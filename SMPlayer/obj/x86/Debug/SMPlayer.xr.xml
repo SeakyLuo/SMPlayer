@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Roots >
+  <Roots.RootTypes>
+    <RootType FullName="Windows.UI.Xaml.Application" />
+    <RootType FullName="Windows.UI.Xaml.ResourceDictionary" />
+    <RootType FullName="Windows.UI.Xaml.DataTemplate">
+      <RootProperty Name="Template" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.StackPanel">
+      <RootProperty Name="Children" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="Orientation" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Background" />
+      <RootProperty Name="Height" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.FontIcon" />
+    <RootType FullName="Windows.UI.Xaml.Controls.TextBlock">
+      <RootProperty Name="FontSize" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="Text" />
+      <RootProperty Name="FontWeight" />
+      <RootProperty Name="Style" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.Page">
+      <RootProperty Name="Background" />
+      <RootProperty Name="Resources" />
+      <RootProperty Name="Content" />
+    </RootType>
+    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.ThemeResourceExtension" />
+    <RootType FullName="Windows.UI.Xaml.Controls.Button">
+      <RootProperty Name="Content" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="Flyout" />
+      <RootProperty Name="Background" />
+      <RootProperty Name="Visibility" />
+      <RootEvent Name="Click" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.FrameworkElement">
+      <RootProperty Name="Width" />
+      <RootProperty Name="Height" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Margin" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.Control">
+      <RootProperty Name="Background" />
+      <RootProperty Name="FontFamily" />
+      <RootProperty Name="FontSize" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Setter">
+      <RootProperty Name="Property" />
+      <RootProperty Name="Value" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.Grid">
+      <RootProperty Name="RowDefinitions" />
+      <RootProperty Name="Children" />
+      <RootProperty Name="Background" />
+      <RootProperty Name="ColumnDefinitions" />
+      <RootMethod Name="GetRow" />
+      <RootMethod Name="SetRow" />
+      <RootMethod Name="GetColumn" />
+      <RootMethod Name="SetColumn" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.RowDefinition">
+      <RootProperty Name="Height" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.SplitView">
+      <RootProperty Name="CompactPaneLength" />
+      <RootProperty Name="DisplayMode" />
+      <RootProperty Name="IsPaneOpen" />
+      <RootProperty Name="OpenPaneLength" />
+      <RootProperty Name="Pane" />
+      <RootProperty Name="Content" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ColumnDefinition">
+      <RootProperty Name="Width" />
+    </RootType>
+    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.StaticResourceExtension" />
+    <RootType FullName="Windows.UI.Xaml.Controls.Flyout" />
+    <RootType FullName="Windows.UI.Xaml.Controls.Slider">
+      <RootProperty Name="Width" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="Maximum" />
+      <RootProperty Name="Minimum" />
+      <RootProperty Name="Value" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.RelativePanel">
+      <RootProperty Name="Children" />
+      <RootMethod Name="GetAlignLeftWithPanel" />
+      <RootMethod Name="SetAlignLeftWithPanel" />
+      <RootMethod Name="GetLeftOf" />
+      <RootMethod Name="SetLeftOf" />
+      <RootMethod Name="GetRightOf" />
+      <RootMethod Name="SetRightOf" />
+      <RootMethod Name="GetAlignRightWithPanel" />
+      <RootMethod Name="SetAlignRightWithPanel" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.Image">
+      <RootProperty Name="Width" />
+      <RootProperty Name="Height" />
+      <RootProperty Name="Source" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.AutoSuggestBox">
+      <RootProperty Name="Width" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="BorderBrush" />
+      <RootProperty Name="BorderThickness" />
+      <RootProperty Name="PlaceholderText" />
+      <RootProperty Name="QueryIcon" />
+      <RootProperty Name="Visibility" />
+      <RootEvent Name="QuerySubmitted" />
+      <RootEvent Name="TextChanged" />
+    </RootType>
+    <RootType FullName="SMPlayer.MainPage" />
+  </Roots.RootTypes>
+</Roots>
