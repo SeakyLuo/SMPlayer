@@ -6,22 +6,31 @@
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="Page_Loaded"
     mc:Ignorable="d">
 
     <Page.Resources>
-        <Style x:Key="ListBoxButton" TargetType="Button">
+        <Style x:Key="ListBoxIconStyle" TargetType="FontIcon">
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <Style x:Key="ListBoxTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="20,0,0,0" />
+        </Style>
+        <Style x:Key="MediaControlButtonStyle" TargetType="Button">
             <Setter Property="Width" Value="50" />
             <Setter Property="Height" Value="50" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
             <Setter Property="FontSize" Value="24" />
+            <Setter Property="Margin" Value="5,0,5,0" />
         </Style>
-        <Style x:Key="ListBoxTextBlock" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="18" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Margin" Value="10,0,0,0" />
-        </Style>
-        <Style x:Key="MediaControlButton" TargetType="Button">
+        <Style x:Key="MediaControlToggleButtonStyle" TargetType="ToggleButton">
             <Setter Property="Width" Value="50" />
             <Setter Property="Height" Value="50" />
             <Setter Property="Background" Value="Transparent" />
@@ -33,7 +42,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <SplitView
@@ -43,64 +52,81 @@
             IsPaneOpen="True"
             OpenPaneLength="320">
             <SplitView.Pane>
-                <StackPanel Background="LightGray">
+                <StackPanel Background="WhiteSmoke">
                     <Button
                         x:Name="HambergurButton"
-                        Background="Transparent"
+                        Width="50"
+                        Height="50"
                         Click="HambergurButton_Click"
                         Content="&#xE700;"
-                        Style="{StaticResource ListBoxButton}" />
-                    <StackPanel
-                        x:Name="SearchPanel"
-                        Height="50"
+                        Style="{StaticResource FontIconButton}"
+                        FontSize="18" />
+                    <AutoSuggestBox
+                        x:Name="SearchBar"
+                        Width="300"
+                        Margin="9"
                         HorizontalAlignment="Center"
-                        Orientation="Horizontal">
-                        <Button
-                            x:Name="SearchButton"
-                            Click="SearchButton_Click"
-                            Content="&#xE721;"
-                            Style="{StaticResource ListBoxButton}"
-                            Visibility="Collapsed" />
-                        <AutoSuggestBox
-                            x:Name="SearchBar"
-                            Width="300"
-                            Margin="5"
-                            VerticalAlignment="Center"
-                            BorderBrush="Transparent"
-                            BorderThickness="0"
-                            PlaceholderText="Search"
-                            QueryIcon="Find"
-                            QuerySubmitted="SearchBar_QuerySubmitted"
-                            TextChanged="SearchBar_TextChanged"
-                            Visibility="Visible" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="&#xE838;" Style="{StaticResource ListBoxButton}" />
-                        <TextBlock Style="{StaticResource ListBoxTextBlock}" Text="Open Folder" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="&#xF0B2;" Style="{StaticResource ListBoxButton}" />
-                        <TextBlock Style="{StaticResource ListBoxTextBlock}" Text="To Play" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="&#xE81C;" Style="{StaticResource ListBoxButton}" />
-                        <TextBlock Style="{StaticResource ListBoxTextBlock}" Text="History" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="&#xEA37;" Style="{StaticResource ListBoxButton}" />
-                        <TextBlock Style="{StaticResource ListBoxTextBlock}" Text="Playlists" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="&#xE713;" Style="{StaticResource ListBoxButton}" />
-                        <TextBlock Style="{StaticResource ListBoxTextBlock}" Text="Settings" />
-                    </StackPanel>
+                        VerticalAlignment="Center"
+                        PlaceholderText="Search"
+                        QueryIcon="Find"
+                        QuerySubmitted="SearchBar_QuerySubmitted"
+                        TextChanged="SearchBar_TextChanged" />
+                    <ListBox
+                        x:Name="SplitViewListBox"
+                        Background="WhiteSmoke"
+                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                        SelectionChanged="SplitViewListBox_SelectionChanged"
+                        SelectionMode="Single">
+                        <ListBoxItem Name="SearchButtonItem" Visibility="Collapsed">
+                            <FontIcon
+                                x:Name="SearchButton"
+                                Glyph="&#xE721;"
+                                Style="{StaticResource ListBoxIconStyle}" />
+                        </ListBoxItem>
+                        <ListBoxItem x:Name="MusicLibraryItem">
+                            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE8F1;" Style="{StaticResource ListBoxIconStyle}" />
+                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="Music Library" />
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem x:Name="NowPlayingItem">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Glyph="&#xEC4F;" Style="{StaticResource ListBoxIconStyle}" />
+                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="Now Playing" />
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem x:Name="ToPlayItem">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Glyph="&#xF0B2;" Style="{StaticResource ListBoxIconStyle}" />
+                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="To Play" />
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem x:Name="HistoryItem">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE81C;" Style="{StaticResource ListBoxIconStyle}" />
+                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="History" />
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem x:Name="PlaylistsItem">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Glyph="&#xEA37;" Style="{StaticResource ListBoxIconStyle}" />
+                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="Playlists" />
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem x:Name="SettingsItem">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE713;" Style="{StaticResource ListBoxIconStyle}" />
+                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="Settings" />
+                            </StackPanel>
+                        </ListBoxItem>
+                    </ListBox>
                 </StackPanel>
             </SplitView.Pane>
             <SplitView.Content>
-                <Grid />
+                <Frame x:Name="MainFrame" />
             </SplitView.Content>
         </SplitView>
-        <Grid Grid.Row="1" Background="LightPink">
+        <Grid Grid.Row="1" Background="LightGray">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -108,12 +134,14 @@
             </Grid.ColumnDefinitions>
             <StackPanel
                 Grid.Column="0"
+                Margin="0"
                 HorizontalAlignment="Left"
                 Orientation="Horizontal">
                 <Image
                     x:Name="AlbumCover"
                     Width="100"
                     Height="100"
+                    HorizontalAlignment="Left"
                     Source="Assets/music.png" />
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock
@@ -129,31 +157,23 @@
                         Text="Author" />
                 </StackPanel>
             </StackPanel>
+
             <StackPanel Grid.Column="1">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                     <Button
-                        x:Name="ShuffleButton"
-                        Content="&#xE8B1;"
-                        Click="ShuffleButton_Click"
-                        Style="{StaticResource MediaControlButton}" />
-                    <Button
                         x:Name="PrevButton"
                         Content="&#xE892;"
-                        Style="{StaticResource MediaControlButton}" />
+                        Style="{StaticResource MediaControlButtonStyle}" />
                     <Button
                         x:Name="PlayButton"
-                        Content="&#xE768;"
                         Click="PlayButton_Click"
-                        Style="{StaticResource MediaControlButton}" />
+                        Content="&#xE768;"
+                        FontSize="30"
+                        Style="{StaticResource MediaControlButtonStyle}" />
                     <Button
                         x:Name="NextButton"
                         Content="&#xE893;"
-                        Style="{StaticResource MediaControlButton}" />
-                    <Button
-                        x:Name="RepeatButton"
-                        Content="&#xE8EE;"
-                        Click="RepeatButton_Click"
-                        Style="{StaticResource MediaControlButton}" />
+                        Style="{StaticResource MediaControlButtonStyle}" />
                 </StackPanel>
                 <RelativePanel>
                     <TextBlock
@@ -178,7 +198,11 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Button x:Name="VolumeButton" Content="&#xE15D;" Style="{StaticResource MediaControlButton}" Click="VolumeButton_Click"/>
+                    <Button
+                        x:Name="VolumeButton"
+                        Click="VolumeButton_Click"
+                        Content="&#xE15D;"
+                        Style="{StaticResource MediaControlButtonStyle}" />
                     <Slider
                         x:Name="Volume"
                         Width="100"
@@ -188,11 +212,24 @@
                         Value="50" />
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Button Content="&#xE712;" Style="{StaticResource MediaControlButton}" >
+                    <ToggleButton
+                        x:Name="ShuffleButton"
+                        Click="ShuffleButton_Click"
+                        Content="&#xE8B1;"
+                        Style="{StaticResource MediaControlToggleButtonStyle}" />
+                    <ToggleButton
+                        x:Name="RepeatButton"
+                        Click="RepeatButton_Click"
+                        Content="&#xE8EE;"
+                        Style="{StaticResource MediaControlToggleButtonStyle}" />
+                    <ToggleButton
+                        x:Name="RepeatOneButton"
+                        Click="RepeatOneButton_Click"
+                        Content="&#xE8ED;"
+                        Style="{StaticResource MediaControlToggleButtonStyle}" />
+                    <Button Content="&#xE712;" Style="{StaticResource MediaControlButtonStyle}">
                         <Button.Flyout>
-                            <Flyout>
-                                
-                            </Flyout>
+                            <Flyout />
                         </Button.Flyout>
                     </Button>
                 </StackPanel>

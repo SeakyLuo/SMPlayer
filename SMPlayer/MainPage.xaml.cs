@@ -41,9 +41,8 @@ namespace SMPlayer
         {
             bool isOpen = !MySplitView.IsPaneOpen;
             MySplitView.IsPaneOpen = isOpen;
-            SearchPanel.HorizontalAlignment = isOpen ? HorizontalAlignment.Center : HorizontalAlignment.Left;
             SearchBar.Visibility = isOpen ? Visibility.Visible : Visibility.Collapsed;
-            SearchButton.Visibility = isOpen ? Visibility.Collapsed : Visibility.Visible;
+            SearchButtonItem.Visibility = isOpen ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void HambergurButton_Click(object sender, RoutedEventArgs e)
@@ -59,17 +58,25 @@ namespace SMPlayer
 
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
-
+            RepeatButton.IsChecked = false;
+            RepeatOneButton.IsChecked = false;
         }
 
         private void RepeatButton_Click(object sender, RoutedEventArgs e)
         {
-            RepeatButton.Content = (string)RepeatButton.Content == "&#xE8EE;" ? "&#xE8ED;" : "&#xE8EE;";
+            ShuffleButton.IsChecked = false;
+            RepeatOneButton.IsChecked = false;
+        }
+
+        private void RepeatOneButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShuffleButton.IsChecked = false;
+            RepeatButton.IsChecked = false;
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            PlayButton.Content = (string)PlayButton.Content == "&#xE768;" ? "&#xE769;" : " &#xE768;";
+            PlayButton.Content = (string)PlayButton.Content == "&#xE768;" ? "&#xE769;" : "&#xE768;";
         }
 
 
@@ -77,5 +84,22 @@ namespace SMPlayer
         {
             VolumeButton.Content = (string)VolumeButton.Content == "&#xE767;" ? "&#xE74F;" : "&#xE767;";
         }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(typeof(MusicLibraryPage));
+        }
+
+        private void SplitViewListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (MusicLibraryItem.IsSelected) MainFrame.Navigate(typeof(MusicLibraryPage));
+            else if (NowPlayingItem.IsSelected) return;
+            else if (ToPlayItem.IsSelected) MainFrame.Navigate(typeof(ToPlayPage));
+            else if (HistoryItem.IsSelected) MainFrame.Navigate(typeof(HistoryPage));
+            else if (PlaylistsItem.IsSelected) MainFrame.Navigate(typeof(PlaylistsPage));
+            else if (SettingsItem.IsSelected) MainFrame.Navigate(typeof(SettingsPage));
+            else return;
+        }
+
     }
 }

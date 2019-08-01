@@ -3,6 +3,25 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:SMPlayer">
-
+    <Application.Resources>
+        <GradientStopCollection x:Key="MyGlassGradientStopsResource">
+            <GradientStop Offset="0.2" Color="WhiteSmoke" />
+            <GradientStop Offset="0.4" Color="Transparent" />
+            <GradientStop Offset="0.5" Color="WhiteSmoke" />
+            <GradientStop Offset="0.75" Color="Transparent" />
+            <GradientStop Offset="0.9" Color="WhiteSmoke" />
+            <GradientStop Offset="1" Color="Transparent" />
+        </GradientStopCollection>
+        <LinearGradientBrush x:Key="GlassBrush" GradientStops="{StaticResource MyGlassGradientStopsResource}" Opacity="0.75" StartPoint="0,0" EndPoint="1,1" />
+        <Style x:Key="TitleTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="40" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="20,20,0,20" />
+        </Style>
+        <Style x:Key="FontIconButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+        </Style>
+    </Application.Resources>
 </Application>
 
