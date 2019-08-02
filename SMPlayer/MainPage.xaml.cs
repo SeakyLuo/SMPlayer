@@ -47,18 +47,17 @@ namespace SMPlayer
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            PlayButton.Content = (string)PlayButton.Content == "&#xE768;" ? "&#xE769;" : "&#xE768;";
+            PlayButtonIcon.Glyph = PlayButtonIcon.Glyph == "\uE768" ? "\uE769" : "\uE768";
         }
 
 
         private void VolumeButton_Click(object sender, RoutedEventArgs e)
         {
-            VolumeButton.Content = (string)VolumeButton.Content == "&#xE767;" ? "&#xE74F;" : "&#xE767;";
+            VolumnButtonIcon.Glyph = VolumnButtonIcon.Glyph == "\uE767" ? "\uE74F" : "\uE767";
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            //MainFrame.Navigate(typeof(MusicLibraryPage));
             MusicLibraryItem.IsSelected = true;
         }
 
@@ -79,9 +78,18 @@ namespace SMPlayer
             Open_Navigation();
         }
 
-        private void MainNavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        private void NaviSearchBar_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            if (args.IsSettingsSelected)
+            if (NaviSearchBar.Text.Length > 0)
+            {
+                MainFrame.Navigate(typeof(SearchPage));
+                MainNavigationView.IsBackButtonVisible = NavigationViewBackButtonVisible.Visible;
+            }
+        }
+
+        private void MainNavigationView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        {
+            if (args.IsSettingsInvoked)
             {
                 MainFrame.Navigate(typeof(SettingsPage));
                 return;
@@ -91,15 +99,19 @@ namespace SMPlayer
             {
                 case "NaviSearchItem":
                     Open_Navigation();
+                    MainNavigationView.IsPaneOpen = true;
                     NaviSearchBar.Focus(FocusState.Programmatic);
                     break;
                 case "MusicLibraryItem":
                     MainFrame.Navigate(typeof(MusicLibraryPage));
                     break;
-                case "NowPlayingItem":
+                case "AlbumsItem":
+                    MainFrame.Navigate(typeof(AlbumsPage));
                     break;
-                case "ToPlayItem":
-                    MainFrame.Navigate(typeof(ToPlayPage));
+                case "ArtistsItem":
+                    MainFrame.Navigate(typeof(ArtistsPage));
+                    break;
+                case "NowPlayingItem":
                     break;
                 case "HistoryItem":
                     MainFrame.Navigate(typeof(HistoryPage));
@@ -110,17 +122,37 @@ namespace SMPlayer
                 default:
                     return;
             }
-
         }
 
-        private void NaviSearchBar_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private void MainNavigationView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+        {
+            if (MainFrame.CanGoBack)
+            {
+                MainFrame.GoBack();
+            }
+            if (!MainFrame.CanGoBack)
+            {
+                MainNavigationView.IsBackButtonVisible = NavigationViewBackButtonVisible.Collapsed;
+            }
+        }
+
+        private void ProgressBar_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
 
         }
 
-        private void NaviSearchBar_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        private void LikeButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (LikeButtonIcon.Glyph == "\uEB51")
+            {
+                LikeButtonIcon.Glyph = "\uEB52";
+                LikeButtonIcon.Foreground = new SolidColorBrush(Windows.UI.Colors.Red);
+            }
+            else
+            {
+                LikeButtonIcon.Glyph = "\uEB51";
+                LikeButtonIcon.Foreground = new SolidColorBrush(Windows.UI.Colors.Black);
+            }
         }
     }
 }
