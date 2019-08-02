@@ -2,11 +2,14 @@
     x:Class="SMPlayer.MusicLibraryPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
+
+    <Page.Resources />
 
     <Grid>
         <Grid.RowDefinitions>
@@ -18,26 +21,84 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Music Library" />
-        <RelativePanel Grid.Row="1" Margin="10">
-            <StackPanel Orientation="Horizontal" RelativePanel.AlignLeftWithPanel="True">
-                <TextBlock Margin="10,0,10,0" Text="Song" />
-                <TextBlock Margin="10,0,10,0" Text="Artist" />
-                <TextBlock Margin="10,0,10,0" Text="Album" />
+        <StackPanel
+            Grid.Row="1"
+            Margin="10,0,10,0"
+            HorizontalAlignment="Stretch"
+            Orientation="Horizontal"
+            RelativePanel.AlignRightWithPanel="True">
+            <Button
+                Width="50"
+                Height="50"
+                VerticalAlignment="Center"
+                Click="OpenFolder"
+                Content="&#xE838;"
+                Style="{StaticResource FontIconButtonStyle}" />
+            <AutoSuggestBox
+                Width="800"
+                Margin="9"
+                FontSize="24"
+                QueryIcon="Refresh"
+                Text="C:\Users\Seaky\Media\" />
+        </StackPanel>
+        <NavigationView
+            x:Name="MusicLibraryNavigationView"
+            Grid.Row="2"
+            IsBackButtonVisible="Collapsed"
+            PaneDisplayMode="Top">
+            <NavigationView.MenuItems>
+                <NavigationViewItem
+                    x:Name="SongsItem"
+                    Background="White"
+                    Content="Songs">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEC4F;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem
+                    x:Name="ArtistsItem"
+                    Background="White"
+                    Content="Artists">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8D4;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem
+                    x:Name="AlbumsItem"
+                    Background="White"
+                    Content="Albums">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE93C;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+            <Frame x:Name="MusicLibraryFrame" />
+        </NavigationView>
+        <!--  <StackPanel  -->
+        <!--Grid.Row="2"
+            Margin="10"
+            Orientation="Horizontal"
+            RelativePanel.AlignLeftWithPanel="True">
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock Text="Song" VerticalAlignment="Center" FontSize="24"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" RelativePanel.AlignRightWithPanel="True">
-                <Button
-                    Margin="10,0,10,0"
-                    VerticalAlignment="Center"
-                    Content="&#xE8CB;"
-                    FontSize="24"
-                    Style="{StaticResource FontIconButton}" />
-                <Button
-                    Margin="10,0,20,0"
-                    VerticalAlignment="Center"
-                    Content="&#xE838;"
-                    FontSize="24"
-                    Style="{StaticResource FontIconButton}" />
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock Text="Artist" VerticalAlignment="Center" FontSize="24"/>
             </StackPanel>
-        </RelativePanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock Text="Album" VerticalAlignment="Center" FontSize="24"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <FontIcon Glyph="&#xE8CB;" Style="{StaticResource FontIconStyle}" />
+                <TextBlock Text="Sort" VerticalAlignment="Center" FontSize="24"/>
+                <FlyoutBase.AttachedFlyout>
+                    <MenuFlyout>
+                        <controls:RadioMenuFlyoutItem IsChecked="True" Text="Sort By Name" />
+                        <controls:RadioMenuFlyoutItem IsChecked="False" Text="Sort By Artist" />
+                        <controls:RadioMenuFlyoutItem IsChecked="False" Text="Sort By Album" />
+                    </MenuFlyout>
+                </FlyoutBase.AttachedFlyout>
+            </StackPanel>
+        </StackPanel>-->
     </Grid>
 </Page>

@@ -26,5 +26,10 @@ namespace SMPlayer
         {
             this.InitializeComponent();
         }
+
+        private void OpenFolder(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

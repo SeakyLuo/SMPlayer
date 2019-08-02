@@ -45,87 +45,54 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <SplitView
-            x:Name="MySplitView"
-            CompactPaneLength="50"
-            DisplayMode="CompactInline"
-            IsPaneOpen="True"
-            OpenPaneLength="320">
-            <SplitView.Pane>
-                <StackPanel Background="WhiteSmoke">
-                    <Button
-                        x:Name="HambergurButton"
-                        Width="50"
-                        Height="50"
-                        Click="HambergurButton_Click"
-                        Content="&#xE700;"
-                        Style="{StaticResource FontIconButton}"
-                        FontSize="18" />
+        <NavigationView
+            x:Name="MainNavigationView"
+            IsBackButtonVisible="Collapsed"
+            PaneClosing="MainNavigationView_PaneClosing"
+            PaneOpening="MainNavigationView_PaneOpening"
+            SelectionChanged="MainNavigationView_SelectionChanged">
+            <NavigationView.MenuItems>
+                <NavigationViewItem
+                    x:Name="NaviSearchItem"
+                    Icon="Find"
+                    Visibility="Collapsed" />
+                <NavigationViewItem x:Name="NaviSearchBarItem">
                     <AutoSuggestBox
-                        x:Name="SearchBar"
-                        Width="300"
-                        Margin="9"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
+                        x:Name="NaviSearchBar"
+                        Width="290"
                         PlaceholderText="Search"
                         QueryIcon="Find"
-                        QuerySubmitted="SearchBar_QuerySubmitted"
-                        TextChanged="SearchBar_TextChanged" />
-                    <ListBox
-                        x:Name="SplitViewListBox"
-                        Background="WhiteSmoke"
-                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                        SelectionChanged="SplitViewListBox_SelectionChanged"
-                        SelectionMode="Single">
-                        <ListBoxItem Name="SearchButtonItem" Visibility="Collapsed">
-                            <FontIcon
-                                x:Name="SearchButton"
-                                Glyph="&#xE721;"
-                                Style="{StaticResource ListBoxIconStyle}" />
-                        </ListBoxItem>
-                        <ListBoxItem x:Name="MusicLibraryItem">
-                            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
-                                <FontIcon Glyph="&#xE8F1;" Style="{StaticResource ListBoxIconStyle}" />
-                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="Music Library" />
-                            </StackPanel>
-                        </ListBoxItem>
-                        <ListBoxItem x:Name="NowPlayingItem">
-                            <StackPanel Orientation="Horizontal">
-                                <FontIcon Glyph="&#xEC4F;" Style="{StaticResource ListBoxIconStyle}" />
-                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="Now Playing" />
-                            </StackPanel>
-                        </ListBoxItem>
-                        <ListBoxItem x:Name="ToPlayItem">
-                            <StackPanel Orientation="Horizontal">
-                                <FontIcon Glyph="&#xF0B2;" Style="{StaticResource ListBoxIconStyle}" />
-                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="To Play" />
-                            </StackPanel>
-                        </ListBoxItem>
-                        <ListBoxItem x:Name="HistoryItem">
-                            <StackPanel Orientation="Horizontal">
-                                <FontIcon Glyph="&#xE81C;" Style="{StaticResource ListBoxIconStyle}" />
-                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="History" />
-                            </StackPanel>
-                        </ListBoxItem>
-                        <ListBoxItem x:Name="PlaylistsItem">
-                            <StackPanel Orientation="Horizontal">
-                                <FontIcon Glyph="&#xEA37;" Style="{StaticResource ListBoxIconStyle}" />
-                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="Playlists" />
-                            </StackPanel>
-                        </ListBoxItem>
-                        <ListBoxItem x:Name="SettingsItem">
-                            <StackPanel Orientation="Horizontal">
-                                <FontIcon Glyph="&#xE713;" Style="{StaticResource ListBoxIconStyle}" />
-                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="Settings" />
-                            </StackPanel>
-                        </ListBoxItem>
-                    </ListBox>
-                </StackPanel>
-            </SplitView.Pane>
-            <SplitView.Content>
-                <Frame x:Name="MainFrame" />
-            </SplitView.Content>
-        </SplitView>
+                        QuerySubmitted="NaviSearchBar_QuerySubmitted"
+                        TextChanged="NaviSearchBar_TextChanged" />
+                </NavigationViewItem>
+                <NavigationViewItem
+                    x:Name="MusicLibraryItem"
+                    Content="Music Library"
+                    Icon="Library" />
+                <NavigationViewItem x:Name="NowPlayingItem" Content="Now Playing">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC4F;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="ToPlayItem" Content="To Play">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF0B2;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="HistoryItem" Content="History">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE81C;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="PlaylistsItem" Content="Playlists">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEA37;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+            <Frame x:Name="MainFrame" />
+        </NavigationView>
+
         <Grid Grid.Row="1" Background="LightGray">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />

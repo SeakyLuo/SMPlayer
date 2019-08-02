@@ -27,35 +27,6 @@ namespace SMPlayer
             this.InitializeComponent();
         }
 
-        private void SearchBar_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-
-        }
-
-        private void SearchBar_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
-        {
-
-        }
-
-        private void OpenSplitView()
-        {
-            bool isOpen = !MySplitView.IsPaneOpen;
-            MySplitView.IsPaneOpen = isOpen;
-            SearchBar.Visibility = isOpen ? Visibility.Visible : Visibility.Collapsed;
-            SearchButtonItem.Visibility = isOpen ? Visibility.Collapsed : Visibility.Visible;
-        }
-
-        private void HambergurButton_Click(object sender, RoutedEventArgs e)
-        {
-            OpenSplitView();
-        }
-
-        private void SearchButton_Click(object sender, RoutedEventArgs e)
-        {
-            OpenSplitView();
-            SearchBar.Focus(FocusState.Programmatic);
-        }
-
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
             RepeatButton.IsChecked = false;
@@ -87,19 +58,69 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(typeof(MusicLibraryPage));
+            //MainFrame.Navigate(typeof(MusicLibraryPage));
+            MusicLibraryItem.IsSelected = true;
         }
 
-        private void SplitViewListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void MainNavigationView_PaneClosing(NavigationView sender, object args)
         {
-            if (MusicLibraryItem.IsSelected) MainFrame.Navigate(typeof(MusicLibraryPage));
-            else if (NowPlayingItem.IsSelected) return;
-            else if (ToPlayItem.IsSelected) MainFrame.Navigate(typeof(ToPlayPage));
-            else if (HistoryItem.IsSelected) MainFrame.Navigate(typeof(HistoryPage));
-            else if (PlaylistsItem.IsSelected) MainFrame.Navigate(typeof(PlaylistsPage));
-            else if (SettingsItem.IsSelected) MainFrame.Navigate(typeof(SettingsPage));
-            else return;
+            NaviSearchBarItem.Visibility = Visibility.Collapsed;
+            NaviSearchItem.Visibility = Visibility.Visible;
         }
 
+        private void Open_Navigation()
+        {
+            NaviSearchBarItem.Visibility = Visibility.Visible;
+            NaviSearchItem.Visibility = Visibility.Collapsed;
+        }
+
+        private void MainNavigationView_PaneOpening(NavigationView sender, object args)
+        {
+            Open_Navigation();
+        }
+
+        private void MainNavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        {
+            if (args.IsSettingsSelected)
+            {
+                MainFrame.Navigate(typeof(SettingsPage));
+                return;
+            }
+            var item = (NavigationViewItem)MainNavigationView.SelectedItem;
+            switch (item.Name)
+            {
+                case "NaviSearchItem":
+                    Open_Navigation();
+                    NaviSearchBar.Focus(FocusState.Programmatic);
+                    break;
+                case "MusicLibraryItem":
+                    MainFrame.Navigate(typeof(MusicLibraryPage));
+                    break;
+                case "NowPlayingItem":
+                    break;
+                case "ToPlayItem":
+                    MainFrame.Navigate(typeof(ToPlayPage));
+                    break;
+                case "HistoryItem":
+                    MainFrame.Navigate(typeof(HistoryPage));
+                    break;
+                case "PlaylistsItem":
+                    MainFrame.Navigate(typeof(PlaylistsPage));
+                    break;
+                default:
+                    return;
+            }
+
+        }
+
+        private void NaviSearchBar_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+
+        }
+
+        private void NaviSearchBar_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+
+        }
     }
 }

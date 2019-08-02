@@ -45,87 +45,54 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <SplitView x:ConnectionId='2'
-            x:Name="MySplitView"
-            CompactPaneLength="50"
-            DisplayMode="CompactInline"
-            IsPaneOpen="True"
-            OpenPaneLength="320">
-            <SplitView.Pane>
-                <StackPanel Background="WhiteSmoke">
-                    <Button x:ConnectionId='17'
-                        x:Name="HambergurButton"
-                        Width="50"
-                        Height="50"
-                                                     
-                        Content="&#xE700;"
-                        Style="{StaticResource FontIconButton}"
-                        FontSize="18" />
-                    <AutoSuggestBox x:ConnectionId='18'
-                        x:Name="SearchBar"
-                        Width="300"
-                        Margin="9"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
+        <NavigationView x:ConnectionId='2'
+            x:Name="MainNavigationView"
+            IsBackButtonVisible="Collapsed"
+                                                        
+                                                        
+                                                                  >
+            <NavigationView.MenuItems>
+                <NavigationViewItem x:ConnectionId='17'
+                    x:Name="NaviSearchItem"
+                    Icon="Find"
+                    Visibility="Collapsed" />
+                <NavigationViewItem x:ConnectionId='18' x:Name="NaviSearchBarItem">
+                    <AutoSuggestBox x:ConnectionId='24'
+                        x:Name="NaviSearchBar"
+                        Width="290"
                         PlaceholderText="Search"
                         QueryIcon="Find"
-                                                                 
-                                                            />
-                    <ListBox x:ConnectionId='19'
-                        x:Name="SplitViewListBox"
-                        Background="WhiteSmoke"
-                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                                                            
-                        SelectionMode="Single">
-                        <ListBoxItem x:ConnectionId='20' Name="SearchButtonItem" Visibility="Collapsed">
-                            <FontIcon x:ConnectionId='27'
-                                x:Name="SearchButton"
-                                Glyph="&#xE721;"
-                                Style="{StaticResource ListBoxIconStyle}" />
-                        </ListBoxItem>
-                        <ListBoxItem x:ConnectionId='21' x:Name="MusicLibraryItem">
-                            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
-                                <FontIcon Glyph="&#xE8F1;" Style="{StaticResource ListBoxIconStyle}" />
-                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="Music Library" />
-                            </StackPanel>
-                        </ListBoxItem>
-                        <ListBoxItem x:ConnectionId='22' x:Name="NowPlayingItem">
-                            <StackPanel Orientation="Horizontal">
-                                <FontIcon Glyph="&#xEC4F;" Style="{StaticResource ListBoxIconStyle}" />
-                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="Now Playing" />
-                            </StackPanel>
-                        </ListBoxItem>
-                        <ListBoxItem x:ConnectionId='23' x:Name="ToPlayItem">
-                            <StackPanel Orientation="Horizontal">
-                                <FontIcon Glyph="&#xF0B2;" Style="{StaticResource ListBoxIconStyle}" />
-                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="To Play" />
-                            </StackPanel>
-                        </ListBoxItem>
-                        <ListBoxItem x:ConnectionId='24' x:Name="HistoryItem">
-                            <StackPanel Orientation="Horizontal">
-                                <FontIcon Glyph="&#xE81C;" Style="{StaticResource ListBoxIconStyle}" />
-                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="History" />
-                            </StackPanel>
-                        </ListBoxItem>
-                        <ListBoxItem x:ConnectionId='25' x:Name="PlaylistsItem">
-                            <StackPanel Orientation="Horizontal">
-                                <FontIcon Glyph="&#xEA37;" Style="{StaticResource ListBoxIconStyle}" />
-                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="Playlists" />
-                            </StackPanel>
-                        </ListBoxItem>
-                        <ListBoxItem x:ConnectionId='26' x:Name="SettingsItem">
-                            <StackPanel Orientation="Horizontal">
-                                <FontIcon Glyph="&#xE713;" Style="{StaticResource ListBoxIconStyle}" />
-                                <TextBlock Style="{StaticResource ListBoxTextBlockStyle}" Text="Settings" />
-                            </StackPanel>
-                        </ListBoxItem>
-                    </ListBox>
-                </StackPanel>
-            </SplitView.Pane>
-            <SplitView.Content>
-                <Frame x:ConnectionId='28' x:Name="MainFrame" />
-            </SplitView.Content>
-        </SplitView>
+                                                                     
+                                                                />
+                </NavigationViewItem>
+                <NavigationViewItem x:ConnectionId='19'
+                    x:Name="MusicLibraryItem"
+                    Content="Music Library"
+                    Icon="Library" />
+                <NavigationViewItem x:ConnectionId='20' x:Name="NowPlayingItem" Content="Now Playing">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC4F;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:ConnectionId='21' x:Name="ToPlayItem" Content="To Play">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF0B2;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:ConnectionId='22' x:Name="HistoryItem" Content="History">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE81C;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:ConnectionId='23' x:Name="PlaylistsItem" Content="Playlists">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEA37;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+            <Frame x:ConnectionId='25' x:Name="MainFrame" />
+        </NavigationView>
+
         <Grid Grid.Row="1" Background="LightGray">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
