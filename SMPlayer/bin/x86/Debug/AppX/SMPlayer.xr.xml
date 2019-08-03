@@ -20,7 +20,7 @@
     <RootPropertyPathName Name="Range" />
     <RootPropertyPathName Name="Height_m" />
     <RootPropertyPathName Name="Mountain" />
-    <RootPropertyPathName Name="Rank" />
+    <RootPropertyPathName Name="Name" />
   </Roots.PropertyPathNames>
   <Roots.RootTypes>
     <RootType FullName="Windows.UI.Xaml.Application">
@@ -152,7 +152,6 @@
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.MasterDetailsView">
       <RootProperty Name="BackButtonBehavior" />
       <RootProperty Name="CompactModeThresholdWidth" />
-      <RootProperty Name="Margin" />
       <RootProperty Name="ItemsSource" />
       <RootProperty Name="ItemTemplate" />
       <RootProperty Name="DetailsTemplate" />
@@ -194,6 +193,7 @@
       <RootProperty Name="Source" />
     </RootType>
     <RootType FullName="SMPlayer.ArtistsPage" />
+    <RootType FullName="SMPlayer.MusicListPage" />
     <RootType FullName="SMPlayer.SearchPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.ContentControl">
       <RootProperty Name="Content" />
@@ -370,11 +370,13 @@
       <RootProperty Name="HeadersVisibility" />
       <RootProperty Name="HorizontalScrollBarVisibility" />
       <RootProperty Name="IsReadOnly" />
+      <RootProperty Name="ItemsSource" />
       <RootProperty Name="MaxColumnWidth" />
       <RootProperty Name="SelectionMode" />
       <RootProperty Name="VerticalScrollBarVisibility" />
       <RootProperty Name="Columns" />
     </RootType>
+    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.BindExtension" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGridTextColumn">
       <RootProperty Name="Binding" />
       <RootProperty Name="Header" />
@@ -388,6 +390,14 @@
     <RootType FullName="SMPlayer.MusicLibraryPage" />
     <RootType FullName="SMPlayer.NowPlayingPage" />
     <RootType FullName="SMPlayer.PlaylistsPage" />
+    <RootType FullName="Windows.UI.Xaml.Controls.AutoSuggestBox">
+      <RootProperty Name="Margin" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="PlaceholderText" />
+      <RootProperty Name="QueryIcon" />
+      <RootProperty Name="Width" />
+      <RootEvent Name="QuerySubmitted" />
+    </RootType>
     <RootType FullName="SMPlayer.SettingsPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.ToggleButton">
       <RootProperty Name="Content" />
@@ -466,12 +476,6 @@
       <RootProperty Name="AutoPlay" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.NavigationViewItemSeparator" />
-    <RootType FullName="Windows.UI.Xaml.Controls.AutoSuggestBox">
-      <RootProperty Name="Width" />
-      <RootProperty Name="PlaceholderText" />
-      <RootProperty Name="QueryIcon" />
-      <RootEvent Name="QuerySubmitted" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Frame">
       <RootProperty Name="IsNavigationStackEnabled" />
     </RootType>

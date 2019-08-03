@@ -40,14 +40,15 @@
             HeadersVisibility="Column"
             HorizontalScrollBarVisibility="Visible"
             IsReadOnly="False"
+            ItemsSource="{x:Bind songs}"
             MaxColumnWidth="400"
             SelectionMode="Extended"
             VerticalScrollBarVisibility="Visible">
             <controls:DataGrid.Columns>
                 <controls:DataGridTextColumn
-                    Binding="{Binding Rank}"
-                    Header="Rank"
-                    Tag="Rank" />
+                    Binding="{Binding Name}"
+                    Header="Name"
+                    Tag="Name" />
                 <controls:DataGridComboBoxColumn
                     Binding="{Binding Mountain}"
                     Header="Mountain"

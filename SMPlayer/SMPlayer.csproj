@@ -132,8 +132,12 @@
     </Compile>
     <Compile Include="Models\Music.cs" />
     <Compile Include="Models\MusicManager.cs" />
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="MusicLibraryPage.xaml.cs">
       <DependentUpon>MusicLibraryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MusicListPage.xaml.cs">
+      <DependentUpon>MusicListPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="NowPlayingPage.xaml.cs">
       <DependentUpon>NowPlayingPage.xaml</DependentUpon>
@@ -178,6 +182,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ArtistsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MusicListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -241,6 +249,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
       <Version>2.1.190606001</Version>
+    </PackageReference>
+    <PackageReference Include="System.Data.SQLite">
+      <Version>1.0.111</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

@@ -6,16 +6,35 @@
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="Page_Loaded"
     mc:Ignorable="d">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
+    <StackPanel>
         <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Settings" />
-    </Grid>
+        <Grid Margin="20,10,20,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock
+                VerticalAlignment="Center"
+                FontSize="22"
+                Text="Music Folder:" />
+            <AutoSuggestBox
+                x:Name="PathBox"
+                Grid.Column="1"
+                Margin="20,9,20,9"
+                HorizontalAlignment="Stretch"
+                PlaceholderText="The Root Folder of Your Music Library"
+                QuerySubmitted="PathBox_QuerySubmitted">
+                <AutoSuggestBox.QueryIcon>
+                    <FontIcon Glyph="&#xE838;" />
+                </AutoSuggestBox.QueryIcon>
+            </AutoSuggestBox>
+        </Grid>
+    </StackPanel>
 </Page>

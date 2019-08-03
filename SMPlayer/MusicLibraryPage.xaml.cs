@@ -23,6 +23,8 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class MusicLibraryPage : Page
     {
+        private ObservableCollection<Music> songs;
+
         public MusicLibraryPage()
         {
             this.InitializeComponent();

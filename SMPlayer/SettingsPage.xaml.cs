@@ -12,6 +12,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.Storage.Pickers;
+using SMPlayer.Models;
+using Windows.Storage;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -25,6 +28,18 @@ namespace SMPlayer
         public SettingsPage()
         {
             this.InitializeComponent();
+        }
+
+        private async void PathBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            FolderPicker picker = new FolderPicker();
+            picker.SuggestedStartLocation = PickerLocationId.MusicLibrary;
+            StorageFolder folder = await picker.PickSingleFolderAsync();
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            PathBox.Text = Settings.settings.rootPath;
         }
     }
 }

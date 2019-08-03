@@ -47,7 +47,16 @@ namespace SMPlayer
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            PlayButtonIcon.Glyph = PlayButtonIcon.Glyph == "\uE768" ? "\uE769" : "\uE768";
+            if (PlayButtonIcon.Glyph == "\uE768")
+            {
+                PlayButtonIcon.Glyph = "\uE769";
+                MediaPlayer.Pause();
+            }
+            else
+            {
+                PlayButtonIcon.Glyph = "\uE768";
+                MediaPlayer.Play();
+            }
         }
 
 
@@ -118,6 +127,9 @@ namespace SMPlayer
                     break;
                 case "PlaylistsItem":
                     MainFrame.Navigate(typeof(PlaylistsPage));
+                    break;
+                case "MyFavoritesItem":
+                    MainFrame.Navigate(typeof(MusicListPage));
                     break;
                 default:
                     return;

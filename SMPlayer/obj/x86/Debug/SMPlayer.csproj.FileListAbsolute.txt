@@ -144,3 +144,13 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SMPlayer.csprojAssem
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Microsoft.Toolkit.Uwp.Notifications.dll
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Microsoft.Toolkit.Uwp.Notifications.pdb
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Microsoft.Toolkit.Uwp.Notifications.pri.xml
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MusicListPage.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SQLite.Interop.dll
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\System.Data.SQLite.dll
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MusicListPage.g.i.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MusicListPage.g.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MusicListPage.xaml
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MusicListPage.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\System.Data.SQLite\en\System.Data.SQLite.SR.resw
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\resources.en.resfiles
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\resources.en.resfiles.intermediate
