@@ -68,6 +68,7 @@ namespace SMPlayer
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             MusicLibraryItem.IsSelected = true;
+            Models.Settings.settings = new Models.Settings();
         }
 
         private void MainNavigationView_PaneClosing(NavigationView sender, object args)

@@ -50,21 +50,26 @@
                     Header="Name"
                     Tag="Name" />
                 <controls:DataGridComboBoxColumn
-                    Binding="{Binding Mountain}"
-                    Header="Mountain"
-                    Tag="Mountain" />
+                    Binding="{Binding Artist}"
+                    Header="Artist"
+                    Tag="Artist" />
                 <controls:DataGridTextColumn
-                    Binding="{Binding Height_m}"
-                    Header="Height (m)"
-                    Tag="Height_m" />
+                    Binding="{Binding Album}"
+                    Header="Album"
+                    Tag="Album" />
                 <controls:DataGridTextColumn
-                    Binding="{Binding Range}"
-                    Header="Range"
-                    Tag="Range" />
+                    Binding="{Binding Duration}"
+                    Header="Duration"
+                    Tag="Duration" />
                 <controls:DataGridTextColumn
-                    Binding="{Binding Parent_mountain}"
-                    Header="Parent Mountain"
-                    Tag="Parent_mountain" />
+                    Binding="{Binding Favorite}"
+                    FontFamily="Segoe MDL2 Assets"
+                    Header="&#xEB51;"
+                    Tag="Favorite" />
+                <controls:DataGridTextColumn
+                    Binding="{Binding PlayedTimes}"
+                    Header="Played"
+                    Tag="Played" />
             </controls:DataGrid.Columns>
         </controls:DataGrid>
     </Grid>

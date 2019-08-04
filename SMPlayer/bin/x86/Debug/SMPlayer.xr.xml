@@ -16,10 +16,11 @@
     <RootPropertyPathName Name="PaneToggleButtonVisibility" />
     <RootPropertyPathName Name="BackButtonVisibility" />
     <RootPropertyPathName Name="CompactPaneLength" />
-    <RootPropertyPathName Name="Parent_mountain" />
-    <RootPropertyPathName Name="Range" />
-    <RootPropertyPathName Name="Height_m" />
-    <RootPropertyPathName Name="Mountain" />
+    <RootPropertyPathName Name="PlayedTimes" />
+    <RootPropertyPathName Name="Favorite" />
+    <RootPropertyPathName Name="Duration" />
+    <RootPropertyPathName Name="Album" />
+    <RootPropertyPathName Name="Artist" />
     <RootPropertyPathName Name="Name" />
   </Roots.PropertyPathNames>
   <Roots.RootTypes>
@@ -381,6 +382,7 @@
       <RootProperty Name="Binding" />
       <RootProperty Name="Header" />
       <RootProperty Name="Tag" />
+      <RootProperty Name="FontFamily" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGridComboBoxColumn">
       <RootProperty Name="Binding" />
@@ -397,6 +399,14 @@
       <RootProperty Name="QueryIcon" />
       <RootProperty Name="Width" />
       <RootEvent Name="QuerySubmitted" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ComboBox">
+      <RootProperty Name="Margin" />
+      <RootProperty Name="Items" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ComboBoxItem">
+      <RootProperty Name="Content" />
+      <RootProperty Name="IsSelected" />
     </RootType>
     <RootType FullName="SMPlayer.SettingsPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.ToggleButton">

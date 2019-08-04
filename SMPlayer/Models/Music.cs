@@ -16,6 +16,8 @@ namespace SMPlayer
         private string Artist { get; set; }
         private string Album { get; set; }
         private int Duration { get; set; } 
+        private bool Favorite { get; set; }
+        private int PlayedTimes { get; set; }
 
         public static async Task<MusicProperties> GetMusicProperties(string path)
         {
@@ -35,6 +37,8 @@ namespace SMPlayer
             Artist = properties.Artist;
             Album = properties.Album;
             Duration = (int)properties.Duration.TotalSeconds;
+            Favorite = false;
+            PlayedTimes = 0;
         }
     }
 }

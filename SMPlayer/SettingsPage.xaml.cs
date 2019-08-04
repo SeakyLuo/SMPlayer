@@ -34,12 +34,18 @@ namespace SMPlayer
         {
             FolderPicker picker = new FolderPicker();
             picker.SuggestedStartLocation = PickerLocationId.MusicLibrary;
+            picker.FileTypeFilter.Add("*");
             StorageFolder folder = await picker.PickSingleFolderAsync();
+            if (folder == null) return;
+            PathBox.Text = folder.Path;
+            Settings.settings.RootPath = folder.Path;
+            Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            PathBox.Text = Settings.settings.rootPath;
+            PathBox.Text = Settings.settings.RootPath;
+            LanguageComboBox.SelectedItem = Settings.settings.Language;
         }
     }
 }

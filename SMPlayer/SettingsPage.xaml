@@ -8,11 +8,18 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
+    <Page.Resources>
+        <Style x:Key="SettingLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </Page.Resources>
 
     <StackPanel>
         <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Settings" />
         <Grid Margin="20,10,20,10">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -20,10 +27,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock
-                VerticalAlignment="Center"
-                FontSize="22"
-                Text="Music Folder:" />
+            <TextBlock Style="{StaticResource SettingLabelStyle}" Text="Music Folder:" />
             <AutoSuggestBox
                 x:Name="PathBox"
                 Grid.Column="1"
@@ -35,6 +39,19 @@
                     <FontIcon Glyph="&#xE838;" />
                 </AutoSuggestBox.QueryIcon>
             </AutoSuggestBox>
+            <TextBlock
+                Grid.Row="2"
+                Style="{StaticResource SettingLabelStyle}"
+                Text="Language:" />
+            <ComboBox
+                x:Name="LanguageComboBox"
+                Grid.Row="2"
+                Grid.Column="2"
+                Margin="20,9,20,9">
+                <ComboBoxItem Content="Follow System" IsSelected="True" />
+                <ComboBoxItem Content="Chinese" />
+                <ComboBoxItem Content="English" />
+            </ComboBox>
         </Grid>
     </StackPanel>
 </Page>

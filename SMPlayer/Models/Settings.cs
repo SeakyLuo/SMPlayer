@@ -7,16 +7,24 @@ using Windows.Storage;
 
 namespace SMPlayer.Models
 {
+    enum AppLanguage
+    {
+        FollowSystem = 0,
+        Chinese = 1,
+        English = 2
+    }
     class Settings
     {
         public static Settings settings;
 
-        public string rootPath { get; set; }
-        public Music lastMusic { get; set; }
+        public string RootPath { get; set; }
+        public Music LastMusic { get; set; }
+        public AppLanguage Language { get; set; }
 
         public Settings()
         {
-            rootPath = Windows.Storage.Pickers.PickerLocationId.MusicLibrary.ToString();
+            RootPath = KnownFolders.MusicLibrary.Path;
+            Language = AppLanguage.FollowSystem;
         }
     }
 }
