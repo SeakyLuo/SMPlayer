@@ -10,18 +10,12 @@ namespace SMPlayer.Models
     [Serializable]
     public class FolderTree
     {
-        public List<FolderTree> folders { get; set; }
-        public SortedSet<Music> musics { get; set; }
+        public List<FolderTree> folders = new List<FolderTree>();
+        public List<Music> musics = new List<Music>();
 
-        public FolderTree()
-        {
-            folders = new List<FolderTree>();
-            musics = new SortedSet<Music>();
-        }
+        public FolderTree() { }
         public FolderTree(StorageFolder folder, Action afterInitiation = null)
         {
-            folders = new List<FolderTree>();
-            musics = new SortedSet<Music>();
             Init(folder);
             afterInitiation?.Invoke();
         }
@@ -35,9 +29,9 @@ namespace SMPlayer.Models
                     musics.Add(await Music.GetMusic(file.Path));
         }
 
-        public SortedSet<Music> Flatten()
+        public List<Music> Flatten()
         {
-            SortedSet<Music> list = new SortedSet<Music>();
+            List<Music> list = new List<Music>();
             foreach (var branch in folders)
                 list.Concat(branch.Flatten());
             foreach (var music in musics)

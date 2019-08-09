@@ -23,7 +23,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MusicLibraryPage : Page
+    public sealed partial class MusicLibraryPage : Page, MusicModificationListener
     {
         private ObservableCollection<Music> songs = new ObservableCollection<Music>();
 
@@ -64,9 +64,17 @@ namespace SMPlayer
 
         private void PlayItem_Click(object sender, RoutedEventArgs e)
         {
-            var menu = sender as MenuFlyoutItem;
-            var music = menu.DataContext as Music;
+            var menu = (MenuFlyoutItem)sender;
+            var music = (Music)menu.DataContext;
             MainPage.Instance.SetMusic(music);
+            MainPage.Instance.AddMusicModificationListener(this);
+        }
+
+        public void FavoriteChangeListener(Music music, bool favorite)
+        {
+            int index = MusicManager.AllSongs.IndexOf(music);
+            MusicManager.AllSongs[index].Favorite = favorite;
+            songs[index].Favorite = favorite;
         }
     }
 }

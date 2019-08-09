@@ -12,13 +12,101 @@
         <Style x:Key="SettingLabelStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="24" />
             <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,9,20,9" />
+        </Style>
+        <Style x:Key="SolidColorButton" TargetType="Button">
+            <Setter Property="Background" Value="{ThemeResource ButtonBackground}" />
+            <Setter Property="BackgroundSizing" Value="OuterBorderEdge" />
+            <Setter Property="Foreground" Value="{ThemeResource ButtonForeground}" />
+            <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}" />
+            <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}" />
+            <Setter Property="Padding" Value="{StaticResource ButtonPadding}" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}" />
+            <Setter Property="FocusVisualMargin" Value="-3" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter
+                            x:Name="ContentPresenter"
+                            Padding="{TemplateBinding Padding}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            AutomationProperties.AccessibilityView="Raw"
+                            Background="{TemplateBinding Background}"
+                            BackgroundSizing="{TemplateBinding BackgroundSizing}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            ContentTransitions="{TemplateBinding ContentTransitions}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <Storyboard>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPointerOver}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPointerOver}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPointerOver}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPressed}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPressed}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPressed}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerDownThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundDisabled}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushDisabled}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundDisabled}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </ContentPresenter>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Page.Resources>
 
     <StackPanel>
         <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Settings" />
-        <Grid Margin="20,10,20,10">
+        <Grid Margin="20,10,40,10">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -31,8 +119,8 @@
             <AutoSuggestBox
                 x:Name="PathBox"
                 Grid.Column="1"
-                Margin="20,9,20,9"
                 HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
                 PlaceholderText="The Root Folder of Your Music Library"
                 QuerySubmitted="PathBox_QuerySubmitted">
                 <AutoSuggestBox.QueryIcon>
@@ -46,12 +134,51 @@
             <ComboBox
                 x:Name="LanguageComboBox"
                 Grid.Row="2"
-                Grid.Column="2"
-                Margin="20,9,20,9">
+                Grid.Column="1"
+                VerticalAlignment="Center">
                 <ComboBoxItem Content="Follow System" IsSelected="True" />
                 <ComboBoxItem Content="Chinese" />
                 <ComboBoxItem Content="English" />
             </ComboBox>
+            <TextBlock
+                Grid.Row="3"
+                Style="{StaticResource SettingLabelStyle}"
+                Text="Theme:" />
+            <Button
+                Grid.Row="3"
+                Grid.Column="1"
+                Width="30"
+                Height="30"
+                HorizontalAlignment="Left"
+                Background="{ThemeResource SystemColorHotlightColor}"
+                FocusVisualPrimaryBrush="{ThemeResource SystemColorHotlightColor}"
+                FocusVisualSecondaryBrush="{ThemeResource SystemColorHotlightColor}"
+                Style="{StaticResource SolidColorButton}">
+                <Button.Flyout>
+                    <Flyout>
+                        <StackPanel>
+                            <ColorPicker />
+                            <Grid Margin="0,20,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Button
+                                    x:Name="ConfirmColorButton"
+                                    HorizontalAlignment="Center"
+                                    Content="Confirm" />
+                                <Button
+                                    x:Name="CancelColorButton"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Center"
+                                    Content="Cancel" />
+                            </Grid>
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
+
+
         </Grid>
     </StackPanel>
 </Page>

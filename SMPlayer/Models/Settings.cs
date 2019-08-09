@@ -19,6 +19,7 @@ namespace SMPlayer.Models
         public AppLanguage Language { get; set; }
         public PlayMode Mode { get; set; }
         public double Volume { get; set; }
+        public bool IsNavigationCollapsed { get; set; }
 
         public Settings()
         {
@@ -27,6 +28,7 @@ namespace SMPlayer.Models
             Language = AppLanguage.FollowSystem;
             Mode = PlayMode.Once;
             Volume = 50.0d;
+            IsNavigationCollapsed = true;
         }
 
         public static async void Init()

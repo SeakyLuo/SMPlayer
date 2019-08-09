@@ -32,6 +32,7 @@ namespace SMPlayer
             get { return (Window.Current.Content as Frame).Content as MainPage; }
         }
         public static Music currentPlayingMusic;
+        private List<MusicModificationListener> MusicModificationListeners = new List<MusicModificationListener>();
         public MainPage()
         {
             this.InitializeComponent();
@@ -40,28 +41,37 @@ namespace SMPlayer
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             MusicLibraryItem.IsSelected = true;
-            MediaPlayer.Volume = Settings.settings.Volume;
-            switch (Settings.settings.Mode)
+            Settings settings = Settings.settings;
+            MediaPlayer.Volume = settings.Volume;
+            VolumeSlider.Value = settings.Volume;
+            MainNavigationView.IsPaneOpen = settings.IsNavigationCollapsed;
+            if (settings.LastMusic != null) SetMusic(settings.LastMusic, false);
+            switch (settings.Mode)
             {
                 case PlayMode.Repeat:
                     RepeatButton.IsChecked = true;
+                    MediaPlayer.IsLooping = false;
                     break;
                 case PlayMode.RepeatOne:
                     RepeatOneButton.IsChecked = true;
+                    MediaPlayer.IsLooping = true;
                     break;
                 case PlayMode.Shuffle:
                     ShuffleButton.IsChecked = true;
+                    MediaPlayer.IsLooping = false;
                     break;
                 default:
                     break;
             }
         }
 
-        public async void SetMusic(Music music)
+        public async void SetMusic(Music music, bool play = true)
         {
             currentPlayingMusic = music;
-            MediaPlayer.Source = new Uri(music.Path);
             var file = await StorageFile.GetFileFromPathAsync(music.Path);
+            MediaPlayer.Source = new Uri(music.Path, UriKind.Absolute);
+            //MediaPlayer.SetSource(await file.OpenReadAsync(), file.ContentType);
+            //MediaPlayer.SetSource(await file.OpenAsync(FileAccessMode.Read), file.ContentType);
             using (var thumbnail = await file.GetThumbnailAsync(ThumbnailMode.MusicView, 300))
             {
                 if (thumbnail != null && thumbnail.Type == ThumbnailType.Image)
@@ -77,7 +87,16 @@ namespace SMPlayer
             RightTimeTextBlock.Text = MusicDurationConverter.ToTime(music.Duration);
             if (music.Favorite) LikeMusic();
             else DislikeMusic();
-            Play();
+            if (play)
+            {
+                ProgressBar.Value = 0;
+                Play();
+            }
+            if (Settings.settings.LastMusic != music)
+            {
+                Settings.settings.LastMusic = music;
+                Settings.Save();
+            }
         }
 
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
@@ -85,6 +104,7 @@ namespace SMPlayer
             RepeatButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
             Settings.settings.Mode = ShuffleButton.IsChecked == true ? PlayMode.Shuffle : PlayMode.Once;
+            MediaPlayer.IsLooping = false;
         }
 
         private void RepeatButton_Click(object sender, RoutedEventArgs e)
@@ -92,6 +112,7 @@ namespace SMPlayer
             ShuffleButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
             Settings.settings.Mode = RepeatButton.IsChecked == true ? PlayMode.Shuffle : PlayMode.Once;
+            MediaPlayer.IsLooping = false;
         }
 
         private void RepeatOneButton_Click(object sender, RoutedEventArgs e)
@@ -99,6 +120,7 @@ namespace SMPlayer
             ShuffleButton.IsChecked = false;
             RepeatButton.IsChecked = false;
             Settings.settings.Mode = RepeatOneButton.IsChecked == true ? PlayMode.Shuffle : PlayMode.Once;
+            MediaPlayer.IsLooping = true;
         }
 
         private void Play()
@@ -214,7 +236,7 @@ namespace SMPlayer
 
         private void ProgressBar_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-
+            MediaPlayer.Position = TimeSpan.FromSeconds(e.NewValue);
         }
         private void VolumeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
@@ -225,14 +247,26 @@ namespace SMPlayer
         {
             LikeButtonIcon.Glyph = "\uEB52";
             LikeButtonIcon.Foreground = new SolidColorBrush(Windows.UI.Colors.Red);
-            currentPlayingMusic.Favorite = true;
+            SetMusicFavorite(true);
         }
 
         private void DislikeMusic()
         {
             LikeButtonIcon.Glyph = "\uEB51";
             LikeButtonIcon.Foreground = new SolidColorBrush(Windows.UI.Colors.Black);
-            currentPlayingMusic.Favorite = false;
+            SetMusicFavorite(false);
+        }
+        
+        public void AddMusicModificationListener(MusicModificationListener listener)
+        {
+            MusicModificationListeners.Add(listener);
+        }
+
+        private void SetMusicFavorite(bool favorite)
+        {
+            foreach (var listener in MusicModificationListeners)
+                listener.FavoriteChangeListener(currentPlayingMusic, favorite);
+            currentPlayingMusic.Favorite = favorite;
         }
 
         private void LikeButton_Click(object sender, RoutedEventArgs e)
@@ -241,5 +275,46 @@ namespace SMPlayer
             if (LikeButtonIcon.Glyph == "\uEB51") LikeMusic();
             else DislikeMusic();
         }
+
+        private void PrevButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void NextMusic()
+        {
+
+        }
+
+        private void NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            NextMusic();
+        }
+
+        private void MediaPlayer_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            switch (Settings.settings.Mode)
+            {
+                case PlayMode.Once:
+                    break;
+                case PlayMode.Repeat:
+                    NextMusic();
+                    break;
+                case PlayMode.RepeatOne:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void MediaPlayer_MediaFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            NaviSearchBar.Text = e.ErrorMessage;
+        }
+    }
+
+    public interface MusicModificationListener
+    {
+        void FavoriteChangeListener(Music music, bool favorite);
     }
 }

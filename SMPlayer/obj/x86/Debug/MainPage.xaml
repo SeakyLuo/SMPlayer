@@ -64,13 +64,13 @@
                                                     x:Name="ellipse"
                                                     Fill="{TemplateBinding Foreground}"
                                                     Stroke="{TemplateBinding Background}"
-                                                    StrokeThickness="2" />
+                                                    StrokeThickness="5" />
                                             </ControlTemplate>
                                         </Setter.Value>
                                     </Setter>
                                 </Style>
                                 <Style x:Key="MediaSliderProgressBarStyle" TargetType="ProgressBar">
-                                    <Setter Property="Height" Value="{ThemeResource SliderTrackThemeHeight}" />
+                                    <Setter Property="Height" Value="5" />
                                     <Setter Property="Minimum" Value="0" />
                                     <Setter Property="Maximum" Value="100" />
                                     <Setter Property="Foreground" Value="{ThemeResource SystemControlHighlightChromeAltLowBrush}" />
@@ -127,14 +127,6 @@
                                         Grid.Row="1"
                                         Fill="{TemplateBinding Foreground}" />
                                     <TickBar
-                                        x:Name="TopTickBar"
-                                        Grid.ColumnSpan="3"
-                                        Height="{ThemeResource SliderOutsideTickBarThemeHeight}"
-                                        Margin="0,0,0,4"
-                                        VerticalAlignment="Bottom"
-                                        Fill="{ThemeResource SliderTickBarFill}"
-                                        Visibility="Collapsed" />
-                                    <TickBar
                                         x:Name="HorizontalInlineTickBar"
                                         Grid.Row="1"
                                         Grid.ColumnSpan="3"
@@ -155,26 +147,18 @@
                                         Grid.Row="0"
                                         Grid.RowSpan="3"
                                         Grid.Column="1"
-                                        Width="24"
-                                        Height="24"
+                                        Width="20"
+                                        Height="20"
                                         AutomationProperties.AccessibilityView="Raw"
                                         FocusVisualMargin="-14,-6,-14,-6"
                                         Style="{StaticResource SliderThumbStyle}">
                                         <Thumb.DataContext>
-                                            <Grid Width="192" Height="112">
-                                                <Image x:Name="ThumbnailImage" />
-                                                <Border
-                                                    HorizontalAlignment="Left"
-                                                    VerticalAlignment="Bottom"
-                                                    Background="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
-                                                    <TextBlock
-                                                        x:Name="TimeElapsedPreview"
-                                                        Margin="6,1,6,3"
-                                                        Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"
-                                                        IsTextScaleFactorEnabled="False"
-                                                        Style="{StaticResource BodyTextBlockStyle}" />
-                                                </Border>
-                                            </Grid>
+                                            <TextBlock
+                                                x:Name="TimeElapsedPreview"
+                                                Margin="3"
+                                                Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"
+                                                IsTextScaleFactorEnabled="True"
+                                                Style="{StaticResource BodyTextBlockStyle}" />
                                         </Thumb.DataContext>
                                         <ToolTipService.ToolTip>
                                             <ToolTip x:Name="ThumbnailTooltip">
@@ -442,36 +426,51 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <StackPanel
+            <Grid
                 Grid.Column="0"
                 Margin="0"
-                HorizontalAlignment="Left"
-                Orientation="Horizontal">
+                HorizontalAlignment="Left">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
                 <Image x:ConnectionId='23'
                     x:Name="AlbumCover"
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Grid.Column="0"
                     Width="100"
                     Height="100"
-                    HorizontalAlignment="Left"
-                    Source="Assets/music.png" />
-                <StackPanel VerticalAlignment="Center">
-                    <TextBlock x:ConnectionId='24'
-                        x:Name="TitleTextBlock"
-                        Margin="10,0,5,5"
-                        FontSize="24"
-                        Text="Title" />
-                    <TextBlock x:ConnectionId='25'
-                        x:Name="ArtistTextBlock"
-                        Margin="10,5,5,0"
-                        FontSize="18"
-                        FontWeight="Bold"
-                        Text="Artist" />
-                </StackPanel>
-            </StackPanel>
+                    Source="Assets/music.png"
+                    Stretch="UniformToFill" />
+                <TextBlock x:ConnectionId='24'
+                    x:Name="TitleTextBlock"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="10,0,5,5"
+                    VerticalAlignment="Bottom"
+                    FontSize="24"
+                    Text="Title" />
+                <TextBlock x:ConnectionId='25'
+                    x:Name="ArtistTextBlock"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="10,5,5,0"
+                    VerticalAlignment="Top"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Text="Artist" />
+            </Grid>
 
-            <StackPanel Grid.Column="1">
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                     <Button x:ConnectionId='19'
                         x:Name="PrevButton"
+                                                
                         Content="&#xE892;"
                         Style="{StaticResource MediaControlButtonStyle}" />
                     <Button x:ConnectionId='20'
@@ -487,19 +486,27 @@
                     </Button>
                     <Button x:ConnectionId='21'
                         x:Name="NextButton"
+                                                
                         Content="&#xE893;"
                         Style="{StaticResource MediaControlButtonStyle}" />
                 </StackPanel>
-                <RelativePanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
                     <TextBlock x:ConnectionId='15'
                         x:Name="LeftTimeTextBlock"
-                        Margin="20"
+                        Margin="10,0,20,0"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI"
                         RelativePanel.AlignLeftWithPanel="True"
                         Text="0:00" />
                     <Slider x:ConnectionId='16'
                         x:Name="ProgressBar"
-                        Margin="0,10,0,10"
-                        IsThumbToolTipEnabled="False"
+                        Grid.Column="1"
+                        IsThumbToolTipEnabled="True"
                         Minimum="0"
                         RelativePanel.LeftOf="RightTimeTextBlock"
                         RelativePanel.RightOf="LeftTimeTextBlock"
@@ -508,15 +515,21 @@
                                                                 />
                     <MediaElement x:ConnectionId='17'
                         x:Name="MediaPlayer"
+                        Grid.Column="1"
                         AutoPlay="False"
+                        IsLooping="False"
+                                                           
+                                                             
                         Volume="50" />
-                    <ProgressBar ElementSoundMode="FocusOnly" />
                     <TextBlock x:ConnectionId='18'
                         x:Name="RightTimeTextBlock"
-                        Margin="20"
+                        Grid.Column="2"
+                        Margin="20,0,10,0"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI"
                         RelativePanel.AlignRightWithPanel="True"
                         Text="0:00" />
-                </RelativePanel>
+                </Grid>
             </StackPanel>
             <StackPanel
                 Grid.Column="2"
@@ -534,7 +547,8 @@
                     <Slider x:ConnectionId='11'
                         x:Name="VolumeSlider"
                         Width="100"
-                        Margin="10,10,20,10"
+                        Margin="10,0,20,0"
+                        VerticalAlignment="Center"
                         Maximum="100"
                         Minimum="0"
                                                                 
