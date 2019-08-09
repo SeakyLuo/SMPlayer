@@ -13,6 +13,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
+using SMPlayer.Models;
+using Windows.Storage;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -28,11 +30,43 @@ namespace SMPlayer
         public MusicLibraryPage()
         {
             this.InitializeComponent();
+            MusicLibraryDataGrid.ItemsSource = songs;
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            
+            if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
+            if (songs.Count == 0)
+            {
+                MusicLibraryProgressRing.IsActive = true;
+                MusicLibraryProgressRing.Visibility = Visibility.Visible;
+                Settings.SetTreeFolder(await StorageFolder.GetFolderFromPathAsync(Settings.settings.RootPath), AfterTreeFirstlySet);
+            }
+            else
+            {
+                Settings.SetTreeFolder(await StorageFolder.GetFolderFromPathAsync(Settings.settings.RootPath), ConvertCollection);
+            }
+        }
+
+        private void AfterTreeFirstlySet()
+        {
+            ConvertCollection();
+            MusicLibraryProgressRing.IsActive = false;
+            MusicLibraryProgressRing.Visibility = Visibility.Collapsed;
+        }
+
+        private void ConvertCollection()
+        {
+            songs.Clear();
+            foreach (var item in MusicManager.AllSongs)
+                songs.Add(item);
+        }
+
+        private void PlayItem_Click(object sender, RoutedEventArgs e)
+        {
+            var menu = sender as MenuFlyoutItem;
+            var music = menu.DataContext as Music;
+            MainPage.Instance.SetMusic(music);
         }
     }
 }

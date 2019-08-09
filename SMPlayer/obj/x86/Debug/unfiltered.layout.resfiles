@@ -15,6 +15,7 @@ MainPage.xbf
 Microsoft.UI.Xaml\DensityStyles\Compact.xbf
 MusicLibraryPage.xbf
 MusicListPage.xbf
+MyFavorites.xbf
 NowPlayingPage.xbf
 PlaylistsPage.xbf
 SearchPage.xbf
@@ -22,6 +23,5 @@ SettingsPage.xbf
 SMPlayer.xr.xml
 TemplateDictionary.xbf
 Themes\Generic.xbf
-ToPlayPage.xbf
 WhiteNavigationView.xbf
 Properties\Default.rd.xml

@@ -368,7 +368,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
+        <local:MusicDurationConverter x:Key="MusicDurationConverter" />
     </Page.Resources>
 
     <Grid>
@@ -460,11 +460,11 @@
                         FontSize="24"
                         Text="Title" />
                     <TextBlock x:ConnectionId='25'
-                        x:Name="AuthorTextBlock"
+                        x:Name="ArtistTextBlock"
                         Margin="10,5,5,0"
                         FontSize="18"
                         FontWeight="Bold"
-                        Text="Author" />
+                        Text="Artist" />
                 </StackPanel>
             </StackPanel>
 
@@ -495,22 +495,27 @@
                         x:Name="LeftTimeTextBlock"
                         Margin="20"
                         RelativePanel.AlignLeftWithPanel="True"
-                        Text="00:00" />
+                        Text="0:00" />
                     <Slider x:ConnectionId='16'
                         x:Name="ProgressBar"
                         Margin="0,10,0,10"
                         IsThumbToolTipEnabled="False"
+                        Minimum="0"
                         RelativePanel.LeftOf="RightTimeTextBlock"
                         RelativePanel.RightOf="LeftTimeTextBlock"
                         Style="{StaticResource MediaSliderStyle}"
+                        ThumbToolTipValueConverter="{StaticResource MusicDurationConverter}"
                                                                 />
-                    <MediaElement x:ConnectionId='17' x:Name="MediaPlayer" AutoPlay="False" />
+                    <MediaElement x:ConnectionId='17'
+                        x:Name="MediaPlayer"
+                        AutoPlay="False"
+                        Volume="50" />
                     <ProgressBar ElementSoundMode="FocusOnly" />
                     <TextBlock x:ConnectionId='18'
                         x:Name="RightTimeTextBlock"
                         Margin="20"
                         RelativePanel.AlignRightWithPanel="True"
-                        Text="00:00" />
+                        Text="0:00" />
                 </RelativePanel>
             </StackPanel>
             <StackPanel
@@ -527,11 +532,12 @@
                         </Button.Content>
                     </Button>
                     <Slider x:ConnectionId='11'
-                        x:Name="Volume"
+                        x:Name="VolumeSlider"
                         Width="100"
                         Margin="10,10,20,10"
                         Maximum="100"
                         Minimum="0"
+                                                                
                         Value="50" />
                     <Button x:ConnectionId='12'
                         x:Name="LikeButton"

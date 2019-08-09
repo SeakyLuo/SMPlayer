@@ -10,6 +10,12 @@
                         
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <local:MusicDurationConverter x:Key="MusicDurationConverter" />
+        <local:MusicFavoriteConverter x:Key="MusicFavoriteConverter" />
+        <local:MusicPlayedTimesConverter x:Key="MusicPlayedTimesConverter" />
+    </Page.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -35,43 +41,81 @@
             CanUserResizeColumns="True"
             CanUserSortColumns="True"
             ColumnHeaderHeight="32"
+            Foreground="Black"
             FrozenColumnCount="0"
             GridLinesVisibility="None"
             HeadersVisibility="Column"
             HorizontalScrollBarVisibility="Visible"
+            IsDoubleTapEnabled="True"
             IsReadOnly="False"
-                                        
-            MaxColumnWidth="400"
+            ItemsSource="{Binding songs}"
+            MinColumnWidth="100"
             SelectionMode="Extended"
             VerticalScrollBarVisibility="Visible">
             <controls:DataGrid.Columns>
                 <controls:DataGridTextColumn
+                    Width="200"
                     Binding="{Binding Name}"
-                    Header="Name"
-                    Tag="Name" />
-                <controls:DataGridComboBoxColumn
+                    Header="Name" />
+                <controls:DataGridTextColumn
+                    Width="160"
                     Binding="{Binding Artist}"
-                    Header="Artist"
-                    Tag="Artist" />
+                    Header="Artist" />
                 <controls:DataGridTextColumn
+                    Width="200"
                     Binding="{Binding Album}"
-                    Header="Album"
-                    Tag="Album" />
+                    Header="Album" />
                 <controls:DataGridTextColumn
-                    Binding="{Binding Duration}"
+                    MaxWidth="120"
+                    Binding="{Binding Duration, Converter={StaticResource MusicDurationConverter}}"
                     Header="Duration"
-                    Tag="Duration" />
+                    IsReadOnly="True" />
                 <controls:DataGridTextColumn
-                    Binding="{Binding Favorite}"
-                    FontFamily="Segoe MDL2 Assets"
-                    Header="&#xEB51;"
-                    Tag="Favorite" />
+                    Binding="{Binding Favorite, Converter={StaticResource MusicFavoriteConverter}}"
+                    CanUserReorder="False"
+                    CanUserResize="False"
+                    Header="Favorite"
+                    IsReadOnly="True" />
                 <controls:DataGridTextColumn
-                    Binding="{Binding PlayedTimes}"
+                    MaxWidth="120"
+                    Binding="{Binding PlayedTimes, Converter={StaticResource MusicPlayedTimesConverter}}"
                     Header="Played"
-                    Tag="Played" />
+                    IsReadOnly="True" />
             </controls:DataGrid.Columns>
+            <controls:DataGrid.RowStyle>
+                <Style TargetType="controls:DataGridRow">
+                    <Setter Property="controls:DataGridRow.ContextFlyout">
+                        <Setter.Value>
+                            <MenuFlyout>
+                                <MenuFlyoutItem x:ConnectionId='5'
+                                    x:Name="PlayItem"
+                                                          
+                                    Icon="Play"
+                                    Text="Play" />
+                                <MenuFlyoutSubItem x:ConnectionId='6'
+                                    x:Name="AddToPlaylistsItem"
+                                    Icon="Add"
+                                    Text="Add To Playlists">
+                                    <MenuFlyoutItem Text="Create New Playlists" />
+                                    <MenuFlyoutSeparator />
+                                    <MenuFlyoutItem Icon="List" Text="My Favorites" />
+                                </MenuFlyoutSubItem>
+                            </MenuFlyout>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </controls:DataGrid.RowStyle>
         </controls:DataGrid>
+
+        <ProgressRing x:ConnectionId='4'
+            x:Name="MusicLibraryProgressRing"
+            Grid.Row="1"
+            Width="100"
+            Height="100"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            IsActive="False"
+            Visibility="Collapsed" />
     </Grid>
 
 </Page>

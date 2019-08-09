@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Roots >
+  <Roots.Interfaces>
+    <RootInterface FullName="Windows.UI.Xaml.Data.IValueConverter" />
+  </Roots.Interfaces>
   <Roots.PropertyPathNames>
     <RootPropertyPathName Name="Emails" />
     <RootPropertyPathName Name="Body" />
@@ -16,6 +19,7 @@
     <RootPropertyPathName Name="PaneToggleButtonVisibility" />
     <RootPropertyPathName Name="BackButtonVisibility" />
     <RootPropertyPathName Name="CompactPaneLength" />
+    <RootPropertyPathName Name="songs" />
     <RootPropertyPathName Name="PlayedTimes" />
     <RootPropertyPathName Name="Favorite" />
     <RootPropertyPathName Name="Duration" />
@@ -160,6 +164,7 @@
     <RootType FullName="Windows.UI.Xaml.Data.Binding">
       <RootProperty Name="Mode" />
       <RootProperty Name="RelativeSource" />
+      <RootProperty Name="Converter" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.DataTemplate">
       <RootProperty Name="Template" />
@@ -195,6 +200,7 @@
     </RootType>
     <RootType FullName="SMPlayer.ArtistsPage" />
     <RootType FullName="SMPlayer.MusicListPage" />
+    <RootType FullName="SMPlayer.MyFavorites" />
     <RootType FullName="SMPlayer.SearchPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.ContentControl">
       <RootProperty Name="Content" />
@@ -353,6 +359,9 @@
       <RootProperty Name="Value" />
     </RootType>
     <RootType FullName="SMPlayer.HistoryPage" />
+    <RootType FullName="SMPlayer.MusicDurationConverter" />
+    <RootType FullName="SMPlayer.MusicFavoriteConverter" />
+    <RootType FullName="SMPlayer.MusicPlayedTimesConverter" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGrid">
       <RootProperty Name="Margin" />
       <RootProperty Name="HorizontalAlignment" />
@@ -366,29 +375,56 @@
       <RootProperty Name="CanUserResizeColumns" />
       <RootProperty Name="CanUserSortColumns" />
       <RootProperty Name="ColumnHeaderHeight" />
+      <RootProperty Name="Foreground" />
       <RootProperty Name="FrozenColumnCount" />
       <RootProperty Name="GridLinesVisibility" />
       <RootProperty Name="HeadersVisibility" />
       <RootProperty Name="HorizontalScrollBarVisibility" />
+      <RootProperty Name="IsDoubleTapEnabled" />
       <RootProperty Name="IsReadOnly" />
       <RootProperty Name="ItemsSource" />
-      <RootProperty Name="MaxColumnWidth" />
+      <RootProperty Name="MinColumnWidth" />
       <RootProperty Name="SelectionMode" />
       <RootProperty Name="VerticalScrollBarVisibility" />
       <RootProperty Name="Columns" />
+      <RootProperty Name="RowStyle" />
     </RootType>
-    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.BindExtension" />
+    <RootType FullName="Windows.UI.Xaml.Controls.ProgressRing">
+      <RootProperty Name="Width" />
+      <RootProperty Name="Height" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="IsActive" />
+      <RootProperty Name="Visibility" />
+    </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGridTextColumn">
+      <RootProperty Name="Width" />
       <RootProperty Name="Binding" />
       <RootProperty Name="Header" />
-      <RootProperty Name="Tag" />
-      <RootProperty Name="FontFamily" />
+      <RootProperty Name="MaxWidth" />
+      <RootProperty Name="IsReadOnly" />
+      <RootProperty Name="CanUserReorder" />
+      <RootProperty Name="CanUserResize" />
     </RootType>
-    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGridComboBoxColumn">
-      <RootProperty Name="Binding" />
-      <RootProperty Name="Header" />
-      <RootProperty Name="Tag" />
+    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGridRow" />
+    <RootType FullName="Windows.UI.Xaml.UIElement">
+      <RootProperty Name="ContextFlyout" />
+      <RootProperty Name="ManipulationMode" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyout">
+      <RootProperty Name="Items" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutItem">
+      <RootProperty Name="Icon" />
+      <RootProperty Name="Text" />
+      <RootEvent Name="Click" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutSubItem">
+      <RootProperty Name="Icon" />
+      <RootProperty Name="Text" />
+      <RootProperty Name="Items" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutSeparator" />
     <RootType FullName="SMPlayer.MusicLibraryPage" />
     <RootType FullName="SMPlayer.NowPlayingPage" />
     <RootType FullName="SMPlayer.PlaylistsPage" />
@@ -422,10 +458,8 @@
       <RootProperty Name="Value" />
       <RootProperty Name="IsThumbToolTipEnabled" />
       <RootProperty Name="Style" />
+      <RootProperty Name="ThumbToolTipValueConverter" />
       <RootEvent Name="ValueChanged" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.UIElement">
-      <RootProperty Name="ManipulationMode" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.Thumb">
       <RootProperty Name="Width" />
@@ -471,25 +505,14 @@
     <RootType FullName="Windows.UI.Xaml.Controls.ToolTip">
       <RootProperty Name="Content" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyout">
-      <RootProperty Name="Items" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutSubItem">
-      <RootProperty Name="Icon" />
-      <RootProperty Name="Text" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutItem">
-      <RootProperty Name="Icon" />
-      <RootProperty Name="Text" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.MediaElement">
       <RootProperty Name="AutoPlay" />
+      <RootProperty Name="Volume" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.NavigationViewItemSeparator" />
     <RootType FullName="Windows.UI.Xaml.Controls.Frame">
       <RootProperty Name="IsNavigationStackEnabled" />
     </RootType>
     <RootType FullName="SMPlayer.MainPage" />
-    <RootType FullName="SMPlayer.ToPlayPage" />
   </Roots.RootTypes>
 </Roots>

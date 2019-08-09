@@ -9,15 +9,28 @@ using SMPlayer.Models;
 
 namespace SMPlayer
 {
-    class Music
+    [Serializable]
+    public class Music : IComparable<Music>
     {
-        private string Path { get; set; }
-        private string Name { get; set; }
-        private string Artist { get; set; }
-        private string Album { get; set; }
-        private int Duration { get; set; } 
-        private bool Favorite { get; set; }
-        private int PlayedTimes { get; set; }
+        public string Path { get; set; }
+        public string Name { get; set; }
+        public string Artist { get; set; }
+        public string Album { get; set; }
+        public int Duration { get; set; }
+        public bool Favorite { get; set; }
+        public int PlayedTimes { get; set; }
+        public Music() { }
+
+        public Music(string path, MusicProperties properties)
+        {
+            Path = path;
+            Name = properties.Title;
+            Artist = properties.Artist;
+            Album = properties.Album;
+            Duration = (int)properties.Duration.TotalSeconds;
+            Favorite = false;
+            PlayedTimes = 0;
+        }
 
         public static async Task<MusicProperties> GetMusicProperties(string path)
         {
@@ -30,15 +43,9 @@ namespace SMPlayer
             return new Music(path, await GetMusicProperties(path));
         }
 
-        public Music(string path, MusicProperties properties)
+        int IComparable<Music>.CompareTo(Music other)
         {
-            Path = path;
-            Name = properties.Title;
-            Artist = properties.Artist;
-            Album = properties.Album;
-            Duration = (int)properties.Duration.TotalSeconds;
-            Favorite = false;
-            PlayedTimes = 0;
+            return (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(other.Name)) ? 0 : Name.CompareTo(other.Name);
         }
     }
 }

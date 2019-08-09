@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.Storage.Pickers;
 using SMPlayer.Models;
 using Windows.Storage;
+using System.Threading.Tasks;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -36,10 +37,12 @@ namespace SMPlayer
             picker.SuggestedStartLocation = PickerLocationId.MusicLibrary;
             picker.FileTypeFilter.Add("*");
             StorageFolder folder = await picker.PickSingleFolderAsync();
-            if (folder == null) return;
+            if (folder == null || folder.Path == Settings.settings.RootPath) return;
             PathBox.Text = folder.Path;
             Settings.settings.RootPath = folder.Path;
             Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
+            Settings.Save();
+            Settings.SetTreeFolder(folder);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

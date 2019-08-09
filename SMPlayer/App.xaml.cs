@@ -1,8 +1,10 @@
-﻿using System;
+﻿using SMPlayer.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -28,6 +30,8 @@ namespace SMPlayer
         /// </summary>
         public App()
         {
+            Settings.Init();
+            MusicManager.Init();
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }

@@ -130,14 +130,21 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\FolderTree.cs" />
+    <Compile Include="Models\JsonFileHelper.cs" />
     <Compile Include="Models\Music.cs" />
     <Compile Include="Models\MusicManager.cs" />
     <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\SettingsEnum.cs" />
     <Compile Include="MusicLibraryPage.xaml.cs">
       <DependentUpon>MusicLibraryPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MusicListPage.xaml.cs">
       <DependentUpon>MusicListPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MusicConverter.cs" />
+    <Compile Include="MyFavorites.xaml.cs">
+      <DependentUpon>MyFavorites.xaml</DependentUpon>
     </Compile>
     <Compile Include="NowPlayingPage.xaml.cs">
       <DependentUpon>NowPlayingPage.xaml</DependentUpon>
@@ -151,9 +158,6 @@
     </Compile>
     <Compile Include="SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ToPlayPage.xaml.cs">
-      <DependentUpon>ToPlayPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -186,6 +190,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MusicListPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyFavorites.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -229,10 +237,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ToPlayPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
@@ -250,12 +254,19 @@
     <PackageReference Include="Microsoft.UI.Xaml">
       <Version>2.1.190606001</Version>
     </PackageReference>
-    <PackageReference Include="System.Data.SQLite">
-      <Version>1.0.111</Version>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.2</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="app.manifest" />
+  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
