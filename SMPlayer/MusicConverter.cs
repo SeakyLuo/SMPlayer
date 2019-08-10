@@ -15,8 +15,8 @@ namespace SMPlayer
                 int seconds;
                 if (int.TryParse((string)value, out seconds)) return ToTime(seconds);
             }
-            if (value is int) return ToTime((int)value);
-            return "";
+            if (value is int || value is double) return ToTime((int)value);
+            return "0:00";
         }
 
         public static string ToTime(int seconds)
@@ -37,6 +37,7 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
+            //return value.Equals(true) ? "\uEB52" : "";
             return (value is bool && (bool)value) ? "\uEB52" : "";
         }
 

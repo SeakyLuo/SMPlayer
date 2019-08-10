@@ -20,6 +20,16 @@ namespace SMPlayer
         public bool Favorite { get; set; }
         public int PlayedTimes { get; set; }
         public Music() { }
+        public Music(Music obj)
+        {
+            Path = obj.Path;
+            Name = obj.Name;
+            Artist = obj.Artist;
+            Album = obj.Album;
+            Duration = obj.Duration;
+            Favorite = obj.Favorite;
+            PlayedTimes = obj.PlayedTimes;
+        }
 
         public Music(string path, MusicProperties properties)
         {
@@ -30,6 +40,11 @@ namespace SMPlayer
             Duration = (int)properties.Duration.TotalSeconds;
             Favorite = false;
             PlayedTimes = 0;
+        }
+
+        public string GetShortPath()
+        {
+            return Path.Substring(Path.IndexOf(Name));
         }
 
         public static async Task<MusicProperties> GetMusicProperties(string path)
@@ -46,6 +61,21 @@ namespace SMPlayer
         int IComparable<Music>.CompareTo(Music other)
         {
             return (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(other.Name)) ? 0 : Name.CompareTo(other.Name);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Path == (obj as Music).Path;
+        }
+
+        public override int GetHashCode()
+        {
+            return Path.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return Path;
         }
     }
 }

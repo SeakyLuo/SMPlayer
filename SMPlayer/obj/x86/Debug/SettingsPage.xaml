@@ -151,23 +151,21 @@
                 Height="30"
                 HorizontalAlignment="Left"
                 Background="{ThemeResource SystemColorHotlightColor}"
-                FocusVisualPrimaryBrush="{ThemeResource SystemColorHotlightColor}"
-                FocusVisualSecondaryBrush="{ThemeResource SystemColorHotlightColor}"
                 Style="{StaticResource SolidColorButton}">
                 <Button.Flyout>
                     <Flyout>
                         <StackPanel>
-                            <ColorPicker />
+                            <ColorPicker x:ConnectionId='6' x:Name="ThemeColorPicker" Color="{ThemeResource SystemColorHotlightColor}" />
                             <Grid Margin="0,20,0,10">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Button x:ConnectionId='6'
+                                <Button x:ConnectionId='7'
                                     x:Name="ConfirmColorButton"
                                     HorizontalAlignment="Center"
                                     Content="Confirm" />
-                                <Button x:ConnectionId='7'
+                                <Button x:ConnectionId='8'
                                     x:Name="CancelColorButton"
                                     Grid.Column="1"
                                     HorizontalAlignment="Center"

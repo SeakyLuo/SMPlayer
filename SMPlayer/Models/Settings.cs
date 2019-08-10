@@ -23,7 +23,7 @@ namespace SMPlayer.Models
 
         public Settings()
         {
-            RootPath = KnownFolders.MusicLibrary.Path;
+            RootPath = "";
             Tree = new FolderTree();
             Language = AppLanguage.FollowSystem;
             Mode = PlayMode.Once;

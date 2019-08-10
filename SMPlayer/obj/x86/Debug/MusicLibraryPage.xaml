@@ -41,6 +41,7 @@
             CanUserResizeColumns="True"
             CanUserSortColumns="True"
             ColumnHeaderHeight="32"
+                                                            
             Foreground="Black"
             FrozenColumnCount="0"
             GridLinesVisibility="None"
@@ -74,8 +75,16 @@
                     Binding="{Binding Favorite, Converter={StaticResource MusicFavoriteConverter}}"
                     CanUserReorder="False"
                     CanUserResize="False"
+                    Foreground="Red"
                     Header="Favorite"
-                    IsReadOnly="True" />
+                    IsReadOnly="True">
+                    <controls:DataGridTextColumn.CellStyle>
+                        <Style TargetType="controls:DataGridCell">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+                        </Style>
+                    </controls:DataGridTextColumn.CellStyle>
+                </controls:DataGridTextColumn>
                 <controls:DataGridTextColumn
                     MaxWidth="120"
                     Binding="{Binding PlayedTimes, Converter={StaticResource MusicPlayedTimesConverter}}"

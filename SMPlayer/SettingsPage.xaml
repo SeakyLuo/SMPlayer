@@ -151,13 +151,11 @@
                 Height="30"
                 HorizontalAlignment="Left"
                 Background="{ThemeResource SystemColorHotlightColor}"
-                FocusVisualPrimaryBrush="{ThemeResource SystemColorHotlightColor}"
-                FocusVisualSecondaryBrush="{ThemeResource SystemColorHotlightColor}"
                 Style="{StaticResource SolidColorButton}">
                 <Button.Flyout>
                     <Flyout>
                         <StackPanel>
-                            <ColorPicker />
+                            <ColorPicker x:Name="ThemeColorPicker" Color="{ThemeResource SystemColorHotlightColor}" />
                             <Grid Margin="0,20,0,10">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />

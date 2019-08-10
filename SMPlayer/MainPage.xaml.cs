@@ -31,17 +31,27 @@ namespace SMPlayer
             // This will return null when your current page is not a MainPage instance!
             get { return (Window.Current.Content as Frame).Content as MainPage; }
         }
-        public static Music currentPlayingMusic;
-        private List<MusicModificationListener> MusicModificationListeners = new List<MusicModificationListener>();
+        public static StorageFolder CurrentMusicFolder;
+        public static Music CurrentMusic;
+        public static DispatcherTimer MusicTimer;
+        private Dictionary<string, MusicModificationListener> MusicModificationListeners = new Dictionary<string, MusicModificationListener>();
+        private bool isDraggingProgressBar = false;
         public MainPage()
         {
             this.InitializeComponent();
+            MusicTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
+            MusicTimer.Tick += MusicTimer_Tick;
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             MusicLibraryItem.IsSelected = true;
             Settings settings = Settings.settings;
+            if (!string.IsNullOrEmpty(settings.RootPath))
+                CurrentMusicFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
             MediaPlayer.Volume = settings.Volume;
             VolumeSlider.Value = settings.Volume;
             MainNavigationView.IsPaneOpen = settings.IsNavigationCollapsed;
@@ -67,11 +77,9 @@ namespace SMPlayer
 
         public async void SetMusic(Music music, bool play = true)
         {
-            currentPlayingMusic = music;
-            var file = await StorageFile.GetFileFromPathAsync(music.Path);
-            MediaPlayer.Source = new Uri(music.Path, UriKind.Absolute);
-            //MediaPlayer.SetSource(await file.OpenReadAsync(), file.ContentType);
-            //MediaPlayer.SetSource(await file.OpenAsync(FileAccessMode.Read), file.ContentType);
+            CurrentMusic = music;
+            var file = await CurrentMusicFolder.GetFileAsync(music.GetShortPath());
+            MediaPlayer.SetSource(await file.OpenAsync(FileAccessMode.Read), file.ContentType);
             using (var thumbnail = await file.GetThumbnailAsync(ThumbnailMode.MusicView, 300))
             {
                 if (thumbnail != null && thumbnail.Type == ThumbnailType.Image)
@@ -85,8 +93,8 @@ namespace SMPlayer
             ArtistTextBlock.Text = music.Artist;
             ProgressBar.Maximum = music.Duration;
             RightTimeTextBlock.Text = MusicDurationConverter.ToTime(music.Duration);
-            if (music.Favorite) LikeMusic();
-            else DislikeMusic();
+            if (music.Favorite) LikeMusic(false);
+            else DislikeMusic(false);
             if (play)
             {
                 ProgressBar.Value = 0;
@@ -123,23 +131,26 @@ namespace SMPlayer
             MediaPlayer.IsLooping = true;
         }
 
-        private void Play()
+        public void Play()
         {
+            if (CurrentMusic == null) return;
             PlayButtonIcon.Glyph = "\uE769";
             MediaPlayer.Play();
+            MusicTimer.Start();
+        }
+
+        public void Pause()
+        {
+            if (CurrentMusic == null) return;
+            PlayButtonIcon.Glyph = "\uE768";
+            MediaPlayer.Pause();
+            MusicTimer.Stop();
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            if (PlayButtonIcon.Glyph == "\uE768")
-            {
-                Play();
-            }
-            else
-            {
-                PlayButtonIcon.Glyph = "\uE768";
-                MediaPlayer.Pause();
-            }
+            if (PlayButtonIcon.Glyph == "\uE768") Play();
+            else Pause();
         }
 
         private void VolumeButton_Click(object sender, RoutedEventArgs e)
@@ -234,39 +245,36 @@ namespace SMPlayer
             }
         }
 
-        private void ProgressBar_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
-        {
-            MediaPlayer.Position = TimeSpan.FromSeconds(e.NewValue);
-        }
         private void VolumeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             MediaPlayer.Volume = e.NewValue;
         }
 
-        private void LikeMusic()
+        public void LikeMusic(bool isClick = true)
         {
             LikeButtonIcon.Glyph = "\uEB52";
             LikeButtonIcon.Foreground = new SolidColorBrush(Windows.UI.Colors.Red);
-            SetMusicFavorite(true);
+            if (isClick) SetMusicFavorite(true);
         }
 
-        private void DislikeMusic()
+        public void DislikeMusic(bool isClick = true)
         {
             LikeButtonIcon.Glyph = "\uEB51";
             LikeButtonIcon.Foreground = new SolidColorBrush(Windows.UI.Colors.Black);
-            SetMusicFavorite(false);
+            if (isClick) SetMusicFavorite(false);
         }
         
-        public void AddMusicModificationListener(MusicModificationListener listener)
+        public void AddMusicModificationListener(string name, MusicModificationListener listener)
         {
-            MusicModificationListeners.Add(listener);
+            MusicModificationListeners[name] = listener;
         }
 
         private void SetMusicFavorite(bool favorite)
         {
-            foreach (var listener in MusicModificationListeners)
-                listener.FavoriteChangeListener(currentPlayingMusic, favorite);
-            currentPlayingMusic.Favorite = favorite;
+            Music before = new Music(CurrentMusic);
+            CurrentMusic.Favorite = favorite;
+            foreach (var listener in MusicModificationListeners.Values)
+                listener.MusicModified(before, CurrentMusic);
         }
 
         private void LikeButton_Click(object sender, RoutedEventArgs e)
@@ -293,9 +301,11 @@ namespace SMPlayer
 
         private void MediaPlayer_MediaEnded(object sender, RoutedEventArgs e)
         {
+            CurrentMusic.PlayedTimes += 1;
             switch (Settings.settings.Mode)
             {
                 case PlayMode.Once:
+                    Pause();
                     break;
                 case PlayMode.Repeat:
                     NextMusic();
@@ -311,10 +321,37 @@ namespace SMPlayer
         {
             NaviSearchBar.Text = e.ErrorMessage;
         }
+
+        private void MediaPlayer_MediaOpened(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MusicTimer_Tick(object sender, object e)
+        {
+            ProgressBar.Value = MediaPlayer.Position.TotalSeconds;
+        }
+
+        private void ProgressBar_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            if (!isDraggingProgressBar) MediaPlayer.Position = TimeSpan.FromSeconds(e.NewValue);
+            LeftTimeTextBlock.Text = MusicDurationConverter.ToTime((int)e.NewValue);
+        }
+
+        private void ProgressBar_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            isDraggingProgressBar = true;
+        }
+
+        private void ProgressBar_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            isDraggingProgressBar = false;
+            MediaPlayer.Position = TimeSpan.FromSeconds(ProgressBar.Value);
+        }
     }
 
     public interface MusicModificationListener
     {
-        void FavoriteChangeListener(Music music, bool favorite);
+        void MusicModified(Music before, Music after);
     }
 }
