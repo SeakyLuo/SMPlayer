@@ -11,7 +11,7 @@ namespace SMPlayer.Models
     public class Settings
     {
         public static Settings settings;
-        private static readonly string filename = "Settings.json";
+        private static readonly string FILENAME = "Settings.json";
 
         public string RootPath { get; set; }
         public FolderTree Tree { get; set; }
@@ -33,7 +33,7 @@ namespace SMPlayer.Models
 
         public static async void Init()
         {
-            var json = await JsonFileHelper.ReadAsync(filename);
+            var json = await JsonFileHelper.ReadAsync(FILENAME);
             if (string.IsNullOrEmpty(json))
             {
                 settings = new Settings();
@@ -47,7 +47,7 @@ namespace SMPlayer.Models
 
         public static void Save()
         {
-            JsonFileHelper.SaveAsync(filename, settings);
+            JsonFileHelper.SaveAsync(FILENAME, settings);
         }
 
         public static void SetTreeFolder(StorageFolder folder, Action afterTreeSet = null)
@@ -59,8 +59,8 @@ namespace SMPlayer.Models
         public static void AfterInitiation()
         {
             Save();
-            MusicManager.AllSongs = settings.Tree.Flatten();
-            MusicManager.Save();
+            MusicLibraryPage.AllSongs = settings.Tree.Flatten();
+            MusicLibraryPage.Save();
         }
     }
 }

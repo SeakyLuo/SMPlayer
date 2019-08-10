@@ -37,8 +37,8 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            //return value.Equals(true) ? "\uEB52" : "";
-            return (value is bool && (bool)value) ? "\uEB52" : "";
+            return value.Equals(true) ? "\uEB52" : "";
+            //return (value is bool && (bool)value) ? "\uEB52" : "";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

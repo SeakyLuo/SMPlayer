@@ -39,7 +39,6 @@
             AutoGenerateColumns="False"
             CanUserReorderColumns="True"
             CanUserResizeColumns="True"
-            CanUserSortColumns="True"
             ColumnHeaderHeight="32"
             DoubleTapped="MusicLibraryDataGrid_DoubleTapped"
             Foreground="Black"
@@ -57,14 +56,17 @@
                 <controls:DataGridTextColumn
                     Width="200"
                     Binding="{Binding Name}"
+                    CanUserSort="True"
                     Header="Name" />
                 <controls:DataGridTextColumn
                     Width="160"
                     Binding="{Binding Artist}"
+                    CanUserSort="True"
                     Header="Artist" />
                 <controls:DataGridTextColumn
                     Width="200"
                     Binding="{Binding Album}"
+                    CanUserSort="True"
                     Header="Album" />
                 <controls:DataGridTextColumn
                     MaxWidth="120"
@@ -88,6 +90,7 @@
                 <controls:DataGridTextColumn
                     MaxWidth="120"
                     Binding="{Binding PlayedTimes, Converter={StaticResource MusicPlayedTimesConverter}}"
+                    CanUserSort="True"
                     Header="Played"
                     IsReadOnly="True" />
             </controls:DataGrid.Columns>
@@ -109,6 +112,11 @@
                                     <MenuFlyoutSeparator />
                                     <MenuFlyoutItem Icon="List" Text="My Favorites" />
                                 </MenuFlyoutSubItem>
+                                <MenuFlyoutItem
+                                    x:Name="DeleteItem"
+                                    Click="DeleteItem_Click"
+                                    Icon="Delete"
+                                    Text="Delete From Disk" />
                             </MenuFlyout>
                         </Setter.Value>
                     </Setter>

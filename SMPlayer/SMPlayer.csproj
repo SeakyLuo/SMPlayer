@@ -133,7 +133,6 @@
     <Compile Include="Models\FolderTree.cs" />
     <Compile Include="Models\JsonFileHelper.cs" />
     <Compile Include="Models\Music.cs" />
-    <Compile Include="Models\MusicManager.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\SettingsEnum.cs" />
     <Compile Include="MusicLibraryPage.xaml.cs">
@@ -166,7 +165,6 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\A Little Story.mp3" />
     <Content Include="Assets\music.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />

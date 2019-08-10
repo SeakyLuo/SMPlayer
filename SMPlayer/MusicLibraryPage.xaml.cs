@@ -26,44 +26,42 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class MusicLibraryPage : Page, MusicModificationListener
     {
-        private static ObservableCollection<Music> songs = new ObservableCollection<Music>();
-        private static List<Music> copy;
+        private static readonly string FILENAME = "MusicLibrary.json";
+        public static List<Music> AllSongs = new List<Music>();
 
         public MusicLibraryPage()
         {
             this.InitializeComponent();
-            //MusicLibraryDataGrid.ItemsSource = songs;
+            MusicLibraryDataGrid.ItemsSource = AllSongs;
             MainPage.Instance.AddMusicModificationListener("MusicLibraryPage", this);
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
-            if (songs.Count == 0)
+            if (AllSongs.Count == 0)
             {
                 MusicLibraryProgressRing.IsActive = true;
                 MusicLibraryProgressRing.Visibility = Visibility.Visible;
                 Settings.SetTreeFolder(await StorageFolder.GetFolderFromPathAsync(Settings.settings.RootPath), AfterTreeFirstlySet);
             }
-            else
-            {
-                Settings.SetTreeFolder(await StorageFolder.GetFolderFromPathAsync(Settings.settings.RootPath), ConvertCollection);
-            }
+        }
+
+        public static async void Init()
+        {
+            AllSongs = JsonFileHelper.Convert<List<Music>>(await JsonFileHelper.ReadAsync(FILENAME));
+        }
+
+        public static void Save()
+        {
+            JsonFileHelper.SaveAsync(FILENAME, AllSongs);
         }
 
         private void AfterTreeFirstlySet()
         {
-            ConvertCollection();
-            MusicLibraryDataGrid.ItemsSource = songs;
+            MusicLibraryDataGrid.ItemsSource = AllSongs;
             MusicLibraryProgressRing.IsActive = false;
             MusicLibraryProgressRing.Visibility = Visibility.Collapsed;
-        }
-
-        private void ConvertCollection()
-        {
-            songs.Clear();
-            foreach (var item in MusicManager.AllSongs)
-                songs.Add(item);
         }
 
         private void PlayItem_Click(object sender, RoutedEventArgs e)
@@ -74,19 +72,21 @@ namespace SMPlayer
 
         public void MusicModified(Music before, Music after)
         {
-            MusicManager.AllSongs[MusicManager.AllSongs.IndexOf(before)] = after;
-            copy = songs.ToList();
-            copy[copy.IndexOf(before)] = after;
-            songs.Clear();
-            foreach (var item in copy)
-                songs.Add(item);
-            //MusicLibraryDataGrid.ItemsSource = songs;
+            int index = AllSongs.IndexOf(before);
+            if (index < 0) return;
+            AllSongs[index] = after;
+            Save();
         }
 
         private void MusicLibraryDataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
             var music = (Music)MusicLibraryDataGrid.SelectedItem;
             MainPage.Instance.SetMusic(music);
+        }
+
+        private void DeleteItem_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

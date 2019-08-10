@@ -408,17 +408,15 @@
                         RelativePanel.AlignLeftWithPanel="True"
                         Text="0:00" />
                     <Slider
-                        x:Name="ProgressBar"
+                        x:Name="MediaSlider"
                         Grid.Column="1"
                         IsThumbToolTipEnabled="True"
                         Minimum="0"
-                        PointerPressed="ProgressBar_PointerPressed"
-                        PointerReleased="ProgressBar_PointerReleased"
                         RelativePanel.LeftOf="RightTimeTextBlock"
                         RelativePanel.RightOf="LeftTimeTextBlock"
                         Style="{StaticResource MediaSliderStyle}"
                         ThumbToolTipValueConverter="{StaticResource MusicDurationConverter}"
-                        ValueChanged="ProgressBar_ValueChanged" />
+                        ValueChanged="MediaSlider_ValueChanged" />
                     <MediaElement
                         x:Name="MediaPlayer"
                         Grid.Column="1"

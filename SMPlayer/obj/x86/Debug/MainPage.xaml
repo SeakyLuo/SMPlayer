@@ -408,12 +408,10 @@
                         RelativePanel.AlignLeftWithPanel="True"
                         Text="0:00" />
                     <Slider x:ConnectionId='16'
-                        x:Name="ProgressBar"
+                        x:Name="MediaSlider"
                         Grid.Column="1"
                         IsThumbToolTipEnabled="True"
                         Minimum="0"
-                                                                   
-                                                                     
                         RelativePanel.LeftOf="RightTimeTextBlock"
                         RelativePanel.RightOf="LeftTimeTextBlock"
                         Style="{StaticResource MediaSliderStyle}"

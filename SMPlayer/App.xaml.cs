@@ -31,7 +31,7 @@ namespace SMPlayer
         public App()
         {
             Settings.Init();
-            MusicManager.Init();
+            MusicLibraryPage.Init();
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }

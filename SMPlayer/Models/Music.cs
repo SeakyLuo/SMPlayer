@@ -44,7 +44,7 @@ namespace SMPlayer
 
         public string GetShortPath()
         {
-            return Path.Substring(Path.IndexOf(Name));
+            return Path.Substring(Settings.settings.RootPath.Length + 1); // Plus one due to "/"
         }
 
         public static async Task<MusicProperties> GetMusicProperties(string path)

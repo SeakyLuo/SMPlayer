@@ -380,7 +380,6 @@
       <RootProperty Name="AutoGenerateColumns" />
       <RootProperty Name="CanUserReorderColumns" />
       <RootProperty Name="CanUserResizeColumns" />
-      <RootProperty Name="CanUserSortColumns" />
       <RootProperty Name="ColumnHeaderHeight" />
       <RootProperty Name="Foreground" />
       <RootProperty Name="FrozenColumnCount" />
@@ -408,6 +407,7 @@
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGridTextColumn">
       <RootProperty Name="Width" />
       <RootProperty Name="Binding" />
+      <RootProperty Name="CanUserSort" />
       <RootProperty Name="Header" />
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="IsReadOnly" />
@@ -477,8 +477,6 @@
       <RootProperty Name="Style" />
       <RootProperty Name="ThumbToolTipValueConverter" />
       <RootEvent Name="ValueChanged" />
-      <RootEvent Name="PointerPressed" />
-      <RootEvent Name="PointerReleased" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.Thumb">
       <RootProperty Name="Width" />
