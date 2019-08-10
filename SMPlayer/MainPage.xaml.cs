@@ -136,7 +136,7 @@ namespace SMPlayer
 
         private void ResetPlaylist()
         {
-            CurrentPlayList = MusicLibraryPage.AllSongs;
+            CurrentPlayList = MusicLibraryPage.AllSongs.ToList();
             if (Settings.settings.Mode == PlayMode.Shuffle) ShuffleCurrentPlayList();
             CurrentMusicIndex = CurrentPlayList.IndexOf(CurrentMusic);
         }
