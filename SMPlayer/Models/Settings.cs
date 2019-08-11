@@ -50,17 +50,15 @@ namespace SMPlayer.Models
             JsonFileHelper.SaveAsync(FILENAME, settings);
         }
 
-        public static void SetTreeFolder(StorageFolder folder, Action afterTreeSet = null)
+        public static async Task SetTreeFolder(StorageFolder folder)
         {
-            settings.Tree = new FolderTree(folder, AfterInitiation);
-            afterTreeSet?.Invoke();
-        }
-
-        public static void AfterInitiation()
-        {
+            await settings.Tree.Init(folder);
             Save();
             MusicLibraryPage.AllSongs = settings.Tree.Flatten();
             MusicLibraryPage.Save();
+            MainPage.CurrentMusicFolder = folder;
+            MainPage.CurrentPlayList = MusicLibraryPage.AllSongs.ToList();
+            MainPage.CurrentMusicIndex = -1;
         }
     }
 }

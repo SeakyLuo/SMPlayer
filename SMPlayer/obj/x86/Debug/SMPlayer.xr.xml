@@ -20,7 +20,7 @@
     <RootPropertyPathName Name="BackButtonVisibility" />
     <RootPropertyPathName Name="CompactPaneLength" />
     <RootPropertyPathName Name="songs" />
-    <RootPropertyPathName Name="PlayedTimes" />
+    <RootPropertyPathName Name="PlayCount" />
     <RootPropertyPathName Name="Favorite" />
     <RootPropertyPathName Name="Duration" />
     <RootPropertyPathName Name="Album" />
@@ -78,6 +78,7 @@
       <RootProperty Name="Height" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="Background" />
+      <RootProperty Name="KeyboardAccelerators" />
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Control">
@@ -380,6 +381,7 @@
       <RootProperty Name="AutoGenerateColumns" />
       <RootProperty Name="CanUserReorderColumns" />
       <RootProperty Name="CanUserResizeColumns" />
+      <RootProperty Name="CanUserSortColumns" />
       <RootProperty Name="ColumnHeaderHeight" />
       <RootProperty Name="Foreground" />
       <RootProperty Name="FrozenColumnCount" />
@@ -395,6 +397,7 @@
       <RootProperty Name="Columns" />
       <RootProperty Name="RowStyle" />
       <RootEvent Name="DoubleTapped" />
+      <RootEvent Name="Sorting" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ProgressRing">
       <RootProperty Name="Width" />
@@ -408,6 +411,7 @@
       <RootProperty Name="Width" />
       <RootProperty Name="Binding" />
       <RootProperty Name="CanUserSort" />
+      <RootProperty Name="Tag" />
       <RootProperty Name="Header" />
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="IsReadOnly" />
@@ -521,6 +525,9 @@
       <RootProperty Name="Volume" />
       <RootEvent Name="MediaEnded" />
       <RootEvent Name="MediaOpened" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Input.KeyboardAccelerator">
+      <RootProperty Name="Key" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Image">
       <RootProperty Name="Width" />

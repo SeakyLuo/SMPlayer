@@ -18,7 +18,7 @@ namespace SMPlayer
         public string Album { get; set; }
         public int Duration { get; set; }
         public bool Favorite { get; set; }
-        public int PlayedTimes { get; set; }
+        public int PlayCount { get; set; }
         public Music() { }
         public Music(Music obj)
         {
@@ -28,7 +28,7 @@ namespace SMPlayer
             Album = obj.Album;
             Duration = obj.Duration;
             Favorite = obj.Favorite;
-            PlayedTimes = obj.PlayedTimes;
+            PlayCount = obj.PlayCount;
         }
 
         public Music(string path, MusicProperties properties)
@@ -39,7 +39,7 @@ namespace SMPlayer
             Album = properties.Album;
             Duration = (int)properties.Duration.TotalSeconds;
             Favorite = false;
-            PlayedTimes = 0;
+            PlayCount = 0;
         }
 
         public string GetShortPath()

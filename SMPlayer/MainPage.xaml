@@ -387,6 +387,9 @@
                                 FontSize="30"
                                 Glyph="&#xE768;" />
                         </Button.Content>
+                        <Button.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="F3" />
+                        </Button.KeyboardAccelerators>
                     </Button>
                     <Button
                         x:Name="NextButton"

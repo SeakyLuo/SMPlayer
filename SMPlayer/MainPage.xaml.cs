@@ -364,7 +364,7 @@ namespace SMPlayer
         private void NextMusic()
         {
             CurrentMusicIndex += 1;
-            if (CurrentMusicIndex > CurrentPlayList.Count && Settings.settings.Mode == PlayMode.Shuffle)
+            if (CurrentMusicIndex >= CurrentPlayList.Count && Settings.settings.Mode == PlayMode.Shuffle)
             {
                 CurrentMusic = null;
                 ShuffleCurrentPlayList();
@@ -384,7 +384,7 @@ namespace SMPlayer
 
         private void MediaPlayer_MediaEnded(object sender, RoutedEventArgs e)
         {
-            CurrentMusic.PlayedTimes += 1;
+            CurrentMusic.PlayCount += 1;
             switch (Settings.settings.Mode)
             {
                 case PlayMode.Once:

@@ -42,8 +42,7 @@ namespace SMPlayer
             Settings.settings.RootPath = folder.Path;
             Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
             Settings.Save();
-            Settings.SetTreeFolder(folder);
-            MainPage.CurrentMusicFolder = folder;
+            await Settings.SetTreeFolder(folder);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

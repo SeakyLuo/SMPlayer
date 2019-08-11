@@ -39,6 +39,7 @@
             AutoGenerateColumns="False"
             CanUserReorderColumns="True"
             CanUserResizeColumns="True"
+            CanUserSortColumns="True"
             ColumnHeaderHeight="32"
             DoubleTapped="MusicLibraryDataGrid_DoubleTapped"
             Foreground="Black"
@@ -51,12 +52,14 @@
             ItemsSource="{Binding songs}"
             MinColumnWidth="100"
             SelectionMode="Extended"
+            Sorting="MusicLibraryDataGrid_Sorting"
             VerticalScrollBarVisibility="Visible">
             <controls:DataGrid.Columns>
                 <controls:DataGridTextColumn
                     Width="200"
                     Binding="{Binding Name}"
                     CanUserSort="True"
+                    Tag="Name"
                     Header="Name" />
                 <controls:DataGridTextColumn
                     Width="160"
@@ -89,9 +92,9 @@
                 </controls:DataGridTextColumn>
                 <controls:DataGridTextColumn
                     MaxWidth="120"
-                    Binding="{Binding PlayedTimes, Converter={StaticResource MusicPlayedTimesConverter}}"
+                    Binding="{Binding PlayCount, Converter={StaticResource MusicPlayedTimesConverter}}"
                     CanUserSort="True"
-                    Header="Played"
+                    Header="Play Count"
                     IsReadOnly="True" />
             </controls:DataGrid.Columns>
             <controls:DataGrid.RowStyle>
@@ -108,9 +111,12 @@
                                     x:Name="AddToPlaylistsItem"
                                     Icon="Add"
                                     Text="Add To Playlists">
-                                    <MenuFlyoutItem Text="Create New Playlists" />
+                                    <MenuFlyoutItem Text="Create New Playlist" />
                                     <MenuFlyoutSeparator />
-                                    <MenuFlyoutItem Icon="List" Text="My Favorites" />
+                                    <MenuFlyoutItem
+                                        Click="AddToMyFavorites_Click"
+                                        Icon="List"
+                                        Text="My Favorites" />
                                 </MenuFlyoutSubItem>
                                 <MenuFlyoutItem
                                     x:Name="DeleteItem"

@@ -32,7 +32,6 @@ namespace SMPlayer
         public MusicLibraryPage()
         {
             this.InitializeComponent();
-            MusicLibraryDataGrid.ItemsSource = AllSongs;
             MainPage.Instance.AddMusicModificationListener("MusicLibraryPage", this);
         }
 
@@ -43,7 +42,14 @@ namespace SMPlayer
             {
                 MusicLibraryProgressRing.IsActive = true;
                 MusicLibraryProgressRing.Visibility = Visibility.Visible;
-                Settings.SetTreeFolder(await StorageFolder.GetFolderFromPathAsync(Settings.settings.RootPath), AfterTreeFirstlySet);
+                await Settings.SetTreeFolder(await StorageFolder.GetFolderFromPathAsync(Settings.settings.RootPath));
+                MusicLibraryDataGrid.ItemsSource = AllSongs;
+                MusicLibraryProgressRing.IsActive = false;
+                MusicLibraryProgressRing.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                MusicLibraryDataGrid.ItemsSource = AllSongs;
             }
         }
 
@@ -56,14 +62,6 @@ namespace SMPlayer
         {
             JsonFileHelper.SaveAsync(FILENAME, AllSongs);
         }
-
-        private void AfterTreeFirstlySet()
-        {
-            MusicLibraryDataGrid.ItemsSource = AllSongs;
-            MusicLibraryProgressRing.IsActive = false;
-            MusicLibraryProgressRing.Visibility = Visibility.Collapsed;
-        }
-
         private void PlayItem_Click(object sender, RoutedEventArgs e)
         {
             var music = (sender as MenuFlyoutItem).DataContext as Music;
@@ -84,9 +82,45 @@ namespace SMPlayer
             MainPage.Instance.SetMusic(music);
         }
 
+        private void AddToMyFavorites_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
         private void DeleteItem_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void MusicLibraryDataGrid_Sorting(object sender, DataGridColumnEventArgs e)
+        {
+            string header = e.Column.Header.ToString();
+            switch (header)
+            {
+                case "Name":
+                    AllSongs = AllSongs.OrderBy((music) => music.Name).ToList();
+                    break;
+                case "Album":
+                    AllSongs = AllSongs.OrderBy((music) => music.Album).ToList();
+                    break;
+                case "Artist":
+                    AllSongs = AllSongs.OrderBy((music) => music.Artist).ToList();
+                    break;
+                case "Play Count":
+                    AllSongs = AllSongs.OrderBy((music) => music.PlayCount).ToList();
+                    break;
+                default:
+                    return;
+            }
+            foreach (var column in MusicLibraryDataGrid.Columns)
+                if (column.Header.ToString() != header)
+                    column.SortDirection = null;
+            if (e.Column.SortDirection == DataGridSortDirection.Ascending) e.Column.SortDirection = DataGridSortDirection.Descending;
+            else e.Column.SortDirection = DataGridSortDirection.Ascending;
+            if (e.Column.SortDirection == DataGridSortDirection.Descending)
+                AllSongs.Reverse();
+            MusicLibraryDataGrid.ItemsSource = AllSongs;
+            Save();
         }
     }
 }
