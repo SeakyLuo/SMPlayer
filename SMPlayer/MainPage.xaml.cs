@@ -37,9 +37,9 @@ namespace SMPlayer
         public static List<Music> CurrentPlayList;
         public static DispatcherTimer MusicTimer;
         public static bool ShouldPlay = false;
-        public static BitmapImage DefaultAlbumCover = new BitmapImage(new Uri("ms-appx:///[project-name]/Assets/music.png"));
+        public static BitmapImage DefaultAlbumCover = new BitmapImage(new Uri("ms-appx:///Assets/music.png"));
         private static Random random = new Random();
-        private Dictionary<string, MusicModificationListener> MusicModificationListeners = new Dictionary<string, MusicModificationListener>();
+        private Dictionary<string, MediaControlListener> MusicModificationListeners = new Dictionary<string, MediaControlListener>();
 
         public MainPage()
         {
@@ -58,6 +58,7 @@ namespace SMPlayer
             if (!string.IsNullOrEmpty(settings.RootPath))
                 CurrentMusicFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
             MainPageMediaElement.Volume = settings.Volume;
+            VolumeButton.Content = GetVolumeIcon(settings.Volume);
             VolumeSlider.Value = settings.Volume;
             MainNavigationView.IsPaneOpen = settings.IsNavigationCollapsed;
             switch (settings.Mode)
@@ -97,7 +98,8 @@ namespace SMPlayer
             }
             catch (FileNotFoundException e)
             {
-                Console.WriteLine(e.Message);
+                var dialog = new Windows.UI.Popups.MessageDialog(e.Message);
+                await dialog.ShowAsync();
                 return;
             }
             CurrentMusic = music;
@@ -132,6 +134,8 @@ namespace SMPlayer
                 Settings.settings.LastMusic = music;
                 Settings.Save();
             }
+            foreach (var listener in MusicModificationListeners.Values)
+                listener.MusicSet(music);
         }
 
         private void ResetPlaylist()
@@ -154,7 +158,7 @@ namespace SMPlayer
         {
             ShuffleButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            Settings.settings.Mode = RepeatButton.IsChecked == true ? PlayMode.Shuffle : PlayMode.Once;
+            Settings.settings.Mode = RepeatButton.IsChecked == true ? PlayMode.Repeat : PlayMode.Once;
             MainPageMediaElement.IsLooping = false;
             ResetPlaylist();
         }
@@ -163,7 +167,7 @@ namespace SMPlayer
         {
             ShuffleButton.IsChecked = false;
             RepeatButton.IsChecked = false;
-            Settings.settings.Mode = RepeatOneButton.IsChecked == true ? PlayMode.Shuffle : PlayMode.Once;
+            Settings.settings.Mode = RepeatOneButton.IsChecked == true ? PlayMode.RepeatOne : PlayMode.Once;
             MainPageMediaElement.IsLooping = !MainPageMediaElement.IsLooping;
             ResetPlaylist();
         }
@@ -210,15 +214,15 @@ namespace SMPlayer
 
         private void VolumeButton_Click(object sender, RoutedEventArgs e)
         {
-            if (VolumnButtonIcon.Glyph == "\uE767")
+            if (VolumeButton.Content.ToString() == "\uE74F")
             {
-                MainPageMediaElement.IsMuted = true;
-                VolumnButtonIcon.Glyph = "\uE74F";
+                MainPageMediaElement.IsMuted = false;
+                VolumeButton.Content = GetVolumeIcon(VolumeSlider.Value);
             }
             else
             {
-                MainPageMediaElement.IsMuted = false;
-                VolumnButtonIcon.Glyph = "\uE767";
+                MainPageMediaElement.IsMuted = true;
+                VolumeButton.Content = "\uE74F";
             }
         }
 
@@ -300,9 +304,19 @@ namespace SMPlayer
             }
         }
 
+        public static string GetVolumeIcon(double volume)
+        {
+            if (volume == 0) return "\uE992";
+            if (volume < 34) return "\uE993";
+            if (volume < 67) return "\uE994";
+            return "\uE995";
+        }
+
         private void VolumeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
+            MainPageMediaElement.IsMuted = false;
             MainPageMediaElement.Volume = e.NewValue;
+            VolumeButton.Content = GetVolumeIcon(e.NewValue);            
         }
 
         public void LikeMusic(bool isClick = true)
@@ -319,7 +333,7 @@ namespace SMPlayer
             if (isClick) SetMusicFavorite(false);
         }
         
-        public void AddMusicModificationListener(string name, MusicModificationListener listener)
+        public void AddMusicModificationListener(string name, MediaControlListener listener)
         {
             MusicModificationListeners[name] = listener;
         }
@@ -382,9 +396,18 @@ namespace SMPlayer
             NextMusic();
         }
 
+        private void MainPageMediaElement_MediaOpened(object sender, RoutedEventArgs e)
+        {
+            if (ShouldPlay)
+                MainPageMediaElement.Play();
+        }
+
         private void MainPageMediaElement_MediaEnded(object sender, RoutedEventArgs e)
         {
+            Music before = new Music(CurrentMusic);
             CurrentMusic.PlayCount += 1;
+            foreach (var listener in MusicModificationListeners.Values)
+                listener.MusicModified(before, CurrentMusic);
             switch (Settings.settings.Mode)
             {
                 case PlayMode.Once:
@@ -412,12 +435,6 @@ namespace SMPlayer
             await dialog.ShowAsync();
         }
 
-        private void MainPageMediaElement_MediaOpened(object sender, RoutedEventArgs e)
-        {
-            if (ShouldPlay)
-                MainPageMediaElement.Play();
-        }
-
         private void MusicTimer_Tick(object sender, object e)
         {
             MediaSlider.Value = MainPageMediaElement.Position.TotalSeconds;
@@ -430,8 +447,9 @@ namespace SMPlayer
         }
     }
 
-    public interface MusicModificationListener
+    public interface MediaControlListener
     {
         void MusicModified(Music before, Music after);
+        void MusicSet(Music music);
     }
 }

@@ -273,55 +273,55 @@
                                                         
                                                         >
             <NavigationView.MenuItems>
-                <NavigationViewItem x:ConnectionId='26'
+                <NavigationViewItem x:ConnectionId='25'
                     x:Name="NaviSearchItem"
                     Icon="Find"
                     Visibility="Collapsed" />
-                <NavigationViewItem x:ConnectionId='27' x:Name="NaviSearchBarItem">
-                    <AutoSuggestBox x:ConnectionId='35'
+                <NavigationViewItem x:ConnectionId='26' x:Name="NaviSearchBarItem">
+                    <AutoSuggestBox x:ConnectionId='34'
                         x:Name="NaviSearchBar"
                         Width="290"
                         PlaceholderText="Search"
                         QueryIcon="Find"
                                                                       />
                 </NavigationViewItem>
-                <NavigationViewItem x:ConnectionId='28'
+                <NavigationViewItem x:ConnectionId='27'
                     x:Name="MusicLibraryItem"
                     Content="Songs"
                     Icon="Library" />
-                <NavigationViewItem x:ConnectionId='29' x:Name="ArtistsItem" Content="Artists">
+                <NavigationViewItem x:ConnectionId='28' x:Name="ArtistsItem" Content="Artists">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8D4;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:ConnectionId='30' x:Name="AlbumsItem" Content="Albums">
+                <NavigationViewItem x:ConnectionId='29' x:Name="AlbumsItem" Content="Albums">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE93C;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItemSeparator />
-                <NavigationViewItem x:ConnectionId='31' x:Name="NowPlayingItem" Content="Now Playing">
+                <NavigationViewItem x:ConnectionId='30' x:Name="NowPlayingItem" Content="Now Playing">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEC4F;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:ConnectionId='32' x:Name="HistoryItem" Content="History">
+                <NavigationViewItem x:ConnectionId='31' x:Name="HistoryItem" Content="History">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE81C;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:ConnectionId='33' x:Name="PlaylistsItem" Content="Playlists">
+                <NavigationViewItem x:ConnectionId='32' x:Name="PlaylistsItem" Content="Playlists">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEA37;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:ConnectionId='34' x:Name="MyFavoritesItem" Content="My Favorites">
+                <NavigationViewItem x:ConnectionId='33' x:Name="MyFavoritesItem" Content="My Favorites">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEB51;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
-            <Frame x:ConnectionId='36' x:Name="MainFrame" IsNavigationStackEnabled="True" />
+            <Frame x:ConnectionId='35' x:Name="MainFrame" IsNavigationStackEnabled="True" />
         </NavigationView>
 
         <Grid Grid.Row="1" Background="LightGray">
@@ -342,7 +342,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Image x:ConnectionId='23'
+                <Image x:ConnectionId='22'
                     x:Name="AlbumCover"
                     Grid.Row="0"
                     Grid.RowSpan="2"
@@ -351,7 +351,7 @@
                     Height="100"
                     Source="Assets/music.png"
                     Stretch="UniformToFill" />
-                <TextBlock x:ConnectionId='24'
+                <TextBlock x:ConnectionId='23'
                     x:Name="TitleTextBlock"
                     Grid.Row="0"
                     Grid.Column="1"
@@ -359,7 +359,7 @@
                     VerticalAlignment="Bottom"
                     FontSize="24"
                     Text="Title" />
-                <TextBlock x:ConnectionId='25'
+                <TextBlock x:ConnectionId='24'
                     x:Name="ArtistTextBlock"
                     Grid.Row="1"
                     Grid.Column="1"
@@ -372,17 +372,17 @@
 
             <StackPanel Grid.Column="1" VerticalAlignment="Center">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Button x:ConnectionId='19'
+                    <Button x:ConnectionId='18'
                         x:Name="PrevButton"
                                                 
                         Content="&#xE892;"
                         Style="{StaticResource MediaControlButtonStyle}" />
-                    <Button x:ConnectionId='20'
+                    <Button x:ConnectionId='19'
                         x:Name="PlayButton"
                                                 
                         Style="{StaticResource MediaControlButtonStyle}">
                         <Button.Content>
-                            <FontIcon x:ConnectionId='22'
+                            <FontIcon x:ConnectionId='21'
                                 x:Name="PlayButtonIcon"
                                 FontSize="30"
                                 Glyph="&#xE768;" />
@@ -391,7 +391,7 @@
                             <KeyboardAccelerator Key="F3" />
                         </Button.KeyboardAccelerators>
                     </Button>
-                    <Button x:ConnectionId='21'
+                    <Button x:ConnectionId='20'
                         x:Name="NextButton"
                                                 
                         Content="&#xE893;"
@@ -403,14 +403,14 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock x:ConnectionId='15'
+                    <TextBlock x:ConnectionId='14'
                         x:Name="LeftTimeTextBlock"
                         Margin="10,0,20,0"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI"
                         RelativePanel.AlignLeftWithPanel="True"
                         Text="0:00" />
-                    <Slider x:ConnectionId='16'
+                    <Slider x:ConnectionId='15'
                         x:Name="MediaSlider"
                         Grid.Column="1"
                         IsThumbToolTipEnabled="True"
@@ -420,7 +420,7 @@
                         Style="{StaticResource MediaSliderStyle}"
                         ThumbToolTipValueConverter="{StaticResource MusicDurationConverter}"
                                                                 />
-                    <MediaElement x:ConnectionId='17'
+                    <MediaElement x:ConnectionId='16'
                         x:Name="MainPageMediaElement"
                         Grid.Column="1"
                         AutoPlay="False"
@@ -429,7 +429,7 @@
                                                                       
                                                                       
                         Volume="50" />
-                    <TextBlock x:ConnectionId='18'
+                    <TextBlock x:ConnectionId='17'
                         x:Name="RightTimeTextBlock"
                         Grid.Column="2"
                         Margin="20,0,10,0"
@@ -447,11 +447,8 @@
                     <Button x:ConnectionId='10'
                         x:Name="VolumeButton"
                                                   
-                        Style="{StaticResource MediaControlButtonStyle}">
-                        <Button.Content>
-                            <FontIcon x:ConnectionId='14' x:Name="VolumnButtonIcon" Glyph="&#xE15D;" />
-                        </Button.Content>
-                    </Button>
+                        Content="&#xE15D;"
+                        Style="{StaticResource MediaControlButtonStyle}" />
                     <Slider x:ConnectionId='11'
                         x:Name="VolumeSlider"
                         Width="100"

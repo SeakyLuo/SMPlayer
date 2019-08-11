@@ -47,7 +47,7 @@ namespace SMPlayer
         }
     }
 
-    class MusicPlayedTimesConverter : Windows.UI.Xaml.Data.IValueConverter
+    class MusicPlayCountConverter : Windows.UI.Xaml.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -57,6 +57,20 @@ namespace SMPlayer
                 if (times > 0) return times;
             }
             return "";
+
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    class DataGridRowColorConverter : Windows.UI.Xaml.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return value.Equals(MainPage.CurrentMusic) ? Windows.UI.Colors.Red : Windows.UI.Colors.Black;
 
         }
 

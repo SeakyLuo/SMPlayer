@@ -13,7 +13,8 @@
     <Page.Resources>
         <local:MusicDurationConverter x:Key="MusicDurationConverter" />
         <local:MusicFavoriteConverter x:Key="MusicFavoriteConverter" />
-        <local:MusicPlayedTimesConverter x:Key="MusicPlayedTimesConverter" />
+        <local:MusicPlayCountConverter x:Key="MusicPlayCountConverter" />
+        <local:DataGridRowColorConverter x:Key="DataGridRowColorConverter" />
     </Page.Resources>
 
     <Grid>
@@ -59,8 +60,8 @@
                     Width="200"
                     Binding="{Binding Name}"
                     CanUserSort="True"
-                    Tag="Name"
-                    Header="Name" />
+                    Header="Name"
+                    Tag="Name" />
                 <controls:DataGridTextColumn
                     Width="160"
                     Binding="{Binding Artist}"
@@ -92,13 +93,16 @@
                 </controls:DataGridTextColumn>
                 <controls:DataGridTextColumn
                     MaxWidth="120"
-                    Binding="{Binding PlayCount, Converter={StaticResource MusicPlayedTimesConverter}}"
+                    Binding="{Binding PlayCount, Converter={StaticResource MusicPlayCountConverter}}"
                     CanUserSort="True"
                     Header="Play Count"
                     IsReadOnly="True" />
             </controls:DataGrid.Columns>
             <controls:DataGrid.RowStyle>
                 <Style TargetType="controls:DataGridRow">
+                    <!--<Setter Property="Foreground">
+                        <Value="{Binding Converter={StaticResource DataGridRowColorConverter}}" /
+                    </Setter>-->
                     <Setter Property="controls:DataGridRow.ContextFlyout">
                         <Setter.Value>
                             <MenuFlyout>

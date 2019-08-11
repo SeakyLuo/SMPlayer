@@ -447,11 +447,8 @@
                     <Button
                         x:Name="VolumeButton"
                         Click="VolumeButton_Click"
-                        Style="{StaticResource MediaControlButtonStyle}">
-                        <Button.Content>
-                            <FontIcon x:Name="VolumnButtonIcon" Glyph="&#xE15D;" />
-                        </Button.Content>
-                    </Button>
+                        Content="&#xE15D;"
+                        Style="{StaticResource MediaControlButtonStyle}" />
                     <Slider
                         x:Name="VolumeSlider"
                         Width="100"

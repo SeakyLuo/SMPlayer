@@ -369,7 +369,8 @@
     <RootType FullName="SMPlayer.HistoryPage" />
     <RootType FullName="SMPlayer.MusicDurationConverter" />
     <RootType FullName="SMPlayer.MusicFavoriteConverter" />
-    <RootType FullName="SMPlayer.MusicPlayedTimesConverter" />
+    <RootType FullName="SMPlayer.MusicPlayCountConverter" />
+    <RootType FullName="SMPlayer.DataGridRowColorConverter" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGrid">
       <RootProperty Name="Margin" />
       <RootProperty Name="HorizontalAlignment" />
@@ -411,8 +412,8 @@
       <RootProperty Name="Width" />
       <RootProperty Name="Binding" />
       <RootProperty Name="CanUserSort" />
-      <RootProperty Name="Tag" />
       <RootProperty Name="Header" />
+      <RootProperty Name="Tag" />
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="IsReadOnly" />
       <RootProperty Name="CanUserReorder" />

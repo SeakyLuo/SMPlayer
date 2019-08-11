@@ -24,7 +24,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MusicLibraryPage : Page, MusicModificationListener
+    public sealed partial class MusicLibraryPage : Page, MediaControlListener
     {
         private static readonly string FILENAME = "MusicLibrary.json";
         public static List<Music> AllSongs = new List<Music>();
@@ -74,6 +74,10 @@ namespace SMPlayer
             if (index < 0) return;
             AllSongs[index] = after;
             Save();
+        }
+        public void MusicSet(Music music)
+        {
+            int index = AllSongs.IndexOf(music);
         }
 
         private void MusicLibraryDataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
