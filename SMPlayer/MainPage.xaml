@@ -421,12 +421,13 @@
                         ThumbToolTipValueConverter="{StaticResource MusicDurationConverter}"
                         ValueChanged="MediaSlider_ValueChanged" />
                     <MediaElement
-                        x:Name="MediaPlayer"
+                        x:Name="MainPageMediaElement"
                         Grid.Column="1"
                         AutoPlay="False"
                         IsLooping="False"
-                        MediaEnded="MediaPlayer_MediaEnded"
-                        MediaOpened="MediaPlayer_MediaOpened"
+                        MediaEnded="MainPageMediaElement_MediaEnded"
+                        MediaFailed="MainPageMediaElement_MediaFailed"
+                        MediaOpened="MainPageMediaElement_MediaOpened"
                         Volume="50" />
                     <TextBlock
                         x:Name="RightTimeTextBlock"

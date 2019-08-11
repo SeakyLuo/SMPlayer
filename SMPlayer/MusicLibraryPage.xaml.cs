@@ -106,6 +106,9 @@ namespace SMPlayer
                 case "Artist":
                     AllSongs = AllSongs.OrderBy((music) => music.Artist).ToList();
                     break;
+                case "Duration":
+                    AllSongs = AllSongs.OrderBy((music) => music.Duration).ToList();
+                    break;
                 case "Play Count":
                     AllSongs = AllSongs.OrderBy((music) => music.PlayCount).ToList();
                     break;
@@ -115,10 +118,12 @@ namespace SMPlayer
             foreach (var column in MusicLibraryDataGrid.Columns)
                 if (column.Header.ToString() != header)
                     column.SortDirection = null;
-            if (e.Column.SortDirection == DataGridSortDirection.Ascending) e.Column.SortDirection = DataGridSortDirection.Descending;
-            else e.Column.SortDirection = DataGridSortDirection.Ascending;
-            if (e.Column.SortDirection == DataGridSortDirection.Descending)
+            if (e.Column.SortDirection == DataGridSortDirection.Ascending)
+            {
+                e.Column.SortDirection = DataGridSortDirection.Descending;
                 AllSongs.Reverse();
+            }
+            else e.Column.SortDirection = DataGridSortDirection.Ascending;
             MusicLibraryDataGrid.ItemsSource = AllSongs;
             Save();
         }

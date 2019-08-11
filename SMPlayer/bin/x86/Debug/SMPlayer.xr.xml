@@ -524,6 +524,7 @@
       <RootProperty Name="IsLooping" />
       <RootProperty Name="Volume" />
       <RootEvent Name="MediaEnded" />
+      <RootEvent Name="MediaFailed" />
       <RootEvent Name="MediaOpened" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Input.KeyboardAccelerator">

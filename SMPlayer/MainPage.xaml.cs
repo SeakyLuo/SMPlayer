@@ -57,7 +57,7 @@ namespace SMPlayer
             Settings settings = Settings.settings;
             if (!string.IsNullOrEmpty(settings.RootPath))
                 CurrentMusicFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
-            MediaPlayer.Volume = settings.Volume;
+            MainPageMediaElement.Volume = settings.Volume;
             VolumeSlider.Value = settings.Volume;
             MainNavigationView.IsPaneOpen = settings.IsNavigationCollapsed;
             switch (settings.Mode)
@@ -66,15 +66,15 @@ namespace SMPlayer
                     break;
                 case PlayMode.Repeat:
                     RepeatButton.IsChecked = true;
-                    MediaPlayer.IsLooping = false;
+                    MainPageMediaElement.IsLooping = false;
                     break;
                 case PlayMode.RepeatOne:
                     RepeatOneButton.IsChecked = true;
-                    MediaPlayer.IsLooping = true;
+                    MainPageMediaElement.IsLooping = true;
                     break;
                 case PlayMode.Shuffle:
                     ShuffleButton.IsChecked = true;
-                    MediaPlayer.IsLooping = false;
+                    MainPageMediaElement.IsLooping = false;
                     break;
                 default:
                     break;
@@ -101,7 +101,7 @@ namespace SMPlayer
                 return;
             }
             CurrentMusic = music;
-            MediaPlayer.SetSource(await file.OpenAsync(FileAccessMode.Read), file.ContentType);
+            MainPageMediaElement.SetSource(await file.OpenAsync(FileAccessMode.Read), file.ContentType);
             using (var thumbnail = await file.GetThumbnailAsync(ThumbnailMode.MusicView, 300))
             {
                 BitmapImage bitmapImage;
@@ -145,7 +145,7 @@ namespace SMPlayer
         {
             RepeatButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            MediaPlayer.IsLooping = false;
+            MainPageMediaElement.IsLooping = false;
             Settings.settings.Mode = ShuffleButton.IsChecked == true ? PlayMode.Shuffle : PlayMode.Once;
             ResetPlaylist();
         }
@@ -155,7 +155,7 @@ namespace SMPlayer
             ShuffleButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
             Settings.settings.Mode = RepeatButton.IsChecked == true ? PlayMode.Shuffle : PlayMode.Once;
-            MediaPlayer.IsLooping = false;
+            MainPageMediaElement.IsLooping = false;
             ResetPlaylist();
         }
 
@@ -164,7 +164,7 @@ namespace SMPlayer
             ShuffleButton.IsChecked = false;
             RepeatButton.IsChecked = false;
             Settings.settings.Mode = RepeatOneButton.IsChecked == true ? PlayMode.Shuffle : PlayMode.Once;
-            MediaPlayer.IsLooping = !MediaPlayer.IsLooping;
+            MainPageMediaElement.IsLooping = !MainPageMediaElement.IsLooping;
             ResetPlaylist();
         }
 
@@ -177,7 +177,7 @@ namespace SMPlayer
                 else SetMusic(MusicLibraryPage.AllSongs[0]);
             }
             PlayButtonIcon.Glyph = "\uE769";
-            MediaPlayer.Play();
+            MainPageMediaElement.Play();
             MusicTimer.Start();
         }
 
@@ -185,7 +185,7 @@ namespace SMPlayer
         {
             if (CurrentMusic == null) return;
             PlayButtonIcon.Glyph = "\uE768";
-            MediaPlayer.Pause();
+            MainPageMediaElement.Pause();
             MusicTimer.Stop();
         }
 
@@ -212,12 +212,12 @@ namespace SMPlayer
         {
             if (VolumnButtonIcon.Glyph == "\uE767")
             {
-                MediaPlayer.IsMuted = true;
+                MainPageMediaElement.IsMuted = true;
                 VolumnButtonIcon.Glyph = "\uE74F";
             }
             else
             {
-                MediaPlayer.IsMuted = false;
+                MainPageMediaElement.IsMuted = false;
                 VolumnButtonIcon.Glyph = "\uE767";
             }
         }
@@ -302,7 +302,7 @@ namespace SMPlayer
 
         private void VolumeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            MediaPlayer.Volume = e.NewValue;
+            MainPageMediaElement.Volume = e.NewValue;
         }
 
         public void LikeMusic(bool isClick = true)
@@ -382,14 +382,14 @@ namespace SMPlayer
             NextMusic();
         }
 
-        private void MediaPlayer_MediaEnded(object sender, RoutedEventArgs e)
+        private void MainPageMediaElement_MediaEnded(object sender, RoutedEventArgs e)
         {
             CurrentMusic.PlayCount += 1;
             switch (Settings.settings.Mode)
             {
                 case PlayMode.Once:
                     PlayButtonIcon.Glyph = "\uE768";
-                    MediaPlayer.Stop();
+                    MainPageMediaElement.Stop();
                     MediaSlider.Value = 0;
                     MusicTimer.Stop();
                     break;
@@ -406,25 +406,26 @@ namespace SMPlayer
             }
         }
 
-        private void MediaPlayer_MediaFailed(object sender, ExceptionRoutedEventArgs e)
+        private async void MainPageMediaElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
-            NaviSearchBar.Text = e.ErrorMessage;
+            var dialog = new Windows.UI.Popups.MessageDialog(e.ErrorMessage);
+            await dialog.ShowAsync();
         }
 
-        private void MediaPlayer_MediaOpened(object sender, RoutedEventArgs e)
+        private void MainPageMediaElement_MediaOpened(object sender, RoutedEventArgs e)
         {
             if (ShouldPlay)
-                MediaPlayer.Play();
+                MainPageMediaElement.Play();
         }
 
         private void MusicTimer_Tick(object sender, object e)
         {
-            MediaSlider.Value = MediaPlayer.Position.TotalSeconds;
+            MediaSlider.Value = MainPageMediaElement.Position.TotalSeconds;
         }
 
         private void MediaSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            MediaPlayer.Position = TimeSpan.FromSeconds(e.NewValue);
+            MainPageMediaElement.Position = TimeSpan.FromSeconds(e.NewValue);
             LeftTimeTextBlock.Text = MusicDurationConverter.ToTime((int)e.NewValue);
         }
     }
