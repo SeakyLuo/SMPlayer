@@ -203,6 +203,7 @@
       <RootProperty Name="Source" />
     </RootType>
     <RootType FullName="SMPlayer.ArtistsPage" />
+    <RootType FullName="SMPlayer.LocalPage" />
     <RootType FullName="SMPlayer.MusicListPage" />
     <RootType FullName="SMPlayer.MyFavorites" />
     <RootType FullName="SMPlayer.SearchPage" />
@@ -366,7 +367,7 @@
       <RootProperty Name="KeyTime" />
       <RootProperty Name="Value" />
     </RootType>
-    <RootType FullName="SMPlayer.HistoryPage" />
+    <RootType FullName="SMPlayer.RecentPage" />
     <RootType FullName="SMPlayer.MusicDurationConverter" />
     <RootType FullName="SMPlayer.MusicFavoriteConverter" />
     <RootType FullName="SMPlayer.MusicPlayCountConverter" />
@@ -523,7 +524,6 @@
     <RootType FullName="Windows.UI.Xaml.Controls.MediaElement">
       <RootProperty Name="AutoPlay" />
       <RootProperty Name="IsLooping" />
-      <RootProperty Name="Volume" />
       <RootEvent Name="MediaEnded" />
       <RootEvent Name="MediaFailed" />
       <RootEvent Name="MediaOpened" />

@@ -305,9 +305,14 @@
                         <FontIcon Glyph="&#xEC4F;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Name="HistoryItem" Content="History">
+                <NavigationViewItem x:Name="RecentItem" Content="Recent">
                     <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE81C;" />
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE823;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="LocalItem" Content="Local">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC4E;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem x:Name="PlaylistsItem" Content="Playlists">
@@ -427,8 +432,7 @@
                         IsLooping="False"
                         MediaEnded="MainPageMediaElement_MediaEnded"
                         MediaFailed="MainPageMediaElement_MediaFailed"
-                        MediaOpened="MainPageMediaElement_MediaOpened"
-                        Volume="50" />
+                        MediaOpened="MainPageMediaElement_MediaOpened" />
                     <TextBlock
                         x:Name="RightTimeTextBlock"
                         Grid.Column="2"

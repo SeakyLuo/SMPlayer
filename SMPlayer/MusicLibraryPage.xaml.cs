@@ -32,6 +32,7 @@ namespace SMPlayer
         public MusicLibraryPage()
         {
             this.InitializeComponent();
+            //this.NavigationCacheMode = NavigationCacheMode.Enabled;
             MainPage.Instance.AddMusicModificationListener("MusicLibraryPage", this);
         }
 
@@ -43,13 +44,13 @@ namespace SMPlayer
                 MusicLibraryProgressRing.IsActive = true;
                 MusicLibraryProgressRing.Visibility = Visibility.Visible;
                 await Settings.SetTreeFolder(await StorageFolder.GetFolderFromPathAsync(Settings.settings.RootPath));
-                MusicLibraryDataGrid.ItemsSource = AllSongs;
+                Update();
                 MusicLibraryProgressRing.IsActive = false;
                 MusicLibraryProgressRing.Visibility = Visibility.Collapsed;
             }
             else
             {
-                MusicLibraryDataGrid.ItemsSource = AllSongs;
+                Update();
             }
         }
 
@@ -62,6 +63,11 @@ namespace SMPlayer
         {
             JsonFileHelper.SaveAsync(FILENAME, AllSongs);
         }
+
+        private void Update()
+        {
+            MusicLibraryDataGrid.ItemsSource = AllSongs;
+        }
         private void PlayItem_Click(object sender, RoutedEventArgs e)
         {
             var music = (sender as MenuFlyoutItem).DataContext as Music;
@@ -73,6 +79,7 @@ namespace SMPlayer
             int index = AllSongs.IndexOf(before);
             if (index < 0) return;
             AllSongs[index] = after;
+            Update();
             Save();
         }
         public void MusicSet(Music music)
@@ -128,7 +135,7 @@ namespace SMPlayer
                 AllSongs.Reverse();
             }
             else e.Column.SortDirection = DataGridSortDirection.Ascending;
-            MusicLibraryDataGrid.ItemsSource = AllSongs;
+            Update();
             Save();
         }
     }

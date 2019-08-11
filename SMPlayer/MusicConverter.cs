@@ -27,6 +27,23 @@ namespace SMPlayer
             return string.Format("{0}:{1}{2}", minute, zero, second);
         }
 
+        public static string ToTime(IEnumerable<Music> list)
+        {
+            int seconds = list.Sum((music) => music.Duration);
+            if (seconds == 0) return "";
+            int minutes = seconds / 60,
+                hours = minutes / 60,
+                days = hours / 24;
+            minutes %= 60;
+            hours %= 60;
+            days %= 24;
+            string second = seconds < 60 ? seconds + "seconds" : "",
+                   minute = minutes == 0 ? "" : minutes + "minutes",
+                   hour = hours == 0 ? "" : hours + "hours",
+                   day = days == 0 ? "" : days+ "days";
+            return day + hour + minute + second;
+        }
+
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             return null;
@@ -38,7 +55,6 @@ namespace SMPlayer
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             return value.Equals(true) ? "\uEB52" : "";
-            //return (value is bool && (bool)value) ? "\uEB52" : "";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

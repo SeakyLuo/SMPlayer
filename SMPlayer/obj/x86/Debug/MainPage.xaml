@@ -278,7 +278,7 @@
                     Icon="Find"
                     Visibility="Collapsed" />
                 <NavigationViewItem x:ConnectionId='26' x:Name="NaviSearchBarItem">
-                    <AutoSuggestBox x:ConnectionId='34'
+                    <AutoSuggestBox x:ConnectionId='35'
                         x:Name="NaviSearchBar"
                         Width="290"
                         PlaceholderText="Search"
@@ -305,23 +305,28 @@
                         <FontIcon Glyph="&#xEC4F;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:ConnectionId='31' x:Name="HistoryItem" Content="History">
+                <NavigationViewItem x:ConnectionId='31' x:Name="RecentItem" Content="Recent">
                     <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE81C;" />
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE823;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:ConnectionId='32' x:Name="PlaylistsItem" Content="Playlists">
+                <NavigationViewItem x:ConnectionId='32' x:Name="LocalItem" Content="Local">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC4E;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:ConnectionId='33' x:Name="PlaylistsItem" Content="Playlists">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEA37;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:ConnectionId='33' x:Name="MyFavoritesItem" Content="My Favorites">
+                <NavigationViewItem x:ConnectionId='34' x:Name="MyFavoritesItem" Content="My Favorites">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEB51;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
-            <Frame x:ConnectionId='35' x:Name="MainFrame" IsNavigationStackEnabled="True" />
+            <Frame x:ConnectionId='36' x:Name="MainFrame" IsNavigationStackEnabled="True" />
         </NavigationView>
 
         <Grid Grid.Row="1" Background="LightGray">
@@ -427,8 +432,7 @@
                         IsLooping="False"
                                                                     
                                                                       
-                                                                      
-                        Volume="50" />
+                                                                       />
                     <TextBlock x:ConnectionId='17'
                         x:Name="RightTimeTextBlock"
                         Grid.Column="2"

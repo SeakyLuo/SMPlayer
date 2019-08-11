@@ -10,7 +10,7 @@ Assets\Wide310x150Logo.scale-200.png
 AlbumsPage.xbf
 App.xbf
 ArtistsPage.xbf
-HistoryPage.xbf
+LocalPage.xbf
 MainPage.xbf
 Microsoft.UI.Xaml\DensityStyles\Compact.xbf
 MusicLibraryPage.xbf
@@ -18,6 +18,7 @@ MusicListPage.xbf
 MyFavorites.xbf
 NowPlayingPage.xbf
 PlaylistsPage.xbf
+RecentPage.xbf
 SearchPage.xbf
 SettingsPage.xbf
 SMPlayer.xr.xml

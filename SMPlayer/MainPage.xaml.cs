@@ -278,8 +278,11 @@ namespace SMPlayer
                     break;
                 case "NowPlayingItem":
                     break;
-                case "HistoryItem":
-                    MainFrame.Navigate(typeof(HistoryPage));
+                case "RecentItem":
+                    MainFrame.Navigate(typeof(RecentPage));
+                    break;
+                case "LocalItem":
+                    MainFrame.Navigate(typeof(LocalPage));
                     break;
                 case "PlaylistsItem":
                     MainFrame.Navigate(typeof(PlaylistsPage));
@@ -315,7 +318,7 @@ namespace SMPlayer
         private void VolumeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             MainPageMediaElement.IsMuted = false;
-            MainPageMediaElement.Volume = e.NewValue;
+            MainPageMediaElement.Volume = e.NewValue / 100;
             VolumeButton.Content = GetVolumeIcon(e.NewValue);            
         }
 
@@ -361,15 +364,18 @@ namespace SMPlayer
             else
             {
                 CurrentMusicIndex -= 1;
-                if (CurrentMusicIndex < 0 && Settings.settings.Mode == PlayMode.Shuffle)
+                if (CurrentMusicIndex < 0)
                 {
-                    CurrentMusic = null;
-                    ShuffleCurrentPlayList();
-                    CurrentMusicIndex = 0;
-                }
-                else
-                {
-                    CurrentMusicIndex %= CurrentPlayList.Count;
+                    if (Settings.settings.Mode == PlayMode.Shuffle)
+                    {
+                        CurrentMusic = null;
+                        ShuffleCurrentPlayList();
+                        CurrentMusicIndex = 0;
+                    }
+                    else
+                    {
+                        CurrentMusicIndex += CurrentPlayList.Count;
+                    }
                 }
                 SetMusic(CurrentPlayList[CurrentMusicIndex]);
             }
@@ -378,15 +384,14 @@ namespace SMPlayer
         private void NextMusic()
         {
             CurrentMusicIndex += 1;
-            if (CurrentMusicIndex >= CurrentPlayList.Count && Settings.settings.Mode == PlayMode.Shuffle)
+            if (CurrentMusicIndex >= CurrentPlayList.Count)
             {
-                CurrentMusic = null;
-                ShuffleCurrentPlayList();
+                if (Settings.settings.Mode == PlayMode.Shuffle)
+                {
+                    CurrentMusic = null;
+                    ShuffleCurrentPlayList();
+                }
                 CurrentMusicIndex = 0;
-            }
-            else
-            {
-                CurrentMusicIndex %= CurrentPlayList.Count;
             }
             SetMusic(CurrentPlayList[CurrentMusicIndex]);
         }

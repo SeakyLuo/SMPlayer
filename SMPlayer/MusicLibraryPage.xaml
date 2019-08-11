@@ -26,7 +26,6 @@
             x:Name="MusicLibraryTitleTextBlock"
             Style="{StaticResource TitleTextBlockStyle}"
             Text="Music Library" />
-
         <controls:DataGrid
             x:Name="MusicLibraryDataGrid"
             Grid.Row="1"
