@@ -127,11 +127,36 @@
                     <FontIcon Glyph="&#xE838;" />
                 </AutoSuggestBox.QueryIcon>
             </AutoSuggestBox>
+            <Popup x:ConnectionId='5'
+                x:Name="UpdatePopup"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                VerticalOffset="200">
+                <Border
+                    Width="400"
+                    Height="200"
+                    Background="{ThemeResource SystemControlAcrylicElementBrush}"
+                    BorderBrush="{StaticResource ApplicationForegroundThemeBrush}"
+                    BorderThickness="1">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ProgressRing x:ConnectionId='10'
+                            x:Name="SettingsProgressRing"
+                            Margin="0,10,0,0"
+                            IsActive="True"
+                            Style="{StaticResource LoadProgressRingStyle}" />
+                        <TextBlock
+                            Margin="0,20,0,0"
+                            HorizontalAlignment="Center"
+                            FontSize="24"
+                            Text="Updating Your Music Library..." />
+                    </StackPanel>
+                </Border>
+            </Popup>
             <TextBlock
                 Grid.Row="2"
                 Style="{StaticResource SettingLabelStyle}"
                 Text="Language:" />
-            <ComboBox x:ConnectionId='5'
+            <ComboBox x:ConnectionId='6'
                 x:Name="LanguageComboBox"
                 Grid.Row="2"
                 Grid.Column="1"
@@ -155,17 +180,17 @@
                 <Button.Flyout>
                     <Flyout>
                         <StackPanel>
-                            <ColorPicker x:ConnectionId='6' x:Name="ThemeColorPicker" Color="{ThemeResource SystemColorHotlightColor}" />
+                            <ColorPicker x:ConnectionId='7' x:Name="ThemeColorPicker" Color="{ThemeResource SystemColorHotlightColor}" />
                             <Grid Margin="0,20,0,10">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Button x:ConnectionId='7'
+                                <Button x:ConnectionId='8'
                                     x:Name="ConfirmColorButton"
                                     HorizontalAlignment="Center"
                                     Content="Confirm" />
-                                <Button x:ConnectionId='8'
+                                <Button x:ConnectionId='9'
                                     x:Name="CancelColorButton"
                                     Grid.Column="1"
                                     HorizontalAlignment="Center"

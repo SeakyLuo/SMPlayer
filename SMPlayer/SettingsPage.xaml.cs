@@ -16,6 +16,7 @@ using Windows.Storage.Pickers;
 using SMPlayer.Models;
 using Windows.Storage;
 using System.Threading.Tasks;
+using System.Threading;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -26,6 +27,7 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
+        public static StorageFolder CurrentFolder;
         public SettingsPage()
         {
             this.InitializeComponent();
@@ -38,11 +40,14 @@ namespace SMPlayer
             picker.FileTypeFilter.Add("*");
             StorageFolder folder = await picker.PickSingleFolderAsync();
             if (folder == null || folder.Path == Settings.settings.RootPath) return;
-            PathBox.Text = folder.Path;
-            Settings.settings.RootPath = folder.Path;
+            UpdatePopup.IsOpen = true;
             Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
+            Settings.settings.RootPath = folder.Path;
             Settings.Save();
             await Settings.SetTreeFolder(folder);
+            PathBox.Text = folder.Path;
+            CurrentFolder = folder;
+            UpdatePopup.IsOpen = false;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

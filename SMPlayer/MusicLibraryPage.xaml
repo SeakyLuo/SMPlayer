@@ -29,7 +29,7 @@
         <controls:DataGrid
             x:Name="MusicLibraryDataGrid"
             Grid.Row="1"
-            Margin="12"
+            Margin="10"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             AlternatingRowBackground="WhiteSmoke"

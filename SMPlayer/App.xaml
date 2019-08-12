@@ -4,15 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:SMPlayer">
     <Application.Resources>
-        <GradientStopCollection x:Key="MyGlassGradientStopsResource">
-            <GradientStop Offset="0.2" Color="WhiteSmoke" />
-            <GradientStop Offset="0.4" Color="Transparent" />
-            <GradientStop Offset="0.5" Color="WhiteSmoke" />
-            <GradientStop Offset="0.75" Color="Transparent" />
-            <GradientStop Offset="0.9" Color="WhiteSmoke" />
-            <GradientStop Offset="1" Color="Transparent" />
-        </GradientStopCollection>
-        <LinearGradientBrush x:Key="GlassBrush" GradientStops="{StaticResource MyGlassGradientStopsResource}" Opacity="0.75" StartPoint="0,0" EndPoint="1,1" />
         <Style x:Key="TitleTextBlockStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="40" />
             <Setter Property="FontWeight" Value="Bold" />
@@ -30,6 +21,12 @@
             <Setter Property="Height" Value="50" />
             <Setter Property="Width" Value="50" />
             <Setter Property="FontSize" Value="24" />
+        </Style>
+        <Style x:Key="LoadProgressRingStyle" TargetType="ProgressRing">
+            <Setter Property="Width" Value="100" />
+            <Setter Property="Height" Value="100" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
     </Application.Resources>
 </Application>

@@ -266,7 +266,7 @@
         </Grid.RowDefinitions>
         <NavigationView
             x:Name="MainNavigationView"
-            BackRequested="MainNavigationView_BackRequested"
+            Background="{ThemeResource SystemControlAcrylicElementBrush}"
             IsBackButtonVisible="Collapsed"
             IsBackEnabled="True"
             ItemInvoked="MainNavigationView_ItemInvoked"
@@ -288,13 +288,20 @@
                 <NavigationViewItem
                     x:Name="MusicLibraryItem"
                     Content="Songs"
-                    Icon="Library" />
-                <NavigationViewItem x:Name="ArtistsItem" Content="Artists">
+                    Icon="Library"
+                    Tag="Music Library" />
+                <NavigationViewItem
+                    x:Name="ArtistsItem"
+                    Content="Artists"
+                    Tag="Artists">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8D4;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Name="AlbumsItem" Content="Albums">
+                <NavigationViewItem
+                    x:Name="AlbumsItem"
+                    Content="Albums"
+                    Tag="Album">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE93C;" />
                     </NavigationViewItem.Icon>
@@ -305,22 +312,34 @@
                         <FontIcon Glyph="&#xEC4F;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Name="RecentItem" Content="Recent">
+                <NavigationViewItem
+                    x:Name="RecentItem"
+                    Content="Recent"
+                    Tag="Recent">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE823;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Name="LocalItem" Content="Local">
+                <NavigationViewItem
+                    x:Name="LocalItem"
+                    Content="Local"
+                    Tag="Local Folders">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC4E;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Name="PlaylistsItem" Content="Playlists">
+                <NavigationViewItem
+                    x:Name="PlaylistsItem"
+                    Content="Playlists"
+                    Tag="Playlists">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEA37;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Name="MyFavoritesItem" Content="My Favorites">
+                <NavigationViewItem
+                    x:Name="MyFavoritesItem"
+                    Content="My Favorites"
+                    Tag="My Favorites">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEB51;" />
                     </NavigationViewItem.Icon>
@@ -329,7 +348,7 @@
             <Frame x:Name="MainFrame" IsNavigationStackEnabled="True" />
         </NavigationView>
 
-        <Grid Grid.Row="1" Background="LightGray">
+        <Grid Grid.Row="1" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -419,6 +438,9 @@
                         x:Name="MediaSlider"
                         Grid.Column="1"
                         IsThumbToolTipEnabled="True"
+                        ManipulationCompleted="MediaSlider_ManipulationCompleted"
+                        ManipulationMode="All"
+                        ManipulationStarting="MediaSlider_ManipulationStarting"
                         Minimum="0"
                         RelativePanel.LeftOf="RightTimeTextBlock"
                         RelativePanel.RightOf="LeftTimeTextBlock"

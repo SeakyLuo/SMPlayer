@@ -45,8 +45,8 @@ namespace SMPlayer
                 MusicLibraryProgressRing.Visibility = Visibility.Visible;
                 await Settings.SetTreeFolder(await StorageFolder.GetFolderFromPathAsync(Settings.settings.RootPath));
                 Update();
-                MusicLibraryProgressRing.IsActive = false;
                 MusicLibraryProgressRing.Visibility = Visibility.Collapsed;
+                MusicLibraryProgressRing.IsActive = false;
             }
             else
             {

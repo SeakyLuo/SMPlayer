@@ -12,7 +12,7 @@ namespace SMPlayer.Models
     {
         public List<FolderTree> Trees = new List<FolderTree>();
         public List<Music> Files = new List<Music>();
-        private string Path = "";
+        public string Path = "";
 
         public FolderTree() { }
         public FolderTree(FolderTree tree)
@@ -69,6 +69,7 @@ namespace SMPlayer.Models
                     if (file.Name.EndsWith("mp3"))
                         Files.Add(await Music.GetMusic(file.Path));
             }
+            Path = folder.Path;
         }
 
         public List<Music> Flatten()

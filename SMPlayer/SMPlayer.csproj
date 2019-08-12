@@ -127,6 +127,9 @@
     <Compile Include="LocalPage.xaml.cs">
       <DependentUpon>LocalPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helper.cs" />
+    <Compile Include="Models\GridFolderView.cs" />
+    <Compile Include="Models\GridMusicView.cs" />
     <Compile Include="RecentPage.xaml.cs">
       <DependentUpon>RecentPage.xaml</DependentUpon>
     </Compile>

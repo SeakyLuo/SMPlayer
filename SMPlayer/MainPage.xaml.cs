@@ -16,6 +16,7 @@ using SMPlayer.Models;
 using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.Storage.FileProperties;
+using Windows.UI.Core;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -37,7 +38,7 @@ namespace SMPlayer
         public static List<Music> CurrentPlayList;
         public static DispatcherTimer MusicTimer;
         public static bool ShouldPlay = false;
-        public static BitmapImage DefaultAlbumCover = new BitmapImage(new Uri("ms-appx:///Assets/music.png"));
+        private static bool NotDragging = true;
         private static Random random = new Random();
         private Dictionary<string, MediaControlListener> MusicModificationListeners = new Dictionary<string, MediaControlListener>();
 
@@ -49,6 +50,13 @@ namespace SMPlayer
                 Interval = TimeSpan.FromSeconds(1)
             };
             MusicTimer.Tick += MusicTimer_Tick;
+            SystemNavigationManager.GetForCurrentView().BackRequested += (s, e) =>
+            {
+                if (MainFrame.CanGoBack)
+                    MainFrame.GoBack();
+                if (!MainFrame.CanGoBack)
+                    Helper.SetBackButtonVisibility(AppViewBackButtonVisibility.Collapsed);
+            };
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -104,20 +112,7 @@ namespace SMPlayer
             }
             CurrentMusic = music;
             MainPageMediaElement.SetSource(await file.OpenAsync(FileAccessMode.Read), file.ContentType);
-            using (var thumbnail = await file.GetThumbnailAsync(ThumbnailMode.MusicView, 300))
-            {
-                BitmapImage bitmapImage;
-                if (thumbnail != null && thumbnail.Type == ThumbnailType.Image)
-                {
-                    bitmapImage = new BitmapImage();
-                    bitmapImage.SetSource(thumbnail);
-                }
-                else
-                {
-                    bitmapImage = DefaultAlbumCover;
-                }
-                AlbumCover.Source = bitmapImage;
-            }
+            AlbumCover.Source = await Helper.GetThumbnail(file);
             TitleTextBlock.Text = music.Name;
             ArtistTextBlock.Text = music.Artist;
             MediaSlider.Maximum = music.Duration;
@@ -248,7 +243,7 @@ namespace SMPlayer
             if (NaviSearchBar.Text.Length > 0)
             {
                 MainFrame.Navigate(typeof(SearchPage));
-                MainNavigationView.IsBackButtonVisible = NavigationViewBackButtonVisible.Visible;
+                Helper.SetBackButtonVisibility(AppViewBackButtonVisibility.Visible);
             }
         }
 
@@ -294,19 +289,6 @@ namespace SMPlayer
                     return;
             }
         }
-
-        private void MainNavigationView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
-        {
-            if (MainFrame.CanGoBack)
-            {
-                MainFrame.GoBack();
-            }
-            if (!MainFrame.CanGoBack)
-            {
-                MainNavigationView.IsBackButtonVisible = NavigationViewBackButtonVisible.Collapsed;
-            }
-        }
-
         public static string GetVolumeIcon(double volume)
         {
             if (volume == 0) return "\uE992";
@@ -403,8 +385,7 @@ namespace SMPlayer
 
         private void MainPageMediaElement_MediaOpened(object sender, RoutedEventArgs e)
         {
-            if (ShouldPlay)
-                MainPageMediaElement.Play();
+            if (ShouldPlay) MainPageMediaElement.Play();
         }
 
         private void MainPageMediaElement_MediaEnded(object sender, RoutedEventArgs e)
@@ -442,13 +423,23 @@ namespace SMPlayer
 
         private void MusicTimer_Tick(object sender, object e)
         {
-            MediaSlider.Value = MainPageMediaElement.Position.TotalSeconds;
+            if (NotDragging) MediaSlider.Value = MainPageMediaElement.Position.TotalSeconds;
         }
 
         private void MediaSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            MainPageMediaElement.Position = TimeSpan.FromSeconds(e.NewValue);
-            LeftTimeTextBlock.Text = MusicDurationConverter.ToTime((int)e.NewValue);
+            LeftTimeTextBlock.Text = MusicDurationConverter.ToTime((int)MediaSlider.Value);
+        }
+
+        private void MediaSlider_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+        {
+            MainPageMediaElement.Position = TimeSpan.FromSeconds(MediaSlider.Value);
+            NotDragging = true;
+        }
+
+        private void MediaSlider_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e)
+        {
+            NotDragging = false;
         }
     }
 
