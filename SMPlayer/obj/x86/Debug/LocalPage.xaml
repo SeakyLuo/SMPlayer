@@ -50,6 +50,7 @@
                         x:Name="LargeThumbnail"
                         Grid.RowSpan="2"
                         Grid.ColumnSpan="2"
+                        CacheMode="BitmapCache"
                                                         
                         Visibility="{Binding Converter={StaticResource LargeThumbnailVisibilityConverter}}" />
                 </Grid>
@@ -89,6 +90,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -111,6 +113,7 @@
                 <TextBlock x:ConnectionId='17'
                     x:Name="SwitchViewTextBlock"
                     VerticalAlignment="Center"
+                    FontSize="16"
                     Text="List View" />
             </StackPanel>
         </RelativePanel>

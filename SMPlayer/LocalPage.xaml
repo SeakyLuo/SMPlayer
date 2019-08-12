@@ -50,6 +50,7 @@
                         x:Name="LargeThumbnail"
                         Grid.RowSpan="2"
                         Grid.ColumnSpan="2"
+                        CacheMode="BitmapCache"
                         Source="{x:Bind LargeThumbnail}"
                         Visibility="{Binding Converter={StaticResource LargeThumbnailVisibilityConverter}}" />
                 </Grid>

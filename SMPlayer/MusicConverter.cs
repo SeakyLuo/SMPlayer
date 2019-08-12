@@ -12,8 +12,14 @@ namespace SMPlayer
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (value is string && int.TryParse((string)value, out int seconds)) return ToTime(seconds);
-            if (value is int || value is double) return ToTime((int)value);
+            if (value is int) return ToTime((int)value);
+            if (value is double) return ToTime((double)value);
             return "0:00";
+        }
+
+        public static string ToTime(double seconds)
+        {
+            return ToTime((int)seconds);
         }
 
         public static string ToTime(int seconds)

@@ -50,7 +50,6 @@
       <RootProperty Name="TextLineBounds" />
       <RootProperty Name="OpticalMarginAlignment" />
       <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="IsTextScaleFactorEnabled" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.FrameworkElement">
       <RootProperty Name="Margin" />
@@ -145,6 +144,7 @@
       <RootProperty Name="Background" />
       <RootProperty Name="Resources" />
       <RootProperty Name="MinHeight" />
+      <RootProperty Name="MinWidth" />
       <RootMethod Name="GetRow" />
       <RootMethod Name="SetRow" />
       <RootMethod Name="GetColumn" />
@@ -370,6 +370,7 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Shapes.Rectangle">
       <RootProperty Name="Fill" />
+      <RootProperty Name="Width" />
       <RootProperty Name="Height" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Viewbox">
@@ -512,16 +513,14 @@
       <RootProperty Name="ThumbToolTipValueConverter" />
       <RootEvent Name="ValueChanged" />
       <RootEvent Name="ManipulationCompleted" />
-      <RootEvent Name="ManipulationStarting" />
+      <RootEvent Name="ManipulationStarted" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.Thumb">
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
-      <RootProperty Name="Margin" />
-      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="DataContext" />
       <RootProperty Name="FocusVisualMargin" />
       <RootProperty Name="Style" />
-      <RootProperty Name="DataContext" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ProgressBar">
       <RootProperty Name="HorizontalAlignment" />
@@ -538,18 +537,13 @@
       <RootProperty Name="StrokeThickness" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.TickBar">
-      <RootProperty Name="Height" />
+      <RootProperty Name="Width" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="Fill" />
       <RootProperty Name="Visibility" />
-      <RootProperty Name="Margin" />
+      <RootProperty Name="Height" />
       <RootProperty Name="VerticalAlignment" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.ToolTipService">
-      <RootMethod Name="GetToolTip" />
-      <RootMethod Name="SetToolTip" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.ToolTip">
-      <RootProperty Name="Content" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.MediaElement">
       <RootProperty Name="AutoPlay" />

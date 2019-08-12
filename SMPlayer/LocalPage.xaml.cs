@@ -53,6 +53,4 @@ namespace SMPlayer
             LocalProgressRing.IsActive = false;
         }
     }
-
-
 }

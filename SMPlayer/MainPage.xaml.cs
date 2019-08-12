@@ -437,7 +437,7 @@ namespace SMPlayer
             NotDragging = true;
         }
 
-        private void MediaSlider_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e)
+        private void MediaSlider_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
             NotDragging = false;
         }
