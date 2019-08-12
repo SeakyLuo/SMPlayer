@@ -34,7 +34,7 @@
             Margin="10"
             IsItemClickEnabled="True"
             ItemClick="LocalFolderGridView_ItemClick"
-            ItemsSource="{x:Bind Folders}">
+            ItemsSource="{x:Bind GridFolders}">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:GridFolderView">
                     <StackPanel Margin="10">
@@ -53,25 +53,30 @@
                             <Image
                                 Grid.Row="0"
                                 Grid.Column="0"
+                                CacheMode="BitmapCache"
                                 Source="{x:Bind First}" />
                             <Image
                                 Grid.Row="0"
                                 Grid.Column="1"
+                                CacheMode="BitmapCache"
                                 Source="{x:Bind Second}" />
                             <Image
                                 Grid.Row="1"
                                 Grid.Column="0"
+                                CacheMode="BitmapCache"
                                 Source="{x:Bind Third}" />
                             <Image
                                 Grid.Row="1"
                                 Grid.Column="1"
+                                CacheMode="BitmapCache"
                                 Source="{x:Bind Fourth}" />
                         </Grid>
                         <TextBlock
                             FontSize="16"
                             FontWeight="Bold"
                             HorizontalTextAlignment="Left"
-                            Text="{x:Bind Name}" />
+                            Text="{x:Bind Name}"
+                            TextWrapping="Wrap" />
                         <TextBlock
                             FontSize="12"
                             HorizontalTextAlignment="Left"

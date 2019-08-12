@@ -26,28 +26,30 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class LocalPage : Page
     {
-        private ObservableCollection<GridFolderView> Folders = new ObservableCollection<GridFolderView>();
+        private ObservableCollection<GridFolderView> GridFolders = new ObservableCollection<GridFolderView>();
         public LocalPage()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            //this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
         private void LocalFolderGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            
+            GridFolderView folderView = (GridFolderView)e.ClickedItem;
+            System.Diagnostics.Debug.WriteLine("Image: " + folderView.First.UriSource);
+            System.Diagnostics.Debug.WriteLine("Name: " + folderView.Name);
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Folders.Clear();
+            GridFolders.Clear();
             LocalProgressRing.IsActive = true;
             LocalProgressRing.Visibility = Visibility.Visible;
-            foreach(var tree in Settings.settings.Tree.Trees)
+            foreach (var tree in Settings.settings.Tree.Trees)
             {
                 GridFolderView folder = new GridFolderView();
-                folder.Init(tree);
-                Folders.Add(folder);
+                await folder.Init(tree);
+                GridFolders.Add(folder);
             }
             LocalProgressRing.Visibility = Visibility.Collapsed;
             LocalProgressRing.IsActive = false;

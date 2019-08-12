@@ -9,8 +9,8 @@ namespace SMPlayer.Models
 {
     public class GridMusicView
     {
-        public string Name;
-        public string Artist;
-        public BitmapImage Thumbnail;
+        public string Name { get; set; }
+        public string Artist { get; set; }
+        public BitmapImage Thumbnail { get; set; }
     }
 }

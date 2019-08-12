@@ -49,7 +49,7 @@
             HorizontalScrollBarVisibility="Visible"
             IsDoubleTapEnabled="True"
             IsReadOnly="False"
-            ItemsSource="{Binding songs}"
+            ItemsSource="{Binding AllSongs}"
             MinColumnWidth="100"
             SelectionMode="Extended"
             Sorting="MusicLibraryDataGrid_Sorting"
@@ -99,9 +99,6 @@
             </controls:DataGrid.Columns>
             <controls:DataGrid.RowStyle>
                 <Style TargetType="controls:DataGridRow">
-                    <!--<Setter Property="Foreground">
-                        <Value="{Binding Converter={StaticResource DataGridRowColorConverter}}" /
-                    </Setter>-->
                     <Setter Property="controls:DataGridRow.ContextFlyout">
                         <Setter.Value>
                             <MenuFlyout>

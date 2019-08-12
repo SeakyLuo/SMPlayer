@@ -19,7 +19,7 @@
     <RootPropertyPathName Name="PaneToggleButtonVisibility" />
     <RootPropertyPathName Name="BackButtonVisibility" />
     <RootPropertyPathName Name="CompactPaneLength" />
-    <RootPropertyPathName Name="songs" />
+    <RootPropertyPathName Name="AllSongs" />
     <RootPropertyPathName Name="PlayCount" />
     <RootPropertyPathName Name="Favorite" />
     <RootPropertyPathName Name="Duration" />
@@ -216,6 +216,7 @@
     </RootType>
     <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.BindExtension" />
     <RootType FullName="Windows.UI.Xaml.Controls.Image">
+      <RootProperty Name="CacheMode" />
       <RootProperty Name="Source" />
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
@@ -463,6 +464,8 @@
       <RootProperty Name="PlaceholderText" />
       <RootProperty Name="QueryIcon" />
       <RootProperty Name="Width" />
+      <RootProperty Name="Background" />
+      <RootProperty Name="BorderBrush" />
       <RootEvent Name="QuerySubmitted" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.Popup">

@@ -10,12 +10,15 @@ namespace SMPlayer.Models
 {
     public class GridFolderView
     {
-        public string Name;
-        public string MusicCount;
-        public BitmapImage First, Second, Third, Fourth;
+        public string Name { get; set; }
+        public string MusicCount { get; set; }
+        public BitmapImage First { get; set; }
+        public BitmapImage Second { get; set; }
+        public BitmapImage Third { get; set; }
+        public BitmapImage Fourth { get; set; }
         public GridFolderView() { }
 
-        public async void Init(FolderTree tree)
+        public async Task Init(FolderTree tree)
         {
             List<BitmapImage> thumbnails = new List<BitmapImage>();
             var folder = await StorageFolder.GetFolderFromPathAsync(tree.Path);

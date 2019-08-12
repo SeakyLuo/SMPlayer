@@ -34,7 +34,7 @@
             Margin="10"
             IsItemClickEnabled="True"
                                                      
-                                          >
+                                              >
             <GridView.ItemTemplate>
                 <DataTemplate                                 >
                     <StackPanel x:ConnectionId='4' Margin="10">
@@ -53,25 +53,30 @@
                             <Image x:ConnectionId='7'
                                 Grid.Row="0"
                                 Grid.Column="0"
+                                CacheMode="BitmapCache"
                                                         />
                             <Image x:ConnectionId='8'
                                 Grid.Row="0"
                                 Grid.Column="1"
+                                CacheMode="BitmapCache"
                                                          />
                             <Image x:ConnectionId='9'
                                 Grid.Row="1"
                                 Grid.Column="0"
+                                CacheMode="BitmapCache"
                                                         />
                             <Image x:ConnectionId='10'
                                 Grid.Row="1"
                                 Grid.Column="1"
+                                CacheMode="BitmapCache"
                                                          />
                         </Grid>
                         <TextBlock x:ConnectionId='5'
                             FontSize="16"
                             FontWeight="Bold"
                             HorizontalTextAlignment="Left"
-                                                 />
+                                                
+                            TextWrapping="Wrap" />
                         <TextBlock x:ConnectionId='6'
                             FontSize="12"
                             HorizontalTextAlignment="Left"

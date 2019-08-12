@@ -281,6 +281,8 @@
                     <AutoSuggestBox x:ConnectionId='35'
                         x:Name="NaviSearchBar"
                         Width="290"
+                        Background="{ThemeResource SystemControlAcrylicElementBrush}"
+                        BorderBrush="{ThemeResource SystemControlAcrylicElementBrush}"
                         PlaceholderText="Search"
                         QueryIcon="Find"
                                                                       />

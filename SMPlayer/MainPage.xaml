@@ -281,6 +281,8 @@
                     <AutoSuggestBox
                         x:Name="NaviSearchBar"
                         Width="290"
+                        Background="{ThemeResource SystemControlAcrylicElementBrush}"
+                        BorderBrush="{ThemeResource SystemControlAcrylicElementBrush}"
                         PlaceholderText="Search"
                         QueryIcon="Find"
                         QuerySubmitted="NaviSearchBar_QuerySubmitted" />
