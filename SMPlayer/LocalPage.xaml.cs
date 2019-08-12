@@ -30,14 +30,12 @@ namespace SMPlayer
         public LocalPage()
         {
             this.InitializeComponent();
-            //this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
         private void LocalFolderGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             GridFolderView folderView = (GridFolderView)e.ClickedItem;
-            System.Diagnostics.Debug.WriteLine("Image: " + folderView.First.UriSource);
-            System.Diagnostics.Debug.WriteLine("Name: " + folderView.Name);
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -55,4 +53,6 @@ namespace SMPlayer
             LocalProgressRing.IsActive = false;
         }
     }
+
+
 }

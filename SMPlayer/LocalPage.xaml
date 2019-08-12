@@ -10,18 +10,115 @@
     Loaded="Page_Loaded"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <local:LargeThumbnailVisibilityConverter x:Key="LargeThumbnailVisibilityConverter" />
+        <DataTemplate x:Key="GridFolderViewDataTemplate" x:DataType="data:GridFolderView">
+            <StackPanel Margin="10">
+                <Grid
+                    Width="160"
+                    Height="160"
+                    Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Image
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        CacheMode="BitmapCache"
+                        Source="{x:Bind First}" />
+                    <Image
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        CacheMode="BitmapCache"
+                        Source="{x:Bind Second}" />
+                    <Image
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        CacheMode="BitmapCache"
+                        Source="{x:Bind Third}" />
+                    <Image
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        CacheMode="BitmapCache"
+                        Source="{x:Bind Fourth}" />
+                    <Image
+                        x:Name="LargeThumbnail"
+                        Grid.RowSpan="2"
+                        Grid.ColumnSpan="2"
+                        Source="{x:Bind LargeThumbnail}"
+                        Visibility="{Binding Converter={StaticResource LargeThumbnailVisibilityConverter}}" />
+                </Grid>
+                <TextBlock
+                    FontSize="16"
+                    FontWeight="Bold"
+                    HorizontalTextAlignment="Left"
+                    Text="{x:Bind Name}"
+                    TextWrapping="Wrap" />
+                <TextBlock
+                    FontSize="12"
+                    HorizontalTextAlignment="Left"
+                    Text="{x:Bind MusicCount}" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="GridMusicViewDataTemplate" x:DataType="data:GridMusicView">
+            <StackPanel Margin="10">
+                <Image
+                    Width="160"
+                    Height="160"
+                    Margin="10"
+                    Source="{x:Bind Thumbnail}" />
+                <TextBlock
+                    FontSize="16"
+                    FontWeight="Bold"
+                    HorizontalTextAlignment="Left"
+                    Text="{x:Bind Name}" />
+                <TextBlock
+                    FontSize="12"
+                    HorizontalTextAlignment="Left"
+                    Text="{x:Bind Artist}" />
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Local Folders" />
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Local Items" />
+        <RelativePanel
+            Grid.Row="1"
+            Margin="20,0,20,0"
+            HorizontalAlignment="Stretch">
+            <TextBlock
+                FontSize="24"
+                RelativePanel.AlignLeftWithPanel="True"
+                Text="Folders"
+                TextAlignment="Center" />
+            <StackPanel Orientation="Horizontal" RelativePanel.AlignRightWithPanel="True">
+                <Button x:Name="SwitchViewButton" Background="Transparent">
+                    <SymbolIcon Symbol="List" />
+                </Button>
+                <TextBlock
+                    x:Name="SwitchViewTextBlock"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    Text="List View" />
+            </StackPanel>
+        </RelativePanel>
         <ProgressRing
             x:Name="LocalProgressRing"
-            Grid.Row="1"
+            Grid.Row="2"
             Width="100"
             Height="100"
             HorizontalAlignment="Center"
@@ -30,60 +127,30 @@
             Visibility="Collapsed" />
         <GridView
             x:Name="LocalFolderGridView"
-            Grid.Row="1"
+            Grid.Row="2"
             Margin="10"
             IsItemClickEnabled="True"
             ItemClick="LocalFolderGridView_ItemClick"
-            ItemsSource="{x:Bind GridFolders}">
-            <GridView.ItemTemplate>
-                <DataTemplate x:DataType="data:GridFolderView">
-                    <StackPanel Margin="10">
-                        <Grid
-                            Width="160"
-                            Height="160"
-                            Margin="10">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Image
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                CacheMode="BitmapCache"
-                                Source="{x:Bind First}" />
-                            <Image
-                                Grid.Row="0"
-                                Grid.Column="1"
-                                CacheMode="BitmapCache"
-                                Source="{x:Bind Second}" />
-                            <Image
-                                Grid.Row="1"
-                                Grid.Column="0"
-                                CacheMode="BitmapCache"
-                                Source="{x:Bind Third}" />
-                            <Image
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                CacheMode="BitmapCache"
-                                Source="{x:Bind Fourth}" />
-                        </Grid>
-                        <TextBlock
-                            FontSize="16"
-                            FontWeight="Bold"
-                            HorizontalTextAlignment="Left"
-                            Text="{x:Bind Name}"
-                            TextWrapping="Wrap" />
-                        <TextBlock
-                            FontSize="12"
-                            HorizontalTextAlignment="Left"
-                            Text="{x:Bind MusicCount}" />
-                    </StackPanel>
-                </DataTemplate>
-            </GridView.ItemTemplate>
-        </GridView>
+            ItemTemplate="{StaticResource GridFolderViewDataTemplate}"
+            ItemsSource="{x:Bind GridFolders}" />
+        <RelativePanel
+            Grid.Row="3"
+            Margin="20,0,20,0"
+            HorizontalAlignment="Stretch">
+            <TextBlock
+                FontSize="24"
+                RelativePanel.AlignLeftWithPanel="True"
+                Text="Music"
+                TextAlignment="Center" />
+            <!--<StackPanel Orientation="Horizontal" RelativePanel.AlignRightWithPanel="True">
+                <Button x:Name="SwitchViewButton" Background="Transparent">
+                    <SymbolIcon Symbol="List" />
+                </Button>
+                <TextBlock
+                    x:Name="SwitchViewTextBlock"
+                    VerticalAlignment="Center"
+                    Text="List View" />
+            </StackPanel>-->
+        </RelativePanel>
     </Grid>
 </Page>

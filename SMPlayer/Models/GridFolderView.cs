@@ -16,6 +16,7 @@ namespace SMPlayer.Models
         public BitmapImage Second { get; set; }
         public BitmapImage Third { get; set; }
         public BitmapImage Fourth { get; set; }
+        public BitmapImage LargeThumbnail { get; set; }
         public GridFolderView() { }
 
         public async Task Init(FolderTree tree)
@@ -25,7 +26,7 @@ namespace SMPlayer.Models
             Name = folder.DisplayName;
             MusicCount = "Songs: " + tree.Files.Count;
             BitmapImage thumbnail;
-            foreach (var music in tree.Files)
+            foreach (var music in tree.Files.OrderBy((m) => m.Name))
             {
                 var file = await StorageFile.GetFileFromPathAsync(music.Path);
                 thumbnail = await Helper.GetThumbnail(file);
@@ -33,17 +34,24 @@ namespace SMPlayer.Models
                     thumbnails.Add(thumbnail);
                 if (thumbnails.Count == 4) break;
             }
-            for (int i = 0; i < 4 - thumbnails.Count; i++)
-                thumbnails.Add(Helper.DefaultAlbumCover);
-            First = thumbnails[0];
-            Second = thumbnails[1];
-            Third = thumbnails[2];
-            Fourth = thumbnails[3];
-        }
-
-        public async void SwitchThumbnail()
-        {
-            await Helper.GetThumbnail(null);
+            int count = thumbnails.Count;
+            if (count == 0)
+            {
+                LargeThumbnail = Helper.ThumbnailNotFoundImage;
+            }
+            else if (count == 1)
+            {
+                LargeThumbnail = thumbnails[0];
+            }
+            else
+            {
+                for (int i = 0; i < 4 - count; i++)
+                    thumbnails.Add(Helper.ThumbnailNotFoundImage);
+                First = thumbnails[0];
+                Second = thumbnails[1];
+                Third = thumbnails[2];
+                Fourth = thumbnails[3];
+            }
         }
     }
 }
