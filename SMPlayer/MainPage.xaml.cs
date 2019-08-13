@@ -33,14 +33,10 @@ namespace SMPlayer
             // This will return null when your current page is not a MainPage instance!
             get { return (Window.Current.Content as Frame).Content as MainPage; }
         }
-        public static StorageFolder CurrentMusicFolder;
-        public static Music CurrentMusic;
-        public static int CurrentMusicIndex = -1;
         public static List<Music> CurrentPlayList;
         public static DispatcherTimer MusicTimer;
         public static bool ShouldPlay = false;
         private static bool NotDragging = true;
-        private static Random random = new Random();
         private Dictionary<string, MediaControlListener> MusicModificationListeners = new Dictionary<string, MediaControlListener>();
 
         public MainPage()
@@ -62,7 +58,7 @@ namespace SMPlayer
             MusicLibraryItem.IsSelected = true;
             Settings settings = Settings.settings;
             if (!string.IsNullOrEmpty(settings.RootPath))
-                CurrentMusicFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
+                Helper.CurrentMusicFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
             MainPageMediaElement.Volume = settings.Volume;
             VolumeButton.Content = GetVolumeIcon(settings.Volume);
             VolumeSlider.Value = settings.Volume;
@@ -100,15 +96,13 @@ namespace SMPlayer
             StorageFile file;
             try
             {
-                file = await CurrentMusicFolder.GetFileAsync(music.GetShortPath());
+                file = await Helper.CurrentMusicFolder.GetFileAsync(music.GetShortPath());
             }
             catch (FileNotFoundException e)
             {
-                var dialog = new Windows.UI.Popups.MessageDialog(e.Message);
-                await dialog.ShowAsync();
                 return;
             }
-            CurrentMusic = music;
+            Helper.CurrentMusic = music;
             MainPageMediaElement.SetSource(await file.OpenAsync(FileAccessMode.Read), file.ContentType);
             AlbumCover.Source = await Helper.GetThumbnail(file);
             TitleTextBlock.Text = music.Name;
@@ -133,9 +127,9 @@ namespace SMPlayer
 
         private void ResetPlaylist()
         {
-            CurrentPlayList = MusicLibraryPage.AllSongs.ToList();
-            if (Settings.settings.Mode == PlayMode.Shuffle) ShuffleCurrentPlayList();
-            CurrentMusicIndex = CurrentPlayList.IndexOf(CurrentMusic);
+            Helper.CurrentPlayList = MusicLibraryPage.AllSongs.ToList();
+            if (Settings.settings.Mode == PlayMode.Shuffle) Helper.ShuffleCurrentPlayList();
+            Helper.CurrentMusicIndex = Helper.CurrentPlayList.IndexOf(Helper.CurrentMusic);
         }
 
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
@@ -167,7 +161,7 @@ namespace SMPlayer
 
         public void Play()
         {
-            if (CurrentMusic == null)
+            if (Helper.CurrentMusic == null)
             {
                 if (MusicLibraryPage.AllSongs.Count == 0) return;
                 if (Settings.settings.Mode == PlayMode.Shuffle) SetMusic(MusicLibraryPage.AllSongs[0]);
@@ -180,23 +174,10 @@ namespace SMPlayer
 
         public void Pause()
         {
-            if (CurrentMusic == null) return;
+            if (Helper.CurrentMusic == null) return;
             PlayButtonIcon.Glyph = "\uE768";
             MainPageMediaElement.Pause();
             MusicTimer.Stop();
-        }
-
-        public static void ShuffleCurrentPlayList()
-        {
-            int n = CurrentPlayList.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = random.Next(n + 1);
-                Music value = CurrentPlayList[k];
-                CurrentPlayList[k] = CurrentPlayList[n];
-                CurrentPlayList[n] = value;
-            }
         }
 
         private void Play_Click()
@@ -332,10 +313,10 @@ namespace SMPlayer
 
         private void SetMusicFavorite(bool favorite)
         {
-            Music before = new Music(CurrentMusic);
-            CurrentMusic.Favorite = favorite;
+            Music before = new Music(Helper.CurrentMusic);
+            Helper.CurrentMusic.Favorite = favorite;
             foreach (var listener in MusicModificationListeners.Values)
-                listener.MusicModified(before, CurrentMusic);
+                listener.MusicModified(before, Helper.CurrentMusic);
         }
 
         private void LikeButton_Click(object sender, RoutedEventArgs e)
@@ -346,43 +327,13 @@ namespace SMPlayer
 
         private void PrevButton_Click(object sender, RoutedEventArgs e)
         {
-            if (MediaSlider.Value > 5)
-            {
-                MediaSlider.Value = 0;
-            }
-            else
-            {
-                CurrentMusicIndex -= 1;
-                if (CurrentMusicIndex < 0)
-                {
-                    if (Settings.settings.Mode == PlayMode.Shuffle)
-                    {
-                        CurrentMusic = null;
-                        ShuffleCurrentPlayList();
-                        CurrentMusicIndex = 0;
-                    }
-                    else
-                    {
-                        CurrentMusicIndex += CurrentPlayList.Count;
-                    }
-                }
-                SetMusic(CurrentPlayList[CurrentMusicIndex]);
-            }
+            if (MediaSlider.Value > 5) MediaSlider.Value = 0;
+            else SetMusic(Helper.PrevMusic());
         }
 
         private void NextMusic()
         {
-            CurrentMusicIndex += 1;
-            if (CurrentMusicIndex >= CurrentPlayList.Count)
-            {
-                if (Settings.settings.Mode == PlayMode.Shuffle)
-                {
-                    CurrentMusic = null;
-                    ShuffleCurrentPlayList();
-                }
-                CurrentMusicIndex = 0;
-            }
-            SetMusic(CurrentPlayList[CurrentMusicIndex]);
+            SetMusic(Helper.NextMusic());
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
@@ -397,10 +348,10 @@ namespace SMPlayer
 
         private void MainPageMediaElement_MediaEnded(object sender, RoutedEventArgs e)
         {
-            Music before = new Music(CurrentMusic);
-            CurrentMusic.PlayCount += 1;
+            Music before = new Music(Helper.CurrentMusic);
+            Helper.CurrentMusic.PlayCount += 1;
             foreach (var listener in MusicModificationListeners.Values)
-                listener.MusicModified(before, CurrentMusic);
+                listener.MusicModified(before, Helper.CurrentMusic);
             switch (Settings.settings.Mode)
             {
                 case PlayMode.Once:

@@ -56,9 +56,9 @@ namespace SMPlayer.Models
             Save();
             MusicLibraryPage.AllSongs = settings.Tree.Flatten();
             MusicLibraryPage.Save();
-            MainPage.CurrentMusicFolder = folder;
-            MainPage.CurrentPlayList = MusicLibraryPage.AllSongs.ToList();
-            MainPage.CurrentMusicIndex = -1;
+            Helper.CurrentMusicFolder = folder;
+            Helper.CurrentPlayList = MusicLibraryPage.AllSongs.ToList();
+            Helper.CurrentMusicIndex = -1;
         }
     }
 }

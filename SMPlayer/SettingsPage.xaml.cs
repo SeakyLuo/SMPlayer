@@ -28,6 +28,7 @@ namespace SMPlayer
     public sealed partial class SettingsPage : Page
     {
         public static StorageFolder CurrentFolder;
+        private static List<AfterPathSetListener> listeners = new List<AfterPathSetListener>();
         public SettingsPage()
         {
             this.InitializeComponent();
@@ -45,6 +46,7 @@ namespace SMPlayer
             Settings.settings.RootPath = folder.Path;
             Settings.Save();
             await Settings.SetTreeFolder(folder);
+            foreach (var listener in listeners) listener.PathSet(folder.Path);
             PathBox.Text = folder.Path;
             CurrentFolder = folder;
             UpdatePopup.IsOpen = false;
@@ -55,5 +57,15 @@ namespace SMPlayer
             PathBox.Text = Settings.settings.RootPath;
             LanguageComboBox.SelectedItem = Settings.settings.Language;
         }
+
+        public static void AddAfterPathSetListener(AfterPathSetListener listener)
+        {
+            listeners.Add(listener);
+        }
+    }
+
+    public interface AfterPathSetListener
+    {
+        void PathSet(string path);
     }
 }

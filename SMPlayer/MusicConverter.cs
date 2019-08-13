@@ -89,7 +89,7 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.Equals(MainPage.CurrentMusic) ? Windows.UI.Colors.Red : Windows.UI.Colors.Black;
+            return value.Equals(Helper.CurrentMusic) ? Windows.UI.Colors.Red : Windows.UI.Colors.Black;
 
         }
 
@@ -104,6 +104,19 @@ namespace SMPlayer
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             return value == null ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
+
+    class AlbumNameVisibilityConverter : Windows.UI.Xaml.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return value is string && string.IsNullOrEmpty(value as string) ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

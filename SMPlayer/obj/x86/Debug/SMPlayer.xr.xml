@@ -40,6 +40,7 @@
       <RootProperty Name="MaxLines" />
       <RootProperty Name="TextAlignment" />
       <RootProperty Name="TextWrapping" />
+      <RootProperty Name="Visibility" />
       <RootProperty Name="Foreground" />
       <RootProperty Name="Opacity" />
       <RootProperty Name="HorizontalTextAlignment" />
@@ -126,11 +127,12 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Page">
       <RootProperty Name="Background" />
-      <RootProperty Name="Content" />
       <RootProperty Name="Resources" />
+      <RootProperty Name="Content" />
       <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.ThemeResourceExtension" />
+    <RootType FullName="SMPlayer.AlbumNameVisibilityConverter" />
     <RootType FullName="Windows.UI.Xaml.Controls.Grid">
       <RootProperty Name="RowDefinitions" />
       <RootProperty Name="Children" />
@@ -164,22 +166,37 @@
       <RootProperty Name="ItemTemplate" />
       <RootEvent Name="ItemClick" />
     </RootType>
-    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.BindExtension" />
+    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.BindExtension">
+      <RootProperty Name="Converter" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.DataTemplate">
       <RootProperty Name="Template" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.StackPanel">
       <RootProperty Name="Width" />
+      <RootProperty Name="Height" />
       <RootProperty Name="Margin" />
-      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Children" />
       <RootProperty Name="Orientation" />
       <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Background" />
       <RootProperty Name="Padding" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.VisualStateManager">
+      <RootMethod Name="GetVisualStateGroups" />
+    </RootType>
+    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DropShadowPanel">
+      <RootProperty Name="VerticalContentAlignment" />
+      <RootProperty Name="BlurRadius" />
+      <RootProperty Name="OffsetX" />
+      <RootProperty Name="OffsetY" />
+      <RootProperty Name="ShadowOpacity" />
+      <RootProperty Name="Color" />
+      <RootProperty Name="Content" />
+    </RootType>
+    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.StaticResourceExtension" />
     <RootType FullName="Windows.UI.Xaml.Controls.Image">
-      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Source" />
       <RootProperty Name="CacheMode" />
       <RootProperty Name="Visibility" />
@@ -188,7 +205,27 @@
       <RootProperty Name="Margin" />
       <RootProperty Name="Stretch" />
     </RootType>
-    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.StaticResourceExtension" />
+    <RootType FullName="Windows.UI.Xaml.VisualStateGroup">
+      <RootProperty Name="States" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.VisualState">
+      <RootProperty Name="Storyboard" />
+      <RootProperty Name="Setters" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Media.Animation.Storyboard">
+      <RootProperty Name="Children" />
+      <RootMethod Name="GetTargetName" />
+      <RootMethod Name="SetTargetName" />
+      <RootMethod Name="GetTargetProperty" />
+      <RootMethod Name="SetTargetProperty" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Media.Animation.ObjectAnimationUsingKeyFrames">
+      <RootProperty Name="KeyFrames" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Media.Animation.DiscreteObjectKeyFrame">
+      <RootProperty Name="KeyTime" />
+      <RootProperty Name="Value" />
+    </RootType>
     <RootType FullName="SMPlayer.AlbumsPage" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.MasterDetailsView">
       <RootProperty Name="BackButtonBehavior" />
@@ -282,9 +319,6 @@
       <RootProperty Name="TargetType" />
       <RootProperty Name="Template" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.VisualStateManager">
-      <RootMethod Name="GetVisualStateGroups" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Canvas">
       <RootMethod Name="GetZIndex" />
       <RootMethod Name="SetZIndex" />
@@ -375,13 +409,6 @@
     <RootType FullName="Windows.UI.Xaml.Controls.ItemsStackPanel">
       <RootProperty Name="Orientation" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.VisualStateGroup">
-      <RootProperty Name="States" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.VisualState">
-      <RootProperty Name="Setters" />
-      <RootProperty Name="Storyboard" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Shapes.Rectangle">
       <RootProperty Name="Fill" />
       <RootProperty Name="Width" />
@@ -394,20 +421,6 @@
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Child" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Media.Animation.Storyboard">
-      <RootProperty Name="Children" />
-      <RootMethod Name="GetTargetName" />
-      <RootMethod Name="SetTargetName" />
-      <RootMethod Name="GetTargetProperty" />
-      <RootMethod Name="SetTargetProperty" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Media.Animation.ObjectAnimationUsingKeyFrames">
-      <RootProperty Name="KeyFrames" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Media.Animation.DiscreteObjectKeyFrame">
-      <RootProperty Name="KeyTime" />
-      <RootProperty Name="Value" />
     </RootType>
     <RootType FullName="SMPlayer.RecentPage" />
     <RootType FullName="SMPlayer.MusicDurationConverter" />
