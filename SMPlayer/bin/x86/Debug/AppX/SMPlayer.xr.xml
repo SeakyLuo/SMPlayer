@@ -515,6 +515,10 @@
       <RootEvent Name="ManipulationCompleted" />
       <RootEvent Name="ManipulationStarted" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Media.AcrylicBrush">
+      <RootProperty Name="TintColor" />
+      <RootProperty Name="TintOpacity" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.Thumb">
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />

@@ -36,6 +36,8 @@ namespace SMPlayer
         private void LocalFolderGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             GridFolderView folderView = (GridFolderView)e.ClickedItem;
+            MainPage.Instance.LoadPage(typeof(LocalPage));
+            Helper.SetBackButtonVisibility(Windows.UI.Core.AppViewBackButtonVisibility.Visible);
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)

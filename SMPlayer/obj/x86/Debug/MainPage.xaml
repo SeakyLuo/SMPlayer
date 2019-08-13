@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:media="using:Microsoft.UI.Xaml.Media"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                         
     mc:Ignorable="d">
@@ -349,6 +350,10 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <AcrylicBrush x:Key="NavigationViewDefaultPaneBackground" TintColor="Transparent" TintOpacity=".6"/>
+        <AcrylicBrush x:Key="NavigationViewTopPaneBackground" TintColor="Transparent" TintOpacity=".6"/>
+        <AcrylicBrush x:Key="NavigationViewExpandedPaneBackground" TintColor="Transparent" TintOpacity=".6"/>
+        <!--<media:AcrylicBrush x:Key="NavigationViewExpandedPaneBackground" TintOpacity="0.8" TintLuminosityOpacity="0.8" TintColor="Transparent" FallbackColor="Transparent"/>-->
     </Page.Resources>
 
     <Grid>

@@ -201,10 +201,15 @@ namespace SMPlayer
             }
         }
 
-        private void PlayButton_Click(object sender, RoutedEventArgs e)
+        private void Play_Click()
         {
             if (PlayButtonIcon.Glyph == "\uE768") Play();
             else Pause();
+        }
+
+        private void PlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            Play_Click();
         }
 
         private void VolumeButton_Click(object sender, RoutedEventArgs e)
@@ -245,6 +250,11 @@ namespace SMPlayer
                 MainFrame.Navigate(typeof(SearchPage));
                 Helper.SetBackButtonVisibility(AppViewBackButtonVisibility.Visible);
             }
+        }
+
+        public void LoadPage(Type page)
+        {
+            MainFrame.Navigate(page);
         }
 
         private void MainNavigationView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
