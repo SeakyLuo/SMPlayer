@@ -42,40 +42,39 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Local Items" />
-        <NavigationView x:ConnectionId='6'
+        <TextBlock x:ConnectionId='6'
+            x:Name="TitleTextBlock"
+            Style="{StaticResource TitleTextBlockStyle}"
+            Text="Folder Content" />
+        <NavigationView x:ConnectionId='7'
             x:Name="LocalNavigationView"
             Grid.Row="1"
                                                              
             IsBackEnabled="True"
             IsSettingsVisible="False"
                                                          
-            PaneDisplayMode="Top"
-            PaneTitle="Cuurent Folder">
+            PaneDisplayMode="Top">
             <NavigationView.MenuItems>
-                <NavigationViewItem x:ConnectionId='7' x:Name="LocalFoldersItem" Content="Folders">
+                <NavigationViewItem x:ConnectionId='8' x:Name="LocalFoldersItem" Content="Folders">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8B7;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:ConnectionId='8'
+                <NavigationViewItem x:ConnectionId='9'
                     x:Name="LocalMusicItem"
-                    Content="Music"
+                    Content="Songs"
                     Icon="MusicInfo" />
             </NavigationView.MenuItems>
             <NavigationView.PaneFooter>
                 <StackPanel Orientation="Horizontal">
-                    <NavigationViewItem x:ConnectionId='9'
+                    <NavigationViewItem x:ConnectionId='10'
                         x:Name="LocalListViewItem"
                         Margin="0,0,10,0"
                         Content="List View"
+                        Icon="List"
                                                          
-                        Visibility="Visible" >
-                        <NavigationViewItem.Icon>
-                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE14C;" />
-                        </NavigationViewItem.Icon>
-                    </NavigationViewItem>
-                    <NavigationViewItem x:ConnectionId='10'
+                        Visibility="Visible" />
+                    <NavigationViewItem x:ConnectionId='11'
                         x:Name="LocalGridViewItem"
                         Margin="0,0,10,0"
                         Content="Grid View"
@@ -87,7 +86,7 @@
                     </NavigationViewItem>
                 </StackPanel>
             </NavigationView.PaneFooter>
-            <Frame x:ConnectionId='11'
+            <Frame x:ConnectionId='12'
                 x:Name="LocalFrame"
                 IsNavigationStackEnabled="True"
                                                  />

@@ -26,11 +26,6 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class LocalPage : Page
     {
-        public static LocalPage Instance
-        {
-            // This will return null when your current page is not a LocalPage instance!
-            get { return (Window.Current.Content as Frame).Content as LocalPage; }
-        }
         public LocalPage()
         {
             this.InitializeComponent();
@@ -77,6 +72,11 @@ namespace SMPlayer
                 default:
                     break;
             }
+        }
+
+        public void SetTitle(string title)
+        {
+            TitleTextBlock.Text = title;
         }
 
         private void LocalListViewItem_Tapped(object sender, TappedRoutedEventArgs e)

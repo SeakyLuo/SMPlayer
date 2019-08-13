@@ -29,20 +29,13 @@ namespace SMPlayer.Models
             foreach (var music in tree.Files.OrderBy((m) => m.Name))
             {
                 var file = await StorageFile.GetFileFromPathAsync(music.Path);
-                thumbnail = await Helper.GetThumbnail(file);
-                if (thumbnail != null && !thumbnail.Equals(Helper.DefaultAlbumCover))
-                    thumbnails.Add(thumbnail);
+                thumbnail = await Helper.GetThumbnail(file, false);
+                if (thumbnail != null) thumbnails.Add(thumbnail);
                 if (thumbnails.Count == 4) break;
             }
             int count = thumbnails.Count;
-            if (count == 0)
-            {
-                LargeThumbnail = Helper.ThumbnailNotFoundImage;
-            }
-            else if (count == 1)
-            {
-                LargeThumbnail = thumbnails[0];
-            }
+            if (count == 0) LargeThumbnail = Helper.ThumbnailNotFoundImage;
+            else if (count == 1) LargeThumbnail = thumbnails[0];
             else
             {
                 for (int i = 0; i < 4 - count; i++)

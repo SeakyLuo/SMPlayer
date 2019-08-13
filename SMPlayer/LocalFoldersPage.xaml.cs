@@ -25,6 +25,7 @@ namespace SMPlayer
     public sealed partial class LocalFoldersPage : Page
     {
         private ObservableCollection<GridFolderView> GridFolders = new ObservableCollection<GridFolderView>();
+        //public static Func< void> AfterLoading;
         public LocalFoldersPage()
         {
             this.InitializeComponent();

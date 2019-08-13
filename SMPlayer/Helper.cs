@@ -20,9 +20,15 @@ namespace SMPlayer
         public static BitmapImage DefaultAlbumCover = new BitmapImage(new Uri(DefaultAlbumCoverPath));
         public static string ThumbnailNotFoundPath = "ms-appx:///Assets/gray_music.png";
         public static BitmapImage ThumbnailNotFoundImage = new BitmapImage(new Uri(ThumbnailNotFoundPath));
-        public static async Task<BitmapImage> GetThumbnail(StorageFile file)
+
+        public static async Task<BitmapImage> GetThumbnail(string path, bool withDefault = true)
         {
-            BitmapImage bitmapImage = DefaultAlbumCover;
+            return await GetThumbnail(await StorageFile.GetFileFromPathAsync(path), withDefault);
+        }
+        public static async Task<BitmapImage> GetThumbnail(StorageFile file, bool withDefault = true)
+        {
+            BitmapImage bitmapImage = null;
+            if (withDefault) bitmapImage = DefaultAlbumCover;
             if (file != null)
             {
                 using (var thumbnail = await file.GetThumbnailAsync(ThumbnailMode.MusicView, 300))

@@ -42,7 +42,10 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Local Items" />
+        <TextBlock
+            x:Name="TitleTextBlock"
+            Style="{StaticResource TitleTextBlockStyle}"
+            Text="Folder Content" />
         <NavigationView
             x:Name="LocalNavigationView"
             Grid.Row="1"
@@ -59,7 +62,7 @@
                 </NavigationViewItem>
                 <NavigationViewItem
                     x:Name="LocalMusicItem"
-                    Content="Music"
+                    Content="Songs"
                     Icon="MusicInfo" />
             </NavigationView.MenuItems>
             <NavigationView.PaneFooter>

@@ -81,5 +81,10 @@ namespace SMPlayer.Models
                 list.Add(music);
             return list;
         }
+
+        public string GetFolderName()
+        {
+            return Path.Substring(Path.LastIndexOf("\\" + 1));
+        }
     }
 }
