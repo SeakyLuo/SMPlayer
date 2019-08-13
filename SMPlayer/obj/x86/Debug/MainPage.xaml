@@ -350,10 +350,9 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <AcrylicBrush x:Key="NavigationViewDefaultPaneBackground" TintColor="Transparent" TintOpacity=".6"/>
-        <AcrylicBrush x:Key="NavigationViewTopPaneBackground" TintColor="Transparent" TintOpacity=".6"/>
-        <AcrylicBrush x:Key="NavigationViewExpandedPaneBackground" TintColor="Transparent" TintOpacity=".6"/>
-        <!--<media:AcrylicBrush x:Key="NavigationViewExpandedPaneBackground" TintOpacity="0.8" TintLuminosityOpacity="0.8" TintColor="Transparent" FallbackColor="Transparent"/>-->
+        <AcrylicBrush x:Key="NavigationViewDefaultPaneBackground" BackgroundSource="HostBackdrop" TintColor="{StaticResource SystemChromeAltHighColor}" TintOpacity="0.8" FallbackColor="{StaticResource SystemChromeMediumColor}" />
+        <AcrylicBrush x:Key="NavigationViewTopPaneBackground" BackgroundSource="HostBackdrop" TintColor="{StaticResource SystemChromeAltHighColor}" TintOpacity="0.8" FallbackColor="{StaticResource SystemChromeMediumColor}" />
+        <AcrylicBrush x:Key="NavigationViewExpandedPaneBackground" BackgroundSource="HostBackdrop" TintColor="{StaticResource SystemChromeAltHighColor}" TintOpacity="0.8" FallbackColor="{StaticResource SystemChromeMediumColor}" />
     </Page.Resources>
 
     <Grid>
@@ -365,6 +364,7 @@
             x:Name="MainNavigationView"
             Background="{ThemeResource SystemControlAcrylicElementBrush}"
             IsBackButtonVisible="Collapsed"
+            TabNavigation="Cycle"
             IsBackEnabled="True"
                                                         
                                                         
@@ -444,7 +444,7 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
-            <Frame x:ConnectionId='36' x:Name="MainFrame" IsNavigationStackEnabled="True" />
+            <Frame x:ConnectionId='36' x:Name="MainFrame" IsNavigationStackEnabled="True"                                 />
         </NavigationView>
 
         <Grid Grid.Row="1" Background="{ThemeResource SystemControlAcrylicWindowBrush}">

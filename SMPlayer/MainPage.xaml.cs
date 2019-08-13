@@ -17,6 +17,7 @@ using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.Storage.FileProperties;
 using Windows.UI.Core;
+using System.Diagnostics;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -52,10 +53,7 @@ namespace SMPlayer
             MusicTimer.Tick += MusicTimer_Tick;
             SystemNavigationManager.GetForCurrentView().BackRequested += (s, e) =>
             {
-                if (MainFrame.CanGoBack)
-                    MainFrame.GoBack();
-                if (!MainFrame.CanGoBack)
-                    Helper.SetBackButtonVisibility(AppViewBackButtonVisibility.Collapsed);
+                if (MainFrame.CanGoBack) MainFrame.GoBack();
             };
         }
 
@@ -259,44 +257,43 @@ namespace SMPlayer
 
         private void MainNavigationView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
-            if (args.IsSettingsInvoked)
+            if (args.IsSettingsInvoked) MainFrame.Navigate(typeof(SettingsPage));
+            else
             {
-                MainFrame.Navigate(typeof(SettingsPage));
-                return;
-            }
-            var item = (NavigationViewItem)MainNavigationView.SelectedItem;
-            switch (item.Name)
-            {
-                case "NaviSearchItem":
-                    Open_Navigation();
-                    MainNavigationView.IsPaneOpen = true;
-                    NaviSearchBar.Focus(FocusState.Programmatic);
-                    break;
-                case "MusicLibraryItem":
-                    MainFrame.Navigate(typeof(MusicLibraryPage));
-                    break;
-                case "AlbumsItem":
-                    MainFrame.Navigate(typeof(AlbumsPage));
-                    break;
-                case "ArtistsItem":
-                    MainFrame.Navigate(typeof(ArtistsPage));
-                    break;
-                case "NowPlayingItem":
-                    break;
-                case "RecentItem":
-                    MainFrame.Navigate(typeof(RecentPage));
-                    break;
-                case "LocalItem":
-                    MainFrame.Navigate(typeof(LocalPage));
-                    break;
-                case "PlaylistsItem":
-                    MainFrame.Navigate(typeof(PlaylistsPage));
-                    break;
-                case "MyFavoritesItem":
-                    MainFrame.Navigate(typeof(MyFavorites));
-                    break;
-                default:
-                    return;
+                var item = (NavigationViewItem)MainNavigationView.SelectedItem;
+                switch (item.Name)
+                {
+                    case "NaviSearchItem":
+                        Open_Navigation();
+                        MainNavigationView.IsPaneOpen = true;
+                        NaviSearchBar.Focus(FocusState.Programmatic);
+                        break;
+                    case "MusicLibraryItem":
+                        MainFrame.Navigate(typeof(MusicLibraryPage));
+                        break;
+                    case "AlbumsItem":
+                        MainFrame.Navigate(typeof(AlbumsPage));
+                        break;
+                    case "ArtistsItem":
+                        MainFrame.Navigate(typeof(ArtistsPage));
+                        break;
+                    case "NowPlayingItem":
+                        break;
+                    case "RecentItem":
+                        MainFrame.Navigate(typeof(RecentPage));
+                        break;
+                    case "LocalItem":
+                        MainFrame.Navigate(typeof(LocalPage));
+                        break;
+                    case "PlaylistsItem":
+                        MainFrame.Navigate(typeof(PlaylistsPage));
+                        break;
+                    case "MyFavoritesItem":
+                        MainFrame.Navigate(typeof(MyFavorites));
+                        break;
+                    default:
+                        return;
+                }
             }
         }
         public static string GetVolumeIcon(double volume)
@@ -450,6 +447,39 @@ namespace SMPlayer
         private void MediaSlider_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
             NotDragging = false;
+        }
+
+        private void MainFrame_Navigated(object sender, NavigationEventArgs e)
+        {
+            Helper.SetBackButtonVisibility(MainFrame.CanGoBack ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed);
+            // need to cancel NowPlaying
+            switch (MainFrame.CurrentSourcePageType.Name)
+            {
+                case "MusicLibraryPage":
+                    MainNavigationView.SelectedItem = MusicLibraryItem;
+                    break;
+                case "ArtistsPage":
+                    MainNavigationView.SelectedItem = ArtistsItem;
+                    break;
+                case "AlbumsPage":
+                    MainNavigationView.SelectedItem = AlbumsItem;
+                    break;
+                case "RecentPage":
+                    MainNavigationView.SelectedItem = RecentItem;
+                    break;
+                case "LocalPage":
+                    MainNavigationView.SelectedItem = LocalItem;
+                    break;
+                case "PlaylistsPage":
+                    MainNavigationView.SelectedItem = PlaylistsItem;
+                    break;
+                case "MyFavoritesPage":
+                    MainNavigationView.SelectedItem = MyFavoritesItem;
+                    break;
+                default:
+                    return;
+            }
+
         }
     }
 

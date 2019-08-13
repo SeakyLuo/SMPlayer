@@ -257,6 +257,7 @@
       <RootProperty Name="CompactPaneLength" />
       <RootProperty Name="Background" />
       <RootProperty Name="IsBackButtonVisible" />
+      <RootProperty Name="TabNavigation" />
       <RootProperty Name="IsBackEnabled" />
       <RootProperty Name="MenuItems" />
       <RootProperty Name="Content" />
@@ -516,8 +517,10 @@
       <RootEvent Name="ManipulationStarted" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.AcrylicBrush">
+      <RootProperty Name="BackgroundSource" />
       <RootProperty Name="TintColor" />
       <RootProperty Name="TintOpacity" />
+      <RootProperty Name="FallbackColor" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.Thumb">
       <RootProperty Name="Width" />
@@ -562,6 +565,7 @@
     <RootType FullName="Windows.UI.Xaml.Controls.NavigationViewItemSeparator" />
     <RootType FullName="Windows.UI.Xaml.Controls.Frame">
       <RootProperty Name="IsNavigationStackEnabled" />
+      <RootEvent Name="Navigated" />
     </RootType>
     <RootType FullName="SMPlayer.MainPage" />
   </Roots.RootTypes>
