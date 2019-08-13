@@ -26,33 +26,69 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class LocalPage : Page
     {
-        private ObservableCollection<GridFolderView> GridFolders = new ObservableCollection<GridFolderView>();
+        public static LocalPage Instance
+        {
+            // This will return null when your current page is not a LocalPage instance!
+            get { return (Window.Current.Content as Frame).Content as LocalPage; }
+        }
         public LocalPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
-        private void LocalFolderGridView_ItemClick(object sender, ItemClickEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            GridFolderView folderView = (GridFolderView)e.ClickedItem;
-            MainPage.Instance.LoadPage(typeof(LocalPage));
-            Helper.SetBackButtonVisibility(Windows.UI.Core.AppViewBackButtonVisibility.Visible);
+            LocalFoldersItem.IsSelected = true;
         }
 
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        private void LocalFrame_Navigated(object sender, NavigationEventArgs e)
         {
-            GridFolders.Clear();
-            LocalProgressRing.IsActive = true;
-            LocalProgressRing.Visibility = Visibility.Visible;
-            foreach (var tree in Settings.settings.Tree.Trees)
+            LocalNavigationView.IsBackButtonVisible = LocalFrame.CanGoBack ? NavigationViewBackButtonVisible.Visible : NavigationViewBackButtonVisible.Collapsed;
+        }
+
+        private void LocalNavigationView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        {
+            var item = (NavigationViewItem)LocalNavigationView.SelectedItem;
+            switch (item.Name)
             {
-                GridFolderView folder = new GridFolderView();
-                await folder.Init(tree);
-                GridFolders.Add(folder);
+                case "LocalFoldersItem":
+                    LocalFrame.Navigate(typeof(LocalFoldersPage));
+                    break;
+                case "LocalMusicItem":
+                    LocalFrame.Navigate(typeof(LocalMusicPage));
+                    break;
+                default:
+                    return;
             }
-            LocalProgressRing.Visibility = Visibility.Collapsed;
-            LocalProgressRing.IsActive = false;
+        }
+
+        private void LocalNavigationView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+        {
+            LocalFrame.GoBack();
+            switch (LocalFrame.CurrentSourcePageType.Name)
+            {
+                case "LocalFoldersPage":
+                    LocalFoldersItem.IsSelected = true;
+                    break;
+                case "LocalMusicPage":
+                    LocalMusicItem.IsSelected = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void LocalListViewItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            LocalListViewItem.Visibility = Visibility.Collapsed;
+            LocalGridViewItem.Visibility = Visibility.Visible;
+        }
+
+        private void LocalGridViewItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            LocalListViewItem.Visibility = Visibility.Visible;
+            LocalGridViewItem.Visibility = Visibility.Collapsed;
         }
     }
 }

@@ -12,60 +12,7 @@
 
     <Page.Resources>
         <local:LargeThumbnailVisibilityConverter x:Key="LargeThumbnailVisibilityConverter" />
-        <DataTemplate x:Key="GridFolderViewDataTemplate"                                 >
-            <StackPanel x:ConnectionId='6' Margin="10">
-                <Grid
-                    Width="160"
-                    Height="160"
-                    Margin="10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Image x:ConnectionId='9'
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        CacheMode="BitmapCache"
-                                                />
-                    <Image x:ConnectionId='10'
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        CacheMode="BitmapCache"
-                                                 />
-                    <Image x:ConnectionId='11'
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        CacheMode="BitmapCache"
-                                                />
-                    <Image x:ConnectionId='12'
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        CacheMode="BitmapCache"
-                                                 />
-                    <Image x:ConnectionId='13'
-                        x:Name="LargeThumbnail"
-                        Grid.RowSpan="2"
-                        Grid.ColumnSpan="2"
-                        CacheMode="BitmapCache"
-                                                        
-                        Visibility="{Binding Converter={StaticResource LargeThumbnailVisibilityConverter}}" />
-                </Grid>
-                <TextBlock x:ConnectionId='7'
-                    FontSize="16"
-                    FontWeight="Bold"
-                    HorizontalTextAlignment="Left"
-                                        
-                    TextWrapping="Wrap" />
-                <TextBlock x:ConnectionId='8'
-                    FontSize="12"
-                    HorizontalTextAlignment="Left"
-                                               />
-            </StackPanel>
-        </DataTemplate>
+        <SolidColorBrush x:Key="NavigationViewTopPaneBackground" Color="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
         <DataTemplate x:Key="GridMusicViewDataTemplate"                                >
             <StackPanel x:ConnectionId='2' Margin="10">
                 <Image x:ConnectionId='3'
@@ -90,69 +37,61 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Local Items" />
-        <RelativePanel
+        <NavigationView x:ConnectionId='6'
+            x:Name="LocalNavigationView"
             Grid.Row="1"
-            Margin="20,0,20,0"
-            HorizontalAlignment="Stretch">
-            <TextBlock
-                FontSize="24"
-                RelativePanel.AlignLeftWithPanel="True"
-                Text="Folders"
-                TextAlignment="Center" />
-            <StackPanel Orientation="Horizontal" RelativePanel.AlignRightWithPanel="True">
-                <Button x:ConnectionId='16' x:Name="SwitchViewButton" Background="Transparent">
-                    <SymbolIcon Symbol="List" />
-                </Button>
-                <TextBlock x:ConnectionId='17'
-                    x:Name="SwitchViewTextBlock"
-                    VerticalAlignment="Center"
-                    FontSize="16"
-                    Text="List View" />
-            </StackPanel>
-        </RelativePanel>
-        <ProgressRing x:ConnectionId='14'
-            x:Name="LocalProgressRing"
-            Grid.Row="2"
-            Width="100"
-            Height="100"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            IsActive="False"
-            Visibility="Collapsed" />
-        <GridView x:ConnectionId='15'
-            x:Name="LocalFolderGridView"
-            Grid.Row="2"
-            Margin="10"
-            IsItemClickEnabled="True"
-                                                     
-            ItemTemplate="{StaticResource GridFolderViewDataTemplate}"
-                                               />
-        <RelativePanel
-            Grid.Row="3"
-            Margin="20,0,20,0"
-            HorizontalAlignment="Stretch">
-            <TextBlock
-                FontSize="24"
-                RelativePanel.AlignLeftWithPanel="True"
-                Text="Music"
-                TextAlignment="Center" />
-            <!--<StackPanel Orientation="Horizontal" RelativePanel.AlignRightWithPanel="True">
-                <Button x:Name="SwitchViewButton" Background="Transparent">
-                    <SymbolIcon Symbol="List" />
-                </Button>
-                <TextBlock
-                    x:Name="SwitchViewTextBlock"
-                    VerticalAlignment="Center"
-                    Text="List View" />
-            </StackPanel>-->
-        </RelativePanel>
+                                                             
+            IsBackEnabled="True"
+            IsSettingsVisible="False"
+                                                         
+            PaneDisplayMode="Top"
+            PaneTitle="Cuurent Folder">
+            <NavigationView.MenuItems>
+                <NavigationViewItem x:ConnectionId='7' x:Name="LocalFoldersItem" Content="Folders">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8B7;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:ConnectionId='8'
+                    x:Name="LocalMusicItem"
+                    Content="Music"
+                    Icon="MusicInfo" />
+            </NavigationView.MenuItems>
+            <NavigationView.PaneFooter>
+                <StackPanel Orientation="Horizontal">
+                    <NavigationViewItem x:ConnectionId='9'
+                        x:Name="LocalListViewItem"
+                        Margin="0,0,10,0"
+                        Content="List View"
+                                                         
+                        Visibility="Visible" >
+                        <NavigationViewItem.Icon>
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE14C;" />
+                        </NavigationViewItem.Icon>
+                    </NavigationViewItem>
+                    <NavigationViewItem x:ConnectionId='10'
+                        x:Name="LocalGridViewItem"
+                        Margin="0,0,10,0"
+                        Content="Grid View"
+                                                         
+                        Visibility="Collapsed">
+                        <NavigationViewItem.Icon>
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF0E2;" />
+                        </NavigationViewItem.Icon>
+                    </NavigationViewItem>
+                </StackPanel>
+            </NavigationView.PaneFooter>
+            <Frame x:ConnectionId='11'
+                x:Name="LocalFrame"
+                IsNavigationStackEnabled="True"
+                                                 />
+        </NavigationView>
     </Grid>
 </Page>
 

@@ -1,0 +1,97 @@
+﻿<Page
+    x:Class="SMPlayer.LocalFoldersPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:data="using:SMPlayer.Models"
+    xmlns:local="using:SMPlayer"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="Page_Loaded"
+    mc:Ignorable="d">
+
+
+    <Page.Resources>
+        <local:LargeThumbnailVisibilityConverter x:Key="LargeThumbnailVisibilityConverter" />
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <ProgressRing
+            x:Name="LocalProgressRing"
+            Width="100"
+            Height="100"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            IsActive="False"
+            Visibility="Collapsed" />
+        <GridView
+            x:Name="LocalFoldersGridView"
+            Margin="10"
+            IsItemClickEnabled="True"
+            ItemClick="LocalFoldersGridView_ItemClick"
+            ItemsSource="{x:Bind GridFolders}">
+            <GridView.ItemTemplate>
+                <DataTemplate x:DataType="data:GridFolderView">
+                    <StackPanel Margin="10">
+                        <Grid
+                            Width="160"
+                            Height="160"
+                            Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                CacheMode="BitmapCache"
+                                Source="{x:Bind First}" />
+                            <Image
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                CacheMode="BitmapCache"
+                                Source="{x:Bind Second}" />
+                            <Image
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                CacheMode="BitmapCache"
+                                Source="{x:Bind Third}" />
+                            <Image
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                CacheMode="BitmapCache"
+                                Source="{x:Bind Fourth}" />
+                            <Image
+                                x:Name="LargeThumbnail"
+                                Grid.RowSpan="2"
+                                Grid.ColumnSpan="2"
+                                CacheMode="BitmapCache"
+                                Source="{x:Bind LargeThumbnail}"
+                                Visibility="{Binding Converter={StaticResource LargeThumbnailVisibilityConverter}}" />
+                        </Grid>
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="Bold"
+                            HorizontalTextAlignment="Left"
+                            Text="{x:Bind Name}"
+                            TextWrapping="Wrap" />
+                        <TextBlock
+                            FontSize="12"
+                            HorizontalTextAlignment="Left"
+                            Text="{x:Bind MusicCount}" />
+                    </StackPanel>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+    </Grid>
+</Page>

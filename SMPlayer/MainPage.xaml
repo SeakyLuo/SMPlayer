@@ -350,9 +350,24 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <AcrylicBrush x:Key="NavigationViewDefaultPaneBackground" BackgroundSource="HostBackdrop" TintColor="{StaticResource SystemChromeAltHighColor}" TintOpacity="0.8" FallbackColor="{StaticResource SystemChromeMediumColor}" />
-        <AcrylicBrush x:Key="NavigationViewTopPaneBackground" BackgroundSource="HostBackdrop" TintColor="{StaticResource SystemChromeAltHighColor}" TintOpacity="0.8" FallbackColor="{StaticResource SystemChromeMediumColor}" />
-        <AcrylicBrush x:Key="NavigationViewExpandedPaneBackground" BackgroundSource="HostBackdrop" TintColor="{StaticResource SystemChromeAltHighColor}" TintOpacity="0.8" FallbackColor="{StaticResource SystemChromeMediumColor}" />
+        <AcrylicBrush
+            x:Key="NavigationViewDefaultPaneBackground"
+            BackgroundSource="HostBackdrop"
+            FallbackColor="{StaticResource SystemChromeMediumColor}"
+            TintColor="{StaticResource SystemChromeAltHighColor}"
+            TintOpacity="0.8" />
+        <AcrylicBrush
+            x:Key="NavigationViewTopPaneBackground"
+            BackgroundSource="HostBackdrop"
+            FallbackColor="{StaticResource SystemChromeMediumColor}"
+            TintColor="{StaticResource SystemChromeAltHighColor}"
+            TintOpacity="0.8" />
+        <AcrylicBrush
+            x:Key="NavigationViewExpandedPaneBackground"
+            BackgroundSource="HostBackdrop"
+            FallbackColor="{StaticResource SystemChromeMediumColor}"
+            TintColor="{StaticResource SystemChromeAltHighColor}"
+            TintOpacity="0.8" />
     </Page.Resources>
 
     <Grid>
@@ -364,11 +379,11 @@
             x:Name="MainNavigationView"
             Background="{ThemeResource SystemControlAcrylicElementBrush}"
             IsBackButtonVisible="Collapsed"
-            TabNavigation="Cycle"
             IsBackEnabled="True"
             ItemInvoked="MainNavigationView_ItemInvoked"
             PaneClosing="MainNavigationView_PaneClosing"
-            PaneOpening="MainNavigationView_PaneOpening">
+            PaneOpening="MainNavigationView_PaneOpening"
+            TabNavigation="Cycle">
             <NavigationView.MenuItems>
                 <NavigationViewItem
                     x:Name="NaviSearchItem"
@@ -444,7 +459,10 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
-            <Frame x:Name="MainFrame" IsNavigationStackEnabled="True" Navigated="MainFrame_Navigated" />
+            <Frame
+                x:Name="MainFrame"
+                IsNavigationStackEnabled="True"
+                Navigated="MainFrame_Navigated" />
         </NavigationView>
 
         <Grid Grid.Row="1" Background="{ThemeResource SystemControlAcrylicWindowBrush}">

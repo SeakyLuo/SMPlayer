@@ -124,6 +124,12 @@
     <Compile Include="ArtistsPage.xaml.cs">
       <DependentUpon>ArtistsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LocalFoldersPage.xaml.cs">
+      <DependentUpon>LocalFoldersPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LocalMusicPage.xaml.cs">
+      <DependentUpon>LocalMusicPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LocalPage.xaml.cs">
       <DependentUpon>LocalPage.xaml</DependentUpon>
     </Compile>
@@ -192,6 +198,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ArtistsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LocalFoldersPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LocalMusicPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

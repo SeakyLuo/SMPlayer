@@ -42,14 +42,13 @@
       <RootProperty Name="Margin" />
       <RootProperty Name="TextWrapping" />
       <RootProperty Name="HorizontalTextAlignment" />
-      <RootProperty Name="TextAlignment" />
-      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="FontFamily" />
       <RootProperty Name="TextTrimming" />
       <RootProperty Name="LineStackingStrategy" />
       <RootProperty Name="TextLineBounds" />
       <RootProperty Name="OpticalMarginAlignment" />
       <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="VerticalAlignment" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.FrameworkElement">
       <RootProperty Name="Margin" />
@@ -62,16 +61,16 @@
       <RootProperty Name="FocusVisualMargin" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Button">
-      <RootProperty Name="Background" />
-      <RootProperty Name="Content" />
       <RootProperty Name="Width" />
       <RootProperty Name="Style" />
       <RootProperty Name="Visibility" />
+      <RootProperty Name="Content" />
       <RootProperty Name="Flyout" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="IsEnabled" />
       <RootProperty Name="Height" />
       <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="Background" />
       <RootProperty Name="KeyboardAccelerators" />
       <RootEvent Name="Click" />
     </RootType>
@@ -97,10 +96,10 @@
     <RootType FullName="Windows.UI.Xaml.Controls.FontIcon">
       <RootProperty Name="FontFamily" />
       <RootProperty Name="FontSize" />
+      <RootProperty Name="Glyph" />
       <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Foreground" />
-      <RootProperty Name="Glyph" />
       <RootProperty Name="IsHitTestVisible" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="MirroredWhenRightToLeft" />
@@ -134,10 +133,10 @@
     <RootType FullName="Windows.UI.Xaml.Controls.Grid">
       <RootProperty Name="Children" />
       <RootProperty Name="RowDefinitions" />
+      <RootProperty Name="ColumnDefinitions" />
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
       <RootProperty Name="Margin" />
-      <RootProperty Name="ColumnDefinitions" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Visibility" />
@@ -186,17 +185,16 @@
     <RootType FullName="Windows.UI.Xaml.Controls.RelativePanel">
       <RootProperty Name="Margin" />
       <RootProperty Name="Children" />
-      <RootProperty Name="HorizontalAlignment" />
       <RootMethod Name="GetRightOf" />
       <RootMethod Name="SetRightOf" />
       <RootMethod Name="GetBelow" />
       <RootMethod Name="SetBelow" />
       <RootMethod Name="GetAlignLeftWithPanel" />
       <RootMethod Name="SetAlignLeftWithPanel" />
-      <RootMethod Name="GetAlignRightWithPanel" />
-      <RootMethod Name="SetAlignRightWithPanel" />
       <RootMethod Name="GetLeftOf" />
       <RootMethod Name="SetLeftOf" />
+      <RootMethod Name="GetAlignRightWithPanel" />
+      <RootMethod Name="SetAlignRightWithPanel" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.ImageEx">
       <RootProperty Name="Width" />
@@ -206,16 +204,6 @@
     </RootType>
     <RootType FullName="SMPlayer.ArtistsPage" />
     <RootType FullName="SMPlayer.LargeThumbnailVisibilityConverter" />
-    <RootType FullName="Windows.UI.Xaml.Controls.Image">
-      <RootProperty Name="Width" />
-      <RootProperty Name="Height" />
-      <RootProperty Name="Margin" />
-      <RootProperty Name="Source" />
-      <RootProperty Name="CacheMode" />
-      <RootProperty Name="Visibility" />
-      <RootProperty Name="Stretch" />
-    </RootType>
-    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.BindExtension" />
     <RootType FullName="Windows.UI.Xaml.Controls.ColumnDefinition">
       <RootProperty Name="Width" />
       <RootProperty Name="MinWidth" />
@@ -223,12 +211,55 @@
     <RootType FullName="Windows.UI.Xaml.Controls.GridView">
       <RootProperty Name="Margin" />
       <RootProperty Name="IsItemClickEnabled" />
-      <RootProperty Name="ItemTemplate" />
       <RootProperty Name="ItemsSource" />
+      <RootProperty Name="ItemTemplate" />
       <RootEvent Name="ItemClick" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.SymbolIcon">
-      <RootProperty Name="Symbol" />
+    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.BindExtension" />
+    <RootType FullName="Windows.UI.Xaml.Controls.Image">
+      <RootProperty Name="CacheMode" />
+      <RootProperty Name="Source" />
+      <RootProperty Name="Visibility" />
+      <RootProperty Name="Width" />
+      <RootProperty Name="Height" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="Stretch" />
+    </RootType>
+    <RootType FullName="SMPlayer.LocalFoldersPage" />
+    <RootType FullName="SMPlayer.LocalMusicPage" />
+    <RootType FullName="Windows.UI.Xaml.Media.SolidColorBrush">
+      <RootProperty Name="Color" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.NavigationView">
+      <RootProperty Name="IsBackEnabled" />
+      <RootProperty Name="IsSettingsVisible" />
+      <RootProperty Name="PaneDisplayMode" />
+      <RootProperty Name="PaneTitle" />
+      <RootProperty Name="MenuItems" />
+      <RootProperty Name="PaneFooter" />
+      <RootProperty Name="Content" />
+      <RootProperty Name="PaneToggleButtonStyle" />
+      <RootProperty Name="CompactPaneLength" />
+      <RootProperty Name="Background" />
+      <RootProperty Name="IsBackButtonVisible" />
+      <RootProperty Name="TabNavigation" />
+      <RootEvent Name="BackRequested" />
+      <RootEvent Name="ItemInvoked" />
+      <RootEvent Name="PaneClosing" />
+      <RootEvent Name="PaneOpening" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.NavigationViewItem">
+      <RootProperty Name="Content" />
+      <RootProperty Name="Icon" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="Visibility" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="Tag" />
+      <RootEvent Name="Tapped" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.Frame">
+      <RootProperty Name="IsNavigationStackEnabled" />
+      <RootEvent Name="Navigated" />
     </RootType>
     <RootType FullName="SMPlayer.LocalPage" />
     <RootType FullName="SMPlayer.MusicListPage" />
@@ -244,26 +275,6 @@
       <RootProperty Name="ContentTemplate" />
       <RootProperty Name="Style" />
       <RootProperty Name="MinWidth" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.NavigationViewItem">
-      <RootProperty Name="Icon" />
-      <RootProperty Name="Style" />
-      <RootProperty Name="Visibility" />
-      <RootProperty Name="Content" />
-      <RootProperty Name="Tag" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.NavigationView">
-      <RootProperty Name="PaneToggleButtonStyle" />
-      <RootProperty Name="CompactPaneLength" />
-      <RootProperty Name="Background" />
-      <RootProperty Name="IsBackButtonVisible" />
-      <RootProperty Name="TabNavigation" />
-      <RootProperty Name="IsBackEnabled" />
-      <RootProperty Name="MenuItems" />
-      <RootProperty Name="Content" />
-      <RootEvent Name="ItemInvoked" />
-      <RootEvent Name="PaneClosing" />
-      <RootEvent Name="PaneOpening" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ControlTemplate">
       <RootProperty Name="TargetType" />
@@ -518,9 +529,9 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.AcrylicBrush">
       <RootProperty Name="BackgroundSource" />
+      <RootProperty Name="FallbackColor" />
       <RootProperty Name="TintColor" />
       <RootProperty Name="TintOpacity" />
-      <RootProperty Name="FallbackColor" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.Thumb">
       <RootProperty Name="Width" />
@@ -563,10 +574,6 @@
       <RootProperty Name="Key" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.NavigationViewItemSeparator" />
-    <RootType FullName="Windows.UI.Xaml.Controls.Frame">
-      <RootProperty Name="IsNavigationStackEnabled" />
-      <RootEvent Name="Navigated" />
-    </RootType>
     <RootType FullName="SMPlayer.MainPage" />
   </Roots.RootTypes>
 </Roots>
