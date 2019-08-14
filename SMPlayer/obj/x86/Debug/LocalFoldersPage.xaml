@@ -34,7 +34,8 @@
             Margin="10"
             IsItemClickEnabled="True"
                                                       
-                                            >
+                                            
+            SelectionMode="None">
             <GridView.ItemTemplate>
                 <DataTemplate                                 >
                     <StackPanel x:ConnectionId='4' Margin="10">

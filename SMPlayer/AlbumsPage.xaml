@@ -15,7 +15,6 @@
         <local:AlbumNameVisibilityConverter x:Key="AlbumNameVisibilityConverter" />
     </Page.Resources>
 
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -39,7 +38,8 @@
             Grid.Row="1"
             Margin="10"
             IsItemClickEnabled="True"
-            ItemsSource="{x:Bind Albums}">
+            ItemsSource="{x:Bind Albums}"
+            SelectionMode="None">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:GridAlbumView">
                     <Grid
@@ -54,11 +54,11 @@
                         <controls:DropShadowPanel
                             x:Name="AlbumShadowPanel"
                             VerticalContentAlignment="Top"
-                            BlurRadius="15"
-                            OffsetX="4"
-                            OffsetY="4"
+                            BlurRadius="25"
+                            OffsetX="5"
+                            OffsetY="5"
                             ShadowOpacity="0"
-                            Color="Black">
+                            Color="Gray">
                             <Image Source="{x:Bind Cover}" />
                         </controls:DropShadowPanel>
                         <TextBlock

@@ -44,13 +44,14 @@
       <RootProperty Name="Foreground" />
       <RootProperty Name="Opacity" />
       <RootProperty Name="HorizontalTextAlignment" />
+      <RootProperty Name="Width" />
+      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="FontFamily" />
       <RootProperty Name="TextTrimming" />
       <RootProperty Name="LineStackingStrategy" />
       <RootProperty Name="TextLineBounds" />
       <RootProperty Name="OpticalMarginAlignment" />
       <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="VerticalAlignment" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.FrameworkElement">
       <RootProperty Name="Margin" />
@@ -63,16 +64,16 @@
       <RootProperty Name="FocusVisualMargin" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Button">
-      <RootProperty Name="Background" />
-      <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="Content" />
-      <RootProperty Name="Flyout" />
       <RootProperty Name="Width" />
       <RootProperty Name="Style" />
       <RootProperty Name="Visibility" />
+      <RootProperty Name="Content" />
+      <RootProperty Name="Flyout" />
+      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="IsEnabled" />
       <RootProperty Name="Height" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="Background" />
       <RootProperty Name="KeyboardAccelerators" />
       <RootEvent Name="Click" />
     </RootType>
@@ -163,6 +164,7 @@
       <RootProperty Name="Margin" />
       <RootProperty Name="IsItemClickEnabled" />
       <RootProperty Name="ItemsSource" />
+      <RootProperty Name="SelectionMode" />
       <RootProperty Name="ItemTemplate" />
       <RootEvent Name="ItemClick" />
     </RootType>
@@ -264,9 +266,6 @@
       <RootProperty Name="MinWidth" />
     </RootType>
     <RootType FullName="SMPlayer.LocalFoldersPage" />
-    <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyout">
-      <RootProperty Name="Items" />
-    </RootType>
     <RootType FullName="SMPlayer.LocalMusicPage" />
     <RootType FullName="Windows.UI.Xaml.Media.SolidColorBrush">
       <RootProperty Name="Color" />
@@ -475,6 +474,9 @@
     <RootType FullName="Windows.UI.Xaml.UIElement">
       <RootProperty Name="ContextFlyout" />
       <RootProperty Name="ManipulationMode" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyout">
+      <RootProperty Name="Items" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutItem">
       <RootProperty Name="Icon" />

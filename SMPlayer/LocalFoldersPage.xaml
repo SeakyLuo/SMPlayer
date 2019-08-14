@@ -34,7 +34,8 @@
             Margin="10"
             IsItemClickEnabled="True"
             ItemClick="LocalFoldersGridView_ItemClick"
-            ItemsSource="{x:Bind GridItems}">
+            ItemsSource="{x:Bind GridItems}"
+            SelectionMode="None">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:GridFolderView">
                     <StackPanel Margin="10">

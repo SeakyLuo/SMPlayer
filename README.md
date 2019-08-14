@@ -5,3 +5,5 @@ Simple Music Player that manages local music files better than Groove.
 Cache AlbumsPage.
 Incorrect Back Logic of LocalPage.
 Background playing.
+Mouse Hover Album.
+GridView Scrolling

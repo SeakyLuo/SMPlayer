@@ -26,7 +26,7 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class LocalPage : Page, InfoSetter
     {
-        private bool firstLoad = true;
+        private FolderTree Tree;
         public LocalPage()
         {
             this.InitializeComponent();
@@ -35,10 +35,7 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Settings.settings.Tree.Trees.Count == 0 && Settings.settings.Tree.Files.Count > 0)
-                LocalSongsItem.IsSelected = true;
-            else
-                LocalFoldersItem.IsSelected = true;
+            SetPage(Settings.settings.Tree.Trees.Count, Settings.settings.Tree.Files.Count);
             LocalNavigationView.IsBackButtonVisible = NavigationViewBackButtonVisible.Collapsed;
         }
 
@@ -46,18 +43,25 @@ namespace SMPlayer
         {
             var item = (NavigationViewItem)LocalNavigationView.SelectedItem;
             LocalNavigationView.IsBackButtonVisible = NavigationViewBackButtonVisible.Visible;
+            Type page = null;
+            bool needsSetting = true;
             switch (item.Name)
             {
                 case "LocalFoldersItem":
-                    if (LocalFrame.CurrentSourcePageType != typeof(LocalFoldersPage))
-                        LocalFrame.Navigate(typeof(LocalFoldersPage), this as InfoSetter);
+                    page = typeof(LocalFoldersPage);
+                    needsSetting = LocalFoldersPage.infoSetter == null;
                     break;
                 case "LocalSongsItem":
-                    if (LocalFrame.CurrentSourcePageType != typeof(LocalMusicPage))
-                        LocalFrame.Navigate(typeof(LocalMusicPage), this as InfoSetter);
+                    page = typeof(LocalMusicPage);
+                    needsSetting = LocalMusicPage.infoSetter == null;
                     break;
                 default:
-                    break;
+                    return;
+            }
+            if (LocalFrame.CurrentSourcePageType != page)
+            {
+                if (needsSetting) LocalFrame.Navigate(page, this as InfoSetter);
+                else LocalFrame.Navigate(page, Tree);
             }
         }
 
@@ -65,6 +69,7 @@ namespace SMPlayer
         {
             if (!LocalFrame.CanGoBack) return;
             LocalFrame.GoBack();
+            System.Diagnostics.Debug.WriteLine(LocalFrame.CurrentSourcePageType.Name);
             switch (LocalFrame.CurrentSourcePageType.Name)
             {
                 case "LocalFoldersPage":
@@ -76,6 +81,7 @@ namespace SMPlayer
                 default:
                     break;
             }
+            System.Diagnostics.Debug.WriteLine(LocalFoldersItem.IsSelected);
             LocalNavigationView.IsBackButtonVisible = LocalFrame.CanGoBack ? NavigationViewBackButtonVisible.Visible : NavigationViewBackButtonVisible.Collapsed;
         }
 
@@ -91,21 +97,30 @@ namespace SMPlayer
             LocalGridViewItem.Visibility = Visibility.Collapsed;
         }
 
-        public void SetInfo(string folder, int folders, int songs)
+        public void SetInfo(FolderTree tree, bool redirect)
         {
-            TitleTextBlock.Text = folder;
+            if (Tree != null && Tree.Path == tree.Path) return;
+            Tree = tree;
+            TitleTextBlock.Text = tree.GetFolderName();
+            int folders = tree.Trees.Count, songs = tree.Files.Count;
             LocalFoldersItem.Content = string.Format("Folders ({0})", folders);
             LocalFoldersItem.IsEnabled = folders != 0;
             LocalSongsItem.Content = string.Format("Songs ({0})", songs);
-            bool songsEnabled = songs != 0;
-            LocalSongsItem.IsEnabled = songsEnabled;
-            if (songsEnabled && !LocalFoldersItem.IsEnabled) LocalSongsItem.IsSelected = true;
-            else LocalFoldersItem.IsSelected = true;
+            LocalSongsItem.IsEnabled = songs != 0;
+            if (redirect) SetPage(folders, songs);
+        }
+
+        public void SetPage(int folders, int songs)
+        {
+            if (songs > folders)
+                LocalSongsItem.IsSelected = true;
+            else
+                LocalFoldersItem.IsSelected = true;
         }
     }
 
     public interface InfoSetter
     {
-        void SetInfo(string folder, int folders, int songs);
+        void SetInfo(FolderTree tree, bool click);
     }
 }

@@ -26,7 +26,7 @@ namespace SMPlayer
     {
         private ObservableCollection<GridFolderView> GridItems = new ObservableCollection<GridFolderView>();
         private FolderTree Tree;
-        private static InfoSetter infoSetter;
+        public static InfoSetter infoSetter;
         
         public LocalFoldersPage()
         {
@@ -38,11 +38,11 @@ namespace SMPlayer
             if (e.Parameter is InfoSetter)
             {
                 infoSetter = (InfoSetter)e.Parameter;
-                Setup(Settings.settings.Tree);
+                Setup(Settings.settings.Tree, false);
             }
             else if (e.Parameter is FolderTree)
             {
-                Setup(e.Parameter as FolderTree);
+                Setup(e.Parameter as FolderTree, true);
             }
             base.OnNavigatedTo(e);
         }
@@ -50,22 +50,23 @@ namespace SMPlayer
         private void LocalFoldersGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var folderView = (GridFolderView)e.ClickedItem;
-            Frame.Navigate(typeof(LocalFoldersPage), Tree.Trees[GridItems.IndexOf(folderView)]);
+            var tree = Tree.Trees[GridItems.IndexOf(folderView)];
+            Frame.Navigate(tree.Files.Count > tree.Trees.Count ? typeof(LocalMusicPage) : typeof(LocalFoldersPage), tree);
         }
 
-        private async void Setup(FolderTree tree)
+        private async void Setup(FolderTree tree, bool redirect)
         {
             Tree = tree;
             LocalProgressRing.IsActive = true;
             LocalProgressRing.Visibility = Visibility.Visible;
             GridItems.Clear();
+            infoSetter.SetInfo(tree, redirect);
             foreach (var branch in tree.Trees)
             {
                 GridFolderView gridItem = new GridFolderView();
                 await gridItem.Init(branch);
                 GridItems.Add(gridItem);
             }
-            infoSetter.SetInfo(tree.GetFolderName(), GridItems.Count, tree.Files.Count);
             LocalProgressRing.Visibility = Visibility.Collapsed;
             LocalProgressRing.IsActive = false;
         }

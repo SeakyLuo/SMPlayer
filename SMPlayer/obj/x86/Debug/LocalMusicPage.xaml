@@ -2,6 +2,7 @@
     x:Class="SMPlayer.LocalMusicPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:SMPlayer.Models"
     xmlns:local="using:SMPlayer"
@@ -29,50 +30,56 @@
             Margin="10"
             IsItemClickEnabled="True"
                                                     
-                                            >
+                                            
+            SelectionMode="Single">
             <GridView.ItemTemplate>
                 <DataTemplate                                >
-                    <Grid x:ConnectionId='4' Margin="10">
+                    <Grid x:ConnectionId='4' Margin="5">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <Image x:ConnectionId='5'
-                            Width="100"
-                            Height="100"
-                            Grid.RowSpan="2"
-                            CacheMode="BitmapCache"
-                                                        />
-                        <TextBlock x:ConnectionId='6'
-                            Grid.Column="1"
-                            FontSize="16"
-                            FontWeight="SemiBold"
-                            HorizontalTextAlignment="Left"
-                                                 />
-                        <TextBlock x:ConnectionId='7'
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Margin="0,3,0,0"
-                            FontSize="12"
-                            Foreground="Gray"
-                            HorizontalTextAlignment="Left"
-                                                   />
-                        <Button
-                            Background="Transparent"
-                            Grid.RowSpan="2"
-                            Grid.Column="2"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center">
-                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE712;" />
-                            <Button.Flyout>
-                                <MenuFlyout />
-                            </Button.Flyout>
-                        </Button>
+                        <controls:DropShadowPanel
+                            x:Name="AlbumShadowPanel"
+                            BlurRadius="10"
+                            OffsetX="2"
+                            OffsetY="2"
+                            ShadowOpacity="0"
+                            Color="Gray">
+                            <Image x:ConnectionId='7'
+                                Width="100"
+                                Height="100"
+                                Margin="0,0,5,0"
+                                CacheMode="BitmapCache"
+                                                            />
+                        </controls:DropShadowPanel>
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock x:ConnectionId='5'
+                                x:Name="MusicNameTextBlock"
+                                Width="160"
+                                VerticalAlignment="Top"
+                                FontSize="15"
+                                FontWeight="SemiBold"
+                                HorizontalTextAlignment="Left"
+                                MaxLines="3"
+                                                    
+                                TextWrapping="Wrap" />
+                            <TextBlock x:ConnectionId='6'
+                                Grid.Row="1"
+                                Margin="0,3,0,0"
+                                VerticalAlignment="center"
+                                FontSize="12"
+                                Foreground="Gray"
+                                HorizontalTextAlignment="Left"
+                                                       />
+                        </Grid>
                     </Grid>
                 </DataTemplate>
             </GridView.ItemTemplate>

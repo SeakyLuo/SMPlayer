@@ -25,7 +25,7 @@ namespace SMPlayer
     public sealed partial class LocalMusicPage : Page
     {
         private ObservableCollection<GridMusicView> GridItems = new ObservableCollection<GridMusicView>();
-        private static InfoSetter infoSetter;
+        public static InfoSetter infoSetter;
         public LocalMusicPage()
         {
             this.InitializeComponent();
@@ -36,25 +36,28 @@ namespace SMPlayer
             if (e.Parameter is InfoSetter)
             {
                 infoSetter = (InfoSetter)e.Parameter;
-                Setup(Settings.settings.Tree);
+                Setup(Settings.settings.Tree, false);
             }
             else if (e.Parameter is FolderTree)
             {
-                Setup(e.Parameter as FolderTree);
+                Setup(e.Parameter as FolderTree, true);
             }
             base.OnNavigatedTo(e);
         }
 
         private void LocalMusicGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-
+            var item = (GridMusicView)e.ClickedItem;
+            MainPage.Instance.SetMusic(item.Source);
+            MainPage.Instance.Play();
         }
 
-        private async void Setup(FolderTree tree)
+        private async void Setup(FolderTree tree, bool redirect)
         {
             LocalProgressRing.IsActive = true;
             LocalProgressRing.Visibility = Visibility.Visible;
             GridItems.Clear();
+            infoSetter.SetInfo(tree, redirect);
             foreach (var file in tree.Files)
             {
                 GridMusicView gridItem = new GridMusicView();
