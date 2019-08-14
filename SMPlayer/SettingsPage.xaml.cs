@@ -27,7 +27,6 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
-        public static StorageFolder CurrentFolder;
         private static List<AfterPathSetListener> listeners = new List<AfterPathSetListener>();
         public SettingsPage()
         {
@@ -48,7 +47,6 @@ namespace SMPlayer
             await Settings.SetTreeFolder(folder);
             foreach (var listener in listeners) listener.PathSet(folder.Path);
             PathBox.Text = folder.Path;
-            CurrentFolder = folder;
             UpdatePopup.IsOpen = false;
         }
 

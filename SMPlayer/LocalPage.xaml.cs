@@ -24,8 +24,9 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalPage : Page
+    public sealed partial class LocalPage : Page, InfoSetter
     {
+        private bool firstLoad = true;
         public LocalPage()
         {
             this.InitializeComponent();
@@ -34,32 +35,35 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            LocalFoldersItem.IsSelected = true;
-        }
-
-        private void LocalFrame_Navigated(object sender, NavigationEventArgs e)
-        {
-            LocalNavigationView.IsBackButtonVisible = LocalFrame.CanGoBack ? NavigationViewBackButtonVisible.Visible : NavigationViewBackButtonVisible.Collapsed;
+            if (Settings.settings.Tree.Trees.Count == 0 && Settings.settings.Tree.Files.Count > 0)
+                LocalSongsItem.IsSelected = true;
+            else
+                LocalFoldersItem.IsSelected = true;
+            LocalNavigationView.IsBackButtonVisible = NavigationViewBackButtonVisible.Collapsed;
         }
 
         private void LocalNavigationView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
             var item = (NavigationViewItem)LocalNavigationView.SelectedItem;
+            LocalNavigationView.IsBackButtonVisible = NavigationViewBackButtonVisible.Visible;
             switch (item.Name)
             {
                 case "LocalFoldersItem":
-                    LocalFrame.Navigate(typeof(LocalFoldersPage));
+                    if (LocalFrame.CurrentSourcePageType != typeof(LocalFoldersPage))
+                        LocalFrame.Navigate(typeof(LocalFoldersPage), this as InfoSetter);
                     break;
-                case "LocalMusicItem":
-                    LocalFrame.Navigate(typeof(LocalMusicPage));
+                case "LocalSongsItem":
+                    if (LocalFrame.CurrentSourcePageType != typeof(LocalMusicPage))
+                        LocalFrame.Navigate(typeof(LocalMusicPage), this as InfoSetter);
                     break;
                 default:
-                    return;
+                    break;
             }
         }
 
         private void LocalNavigationView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
         {
+            if (!LocalFrame.CanGoBack) return;
             LocalFrame.GoBack();
             switch (LocalFrame.CurrentSourcePageType.Name)
             {
@@ -67,16 +71,12 @@ namespace SMPlayer
                     LocalFoldersItem.IsSelected = true;
                     break;
                 case "LocalMusicPage":
-                    LocalMusicItem.IsSelected = true;
+                    LocalSongsItem.IsSelected = true;
                     break;
                 default:
                     break;
             }
-        }
-
-        public void SetTitle(string title)
-        {
-            TitleTextBlock.Text = title;
+            LocalNavigationView.IsBackButtonVisible = LocalFrame.CanGoBack ? NavigationViewBackButtonVisible.Visible : NavigationViewBackButtonVisible.Collapsed;
         }
 
         private void LocalListViewItem_Tapped(object sender, TappedRoutedEventArgs e)
@@ -90,5 +90,22 @@ namespace SMPlayer
             LocalListViewItem.Visibility = Visibility.Visible;
             LocalGridViewItem.Visibility = Visibility.Collapsed;
         }
+
+        public void SetInfo(string folder, int folders, int songs)
+        {
+            TitleTextBlock.Text = folder;
+            LocalFoldersItem.Content = string.Format("Folders ({0})", folders);
+            LocalFoldersItem.IsEnabled = folders != 0;
+            LocalSongsItem.Content = string.Format("Songs ({0})", songs);
+            bool songsEnabled = songs != 0;
+            LocalSongsItem.IsEnabled = songsEnabled;
+            if (songsEnabled && !LocalFoldersItem.IsEnabled) LocalSongsItem.IsSelected = true;
+            else LocalFoldersItem.IsSelected = true;
+        }
+    }
+
+    public interface InfoSetter
+    {
+        void SetInfo(string folder, int folders, int songs);
     }
 }

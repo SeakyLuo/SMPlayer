@@ -14,8 +14,8 @@ namespace SMPlayer.Models
         public BitmapImage Cover { get; set; }
         public GridAlbumView(string Name, string Artist, BitmapImage Cover)
         {
-            this.Name = Name;
-            this.Artist = Artist;
+            this.Name = string.IsNullOrEmpty(Name) ? "Unknown Album" : Name;
+            this.Artist = string.IsNullOrEmpty(Artist) ? "Unknown Artist" : Artist;
             this.Cover = Cover;
         }
     }

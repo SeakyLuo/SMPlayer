@@ -24,28 +24,48 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class LocalFoldersPage : Page
     {
-        private ObservableCollection<GridFolderView> GridFolders = new ObservableCollection<GridFolderView>();
-        //public static Func< void> AfterLoading;
+        private ObservableCollection<GridFolderView> GridItems = new ObservableCollection<GridFolderView>();
+        private FolderTree Tree;
+        private static InfoSetter infoSetter;
+        
         public LocalFoldersPage()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if (e.Parameter is InfoSetter)
+            {
+                infoSetter = (InfoSetter)e.Parameter;
+                Setup(Settings.settings.Tree);
+            }
+            else if (e.Parameter is FolderTree)
+            {
+                Setup(e.Parameter as FolderTree);
+            }
+            base.OnNavigatedTo(e);
+        }
+
         private void LocalFoldersGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            GridFolderView folderView = (GridFolderView)e.ClickedItem;
+            var folderView = (GridFolderView)e.ClickedItem;
+            Frame.Navigate(typeof(LocalFoldersPage), Tree.Trees[GridItems.IndexOf(folderView)]);
         }
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
+
+        private async void Setup(FolderTree tree)
         {
-            GridFolders.Clear();
+            Tree = tree;
             LocalProgressRing.IsActive = true;
             LocalProgressRing.Visibility = Visibility.Visible;
-            foreach (var tree in Settings.settings.Tree.Trees)
+            GridItems.Clear();
+            foreach (var branch in tree.Trees)
             {
-                GridFolderView folder = new GridFolderView();
-                await folder.Init(tree);
-                GridFolders.Add(folder);
+                GridFolderView gridItem = new GridFolderView();
+                await gridItem.Init(branch);
+                GridItems.Add(gridItem);
             }
+            infoSetter.SetInfo(tree.GetFolderName(), GridItems.Count, tree.Files.Count);
             LocalProgressRing.Visibility = Visibility.Collapsed;
             LocalProgressRing.IsActive = false;
         }

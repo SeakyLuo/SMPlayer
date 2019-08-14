@@ -84,7 +84,7 @@ namespace SMPlayer.Models
 
         public string GetFolderName()
         {
-            return Path.Substring(Path.LastIndexOf("\\" + 1));
+            return Path.Substring(Path.LastIndexOf("\\") + 1);
         }
     }
 }

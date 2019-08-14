@@ -65,7 +65,7 @@ namespace SMPlayer
             AlbumPageProgressRing.IsActive = true;
             AlbumPageProgressRing.Visibility = Visibility.Visible;
             Albums.Clear();
-            List<GridAlbumView> gridAlbumViews = new List<GridAlbumView>();
+            List<GridAlbumView> gridAlbums = new List<GridAlbumView>();
             GroupedMusic.Clear();
             foreach (var group in MusicLibraryPage.AllSongs.GroupBy((m) => m.Album))
             {
@@ -86,10 +86,10 @@ namespace SMPlayer
                     thumbnail = Helper.DefaultAlbumCover;
                 }
                 var album = new GridAlbumView(music.Album, music.Artist, thumbnail);
-                gridAlbumViews.Add(album);
+                gridAlbums.Add(album);
                 GroupedMusic.Add(music.Album, group.OrderBy((m) => m.Name).ThenBy((m) => m.Artist).ToList());
             }
-            foreach (var album in gridAlbumViews.OrderBy((a) => a.Name).ThenBy((a) => a.Artist)) Albums.Add(album);
+            foreach (var album in gridAlbums.OrderBy((a) => a.Name).ThenBy((a) => a.Artist)) Albums.Add(album);
             if (Notified == 2) Notified = 1;
             AlbumPageProgressRing.Visibility = Visibility.Collapsed;
             AlbumPageProgressRing.IsActive = false;

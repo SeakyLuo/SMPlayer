@@ -20,4 +20,10 @@ namespace SMPlayer.Models
         RepeatOne = 2,
         Shuffle = 3
     }
+
+    public enum LocalView
+    {
+        ListView = 0,
+        GridView = 1
+    }
 }

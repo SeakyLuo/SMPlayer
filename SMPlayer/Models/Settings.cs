@@ -42,6 +42,8 @@ namespace SMPlayer.Models
             else
             {
                 settings = JsonFileHelper.Convert<Settings>(json);
+                var folder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
+                AfterTreeSet(folder);
             }
         }
 
@@ -54,9 +56,14 @@ namespace SMPlayer.Models
         {
             await settings.Tree.Init(folder);
             Save();
+            AfterTreeSet(folder);
+        }
+
+        private static void AfterTreeSet(StorageFolder folder)
+        {
             MusicLibraryPage.AllSongs = settings.Tree.Flatten();
             MusicLibraryPage.Save();
-            Helper.CurrentMusicFolder = folder;
+            Helper.CurrentFolder = folder;
             Helper.CurrentPlayList = MusicLibraryPage.AllSongs.ToList();
             Helper.CurrentMusicIndex = -1;
         }

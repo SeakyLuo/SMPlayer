@@ -17,7 +17,7 @@ namespace SMPlayer
 {
     public static class Helper
     {
-        public static StorageFolder CurrentMusicFolder;
+        public static StorageFolder CurrentFolder;
         public static Music CurrentMusic;
         public static int CurrentMusicIndex = -1;
         public static List<Music> CurrentPlayList;

@@ -7,7 +7,6 @@
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    Loaded="Page_Loaded"
     mc:Ignorable="d">
 
 
@@ -35,14 +34,14 @@
             Margin="10"
             IsItemClickEnabled="True"
             ItemClick="LocalFoldersGridView_ItemClick"
-            ItemsSource="{x:Bind GridFolders}">
+            ItemsSource="{x:Bind GridItems}">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:GridFolderView">
                     <StackPanel Margin="10">
                         <Grid
                             Width="160"
                             Height="160"
-                            Margin="10">
+                            Margin="10,10,10,5">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
@@ -81,12 +80,14 @@
                         </Grid>
                         <TextBlock
                             FontSize="16"
-                            FontWeight="Bold"
+                            FontWeight="SemiBold"
                             HorizontalTextAlignment="Left"
                             Text="{x:Bind Name}"
                             TextWrapping="Wrap" />
                         <TextBlock
+                            Margin="0,3,0,0"
                             FontSize="12"
+                            Foreground="Gray"
                             HorizontalTextAlignment="Left"
                             Text="{x:Bind MusicCount}" />
                     </StackPanel>

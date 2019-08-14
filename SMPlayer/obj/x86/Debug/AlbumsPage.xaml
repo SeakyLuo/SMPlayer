@@ -42,10 +42,15 @@
                                          >
             <GridView.ItemTemplate>
                 <DataTemplate                                >
-                    <StackPanel x:ConnectionId='5'
+                    <Grid x:ConnectionId='5'
                         Width="180"
                         Height="240"
                         Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
                         <controls:DropShadowPanel
                             x:Name="AlbumShadowPanel"
                             VerticalContentAlignment="Top"
@@ -57,7 +62,8 @@
                             <Image x:ConnectionId='8'                         />
                         </controls:DropShadowPanel>
                         <TextBlock x:ConnectionId='6'
-                            Margin="0,5,0,0"
+                            Grid.Row="1"
+                            Margin="0,5,0,3"
                             FontWeight="SemiBold"
                             MaxLines="2"
                                                 
@@ -65,6 +71,7 @@
                             TextWrapping="Wrap"
                                                                                                                 />
                         <TextBlock x:ConnectionId='7'
+                            Grid.Row="2"
                             FontSize="12"
                             Foreground="Gray"
                                                   
@@ -80,7 +87,7 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                    </StackPanel>
+                    </Grid>
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>

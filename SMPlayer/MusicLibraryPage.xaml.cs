@@ -36,14 +36,13 @@ namespace SMPlayer
             MainPage.Instance.AddMusicModificationListener("MusicLibraryPage", this);
         }
 
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
             if (AllSongs.Count == 0)
             {
                 MusicLibraryProgressRing.IsActive = true;
                 MusicLibraryProgressRing.Visibility = Visibility.Visible;
-                await Settings.SetTreeFolder(await StorageFolder.GetFolderFromPathAsync(Settings.settings.RootPath));
                 Update();
                 MusicLibraryProgressRing.Visibility = Visibility.Collapsed;
                 MusicLibraryProgressRing.IsActive = false;

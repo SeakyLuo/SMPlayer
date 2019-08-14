@@ -42,10 +42,15 @@
             ItemsSource="{x:Bind Albums}">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:GridAlbumView">
-                    <StackPanel
+                    <Grid
                         Width="180"
                         Height="240"
                         Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
                         <controls:DropShadowPanel
                             x:Name="AlbumShadowPanel"
                             VerticalContentAlignment="Top"
@@ -57,7 +62,8 @@
                             <Image Source="{x:Bind Cover}" />
                         </controls:DropShadowPanel>
                         <TextBlock
-                            Margin="0,5,0,0"
+                            Grid.Row="1"
+                            Margin="0,5,0,3"
                             FontWeight="SemiBold"
                             MaxLines="2"
                             Text="{x:Bind Name}"
@@ -65,6 +71,7 @@
                             TextWrapping="Wrap"
                             Visibility="{x:Bind Name, Converter={StaticResource AlbumNameVisibilityConverter}}" />
                         <TextBlock
+                            Grid.Row="2"
                             FontSize="12"
                             Foreground="Gray"
                             Text="{x:Bind Artist}"
@@ -80,7 +87,7 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                    </StackPanel>
+                    </Grid>
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>

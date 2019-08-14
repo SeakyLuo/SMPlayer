@@ -58,7 +58,7 @@ namespace SMPlayer
             MusicLibraryItem.IsSelected = true;
             Settings settings = Settings.settings;
             if (!string.IsNullOrEmpty(settings.RootPath))
-                Helper.CurrentMusicFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
+                Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
             MainPageMediaElement.Volume = settings.Volume;
             VolumeButton.Content = GetVolumeIcon(settings.Volume);
             VolumeSlider.Value = settings.Volume;
@@ -96,7 +96,7 @@ namespace SMPlayer
             StorageFile file;
             try
             {
-                file = await Helper.CurrentMusicFolder.GetFileAsync(music.GetShortPath());
+                file = await Helper.CurrentFolder.GetFileAsync(music.GetShortPath());
             }
             catch (FileNotFoundException e)
             {

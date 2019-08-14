@@ -46,5 +46,15 @@ namespace SMPlayer.Models
                 Fourth = thumbnails[3];
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            return Name == (obj as GridFolderView).Name;
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
     }
 }
