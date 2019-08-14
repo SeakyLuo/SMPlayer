@@ -41,7 +41,7 @@
                                          
             SelectionMode="None">
             <GridView.ItemTemplate>
-                <DataTemplate                                >
+                <DataTemplate                            >
                     <Grid x:ConnectionId='5'
                         Width="180"
                         Height="240"

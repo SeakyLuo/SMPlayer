@@ -7,10 +7,12 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Graphics.Imaging;
+using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.Storage.Streams;
 using Windows.UI.Core;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMPlayer
@@ -18,61 +20,10 @@ namespace SMPlayer
     public static class Helper
     {
         public static StorageFolder CurrentFolder;
-        public static Music CurrentMusic;
-        public static int CurrentMusicIndex = -1;
-        public static List<Music> CurrentPlayList;
         public static string DefaultAlbumCoverPath = "ms-appx:///Assets/music.png";
         public static BitmapImage DefaultAlbumCover = new BitmapImage(new Uri(DefaultAlbumCoverPath));
         public static string ThumbnailNotFoundPath = "ms-appx:///Assets/gray_music.png";
         public static BitmapImage ThumbnailNotFoundImage = new BitmapImage(new Uri(ThumbnailNotFoundPath));
-        private static Random random = new Random();
-
-        public static Music PrevMusic()
-        {
-            CurrentMusicIndex -= 1;
-            if (CurrentMusicIndex < 0)
-            {
-                if (Settings.settings.Mode == PlayMode.Shuffle)
-                {
-                    CurrentMusic = null;
-                    ShuffleCurrentPlayList();
-                    CurrentMusicIndex = 0;
-                }
-                else
-                {
-                    CurrentMusicIndex += CurrentPlayList.Count;
-                }
-            }
-            return CurrentPlayList[CurrentMusicIndex];
-        }
-
-        public static Music NextMusic()
-        {
-            CurrentMusicIndex += 1;
-            if (CurrentMusicIndex >= CurrentPlayList.Count)
-            {
-                if (Settings.settings.Mode == PlayMode.Shuffle)
-                {
-                    CurrentMusic = null;
-                    ShuffleCurrentPlayList();
-                }
-                CurrentMusicIndex = 0;
-            }
-            return CurrentPlayList[CurrentMusicIndex];
-        }
-
-        public static void ShuffleCurrentPlayList()
-        {
-            int n = CurrentPlayList.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = random.Next(n + 1);
-                Music value = CurrentPlayList[k];
-                CurrentPlayList[k] = CurrentPlayList[n];
-                CurrentPlayList[n] = value;
-            }
-        }
 
         public static async Task<BitmapImage> GetThumbnail(string path, bool withDefault = true)
         {

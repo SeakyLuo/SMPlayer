@@ -7,16 +7,29 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMPlayer.Models
 {
-    class GridAlbumView
+    class AlbumView
     {
         public string Name { get; set; }
         public string Artist { get; set; }
         public BitmapImage Cover { get; set; }
-        public GridAlbumView(string Name, string Artist, BitmapImage Cover)
+
+        public List<Music> Songs { get; set; }
+        public AlbumView(string Name, string Artist, BitmapImage Cover, List<Music> Songs)
         {
             this.Name = string.IsNullOrEmpty(Name) ? "Unknown Album" : Name;
             this.Artist = string.IsNullOrEmpty(Artist) ? "Unknown Artist" : Artist;
             this.Cover = Cover;
+            this.Songs = Songs;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Name == (obj as AlbumView).Name;
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
         }
     }
 }

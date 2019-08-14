@@ -24,7 +24,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MusicLibraryPage : Page, MediaControlListener
+    public sealed partial class MusicLibraryPage : Page, MusicControlListener
     {
         private static readonly string FILENAME = "MusicLibrary.json";
         public static List<Music> AllSongs = new List<Music>();
@@ -33,7 +33,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             //this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MainPage.Instance.AddMusicModificationListener("MusicLibraryPage", this);
+            MainPage.AddMusicControlListener("MusicLibraryPage", this);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

@@ -41,7 +41,7 @@
             ItemsSource="{x:Bind Albums}"
             SelectionMode="None">
             <GridView.ItemTemplate>
-                <DataTemplate x:DataType="data:GridAlbumView">
+                <DataTemplate x:DataType="data:AlbumView">
                     <Grid
                         Width="180"
                         Height="240"

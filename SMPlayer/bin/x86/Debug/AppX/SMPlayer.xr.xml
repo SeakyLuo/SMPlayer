@@ -4,11 +4,6 @@
     <RootInterface FullName="Windows.UI.Xaml.Data.IValueConverter" />
   </Roots.Interfaces>
   <Roots.PropertyPathNames>
-    <RootPropertyPathName Name="Emails" />
-    <RootPropertyPathName Name="Body" />
-    <RootPropertyPathName Name="Subject" />
-    <RootPropertyPathName Name="From" />
-    <RootPropertyPathName Name="Thumbnail" />
     <RootPropertyPathName Name="IsPaneOpen" />
     <RootPropertyPathName Name="TemplateSettings" />
     <RootPropertyPathName Name="LeftPaneVisibility" />
@@ -42,7 +37,6 @@
       <RootProperty Name="TextWrapping" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="Foreground" />
-      <RootProperty Name="Opacity" />
       <RootProperty Name="HorizontalTextAlignment" />
       <RootProperty Name="Width" />
       <RootProperty Name="VerticalAlignment" />
@@ -99,10 +93,10 @@
     <RootType FullName="Windows.UI.Xaml.Controls.FontIcon">
       <RootProperty Name="FontFamily" />
       <RootProperty Name="FontSize" />
+      <RootProperty Name="Foreground" />
       <RootProperty Name="Glyph" />
       <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="Foreground" />
       <RootProperty Name="IsHitTestVisible" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="MirroredWhenRightToLeft" />
@@ -225,38 +219,30 @@
       <RootProperty Name="ItemTemplate" />
       <RootProperty Name="DetailsTemplate" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Data.Binding">
-      <RootProperty Name="Converter" />
-      <RootProperty Name="Mode" />
-      <RootProperty Name="RelativeSource" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.StackPanel">
       <RootProperty Name="Margin" />
-      <RootProperty Name="Children" />
       <RootProperty Name="Orientation" />
+      <RootProperty Name="Children" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Background" />
       <RootProperty Name="Padding" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.RelativePanel">
-      <RootProperty Name="Margin" />
-      <RootProperty Name="Children" />
-      <RootMethod Name="GetRightOf" />
-      <RootMethod Name="SetRightOf" />
-      <RootMethod Name="GetBelow" />
-      <RootMethod Name="SetBelow" />
-      <RootMethod Name="GetAlignLeftWithPanel" />
-      <RootMethod Name="SetAlignLeftWithPanel" />
-      <RootMethod Name="GetLeftOf" />
-      <RootMethod Name="SetLeftOf" />
-      <RootMethod Name="GetAlignRightWithPanel" />
-      <RootMethod Name="SetAlignRightWithPanel" />
+    <RootType FullName="Windows.UI.Xaml.Shapes.Ellipse">
+      <RootProperty Name="Width" />
+      <RootProperty Name="Height" />
+      <RootProperty Name="Fill" />
+      <RootProperty Name="Stroke" />
+      <RootProperty Name="StrokeThickness" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ListView">
+      <RootProperty Name="ItemsSource" />
+      <RootProperty Name="ItemTemplate" />
+      <RootProperty Name="SelectionMode" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.ImageEx">
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
-      <RootProperty Name="CornerRadius" />
       <RootProperty Name="Source" />
     </RootType>
     <RootType FullName="SMPlayer.ArtistsPage" />
@@ -264,6 +250,11 @@
     <RootType FullName="Windows.UI.Xaml.Controls.ColumnDefinition">
       <RootProperty Name="Width" />
       <RootProperty Name="MinWidth" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Data.Binding">
+      <RootProperty Name="Converter" />
+      <RootProperty Name="Mode" />
+      <RootProperty Name="RelativeSource" />
     </RootType>
     <RootType FullName="SMPlayer.LocalFoldersPage" />
     <RootType FullName="SMPlayer.LocalMusicPage" />
@@ -564,11 +555,6 @@
       <RootProperty Name="Minimum" />
       <RootProperty Name="Maximum" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Shapes.Ellipse">
-      <RootProperty Name="Fill" />
-      <RootProperty Name="Stroke" />
-      <RootProperty Name="StrokeThickness" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.TickBar">
       <RootProperty Name="Width" />
       <RootProperty Name="Margin" />
@@ -578,12 +564,15 @@
       <RootProperty Name="Height" />
       <RootProperty Name="VerticalAlignment" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.MediaElement">
-      <RootProperty Name="AutoPlay" />
-      <RootProperty Name="IsLooping" />
-      <RootEvent Name="MediaEnded" />
-      <RootEvent Name="MediaFailed" />
-      <RootEvent Name="MediaOpened" />
+    <RootType FullName="Windows.UI.Xaml.Controls.RelativePanel">
+      <RootMethod Name="GetAlignLeftWithPanel" />
+      <RootMethod Name="SetAlignLeftWithPanel" />
+      <RootMethod Name="GetLeftOf" />
+      <RootMethod Name="SetLeftOf" />
+      <RootMethod Name="GetRightOf" />
+      <RootMethod Name="SetRightOf" />
+      <RootMethod Name="GetAlignRightWithPanel" />
+      <RootMethod Name="SetAlignRightWithPanel" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Input.KeyboardAccelerator">
       <RootProperty Name="Key" />

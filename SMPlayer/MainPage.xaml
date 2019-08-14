@@ -564,14 +564,6 @@
                         Style="{StaticResource MediaProgressSliderStyle}"
                         ThumbToolTipValueConverter="{StaticResource MusicDurationConverter}"
                         ValueChanged="MediaSlider_ValueChanged" />
-                    <MediaElement
-                        x:Name="MainPageMediaElement"
-                        Grid.Column="1"
-                        AutoPlay="False"
-                        IsLooping="False"
-                        MediaEnded="MainPageMediaElement_MediaEnded"
-                        MediaFailed="MainPageMediaElement_MediaFailed"
-                        MediaOpened="MainPageMediaElement_MediaOpened" />
                     <TextBlock
                         x:Name="RightTimeTextBlock"
                         Grid.Column="2"

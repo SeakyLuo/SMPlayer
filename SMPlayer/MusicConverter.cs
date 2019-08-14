@@ -89,7 +89,7 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.Equals(Helper.CurrentMusic) ? Windows.UI.Colors.Red : Windows.UI.Colors.Black;
+            return value.Equals(MainPage.Instance.MediaController.CurrentMusic) ? Windows.UI.Colors.Red : Windows.UI.Colors.Black;
 
         }
 

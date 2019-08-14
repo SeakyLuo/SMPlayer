@@ -25,8 +25,7 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class AlbumsPage : Page, AfterPathSetListener
     {
-        private ObservableCollection<GridAlbumView> Albums = new ObservableCollection<GridAlbumView>();
-        private SortedDictionary<string, List<Music>> GroupedMusic = new SortedDictionary<string, List<Music>>();
+        private ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         private bool SetupStarted = false;
         private int Notified = 0;
         public AlbumsPage()
@@ -65,8 +64,7 @@ namespace SMPlayer
             AlbumPageProgressRing.IsActive = true;
             AlbumPageProgressRing.Visibility = Visibility.Visible;
             Albums.Clear();
-            List<GridAlbumView> gridAlbums = new List<GridAlbumView>();
-            GroupedMusic.Clear();
+            List<AlbumView> albums = new List<AlbumView>();
             foreach (var group in MusicLibraryPage.AllSongs.GroupBy((m) => m.Album))
             {
                 Music music = null;
@@ -85,11 +83,10 @@ namespace SMPlayer
                     music = group.ElementAt(0);
                     thumbnail = Helper.DefaultAlbumCover;
                 }
-                var album = new GridAlbumView(music.Album, music.Artist, thumbnail);
-                gridAlbums.Add(album);
-                GroupedMusic.Add(music.Album, group.OrderBy((m) => m.Name).ThenBy((m) => m.Artist).ToList());
+                var album = new AlbumView(music.Album, music.Artist, thumbnail, group.OrderBy((m) => m.Name).ThenBy((m) => m.Artist).ToList());
+                albums.Add(album);
             }
-            foreach (var album in gridAlbums.OrderBy((a) => a.Name).ThenBy((a) => a.Artist)) Albums.Add(album);
+            foreach (var album in albums.OrderBy((a) => a.Name).ThenBy((a) => a.Artist)) Albums.Add(album);
             if (Notified == 2) Notified = 1;
             AlbumPageProgressRing.Visibility = Visibility.Collapsed;
             AlbumPageProgressRing.IsActive = false;

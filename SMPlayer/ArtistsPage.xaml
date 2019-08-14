@@ -4,9 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:data="using:SMPlayer.Models"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="Page_Loaded"
     mc:Ignorable="d">
 
     <Grid>
@@ -22,52 +24,55 @@
             Grid.Row="1"
             BackButtonBehavior="Automatic"
             CompactModeThresholdWidth="720"
-            ItemsSource="{Binding Emails}">
+            ItemsSource="{x:Bind Artists}">
             <controls:MasterDetailsView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Margin="0,8">
-                        <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="{Binding From}" />
+                <DataTemplate x:DataType="data:ArtistView">
+                    <StackPanel Margin="5" Orientation="Horizontal">
+                        <Grid>
+                            <Ellipse
+                                Width="36"
+                                Height="36"
+                                Fill="Gray" />
+                            <FontIcon Foreground="White" Glyph="&#xE8D4;" />
+                        </Grid>
                         <TextBlock
-                            Foreground="{ThemeResource Brush-Blue-01}"
-                            MaxLines="1"
-                            Style="{ThemeResource BodyTextBlockStyle}"
-                            Text="{Binding Subject}" />
-                        <TextBlock
-                            MaxLines="1"
-                            Opacity=".6"
-                            Style="{ThemeResource BodyTextBlockStyle}"
-                            Text="{Binding Body}" />
+                            Margin="10"
+                            Text="{x:Bind Name}"
+                            TextAlignment="Start" />
                     </StackPanel>
                 </DataTemplate>
             </controls:MasterDetailsView.ItemTemplate>
             <controls:MasterDetailsView.DetailsTemplate>
-                <DataTemplate>
-                    <RelativePanel Margin="24">
-                        <controls:ImageEx
-                            x:Name="FromEllipse"
-                            Width="50"
-                            Height="50"
-                            CornerRadius="999"
-                            Source="{Binding Thumbnail}" />
-                        <TextBlock
-                            Margin="12,-6,0,0"
-                            RelativePanel.RightOf="FromEllipse"
-                            Style="{ThemeResource SubtitleTextBlockStyle}"
-                            Text="{Binding From}" />
-                        <TextBlock
-                            x:Name="SubjectLine"
-                            Margin="0,12,0,0"
-                            RelativePanel.Below="FromEllipse"
-                            Style="{ThemeResource BodyTextBlockStyle}"
-                            Text="{Binding Subject}" />
-                        <TextBlock
-                            x:Name="Body"
-                            Margin="0,12,0,0"
-                            RelativePanel.Below="SubjectLine"
-                            Style="{ThemeResource BodyTextBlockStyle}"
-                            Text="{Binding Body}"
-                            TextWrapping="Wrap" />
-                    </RelativePanel>
+                <DataTemplate x:DataType="data:ArtistView">
+                    <ListView ItemsSource="{x:Bind Albums}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="data:AlbumView">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <controls:ImageEx
+                                        x:Name="AlbumCover"
+                                        Width="50"
+                                        Height="50"
+                                        Source="{x:Bind Cover}" />
+                                    <ListView
+                                        Grid.Row="1"
+                                        ItemsSource="{x:Bind Songs}"
+                                        SelectionMode="Single">
+                                        <!--<ListView.ItemTemplate>
+                                            <DataTemplate x:DataType="data:Music">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{x:Bind Name}" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>-->
+                                    </ListView>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </DataTemplate>
             </controls:MasterDetailsView.DetailsTemplate>
         </controls:MasterDetailsView>
