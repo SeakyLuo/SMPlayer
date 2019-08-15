@@ -78,7 +78,7 @@ namespace SMPlayer
             int index = AllSongs.IndexOf(before);
             if (index < 0) return;
             AllSongs[index] = after;
-            Update();
+            //Update();
             Save();
         }
         public void MusicSet(Music music)

@@ -49,7 +49,7 @@ namespace SMPlayer
         {
             var item = (GridMusicView)e.ClickedItem;
             MainPage.Instance.SetMusic(item.Source);
-            MainPage.Instance.Play();
+            MainPage.Instance.PlayMusic();
         }
 
         private async void Setup(FolderTree tree, bool redirect)

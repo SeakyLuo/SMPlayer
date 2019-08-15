@@ -10,17 +10,17 @@ using Windows.UI.Xaml;
 
 namespace SMPlayer
 {
-    public class MediaControl
+    public static class MediaControl
     {
-        public Music CurrentMusic;
-        public List<Music> CurrentPlayList = new List<Music>();
+        public static Music CurrentMusic;
+        public static List<Music> CurrentPlayList = new List<Music>();
 
-        public MediaPlayer Player = new MediaPlayer();
-        public MediaPlaybackList PlayList = new MediaPlaybackList();
-        private DispatcherTimer Timer = new DispatcherTimer {  Interval = TimeSpan.FromSeconds(1) };
-        private List<MediaControlListener> MediaControlListeners = new List<MediaControlListener>();
+        public static MediaPlayer Player = new MediaPlayer();
+        public static MediaPlaybackList PlayList = new MediaPlaybackList();
+        private static DispatcherTimer Timer = new DispatcherTimer {  Interval = TimeSpan.FromSeconds(1) };
+        private static List<MediaControlListener> MediaControlListeners = new List<MediaControlListener>();
 
-        public void Init()
+        public static void Init()
         {
             foreach (var music in MusicLibraryPage.AllSongs)
             {
@@ -68,50 +68,53 @@ namespace SMPlayer
                     listener.MediaFailed(args);
             };
             Player.Volume = Settings.settings.Volume;
-            CurrentMusic = Settings.settings.LastMusic;
+            SetMusic(Settings.settings.LastMusic);
         }
 
-        public void AddMediaControlListener(MediaControlListener listener)
+        public static void AddMediaControlListener(MediaControlListener listener)
         {
             MediaControlListeners.Add(listener);
         }
 
-        public void Play()
+        public static void Play()
         {
             Player.Play();
             Timer.Start();
         }
 
-        public void Pause()
+        public static void Pause()
         {
             Player.Pause();
             Timer.Stop();
         }
 
-        public Music PrevMusic()
+        public static Music PrevMusic()
         {
             PlayList.MovePrevious();
-            return CurrentPlayList[(int)PlayList.CurrentItemIndex];
+            CurrentMusic = CurrentPlayList[(int)PlayList.CurrentItemIndex];
+            return CurrentMusic;
         }
 
-        public Music NextMusic()
+        public static Music NextMusic()
         {
             PlayList.MoveNext();
-            return CurrentPlayList[(int)PlayList.CurrentItemIndex];
+            CurrentMusic = CurrentPlayList[(int)PlayList.CurrentItemIndex];
+            return CurrentMusic;
         }
 
-        public void SetMusic(Music music)
+        public static void SetMusic(Music music)
         {
             CurrentMusic = music;
-            PlayList.MoveTo((uint)CurrentPlayList.IndexOf(music));
+            int index = CurrentPlayList.IndexOf(music);
+            PlayList.MoveTo((uint)index);
         }
 
-        public void Shuffle()
+        public static void SetShuffle(bool isShuffle)
         {
-            PlayList.ShuffleEnabled = true;
+            PlayList.ShuffleEnabled = isShuffle;
         }
 
-        public void UnShuffle()
+        public static void UnShuffle()
         {
             PlayList.ShuffleEnabled = false;
         }

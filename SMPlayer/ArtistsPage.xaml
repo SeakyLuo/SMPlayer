@@ -44,35 +44,71 @@
             </controls:MasterDetailsView.ItemTemplate>
             <controls:MasterDetailsView.DetailsTemplate>
                 <DataTemplate x:DataType="data:ArtistView">
-                    <ListView ItemsSource="{x:Bind Albums}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate x:DataType="data:AlbumView">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <controls:ImageEx
-                                        x:Name="AlbumCover"
-                                        Width="50"
-                                        Height="50"
-                                        Source="{x:Bind Cover}" />
-                                    <ListView
-                                        Grid.Row="1"
-                                        ItemsSource="{x:Bind Songs}"
-                                        SelectionMode="Single">
-                                        <!--<ListView.ItemTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <RelativePanel>
+                            <StackPanel Margin="15,10,0,10" RelativePanel.AlignLeftWithPanel="True">
+                                <TextBlock
+                                    Margin="0,0,0,5"
+                                    FontSize="24"
+                                    FontWeight="Bold"
+                                    Text="{x:Bind Name}" />
+                                <TextBlock FontSize="18" Text="Albums Songs" />
+                            </StackPanel>
+                            <SymbolIcon
+                                VerticalAlignment="Center"
+                                Foreground="{ThemeResource SystemColorHighlightColor}"
+                                RelativePanel.AlignRightWithPanel="True"
+                                Symbol="More" />
+                            <Border
+                                Width="100"
+                                Height="1"
+                                BorderThickness="1"
+                                RelativePanel.AlignBottomWithPanel="True" />
+                        </RelativePanel>
+                        <ListView
+                            Grid.Row="1"
+                            ItemsSource="{x:Bind Albums}"
+                            SelectionMode="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="data:AlbumView">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <StackPanel Orientation="Horizontal">
+                                            <controls:ImageEx
+                                                x:Name="AlbumCover"
+                                                Width="60"
+                                                Height="60"
+                                                Margin="10"
+                                                Source="{x:Bind Cover}" />
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                FontWeight="Bold"
+                                                Text="{x:Bind Name}" />
+                                        </StackPanel>
+                                        <ListView
+                                            Grid.Row="1"
+                                            ItemsSource="{x:Bind Songs}"
+                                            SelectionMode="Single">
+                                            <!--<ListView.ItemTemplate>
                                             <DataTemplate x:DataType="data:Music">
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="{x:Bind Name}" />
                                                 </StackPanel>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>-->
-                                    </ListView>
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                                        </ListView>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
                 </DataTemplate>
             </controls:MasterDetailsView.DetailsTemplate>
         </controls:MasterDetailsView>
