@@ -558,9 +558,7 @@
                                                                                  
                         ManipulationMode="All"
                                                                              
-                                                                               
                         Minimum="0"
-                                                                   
                         RelativePanel.LeftOf="RightTimeTextBlock"
                         RelativePanel.RightOf="LeftTimeTextBlock"
                         Style="{StaticResource MediaProgressSliderStyle}"

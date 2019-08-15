@@ -70,6 +70,7 @@ namespace SMPlayer
         private void PlayItem_Click(object sender, RoutedEventArgs e)
         {
             var music = (sender as MenuFlyoutItem).DataContext as Music;
+            MediaControl.SetMusic(music);
             MainPage.Instance.SetMusic(music);
         }
 
@@ -89,6 +90,7 @@ namespace SMPlayer
         private void MusicLibraryDataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
             var music = (Music)MusicLibraryDataGrid.SelectedItem;
+            MediaControl.SetMusic(music);
             MainPage.Instance.SetMusic(music);
         }
 

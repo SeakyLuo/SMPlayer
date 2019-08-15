@@ -63,22 +63,15 @@ namespace SMPlayer
             switch (settings.Mode)
             {
                 case PlayMode.Once:
-                    MediaControl.PlayList.AutoRepeatEnabled = false;
                     break;
                 case PlayMode.Repeat:
                     RepeatButton.IsChecked = true;
-                    MediaControl.Player.IsLoopingEnabled = false;
-                    MediaControl.PlayList.ShuffleEnabled = false;
                     break;
                 case PlayMode.RepeatOne:
                     RepeatOneButton.IsChecked = true;
-                    MediaControl.Player.IsLoopingEnabled = true;
-                    MediaControl.PlayList.ShuffleEnabled = false;
                     break;
                 case PlayMode.Shuffle:
                     ShuffleButton.IsChecked = true;
-                    MediaControl.Player.IsLoopingEnabled = false;
-                    MediaControl.PlayList.ShuffleEnabled = true;
                     break;
                 default:
                     break;
@@ -125,32 +118,21 @@ namespace SMPlayer
         {
             RepeatButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            MediaControl.Player.IsLoopingEnabled = false;
-            bool isChecked = (bool)ShuffleButton.IsChecked;
-            Settings.settings.Mode = isChecked ? PlayMode.Shuffle : PlayMode.Once;
-            MediaControl.PlayList.AutoRepeatEnabled = Settings.settings.Mode != PlayMode.Once;
-            MediaControl.SetShuffle(isChecked);
+            MediaControl.SetMode((bool)ShuffleButton.IsChecked ? PlayMode.Shuffle : PlayMode.Once);
         }
 
         private void RepeatButton_Click(object sender, RoutedEventArgs e)
         {
             ShuffleButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            Settings.settings.Mode = (bool)RepeatButton.IsChecked ? PlayMode.Repeat : PlayMode.Once;
-            MediaControl.Player.IsLoopingEnabled = false;
-            MediaControl.PlayList.AutoRepeatEnabled = Settings.settings.Mode != PlayMode.Once;
-            MediaControl.SetShuffle(false);
+            MediaControl.SetMode((bool)RepeatButton.IsChecked ? PlayMode.Repeat : PlayMode.Once);
         }
 
         private void RepeatOneButton_Click(object sender, RoutedEventArgs e)
         {
             ShuffleButton.IsChecked = false;
             RepeatButton.IsChecked = false;
-            bool isChecked = (bool)RepeatOneButton.IsChecked;
-            Settings.settings.Mode = isChecked ? PlayMode.RepeatOne : PlayMode.Once;
-            MediaControl.Player.IsLoopingEnabled = isChecked;Debug.WriteLine(MediaControl.Player.IsLoopingEnabled);
-            MediaControl.PlayList.AutoRepeatEnabled = Settings.settings.Mode != PlayMode.Once;
-            MediaControl.SetShuffle(false);
+            MediaControl.SetMode((bool)RepeatOneButton.IsChecked ? PlayMode.RepeatOne : PlayMode.Once);
         }
 
         public void PlayMusic()
@@ -337,20 +319,13 @@ namespace SMPlayer
         {
             MediaControl.SetPosition(MediaSlider.Value);
             ShouldUpdate = true;
-            //Debug.WriteLine("Completed");
+            Debug.WriteLine("Completed");
         }
 
         private void MediaSlider_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
             ShouldUpdate = false;
-            //Debug.WriteLine("Started");
-        }
-
-        private void MediaSlider_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e)
-        {
-            //Debug.WriteLine("Starting");
-            //MediaControl.Player.PlaybackSession.Position = TimeSpan.FromSeconds(MediaSlider.Value);
-            //Debug.WriteLine(MusicDurationConverter.ToTime(MediaSlider.Value));
+            Debug.WriteLine("Started");
         }
 
         private void MainFrame_Navigated(object sender, NavigationEventArgs e)
@@ -431,15 +406,9 @@ namespace SMPlayer
                 listener.MusicModified(before, after);
         }
 
-        private void MediaSlider_PointerPressed(object sender, PointerRoutedEventArgs e)
-        {
-            Debug.WriteLine("Pressed");
-            SliderClicked = true;
-            MediaControl.SetPosition(MediaSlider.Value);
-        }
-
         private void MediaSlider_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            Debug.Write("Tapped");
             MediaControl.SetPosition(MediaSlider.Value);
         }
     }

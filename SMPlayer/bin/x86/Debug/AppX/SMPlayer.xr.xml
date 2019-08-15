@@ -552,8 +552,6 @@
       <RootEvent Name="ValueChanged" />
       <RootEvent Name="ManipulationCompleted" />
       <RootEvent Name="ManipulationStarted" />
-      <RootEvent Name="ManipulationStarting" />
-      <RootEvent Name="PointerPressed" />
       <RootEvent Name="Tapped" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.AcrylicBrush">

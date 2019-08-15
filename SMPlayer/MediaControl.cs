@@ -18,18 +18,22 @@ namespace SMPlayer
 
         public static MediaPlayer Player = new MediaPlayer();
         public static MediaPlaybackList PlayList = new MediaPlaybackList();
-        private static int CurrentMusicIndex;
+        private static int CurrentMusicIndex = -1;
         private static DispatcherTimer Timer = new DispatcherTimer {  Interval = TimeSpan.FromSeconds(1) };
         private static List<MediaControlListener> MediaControlListeners = new List<MediaControlListener>();
+        private static Random random = new Random();
+        private static List<int> RandomIndices = new List<int>();
+        private static int RandomIndex = 0;
+        private static bool ShuffleEnabled = false;
 
         public async static void Init()
         {
+            await SetPlayList(MusicLibraryPage.AllSongs);
             Timer.Tick += (sender, e) =>
             {
                 foreach (var listener in MediaControlListeners)
                     listener.Tick();
             };
-            await SetPlayList(MusicLibraryPage.AllSongs);
             Player.Source = PlayList;
             Player.MediaOpened += (sender, args) =>
             {
@@ -65,8 +69,39 @@ namespace SMPlayer
                 foreach (var listener in MediaControlListeners)
                     listener.MediaFailed(args);
             };
+            for (int i = 0; i < CurrentPlayList.Count; i++)
+                RandomIndices.Add(i);
+
             Player.Volume = Settings.settings.Volume;
             SetMusic(Settings.settings.LastMusic);
+            SetMode(Settings.settings.Mode);
+        }
+
+        public static void SetMode(PlayMode mode)
+        {
+            switch (mode)
+            {
+                case PlayMode.Once:
+                    Player.IsLoopingEnabled = false;
+                    PlayList.AutoRepeatEnabled = false;
+                    break;
+                case PlayMode.Repeat:
+                    Player.IsLoopingEnabled = false;
+                    PlayList.AutoRepeatEnabled = true;
+                    break;
+                case PlayMode.RepeatOne:
+                    Player.IsLoopingEnabled = true;
+                    PlayList.AutoRepeatEnabled = false;
+                    break;
+                case PlayMode.Shuffle:
+                    PlayList.AutoRepeatEnabled = true;
+                    Player.IsLoopingEnabled = false;
+                    break;
+                default:
+                    break;
+            }
+            SetShuffle(mode == PlayMode.Shuffle);
+            Settings.settings.Mode = mode;
         }
 
         public static async Task SetPlayList(List<Music> playlist)
@@ -106,17 +141,18 @@ namespace SMPlayer
             }
             else
             {
-                PlayList.MovePrevious();
-                if (PlayList.ShuffleEnabled)
+                if (ShuffleEnabled)
                 {
-                    CurrentMusicIndex = int.Parse(PlayList.CurrentItemIndex.ToString());
+                    RandomIndex = RandomIndex == 0 ? CurrentPlayList.Count - 1 : RandomIndex - 1;
+                    CurrentMusic = CurrentPlayList[RandomIndices[RandomIndex]];
+                    PlayList.MoveTo(Convert.ToUInt32(RandomIndices[RandomIndex]));
                 }
                 else
                 {
-                    CurrentMusicIndex -= 1;
-                    if (CurrentMusicIndex < 0) CurrentMusicIndex += CurrentPlayList.Count;
+                    CurrentMusicIndex = CurrentMusicIndex == 0 ? CurrentPlayList.Count - 1 : CurrentMusicIndex - 1;
+                    CurrentMusic = CurrentPlayList[CurrentMusicIndex];
+                    PlayList.MovePrevious();
                 }
-                CurrentMusic = CurrentPlayList[CurrentMusicIndex];
             }
             return CurrentMusic;
         }
@@ -129,18 +165,18 @@ namespace SMPlayer
             }
             else
             {
-                PlayList.MoveNext();
-                if (PlayList.ShuffleEnabled)
+                if (ShuffleEnabled)
                 {
-                    var item = PlayList.CurrentItem;
-                    string value = PlayList.CurrentItemIndex.ToString();
-                    CurrentMusicIndex = int.Parse(value);
+                    RandomIndex = (RandomIndex + 1) % CurrentPlayList.Count;
+                    CurrentMusic = CurrentPlayList[RandomIndices[RandomIndex]];
+                    PlayList.MoveTo(Convert.ToUInt32(RandomIndices[RandomIndex]));
                 }
                 else
                 {
                     CurrentMusicIndex = (CurrentMusicIndex + 1) % CurrentPlayList.Count;
+                    CurrentMusic = CurrentPlayList[CurrentMusicIndex];
+                    PlayList.MoveNext();
                 }
-                CurrentMusic = CurrentPlayList[CurrentMusicIndex];
             }
             return CurrentMusic;
         }
@@ -152,6 +188,7 @@ namespace SMPlayer
             CurrentMusicIndex = index;
             CurrentMusic = music;
             PlayList.MoveTo(Convert.ToUInt32(index));
+            SetShuffle(ShuffleEnabled);
         }
 
         public static void SetPosition(double seconds)
@@ -161,8 +198,25 @@ namespace SMPlayer
 
         public static void SetShuffle(bool isShuffle)
         {
-            PlayList.ShuffleEnabled = isShuffle;
-            if (isShuffle) PlayList.SetShuffledItems(PlayList.ShuffledItems);
+            ShuffleEnabled = isShuffle;
+            if (!isShuffle) return;
+            RandomIndex = 0;
+            Shuffle(RandomIndices);
+            RandomIndices.Remove(CurrentMusicIndex);
+            RandomIndices.Insert(0, CurrentMusicIndex);
+        }
+
+        private static void Shuffle<T>(List<T> list)
+        {
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = random.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
         }
     }
 
