@@ -99,6 +99,7 @@
             </controls:DataGrid.Columns>
             <controls:DataGrid.RowStyle>
                 <Style TargetType="controls:DataGridRow">
+                    <!--<Setter Property="Foreground" Value="{Binding Music, Converter={StaticResource DataGridRowColorConverter}}" />-->
                     <Setter Property="controls:DataGridRow.ContextFlyout">
                         <Setter.Value>
                             <MenuFlyout>

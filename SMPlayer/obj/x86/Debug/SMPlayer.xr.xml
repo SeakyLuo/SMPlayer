@@ -37,9 +37,9 @@
       <RootProperty Name="TextWrapping" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="Foreground" />
+      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="HorizontalTextAlignment" />
       <RootProperty Name="Width" />
-      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="FontFamily" />
       <RootProperty Name="TextTrimming" />
       <RootProperty Name="LineStackingStrategy" />
@@ -216,6 +216,7 @@
       <RootProperty Name="BackButtonBehavior" />
       <RootProperty Name="CompactModeThresholdWidth" />
       <RootProperty Name="ItemsSource" />
+      <RootProperty Name="MasterHeader" />
       <RootProperty Name="ItemTemplate" />
       <RootProperty Name="DetailsTemplate" />
     </RootType>
@@ -241,6 +242,8 @@
       <RootMethod Name="SetAlignLeftWithPanel" />
       <RootMethod Name="GetAlignRightWithPanel" />
       <RootMethod Name="SetAlignRightWithPanel" />
+      <RootMethod Name="GetAlignBottomWithPanel" />
+      <RootMethod Name="SetAlignBottomWithPanel" />
       <RootMethod Name="GetLeftOf" />
       <RootMethod Name="SetLeftOf" />
       <RootMethod Name="GetRightOf" />
@@ -254,11 +257,21 @@
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.ImageEx">
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
+      <RootProperty Name="Margin" />
       <RootProperty Name="Source" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.SymbolIcon">
       <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Foreground" />
       <RootProperty Name="Symbol" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.Border">
+      <RootProperty Name="Width" />
+      <RootProperty Name="Height" />
+      <RootProperty Name="BorderThickness" />
+      <RootProperty Name="Child" />
+      <RootProperty Name="BorderBrush" />
+      <RootProperty Name="Background" />
     </RootType>
     <RootType FullName="SMPlayer.ArtistsPage" />
     <RootType FullName="SMPlayer.LargeThumbnailVisibilityConverter" />
@@ -383,14 +396,6 @@
       <RootMethod Name="SetLandmarkType" />
       <RootMethod Name="GetAccessibilityView" />
       <RootMethod Name="SetAccessibilityView" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.Border">
-      <RootProperty Name="Child" />
-      <RootProperty Name="BorderBrush" />
-      <RootProperty Name="BorderThickness" />
-      <RootProperty Name="Width" />
-      <RootProperty Name="Height" />
-      <RootProperty Name="Background" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ScrollViewer">
       <RootMethod Name="GetHorizontalScrollBarVisibility" />
@@ -547,6 +552,9 @@
       <RootEvent Name="ValueChanged" />
       <RootEvent Name="ManipulationCompleted" />
       <RootEvent Name="ManipulationStarted" />
+      <RootEvent Name="ManipulationStarting" />
+      <RootEvent Name="PointerPressed" />
+      <RootEvent Name="Tapped" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.AcrylicBrush">
       <RootProperty Name="BackgroundSource" />

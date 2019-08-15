@@ -25,9 +25,17 @@
             BackButtonBehavior="Automatic"
             CompactModeThresholdWidth="720"
                                           >
+            <controls:MasterDetailsView.MasterHeader>
+                <ProgressRing x:ConnectionId='4'
+                    x:Name="ArtistsProgressRing"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    IsActive="False"
+                    Visibility="Collapsed" />
+            </controls:MasterDetailsView.MasterHeader>
             <controls:MasterDetailsView.ItemTemplate>
                 <DataTemplate                             >
-                    <StackPanel x:ConnectionId='4' Margin="5" Orientation="Horizontal">
+                    <StackPanel x:ConnectionId='5' Margin="5" Orientation="Horizontal">
                         <Grid>
                             <Ellipse
                                 Width="36"
@@ -35,7 +43,7 @@
                                 Fill="Gray" />
                             <FontIcon Foreground="White" Glyph="&#xE8D4;" />
                         </Grid>
-                        <TextBlock x:ConnectionId='5'
+                        <TextBlock x:ConnectionId='6'
                             Margin="10"
                                                 
                             TextAlignment="Start" />
@@ -44,40 +52,55 @@
             </controls:MasterDetailsView.ItemTemplate>
             <controls:MasterDetailsView.DetailsTemplate>
                 <DataTemplate                             >
-                    <Grid x:ConnectionId='6'>
+                    <Grid x:ConnectionId='7'>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <RelativePanel>
-                            <StackPanel Margin="5" RelativePanel.AlignLeftWithPanel="True">
-                                <TextBlock x:ConnectionId='12'
-                                    FontSize="18"
+                            <StackPanel Margin="15,10,0,10" RelativePanel.AlignLeftWithPanel="True">
+                                <TextBlock x:ConnectionId='13'
+                                    Margin="0,0,0,5"
+                                    FontSize="24"
                                     FontWeight="Bold"
                                                          />
+                                <TextBlock FontSize="18" Text="Albums Songs" />
                             </StackPanel>
                             <SymbolIcon
                                 VerticalAlignment="Center"
+                                Foreground="{ThemeResource SystemColorHighlightColor}"
                                 RelativePanel.AlignRightWithPanel="True"
                                 Symbol="More" />
+                            <Border
+                                Width="100"
+                                Height="1"
+                                BorderThickness="1"
+                                RelativePanel.AlignBottomWithPanel="True" />
                         </RelativePanel>
-                        <ListView x:ConnectionId='7'                               SelectionMode="None">
+                        <ListView x:ConnectionId='8'
+                            Grid.Row="1"
+                                                         
+                            SelectionMode="None">
                             <ListView.ItemTemplate>
                                 <DataTemplate                            >
-                                    <Grid x:ConnectionId='8'>
+                                    <Grid x:ConnectionId='9'>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
                                         <StackPanel Orientation="Horizontal">
-                                            <controls:ImageEx x:ConnectionId='10'
+                                            <controls:ImageEx x:ConnectionId='11'
                                                 x:Name="AlbumCover"
-                                                Width="50"
-                                                Height="50"
+                                                Width="60"
+                                                Height="60"
+                                                Margin="10"
                                                                         />
-                                            <TextBlock x:ConnectionId='11'                      />
+                                            <TextBlock x:ConnectionId='12'
+                                                VerticalAlignment="Center"
+                                                FontWeight="Bold"
+                                                                     />
                                         </StackPanel>
-                                        <ListView x:ConnectionId='9'
+                                        <ListView x:ConnectionId='10'
                                             Grid.Row="1"
                                                                         
                                             SelectionMode="Single">

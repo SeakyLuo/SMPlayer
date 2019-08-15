@@ -25,6 +25,14 @@
             BackButtonBehavior="Automatic"
             CompactModeThresholdWidth="720"
             ItemsSource="{x:Bind Artists}">
+            <controls:MasterDetailsView.MasterHeader>
+                <ProgressRing
+                    x:Name="ArtistsProgressRing"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    IsActive="False"
+                    Visibility="Collapsed" />
+            </controls:MasterDetailsView.MasterHeader>
             <controls:MasterDetailsView.ItemTemplate>
                 <DataTemplate x:DataType="data:ArtistView">
                     <StackPanel Margin="5" Orientation="Horizontal">

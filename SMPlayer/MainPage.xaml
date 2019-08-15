@@ -558,10 +558,13 @@
                         ManipulationCompleted="MediaSlider_ManipulationCompleted"
                         ManipulationMode="All"
                         ManipulationStarted="MediaSlider_ManipulationStarted"
+                        ManipulationStarting="MediaSlider_ManipulationStarting"
                         Minimum="0"
+                        PointerPressed="MediaSlider_PointerPressed"
                         RelativePanel.LeftOf="RightTimeTextBlock"
                         RelativePanel.RightOf="LeftTimeTextBlock"
                         Style="{StaticResource MediaProgressSliderStyle}"
+                        Tapped="MediaSlider_Tapped"
                         ThumbToolTipValueConverter="{StaticResource MusicDurationConverter}"
                         ValueChanged="MediaSlider_ValueChanged" />
                     <TextBlock

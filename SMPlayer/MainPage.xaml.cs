@@ -36,7 +36,8 @@ namespace SMPlayer
             get { return (Window.Current.Content as Frame).Content as MainPage; }
         }
         private bool ShouldPlay = false;
-        private bool NotDragging = true;
+        private bool ShouldUpdate = true;
+        private bool SliderClicked = true;
         private static Dictionary<string, MusicControlListener> MusicControlListeners = new Dictionary<string, MusicControlListener>();
 
         public MainPage()
@@ -99,7 +100,6 @@ namespace SMPlayer
             {
                 return;
             }
-            MediaControl.PlayList.Items.Add(new MediaPlaybackItem(MediaSource.CreateFromStorageFile(file)));
             AlbumCover.Source = await Helper.GetThumbnail(file);
             TitleTextBlock.Text = music.Name;
             ArtistTextBlock.Text = music.Artist;
@@ -126,10 +126,10 @@ namespace SMPlayer
             RepeatButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
             MediaControl.Player.IsLoopingEnabled = false;
-            bool isShuffle = (bool)ShuffleButton.IsChecked;
-            Settings.settings.Mode = isShuffle ? PlayMode.Shuffle : PlayMode.Once;
-            MediaControl.PlayList.AutoRepeatEnabled = isShuffle;
-            MediaControl.SetShuffle(isShuffle);
+            bool isChecked = (bool)ShuffleButton.IsChecked;
+            Settings.settings.Mode = isChecked ? PlayMode.Shuffle : PlayMode.Once;
+            MediaControl.PlayList.AutoRepeatEnabled = Settings.settings.Mode != PlayMode.Once;
+            MediaControl.SetShuffle(isChecked);
         }
 
         private void RepeatButton_Click(object sender, RoutedEventArgs e)
@@ -138,7 +138,7 @@ namespace SMPlayer
             RepeatOneButton.IsChecked = false;
             Settings.settings.Mode = (bool)RepeatButton.IsChecked ? PlayMode.Repeat : PlayMode.Once;
             MediaControl.Player.IsLoopingEnabled = false;
-            MediaControl.PlayList.AutoRepeatEnabled = Settings.settings.Mode == PlayMode.Once;
+            MediaControl.PlayList.AutoRepeatEnabled = Settings.settings.Mode != PlayMode.Once;
             MediaControl.SetShuffle(false);
         }
 
@@ -146,9 +146,10 @@ namespace SMPlayer
         {
             ShuffleButton.IsChecked = false;
             RepeatButton.IsChecked = false;
-            Settings.settings.Mode = (bool)RepeatOneButton.IsChecked ? PlayMode.RepeatOne : PlayMode.Once;
-            MediaControl.Player.IsLoopingEnabled = !MediaControl.Player.IsLoopingEnabled;
-            MediaControl.PlayList.AutoRepeatEnabled = Settings.settings.Mode == PlayMode.Once;
+            bool isChecked = (bool)RepeatOneButton.IsChecked;
+            Settings.settings.Mode = isChecked ? PlayMode.RepeatOne : PlayMode.Once;
+            MediaControl.Player.IsLoopingEnabled = isChecked;Debug.WriteLine(MediaControl.Player.IsLoopingEnabled);
+            MediaControl.PlayList.AutoRepeatEnabled = Settings.settings.Mode != PlayMode.Once;
             MediaControl.SetShuffle(false);
         }
 
@@ -309,7 +310,11 @@ namespace SMPlayer
 
         private void PrevButton_Click(object sender, RoutedEventArgs e)
         {
-            if (MediaSlider.Value > 5) MediaSlider.Value = 0;
+            if (MediaSlider.Value > 5)
+            {
+                MediaSlider.Value = 0;
+                MediaControl.SetPosition(0);
+            }
             else SetMusic(MediaControl.PrevMusic());
         }
 
@@ -321,17 +326,31 @@ namespace SMPlayer
         private void MediaSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             LeftTimeTextBlock.Text = MusicDurationConverter.ToTime((int)MediaSlider.Value);
+            //if (SliderClicked)
+            //{
+            //    MediaControl.SetPosition(MediaSlider.Value);
+            //    SliderClicked = false;
+            //}
         }
 
         private void MediaSlider_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
         {
-            MediaControl.Player.PlaybackSession.Position = TimeSpan.FromSeconds(MediaSlider.Value);
-            NotDragging = true;
+            MediaControl.SetPosition(MediaSlider.Value);
+            ShouldUpdate = true;
+            //Debug.WriteLine("Completed");
         }
 
         private void MediaSlider_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
-            NotDragging = false;
+            ShouldUpdate = false;
+            //Debug.WriteLine("Started");
+        }
+
+        private void MediaSlider_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e)
+        {
+            //Debug.WriteLine("Starting");
+            //MediaControl.Player.PlaybackSession.Position = TimeSpan.FromSeconds(MediaSlider.Value);
+            //Debug.WriteLine(MusicDurationConverter.ToTime(MediaSlider.Value));
         }
 
         private void MainFrame_Navigated(object sender, NavigationEventArgs e)
@@ -368,7 +387,10 @@ namespace SMPlayer
 
         public void Tick()
         {
-            if (NotDragging) MediaSlider.Value = MediaControl.Player.PlaybackSession.Position.TotalSeconds;
+            if (ShouldUpdate)
+            {
+                MediaSlider.Value = MediaControl.Player.PlaybackSession.Position.TotalSeconds;
+            }
         }
 
         public void MediaOpened()
@@ -407,6 +429,18 @@ namespace SMPlayer
         {
             foreach (var listener in MusicControlListeners.Values)
                 listener.MusicModified(before, after);
+        }
+
+        private void MediaSlider_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            Debug.WriteLine("Pressed");
+            SliderClicked = true;
+            MediaControl.SetPosition(MediaSlider.Value);
+        }
+
+        private void MediaSlider_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            MediaControl.SetPosition(MediaSlider.Value);
         }
     }
 

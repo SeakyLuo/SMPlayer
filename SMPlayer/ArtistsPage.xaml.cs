@@ -48,6 +48,8 @@ namespace SMPlayer
                 return;
             }
             SetupStarted = true;
+            ArtistsProgressRing.IsActive = true;
+            ArtistsProgressRing.Visibility = Visibility.Visible;
             Artists.Clear();
             List<ArtistView> artists = new List<ArtistView>();
             foreach (var group in MusicLibraryPage.AllSongs.GroupBy((m) => m.Artist))
@@ -69,6 +71,8 @@ namespace SMPlayer
             }
             foreach (var artist in artists.OrderBy((a) => a.Name)) Artists.Add(artist);
             if (Notified == 2) Notified = 1;
+            ArtistsProgressRing.Visibility = Visibility.Collapsed;
+            ArtistsProgressRing.IsActive = false;
             SetupStarted = false;
         }
 
