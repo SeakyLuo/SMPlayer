@@ -28,6 +28,10 @@ namespace SMPlayer
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
         private bool SetupStarted = false;
         private int Notified = 0;
+        private SolidColorBrush WhiteBrush = new SolidColorBrush(Colors.White);
+        private SolidColorBrush WhiteSmokeBrush = new SolidColorBrush(Colors.WhiteSmoke);
+        private SolidColorBrush BlackBrush = new SolidColorBrush(Colors.Black);
+
         public ArtistsPage()
         {
             this.InitializeComponent();
@@ -54,7 +58,7 @@ namespace SMPlayer
             List<ArtistView> artists = new List<ArtistView>();
             foreach (var group in MusicLibraryPage.AllSongs.GroupBy((m) => m.Artist))
             {
-                List<AlbumView> albums = new List<AlbumView>();
+                ObservableCollection<AlbumView> albums = new ObservableCollection<AlbumView>();
                 foreach (var songs in group.GroupBy((m) => m.Album))
                 {
                     Windows.UI.Xaml.Media.Imaging.BitmapImage thumbnail = null;
@@ -64,7 +68,7 @@ namespace SMPlayer
                         if (thumbnail != null) break;
                     }
                     if (thumbnail == null) thumbnail = Helper.DefaultAlbumCover;
-                    var album = new AlbumView(songs.Key, group.Key, thumbnail, songs.OrderBy((m) => m.Name).ToList());
+                    var album = new AlbumView(songs.Key, group.Key, thumbnail, songs.OrderBy((m) => m.Name));
                     albums.Add(album);
                 }
                 artists.Add(new ArtistView(group.Key, albums));
@@ -82,20 +86,23 @@ namespace SMPlayer
             Setup();
         }
 
-        private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
+        private async void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Music music = (Music)e.ClickedItem;
+            await MediaControl.SetPlayList((e.OriginalSource as ListView).ItemsSource as ObservableCollection<Music>);
             MainPage.Instance.SetMusicAndPlay(music);
         }
 
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            args.ItemContainer.Background = new SolidColorBrush(args.ItemIndex % 2 == 0 ? Colors.WhiteSmoke : Colors.White);
+            args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? WhiteSmokeBrush : WhiteBrush;
+            args.ItemContainer.Foreground = (Music)args.Item == MediaControl.CurrentMusic ? new SolidColorBrush((Color)Resources["SystemColorHighlightColor"]) : BlackBrush;
         }
 
-        private void PlayItem_Click(object sender, RoutedEventArgs e)
+        private async void PlayItem_Click(object sender, RoutedEventArgs e)
         {
             Music music = (sender as MenuFlyoutItem).DataContext as Music;
+            await MediaControl.SetPlayList((e.OriginalSource as ListView).ItemsSource as List<Music>);
             MainPage.Instance.SetMusicAndPlay(music);
         }
     }

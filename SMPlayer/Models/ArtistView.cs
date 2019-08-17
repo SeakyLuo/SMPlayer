@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,9 +11,9 @@ namespace SMPlayer.Models
     class ArtistView
     {
         public string Name { get; set; }
-        public List<AlbumView> Albums { get; set; }
+        public ObservableCollection<AlbumView> Albums { get; set; }
 
-        public ArtistView(string Name, List<AlbumView> Albums)
+        public ArtistView(string Name, ObservableCollection<AlbumView> Albums)
         {
             this.Name = Name;
             this.Albums = Albums;

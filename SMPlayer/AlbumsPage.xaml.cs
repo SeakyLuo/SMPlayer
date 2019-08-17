@@ -83,7 +83,7 @@ namespace SMPlayer
                     music = group.ElementAt(0);
                     thumbnail = Helper.DefaultAlbumCover;
                 }
-                var album = new AlbumView(music.Album, music.Artist, thumbnail, group.OrderBy((m) => m.Name).ThenBy((m) => m.Artist).ToList());
+                var album = new AlbumView(music.Album, music.Artist, thumbnail, group.OrderBy((m) => m.Name).ThenBy((m) => m.Artist));
                 albums.Add(album);
             }
             foreach (var album in albums.OrderBy((a) => a.Name).ThenBy((a) => a.Artist)) Albums.Add(album);

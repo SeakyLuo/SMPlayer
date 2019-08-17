@@ -83,7 +83,7 @@ namespace SMPlayer
             Settings.settings.Mode = mode;
         }
 
-        public static async Task SetPlayList(List<Music> playlist)
+        public static async Task SetPlayList(IEnumerable<Music> playlist)
         {
             PlayList.Items.Clear();
             CurrentPlayList.Clear();

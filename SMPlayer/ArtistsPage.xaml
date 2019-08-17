@@ -149,15 +149,17 @@
                                             </StackPanel>
                                             <Button
                                                 x:Name="AlbumMoreButton"
-                                                Margin="0,40,25,0"
+                                                Margin="0,40,20,0"
                                                 Background="Transparent"
                                                 Content="&#xE712;"
                                                 FontFamily="Segoe MDL2 Assets"
+                                                FontSize="18"
                                                 Foreground="{ThemeResource SystemColorHighlightColor}"
                                                 RelativePanel.AlignRightWithPanel="True">
                                                 <Button.Flyout>
                                                     <MenuFlyout>
                                                         <MenuFlyoutItem Icon="Add" Text="Add To Now Playing" />
+                                                        <MenuFlyoutItem Icon="Shuffle" Text="Shuffle Album" />
                                                     </MenuFlyout>
                                                 </Button.Flyout>
                                             </Button>

@@ -45,9 +45,10 @@ namespace SMPlayer
             base.OnNavigatedTo(e);
         }
 
-        private void LocalMusicGridView_ItemClick(object sender, ItemClickEventArgs e)
+        private async void LocalMusicGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = (GridMusicView)e.ClickedItem;
+            await MediaControl.SetPlayList(GridItems.Select((m) => m.Source).ToList());
             MediaControl.SetMusic(item.Source);
             MainPage.Instance.PlayMusic();
         }

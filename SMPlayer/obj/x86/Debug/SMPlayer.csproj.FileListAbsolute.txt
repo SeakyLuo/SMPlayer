@@ -166,8 +166,3 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LoadingControl.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LoadingControl.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\LoadingControl.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SMPlayer.csprojAssemblyReference.cache
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\AlternatingColorListView.g.i.cs
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\AlternatingColorListView.g.cs
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\AlternatingColorListView.xaml
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\AlternatingColorListView.xbf
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\AlternatingColorListView.xbf

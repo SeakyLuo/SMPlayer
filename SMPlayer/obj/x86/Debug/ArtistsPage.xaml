@@ -133,7 +133,10 @@
                                                 Margin="10"
                                                 RelativePanel.AlignLeftWithPanel="True"
                                                                         />
-                                            <StackPanel Margin="0,10" RelativePanel.RightOf="AlbumCover" RelativePanel.LeftOf="AlbumMoreButton">
+                                            <StackPanel
+                                                Margin="0,10"
+                                                RelativePanel.LeftOf="AlbumMoreButton"
+                                                RelativePanel.RightOf="AlbumCover">
                                                 <TextBlock x:ConnectionId='17'
                                                     VerticalAlignment="Center"
                                                     FontSize="18"
@@ -146,15 +149,17 @@
                                             </StackPanel>
                                             <Button
                                                 x:Name="AlbumMoreButton"
+                                                Margin="0,40,20,0"
+                                                Background="Transparent"
                                                 Content="&#xE712;"
                                                 FontFamily="Segoe MDL2 Assets"
-                                                Background="Transparent"
-                                                Margin="0,40,40,0"
+                                                FontSize="18"
                                                 Foreground="{ThemeResource SystemColorHighlightColor}"
                                                 RelativePanel.AlignRightWithPanel="True">
                                                 <Button.Flyout>
                                                     <MenuFlyout>
                                                         <MenuFlyoutItem Icon="Add" Text="Add To Now Playing" />
+                                                        <MenuFlyoutItem Icon="Shuffle" Text="Shuffle Album" />
                                                     </MenuFlyout>
                                                 </Button.Flyout>
                                             </Button>

@@ -84,6 +84,5 @@
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>
-
     </Grid>
 </Page>

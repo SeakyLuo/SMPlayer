@@ -118,9 +118,6 @@
     <Compile Include="AlbumsPage.xaml.cs">
       <DependentUpon>AlbumsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AlternatingColorListView.xaml.cs">
-      <DependentUpon>AlternatingColorListView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -203,10 +200,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="AlbumsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="AlternatingColorListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
