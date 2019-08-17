@@ -14,7 +14,6 @@
         <local:MusicDurationConverter x:Key="MusicDurationConverter" />
         <local:MusicFavoriteConverter x:Key="MusicFavoriteConverter" />
         <local:MusicPlayCountConverter x:Key="MusicPlayCountConverter" />
-        <local:DataGridRowColorConverter x:Key="DataGridRowColorConverter" />
     </Page.Resources>
 
     <Grid>
@@ -99,7 +98,6 @@
             </controls:DataGrid.Columns>
             <controls:DataGrid.RowStyle>
                 <Style TargetType="controls:DataGridRow">
-                    <!--<Setter Property="Foreground" Value="{Binding Music, Converter={StaticResource DataGridRowColorConverter}}" />-->
                     <Setter Property="controls:DataGridRow.ContextFlyout">
                         <Setter.Value>
                             <MenuFlyout>
@@ -124,6 +122,10 @@
                                     Click="DeleteItem_Click"
                                     Icon="Delete"
                                     Text="Delete From Disk" />
+                                <MenuFlyoutItem
+                                    x:Name="MusicInfoItem"
+                                    Icon="MusicInfo"
+                                    Text="Music Info" />
                             </MenuFlyout>
                         </Setter.Value>
                     </Setter>

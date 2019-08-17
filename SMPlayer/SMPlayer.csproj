@@ -118,11 +118,17 @@
     <Compile Include="AlbumsPage.xaml.cs">
       <DependentUpon>AlbumsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AlternatingColorListView.xaml.cs">
+      <DependentUpon>AlternatingColorListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="ArtistsPage.xaml.cs">
       <DependentUpon>ArtistsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LoadingControl.xaml.cs">
+      <DependentUpon>LoadingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="LocalFoldersPage.xaml.cs">
       <DependentUpon>LocalFoldersPage.xaml</DependentUpon>
@@ -200,7 +206,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="AlternatingColorListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ArtistsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LoadingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -225,10 +239,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SearchPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WhiteNavigationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

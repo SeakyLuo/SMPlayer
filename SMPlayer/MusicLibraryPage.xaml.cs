@@ -90,8 +90,7 @@ namespace SMPlayer
         private void MusicLibraryDataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
             var music = (Music)MusicLibraryDataGrid.SelectedItem;
-            MediaControl.SetMusic(music);
-            MainPage.Instance.SetMusic(music);
+            MainPage.Instance.SetMusicAndPlay(music);
         }
 
         private void AddToMyFavorites_Click(object sender, RoutedEventArgs e)

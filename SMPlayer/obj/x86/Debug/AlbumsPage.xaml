@@ -24,7 +24,6 @@
             x:Name="MusicLibraryTitleTextBlock"
             Style="{StaticResource TitleTextBlockStyle}"
             Text="Albums" />
-
         <ProgressRing x:ConnectionId='3'
             x:Name="AlbumPageProgressRing"
             Grid.Row="1"

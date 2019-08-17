@@ -39,7 +39,6 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LocalPage.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MusicListPage.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MyFavorites.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SearchPage.xaml
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\WhiteNavigationView.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\RecentPage.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MusicLibraryPage.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\NowPlayingPage.xaml
@@ -58,7 +57,6 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LocalPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MusicListPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MyFavorites.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SearchPage.xbf
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\WhiteNavigationView.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\RecentPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MusicLibraryPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\NowPlayingPage.xbf
@@ -78,7 +76,6 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\LocalPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MusicListPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MyFavorites.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SearchPage.xbf
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\WhiteNavigationView.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\RecentPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MusicLibraryPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\NowPlayingPage.xbf
@@ -163,4 +160,14 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\ProjectArchitectures
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\.winmd_cache\$Microsoft.Graphics.Canvas.winmd_636340141040000000.json
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\.winmd_cache\$Microsoft.UI.Xaml.Markup.winmd_636758264200000000.json
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\.winmd_cache\$Robmikh.CompositionSurfaceFactory.winmd_636421080520000000.json
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LoadingControl.g.i.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LoadingControl.g.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LoadingControl.xaml
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LoadingControl.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\LoadingControl.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SMPlayer.csprojAssemblyReference.cache
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\AlternatingColorListView.g.i.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\AlternatingColorListView.g.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\AlternatingColorListView.xaml
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\AlternatingColorListView.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\AlternatingColorListView.xbf

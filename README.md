@@ -8,8 +8,4 @@ Cache AlbumsPage.
 
 Incorrect Back Logic of LocalPage.
 
-Main Page Set Music first.
-
 Mouse Hover Album.
-
-GridView Scrolling in LocalPage.

@@ -1,0 +1,34 @@
+﻿<UserControl
+    x:Class="SMPlayer.LoadingControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:SMPlayer"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    mc:Ignorable="d">
+
+    <controls:Loading x:Name="MainControl">
+        <controls:Loading.Background>
+            <SolidColorBrush Opacity="0.75" Color="Black" />
+        </controls:Loading.Background>
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <ProgressRing
+                x:Name="LoadingProgressRing"
+                Width="150"
+                Height="150"
+                Foreground="White"
+                IsActive="True"
+                Style="{StaticResource LoadProgressRingStyle}" />
+            <TextBlock
+                x:Name="LoadingTextBlock"
+                Margin="0,45,0,0"
+                HorizontalAlignment="Center"
+                FontSize="36"
+                Foreground="White"
+                Text="Loading..." />
+        </StackPanel>
+    </controls:Loading>
+</UserControl>

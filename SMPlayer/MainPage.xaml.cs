@@ -45,7 +45,8 @@ namespace SMPlayer
             {
                 if (MainFrame.CanGoBack) MainFrame.GoBack();
             };
-            MediaControl.AddMediaControlListener(this);
+            MediaControl.AddMediaControlListener(this as MediaControlListener);
+            SetMusic(Settings.settings.LastMusic);
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -103,6 +104,13 @@ namespace SMPlayer
             }
             foreach (var listener in MusicControlListeners.Values)
                 listener.MusicSet(music);
+        }
+
+        public void SetMusicAndPlay(Music music)
+        {
+            SetMusic(music);
+            MediaControl.SetMusic(music);
+            PlayMusic();
         }
 
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
@@ -376,6 +384,7 @@ namespace SMPlayer
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
+                if (current == null) return;
                 SetMusic(next);
                 Music after = new Music(current);
                 after.PlayCount += 1;

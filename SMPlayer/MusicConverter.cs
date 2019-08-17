@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMPlayer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -85,11 +86,11 @@ namespace SMPlayer
         }
     }
 
-    class DataGridRowColorConverter : Windows.UI.Xaml.Data.IValueConverter
+    class MusicVisibilityConverter : Windows.UI.Xaml.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.Equals(MediaControl.CurrentMusic) ? Windows.UI.Colors.Red : Windows.UI.Colors.Black;
+            return value.Equals(MediaControl.CurrentMusic.Name) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -116,6 +117,45 @@ namespace SMPlayer
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             return value is string && string.IsNullOrEmpty(value as string) ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
+
+    class ArtistAlbumInfoConverter : Windows.UI.Xaml.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value is List<AlbumView>)
+            {
+                var list = (List<AlbumView>)value;
+                int songs = 0;
+                foreach (var album in (List<AlbumView>)value)
+                    songs += album.Songs.Count;
+                return string.Format("Albums: {0}   Songs: {1}", list.Count, songs);
+            }
+            return "";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
+
+    class SongCountConverter : Windows.UI.Xaml.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value is List<Music>)
+            {
+                var list = (List<Music>)value;
+                return string.Format("Songs: {0}", list.Count);
+            }
+            return "";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

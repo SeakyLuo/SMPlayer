@@ -2,6 +2,7 @@
     x:Class="SMPlayer.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -102,106 +103,82 @@
         </Style>
     </Page.Resources>
 
-    <StackPanel>
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Settings" />
-        <Grid Margin="20,10,40,10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Style="{StaticResource SettingLabelStyle}" Text="Music Folder:" />
-            <AutoSuggestBox
-                x:Name="PathBox"
-                Grid.Column="1"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
-                PlaceholderText="The Root Folder of Your Music Library"
-                QuerySubmitted="PathBox_QuerySubmitted">
-                <AutoSuggestBox.QueryIcon>
-                    <FontIcon Glyph="&#xE838;" />
-                </AutoSuggestBox.QueryIcon>
-            </AutoSuggestBox>
-            <Popup
-                x:Name="UpdatePopup"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                VerticalOffset="200">
-                <Border
-                    Width="400"
-                    Height="200"
-                    Background="{ThemeResource SystemControlAcrylicElementBrush}"
-                    BorderBrush="{StaticResource ApplicationForegroundThemeBrush}"
-                    BorderThickness="1">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <ProgressRing
-                            x:Name="SettingsProgressRing"
-                            Margin="0,10,0,0"
-                            IsActive="True"
-                            Style="{StaticResource LoadProgressRingStyle}" />
-                        <TextBlock
-                            Margin="0,20,0,0"
-                            HorizontalAlignment="Center"
-                            FontSize="24"
-                            Text="Updating Your Music Library..." />
-                    </StackPanel>
-                </Border>
-            </Popup>
-            <TextBlock
-                Grid.Row="2"
-                Style="{StaticResource SettingLabelStyle}"
-                Text="Language:" />
-            <ComboBox
-                x:Name="LanguageComboBox"
-                Grid.Row="2"
-                Grid.Column="1"
-                VerticalAlignment="Center">
-                <ComboBoxItem Content="Follow System" IsSelected="True" />
-                <ComboBoxItem Content="Chinese" />
-                <ComboBoxItem Content="English" />
-            </ComboBox>
-            <TextBlock
-                Grid.Row="3"
-                Style="{StaticResource SettingLabelStyle}"
-                Text="Theme:" />
-            <Button
-                Grid.Row="3"
-                Grid.Column="1"
-                Width="30"
-                Height="30"
-                HorizontalAlignment="Left"
-                Background="{ThemeResource SystemColorHotlightColor}"
-                Style="{StaticResource SolidColorButton}">
-                <Button.Flyout>
-                    <Flyout>
-                        <StackPanel>
-                            <ColorPicker x:Name="ThemeColorPicker" Color="{ThemeResource SystemColorHotlightColor}" />
-                            <Grid Margin="0,20,0,10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Button
-                                    x:Name="ConfirmColorButton"
-                                    HorizontalAlignment="Center"
-                                    Content="Confirm" />
-                                <Button
-                                    x:Name="CancelColorButton"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Center"
-                                    Content="Cancel" />
-                            </Grid>
-                        </StackPanel>
-                    </Flyout>
-                </Button.Flyout>
-            </Button>
-
-
-        </Grid>
-    </StackPanel>
+    <Grid>
+        <StackPanel>
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Settings" />
+            <Grid Grid.Row="1" Margin="20,10,40,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Style="{StaticResource SettingLabelStyle}" Text="Music Folder:" />
+                <AutoSuggestBox
+                    x:Name="PathBox"
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    PlaceholderText="The Root Folder of Your Music Library"
+                    QuerySubmitted="PathBox_QuerySubmitted">
+                    <AutoSuggestBox.QueryIcon>
+                        <FontIcon Glyph="&#xE838;" />
+                    </AutoSuggestBox.QueryIcon>
+                </AutoSuggestBox>
+                <TextBlock
+                    Grid.Row="2"
+                    Style="{StaticResource SettingLabelStyle}"
+                    Text="Language:" />
+                <ComboBox
+                    x:Name="LanguageComboBox"
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    VerticalAlignment="Center">
+                    <ComboBoxItem Content="Follow System" IsSelected="True" />
+                    <ComboBoxItem Content="Chinese" />
+                    <ComboBoxItem Content="English" />
+                </ComboBox>
+                <TextBlock
+                    Grid.Row="3"
+                    Style="{StaticResource SettingLabelStyle}"
+                    Text="Theme:" />
+                <Button
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Width="30"
+                    Height="30"
+                    HorizontalAlignment="Left"
+                    Background="{ThemeResource SystemColorHotlightColor}"
+                    Style="{StaticResource SolidColorButton}">
+                    <Button.Flyout>
+                        <Flyout>
+                            <StackPanel>
+                                <ColorPicker x:Name="ThemeColorPicker" Color="{ThemeResource SystemColorHotlightColor}" />
+                                <Grid Margin="0,20,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Button
+                                        x:Name="ConfirmColorButton"
+                                        HorizontalAlignment="Center"
+                                        Content="Confirm" />
+                                    <Button
+                                        x:Name="CancelColorButton"
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Center"
+                                        Content="Cancel" />
+                                </Grid>
+                            </StackPanel>
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+            </Grid>
+        </StackPanel>
+        <local:LoadingControl x:Name="SettingsLoadingControl" Text="Updating Your Music Library..." />
+    </Grid>
 </Page>

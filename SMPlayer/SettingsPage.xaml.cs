@@ -40,7 +40,7 @@ namespace SMPlayer
             picker.FileTypeFilter.Add("*");
             StorageFolder folder = await picker.PickSingleFolderAsync();
             if (folder == null || folder.Path == Settings.settings.RootPath) return;
-            UpdatePopup.IsOpen = true;
+            SettingsLoadingControl.IsLoading = true;
             Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
             Settings.settings.RootPath = folder.Path;
             Settings.Save();
@@ -48,7 +48,7 @@ namespace SMPlayer
             foreach (var listener in listeners) listener.PathSet(folder.Path);
             await MediaControl.SetPlayList(MusicLibraryPage.AllSongs);
             PathBox.Text = folder.Path;
-            UpdatePopup.IsOpen = false;
+            SettingsLoadingControl.IsLoading = false;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

@@ -11,6 +11,13 @@
     Loaded="Page_Loaded"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <local:MusicDurationConverter x:Key="MusicDurationConverter" />
+        <local:MusicVisibilityConverter x:Key="MusicVisibilityConverter" />
+        <local:ArtistAlbumInfoConverter x:Key="ArtistAlbumInfoConverter" />
+        <local:SongCountConverter x:Key="SongCountConverter" />
+    </Page.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -26,12 +33,17 @@
             CompactModeThresholdWidth="720"
             ItemsSource="{x:Bind Artists}">
             <controls:MasterDetailsView.MasterHeader>
-                <ProgressRing
-                    x:Name="ArtistsProgressRing"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    IsActive="False"
-                    Visibility="Collapsed" />
+                <RelativePanel Margin="10,0,5,10">
+                    <TextBlock
+                        x:Name="ArtistsCountTextBlock"
+                        FontSize="16"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        Text="All Artists" />
+                    <ProgressRing
+                        x:Name="ArtistsProgressRing"
+                        IsActive="False"
+                        RelativePanel.AlignRightWithPanel="True" />
+                </RelativePanel>
             </controls:MasterDetailsView.MasterHeader>
             <controls:MasterDetailsView.ItemTemplate>
                 <DataTemplate x:DataType="data:ArtistView">
@@ -40,10 +52,11 @@
                             <Ellipse
                                 Width="36"
                                 Height="36"
-                                Fill="Gray" />
+                                Fill="DarkGray" />
                             <FontIcon Foreground="White" Glyph="&#xE8D4;" />
                         </Grid>
                         <TextBlock
+                            x:Name="ArtistNameTextBlock"
                             Margin="10"
                             Text="{x:Bind Name}"
                             TextAlignment="Start" />
@@ -57,60 +70,162 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <RelativePanel>
-                            <StackPanel Margin="15,10,0,10" RelativePanel.AlignLeftWithPanel="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <RelativePanel HorizontalAlignment="Stretch">
+                            <StackPanel
+                                Margin="20,10,0,20"
+                                VerticalAlignment="Center"
+                                RelativePanel.AlignLeftWithPanel="True">
                                 <TextBlock
-                                    Margin="0,0,0,5"
+                                    Margin="0,0,0,10"
                                     FontSize="24"
                                     FontWeight="Bold"
                                     Text="{x:Bind Name}" />
-                                <TextBlock FontSize="18" Text="Albums Songs" />
+                                <TextBlock
+                                    x:Name="ArtistInfoTextBlock"
+                                    FontSize="18"
+                                    Text="{x:Bind Albums, Converter={StaticResource ArtistAlbumInfoConverter}}" />
                             </StackPanel>
-                            <SymbolIcon
+                            <Grid
+                                Margin="36,12"
                                 VerticalAlignment="Center"
-                                Foreground="{ThemeResource SystemColorHighlightColor}"
-                                RelativePanel.AlignRightWithPanel="True"
-                                Symbol="More" />
+                                RelativePanel.AlignRightWithPanel="True">
+                                <Ellipse
+                                    Width="36"
+                                    Height="36"
+                                    Fill="{ThemeResource SystemColorHighlightColor}" />
+                                <SymbolIcon
+                                    VerticalAlignment="Center"
+                                    Foreground="{ThemeResource AppBarBackgroundThemeBrush}"
+                                    Symbol="More" />
+                            </Grid>
                             <Border
-                                Width="100"
+                                Width="1000"
                                 Height="1"
-                                BorderThickness="1"
+                                Margin="80,0,80,0"
+                                HorizontalAlignment="Stretch"
+                                BorderBrush="WhiteSmoke"
+                                BorderThickness="2"
                                 RelativePanel.AlignBottomWithPanel="True" />
                         </RelativePanel>
                         <ListView
                             Grid.Row="1"
+                            HorizontalAlignment="Stretch"
                             ItemsSource="{x:Bind Albums}"
                             SelectionMode="None">
                             <ListView.ItemTemplate>
                                 <DataTemplate x:DataType="data:AlbumView">
-                                    <Grid>
+                                    <Grid Margin="10,0,0,30">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
-                                        <StackPanel Orientation="Horizontal">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <RelativePanel>
                                             <controls:ImageEx
                                                 x:Name="AlbumCover"
-                                                Width="60"
-                                                Height="60"
+                                                Width="80"
+                                                Height="80"
                                                 Margin="10"
+                                                RelativePanel.AlignLeftWithPanel="True"
                                                 Source="{x:Bind Cover}" />
-                                            <TextBlock
-                                                VerticalAlignment="Center"
-                                                FontWeight="Bold"
-                                                Text="{x:Bind Name}" />
-                                        </StackPanel>
+                                            <StackPanel
+                                                Margin="0,10"
+                                                RelativePanel.LeftOf="AlbumMoreButton"
+                                                RelativePanel.RightOf="AlbumCover">
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    FontSize="18"
+                                                    FontWeight="Bold"
+                                                    Text="{x:Bind Name}" />
+                                                <TextBlock
+                                                    x:Name="SongCountTextBlock"
+                                                    Margin="0,10"
+                                                    Text="{x:Bind Songs, Converter={StaticResource SongCountConverter}}" />
+                                            </StackPanel>
+                                            <Button
+                                                x:Name="AlbumMoreButton"
+                                                Margin="0,40,25,0"
+                                                Background="Transparent"
+                                                Content="&#xE712;"
+                                                FontFamily="Segoe MDL2 Assets"
+                                                Foreground="{ThemeResource SystemColorHighlightColor}"
+                                                RelativePanel.AlignRightWithPanel="True">
+                                                <Button.Flyout>
+                                                    <MenuFlyout>
+                                                        <MenuFlyoutItem Icon="Add" Text="Add To Now Playing" />
+                                                    </MenuFlyout>
+                                                </Button.Flyout>
+                                            </Button>
+                                        </RelativePanel>
                                         <ListView
+                                            x:Name="SongsListView"
                                             Grid.Row="1"
+                                            HorizontalAlignment="Stretch"
+                                            ContainerContentChanging="SongsListView_ContainerContentChanging"
+                                            IsItemClickEnabled="True"
+                                            ItemClick="SongsListView_ItemClick"
                                             ItemsSource="{x:Bind Songs}"
                                             SelectionMode="Single">
-                                            <!--<ListView.ItemTemplate>
-                                            <DataTemplate x:DataType="data:Music">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="{x:Bind Name}" />
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>-->
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate x:DataType="local:Music">
+                                                    <Grid Margin="12,0,0,0">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Grid.ContextFlyout>
+                                                            <MenuFlyout>
+                                                                <MenuFlyoutItem
+                                                                    x:Name="PlayItem"
+                                                                    Click="PlayItem_Click"
+                                                                    Icon="Play"
+                                                                    Text="Play" />
+                                                                <MenuFlyoutSubItem
+                                                                    x:Name="AddToPlaylistsItem"
+                                                                    Icon="Add"
+                                                                    Text="Add To Playlists">
+                                                                    <MenuFlyoutItem Text="Create New Playlist" />
+                                                                    <MenuFlyoutSeparator />
+                                                                    <MenuFlyoutItem Icon="List" Text="My Favorites" />
+                                                                </MenuFlyoutSubItem>
+                                                                <MenuFlyoutItem
+                                                                    x:Name="DeleteItem"
+                                                                    Icon="Delete"
+                                                                    Text="Delete From Disk" />
+                                                                <MenuFlyoutItem
+                                                                    x:Name="MusicInfoItem"
+                                                                    Icon="MusicInfo"
+                                                                    Text="Music Info" />
+                                                            </MenuFlyout>
+                                                        </Grid.ContextFlyout>
+                                                        <StackPanel MaxWidth="720" Orientation="Horizontal">
+                                                            <FontIcon
+                                                                x:Name="PlayingIcon"
+                                                                Margin="0,0,16,0"
+                                                                FontFamily="Segoe MDL2 Assets"
+                                                                Foreground="{StaticResource SystemColorHighlightColor}"
+                                                                Glyph="&#xE767;"
+                                                                RelativePanel.AlignLeftWithPanel="True"
+                                                                Visibility="{Binding Name, Converter={StaticResource MusicVisibilityConverter}}" />
+                                                            <TextBlock
+                                                                x:Name="MusicNameTextBlcok"
+                                                                Grid.Column="1"
+                                                                Width="720"
+                                                                Text="{x:Bind Name}" />
+                                                        </StackPanel>
+                                                        <TextBlock
+                                                            Grid.Column="2"
+                                                            Margin="10,0,10,0"
+                                                            Text="{x:Bind Duration, Converter={StaticResource MusicDurationConverter}}" />
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
                                         </ListView>
                                     </Grid>
                                 </DataTemplate>
@@ -119,6 +234,19 @@
                     </Grid>
                 </DataTemplate>
             </controls:MasterDetailsView.DetailsTemplate>
+            <controls:MasterDetailsView.NoSelectionContent>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <SymbolIcon RenderTransformOrigin=".5,.5" Symbol="MusicInfo">
+                        <SymbolIcon.RenderTransform>
+                            <CompositeTransform ScaleX="2" ScaleY="2" />
+                        </SymbolIcon.RenderTransform>
+                    </SymbolIcon>
+                    <TextBlock
+                        Margin="0,24"
+                        FontSize="24"
+                        Text="Select an Artist" />
+                </StackPanel>
+            </controls:MasterDetailsView.NoSelectionContent>
         </controls:MasterDetailsView>
     </Grid>
 </Page>

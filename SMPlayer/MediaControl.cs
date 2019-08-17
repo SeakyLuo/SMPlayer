@@ -41,7 +41,7 @@ namespace SMPlayer
             PlayList.CurrentItemChanged += (sender, args) =>
             {
                 if (sender.CurrentItemIndex >= CurrentPlayList.Count) return;
-                Music current = new Music(CurrentMusic), next = CurrentPlayList[Convert.ToInt32(sender.CurrentItemIndex)];
+                Music current = CurrentMusic == null ? null : new Music(CurrentMusic), next = CurrentPlayList[Convert.ToInt32(sender.CurrentItemIndex)];
                 foreach (var listener in MediaControlListeners)
                     listener.MusicSwitching(current, next);
                 CurrentMusic = next;
@@ -152,18 +152,7 @@ namespace SMPlayer
             int index = CurrentPlayList.IndexOf(music);
             if (index == -1) return;
             Debug.WriteLine("MediaControl: " + music.Name);
-            do
-            {
-                try
-                {
-                    PlayList.MoveTo(Convert.ToUInt32(index));
-                    break;
-                }catch(Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                    continue;
-                }
-            } while (true);
+            PlayList.MoveTo(Convert.ToUInt32(index));
             //CurrentMusic = music;
         }
     }

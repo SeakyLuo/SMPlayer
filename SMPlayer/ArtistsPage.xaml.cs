@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -30,7 +31,7 @@ namespace SMPlayer
         public ArtistsPage()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            this.NavigationCacheMode = NavigationCacheMode.Required;
             SettingsPage.AddAfterPathSetListener(this);
         }
 
@@ -49,7 +50,6 @@ namespace SMPlayer
             }
             SetupStarted = true;
             ArtistsProgressRing.IsActive = true;
-            ArtistsProgressRing.Visibility = Visibility.Visible;
             Artists.Clear();
             List<ArtistView> artists = new List<ArtistView>();
             foreach (var group in MusicLibraryPage.AllSongs.GroupBy((m) => m.Artist))
@@ -70,8 +70,8 @@ namespace SMPlayer
                 artists.Add(new ArtistView(group.Key, albums));
             }
             foreach (var artist in artists.OrderBy((a) => a.Name)) Artists.Add(artist);
+            ArtistsCountTextBlock.Text = "All Artists: " + Artists.Count;
             if (Notified == 2) Notified = 1;
-            ArtistsProgressRing.Visibility = Visibility.Collapsed;
             ArtistsProgressRing.IsActive = false;
             SetupStarted = false;
         }
@@ -80,6 +80,23 @@ namespace SMPlayer
         {
             Notified = 2;
             Setup();
+        }
+
+        private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Music music = (Music)e.ClickedItem;
+            MainPage.Instance.SetMusicAndPlay(music);
+        }
+
+        private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        {
+            args.ItemContainer.Background = new SolidColorBrush(args.ItemIndex % 2 == 0 ? Colors.WhiteSmoke : Colors.White);
+        }
+
+        private void PlayItem_Click(object sender, RoutedEventArgs e)
+        {
+            Music music = (sender as MenuFlyoutItem).DataContext as Music;
+            MainPage.Instance.SetMusicAndPlay(music);
         }
     }
 }
