@@ -1,9 +1,11 @@
 ﻿using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Media;
 using Windows.Media.Core;
 using Windows.Media.Playback;
 using Windows.Storage;
@@ -15,19 +17,20 @@ namespace SMPlayer
     {
         public static Music CurrentMusic;
         public static List<Music> CurrentPlayList = new List<Music>();
+        public static double Position
+        {
+            get => Player.PlaybackSession.Position.TotalSeconds;
+            set => Player.PlaybackSession.Position = TimeSpan.FromSeconds(value);
+        }
 
         public static MediaPlayer Player = new MediaPlayer();
         public static MediaPlaybackList PlayList = new MediaPlaybackList();
-        private static int CurrentMusicIndex = -1;
-        private static DispatcherTimer Timer = new DispatcherTimer {  Interval = TimeSpan.FromSeconds(1) };
+        public static DispatcherTimer Timer = new DispatcherTimer {  Interval = TimeSpan.FromSeconds(1) };
         private static List<MediaControlListener> MediaControlListeners = new List<MediaControlListener>();
-        private static Random random = new Random();
-        private static List<int> RandomIndices = new List<int>();
-        private static int RandomIndex = 0;
-        private static bool ShuffleEnabled = false;
 
-        public async static void Init()
+        public async static Task Init()
         {
+            while (MusicLibraryPage.AllSongs == null) { }
             await SetPlayList(MusicLibraryPage.AllSongs);
             Timer.Tick += (sender, e) =>
             {
@@ -35,48 +38,24 @@ namespace SMPlayer
                     listener.Tick();
             };
             Player.Source = PlayList;
-            Player.MediaOpened += (sender, args) =>
+            PlayList.CurrentItemChanged += (sender, args) =>
             {
+                if (sender.CurrentItemIndex >= CurrentPlayList.Count) return;
+                Music current = new Music(CurrentMusic), next = CurrentPlayList[Convert.ToInt32(sender.CurrentItemIndex)];
                 foreach (var listener in MediaControlListeners)
-                    listener.MediaOpened();
+                    listener.MusicSwitching(current, next);
+                CurrentMusic = next;
             };
             Player.MediaEnded += (sender, args) =>
             {
-                Music before = new Music(CurrentMusic);
-                CurrentMusic.PlayCount += 1;
                 foreach (var listener in MediaControlListeners)
-                    listener.MediaEnded(before, CurrentMusic);
-                switch (Settings.settings.Mode)
-                {
-                    case PlayMode.Once:
-                        Player.Pause();
-                        Timer.Stop();
-                        break;
-                    case PlayMode.Repeat:
-                        NextMusic();
-                        break;
-                    case PlayMode.RepeatOne:
-                        break;
-                    case PlayMode.Shuffle:
-                        NextMusic();
-                        break;
-                    default:
-                        break;
-                }
+                    listener.MediaEnded();
             };
-            Player.MediaFailed += (sender, args) =>
-            {
-                foreach (var listener in MediaControlListeners)
-                    listener.MediaFailed(args);
-            };
-            for (int i = 0; i < CurrentPlayList.Count; i++)
-                RandomIndices.Add(i);
 
             Player.Volume = Settings.settings.Volume;
             SetMusic(Settings.settings.LastMusic);
             SetMode(Settings.settings.Mode);
         }
-
         public static void SetMode(PlayMode mode)
         {
             switch (mode)
@@ -94,13 +73,13 @@ namespace SMPlayer
                     PlayList.AutoRepeatEnabled = false;
                     break;
                 case PlayMode.Shuffle:
-                    PlayList.AutoRepeatEnabled = true;
                     Player.IsLoopingEnabled = false;
+                    PlayList.AutoRepeatEnabled = true;
                     break;
                 default:
                     break;
             }
-            SetShuffle(mode == PlayMode.Shuffle);
+            PlayList.ShuffleEnabled = mode == PlayMode.Shuffle;
             Settings.settings.Mode = mode;
         }
 
@@ -141,18 +120,8 @@ namespace SMPlayer
             }
             else
             {
-                if (ShuffleEnabled)
-                {
-                    RandomIndex = RandomIndex == 0 ? CurrentPlayList.Count - 1 : RandomIndex - 1;
-                    CurrentMusic = CurrentPlayList[RandomIndices[RandomIndex]];
-                    PlayList.MoveTo(Convert.ToUInt32(RandomIndices[RandomIndex]));
-                }
-                else
-                {
-                    CurrentMusicIndex = CurrentMusicIndex == 0 ? CurrentPlayList.Count - 1 : CurrentMusicIndex - 1;
-                    CurrentMusic = CurrentPlayList[CurrentMusicIndex];
-                    PlayList.MovePrevious();
-                }
+                PlayList.MovePrevious();
+                CurrentMusic = WaitForCurrentMusic();
             }
             return CurrentMusic;
         }
@@ -165,66 +134,44 @@ namespace SMPlayer
             }
             else
             {
-                if (ShuffleEnabled)
-                {
-                    RandomIndex = (RandomIndex + 1) % CurrentPlayList.Count;
-                    CurrentMusic = CurrentPlayList[RandomIndices[RandomIndex]];
-                    PlayList.MoveTo(Convert.ToUInt32(RandomIndices[RandomIndex]));
-                }
-                else
-                {
-                    CurrentMusicIndex = (CurrentMusicIndex + 1) % CurrentPlayList.Count;
-                    CurrentMusic = CurrentPlayList[CurrentMusicIndex];
-                    PlayList.MoveNext();
-                }
+                PlayList.MoveNext();
+                CurrentMusic = WaitForCurrentMusic();
             }
             return CurrentMusic;
         }
 
+        private static Music WaitForCurrentMusic()
+        {
+            while (PlayList.CurrentItem == null) { }
+            return CurrentPlayList[(int)PlayList.CurrentItemIndex];
+        }
+
         public static void SetMusic(Music music)
         {
+            if (music == null) return; 
             int index = CurrentPlayList.IndexOf(music);
             if (index == -1) return;
-            CurrentMusicIndex = index;
-            CurrentMusic = music;
-            PlayList.MoveTo(Convert.ToUInt32(index));
-            SetShuffle(ShuffleEnabled);
-        }
-
-        public static void SetPosition(double seconds)
-        {
-            Player.PlaybackSession.Position = TimeSpan.FromSeconds(seconds);
-        }
-
-        public static void SetShuffle(bool isShuffle)
-        {
-            ShuffleEnabled = isShuffle;
-            if (!isShuffle) return;
-            RandomIndex = 0;
-            Shuffle(RandomIndices);
-            RandomIndices.Remove(CurrentMusicIndex);
-            RandomIndices.Insert(0, CurrentMusicIndex);
-        }
-
-        private static void Shuffle<T>(List<T> list)
-        {
-            int n = list.Count;
-            while (n > 1)
+            Debug.WriteLine("MediaControl: " + music.Name);
+            do
             {
-                n--;
-                int k = random.Next(n + 1);
-                T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
-            }
+                try
+                {
+                    PlayList.MoveTo(Convert.ToUInt32(index));
+                    break;
+                }catch(Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    continue;
+                }
+            } while (true);
+            //CurrentMusic = music;
         }
     }
 
     public interface MediaControlListener
     {
         void Tick();
-        void MediaOpened();
-        void MediaEnded(Music before, Music after);
-        void MediaFailed(MediaPlayerFailedEventArgs args);
+        void MusicSwitching(Music current, Music next);
+        void MediaEnded();
     }
 }

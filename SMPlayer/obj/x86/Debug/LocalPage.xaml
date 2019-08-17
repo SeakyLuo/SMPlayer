@@ -11,42 +11,26 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <local:LargeThumbnailVisibilityConverter x:Key="LargeThumbnailVisibilityConverter" />
         <SolidColorBrush x:Key="NavigationViewTopPaneBackground" Color="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
-        <DataTemplate x:Key="GridMusicViewDataTemplate"                                >
-            <StackPanel x:ConnectionId='2' Margin="10">
-                <Image x:ConnectionId='3'
-                    Width="160"
-                    Height="160"
-                    Margin="10"
-                                                />
-                <TextBlock x:ConnectionId='4'
-                    FontSize="16"
-                    FontWeight="Bold"
-                    HorizontalTextAlignment="Left"
-                                         />
-                <TextBlock x:ConnectionId='5'
-                    FontSize="12"
-                    HorizontalTextAlignment="Left"
-                                           />
-            </StackPanel>
-        </DataTemplate>
+        <Style x:Key="TopNavigationViewFooterItemStyle" TargetType="NavigationViewItem">
+            <Setter Property="Margin" Value="0,0,5,0" />
+            <Setter Property="Padding" Value="0,0,15,0" />
+        </Style>
     </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBlock x:ConnectionId='6'
+        <TextBlock x:ConnectionId='2'
             x:Name="TitleTextBlock"
             Style="{StaticResource TitleTextBlockStyle}"
             Text="Folder Content" />
-        <NavigationView x:ConnectionId='7'
+        <NavigationView x:ConnectionId='3'
             x:Name="LocalNavigationView"
             Grid.Row="1"
                                                              
@@ -56,29 +40,35 @@
                                                          
             PaneDisplayMode="Top">
             <NavigationView.MenuItems>
-                <NavigationViewItem x:ConnectionId='8' x:Name="LocalFoldersItem" Content="Folders">
+                <NavigationViewItem x:ConnectionId='4' x:Name="LocalFoldersItem" Content="Folders">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8B7;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:ConnectionId='9'
+                <NavigationViewItem x:ConnectionId='5'
                     x:Name="LocalSongsItem"
                     Content="Songs"
                     Icon="MusicInfo" />
             </NavigationView.MenuItems>
             <NavigationView.PaneFooter>
                 <StackPanel Orientation="Horizontal">
-                    <NavigationViewItem x:ConnectionId='10'
+                    <NavigationViewItem x:ConnectionId='6'
+                        x:Name="LocalShuffleItem"
+                        Content="Shuffle All"
+                        Icon="Shuffle"
+                        Style="{StaticResource TopNavigationViewFooterItemStyle}"
+                                                         />
+                    <NavigationViewItem x:ConnectionId='7'
                         x:Name="LocalListViewItem"
-                        Margin="0,0,10,0"
                         Content="List View"
                         Icon="List"
+                        Style="{StaticResource TopNavigationViewFooterItemStyle}"
                                                          
                         Visibility="Visible" />
-                    <NavigationViewItem x:ConnectionId='11'
+                    <NavigationViewItem x:ConnectionId='8'
                         x:Name="LocalGridViewItem"
-                        Margin="0,0,10,0"
                         Content="Grid View"
+                        Style="{StaticResource TopNavigationViewFooterItemStyle}"
                                                          
                         Visibility="Collapsed">
                         <NavigationViewItem.Icon>
@@ -87,7 +77,7 @@
                     </NavigationViewItem>
                 </StackPanel>
             </NavigationView.PaneFooter>
-            <Frame x:ConnectionId='12' x:Name="LocalFrame" IsNavigationStackEnabled="True" />
+            <Frame x:ConnectionId='9' x:Name="LocalFrame" IsNavigationStackEnabled="True" />
         </NavigationView>
     </Grid>
 </Page>

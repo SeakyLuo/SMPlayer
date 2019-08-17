@@ -46,6 +46,7 @@ namespace SMPlayer
             Settings.Save();
             await Settings.SetTreeFolder(folder);
             foreach (var listener in listeners) listener.PathSet(folder.Path);
+            await MediaControl.SetPlayList(MusicLibraryPage.AllSongs);
             PathBox.Text = folder.Path;
             UpdatePopup.IsOpen = false;
         }

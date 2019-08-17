@@ -11,31 +11,15 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <local:LargeThumbnailVisibilityConverter x:Key="LargeThumbnailVisibilityConverter" />
         <SolidColorBrush x:Key="NavigationViewTopPaneBackground" Color="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
-        <DataTemplate x:Key="GridMusicViewDataTemplate" x:DataType="data:GridMusicView">
-            <StackPanel Margin="10">
-                <Image
-                    Width="160"
-                    Height="160"
-                    Margin="10"
-                    Source="{x:Bind Thumbnail}" />
-                <TextBlock
-                    FontSize="16"
-                    FontWeight="Bold"
-                    HorizontalTextAlignment="Left"
-                    Text="{x:Bind Name}" />
-                <TextBlock
-                    FontSize="12"
-                    HorizontalTextAlignment="Left"
-                    Text="{x:Bind Artist}" />
-            </StackPanel>
-        </DataTemplate>
+        <Style x:Key="TopNavigationViewFooterItemStyle" TargetType="NavigationViewItem">
+            <Setter Property="Margin" Value="0,0,5,0" />
+            <Setter Property="Padding" Value="0,0,15,0" />
+        </Style>
     </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -69,16 +53,22 @@
             <NavigationView.PaneFooter>
                 <StackPanel Orientation="Horizontal">
                     <NavigationViewItem
+                        x:Name="LocalShuffleItem"
+                        Content="Shuffle All"
+                        Icon="Shuffle"
+                        Style="{StaticResource TopNavigationViewFooterItemStyle}"
+                        Tapped="LocalShuffleItem_Tapped" />
+                    <NavigationViewItem
                         x:Name="LocalListViewItem"
-                        Margin="0,0,10,0"
                         Content="List View"
                         Icon="List"
+                        Style="{StaticResource TopNavigationViewFooterItemStyle}"
                         Tapped="LocalListViewItem_Tapped"
                         Visibility="Visible" />
                     <NavigationViewItem
                         x:Name="LocalGridViewItem"
-                        Margin="0,0,10,0"
                         Content="Grid View"
+                        Style="{StaticResource TopNavigationViewFooterItemStyle}"
                         Tapped="LocalGridViewItem_Tapped"
                         Visibility="Collapsed">
                         <NavigationViewItem.Icon>

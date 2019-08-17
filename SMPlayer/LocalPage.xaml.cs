@@ -117,6 +117,11 @@ namespace SMPlayer
             else
                 LocalFoldersItem.IsSelected = true;
         }
+
+        private void LocalShuffleItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+
+        }
     }
 
     public interface InfoSetter

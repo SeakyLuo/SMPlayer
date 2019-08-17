@@ -22,6 +22,7 @@ namespace SMPlayer
         public Music() { }
         public Music(Music obj)
         {
+            if (obj == null) return;
             Path = obj.Path;
             Name = obj.Name;
             Artist = obj.Artist;
