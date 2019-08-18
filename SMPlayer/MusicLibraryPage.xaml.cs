@@ -53,7 +53,7 @@ namespace SMPlayer
             }
         }
 
-        public static async void Init()
+        public static async System.Threading.Tasks.Task Init()
         {
             AllSongs = JsonFileHelper.Convert<List<Music>>(await JsonFileHelper.ReadAsync(FILENAME));
         }

@@ -8,6 +8,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -23,11 +24,12 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class ArtistsPage : Page, AfterPathSetListener
+    public sealed partial class ArtistsPage : Page, AfterPathSetListener, MediaControlListener
     {
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
         private bool SetupStarted = false;
         private int Notified = 0;
+        private ListViewItem prevItem;
         private SolidColorBrush WhiteBrush = new SolidColorBrush(Colors.White);
         private SolidColorBrush WhiteSmokeBrush = new SolidColorBrush(Colors.WhiteSmoke);
         private SolidColorBrush BlackBrush = new SolidColorBrush(Colors.Black);
@@ -36,7 +38,8 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
-            SettingsPage.AddAfterPathSetListener(this);
+            SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
+            MediaControl.AddMediaControlListener(this as MediaControlListener);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -89,8 +92,25 @@ namespace SMPlayer
         private async void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Music music = (Music)e.ClickedItem;
-            await MediaControl.SetPlayList((e.OriginalSource as ListView).ItemsSource as ObservableCollection<Music>);
+            //if (prevItem != null) SetColor(BlackBrush, Visibility.Collapsed);
+            ListView listView = (ListView)sender;
+            prevItem = (ListViewItem)listView.ContainerFromItem(music);
+            //SetColor(new SolidColorBrush((Color)Resources["SystemColorHighlightColor"]), Visibility.Visible);
+            await MediaControl.SetPlayList(listView.ItemsSource as ObservableCollection<Music>);
             MainPage.Instance.SetMusicAndPlay(music);
+        }
+
+        private void SetColor(Brush brush, Visibility visibility)
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(prevItem); i++)
+            {
+                var child = VisualTreeHelper.GetChild(prevItem, i);
+                if (child is TextBlock)
+                    (child as TextBlock).Foreground = brush;
+                else
+                    (child as ListViewItemPresenter).Visibility = visibility;
+            }
+
         }
 
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
@@ -104,6 +124,26 @@ namespace SMPlayer
             Music music = (sender as MenuFlyoutItem).DataContext as Music;
             await MediaControl.SetPlayList((e.OriginalSource as ListView).ItemsSource as List<Music>);
             MainPage.Instance.SetMusicAndPlay(music);
+        }
+
+        public void Tick()
+        {
+            return;
+        }
+
+        public async void MusicSwitching(Music current, Music next)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+            {
+                //var item = ArtistMasterDetailsView.Items.FirstOrDefault((a) => (a as ArtistView).Name == next.Artist);
+                //if (item == null) return;
+                //var container = ArtistMasterDetailsView.ContainerFromItem(item);
+            });
+        }
+
+        public void MediaEnded()
+        {
+            return;
         }
     }
 }

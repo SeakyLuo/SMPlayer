@@ -2,17 +2,13 @@
     x:Class="SMPlayer.LocalFoldersPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:SMPlayer.Models"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
-
-
-    <Page.Resources>
-        <local:LargeThumbnailVisibilityConverter x:Key="LargeThumbnailVisibilityConverter" />
-    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -51,32 +47,32 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Image
+                            <controls:ImageEx
                                 Grid.Row="0"
                                 Grid.Column="0"
-                                CacheMode="BitmapCache"
-                                Source="{x:Bind First}" />
-                            <Image
+                                Source="{x:Bind First}"
+                                Style="{StaticResource CachedImageStyle}" />
+                            <controls:ImageEx
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                CacheMode="BitmapCache"
-                                Source="{x:Bind Second}" />
-                            <Image
+                                Source="{x:Bind Second}"
+                                Style="{StaticResource CachedImageStyle}" />
+                            <controls:ImageEx
                                 Grid.Row="1"
                                 Grid.Column="0"
-                                CacheMode="BitmapCache"
-                                Source="{x:Bind Third}" />
-                            <Image
+                                Source="{x:Bind Third}"
+                                Style="{StaticResource CachedImageStyle}" />
+                            <controls:ImageEx
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                CacheMode="BitmapCache"
-                                Source="{x:Bind Fourth}" />
-                            <Image
+                                Source="{x:Bind Fourth}"
+                                Style="{StaticResource CachedImageStyle}" />
+                            <controls:ImageEx
                                 x:Name="LargeThumbnail"
                                 Grid.RowSpan="2"
                                 Grid.ColumnSpan="2"
-                                CacheMode="BitmapCache"
                                 Source="{x:Bind LargeThumbnail}"
+                                Style="{StaticResource CachedImageStyle}"
                                 Visibility="{Binding Converter={StaticResource LargeThumbnailVisibilityConverter}}" />
                         </Grid>
                         <TextBlock

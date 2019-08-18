@@ -31,7 +31,7 @@ namespace SMPlayer.Models
             IsNavigationCollapsed = true;
         }
 
-        public static async void Init()
+        public static async Task Init()
         {
             var json = await JsonFileHelper.ReadAsync(FILENAME);
             if (string.IsNullOrEmpty(json))

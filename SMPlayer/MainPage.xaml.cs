@@ -20,6 +20,9 @@ using Windows.UI.Core;
 using System.Diagnostics;
 using Windows.Media.Playback;
 using Windows.Media.Core;
+using Microsoft.Toolkit.Uwp.Notifications;
+using Windows.UI.Notifications;
+using Windows.ApplicationModel.Activation;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -385,6 +388,7 @@ namespace SMPlayer
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
                 if (current == null) return;
+                if (!Window.Current.Visible) ShowToast(next);
                 SetMusic(next);
                 Music after = new Music(current);
                 after.PlayCount += 1;
@@ -401,6 +405,71 @@ namespace SMPlayer
                 {
                     PlayButtonIcon.Glyph = "\uE768";
                     MediaSlider.Value = 0;
+                }
+            });
+        }
+
+        public void ShowToast(Music music)
+        {
+            var toastContent = new ToastContent()
+            {
+                Visual = new ToastVisual()
+                {
+                    BindingGeneric = new ToastBindingGeneric()
+                    {
+                        Children =
+                        {
+                            new AdaptiveText()
+                            {
+                                Text = string.IsNullOrEmpty(music.Artist) ?
+                                       string.IsNullOrEmpty(music.Album) ? music.Name : string.Format("{0} - {1}", music.Name, music.Album) :
+                                       string.Format("{0} - {1}", music.Name, string.IsNullOrEmpty(music.Artist) ? music.Album : music.Artist)
+                            },
+                            new AdaptiveProgressBar()
+                            {
+                                Value = new BindableProgressBarValue("MediaControl.Position"),
+                                ValueStringOverride = MusicDurationConverter.ToTime(music.Duration),
+                                Title = "Lyrics To Be Implemented",
+                                Status = MusicDurationConverter.ToTime(MediaControl.Position);
+                            }
+                        }
+                    }
+                },
+                Actions = new ToastActionsCustom()
+                {
+                    Buttons =
+                    {
+                        new ToastButton("Pause", "Pause"),
+                        new ToastButton("Next", "Next")
+                    },
+                },
+                Launch = "Launch",
+                Audio = Helper.SlientToast,
+            };
+
+            // Create the toast notification
+            var toast = new ToastNotification(toastContent.GetXml())
+            {
+                ExpirationTime = DateTime.Now.AddSeconds(music.Duration),
+            };
+            toast.Activated += Toast_Activated;
+            Helper.ShowToast(toast);
+        }
+
+        private async void Toast_Activated(ToastNotification sender, object args)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+            {
+                switch ((args as ToastActivatedEventArgs).Arguments)
+                {
+                    case "Next":
+                        MediaControl.NextMusic();
+                        break;
+                    case "Pause":
+                        PauseMusic();
+                        break;
+                    default:
+                        break;
                 }
             });
         }

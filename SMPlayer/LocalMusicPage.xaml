@@ -49,12 +49,12 @@
                             OffsetY="2"
                             ShadowOpacity="0"
                             Color="Gray">
-                            <Image
+                            <controls:ImageEx
                                 Width="100"
                                 Height="100"
                                 Margin="0,0,5,0"
-                                CacheMode="BitmapCache"
-                                Source="{x:Bind Thumbnail}" />
+                                Source="{x:Bind Thumbnail}"
+                                Style="{StaticResource CachedImageStyle}" />
                         </controls:DropShadowPanel>
                         <Grid Grid.Column="1">
                             <Grid.RowDefinitions>

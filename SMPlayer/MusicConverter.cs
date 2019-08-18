@@ -41,11 +41,16 @@ namespace SMPlayer
             minutes %= 60;
             hours %= 60;
             days %= 24;
-            string second = seconds < 60 ? seconds + "seconds" : "",
-                   minute = minutes == 0 ? "" : minutes + "minutes",
-                   hour = hours == 0 ? "" : hours + "hours",
-                   day = days == 0 ? "" : days+ "days";
+            string second = seconds < 60 || minutes < 6 ? string.Format("{0} {1}", seconds, TryPlural("second", seconds)) : "",
+                   minute = minutes == 0 ? "" : string.Format("{0} {1} ", minutes, TryPlural("minute", minutes)),
+                   hour = hours == 0 ? "" : string.Format("{0} {1} ", hours, TryPlural("hour", hours)),
+                   day = days == 0 ? "" : string.Format("{0} {1} ", days, TryPlural("day", days));
             return day + hour + minute + second;
+        }
+
+        public static string TryPlural(string str, int quantity)
+        {
+            return quantity == 1 ? str : str + 's';
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -129,13 +134,13 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is List<AlbumView>)
+            if (value is IEnumerable<AlbumView>)
             {
-                var list = (List<AlbumView>)value;
+                var list = (IEnumerable<AlbumView>)value;
                 int songs = 0;
-                foreach (var album in (List<AlbumView>)value)
+                foreach (var album in (IEnumerable<AlbumView>)value)
                     songs += album.Songs.Count;
-                return string.Format("Albums: {0}   Songs: {1}", list.Count, songs);
+                return string.Format("Albums: {0}   Songs: {1}", list.Count(), songs);
             }
             return "";
         }
@@ -150,10 +155,10 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is List<Music>)
+            if (value is IEnumerable<Music>)
             {
-                var list = (List<Music>)value;
-                return string.Format("Songs: {0}", list.Count);
+                var list = (IEnumerable<Music>)value;
+                return string.Format("Songs: {0}   {1}", list.Count(), MusicDurationConverter.ToTime(list));
             }
             return "";
         }

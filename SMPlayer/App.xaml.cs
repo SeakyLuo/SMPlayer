@@ -30,8 +30,6 @@ namespace SMPlayer
         /// </summary>
         public App()
         {
-            Settings.Init();
-            MusicLibraryPage.Init();
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
@@ -41,8 +39,11 @@ namespace SMPlayer
         /// 将在启动应用程序以打开特定文件等情况下使用。
         /// </summary>
         /// <param name="e">有关启动请求和过程的详细信息。</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
+            await Settings.Init();
+            await MusicLibraryPage.Init();
+
             Frame rootFrame = Window.Current.Content as Frame;
 
             // 不要在窗口已包含内容时重复应用程序初始化，

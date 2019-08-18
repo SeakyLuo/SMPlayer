@@ -31,6 +31,7 @@ namespace SMPlayer
         public LocalFoldersPage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

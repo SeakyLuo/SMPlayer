@@ -11,13 +11,6 @@
                         
     mc:Ignorable="d">
 
-    <Page.Resources>
-        <local:MusicDurationConverter x:Key="MusicDurationConverter" />
-        <local:MusicVisibilityConverter x:Key="MusicVisibilityConverter" />
-        <local:ArtistAlbumInfoConverter x:Key="ArtistAlbumInfoConverter" />
-        <local:SongCountConverter x:Key="SongCountConverter" />
-    </Page.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -28,6 +21,7 @@
             Style="{StaticResource TitleTextBlockStyle}"
             Text="Artists" />
         <controls:MasterDetailsView x:ConnectionId='3'
+            x:Name="ArtistMasterDetailsView"
             Grid.Row="1"
             BackButtonBehavior="Automatic"
             CompactModeThresholdWidth="720"
@@ -111,6 +105,7 @@
                                 RelativePanel.AlignBottomWithPanel="True" />
                         </RelativePanel>
                         <ListView x:ConnectionId='9'
+                            x:Name="AlbumsListView"
                             Grid.Row="1"
                             HorizontalAlignment="Stretch"
                                                          
@@ -132,7 +127,8 @@
                                                 Height="80"
                                                 Margin="10"
                                                 RelativePanel.AlignLeftWithPanel="True"
-                                                                        />
+                                                                       
+                                                Style="{StaticResource CachedImageStyle}" />
                                             <StackPanel
                                                 Margin="0,10"
                                                 RelativePanel.LeftOf="AlbumMoreButton"
@@ -206,7 +202,10 @@
                                                                     Text="Music Info" />
                                                             </MenuFlyout>
                                                         </Grid.ContextFlyout>
-                                                        <StackPanel MaxWidth="720" Orientation="Horizontal">
+                                                        <StackPanel
+                                                            x:Name="HeaderPanel"
+                                                            MaxWidth="720"
+                                                            Orientation="Horizontal">
                                                             <FontIcon
                                                                 x:Name="PlayingIcon"
                                                                 Margin="0,0,16,0"
@@ -225,6 +224,18 @@
                                                             Grid.Column="2"
                                                             Margin="10,0,10,0"
                                                                                                                                         />
+                                                        <VisualStateManager.VisualStateGroups>
+                                                            <VisualStateGroup x:Name="WidthChangeVisualStateGroup">
+                                                                <VisualState x:Name="Wide">
+                                                                    <VisualState.StateTriggers>
+                                                                        <AdaptiveTrigger MinWindowWidth="1200" />
+                                                                    </VisualState.StateTriggers>
+                                                                    <VisualState.Setters>
+                                                                        <Setter Target="HeaderPanel.MusicNameTextBlock.Width" Value="600" />
+                                                                    </VisualState.Setters>
+                                                                </VisualState>
+                                                            </VisualStateGroup>
+                                                        </VisualStateManager.VisualStateGroups>
                                                     </Grid>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>

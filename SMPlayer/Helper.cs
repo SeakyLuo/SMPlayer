@@ -1,4 +1,5 @@
-﻿using SMPlayer.Models;
+﻿using Microsoft.Toolkit.Uwp.Notifications;
+using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +13,7 @@ using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.Storage.Streams;
 using Windows.UI.Core;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -24,6 +26,8 @@ namespace SMPlayer
         public static BitmapImage DefaultAlbumCover = new BitmapImage(new Uri(DefaultAlbumCoverPath));
         public static string ThumbnailNotFoundPath = "ms-appx:///Assets/gray_music.png";
         public static BitmapImage ThumbnailNotFoundImage = new BitmapImage(new Uri(ThumbnailNotFoundPath));
+        public static ToastNotifier toastNotifier = ToastNotificationManager.CreateToastNotifier();
+        public static ToastAudio SlientToast = new ToastAudio() { Silent = true };
 
         public static async Task<BitmapImage> GetThumbnail(string path, bool withDefault = true)
         {
@@ -51,5 +55,17 @@ namespace SMPlayer
             var currentView = SystemNavigationManager.GetForCurrentView();
             currentView.AppViewBackButtonVisibility = visibility;
         }
+
+        public static void ShowToast(ToastNotification toast)
+        {
+            toastNotifier.Show(toast);
+        }
+
+        public static void UpdateToast()
+        {
+            toastNotifier.Update(null, null);
+        }
+
+
     }
 }

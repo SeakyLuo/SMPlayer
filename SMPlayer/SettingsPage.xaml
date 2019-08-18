@@ -111,6 +111,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -145,9 +146,22 @@
                 <TextBlock
                     Grid.Row="3"
                     Style="{StaticResource SettingLabelStyle}"
+                    Text="Notification: " />
+                <ComboBox
+                    x:Name="NotificationComboBox"
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    VerticalAlignment="Center">
+                    <ComboBoxItem Content="Always Shown" IsSelected="True" />
+                    <ComboBoxItem Content="Music Change" />
+                    <ComboBoxItem Content="Never" />
+                </ComboBox>
+                <TextBlock
+                    Grid.Row="4"
+                    Style="{StaticResource SettingLabelStyle}"
                     Text="Theme:" />
                 <Button
-                    Grid.Row="3"
+                    Grid.Row="4"
                     Grid.Column="1"
                     Width="30"
                     Height="30"
@@ -157,7 +171,7 @@
                     <Button.Flyout>
                         <Flyout>
                             <StackPanel>
-                                <ColorPicker x:Name="ThemeColorPicker" Color="{ThemeResource SystemColorHotlightColor}" />
+                                <ColorPicker x:Name="ThemeColorPicker" Color="{ThemeResource SystemColorHighlightColor}" />
                                 <Grid Margin="0,20,0,10">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />

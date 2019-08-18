@@ -90,9 +90,33 @@
       <RootProperty Name="Foreground" />
       <RootProperty Name="Style" />
     </RootType>
+    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.ImageEx">
+      <RootProperty Name="Width" />
+      <RootProperty Name="Height" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="Source" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="Visibility" />
+    </RootType>
+    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.ImageExBase">
+      <RootProperty Name="IsCacheEnabled" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.UIElement">
+      <RootProperty Name="CacheMode" />
+      <RootProperty Name="ContextFlyout" />
+      <RootProperty Name="ManipulationMode" />
+    </RootType>
+    <RootType FullName="SMPlayer.LargeThumbnailVisibilityConverter" />
+    <RootType FullName="SMPlayer.MusicDurationConverter" />
+    <RootType FullName="SMPlayer.MusicFavoriteConverter" />
+    <RootType FullName="SMPlayer.MusicPlayCountConverter" />
+    <RootType FullName="SMPlayer.MusicVisibilityConverter" />
+    <RootType FullName="SMPlayer.ArtistAlbumInfoConverter" />
+    <RootType FullName="SMPlayer.SongCountConverter" />
     <RootType FullName="Windows.UI.Xaml.Setter">
       <RootProperty Name="Property" />
       <RootProperty Name="Value" />
+      <RootProperty Name="Target" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.ResourceDictionary">
       <RootProperty Name="MergedDictionaries" />
@@ -162,11 +186,8 @@
     <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.StaticResourceExtension" />
     <RootType FullName="Windows.UI.Xaml.Controls.Image">
       <RootProperty Name="Source" />
-      <RootProperty Name="CacheMode" />
-      <RootProperty Name="Visibility" />
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
-      <RootProperty Name="Margin" />
       <RootProperty Name="Stretch" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.VisualStateGroup">
@@ -174,6 +195,8 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.VisualState">
       <RootProperty Name="Storyboard" />
+      <RootProperty Name="StateTriggers" />
+      <RootProperty Name="Setters" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.Animation.Storyboard">
       <RootProperty Name="Children" />
@@ -190,10 +213,6 @@
       <RootProperty Name="Value" />
     </RootType>
     <RootType FullName="SMPlayer.AlbumsPage" />
-    <RootType FullName="SMPlayer.MusicDurationConverter" />
-    <RootType FullName="SMPlayer.MusicVisibilityConverter" />
-    <RootType FullName="SMPlayer.ArtistAlbumInfoConverter" />
-    <RootType FullName="SMPlayer.SongCountConverter" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.MasterDetailsView">
       <RootProperty Name="BackButtonBehavior" />
       <RootProperty Name="CompactModeThresholdWidth" />
@@ -262,11 +281,8 @@
     <RootType FullName="Windows.UI.Xaml.Data.Binding">
       <RootProperty Name="Converter" />
     </RootType>
-    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.ImageEx">
-      <RootProperty Name="Width" />
-      <RootProperty Name="Height" />
-      <RootProperty Name="Margin" />
-      <RootProperty Name="Source" />
+    <RootType FullName="Windows.UI.Xaml.AdaptiveTrigger">
+      <RootProperty Name="MinWindowWidth" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Border">
       <RootProperty Name="Width" />
@@ -302,7 +318,6 @@
     <RootType FullName="SMPlayer.LoadingControl">
       <RootProperty Name="Text" />
     </RootType>
-    <RootType FullName="SMPlayer.LargeThumbnailVisibilityConverter" />
     <RootType FullName="SMPlayer.LocalFoldersPage" />
     <RootType FullName="SMPlayer.LocalMusicPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.NavigationViewItem">
@@ -337,8 +352,6 @@
     <RootType FullName="SMPlayer.MyFavorites" />
     <RootType FullName="SMPlayer.SearchPage" />
     <RootType FullName="SMPlayer.RecentPage" />
-    <RootType FullName="SMPlayer.MusicFavoriteConverter" />
-    <RootType FullName="SMPlayer.MusicPlayCountConverter" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGrid">
       <RootProperty Name="Margin" />
       <RootProperty Name="HorizontalAlignment" />
@@ -383,10 +396,6 @@
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGridCell" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGridRow" />
-    <RootType FullName="Windows.UI.Xaml.UIElement">
-      <RootProperty Name="ContextFlyout" />
-      <RootProperty Name="ManipulationMode" />
-    </RootType>
     <RootType FullName="SMPlayer.MusicLibraryPage" />
     <RootType FullName="SMPlayer.NowPlayingPage" />
     <RootType FullName="SMPlayer.PlaylistsPage" />

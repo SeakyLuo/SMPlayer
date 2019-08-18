@@ -10,12 +10,6 @@
     Loaded="Page_Loaded"
     mc:Ignorable="d">
 
-    <Page.Resources>
-        <local:MusicDurationConverter x:Key="MusicDurationConverter" />
-        <local:MusicFavoriteConverter x:Key="MusicFavoriteConverter" />
-        <local:MusicPlayCountConverter x:Key="MusicPlayCountConverter" />
-    </Page.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
