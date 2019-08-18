@@ -25,6 +25,172 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+            <Grid Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid
+                    Grid.Column="0"
+                    Margin="0"
+                    HorizontalAlignment="Left">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Image x:ConnectionId='17'
+                        x:Name="AlbumCover"
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="0"
+                        Width="100"
+                        Height="100"
+                        Source="Assets/music.png"
+                        Stretch="UniformToFill" />
+                    <TextBlock x:ConnectionId='18'
+                        x:Name="TitleTextBlock"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="10,0,5,5"
+                        VerticalAlignment="Bottom"
+                        FontSize="24"
+                        Text="Title" />
+                    <TextBlock x:ConnectionId='19'
+                        x:Name="ArtistTextBlock"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="10,5,5,0"
+                        VerticalAlignment="Top"
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Text="Artist" />
+                </Grid>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <Button x:ConnectionId='13'
+                            x:Name="PrevButton"
+                                                    
+                            Content="&#xE892;"
+                            Style="{StaticResource MediaControlButtonStyle}" />
+                        <Button x:ConnectionId='14'
+                            x:Name="PlayButton"
+                                                    
+                            Style="{StaticResource MediaControlButtonStyle}">
+                            <Button.Content>
+                                <FontIcon x:ConnectionId='16'
+                                    x:Name="PlayButtonIcon"
+                                    FontSize="30"
+                                    Glyph="&#xE768;" />
+                            </Button.Content>
+                            <Button.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="F3" />
+                            </Button.KeyboardAccelerators>
+                        </Button>
+                        <Button x:ConnectionId='15'
+                            x:Name="NextButton"
+                                                    
+                            Content="&#xE893;"
+                            Style="{StaticResource MediaControlButtonStyle}" />
+                    </StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:ConnectionId='10'
+                            x:Name="LeftTimeTextBlock"
+                            Margin="10,0,20,0"
+                            VerticalAlignment="Center"
+                            FontFamily="Segoe UI"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            Text="0:00" />
+                        <Slider x:ConnectionId='11'
+                            x:Name="MediaSlider"
+                            Grid.Column="1"
+                            IsThumbToolTipEnabled="True"
+                                                                                     
+                            ManipulationMode="All"
+                                                                                 
+                                                                                   
+                            Minimum="0"
+                            RelativePanel.LeftOf="RightTimeTextBlock"
+                            RelativePanel.RightOf="LeftTimeTextBlock"
+                            Style="{StaticResource MediaProgressSliderStyle}"
+                            ThumbToolTipValueConverter="{StaticResource MusicDurationConverter}"
+                                                                    />
+                        <TextBlock x:ConnectionId='12'
+                            x:Name="RightTimeTextBlock"
+                            Grid.Column="2"
+                            Margin="20,0,10,0"
+                            VerticalAlignment="Center"
+                            FontFamily="Segoe UI"
+                            RelativePanel.AlignRightWithPanel="True"
+                            Text="0:00" />
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="2"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center">
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <Button x:ConnectionId='6'
+                            x:Name="VolumeButton"
+                                                      
+                            Content="&#xE15D;"
+                            Style="{StaticResource MediaControlButtonStyle}" />
+                        <Slider x:ConnectionId='7'
+                            x:Name="VolumeSlider"
+                            Width="100"
+                            Margin="10,0,20,0"
+                            VerticalAlignment="Center"
+                            Maximum="100"
+                            Minimum="0"
+                                                                    
+                            Value="50" />
+                        <Button x:ConnectionId='8'
+                            x:Name="LikeButton"
+                                                    
+                            Style="{StaticResource MediaControlButtonStyle}">
+                            <Button.Content>
+                                <FontIcon x:ConnectionId='9' x:Name="LikeButtonIcon" Glyph="&#xEB51;" />
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <ToggleButton x:ConnectionId='3'
+                            x:Name="ShuffleButton"
+                                                       
+                            Content="&#xE8B1;"
+                            Style="{StaticResource MediaControlToggleButtonStyle}" />
+                        <ToggleButton x:ConnectionId='4'
+                            x:Name="RepeatButton"
+                                                      
+                            Content="&#xE8EE;"
+                            Style="{StaticResource MediaControlToggleButtonStyle}" />
+                        <ToggleButton x:ConnectionId='5'
+                            x:Name="RepeatOneButton"
+                                                         
+                            Content="&#xE8ED;"
+                            Style="{StaticResource MediaControlToggleButtonStyle}" />
+                        <Button Content="&#xE712;" Style="{StaticResource MediaControlButtonStyle}">
+                            <Button.Flyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutSubItem Icon="Add" Text="Add To Playlist" />
+                                    <MenuFlyoutItem Icon="Fullscreen" Text="Full Window" />
+                                    <MenuFlyoutItem Icon="MusicInfo" Text="Music Info" />
+                                </MenuFlyout>
+                            </Button.Flyout>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 </Page>
