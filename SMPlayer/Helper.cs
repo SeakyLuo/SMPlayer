@@ -29,6 +29,20 @@ namespace SMPlayer
         public static ToastNotifier toastNotifier = ToastNotificationManager.CreateToastNotifier();
         public static ToastAudio SlientToast = new ToastAudio() { Silent = true };
 
+        public static async Task<BitmapImage> GetThumbnail(Music music, bool withDefault = true)
+        {
+            StorageFile file;
+            try
+            {
+                file = await CurrentFolder.GetFileAsync(music.GetShortPath());
+                return await GetThumbnail(file, withDefault);
+            }
+            catch (FileNotFoundException)
+            {
+                return withDefault ? DefaultAlbumCover : null;
+            }
+        }
+
         public static async Task<BitmapImage> GetThumbnail(string path, bool withDefault = true)
         {
             return await GetThumbnail(await StorageFile.GetFileFromPathAsync(path), withDefault);

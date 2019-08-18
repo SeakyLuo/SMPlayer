@@ -38,7 +38,7 @@ namespace SMPlayer
             // This will return null when your current page is not a MainPage instance!
             get { return (Window.Current.Content as Frame).Content as MainPage; }
         }
-        private bool ShouldUpdate = true, SliderClicked = false;
+        private bool ShouldUpdate = true, SliderClicked = false, hasLoaded = false;
         private static Dictionary<string, MusicControlListener> MusicControlListeners = new Dictionary<string, MusicControlListener>();
 
         public MainPage()
@@ -48,12 +48,14 @@ namespace SMPlayer
             {
                 if (MainFrame.CanGoBack) MainFrame.GoBack();
             };
+            this.NavigationCacheMode = NavigationCacheMode.Required;
             MediaControl.AddMediaControlListener(this as MediaControlListener);
             SetMusic(Settings.settings.LastMusic);
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            if (hasLoaded) return;
             MusicLibraryItem.IsSelected = true;
             await MediaControl.Init();
             Settings settings = Settings.settings;
@@ -78,22 +80,13 @@ namespace SMPlayer
                 default:
                     break;
             }
+            hasLoaded = true;
         }
 
         public async void SetMusic(Music music)
         {
             if (music == null) return;
-            StorageFile file;
-            try
-            {
-                file = await Helper.CurrentFolder.GetFileAsync(music.GetShortPath());
-                Debug.WriteLine("MainPage: " + file.Name);
-            }
-            catch (FileNotFoundException)
-            {
-                return;
-            }
-            AlbumCover.Source = await Helper.GetThumbnail(file);
+            AlbumCover.Source = await Helper.GetThumbnail(music);
             TitleTextBlock.Text = music.Name;
             ArtistTextBlock.Text = music.Artist;
             MediaSlider.Maximum = music.Duration;
@@ -223,6 +216,7 @@ namespace SMPlayer
                         MainFrame.Navigate(typeof(ArtistsPage));
                         break;
                     case "NowPlayingItem":
+                        Frame.Navigate(typeof(NowPlayingPage));
                         break;
                     case "RecentItem":
                         MainFrame.Navigate(typeof(RecentPage));
@@ -420,7 +414,7 @@ namespace SMPlayer
                         Children =
                         {
                             new AdaptiveText()
-                            {
+                            { 
                                 Text = string.IsNullOrEmpty(music.Artist) ?
                                        string.IsNullOrEmpty(music.Album) ? music.Name : string.Format("{0} - {1}", music.Name, music.Album) :
                                        string.Format("{0} - {1}", music.Name, string.IsNullOrEmpty(music.Artist) ? music.Album : music.Artist)
@@ -430,7 +424,7 @@ namespace SMPlayer
                                 Value = new BindableProgressBarValue("MediaControl.Position"),
                                 ValueStringOverride = MusicDurationConverter.ToTime(music.Duration),
                                 Title = "Lyrics To Be Implemented",
-                                Status = MusicDurationConverter.ToTime(MediaControl.Position);
+                                Status = MusicDurationConverter.ToTime(MediaControl.Position)
                             }
                         }
                     }
