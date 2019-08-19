@@ -248,7 +248,7 @@
             </controls:MasterDetailsView.DetailsTemplate>
             <controls:MasterDetailsView.NoSelectionContent>
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <SymbolIcon RenderTransformOrigin=".5,.5" Symbol="MusicInfo">
+                    <SymbolIcon RenderTransformOrigin=".5,.5" Symbol="Audio">
                         <SymbolIcon.RenderTransform>
                             <CompositeTransform ScaleX="2" ScaleY="2" />
                         </SymbolIcon.RenderTransform>

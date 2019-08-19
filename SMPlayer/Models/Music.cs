@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using SMPlayer.Models;
+using Id3;
+using Windows.Media.Core;
 
 namespace SMPlayer
 {
@@ -19,6 +21,7 @@ namespace SMPlayer
         public int Duration { get; set; }
         public bool Favorite { get; set; }
         public int PlayCount { get; set; }
+        private bool IsMusicPlaying = false;
         public Music() { }
         public Music(Music obj)
         {
@@ -43,6 +46,16 @@ namespace SMPlayer
             PlayCount = 0;
         }
 
+        public void SetPlaying(bool IsPlaying) { IsMusicPlaying = IsPlaying; }
+        public bool IsPlaying() { return IsMusicPlaying;  }
+
+        public void Played()
+        {
+            PlayCount += 1;
+            IsMusicPlaying = false;
+        }
+
+
         public string GetShortPath()
         {
             return Path.Substring(Settings.settings.RootPath.Length + 1); // Plus one due to "/"
@@ -59,9 +72,18 @@ namespace SMPlayer
             return new Music(path, await GetMusicProperties(path));
         }
 
+        public string GetLyrics()
+        {
+            return "";
+            //using (var mp3 = new Mp3(Path)
+            //{
+            //    return mp3.GetTag(Id3TagFamily.Version2X).Lyrics.ToString();
+            //}
+        }
+
         int IComparable<Music>.CompareTo(Music other)
         {
-            return (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(other.Name)) ? 0 : Name.CompareTo(other.Name);
+            return string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(other.Name) ? 0 : Name.CompareTo(other.Name);
         }
 
         public override bool Equals(object obj)

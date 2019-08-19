@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Background;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -44,6 +45,11 @@ namespace SMPlayer
             await Settings.Init();
             await MusicLibraryPage.Init();
 
+            Window.Current.Closed += (sender, args) =>
+            {
+                Settings.Save();
+            };
+
             Frame rootFrame = Window.Current.Content as Frame;
 
             // 不要在窗口已包含内容时重复应用程序初始化，
@@ -76,6 +82,25 @@ namespace SMPlayer
                 // 确保当前窗口处于活动状态
                 Window.Current.Activate();
             }
+
+            // If background task is already registered, do nothing
+            if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals(Helper.ToastTaskName)))
+                return;
+
+            // Otherwise request access
+            BackgroundAccessStatus status = await BackgroundExecutionManager.RequestAccessAsync();
+
+            // Create the background task
+            BackgroundTaskBuilder builder = new BackgroundTaskBuilder()
+            {
+                Name = Helper.ToastTaskName
+            };
+
+            // Assign the toast action trigger
+            builder.SetTrigger(new ToastNotificationActionTrigger());
+
+            // And register the task
+            BackgroundTaskRegistration registration = builder.Register();
         }
 
         /// <summary>
@@ -99,6 +124,40 @@ namespace SMPlayer
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: 保存应用程序状态并停止任何后台活动
+            deferral.Complete();
+        }
+
+
+        protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
+        {
+            var deferral = args.TaskInstance.GetDeferral();
+
+            switch (args.TaskInstance.Task.Name)
+            {
+                case Helper.ToastTaskName:
+                    var details = args.TaskInstance.TriggerDetails as Windows.UI.Notifications.ToastNotificationActionTriggerDetail;
+                    if (details != null)
+                    {
+                        // Perform tasks
+                        switch (details.Argument)
+                        {
+                            case "Next":
+                                MediaHelper.NextMusic();
+                                break;
+                            case "Pause":
+                                if (Window.Current.Content is MainPage page)
+                                {
+                                    page.PauseMusic();
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                    break;
+            }
+
             deferral.Complete();
         }
     }

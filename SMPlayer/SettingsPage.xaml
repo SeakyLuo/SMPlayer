@@ -180,6 +180,7 @@
                                     <Button
                                         x:Name="ConfirmColorButton"
                                         HorizontalAlignment="Center"
+                                        Click="ConfirmColorButton_Click"
                                         Content="Confirm" />
                                     <Button
                                         x:Name="CancelColorButton"

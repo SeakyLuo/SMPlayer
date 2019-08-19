@@ -136,6 +136,7 @@
     <RootType FullName="SMPlayer.MusicPlayCountConverter" />
     <RootType FullName="SMPlayer.MusicVisibilityConverter" />
     <RootType FullName="SMPlayer.ArtistAlbumInfoConverter" />
+    <RootType FullName="SMPlayer.RowColorConverter" />
     <RootType FullName="SMPlayer.SongCountConverter" />
     <RootType FullName="Windows.UI.Xaml.Setter">
       <RootProperty Name="Property" />
@@ -492,13 +493,14 @@
     <RootType FullName="SMPlayer.MusicLibraryPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.CommandBar">
       <RootProperty Name="Background" />
-      <RootProperty Name="IsOpen" />
       <RootProperty Name="DefaultLabelPosition" />
+      <RootProperty Name="IsOpen" />
       <RootProperty Name="PrimaryCommands" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">
       <RootProperty Name="Icon" />
       <RootProperty Name="Label" />
+      <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="SMPlayer.NowPlayingPage" />
     <RootType FullName="SMPlayer.PlaylistsPage" />

@@ -33,7 +33,7 @@ namespace SMPlayer
         public NowPlayingPage()
         {
             this.InitializeComponent();
-
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -47,6 +47,24 @@ namespace SMPlayer
         }
 
         private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+
+        }
+        private void FullScreenButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+        private void NewListButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void LyricsButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MusicInfoButton_Click(object sender, RoutedEventArgs e)
         {
 
         }

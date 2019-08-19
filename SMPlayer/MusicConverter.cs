@@ -130,6 +130,19 @@ namespace SMPlayer
         }
     }
 
+    class RowColorConverter : Windows.UI.Xaml.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return value is Music && (value as Music).IsPlaying() ? Helper.GetHighlightBrush() : Helper.BlackBrush;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
+
     class ArtistAlbumInfoConverter : Windows.UI.Xaml.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

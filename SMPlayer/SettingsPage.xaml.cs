@@ -43,7 +43,6 @@ namespace SMPlayer
             SettingsLoadingControl.IsLoading = true;
             Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
             Settings.settings.RootPath = folder.Path;
-            Settings.Save();
             await Settings.SetTreeFolder(folder);
             foreach (var listener in listeners) listener.PathSet(folder.Path);
             await MediaHelper.SetPlayList(MusicLibraryPage.AllSongs);
@@ -60,6 +59,11 @@ namespace SMPlayer
         public static void AddAfterPathSetListener(AfterPathSetListener listener)
         {
             listeners.Add(listener);
+        }
+
+        private void ConfirmColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.ThemeColor = ThemeColorPicker.Color;
         }
     }
 

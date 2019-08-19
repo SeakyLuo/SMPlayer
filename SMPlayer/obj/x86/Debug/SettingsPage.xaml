@@ -180,6 +180,7 @@
                                     <Button x:ConnectionId='9'
                                         x:Name="ConfirmColorButton"
                                         HorizontalAlignment="Center"
+                                                                        
                                         Content="Confirm" />
                                     <Button x:ConnectionId='10'
                                         x:Name="CancelColorButton"

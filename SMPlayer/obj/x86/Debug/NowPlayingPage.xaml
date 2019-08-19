@@ -20,9 +20,31 @@
             x:Name="MusicLibraryTitleTextBlock"
             Style="{StaticResource TitleTextBlockStyle}"
             Text="Now Playing" />
-        <CommandBar Grid.Row="1" Background="Transparent" IsOpen="False" DefaultLabelPosition="Right">
-            <AppBarButton Icon="Add" Label="Add To a New List"/>
-            <AppBarButton Icon="FullScreen" Label="Full Screen" />
+        <CommandBar
+            Grid.Row="1"
+            Background="Transparent"
+            DefaultLabelPosition="Right"
+            IsOpen="False">
+            <AppBarButton x:ConnectionId='9'
+                x:Name="NewListButton"
+                                           
+                Icon="Add"
+                Label="Add To New Playlist" />
+            <AppBarButton x:ConnectionId='10'
+                x:Name="MusicInfoButton"
+                                             
+                Icon="MusicInfo"
+                Label="Show MusicInfo" />
+            <AppBarButton x:ConnectionId='11'
+                x:Name="LyricsButton"
+                                          
+                Icon="Comment"
+                Label="Show Lyrics" />
+            <AppBarButton x:ConnectionId='12'
+                x:Name="FullScreenButton"
+                                              
+                Icon="FullScreen"
+                Label="Full Screen" />
         </CommandBar>
         <ListView x:ConnectionId='3'
             x:Name="SongsListView"
@@ -34,7 +56,7 @@
                                         
             SelectionMode="Single">
             <ListView.ItemTemplate>
-                <DataTemplate                          >
+                <DataTemplate                         >
                     <Grid x:ConnectionId='4'>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*" />
@@ -43,6 +65,9 @@
                             <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
                         <TextBlock x:ConnectionId='5'                      />
+                        <TextBlock x:ConnectionId='6'                        />
+                        <TextBlock x:ConnectionId='7'                       />
+                        <TextBlock x:ConnectionId='8'                          />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

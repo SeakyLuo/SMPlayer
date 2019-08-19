@@ -20,9 +20,31 @@
             x:Name="MusicLibraryTitleTextBlock"
             Style="{StaticResource TitleTextBlockStyle}"
             Text="Now Playing" />
-        <CommandBar Grid.Row="1" Background="Transparent" IsOpen="False" DefaultLabelPosition="Right">
-            <AppBarButton Icon="Add" Label="Add To a New List"/>
-            <AppBarButton Icon="FullScreen" Label="Full Screen" />
+        <CommandBar
+            Grid.Row="1"
+            Background="Transparent"
+            DefaultLabelPosition="Right"
+            IsOpen="False">
+            <AppBarButton
+                x:Name="NewListButton"
+                Click="NewListButton_Click"
+                Icon="Add"
+                Label="Add To New Playlist" />
+            <AppBarButton
+                x:Name="MusicInfoButton"
+                Click="MusicInfoButton_Click"
+                Icon="MusicInfo"
+                Label="Show MusicInfo" />
+            <AppBarButton
+                x:Name="LyricsButton"
+                Click="LyricsButton_Click"
+                Icon="Comment"
+                Label="Show Lyrics" />
+            <AppBarButton
+                x:Name="FullScreenButton"
+                Click="FullScreenButton_Click"
+                Icon="FullScreen"
+                Label="Full Screen" />
         </CommandBar>
         <ListView
             x:Name="SongsListView"
@@ -34,7 +56,7 @@
             ItemsSource="{x:Bind Songs}"
             SelectionMode="Single">
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="local:Music" >
+                <DataTemplate x:DataType="local:Music">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*" />
@@ -43,6 +65,9 @@
                             <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{x:Bind Name}" />
+                        <TextBlock Text="{x:Bind Artist}" />
+                        <TextBlock Text="{x:Bind Album}" />
+                        <TextBlock Text="{x:Bind Duration}" />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

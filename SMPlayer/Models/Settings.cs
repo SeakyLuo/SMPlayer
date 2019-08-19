@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI;
 
 namespace SMPlayer.Models
 {
@@ -11,7 +12,7 @@ namespace SMPlayer.Models
     public class Settings
     {
         public static Settings settings;
-        private static readonly string FILENAME = "Settings.json";
+        private const string FILENAME = "Settings.json";
 
         public string RootPath { get; set; }
         public FolderTree Tree { get; set; }
@@ -20,6 +21,7 @@ namespace SMPlayer.Models
         public PlayMode Mode { get; set; }
         public double Volume { get; set; }
         public bool IsNavigationCollapsed { get; set; }
+        public Color ThemeColor { get; set; }
 
         public Settings()
         {
@@ -29,6 +31,7 @@ namespace SMPlayer.Models
             Mode = PlayMode.Once;
             Volume = 50.0d;
             IsNavigationCollapsed = true;
+            ThemeColor = (Color)Windows.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(typeof(Color), "#0078D7");
         }
 
         public static async Task Init()
@@ -55,7 +58,6 @@ namespace SMPlayer.Models
         public static async Task SetTreeFolder(StorageFolder folder)
         {
             await settings.Tree.Init(folder);
-            Save();
             AfterTreeSet(folder);
         }
 

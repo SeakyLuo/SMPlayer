@@ -26,14 +26,14 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class MusicLibraryPage : Page, MusicControlListener
     {
-        private static readonly string FILENAME = "MusicLibrary.json";
+        private const string FILENAME = "MusicLibrary.json";
         public static List<Music> AllSongs = new List<Music>();
 
         public MusicLibraryPage()
         {
             this.InitializeComponent();
-            //this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MainPage.AddMusicControlListener("MusicLibraryPage", this);
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            MainPage.AddMusicControlListener(this);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

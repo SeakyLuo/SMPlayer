@@ -39,7 +39,7 @@ namespace SMPlayer
             get { return (Window.Current.Content as Frame).Content as MainPage; }
         }
         private bool ShouldUpdate = true, SliderClicked = false, hasLoaded = false;
-        private static Dictionary<string, MusicControlListener> MusicControlListeners = new Dictionary<string, MusicControlListener>();
+        private static List<MusicControlListener> MusicControlListeners = new List<MusicControlListener>();
 
         public MainPage()
         {
@@ -93,12 +93,8 @@ namespace SMPlayer
             RightTimeTextBlock.Text = MusicDurationConverter.ToTime(music.Duration);
             if (music.Favorite) LikeMusic(false);
             else DislikeMusic(false);
-            if (Settings.settings.LastMusic != music)
-            {
-                Settings.settings.LastMusic = music;
-                Settings.Save();
-            }
-            foreach (var listener in MusicControlListeners.Values)
+            Settings.settings.LastMusic = music;
+            foreach (var listener in MusicControlListeners)
                 listener.MusicSet(music);
         }
 
@@ -300,16 +296,16 @@ namespace SMPlayer
             if (isClick) SetMusicFavorite(false);
         }
         
-        public static void AddMusicControlListener(string name, MusicControlListener listener)
+        public static void AddMusicControlListener(MusicControlListener listener)
         {
-            MusicControlListeners[name] = listener;
+            MusicControlListeners.Add(listener);
         }
 
         private void SetMusicFavorite(bool favorite)
         {
             Music before = new Music(MediaHelper.CurrentMusic);
             MediaHelper.CurrentMusic.Favorite = favorite;
-            foreach (var listener in MusicControlListeners.Values)
+            foreach (var listener in MusicControlListeners)
                 listener.MusicModified(before, MediaHelper.CurrentMusic);
         }
 
@@ -372,10 +368,11 @@ namespace SMPlayer
             {
                 MediaSlider.Value = MediaHelper.Position;
             }
+            if (!Window.Current.Visible) Helper.UpdateToast();
         }
         private void NotifyListeners(Music before, Music after)
         {
-            foreach (var listener in MusicControlListeners.Values)
+            foreach (var listener in MusicControlListeners)
                 listener.MusicModified(before, after);
         }
 
@@ -384,11 +381,12 @@ namespace SMPlayer
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
                 if (current == null) return;
-                if (!Window.Current.Visible) ShowToast(next);
+                next.SetPlaying(true);
+                if (!Window.Current.Visible) Helper.ShowToast(next);
                 SetMusic(next);
-                Music after = new Music(current);
-                after.PlayCount += 1;
-                NotifyListeners(current, after);
+                Music before = new Music(current);
+                current.Played();
+                NotifyListeners(before, current);
             });
         }
 
@@ -403,53 +401,6 @@ namespace SMPlayer
                     MediaSlider.Value = 0;
                 }
             });
-        }
-
-        public void ShowToast(Music music)
-        {
-            var toastContent = new ToastContent()
-            {
-                Visual = new ToastVisual()
-                {
-                    BindingGeneric = new ToastBindingGeneric()
-                    {
-                        Children =
-                        {
-                            new AdaptiveText()
-                            { 
-                                Text = string.IsNullOrEmpty(music.Artist) ?
-                                       string.IsNullOrEmpty(music.Album) ? music.Name : string.Format("{0} - {1}", music.Name, music.Album) :
-                                       string.Format("{0} - {1}", music.Name, string.IsNullOrEmpty(music.Artist) ? music.Album : music.Artist)
-                            },
-                            new AdaptiveProgressBar()
-                            {
-                                Value = new BindableProgressBarValue("MediaControl.Position"),
-                                ValueStringOverride = MusicDurationConverter.ToTime(music.Duration),
-                                Title = "Lyrics To Be Implemented",
-                                Status = MusicDurationConverter.ToTime(MediaHelper.Position)
-                            }
-                        }
-                    }
-                },
-                Actions = new ToastActionsCustom()
-                {
-                    Buttons =
-                    {
-                        new ToastButton("Pause", "Pause"),
-                        new ToastButton("Next", "Next")
-                    },
-                },
-                Launch = "Launch",
-                Audio = Helper.SlientToast,
-            };
-
-            // Create the toast notification
-            var toast = new ToastNotification(toastContent.GetXml())
-            {
-                ExpirationTime = DateTime.Now.AddSeconds(music.Duration),
-            };
-            toast.Activated += Toast_Activated;
-            Helper.ShowToast(toast);
         }
 
         private async void Toast_Activated(ToastNotification sender, object args)

@@ -30,9 +30,6 @@ namespace SMPlayer
         private bool SetupStarted = false;
         private int Notified = 0;
         private ListViewItem prevItem;
-        private SolidColorBrush WhiteBrush = new SolidColorBrush(Colors.White);
-        private SolidColorBrush WhiteSmokeBrush = new SolidColorBrush(Colors.WhiteSmoke);
-        private SolidColorBrush BlackBrush = new SolidColorBrush(Colors.Black);
 
         public ArtistsPage()
         {
@@ -112,8 +109,8 @@ namespace SMPlayer
 
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? WhiteSmokeBrush : WhiteBrush;
-            args.ItemContainer.Foreground = (Music)args.Item == MediaHelper.CurrentMusic ? new SolidColorBrush((Color)Resources["SystemColorHighlightColor"]) : BlackBrush;
+            args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? Helper.WhiteSmokeBrush : Helper.WhiteBrush;
+            args.ItemContainer.Foreground = (Music)args.Item == MediaHelper.CurrentMusic ? Helper.GetHighlightBrush() : Helper.BlackBrush;
         }
 
         private async void PlayItem_Click(object sender, RoutedEventArgs e)

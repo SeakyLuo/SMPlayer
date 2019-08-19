@@ -12,22 +12,40 @@ using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.Storage.Streams;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMPlayer
 {
     public static class Helper
     {
+        public const string ToastTaskName = "ToastBackgroundTask";
+        public const string DefaultAlbumCoverPath = "ms-appx:///Assets/music.png";
+        public const string ThumbnailNotFoundPath = "ms-appx:///Assets/gray_music.png";
+        public const string ToastTag = "SMPlayerMediaToastTag";
+        public const string ToastGroup = "SMPlayerMediaToastGroup";
+        public const string NoLyricsAvailable = "No Lyrics Available";
+
         public static StorageFolder CurrentFolder;
-        public static string DefaultAlbumCoverPath = "ms-appx:///Assets/music.png";
         public static BitmapImage DefaultAlbumCover = new BitmapImage(new Uri(DefaultAlbumCoverPath));
-        public static string ThumbnailNotFoundPath = "ms-appx:///Assets/gray_music.png";
         public static BitmapImage ThumbnailNotFoundImage = new BitmapImage(new Uri(ThumbnailNotFoundPath));
         public static ToastNotifier toastNotifier = ToastNotificationManager.CreateToastNotifier();
         public static ToastAudio SlientToast = new ToastAudio() { Silent = true };
+        public static SolidColorBrush WhiteBrush = new SolidColorBrush(Colors.White);
+        public static SolidColorBrush WhiteSmokeBrush = new SolidColorBrush(Colors.WhiteSmoke);
+        public static SolidColorBrush BlackBrush = new SolidColorBrush(Colors.Black);
+        private static string Lyrics = "";
+        public static SolidColorBrush GetHighlightBrush() { return new SolidColorBrush(Settings.settings.ThemeColor); }
+
+        public static string GetLyricByTime(double time)
+        {
+            if (string.IsNullOrEmpty(Lyrics)) return NoLyricsAvailable;
+            return "";
+        }
 
         public static async Task<BitmapImage> GetThumbnail(Music music, bool withDefault = true)
         {
@@ -66,20 +84,72 @@ namespace SMPlayer
         }
         public static void SetBackButtonVisibility(AppViewBackButtonVisibility visibility)
         {
-            var currentView = SystemNavigationManager.GetForCurrentView();
-            currentView.AppViewBackButtonVisibility = visibility;
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = visibility;
         }
-
-        public static void ShowToast(ToastNotification toast)
+        public static void ShowToast(Music music)
         {
+            var toastContent = new ToastContent()
+            {
+                Visual = new ToastVisual()
+                {
+                    BindingGeneric = new ToastBindingGeneric()
+                    {
+                        Children =
+                        {
+                            new AdaptiveText()
+                            {
+                                Text = string.IsNullOrEmpty(music.Artist) ?
+                                       string.IsNullOrEmpty(music.Album) ? music.Name : string.Format("{0} - {1}", music.Name, music.Album) :
+                                       string.Format("{0} - {1}", music.Name, string.IsNullOrEmpty(music.Artist) ? music.Album : music.Artist)
+                            },
+                            new AdaptiveProgressBar()
+                            {
+                                Value = new BindableProgressBarValue("MediaControlPosition"),
+                                ValueStringOverride = MusicDurationConverter.ToTime(music.Duration),
+                                Title = new BindableString("Lyrics"),
+                                Status = new BindableString("MediaControlPositionTime")
+                            }
+                        }
+                    }
+                },
+                Actions = new ToastActionsCustom()
+                {
+                    Buttons =
+                    {
+                        new ToastButton("Pause", "Pause"),
+                        new ToastButton("Next", "Next")
+                    },
+                },
+                Launch = "Launch",
+                Audio = SlientToast,
+                Scenario = ToastScenario.Reminder
+            };
+
+            // Create the toast notification
+            var toast = new ToastNotification(toastContent.GetXml())
+            {
+                ExpirationTime = DateTime.Now.AddSeconds(music.Duration),
+                Tag = ToastTag,
+                Group = ToastGroup,
+                Data = new NotificationData() { SequenceNumber = 0 }
+            };
+            toast.Data.Values["MediaControlPosition"] = "0";
+            toast.Data.Values["MediaControlPositionTime"] = "0:00";
+            toast.Data.Values["Lyrics"] = string.IsNullOrEmpty(Lyrics = music.GetLyrics()) ? NoLyricsAvailable : "" ;
+
             toastNotifier.Show(toast);
         }
-
         public static void UpdateToast()
         {
-            toastNotifier.Update(null, null);
+            // Create NotificationData and make sure the sequence number is incremented
+            // since last update, or assign 0 for updating regardless of order
+            var data = new NotificationData { SequenceNumber = 0 };
+            data.Values["MediaControlPosition"] = (MediaHelper.Position / 100).ToString();
+            data.Values["MediaControlPositionTime"] = MusicDurationConverter.ToTime(MediaHelper.Position);
+            data.Values["Lyrics"] = GetLyricByTime(MediaHelper.Position);
+
+            // Update the existing notification's data by using tag/group
+            toastNotifier.Update(data, ToastTag, ToastGroup);
         }
-
-
     }
 }
