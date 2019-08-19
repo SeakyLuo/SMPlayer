@@ -46,10 +46,10 @@ namespace SMPlayer
             this.InitializeComponent();
             SystemNavigationManager.GetForCurrentView().BackRequested += (s, e) =>
             {
-                if (MainFrame.CanGoBack) MainFrame.GoBack();
+                if (NaviFrame.CanGoBack) NaviFrame.GoBack();
             };
             this.NavigationCacheMode = NavigationCacheMode.Required;
-            MediaControl.AddMediaControlListener(this as MediaControlListener);
+            MediaHelper.AddMediaControlListener(this as MediaControlListener);
             SetMusic(Settings.settings.LastMusic);
         }
 
@@ -57,7 +57,7 @@ namespace SMPlayer
         {
             if (hasLoaded) return;
             MusicLibraryItem.IsSelected = true;
-            await MediaControl.Init();
+            await MediaHelper.Init();
             Settings settings = Settings.settings;
             if (!string.IsNullOrEmpty(settings.RootPath))
                 Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
@@ -105,7 +105,7 @@ namespace SMPlayer
         public void SetMusicAndPlay(Music music)
         {
             SetMusic(music);
-            MediaControl.SetMusic(music);
+            MediaHelper.SetMusic(music);
             PlayMusic();
         }
 
@@ -113,39 +113,39 @@ namespace SMPlayer
         {
             RepeatButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            MediaControl.SetMode((bool)ShuffleButton.IsChecked ? PlayMode.Shuffle : PlayMode.Once);
+            MediaHelper.SetMode((bool)ShuffleButton.IsChecked ? PlayMode.Shuffle : PlayMode.Once);
         }
 
         private void RepeatButton_Click(object sender, RoutedEventArgs e)
         {
             ShuffleButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            MediaControl.SetMode((bool)RepeatButton.IsChecked ? PlayMode.Repeat : PlayMode.Once);
+            MediaHelper.SetMode((bool)RepeatButton.IsChecked ? PlayMode.Repeat : PlayMode.Once);
         }
 
         private void RepeatOneButton_Click(object sender, RoutedEventArgs e)
         {
             ShuffleButton.IsChecked = false;
             RepeatButton.IsChecked = false;
-            MediaControl.SetMode((bool)RepeatOneButton.IsChecked ? PlayMode.RepeatOne : PlayMode.Once);
+            MediaHelper.SetMode((bool)RepeatOneButton.IsChecked ? PlayMode.RepeatOne : PlayMode.Once);
         }
 
         public void PlayMusic()
         {
-            if (MediaControl.CurrentMusic == null)
+            if (MediaHelper.CurrentMusic == null)
             {
                 if (MusicLibraryPage.AllSongs.Count == 0) return;
-                MediaControl.SetMusic(MediaControl.CurrentPlayList[0]);
+                MediaHelper.SetMusic(MediaHelper.CurrentPlayList[0]);
             }
             PlayButtonIcon.Glyph = "\uE769";
-            MediaControl.Play();
+            MediaHelper.Play();
         }
 
         public void PauseMusic()
         {
-            if (MediaControl.CurrentMusic == null) return;
+            if (MediaHelper.CurrentMusic == null) return;
             PlayButtonIcon.Glyph = "\uE768";
-            MediaControl.Pause();
+            MediaHelper.Pause();
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
@@ -158,12 +158,12 @@ namespace SMPlayer
         {
             if (VolumeButton.Content.ToString() == "\uE74F")
             {
-                MediaControl.Player.IsMuted = false;
+                MediaHelper.Player.IsMuted = false;
                 VolumeButton.Content = GetVolumeIcon(VolumeSlider.Value);
             }
             else
             {
-                MediaControl.Player.IsMuted = true;
+                MediaHelper.Player.IsMuted = true;
                 VolumeButton.Content = "\uE74F";
             }
         }
@@ -189,13 +189,13 @@ namespace SMPlayer
         {
             if (NaviSearchBar.Text.Length > 0)
             {
-                MainFrame.Navigate(typeof(SearchPage));
+                NaviFrame.Navigate(typeof(SearchPage));
                 Helper.SetBackButtonVisibility(AppViewBackButtonVisibility.Visible);
             }
         }
         private void MainNavigationView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
-            if (args.IsSettingsInvoked) MainFrame.Navigate(typeof(SettingsPage));
+            if (args.IsSettingsInvoked) NaviFrame.Navigate(typeof(SettingsPage));
             else
             {
                 var item = (NavigationViewItem)MainNavigationView.SelectedItem;
@@ -207,39 +207,38 @@ namespace SMPlayer
                         NaviSearchBar.Focus(FocusState.Programmatic);
                         break;
                     case "MusicLibraryItem":
-                        MainFrame.Navigate(typeof(MusicLibraryPage));
+                        NaviFrame.Navigate(typeof(MusicLibraryPage));
                         break;
                     case "AlbumsItem":
-                        MainFrame.Navigate(typeof(AlbumsPage));
+                        NaviFrame.Navigate(typeof(AlbumsPage));
                         break;
                     case "ArtistsItem":
-                        MainFrame.Navigate(typeof(ArtistsPage));
+                        NaviFrame.Navigate(typeof(ArtistsPage));
                         break;
                     case "NowPlayingItem":
-                        Frame.Navigate(typeof(NowPlayingPage));
+                        NaviFrame.Navigate(typeof(NowPlayingPage));
                         break;
                     case "RecentItem":
-                        MainFrame.Navigate(typeof(RecentPage));
+                        NaviFrame.Navigate(typeof(RecentPage));
                         break;
                     case "LocalItem":
-                        MainFrame.Navigate(typeof(LocalPage));
+                        NaviFrame.Navigate(typeof(LocalPage));
                         break;
                     case "PlaylistsItem":
-                        MainFrame.Navigate(typeof(PlaylistsPage));
+                        NaviFrame.Navigate(typeof(PlaylistsPage));
                         break;
                     case "MyFavoritesItem":
-                        MainFrame.Navigate(typeof(MyFavorites));
+                        NaviFrame.Navigate(typeof(MyFavorites));
                         break;
                     default:
                         return;
                 }
             }
         }
-        private void MainFrame_Navigated(object sender, NavigationEventArgs e)
+        private void NaviFrame_Navigated(object sender, NavigationEventArgs e)
         {
-            Helper.SetBackButtonVisibility(MainFrame.CanGoBack ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed);
-            // need to cancel NowPlaying
-            switch (MainFrame.CurrentSourcePageType.Name)
+            Helper.SetBackButtonVisibility(NaviFrame.CanGoBack ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed);
+            switch (NaviFrame.CurrentSourcePageType.Name)
             {
                 case "MusicLibraryPage":
                     MainNavigationView.SelectedItem = MusicLibraryItem;
@@ -249,6 +248,9 @@ namespace SMPlayer
                     break;
                 case "AlbumsPage":
                     MainNavigationView.SelectedItem = AlbumsItem;
+                    break;
+                case "NowPlayingPage":
+                    MainNavigationView.SelectedItem = NowPlayingItem;
                     break;
                 case "RecentPage":
                     MainNavigationView.SelectedItem = RecentItem;
@@ -277,9 +279,9 @@ namespace SMPlayer
 
         private void VolumeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            MediaControl.Player.IsMuted = false;
+            MediaHelper.Player.IsMuted = false;
             double volume = e.NewValue / 100;
-            MediaControl.Player.Volume = volume;
+            MediaHelper.Player.Volume = volume;
             Settings.settings.Volume = volume;
             VolumeButton.Content = GetVolumeIcon(e.NewValue);            
         }
@@ -305,10 +307,10 @@ namespace SMPlayer
 
         private void SetMusicFavorite(bool favorite)
         {
-            Music before = new Music(MediaControl.CurrentMusic);
-            MediaControl.CurrentMusic.Favorite = favorite;
+            Music before = new Music(MediaHelper.CurrentMusic);
+            MediaHelper.CurrentMusic.Favorite = favorite;
             foreach (var listener in MusicControlListeners.Values)
-                listener.MusicModified(before, MediaControl.CurrentMusic);
+                listener.MusicModified(before, MediaHelper.CurrentMusic);
         }
 
         private void LikeButton_Click(object sender, RoutedEventArgs e)
@@ -322,22 +324,22 @@ namespace SMPlayer
             if (MediaSlider.Value > 5)
             {
                 MediaSlider.Value = 0;
-                MediaControl.Position = 0;
+                MediaHelper.Position = 0;
             }
             else
             {
-                MediaControl.PrevMusic();
+                MediaHelper.PrevMusic();
             }
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
-            MediaControl.NextMusic();
+            MediaHelper.NextMusic();
         }
 
         private void MediaSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            int newValue = (int)MediaSlider.Value, diff = newValue - (int)MediaControl.Position;
+            int newValue = (int)MediaSlider.Value, diff = newValue - (int)MediaHelper.Position;
             SliderClicked = diff != 1 && diff != 0;
             Debug.WriteLine("ValueChanged To " + MusicDurationConverter.ToTime(newValue));
             LeftTimeTextBlock.Text = MusicDurationConverter.ToTime(newValue);
@@ -345,7 +347,7 @@ namespace SMPlayer
 
         private void MediaSlider_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
         {
-            MediaControl.Position = MediaSlider.Value;
+            MediaHelper.Position = MediaSlider.Value;
             ShouldUpdate = true;
             Debug.WriteLine("Completed");
         }
@@ -360,7 +362,7 @@ namespace SMPlayer
             Debug.WriteLine("Starting");
             if (SliderClicked)
             {
-                MediaControl.Position = MediaSlider.Value;
+                MediaHelper.Position = MediaSlider.Value;
             }
         }
 
@@ -368,7 +370,7 @@ namespace SMPlayer
         {
             if (ShouldUpdate)
             {
-                MediaSlider.Value = MediaControl.Position;
+                MediaSlider.Value = MediaHelper.Position;
             }
         }
         private void NotifyListeners(Music before, Music after)
@@ -394,7 +396,7 @@ namespace SMPlayer
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
-                MediaControl.Timer.Stop();
+                MediaHelper.Timer.Stop();
                 if (Settings.settings.Mode == PlayMode.Once)
                 {
                     PlayButtonIcon.Glyph = "\uE768";
@@ -424,7 +426,7 @@ namespace SMPlayer
                                 Value = new BindableProgressBarValue("MediaControl.Position"),
                                 ValueStringOverride = MusicDurationConverter.ToTime(music.Duration),
                                 Title = "Lyrics To Be Implemented",
-                                Status = MusicDurationConverter.ToTime(MediaControl.Position)
+                                Status = MusicDurationConverter.ToTime(MediaHelper.Position)
                             }
                         }
                     }
@@ -457,7 +459,7 @@ namespace SMPlayer
                 switch ((args as ToastActivatedEventArgs).Arguments)
                 {
                     case "Next":
-                        MediaControl.NextMusic();
+                        MediaHelper.NextMusic();
                         break;
                     case "Pause":
                         PauseMusic();

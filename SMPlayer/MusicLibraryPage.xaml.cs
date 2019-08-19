@@ -70,7 +70,7 @@ namespace SMPlayer
         private void PlayItem_Click(object sender, RoutedEventArgs e)
         {
             var music = (sender as MenuFlyoutItem).DataContext as Music;
-            MediaControl.SetMusic(music);
+            MediaHelper.SetMusic(music);
             MainPage.Instance.SetMusic(music);
         }
 

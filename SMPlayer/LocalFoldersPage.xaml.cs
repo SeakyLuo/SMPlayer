@@ -26,50 +26,40 @@ namespace SMPlayer
     {
         private ObservableCollection<GridFolderView> GridItems = new ObservableCollection<GridFolderView>();
         private FolderTree Tree;
-        public static InfoSetter infoSetter;
+        public static LocalSetter setter;
         
         public LocalFoldersPage()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Required;
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.Parameter is InfoSetter)
-            {
-                infoSetter = (InfoSetter)e.Parameter;
-                Setup(Settings.settings.Tree, false);
-            }
-            else if (e.Parameter is FolderTree)
-            {
-                Setup(e.Parameter as FolderTree, true);
-            }
+            Setup((FolderTree)e.Parameter);
             base.OnNavigatedTo(e);
         }
 
         private void LocalFoldersGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var folderView = (GridFolderView)e.ClickedItem;
-            var tree = Tree.Trees[GridItems.IndexOf(folderView)];
-            Frame.Navigate(tree.Files.Count > tree.Trees.Count ? typeof(LocalMusicPage) : typeof(LocalFoldersPage), tree);
+            setter.SetPage(Tree.Trees[GridItems.IndexOf(folderView)]);
         }
 
-        private async void Setup(FolderTree tree, bool redirect)
+        private async void Setup(FolderTree tree)
         {
+            if (Tree == tree) return;
             Tree = tree;
-            LocalProgressRing.IsActive = true;
-            LocalProgressRing.Visibility = Visibility.Visible;
+            LocalLoadingControl.Visibility = Visibility.Visible;
             GridItems.Clear();
-            infoSetter.SetInfo(tree, redirect);
+            setter.SetPage(tree);
             foreach (var branch in tree.Trees)
             {
                 GridFolderView gridItem = new GridFolderView();
                 await gridItem.Init(branch);
                 GridItems.Add(gridItem);
             }
-            LocalProgressRing.Visibility = Visibility.Collapsed;
-            LocalProgressRing.IsActive = false;
+            LocalLoadingControl.Visibility = Visibility.Collapsed;
         }
     }
 }

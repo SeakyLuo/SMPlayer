@@ -137,11 +137,17 @@
       <DependentUpon>LocalPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helper.cs" />
-    <Compile Include="MediaControl.cs" />
+    <Compile Include="MediaControl.xaml.cs">
+      <DependentUpon>MediaControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MediaHelper.cs" />
     <Compile Include="Models\ArtistView.cs" />
     <Compile Include="Models\AlbumView.cs" />
     <Compile Include="Models\GridFolderView.cs" />
     <Compile Include="Models\GridMusicView.cs" />
+    <Compile Include="NowPlayingFullPage.xaml.cs">
+      <DependentUpon>NowPlayingFullPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RecentPage.xaml.cs">
       <DependentUpon>RecentPage.xaml</DependentUpon>
     </Compile>
@@ -223,11 +229,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MediaControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MusicListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MyFavorites.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NowPlayingFullPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

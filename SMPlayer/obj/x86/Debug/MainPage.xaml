@@ -133,7 +133,7 @@
                 </NavigationViewItem>
             </NavigationView.MenuItems>
             <Frame x:ConnectionId='31'
-                x:Name="MainFrame"
+                x:Name="NaviFrame"
                 IsNavigationStackEnabled="True"
                                                 />
         </NavigationView>

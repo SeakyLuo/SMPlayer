@@ -41,7 +41,7 @@ namespace SMPlayer
             minutes %= 60;
             hours %= 60;
             days %= 24;
-            string second = seconds < 60 || minutes < 6 ? string.Format("{0} {1}", seconds, TryPlural("second", seconds)) : "",
+            string second = seconds < 60 || minutes < 6 ? string.Format("{0} {1}", seconds, TryPlural("second", seconds % 60)) : "",
                    minute = minutes == 0 ? "" : string.Format("{0} {1} ", minutes, TryPlural("minute", minutes)),
                    hour = hours == 0 ? "" : string.Format("{0} {1} ", hours, TryPlural("hour", hours)),
                    day = days == 0 ? "" : string.Format("{0} {1} ", days, TryPlural("day", days));
@@ -95,7 +95,7 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.Equals(MediaControl.CurrentMusic.Name) ? Visibility.Visible : Visibility.Collapsed;
+            return value.Equals(MediaHelper.CurrentMusic.Name) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

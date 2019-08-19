@@ -12,21 +12,17 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ProgressRing x:ConnectionId='2'
-            x:Name="LocalProgressRing"
-            Width="100"
-            Height="100"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            IsActive="False"
-            Visibility="Collapsed" />
-        <GridView x:ConnectionId='3'
+        <Rectangle x:ConnectionId='2' x:Name="LoadingControlPlaceHolder" Height="4" />
+        <ProgressBar x:ConnectionId='3' x:Name="LocalLoadingControl" IsIndeterminate="True" />
+        <GridView x:ConnectionId='4'
             x:Name="LocalMusicGridView"
+            Grid.Row="1"
             Margin="10"
             IsItemClickEnabled="True"
                                                     
@@ -34,7 +30,7 @@
             SelectionMode="Single">
             <GridView.ItemTemplate>
                 <DataTemplate                                >
-                    <Grid x:ConnectionId='4' Margin="5">
+                    <Grid x:ConnectionId='5' Margin="5">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
@@ -49,7 +45,7 @@
                             OffsetY="2"
                             ShadowOpacity="0"
                             Color="Gray">
-                            <controls:ImageEx x:ConnectionId='7'
+                            <controls:ImageEx x:ConnectionId='8'
                                 Width="100"
                                 Height="100"
                                 Margin="0,0,5,0"
@@ -61,7 +57,7 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock x:ConnectionId='5'
+                            <TextBlock x:ConnectionId='6'
                                 x:Name="MusicNameTextBlock"
                                 Width="160"
                                 VerticalAlignment="Top"
@@ -71,7 +67,7 @@
                                 MaxLines="3"
                                                     
                                 TextWrapping="Wrap" />
-                            <TextBlock x:ConnectionId='6'
+                            <TextBlock x:ConnectionId='7'
                                 Grid.Row="1"
                                 Margin="0,3,0,0"
                                 VerticalAlignment="center"

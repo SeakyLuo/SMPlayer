@@ -82,9 +82,36 @@ namespace SMPlayer.Models
             return list;
         }
 
-        public string GetFolderName()
+        public TreeInfo GetTreeInfo()
+        {
+            return new TreeInfo(GetDirectory(), Trees.Count, Files.Count);
+        }
+
+        public string GetDirectory()
         {
             return Path.Substring(Path.LastIndexOf("\\") + 1);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj != null && obj is FolderTree && Path == (obj as FolderTree).Path;
+        }
+
+        public override int GetHashCode()
+        {
+            return Path.GetHashCode();
+        }
+    }
+    public struct TreeInfo
+    {
+        public string Directory;
+        public int Folders;
+        public int Songs;
+        public TreeInfo(string Directory, int Folders, int Songs)
+        {
+            this.Directory = Directory;
+            this.Folders = Folders;
+            this.Songs = Songs;
         }
     }
 }

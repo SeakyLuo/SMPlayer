@@ -30,13 +30,13 @@
     <AppXManifest Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Core\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2019-08-18T15:04:02.390</Modified>
+      <Modified>2019-08-19T07:51:36.009</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SMPlayer.exe">
       <PackagePath>entrypoint\SMPlayer.exe</PackagePath>
-      <Modified>2019-08-18T15:04:00.820</Modified>
+      <Modified>2019-08-19T07:51:34.549</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\.nuget\packages\colorcode.core\2.0.6\lib\netstandard1.4\ColorCode.Core.dll">
       <PackagePath>ColorCode.Core.dll</PackagePath>
@@ -162,83 +162,91 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SMPlayer.xr.xml">
       <PackagePath>SMPlayer.xr.xml</PackagePath>
-      <Modified>2019-08-18T14:55:09.034</Modified>
+      <Modified>2019-08-19T07:24:04.978</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Microsoft.UI.Xaml\DensityStyles\Compact.xbf">
       <PackagePath>Microsoft.UI.Xaml\DensityStyles\Compact.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.368</Modified>
+      <Modified>2019-08-19T07:51:34.128</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\App.xbf">
       <PackagePath>App.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.317</Modified>
+      <Modified>2019-08-19T07:51:34.073</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\AlbumsPage.xbf">
       <PackagePath>AlbumsPage.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.370</Modified>
+      <Modified>2019-08-19T07:51:34.129</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\ArtistsPage.xbf">
       <PackagePath>ArtistsPage.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.331</Modified>
+      <Modified>2019-08-19T07:51:34.089</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\LoadingControl.xbf">
       <PackagePath>LoadingControl.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.370</Modified>
+      <Modified>2019-08-19T07:51:34.130</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\LocalFoldersPage.xbf">
       <PackagePath>LocalFoldersPage.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.371</Modified>
+      <Modified>2019-08-19T07:51:34.130</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\LocalMusicPage.xbf">
       <PackagePath>LocalMusicPage.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.371</Modified>
+      <Modified>2019-08-19T07:51:34.131</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\LocalPage.xbf">
       <PackagePath>LocalPage.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.371</Modified>
+      <Modified>2019-08-19T07:51:34.131</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MediaControl.xbf">
+      <PackagePath>MediaControl.xbf</PackagePath>
+      <Modified>2019-08-19T07:51:34.131</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MusicListPage.xbf">
       <PackagePath>MusicListPage.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.372</Modified>
+      <Modified>2019-08-19T07:51:34.131</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MyFavorites.xbf">
       <PackagePath>MyFavorites.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.372</Modified>
+      <Modified>2019-08-19T07:51:34.132</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\NowPlayingFullPage.xbf">
+      <PackagePath>NowPlayingFullPage.xbf</PackagePath>
+      <Modified>2019-08-19T07:51:34.106</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SearchPage.xbf">
       <PackagePath>SearchPage.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.373</Modified>
+      <Modified>2019-08-19T07:51:34.133</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\RecentPage.xbf">
       <PackagePath>RecentPage.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.373</Modified>
+      <Modified>2019-08-19T07:51:34.133</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MusicLibraryPage.xbf">
       <PackagePath>MusicLibraryPage.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.349</Modified>
+      <Modified>2019-08-19T07:51:34.112</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\NowPlayingPage.xbf">
       <PackagePath>NowPlayingPage.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.353</Modified>
+      <Modified>2019-08-19T07:51:34.134</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\PlaylistsPage.xbf">
       <PackagePath>PlaylistsPage.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.374</Modified>
+      <Modified>2019-08-19T07:51:34.134</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SettingsPage.xbf">
       <PackagePath>SettingsPage.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.361</Modified>
+      <Modified>2019-08-19T07:51:34.121</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\TemplateDictionary.xbf">
       <PackagePath>TemplateDictionary.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.369</Modified>
+      <Modified>2019-08-19T07:51:34.128</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MainPage.xbf">
       <PackagePath>MainPage.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.368</Modified>
+      <Modified>2019-08-19T07:51:34.127</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Themes\Generic.xbf">
       <PackagePath>Themes\Generic.xbf</PackagePath>
-      <Modified>2019-08-18T15:04:00.369</Modified>
+      <Modified>2019-08-19T07:51:34.129</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Program Files %28x86%29\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.UniversalCRT.Debug\10.0.17763.0\\redist\Debug\x86\ucrtbased.dll">
       <PackagePath>ucrtbased.dll</PackagePath>
@@ -262,11 +270,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2019-08-17T11:50:17.642</Modified>
+      <Modified>2019-08-19T07:17:57.638</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Core\SMPlayer.exe">
       <PackagePath>SMPlayer.exe</PackagePath>
-      <Modified>2019-08-18T15:04:02.364</Modified>
+      <Modified>2019-08-19T07:51:35.986</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

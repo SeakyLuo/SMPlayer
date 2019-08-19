@@ -165,4 +165,13 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LoadingControl.g.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LoadingControl.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LoadingControl.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\LoadingControl.xbf
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SMPlayer.csprojAssemblyReference.cache
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MediaControl.g.i.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MediaControl.g.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MediaControl.xaml
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MediaControl.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MediaControl.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\NowPlayingFullPage.g.i.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\NowPlayingFullPage.g.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\NowPlayingFullPage.xaml
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\NowPlayingFullPage.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\NowPlayingFullPage.xbf

@@ -11,205 +11,41 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Image
-            x:Name="LargeAlbumCover"
-            VerticalAlignment="Center"
-            Stretch="UniformToFill" />
-        <Border>
-            <Border.Background>
-                <media:BackdropBlurBrush Amount="20" />
-            </Border.Background>
-        </Border>
-        <Grid Background="Black" Opacity="0.75">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid Background="Transparent">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid
-                    Grid.Column="0"
-                    Margin="0"
-                    HorizontalAlignment="Left">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Image
-                        x:Name="AlbumCover"
-                        Grid.Row="0"
-                        Grid.RowSpan="2"
-                        Grid.Column="0"
-                        Width="100"
-                        Height="100"
-                        Source="Assets/music.png"
-                        Stretch="UniformToFill" />
-                    <TextBlock
-                        x:Name="TitleTextBlock"
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Margin="10,0,5,5"
-                        VerticalAlignment="Bottom"
-                        FontSize="24"
-                        Foreground="White"
-                        Text="Title" />
-                    <TextBlock
-                        x:Name="ArtistTextBlock"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Margin="10,5,5,0"
-                        VerticalAlignment="Top"
-                        FontSize="18"
-                        FontWeight="Bold"
-                        Foreground="White"
-                        Text="Artist" />
-                </Grid>
-
-                <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                        <Button
-                            x:Name="PrevButton"
-                            Click="PrevButton_Click"
-                            Content="&#xE892;"
-                            Foreground="White"
-                            Style="{StaticResource MediaControlButtonStyle}" />
-                        <Button
-                            x:Name="PlayButton"
-                            Click="PlayButton_Click"
-                            Foreground="White"
-                            Style="{StaticResource MediaControlButtonStyle}">
-                            <Button.Content>
-                                <FontIcon
-                                    x:Name="PlayButtonIcon"
-                                    FontSize="30"
-                                    Glyph="&#xE768;" />
-                            </Button.Content>
-                            <Button.KeyboardAccelerators>
-                                <KeyboardAccelerator Key="F3" />
-                            </Button.KeyboardAccelerators>
-                        </Button>
-                        <Button
-                            x:Name="NextButton"
-                            Click="NextButton_Click"
-                            Content="&#xE893;"
-                            Foreground="White"
-                            Style="{StaticResource MediaControlButtonStyle}" />
-                    </StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            x:Name="MusicLibraryTitleTextBlock"
+            Style="{StaticResource TitleTextBlockStyle}"
+            Text="Now Playing" />
+        <CommandBar Grid.Row="1" Background="Transparent" IsOpen="False" DefaultLabelPosition="Right">
+            <AppBarButton Icon="Add" Label="Add To a New List"/>
+            <AppBarButton Icon="FullScreen" Label="Full Screen" />
+        </CommandBar>
+        <ListView
+            x:Name="SongsListView"
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            ContainerContentChanging="SongsListView_ContainerContentChanging"
+            IsItemClickEnabled="True"
+            ItemClick="SongsListView_ItemClick"
+            ItemsSource="{x:Bind Songs}"
+            SelectionMode="Single">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:Music" >
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock
-                            x:Name="LeftTimeTextBlock"
-                            Margin="10,0,20,0"
-                            VerticalAlignment="Center"
-                            FontFamily="Segoe UI"
-                            Foreground="White"
-                            RelativePanel.AlignLeftWithPanel="True"
-                            Text="0:00" />
-                        <Slider
-                            x:Name="MediaSlider"
-                            Grid.Column="1"
-                            Foreground="White"
-                            IsThumbToolTipEnabled="True"
-                            ManipulationCompleted="MediaSlider_ManipulationCompleted"
-                            ManipulationMode="All"
-                            ManipulationStarted="MediaSlider_ManipulationStarted"
-                            ManipulationStarting="MediaSlider_ManipulationStarting"
-                            Minimum="0"
-                            RelativePanel.LeftOf="RightTimeTextBlock"
-                            RelativePanel.RightOf="LeftTimeTextBlock"
-                            Style="{StaticResource MediaProgressSliderStyle}"
-                            ThumbToolTipValueConverter="{StaticResource MusicDurationConverter}"
-                            ValueChanged="MediaSlider_ValueChanged" />
-                        <TextBlock
-                            x:Name="RightTimeTextBlock"
-                            Grid.Column="2"
-                            Margin="20,0,10,0"
-                            VerticalAlignment="Center"
-                            FontFamily="Segoe UI"
-                            Foreground="White"
-                            RelativePanel.AlignRightWithPanel="True"
-                            Text="0:00" />
+                        <TextBlock Text="{x:Bind Name}" />
                     </Grid>
-                </StackPanel>
-                <StackPanel
-                    Grid.Column="2"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center">
-                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                        <Button
-                            x:Name="VolumeButton"
-                            Click="VolumeButton_Click"
-                            Content="&#xE15D;"
-                            Foreground="White"
-                            Style="{StaticResource MediaControlButtonStyle}" />
-                        <Slider
-                            x:Name="VolumeSlider"
-                            Width="100"
-                            Margin="10,0,20,0"
-                            VerticalAlignment="Center"
-                            Foreground="White"
-                            Maximum="100"
-                            Minimum="0"
-                            ValueChanged="VolumeSlider_ValueChanged"
-                            Value="50" />
-                        <Button
-                            x:Name="LikeButton"
-                            Click="LikeButton_Click"
-                            Style="{StaticResource MediaControlButtonStyle}">
-                            <Button.Content>
-                                <FontIcon
-                                    x:Name="LikeButtonIcon"
-                                    Foreground="White"
-                                    Glyph="&#xEB51;" />
-                            </Button.Content>
-                        </Button>
-                    </StackPanel>
-                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                        <ToggleButton
-                            x:Name="ShuffleButton"
-                            Click="ShuffleButton_Click"
-                            Content="&#xE8B1;"
-                            Foreground="White"
-                            Style="{StaticResource MediaControlToggleButtonStyle}" />
-                        <ToggleButton
-                            x:Name="RepeatButton"
-                            Click="RepeatButton_Click"
-                            Content="&#xE8EE;"
-                            Foreground="White"
-                            Style="{StaticResource MediaControlToggleButtonStyle}" />
-                        <ToggleButton
-                            x:Name="RepeatOneButton"
-                            Click="RepeatOneButton_Click"
-                            Content="&#xE8ED;"
-                            Foreground="White"
-                            Style="{StaticResource MediaControlToggleButtonStyle}" />
-                        <Button
-                            Content="&#xE712;"
-                            Foreground="White"
-                            Style="{StaticResource MediaControlButtonStyle}">
-                            <Button.Flyout>
-                                <MenuFlyout>
-                                    <MenuFlyoutSubItem Icon="Add" Text="Add To Playlist" />
-                                    <MenuFlyoutItem Icon="Fullscreen" Text="Full Window" />
-                                    <MenuFlyoutItem Icon="MusicInfo" Text="Music Info" />
-                                </MenuFlyout>
-                            </Button.Flyout>
-                        </Button>
-                    </StackPanel>
-                </StackPanel>
-            </Grid>
-        </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>

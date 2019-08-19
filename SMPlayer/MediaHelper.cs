@@ -13,7 +13,7 @@ using Windows.UI.Xaml;
 
 namespace SMPlayer
 {
-    public static class MediaControl
+    public static class MediaHelper
     {
         public static Music CurrentMusic;
         public static List<Music> CurrentPlayList = new List<Music>();

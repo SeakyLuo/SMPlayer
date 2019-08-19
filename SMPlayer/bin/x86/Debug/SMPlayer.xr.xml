@@ -27,8 +27,8 @@
       <RootProperty Name="TextWrapping" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="Foreground" />
-      <RootProperty Name="Width" />
       <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Width" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="HorizontalTextAlignment" />
       <RootProperty Name="FontFamily" />
@@ -39,6 +39,7 @@
       <RootProperty Name="Width" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Style" />
       <RootProperty Name="FocusVisualMargin" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Button">
@@ -60,8 +61,8 @@
       <RootProperty Name="Background" />
       <RootProperty Name="FontFamily" />
       <RootProperty Name="FontSize" />
-      <RootProperty Name="BorderThickness" />
       <RootProperty Name="Foreground" />
+      <RootProperty Name="BorderThickness" />
       <RootProperty Name="UseSystemFocusVisuals" />
       <RootProperty Name="IsFocusEngagementEnabled" />
       <RootProperty Name="Template" />
@@ -92,6 +93,7 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.ToggleButton">
       <RootProperty Name="Content" />
+      <RootProperty Name="Foreground" />
       <RootProperty Name="Style" />
       <RootEvent Name="Click" />
     </RootType>
@@ -115,6 +117,7 @@
       <RootProperty Name="Width" />
       <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Foreground" />
       <RootProperty Name="Maximum" />
       <RootProperty Name="Minimum" />
       <RootProperty Name="Value" />
@@ -183,6 +186,7 @@
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Style" />
+      <RootProperty Name="IsIndeterminate" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.RangeBase">
       <RootProperty Name="Minimum" />
@@ -312,21 +316,6 @@
       <RootProperty Name="DetailsTemplate" />
       <RootProperty Name="NoSelectionContent" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.RelativePanel">
-      <RootProperty Name="Margin" />
-      <RootProperty Name="Children" />
-      <RootProperty Name="HorizontalAlignment" />
-      <RootMethod Name="GetAlignLeftWithPanel" />
-      <RootMethod Name="SetAlignLeftWithPanel" />
-      <RootMethod Name="GetAlignRightWithPanel" />
-      <RootMethod Name="SetAlignRightWithPanel" />
-      <RootMethod Name="GetLeftOf" />
-      <RootMethod Name="SetLeftOf" />
-      <RootMethod Name="GetRightOf" />
-      <RootMethod Name="SetRightOf" />
-      <RootMethod Name="GetAlignBottomWithPanel" />
-      <RootMethod Name="SetAlignBottomWithPanel" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.StackPanel">
       <RootProperty Name="Margin" />
       <RootProperty Name="Orientation" />
@@ -334,6 +323,20 @@
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="HorizontalAlignment" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.RelativePanel">
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="Children" />
+      <RootMethod Name="GetAlignLeftWithPanel" />
+      <RootMethod Name="SetAlignLeftWithPanel" />
+      <RootMethod Name="GetLeftOf" />
+      <RootMethod Name="SetLeftOf" />
+      <RootMethod Name="GetRightOf" />
+      <RootMethod Name="SetRightOf" />
+      <RootMethod Name="GetAlignRightWithPanel" />
+      <RootMethod Name="SetAlignRightWithPanel" />
+      <RootMethod Name="GetAlignBottomWithPanel" />
+      <RootMethod Name="SetAlignBottomWithPanel" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ListView">
       <RootProperty Name="HorizontalAlignment" />
@@ -387,6 +390,7 @@
     <RootType FullName="SMPlayer.ArtistsPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.UserControl">
       <RootProperty Name="Content" />
+      <RootProperty Name="Resources" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.Loading">
       <RootProperty Name="Background" />
@@ -429,8 +433,16 @@
       <RootEvent Name="Navigated" />
     </RootType>
     <RootType FullName="SMPlayer.LocalPage" />
+    <RootType FullName="SMPlayer.MediaControl" />
     <RootType FullName="SMPlayer.MusicListPage" />
     <RootType FullName="SMPlayer.MyFavorites" />
+    <RootType FullName="Windows.UI.Xaml.Input.KeyboardAccelerator">
+      <RootProperty Name="Key" />
+    </RootType>
+    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Media.BackdropBlurBrush">
+      <RootProperty Name="Amount" />
+    </RootType>
+    <RootType FullName="SMPlayer.NowPlayingFullPage" />
     <RootType FullName="SMPlayer.SearchPage" />
     <RootType FullName="SMPlayer.RecentPage" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGrid">
@@ -478,11 +490,15 @@
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGridCell" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGridRow" />
     <RootType FullName="SMPlayer.MusicLibraryPage" />
-    <RootType FullName="Windows.UI.Xaml.Input.KeyboardAccelerator">
-      <RootProperty Name="Key" />
+    <RootType FullName="Windows.UI.Xaml.Controls.CommandBar">
+      <RootProperty Name="Background" />
+      <RootProperty Name="IsOpen" />
+      <RootProperty Name="DefaultLabelPosition" />
+      <RootProperty Name="PrimaryCommands" />
     </RootType>
-    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Media.BackdropBlurBrush">
-      <RootProperty Name="Amount" />
+    <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">
+      <RootProperty Name="Icon" />
+      <RootProperty Name="Label" />
     </RootType>
     <RootType FullName="SMPlayer.NowPlayingPage" />
     <RootType FullName="SMPlayer.PlaylistsPage" />

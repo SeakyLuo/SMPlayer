@@ -29,6 +29,18 @@ namespace SMPlayer
             get => LoadingTextBlock.Text;
             set => LoadingTextBlock.Text = value;
         }
+
+        public Brush TextForeground
+        {
+            get => LoadingTextBlock.Foreground;
+            set => LoadingTextBlock.Foreground = value;
+        }
+
+        public Brush ProgressForeground
+        {
+            get => LoadingProgressRing.Foreground;
+            set => LoadingProgressRing.Foreground = value;
+        }
         public LoadingControl()
         {
             this.InitializeComponent();

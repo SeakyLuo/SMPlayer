@@ -8,7 +8,6 @@
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                        
     mc:Ignorable="d">
 
     <Grid>
@@ -27,17 +26,17 @@
             CompactModeThresholdWidth="720"
                                           >
             <controls:MasterDetailsView.MasterHeader>
-                <RelativePanel Margin="10,0,5,10">
+                <Grid Margin="10,0,5,10">
                     <TextBlock x:ConnectionId='4'
                         x:Name="ArtistsCountTextBlock"
+                        VerticalAlignment="Center"
                         FontSize="16"
-                        RelativePanel.AlignLeftWithPanel="True"
-                        Text="All Artists" />
-                    <ProgressRing x:ConnectionId='5'
-                        x:Name="ArtistsProgressRing"
-                        IsActive="False"
-                        RelativePanel.AlignRightWithPanel="True" />
-                </RelativePanel>
+                        TextAlignment="Left" />
+                    <ProgressBar x:ConnectionId='5'
+                        x:Name="ArtistProgressBar"
+                        VerticalAlignment="Center"
+                        IsIndeterminate="True" />
+                </Grid>
             </controls:MasterDetailsView.MasterHeader>
             <controls:MasterDetailsView.ItemTemplate>
                 <DataTemplate                             >

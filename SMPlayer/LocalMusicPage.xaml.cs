@@ -25,49 +25,39 @@ namespace SMPlayer
     public sealed partial class LocalMusicPage : Page
     {
         private ObservableCollection<GridMusicView> GridItems = new ObservableCollection<GridMusicView>();
-        public static InfoSetter infoSetter;
+        private FolderTree Tree;
         public LocalMusicPage()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.Parameter is InfoSetter)
-            {
-                infoSetter = (InfoSetter)e.Parameter;
-                Setup(Settings.settings.Tree, false);
-            }
-            else if (e.Parameter is FolderTree)
-            {
-                Setup(e.Parameter as FolderTree, true);
-            }
+            Setup((FolderTree)e.Parameter);
             base.OnNavigatedTo(e);
         }
 
         private async void LocalMusicGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = (GridMusicView)e.ClickedItem;
-            await MediaControl.SetPlayList(GridItems.Select((m) => m.Source).ToList());
-            MediaControl.SetMusic(item.Source);
+            await MediaHelper.SetPlayList(GridItems.Select((m) => m.Source).ToList());
+            MediaHelper.SetMusic(item.Source);
             MainPage.Instance.PlayMusic();
         }
 
-        private async void Setup(FolderTree tree, bool redirect)
+        private async void Setup(FolderTree tree)
         {
-            LocalProgressRing.IsActive = true;
-            LocalProgressRing.Visibility = Visibility.Visible;
+            if (Tree == tree) return;
+            Tree = tree;
+            LocalLoadingControl.Visibility = Visibility.Visible;
             GridItems.Clear();
-            infoSetter.SetInfo(tree, redirect);
             foreach (var file in tree.Files)
             {
                 GridMusicView gridItem = new GridMusicView();
                 await gridItem.Init(file);
                 GridItems.Add(gridItem);
             }
-            LocalProgressRing.Visibility = Visibility.Collapsed;
-            LocalProgressRing.IsActive = false;
+            LocalLoadingControl.Visibility = Visibility.Collapsed;
         }
     }
 }

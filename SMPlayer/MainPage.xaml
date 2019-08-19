@@ -133,9 +133,9 @@
                 </NavigationViewItem>
             </NavigationView.MenuItems>
             <Frame
-                x:Name="MainFrame"
+                x:Name="NaviFrame"
                 IsNavigationStackEnabled="True"
-                Navigated="MainFrame_Navigated" />
+                Navigated="NaviFrame_Navigated" />
         </NavigationView>
 
         <Grid Grid.Row="1" Background="{ThemeResource SystemControlAcrylicWindowBrush}">

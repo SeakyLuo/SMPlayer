@@ -16,10 +16,12 @@ LocalFoldersPage.xbf
 LocalMusicPage.xbf
 LocalPage.xbf
 MainPage.xbf
+MediaControl.xbf
 Microsoft.UI.Xaml\DensityStyles\Compact.xbf
 MusicLibraryPage.xbf
 MusicListPage.xbf
 MyFavorites.xbf
+NowPlayingFullPage.xbf
 NowPlayingPage.xbf
 PlaylistsPage.xbf
 RecentPage.xbf

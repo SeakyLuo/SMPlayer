@@ -12,21 +12,17 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ProgressRing
-            x:Name="LocalProgressRing"
-            Width="100"
-            Height="100"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            IsActive="False"
-            Visibility="Collapsed" />
+        <Rectangle x:Name="LoadingControlPlaceHolder" Height="4" />
+        <ProgressBar x:Name="LocalLoadingControl" IsIndeterminate="True" />
         <GridView
             x:Name="LocalMusicGridView"
+            Grid.Row="1"
             Margin="10"
             IsItemClickEnabled="True"
             ItemClick="LocalMusicGridView_ItemClick"

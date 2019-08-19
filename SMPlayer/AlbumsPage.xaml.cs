@@ -33,10 +33,6 @@ namespace SMPlayer
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             SettingsPage.AddAfterPathSetListener(this);
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
             Setup();
         }
 

@@ -26,4 +26,11 @@ namespace SMPlayer.Models
         ListView = 0,
         GridView = 1
     }
+
+    public enum ShowNotification
+    {
+        Always = 0,
+        MusicChange = 1,
+        Never = 2
+    }
 }
