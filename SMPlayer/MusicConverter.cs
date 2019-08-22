@@ -95,7 +95,7 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value == MediaHelper.CurrentMusic ? Visibility.Visible : Visibility.Collapsed;
+            return value.Equals(true) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -134,7 +134,7 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.ToString() == "true" ? Helper.GetHighlightBrush() : Helper.BlackBrush;
+            return value.Equals(true) ? Helper.GetHighlightBrush() : Helper.BlackBrush;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

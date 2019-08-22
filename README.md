@@ -12,4 +12,8 @@ Set Music Bug.
 
 Render current playing music.
 
+Flashing Current Playing Music on ArtistsPage.
+
 Local Page IsSelected.
+
+Set unshuffle.

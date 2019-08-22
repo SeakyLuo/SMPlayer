@@ -342,7 +342,7 @@ namespace SMPlayer
         {
             int newValue = (int)MediaSlider.Value, diff = newValue - (int)MediaHelper.Position;
             SliderClicked = diff != 1 && diff != 0;
-            Debug.WriteLine("ValueChanged To " + MusicDurationConverter.ToTime(newValue));
+            //Debug.WriteLine("ValueChanged To " + MusicDurationConverter.ToTime(newValue));
             LeftTimeTextBlock.Text = MusicDurationConverter.ToTime(newValue);
         }
 
@@ -404,24 +404,6 @@ namespace SMPlayer
                 {
                     PlayButtonIcon.Glyph = "\uE768";
                     MediaSlider.Value = 0;
-                }
-            });
-        }
-
-        private async void Toast_Activated(ToastNotification sender, object args)
-        {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
-            {
-                switch ((args as ToastActivatedEventArgs).Arguments)
-                {
-                    case "Next":
-                        MediaHelper.NextMusic();
-                        break;
-                    case "Pause":
-                        PauseMusic();
-                        break;
-                    default:
-                        break;
                 }
             });
         }

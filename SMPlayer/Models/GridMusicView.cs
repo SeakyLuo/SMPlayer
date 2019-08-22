@@ -26,7 +26,7 @@ namespace SMPlayer.Models
 
         public override bool Equals(object obj)
         {
-            return Name == (obj as GridFolderView).Name;
+            return obj != null && obj is GridMusicView && Name == (obj as GridFolderView).Name;
         }
 
         public override int GetHashCode()

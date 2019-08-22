@@ -13,7 +13,7 @@ using System.ComponentModel;
 namespace SMPlayer
 {
     [Serializable]
-    public class Music : IComparable<Music>, System.ComponentModel.INotifyPropertyChanged
+    public class Music : IComparable<Music>, INotifyPropertyChanged
     {
         public string Path { get; set; }
         public string Name { get; set; }
@@ -23,6 +23,8 @@ namespace SMPlayer
         public bool Favorite { get; set; }
         public int PlayCount { get; set; }
         private bool IsMusicPlaying = false;
+
+        [Newtonsoft.Json.JsonIgnore]
         public bool IsPlaying
         {
             set
@@ -103,7 +105,7 @@ namespace SMPlayer
 
         public override bool Equals(object obj)
         {
-            return Path == (obj as Music).Path;
+            return obj != null && obj is Music && Path == (obj as Music).Path;
         }
 
         public override int GetHashCode()

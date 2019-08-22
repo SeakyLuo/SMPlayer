@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -29,7 +30,6 @@ namespace SMPlayer
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
         private bool SetupStarted = false;
         private int Notified = 0;
-        private ListViewItem prevItem;
 
         public ArtistsPage()
         {
@@ -72,6 +72,7 @@ namespace SMPlayer
             }
             foreach (var artist in artists.OrderBy((a) => a.Name)) Artists.Add(artist);
             ArtistsCountTextBlock.Text = "All Artists: " + Artists.Count;
+            FindMusicAndSetPlaying(MediaHelper.CurrentMusic, true);
             if (Notified == 2) Notified = 1;
             ArtistProgressBar.Visibility = Visibility.Collapsed;
             SetupStarted = false;
@@ -86,38 +87,31 @@ namespace SMPlayer
         private async void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Music music = (Music)e.ClickedItem;
-            //if (prevItem != null) SetColor(BlackBrush, Visibility.Collapsed);
             ListView listView = (ListView)sender;
-            prevItem = (ListViewItem)listView.ContainerFromItem(music);
-            //SetColor(new SolidColorBrush((Color)Resources["SystemColorHighlightColor"]), Visibility.Visible);
             await MediaHelper.SetPlayList(listView.ItemsSource as ObservableCollection<Music>);
             MainPage.Instance.SetMusicAndPlay(music);
-        }
-
-        private void SetColor(Brush brush, Visibility visibility)
-        {
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(prevItem); i++)
-            {
-                var child = VisualTreeHelper.GetChild(prevItem, i);
-                if (child is TextBlock)
-                    (child as TextBlock).Foreground = brush;
-                else
-                    (child as ListViewItemPresenter).Visibility = visibility;
-            }
-
         }
 
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
             args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? Helper.WhiteSmokeBrush : Helper.WhiteBrush;
-            args.ItemContainer.Foreground = (Music)args.Item == MediaHelper.CurrentMusic ? Helper.GetHighlightBrush() : Helper.BlackBrush;
         }
 
         private async void PlayItem_Click(object sender, RoutedEventArgs e)
         {
             Music music = (sender as MenuFlyoutItem).DataContext as Music;
-            await MediaHelper.SetPlayList((e.OriginalSource as ListView).ItemsSource as List<Music>);
+            await MediaHelper.SetPlayList(Artists.First((a) => a.Name == music.Artist).Albums.First((a) => a.Name == music.Album).Songs);
             MainPage.Instance.SetMusicAndPlay(music);
+        }
+
+        private void FindMusicAndSetPlaying(Music target, bool isPlaying)
+        {
+            var artist = Artists.FirstOrDefault((a) => a.Name == target.Artist);
+            if (artist == null) return;
+            var album = artist.Albums.FirstOrDefault((a) => a.Name == target.Album);
+            if (album == null) return;
+            var music = album.Songs.FirstOrDefault((m) => m.Equals(target));
+            music.IsPlaying = isPlaying;
         }
 
         public void Tick()
@@ -129,9 +123,11 @@ namespace SMPlayer
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
-                //var item = ArtistMasterDetailsView.Items.FirstOrDefault((a) => (a as ArtistView).Name == next.Artist);
-                //if (item == null) return;
-                //var container = ArtistMasterDetailsView.ContainerFromItem(item);
+                if (current != null)
+                Debug.WriteLine("Current: " + current.Name);
+                Debug.WriteLine("Next: " + next.Name);
+                foreach (var target in new Music[] { current, next })
+                    FindMusicAndSetPlaying(target, target.Equals(next));
             });
         }
 

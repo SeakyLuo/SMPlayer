@@ -21,7 +21,7 @@ namespace SMPlayer.Models
 
         public override bool Equals(object obj)
         {
-            return Name == (obj as ArtistView).Name;
+            return obj != null && obj is ArtistView && Name == (obj as ArtistView).Name;
         }
 
         public override int GetHashCode()

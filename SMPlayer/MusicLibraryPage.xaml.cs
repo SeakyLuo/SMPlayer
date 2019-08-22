@@ -84,7 +84,7 @@ namespace SMPlayer
         }
         public void MusicSet(Music music)
         {
-            int index = AllSongs.IndexOf(music);
+            //int index = AllSongs.IndexOf(music);
         }
 
         private void MusicLibraryDataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)

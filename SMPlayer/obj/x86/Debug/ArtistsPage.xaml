@@ -204,6 +204,7 @@
                                                         <StackPanel
                                                             x:Name="HeaderPanel"
                                                             MaxWidth="720"
+                                                            HorizontalAlignment="Stretch"
                                                             Orientation="Horizontal">
                                                             <FontIcon x:ConnectionId='15'
                                                                 x:Name="PlayingIcon"
@@ -212,12 +213,12 @@
                                                                 Foreground="{StaticResource SystemColorHighlightColor}"
                                                                 Glyph="&#xE767;"
                                                                 RelativePanel.AlignLeftWithPanel="True"
-                                                                                                                                          />
+                                                                                                                                                                  />
                                                             <TextBlock x:ConnectionId='16'
                                                                 x:Name="MusicNameTextBlcok"
                                                                 Grid.Column="1"
                                                                 Width="720"
-                                                                                                                                                         
+                                                                                                                                                          
                                                                                      />
                                                         </StackPanel>
                                                         <TextBlock x:ConnectionId='14'
@@ -226,12 +227,20 @@
                                                                                                                                         />
                                                         <VisualStateManager.VisualStateGroups>
                                                             <VisualStateGroup x:Name="WidthChangeVisualStateGroup">
+                                                                <VisualState x:Name="Narrow">
+                                                                    <VisualState.StateTriggers>
+                                                                        <AdaptiveTrigger MinWindowWidth="1080" />
+                                                                    </VisualState.StateTriggers>
+                                                                    <VisualState.Setters>
+                                                                        <Setter Target="HeaderPanel.MusicNameTextBlock.Width" Value="600" />
+                                                                    </VisualState.Setters>
+                                                                </VisualState>
                                                                 <VisualState x:Name="Wide">
                                                                     <VisualState.StateTriggers>
                                                                         <AdaptiveTrigger MinWindowWidth="1200" />
                                                                     </VisualState.StateTriggers>
                                                                     <VisualState.Setters>
-                                                                        <Setter Target="HeaderPanel.MusicNameTextBlock.Width" Value="600" />
+                                                                        <Setter Target="HeaderPanel.MusicNameTextBlock.Width" Value="720" />
                                                                     </VisualState.Setters>
                                                                 </VisualState>
                                                             </VisualStateGroup>

@@ -49,7 +49,7 @@ namespace SMPlayer.Models
 
         public override bool Equals(object obj)
         {
-            return Name == (obj as GridFolderView).Name;
+            return obj != null && obj is GridFolderView && Name == (obj as GridFolderView).Name;
         }
 
         public override int GetHashCode()
