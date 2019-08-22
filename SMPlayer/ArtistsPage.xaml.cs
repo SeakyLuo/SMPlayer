@@ -127,7 +127,7 @@ namespace SMPlayer
                 Debug.WriteLine("Current: " + current.Name);
                 Debug.WriteLine("Next: " + next.Name);
                 foreach (var target in new Music[] { current, next })
-                    FindMusicAndSetPlaying(target, target.Equals(next));
+                    FindMusicAndSetPlaying(target, next.Equals(target));
             });
         }
 

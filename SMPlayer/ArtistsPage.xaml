@@ -109,6 +109,11 @@
                             HorizontalAlignment="Stretch"
                             ItemsSource="{x:Bind Albums, Mode=OneWay}"
                             SelectionMode="None">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
                             <ListView.ItemTemplate>
                                 <DataTemplate x:DataType="data:AlbumView">
                                     <Grid Margin="10,0,0,30">
@@ -170,8 +175,6 @@
                                             <ListView.ItemContainerStyle>
                                                 <Style TargetType="ListViewItem">
                                                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                                    <Setter Property="Margin" Value="0" />
-                                                    <Setter Property="Padding" Value="0" />
                                                 </Style>
                                             </ListView.ItemContainerStyle>
                                             <ListView.ItemTemplate>
