@@ -49,7 +49,8 @@
     <Capability Name="internetClient" />
     <uap:Capability Name="musicLibrary"/>
     <uap3:Capability Name="backgroundMediaPlayback"/>
-    <rescap:Capability Name="broadFileSystemAccess" />
+    <rescap:Capability Name="broadFileSystemAccess"/>
+    <rescap:Capability Name="confirmAppClose"/>
     <uap:Capability Name="removableStorage"/>
   </Capabilities>
 </Package>

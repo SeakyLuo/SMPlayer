@@ -4,13 +4,13 @@
     <RootInterface FullName="Windows.UI.Xaml.Data.IValueConverter" />
   </Roots.Interfaces>
   <Roots.PropertyPathNames>
-    <RootPropertyPathName Name="Name" />
     <RootPropertyPathName Name="AllSongs" />
     <RootPropertyPathName Name="PlayCount" />
     <RootPropertyPathName Name="Favorite" />
     <RootPropertyPathName Name="Duration" />
     <RootPropertyPathName Name="Album" />
     <RootPropertyPathName Name="Artist" />
+    <RootPropertyPathName Name="Name" />
   </Roots.PropertyPathNames>
   <Roots.RootTypes>
     <RootType FullName="Windows.UI.Xaml.Application">
@@ -363,9 +363,6 @@
       <RootProperty Name="Items" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutSeparator" />
-    <RootType FullName="Windows.UI.Xaml.Data.Binding">
-      <RootProperty Name="Converter" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.AdaptiveTrigger">
       <RootProperty Name="MinWindowWidth" />
     </RootType>
@@ -404,6 +401,9 @@
     </RootType>
     <RootType FullName="SMPlayer.LoadingControl">
       <RootProperty Name="Text" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Data.Binding">
+      <RootProperty Name="Converter" />
     </RootType>
     <RootType FullName="SMPlayer.LocalFoldersPage" />
     <RootType FullName="SMPlayer.LocalMusicPage" />

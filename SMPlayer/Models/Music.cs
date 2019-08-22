@@ -8,11 +8,12 @@ using Windows.Storage.FileProperties;
 using SMPlayer.Models;
 using Id3;
 using Windows.Media.Core;
+using System.ComponentModel;
 
 namespace SMPlayer
 {
     [Serializable]
-    public class Music : IComparable<Music>
+    public class Music : IComparable<Music>, System.ComponentModel.INotifyPropertyChanged
     {
         public string Path { get; set; }
         public string Name { get; set; }
@@ -22,6 +23,18 @@ namespace SMPlayer
         public bool Favorite { get; set; }
         public int PlayCount { get; set; }
         private bool IsMusicPlaying = false;
+        public bool IsPlaying
+        {
+            set
+            {
+                IsMusicPlaying = value;
+                OnPropertyChanged();
+            }
+            get => IsMusicPlaying;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
         public Music() { }
         public Music(Music obj)
         {
@@ -46,15 +59,17 @@ namespace SMPlayer
             PlayCount = 0;
         }
 
-        public void SetPlaying(bool IsPlaying) { IsMusicPlaying = IsPlaying; }
-        public bool IsPlaying() { return IsMusicPlaying;  }
+        public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            // Raise the PropertyChanged event, passing the name of the property whose value has changed.
+            this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public void Played()
         {
             PlayCount += 1;
             IsMusicPlaying = false;
         }
-
 
         public string GetShortPath()
         {

@@ -116,10 +116,11 @@ namespace SMPlayer
                 {
                     Buttons =
                     {
-                        new ToastButton("Pause", "Pause"),
-                        new ToastButton("Next", "Next")
+                        new ToastButton("Pause", "Pause"){ ActivationType = ToastActivationType.Background },
+                        new ToastButton("Next", "Next"){ ActivationType = ToastActivationType.Background }
                     },
                 },
+                ActivationType = ToastActivationType.Background,
                 Launch = "Launch",
                 Audio = SlientToast,
                 Scenario = ToastScenario.Reminder

@@ -23,6 +23,7 @@ using Windows.Media.Core;
 using Microsoft.Toolkit.Uwp.Notifications;
 using Windows.UI.Notifications;
 using Windows.ApplicationModel.Activation;
+using Windows.UI.Core.Preview;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -47,6 +48,10 @@ namespace SMPlayer
             SystemNavigationManager.GetForCurrentView().BackRequested += (s, e) =>
             {
                 if (NaviFrame.CanGoBack) NaviFrame.GoBack();
+            };
+            SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += (s, e) =>
+            {
+                Settings.Save();
             };
             this.NavigationCacheMode = NavigationCacheMode.Required;
             MediaHelper.AddMediaControlListener(this as MediaControlListener);
@@ -381,7 +386,7 @@ namespace SMPlayer
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
                 if (current == null) return;
-                next.SetPlaying(true);
+                next.IsPlaying = true;
                 if (!Window.Current.Visible) Helper.ShowToast(next);
                 SetMusic(next);
                 Music before = new Music(current);

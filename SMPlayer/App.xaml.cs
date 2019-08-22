@@ -45,11 +45,6 @@ namespace SMPlayer
             await Settings.Init();
             await MusicLibraryPage.Init();
 
-            Window.Current.Closed += (sender, args) =>
-            {
-                Settings.Save();
-            };
-
             Frame rootFrame = Window.Current.Content as Frame;
 
             // 不要在窗口已包含内容时重复应用程序初始化，
@@ -145,7 +140,7 @@ namespace SMPlayer
                                 MediaHelper.NextMusic();
                                 break;
                             case "Pause":
-                                if (Window.Current.Content is MainPage page)
+                                if ((Window.Current.Content as Frame).Content is MainPage page)
                                 {
                                     page.PauseMusic();
                                 }

@@ -24,7 +24,7 @@
             Grid.Row="1"
             BackButtonBehavior="Automatic"
             CompactModeThresholdWidth="720"
-            ItemsSource="{x:Bind Artists, Mode=OneWay}">
+            ItemsSource="{x:Bind Artists}">
             <controls:MasterDetailsView.MasterHeader>
                 <Grid Margin="10,0,5,10">
                     <TextBlock
@@ -212,11 +212,12 @@
                                                                 Foreground="{StaticResource SystemColorHighlightColor}"
                                                                 Glyph="&#xE767;"
                                                                 RelativePanel.AlignLeftWithPanel="True"
-                                                                Visibility="{Binding Name, Converter={StaticResource MusicVisibilityConverter}}" />
+                                                                Visibility="{x:Bind Converter={StaticResource MusicVisibilityConverter}}" />
                                                             <TextBlock
                                                                 x:Name="MusicNameTextBlcok"
                                                                 Grid.Column="1"
                                                                 Width="720"
+                                                                Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter},Mode=OneWay}"
                                                                 Text="{x:Bind Name}" />
                                                         </StackPanel>
                                                         <TextBlock
