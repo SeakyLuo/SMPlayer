@@ -52,7 +52,7 @@ namespace SMPlayer
         }
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            (Parent as MainPage).Frame.Navigate(typeof(NowPlayingFullPage));
         }
         private void NewListButton_Click(object sender, RoutedEventArgs e)
         {

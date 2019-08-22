@@ -34,7 +34,7 @@
                 x:Name="MusicInfoButton"
                 Click="MusicInfoButton_Click"
                 Icon="MusicInfo"
-                Label="Show MusicInfo" />
+                Label="Show Music Info" />
             <AppBarButton
                 x:Name="LyricsButton"
                 Click="LyricsButton_Click"

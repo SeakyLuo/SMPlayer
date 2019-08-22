@@ -24,7 +24,7 @@
             Grid.Row="1"
             BackButtonBehavior="Automatic"
             CompactModeThresholdWidth="720"
-            ItemsSource="{x:Bind Artists}">
+            ItemsSource="{x:Bind Artists, Mode=OneWay}">
             <controls:MasterDetailsView.MasterHeader>
                 <Grid Margin="10,0,5,10">
                     <TextBlock
@@ -107,7 +107,7 @@
                             x:Name="AlbumsListView"
                             Grid.Row="1"
                             HorizontalAlignment="Stretch"
-                            ItemsSource="{x:Bind Albums}"
+                            ItemsSource="{x:Bind Albums, Mode=OneWay}"
                             SelectionMode="None">
                             <ListView.ItemTemplate>
                                 <DataTemplate x:DataType="data:AlbumView">
@@ -166,7 +166,7 @@
                                             ContainerContentChanging="SongsListView_ContainerContentChanging"
                                             IsItemClickEnabled="True"
                                             ItemClick="SongsListView_ItemClick"
-                                            ItemsSource="{x:Bind Songs}"
+                                            ItemsSource="{x:Bind Songs, Mode=OneWay}"
                                             SelectionMode="Single">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate x:DataType="local:Music">
@@ -248,7 +248,7 @@
             </controls:MasterDetailsView.DetailsTemplate>
             <controls:MasterDetailsView.NoSelectionContent>
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <SymbolIcon RenderTransformOrigin=".5,.5" Symbol="Audio">
+                    <SymbolIcon RenderTransformOrigin=".5,.5" Symbol="MusicInfo">
                         <SymbolIcon.RenderTransform>
                             <CompositeTransform ScaleX="2" ScaleY="2" />
                         </SymbolIcon.RenderTransform>

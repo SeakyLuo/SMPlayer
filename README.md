@@ -8,6 +8,8 @@ Mouse Hover Album.
 
 Hangs when reaching the end of the playlist.
 
+Set Music Bug.
+
 Render current playing music.
 
 Local Page IsSelected.

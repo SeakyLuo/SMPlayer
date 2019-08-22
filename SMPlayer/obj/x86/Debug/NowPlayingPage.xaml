@@ -34,7 +34,7 @@
                 x:Name="MusicInfoButton"
                                              
                 Icon="MusicInfo"
-                Label="Show MusicInfo" />
+                Label="Show Music Info" />
             <AppBarButton x:ConnectionId='11'
                 x:Name="LyricsButton"
                                           
