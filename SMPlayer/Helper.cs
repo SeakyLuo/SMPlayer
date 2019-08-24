@@ -41,6 +41,11 @@ namespace SMPlayer
         private static string Lyrics = "";
         public static SolidColorBrush GetHighlightBrush() { return new SolidColorBrush(Settings.settings.ThemeColor); }
 
+        public static bool SamePlayList(IEnumerable<Music> list1, IEnumerable<Music> list2)
+        {
+            return list1.Count() == list2.Count() && list1.Zip(list2, (m1, m2) => m1.Equals(m2)).All((res) => res);
+        }
+
         public static string GetLyricByTime(double time)
         {
             if (string.IsNullOrEmpty(Lyrics)) return NoLyricsAvailable;

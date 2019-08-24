@@ -85,6 +85,7 @@ namespace SMPlayer
 
         public static async Task SetPlayList(IEnumerable<Music> playlist)
         {
+            if (Helper.SamePlayList(playlist, CurrentPlayList)) return;
             PlayList.Items.Clear();
             CurrentPlayList.Clear();
             foreach (var music in playlist)
@@ -121,9 +122,8 @@ namespace SMPlayer
             else
             {
                 PlayList.MovePrevious();
-                CurrentMusic = WaitForCurrentMusic();
             }
-            return CurrentMusic;
+            return WaitForCurrentMusic();
         }
 
         public static Music NextMusic()
@@ -135,9 +135,8 @@ namespace SMPlayer
             else
             {
                 PlayList.MoveNext();
-                CurrentMusic = WaitForCurrentMusic();
             }
-            return CurrentMusic;
+            return WaitForCurrentMusic();
         }
 
         private static Music WaitForCurrentMusic()

@@ -340,9 +340,9 @@
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="ItemsSource" />
       <RootProperty Name="SelectionMode" />
+      <RootProperty Name="ItemContainerStyle" />
       <RootProperty Name="ItemTemplate" />
       <RootProperty Name="IsItemClickEnabled" />
-      <RootProperty Name="ItemContainerStyle" />
       <RootEvent Name="ContainerContentChanging" />
       <RootEvent Name="ItemClick" />
     </RootType>
