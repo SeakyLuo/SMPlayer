@@ -27,28 +27,36 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class NowPlayingPage : Page
+    public sealed partial class NowPlayingPage : Page, MediaControlListener
     {
         private ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         public NowPlayingPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            MediaHelper.AddMediaControlListener(this as MediaControlListener);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-
+            //List<Music> playlist = await MediaHelper.GetRealPlayList();
+            List<Music> playlist = MediaHelper.CurrentPlayList;
+            if (Helper.SamePlayList(Songs, playlist)) return;
+            Songs.Clear();
+            foreach (var music in playlist)
+                Songs.Add(music);
+            FindMusicAndSetPlaying(MediaHelper.CurrentMusic, true);
         }
 
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-
+            args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? Helper.WhiteSmokeBrush : Helper.WhiteBrush;
         }
 
         private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-
+            Music music = (Music)e.ClickedItem;
+            MainPage.Instance.SetMusicAndPlay(music);
         }
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
         {
@@ -67,6 +75,43 @@ namespace SMPlayer
         private void MusicInfoButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        public void Tick() { return; }
+
+        private void FindMusicAndSetPlaying(Music target, bool isPlaying)
+        {
+            var music = Songs.FirstOrDefault((m) => m.Equals(target));
+            if (music != null) music.IsPlaying = isPlaying;
+        }
+
+        public async void MusicSwitchingAsync(Music current, Music next)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+            {
+                FindMusicAndSetPlaying(current, false);
+                FindMusicAndSetPlaying(next, true);
+            });
+        }
+
+        public void MediaEnded() { return; }
+
+        private void PlayItem_Click(object sender, RoutedEventArgs e)
+        {
+            Music music = (sender as MenuFlyoutItem).DataContext as Music;
+            MainPage.Instance.SetMusicAndPlay(music);
+        }
+
+        private void DeleteItem_Click(object sender, RoutedEventArgs e)
+        {
+            Music music = (sender as MenuFlyoutItem).DataContext as Music;
+            if (music.Equals(MediaHelper.CurrentMusic))
+            {
+                Songs.Remove(music);
+                // TODO:
+                // also need to remove from MediaHelper.
+                MediaHelper.NextMusic();
+            }
         }
     }
 }

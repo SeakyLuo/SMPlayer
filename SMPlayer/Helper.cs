@@ -93,6 +93,8 @@ namespace SMPlayer
         }
         public static void ShowToast(Music music)
         {
+            ShowNotification status = Settings.settings.Notification;
+            if (status == ShowNotification.Never) return;
             var toastContent = new ToastContent()
             {
                 Visual = new ToastVisual()
@@ -128,7 +130,7 @@ namespace SMPlayer
                 ActivationType = ToastActivationType.Background,
                 Launch = "Launch",
                 Audio = SlientToast,
-                Scenario = ToastScenario.Reminder
+                Scenario = status == ShowNotification.Always ? ToastScenario.Reminder : ToastScenario.Default
             };
 
             // Create the toast notification

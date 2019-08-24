@@ -41,41 +41,65 @@
             HeadersVisibility="Column"
             HorizontalScrollBarVisibility="Visible"
             IsDoubleTapEnabled="True"
-            IsReadOnly="False"
+            IsReadOnly="True"
             ItemsSource="{Binding AllSongs}"
-            MinColumnWidth="100"
             SelectionMode="Extended"
                                                   
             VerticalScrollBarVisibility="Visible">
             <controls:DataGrid.Columns>
                 <controls:DataGridTextColumn
+                    Width="40"
+                    Binding="{Binding IsPlaying, Converter={StaticResource MusicIsPlayingConverter}, Mode=OneWay}"
+                    CanUserSort="False"
+                    Foreground="#0078D7"
+                    CanUserResize="False"
+                    Header=""
+                    Tag="IsPlaying">
+                    <controls:DataGridTextColumn.CellStyle>
+                        <Style TargetType="controls:DataGridCell">
+                            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+                            <!--<Setter Property="Content">
+                                <Setter.Value>
+                                    <Binding
+                                        Converter="{StaticResource MusicIsPlayingConverter}"
+                                        Mode="OneWay"
+                                        Source="IsPlaying" />
+                                </Setter.Value>
+                            </Setter>-->
+                        </Style>
+                    </controls:DataGridTextColumn.CellStyle>
+                </controls:DataGridTextColumn>
+                <controls:DataGridTextColumn
                     Width="200"
+                    MinWidth="100"
                     Binding="{Binding Name}"
                     CanUserSort="True"
                     Header="Name"
                     Tag="Name" />
                 <controls:DataGridTextColumn
                     Width="160"
+                    MinWidth="100"
                     Binding="{Binding Artist}"
                     CanUserSort="True"
                     Header="Artist" />
                 <controls:DataGridTextColumn
                     Width="200"
+                    MinWidth="100"
                     Binding="{Binding Album}"
                     CanUserSort="True"
                     Header="Album" />
                 <controls:DataGridTextColumn
+                    MinWidth="100"
                     MaxWidth="120"
                     Binding="{Binding Duration, Converter={StaticResource MusicDurationConverter}}"
                     Header="Duration"
                     IsReadOnly="True" />
                 <controls:DataGridTextColumn
-                    Binding="{Binding Favorite, Converter={StaticResource MusicFavoriteConverter}}"
-                    CanUserReorder="False"
+                    MinWidth="100"
+                    Binding="{Binding Favorite, Converter={StaticResource MusicFavoriteConverter}, Mode=OneWay}"
                     CanUserResize="False"
                     Foreground="Red"
-                    Header="Favorite"
-                    IsReadOnly="True">
+                    Header="Favorite">
                     <controls:DataGridTextColumn.CellStyle>
                         <Style TargetType="controls:DataGridCell">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -84,11 +108,11 @@
                     </controls:DataGridTextColumn.CellStyle>
                 </controls:DataGridTextColumn>
                 <controls:DataGridTextColumn
+                    MinWidth="100"
                     MaxWidth="120"
-                    Binding="{Binding PlayCount, Converter={StaticResource MusicPlayCountConverter}}"
+                    Binding="{Binding PlayCount, Converter={StaticResource MusicPlayCountConverter}, Mode=OneWay}"
                     CanUserSort="True"
-                    Header="Play Count"
-                    IsReadOnly="True" />
+                    Header="Play Count" />
             </controls:DataGrid.Columns>
             <controls:DataGrid.RowStyle>
                 <Style TargetType="controls:DataGridRow">

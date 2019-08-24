@@ -16,34 +16,46 @@ namespace SMPlayer
     public static class MediaHelper
     {
         public static Music CurrentMusic;
+        // This is an ordered one, not the shuffled one
         public static List<Music> CurrentPlayList = new List<Music>();
+        private static List<Music> ShuffledPlayList = new List<Music>();
         public static double Position
         {
             get => Player.PlaybackSession.Position.TotalSeconds;
             set => Player.PlaybackSession.Position = TimeSpan.FromSeconds(value);
         }
 
-        public static MediaPlayer Player = new MediaPlayer();
         public static MediaPlaybackList PlayList = new MediaPlaybackList();
+        public static MediaPlayer Player = new MediaPlayer()
+        {
+            Source = PlayList
+        };
         public static DispatcherTimer Timer = new DispatcherTimer {  Interval = TimeSpan.FromSeconds(1) };
         private static List<MediaControlListener> MediaControlListeners = new List<MediaControlListener>();
 
         public async static Task Init()
         {
-            while (MusicLibraryPage.AllSongs == null) { }
-            await SetPlayList(MusicLibraryPage.AllSongs);
+            while (Settings.settings == null) { }
+            if (Settings.settings.PlayList.Count > 0)
+            {
+                await SetPlayList(Settings.settings.PlayList);
+            }
+            else
+            {
+                while (MusicLibraryPage.AllSongs == null) { }
+                await SetPlayList(MusicLibraryPage.AllSongs);
+            }
             Timer.Tick += (sender, e) =>
             {
                 foreach (var listener in MediaControlListeners)
                     listener.Tick();
             };
-            Player.Source = PlayList;
             PlayList.CurrentItemChanged += (sender, args) =>
             {
                 if (sender.CurrentItemIndex >= CurrentPlayList.Count) return;
-                Music current = CurrentMusic == null ? null : new Music(CurrentMusic), next = CurrentPlayList[Convert.ToInt32(sender.CurrentItemIndex)];
+                Music current = CurrentMusic?.Copy(), next = CurrentPlayList[Convert.ToInt32(sender.CurrentItemIndex)];
                 foreach (var listener in MediaControlListeners)
-                    listener.MusicSwitching(current, next);
+                    listener.MusicSwitchingAsync(current, next);
                 CurrentMusic = next;
             };
             Player.MediaEnded += (sender, args) =>
@@ -53,7 +65,7 @@ namespace SMPlayer
             };
 
             Player.Volume = Settings.settings.Volume;
-            SetMusic(Settings.settings.LastMusic);
+            MoveToMusic(Settings.settings.LastMusic);
             SetMode(Settings.settings.Mode);
         }
         public static void SetMode(PlayMode mode)
@@ -87,13 +99,31 @@ namespace SMPlayer
         {
             if (Helper.SamePlayList(playlist, CurrentPlayList)) return;
             PlayList.Items.Clear();
-            CurrentPlayList.Clear();
             foreach (var music in playlist)
             {
-                var item = new MediaPlaybackItem(MediaSource.CreateFromStorageFile(await Helper.CurrentFolder.GetFileAsync(music.GetShortPath())));
+                var file = await Helper.CurrentFolder.GetFileAsync(music.GetShortPath());
+                var item = new MediaPlaybackItem(MediaSource.CreateFromStorageFile(file));
                 PlayList.Items.Add(item);
-                CurrentPlayList.Add(music);
             }
+            CurrentPlayList = playlist.ToList();
+        }
+
+        public static async Task<List<Music>> GetRealPlayList()
+        {
+            if (PlayList.ShuffleEnabled)
+            {
+                if (ShuffledPlayList.Count == 0)
+                {
+                    foreach (var music in PlayList.ShuffledItems)
+                    {
+                        var p = music.GetDisplayProperties();
+                        ShuffledPlayList.Add(await Music.GetMusic(music.Source.Uri.AbsolutePath));
+                    }
+                }
+                return ShuffledPlayList;
+            }
+            else
+                return CurrentPlayList;
         }
 
         public static void AddMediaControlListener(MediaControlListener listener)
@@ -145,21 +175,20 @@ namespace SMPlayer
             return CurrentPlayList[(int)PlayList.CurrentItemIndex];
         }
 
-        public static void SetMusic(Music music)
+        public static void MoveToMusic(Music music)
         {
             if (music == null) return; 
             int index = CurrentPlayList.IndexOf(music);
             if (index == -1) return;
             Debug.WriteLine("MediaControl: " + music.Name);
             PlayList.MoveTo(Convert.ToUInt32(index));
-            //CurrentMusic = music;
         }
     }
 
     public interface MediaControlListener
     {
         void Tick();
-        void MusicSwitching(Music current, Music next);
+        void MusicSwitchingAsync(Music current, Music next);
         void MediaEnded();
     }
 }

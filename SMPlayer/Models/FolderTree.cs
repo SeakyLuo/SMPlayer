@@ -68,8 +68,21 @@ namespace SMPlayer.Models
                 foreach (var file in await folder.GetFilesAsync())
                     if (file.Name.EndsWith("mp3"))
                         Files.Add(await Music.GetMusic(file.Path));
+                // TODO:
+                // Set Current Playing Music to Null
             }
             Path = folder.Path;
+        }
+
+        public void Update(FolderTree tree)
+        {
+            // Merge to this tree
+            foreach (var folder in tree.Trees)
+                Trees.FirstOrDefault((f) => f.Equals(folder))?.Update(folder);
+            var set = Files.ToHashSet();
+            foreach (var file in tree.Files)
+                if (set.Contains(file))
+                    Files.First((f) => f.Equals(file)).CopyFrom(file);
         }
 
         public List<Music> Flatten()

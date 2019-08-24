@@ -22,6 +22,8 @@ namespace SMPlayer.Models
         public double Volume { get; set; }
         public bool IsNavigationCollapsed { get; set; }
         public Color ThemeColor { get; set; }
+        public List<Music> PlayList { get; set; }
+        public ShowNotification Notification { get; set; }
 
         public Settings()
         {
@@ -32,6 +34,7 @@ namespace SMPlayer.Models
             Volume = 50.0d;
             IsNavigationCollapsed = true;
             ThemeColor = (Color)Windows.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(typeof(Color), "#0078D7");
+            PlayList = new List<Music>();
         }
 
         public static async Task Init()
@@ -52,6 +55,13 @@ namespace SMPlayer.Models
 
         public static void Save()
         {
+            if (!Helper.SamePlayList(settings.PlayList, MediaHelper.CurrentPlayList))
+            {
+                if (MediaHelper.CurrentPlayList.Count == MusicLibraryPage.AllSongs.Count)
+                    settings.PlayList.Clear();
+                else
+                    settings.PlayList = MediaHelper.CurrentPlayList;
+            }
             JsonFileHelper.SaveAsync(FILENAME, settings);
         }
 
@@ -63,7 +73,7 @@ namespace SMPlayer.Models
 
         private static void AfterTreeSet(StorageFolder folder)
         {
-            MusicLibraryPage.AllSongs = settings.Tree.Flatten();
+            MusicLibraryPage.SetAllSongs(settings.Tree.Flatten());
             MusicLibraryPage.Save();
             Helper.CurrentFolder = folder;
         }

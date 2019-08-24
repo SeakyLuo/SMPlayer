@@ -24,6 +24,7 @@ using Microsoft.Toolkit.Uwp.Notifications;
 using Windows.UI.Notifications;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Core.Preview;
+using System.Threading.Tasks;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -39,7 +40,7 @@ namespace SMPlayer
             // This will return null when your current page is not a MainPage instance!
             get { return (Window.Current.Content as Frame).Content as MainPage; }
         }
-        private bool ShouldUpdate = true, SliderClicked = false, hasLoaded = false;
+        private bool ShouldUpdate = true, SliderClicked = false, hasLoaded = false, WindowVisible = true;
         private static List<MusicControlListener> MusicControlListeners = new List<MusicControlListener>();
 
         public MainPage()
@@ -52,6 +53,23 @@ namespace SMPlayer
             SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += (s, e) =>
             {
                 Settings.Save();
+                MusicLibraryPage.Save();
+            };
+            Window.Current.VisibilityChanged += async (s, e) =>
+            {
+                WindowVisible = e.Visible;
+                if (e.Visible)
+                {
+
+                }
+                else
+                {
+                    await Task.Run(() =>
+                    {
+                        System.Threading.Thread.Sleep(6666);
+                        if (!WindowVisible) MusicLibraryPage.CheckLibrary();
+                    });
+                }
             };
             this.NavigationCacheMode = NavigationCacheMode.Required;
             MediaHelper.AddMediaControlListener(this as MediaControlListener);
@@ -99,14 +117,12 @@ namespace SMPlayer
             if (music.Favorite) LikeMusic(false);
             else DislikeMusic(false);
             Settings.settings.LastMusic = music;
-            foreach (var listener in MusicControlListeners)
-                listener.MusicSet(music);
         }
 
         public void SetMusicAndPlay(Music music)
         {
             SetMusic(music);
-            MediaHelper.SetMusic(music);
+            MediaHelper.MoveToMusic(music);
             PlayMusic();
         }
 
@@ -136,7 +152,7 @@ namespace SMPlayer
             if (MediaHelper.CurrentMusic == null)
             {
                 if (MusicLibraryPage.AllSongs.Count == 0) return;
-                MediaHelper.SetMusic(MediaHelper.CurrentPlayList[0]);
+                MediaHelper.MoveToMusic(MediaHelper.CurrentPlayList[0]);
             }
             PlayButtonIcon.Glyph = "\uE769";
             MediaHelper.Play();
@@ -308,10 +324,9 @@ namespace SMPlayer
 
         private void SetMusicFavorite(bool favorite)
         {
-            Music before = new Music(MediaHelper.CurrentMusic);
+            Music before = MediaHelper.CurrentMusic.Copy();
             MediaHelper.CurrentMusic.Favorite = favorite;
-            foreach (var listener in MusicControlListeners)
-                listener.MusicModified(before, MediaHelper.CurrentMusic);
+            NotifyListeners(before, MediaHelper.CurrentMusic);
         }
 
         private void LikeButton_Click(object sender, RoutedEventArgs e)
@@ -373,6 +388,12 @@ namespace SMPlayer
             {
                 MediaSlider.Value = MediaHelper.Position;
             }
+            if (MediaSlider.Value == MediaSlider.Maximum)
+            {
+                Music before = MediaHelper.CurrentMusic.Copy();
+                MediaHelper.CurrentMusic.Played();
+                NotifyListeners(before, MediaHelper.CurrentMusic);
+            }
             if (!Window.Current.Visible) Helper.UpdateToast();
         }
         private void NotifyListeners(Music before, Music after)
@@ -381,7 +402,7 @@ namespace SMPlayer
                 listener.MusicModified(before, after);
         }
 
-        public async void MusicSwitching(Music current, Music next)
+        public async void MusicSwitchingAsync(Music current, Music next)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
@@ -389,15 +410,12 @@ namespace SMPlayer
                 next.IsPlaying = true;
                 if (!Window.Current.Visible) Helper.ShowToast(next);
                 SetMusic(next);
-                Music before = new Music(current);
-                current.Played();
-                NotifyListeners(before, current);
             });
         }
 
         public async void MediaEnded()
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 MediaHelper.Timer.Stop();
                 if (Settings.settings.Mode == PlayMode.Once)
@@ -412,6 +430,5 @@ namespace SMPlayer
     public interface MusicControlListener
     {
         void MusicModified(Music before, Music after);
-        void MusicSet(Music music);
     }
 }

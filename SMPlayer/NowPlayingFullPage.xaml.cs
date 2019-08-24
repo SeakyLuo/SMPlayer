@@ -54,14 +54,12 @@ namespace SMPlayer
             if (music.Favorite) LikeMusic(false);
             else DislikeMusic(false);
             Settings.settings.LastMusic = music;
-            foreach (var listener in MusicControlListeners.Values)
-                listener.MusicSet(music);
         }
 
         public void SetMusicAndPlay(Music music)
         {
             SetMusic(music);
-            MediaHelper.SetMusic(music);
+            MediaHelper.MoveToMusic(music);
             PlayMusic();
         }
 
@@ -91,7 +89,7 @@ namespace SMPlayer
             if (MediaHelper.CurrentMusic == null)
             {
                 if (MusicLibraryPage.AllSongs.Count == 0) return;
-                MediaHelper.SetMusic(MediaHelper.CurrentPlayList[0]);
+                MediaHelper.MoveToMusic(MediaHelper.CurrentPlayList[0]);
             }
             PlayButtonIcon.Glyph = "\uE769";
             MediaHelper.Play();

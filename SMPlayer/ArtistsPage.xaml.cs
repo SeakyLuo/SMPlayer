@@ -119,13 +119,10 @@ namespace SMPlayer
             return;
         }
 
-        public async void MusicSwitching(Music current, Music next)
+        public async void MusicSwitchingAsync(Music current, Music next)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
-                if (current != null)
-                Debug.WriteLine("Current: " + current.Name);
-                Debug.WriteLine("Next: " + next.Name);
                 foreach (var target in new Music[] { current, next })
                     FindMusicAndSetPlaying(target, next.Equals(target));
             });

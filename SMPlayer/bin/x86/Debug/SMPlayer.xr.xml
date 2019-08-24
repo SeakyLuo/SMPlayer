@@ -11,6 +11,7 @@
     <RootPropertyPathName Name="Album" />
     <RootPropertyPathName Name="Artist" />
     <RootPropertyPathName Name="Name" />
+    <RootPropertyPathName Name="IsPlaying" />
   </Roots.PropertyPathNames>
   <Roots.RootTypes>
     <RootType FullName="Windows.UI.Xaml.Application">
@@ -137,6 +138,7 @@
     <RootType FullName="SMPlayer.MusicPlayCountConverter" />
     <RootType FullName="SMPlayer.MusicVisibilityConverter" />
     <RootType FullName="SMPlayer.ArtistAlbumInfoConverter" />
+    <RootType FullName="SMPlayer.MusicIsPlayingConverter" />
     <RootType FullName="SMPlayer.RowColorConverter" />
     <RootType FullName="SMPlayer.SongCountConverter" />
     <RootType FullName="Windows.UI.Xaml.Setter">
@@ -343,6 +345,11 @@
       <RootProperty Name="ItemContainerStyle" />
       <RootProperty Name="ItemTemplate" />
       <RootProperty Name="IsItemClickEnabled" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="AllowDrop" />
+      <RootProperty Name="CanDrag" />
+      <RootProperty Name="CanReorderItems" />
+      <RootProperty Name="ReorderMode" />
       <RootEvent Name="ContainerContentChanging" />
       <RootEvent Name="ItemClick" />
     </RootType>
@@ -399,6 +406,7 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Data.Binding">
       <RootProperty Name="Converter" />
+      <RootProperty Name="Mode" />
     </RootType>
     <RootType FullName="SMPlayer.LocalFoldersPage" />
     <RootType FullName="SMPlayer.LocalMusicPage" />
@@ -463,7 +471,6 @@
       <RootProperty Name="IsDoubleTapEnabled" />
       <RootProperty Name="IsReadOnly" />
       <RootProperty Name="ItemsSource" />
-      <RootProperty Name="MinColumnWidth" />
       <RootProperty Name="SelectionMode" />
       <RootProperty Name="VerticalScrollBarVisibility" />
       <RootProperty Name="Columns" />
@@ -475,14 +482,14 @@
       <RootProperty Name="Width" />
       <RootProperty Name="Binding" />
       <RootProperty Name="CanUserSort" />
+      <RootProperty Name="Foreground" />
+      <RootProperty Name="CanUserResize" />
       <RootProperty Name="Header" />
       <RootProperty Name="Tag" />
+      <RootProperty Name="CellStyle" />
+      <RootProperty Name="MinWidth" />
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="IsReadOnly" />
-      <RootProperty Name="CanUserReorder" />
-      <RootProperty Name="CanUserResize" />
-      <RootProperty Name="Foreground" />
-      <RootProperty Name="CellStyle" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGridCell" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGridRow" />

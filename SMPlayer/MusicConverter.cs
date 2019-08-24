@@ -72,6 +72,19 @@ namespace SMPlayer
         }
     }
 
+    class MusicIsPlayingConverter : Windows.UI.Xaml.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return value.Equals(true) ? "\uE767" : "";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     class MusicPlayCountConverter : Windows.UI.Xaml.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
@@ -103,7 +116,6 @@ namespace SMPlayer
             throw new NotImplementedException();
         }
     }
-
     class LargeThumbnailVisibilityConverter : Windows.UI.Xaml.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

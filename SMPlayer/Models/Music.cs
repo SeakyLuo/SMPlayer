@@ -22,17 +22,21 @@ namespace SMPlayer
         public int Duration { get; set; }
         public bool Favorite { get; set; }
         public int PlayCount { get; set; }
-        private bool IsMusicPlaying = false;
+
+        private bool isPlaying = false;
 
         [Newtonsoft.Json.JsonIgnore]
         public bool IsPlaying
         {
+            get => isPlaying;
             set
             {
-                IsMusicPlaying = value;
-                OnPropertyChanged();
+                if (isPlaying != value)
+                {
+                    isPlaying = value;
+                    OnPropertyChanged();
+                }
             }
-            get => IsMusicPlaying;
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -41,13 +45,7 @@ namespace SMPlayer
         public Music(Music obj)
         {
             if (obj == null) return;
-            Path = obj.Path;
-            Name = obj.Name;
-            Artist = obj.Artist;
-            Album = obj.Album;
-            Duration = obj.Duration;
-            Favorite = obj.Favorite;
-            PlayCount = obj.PlayCount;
+            CopyFrom(obj);
         }
 
         public Music(string path, MusicProperties properties)
@@ -59,6 +57,7 @@ namespace SMPlayer
             Duration = (int)properties.Duration.TotalSeconds;
             Favorite = false;
             PlayCount = 0;
+            IsPlaying = false;
         }
 
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
@@ -67,10 +66,26 @@ namespace SMPlayer
             this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public Music Copy()
+        {
+            return new Music(this);
+        }
+
+        public void CopyFrom(Music obj)
+        {
+            Path = obj.Path;
+            Name = obj.Name;
+            Artist = obj.Artist;
+            Album = obj.Album;
+            Duration = obj.Duration;
+            Favorite = obj.Favorite;
+            PlayCount = obj.PlayCount;
+            IsPlaying = false;
+        }
+
         public void Played()
         {
             PlayCount += 1;
-            IsMusicPlaying = false;
         }
 
         public string GetShortPath()
@@ -78,21 +93,24 @@ namespace SMPlayer
             return Path.Substring(Settings.settings.RootPath.Length + 1); // Plus one due to "/"
         }
 
-        public static async Task<MusicProperties> GetMusicProperties(string path)
+        public static async Task<Music> GetMusic(string source)
         {
-            StorageFile file = await StorageFile.GetFileFromPathAsync(path);
-            return await file.Properties.GetMusicPropertiesAsync();
+            var file = await StorageFile.GetFileFromPathAsync(source);
+            return new Music(source, await file.Properties.GetMusicPropertiesAsync());
         }
 
-        public static async Task<Music> GetMusic(string path)
+        public static async Task<Music> GetMusic(Uri source)
         {
-            return new Music(path, await GetMusicProperties(path));
+            var file = await StorageFile.GetFileFromApplicationUriAsync(source);
+            return new Music(source.AbsolutePath, await file.Properties.GetMusicPropertiesAsync());
         }
 
         public string GetLyrics()
         {
+            //await Launcher.LaunchUriAsync(new Uri(“ms - settings:appsfeatures - app”));
             return "";
-            //using (var mp3 = new Mp3(Path)
+            //System.UnauthorizedAccessException
+            //using (var mp3 = new Mp3(Path))
             //{
             //    return mp3.GetTag(Id3TagFamily.Version2X).Lyrics.ToString();
             //}
