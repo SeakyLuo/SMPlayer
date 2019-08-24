@@ -112,6 +112,11 @@ namespace SMPlayer
 
         }
 
+        private void MusicInfoItem_Click(object sender, RoutedEventArgs e)
+        {
+            var list = AllSongs;
+        }
+
         private void MusicLibraryDataGrid_Sorting(object sender, DataGridColumnEventArgs e)
         {
             string header = e.Column.Header.ToString();
@@ -176,5 +181,6 @@ namespace SMPlayer
         }
 
         public void MediaEnded() { return; }
+
     }
 }

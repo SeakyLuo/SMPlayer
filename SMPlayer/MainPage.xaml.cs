@@ -40,7 +40,7 @@ namespace SMPlayer
             // This will return null when your current page is not a MainPage instance!
             get { return (Window.Current.Content as Frame).Content as MainPage; }
         }
-        private bool ShouldUpdate = true, SliderClicked = false, hasLoaded = false, WindowVisible = true;
+        private bool ShouldUpdate = true, SliderClicked = false, WindowVisible = true;
         private static List<MusicControlListener> MusicControlListeners = new List<MusicControlListener>();
 
         public MainPage()
@@ -73,17 +73,9 @@ namespace SMPlayer
             };
             this.NavigationCacheMode = NavigationCacheMode.Required;
             MediaHelper.AddMediaControlListener(this as MediaControlListener);
-            SetMusic(Settings.settings.LastMusic);
-        }
-
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (hasLoaded) return;
-            MusicLibraryItem.IsSelected = true;
-            await MediaHelper.Init();
+            // Settings
             Settings settings = Settings.settings;
-            if (!string.IsNullOrEmpty(settings.RootPath))
-                Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
+            SetMusic(settings.LastMusic);
             VolumeButton.Content = GetVolumeIcon(settings.Volume);
             VolumeSlider.Value = settings.Volume * 100;
             MainNavigationView.IsPaneOpen = settings.IsNavigationCollapsed;
@@ -103,7 +95,11 @@ namespace SMPlayer
                 default:
                     break;
             }
-            hasLoaded = true;
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            MusicLibraryItem.IsSelected = true;
         }
 
         public async void SetMusic(Music music)
@@ -117,11 +113,12 @@ namespace SMPlayer
             if (music.Favorite) LikeMusic(false);
             else DislikeMusic(false);
             Settings.settings.LastMusic = music;
+            await Helper.SaveThumbnail(AlbumCover);
+            Helper.UpdateTile(music);
         }
 
         public void SetMusicAndPlay(Music music)
         {
-            SetMusic(music);
             MediaHelper.MoveToMusic(music);
             PlayMusic();
         }
@@ -303,8 +300,8 @@ namespace SMPlayer
             MediaHelper.Player.IsMuted = false;
             double volume = e.NewValue / 100;
             MediaHelper.Player.Volume = volume;
-            Settings.settings.Volume = volume;
             VolumeButton.Content = GetVolumeIcon(e.NewValue);            
+            Settings.settings.Volume = volume;
         }
 
         public void LikeMusic(bool isClick = true)
@@ -410,10 +407,9 @@ namespace SMPlayer
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
-                if (current == null) return;
                 next.IsPlaying = true;
-                if (!Window.Current.Visible) Helper.ShowToast(next);
                 SetMusic(next);
+                if (!Window.Current.Visible) Helper.ShowToast(next);
             });
         }
 

@@ -52,6 +52,9 @@ namespace SMPlayer.Models
                 var folder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
                 AfterTreeSet(folder);
             }
+
+            if (!string.IsNullOrEmpty(settings.RootPath))
+                Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
         }
 
         public static void Save()

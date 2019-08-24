@@ -31,10 +31,12 @@ namespace SMPlayer
         public const string NoLyricsAvailable = "No Lyrics Available";
 
         public static StorageFolder CurrentFolder;
+        public static StorageFile Thumbnail;
         public static BitmapImage DefaultAlbumCover = new BitmapImage(new Uri(DefaultAlbumCoverPath));
         public static BitmapImage ThumbnailNotFoundImage = new BitmapImage(new Uri(ThumbnailNotFoundPath));
         public static ToastNotifier toastNotifier = ToastNotificationManager.CreateToastNotifier();
         public static ToastAudio SlientToast = new ToastAudio() { Silent = true };
+        public static TileUpdater tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
         public static SolidColorBrush WhiteBrush = new SolidColorBrush(Colors.White);
         public static SolidColorBrush WhiteSmokeBrush = new SolidColorBrush(Colors.WhiteSmoke);
         public static SolidColorBrush BlackBrush = new SolidColorBrush(Colors.Black);
@@ -158,6 +160,126 @@ namespace SMPlayer
 
             // Update the existing notification's data by using tag/group
             toastNotifier.Update(data, ToastTag, ToastGroup);
+        }
+
+        public static async Task SaveThumbnail(UIElement image)
+        {
+            var _bitmap = new RenderTargetBitmap();
+            await _bitmap.RenderAsync(image);
+            var pixels = await _bitmap.GetPixelsAsync();
+            //var folder = await ApplicationData.Current.LocalFolder;
+            Thumbnail = await ApplicationData.Current.LocalFolder.CreateFileAsync("CurrentMusicThumbnail.png", CreationCollisionOption.ReplaceExisting);
+            using (IRandomAccessStream stream = await Thumbnail.OpenAsync(FileAccessMode.ReadWrite))
+            {
+                var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, stream);
+                byte[] bytes = pixels.ToArray();
+                encoder.SetPixelData(BitmapPixelFormat.Bgra8,
+                                     BitmapAlphaMode.Ignore,
+                                     (uint)_bitmap.PixelWidth,
+                                     (uint)_bitmap.PixelHeight,
+                                     200,
+                                     200,
+                                     bytes);
+
+                await encoder.FlushAsync();
+            }
+        }
+
+        public static void UpdateTile(Music music)
+        {
+            string uri = Thumbnail.Path;
+            var tileContent = new TileContent()
+            {
+                Visual = new TileVisual()
+                {
+                    //TileSmall = new TileBinding()
+                    //{
+                    //    Branding = TileBranding.None,
+                    //    Content = new TileBindingContentAdaptive()
+                    //    {
+                    //        Children =
+                    //        {
+                    //            new AdaptiveImage()
+                    //            {
+                    //                Source = uri
+                    //            }
+                    //        }
+                    //    }
+                    //},
+                    TileMedium = new TileBinding()
+                    {
+                        Branding = TileBranding.None,
+                        Content = new TileBindingContentAdaptive()
+                        {
+                            Children =
+                            {
+                                new AdaptiveImage() { Source = uri },
+                            }
+                        }
+                    },
+                    TileWide = new TileBinding()
+                    {
+                        Branding = TileBranding.None,
+                        Content = new TileBindingContentAdaptive()
+                        {
+                            Children =
+                            {
+                                new AdaptiveImage()
+                                {
+                                    Source = uri
+                                },
+                                new AdaptiveText()
+                                {
+                                    Text = music.Name,
+                                    HintStyle = AdaptiveTextStyle.Title
+                                }
+                            }
+                        }
+                    },
+                    TileLarge = new TileBinding()
+                    {
+                        Branding = TileBranding.None,
+                        Content = new TileBindingContentAdaptive()
+                        {
+                            Children =
+                            {
+                                new AdaptiveImage()
+                                {
+                                    Source = uri
+                                },
+                                new AdaptiveGroup()
+                                {
+                                    Children =
+                                    {
+                                        new AdaptiveSubgroup()
+                                        {
+                                            Children =
+                                            {
+                                                new AdaptiveText()
+                                                {
+                                                    Text = music.Name,
+                                                    HintStyle = AdaptiveTextStyle.Caption
+                                                },
+                                                new AdaptiveText()
+                                                {
+                                                    Text = music.Artist,
+                                                    HintStyle = AdaptiveTextStyle.CaptionSubtle
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                            }
+                        }
+                    }
+                }
+            };
+
+            // Create the tile notification
+            var tileNotification = new TileNotification(tileContent.GetXml());
+
+            // And send the notification to the primary tile
+            tileUpdater.Update(tileNotification);
         }
     }
 }

@@ -50,9 +50,9 @@
                 <controls:DataGridTextColumn
                     Width="40"
                     Binding="{Binding IsPlaying, Converter={StaticResource MusicIsPlayingConverter}, Mode=OneWay}"
+                    CanUserResize="False"
                     CanUserSort="False"
                     Foreground="#0078D7"
-                    CanUserResize="False"
                     Header=""
                     Tag="IsPlaying">
                     <controls:DataGridTextColumn.CellStyle>
@@ -142,6 +142,7 @@
                                     Text="Delete From Disk" />
                                 <MenuFlyoutItem x:ConnectionId='8'
                                     x:Name="MusicInfoItem"
+                                                               
                                     Icon="MusicInfo"
                                     Text="Music Info" />
                             </MenuFlyout>

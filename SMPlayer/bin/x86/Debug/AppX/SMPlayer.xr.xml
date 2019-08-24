@@ -481,9 +481,9 @@
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGridTextColumn">
       <RootProperty Name="Width" />
       <RootProperty Name="Binding" />
+      <RootProperty Name="CanUserResize" />
       <RootProperty Name="CanUserSort" />
       <RootProperty Name="Foreground" />
-      <RootProperty Name="CanUserResize" />
       <RootProperty Name="Header" />
       <RootProperty Name="Tag" />
       <RootProperty Name="CellStyle" />

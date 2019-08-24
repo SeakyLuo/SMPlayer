@@ -78,6 +78,8 @@ namespace SMPlayer
                 Window.Current.Activate();
             }
 
+            await MediaHelper.Init();
+
             // If background task is already registered, do nothing
             if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals(Helper.ToastTaskName)))
                 return;
