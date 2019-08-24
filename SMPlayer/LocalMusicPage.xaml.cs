@@ -50,12 +50,20 @@ namespace SMPlayer
             if (Tree == tree) return;
             Tree = tree;
             LocalLoadingControl.Visibility = Visibility.Visible;
-            GridItems.Clear();
-            foreach (var file in tree.Files)
+            try
             {
-                GridMusicView gridItem = new GridMusicView();
-                await gridItem.Init(file);
-                GridItems.Add(gridItem);
+                GridItems.Clear();
+                foreach (var file in tree.Files)
+                {
+                    GridMusicView gridItem = new GridMusicView();
+                    await gridItem.Init(file);
+                    GridItems.Add(gridItem);
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                // Loading while Set New Folder will cause this Exception
+                System.Diagnostics.Debug.WriteLine("InvalidOperationException On Local Music Page");
             }
             LocalLoadingControl.Visibility = Visibility.Collapsed;
         }

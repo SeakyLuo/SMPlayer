@@ -24,7 +24,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalPage : Page, LocalSetter
+    public sealed partial class LocalPage : Page, LocalSetter, AfterPathSetListener
     {
         public static Stack<FolderTree> History = new Stack<FolderTree>();
         public LocalPage()
@@ -33,6 +33,7 @@ namespace SMPlayer
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             LocalFoldersPage.setter = this;
             SetPage(Settings.settings.Tree);
+            SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -105,9 +106,12 @@ namespace SMPlayer
             LocalGridViewItem.Visibility = Visibility.Collapsed;
         }
 
-        private void LocalShuffleItem_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void LocalShuffleItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-
+            var tree = History.Peek();
+            await MediaHelper.SetPlayList(LocalFrame.SourcePageType == typeof(LocalMusicPage) ? tree.Flatten() : tree.Files);
+            MainPage.Instance.SetShuffle(true);
+            MediaHelper.Play();
         }
 
         private void SetText(TreeInfo info)
@@ -128,12 +132,12 @@ namespace SMPlayer
             SetText(info);
             if (IsBackToMusicPage(info))
             {
-                LocalSongsItem.IsSelected = true;
+                LocalNavigationView.SelectedItem = LocalSongsItem;
                 LocalFrame.Navigate(typeof(LocalMusicPage), tree);
             }
             else
             {
-                LocalFoldersItem.IsSelected = true;
+                LocalNavigationView.SelectedItem = LocalFoldersItem;
                 LocalFrame.Navigate(typeof(LocalFoldersPage), tree);
             }
         }
@@ -141,6 +145,12 @@ namespace SMPlayer
         private bool IsBackToMusicPage(TreeInfo info)
         {
             return info.Songs > info.Folders;
+        }
+
+        public void PathSet(string path)
+        {
+            History.Clear();
+            SetPage(Settings.settings.Tree);
         }
     }
     public interface LocalSetter

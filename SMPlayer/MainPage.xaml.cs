@@ -128,9 +128,13 @@ namespace SMPlayer
 
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
+            SetShuffle((bool)ShuffleButton.IsChecked);
+        }
+        public void SetShuffle(bool isShuffle)
+        {
             RepeatButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            MediaHelper.SetMode((bool)ShuffleButton.IsChecked ? PlayMode.Shuffle : PlayMode.Once);
+            MediaHelper.SetMode(isShuffle ? PlayMode.Shuffle : PlayMode.Once);
         }
 
         private void RepeatButton_Click(object sender, RoutedEventArgs e)

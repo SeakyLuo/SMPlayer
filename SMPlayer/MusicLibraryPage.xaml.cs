@@ -39,21 +39,23 @@ namespace SMPlayer
             MediaHelper.AddMediaControlListener(this as MediaControlListener);
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
             Update();
             FindMusicAndSetPlaying(MediaHelper.CurrentMusic, true);
+            await Dispatcher.TryRunAsync(CoreDispatcherPriority.Low, () => { });
+            await Dispatcher.RunIdleAsync((args) => { CheckLibrary(); });
         }
 
         public static async Task Init()
         {
             AllSongs = JsonFileHelper.Convert<ObservableCollection<Music>>(await JsonFileHelper.ReadAsync(FILENAME));
-            CheckLibrary();
         }
 
         public static async void CheckLibrary()
         {
+            if (Helper.CurrentFolder == null) return;
             var tree = new FolderTree();
             await tree.Init(Helper.CurrentFolder);
             var newLibrary = tree.Flatten();
@@ -150,7 +152,8 @@ namespace SMPlayer
 
         public static void SetAllSongs(IEnumerable<Music> songs)
         {
-            AllSongs.Clear();
+            if (AllSongs == null) AllSongs = new ObservableCollection<Music>();
+            else AllSongs.Clear();
             foreach (var item in songs) AllSongs.Add(item);
         }
 

@@ -35,8 +35,10 @@ namespace SMPlayer
 
         private async void PathBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            FolderPicker picker = new FolderPicker();
-            picker.SuggestedStartLocation = PickerLocationId.MusicLibrary;
+            FolderPicker picker = new FolderPicker
+            {
+                SuggestedStartLocation = PickerLocationId.MusicLibrary
+            };
             picker.FileTypeFilter.Add("*");
             StorageFolder folder = await picker.PickSingleFolderAsync();
             if (folder == null || folder.Path == Settings.settings.RootPath) return;
@@ -46,6 +48,7 @@ namespace SMPlayer
             await Settings.SetTreeFolder(folder);
             foreach (var listener in listeners) listener.PathSet(folder.Path);
             await MediaHelper.SetPlayList(MusicLibraryPage.AllSongs);
+            Settings.Save();
             PathBox.Text = folder.Path;
             SettingsLoadingControl.IsLoading = false;
         }

@@ -90,8 +90,7 @@ namespace SMPlayer.Models
             List<Music> list = new List<Music>();
             foreach (var branch in Trees)
                 list.AddRange(branch.Flatten());
-            foreach (var music in Files)
-                list.Add(music);
+            list.AddRange(Files);
             return list;
         }
 

@@ -40,7 +40,7 @@ namespace SMPlayer
             {
                 await SetPlayList(Settings.settings.PlayList);
             }
-            else
+            else if (!string.IsNullOrEmpty(Settings.settings.RootPath))
             {
                 while (MusicLibraryPage.AllSongs == null) { }
                 await SetPlayList(MusicLibraryPage.AllSongs);
@@ -101,9 +101,16 @@ namespace SMPlayer
             PlayList.Items.Clear();
             foreach (var music in playlist)
             {
-                var file = await Helper.CurrentFolder.GetFileAsync(music.GetShortPath());
-                var item = new MediaPlaybackItem(MediaSource.CreateFromStorageFile(file));
-                PlayList.Items.Add(item);
+                try
+                {
+                    var file = await Helper.CurrentFolder.GetFileAsync(music.GetShortPath());
+                    var item = new MediaPlaybackItem(MediaSource.CreateFromStorageFile(file));
+                    PlayList.Items.Add(item);
+                }
+                catch (System.IO.FileNotFoundException)
+                {
+                    continue;
+                }
             }
             CurrentPlayList = playlist.ToList();
         }

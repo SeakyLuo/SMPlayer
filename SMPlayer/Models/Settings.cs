@@ -12,7 +12,7 @@ namespace SMPlayer.Models
     public class Settings
     {
         public static Settings settings;
-        private const string FILENAME = "Settings.json";
+        private const string FILENAME = "SMPlayerSettings.json";
 
         public string RootPath { get; set; }
         public FolderTree Tree { get; set; }
@@ -48,6 +48,7 @@ namespace SMPlayer.Models
             else
             {
                 settings = JsonFileHelper.Convert<Settings>(json);
+                if (string.IsNullOrEmpty(settings.RootPath)) return;
                 var folder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
                 AfterTreeSet(folder);
             }
