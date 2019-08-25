@@ -9,6 +9,7 @@ using SMPlayer.Models;
 using Id3;
 using Windows.Media.Core;
 using System.ComponentModel;
+using System.IO;
 
 namespace SMPlayer
 {
@@ -20,8 +21,32 @@ namespace SMPlayer
         public string Artist { get; set; }
         public string Album { get; set; }
         public int Duration { get; set; }
-        public bool Favorite { get; set; }
-        public int PlayCount { get; set; }
+
+        private bool isFavorite = false;
+
+        public bool Favorite
+        {
+            get => isFavorite;
+            set
+            {
+                if (isFavorite != value)
+                {
+                    isFavorite = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private int playCount = 0;
+        public int PlayCount
+        {
+            get => playCount;
+            set
+            {
+                playCount = value;
+                OnPropertyChanged();
+            }
+        }
 
         private bool isPlaying = false;
 
@@ -80,7 +105,7 @@ namespace SMPlayer
             Duration = obj.Duration;
             Favorite = obj.Favorite;
             PlayCount = obj.PlayCount;
-            IsPlaying = false;
+            IsPlaying = obj.IsPlaying;
         }
 
         public void Played()
@@ -105,15 +130,17 @@ namespace SMPlayer
             return new Music(source.AbsolutePath, await file.Properties.GetMusicPropertiesAsync());
         }
 
-        public string GetLyrics()
+        public async Task<string> GetLyrics()
         {
-            //await Launcher.LaunchUriAsync(new Uri(“ms - settings:appsfeatures - app”));
-            return "";
-            //System.UnauthorizedAccessException
-            //using (var mp3 = new Mp3(Path))
-            //{
-            //    return mp3.GetTag(Id3TagFamily.Version2X).Lyrics.ToString();
-            //}
+            var file = await StorageFile.GetFileFromPathAsync(Path);
+            using (var stream = await file.OpenAsync(FileAccessMode.Read))
+            {
+                using (var mp3 = new Mp3(stream.AsStream()))
+                {
+                    var lyrics = mp3.GetTag(Id3TagFamily.Version2X).Lyrics;
+                    return lyrics.Count > 0 ? lyrics[0].Lyrics : "";
+                }
+            }
         }
 
         int IComparable<Music>.CompareTo(Music other)

@@ -53,8 +53,9 @@ namespace SMPlayer.Models
                 AfterTreeSet(folder);
             }
 
-            if (!string.IsNullOrEmpty(settings.RootPath))
-                Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
+            Helper.ThumbnailFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Thumbnails", CreationCollisionOption.OpenIfExists);
+            foreach (var item in await Helper.ThumbnailFolder.GetFilesAsync())
+                await item.DeleteAsync();
         }
 
         public static void Save()

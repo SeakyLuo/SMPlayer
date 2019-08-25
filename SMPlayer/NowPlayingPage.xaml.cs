@@ -85,7 +85,7 @@ namespace SMPlayer
             if (music != null) music.IsPlaying = isPlaying;
         }
 
-        public async void MusicSwitchingAsync(Music current, Music next)
+        public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {

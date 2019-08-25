@@ -15,14 +15,13 @@ namespace SMPlayer.Models
 
         public static async Task<string> ReadAsync(string filename)
         {
-            StorageFile file = await GetStorageFileAsync(filename);
-            string content = await FileIO.ReadTextAsync(file);
-            return content;
+            StorageFile file = await Folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
+            return await FileIO.ReadTextAsync(file);
         }
 
         public static async void SaveAsync<T>(string filename, T data)
         {
-            StorageFile file = await GetStorageFileAsync(filename);
+            StorageFile file = await Folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
             var json = JsonConvert.SerializeObject(data);
             while (true)
             {
@@ -33,6 +32,7 @@ namespace SMPlayer.Models
                 }
                 catch (FileLoadException)
                 {
+                    System.Threading.Thread.Sleep(1000);
                     continue;
                 }
             }
@@ -41,20 +41,6 @@ namespace SMPlayer.Models
         public static T Convert<T>(string json)
         {
             return JsonConvert.DeserializeObject<T>(json);
-        }
-
-        public static async Task<StorageFile> GetStorageFileAsync(string filename)
-        {
-            StorageFile file;
-            try
-            {
-                file = await Folder.GetFileAsync(filename);
-            }
-            catch (FileNotFoundException)
-            {
-                file = await Folder.CreateFileAsync(filename);
-            }
-            return file;
         }
 
         public static async void DeleteFile(string filename)

@@ -35,16 +35,6 @@ namespace SMPlayer
 
         public async static Task Init()
         {
-            while (Settings.settings == null) { }
-            if (Settings.settings.PlayList.Count > 0)
-            {
-                await SetPlayList(Settings.settings.PlayList);
-            }
-            else if (!string.IsNullOrEmpty(Settings.settings.RootPath))
-            {
-                while (MusicLibraryPage.AllSongs == null) { }
-                await SetPlayList(MusicLibraryPage.AllSongs);
-            }
             Timer.Tick += (sender, e) =>
             {
                 foreach (var listener in MediaControlListeners)
@@ -55,7 +45,7 @@ namespace SMPlayer
                 if (sender.CurrentItemIndex >= CurrentPlayList.Count) return;
                 Music current = CurrentMusic?.Copy(), next = CurrentPlayList[Convert.ToInt32(sender.CurrentItemIndex)];
                 foreach (var listener in MediaControlListeners)
-                    listener.MusicSwitchingAsync(current, next);
+                    listener.MusicSwitching(current, next, args.Reason);
                 CurrentMusic = next;
             };
             Player.MediaEnded += (sender, args) =>
@@ -64,6 +54,16 @@ namespace SMPlayer
                     listener.MediaEnded();
             };
 
+            while (Settings.settings == null) { System.Threading.Thread.Sleep(500); }
+            if (Settings.settings.PlayList.Count > 0)
+            {
+                await SetPlayList(Settings.settings.PlayList);
+            }
+            else if (!string.IsNullOrEmpty(Settings.settings.RootPath))
+            {
+                while (MusicLibraryPage.AllSongs == null) { }
+                await SetPlayList(MusicLibraryPage.AllSongs);
+            }
             Player.Volume = Settings.settings.Volume;
             MoveToMusic(Settings.settings.LastMusic);
             SetMode(Settings.settings.Mode);
@@ -195,7 +195,7 @@ namespace SMPlayer
     public interface MediaControlListener
     {
         void Tick();
-        void MusicSwitchingAsync(Music current, Music next);
+        void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason);
         void MediaEnded();
     }
 }

@@ -5,10 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Graphics.Imaging;
-using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.Storage.Streams;
@@ -30,7 +28,7 @@ namespace SMPlayer
         public const string ToastGroup = "SMPlayerMediaToastGroup";
         public const string NoLyricsAvailable = "No Lyrics Available";
 
-        public static StorageFolder CurrentFolder;
+        public static StorageFolder CurrentFolder, ThumbnailFolder;
         public static StorageFile Thumbnail;
         public static BitmapImage DefaultAlbumCover = new BitmapImage(new Uri(DefaultAlbumCoverPath));
         public static BitmapImage ThumbnailNotFoundImage = new BitmapImage(new Uri(ThumbnailNotFoundPath));
@@ -56,11 +54,9 @@ namespace SMPlayer
 
         public static async Task<BitmapImage> GetThumbnail(Music music, bool withDefault = true)
         {
-            StorageFile file;
             try
             {
-                file = await CurrentFolder.GetFileAsync(music.GetShortPath());
-                return await GetThumbnail(file, withDefault);
+                return await GetThumbnail(await CurrentFolder.GetFileAsync(music.GetShortPath()), withDefault);
             }
             catch (FileNotFoundException)
             {
@@ -89,11 +85,60 @@ namespace SMPlayer
             }
             return bitmapImage;
         }
+
+        public static async Task<Brush> GetThumbnailMainColor()
+        {
+            var decoder = await BitmapDecoder.CreateAsync(await Thumbnail.OpenAsync(FileAccessMode.Read));
+            var data = await decoder.GetPixelDataAsync(BitmapPixelFormat.Bgra8,
+                                                       BitmapAlphaMode.Straight,
+                                                       new BitmapTransform()
+                                                       {
+                                                           Bounds = new BitmapBounds() { Height = 1, Width = 1, X = 0, Y = 0 },
+                                                           ScaledWidth = 1,
+                                                           ScaledHeight = 1,
+                                                           //ScaledWidth = decoder.PixelWidth,
+                                                           //ScaledHeight = decoder.PixelHeight,
+                                                       },
+                                                       ExifOrientationMode.IgnoreExifOrientation,
+                                                       ColorManagementMode.DoNotColorManage);
+            var bgra = data.DetachPixelData();
+            return new AcrylicBrush()
+            {
+                BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
+                TintOpacity = 0.75,
+                TintColor = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0])
+            };
+        }
+
+        public static async Task<Brush> GetThumbnailMainColorBackup()
+        {
+            using (var stream = await Thumbnail.OpenAsync(FileAccessMode.Read))
+            {
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    await stream.AsStreamForRead().CopyToAsync(memoryStream);
+                    byte[] pixels = memoryStream.ToArray();
+                    var bgra = new byte[4];
+                    for (int i = 0; i < pixels.Length; i += 4)
+                        for (int j = 0; j < 4; j++)
+                            bgra[j] += pixels[i];
+                    var result = new byte[4];
+                    for (int i = 0; i < 4; i++)
+                        result[i] = Convert.ToByte(bgra[i] / (pixels.Length / 4));
+                    return new AcrylicBrush()
+                    {
+                        BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
+                        TintOpacity = 0.75,
+                        TintColor = Color.FromArgb(result[3], result[2], result[1], result[0])
+                    };
+                }
+            }
+        }
         public static void SetBackButtonVisibility(AppViewBackButtonVisibility visibility)
         {
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = visibility;
         }
-        public static void ShowToast(Music music)
+        public static async void ShowToast(Music music)
         {
             ShowNotification status = Settings.settings.Notification;
             if (status == ShowNotification.Never) return;
@@ -145,7 +190,7 @@ namespace SMPlayer
             };
             toast.Data.Values["MediaControlPosition"] = "0";
             toast.Data.Values["MediaControlPositionTime"] = "0:00";
-            toast.Data.Values["Lyrics"] = string.IsNullOrEmpty(Lyrics = music.GetLyrics()) ? NoLyricsAvailable : "" ;
+            toast.Data.Values["Lyrics"] = string.IsNullOrEmpty(Lyrics = await music.GetLyrics()) ? NoLyricsAvailable : "" ;
 
             toastNotifier.Show(toast);
         }
@@ -167,11 +212,21 @@ namespace SMPlayer
             var _bitmap = new RenderTargetBitmap();
             await _bitmap.RenderAsync(image);
             var pixels = await _bitmap.GetPixelsAsync();
-            //var folder = await ApplicationData.Current.LocalFolder;
-            Thumbnail = await ApplicationData.Current.LocalFolder.CreateFileAsync("CurrentMusicThumbnail.png", CreationCollisionOption.ReplaceExisting);
+            while (true)
+            {
+                try
+                {
+                    Thumbnail = await ThumbnailFolder.CreateFileAsync($@"{Guid.NewGuid()}.png", CreationCollisionOption.ReplaceExisting);
+                    break;
+                }
+                catch (FileLoadException)
+                {
+                    continue;
+                }
+            }
             using (IRandomAccessStream stream = await Thumbnail.OpenAsync(FileAccessMode.ReadWrite))
             {
-                var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, stream);
+                var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, stream);
                 byte[] bytes = pixels.ToArray();
                 encoder.SetPixelData(BitmapPixelFormat.Bgra8,
                                      BitmapAlphaMode.Ignore,

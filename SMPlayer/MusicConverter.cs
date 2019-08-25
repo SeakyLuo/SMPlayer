@@ -41,8 +41,8 @@ namespace SMPlayer
             minutes %= 60;
             hours %= 60;
             days %= 24;
-            string second = seconds < 60 || minutes < 6 ? string.Format("{0} {1}", seconds, TryPlural("second", seconds % 60)) : "",
-                   minute = minutes == 0 ? "" : string.Format("{0} {1} ", minutes, TryPlural("minute", minutes)),
+            string second = seconds < 60 || minutes < 6 ? string.Format("{0} {1}", seconds %= 60, TryPlural("second", seconds)) : "",
+                   minute = minutes == 0 || days > 0 ? "" : string.Format("{0} {1} ", minutes, TryPlural("minute", minutes)),
                    hour = hours == 0 ? "" : string.Format("{0} {1} ", hours, TryPlural("hour", hours)),
                    day = days == 0 ? "" : string.Format("{0} {1} ", days, TryPlural("day", days));
             return day + hour + minute + second;

@@ -4,7 +4,6 @@
     <RootInterface FullName="Windows.UI.Xaml.Data.IValueConverter" />
   </Roots.Interfaces>
   <Roots.PropertyPathNames>
-    <RootPropertyPathName Name="AllSongs" />
     <RootPropertyPathName Name="PlayCount" />
     <RootPropertyPathName Name="Favorite" />
     <RootPropertyPathName Name="Duration" />
@@ -165,6 +164,7 @@
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Opacity" />
       <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="RequestedTheme" />
       <RootMethod Name="GetRow" />
       <RootMethod Name="SetRow" />
       <RootMethod Name="GetRowSpan" />
@@ -406,6 +406,7 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Data.Binding">
       <RootProperty Name="Converter" />
+      <RootProperty Name="Source" />
       <RootProperty Name="Mode" />
     </RootType>
     <RootType FullName="SMPlayer.LocalFoldersPage" />

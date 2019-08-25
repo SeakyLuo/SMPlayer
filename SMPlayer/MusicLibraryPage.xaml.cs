@@ -30,11 +30,13 @@ namespace SMPlayer
     {
         private const string FILENAME = "MusicLibrary.json";
         public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
+        private bool libraryChecked = false;
 
         public MusicLibraryPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            MusicLibraryDataGrid.ItemsSource = AllSongs;
             MainPage.AddMusicControlListener(this as MusicControlListener);
             MediaHelper.AddMediaControlListener(this as MediaControlListener);
         }
@@ -42,10 +44,9 @@ namespace SMPlayer
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
-            Update();
             FindMusicAndSetPlaying(MediaHelper.CurrentMusic, true);
-            await Dispatcher.TryRunAsync(CoreDispatcherPriority.Low, () => { });
-            await Dispatcher.RunIdleAsync((args) => { CheckLibrary(); });
+            if (!libraryChecked)
+                await Dispatcher.RunIdleAsync((args) => { CheckLibrary(); libraryChecked = true; });
         }
 
         public static async Task Init()
@@ -72,11 +73,6 @@ namespace SMPlayer
         {
             JsonFileHelper.SaveAsync(FILENAME, AllSongs);
         }
-
-        private void Update()
-        {
-            MusicLibraryDataGrid.ItemsSource = AllSongs;
-        }
         private void PlayItem_Click(object sender, RoutedEventArgs e)
         {
             var music = (sender as MenuFlyoutItem).DataContext as Music;
@@ -99,6 +95,8 @@ namespace SMPlayer
         public void MusicModified(Music before, Music after)
         {
             var music = AllSongs.First((m) => m.Equals(before));
+            if (after.Equals(MediaHelper.CurrentMusic))
+                after.IsPlaying = true;
             music.CopyFrom(after);
         }
 
@@ -120,7 +118,7 @@ namespace SMPlayer
         private void MusicLibraryDataGrid_Sorting(object sender, DataGridColumnEventArgs e)
         {
             string header = e.Column.Header.ToString();
-            IOrderedEnumerable<Music> temp;
+            IEnumerable<Music> temp;
             switch (header)
             {
                 case "Name":
@@ -141,18 +139,16 @@ namespace SMPlayer
                 default:
                     return;
             }
-            SetAllSongs(temp.ToList());
             foreach (var column in MusicLibraryDataGrid.Columns)
                 if (column.Header.ToString() != header)
                     column.SortDirection = null;
             if (e.Column.SortDirection == DataGridSortDirection.Ascending)
             {
                 e.Column.SortDirection = DataGridSortDirection.Descending;
-                AllSongs.Reverse();
+                temp = temp.Reverse();
             }
             else e.Column.SortDirection = DataGridSortDirection.Ascending;
-            Update();
-            Save();
+            SetAllSongs(temp.ToList());
         }
 
         public static void SetAllSongs(IEnumerable<Music> songs)
@@ -167,11 +163,12 @@ namespace SMPlayer
         private void FindMusicAndSetPlaying(Music target, bool isPlaying)
         {
             if (target == null) return;
+            while (AllSongs == null) { System.Threading.Thread.Sleep(500); }
             var music = AllSongs.FirstOrDefault((m) => m.Equals(target));
             if (music != null) music.IsPlaying = isPlaying;
         }
 
-        public async void MusicSwitchingAsync(Music current, Music next)
+        public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {

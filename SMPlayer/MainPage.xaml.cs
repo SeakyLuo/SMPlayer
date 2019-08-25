@@ -33,7 +33,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MainPage : Page, MediaControlListener
+    public sealed partial class MainPage : Page, MediaControlListener, AfterPathSetListener
     {
         public static MainPage Instance
         {
@@ -64,9 +64,10 @@ namespace SMPlayer
                 }
                 else
                 {
-                    await Task.Run(() =>
+                    await Dispatcher.RunIdleAsync((args) =>
                     {
-                        System.Threading.Thread.Sleep(6666);
+                        // 2333
+                        System.Threading.Thread.Sleep(2333);
                         if (!WindowVisible) MusicLibraryPage.CheckLibrary();
                     });
                 }
@@ -75,7 +76,6 @@ namespace SMPlayer
             MediaHelper.AddMediaControlListener(this as MediaControlListener);
             // Settings
             Settings settings = Settings.settings;
-            SetMusic(settings.LastMusic);
             VolumeButton.Content = GetVolumeIcon(settings.Volume);
             VolumeSlider.Value = settings.Volume * 100;
             MainNavigationView.IsPaneOpen = settings.IsNavigationCollapsed;
@@ -105,16 +105,25 @@ namespace SMPlayer
         public async void SetMusic(Music music)
         {
             if (music == null) return;
-            AlbumCover.Source = await Helper.GetThumbnail(music);
             TitleTextBlock.Text = music.Name;
             ArtistTextBlock.Text = music.Artist;
             MediaSlider.Maximum = music.Duration;
             RightTimeTextBlock.Text = MusicDurationConverter.ToTime(music.Duration);
             if (music.Favorite) LikeMusic(false);
             else DislikeMusic(false);
-            Settings.settings.LastMusic = music;
+            AlbumCover.Source = await Helper.GetThumbnail(music);
             await Helper.SaveThumbnail(AlbumCover);
+            MediaControlGrid.Background = await Helper.GetThumbnailMainColor();
             Helper.UpdateTile(music);
+            // Same Album should have the same Thumbnail
+            //if (MediaHelper.CurrentMusic == null || music.Album != MediaHelper.CurrentMusic.Album)
+            //{
+            //    AlbumCover.Source = await Helper.GetThumbnail(music);
+            //    await Helper.SaveThumbnail(AlbumCover);
+            //    MediaControlGrid.Background = await Helper.GetThumbnailMainColor();
+            //    Helper.UpdateTile(music);
+            //}
+            Settings.settings.LastMusic = music;
         }
 
         public void SetMusicAndPlay(Music music)
@@ -123,6 +132,10 @@ namespace SMPlayer
             PlayMusic();
         }
 
+        public static void AddMusicControlListener(MusicControlListener listener)
+        {
+            MusicControlListeners.Add(listener);
+        }
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
             SetShuffle((bool)ShuffleButton.IsChecked);
@@ -314,13 +327,8 @@ namespace SMPlayer
         public void DislikeMusic(bool isClick = true)
         {
             LikeButtonIcon.Glyph = "\uEB51";
-            LikeButtonIcon.Foreground = new SolidColorBrush(Windows.UI.Colors.Black);
+            LikeButtonIcon.Foreground = new SolidColorBrush(Windows.UI.Colors.White);
             if (isClick) SetMusicFavorite(false);
-        }
-        
-        public static void AddMusicControlListener(MusicControlListener listener)
-        {
-            MusicControlListeners.Add(listener);
         }
 
         private void SetMusicFavorite(bool favorite)
@@ -403,11 +411,12 @@ namespace SMPlayer
                 listener.MusicModified(before, after);
         }
 
-        public async void MusicSwitchingAsync(Music current, Music next)
+        public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
                 next.IsPlaying = true;
+                if (reason == MediaPlaybackItemChangedReason.EndOfStream) next.PlayCount += 1;
                 SetMusic(next);
                 if (!Window.Current.Visible) Helper.ShowToast(next);
             });
@@ -424,6 +433,13 @@ namespace SMPlayer
                     MediaSlider.Value = 0;
                 }
             });
+        }
+
+        public void PathSet(string path)
+        {
+            AlbumCover.Source = Helper.DefaultAlbumCover;
+            TitleTextBlock.Text = "";
+            ArtistTextBlock.Text = "";
         }
     }
 

@@ -106,6 +106,7 @@ namespace SMPlayer
 
         private void FindMusicAndSetPlaying(Music target, bool isPlaying)
         {
+            if (target == null) return;
             var artist = Artists.FirstOrDefault((a) => a.Name == target.Artist);
             if (artist == null) return;
             var album = artist.Albums.FirstOrDefault((a) => a.Name == target.Album);
@@ -119,7 +120,7 @@ namespace SMPlayer
             return;
         }
 
-        public async void MusicSwitchingAsync(Music current, Music next)
+        public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {

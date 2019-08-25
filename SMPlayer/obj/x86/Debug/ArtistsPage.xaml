@@ -171,7 +171,7 @@
                                             IsItemClickEnabled="True"
                                                                                
                                                                                      
-                                            SelectionMode="Single">
+                                            SelectionMode="None">
                                             <ListView.ItemContainerStyle>
                                                 <Style TargetType="ListViewItem">
                                                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
