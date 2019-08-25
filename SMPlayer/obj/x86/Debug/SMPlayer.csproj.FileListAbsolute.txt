@@ -178,3 +178,9 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\NowPlayingFullPage.x
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Id3.Net.dll
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\JetBrains.Annotations.dll
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SMPlayer.csprojAssemblyReference.cache
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MediaControlButtonTemplate.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MediaControlSliderTemplate.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MediaControlButtonTemplate.xaml
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MediaControlSliderTemplate.xaml
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MediaControlButtonTemplate.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MediaControlSliderTemplate.xbf

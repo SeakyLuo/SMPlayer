@@ -194,15 +194,22 @@
                         x:Name="PrevButton"
                         Click="PrevButton_Click"
                         Content="&#xE892;"
-                        Style="{StaticResource MediaControlButtonStyle}" />
+                        Style="{StaticResource MediaControlButtonStyle}"
+                        Template="{StaticResource MediaControlButtonTemplate}" />
                     <Button
                         x:Name="PlayButton"
+                        Width="48"
+                        Height="48"
+                        HorizontalAlignment="Center"
+                        BorderBrush="{StaticResource PlayButtonBorderBrush}"
                         Click="PlayButton_Click"
-                        Style="{StaticResource MediaControlButtonStyle}">
+                        CornerRadius="25"
+                        Style="{StaticResource MediaControlButtonStyle}"
+                        Template="{StaticResource MediaControlButtonTemplate}">
                         <Button.Content>
                             <FontIcon
                                 x:Name="PlayButtonIcon"
-                                FontSize="30"
+                                FontSize="24"
                                 Glyph="&#xE768;" />
                         </Button.Content>
                         <Button.KeyboardAccelerators>
@@ -213,7 +220,8 @@
                         x:Name="NextButton"
                         Click="NextButton_Click"
                         Content="&#xE893;"
-                        Style="{StaticResource MediaControlButtonStyle}" />
+                        Style="{StaticResource MediaControlButtonStyle}"
+                        Template="{StaticResource MediaControlButtonTemplate}" />
                 </StackPanel>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -261,20 +269,24 @@
                         x:Name="VolumeButton"
                         Click="VolumeButton_Click"
                         Content="&#xE15D;"
-                        Style="{StaticResource MediaControlButtonStyle}" />
+                        Style="{StaticResource MediaControlButtonStyle}"
+                        Template="{StaticResource MediaControlButtonTemplate}" />
                     <Slider
                         x:Name="VolumeSlider"
                         Width="100"
                         Margin="10,0,20,0"
                         VerticalAlignment="Center"
+                        Foreground="White"
                         Maximum="100"
                         Minimum="0"
+                        Style="{StaticResource MediaProgressSliderStyle}"
                         ValueChanged="VolumeSlider_ValueChanged"
                         Value="50" />
                     <Button
                         x:Name="LikeButton"
                         Click="LikeButton_Click"
-                        Style="{StaticResource MediaControlButtonStyle}">
+                        Style="{StaticResource MediaControlButtonStyle}"
+                        Template="{StaticResource MediaControlButtonTemplate}">
                         <Button.Content>
                             <FontIcon x:Name="LikeButtonIcon" Glyph="&#xEB51;" />
                         </Button.Content>
@@ -285,18 +297,24 @@
                         x:Name="ShuffleButton"
                         Click="ShuffleButton_Click"
                         Content="&#xE8B1;"
-                        Style="{StaticResource MediaControlToggleButtonStyle}" />
+                        Style="{StaticResource MediaControlToggleButtonStyle}"
+                        Template="{StaticResource MediaControlToggleButtonTemplate}" />
                     <ToggleButton
                         x:Name="RepeatButton"
                         Click="RepeatButton_Click"
                         Content="&#xE8EE;"
-                        Style="{StaticResource MediaControlToggleButtonStyle}" />
+                        Style="{StaticResource MediaControlToggleButtonStyle}"
+                        Template="{StaticResource MediaControlToggleButtonTemplate}" />
                     <ToggleButton
                         x:Name="RepeatOneButton"
                         Click="RepeatOneButton_Click"
                         Content="&#xE8ED;"
-                        Style="{StaticResource MediaControlToggleButtonStyle}" />
-                    <Button Content="&#xE712;" Style="{StaticResource MediaControlButtonStyle}">
+                        Style="{StaticResource MediaControlToggleButtonStyle}"
+                        Template="{StaticResource MediaControlToggleButtonTemplate}" />
+                    <Button
+                        Content="&#xE712;"
+                        Style="{StaticResource MediaControlButtonStyle}"
+                        Template="{StaticResource MediaControlButtonTemplate}">
                         <Button.Flyout>
                             <MenuFlyout>
                                 <MenuFlyoutSubItem Icon="Add" Text="Add To Playlist" />

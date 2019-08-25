@@ -76,7 +76,7 @@ namespace SMPlayer
             MediaHelper.AddMediaControlListener(this as MediaControlListener);
             // Settings
             Settings settings = Settings.settings;
-            VolumeButton.Content = GetVolumeIcon(settings.Volume);
+            VolumeButton.Content = Helper.GetVolumeIcon(settings.Volume);
             VolumeSlider.Value = settings.Volume * 100;
             MainNavigationView.IsPaneOpen = settings.IsNavigationCollapsed;
             switch (settings.Mode)
@@ -115,14 +115,6 @@ namespace SMPlayer
             await Helper.SaveThumbnail(AlbumCover);
             MediaControlGrid.Background = await Helper.GetThumbnailMainColor();
             Helper.UpdateTile(music);
-            // Same Album should have the same Thumbnail
-            //if (MediaHelper.CurrentMusic == null || music.Album != MediaHelper.CurrentMusic.Album)
-            //{
-            //    AlbumCover.Source = await Helper.GetThumbnail(music);
-            //    await Helper.SaveThumbnail(AlbumCover);
-            //    MediaControlGrid.Background = await Helper.GetThumbnailMainColor();
-            //    Helper.UpdateTile(music);
-            //}
             Settings.settings.LastMusic = music;
         }
 
@@ -190,7 +182,7 @@ namespace SMPlayer
             if (VolumeButton.Content.ToString() == "\uE74F")
             {
                 MediaHelper.Player.IsMuted = false;
-                VolumeButton.Content = GetVolumeIcon(VolumeSlider.Value);
+                VolumeButton.Content = Helper.GetVolumeIcon(VolumeSlider.Value);
             }
             else
             {
@@ -300,20 +292,12 @@ namespace SMPlayer
             }
         }
 
-        public static string GetVolumeIcon(double volume)
-        {
-            if (volume == 0) return "\uE992";
-            if (volume < 34) return "\uE993";
-            if (volume < 67) return "\uE994";
-            return "\uE995";
-        }
-
         private void VolumeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             MediaHelper.Player.IsMuted = false;
             double volume = e.NewValue / 100;
             MediaHelper.Player.Volume = volume;
-            VolumeButton.Content = GetVolumeIcon(e.NewValue);            
+            VolumeButton.Content = Helper.GetVolumeIcon(e.NewValue);            
             Settings.settings.Volume = volume;
         }
 
@@ -346,10 +330,10 @@ namespace SMPlayer
 
         private void PrevButton_Click(object sender, RoutedEventArgs e)
         {
-            if (MediaSlider.Value > 5)
+            if (MediaHelper.Position > 5)
             {
-                MediaSlider.Value = 0;
                 MediaHelper.Position = 0;
+                MediaSlider.Value = 0;
             }
             else
             {
@@ -417,9 +401,7 @@ namespace SMPlayer
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
                 if (reason == MediaPlaybackItemChangedReason.EndOfStream)
-                {
                     Played(current);
-                }
                 next.IsPlaying = true;
                 SetMusic(next);
                 if (!Window.Current.Visible) Helper.ShowToast(next);

@@ -17,6 +17,8 @@ LocalMusicPage.xbf
 LocalPage.xbf
 MainPage.xbf
 MediaControl.xbf
+MediaControlButtonTemplate.xbf
+MediaControlSliderTemplate.xbf
 Microsoft.UI.Xaml\DensityStyles\Compact.xbf
 MusicLibraryPage.xbf
 MusicListPage.xbf

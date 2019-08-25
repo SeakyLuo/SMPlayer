@@ -24,6 +24,4 @@ Mouse Hover Album.
 
 Set unshuffle.
 
-Favorite.
-
 Dislike Music Hardcoded.
