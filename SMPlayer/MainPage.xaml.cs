@@ -397,12 +397,6 @@ namespace SMPlayer
             {
                 MediaSlider.Value = MediaHelper.Position;
             }
-            if (MediaSlider.Value == MediaSlider.Maximum)
-            {
-                Music before = MediaHelper.CurrentMusic.Copy();
-                MediaHelper.CurrentMusic.Played();
-                NotifyListeners(before, MediaHelper.CurrentMusic);
-            }
             if (!Window.Current.Visible) Helper.UpdateToast();
         }
         private void NotifyListeners(Music before, Music after)
@@ -411,12 +405,22 @@ namespace SMPlayer
                 listener.MusicModified(before, after);
         }
 
+        private void Played(Music music)
+        {
+            Music before = music.Copy();
+            music.Played();
+            NotifyListeners(before, music);
+        }
+
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
+                if (reason == MediaPlaybackItemChangedReason.EndOfStream)
+                {
+                    Played(current);
+                }
                 next.IsPlaying = true;
-                if (reason == MediaPlaybackItemChangedReason.EndOfStream) next.PlayCount += 1;
                 SetMusic(next);
                 if (!Window.Current.Visible) Helper.ShowToast(next);
             });
@@ -432,6 +436,7 @@ namespace SMPlayer
                     PlayButtonIcon.Glyph = "\uE768";
                     MediaSlider.Value = 0;
                 }
+                Played(MediaHelper.CurrentMusic);
             });
         }
 

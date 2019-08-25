@@ -150,36 +150,20 @@ namespace SMPlayer
             Timer.Stop();
         }
 
-        public static Music PrevMusic()
+        public static void PrevMusic()
         {
             if (Player.IsLoopingEnabled)
-            {
                 Player.PlaybackSession.Position = TimeSpan.FromSeconds(0);
-            }
             else
-            {
                 PlayList.MovePrevious();
-            }
-            return WaitForCurrentMusic();
         }
 
-        public static Music NextMusic()
+        public static void NextMusic()
         {
             if (Player.IsLoopingEnabled)
-            {
                 Player.PlaybackSession.Position = TimeSpan.FromSeconds(0);
-            }
             else
-            {
                 PlayList.MoveNext();
-            }
-            return WaitForCurrentMusic();
-        }
-
-        private static Music WaitForCurrentMusic()
-        {
-            while (PlayList.CurrentItem == null) { }
-            return CurrentPlayList[(int)PlayList.CurrentItemIndex];
         }
 
         public static void MoveToMusic(Music music)
