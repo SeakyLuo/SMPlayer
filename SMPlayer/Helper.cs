@@ -22,8 +22,8 @@ namespace SMPlayer
     public static class Helper
     {
         public const string ToastTaskName = "ToastBackgroundTask";
-        public const string DefaultAlbumCoverPath = "ms-appx:///Assets/music.png";
-        public const string ThumbnailNotFoundPath = "ms-appx:///Assets/gray_music.png";
+        public const string DefaultAlbumCoverPath = "ms-appx:///Assets/logo_bg.png";
+        public const string ThumbnailNotFoundPath = "ms-appx:///Assets/logo_no_bg.png";
         public const string ToastTag = "SMPlayerMediaToastTag";
         public const string ToastGroup = "SMPlayerMediaToastGroup";
         public const string NoLyricsAvailable = "No Lyrics Available";
