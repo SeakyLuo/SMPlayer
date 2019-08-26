@@ -98,6 +98,11 @@
                                     x:Name="MusicInfoItem"
                                     Icon="MusicInfo"
                                     Text="Music Info" />
+                                <MenuFlyoutItem
+                                    x:Name="MoveToTopItem"
+                                    Click="MoveToTopItem_Click"
+                                    Icon="Upload"
+                                    Text="Move To Top" />
                             </MenuFlyout>
                         </Grid.ContextFlyout>
                         <StackPanel Orientation="Horizontal">

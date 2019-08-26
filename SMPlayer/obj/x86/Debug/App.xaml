@@ -339,6 +339,8 @@
                 <Setter Property="Height" Value="40" />
                 <Setter Property="CornerRadius" Value="20" />
                 <Setter Property="Margin" Value="5,0" />
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="Foreground" Value="White" />
             </Style.Setters>
         </Style>
         <ControlTemplate x:Key="MediaControlButtonTemplate" TargetType="Button">
@@ -356,8 +358,7 @@
                 ContentTemplate="{TemplateBinding ContentTemplate}"
                 ContentTransitions="{TemplateBinding ContentTransitions}"
                 CornerRadius="{TemplateBinding CornerRadius}"
-                FontFamily="Segoe MDL2 Assets"
-                FontSize="20">
+                FontFamily="Segoe MDL2 Assets">
                 <VisualStateManager.VisualStateGroups>
                     <VisualStateGroup x:Name="CommonStates">
                         <VisualState x:Name="Normal">
@@ -410,12 +411,19 @@
                 </VisualStateManager.VisualStateGroups>
             </ContentPresenter>
         </ControlTemplate>
+        <Style x:Key="MediaControlToggleButtonStyle" TargetType="ToggleButton">
+            <Style.Setters>
+                <Setter Property="Width" Value="40" />
+                <Setter Property="Height" Value="40" />
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="Margin" Value="5,0" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="FontSize" Value="20" />
+            </Style.Setters>
+        </Style>
         <ControlTemplate x:Key="MediaControlToggleButtonTemplate" TargetType="ToggleButton">
             <ContentPresenter
                 x:Name="ContentPresenter"
-                Width="48"
-                Height="48"
-                Margin="5,0"
                 Padding="{TemplateBinding Padding}"
                 HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                 VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -427,9 +435,8 @@
                 Content="{TemplateBinding Content}"
                 ContentTemplate="{TemplateBinding ContentTemplate}"
                 ContentTransitions="{TemplateBinding ContentTransitions}"
-                CornerRadius="24"
-                FontFamily="Segoe MDL2 Assets"
-                FontSize="24">
+                CornerRadius="{TemplateBinding CornerRadius}"
+                FontFamily="Segoe MDL2 Assets">
                 <VisualStateManager.VisualStateGroups>
                     <VisualStateGroup x:Name="CommonStates">
                         <VisualState x:Name="Normal">

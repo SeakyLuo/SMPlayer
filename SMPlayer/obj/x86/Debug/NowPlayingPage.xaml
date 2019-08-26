@@ -25,22 +25,22 @@
             Background="Transparent"
             DefaultLabelPosition="Right"
             IsOpen="False">
-            <AppBarButton x:ConnectionId='12'
+            <AppBarButton x:ConnectionId='13'
                 x:Name="NewListButton"
                                            
                 Icon="Add"
                 Label="Add To New Playlist" />
-            <AppBarButton x:ConnectionId='13'
+            <AppBarButton x:ConnectionId='14'
                 x:Name="MusicInfoButton"
                                              
                 Icon="MusicInfo"
                 Label="Show Music Info" />
-            <AppBarButton x:ConnectionId='14'
+            <AppBarButton x:ConnectionId='15'
                 x:Name="LyricsButton"
                                           
                 Icon="Comment"
                 Label="Show Lyrics" />
-            <AppBarButton x:ConnectionId='15'
+            <AppBarButton x:ConnectionId='16'
                 x:Name="FullScreenButton"
                                               
                 Icon="FullScreen"
@@ -98,10 +98,15 @@
                                     x:Name="MusicInfoItem"
                                     Icon="MusicInfo"
                                     Text="Music Info" />
+                                <MenuFlyoutItem x:ConnectionId='7'
+                                    x:Name="MoveToTopItem"
+                                                               
+                                    Icon="Upload"
+                                    Text="Move To Top" />
                             </MenuFlyout>
                         </Grid.ContextFlyout>
                         <StackPanel Orientation="Horizontal">
-                            <FontIcon x:ConnectionId='10'
+                            <FontIcon x:ConnectionId='11'
                                 x:Name="PlayingIcon"
                                 Margin="0,0,16,0"
                                 FontFamily="Segoe MDL2 Assets"
@@ -109,17 +114,17 @@
                                 Glyph="&#xE767;"
                                 RelativePanel.AlignLeftWithPanel="True"
                                                                                                                                   />
-                            <TextBlock x:ConnectionId='11'                                                                                                                 />
+                            <TextBlock x:ConnectionId='12'                                                                                                                 />
                         </StackPanel>
-                        <TextBlock x:ConnectionId='7'
+                        <TextBlock x:ConnectionId='8'
                             Grid.Column="1"
                                                                                                                       
                                                    />
-                        <TextBlock x:ConnectionId='8'
+                        <TextBlock x:ConnectionId='9'
                             Grid.Column="2"
                                                                                                                       
                                                   />
-                        <TextBlock x:ConnectionId='9'
+                        <TextBlock x:ConnectionId='10'
                             Grid.Column="3"
                             HorizontalAlignment="Right"
                                                                                                                       

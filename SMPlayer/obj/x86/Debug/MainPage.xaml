@@ -141,7 +141,7 @@
         <Grid x:ConnectionId='3'
             x:Name="MediaControlGrid"
             Grid.Row="1"
-            Background="{ThemeResource SystemControlAcrylicWindowBrush}"
+            Background="{ThemeResource SystemControlAcrylicElementBrush}"
             RequestedTheme="Dark">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -297,16 +297,19 @@
                         x:Name="ShuffleButton"
                                                    
                         Content="&#xE8B1;"
+                        Style="{StaticResource MediaControlToggleButtonStyle}"
                         Template="{StaticResource MediaControlToggleButtonTemplate}" />
                     <ToggleButton x:ConnectionId='5'
                         x:Name="RepeatButton"
                                                   
                         Content="&#xE8EE;"
+                        Style="{StaticResource MediaControlToggleButtonStyle}"
                         Template="{StaticResource MediaControlToggleButtonTemplate}" />
                     <ToggleButton x:ConnectionId='6'
                         x:Name="RepeatOneButton"
                                                      
                         Content="&#xE8ED;"
+                        Style="{StaticResource MediaControlToggleButtonStyle}"
                         Template="{StaticResource MediaControlToggleButtonTemplate}" />
                     <Button
                         Content="&#xE712;"

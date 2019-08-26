@@ -141,7 +141,7 @@
         <Grid
             x:Name="MediaControlGrid"
             Grid.Row="1"
-            Background="{ThemeResource SystemControlAcrylicWindowBrush}"
+            Background="{ThemeResource SystemControlAcrylicElementBrush}"
             RequestedTheme="Dark">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />

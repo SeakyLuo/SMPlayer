@@ -97,22 +97,19 @@ namespace SMPlayer
         public static async Task<Brush> GetThumbnailMainColor()
         {
             var decoder = await BitmapDecoder.CreateAsync(await Thumbnail.OpenAsync(FileAccessMode.Read));
+            uint width = decoder.PixelWidth, height = decoder.PixelHeight;
             var data = await decoder.GetPixelDataAsync(BitmapPixelFormat.Bgra8,
                                                        BitmapAlphaMode.Straight,
                                                        new BitmapTransform()
                                                        {
-                                                           Bounds = new BitmapBounds() { Height = 1, Width = 1, X = 0, Y = 0 },
-                                                           ScaledWidth = 1,
-                                                           ScaledHeight = 1,
-                                                           //ScaledWidth = decoder.PixelWidth,
-                                                           //ScaledHeight = decoder.PixelHeight,
+                                                           Bounds = new BitmapBounds() { Width = 1, Height = 1, X = width / 2, Y = width / 2 }
                                                        },
                                                        ExifOrientationMode.IgnoreExifOrientation,
                                                        ColorManagementMode.DoNotColorManage);
             var bgra = data.DetachPixelData();
             return new AcrylicBrush()
             {
-                BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
+                BackgroundSource = AcrylicBackgroundSource.Backdrop,
                 TintOpacity = 0.75,
                 TintColor = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0])
             };
@@ -120,27 +117,34 @@ namespace SMPlayer
 
         public static async Task<Brush> GetThumbnailMainColorBackup()
         {
-            using (var stream = await Thumbnail.OpenAsync(FileAccessMode.Read))
+            var decoder = await BitmapDecoder.CreateAsync(await Thumbnail.OpenAsync(FileAccessMode.Read));
+            uint width = decoder.PixelWidth, height = decoder.PixelHeight;
+            byte[] bgra = new byte[4];
+            for (uint i = 0; i < width - 1; i++)
             {
-                using (MemoryStream memoryStream = new MemoryStream())
+                for (uint j = 0; j < height - 1; j++)
                 {
-                    await stream.AsStreamForRead().CopyToAsync(memoryStream);
-                    byte[] pixels = memoryStream.ToArray();
-                    var bgra = new byte[4];
-                    for (int i = 0; i < pixels.Length; i += 4)
-                        for (int j = 0; j < 4; j++)
-                            bgra[j] += pixels[i];
-                    var result = new byte[4];
-                    for (int i = 0; i < 4; i++)
-                        result[i] = Convert.ToByte(bgra[i] / (pixels.Length / 4));
-                    return new AcrylicBrush()
-                    {
-                        BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
-                        TintOpacity = 0.75,
-                        TintColor = Color.FromArgb(result[3], result[2], result[1], result[0])
-                    };
+                    var data = await decoder.GetPixelDataAsync(BitmapPixelFormat.Bgra8,
+                                                       BitmapAlphaMode.Straight,
+                                                       new BitmapTransform()
+                                                       {
+                                                           Bounds = new BitmapBounds() { Width = 1, Height = 1, X = i, Y = j }
+                                                       },
+                                                       ExifOrientationMode.IgnoreExifOrientation,
+                                                       ColorManagementMode.DoNotColorManage);
+                    var bytes = data.DetachPixelData();
+                    for (int n = 0; n < 4; n++)
+                        bgra[n] += bytes[n];
                 }
             }
+            for (int n = 0; n < 4; n++)
+                bgra[n] = Convert.ToByte(bgra[n] / (width * height));
+            return new AcrylicBrush()
+            {
+                BackgroundSource = AcrylicBackgroundSource.Backdrop,
+                TintOpacity = 0.75,
+                TintColor = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0])
+            };
         }
         public static void SetBackButtonVisibility(AppViewBackButtonVisibility visibility)
         {

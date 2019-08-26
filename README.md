@@ -25,3 +25,5 @@ Mouse Hover Album.
 Set unshuffle.
 
 Dislike Music Hardcoded.
+
+Cancel Tile Notification when App is not active.

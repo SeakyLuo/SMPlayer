@@ -60,7 +60,7 @@ namespace SMPlayer
         }
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
         {
-            (Parent as MainPage).Frame.Navigate(typeof(NowPlayingFullPage));
+            MainPage.Instance.Frame.Navigate(typeof(NowPlayingFullPage));
         }
         private void NewListButton_Click(object sender, RoutedEventArgs e)
         {
@@ -112,6 +112,12 @@ namespace SMPlayer
                 // also need to remove from MediaHelper.
                 MediaHelper.NextMusic();
             }
+        }
+
+        private void MoveToTopItem_Click(object sender, RoutedEventArgs e)
+        {
+            Music music = (sender as MenuFlyoutItem).DataContext as Music;
+            Songs.Move(Songs.IndexOf(music), 0);
         }
     }
 }

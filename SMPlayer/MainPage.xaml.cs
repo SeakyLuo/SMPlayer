@@ -105,13 +105,13 @@ namespace SMPlayer
         public async void SetMusic(Music music)
         {
             if (music == null) return;
+            AlbumCover.Source = await Helper.GetThumbnail(music);
             TitleTextBlock.Text = music.Name;
             ArtistTextBlock.Text = music.Artist;
             MediaSlider.Maximum = music.Duration;
             RightTimeTextBlock.Text = MusicDurationConverter.ToTime(music.Duration);
             if (music.Favorite) LikeMusic(false);
             else DislikeMusic(false);
-            AlbumCover.Source = await Helper.GetThumbnail(music);
             await Helper.SaveThumbnail(AlbumCover);
             MediaControlGrid.Background = await Helper.GetThumbnailMainColor();
             Helper.UpdateTile(music);
@@ -404,7 +404,7 @@ namespace SMPlayer
                     Played(current);
                 next.IsPlaying = true;
                 SetMusic(next);
-                if (!Window.Current.Visible) Helper.ShowToast(next);
+                if (current != null && !Window.Current.Visible) Helper.ShowToast(next);
             });
         }
 

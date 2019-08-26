@@ -340,6 +340,7 @@
                 <Setter Property="CornerRadius" Value="20" />
                 <Setter Property="Margin" Value="5,0" />
                 <Setter Property="FontSize" Value="20" />
+                <Setter Property="Foreground" Value="White" />
             </Style.Setters>
         </Style>
         <ControlTemplate x:Key="MediaControlButtonTemplate" TargetType="Button">
@@ -416,6 +417,7 @@
                 <Setter Property="Height" Value="40" />
                 <Setter Property="CornerRadius" Value="20" />
                 <Setter Property="Margin" Value="5,0" />
+                <Setter Property="Foreground" Value="White" />
                 <Setter Property="FontSize" Value="20" />
             </Style.Setters>
         </Style>
