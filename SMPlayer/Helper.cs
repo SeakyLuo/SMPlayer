@@ -107,11 +107,13 @@ namespace SMPlayer
                                                        ExifOrientationMode.IgnoreExifOrientation,
                                                        ColorManagementMode.DoNotColorManage);
             var bgra = data.DetachPixelData();
+            Color color = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0]);
             return new AcrylicBrush()
             {
-                BackgroundSource = AcrylicBackgroundSource.Backdrop,
+                BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
+                FallbackColor = color,
                 TintOpacity = 0.75,
-                TintColor = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0])
+                TintColor = color
             };
         }
 
@@ -125,13 +127,13 @@ namespace SMPlayer
                 for (uint j = 0; j < height - 1; j++)
                 {
                     var data = await decoder.GetPixelDataAsync(BitmapPixelFormat.Bgra8,
-                                                       BitmapAlphaMode.Straight,
-                                                       new BitmapTransform()
-                                                       {
-                                                           Bounds = new BitmapBounds() { Width = 1, Height = 1, X = i, Y = j }
-                                                       },
-                                                       ExifOrientationMode.IgnoreExifOrientation,
-                                                       ColorManagementMode.DoNotColorManage);
+                                                               BitmapAlphaMode.Straight,
+                                                               new BitmapTransform()
+                                                               {
+                                                                   Bounds = new BitmapBounds() { Width = 1, Height = 1, X = i, Y = j }
+                                                               },
+                                                               ExifOrientationMode.IgnoreExifOrientation,
+                                                               ColorManagementMode.DoNotColorManage);
                     var bytes = data.DetachPixelData();
                     for (int n = 0; n < 4; n++)
                         bgra[n] += bytes[n];
@@ -139,11 +141,13 @@ namespace SMPlayer
             }
             for (int n = 0; n < 4; n++)
                 bgra[n] = Convert.ToByte(bgra[n] / (width * height));
+            Color color = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0]);
             return new AcrylicBrush()
             {
-                BackgroundSource = AcrylicBackgroundSource.Backdrop,
+                BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
+                FallbackColor = color,
                 TintOpacity = 0.75,
-                TintColor = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0])
+                TintColor = color
             };
         }
         public static void SetBackButtonVisibility(AppViewBackButtonVisibility visibility)
