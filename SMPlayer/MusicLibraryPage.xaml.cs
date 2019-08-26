@@ -179,5 +179,6 @@ namespace SMPlayer
 
         public void MediaEnded() { return; }
 
+        public void ShuffleChanged(IEnumerable<Music> newPlayList, bool isShuffle) { return; }
     }
 }

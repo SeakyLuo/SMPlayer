@@ -57,7 +57,7 @@
                                             <ControlTemplate TargetType="Thumb">
                                                 <Ellipse
                                                     x:Name="ellipse"
-                                                    Fill="{ThemeResource SliderThumbAcrylicBrush}"
+                                                    Fill="{ThemeResource MediaControlSliderThumbAcrylicBrush}"
                                                     Stroke="{TemplateBinding FocusVisualPrimaryBrush}"
                                                     StrokeThickness="3.6" />
                                             </ControlTemplate>
@@ -293,7 +293,7 @@
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SliderTrackFillPointerOver}" />
                                             </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="HorizontalThumb" Storyboard.TargetProperty="Background">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SliderThumbAcrylicBrush}" />
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource MediaControlSliderThumbAcrylicBrush}" />
                                             </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="VerticalThumb" Storyboard.TargetProperty="Background">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SliderThumbBackgroundPointerOver}" />
@@ -447,10 +447,10 @@
                         <VisualState x:Name="PointerOver">
                             <Storyboard>
                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
-                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonBackgroundPointerOver}" />
+                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource MediaControlToggleButtonPointerOverBackgroundBrush}" />
                                 </ObjectAnimationUsingKeyFrames>
                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonBorderBrushPointerOver}" />
+                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource MediaControlToggleButtonPointerOverBorderBrush}" />
                                 </ObjectAnimationUsingKeyFrames>
                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
                                     <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonForegroundPointerOver}" />
@@ -461,10 +461,10 @@
                         <VisualState x:Name="Pressed">
                             <Storyboard>
                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
-                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonBackgroundPressed}" />
+                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource MediaControlToggleButtonPointerOverBackgroundBrush}" />
                                 </ObjectAnimationUsingKeyFrames>
                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonBorderBrushPressed}" />
+                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource MediaControlToggleButtonPointerOverBackgroundBrush}" />
                                 </ObjectAnimationUsingKeyFrames>
                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
                                     <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonForegroundPressed}" />
@@ -488,7 +488,7 @@
                         <VisualState x:Name="Checked">
                             <Storyboard>
                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
-                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonBackgroundChecked}" />
+                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource MediaControlToggleButtonCheckedBackgroundBrush}" />
                                 </ObjectAnimationUsingKeyFrames>
                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
                                     <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonForegroundChecked}" />
@@ -497,47 +497,6 @@
                                     <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonBorderBrushChecked}" />
                                 </ObjectAnimationUsingKeyFrames>
                                 <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
-                            </Storyboard>
-                        </VisualState>
-                        <VisualState x:Name="CheckedPointerOver">
-                            <Storyboard>
-                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
-                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonBackgroundCheckedPointerOver}" />
-                                </ObjectAnimationUsingKeyFrames>
-                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonBorderBrushCheckedPointerOver}" />
-                                </ObjectAnimationUsingKeyFrames>
-                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonForegroundCheckedPointerOver}" />
-                                </ObjectAnimationUsingKeyFrames>
-                                <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
-                            </Storyboard>
-                        </VisualState>
-                        <VisualState x:Name="CheckedPressed">
-                            <Storyboard>
-                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
-                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonBackgroundCheckedPressed}" />
-                                </ObjectAnimationUsingKeyFrames>
-                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonForegroundCheckedPressed}" />
-                                </ObjectAnimationUsingKeyFrames>
-                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonBorderBrushCheckedPressed}" />
-                                </ObjectAnimationUsingKeyFrames>
-                                <PointerDownThemeAnimation Storyboard.TargetName="ContentPresenter" />
-                            </Storyboard>
-                        </VisualState>
-                        <VisualState x:Name="CheckedDisabled">
-                            <Storyboard>
-                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
-                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonBackgroundCheckedDisabled}" />
-                                </ObjectAnimationUsingKeyFrames>
-                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonForegroundCheckedDisabled}" />
-                                </ObjectAnimationUsingKeyFrames>
-                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonBorderBrushCheckedDisabled}" />
-                                </ObjectAnimationUsingKeyFrames>
                             </Storyboard>
                         </VisualState>
                         <VisualState x:Name="Indeterminate">
@@ -610,16 +569,34 @@
         <local:RowColorConverter x:Key="RowColorConverter" />
         <local:SongCountConverter x:Key="SongCountConverter" />
         <AcrylicBrush
-            x:Key="SliderThumbAcrylicBrush"
+            x:Key="MediaControlSliderThumbAcrylicBrush"
             BackgroundSource="Backdrop"
             FallbackColor="{StaticResource SystemChromeMediumColor}"
             TintColor="{StaticResource SystemChromeAltHighColor}"
             TintOpacity="0" />
         <AcrylicBrush
-            x:Key="PlayButtonBorderBrush"
+            x:Key="MediaControlPlayButtonBorderBrush"
             BackgroundSource="Backdrop"
             FallbackColor="{StaticResource SystemChromeMediumColor}"
             TintColor="{StaticResource SystemChromeAltHighColor}"
             TintOpacity="0.2" />
+        <AcrylicBrush
+            x:Key="MediaControlToggleButtonCheckedBackgroundBrush"
+            BackgroundSource="Backdrop"
+            FallbackColor="{StaticResource SystemAltLowColor}"
+            TintColor="Black"
+            TintOpacity="0.4" />
+        <AcrylicBrush
+            x:Key="MediaControlToggleButtonPointerOverBorderBrush"
+            BackgroundSource="Backdrop"
+            FallbackColor="{StaticResource SystemAltLowColor}"
+            TintColor="Black"
+            TintOpacity="0.6" />
+        <AcrylicBrush
+            x:Key="MediaControlToggleButtonPointerOverBackgroundBrush"
+            BackgroundSource="Backdrop"
+            FallbackColor="{StaticResource SystemAltLowColor}"
+            TintColor="{StaticResource SystemAltLowColor}"
+            TintOpacity="0.1" />
     </Application.Resources>
 </Application>

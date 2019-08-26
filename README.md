@@ -10,10 +10,6 @@ My Favorites Page.
 
 Localization.
 
-Set Current Playing Music to Null after FolderTree.Init
-
-Button Style.
-
 SearchBox Style.
 
 

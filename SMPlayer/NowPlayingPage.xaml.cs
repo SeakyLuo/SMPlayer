@@ -39,7 +39,6 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            //List<Music> playlist = await MediaHelper.GetRealPlayList();
             List<Music> playlist = MediaHelper.CurrentPlayList;
             if (Helper.SamePlayList(Songs, playlist)) return;
             Songs.Clear();
@@ -93,7 +92,11 @@ namespace SMPlayer
                 FindMusicAndSetPlaying(next, true);
             });
         }
-
+        public void ShuffleChanged(IEnumerable<Music> newPlayList, bool isShuffle)
+        {
+            Songs.Clear();
+            foreach (var music in newPlayList) Songs.Add(music);
+        }
         public void MediaEnded() { return; }
 
         private void PlayItem_Click(object sender, RoutedEventArgs e)

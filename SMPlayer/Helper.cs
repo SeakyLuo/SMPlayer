@@ -116,40 +116,6 @@ namespace SMPlayer
                 TintColor = color
             };
         }
-
-        public static async Task<Brush> GetThumbnailMainColorBackup()
-        {
-            var decoder = await BitmapDecoder.CreateAsync(await Thumbnail.OpenAsync(FileAccessMode.Read));
-            uint width = decoder.PixelWidth, height = decoder.PixelHeight;
-            byte[] bgra = new byte[4];
-            for (uint i = 0; i < width - 1; i++)
-            {
-                for (uint j = 0; j < height - 1; j++)
-                {
-                    var data = await decoder.GetPixelDataAsync(BitmapPixelFormat.Bgra8,
-                                                               BitmapAlphaMode.Straight,
-                                                               new BitmapTransform()
-                                                               {
-                                                                   Bounds = new BitmapBounds() { Width = 1, Height = 1, X = i, Y = j }
-                                                               },
-                                                               ExifOrientationMode.IgnoreExifOrientation,
-                                                               ColorManagementMode.DoNotColorManage);
-                    var bytes = data.DetachPixelData();
-                    for (int n = 0; n < 4; n++)
-                        bgra[n] += bytes[n];
-                }
-            }
-            for (int n = 0; n < 4; n++)
-                bgra[n] = Convert.ToByte(bgra[n] / (width * height));
-            Color color = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0]);
-            return new AcrylicBrush()
-            {
-                BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
-                FallbackColor = color,
-                TintOpacity = 0.75,
-                TintColor = color
-            };
-        }
         public static void SetBackButtonVisibility(AppViewBackButtonVisibility visibility)
         {
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = visibility;
@@ -268,78 +234,85 @@ namespace SMPlayer
                     //    Branding = TileBranding.None,
                     //    Content = new TileBindingContentAdaptive()
                     //    {
-                    //        Children =
+                    //        BackgroundImage = new TileBackgroundImage()
                     //        {
-                    //            new AdaptiveImage()
-                    //            {
-                    //                Source = uri
-                    //            }
+                    //            Source = uri
                     //        }
                     //    }
                     //},
                     TileMedium = new TileBinding()
                     {
-                        Branding = TileBranding.None,
+                        Branding = TileBranding.Name,
                         Content = new TileBindingContentAdaptive()
                         {
+                            BackgroundImage = new TileBackgroundImage()
+                            {
+                                Source = uri
+                            },
                             Children =
                             {
-                                new AdaptiveImage() { Source = uri },
+                                new AdaptiveText()
+                                {
+                                    Text = music.Name,
+                                    HintStyle = AdaptiveTextStyle.Body,
+                                    HintWrap = true
+                                }
                             }
                         }
                     },
                     TileWide = new TileBinding()
                     {
-                        Branding = TileBranding.None,
+                        Branding = TileBranding.Name,
                         Content = new TileBindingContentAdaptive()
                         {
+                            BackgroundImage = new TileBackgroundImage()
+                            {
+                                Source = uri
+                            },
                             Children =
                             {
-                                new AdaptiveImage()
-                                {
-                                    Source = uri
-                                },
                                 new AdaptiveText()
                                 {
                                     Text = music.Name,
-                                    HintStyle = AdaptiveTextStyle.Title
+                                    HintStyle = AdaptiveTextStyle.Base,
+                                    HintWrap = true
+                                },
+                                new AdaptiveText()
+                                {
+                                    Text = music.Artist,
+                                    HintStyle = AdaptiveTextStyle.Caption,
+                                    HintWrap = true
                                 }
                             }
                         }
                     },
                     TileLarge = new TileBinding()
                     {
-                        Branding = TileBranding.None,
+                        Branding = TileBranding.Name,
                         Content = new TileBindingContentAdaptive()
                         {
+                            BackgroundImage = new TileBackgroundImage()
+                            {
+                                Source = uri
+                            },
                             Children =
                             {
-                                new AdaptiveImage()
+                                new AdaptiveText()
                                 {
-                                    Source = uri
+                                    Text = music.Album,
+                                    HintStyle = AdaptiveTextStyle.Caption
                                 },
-                                new AdaptiveGroup()
+                                new AdaptiveText()
                                 {
-                                    Children =
-                                    {
-                                        new AdaptiveSubgroup()
-                                        {
-                                            Children =
-                                            {
-                                                new AdaptiveText()
-                                                {
-                                                    Text = music.Name,
-                                                    HintStyle = AdaptiveTextStyle.Caption
-                                                },
-                                                new AdaptiveText()
-                                                {
-                                                    Text = music.Artist,
-                                                    HintStyle = AdaptiveTextStyle.CaptionSubtle
-                                                }
-                                            }
-                                        }
-                                    }
+                                    Text = music.Name,
+                                    HintStyle = AdaptiveTextStyle.Subtitle,
+                                    HintWrap = true
                                 },
+                                new AdaptiveText()
+                                {
+                                    Text = music.Artist,
+                                    HintStyle = AdaptiveTextStyle.Base
+                                }
                             }
                         }
                     }

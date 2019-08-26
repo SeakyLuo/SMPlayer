@@ -201,7 +201,7 @@
                         Width="48"
                         Height="48"
                         HorizontalAlignment="Center"
-                        BorderBrush="{StaticResource PlayButtonBorderBrush}"
+                        BorderBrush="{StaticResource MediaControlPlayButtonBorderBrush}"
                         Click="PlayButton_Click"
                         CornerRadius="25"
                         Style="{StaticResource MediaControlButtonStyle}"

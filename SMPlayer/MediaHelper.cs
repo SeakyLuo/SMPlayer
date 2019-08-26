@@ -17,7 +17,25 @@ namespace SMPlayer
     {
         public static Music CurrentMusic;
         // This is an ordered one, not the shuffled one
-        public static List<Music> CurrentPlayList = new List<Music>();
+        public static List<Music> CurrentPlayList
+        {
+            get
+            {
+                if (PlayList.ShuffleEnabled)
+                {
+                    if (ShuffledPlayList.Count == 0)
+                        foreach (var item in PlayList.ShuffledItems)
+                            ShuffledPlayList.Add(item.Source.CustomProperties["Source"] as Music);
+                    return ShuffledPlayList;
+                }
+                else
+                {
+                    return OrderedPlayList;
+                }
+            }
+            private set => OrderedPlayList = value;
+        }
+        private static List<Music> OrderedPlayList = new List<Music>();
         private static List<Music> ShuffledPlayList = new List<Music>();
         public static double Position
         {
@@ -91,7 +109,11 @@ namespace SMPlayer
                 default:
                     break;
             }
-            PlayList.ShuffleEnabled = mode == PlayMode.Shuffle;
+            bool isShuffle = mode == PlayMode.Shuffle;
+            PlayList.ShuffleEnabled = isShuffle;
+            if (!isShuffle) ShuffledPlayList.Clear();
+            foreach (var listener in MediaControlListeners)
+                listener.ShuffleChanged(CurrentPlayList, isShuffle);
             Settings.settings.Mode = mode;
         }
 
@@ -104,7 +126,9 @@ namespace SMPlayer
                 try
                 {
                     var file = await Helper.CurrentFolder.GetFileAsync(music.GetShortPath());
-                    var item = new MediaPlaybackItem(MediaSource.CreateFromStorageFile(file));
+                    var source = MediaSource.CreateFromStorageFile(file);
+                    source.CustomProperties.Add("Source", music);
+                    var item = new MediaPlaybackItem(source);
                     PlayList.Items.Add(item);
                 }
                 catch (System.IO.FileNotFoundException)
@@ -115,22 +139,19 @@ namespace SMPlayer
             CurrentPlayList = playlist.ToList();
         }
 
-        public static async Task<List<Music>> GetRealPlayList()
+        public static List<Music> GetRealPlayList()
         {
             if (PlayList.ShuffleEnabled)
             {
                 if (ShuffledPlayList.Count == 0)
-                {
-                    foreach (var music in PlayList.ShuffledItems)
-                    {
-                        var p = music.GetDisplayProperties();
-                        ShuffledPlayList.Add(await Music.GetMusic(music.Source.Uri.AbsolutePath));
-                    }
-                }
+                    foreach (var item in PlayList.ShuffledItems)
+                        ShuffledPlayList.Add(item.Source.CustomProperties["Source"] as Music);
                 return ShuffledPlayList;
             }
             else
+            {
                 return CurrentPlayList;
+            }
         }
 
         public static void AddMediaControlListener(MediaControlListener listener)
@@ -181,5 +202,6 @@ namespace SMPlayer
         void Tick();
         void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason);
         void MediaEnded();
+        void ShuffleChanged(IEnumerable<Music> newPlayList, bool isShuffle);
     }
 }
