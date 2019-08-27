@@ -22,8 +22,9 @@ namespace SMPlayer
     public static class Helper
     {
         public const string ToastTaskName = "ToastBackgroundTask";
-        public const string DefaultAlbumCoverPath = "ms-appx:///Assets/logo_bg.png";
-        public const string ThumbnailNotFoundPath = "ms-appx:///Assets/logo_no_bg.png";
+        public const string LogoPath = "ms-appx:///Asserts/monotone_no_bg.png";
+        public const string DefaultAlbumCoverPath = "ms-appx:///Assets/monotone_bg_wide.png";
+        public const string ThumbnailNotFoundPath = "ms-appx:///Assets/colorful_bg_wide.png";
         public const string ToastTag = "SMPlayerMediaToastTag";
         public const string ToastGroup = "SMPlayerMediaToastGroup";
         public const string NoLyricsAvailable = "No Lyrics Available";
@@ -316,6 +317,37 @@ namespace SMPlayer
                             }
                         }
                     }
+                }
+            };
+
+            // Create the tile notification
+            var tileNotification = new TileNotification(tileContent.GetXml());
+
+            // And send the notification to the primary tile
+            tileUpdater.Update(tileNotification);
+        }
+
+        public static void ResumeTile()
+        {
+            var tile = new TileBinding()
+            {
+                DisplayName = "SMPlayer",
+                Branding = TileBranding.NameAndLogo,
+                Content = new TileBindingContentAdaptive()
+                {
+                    BackgroundImage = new TileBackgroundImage()
+                    {
+                        Source = LogoPath
+                    },
+                }
+            };
+            var tileContent = new TileContent()
+            {
+                Visual = new TileVisual()
+                {
+                    TileMedium = tile,
+                    TileWide = tile,
+                    TileLarge = tile
                 }
             };
 

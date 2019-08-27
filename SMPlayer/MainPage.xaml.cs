@@ -50,11 +50,6 @@ namespace SMPlayer
             {
                 if (NaviFrame.CanGoBack) NaviFrame.GoBack();
             };
-            SystemNavigationManagerPreview.GetForCurrentView().CloseRequested += (s, e) =>
-            {
-                Settings.Save();
-                MusicLibraryPage.Save();
-            };
             Window.Current.VisibilityChanged += async (s, e) =>
             {
                 WindowVisible = e.Visible;
@@ -155,11 +150,6 @@ namespace SMPlayer
 
         public void PlayMusic()
         {
-            if (MediaHelper.CurrentMusic == null)
-            {
-                if (MusicLibraryPage.AllSongs.Count == 0) return;
-                MediaHelper.MoveToMusic(MediaHelper.CurrentPlayList[0]);
-            }
             PlayButtonIcon.Glyph = "\uE769";
             MediaHelper.Play();
         }
@@ -173,7 +163,15 @@ namespace SMPlayer
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            if (PlayButtonIcon.Glyph == "\uE768") PlayMusic();
+            if (PlayButtonIcon.Glyph == "\uE768")
+            {
+                if (MediaHelper.CurrentMusic == null)
+                {
+                    if (MediaHelper.CurrentPlayList.Count == 0) return;
+                    MediaHelper.MoveToMusic(MediaHelper.CurrentPlayList[0]);
+                }
+                PlayMusic();
+            }
             else PauseMusic();
         }
 

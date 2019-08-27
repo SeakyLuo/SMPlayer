@@ -93,7 +93,7 @@ namespace SMPlayer
             if (value is int)
             {
                 int count = (int)value;
-                if (count > 0) return count;
+                if (count > 0) return count.ToString();
             }
             return "";
 

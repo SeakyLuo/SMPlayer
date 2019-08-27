@@ -120,6 +120,9 @@ namespace SMPlayer
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
+            Helper.ResumeTile();
+            Settings.Save();
+            MusicLibraryPage.Save();
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
         }

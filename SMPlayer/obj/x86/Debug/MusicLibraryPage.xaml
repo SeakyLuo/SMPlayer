@@ -42,7 +42,7 @@
             HorizontalScrollBarVisibility="Visible"
             IsDoubleTapEnabled="True"
             IsReadOnly="True"
-            ItemsSource="{Binding Source=AllSongs, Mode=OneWay}"
+            ItemsSource="{Binding AllSongs, Mode=OneWay}"
             SelectionMode="Extended"
                                                   
             VerticalScrollBarVisibility="Visible">

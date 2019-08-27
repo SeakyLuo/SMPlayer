@@ -1,10 +1,14 @@
 WinMetadata\Windows.winmd
+Assets\colorful_bg_wide.png
 Assets\LargeTile.scale-100.png
 Assets\LargeTile.scale-125.png
 Assets\LargeTile.scale-150.png
 Assets\LargeTile.scale-200.png
 Assets\LargeTile.scale-400.png
 Assets\LockScreenLogo.scale-200.png
+Assets\monotone_bg.png
+Assets\monotone_bg_wide.png
+Assets\monotone_no_bg.png
 Assets\SmallTile.scale-100.png
 Assets\SmallTile.scale-125.png
 Assets\SmallTile.scale-150.png

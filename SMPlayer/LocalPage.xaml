@@ -29,7 +29,7 @@
         <TextBlock
             x:Name="TitleTextBlock"
             Style="{StaticResource TitleTextBlockStyle}"
-            Text="Folder Content" />
+            Text="Folder Name" />
         <NavigationView
             x:Name="LocalNavigationView"
             Grid.Row="1"

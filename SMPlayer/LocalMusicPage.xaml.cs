@@ -40,9 +40,9 @@ namespace SMPlayer
         private async void LocalMusicGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = (GridMusicView)e.ClickedItem;
-            await MediaHelper.SetPlayList(GridItems.Select((m) => m.Source).ToList());
-            MediaHelper.MoveToMusic(item.Source);
-            MainPage.Instance.PlayMusic();
+            if (!Tree.Equals(LocalPage.History.Peek()))
+                await MediaHelper.SetPlayList(GridItems.Select((m) => m.Source).ToList());
+            MainPage.Instance.SetMusicAndPlay(item.Source);
         }
 
         private async void Setup(FolderTree tree)

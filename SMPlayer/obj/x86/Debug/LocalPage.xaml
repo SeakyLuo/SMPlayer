@@ -29,7 +29,7 @@
         <TextBlock x:ConnectionId='2'
             x:Name="TitleTextBlock"
             Style="{StaticResource TitleTextBlockStyle}"
-            Text="Folder Content" />
+            Text="Folder Name" />
         <NavigationView x:ConnectionId='3'
             x:Name="LocalNavigationView"
             Grid.Row="1"

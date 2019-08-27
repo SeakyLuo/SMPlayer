@@ -116,7 +116,7 @@ namespace SMPlayer
 
         private void SetText(TreeInfo info)
         {
-            TitleTextBlock.Text = info.Directory;
+            TitleTextBlock.Text = string.IsNullOrEmpty(info.Directory) ? info.Directory : "No Music";
             LocalFoldersItem.Content = string.Format("Folders ({0})", info.Folders);
             LocalFoldersItem.IsEnabled = info.Folders != 0;
             LocalSongsItem.Content = string.Format("Songs ({0})", info.Songs);
@@ -135,7 +135,7 @@ namespace SMPlayer
                 LocalNavigationView.SelectedItem = LocalSongsItem;
                 LocalFrame.Navigate(typeof(LocalMusicPage), tree);
             }
-            else
+            else if (info.Folders > 0)
             {
                 LocalNavigationView.SelectedItem = LocalFoldersItem;
                 LocalFrame.Navigate(typeof(LocalFoldersPage), tree);

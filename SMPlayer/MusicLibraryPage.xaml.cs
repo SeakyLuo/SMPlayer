@@ -29,7 +29,7 @@ namespace SMPlayer
     public sealed partial class MusicLibraryPage : Page, MusicControlListener, MediaControlListener
     {
         private const string FILENAME = "MusicLibrary.json";
-        public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
+        public static ObservableCollection<Music> AllSongs;
         private bool libraryChecked = false;
 
         public MusicLibraryPage()
@@ -52,6 +52,7 @@ namespace SMPlayer
         public static async Task Init()
         {
             AllSongs = JsonFileHelper.Convert<ObservableCollection<Music>>(await JsonFileHelper.ReadAsync(FILENAME));
+            if (AllSongs == null) AllSongs = new ObservableCollection<Music>();
         }
 
         public static async void CheckLibrary()
@@ -76,7 +77,6 @@ namespace SMPlayer
         private void PlayItem_Click(object sender, RoutedEventArgs e)
         {
             var music = (sender as MenuFlyoutItem).DataContext as Music;
-            MediaHelper.MoveToMusic(music);
             PlayMusic(music);
         }
 
