@@ -33,15 +33,16 @@ namespace SMPlayer
 
         public static string ToTime(IEnumerable<Music> list)
         {
-            int seconds = list.Sum((music) => music.Duration);
-            if (seconds == 0) return "";
-            int minutes = seconds / 60,
+            int total_seconds = list.Sum((music) => music.Duration);
+            if (total_seconds == 0) return "";
+            int seconds = total_seconds % 60,
+                minutes = total_seconds / 60,
                 hours = minutes / 60,
                 days = hours / 24;
             minutes %= 60;
             hours %= 60;
             days %= 24;
-            string second = seconds < 60 || minutes < 6 ? string.Format("{0} {1}", seconds %= 60, TryPlural("second", seconds)) : "",
+            string second = seconds != 0 && (total_seconds < 60 || minutes < 6) ? string.Format("{0} {1}", seconds, TryPlural("second", seconds)) : "",
                    minute = minutes == 0 || days > 0 ? "" : string.Format("{0} {1} ", minutes, TryPlural("minute", minutes)),
                    hour = hours == 0 ? "" : string.Format("{0} {1} ", hours, TryPlural("hour", hours)),
                    day = days == 0 ? "" : string.Format("{0} {1} ", days, TryPlural("day", days));

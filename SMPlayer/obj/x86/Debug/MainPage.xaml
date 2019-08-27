@@ -167,7 +167,7 @@
                     Grid.Column="0"
                     Width="100"
                     Height="100"
-                    Source="Assets/music.png"
+                    Source="Assets/logo.png"
                     Stretch="UniformToFill" />
                 <TextBlock x:ConnectionId='19'
                     x:Name="TitleTextBlock"
