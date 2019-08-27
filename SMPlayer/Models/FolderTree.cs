@@ -68,10 +68,13 @@ namespace SMPlayer.Models
                 foreach (var file in await folder.GetFilesAsync())
                     if (file.Name.EndsWith("mp3"))
                         Files.Add(await Music.GetMusic(file.Path));
-                // TODO:
-                // Set Current Playing Music to Null
             }
             Path = folder.Path;
+        }
+
+        public bool Contains(Music music)
+        {
+            return Files.Contains(music) || Trees.Any((tree) => tree.Contains(music));
         }
 
         public void Update(FolderTree tree)

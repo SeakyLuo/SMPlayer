@@ -12,16 +12,13 @@ Localization.
 
 SearchBox Style.
 
+Cache Artists Result.
 
 # TO FIX
 No music but still highlighted.
 
 Mouse Hover Album.
 
-Set unshuffle.
-
 Dislike Music Hardcoded.
-
-Cancel Tile Notification when App is not active.
 
 Toggle Button Checked == PointerOver

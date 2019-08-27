@@ -69,6 +69,7 @@ namespace SMPlayer
             };
             this.NavigationCacheMode = NavigationCacheMode.Required;
             MediaHelper.AddMediaControlListener(this as MediaControlListener);
+            SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
             // Settings
             Settings settings = Settings.settings;
             VolumeButton.Content = Helper.GetVolumeIcon(settings.Volume);
@@ -156,7 +157,6 @@ namespace SMPlayer
 
         public void PauseMusic()
         {
-            if (MediaHelper.CurrentMusic == null) return;
             PlayButtonIcon.Glyph = "\uE768";
             MediaHelper.Pause();
         }
@@ -422,6 +422,8 @@ namespace SMPlayer
 
         public void PathSet(string path)
         {
+            PauseMusic();
+            MediaSlider.Value = 0;
             AlbumCover.Source = Helper.DefaultAlbumCover;
             TitleTextBlock.Text = "";
             ArtistTextBlock.Text = "";

@@ -16,14 +16,12 @@ namespace SMPlayer
     public static class MediaHelper
     {
         public static Music CurrentMusic;
-        // This is an ordered one, not the shuffled one
         public static List<Music> CurrentPlayList
         {
             get
             {
                 if (PlayList.ShuffleEnabled)
                 {
-                    //ShuffledPlayList.Clear();
                     if (ShuffledPlayList.Count == 0)
                         foreach (var item in PlayList.ShuffledItems)
                             ShuffledPlayList.Add(item.Source.CustomProperties["Source"] as Music);
@@ -63,9 +61,13 @@ namespace SMPlayer
             {
                 if (sender.CurrentItemIndex >= OrderedPlayList.Count) return;
                 Music current = CurrentMusic?.Copy(), next = OrderedPlayList[Convert.ToInt32(sender.CurrentItemIndex)];
-                foreach (var listener in MediaControlListeners)
-                    listener.MusicSwitching(current, next, args.Reason);
-                CurrentMusic = next;
+                // Switching Folder Cause this
+                if (!next.Equals(current))
+                {
+                    foreach (var listener in MediaControlListeners)
+                        listener.MusicSwitching(current, next, args.Reason);
+                    CurrentMusic = next;
+                }
             };
             Player.MediaEnded += (sender, args) =>
             {
@@ -138,6 +140,8 @@ namespace SMPlayer
                 }
             }
             OrderedPlayList = playlist.ToList();
+            if (!OrderedPlayList.Contains(CurrentMusic))
+                CurrentMusic = null;
         }
 
         public static void AddMediaControlListener(MediaControlListener listener)
