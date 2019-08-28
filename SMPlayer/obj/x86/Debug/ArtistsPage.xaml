@@ -24,7 +24,7 @@
             Grid.Row="1"
             BackButtonBehavior="Automatic"
             CompactModeThresholdWidth="720"
-                                          >
+                                                       >
             <controls:MasterDetailsView.MasterHeader>
                 <Grid Margin="10,0,5,10">
                     <TextBlock x:ConnectionId='4'

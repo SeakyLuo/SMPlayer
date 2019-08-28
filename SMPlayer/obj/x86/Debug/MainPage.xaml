@@ -67,11 +67,10 @@
                     <AutoSuggestBox x:ConnectionId='32'
                         x:Name="NaviSearchBar"
                         Width="290"
-                        Background="{ThemeResource SystemControlAcrylicElementBrush}"
-                        BorderBrush="{ThemeResource SystemControlAcrylicElementBrush}"
                         PlaceholderText="Search"
                         QueryIcon="Find"
-                                                                      />
+                                                                     
+                        Style="{StaticResource NaviAutoSuggestBoxStyle}" />
                 </NavigationViewItem>
                 <NavigationViewItem x:ConnectionId='24'
                     x:Name="MusicLibraryItem"
@@ -329,10 +328,10 @@
                         Template="{StaticResource MediaControlToggleButtonTemplate}"
                                                                                                                                                 />
                     <Button
-                        ToolTipService.ToolTip="More"
                         Content="&#xE712;"
                         Style="{StaticResource MediaControlButtonStyle}"
-                        Template="{StaticResource MediaControlButtonTemplate}">
+                        Template="{StaticResource MediaControlButtonTemplate}"
+                        ToolTipService.ToolTip="More">
                         <Button.Flyout>
                             <MenuFlyout>
                                 <MenuFlyoutSubItem Icon="Add" Text="Add To Playlist" />

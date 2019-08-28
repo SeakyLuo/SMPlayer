@@ -41,6 +41,10 @@ namespace SMPlayer
             get => Player.PlaybackSession.Position.TotalSeconds;
             set => Player.PlaybackSession.Position = TimeSpan.FromSeconds(value);
         }
+        public static bool IsPlaying
+        {
+            get => Player.PlaybackSession.PlaybackState == MediaPlaybackState.Playing;
+        }
 
         public static MediaPlaybackList PlayList = new MediaPlaybackList();
         public static MediaPlayer Player = new MediaPlayer()
@@ -123,6 +127,7 @@ namespace SMPlayer
         public static async Task SetPlayList(IEnumerable<Music> playlist)
         {
             if (Helper.SamePlayList(playlist, OrderedPlayList)) return;
+            Pause();
             PlayList.Items.Clear();
             foreach (var music in playlist)
             {
@@ -130,6 +135,7 @@ namespace SMPlayer
                 {
                     var file = await Helper.CurrentFolder.GetFileAsync(music.GetShortPath());
                     var source = MediaSource.CreateFromStorageFile(file);
+                    music.IsPlaying = false;
                     source.CustomProperties.Add("Source", music);
                     var item = new MediaPlaybackItem(source);
                     PlayList.Items.Add(item);
@@ -140,6 +146,7 @@ namespace SMPlayer
                 }
             }
             OrderedPlayList = playlist.ToList();
+            ShuffledPlayList.Clear();
             if (!OrderedPlayList.Contains(CurrentMusic))
                 CurrentMusic = null;
         }

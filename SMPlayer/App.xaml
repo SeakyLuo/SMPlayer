@@ -33,6 +33,60 @@
             <Setter Property="IsCacheEnabled" Value="True" />
             <Setter Property="CacheMode" Value="BitmapCache" />
         </Style>
+        <Style x:Key="NaviAutoSuggestBoxStyle" TargetType="AutoSuggestBox">
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="TextBoxStyle" Value="{StaticResource AutoSuggestBoxTextBoxStyle}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="AutoSuggestBox">
+                        <Grid>
+                            <TextBox
+                                x:Name="TextBox"
+                                Width="{TemplateBinding Width}"
+                                Margin="0"
+                                BorderThickness="0"
+                                Canvas.ZIndex="0"
+                                DesiredCandidateWindowAlignment="BottomEdge"
+                                Header="{TemplateBinding Header}"
+                                PlaceholderText="{TemplateBinding PlaceholderText}"
+                                ScrollViewer.BringIntoViewOnFocusChange="False"
+                                Style="{TemplateBinding TextBoxStyle}" />
+                            <Popup x:Name="SuggestionsPopup">
+                                <Border x:Name="SuggestionsContainer" BorderThickness="0">
+                                    <Border.RenderTransform>
+                                        <TranslateTransform x:Name="UpwardTransform" />
+                                    </Border.RenderTransform>
+                                    <ListView
+                                        x:Name="SuggestionsList"
+                                        MaxHeight="{ThemeResource AutoSuggestListMaxHeight}"
+                                        Margin="{ThemeResource AutoSuggestListMargin}"
+                                        Padding="{ThemeResource AutoSuggestListPadding}"
+                                        Background="{ThemeResource SystemControlAcrylicElementBrush}"
+                                        BorderBrush="{ThemeResource SystemControlAcrylicElementBrush}"
+                                        BorderThickness="0"
+                                        DisplayMemberPath="{TemplateBinding DisplayMemberPath}"
+                                        IsItemClickEnabled="True"
+                                        ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
+                                        ItemTemplate="{TemplateBinding ItemTemplate}"
+                                        ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}">
+                                        <ListView.ItemContainerTransitions>
+                                            <TransitionCollection />
+                                        </ListView.ItemContainerTransitions>
+                                    </ListView>
+                                </Border>
+                            </Popup>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="Orientation">
+                                    <VisualState x:Name="Landscape" />
+                                    <VisualState x:Name="Portrait" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="MediaProgressSliderStyle" TargetType="Slider">
             <Setter Property="Background" Value="{ThemeResource SliderTrackFill}" />
             <Setter Property="BorderThickness" Value="{ThemeResource SliderBorderThemeThickness}" />

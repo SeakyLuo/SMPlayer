@@ -84,12 +84,11 @@ namespace SMPlayer
             Setup();
         }
 
-        private async void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
+        private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Music music = (Music)e.ClickedItem;
             ListView listView = (ListView)sender;
-            await MediaHelper.SetPlayList(listView.ItemsSource as ObservableCollection<Music>);
-            MainPage.Instance.SetMusicAndPlay(music);
+            SetMusicAndPlay(music, listView.ItemsSource as ObservableCollection<Music>);
         }
 
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
@@ -97,11 +96,20 @@ namespace SMPlayer
             args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? Helper.WhiteSmokeBrush : Helper.WhiteBrush;
         }
 
-        private async void PlayItem_Click(object sender, RoutedEventArgs e)
+        private async void SetMusicAndPlay(Music music, IEnumerable<Music> playlist)
+        {
+            if (!music.Equals(MediaHelper.CurrentMusic))
+            {
+                FindMusicAndSetPlaying(MediaHelper.CurrentMusic, false);
+                await MediaHelper.SetPlayList(playlist);
+            }
+            MainPage.Instance.SetMusicAndPlay(music);
+        }
+
+        private void PlayItem_Click(object sender, RoutedEventArgs e)
         {
             Music music = (sender as MenuFlyoutItem).DataContext as Music;
-            await MediaHelper.SetPlayList(Artists.First((a) => a.Name == music.Artist).Albums.First((a) => a.Name == music.Album).Songs);
-            MainPage.Instance.SetMusicAndPlay(music);
+            SetMusicAndPlay(music, Artists.First((a) => a.Name == music.Artist).Albums.First((a) => a.Name == music.Album).Songs);
         }
 
         private void FindMusicAndSetPlaying(Music target, bool isPlaying)
