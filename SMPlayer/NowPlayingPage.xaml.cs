@@ -59,19 +59,16 @@ namespace SMPlayer
         }
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
         {
-            MainPage.Instance.Frame.Navigate(typeof(NowPlayingFullPage));
+            try
+            {
+                MainPage.Instance.Frame.Navigate(typeof(NowPlayingFullPage));
+            }
+            catch (NullReferenceException)
+            {
+                // Clicking twice quickly will cause this exception
+            }
         }
         private void NewListButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void LyricsButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void MusicInfoButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
@@ -110,10 +107,9 @@ namespace SMPlayer
             Music music = (sender as MenuFlyoutItem).DataContext as Music;
             if (music.Equals(MediaHelper.CurrentMusic))
             {
-                Songs.Remove(music);
-                // TODO:
-                // also need to remove from MediaHelper.
                 MediaHelper.NextMusic();
+                Songs.Remove(music);
+                MediaHelper.RemoveMusic(music);
             }
         }
 
@@ -121,6 +117,11 @@ namespace SMPlayer
         {
             Music music = (sender as MenuFlyoutItem).DataContext as Music;
             Songs.Move(Songs.IndexOf(music), 0);
+        }
+
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

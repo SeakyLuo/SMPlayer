@@ -194,4 +194,62 @@ namespace SMPlayer
             return null;
         }
     }
+
+    class ButtonTooltipConverter : Windows.UI.Xaml.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            string text = value.ToString();
+            switch (text)
+            {
+                case "\uE768":
+                    return "Pause";
+                case "\uE769":
+                    return "Play";
+                case "\uE767":
+                case "\uE992":
+                case "\uE993":
+                case "\uE994":
+                case "\uE995":
+                    return "Mute";
+                case "\uE74F":
+                    return "Unmute";
+                default:
+                    return "";
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
+
+    class LikeTooltipConverter : Windows.UI.Xaml.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            var foreground = (Windows.UI.Xaml.Media.Brush)value;
+            return foreground.Equals(Helper.RedBrush) ? "Undo Like" : "Like";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
+
+    class ToggleButtonTooltipConverter : Windows.UI.Xaml.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            var button = (Windows.UI.Xaml.Controls.Primitives.ToggleButton)value;
+            return string.Format("{0}: {1}", button.Tag, (bool)button.IsChecked ? "Enabled" : "Disabled");
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
 }

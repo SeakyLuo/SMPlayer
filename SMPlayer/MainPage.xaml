@@ -61,8 +61,9 @@
                 <NavigationViewItem
                     x:Name="NaviSearchItem"
                     Icon="Find"
+                    SelectsOnInvoked="False"
                     Visibility="Collapsed" />
-                <NavigationViewItem x:Name="NaviSearchBarItem">
+                <NavigationViewItem x:Name="NaviSearchBarItem" SelectsOnInvoked="False">
                     <AutoSuggestBox
                         x:Name="NaviSearchBar"
                         Width="290"
@@ -149,9 +150,11 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid
+                x:Name="MusicInfoGrid"
                 Grid.Column="0"
                 Margin="0"
-                HorizontalAlignment="Left">
+                HorizontalAlignment="Left"
+                Tapped="MusicInfoGrid_Tapped">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
@@ -186,6 +189,17 @@
                     FontSize="18"
                     FontWeight="Bold"
                     Text="" />
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="PointerOver">
+                            <Storyboard>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPointerOverBackgroundThemeBrush}" />
+                                </ObjectAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
             </Grid>
 
             <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -195,7 +209,8 @@
                         Click="PrevButton_Click"
                         Content="&#xE892;"
                         Style="{StaticResource MediaControlButtonStyle}"
-                        Template="{StaticResource MediaControlButtonTemplate}" />
+                        Template="{StaticResource MediaControlButtonTemplate}"
+                        ToolTipService.ToolTip="Previous" />
                     <Button
                         x:Name="PlayButton"
                         Width="48"
@@ -203,15 +218,12 @@
                         HorizontalAlignment="Center"
                         BorderBrush="{StaticResource MediaControlPlayButtonBorderBrush}"
                         Click="PlayButton_Click"
+                        Content="&#xE768;"
                         CornerRadius="25"
+                        FontSize="24"
                         Style="{StaticResource MediaControlButtonStyle}"
-                        Template="{StaticResource MediaControlButtonTemplate}">
-                        <Button.Content>
-                            <FontIcon
-                                x:Name="PlayButtonIcon"
-                                FontSize="24"
-                                Glyph="&#xE768;" />
-                        </Button.Content>
+                        Template="{StaticResource MediaControlButtonTemplate}"
+                        ToolTipService.ToolTip="{x:Bind PlayButton.Content, Converter={StaticResource ButtonTooltipConverter}, Mode=OneWay}">
                         <Button.KeyboardAccelerators>
                             <KeyboardAccelerator Key="F3" />
                         </Button.KeyboardAccelerators>
@@ -221,7 +233,8 @@
                         Click="NextButton_Click"
                         Content="&#xE893;"
                         Style="{StaticResource MediaControlButtonStyle}"
-                        Template="{StaticResource MediaControlButtonTemplate}" />
+                        Template="{StaticResource MediaControlButtonTemplate}"
+                        ToolTipService.ToolTip="Next" />
                 </StackPanel>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -270,13 +283,13 @@
                         Click="VolumeButton_Click"
                         Content="&#xE15D;"
                         Style="{StaticResource MediaControlButtonStyle}"
-                        Template="{StaticResource MediaControlButtonTemplate}" />
+                        Template="{StaticResource MediaControlButtonTemplate}"
+                        ToolTipService.ToolTip="{x:Bind VolumeButton.Content, Converter={StaticResource ButtonTooltipConverter}, Mode=OneWay}" />
                     <Slider
                         x:Name="VolumeSlider"
                         Width="100"
                         Margin="10,0,20,0"
                         VerticalAlignment="Center"
-                        Foreground="White"
                         Maximum="100"
                         Minimum="0"
                         Style="{StaticResource MediaProgressSliderStyle}"
@@ -285,12 +298,10 @@
                     <Button
                         x:Name="LikeButton"
                         Click="LikeButton_Click"
+                        Content="&#xEB51;"
                         Style="{StaticResource MediaControlButtonStyle}"
-                        Template="{StaticResource MediaControlButtonTemplate}">
-                        <Button.Content>
-                            <FontIcon x:Name="LikeButtonIcon" Glyph="&#xEB51;" />
-                        </Button.Content>
-                    </Button>
+                        Template="{StaticResource MediaControlButtonTemplate}"
+                        ToolTipService.ToolTip="{x:Bind LikeButton.Foreground, Converter={StaticResource LikeTooltipConverter}, Mode=OneWay}" />
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                     <ToggleButton
@@ -298,20 +309,27 @@
                         Click="ShuffleButton_Click"
                         Content="&#xE8B1;"
                         Style="{StaticResource MediaControlToggleButtonStyle}"
-                        Template="{StaticResource MediaControlToggleButtonTemplate}" />
+                        Tag="Shuffle"
+                        Template="{StaticResource MediaControlToggleButtonTemplate}"
+                        ToolTipService.ToolTip="{x:Bind ShuffleButton, Converter={StaticResource ToggleButtonTooltipConverter}, Mode=OneWay}" />
                     <ToggleButton
                         x:Name="RepeatButton"
                         Click="RepeatButton_Click"
                         Content="&#xE8EE;"
                         Style="{StaticResource MediaControlToggleButtonStyle}"
-                        Template="{StaticResource MediaControlToggleButtonTemplate}" />
+                        Tag="Repeat"
+                        Template="{StaticResource MediaControlToggleButtonTemplate}"
+                        ToolTipService.ToolTip="{x:Bind RepeatButton, Converter={StaticResource ToggleButtonTooltipConverter}, Mode=OneWay}" />
                     <ToggleButton
                         x:Name="RepeatOneButton"
                         Click="RepeatOneButton_Click"
                         Content="&#xE8ED;"
                         Style="{StaticResource MediaControlToggleButtonStyle}"
-                        Template="{StaticResource MediaControlToggleButtonTemplate}" />
+                        Tag="RepeatOne"
+                        Template="{StaticResource MediaControlToggleButtonTemplate}"
+                        ToolTipService.ToolTip="{x:Bind RepeatOneButton, Converter={StaticResource ToggleButtonTooltipConverter}, Mode=OneWay}" />
                     <Button
+                        ToolTipService.ToolTip="More"
                         Content="&#xE712;"
                         Style="{StaticResource MediaControlButtonStyle}"
                         Template="{StaticResource MediaControlButtonTemplate}">

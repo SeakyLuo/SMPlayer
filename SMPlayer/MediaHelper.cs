@@ -190,6 +190,14 @@ namespace SMPlayer
                 }
             }
         }
+
+        public static void RemoveMusic(Music music)
+        {
+            OrderedPlayList.Remove(music);
+            ShuffledPlayList.Remove(music);
+            var target = PlayList.Items.FirstOrDefault((item) => music.Equals(item.Source.CustomProperties["Source"]));
+            PlayList.Items.Remove(target);
+        }
     }
 
     public interface MediaControlListener

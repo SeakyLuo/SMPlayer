@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:data="using:SMPlayer.Models"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:media="using:Microsoft.Toolkit.Uwp.UI.Media"
@@ -31,16 +32,11 @@
                 Icon="Add"
                 Label="Add To New Playlist" />
             <AppBarButton x:ConnectionId='14'
-                x:Name="MusicInfoButton"
-                                             
-                Icon="MusicInfo"
-                Label="Show Music Info" />
+                x:Name="ClearButton"
+                                         
+                Icon="Clear"
+                Label="Clear All" />
             <AppBarButton x:ConnectionId='15'
-                x:Name="LyricsButton"
-                                          
-                Icon="Comment"
-                Label="Show Lyrics" />
-            <AppBarButton x:ConnectionId='16'
                 x:Name="FullScreenButton"
                                               
                 Icon="FullScreen"
@@ -66,7 +62,7 @@
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
-                <DataTemplate                         >
+                <DataTemplate                        >
                     <Grid x:ConnectionId='4'>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="8*" />

@@ -33,6 +33,8 @@
       <RootProperty Name="HorizontalTextAlignment" />
       <RootProperty Name="Width" />
       <RootProperty Name="FontFamily" />
+      <RootProperty Name="Padding" />
+      <RootProperty Name="Inlines" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.FrameworkElement">
       <RootProperty Name="Margin" />
@@ -51,13 +53,14 @@
       <RootProperty Name="Foreground" />
       <RootProperty Name="Flyout" />
       <RootProperty Name="Style" />
-      <RootProperty Name="KeyboardAccelerators" />
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
       <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="Template" />
-      <RootProperty Name="BorderBrush" />
       <RootProperty Name="CornerRadius" />
+      <RootProperty Name="Template" />
+      <RootProperty Name="KeyboardAccelerators" />
+      <RootProperty Name="BorderThickness" />
+      <RootProperty Name="BorderBrush" />
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Control">
@@ -116,13 +119,12 @@
       <RootProperty Name="Width" />
       <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="Foreground" />
       <RootProperty Name="Maximum" />
       <RootProperty Name="Minimum" />
+      <RootProperty Name="Style" />
       <RootProperty Name="Value" />
       <RootProperty Name="IsThumbToolTipEnabled" />
       <RootProperty Name="ManipulationMode" />
-      <RootProperty Name="Style" />
       <RootProperty Name="ThumbToolTipValueConverter" />
       <RootEvent Name="ValueChanged" />
       <RootEvent Name="ManipulationCompleted" />
@@ -135,8 +137,8 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.ToggleButton">
       <RootProperty Name="Content" />
-      <RootProperty Name="Foreground" />
       <RootProperty Name="Style" />
+      <RootProperty Name="Tag" />
       <RootProperty Name="Template" />
       <RootEvent Name="Click" />
     </RootType>
@@ -149,6 +151,9 @@
     <RootType FullName="SMPlayer.MusicIsPlayingConverter" />
     <RootType FullName="SMPlayer.RowColorConverter" />
     <RootType FullName="SMPlayer.SongCountConverter" />
+    <RootType FullName="SMPlayer.ButtonTooltipConverter" />
+    <RootType FullName="SMPlayer.LikeTooltipConverter" />
+    <RootType FullName="SMPlayer.ToggleButtonTooltipConverter" />
     <RootType FullName="Windows.UI.Xaml.Media.AcrylicBrush">
       <RootProperty Name="BackgroundSource" />
       <RootProperty Name="FallbackColor" />
@@ -228,8 +233,9 @@
       <RootProperty Name="ContextFlyout" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Opacity" />
-      <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="RequestedTheme" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootEvent Name="Tapped" />
       <RootMethod Name="GetRow" />
       <RootMethod Name="SetRow" />
       <RootMethod Name="GetRowSpan" />
@@ -289,10 +295,11 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Page">
       <RootProperty Name="Background" />
-      <RootProperty Name="Resources" />
       <RootProperty Name="Content" />
+      <RootProperty Name="Resources" />
       <RootEvent Name="Loaded" />
     </RootType>
+    <RootType FullName="SMPlayer.AlbumPage" />
     <RootType FullName="SMPlayer.AlbumNameVisibilityConverter" />
     <RootType FullName="Windows.UI.Xaml.Controls.GridView">
       <RootProperty Name="Margin" />
@@ -344,6 +351,7 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.RelativePanel">
       <RootProperty Name="Children" />
+      <RootProperty Name="Margin" />
       <RootMethod Name="GetAlignLeftWithPanel" />
       <RootMethod Name="SetAlignLeftWithPanel" />
       <RootMethod Name="GetLeftOf" />
@@ -432,6 +440,7 @@
       <RootProperty Name="Icon" />
       <RootProperty Name="Style" />
       <RootProperty Name="Visibility" />
+      <RootProperty Name="SelectsOnInvoked" />
       <RootProperty Name="Tag" />
       <RootEvent Name="Tapped" />
     </RootType>
@@ -450,6 +459,12 @@
       <RootEvent Name="PaneClosing" />
       <RootEvent Name="PaneOpening" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.Viewbox">
+      <RootProperty Name="Width" />
+      <RootProperty Name="Child" />
+      <RootProperty Name="MaxWidth" />
+      <RootProperty Name="MaxHeight" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Frame">
       <RootProperty Name="IsNavigationStackEnabled" />
       <RootEvent Name="Navigated" />
@@ -458,6 +473,9 @@
     <RootType FullName="SMPlayer.MediaControl" />
     <RootType FullName="SMPlayer.MusicListPage" />
     <RootType FullName="SMPlayer.MyFavorites" />
+    <RootType FullName="Windows.UI.Xaml.Controls.Flyout">
+      <RootProperty Name="Content" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Input.KeyboardAccelerator">
       <RootProperty Name="Key" />
     </RootType>
@@ -523,6 +541,28 @@
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="SMPlayer.NowPlayingPage" />
+    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.TabView">
+      <RootProperty Name="AllowDrop" />
+      <RootProperty Name="CanCloseTabs" />
+      <RootProperty Name="CanDragItems" />
+      <RootProperty Name="CanReorderItems" />
+      <RootProperty Name="IsCloseButtonOverlay" />
+      <RootProperty Name="ItemsSource" />
+      <RootProperty Name="SelectedTabWidth" />
+      <RootProperty Name="TabWidthBehavior" />
+      <RootProperty Name="Resources" />
+      <RootProperty Name="ItemTemplate" />
+      <RootProperty Name="TabStartHeader" />
+      <RootProperty Name="Items" />
+      <RootProperty Name="TabEndHeader" />
+      <RootProperty Name="Footer" />
+    </RootType>
+    <RootType FullName="System.Double" />
+    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.TabViewItem">
+      <RootProperty Name="Header" />
+      <RootProperty Name="Icon" />
+      <RootProperty Name="ContextFlyout" />
+    </RootType>
     <RootType FullName="SMPlayer.PlaylistsPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.AutoSuggestBox">
       <RootProperty Name="HorizontalAlignment" />
@@ -538,9 +578,6 @@
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Items" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.Flyout">
-      <RootProperty Name="Content" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ColorPicker">
       <RootProperty Name="Color" />
     </RootType>
@@ -549,6 +586,10 @@
       <RootProperty Name="IsSelected" />
     </RootType>
     <RootType FullName="SMPlayer.SettingsPage" />
+    <RootType FullName="Windows.UI.Xaml.Controls.ToolTipService">
+      <RootMethod Name="GetToolTip" />
+      <RootMethod Name="SetToolTip" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.NavigationViewItemSeparator" />
     <RootType FullName="SMPlayer.MainPage" />
   </Roots.RootTypes>

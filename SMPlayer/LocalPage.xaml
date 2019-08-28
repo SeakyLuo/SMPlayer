@@ -60,11 +60,14 @@
                         Tapped="LocalShuffleItem_Tapped" />
                     <NavigationViewItem
                         x:Name="LocalListViewItem"
-                        Content="List View"
                         Icon="List"
                         Style="{StaticResource TopNavigationViewFooterItemStyle}"
                         Tapped="LocalListViewItem_Tapped"
-                        Visibility="Visible" />
+                        Visibility="Visible">
+                        <Viewbox Width="60">
+                            <TextBlock FontSize="14" Text="List View" />
+                        </Viewbox>
+                    </NavigationViewItem>
                     <NavigationViewItem
                         x:Name="LocalGridViewItem"
                         Content="Grid View"

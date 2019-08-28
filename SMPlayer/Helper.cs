@@ -37,6 +37,7 @@ namespace SMPlayer
         public static ToastAudio SlientToast = new ToastAudio() { Silent = true };
         public static TileUpdater tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
         public static SolidColorBrush WhiteBrush = new SolidColorBrush(Colors.White);
+        public static SolidColorBrush RedBrush = new SolidColorBrush(Colors.Red);
         public static SolidColorBrush WhiteSmokeBrush = new SolidColorBrush(Colors.WhiteSmoke);
         public static SolidColorBrush BlackBrush = new SolidColorBrush(Colors.Black);
         private static string Lyrics = "";

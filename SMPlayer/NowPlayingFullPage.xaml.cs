@@ -32,6 +32,11 @@ namespace SMPlayer
         public NowPlayingFullPage()
         {
             this.InitializeComponent();
+            SystemNavigationManager.GetForCurrentView().BackRequested += (s, e) =>
+            {
+                if (Frame.CanGoBack)
+                    Frame.GoBack();
+            };
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -91,20 +96,20 @@ namespace SMPlayer
                 if (MusicLibraryPage.AllSongs.Count == 0) return;
                 MediaHelper.MoveToMusic(MediaHelper.CurrentPlayList[0]);
             }
-            PlayButtonIcon.Glyph = "\uE769";
+            PlayButton.Content = "\uE769";
             MediaHelper.Play();
         }
 
         public void PauseMusic()
         {
             if (MediaHelper.CurrentMusic == null) return;
-            PlayButtonIcon.Glyph = "\uE768";
+            PlayButton.Content = "\uE768";
             MediaHelper.Pause();
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            if (PlayButtonIcon.Glyph == "\uE768") PlayMusic();
+            if (PlayButton.Content.ToString() == "\uE768") PlayMusic();
             else PauseMusic();
         }
 
@@ -141,15 +146,15 @@ namespace SMPlayer
 
         public void LikeMusic(bool isClick = true)
         {
-            LikeButtonIcon.Glyph = "\uEB52";
-            LikeButtonIcon.Foreground = new SolidColorBrush(Windows.UI.Colors.Red);
+            LikeButton.Content = "\uEB52";
+            LikeButton.Foreground = new SolidColorBrush(Windows.UI.Colors.Red);
             if (isClick) SetMusicFavorite(true);
         }
 
         public void DislikeMusic(bool isClick = true)
         {
-            LikeButtonIcon.Glyph = "\uEB51";
-            LikeButtonIcon.Foreground = new SolidColorBrush(Windows.UI.Colors.Black);
+            LikeButton.Content = "\uEB51";
+            LikeButton.Foreground = new SolidColorBrush(Windows.UI.Colors.Black);
             if (isClick) SetMusicFavorite(false);
         }
 
@@ -168,7 +173,7 @@ namespace SMPlayer
 
         private void LikeButton_Click(object sender, RoutedEventArgs e)
         {
-            if (LikeButtonIcon.Glyph == "\uEB51") LikeMusic();
+            if (LikeButton.Content.ToString() == "\uEB51") LikeMusic();
             else DislikeMusic();
         }
 
@@ -245,6 +250,36 @@ namespace SMPlayer
             });
         }
 
+        private void FullScreenButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MiniPlayButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CarouselButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SavePlaylistButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MusicInfoButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ClearNowPlayingButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         public async void MediaEnded()
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
@@ -252,7 +287,7 @@ namespace SMPlayer
                 MediaHelper.Timer.Stop();
                 if (Settings.settings.Mode == PlayMode.Once)
                 {
-                    PlayButtonIcon.Glyph = "\uE768";
+                    PlayButton.Content = "\uE768";
                     MediaSlider.Value = 0;
                 }
             });

@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMPlayer.Models
 {
-    public class GridFolderView
+    class GridFolderView
     {
         public string Name { get; set; }
         public string MusicCount { get; set; }

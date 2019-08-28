@@ -1,7 +1,5 @@
-﻿using SMPlayer.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -22,22 +20,11 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class PlaylistsPage : Page
+    public sealed partial class AlbumPage : Page
     {
-        private ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
-        public PlaylistsPage()
+        public AlbumPage()
         {
             this.InitializeComponent();
-        }
-
-        private void DeleteClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void DuplicateClick(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

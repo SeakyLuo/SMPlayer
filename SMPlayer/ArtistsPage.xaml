@@ -178,7 +178,7 @@
                                                 </Style>
                                             </ListView.ItemContainerStyle>
                                             <ListView.ItemTemplate>
-                                                <DataTemplate x:DataType="local:Music">
+                                                <DataTemplate x:DataType="data:Music">
                                                     <Grid Margin="12,0,0,0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="Auto" />

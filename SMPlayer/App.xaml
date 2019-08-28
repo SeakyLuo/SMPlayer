@@ -341,6 +341,7 @@
                 <Setter Property="Margin" Value="5,0" />
                 <Setter Property="FontSize" Value="20" />
                 <Setter Property="Foreground" Value="White" />
+                <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
             </Style.Setters>
         </Style>
         <ControlTemplate x:Key="MediaControlButtonTemplate" TargetType="Button">
@@ -418,6 +419,7 @@
                 <Setter Property="CornerRadius" Value="20" />
                 <Setter Property="Margin" Value="5,0" />
                 <Setter Property="Foreground" Value="White" />
+                <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
                 <Setter Property="FontSize" Value="20" />
             </Style.Setters>
         </Style>
@@ -499,6 +501,20 @@
                                 <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
                             </Storyboard>
                         </VisualState>
+                        <VisualState x:Name="CheckedPointerOver">
+                            <Storyboard>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource MediaControlToggleButtonCheckedBackgroundBrush}" />
+                                </ObjectAnimationUsingKeyFrames>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonForegroundChecked}" />
+                                </ObjectAnimationUsingKeyFrames>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonBorderBrushChecked}" />
+                                </ObjectAnimationUsingKeyFrames>
+                                <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                            </Storyboard>
+                        </VisualState>
                     </VisualStateGroup>
                 </VisualStateManager.VisualStateGroups>
             </ContentPresenter>
@@ -512,6 +528,9 @@
         <local:MusicIsPlayingConverter x:Key="MusicIsPlayingConverter" />
         <local:RowColorConverter x:Key="RowColorConverter" />
         <local:SongCountConverter x:Key="SongCountConverter" />
+        <local:ButtonTooltipConverter x:Key="ButtonTooltipConverter" />
+        <local:LikeTooltipConverter x:Key="LikeTooltipConverter" />
+        <local:ToggleButtonTooltipConverter x:Key="ToggleButtonTooltipConverter" />
         <AcrylicBrush
             x:Key="MediaControlSliderThumbAcrylicBrush"
             BackgroundSource="Backdrop"

@@ -178,7 +178,7 @@
                                                 </Style>
                                             </ListView.ItemContainerStyle>
                                             <ListView.ItemTemplate>
-                                                <DataTemplate                         >
+                                                <DataTemplate                        >
                                                     <Grid x:ConnectionId='12' Margin="12,0,0,0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="Auto" />

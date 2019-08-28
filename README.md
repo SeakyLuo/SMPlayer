@@ -15,10 +15,6 @@ SearchBox Style.
 Cache Artists Result.
 
 # TO FIX
-No music but still highlighted.
-
-Mouse Hover Album.
+VisualStateManager.
 
 Dislike Music Hardcoded.
-
-Toggle Button Checked == PointerOver

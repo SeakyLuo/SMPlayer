@@ -115,6 +115,9 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AlbumPage.xaml.cs">
+      <DependentUpon>AlbumPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AlbumsPage.xaml.cs">
       <DependentUpon>AlbumsPage.xaml</DependentUpon>
     </Compile>
@@ -149,6 +152,7 @@
     <Compile Include="NowPlayingFullPage.xaml.cs">
       <DependentUpon>NowPlayingFullPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Playlist.cs" />
     <Compile Include="RecentPage.xaml.cs">
       <DependentUpon>RecentPage.xaml</DependentUpon>
     </Compile>
@@ -156,7 +160,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\FolderTree.cs" />
-    <Compile Include="Models\JsonFileHelper.cs" />
+    <Compile Include="JsonFileHelper.cs" />
     <Compile Include="Models\Music.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\SettingsEnum.cs" />
@@ -247,6 +251,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="AlbumPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AlbumsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

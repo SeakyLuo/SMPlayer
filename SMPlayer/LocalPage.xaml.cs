@@ -116,7 +116,7 @@ namespace SMPlayer
 
         private void SetText(TreeInfo info)
         {
-            TitleTextBlock.Text = string.IsNullOrEmpty(info.Directory) ? info.Directory : "No Music";
+            TitleTextBlock.Text = string.IsNullOrEmpty(info.Directory) ? "No Music" : info.Directory;
             LocalFoldersItem.Content = string.Format("Folders ({0})", info.Folders);
             LocalFoldersItem.IsEnabled = info.Folders != 0;
             LocalSongsItem.Content = string.Format("Songs ({0})", info.Songs);

@@ -60,11 +60,14 @@
                                                          />
                     <NavigationViewItem x:ConnectionId='7'
                         x:Name="LocalListViewItem"
-                        Content="List View"
                         Icon="List"
                         Style="{StaticResource TopNavigationViewFooterItemStyle}"
                                                          
-                        Visibility="Visible" />
+                        Visibility="Visible">
+                        <Viewbox Width="60">
+                            <TextBlock FontSize="14" Text="List View" />
+                        </Viewbox>
+                    </NavigationViewItem>
                     <NavigationViewItem x:ConnectionId='8'
                         x:Name="LocalGridViewItem"
                         Content="Grid View"

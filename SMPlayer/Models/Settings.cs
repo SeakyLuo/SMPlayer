@@ -22,8 +22,10 @@ namespace SMPlayer.Models
         public double Volume { get; set; }
         public bool IsNavigationCollapsed { get; set; }
         public Color ThemeColor { get; set; }
-        public List<Music> PlayList { get; set; }
+        public List<Music> PlayList { get; set; } // Current Playlist
         public ShowNotification Notification { get; set; }
+        public string LastPage { get; set; }
+        public List<Playlist> Playlists { get; set; }
 
         public Settings()
         {
@@ -35,6 +37,8 @@ namespace SMPlayer.Models
             IsNavigationCollapsed = true;
             ThemeColor = (Color)Windows.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(typeof(Color), "#0078D7");
             PlayList = new List<Music>();
+            LastPage = "";
+            Playlists = new List<Playlist>();
         }
 
         public static async Task Init()

@@ -67,7 +67,7 @@ namespace SMPlayer
                     });
                 }
             };
-            this.NavigationCacheMode = NavigationCacheMode.Required;
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
             MediaHelper.AddMediaControlListener(this as MediaControlListener);
             SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
             // Settings
@@ -95,7 +95,7 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            MusicLibraryItem.IsSelected = true;
+            SwitchPage(string.IsNullOrEmpty(Settings.settings.LastPage) ? "MusicLibraryItem" : Settings.settings.LastPage);
         }
 
         public async void SetMusic(Music music)
@@ -151,19 +151,19 @@ namespace SMPlayer
 
         public void PlayMusic()
         {
-            PlayButtonIcon.Glyph = "\uE769";
+            PlayButton.Content = "\uE769";
             MediaHelper.Play();
         }
 
         public void PauseMusic()
         {
-            PlayButtonIcon.Glyph = "\uE768";
+            PlayButton.Content = "\uE768";
             MediaHelper.Pause();
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            if (PlayButtonIcon.Glyph == "\uE768")
+            if (PlayButton.Content.ToString() == "\uE768")
             {
                 if (MediaHelper.CurrentMusic == null)
                 {
@@ -214,80 +214,70 @@ namespace SMPlayer
                 Helper.SetBackButtonVisibility(AppViewBackButtonVisibility.Visible);
             }
         }
+
+        private void SwitchPage(string name)
+        {
+            switch (name)
+            {
+                case "MusicLibraryItem":
+                    NaviFrame.Navigate(typeof(MusicLibraryPage));
+                    MusicLibraryItem.IsSelected = true;
+                    break;
+                case "AlbumsItem":
+                    NaviFrame.Navigate(typeof(AlbumsPage));
+                    AlbumsItem.IsSelected = true;
+                    break;
+                case "ArtistsItem":
+                    NaviFrame.Navigate(typeof(ArtistsPage));
+                    ArtistsItem.IsSelected = true;
+                    break;
+                case "NowPlayingItem":
+                    NaviFrame.Navigate(typeof(NowPlayingPage));
+                    NowPlayingItem.IsSelected = true;
+                    break;
+                case "RecentItem":
+                    NaviFrame.Navigate(typeof(RecentPage));
+                    RecentItem.IsSelected = true;
+                    break;
+                case "LocalItem":
+                    NaviFrame.Navigate(typeof(LocalPage));
+                    LocalItem.IsSelected = true;
+                    break;
+                case "PlaylistsItem":
+                    NaviFrame.Navigate(typeof(PlaylistsPage));
+                    MusicLibraryItem.IsSelected = true;
+                    break;
+                case "MyFavoritesItem":
+                    NaviFrame.Navigate(typeof(MyFavorites));
+                    MyFavoritesItem.IsSelected = true;
+                    break;
+                default:
+                    return;
+            }
+            Settings.settings.LastPage = name;
+        }
         private void MainNavigationView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
             if (args.IsSettingsInvoked) NaviFrame.Navigate(typeof(SettingsPage));
             else
             {
-                var item = (NavigationViewItem)MainNavigationView.SelectedItem;
-                switch (item.Name)
+                var item = (NavigationViewItem)args.InvokedItemContainer;
+                if (item == null)
                 {
-                    case "NaviSearchItem":
-                        Open_Navigation();
-                        MainNavigationView.IsPaneOpen = true;
-                        NaviSearchBar.Focus(FocusState.Programmatic);
-                        break;
-                    case "MusicLibraryItem":
-                        NaviFrame.Navigate(typeof(MusicLibraryPage));
-                        break;
-                    case "AlbumsItem":
-                        NaviFrame.Navigate(typeof(AlbumsPage));
-                        break;
-                    case "ArtistsItem":
-                        NaviFrame.Navigate(typeof(ArtistsPage));
-                        break;
-                    case "NowPlayingItem":
-                        NaviFrame.Navigate(typeof(NowPlayingPage));
-                        break;
-                    case "RecentItem":
-                        NaviFrame.Navigate(typeof(RecentPage));
-                        break;
-                    case "LocalItem":
-                        NaviFrame.Navigate(typeof(LocalPage));
-                        break;
-                    case "PlaylistsItem":
-                        NaviFrame.Navigate(typeof(PlaylistsPage));
-                        break;
-                    case "MyFavoritesItem":
-                        NaviFrame.Navigate(typeof(MyFavorites));
-                        break;
-                    default:
-                        return;
+                    // Search
+                    Open_Navigation();
+                    MainNavigationView.IsPaneOpen = true;
+                    NaviSearchBar.Focus(FocusState.Programmatic);
+                }
+                else
+                {
+                    SwitchPage(item.Name);
                 }
             }
         }
         private void NaviFrame_Navigated(object sender, NavigationEventArgs e)
         {
             Helper.SetBackButtonVisibility(NaviFrame.CanGoBack ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed);
-            switch (NaviFrame.CurrentSourcePageType.Name)
-            {
-                case "MusicLibraryPage":
-                    MainNavigationView.SelectedItem = MusicLibraryItem;
-                    break;
-                case "ArtistsPage":
-                    MainNavigationView.SelectedItem = ArtistsItem;
-                    break;
-                case "AlbumsPage":
-                    MainNavigationView.SelectedItem = AlbumsItem;
-                    break;
-                case "NowPlayingPage":
-                    MainNavigationView.SelectedItem = NowPlayingItem;
-                    break;
-                case "RecentPage":
-                    MainNavigationView.SelectedItem = RecentItem;
-                    break;
-                case "LocalPage":
-                    MainNavigationView.SelectedItem = LocalItem;
-                    break;
-                case "PlaylistsPage":
-                    MainNavigationView.SelectedItem = PlaylistsItem;
-                    break;
-                case "MyFavoritesPage":
-                    MainNavigationView.SelectedItem = MyFavoritesItem;
-                    break;
-                default:
-                    return;
-            }
         }
 
         private void VolumeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
@@ -301,15 +291,15 @@ namespace SMPlayer
 
         public void LikeMusic(bool isClick = true)
         {
-            LikeButtonIcon.Glyph = "\uEB52";
-            LikeButtonIcon.Foreground = new SolidColorBrush(Windows.UI.Colors.Red);
+            LikeButton.Content = "\uEB52";
+            LikeButton.Foreground = Helper.RedBrush;
             if (isClick) SetMusicFavorite(true);
         }
 
         public void DislikeMusic(bool isClick = true)
         {
-            LikeButtonIcon.Glyph = "\uEB51";
-            LikeButtonIcon.Foreground = new SolidColorBrush(Windows.UI.Colors.White);
+            LikeButton.Content = "\uEB51";
+            LikeButton.Foreground = Helper.WhiteBrush;
             if (isClick) SetMusicFavorite(false);
         }
 
@@ -322,7 +312,7 @@ namespace SMPlayer
 
         private void LikeButton_Click(object sender, RoutedEventArgs e)
         {
-            if (LikeButtonIcon.Glyph == "\uEB51") LikeMusic();
+            if (LikeButton.Content.ToString() == "\uEB51") LikeMusic();
             else DislikeMusic();
         }
 
@@ -413,11 +403,16 @@ namespace SMPlayer
                 MediaHelper.Timer.Stop();
                 if (Settings.settings.Mode == PlayMode.Once)
                 {
-                    PlayButtonIcon.Glyph = "\uE768";
+                    PlayButton.Content = "\uE768";
                     MediaSlider.Value = 0;
                 }
                 Played(MediaHelper.CurrentMusic);
             });
+        }
+
+        private void MusicInfoGrid_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(NowPlayingFullPage));
         }
 
         public void PathSet(string path)

@@ -11,7 +11,7 @@ using Windows.Media.Core;
 using System.ComponentModel;
 using System.IO;
 
-namespace SMPlayer
+namespace SMPlayer.Models
 {
     [Serializable]
     public class Music : IComparable<Music>, INotifyPropertyChanged
