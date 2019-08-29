@@ -53,11 +53,11 @@
       <RootProperty Name="Foreground" />
       <RootProperty Name="Flyout" />
       <RootProperty Name="Style" />
+      <RootProperty Name="Template" />
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="CornerRadius" />
-      <RootProperty Name="Template" />
       <RootProperty Name="KeyboardAccelerators" />
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="BorderThickness" />
@@ -324,6 +324,7 @@
       <RootProperty Name="Margin" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="BorderBrush" />
+      <RootProperty Name="Background" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.TranslateTransform" />
     <RootType FullName="Windows.UI.Xaml.Controls.ListView">
@@ -506,15 +507,15 @@
       <RootEvent Name="Navigated" />
     </RootType>
     <RootType FullName="SMPlayer.LocalPage" />
+    <RootType FullName="Windows.UI.Xaml.Controls.ToolTipService">
+      <RootMethod Name="GetToolTip" />
+      <RootMethod Name="SetToolTip" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Flyout">
       <RootProperty Name="Content" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Input.KeyboardAccelerator">
       <RootProperty Name="Key" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.ToolTipService">
-      <RootMethod Name="GetToolTip" />
-      <RootMethod Name="SetToolTip" />
     </RootType>
     <RootType FullName="SMPlayer.MediaControl">
       <RootProperty Name="Mode" />
@@ -524,6 +525,20 @@
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Media.BackdropBlurBrush">
       <RootProperty Name="Amount" />
     </RootType>
+    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.BladeView">
+      <RootProperty Name="BorderThickness" />
+      <RootProperty Name="Background" />
+      <RootProperty Name="BladeMode" />
+      <RootProperty Name="ItemTemplate" />
+      <RootProperty Name="Items" />
+    </RootType>
+    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.BladeItem">
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="Background" />
+      <RootProperty Name="TitleBarVisibility" />
+      <RootProperty Name="Content" />
+    </RootType>
+    <RootType FullName="SMPlayer.PlaylistControl" />
     <RootType FullName="SMPlayer.NowPlayingFullPage" />
     <RootType FullName="SMPlayer.SearchPage" />
     <RootType FullName="SMPlayer.RecentPage" />

@@ -49,8 +49,7 @@
                     Grid.Column="1"
                     Margin="10,0,5,5"
                     VerticalAlignment="Bottom"
-                    FontSize="24"
-                    Text="" />
+                    FontSize="24" />
                 <TextBlock
                     x:Name="MainArtistTextBlock"
                     Grid.Row="1"
@@ -58,8 +57,7 @@
                     Margin="10,5,5,0"
                     VerticalAlignment="Top"
                     FontSize="18"
-                    FontWeight="Bold"
-                    Text="" />
+                    FontWeight="Bold" />
                 <VisualStateManager.VisualStateGroups>
                     <VisualStateGroup x:Name="CommonStates">
                         <VisualState x:Name="PointerOver">
@@ -137,8 +135,7 @@
                         Margin="20,0,10,0"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI"
-                        RelativePanel.AlignRightWithPanel="True"
-                        Text="0:00" />
+                        RelativePanel.AlignRightWithPanel="True" />
                 </Grid>
             </StackPanel>
             <StackPanel
@@ -208,8 +205,8 @@
             x:Name="FullMediaControlGrid"
             Background="Black"
             Opacity="0.75"
-            Visibility="Visible"
-            RequestedTheme="Dark">
+            RequestedTheme="Dark"
+            Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -227,6 +224,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -234,11 +232,9 @@
                     </Grid.ColumnDefinitions>
                     <Image
                         x:Name="FullAlbumCover"
-                        Grid.Row="0"
-                        Grid.RowSpan="2"
-                        Grid.Column="0"
-                        Width="160"
-                        Height="160"
+                        Grid.RowSpan="3"
+                        Width="120"
+                        Height="120"
                         Source="Assets/colorful_bg_wide.png"
                         Stretch="UniformToFill" />
                     <TextBlock
@@ -246,7 +242,6 @@
                         Grid.Row="0"
                         Grid.Column="1"
                         Margin="10,0,5,5"
-                        VerticalAlignment="Bottom"
                         FontSize="24"
                         FontWeight="Bold" />
                     <TextBlock
@@ -254,7 +249,12 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         Margin="10,5,5,0"
-                        VerticalAlignment="Top"
+                        FontSize="18" />
+                    <TextBlock
+                        x:Name="FullAlbumTextBlock"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="10,5,5,0"
                         FontSize="18" />
                 </Grid>
 
@@ -294,8 +294,7 @@
                         Margin="20,0,10,0"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI"
-                        RelativePanel.AlignRightWithPanel="True"
-                        Text="0:00" />
+                        RelativePanel.AlignRightWithPanel="True" />
                 </Grid>
                 <RelativePanel Grid.Row="2" Margin="10">
                     <StackPanel
@@ -305,7 +304,9 @@
                         <Button
                             Click="PrevButton_Click"
                             Content="&#xE892;"
-                            Style="{StaticResource MediaControlButtonStyle}" />
+                            Style="{StaticResource MediaControlButtonStyle}"
+                            Template="{StaticResource MediaControlButtonTemplate}"
+                            ToolTipService.ToolTip="Previous" />
                         <Button
                             x:Name="FullPlayButton"
                             Width="48"
@@ -324,16 +325,23 @@
                         <Button
                             Click="NextButton_Click"
                             Content="&#xE893;"
-                            Style="{StaticResource MediaControlButtonStyle}" />
+                            Style="{StaticResource MediaControlButtonStyle}"
+                            Template="{StaticResource MediaControlButtonTemplate}"
+                            ToolTipService.ToolTip="Next" />
                         <Button
-                            x:Name="FullVolumeButton"
-                            Click="VolumeButton_Click"
                             Content="&#xE15D;"
-                            Style="{StaticResource MediaControlButtonStyle}">
+                            Style="{StaticResource MediaControlButtonStyle}"
+                            Template="{StaticResource MediaControlButtonTemplate}"
+                            ToolTipService.ToolTip="Volume">
                             <Button.Flyout>
                                 <Flyout>
                                     <StackPanel Orientation="Horizontal">
-                                        <Button Content="&#xE15D;" />
+                                        <Button
+                                            x:Name="FullVolumeButton"
+                                            Click="VolumeButton_Click"
+                                            Content="&#xE15D;"
+                                            Style="{StaticResource MediaControlButtonStyle}"
+                                            Template="{StaticResource MediaControlButtonTemplate}" />
                                         <Slider
                                             x:Name="FullVolumeSlider"
                                             Width="100"
@@ -352,23 +360,31 @@
                             x:Name="FullShuffleButton"
                             Click="ShuffleButton_Click"
                             Content="&#xE8B1;"
-                            Style="{StaticResource MediaControlToggleButtonStyle}" />
+                            Style="{StaticResource MediaControlToggleButtonStyle}"
+                            Template="{StaticResource MediaControlToggleButtonTemplate}" />
                         <ToggleButton
                             x:Name="FullRepeatButton"
                             Click="RepeatButton_Click"
                             Content="&#xE8EE;"
-                            Style="{StaticResource MediaControlToggleButtonStyle}" />
+                            Style="{StaticResource MediaControlToggleButtonStyle}"
+                            Template="{StaticResource MediaControlToggleButtonTemplate}" />
                         <ToggleButton
                             x:Name="FullRepeatOneButton"
                             Click="RepeatOneButton_Click"
                             Content="&#xE8ED;"
-                            Style="{StaticResource MediaControlToggleButtonStyle}" />
+                            Style="{StaticResource MediaControlToggleButtonStyle}"
+                            Template="{StaticResource MediaControlToggleButtonTemplate}" />
                         <Button
                             x:Name="FullLikeButton"
                             Click="LikeButton_Click"
                             Content="&#xEB51;"
-                            Style="{StaticResource MediaControlButtonStyle}" />
-                        <Button Content="&#xE712;" Style="{StaticResource MediaControlButtonStyle}">
+                            Style="{StaticResource MediaControlButtonStyle}"
+                            Template="{StaticResource MediaControlButtonTemplate}" />
+                        <Button
+                            Content="&#xE712;"
+                            Style="{StaticResource MediaControlButtonStyle}"
+                            Template="{StaticResource MediaControlButtonTemplate}"
+                            ToolTipService.ToolTip="More">
                             <Button.Flyout>
                                 <MenuFlyout>
                                     <MenuFlyoutItem
@@ -385,30 +401,35 @@
                             </Button.Flyout>
                         </Button>
                     </StackPanel>
-                    <StackPanel
-                        Orientation="Horizontal"
-                        RelativePanel.AlignRightWithPanel="True"
-                        RelativePanel.RightOf="FullMediaControlMusicControlButtonPanel">
+                    <StackPanel Orientation="Horizontal" RelativePanel.AlignRightWithPanel="True">
                         <Button
                             x:Name="MusicInfoButton"
                             Click="MusicInfoButton_Click"
                             Content="&#xE90B;"
-                            Style="{StaticResource MediaControlButtonStyle}" />
+                            Style="{StaticResource MediaControlButtonStyle}"
+                            Template="{StaticResource MediaControlButtonTemplate}"
+                            ToolTipService.ToolTip="Show Music Info" />
                         <Button
                             x:Name="CarouselButton"
                             Click="CarouselButton_Click"
                             Content="&#xE7C5;"
-                            Style="{StaticResource MediaControlButtonStyle}" />
+                            Style="{StaticResource MediaControlButtonStyle}"
+                            Template="{StaticResource MediaControlButtonTemplate}"
+                            ToolTipService.ToolTip="Carousel Mode" />
                         <Button
                             x:Name="FullScreenButton"
                             Click="FullScreenButton_Click"
                             Content="&#xE740;"
-                            Style="{StaticResource MediaControlButtonStyle}" />
+                            Style="{StaticResource MediaControlButtonStyle}"
+                            Template="{StaticResource MediaControlButtonTemplate}"
+                            ToolTipService.ToolTip="Full Screen" />
                         <Button
                             x:Name="MiniPlayButton"
                             Click="MiniPlayButton_Click"
                             Content="&#xE744;"
-                            Style="{StaticResource MediaControlButtonStyle}" />
+                            Style="{StaticResource MediaControlButtonStyle}"
+                            Template="{StaticResource MediaControlButtonTemplate}"
+                            ToolTipService.ToolTip="Mini Player" />
                     </StackPanel>
 
                 </RelativePanel>

@@ -1,17 +1,12 @@
-﻿using Microsoft.Toolkit.Uwp.Notifications;
-using SMPlayer.Models;
+﻿using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using Windows.Storage;
-using Windows.UI.Core;
-using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -20,36 +15,21 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
+//https://go.microsoft.com/fwlink/?LinkId=234236 上介绍了“用户控件”项模板
 
 namespace SMPlayer
 {
-    /// <summary>
-    /// 可用于自身或导航至 Frame 内部的空白页。
-    /// </summary>
-    public sealed partial class NowPlayingPage : Page, MediaControlListener
+    public sealed partial class PlaylistControl : UserControl, MediaControlListener
     {
-        public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
-        public NowPlayingPage()
+        public ObservableCollection<Music> Songs { get; set; }
+        public PlaylistControl()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MediaHelper.AddMediaControlListener(this as MediaControlListener);
         }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            List<Music> playlist = MediaHelper.CurrentPlayList;
-            if (Helper.SamePlayList(Songs, playlist)) return;
-            Songs.Clear();
-            foreach (var music in playlist)
-                Songs.Add(music);
-            FindMusicAndSetPlaying(MediaHelper.CurrentMusic, true);
-        }
-
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? Helper.WhiteSmokeBrush : Helper.WhiteBrush;
+            if (RequestedTheme != ElementTheme.Dark)
+                args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? Helper.WhiteSmokeBrush : Helper.WhiteBrush;
         }
 
         private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -57,22 +37,6 @@ namespace SMPlayer
             Music music = (Music)e.ClickedItem;
             MainPage.Instance.SetMusicAndPlay(music);
         }
-        private void FullScreenButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                MainPage.Instance.Frame.Navigate(typeof(NowPlayingFullPage));
-            }
-            catch (NullReferenceException)
-            {
-                // Clicking twice quickly will cause this exception
-            }
-        }
-        private void NewListButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         public void Tick() { return; }
 
         private void FindMusicAndSetPlaying(Music target, bool isPlaying)
@@ -83,7 +47,7 @@ namespace SMPlayer
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
             {
                 FindMusicAndSetPlaying(current, false);
                 FindMusicAndSetPlaying(next, true);

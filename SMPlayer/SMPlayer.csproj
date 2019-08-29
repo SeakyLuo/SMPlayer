@@ -153,6 +153,9 @@
       <DependentUpon>NowPlayingFullPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Playlist.cs" />
+    <Compile Include="PlaylistControl.xaml.cs">
+      <DependentUpon>PlaylistControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RecentPage.xaml.cs">
       <DependentUpon>RecentPage.xaml</DependentUpon>
     </Compile>
@@ -304,6 +307,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="NowPlayingFullPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PlaylistControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

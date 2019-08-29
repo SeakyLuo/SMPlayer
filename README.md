@@ -2,17 +2,18 @@
 Simple Music Player that manages local music files better than Groove.
 
 # TO DO
-Recent Page.
-
-Playlists Page.
-
-My Favorites Page.
 
 Localization.
 
 Cache Artists Result.
 
-# TO FIX
-VisualStateManager.
+Add SwipeControl.
 
-Dislike Music Hardcoded.
+Playlist Control.
+
+MediControlButton Style.
+
+Change LikeButton to ToggleButton.
+
+# TO FIX
+VisualStateManager. (GridAlbumView, MusicGridInfo)

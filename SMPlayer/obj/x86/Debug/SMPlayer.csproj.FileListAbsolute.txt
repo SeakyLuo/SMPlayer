@@ -186,9 +186,14 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\AlbumPage.g.i.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\AlbumPage.g.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\AlbumPage.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\AlbumPage.xbf
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SMPlayer.csprojAssemblyReference.cache
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MyFavoritesPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MyFavoritesPage.g.i.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MyFavoritesPage.g.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MyFavoritesPage.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MyFavoritesPage.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\PlaylistControl.g.i.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\PlaylistControl.g.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\PlaylistControl.xaml
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\PlaylistControl.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\PlaylistControl.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SMPlayer.csprojAssemblyReference.cache

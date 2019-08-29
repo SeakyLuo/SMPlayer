@@ -69,6 +69,7 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            MainMediaControl.Update();
             if (NaviFrame.SourcePageType != null && NaviFrame.SourcePageType.Name.StartsWith(Settings.settings.LastPage)) return;
             SwitchPage(Settings.settings.LastPage);
         }

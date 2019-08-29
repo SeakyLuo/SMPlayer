@@ -193,9 +193,16 @@ namespace SMPlayer
 
         public static async Task SaveThumbnail(UIElement image)
         {
-            var _bitmap = new RenderTargetBitmap();
-            await _bitmap.RenderAsync(image);
-            var pixels = await _bitmap.GetPixelsAsync();
+            var bitmap = new RenderTargetBitmap();
+            try
+            {
+                await bitmap.RenderAsync(image);
+            }
+            catch (ArgumentException)
+            {
+                return;
+            }
+            var pixels = await bitmap.GetPixelsAsync();
             while (true)
             {
                 try
@@ -214,8 +221,8 @@ namespace SMPlayer
                 byte[] bytes = pixels.ToArray();
                 encoder.SetPixelData(BitmapPixelFormat.Bgra8,
                                      BitmapAlphaMode.Ignore,
-                                     (uint)_bitmap.PixelWidth,
-                                     (uint)_bitmap.PixelHeight,
+                                     (uint)bitmap.PixelWidth,
+                                     (uint)bitmap.PixelHeight,
                                      200,
                                      200,
                                      bytes);

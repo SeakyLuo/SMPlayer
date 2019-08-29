@@ -88,7 +88,7 @@ namespace SMPlayer
                     case MediaControlMode.Main:
                         return MainArtistTextBlock;
                     case MediaControlMode.Full:
-                        return FullTitleTextBlock;
+                        return FullArtistTextBlock;
                     default:
                         return null;
                 }
@@ -244,8 +244,13 @@ namespace SMPlayer
                 }
             }
         }
-        public ToolTip MediaControlToolTip = new ToolTip();
-        
+        public Music CurrentMusic { get; set; }
+
+        private ToolTip MediaControlToolTip = new ToolTip();
+        private ToolTip ShuffleToolTip = new ToolTip();
+        private ToolTip RepeatOneToolTip = new ToolTip();
+        private ToolTip RepeatToolTip = new ToolTip();
+
         private bool ShouldUpdate = true, SliderClicked = false;
         private static List<MusicControlListener> MusicControlListeners = new List<MusicControlListener>();
 
@@ -254,26 +259,18 @@ namespace SMPlayer
             this.InitializeComponent();
             MediaHelper.AddMediaControlListener(this as MediaControlListener);
             SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
-            // Settings
+        }
+
+        public void Update()
+        {
+            SetMusic(MediaHelper.CurrentMusic);
+            if (MediaHelper.IsPlaying) PlayMusic();
+            else PauseMusic();
+
             Settings settings = Settings.settings;
             VolumeButton.Content = Helper.GetVolumeIcon(settings.Volume);
             VolumeSlider.Value = settings.Volume * 100;
-            switch (settings.Mode)
-            {
-                case PlayMode.Once:
-                    break;
-                case PlayMode.Repeat:
-                    RepeatButton.IsChecked = true;
-                    break;
-                case PlayMode.RepeatOne:
-                    RepeatOneButton.IsChecked = true;
-                    break;
-                case PlayMode.Shuffle:
-                    ShuffleButton.IsChecked = true;
-                    break;
-                default:
-                    break;
-            }
+            SetPlayMode(settings.Mode);
         }
 
         public async void SetMusic(Music music)
@@ -282,6 +279,7 @@ namespace SMPlayer
             AlbumCover.Source = await Helper.GetThumbnail(music);
             TitleTextBlock.Text = music.Name;
             ArtistTextBlock.Text = music.Artist;
+            FullAlbumTextBlock.Text = music.Album;
             MediaSlider.Maximum = music.Duration;
             RightTimeTextBlock.Text = MusicDurationConverter.ToTime(music.Duration);
             if (music.Favorite) LikeMusic(false);
@@ -306,6 +304,30 @@ namespace SMPlayer
                 listener.MusicModified(before, after);
         }
 
+        public void SetPlayMode(PlayMode mode)
+        {
+            switch (mode)
+            {
+                case PlayMode.Once:
+                    SetShuffle(false);
+                    break;
+                case PlayMode.Repeat:
+                    RepeatButton.IsChecked = true;
+                    SetRepeat(true);
+                    break;
+                case PlayMode.RepeatOne:
+                    RepeatOneButton.IsChecked = true;
+                    SetRepeatOne(true);
+                    break;
+                case PlayMode.Shuffle:
+                    ShuffleButton.IsChecked = true;
+                    SetShuffle(true);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         public void SetToolTip(DependencyObject control, string content)
         {
             MediaControlToolTip.Content = content;
@@ -323,25 +345,51 @@ namespace SMPlayer
         {
             SetShuffle((bool)ShuffleButton.IsChecked);
         }
-        public void SetShuffle(bool isShuffle)
+        private void SetToolTips()
+        {
+            ToolTipService.SetToolTip(ShuffleButton, ShuffleToolTip);
+            ToolTipService.SetToolTip(RepeatButton, RepeatToolTip);
+            ToolTipService.SetToolTip(RepeatOneButton, RepeatOneToolTip);
+        }
+        public void SetShuffle(bool isChecked)
         {
             RepeatButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            MediaHelper.SetMode(isShuffle ? PlayMode.Shuffle : PlayMode.Once);
+            ShuffleToolTip.Content = "Shuffle: " + (isChecked ? "Enabled" : "Disabled");
+            RepeatToolTip.Content = "Repeat: Disabled";
+            RepeatOneToolTip.Content = "Repeat One: Disabled";
+            SetToolTips();
+            MediaHelper.SetMode(isChecked ? PlayMode.Shuffle : PlayMode.Once);
         }
 
         private void RepeatButton_Click(object sender, RoutedEventArgs e)
         {
+            SetRepeat((bool)RepeatButton.IsChecked);
+        }
+        public void SetRepeat(bool isChecked)
+        {
             ShuffleButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            MediaHelper.SetMode((bool)RepeatButton.IsChecked ? PlayMode.Repeat : PlayMode.Once);
+            ShuffleToolTip.Content = "Shuffle: Disabled";
+            RepeatToolTip.Content = "Repeat: " + (isChecked ? "Enabled" : "Disabled");
+            RepeatOneToolTip.Content = "Repeat One: Disabled";
+            SetToolTips();
+            MediaHelper.SetMode(isChecked ? PlayMode.Repeat : PlayMode.Once);
         }
 
         private void RepeatOneButton_Click(object sender, RoutedEventArgs e)
         {
+            SetRepeatOne((bool)RepeatOneButton.IsChecked);
+        }
+        public void SetRepeatOne(bool isChecked)
+        {
             ShuffleButton.IsChecked = false;
             RepeatButton.IsChecked = false;
-            MediaHelper.SetMode((bool)RepeatOneButton.IsChecked ? PlayMode.RepeatOne : PlayMode.Once);
+            ShuffleToolTip.Content = "Shuffle: Disabled";
+            RepeatToolTip.Content = "Repeat: Disabled";
+            RepeatOneToolTip.Content = "Repeat One: " + (isChecked ? "Enabled" : "Disabled");
+            SetToolTips();
+            MediaHelper.SetMode(isChecked ? PlayMode.RepeatOne : PlayMode.Once);
         }
 
         public void PlayMusic()
@@ -404,7 +452,7 @@ namespace SMPlayer
         {
             LikeButton.Content = "\uEB52";
             LikeButton.Foreground = Helper.RedBrush;
-            ToolTipService.SetToolTip(LikeButton, "Like");
+            ToolTipService.SetToolTip(LikeButton, "Undo Like");
             if (isClick) SetMusicFavorite(true);
         }
 
@@ -412,7 +460,7 @@ namespace SMPlayer
         {
             LikeButton.Content = "\uEB51";
             LikeButton.Foreground = Helper.WhiteBrush;
-            ToolTipService.SetToolTip(LikeButton, "Undo Like");
+            ToolTipService.SetToolTip(LikeButton, "Like");
             if (isClick) SetMusicFavorite(false);
         }
 
@@ -477,6 +525,46 @@ namespace SMPlayer
             }
         }
 
+        private void FullScreenButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MiniPlayButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CarouselButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SavePlaylistButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MusicInfoButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ClearNowPlayingButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
+        private void SavePlaylistItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ClearNowPlayingItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
         public void Tick()
         {
             if (ShouldUpdate)
@@ -518,47 +606,6 @@ namespace SMPlayer
                 }
                 Played(MediaHelper.CurrentMusic);
             });
-        }
-
-        private void FullScreenButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void MiniPlayButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void CarouselButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void SavePlaylistButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void MusicInfoButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ClearNowPlayingButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-
-        private void SavePlaylistItem_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ClearNowPlayingItem_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         public void PathSet(string path)
