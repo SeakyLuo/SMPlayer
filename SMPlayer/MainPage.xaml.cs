@@ -48,7 +48,40 @@ namespace SMPlayer
             this.InitializeComponent();
             SystemNavigationManager.GetForCurrentView().BackRequested += (s, e) =>
             {
-                if (NaviFrame.CanGoBack) NaviFrame.GoBack();
+                if (!NaviFrame.CanGoBack) return;
+                NaviFrame.GoBack();
+                switch (NaviFrame.SourcePageType.Name)
+                {
+                    case "MusicLibraryPage":
+                        MusicLibraryItem.IsSelected = true;
+                        break;
+                    case "ArtistsPage":
+                        ArtistsItem.IsSelected = true;
+                        break;
+                    case "AlbumsPage":
+                        AlbumsItem.IsSelected = true;
+                        break;
+                    case "NowPlayingPage":
+                        NowPlayingItem.IsSelected = true;
+                        break;
+                    case "RecentPage":
+                        RecentItem.IsSelected = true;
+                        break;
+                    case "LocalPage":
+                        LocalItem.IsSelected = true;
+                        break;
+                    case "PlaylistsPage":
+                        PlaylistsItem.IsSelected = true;
+                        break;
+                    case "MyFavoritesPage":
+                        MyFavoritesItem.IsSelected = true;
+                        break;
+                    case "SettingsPage":
+                        MainNavigationView.SelectedItem = MainNavigationView.SettingsItem;
+                        break;
+                    default:
+                        break;
+                }
             };
             Window.Current.VisibilityChanged += async (s, e) =>
             {
@@ -211,7 +244,7 @@ namespace SMPlayer
             if (NaviSearchBar.Text.Length > 0)
             {
                 NaviFrame.Navigate(typeof(SearchPage));
-                Helper.SetBackButtonVisibility(AppViewBackButtonVisibility.Visible);
+                Helper.SetBackButtonVisible(true);
             }
         }
 
@@ -221,35 +254,27 @@ namespace SMPlayer
             {
                 case "MusicLibraryItem":
                     NaviFrame.Navigate(typeof(MusicLibraryPage));
-                    MusicLibraryItem.IsSelected = true;
                     break;
                 case "AlbumsItem":
                     NaviFrame.Navigate(typeof(AlbumsPage));
-                    AlbumsItem.IsSelected = true;
                     break;
                 case "ArtistsItem":
                     NaviFrame.Navigate(typeof(ArtistsPage));
-                    ArtistsItem.IsSelected = true;
                     break;
                 case "NowPlayingItem":
                     NaviFrame.Navigate(typeof(NowPlayingPage));
-                    NowPlayingItem.IsSelected = true;
                     break;
                 case "RecentItem":
                     NaviFrame.Navigate(typeof(RecentPage));
-                    RecentItem.IsSelected = true;
                     break;
                 case "LocalItem":
                     NaviFrame.Navigate(typeof(LocalPage));
-                    LocalItem.IsSelected = true;
                     break;
                 case "PlaylistsItem":
                     NaviFrame.Navigate(typeof(PlaylistsPage));
-                    MusicLibraryItem.IsSelected = true;
                     break;
                 case "MyFavoritesItem":
                     NaviFrame.Navigate(typeof(MyFavorites));
-                    MyFavoritesItem.IsSelected = true;
                     break;
                 default:
                     return;
@@ -258,7 +283,11 @@ namespace SMPlayer
         }
         private void MainNavigationView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
-            if (args.IsSettingsInvoked) NaviFrame.Navigate(typeof(SettingsPage));
+            if (args.IsSettingsInvoked)
+            {
+                if (NaviFrame.SourcePageType.Name != "SettingsPage")
+                    NaviFrame.Navigate(typeof(SettingsPage));
+            }
             else
             {
                 var item = (NavigationViewItem)args.InvokedItemContainer;
@@ -274,10 +303,6 @@ namespace SMPlayer
                     SwitchPage(item.Name);
                 }
             }
-        }
-        private void NaviFrame_Navigated(object sender, NavigationEventArgs e)
-        {
-            Helper.SetBackButtonVisibility(NaviFrame.CanGoBack ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed);
         }
 
         private void VolumeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
@@ -413,6 +438,40 @@ namespace SMPlayer
         private void MusicInfoGrid_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Frame.Navigate(typeof(NowPlayingFullPage));
+        }
+
+        private void NaviFrame_Navigated(object sender, NavigationEventArgs e)
+        {
+            Helper.SetBackButtonVisible(NaviFrame.CanGoBack);
+            switch (NaviFrame.CurrentSourcePageType.Name)
+            {
+                case "MusicLibraryPage":
+                    MainNavigationView.SelectedItem = MusicLibraryItem;
+                    break;
+                case "ArtistsPage":
+                    MainNavigationView.SelectedItem = ArtistsItem;
+                    break;
+                case "AlbumsPage":
+                    MainNavigationView.SelectedItem = AlbumsItem;
+                    break;
+                case "NowPlayingPage":
+                    MainNavigationView.SelectedItem = NowPlayingItem;
+                    break;
+                case "RecentPage":
+                    MainNavigationView.SelectedItem = RecentItem;
+                    break;
+                case "LocalPage":
+                    MainNavigationView.SelectedItem = LocalItem;
+                    break;
+                case "PlaylistsPage":
+                    MainNavigationView.SelectedItem = PlaylistsItem;
+                    break;
+                case "MyFavoritesPage":
+                    MainNavigationView.SelectedItem = MyFavoritesItem;
+                    break;
+                default:
+                    return;
+            }
         }
 
         public void PathSet(string path)

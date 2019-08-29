@@ -132,10 +132,7 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
-            <Frame
-                x:Name="NaviFrame"
-                IsNavigationStackEnabled="True"
-                Navigated="NaviFrame_Navigated" />
+            <Frame x:Name="NaviFrame" IsNavigationStackEnabled="True" Navigated="NaviFrame_Navigated"/>
         </NavigationView>
 
         <Grid

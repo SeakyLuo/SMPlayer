@@ -118,9 +118,9 @@ namespace SMPlayer
                 TintColor = color
             };
         }
-        public static void SetBackButtonVisibility(AppViewBackButtonVisibility visibility)
+        public static void SetBackButtonVisible(bool isVisible)
         {
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = visibility;
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = isVisible ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
         }
         public static async void ShowToast(Music music)
         {
