@@ -12,8 +12,6 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LocalPage.g.i.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LocalPage.g.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MusicListPage.g.i.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MusicListPage.g.cs
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MyFavorites.g.i.cs
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MyFavorites.g.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SearchPage.g.i.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SearchPage.g.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\RecentPage.g.i.cs
@@ -37,7 +35,6 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LocalFoldersPage.xam
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LocalMusicPage.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LocalPage.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MusicListPage.xaml
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MyFavorites.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SearchPage.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\RecentPage.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MusicLibraryPage.xaml
@@ -55,7 +52,6 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LocalFoldersPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LocalMusicPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\LocalPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MusicListPage.xbf
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MyFavorites.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SearchPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\RecentPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MusicLibraryPage.xbf
@@ -74,7 +70,6 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\LocalFoldersPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\LocalMusicPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\LocalPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MusicListPage.xbf
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MyFavorites.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SearchPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\RecentPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MusicLibraryPage.xbf
@@ -192,3 +187,8 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\AlbumPage.g.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\AlbumPage.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\AlbumPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SMPlayer.csprojAssemblyReference.cache
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MyFavoritesPage.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MyFavoritesPage.g.i.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MyFavoritesPage.g.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MyFavoritesPage.xaml
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MyFavoritesPage.xbf

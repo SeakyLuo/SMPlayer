@@ -171,8 +171,8 @@
       <DependentUpon>MusicListPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MusicConverter.cs" />
-    <Compile Include="MyFavorites.xaml.cs">
-      <DependentUpon>MyFavorites.xaml</DependentUpon>
+    <Compile Include="MyFavoritesPage.xaml.cs">
+      <DependentUpon>MyFavoritesPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="NowPlayingPage.xaml.cs">
       <DependentUpon>NowPlayingPage.xaml</DependentUpon>
@@ -299,7 +299,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MyFavorites.xaml">
+    <Page Include="MyFavoritesPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

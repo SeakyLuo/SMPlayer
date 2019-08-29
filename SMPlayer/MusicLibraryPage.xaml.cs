@@ -37,7 +37,7 @@ namespace SMPlayer
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             MusicLibraryDataGrid.ItemsSource = AllSongs;
-            MainPage.AddMusicControlListener(this as MusicControlListener);
+            MediaControl.AddMusicControlListener(this as MusicControlListener);
             MediaHelper.AddMediaControlListener(this as MediaControlListener);
         }
 

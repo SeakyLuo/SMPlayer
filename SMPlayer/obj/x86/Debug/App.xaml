@@ -582,9 +582,6 @@
         <local:MusicIsPlayingConverter x:Key="MusicIsPlayingConverter" />
         <local:RowColorConverter x:Key="RowColorConverter" />
         <local:SongCountConverter x:Key="SongCountConverter" />
-        <local:ButtonTooltipConverter x:Key="ButtonTooltipConverter" />
-        <local:LikeTooltipConverter x:Key="LikeTooltipConverter" />
-        <local:ToggleButtonTooltipConverter x:Key="ToggleButtonTooltipConverter" />
         <AcrylicBrush
             x:Key="MediaControlSliderThumbAcrylicBrush"
             BackgroundSource="Backdrop"

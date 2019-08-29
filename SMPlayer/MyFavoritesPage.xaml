@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="SMPlayer.MyFavorites"
+    x:Class="SMPlayer.MyFavoritesPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -13,10 +13,9 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock x:ConnectionId='2'
+        <TextBlock
             x:Name="MusicLibraryTitleTextBlock"
             Style="{StaticResource TitleTextBlockStyle}"
             Text="My Favorites" />
     </Grid>
 </Page>
-

@@ -59,8 +59,8 @@
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="Template" />
       <RootProperty Name="KeyboardAccelerators" />
-      <RootProperty Name="BorderThickness" />
       <RootProperty Name="BorderBrush" />
+      <RootProperty Name="BorderThickness" />
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Control">
@@ -149,7 +149,6 @@
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.ToggleButton">
       <RootProperty Name="Content" />
       <RootProperty Name="Style" />
-      <RootProperty Name="Tag" />
       <RootProperty Name="Template" />
       <RootEvent Name="Click" />
     </RootType>
@@ -162,9 +161,6 @@
     <RootType FullName="SMPlayer.MusicIsPlayingConverter" />
     <RootType FullName="SMPlayer.RowColorConverter" />
     <RootType FullName="SMPlayer.SongCountConverter" />
-    <RootType FullName="SMPlayer.ButtonTooltipConverter" />
-    <RootType FullName="SMPlayer.LikeTooltipConverter" />
-    <RootType FullName="SMPlayer.ToggleButtonTooltipConverter" />
     <RootType FullName="Windows.UI.Xaml.Media.AcrylicBrush">
       <RootProperty Name="BackgroundSource" />
       <RootProperty Name="FallbackColor" />
@@ -243,10 +239,9 @@
       <RootProperty Name="Height" />
       <RootProperty Name="ContextFlyout" />
       <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="Opacity" />
       <RootProperty Name="RequestedTheme" />
+      <RootProperty Name="Opacity" />
       <RootProperty Name="HorizontalAlignment" />
-      <RootEvent Name="Tapped" />
       <RootMethod Name="GetRow" />
       <RootMethod Name="SetRow" />
       <RootMethod Name="GetRowSpan" />
@@ -329,7 +324,6 @@
       <RootProperty Name="Margin" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="BorderBrush" />
-      <RootProperty Name="Background" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.TranslateTransform" />
     <RootType FullName="Windows.UI.Xaml.Controls.ListView">
@@ -394,10 +388,10 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Image">
       <RootProperty Name="Source" />
-      <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="Stretch" />
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
+      <RootProperty Name="Stretch" />
+      <RootProperty Name="VerticalAlignment" />
     </RootType>
     <RootType FullName="SMPlayer.AlbumsPage" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.MasterDetailsView">
@@ -459,7 +453,6 @@
     <RootType FullName="SMPlayer.ArtistsPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.UserControl">
       <RootProperty Name="Content" />
-      <RootProperty Name="Resources" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.Loading">
       <RootProperty Name="Background" />
@@ -513,15 +506,21 @@
       <RootEvent Name="Navigated" />
     </RootType>
     <RootType FullName="SMPlayer.LocalPage" />
-    <RootType FullName="SMPlayer.MediaControl" />
-    <RootType FullName="SMPlayer.MusicListPage" />
-    <RootType FullName="SMPlayer.MyFavorites" />
     <RootType FullName="Windows.UI.Xaml.Controls.Flyout">
       <RootProperty Name="Content" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Input.KeyboardAccelerator">
       <RootProperty Name="Key" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ToolTipService">
+      <RootMethod Name="GetToolTip" />
+      <RootMethod Name="SetToolTip" />
+    </RootType>
+    <RootType FullName="SMPlayer.MediaControl">
+      <RootProperty Name="Mode" />
+    </RootType>
+    <RootType FullName="SMPlayer.MusicListPage" />
+    <RootType FullName="SMPlayer.MyFavoritesPage" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Media.BackdropBlurBrush">
       <RootProperty Name="Amount" />
     </RootType>
@@ -619,10 +618,6 @@
       <RootProperty Name="IsSelected" />
     </RootType>
     <RootType FullName="SMPlayer.SettingsPage" />
-    <RootType FullName="Windows.UI.Xaml.Controls.ToolTipService">
-      <RootMethod Name="GetToolTip" />
-      <RootMethod Name="SetToolTip" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.NavigationViewItemSeparator" />
     <RootType FullName="SMPlayer.MainPage" />
   </Roots.RootTypes>

@@ -20,9 +20,9 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MyFavorites : Page
+    public sealed partial class MyFavoritesPage : Page
     {
-        public MyFavorites()
+        public MyFavoritesPage()
         {
             this.InitializeComponent();
         }

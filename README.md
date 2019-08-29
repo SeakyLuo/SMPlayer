@@ -10,8 +10,6 @@ My Favorites Page.
 
 Localization.
 
-SearchBox Style.
-
 Cache Artists Result.
 
 # TO FIX
