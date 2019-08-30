@@ -27,6 +27,7 @@ namespace SMPlayer
             get => SongsListView.RequestedTheme;
             set => SongsListView.RequestedTheme = value;
         }
+        public static readonly DependencyProperty ThemeProperty = DependencyProperty.Register("Theme", typeof(ElementTheme), typeof(PlaylistControl), new PropertyMetadata(ElementTheme.Default));
         public bool AlternatingRowColor { get; set; }
         public PlaylistControl()
         {

@@ -615,18 +615,13 @@
       <RootProperty Name="SelectedTabWidth" />
       <RootProperty Name="TabWidthBehavior" />
       <RootProperty Name="Resources" />
+      <RootProperty Name="ItemHeaderTemplate" />
       <RootProperty Name="ItemTemplate" />
       <RootProperty Name="TabStartHeader" />
-      <RootProperty Name="Items" />
       <RootProperty Name="TabEndHeader" />
       <RootProperty Name="Footer" />
     </RootType>
     <RootType FullName="System.Double" />
-    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.TabViewItem">
-      <RootProperty Name="Header" />
-      <RootProperty Name="Icon" />
-      <RootProperty Name="ContextFlyout" />
-    </RootType>
     <RootType FullName="SMPlayer.PlaylistsPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.ComboBox">
       <RootProperty Name="VerticalAlignment" />

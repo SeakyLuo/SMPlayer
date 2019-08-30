@@ -29,6 +29,30 @@
                 <x:Double x:Key="TabViewItemHeaderMinWidth">48</x:Double>
                 <x:Double x:Key="TabViewItemHeaderMaxWidth">200</x:Double>
             </controls:TabView.Resources>
+            <controls:TabView.ItemHeaderTemplate>
+                <DataTemplate x:DataType="data:Playlist">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem
+                                    Click="DuplicateClick"
+                                    Icon="Copy"
+                                    Text="Duplicate PlayList" />
+                                <MenuFlyoutItem
+                                    Click="DeleteClick"
+                                    Icon="Delete"
+                                    Text="Delete PlayList" />
+                            </MenuFlyout>
+                        </Grid.ContextFlyout>
+                        <SymbolIcon Symbol="Audio" />
+                        <TextBlock Grid.Column="1" Text="{x:Bind Name}" />
+                    </Grid>
+                </DataTemplate>
+            </controls:TabView.ItemHeaderTemplate>
             <controls:TabView.ItemTemplate>
                 <DataTemplate x:DataType="data:Playlist">
                     <Grid>
@@ -40,6 +64,7 @@
                     </Grid>
                 </DataTemplate>
             </controls:TabView.ItemTemplate>
+
             <controls:TabView.TabStartHeader>
                 <Button
                     x:Name="NewPlaylist"
@@ -84,21 +109,6 @@
                     </Viewbox>
                 </Button>
             </controls:TabView.TabStartHeader>
-
-            <controls:TabViewItem Header="Playlist" Icon="Audio">
-                <controls:TabViewItem.ContextFlyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem
-                            Click="DuplicateClick"
-                            Icon="Copy"
-                            Text="Duplicate PlayList" />
-                        <MenuFlyoutItem
-                            Click="DeleteClick"
-                            Icon="Delete"
-                            Text="Delete PlayList" />
-                    </MenuFlyout>
-                </controls:TabViewItem.ContextFlyout>
-            </controls:TabViewItem>
 
             <controls:TabView.TabEndHeader>
                 <Button
