@@ -13,7 +13,11 @@ Playlist Control.
 
 MediControlButton Style.
 
+FullMediaControl Album Flipview.
+
 Change LikeButton to ToggleButton.
+
+Check FullVolumeButton to PointerOver background less.
 
 # TO FIX
 VisualStateManager. (GridAlbumView, MusicGridInfo)

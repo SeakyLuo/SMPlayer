@@ -58,14 +58,6 @@
                     <controls:DataGridTextColumn.CellStyle>
                         <Style TargetType="controls:DataGridCell">
                             <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
-                            <!--<Setter Property="Content">
-                                <Setter.Value>
-                                    <Binding
-                                        Converter="{StaticResource MusicIsPlayingConverter}"
-                                        Mode="OneWay"
-                                        Source="IsPlaying" />
-                                </Setter.Value>
-                            </Setter>-->
                         </Style>
                     </controls:DataGridTextColumn.CellStyle>
                 </controls:DataGridTextColumn>

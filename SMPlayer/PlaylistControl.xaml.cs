@@ -21,21 +21,39 @@ namespace SMPlayer
 {
     public sealed partial class PlaylistControl : UserControl, MediaControlListener
     {
-        public ObservableCollection<Music> Songs { get; set; }
+        public static ObservableCollection<Music> Songs = new ObservableCollection<Music>();
+        public ElementTheme Theme { get; set; }
+        public static readonly DependencyProperty ThemeProperty = DependencyProperty.Register("Theme", typeof(ElementTheme), typeof(PlaylistControl), new PropertyMetadata(ElementTheme.Default));
+        public bool AlternatingRowColor { get; set; }
         public PlaylistControl()
         {
             this.InitializeComponent();
+            SongsListView.ItemsSource = Songs;
+        }
+
+        public static void SetPlaylist(IEnumerable<Music> playlist)
+        {
+            if (Helper.SamePlayList(Songs, playlist)) return;
+            Songs.Clear();
+            foreach (var music in playlist)
+            {
+                if (music.Equals(MediaHelper.CurrentMusic))
+                    music.IsPlaying = true;
+                Songs.Add(music);
+            }
         }
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            if (RequestedTheme != ElementTheme.Dark)
+            
+            args.ItemContainer.Foreground = Theme == ElementTheme.Dark ? Helper.WhiteSmokeBrush : Helper.BlackBrush;
+            if (AlternatingRowColor)
                 args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? Helper.WhiteSmokeBrush : Helper.WhiteBrush;
         }
 
         private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Music music = (Music)e.ClickedItem;
-            MainPage.Instance.SetMusicAndPlay(music);
+            ((Window.Current.Content as Frame).Content as MediaControlContainer).SetMusicAndPlay(music);
         }
         public void Tick() { return; }
 
@@ -63,7 +81,7 @@ namespace SMPlayer
         private void PlayItem_Click(object sender, RoutedEventArgs e)
         {
             Music music = (sender as MenuFlyoutItem).DataContext as Music;
-            MainPage.Instance.SetMusicAndPlay(music);
+            ((Window.Current.Content as Frame).Content as MediaControlContainer).SetMusicAndPlay(music);
         }
 
         private void DeleteItem_Click(object sender, RoutedEventArgs e)
@@ -86,6 +104,25 @@ namespace SMPlayer
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+    }
+
+    public class PlaylistListItemContainerStyleSelector : StyleSelector
+    {
+        public Style NewStyle { get; set; }
+        public Style OldStyle { get; set; }
+
+        protected override Style SelectStyleCore(object item, DependencyObject container)
+        {
+            var obj = (string)item;
+            if (obj.Equals("789"))
+            {
+                return NewStyle;
+            }
+            else
+            {
+                return OldStyle;
+            }
         }
     }
 }

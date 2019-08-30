@@ -5,8 +5,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="300"
-    d:DesignWidth="400"
     mc:Ignorable="d">
 
     <Grid>
@@ -193,7 +191,7 @@
                         <Button.Flyout>
                             <MenuFlyout>
                                 <MenuFlyoutSubItem Icon="Add" Text="Add To Playlist" />
-                                <MenuFlyoutItem Icon="Fullscreen" Text="Full Window" />
+                                <MenuFlyoutItem Icon="Fullscreen" Text="Full Screen" />
                                 <MenuFlyoutItem Icon="MusicInfo" Text="Music Info" />
                             </MenuFlyout>
                         </Button.Flyout>
@@ -431,11 +429,9 @@
                             Template="{StaticResource MediaControlButtonTemplate}"
                             ToolTipService.ToolTip="Mini Player" />
                     </StackPanel>
-
                 </RelativePanel>
             </Grid>
         </Grid>
-
     </Grid>
 </UserControl>
 

@@ -33,7 +33,7 @@
             <Setter Property="IsCacheEnabled" Value="True" />
             <Setter Property="CacheMode" Value="BitmapCache" />
         </Style>
-        <Style x:Key="NaviAutoSuggestBoxStyle" TargetType="AutoSuggestBox">
+        <Style x:Key="BorderlessAutoSuggestBoxStyle" TargetType="AutoSuggestBox">
             <Setter Property="VerticalAlignment" Value="Top" />
             <Setter Property="IsTabStop" Value="False" />
             <Setter Property="TextBoxStyle" Value="{StaticResource AutoSuggestBoxTextBoxStyle}" />

@@ -44,6 +44,7 @@ namespace SMPlayer
             Songs.Clear();
             foreach (var music in playlist)
                 Songs.Add(music);
+            PlaylistControl.SetPlaylist(playlist);
             FindMusicAndSetPlaying(MediaHelper.CurrentMusic, true);
         }
 

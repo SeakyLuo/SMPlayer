@@ -39,5 +39,21 @@ namespace SMPlayer
         {
 
         }
+
+        private void CancelNewPlaylistButton_Click(object sender, RoutedEventArgs e)
+        {
+            Playlists.Add(new Playlist(NewPlaylistNameTextBox.Text));
+            NewPlaylistFlyout.Hide();
+        }
+
+        private void CreateaNewPlaylistButton_Click(object sender, RoutedEventArgs e)
+        {
+            NewPlaylistFlyout.Hide();
+        }
+
+        private void EditPlaylistButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

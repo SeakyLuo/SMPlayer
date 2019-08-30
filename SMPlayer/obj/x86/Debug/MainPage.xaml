@@ -70,7 +70,7 @@
                         PlaceholderText="Search"
                         QueryIcon="Find"
                                                                      
-                        Style="{StaticResource NaviAutoSuggestBoxStyle}" />
+                        Style="{StaticResource BorderlessAutoSuggestBoxStyle}" />
                 </NavigationViewItem>
                 <NavigationViewItem x:ConnectionId='6'
                     x:Name="MusicLibraryItem"

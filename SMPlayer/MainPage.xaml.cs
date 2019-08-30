@@ -25,6 +25,7 @@ using Windows.UI.Notifications;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Core.Preview;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Media.Animation;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -33,7 +34,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class MainPage : Page, MediaControlContainer
     {
         public static MainPage Instance
         {
@@ -48,7 +49,7 @@ namespace SMPlayer
             {
                 if (Frame.CanGoBack)
                 {
-                    Frame.GoBack();
+                    Frame.GoBack(new DrillInNavigationTransitionInfo());
                     Helper.SetBackButtonVisible(NaviFrame.CanGoBack);
                 }
                 else if (NaviFrame.CanGoBack)
@@ -62,7 +63,7 @@ namespace SMPlayer
             MainNavigationView.IsPaneOpen = Settings.settings.IsNavigationCollapsed;
             MainMediaControl.SetMusicGridInfoTapped((sender, args) =>
             {
-                Frame.Navigate(typeof(NowPlayingFullPage));
+                Frame.Navigate(typeof(NowPlayingFullPage), null, new DrillInNavigationTransitionInfo());
                 Helper.SetBackButtonVisible(true);
             });
         }

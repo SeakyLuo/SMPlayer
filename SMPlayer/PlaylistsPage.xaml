@@ -15,7 +15,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <controls:TabView
-            x:Name="Tabs"
+            x:Name="PlaylistTabView"
             AllowDrop="True"
             CanCloseTabs="False"
             CanDragItems="True"
@@ -42,17 +42,50 @@
             </controls:TabView.ItemTemplate>
             <controls:TabView.TabStartHeader>
                 <Button
+                    x:Name="NewPlaylist"
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
                     Background="Transparent"
                     Style="{StaticResource ButtonRevealStyle}">
+                    <Button.Flyout>
+                        <Flyout x:Name="NewPlaylistFlyout">
+                            <StackPanel>
+                                <TextBox
+                                    x:Name="NewPlaylistNameTextBox"
+                                    Grid.ColumnSpan="2"
+                                    Width="360"
+                                    Margin="20"
+                                    BorderThickness="0"
+                                    PlaceholderText="New Playlist Name" />
+                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                    <Button
+                                        x:Name="CreateaNewPlaylistButton"
+                                        Grid.Row="1"
+                                        Margin="10,0"
+                                        Background="{ThemeResource SystemColorHighlightColor}"
+                                        Click="CreateaNewPlaylistButton_Click"
+                                        Content="Create New Playlist"
+                                        Foreground="White" />
+                                    <Button
+                                        x:Name="CancelNewPlaylistButton"
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Margin="10,0"
+                                        Background="Transparent"
+                                        Click="CancelNewPlaylistButton_Click"
+                                        Content="Cancel"
+                                        Foreground="{ThemeResource SystemColorHighlightColor}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Flyout>
+                    </Button.Flyout>
                     <Viewbox MaxWidth="16" MaxHeight="16">
                         <SymbolIcon Symbol="Add" />
                     </Viewbox>
                 </Button>
             </controls:TabView.TabStartHeader>
 
-            <controls:TabViewItem Header="PlayList" Icon="Audio">
+            <controls:TabViewItem Header="Playlist" Icon="Audio">
                 <controls:TabViewItem.ContextFlyout>
                     <MenuFlyout>
                         <MenuFlyoutItem
@@ -69,14 +102,16 @@
 
             <controls:TabView.TabEndHeader>
                 <Button
+                    x:Name="EditPlaylistButton"
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
                     Margin="-1,0,0,0"
                     Background="Transparent"
                     BorderThickness="1"
+                    Click="EditPlaylistButton_Click"
                     Style="{StaticResource ButtonRevealStyle}">
                     <Viewbox MaxWidth="16" MaxHeight="16">
-                        <SymbolIcon Symbol="Setting" />
+                        <SymbolIcon Symbol="Edit" />
                     </Viewbox>
                 </Button>
             </controls:TabView.TabEndHeader>

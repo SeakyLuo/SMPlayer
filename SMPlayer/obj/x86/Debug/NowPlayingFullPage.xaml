@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:data="using:SMPlayer.Models"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:media="using:Microsoft.Toolkit.Uwp.UI.Media"
@@ -20,42 +19,41 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Border
+        <Image x:ConnectionId='2'
+            x:Name="LargeAlbumCover"
             Grid.RowSpan="2"
-            Background="{StaticResource AlbumBlurBrush}"
-            BorderBrush="Black">
-            <Image x:ConnectionId='5'
-                x:Name="LargeAlbumCover"
-                VerticalAlignment="Center"
-                                                                                 
-                Stretch="UniformToFill" />
-        </Border>
-        <local:MediaControl x:ConnectionId='2' x:Name="FullMediaControl" Mode="Full" />
-        <controls:BladeView
-            Grid.Row="1"
-            BorderThickness="0"
-            Background="{StaticResource AlbumBlurBrush}"
-            BladeMode="Fullscreen">
-            <controls:BladeView.ItemTemplate>
-                <DataTemplate                        >
-                    <Grid x:ConnectionId='3'>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock x:ConnectionId='4'                      />
-                    </Grid>
-                </DataTemplate>
-            </controls:BladeView.ItemTemplate>
+            VerticalAlignment="Center"
+                                                                             
+            Stretch="UniformToFill" />
+        <Grid Background="{StaticResource AlbumBlurBrush}">
+            <local:MediaControl x:ConnectionId='4' x:Name="FullMediaControl" Mode="Full" />
+        </Grid>
+        <controls:BladeView Grid.Row="1" BladeMode="Fullscreen">
             <controls:BladeItem
-                HorizontalAlignment="Stretch"
-                Background="Transparent"
+                Background="{StaticResource AlbumBlurBrush}"
+                BorderThickness="0"
+                IsOpen="True"
                 TitleBarVisibility="Collapsed">
-                <local:PlaylistControl />
+                <Grid Background="Transparent">
+                    <local:PlaylistControl x:ConnectionId='3'
+                        x:Name="FullPlaylistControl"
+                        Margin="10"
+                        AlternatingRowColor="False"
+                        Theme="Dark" />
+                </Grid>
+            </controls:BladeItem>
+            <controls:BladeItem Background="Transparent" IsOpen="True">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <!--<TextBlock Text="{x:Bind Name}" />-->
+                </Grid>
             </controls:BladeItem>
         </controls:BladeView>
     </Grid>

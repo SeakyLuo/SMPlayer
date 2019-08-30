@@ -25,8 +25,9 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class NowPlayingFullPage : Page
+    public sealed partial class NowPlayingFullPage : Page, MediaControlContainer
     {
+        public static NowPlayingFullPage Instance { get => (Window.Current.Content as Frame).Content as NowPlayingFullPage; }
         public NowPlayingFullPage()
         {
             this.InitializeComponent();
@@ -35,6 +36,22 @@ namespace SMPlayer
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             FullMediaControl.Update();
+            PlaylistControl.SetPlaylist(MediaHelper.CurrentPlayList);
+        }
+
+        public void SetMusicAndPlay(Music music)
+        {
+            FullMediaControl.SetMusicAndPlay(music);
+        }
+
+        public void PauseMusic()
+        {
+            FullMediaControl.PauseMusic();
+        }
+
+        public void SetShuffle(bool isShuffle)
+        {
+            FullMediaControl.SetShuffle(isShuffle);
         }
     }
 }

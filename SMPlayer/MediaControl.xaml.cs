@@ -624,4 +624,11 @@ namespace SMPlayer
     {
         void MusicModified(Music before, Music after);
     }
+
+    public interface MediaControlContainer
+    {
+        void SetMusicAndPlay(Music music);
+        void PauseMusic();
+        void SetShuffle(bool isShuffle);
+    }
 }

@@ -15,7 +15,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <controls:TabView x:ConnectionId='2'
-            x:Name="Tabs"
+            x:Name="PlaylistTabView"
             AllowDrop="True"
             CanCloseTabs="False"
             CanDragItems="True"
@@ -41,25 +41,58 @@
                 </DataTemplate>
             </controls:TabView.ItemTemplate>
             <controls:TabView.TabStartHeader>
-                <Button
+                <Button x:ConnectionId='4'
+                    x:Name="NewPlaylist"
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
                     Background="Transparent"
                     Style="{StaticResource ButtonRevealStyle}">
+                    <Button.Flyout>
+                        <Flyout x:ConnectionId='5' x:Name="NewPlaylistFlyout">
+                            <StackPanel>
+                                <TextBox x:ConnectionId='6'
+                                    x:Name="NewPlaylistNameTextBox"
+                                    Grid.ColumnSpan="2"
+                                    Width="360"
+                                    Margin="20"
+                                    BorderThickness="0"
+                                    PlaceholderText="New Playlist Name" />
+                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                    <Button x:ConnectionId='7'
+                                        x:Name="CreateaNewPlaylistButton"
+                                        Grid.Row="1"
+                                        Margin="10,0"
+                                        Background="{ThemeResource SystemColorHighlightColor}"
+                                                                              
+                                        Content="Create New Playlist"
+                                        Foreground="White" />
+                                    <Button x:ConnectionId='8'
+                                        x:Name="CancelNewPlaylistButton"
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Margin="10,0"
+                                        Background="Transparent"
+                                                                             
+                                        Content="Cancel"
+                                        Foreground="{ThemeResource SystemColorHighlightColor}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Flyout>
+                    </Button.Flyout>
                     <Viewbox MaxWidth="16" MaxHeight="16">
                         <SymbolIcon Symbol="Add" />
                     </Viewbox>
                 </Button>
             </controls:TabView.TabStartHeader>
 
-            <controls:TabViewItem Header="PlayList" Icon="Audio">
+            <controls:TabViewItem Header="Playlist" Icon="Audio">
                 <controls:TabViewItem.ContextFlyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem x:ConnectionId='4'
+                        <MenuFlyoutItem x:ConnectionId='9'
                                                   
                             Icon="Copy"
                             Text="Duplicate PlayList" />
-                        <MenuFlyoutItem x:ConnectionId='5'
+                        <MenuFlyoutItem x:ConnectionId='10'
                                                
                             Icon="Delete"
                             Text="Delete PlayList" />
@@ -76,13 +109,13 @@
                     BorderThickness="1"
                     Style="{StaticResource ButtonRevealStyle}">
                     <Viewbox MaxWidth="16" MaxHeight="16">
-                        <SymbolIcon Symbol="Setting" />
+                        <SymbolIcon Symbol="Edit" />
                     </Viewbox>
                 </Button>
             </controls:TabView.TabEndHeader>
 
             <controls:TabView.Footer>
-                <TextBlock x:ConnectionId='6'
+                <TextBlock x:ConnectionId='11'
                     x:Name="PlayListTabViewFooter"
                     Padding="16,8,16,8"
                     HorizontalAlignment="Right"

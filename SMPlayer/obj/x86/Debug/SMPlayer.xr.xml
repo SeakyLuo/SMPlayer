@@ -4,12 +4,14 @@
     <RootInterface FullName="Windows.UI.Xaml.Data.IValueConverter" />
   </Roots.Interfaces>
   <Roots.PropertyPathNames>
-    <RootPropertyPathName Name="AllSongs" />
-    <RootPropertyPathName Name="PlayCount" />
-    <RootPropertyPathName Name="Favorite" />
+    <RootPropertyPathName Name="Songs" />
+    <RootPropertyPathName Name="Theme" />
     <RootPropertyPathName Name="Duration" />
     <RootPropertyPathName Name="Album" />
     <RootPropertyPathName Name="Artist" />
+    <RootPropertyPathName Name="AllSongs" />
+    <RootPropertyPathName Name="PlayCount" />
+    <RootPropertyPathName Name="Favorite" />
     <RootPropertyPathName Name="Name" />
     <RootPropertyPathName Name="IsPlaying" />
   </Roots.PropertyPathNames>
@@ -324,7 +326,6 @@
       <RootProperty Name="Margin" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="BorderBrush" />
-      <RootProperty Name="Background" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.TranslateTransform" />
     <RootType FullName="Windows.UI.Xaml.Controls.ListView">
@@ -374,6 +375,7 @@
     <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.BindExtension">
       <RootProperty Name="Converter" />
       <RootProperty Name="Mode" />
+      <RootProperty Name="ConverterParameter" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.DataTemplate">
       <RootProperty Name="Template" />
@@ -454,6 +456,7 @@
     <RootType FullName="SMPlayer.ArtistsPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.UserControl">
       <RootProperty Name="Content" />
+      <RootProperty Name="Resources" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.Loading">
       <RootProperty Name="Background" />
@@ -526,20 +529,25 @@
       <RootProperty Name="Amount" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.BladeView">
-      <RootProperty Name="BorderThickness" />
-      <RootProperty Name="Background" />
       <RootProperty Name="BladeMode" />
-      <RootProperty Name="ItemTemplate" />
       <RootProperty Name="Items" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.BladeItem">
-      <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="Background" />
+      <RootProperty Name="BorderThickness" />
+      <RootProperty Name="IsOpen" />
       <RootProperty Name="TitleBarVisibility" />
       <RootProperty Name="Content" />
     </RootType>
-    <RootType FullName="SMPlayer.PlaylistControl" />
+    <RootType FullName="SMPlayer.PlaylistControl">
+      <RootProperty Name="Margin" />
+      <RootProperty Name="AlternatingRowColor" />
+      <RootProperty Name="Theme" />
+    </RootType>
     <RootType FullName="SMPlayer.NowPlayingFullPage" />
+    <RootType FullName="Windows.UI.Xaml.Controls.Primitives.ListViewItemPresenter">
+      <RootProperty Name="SelectedPointerOverBackground" />
+    </RootType>
     <RootType FullName="SMPlayer.SearchPage" />
     <RootType FullName="SMPlayer.RecentPage" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGrid">

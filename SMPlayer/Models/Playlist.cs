@@ -16,6 +16,12 @@ namespace SMPlayer.Models
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
+        public Playlist(string Name)
+        {
+            this.Name = Name;
+            this.Songs = new ObservableCollection<Music>();
+        }
+
         public Playlist(string Name, IEnumerable<Music> Songs)
         {
             this.Name = Name;
