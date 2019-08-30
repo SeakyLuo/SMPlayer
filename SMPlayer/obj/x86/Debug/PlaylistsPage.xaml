@@ -101,27 +101,27 @@
             </controls:TabViewItem>
 
             <controls:TabView.TabEndHeader>
-                <Button
+                <Button x:ConnectionId='11'
+                    x:Name="EditPlaylistButton"
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
                     Margin="-1,0,0,0"
                     Background="Transparent"
                     BorderThickness="1"
-                    Style="{StaticResource ButtonRevealStyle}">
-                    <Viewbox MaxWidth="16" MaxHeight="16">
-                        <SymbolIcon Symbol="Edit" />
-                    </Viewbox>
-                </Button>
+                                                    
+                    Content="&#xE70F;"
+                    FontFamily="Segoe MDL2 Assets"
+                    FontSize="16"
+                    Style="{StaticResource ButtonRevealStyle}" />
             </controls:TabView.TabEndHeader>
 
             <controls:TabView.Footer>
-                <TextBlock x:ConnectionId='11'
+                <TextBlock x:ConnectionId='12'
                     x:Name="PlayListTabViewFooter"
                     Padding="16,8,16,8"
                     HorizontalAlignment="Right"
                     FontSize="16"
-                    FontWeight="Bold"
-                    Text="" />
+                    FontWeight="Bold" />
             </controls:TabView.Footer>
         </controls:TabView>
     </Grid>

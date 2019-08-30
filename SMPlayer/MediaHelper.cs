@@ -22,9 +22,12 @@ namespace SMPlayer
             {
                 if (PlayList.ShuffleEnabled)
                 {
-                    if (ShuffledPlayList.Count == 0)
+                    if (ShuffledPlayList.Count == 0 || ShuffledPlayList.Count != OrderedPlayList.Count)
+                    {
+                        ShuffledPlayList.Clear();
                         foreach (var item in PlayList.ShuffledItems)
                             ShuffledPlayList.Add(item.Source.CustomProperties["Source"] as Music);
+                    }
                     return ShuffledPlayList;
                 }
                 else
@@ -126,7 +129,7 @@ namespace SMPlayer
 
         public static async Task SetPlayList(IEnumerable<Music> playlist)
         {
-            if (Helper.SamePlayList(playlist, OrderedPlayList)) return;
+            if (Helper.SamePlayList(playlist, CurrentPlayList)) return;
             Pause();
             PlayList.Items.Clear();
             foreach (var music in playlist)
@@ -154,6 +157,33 @@ namespace SMPlayer
         public static void AddMediaControlListener(MediaControlListener listener)
         {
             MediaControlListeners.Add(listener);
+        }
+
+        public static void MoveMusic(Music music, int toIndex)
+        {
+            var item = PlayList.Items.FirstOrDefault((i) => i.Source.CustomProperties["Source"].Equals(music));
+            if (item == null) return;
+            PlayList.Items.Remove(item);
+            PlayList.Items.Insert(0, item);
+        }
+
+        public static int IndexOf(Music music)
+        {
+            for (int i = 0; i < OrderedPlayList.Count; i++)
+                if (PlayList.Items[i].Source.CustomProperties["Source"].Equals(music))
+                    return i;
+            return -1;
+        }
+
+        public static void SwitchMusic(Music music1, Music music2)
+        {
+            int index1 = IndexOf(music1);
+            if (index1 == -1) return;
+            int index2 = IndexOf(music1);
+            if (index2 == -1) return;
+            var temp = PlayList.Items[index1];
+            PlayList.Items[index1] = PlayList.Items[index2];
+            PlayList.Items[index2] = temp;
         }
 
         public static void Play()

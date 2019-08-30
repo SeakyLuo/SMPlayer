@@ -5,8 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:SMPlayer.Models"
     xmlns:local="using:SMPlayer"
-    x:Name="PlaylistController"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="PlaylistController"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -30,18 +30,8 @@
         <ListView.ItemContainerStyle>
             <Style TargetType="ListViewItem">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            </Style>
-        </ListView.ItemContainerStyle>
-        <ListView.ItemTemplate>
-            <DataTemplate x:DataType="data:Music">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="8*" />
-                        <ColumnDefinition Width="3*" />
-                        <ColumnDefinition Width="5*" />
-                        <ColumnDefinition Width="1*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.ContextFlyout>
+                <Setter Property="ContextFlyout">
+                    <Setter.Value>
                         <MenuFlyout>
                             <MenuFlyoutItem
                                 x:Name="PlayItem"
@@ -71,7 +61,19 @@
                                 Icon="Upload"
                                 Text="Move To Top" />
                         </MenuFlyout>
-                    </Grid.ContextFlyout>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ListView.ItemContainerStyle>
+        <ListView.ItemTemplate>
+            <DataTemplate x:DataType="data:Music">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="8*" />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal">
                         <FontIcon
                             x:Name="PlayingIcon"
@@ -81,20 +83,20 @@
                             Glyph="&#xE767;"
                             RelativePanel.AlignLeftWithPanel="True"
                             Visibility="{x:Bind IsPlaying, Converter={StaticResource MusicVisibilityConverter}, Mode=OneWay}" />
-                        <TextBlock Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, ConverterParameter={Binding Theme}, Mode=OneWay}" Text="{x:Bind Name}" />
+                        <TextBlock Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}" Text="{x:Bind Name}" />
                     </StackPanel>
                     <TextBlock
                         Grid.Column="1"
-                        Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, ConverterParameter={Binding Theme}, Mode=OneWay}"
+                        Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
                         Text="{Binding Artist}" />
                     <TextBlock
                         Grid.Column="2"
-                        Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, ConverterParameter={Binding Theme}, Mode=OneWay}"
+                        Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
                         Text="{Binding Album}" />
                     <TextBlock
                         Grid.Column="3"
                         HorizontalAlignment="Right"
-                        Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, ConverterParameter={Binding Theme}, Mode=OneWay}"
+                        Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
                         Text="{Binding Duration, Converter={StaticResource MusicDurationConverter}}" />
                 </Grid>
             </DataTemplate>

@@ -191,7 +191,11 @@
                         <Button.Flyout>
                             <MenuFlyout>
                                 <MenuFlyoutSubItem Icon="Add" Text="Add To Playlist" />
-                                <MenuFlyoutItem Icon="Fullscreen" Text="Full Screen" />
+                                <MenuFlyoutItem
+                                    x:Name="FullScreenItem"
+                                    Click="FullScreenButton_Click"
+                                    Icon="Fullscreen"
+                                    Text="Full Screen" />
                                 <MenuFlyoutItem Icon="MusicInfo" Text="Music Info" />
                             </MenuFlyout>
                         </Button.Flyout>

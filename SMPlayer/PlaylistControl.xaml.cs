@@ -22,8 +22,11 @@ namespace SMPlayer
     public sealed partial class PlaylistControl : UserControl, MediaControlListener
     {
         public static ObservableCollection<Music> Songs = new ObservableCollection<Music>();
-        public ElementTheme Theme { get; set; }
-        public static readonly DependencyProperty ThemeProperty = DependencyProperty.Register("Theme", typeof(ElementTheme), typeof(PlaylistControl), new PropertyMetadata(ElementTheme.Default));
+        public ElementTheme Theme
+        {
+            get => SongsListView.RequestedTheme;
+            set => SongsListView.RequestedTheme = value;
+        }
         public bool AlternatingRowColor { get; set; }
         public PlaylistControl()
         {
@@ -44,7 +47,6 @@ namespace SMPlayer
         }
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            
             args.ItemContainer.Foreground = Theme == ElementTheme.Dark ? Helper.WhiteSmokeBrush : Helper.BlackBrush;
             if (AlternatingRowColor)
                 args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? Helper.WhiteSmokeBrush : Helper.WhiteBrush;
@@ -99,6 +101,7 @@ namespace SMPlayer
         {
             Music music = (sender as MenuFlyoutItem).DataContext as Music;
             Songs.Move(Songs.IndexOf(music), 0);
+            MediaHelper.MoveMusic(music, 0);
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)

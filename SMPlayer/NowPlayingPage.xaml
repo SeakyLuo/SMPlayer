@@ -40,8 +40,13 @@
                 x:Name="FullScreenButton"
                 Click="FullScreenButton_Click"
                 Icon="FullScreen"
-                Label="Full Screen" />
+                Label="Full Window" />
         </CommandBar>
-        <local:PlaylistControl Margin="10" Grid.Row="2" AlternatingRowColor="True" Theme="Light" />
+        <local:PlaylistControl
+            x:Name="NowPlayingPlaylistControl"
+            Grid.Row="2"
+            Margin="10"
+            AlternatingRowColor="True"
+            Theme="Light" />
     </Grid>
 </Page>

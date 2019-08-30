@@ -109,11 +109,10 @@
                     Background="Transparent"
                     BorderThickness="1"
                     Click="EditPlaylistButton_Click"
-                    Style="{StaticResource ButtonRevealStyle}">
-                    <Viewbox MaxWidth="16" MaxHeight="16">
-                        <SymbolIcon Symbol="Edit" />
-                    </Viewbox>
-                </Button>
+                    Content="&#xE70F;"
+                    FontFamily="Segoe MDL2 Assets"
+                    FontSize="16"
+                    Style="{StaticResource ButtonRevealStyle}" />
             </controls:TabView.TabEndHeader>
 
             <controls:TabView.Footer>
@@ -122,8 +121,7 @@
                     Padding="16,8,16,8"
                     HorizontalAlignment="Right"
                     FontSize="16"
-                    FontWeight="Bold"
-                    Text="" />
+                    FontWeight="Bold" />
             </controls:TabView.Footer>
         </controls:TabView>
     </Grid>

@@ -27,36 +27,18 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class NowPlayingPage : Page, MediaControlListener
+    public sealed partial class NowPlayingPage : Page
     {
         public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         public NowPlayingPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MediaHelper.AddMediaControlListener(this as MediaControlListener);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            List<Music> playlist = MediaHelper.CurrentPlayList;
-            if (Helper.SamePlayList(Songs, playlist)) return;
-            Songs.Clear();
-            foreach (var music in playlist)
-                Songs.Add(music);
-            PlaylistControl.SetPlaylist(playlist);
-            FindMusicAndSetPlaying(MediaHelper.CurrentMusic, true);
-        }
-
-        private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
-        {
-            args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? Helper.WhiteSmokeBrush : Helper.WhiteBrush;
-        }
-
-        private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            Music music = (Music)e.ClickedItem;
-            MainPage.Instance.SetMusicAndPlay(music);
+            PlaylistControl.SetPlaylist(MediaHelper.CurrentPlayList);
         }
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
         {
@@ -72,52 +54,6 @@ namespace SMPlayer
         private void NewListButton_Click(object sender, RoutedEventArgs e)
         {
 
-        }
-
-        public void Tick() { return; }
-
-        private void FindMusicAndSetPlaying(Music target, bool isPlaying)
-        {
-            var music = Songs.FirstOrDefault((m) => m.Equals(target));
-            if (music != null) music.IsPlaying = isPlaying;
-        }
-
-        public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
-        {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
-            {
-                FindMusicAndSetPlaying(current, false);
-                FindMusicAndSetPlaying(next, true);
-            });
-        }
-        public void ShuffleChanged(IEnumerable<Music> newPlayList, bool isShuffle)
-        {
-            Songs.Clear();
-            foreach (var music in newPlayList) Songs.Add(music);
-        }
-        public void MediaEnded() { return; }
-
-        private void PlayItem_Click(object sender, RoutedEventArgs e)
-        {
-            Music music = (sender as MenuFlyoutItem).DataContext as Music;
-            MainPage.Instance.SetMusicAndPlay(music);
-        }
-
-        private void DeleteItem_Click(object sender, RoutedEventArgs e)
-        {
-            Music music = (sender as MenuFlyoutItem).DataContext as Music;
-            if (music.Equals(MediaHelper.CurrentMusic))
-            {
-                MediaHelper.NextMusic();
-                Songs.Remove(music);
-                MediaHelper.RemoveMusic(music);
-            }
-        }
-
-        private void MoveToTopItem_Click(object sender, RoutedEventArgs e)
-        {
-            Music music = (sender as MenuFlyoutItem).DataContext as Music;
-            Songs.Move(Songs.IndexOf(music), 0);
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)

@@ -148,8 +148,7 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.Equals(true) ? Helper.GetHighlightBrush() :
-                                        parameter is ElementTheme && (ElementTheme)parameter == ElementTheme.Dark ? Helper.WhiteSmokeBrush : Helper.BlackBrush;
+            return value.Equals(true) ? Helper.GetHighlightBrush() : (Windows.UI.Xaml.Media.Brush)Application.Current.Resources["UnplayForeground"];
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

@@ -9,6 +9,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Media.Playback;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -527,7 +528,24 @@ namespace SMPlayer
 
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (!ApplicationView.GetForCurrentView().IsFullScreenMode)
+            {
+                ApplicationView.GetForCurrentView().ExitFullScreenMode();
+                FullScreenItem.Icon = new SymbolIcon(Symbol.FullScreen);
+                FullScreenItem.Text = "Full Screen";
+                FullScreenButton.Content = "\uE740";
+                SetToolTip(FullScreenButton, "Full Screen");
+            }
+            else
+            {
+                if (ApplicationView.GetForCurrentView().TryEnterFullScreenMode())
+                {
+                    FullScreenItem.Icon = new SymbolIcon(Symbol.BackToWindow);
+                    FullScreenItem.Text = "Exit Full Screen";
+                    FullScreenButton.Content = "\uE73F";
+                    SetToolTip(FullScreenButton, "Exit Full Screen");
+                }
+            }
         }
 
         private void MiniPlayButton_Click(object sender, RoutedEventArgs e)

@@ -30,6 +30,7 @@ namespace SMPlayer
             this.InitializeComponent();
         }
 
+
         private void DeleteClick(object sender, RoutedEventArgs e)
         {
 
@@ -53,7 +54,16 @@ namespace SMPlayer
 
         private void EditPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (EditPlaylistButton.Content.ToString() == "\uE70F")
+            {
+                EditPlaylistButton.Content = "\uE73E";
+                PlaylistTabView.CanCloseTabs = true;
+            }
+            else
+            {
+                EditPlaylistButton.Content = "\uE70F";
+                PlaylistTabView.CanCloseTabs = false;
+            }
         }
     }
 }

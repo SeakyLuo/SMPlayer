@@ -32,7 +32,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Image x:ConnectionId='40'
+                <Image x:ConnectionId='41'
                     x:Name="MainAlbumCover"
                     Grid.Row="0"
                     Grid.RowSpan="2"
@@ -41,14 +41,14 @@
                     Height="100"
                     Source="Assets/monotone_bg_wide.png"
                     Stretch="UniformToFill" />
-                <TextBlock x:ConnectionId='41'
+                <TextBlock x:ConnectionId='42'
                     x:Name="MainTitleTextBlock"
                     Grid.Row="0"
                     Grid.Column="1"
                     Margin="10,0,5,5"
                     VerticalAlignment="Bottom"
                     FontSize="24" />
-                <TextBlock x:ConnectionId='42'
+                <TextBlock x:ConnectionId='43'
                     x:Name="MainArtistTextBlock"
                     Grid.Row="1"
                     Grid.Column="1"
@@ -57,8 +57,8 @@
                     FontSize="18"
                     FontWeight="Bold" />
                 <VisualStateManager.VisualStateGroups>
-                    <VisualStateGroup x:ConnectionId='43' x:Name="CommonStates">
-                        <VisualState x:ConnectionId='44' x:Name="PointerOver">
+                    <VisualStateGroup x:ConnectionId='44' x:Name="CommonStates">
+                        <VisualState x:ConnectionId='45' x:Name="PointerOver">
                             <Storyboard>
                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
                                     <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPointerOverBackgroundThemeBrush}" />
@@ -71,13 +71,13 @@
 
             <StackPanel Grid.Column="1" VerticalAlignment="Center">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Button x:ConnectionId='37'
+                    <Button x:ConnectionId='38'
                                                 
                         Content="&#xE892;"
                         Style="{StaticResource MediaControlButtonStyle}"
                         Template="{StaticResource MediaControlButtonTemplate}"
                         ToolTipService.ToolTip="Previous" />
-                    <Button x:ConnectionId='38'
+                    <Button x:ConnectionId='39'
                         x:Name="MainPlayButton"
                         Width="48"
                         Height="48"
@@ -93,7 +93,7 @@
                             <KeyboardAccelerator Key="F3" />
                         </Button.KeyboardAccelerators>
                     </Button>
-                    <Button x:ConnectionId='39'
+                    <Button x:ConnectionId='40'
                                                 
                         Content="&#xE893;"
                         Style="{StaticResource MediaControlButtonStyle}"
@@ -106,14 +106,14 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock x:ConnectionId='34'
+                    <TextBlock x:ConnectionId='35'
                         x:Name="MainLeftTimeTextBlock"
                         Margin="10,0,20,0"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI"
                         RelativePanel.AlignLeftWithPanel="True"
                         Text="0:00" />
-                    <Slider x:ConnectionId='35'
+                    <Slider x:ConnectionId='36'
                         x:Name="MainMediaSlider"
                         Grid.Column="1"
                         IsThumbToolTipEnabled="True"
@@ -127,7 +127,7 @@
                         Style="{StaticResource MediaProgressSliderStyle}"
                         ThumbToolTipValueConverter="{StaticResource MusicDurationConverter}"
                                                                 />
-                    <TextBlock x:ConnectionId='36'
+                    <TextBlock x:ConnectionId='37'
                         x:Name="MainRightTimeTextBlock"
                         Grid.Column="2"
                         Margin="20,0,10,0"
@@ -141,13 +141,13 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Button x:ConnectionId='31'
+                    <Button x:ConnectionId='32'
                         x:Name="MainVolumeButton"
                                                   
                         Content="&#xE15D;"
                         Style="{StaticResource MediaControlButtonStyle}"
                         Template="{StaticResource MediaControlButtonTemplate}" />
-                    <Slider x:ConnectionId='32'
+                    <Slider x:ConnectionId='33'
                         x:Name="MainVolumeSlider"
                         Width="100"
                         Margin="10,0,20,0"
@@ -157,7 +157,7 @@
                         Style="{StaticResource MediaProgressSliderStyle}"
                                                                 
                         Value="50" />
-                    <Button x:ConnectionId='33'
+                    <Button x:ConnectionId='34'
                         x:Name="MainLikeButton"
                                                 
                         Content="&#xEB51;"
@@ -191,7 +191,11 @@
                         <Button.Flyout>
                             <MenuFlyout>
                                 <MenuFlyoutSubItem Icon="Add" Text="Add To Playlist" />
-                                <MenuFlyoutItem Icon="Fullscreen" Text="Full Screen" />
+                                <MenuFlyoutItem x:ConnectionId='31'
+                                    x:Name="FullScreenItem"
+                                                                  
+                                    Icon="Fullscreen"
+                                    Text="Full Screen" />
                                 <MenuFlyoutItem Icon="MusicInfo" Text="Music Info" />
                             </MenuFlyout>
                         </Button.Flyout>

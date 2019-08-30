@@ -26,23 +26,28 @@
             Background="Transparent"
             DefaultLabelPosition="Right"
             IsOpen="False">
-            <AppBarButton x:ConnectionId='3'
+            <AppBarButton x:ConnectionId='4'
                 x:Name="NewListButton"
                                            
                 Icon="Add"
                 Label="Add To New Playlist" />
-            <AppBarButton x:ConnectionId='4'
+            <AppBarButton x:ConnectionId='5'
                 x:Name="ClearButton"
                                          
                 Icon="Clear"
                 Label="Clear All" />
-            <AppBarButton x:ConnectionId='5'
+            <AppBarButton x:ConnectionId='6'
                 x:Name="FullScreenButton"
                                               
                 Icon="FullScreen"
-                Label="Full Screen" />
+                Label="Full Window" />
         </CommandBar>
-        <local:PlaylistControl Margin="10" Grid.Row="2" AlternatingRowColor="True" Theme="Light" />
+        <local:PlaylistControl x:ConnectionId='3'
+            x:Name="NowPlayingPlaylistControl"
+            Grid.Row="2"
+            Margin="10"
+            AlternatingRowColor="True"
+            Theme="Light" />
     </Grid>
 </Page>
 
