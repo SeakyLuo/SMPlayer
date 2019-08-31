@@ -310,8 +310,8 @@
       <RootProperty Name="Header" />
       <RootProperty Name="PlaceholderText" />
       <RootProperty Name="Style" />
-      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="Background" />
+      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="TextWrapping" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Canvas">

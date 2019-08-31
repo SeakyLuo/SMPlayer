@@ -263,7 +263,7 @@
                                 VerticalAlignment="Center"
                                 Text="Producers"
                                 TextAlignment="Right" />
-                            <TextBox
+                            <TextBlock
                                 x:Name="ProducersTextBox"
                                 Grid.Row="15"
                                 Grid.Column="1"

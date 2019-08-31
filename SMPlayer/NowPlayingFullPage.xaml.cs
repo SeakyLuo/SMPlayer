@@ -132,6 +132,7 @@ namespace SMPlayer
 
         public async void MusicInfoRequested(Music music)
         {
+            CurrentMusic = music;
             var file = await StorageFile.GetFileFromPathAsync(music.Path);
             SetMusicProperty(musicProperties = await music.GetMusicProperties());
             MusicPropertyBladeItem.StartBringIntoView();
@@ -139,6 +140,7 @@ namespace SMPlayer
 
         public async void LyricsRequested(Music music)
         {
+            CurrentMusic = music;
             Lyrics = await music.GetLyrics();
             LyricsTextBox.Text = Lyrics;
             LyricsBladeItem.StartBringIntoView();
