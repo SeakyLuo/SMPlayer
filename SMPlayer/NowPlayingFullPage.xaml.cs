@@ -56,14 +56,15 @@ namespace SMPlayer
             ArtistTextBox.Text = musicProperties.Artist;
             AlbumTextBox.Text = musicProperties.Album;
             AlbumArtistTextBox.Text = musicProperties.AlbumArtist;
+            PlayCountTextBox.Text = IntConverter.ToStr(CurrentMusic.PlayCount);
+            PublisherTextBox.Text = musicProperties.Publisher;
+            TrackNumberTextBox.Text = IntConverter.ToStr((int)musicProperties.TrackNumber);
+            YearTextBox.Text = IntConverter.ToStr((int)musicProperties.Year);
             BitRateTextBox.Text = musicProperties.Bitrate.ToString();
             ComposersTextBox.Text = string.Join(", ", musicProperties.Composers);
             DurationTextBox.Text = MusicDurationConverter.ToTime(musicProperties.Duration.TotalSeconds);
             GenreTextBox.Text = string.Join(", ", musicProperties.Genre);
             ProducersTextBox.Text = string.Join(", ", musicProperties.Producers);
-            PublisherTextBox.Text = musicProperties.Publisher;
-            TrackNumberTextBox.Text = IntConverter.ToStr((int)musicProperties.TrackNumber);
-            YearTextBox.Text = IntConverter.ToStr((int)musicProperties.Year);
         }
 
         private void ResetLyricsButton_Click(object sender, RoutedEventArgs e)

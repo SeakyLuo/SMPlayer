@@ -181,86 +181,91 @@
                             <TextBlock
                                 Grid.Row="7"
                                 VerticalAlignment="Center"
-                                Text="Producer"
+                                Text="Publisher"
                                 TextAlignment="Right" />
                             <TextBox
-                                x:Name="ProducersTextBox"
+                                x:Name="PublisherTextBox"
                                 Grid.Row="7"
                                 Grid.Column="1"
                                 Margin="20,5" />
                             <TextBlock
                                 Grid.Row="8"
                                 VerticalAlignment="Center"
-                                Text="Publisher"
+                                Text="TrackNumber"
                                 TextAlignment="Right" />
                             <TextBox
-                                x:Name="PublisherTextBox"
+                                x:Name="TrackNumberTextBox"
                                 Grid.Row="8"
                                 Grid.Column="1"
                                 Margin="20,5" />
                             <TextBlock
                                 Grid.Row="9"
                                 VerticalAlignment="Center"
-                                Text="TrackNumber"
+                                Text=" Year"
                                 TextAlignment="Right" />
                             <TextBox
-                                x:Name="TrackNumberTextBox"
+                                x:Name="YearTextBox"
                                 Grid.Row="9"
                                 Grid.Column="1"
                                 Margin="20,5" />
                             <TextBlock
                                 Grid.Row="10"
                                 VerticalAlignment="Center"
-                                Text=" Year"
+                                Text="Bitrate"
                                 TextAlignment="Right" />
-                            <TextBox
-                                x:Name="YearTextBox"
+                            <TextBlock
+                                x:Name="BitRateTextBox"
                                 Grid.Row="10"
                                 Grid.Column="1"
                                 Margin="20,5" />
                             <TextBlock
                                 Grid.Row="11"
                                 VerticalAlignment="Center"
-                                Text="Bitrate"
-                                TextAlignment="Right" />
-                            <TextBlock
-                                x:Name="GenreTextBox"
-                                Grid.Row="11"
-                                Grid.Column="1"
-                                Margin="20,5" />
-                            <TextBlock
-                                x:Name="BitRateTextBox"
-                                Grid.Row="12"
-                                Grid.Column="1"
-                                Margin="20,5" />
-                            <TextBlock
-                                Grid.Row="12"
-                                VerticalAlignment="Center"
                                 Text="Composers"
                                 TextAlignment="Right" />
                             <TextBlock
                                 x:Name="ComposersTextBox"
-                                Grid.Row="12"
+                                Grid.Row="11"
                                 Grid.Column="1"
                                 Margin="20,5" />
                             <TextBlock
-                                Grid.Row="13"
+                                Grid.Row="12"
                                 VerticalAlignment="Center"
                                 Text="Conductors"
                                 TextAlignment="Right" />
                             <TextBlock
                                 x:Name="ConductorsTextBox"
+                                Grid.Row="12"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="13"
+                                VerticalAlignment="Center"
+                                Text="Duration"
+                                TextAlignment="Right" />
+                            <TextBlock
+                                x:Name="DurationTextBox"
                                 Grid.Row="13"
                                 Grid.Column="1"
                                 Margin="20,5" />
                             <TextBlock
                                 Grid.Row="14"
                                 VerticalAlignment="Center"
-                                Text="Duration"
+                                Text="Genre"
                                 TextAlignment="Right" />
                             <TextBlock
-                                x:Name="DurationTextBox"
+                                x:Name="GenreTextBox"
                                 Grid.Row="14"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="15"
+                                VerticalAlignment="Center"
+                                Text="Producers"
+                                TextAlignment="Right" />
+                            <TextBox
+                                x:Name="ProducersTextBox"
+                                Grid.Row="15"
                                 Grid.Column="1"
                                 Margin="20,5" />
                         </Grid>
@@ -300,10 +305,10 @@
                     <TextBox
                         x:Name="LyricsTextBox"
                         Grid.Row="1"
-                        BorderThickness="0"
                         Margin="20,0,20,10"
-                        RequestedTheme="Dark"
                         Background="Transparent"
+                        BorderThickness="0"
+                        RequestedTheme="Dark"
                         TextWrapping="Wrap" />
                 </Grid>
             </controls:BladeItem>
