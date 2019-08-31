@@ -412,6 +412,13 @@
                             Template="{StaticResource MediaControlButtonTemplate}"
                             ToolTipService.ToolTip="Show Music Info" />
                         <Button
+                            x:Name="LyricsButton"
+                            Click="LyricsButton_Click"
+                            Content="&#xEC42;"
+                            Style="{StaticResource MediaControlButtonStyle}"
+                            Template="{StaticResource MediaControlButtonTemplate}"
+                            ToolTipService.ToolTip="Show Lyrics" />
+                        <Button
                             x:Name="CarouselButton"
                             Click="CarouselButton_Click"
                             Content="&#xE7C5;"

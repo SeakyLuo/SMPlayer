@@ -26,33 +26,285 @@
                                                                              
             Stretch="UniformToFill" />
         <Grid Background="{StaticResource AlbumBlurBrush}">
-            <local:MediaControl x:ConnectionId='4' x:Name="FullMediaControl" Mode="Full" />
+            <local:MediaControl x:ConnectionId='27' x:Name="FullMediaControl" Mode="Full" />
         </Grid>
-        <controls:BladeView Grid.Row="1" BladeMode="Fullscreen">
-            <controls:BladeItem
-                Background="{StaticResource AlbumBlurBrush}"
-                BorderThickness="0"
-                IsOpen="True"
-                TitleBarVisibility="Collapsed">
+        <controls:BladeView x:ConnectionId='3'
+            x:Name="NowPlayingFullBladeView"
+            Grid.Row="1"
+            BladeMode="Fullscreen">
+            <controls:BladeView.Resources>
+                <Style x:Key="NowPlayingFullBladeItemStyle" TargetType="controls:BladeItem">
+                    <Setter Property="Background" Value="{StaticResource AlbumBlurBrush}" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="IsOpen" Value="True" />
+                    <Setter Property="TitleBarVisibility" Value="Collapsed" />
+                </Style>
+                <Style x:Key="ScrollHeaderButtonStyle" TargetType="Button">
+                    <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+                    <Setter Property="FontSize" Value="20" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Width" Value="40" />
+                    <Setter Property="Height" Value="40" />
+                    <Setter Property="Margin" Value="15" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                </Style>
+            </controls:BladeView.Resources>
+            <controls:BladeItem Style="{StaticResource NowPlayingFullBladeItemStyle}">
                 <Grid Background="Transparent">
-                    <local:PlaylistControl x:ConnectionId='3'
+                    <local:PlaylistControl x:ConnectionId='26'
                         x:Name="FullPlaylistControl"
                         Margin="10"
                         AlternatingRowColor="False"
                         Theme="Dark" />
                 </Grid>
             </controls:BladeItem>
-            <controls:BladeItem Background="Transparent" IsOpen="True">
+            <controls:BladeItem x:ConnectionId='4'
+                x:Name="MusicPropertyBladeItem"
+                RequestedTheme="Dark"
+                Style="{StaticResource NowPlayingFullBladeItemStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <!--<TextBlock Text="{x:Bind Name}" />-->
+                    <RelativePanel Margin="40,10,20,10">
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Foreground="White"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            Style="{StaticResource HeaderTextBlockStyle}"
+                            Text="Properties"
+                            TextAlignment="Left" />
+                        <Button x:ConnectionId='24'
+                            x:Name="SaveMusicPropertiesButton"
+                                                                   
+                            Content="&#xE74E;"
+                            RelativePanel.LeftOf="ResetMusicPropertiesButton"
+                            Style="{StaticResource ScrollHeaderButtonStyle}"
+                            ToolTipService.ToolTip="Save" />
+                        <Button x:ConnectionId='25'
+                            x:Name="ResetMusicPropertiesButton"
+                            Background="Transparent"
+                                                                    
+                            Content="&#xE72C;"
+                            RelativePanel.AlignRightWithPanel="True"
+                            Style="{StaticResource ScrollHeaderButtonStyle}"
+                            ToolTipService.ToolTip="Reset" />
+                    </RelativePanel>
+                    <ScrollViewer Grid.Row="1">
+                        <Grid
+                            Padding="20,0"
+                            Background="{StaticResource AlbumBlurBrush}"
+                            RequestedTheme="Dark">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Row="1"
+                                VerticalAlignment="Center"
+                                Text="Title"
+                                TextAlignment="Right" />
+                            <TextBox x:ConnectionId='9'
+                                x:Name="TitleTextBox"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="2"
+                                VerticalAlignment="Center"
+                                Text="Subtitle"
+                                TextAlignment="Right" />
+                            <TextBox x:ConnectionId='10'
+                                x:Name="SubtitleTextBox"
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="3"
+                                VerticalAlignment="Center"
+                                Text="Artist"
+                                TextAlignment="Right" />
+                            <TextBox x:ConnectionId='11'
+                                x:Name="ArtistTextBox"
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="4"
+                                VerticalAlignment="Center"
+                                Text="Album"
+                                TextAlignment="Right" />
+                            <TextBox x:ConnectionId='12'
+                                x:Name="AlbumTextBox"
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="5"
+                                VerticalAlignment="Center"
+                                Text="Album Artist"
+                                TextAlignment="Right" />
+                            <TextBox x:ConnectionId='13'
+                                x:Name="AlbumArtistTextBox"
+                                Grid.Row="5"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="6"
+                                VerticalAlignment="Center"
+                                Text="Play Count"
+                                TextAlignment="Right" />
+                            <TextBox x:ConnectionId='14'
+                                x:Name="PlayCountTextBox"
+                                Grid.Row="6"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="7"
+                                VerticalAlignment="Center"
+                                Text="Producer"
+                                TextAlignment="Right" />
+                            <TextBox x:ConnectionId='15'
+                                x:Name="ProducersTextBox"
+                                Grid.Row="7"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="8"
+                                VerticalAlignment="Center"
+                                Text="Publisher"
+                                TextAlignment="Right" />
+                            <TextBox x:ConnectionId='16'
+                                x:Name="PublisherTextBox"
+                                Grid.Row="8"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="9"
+                                VerticalAlignment="Center"
+                                Text="TrackNumber"
+                                TextAlignment="Right" />
+                            <TextBox x:ConnectionId='17'
+                                x:Name="TrackNumberTextBox"
+                                Grid.Row="9"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="10"
+                                VerticalAlignment="Center"
+                                Text=" Year"
+                                TextAlignment="Right" />
+                            <TextBox x:ConnectionId='18'
+                                x:Name="YearTextBox"
+                                Grid.Row="10"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="11"
+                                VerticalAlignment="Center"
+                                Text="Bitrate"
+                                TextAlignment="Right" />
+                            <TextBlock x:ConnectionId='19'
+                                x:Name="GenreTextBox"
+                                Grid.Row="11"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock x:ConnectionId='20'
+                                x:Name="BitRateTextBox"
+                                Grid.Row="12"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="12"
+                                VerticalAlignment="Center"
+                                Text="Composers"
+                                TextAlignment="Right" />
+                            <TextBlock x:ConnectionId='21'
+                                x:Name="ComposersTextBox"
+                                Grid.Row="12"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="13"
+                                VerticalAlignment="Center"
+                                Text="Conductors"
+                                TextAlignment="Right" />
+                            <TextBlock x:ConnectionId='22'
+                                x:Name="ConductorsTextBox"
+                                Grid.Row="13"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="14"
+                                VerticalAlignment="Center"
+                                Text="Duration"
+                                TextAlignment="Right" />
+                            <TextBlock x:ConnectionId='23'
+                                x:Name="DurationTextBox"
+                                Grid.Row="14"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </controls:BladeItem>
+            <controls:BladeItem x:ConnectionId='5' x:Name="LyricsBladeItem" Style="{StaticResource NowPlayingFullBladeItemStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <RelativePanel Margin="40,10,20,10">
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Foreground="White"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            Style="{StaticResource HeaderTextBlockStyle}"
+                            Text="Lyrics"
+                            TextAlignment="Left" />
+                        <Button x:ConnectionId='7'
+                            x:Name="SaveLyricsButton"
+                                                          
+                            Content="&#xE74E;"
+                            RelativePanel.LeftOf="ResetLyricsButton"
+                            Style="{StaticResource ScrollHeaderButtonStyle}"
+                            ToolTipService.ToolTip="Save" />
+                        <Button x:ConnectionId='8'
+                            x:Name="ResetLyricsButton"
+                            Background="Transparent"
+                                                           
+                            Content="&#xE72C;"
+                            RelativePanel.AlignRightWithPanel="True"
+                            Style="{StaticResource ScrollHeaderButtonStyle}"
+                            ToolTipService.ToolTip="Reset" />
+                    </RelativePanel>
+                    <TextBox x:ConnectionId='6'
+                        x:Name="LyricsTextBox"
+                        Grid.Row="1"
+                        BorderThickness="0"
+                        Margin="20,0,20,10"
+                        RequestedTheme="Dark"
+                        Background="Transparent"
+                        TextWrapping="Wrap" />
                 </Grid>
             </controls:BladeItem>
         </controls:BladeView>

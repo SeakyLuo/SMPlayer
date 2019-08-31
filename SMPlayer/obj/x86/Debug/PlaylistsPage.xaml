@@ -20,8 +20,10 @@
             CanCloseTabs="False"
             CanDragItems="True"
             CanReorderItems="True"
+                                                                 
+                                                         
             IsCloseButtonOverlay="False"
-                                            
+                                                         
             SelectedTabWidth="200"
             TabWidthBehavior="Actual">
             <controls:TabView.Resources>
@@ -49,7 +51,7 @@
                             </MenuFlyout>
                         </Grid.ContextFlyout>
                         <SymbolIcon Symbol="Audio" />
-                        <TextBlock x:ConnectionId='6' Grid.Column="1"                      />
+                        <TextBlock x:ConnectionId='6' Grid.Column="1"                                   />
                     </Grid>
                 </DataTemplate>
             </controls:TabView.ItemHeaderTemplate>
@@ -67,7 +69,7 @@
 
             <controls:TabView.TabStartHeader>
                 <Button x:ConnectionId='8'
-                    x:Name="NewPlaylist"
+                    x:Name="NewPlaylistButton"
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
                     Background="Transparent"

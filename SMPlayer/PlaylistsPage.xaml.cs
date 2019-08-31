@@ -28,8 +28,9 @@ namespace SMPlayer
         public PlaylistsPage()
         {
             this.InitializeComponent();
+            foreach (var list in Settings.settings.Playlists)
+                Playlists.Add(list);
         }
-
 
         private void DeleteClick(object sender, RoutedEventArgs e)
         {
@@ -64,6 +65,16 @@ namespace SMPlayer
                 EditPlaylistButton.Content = "\uE70F";
                 PlaylistTabView.CanCloseTabs = false;
             }
+        }
+
+        private void PlaylistTabView_DropCompleted(UIElement sender, DropCompletedEventArgs args)
+        {
+
+        }
+
+        private void PlaylistTabView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
+        {
+
         }
     }
 }

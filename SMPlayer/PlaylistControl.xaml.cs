@@ -27,12 +27,23 @@ namespace SMPlayer
             get => SongsListView.RequestedTheme;
             set => SongsListView.RequestedTheme = value;
         }
-        public static readonly DependencyProperty ThemeProperty = DependencyProperty.Register("Theme", typeof(ElementTheme), typeof(PlaylistControl), new PropertyMetadata(ElementTheme.Default));
+        public static ElementTheme CurrentTheme;
+        private static List<MusicRequestListener> MusicRequestListeners = new List<MusicRequestListener>();
         public bool AlternatingRowColor { get; set; }
         public PlaylistControl()
         {
             this.InitializeComponent();
             SongsListView.ItemsSource = Songs;
+        }
+
+        private void PlaylistController_Loaded(object sender, RoutedEventArgs e)
+        {
+            CurrentTheme = Theme;
+        }
+
+        public static void AddMusicRequestListener(MusicRequestListener listener)
+        {
+            MusicRequestListeners.Add(listener);
         }
 
         public static void SetPlaylist(IEnumerable<Music> playlist)
@@ -109,24 +120,15 @@ namespace SMPlayer
         {
 
         }
-    }
 
-    public class PlaylistListItemContainerStyleSelector : StyleSelector
-    {
-        public Style NewStyle { get; set; }
-        public Style OldStyle { get; set; }
-
-        protected override Style SelectStyleCore(object item, DependencyObject container)
+        private void SongsListView_DropCompleted(UIElement sender, DropCompletedEventArgs args)
         {
-            var obj = (string)item;
-            if (obj.Equals("789"))
-            {
-                return NewStyle;
-            }
-            else
-            {
-                return OldStyle;
-            }
+
+        }
+
+        private void SongsListView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
+        {
+
         }
     }
 }

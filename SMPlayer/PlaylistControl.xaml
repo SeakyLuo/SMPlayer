@@ -7,6 +7,7 @@
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="PlaylistController"
+    Loaded="PlaylistController_Loaded"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -22,6 +23,8 @@
         CanDrag="True"
         CanReorderItems="True"
         ContainerContentChanging="SongsListView_ContainerContentChanging"
+        DragItemsStarting="SongsListView_DragItemsStarting"
+        DropCompleted="SongsListView_DropCompleted"
         IsItemClickEnabled="True"
         ItemClick="SongsListView_ItemClick"
         ItemsSource="{Binding Songs, Mode=TwoWay}"

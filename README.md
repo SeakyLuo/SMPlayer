@@ -9,8 +9,6 @@ Cache Artists Result.
 
 Add SwipeControl.
 
-Playlist Control.
-
 MediControlButton Style.
 
 FullMediaControl Album Flipview.

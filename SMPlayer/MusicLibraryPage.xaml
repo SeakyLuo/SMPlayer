@@ -102,7 +102,7 @@
                 <controls:DataGridTextColumn
                     MinWidth="100"
                     MaxWidth="120"
-                    Binding="{Binding PlayCount, Converter={StaticResource MusicPlayCountConverter}, Mode=OneWay}"
+                    Binding="{Binding PlayCount, Converter={StaticResource IntConverter}, Mode=OneWay}"
                     CanUserSort="True"
                     Header="Play Count" />
             </controls:DataGrid.Columns>

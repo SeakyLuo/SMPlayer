@@ -6,14 +6,6 @@
     xmlns:local="using:SMPlayer">
     <Application.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.ThemeDictionaries>
-                <ResourceDictionary x:Key="Light">
-                    <SolidColorBrush x:Key="UnplayForeground" Color="Black"/>
-                </ResourceDictionary>
-                <ResourceDictionary x:Key="Dark">
-                    <SolidColorBrush x:Key="UnplayForeground" Color="White"/>
-                </ResourceDictionary>
-            </ResourceDictionary.ThemeDictionaries>
             <Style x:Key="TitleTextBlockStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="40" />
                 <Setter Property="FontWeight" Value="Bold" />
@@ -585,12 +577,13 @@
             <local:LargeThumbnailVisibilityConverter x:Key="LargeThumbnailVisibilityConverter" />
             <local:MusicDurationConverter x:Key="MusicDurationConverter" />
             <local:MusicFavoriteConverter x:Key="MusicFavoriteConverter" />
-            <local:MusicPlayCountConverter x:Key="MusicPlayCountConverter" />
+            <local:IntConverter x:Key="IntConverter" />
             <local:MusicVisibilityConverter x:Key="MusicVisibilityConverter" />
             <local:ArtistAlbumInfoConverter x:Key="ArtistAlbumInfoConverter" />
             <local:MusicIsPlayingConverter x:Key="MusicIsPlayingConverter" />
             <local:RowColorConverter x:Key="RowColorConverter" />
             <local:SongCountConverter x:Key="SongCountConverter" />
+            <local:JoinConverter x:Key="JoinConverter" />
             <AcrylicBrush
                 x:Key="MediaControlSliderThumbAcrylicBrush"
                 BackgroundSource="Backdrop"

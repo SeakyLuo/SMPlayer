@@ -87,17 +87,17 @@ namespace SMPlayer
         }
     }
 
-    class MusicPlayCountConverter : Windows.UI.Xaml.Data.IValueConverter
+    class IntConverter : Windows.UI.Xaml.Data.IValueConverter
     {
+        public static string ToStr(int value)
+        {
+            int count = (int)value;
+            if (count > 0) return count.ToString();
+            return "";
+        }
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is int)
-            {
-                int count = (int)value;
-                if (count > 0) return count.ToString();
-            }
-            return "";
-
+            return value is int ? ToStr((int)value) : "";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -148,7 +148,8 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.Equals(true) ? Helper.GetHighlightBrush() : (Windows.UI.Xaml.Media.Brush)Application.Current.Resources["UnplayForeground"];
+            return value.Equals(true) ? Helper.GetHighlightBrush() : 
+                                        PlaylistControl.CurrentTheme == ElementTheme.Dark ? Helper.WhiteSmokeBrush : Helper.BlackBrush;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -188,6 +189,19 @@ namespace SMPlayer
                 return string.Format("Songs: {0}   {1}", list.Count(), MusicDurationConverter.ToTime(list));
             }
             return "";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
+
+    class JoinConverter : Windows.UI.Xaml.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return value is IEnumerable<string> ? string.Join(", ", (IEnumerable<string>)value) : "";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

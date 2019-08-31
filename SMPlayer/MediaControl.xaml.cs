@@ -245,8 +245,6 @@ namespace SMPlayer
                 }
             }
         }
-        public Music CurrentMusic { get; set; }
-
         private ToolTip MediaControlToolTip = new ToolTip();
         private ToolTip ShuffleToolTip = new ToolTip();
         private ToolTip RepeatOneToolTip = new ToolTip();
@@ -254,6 +252,7 @@ namespace SMPlayer
 
         private bool ShouldUpdate = true, SliderClicked = false;
         private static List<MusicControlListener> MusicControlListeners = new List<MusicControlListener>();
+        private static List<MusicRequestListener> MusicRequestListeners = new List<MusicRequestListener>();
 
         public MediaControl()
         {
@@ -299,7 +298,12 @@ namespace SMPlayer
         {
             MusicControlListeners.Add(listener);
         }
-        private void NotifyListeners(Music before, Music after)
+
+        public static void AddMusicRequestListener(MusicRequestListener listener)
+        {
+            MusicRequestListeners.Add(listener);
+        }
+        private void NotifyMusicModifiedListeners(Music before, Music after)
         {
             foreach (var listener in MusicControlListeners)
                 listener.MusicModified(before, after);
@@ -469,7 +473,7 @@ namespace SMPlayer
         {
             Music before = MediaHelper.CurrentMusic.Copy();
             MediaHelper.CurrentMusic.Favorite = favorite;
-            NotifyListeners(before, MediaHelper.CurrentMusic);
+            NotifyMusicModifiedListeners(before, MediaHelper.CurrentMusic);
         }
 
         private void LikeButton_Click(object sender, RoutedEventArgs e)
@@ -565,7 +569,14 @@ namespace SMPlayer
 
         private void MusicInfoButton_Click(object sender, RoutedEventArgs e)
         {
+            foreach (var listener in MusicRequestListeners)
+                listener.MusicInfoRequested(MediaHelper.CurrentMusic);
+        }
 
+        private void LyricsButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var listener in MusicRequestListeners)
+                listener.LyricsRequested(MediaHelper.CurrentMusic);
         }
 
         private void ClearNowPlayingButton_Click(object sender, RoutedEventArgs e)
@@ -597,7 +608,7 @@ namespace SMPlayer
         {
             Music before = music.Copy();
             music.Played();
-            NotifyListeners(before, music);
+            NotifyMusicModifiedListeners(before, music);
         }
 
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
@@ -641,6 +652,12 @@ namespace SMPlayer
     public interface MusicControlListener
     {
         void MusicModified(Music before, Music after);
+    }
+
+    public interface MusicRequestListener
+    {
+        void MusicInfoRequested(Music music);
+        void LyricsRequested(Music music);
     }
 
     public interface MediaControlContainer

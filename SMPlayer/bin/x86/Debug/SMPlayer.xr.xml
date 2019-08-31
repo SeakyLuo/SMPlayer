@@ -19,13 +19,8 @@
       <RootProperty Name="Resources" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.ResourceDictionary">
-      <RootProperty Name="ThemeDictionaries" />
       <RootProperty Name="MergedDictionaries" />
       <RootProperty Name="Source" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Media.SolidColorBrush">
-      <RootProperty Name="Color" />
-      <RootProperty Name="Opacity" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.TextBlock">
       <RootProperty Name="FontSize" />
@@ -165,12 +160,13 @@
     <RootType FullName="SMPlayer.LargeThumbnailVisibilityConverter" />
     <RootType FullName="SMPlayer.MusicDurationConverter" />
     <RootType FullName="SMPlayer.MusicFavoriteConverter" />
-    <RootType FullName="SMPlayer.MusicPlayCountConverter" />
+    <RootType FullName="SMPlayer.IntConverter" />
     <RootType FullName="SMPlayer.MusicVisibilityConverter" />
     <RootType FullName="SMPlayer.ArtistAlbumInfoConverter" />
     <RootType FullName="SMPlayer.MusicIsPlayingConverter" />
     <RootType FullName="SMPlayer.RowColorConverter" />
     <RootType FullName="SMPlayer.SongCountConverter" />
+    <RootType FullName="SMPlayer.JoinConverter" />
     <RootType FullName="Windows.UI.Xaml.Media.AcrylicBrush">
       <RootProperty Name="BackgroundSource" />
       <RootProperty Name="FallbackColor" />
@@ -252,6 +248,7 @@
       <RootProperty Name="RequestedTheme" />
       <RootProperty Name="Opacity" />
       <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="Padding" />
       <RootMethod Name="GetRow" />
       <RootMethod Name="SetRow" />
       <RootMethod Name="GetRowSpan" />
@@ -313,12 +310,16 @@
       <RootProperty Name="Header" />
       <RootProperty Name="PlaceholderText" />
       <RootProperty Name="Style" />
+      <RootProperty Name="RequestedTheme" />
+      <RootProperty Name="Background" />
+      <RootProperty Name="TextWrapping" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Canvas">
       <RootMethod Name="GetZIndex" />
       <RootMethod Name="SetZIndex" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ScrollViewer">
+      <RootProperty Name="Content" />
       <RootMethod Name="GetBringIntoViewOnFocusChange" />
       <RootMethod Name="SetBringIntoViewOnFocusChange" />
     </RootType>
@@ -358,6 +359,8 @@
       <RootProperty Name="ReorderMode" />
       <RootEvent Name="ContainerContentChanging" />
       <RootEvent Name="ItemClick" />
+      <RootEvent Name="DragItemsStarting" />
+      <RootEvent Name="DropCompleted" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.Animation.TransitionCollection" />
     <RootType FullName="Windows.UI.Xaml.Controls.Page">
@@ -460,10 +463,15 @@
     <RootType FullName="Windows.UI.Xaml.Controls.UserControl">
       <RootProperty Name="Content" />
       <RootProperty Name="Resources" />
+      <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.Loading">
       <RootProperty Name="Background" />
       <RootProperty Name="Content" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Media.SolidColorBrush">
+      <RootProperty Name="Opacity" />
+      <RootProperty Name="Color" />
     </RootType>
     <RootType FullName="SMPlayer.LoadingControl">
       <RootProperty Name="Text" />
@@ -529,14 +537,15 @@
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.BladeView">
       <RootProperty Name="BladeMode" />
+      <RootProperty Name="Resources" />
       <RootProperty Name="Items" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.BladeItem">
-      <RootProperty Name="Background" />
-      <RootProperty Name="BorderThickness" />
       <RootProperty Name="IsOpen" />
       <RootProperty Name="TitleBarVisibility" />
+      <RootProperty Name="Style" />
       <RootProperty Name="Content" />
+      <RootProperty Name="RequestedTheme" />
     </RootType>
     <RootType FullName="SMPlayer.PlaylistControl">
       <RootProperty Name="Margin" />
@@ -620,6 +629,8 @@
       <RootProperty Name="TabStartHeader" />
       <RootProperty Name="TabEndHeader" />
       <RootProperty Name="Footer" />
+      <RootEvent Name="DragItemsStarting" />
+      <RootEvent Name="DropCompleted" />
     </RootType>
     <RootType FullName="System.Double" />
     <RootType FullName="SMPlayer.PlaylistsPage" />

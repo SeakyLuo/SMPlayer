@@ -125,6 +125,12 @@ namespace SMPlayer.Models
             return Path.Substring(Settings.settings.RootPath.Length + 1); // Plus one due to "/"
         }
 
+        public async Task<MusicProperties> GetMusicProperties()
+        {
+            var file = await StorageFile.GetFileFromPathAsync(Path);
+            return await file.Properties.GetMusicPropertiesAsync();
+        }
+
         public static async Task<Music> GetMusic(string source)
         {
             var file = await StorageFile.GetFileFromPathAsync(source);
@@ -144,8 +150,8 @@ namespace SMPlayer.Models
             {
                 using (var mp3 = new Mp3(stream.AsStream()))
                 {
-                    var lyrics = mp3.GetTag(Id3TagFamily.Version2X).Lyrics;
-                    return lyrics.Count > 0 ? lyrics[0].Lyrics : "";
+                    var lyrics = mp3.GetTag(Id3TagFamily.Version2X).Lyrics.Select((l) => l.Lyrics);
+                    return string.Join("\n", lyrics);
                 }
             }
         }

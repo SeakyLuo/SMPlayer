@@ -20,8 +20,10 @@
             CanCloseTabs="False"
             CanDragItems="True"
             CanReorderItems="True"
+            DragItemsStarting="PlaylistTabView_DragItemsStarting"
+            DropCompleted="PlaylistTabView_DropCompleted"
             IsCloseButtonOverlay="False"
-            ItemsSource="{x:Bind Playlists}"
+            ItemsSource="{x:Bind Playlists, Mode=TwoWay}"
             SelectedTabWidth="200"
             TabWidthBehavior="Actual">
             <controls:TabView.Resources>
@@ -49,7 +51,7 @@
                             </MenuFlyout>
                         </Grid.ContextFlyout>
                         <SymbolIcon Symbol="Audio" />
-                        <TextBlock Grid.Column="1" Text="{x:Bind Name}" />
+                        <TextBlock Grid.Column="1" Text="{x:Bind Name, Mode=TwoWay}" />
                     </Grid>
                 </DataTemplate>
             </controls:TabView.ItemHeaderTemplate>
@@ -67,7 +69,7 @@
 
             <controls:TabView.TabStartHeader>
                 <Button
-                    x:Name="NewPlaylist"
+                    x:Name="NewPlaylistButton"
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
                     Background="Transparent"
