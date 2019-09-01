@@ -111,7 +111,7 @@ namespace SMPlayer
             ShowNotification("Lyrics Reset!");
         }
 
-        private void SaveLyricsButton_Click(object sender, RoutedEventArgs e)
+        private async void SaveLyricsButton_Click(object sender, RoutedEventArgs e)
         {
             //var mf = TagLib.File.Create(new TagLib.File.LocalFileAbstraction(CurrentMusic.Path), TagLib.ReadStyle.Average);
             //mf.Tag.Lyrics = Lyrics;
