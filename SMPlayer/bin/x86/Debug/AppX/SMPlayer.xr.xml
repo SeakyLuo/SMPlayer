@@ -48,6 +48,7 @@
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="FocusVisualMargin" />
+      <RootProperty Name="RequestedTheme" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Button">
       <RootProperty Name="Margin" />
@@ -313,6 +314,7 @@
       <RootProperty Name="Background" />
       <RootProperty Name="RequestedTheme" />
       <RootProperty Name="TextWrapping" />
+      <RootEvent Name="BeforeTextChanging" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Canvas">
       <RootMethod Name="GetZIndex" />
@@ -539,6 +541,13 @@
       <RootProperty Name="BladeMode" />
       <RootProperty Name="Resources" />
       <RootProperty Name="Items" />
+    </RootType>
+    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.InAppNotification">
+      <RootProperty Name="AnimationDuration" />
+      <RootProperty Name="HorizontalOffset" />
+      <RootProperty Name="ShowDismissButton" />
+      <RootProperty Name="StackMode" />
+      <RootProperty Name="VerticalOffset" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.BladeItem">
       <RootProperty Name="IsOpen" />

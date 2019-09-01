@@ -35,7 +35,6 @@ namespace SMPlayer
         public static NowPlayingFullPage Instance { get => (Window.Current.Content as Frame).Content as NowPlayingFullPage; }
         private MusicProperties musicProperties;
         private string Lyrics;
-        private Id3Tag MusicTag;
         private Music CurrentMusic;
         public NowPlayingFullPage()
         {
@@ -47,9 +46,11 @@ namespace SMPlayer
         {
             FullMediaControl.Update();
             PlaylistControl.SetPlaylist(MediaHelper.CurrentPlayList);
+            SetMusicInfo(MediaHelper.CurrentMusic);
+            SetLyrics(MediaHelper.CurrentMusic);
         }
 
-        public void SetMusicProperty(MusicProperties properties)
+        public void SetMusicProperties(MusicProperties properties)
         {
             TitleTextBox.Text = musicProperties.Title;
             SubtitleTextBox.Text = musicProperties.Subtitle;
@@ -67,32 +68,71 @@ namespace SMPlayer
             ProducersTextBox.Text = string.Join(", ", musicProperties.Producers);
         }
 
-        private void ResetLyricsButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void SaveLyricsButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void ResetMusicPropertiesButton_Click(object sender, RoutedEventArgs e)
         {
-            SetMusicProperty(musicProperties);
+            SetMusicProperties(musicProperties);
+            ShowNotification("Properties Reset!");
         }
 
         private async void SaveMusicPropertiesButton_Click(object sender, RoutedEventArgs e)
         {
+            musicProperties.Title = TitleTextBox.Text;
+            musicProperties.Subtitle = SubtitleTextBox.Text;
+            musicProperties.Artist = ArtistTextBox.Text;
+            musicProperties.Album = ArtistTextBox.Text;
+            musicProperties.AlbumArtist = AlbumArtistTextBox.Text;
+            AlbumArtistTextBox.Text = musicProperties.AlbumArtist;
+            if (int.TryParse(PlayCountTextBox.Text, out int PlayCount))
+            {
+                MusicLibraryPage.AllSongs[MusicLibraryPage.AllSongs.IndexOf(CurrentMusic)].PlayCount = PlayCount;
+                CurrentMusic.PlayCount = PlayCount;
+            }
+            musicProperties.Publisher = PublisherTextBox.Text;
+            if (uint.TryParse(TrackNumberTextBox.Text, out uint TrackNumber))
+                musicProperties.TrackNumber = TrackNumber;
+            if (uint.TryParse(YearTextBox.Text, out uint Year))
+                musicProperties.Year = Year;
             await musicProperties.SavePropertiesAsync();
+            ShowNotification("Lyrics Updated!");
         }
 
-        public async Task<Id3Tag> GetMusicTag(Music music)
+        public async void SetBasicProperties(StorageFile file)
         {
-            var file = await StorageFile.GetFileFromPathAsync(music.Path);
-            var stream = await file.OpenAsync(FileAccessMode.Read);
-            var mp3 = new Mp3(stream.AsStream());
-            return mp3.GetTag(Id3TagFamily.Version2X);
+            var basicProperties = await file.GetBasicPropertiesAsync();
+            FileSizeTextBox.Text = basicProperties.Size.ToString() + " Bytes";
+            DateCreatedTextBox.Text = file.DateCreated.ToLocalTime().ToString();
+            DateModifiedTextBox.Text = basicProperties.DateModified.ToLocalTime().ToString();
+            PathTextBox.Text = file.Path;
+        }
+
+        private void ResetLyricsButton_Click(object sender, RoutedEventArgs e)
+        {
+            LyricsTextBox.Text = Lyrics;
+            ShowNotification("Lyrics Reset!");
+        }
+
+        private void SaveLyricsButton_Click(object sender, RoutedEventArgs e)
+        {
+            //var mf = TagLib.File.Create(new TagLib.File.LocalFileAbstraction(CurrentMusic.Path), TagLib.ReadStyle.Average);
+            //mf.Tag.Lyrics = Lyrics;
+            //mf.Save();
+            var file = await StorageFile.GetFileFromPathAsync(CurrentMusic.Path);
+            using (var stream = await file.OpenAsync(FileAccessMode.ReadWrite))
+            {
+                using (var mp3 = new Mp3(stream.AsStream(), Mp3Permissions.ReadWrite))
+                {
+                    var tag = mp3.GetTag(Id3TagFamily.Version2X);
+                    tag.Lyrics[0] = Lyrics;
+                    mp3.WriteTag(tag, tag.Version, WriteConflictAction.Replace);
+                }
+            }
+            ShowNotification("Lyrics Updated!");
+        }
+
+        public void ShowNotification(string text)
+        {
+            ShowResultInAppNotification.Content = text;
+            ShowResultInAppNotification.Show(1500);
         }
 
         public void SetMusicAndPlay(Music music)
@@ -110,40 +150,62 @@ namespace SMPlayer
             FullMediaControl.SetShuffle(isShuffle);
         }
 
-        public void Tick()
-        {
-            return;
-        }
+        public void Tick() { return; }
 
         public void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
         {
-            return;
+            if (!current.Equals(CurrentMusic) ||
+                // if being modified and not saved
+                musicProperties.Title != TitleTextBox.Text ||
+                musicProperties.Subtitle != SubtitleTextBox.Text ||
+                musicProperties.Artist != ArtistTextBox.Text ||
+                musicProperties.AlbumArtist != AlbumArtistTextBox.Text ||
+                musicProperties.Publisher != PublisherTextBox.Text ||
+                Lyrics != LyricsTextBox.Text ||
+                PlayCountTextBox.Text == "" && CurrentMusic.PlayCount != 0 ||
+                int.TryParse(PlayCountTextBox.Text, out int PlayCount) && CurrentMusic.PlayCount != PlayCount ||
+                TrackNumberTextBox.Text == "" && musicProperties.TrackNumber != 0 ||
+                uint.TryParse(TrackNumberTextBox.Text, out uint TrackNumber) && musicProperties.TrackNumber != TrackNumber ||
+                YearTextBox.Text == "" && musicProperties.Year != 0 ||
+                uint.TryParse(YearTextBox.Text, out uint Year) && musicProperties.Year != Year)
+                return;
+            MusicInfoRequested(next);
+            LyricsRequested(next);
         }
 
-        public void MediaEnded()
-        {
-            return;
-        }
+        public void MediaEnded() { return; }
 
-        public void ShuffleChanged(IEnumerable<Music> newPlayList, bool isShuffle)
-        {
-            return;
-        }
+        public void ShuffleChanged(IEnumerable<Music> newPlayList, bool isShuffle) { return; }
 
-        public async void MusicInfoRequested(Music music)
+        public async void SetMusicInfo(Music music)
         {
             CurrentMusic = music;
             var file = await StorageFile.GetFileFromPathAsync(music.Path);
-            SetMusicProperty(musicProperties = await music.GetMusicProperties());
+            SetBasicProperties(file);
+            SetMusicProperties(musicProperties = await music.GetMusicProperties());
+        }
+        public void MusicInfoRequested(Music music)
+        {
+            SetMusicInfo(music);
             MusicPropertyBladeItem.StartBringIntoView();
         }
 
-        public async void LyricsRequested(Music music)
+        public async void SetLyrics(Music music)
         {
             CurrentMusic = music;
             Lyrics = await music.GetLyrics();
             LyricsTextBox.Text = Lyrics;
+        }
+
+        public void LyricsRequested(Music music)
+        {
+            SetLyrics(music);
             LyricsBladeItem.StartBringIntoView();
+        }
+
+        private void CheckIfDigit(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+        {
+            args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
     }
 }

@@ -197,3 +197,5 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\PlaylistControl.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\PlaylistControl.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\PlaylistControl.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SMPlayer.csprojAssemblyReference.cache
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\policy.2.0.taglib-sharp.dll
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\taglib-sharp.dll

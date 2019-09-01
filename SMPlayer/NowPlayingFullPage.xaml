@@ -45,6 +45,7 @@
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="Width" Value="40" />
                     <Setter Property="Height" Value="40" />
+                    <Setter Property="RequestedTheme" Value="Dark" />
                     <Setter Property="Margin" Value="15" />
                     <Setter Property="VerticalAlignment" Value="Center" />
                 </Style>
@@ -97,6 +98,11 @@
                             Background="{StaticResource AlbumBlurBrush}"
                             RequestedTheme="Dark">
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
@@ -177,7 +183,8 @@
                                 x:Name="PlayCountTextBox"
                                 Grid.Row="6"
                                 Grid.Column="1"
-                                Margin="20,5" />
+                                Margin="20,5"
+                                BeforeTextChanging="CheckIfDigit" />
                             <TextBlock
                                 Grid.Row="7"
                                 VerticalAlignment="Center"
@@ -197,7 +204,8 @@
                                 x:Name="TrackNumberTextBox"
                                 Grid.Row="8"
                                 Grid.Column="1"
-                                Margin="20,5" />
+                                Margin="20,5"
+                                BeforeTextChanging="CheckIfDigit" />
                             <TextBlock
                                 Grid.Row="9"
                                 VerticalAlignment="Center"
@@ -207,7 +215,8 @@
                                 x:Name="YearTextBox"
                                 Grid.Row="9"
                                 Grid.Column="1"
-                                Margin="20,5" />
+                                Margin="20,5"
+                                BeforeTextChanging="CheckIfDigit" />
                             <TextBlock
                                 Grid.Row="10"
                                 VerticalAlignment="Center"
@@ -241,31 +250,81 @@
                             <TextBlock
                                 Grid.Row="13"
                                 VerticalAlignment="Center"
-                                Text="Duration"
+                                Text="Date Created"
                                 TextAlignment="Right" />
                             <TextBlock
-                                x:Name="DurationTextBox"
+                                x:Name="DateCreatedTextBox"
                                 Grid.Row="13"
                                 Grid.Column="1"
                                 Margin="20,5" />
                             <TextBlock
                                 Grid.Row="14"
                                 VerticalAlignment="Center"
-                                Text="Genre"
+                                Text="Date Modified"
                                 TextAlignment="Right" />
                             <TextBlock
-                                x:Name="GenreTextBox"
+                                x:Name="DateModifiedTextBox"
                                 Grid.Row="14"
                                 Grid.Column="1"
                                 Margin="20,5" />
                             <TextBlock
                                 Grid.Row="15"
                                 VerticalAlignment="Center"
+                                Text="Duration"
+                                TextAlignment="Right" />
+                            <TextBlock
+                                x:Name="DurationTextBox"
+                                Grid.Row="15"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="16"
+                                VerticalAlignment="Center"
+                                Text="File Size"
+                                TextAlignment="Right" />
+                            <TextBlock
+                                x:Name="FileSizeTextBox"
+                                Grid.Row="16"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="17"
+                                VerticalAlignment="Center"
+                                Text="File Type"
+                                TextAlignment="Right" />
+                            <TextBlock
+                                x:Name="FileTypeTextBox"
+                                Grid.Row="17"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="18"
+                                VerticalAlignment="Center"
+                                Text="Genre"
+                                TextAlignment="Right" />
+                            <TextBlock
+                                x:Name="GenreTextBox"
+                                Grid.Row="18"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="19"
+                                VerticalAlignment="Center"
+                                Text="Path"
+                                TextAlignment="Right" />
+                            <TextBlock
+                                x:Name="PathTextBox"
+                                Grid.Row="19"
+                                Grid.Column="1"
+                                Margin="20,5" />
+                            <TextBlock
+                                Grid.Row="20"
+                                VerticalAlignment="Center"
                                 Text="Producers"
                                 TextAlignment="Right" />
                             <TextBlock
                                 x:Name="ProducersTextBox"
-                                Grid.Row="15"
+                                Grid.Row="20"
                                 Grid.Column="1"
                                 Margin="20,5" />
                         </Grid>
@@ -313,5 +372,13 @@
                 </Grid>
             </controls:BladeItem>
         </controls:BladeView>
+        <controls:InAppNotification
+            x:Name="ShowResultInAppNotification"
+            Grid.Row="1"
+            AnimationDuration="00:00:00.1000000"
+            HorizontalOffset="0"
+            ShowDismissButton="True"
+            StackMode="Replace"
+            VerticalOffset="100" />
     </Grid>
 </Page>
