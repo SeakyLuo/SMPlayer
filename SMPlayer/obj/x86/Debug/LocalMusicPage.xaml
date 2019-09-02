@@ -30,7 +30,12 @@
             SelectionMode="Single">
             <GridView.ItemTemplate>
                 <DataTemplate                                >
-                    <Grid x:ConnectionId='5' Margin="5">
+                    <Grid x:ConnectionId='6' Margin="5">
+                        <Grid.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Icon="Delete" Text="Delete From Disk" />
+                            </MenuFlyout>
+                        </Grid.ContextFlyout>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
@@ -45,19 +50,18 @@
                             OffsetY="2"
                             ShadowOpacity="0"
                             Color="Gray">
-                            <controls:ImageEx x:ConnectionId='8'
+                            <Image x:ConnectionId='10'
                                 Width="100"
                                 Height="100"
                                 Margin="0,0,5,0"
-                                                           
-                                Style="{StaticResource CachedImageStyle}" />
+                                                            />
                         </controls:DropShadowPanel>
                         <Grid Grid.Column="1">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock x:ConnectionId='6'
+                            <TextBlock x:ConnectionId='8'
                                 x:Name="MusicNameTextBlock"
                                 Width="160"
                                 VerticalAlignment="Top"
@@ -67,7 +71,7 @@
                                 MaxLines="3"
                                                     
                                 TextWrapping="Wrap" />
-                            <TextBlock x:ConnectionId='7'
+                            <TextBlock x:ConnectionId='9'
                                 Grid.Row="1"
                                 Margin="0,3,0,0"
                                 VerticalAlignment="center"

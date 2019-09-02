@@ -29,7 +29,7 @@
             SelectionMode="None">
             <GridView.ItemTemplate>
                 <DataTemplate                                 >
-                    <StackPanel x:ConnectionId='5' Margin="10">
+                    <StackPanel x:ConnectionId='6' Margin="10">
                         <Grid
                             Width="160"
                             Height="160"
@@ -42,27 +42,27 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <controls:ImageEx x:ConnectionId='8'
+                            <controls:ImageEx x:ConnectionId='9'
                                 Grid.Row="0"
                                 Grid.Column="0"
                                                        
                                 Style="{StaticResource CachedImageStyle}" />
-                            <controls:ImageEx x:ConnectionId='9'
+                            <controls:ImageEx x:ConnectionId='10'
                                 Grid.Row="0"
                                 Grid.Column="1"
                                                         
-                                Style="{StaticResource CachedImageStyle}" />
-                            <controls:ImageEx x:ConnectionId='10'
-                                Grid.Row="1"
-                                Grid.Column="0"
-                                                       
                                 Style="{StaticResource CachedImageStyle}" />
                             <controls:ImageEx x:ConnectionId='11'
                                 Grid.Row="1"
+                                Grid.Column="0"
+                                                       
+                                Style="{StaticResource CachedImageStyle}" />
+                            <controls:ImageEx x:ConnectionId='12'
+                                Grid.Row="1"
                                 Grid.Column="1"
                                                         
                                 Style="{StaticResource CachedImageStyle}" />
-                            <controls:ImageEx x:ConnectionId='12'
+                            <controls:ImageEx x:ConnectionId='13'
                                 x:Name="LargeThumbnail"
                                 Grid.RowSpan="2"
                                 Grid.ColumnSpan="2"
@@ -70,13 +70,13 @@
                                 Style="{StaticResource CachedImageStyle}"
                                 Visibility="{Binding Converter={StaticResource LargeThumbnailVisibilityConverter}}" />
                         </Grid>
-                        <TextBlock x:ConnectionId='6'
+                        <TextBlock x:ConnectionId='7'
                             FontSize="16"
                             FontWeight="SemiBold"
                             HorizontalTextAlignment="Left"
                                                 
                             TextWrapping="Wrap" />
-                        <TextBlock x:ConnectionId='7'
+                        <TextBlock x:ConnectionId='8'
                             Margin="0,3,0,0"
                             FontSize="12"
                             Foreground="Gray"

@@ -18,7 +18,7 @@ namespace SMPlayer
         /// <summary>
         /// Connect()
         /// </summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public void Connect(int connectionId, object target)
         {
@@ -30,39 +30,39 @@ namespace SMPlayer
                     ((global::Windows.UI.Xaml.Controls.Page)element1).Loaded += this.Page_Loaded;
                 }
                 break;
-            case 4: // SettingsPage.xaml line 197
+            case 9: // SettingsPage.xaml line 197
                 {
                     this.SettingsLoadingControl = (global::SMPlayer.LoadingControl)(target);
                 }
                 break;
-            case 5: // SettingsPage.xaml line 122
+            case 10: // SettingsPage.xaml line 122
                 {
                     this.PathBox = (global::Windows.UI.Xaml.Controls.AutoSuggestBox)(target);
                     ((global::Windows.UI.Xaml.Controls.AutoSuggestBox)this.PathBox).QuerySubmitted += this.PathBox_QuerySubmitted;
                 }
                 break;
-            case 6: // SettingsPage.xaml line 137
+            case 11: // SettingsPage.xaml line 137
                 {
                     this.LanguageComboBox = (global::Windows.UI.Xaml.Controls.ComboBox)(target);
                 }
                 break;
-            case 7: // SettingsPage.xaml line 150
+            case 12: // SettingsPage.xaml line 150
                 {
                     this.NotificationComboBox = (global::Windows.UI.Xaml.Controls.ComboBox)(target);
                 }
                 break;
-            case 8: // SettingsPage.xaml line 174
+            case 13: // SettingsPage.xaml line 174
                 {
                     this.ThemeColorPicker = (global::Windows.UI.Xaml.Controls.ColorPicker)(target);
                 }
                 break;
-            case 9: // SettingsPage.xaml line 180
+            case 14: // SettingsPage.xaml line 180
                 {
                     this.ConfirmColorButton = (global::Windows.UI.Xaml.Controls.Button)(target);
                     ((global::Windows.UI.Xaml.Controls.Button)this.ConfirmColorButton).Click += this.ConfirmColorButton_Click;
                 }
                 break;
-            case 10: // SettingsPage.xaml line 185
+            case 15: // SettingsPage.xaml line 185
                 {
                     this.CancelColorButton = (global::Windows.UI.Xaml.Controls.Button)(target);
                 }
@@ -76,7 +76,7 @@ namespace SMPlayer
         /// <summary>
         /// GetBindingConnector(int connectionId, object target)
         /// </summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public global::Windows.UI.Xaml.Markup.IComponentConnector GetBindingConnector(int connectionId, object target)
         {

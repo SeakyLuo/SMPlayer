@@ -43,7 +43,7 @@
             },
             "Microsoft.NETCore.UniversalWindowsPlatform": {
               "target": "Package",
-              "version": "[6.2.8, )"
+              "version": "[6.2.9, )"
             },
             "Microsoft.Toolkit.Uwp.Notifications": {
               "target": "Package",
@@ -59,7 +59,11 @@
             },
             "Microsoft.UI.Xaml": {
               "target": "Package",
-              "version": "[2.1.190606001, )"
+              "version": "[2.2.190830001, )"
+            },
+            "Microsoft.UI.Xaml.Core.Direct": {
+              "target": "Package",
+              "version": "[2.0.190315001-prerelease, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",

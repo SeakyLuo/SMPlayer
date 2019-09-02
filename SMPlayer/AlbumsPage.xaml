@@ -44,6 +44,20 @@
                         Width="180"
                         Height="240"
                         Margin="10">
+                        <Grid.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Icon="Shuffle" Text="Shuffle" />
+                                <MenuFlyoutSubItem Text="Add To Playlist">
+                                    <MenuFlyoutItem Text="Now Playing">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC4F;" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutSeparator />
+                                    <MenuFlyoutItem Icon="Add" Text="New Playlist" />
+                                </MenuFlyoutSubItem>
+                            </MenuFlyout>
+                        </Grid.ContextFlyout>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />

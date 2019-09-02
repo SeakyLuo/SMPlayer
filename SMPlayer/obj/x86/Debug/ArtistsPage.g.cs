@@ -15,7 +15,7 @@ namespace SMPlayer
         global::Windows.UI.Xaml.Markup.IComponentConnector,
         global::Windows.UI.Xaml.Markup.IComponentConnector2
     {
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private static class XamlBindingSetters
         {
@@ -57,9 +57,9 @@ namespace SMPlayer
             }
         };
 
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        private class ArtistsPage_obj6_Bindings :
+        private class ArtistsPage_obj7_Bindings :
             global::Windows.UI.Xaml.IDataTemplateExtension,
             global::Windows.UI.Xaml.Markup.IDataTemplateComponent,
             global::Windows.UI.Xaml.Markup.IXamlBindScopeDiagnostics,
@@ -73,13 +73,13 @@ namespace SMPlayer
             private bool removedDataContextHandler = false;
 
             // Fields for each control that has bindings.
-            private global::System.WeakReference obj6;
-            private global::Windows.UI.Xaml.Controls.TextBlock obj7;
+            private global::System.WeakReference obj7;
+            private global::Windows.UI.Xaml.Controls.TextBlock obj8;
 
             // Static fields for each binding's enabled/disabled state
-            private static bool isobj7TextDisabled = false;
+            private static bool isobj8TextDisabled = false;
 
-            public ArtistsPage_obj6_Bindings()
+            public ArtistsPage_obj7_Bindings()
             {
             }
 
@@ -87,7 +87,7 @@ namespace SMPlayer
             {
                 if (lineNumber == 54 && columnNumber == 29)
                 {
-                    isobj7TextDisabled = true;
+                    isobj8TextDisabled = true;
                 }
             }
 
@@ -97,11 +97,11 @@ namespace SMPlayer
             {
                 switch(connectionId)
                 {
-                    case 6: // ArtistsPage.xaml line 43
-                        this.obj6 = new global::System.WeakReference((global::Windows.UI.Xaml.Controls.StackPanel)target);
+                    case 7: // ArtistsPage.xaml line 43
+                        this.obj7 = new global::System.WeakReference((global::Windows.UI.Xaml.Controls.StackPanel)target);
                         break;
-                    case 7: // ArtistsPage.xaml line 51
-                        this.obj7 = (global::Windows.UI.Xaml.Controls.TextBlock)target;
+                    case 8: // ArtistsPage.xaml line 51
+                        this.obj8 = (global::Windows.UI.Xaml.Controls.TextBlock)target;
                         break;
                     default:
                         break;
@@ -148,7 +148,7 @@ namespace SMPlayer
                         if (!removedDataContextHandler)
                         {
                             removedDataContextHandler = true;
-                            (this.obj6.Target as global::Windows.UI.Xaml.Controls.StackPanel).DataContextChanged -= this.DataContextChangedHandler;
+                            (this.obj7.Target as global::Windows.UI.Xaml.Controls.StackPanel).DataContextChanged -= this.DataContextChangedHandler;
                         }
                         this.initialized = true;
                         break;
@@ -211,17 +211,17 @@ namespace SMPlayer
                 if ((phase & ((1 << 0) | NOT_PHASED )) != 0)
                 {
                     // ArtistsPage.xaml line 51
-                    if (!isobj7TextDisabled)
+                    if (!isobj8TextDisabled)
                     {
-                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj7, obj, null);
+                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj8, obj, null);
                     }
                 }
             }
         }
 
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        private class ArtistsPage_obj12_Bindings :
+        private class ArtistsPage_obj16_Bindings :
             global::Windows.UI.Xaml.IDataTemplateExtension,
             global::Windows.UI.Xaml.Markup.IDataTemplateComponent,
             global::Windows.UI.Xaml.Markup.IXamlBindScopeDiagnostics,
@@ -237,46 +237,46 @@ namespace SMPlayer
             private bool removedDataContextHandler = false;
 
             // Fields for each control that has bindings.
-            private global::System.WeakReference obj12;
-            private global::Windows.UI.Xaml.Controls.TextBlock obj14;
-            private global::Windows.UI.Xaml.Controls.FontIcon obj15;
-            private global::Windows.UI.Xaml.Controls.TextBlock obj16;
+            private global::System.WeakReference obj16;
+            private global::Windows.UI.Xaml.Controls.TextBlock obj22;
+            private global::Windows.UI.Xaml.Controls.FontIcon obj23;
+            private global::Windows.UI.Xaml.Controls.TextBlock obj24;
 
             // Static fields for each binding's enabled/disabled state
-            private static bool isobj14ForegroundDisabled = false;
-            private static bool isobj14TextDisabled = false;
-            private static bool isobj15VisibilityDisabled = false;
-            private static bool isobj16ForegroundDisabled = false;
-            private static bool isobj16TextDisabled = false;
+            private static bool isobj22ForegroundDisabled = false;
+            private static bool isobj22TextDisabled = false;
+            private static bool isobj23VisibilityDisabled = false;
+            private static bool isobj24ForegroundDisabled = false;
+            private static bool isobj24TextDisabled = false;
 
-            private ArtistsPage_obj12_BindingsTracking bindingsTracking;
+            private ArtistsPage_obj16_BindingsTracking bindingsTracking;
 
-            public ArtistsPage_obj12_Bindings()
+            public ArtistsPage_obj16_Bindings()
             {
-                this.bindingsTracking = new ArtistsPage_obj12_BindingsTracking(this);
+                this.bindingsTracking = new ArtistsPage_obj16_BindingsTracking(this);
             }
 
             public void Disable(int lineNumber, int columnNumber)
             {
                 if (lineNumber == 231 && columnNumber == 61)
                 {
-                    isobj14ForegroundDisabled = true;
+                    isobj22ForegroundDisabled = true;
                 }
                 else if (lineNumber == 232 && columnNumber == 61)
                 {
-                    isobj14TextDisabled = true;
+                    isobj22TextDisabled = true;
                 }
                 else if (lineNumber == 221 && columnNumber == 65)
                 {
-                    isobj15VisibilityDisabled = true;
+                    isobj23VisibilityDisabled = true;
                 }
                 else if (lineNumber == 225 && columnNumber == 65)
                 {
-                    isobj16ForegroundDisabled = true;
+                    isobj24ForegroundDisabled = true;
                 }
                 else if (lineNumber == 226 && columnNumber == 65)
                 {
-                    isobj16TextDisabled = true;
+                    isobj24TextDisabled = true;
                 }
             }
 
@@ -286,17 +286,17 @@ namespace SMPlayer
             {
                 switch(connectionId)
                 {
-                    case 12: // ArtistsPage.xaml line 182
-                        this.obj12 = new global::System.WeakReference((global::Windows.UI.Xaml.Controls.Grid)target);
+                    case 16: // ArtistsPage.xaml line 182
+                        this.obj16 = new global::System.WeakReference((global::Windows.UI.Xaml.Controls.Grid)target);
                         break;
-                    case 14: // ArtistsPage.xaml line 228
-                        this.obj14 = (global::Windows.UI.Xaml.Controls.TextBlock)target;
+                    case 22: // ArtistsPage.xaml line 228
+                        this.obj22 = (global::Windows.UI.Xaml.Controls.TextBlock)target;
                         break;
-                    case 15: // ArtistsPage.xaml line 214
-                        this.obj15 = (global::Windows.UI.Xaml.Controls.FontIcon)target;
+                    case 23: // ArtistsPage.xaml line 214
+                        this.obj23 = (global::Windows.UI.Xaml.Controls.FontIcon)target;
                         break;
-                    case 16: // ArtistsPage.xaml line 222
-                        this.obj16 = (global::Windows.UI.Xaml.Controls.TextBlock)target;
+                    case 24: // ArtistsPage.xaml line 222
+                        this.obj24 = (global::Windows.UI.Xaml.Controls.TextBlock)target;
                         break;
                     default:
                         break;
@@ -343,7 +343,7 @@ namespace SMPlayer
                         if (!removedDataContextHandler)
                         {
                             removedDataContextHandler = true;
-                            (this.obj12.Target as global::Windows.UI.Xaml.Controls.Grid).DataContextChanged -= this.DataContextChangedHandler;
+                            (this.obj16.Target as global::Windows.UI.Xaml.Controls.Grid).DataContextChanged -= this.DataContextChangedHandler;
                         }
                         this.initialized = true;
                         break;
@@ -432,19 +432,19 @@ namespace SMPlayer
                 if ((phase & ((1 << 0) | NOT_PHASED | DATA_CHANGED)) != 0)
                 {
                     // ArtistsPage.xaml line 228
-                    if (!isobj14ForegroundDisabled)
+                    if (!isobj22ForegroundDisabled)
                     {
-                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Foreground(this.obj14, (global::Windows.UI.Xaml.Media.Brush)this.LookupConverter("RowColorConverter").Convert(obj, typeof(global::Windows.UI.Xaml.Media.Brush), null, null), null);
+                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Foreground(this.obj22, (global::Windows.UI.Xaml.Media.Brush)this.LookupConverter("RowColorConverter").Convert(obj, typeof(global::Windows.UI.Xaml.Media.Brush), null, null), null);
                     }
                     // ArtistsPage.xaml line 214
-                    if (!isobj15VisibilityDisabled)
+                    if (!isobj23VisibilityDisabled)
                     {
-                        XamlBindingSetters.Set_Windows_UI_Xaml_UIElement_Visibility(this.obj15, (global::Windows.UI.Xaml.Visibility)this.LookupConverter("MusicVisibilityConverter").Convert(obj, typeof(global::Windows.UI.Xaml.Visibility), null, null));
+                        XamlBindingSetters.Set_Windows_UI_Xaml_UIElement_Visibility(this.obj23, (global::Windows.UI.Xaml.Visibility)this.LookupConverter("MusicVisibilityConverter").Convert(obj, typeof(global::Windows.UI.Xaml.Visibility), null, null));
                     }
                     // ArtistsPage.xaml line 222
-                    if (!isobj16ForegroundDisabled)
+                    if (!isobj24ForegroundDisabled)
                     {
-                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Foreground(this.obj16, (global::Windows.UI.Xaml.Media.Brush)this.LookupConverter("RowColorConverter").Convert(obj, typeof(global::Windows.UI.Xaml.Media.Brush), null, null), null);
+                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Foreground(this.obj24, (global::Windows.UI.Xaml.Media.Brush)this.LookupConverter("RowColorConverter").Convert(obj, typeof(global::Windows.UI.Xaml.Media.Brush), null, null), null);
                     }
                 }
             }
@@ -453,9 +453,9 @@ namespace SMPlayer
                 if ((phase & ((1 << 0) | NOT_PHASED )) != 0)
                 {
                     // ArtistsPage.xaml line 228
-                    if (!isobj14TextDisabled)
+                    if (!isobj22TextDisabled)
                     {
-                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj14, (global::System.String)this.LookupConverter("MusicDurationConverter").Convert(obj, typeof(global::System.String), null, null), null);
+                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj22, (global::System.String)this.LookupConverter("MusicDurationConverter").Convert(obj, typeof(global::System.String), null, null), null);
                     }
                 }
             }
@@ -464,27 +464,27 @@ namespace SMPlayer
                 if ((phase & ((1 << 0) | NOT_PHASED )) != 0)
                 {
                     // ArtistsPage.xaml line 222
-                    if (!isobj16TextDisabled)
+                    if (!isobj24TextDisabled)
                     {
-                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj16, obj, null);
+                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj24, obj, null);
                     }
                 }
             }
 
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            private class ArtistsPage_obj12_BindingsTracking
+            private class ArtistsPage_obj16_BindingsTracking
             {
-                private global::System.WeakReference<ArtistsPage_obj12_Bindings> weakRefToBindingObj; 
+                private global::System.WeakReference<ArtistsPage_obj16_Bindings> weakRefToBindingObj; 
 
-                public ArtistsPage_obj12_BindingsTracking(ArtistsPage_obj12_Bindings obj)
+                public ArtistsPage_obj16_BindingsTracking(ArtistsPage_obj16_Bindings obj)
                 {
-                    weakRefToBindingObj = new global::System.WeakReference<ArtistsPage_obj12_Bindings>(obj);
+                    weakRefToBindingObj = new global::System.WeakReference<ArtistsPage_obj16_Bindings>(obj);
                 }
 
-                public ArtistsPage_obj12_Bindings TryGetBindingObject()
+                public ArtistsPage_obj16_Bindings TryGetBindingObject()
                 {
-                    ArtistsPage_obj12_Bindings bindingObject = null;
+                    ArtistsPage_obj16_Bindings bindingObject = null;
                     if (weakRefToBindingObj != null)
                     {
                         weakRefToBindingObj.TryGetTarget(out bindingObject);
@@ -504,7 +504,7 @@ namespace SMPlayer
 
                 public void PropertyChanged_(object sender, global::System.ComponentModel.PropertyChangedEventArgs e)
                 {
-                    ArtistsPage_obj12_Bindings bindings = TryGetBindingObject();
+                    ArtistsPage_obj16_Bindings bindings = TryGetBindingObject();
                     if (bindings != null)
                     {
                         string propName = e.PropertyName;
@@ -536,7 +536,7 @@ namespace SMPlayer
                 }
                 public void UpdateChildListeners_(global::SMPlayer.Models.Music obj)
                 {
-                    ArtistsPage_obj12_Bindings bindings = TryGetBindingObject();
+                    ArtistsPage_obj16_Bindings bindings = TryGetBindingObject();
                     if (bindings != null)
                     {
                         if (bindings.dataRoot != null)
@@ -553,9 +553,9 @@ namespace SMPlayer
             }
         }
 
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        private class ArtistsPage_obj10_Bindings :
+        private class ArtistsPage_obj13_Bindings :
             global::Windows.UI.Xaml.IDataTemplateExtension,
             global::Windows.UI.Xaml.Markup.IDataTemplateComponent,
             global::Windows.UI.Xaml.Markup.IXamlBindScopeDiagnostics,
@@ -571,42 +571,42 @@ namespace SMPlayer
             private bool removedDataContextHandler = false;
 
             // Fields for each control that has bindings.
-            private global::System.WeakReference obj10;
-            private global::Windows.UI.Xaml.Controls.ListView obj11;
-            private global::Microsoft.Toolkit.Uwp.UI.Controls.ImageEx obj17;
-            private global::Windows.UI.Xaml.Controls.TextBlock obj18;
-            private global::Windows.UI.Xaml.Controls.TextBlock obj19;
+            private global::System.WeakReference obj13;
+            private global::Windows.UI.Xaml.Controls.ListView obj14;
+            private global::Microsoft.Toolkit.Uwp.UI.Controls.ImageEx obj25;
+            private global::Windows.UI.Xaml.Controls.TextBlock obj27;
+            private global::Windows.UI.Xaml.Controls.TextBlock obj28;
 
             // Static fields for each binding's enabled/disabled state
-            private static bool isobj11ItemsSourceDisabled = false;
-            private static bool isobj17SourceDisabled = false;
-            private static bool isobj18TextDisabled = false;
-            private static bool isobj19TextDisabled = false;
+            private static bool isobj14ItemsSourceDisabled = false;
+            private static bool isobj25SourceDisabled = false;
+            private static bool isobj27TextDisabled = false;
+            private static bool isobj28TextDisabled = false;
 
-            private ArtistsPage_obj10_BindingsTracking bindingsTracking;
+            private ArtistsPage_obj13_BindingsTracking bindingsTracking;
 
-            public ArtistsPage_obj10_Bindings()
+            public ArtistsPage_obj13_Bindings()
             {
-                this.bindingsTracking = new ArtistsPage_obj10_BindingsTracking(this);
+                this.bindingsTracking = new ArtistsPage_obj13_BindingsTracking(this);
             }
 
             public void Disable(int lineNumber, int columnNumber)
             {
                 if (lineNumber == 173 && columnNumber == 45)
                 {
-                    isobj11ItemsSourceDisabled = true;
+                    isobj14ItemsSourceDisabled = true;
                 }
                 else if (lineNumber == 134 && columnNumber == 49)
                 {
-                    isobj17SourceDisabled = true;
+                    isobj25SourceDisabled = true;
                 }
                 else if (lineNumber == 144 && columnNumber == 53)
                 {
-                    isobj18TextDisabled = true;
+                    isobj27TextDisabled = true;
                 }
                 else if (lineNumber == 148 && columnNumber == 53)
                 {
-                    isobj19TextDisabled = true;
+                    isobj28TextDisabled = true;
                 }
             }
 
@@ -616,20 +616,20 @@ namespace SMPlayer
             {
                 switch(connectionId)
                 {
-                    case 10: // ArtistsPage.xaml line 119
-                        this.obj10 = new global::System.WeakReference((global::Windows.UI.Xaml.Controls.Grid)target);
+                    case 13: // ArtistsPage.xaml line 119
+                        this.obj13 = new global::System.WeakReference((global::Windows.UI.Xaml.Controls.Grid)target);
                         break;
-                    case 11: // ArtistsPage.xaml line 167
-                        this.obj11 = (global::Windows.UI.Xaml.Controls.ListView)target;
+                    case 14: // ArtistsPage.xaml line 167
+                        this.obj14 = (global::Windows.UI.Xaml.Controls.ListView)target;
                         break;
-                    case 17: // ArtistsPage.xaml line 128
-                        this.obj17 = (global::Microsoft.Toolkit.Uwp.UI.Controls.ImageEx)target;
+                    case 25: // ArtistsPage.xaml line 128
+                        this.obj25 = (global::Microsoft.Toolkit.Uwp.UI.Controls.ImageEx)target;
                         break;
-                    case 18: // ArtistsPage.xaml line 140
-                        this.obj18 = (global::Windows.UI.Xaml.Controls.TextBlock)target;
+                    case 27: // ArtistsPage.xaml line 140
+                        this.obj27 = (global::Windows.UI.Xaml.Controls.TextBlock)target;
                         break;
-                    case 19: // ArtistsPage.xaml line 145
-                        this.obj19 = (global::Windows.UI.Xaml.Controls.TextBlock)target;
+                    case 28: // ArtistsPage.xaml line 145
+                        this.obj28 = (global::Windows.UI.Xaml.Controls.TextBlock)target;
                         break;
                     default:
                         break;
@@ -676,7 +676,7 @@ namespace SMPlayer
                         if (!removedDataContextHandler)
                         {
                             removedDataContextHandler = true;
-                            (this.obj10.Target as global::Windows.UI.Xaml.Controls.Grid).DataContextChanged -= this.DataContextChangedHandler;
+                            (this.obj13.Target as global::Windows.UI.Xaml.Controls.Grid).DataContextChanged -= this.DataContextChangedHandler;
                         }
                         this.initialized = true;
                         break;
@@ -765,17 +765,17 @@ namespace SMPlayer
                 if ((phase & ((1 << 0) | NOT_PHASED | DATA_CHANGED)) != 0)
                 {
                     // ArtistsPage.xaml line 167
-                    if (!isobj11ItemsSourceDisabled)
+                    if (!isobj14ItemsSourceDisabled)
                     {
-                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_ItemsControl_ItemsSource(this.obj11, obj, null);
+                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_ItemsControl_ItemsSource(this.obj14, obj, null);
                     }
                 }
                 if ((phase & ((1 << 0) | NOT_PHASED )) != 0)
                 {
                     // ArtistsPage.xaml line 145
-                    if (!isobj19TextDisabled)
+                    if (!isobj28TextDisabled)
                     {
-                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj19, (global::System.String)this.LookupConverter("SongCountConverter").Convert(obj, typeof(global::System.String), null, null), null);
+                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj28, (global::System.String)this.LookupConverter("SongCountConverter").Convert(obj, typeof(global::System.String), null, null), null);
                     }
                 }
             }
@@ -784,9 +784,9 @@ namespace SMPlayer
                 if ((phase & ((1 << 0) | NOT_PHASED )) != 0)
                 {
                     // ArtistsPage.xaml line 128
-                    if (!isobj17SourceDisabled)
+                    if (!isobj25SourceDisabled)
                     {
-                        XamlBindingSetters.Set_Microsoft_Toolkit_Uwp_UI_Controls_ImageExBase_Source(this.obj17, obj, null);
+                        XamlBindingSetters.Set_Microsoft_Toolkit_Uwp_UI_Controls_ImageExBase_Source(this.obj25, obj, null);
                     }
                 }
             }
@@ -795,27 +795,27 @@ namespace SMPlayer
                 if ((phase & ((1 << 0) | NOT_PHASED )) != 0)
                 {
                     // ArtistsPage.xaml line 140
-                    if (!isobj18TextDisabled)
+                    if (!isobj27TextDisabled)
                     {
-                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj18, obj, null);
+                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj27, obj, null);
                     }
                 }
             }
 
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            private class ArtistsPage_obj10_BindingsTracking
+            private class ArtistsPage_obj13_BindingsTracking
             {
-                private global::System.WeakReference<ArtistsPage_obj10_Bindings> weakRefToBindingObj; 
+                private global::System.WeakReference<ArtistsPage_obj13_Bindings> weakRefToBindingObj; 
 
-                public ArtistsPage_obj10_BindingsTracking(ArtistsPage_obj10_Bindings obj)
+                public ArtistsPage_obj13_BindingsTracking(ArtistsPage_obj13_Bindings obj)
                 {
-                    weakRefToBindingObj = new global::System.WeakReference<ArtistsPage_obj10_Bindings>(obj);
+                    weakRefToBindingObj = new global::System.WeakReference<ArtistsPage_obj13_Bindings>(obj);
                 }
 
-                public ArtistsPage_obj10_Bindings TryGetBindingObject()
+                public ArtistsPage_obj13_Bindings TryGetBindingObject()
                 {
-                    ArtistsPage_obj10_Bindings bindingObject = null;
+                    ArtistsPage_obj13_Bindings bindingObject = null;
                     if (weakRefToBindingObj != null)
                     {
                         weakRefToBindingObj.TryGetTarget(out bindingObject);
@@ -835,7 +835,7 @@ namespace SMPlayer
 
                 public void PropertyChanged_Songs(object sender, global::System.ComponentModel.PropertyChangedEventArgs e)
                 {
-                    ArtistsPage_obj10_Bindings bindings = TryGetBindingObject();
+                    ArtistsPage_obj13_Bindings bindings = TryGetBindingObject();
                     if (bindings != null)
                     {
                         string propName = e.PropertyName;
@@ -855,7 +855,7 @@ namespace SMPlayer
                 }
                 public void CollectionChanged_Songs(object sender, global::System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
                 {
-                    ArtistsPage_obj10_Bindings bindings = TryGetBindingObject();
+                    ArtistsPage_obj13_Bindings bindings = TryGetBindingObject();
                     if (bindings != null)
                     {
                         global::System.Collections.ObjectModel.ObservableCollection<global::SMPlayer.Models.Music> obj = sender as global::System.Collections.ObjectModel.ObservableCollection<global::SMPlayer.Models.Music>;
@@ -883,9 +883,9 @@ namespace SMPlayer
             }
         }
 
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        private class ArtistsPage_obj8_Bindings :
+        private class ArtistsPage_obj10_Bindings :
             global::Windows.UI.Xaml.IDataTemplateExtension,
             global::Windows.UI.Xaml.Markup.IDataTemplateComponent,
             global::Windows.UI.Xaml.Markup.IXamlBindScopeDiagnostics,
@@ -901,36 +901,36 @@ namespace SMPlayer
             private bool removedDataContextHandler = false;
 
             // Fields for each control that has bindings.
-            private global::System.WeakReference obj8;
-            private global::Windows.UI.Xaml.Controls.ListView obj9;
-            private global::Windows.UI.Xaml.Controls.TextBlock obj20;
-            private global::Windows.UI.Xaml.Controls.TextBlock obj21;
+            private global::System.WeakReference obj10;
+            private global::Windows.UI.Xaml.Controls.ListView obj11;
+            private global::Windows.UI.Xaml.Controls.TextBlock obj29;
+            private global::Windows.UI.Xaml.Controls.TextBlock obj30;
 
             // Static fields for each binding's enabled/disabled state
-            private static bool isobj9ItemsSourceDisabled = false;
-            private static bool isobj20TextDisabled = false;
-            private static bool isobj21TextDisabled = false;
+            private static bool isobj11ItemsSourceDisabled = false;
+            private static bool isobj29TextDisabled = false;
+            private static bool isobj30TextDisabled = false;
 
-            private ArtistsPage_obj8_BindingsTracking bindingsTracking;
+            private ArtistsPage_obj10_BindingsTracking bindingsTracking;
 
-            public ArtistsPage_obj8_Bindings()
+            public ArtistsPage_obj10_Bindings()
             {
-                this.bindingsTracking = new ArtistsPage_obj8_BindingsTracking(this);
+                this.bindingsTracking = new ArtistsPage_obj10_BindingsTracking(this);
             }
 
             public void Disable(int lineNumber, int columnNumber)
             {
                 if (lineNumber == 110 && columnNumber == 29)
                 {
-                    isobj9ItemsSourceDisabled = true;
+                    isobj11ItemsSourceDisabled = true;
                 }
                 else if (lineNumber == 78 && columnNumber == 37)
                 {
-                    isobj20TextDisabled = true;
+                    isobj29TextDisabled = true;
                 }
                 else if (lineNumber == 82 && columnNumber == 37)
                 {
-                    isobj21TextDisabled = true;
+                    isobj30TextDisabled = true;
                 }
             }
 
@@ -940,17 +940,17 @@ namespace SMPlayer
             {
                 switch(connectionId)
                 {
-                    case 8: // ArtistsPage.xaml line 61
-                        this.obj8 = new global::System.WeakReference((global::Windows.UI.Xaml.Controls.Grid)target);
+                    case 10: // ArtistsPage.xaml line 61
+                        this.obj10 = new global::System.WeakReference((global::Windows.UI.Xaml.Controls.Grid)target);
                         break;
-                    case 9: // ArtistsPage.xaml line 106
-                        this.obj9 = (global::Windows.UI.Xaml.Controls.ListView)target;
+                    case 11: // ArtistsPage.xaml line 106
+                        this.obj11 = (global::Windows.UI.Xaml.Controls.ListView)target;
                         break;
-                    case 20: // ArtistsPage.xaml line 74
-                        this.obj20 = (global::Windows.UI.Xaml.Controls.TextBlock)target;
+                    case 29: // ArtistsPage.xaml line 74
+                        this.obj29 = (global::Windows.UI.Xaml.Controls.TextBlock)target;
                         break;
-                    case 21: // ArtistsPage.xaml line 79
-                        this.obj21 = (global::Windows.UI.Xaml.Controls.TextBlock)target;
+                    case 30: // ArtistsPage.xaml line 79
+                        this.obj30 = (global::Windows.UI.Xaml.Controls.TextBlock)target;
                         break;
                     default:
                         break;
@@ -997,7 +997,7 @@ namespace SMPlayer
                         if (!removedDataContextHandler)
                         {
                             removedDataContextHandler = true;
-                            (this.obj8.Target as global::Windows.UI.Xaml.Controls.Grid).DataContextChanged -= this.DataContextChangedHandler;
+                            (this.obj10.Target as global::Windows.UI.Xaml.Controls.Grid).DataContextChanged -= this.DataContextChangedHandler;
                         }
                         this.initialized = true;
                         break;
@@ -1085,17 +1085,17 @@ namespace SMPlayer
                 if ((phase & ((1 << 0) | NOT_PHASED | DATA_CHANGED)) != 0)
                 {
                     // ArtistsPage.xaml line 106
-                    if (!isobj9ItemsSourceDisabled)
+                    if (!isobj11ItemsSourceDisabled)
                     {
-                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_ItemsControl_ItemsSource(this.obj9, obj, null);
+                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_ItemsControl_ItemsSource(this.obj11, obj, null);
                     }
                 }
                 if ((phase & ((1 << 0) | NOT_PHASED )) != 0)
                 {
                     // ArtistsPage.xaml line 79
-                    if (!isobj21TextDisabled)
+                    if (!isobj30TextDisabled)
                     {
-                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj21, (global::System.String)this.LookupConverter("ArtistAlbumInfoConverter").Convert(obj, typeof(global::System.String), null, null), null);
+                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj30, (global::System.String)this.LookupConverter("ArtistAlbumInfoConverter").Convert(obj, typeof(global::System.String), null, null), null);
                     }
                 }
             }
@@ -1104,27 +1104,27 @@ namespace SMPlayer
                 if ((phase & ((1 << 0) | NOT_PHASED )) != 0)
                 {
                     // ArtistsPage.xaml line 74
-                    if (!isobj20TextDisabled)
+                    if (!isobj29TextDisabled)
                     {
-                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj20, obj, null);
+                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj29, obj, null);
                     }
                 }
             }
 
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            private class ArtistsPage_obj8_BindingsTracking
+            private class ArtistsPage_obj10_BindingsTracking
             {
-                private global::System.WeakReference<ArtistsPage_obj8_Bindings> weakRefToBindingObj; 
+                private global::System.WeakReference<ArtistsPage_obj10_Bindings> weakRefToBindingObj; 
 
-                public ArtistsPage_obj8_BindingsTracking(ArtistsPage_obj8_Bindings obj)
+                public ArtistsPage_obj10_BindingsTracking(ArtistsPage_obj10_Bindings obj)
                 {
-                    weakRefToBindingObj = new global::System.WeakReference<ArtistsPage_obj8_Bindings>(obj);
+                    weakRefToBindingObj = new global::System.WeakReference<ArtistsPage_obj10_Bindings>(obj);
                 }
 
-                public ArtistsPage_obj8_Bindings TryGetBindingObject()
+                public ArtistsPage_obj10_Bindings TryGetBindingObject()
                 {
-                    ArtistsPage_obj8_Bindings bindingObject = null;
+                    ArtistsPage_obj10_Bindings bindingObject = null;
                     if (weakRefToBindingObj != null)
                     {
                         weakRefToBindingObj.TryGetTarget(out bindingObject);
@@ -1144,7 +1144,7 @@ namespace SMPlayer
 
                 public void PropertyChanged_Albums(object sender, global::System.ComponentModel.PropertyChangedEventArgs e)
                 {
-                    ArtistsPage_obj8_Bindings bindings = TryGetBindingObject();
+                    ArtistsPage_obj10_Bindings bindings = TryGetBindingObject();
                     if (bindings != null)
                     {
                         string propName = e.PropertyName;
@@ -1164,7 +1164,7 @@ namespace SMPlayer
                 }
                 public void CollectionChanged_Albums(object sender, global::System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
                 {
-                    ArtistsPage_obj8_Bindings bindings = TryGetBindingObject();
+                    ArtistsPage_obj10_Bindings bindings = TryGetBindingObject();
                     if (bindings != null)
                     {
                         global::System.Collections.ObjectModel.ObservableCollection<global::SMPlayer.Models.AlbumView> obj = sender as global::System.Collections.ObjectModel.ObservableCollection<global::SMPlayer.Models.AlbumView>;
@@ -1192,7 +1192,7 @@ namespace SMPlayer
             }
         }
 
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private class ArtistsPage_obj1_Bindings :
             global::Windows.UI.Xaml.Markup.IDataTemplateComponent,
@@ -1244,12 +1244,12 @@ namespace SMPlayer
 
             public void ProcessBindings(global::System.Object item, int itemIndex, int phase, out int nextPhase)
             {
-                throw new global::System.NotImplementedException();
+                nextPhase = -1;
             }
 
             public void Recycle()
             {
-                throw new global::System.NotImplementedException();
+                return;
             }
 
             // IArtistsPage_Bindings
@@ -1319,7 +1319,7 @@ namespace SMPlayer
                 }
             }
 
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             private class ArtistsPage_obj1_BindingsTracking
             {
@@ -1402,7 +1402,7 @@ namespace SMPlayer
         /// <summary>
         /// Connect()
         /// </summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public void Connect(int connectionId, object target)
         {
@@ -1428,17 +1428,17 @@ namespace SMPlayer
                     this.ArtistProgressBar = (global::Windows.UI.Xaml.Controls.ProgressBar)(target);
                 }
                 break;
-            case 11: // ArtistsPage.xaml line 167
+            case 14: // ArtistsPage.xaml line 167
                 {
-                    global::Windows.UI.Xaml.Controls.ListView element11 = (global::Windows.UI.Xaml.Controls.ListView)(target);
-                    ((global::Windows.UI.Xaml.Controls.ListView)element11).ContainerContentChanging += this.SongsListView_ContainerContentChanging;
-                    ((global::Windows.UI.Xaml.Controls.ListView)element11).ItemClick += this.SongsListView_ItemClick;
+                    global::Windows.UI.Xaml.Controls.ListView element14 = (global::Windows.UI.Xaml.Controls.ListView)(target);
+                    ((global::Windows.UI.Xaml.Controls.ListView)element14).ContainerContentChanging += this.SongsListView_ContainerContentChanging;
+                    ((global::Windows.UI.Xaml.Controls.ListView)element14).ItemClick += this.SongsListView_ItemClick;
                 }
                 break;
-            case 13: // ArtistsPage.xaml line 190
+            case 17: // ArtistsPage.xaml line 190
                 {
-                    global::Windows.UI.Xaml.Controls.MenuFlyoutItem element13 = (global::Windows.UI.Xaml.Controls.MenuFlyoutItem)(target);
-                    ((global::Windows.UI.Xaml.Controls.MenuFlyoutItem)element13).Click += this.PlayItem_Click;
+                    global::Windows.UI.Xaml.Controls.MenuFlyoutItem element17 = (global::Windows.UI.Xaml.Controls.MenuFlyoutItem)(target);
+                    ((global::Windows.UI.Xaml.Controls.MenuFlyoutItem)element17).Click += this.PlayItem_Click;
                 }
                 break;
             default:
@@ -1450,7 +1450,7 @@ namespace SMPlayer
         /// <summary>
         /// GetBindingConnector(int connectionId, object target)
         /// </summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public global::Windows.UI.Xaml.Markup.IComponentConnector GetBindingConnector(int connectionId, object target)
         {
@@ -1468,30 +1468,18 @@ namespace SMPlayer
                     global::Windows.UI.Xaml.Markup.XamlBindingHelper.SetDataTemplateComponent(element1, bindings);
                 }
                 break;
-            case 6: // ArtistsPage.xaml line 43
+            case 7: // ArtistsPage.xaml line 43
                 {                    
-                    global::Windows.UI.Xaml.Controls.StackPanel element6 = (global::Windows.UI.Xaml.Controls.StackPanel)target;
-                    ArtistsPage_obj6_Bindings bindings = new ArtistsPage_obj6_Bindings();
+                    global::Windows.UI.Xaml.Controls.StackPanel element7 = (global::Windows.UI.Xaml.Controls.StackPanel)target;
+                    ArtistsPage_obj7_Bindings bindings = new ArtistsPage_obj7_Bindings();
                     returnValue = bindings;
-                    bindings.SetDataRoot(element6.DataContext);
-                    element6.DataContextChanged += bindings.DataContextChangedHandler;
-                    global::Windows.UI.Xaml.DataTemplate.SetExtensionInstance(element6, bindings);
-                    global::Windows.UI.Xaml.Markup.XamlBindingHelper.SetDataTemplateComponent(element6, bindings);
+                    bindings.SetDataRoot(element7.DataContext);
+                    element7.DataContextChanged += bindings.DataContextChangedHandler;
+                    global::Windows.UI.Xaml.DataTemplate.SetExtensionInstance(element7, bindings);
+                    global::Windows.UI.Xaml.Markup.XamlBindingHelper.SetDataTemplateComponent(element7, bindings);
                 }
                 break;
-            case 8: // ArtistsPage.xaml line 61
-                {                    
-                    global::Windows.UI.Xaml.Controls.Grid element8 = (global::Windows.UI.Xaml.Controls.Grid)target;
-                    ArtistsPage_obj8_Bindings bindings = new ArtistsPage_obj8_Bindings();
-                    returnValue = bindings;
-                    bindings.SetDataRoot(element8.DataContext);
-                    bindings.SetConverterLookupRoot(this);
-                    element8.DataContextChanged += bindings.DataContextChangedHandler;
-                    global::Windows.UI.Xaml.DataTemplate.SetExtensionInstance(element8, bindings);
-                    global::Windows.UI.Xaml.Markup.XamlBindingHelper.SetDataTemplateComponent(element8, bindings);
-                }
-                break;
-            case 10: // ArtistsPage.xaml line 119
+            case 10: // ArtistsPage.xaml line 61
                 {                    
                     global::Windows.UI.Xaml.Controls.Grid element10 = (global::Windows.UI.Xaml.Controls.Grid)target;
                     ArtistsPage_obj10_Bindings bindings = new ArtistsPage_obj10_Bindings();
@@ -1503,16 +1491,28 @@ namespace SMPlayer
                     global::Windows.UI.Xaml.Markup.XamlBindingHelper.SetDataTemplateComponent(element10, bindings);
                 }
                 break;
-            case 12: // ArtistsPage.xaml line 182
+            case 13: // ArtistsPage.xaml line 119
                 {                    
-                    global::Windows.UI.Xaml.Controls.Grid element12 = (global::Windows.UI.Xaml.Controls.Grid)target;
-                    ArtistsPage_obj12_Bindings bindings = new ArtistsPage_obj12_Bindings();
+                    global::Windows.UI.Xaml.Controls.Grid element13 = (global::Windows.UI.Xaml.Controls.Grid)target;
+                    ArtistsPage_obj13_Bindings bindings = new ArtistsPage_obj13_Bindings();
                     returnValue = bindings;
-                    bindings.SetDataRoot(element12.DataContext);
+                    bindings.SetDataRoot(element13.DataContext);
                     bindings.SetConverterLookupRoot(this);
-                    element12.DataContextChanged += bindings.DataContextChangedHandler;
-                    global::Windows.UI.Xaml.DataTemplate.SetExtensionInstance(element12, bindings);
-                    global::Windows.UI.Xaml.Markup.XamlBindingHelper.SetDataTemplateComponent(element12, bindings);
+                    element13.DataContextChanged += bindings.DataContextChangedHandler;
+                    global::Windows.UI.Xaml.DataTemplate.SetExtensionInstance(element13, bindings);
+                    global::Windows.UI.Xaml.Markup.XamlBindingHelper.SetDataTemplateComponent(element13, bindings);
+                }
+                break;
+            case 16: // ArtistsPage.xaml line 182
+                {                    
+                    global::Windows.UI.Xaml.Controls.Grid element16 = (global::Windows.UI.Xaml.Controls.Grid)target;
+                    ArtistsPage_obj16_Bindings bindings = new ArtistsPage_obj16_Bindings();
+                    returnValue = bindings;
+                    bindings.SetDataRoot(element16.DataContext);
+                    bindings.SetConverterLookupRoot(this);
+                    element16.DataContextChanged += bindings.DataContextChangedHandler;
+                    global::Windows.UI.Xaml.DataTemplate.SetExtensionInstance(element16, bindings);
+                    global::Windows.UI.Xaml.Markup.XamlBindingHelper.SetDataTemplateComponent(element16, bindings);
                 }
                 break;
             }

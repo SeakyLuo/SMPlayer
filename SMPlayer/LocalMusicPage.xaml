@@ -31,6 +31,11 @@
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:GridMusicView">
                     <Grid Margin="5">
+                        <Grid.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Icon="Delete" Text="Delete From Disk" />
+                            </MenuFlyout>
+                        </Grid.ContextFlyout>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
@@ -45,12 +50,11 @@
                             OffsetY="2"
                             ShadowOpacity="0"
                             Color="Gray">
-                            <controls:ImageEx
+                            <Image
                                 Width="100"
                                 Height="100"
                                 Margin="0,0,5,0"
-                                Source="{x:Bind Thumbnail}"
-                                Style="{StaticResource CachedImageStyle}" />
+                                Source="{x:Bind Thumbnail}" />
                         </controls:DropShadowPanel>
                         <Grid Grid.Column="1">
                             <Grid.RowDefinitions>

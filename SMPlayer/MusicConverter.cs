@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace SMPlayer
 {
@@ -189,19 +190,6 @@ namespace SMPlayer
                 return string.Format("Songs: {0}   {1}", list.Count(), MusicDurationConverter.ToTime(list));
             }
             return "";
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            return null;
-        }
-    }
-
-    class JoinConverter : Windows.UI.Xaml.Data.IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            return value is IEnumerable<string> ? string.Join(", ", (IEnumerable<string>)value) : "";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

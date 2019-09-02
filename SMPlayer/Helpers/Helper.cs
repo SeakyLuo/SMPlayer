@@ -14,6 +14,7 @@ using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -42,6 +43,41 @@ namespace SMPlayer
         public static SolidColorBrush BlackBrush = new SolidColorBrush(Colors.Black);
         private static string Lyrics = "";
         public static SolidColorBrush GetHighlightBrush() { return new SolidColorBrush(Settings.settings.ThemeColor); }
+
+        public static MenuFlyout GetAddToPlaylistFlyout()
+        {
+            MenuFlyout flyout = new MenuFlyout();
+            flyout.Items.Add(new MenuFlyoutItem()
+            {
+                Icon = new FontIcon() { Glyph = "\uEC4F" },
+                Text = "Now Playing"
+            });
+            flyout.Items.Add(new MenuFlyoutSeparator());
+            flyout.Items.Add(new MenuFlyoutItem()
+            {
+                Icon = new SymbolIcon(Symbol.Add),
+                Text = "New Playlist"
+            });
+            foreach (var playlist in Settings.settings.Playlists)
+            {
+                var item = new MenuFlyoutItem()
+                {
+                    Icon = new SymbolIcon(Symbol.Audio),
+                    Text = playlist.Name
+                };
+                item.Tapped += (sender, args) =>
+                {
+                    var target = (sender as MenuFlyoutItem).DataContext;
+                    var targetlist = Settings.settings.Playlists.Find((p) => p.Name == item.Text);
+                    if (target is Music)
+                        targetlist.Add(target as Music);
+                    else
+                        targetlist.Add(target as IEnumerable<Music>);
+                };
+                flyout.Items.Add(item);
+            }
+            return flyout;
+        }
 
         public static string GetVolumeIcon(double volume)
         {
@@ -104,7 +140,7 @@ namespace SMPlayer
                                                        BitmapAlphaMode.Straight,
                                                        new BitmapTransform()
                                                        {
-                                                           Bounds = new BitmapBounds() { Width = 1, Height = 1, X = width / 2, Y = width / 2 }
+                                                           Bounds = new BitmapBounds() { Width = 1, Height = 1, X = width / 4, Y = width / 4 }
                                                        },
                                                        ExifOrientationMode.IgnoreExifOrientation,
                                                        ColorManagementMode.DoNotColorManage);
@@ -212,6 +248,7 @@ namespace SMPlayer
                 }
                 catch (FileLoadException)
                 {
+                    System.Threading.Thread.Sleep(250);
                     continue;
                 }
             }

@@ -15,7 +15,7 @@ namespace SMPlayer
         global::Windows.UI.Xaml.Markup.IComponentConnector,
         global::Windows.UI.Xaml.Markup.IComponentConnector2
     {
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private static class XamlBindingSetters
         {
@@ -45,9 +45,9 @@ namespace SMPlayer
             }
         };
 
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        private class LocalFoldersPage_obj5_Bindings :
+        private class LocalFoldersPage_obj6_Bindings :
             global::Windows.UI.Xaml.IDataTemplateExtension,
             global::Windows.UI.Xaml.Markup.IDataTemplateComponent,
             global::Windows.UI.Xaml.Markup.IXamlBindScopeDiagnostics,
@@ -61,25 +61,25 @@ namespace SMPlayer
             private bool removedDataContextHandler = false;
 
             // Fields for each control that has bindings.
-            private global::System.WeakReference obj5;
-            private global::Windows.UI.Xaml.Controls.TextBlock obj6;
+            private global::System.WeakReference obj6;
             private global::Windows.UI.Xaml.Controls.TextBlock obj7;
-            private global::Microsoft.Toolkit.Uwp.UI.Controls.ImageEx obj8;
+            private global::Windows.UI.Xaml.Controls.TextBlock obj8;
             private global::Microsoft.Toolkit.Uwp.UI.Controls.ImageEx obj9;
             private global::Microsoft.Toolkit.Uwp.UI.Controls.ImageEx obj10;
             private global::Microsoft.Toolkit.Uwp.UI.Controls.ImageEx obj11;
             private global::Microsoft.Toolkit.Uwp.UI.Controls.ImageEx obj12;
+            private global::Microsoft.Toolkit.Uwp.UI.Controls.ImageEx obj13;
 
             // Static fields for each binding's enabled/disabled state
-            private static bool isobj6TextDisabled = false;
             private static bool isobj7TextDisabled = false;
-            private static bool isobj8SourceDisabled = false;
+            private static bool isobj8TextDisabled = false;
             private static bool isobj9SourceDisabled = false;
             private static bool isobj10SourceDisabled = false;
             private static bool isobj11SourceDisabled = false;
             private static bool isobj12SourceDisabled = false;
+            private static bool isobj13SourceDisabled = false;
 
-            public LocalFoldersPage_obj5_Bindings()
+            public LocalFoldersPage_obj6_Bindings()
             {
             }
 
@@ -87,31 +87,31 @@ namespace SMPlayer
             {
                 if (lineNumber == 77 && columnNumber == 29)
                 {
-                    isobj6TextDisabled = true;
+                    isobj7TextDisabled = true;
                 }
                 else if (lineNumber == 84 && columnNumber == 29)
                 {
-                    isobj7TextDisabled = true;
+                    isobj8TextDisabled = true;
                 }
                 else if (lineNumber == 48 && columnNumber == 33)
                 {
-                    isobj8SourceDisabled = true;
+                    isobj9SourceDisabled = true;
                 }
                 else if (lineNumber == 53 && columnNumber == 33)
                 {
-                    isobj9SourceDisabled = true;
+                    isobj10SourceDisabled = true;
                 }
                 else if (lineNumber == 58 && columnNumber == 33)
                 {
-                    isobj10SourceDisabled = true;
+                    isobj11SourceDisabled = true;
                 }
                 else if (lineNumber == 63 && columnNumber == 33)
                 {
-                    isobj11SourceDisabled = true;
+                    isobj12SourceDisabled = true;
                 }
                 else if (lineNumber == 69 && columnNumber == 33)
                 {
-                    isobj12SourceDisabled = true;
+                    isobj13SourceDisabled = true;
                 }
             }
 
@@ -121,29 +121,29 @@ namespace SMPlayer
             {
                 switch(connectionId)
                 {
-                    case 5: // LocalFoldersPage.xaml line 32
-                        this.obj5 = new global::System.WeakReference((global::Windows.UI.Xaml.Controls.StackPanel)target);
+                    case 6: // LocalFoldersPage.xaml line 32
+                        this.obj6 = new global::System.WeakReference((global::Windows.UI.Xaml.Controls.StackPanel)target);
                         break;
-                    case 6: // LocalFoldersPage.xaml line 73
-                        this.obj6 = (global::Windows.UI.Xaml.Controls.TextBlock)target;
-                        break;
-                    case 7: // LocalFoldersPage.xaml line 79
+                    case 7: // LocalFoldersPage.xaml line 73
                         this.obj7 = (global::Windows.UI.Xaml.Controls.TextBlock)target;
                         break;
-                    case 8: // LocalFoldersPage.xaml line 45
-                        this.obj8 = (global::Microsoft.Toolkit.Uwp.UI.Controls.ImageEx)target;
+                    case 8: // LocalFoldersPage.xaml line 79
+                        this.obj8 = (global::Windows.UI.Xaml.Controls.TextBlock)target;
                         break;
-                    case 9: // LocalFoldersPage.xaml line 50
+                    case 9: // LocalFoldersPage.xaml line 45
                         this.obj9 = (global::Microsoft.Toolkit.Uwp.UI.Controls.ImageEx)target;
                         break;
-                    case 10: // LocalFoldersPage.xaml line 55
+                    case 10: // LocalFoldersPage.xaml line 50
                         this.obj10 = (global::Microsoft.Toolkit.Uwp.UI.Controls.ImageEx)target;
                         break;
-                    case 11: // LocalFoldersPage.xaml line 60
+                    case 11: // LocalFoldersPage.xaml line 55
                         this.obj11 = (global::Microsoft.Toolkit.Uwp.UI.Controls.ImageEx)target;
                         break;
-                    case 12: // LocalFoldersPage.xaml line 65
+                    case 12: // LocalFoldersPage.xaml line 60
                         this.obj12 = (global::Microsoft.Toolkit.Uwp.UI.Controls.ImageEx)target;
+                        break;
+                    case 13: // LocalFoldersPage.xaml line 65
+                        this.obj13 = (global::Microsoft.Toolkit.Uwp.UI.Controls.ImageEx)target;
                         break;
                     default:
                         break;
@@ -190,7 +190,7 @@ namespace SMPlayer
                         if (!removedDataContextHandler)
                         {
                             removedDataContextHandler = true;
-                            (this.obj5.Target as global::Windows.UI.Xaml.Controls.StackPanel).DataContextChanged -= this.DataContextChangedHandler;
+                            (this.obj6.Target as global::Windows.UI.Xaml.Controls.StackPanel).DataContextChanged -= this.DataContextChangedHandler;
                         }
                         this.initialized = true;
                         break;
@@ -240,6 +240,7 @@ namespace SMPlayer
             // Update methods for each path node used in binding steps.
             private void Update_(global::SMPlayer.Models.GridFolderView obj, int phase)
             {
+                LocalFoldersPage_obj6_Bindings bindings = this;
                 if (obj != null)
                 {
                     if ((phase & (NOT_PHASED | (1 << 0))) != 0)
@@ -259,9 +260,9 @@ namespace SMPlayer
                 if ((phase & ((1 << 0) | NOT_PHASED )) != 0)
                 {
                     // LocalFoldersPage.xaml line 73
-                    if (!isobj6TextDisabled)
+                    if (!isobj7TextDisabled)
                     {
-                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj6, obj, null);
+                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj7, obj, null);
                     }
                 }
             }
@@ -270,9 +271,9 @@ namespace SMPlayer
                 if ((phase & ((1 << 0) | NOT_PHASED )) != 0)
                 {
                     // LocalFoldersPage.xaml line 79
-                    if (!isobj7TextDisabled)
+                    if (!isobj8TextDisabled)
                     {
-                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj7, obj, null);
+                        XamlBindingSetters.Set_Windows_UI_Xaml_Controls_TextBlock_Text(this.obj8, obj, null);
                     }
                 }
             }
@@ -281,9 +282,9 @@ namespace SMPlayer
                 if ((phase & ((1 << 0) | NOT_PHASED )) != 0)
                 {
                     // LocalFoldersPage.xaml line 45
-                    if (!isobj8SourceDisabled)
+                    if (!isobj9SourceDisabled)
                     {
-                        XamlBindingSetters.Set_Microsoft_Toolkit_Uwp_UI_Controls_ImageExBase_Source(this.obj8, obj, null);
+                        XamlBindingSetters.Set_Microsoft_Toolkit_Uwp_UI_Controls_ImageExBase_Source(this.obj9, obj, null);
                     }
                 }
             }
@@ -292,9 +293,9 @@ namespace SMPlayer
                 if ((phase & ((1 << 0) | NOT_PHASED )) != 0)
                 {
                     // LocalFoldersPage.xaml line 50
-                    if (!isobj9SourceDisabled)
+                    if (!isobj10SourceDisabled)
                     {
-                        XamlBindingSetters.Set_Microsoft_Toolkit_Uwp_UI_Controls_ImageExBase_Source(this.obj9, obj, null);
+                        XamlBindingSetters.Set_Microsoft_Toolkit_Uwp_UI_Controls_ImageExBase_Source(this.obj10, obj, null);
                     }
                 }
             }
@@ -303,9 +304,9 @@ namespace SMPlayer
                 if ((phase & ((1 << 0) | NOT_PHASED )) != 0)
                 {
                     // LocalFoldersPage.xaml line 55
-                    if (!isobj10SourceDisabled)
+                    if (!isobj11SourceDisabled)
                     {
-                        XamlBindingSetters.Set_Microsoft_Toolkit_Uwp_UI_Controls_ImageExBase_Source(this.obj10, obj, null);
+                        XamlBindingSetters.Set_Microsoft_Toolkit_Uwp_UI_Controls_ImageExBase_Source(this.obj11, obj, null);
                     }
                 }
             }
@@ -314,9 +315,9 @@ namespace SMPlayer
                 if ((phase & ((1 << 0) | NOT_PHASED )) != 0)
                 {
                     // LocalFoldersPage.xaml line 60
-                    if (!isobj11SourceDisabled)
+                    if (!isobj12SourceDisabled)
                     {
-                        XamlBindingSetters.Set_Microsoft_Toolkit_Uwp_UI_Controls_ImageExBase_Source(this.obj11, obj, null);
+                        XamlBindingSetters.Set_Microsoft_Toolkit_Uwp_UI_Controls_ImageExBase_Source(this.obj12, obj, null);
                     }
                 }
             }
@@ -325,15 +326,15 @@ namespace SMPlayer
                 if ((phase & ((1 << 0) | NOT_PHASED )) != 0)
                 {
                     // LocalFoldersPage.xaml line 65
-                    if (!isobj12SourceDisabled)
+                    if (!isobj13SourceDisabled)
                     {
-                        XamlBindingSetters.Set_Microsoft_Toolkit_Uwp_UI_Controls_ImageExBase_Source(this.obj12, obj, null);
+                        XamlBindingSetters.Set_Microsoft_Toolkit_Uwp_UI_Controls_ImageExBase_Source(this.obj13, obj, null);
                     }
                 }
             }
         }
 
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private class LocalFoldersPage_obj1_Bindings :
             global::Windows.UI.Xaml.Markup.IDataTemplateComponent,
@@ -382,12 +383,12 @@ namespace SMPlayer
 
             public void ProcessBindings(global::System.Object item, int itemIndex, int phase, out int nextPhase)
             {
-                throw new global::System.NotImplementedException();
+                nextPhase = -1;
             }
 
             public void Recycle()
             {
-                throw new global::System.NotImplementedException();
+                return;
             }
 
             // ILocalFoldersPage_Bindings
@@ -456,7 +457,7 @@ namespace SMPlayer
         /// <summary>
         /// Connect()
         /// </summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public void Connect(int connectionId, object target)
         {
@@ -487,7 +488,7 @@ namespace SMPlayer
         /// <summary>
         /// GetBindingConnector(int connectionId, object target)
         /// </summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.17.0")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks"," 10.0.18362.1")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public global::Windows.UI.Xaml.Markup.IComponentConnector GetBindingConnector(int connectionId, object target)
         {
@@ -505,15 +506,15 @@ namespace SMPlayer
                     global::Windows.UI.Xaml.Markup.XamlBindingHelper.SetDataTemplateComponent(element1, bindings);
                 }
                 break;
-            case 5: // LocalFoldersPage.xaml line 32
+            case 6: // LocalFoldersPage.xaml line 32
                 {                    
-                    global::Windows.UI.Xaml.Controls.StackPanel element5 = (global::Windows.UI.Xaml.Controls.StackPanel)target;
-                    LocalFoldersPage_obj5_Bindings bindings = new LocalFoldersPage_obj5_Bindings();
+                    global::Windows.UI.Xaml.Controls.StackPanel element6 = (global::Windows.UI.Xaml.Controls.StackPanel)target;
+                    LocalFoldersPage_obj6_Bindings bindings = new LocalFoldersPage_obj6_Bindings();
                     returnValue = bindings;
-                    bindings.SetDataRoot(element5.DataContext);
-                    element5.DataContextChanged += bindings.DataContextChangedHandler;
-                    global::Windows.UI.Xaml.DataTemplate.SetExtensionInstance(element5, bindings);
-                    global::Windows.UI.Xaml.Markup.XamlBindingHelper.SetDataTemplateComponent(element5, bindings);
+                    bindings.SetDataRoot(element6.DataContext);
+                    element6.DataContextChanged += bindings.DataContextChangedHandler;
+                    global::Windows.UI.Xaml.DataTemplate.SetExtensionInstance(element6, bindings);
+                    global::Windows.UI.Xaml.Markup.XamlBindingHelper.SetDataTemplateComponent(element6, bindings);
                 }
                 break;
             }

@@ -10,10 +10,6 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
         <controls:TabView
             x:Name="PlaylistTabView"
             AllowDrop="True"
@@ -25,6 +21,10 @@
             IsCloseButtonOverlay="False"
             ItemsSource="{x:Bind Playlists, Mode=TwoWay}"
             SelectedTabWidth="200"
+            SelectionChanged="PlaylistTabView_SelectionChanged"
+            SelectionMode="Single"
+            TabClosing="PlaylistTabView_TabClosing"
+            TabNavigation="Cycle"
             TabWidthBehavior="Actual">
             <controls:TabView.Resources>
                 <x:Double x:Key="TabViewItemHeaderMinHeight">40</x:Double>
@@ -33,13 +33,13 @@
             </controls:TabView.Resources>
             <controls:TabView.ItemHeaderTemplate>
                 <DataTemplate x:DataType="data:Playlist">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.ContextFlyout>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.ContextFlyout>
                             <MenuFlyout>
+                                <MenuFlyoutItem
+                                    Click="RenameClick"
+                                    Icon="Rename"
+                                    Text="Rename PlayList" />
                                 <MenuFlyoutItem
                                     Click="DuplicateClick"
                                     Icon="Copy"
@@ -49,21 +49,87 @@
                                     Icon="Delete"
                                     Text="Delete PlayList" />
                             </MenuFlyout>
-                        </Grid.ContextFlyout>
+                        </StackPanel.ContextFlyout>
                         <SymbolIcon Symbol="Audio" />
-                        <TextBlock Grid.Column="1" Text="{x:Bind Name, Mode=TwoWay}" />
-                    </Grid>
+                        <TextBlock
+                            x:Name="NameTextBlock"
+                            Margin="10,0,5,0"
+                            Text="{x:Bind Name, Mode=OneWay}" />
+                        <TextBox
+                            x:Name="NameTextBox"
+                            Margin="10,0,5,0"
+                            AcceptsReturn="True"
+                            Background="Transparent"
+                            ManipulationCompleted="NameTextBox_ManipulationCompleted"
+                            Text="{x:Bind Name, Mode=TwoWay}"
+                            Visibility="Collapsed" />
+                    </StackPanel>
                 </DataTemplate>
             </controls:TabView.ItemHeaderTemplate>
             <controls:TabView.ItemTemplate>
                 <DataTemplate x:DataType="data:Playlist">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <TextBlock Padding="16">It has a lot of versitility out of the box for different scenarios.</TextBlock>
-                    </Grid>
+                    <ListView ItemTemplate="{StaticResource MusicListViewTemplate}" ItemsSource="{x:Bind Songs}">
+                        <ListView.Header>
+                            <controls:ScrollHeader Mode="Sticky">
+                                <Grid
+                                    x:Name="PlaylistInfoGrid"
+                                    Padding="36"
+                                    Background="#222222"
+                                    Loaded="PlaylistInfoGrid_Loaded"
+                                    RequestedTheme="Dark">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image
+                                        x:Name="PlaylistCover"
+                                        Grid.RowSpan="4"
+                                        Width="180"
+                                        Height="180"
+                                        Margin="0,0,20,0" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Style="{StaticResource HeaderTextBlockStyle}"
+                                        Text="{x:Bind Name}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Margin="0,5"
+                                        Text="{x:Bind Songs, Converter={StaticResource SongCountConverter}}" />
+                                    <StackPanel
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Orientation="Horizontal">
+                                        <NavigationViewItem
+                                            Margin="5,0"
+                                            Padding="0,0,10,0"
+                                            Content="Shuffle"
+                                            Icon="Shuffle" />
+                                        <NavigationViewItem
+                                            Margin="5,0"
+                                            Padding="0,0,10,0"
+                                            Content="Add To"
+                                            Icon="Add" />
+                                        <NavigationViewItem
+                                            Margin="5,0"
+                                            Padding="0,0,10,0"
+                                            Content="Rename"
+                                            Icon="Edit" />
+                                        <NavigationViewItem
+                                            Margin="5,0"
+                                            Padding="0,0,10,0"
+                                            Content="Delete"
+                                            Icon="Delete" />
+                                    </StackPanel>
+                                </Grid>
+                            </controls:ScrollHeader>
+                        </ListView.Header>
+                    </ListView>
                 </DataTemplate>
             </controls:TabView.ItemTemplate>
 
@@ -73,9 +139,13 @@
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
                     Background="Transparent"
-                    Style="{StaticResource ButtonRevealStyle}">
+                    Style="{StaticResource ButtonRevealStyle}"
+                    ToolTipService.ToolTip="Create New Playlist">
                     <Button.Flyout>
-                        <Flyout x:Name="NewPlaylistFlyout">
+                        <Flyout
+                            x:Name="NewPlaylistFlyout"
+                            Closed="NewPlaylistFlyout_Closed"
+                            Opening="NewPlaylistFlyout_Opening">
                             <StackPanel>
                                 <TextBox
                                     x:Name="NewPlaylistNameTextBox"
@@ -84,13 +154,18 @@
                                     Margin="20"
                                     BorderThickness="0"
                                     PlaceholderText="New Playlist Name" />
+                                <TextBlock
+                                    x:Name="NamingErrorTextBox"
+                                    Margin="20,-10,20,10"
+                                    Foreground="Red"
+                                    Visibility="Collapsed" />
                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                     <Button
-                                        x:Name="CreateaNewPlaylistButton"
+                                        x:Name="CreateNewPlaylistButton"
                                         Grid.Row="1"
                                         Margin="10,0"
                                         Background="{ThemeResource SystemColorHighlightColor}"
-                                        Click="CreateaNewPlaylistButton_Click"
+                                        Click="CreateNewPlaylistButton_Click"
                                         Content="Create New Playlist"
                                         Foreground="White" />
                                     <Button
@@ -124,7 +199,8 @@
                     Content="&#xE70F;"
                     FontFamily="Segoe MDL2 Assets"
                     FontSize="16"
-                    Style="{StaticResource ButtonRevealStyle}" />
+                    Style="{StaticResource ButtonRevealStyle}"
+                    ToolTipService.ToolTip="Edit Playlists" />
             </controls:TabView.TabEndHeader>
 
             <controls:TabView.Footer>

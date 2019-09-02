@@ -83,9 +83,9 @@ namespace SMPlayer
             };
 
             while (Settings.settings == null) { System.Threading.Thread.Sleep(500); }
-            if (Settings.settings.PlayList.Count > 0)
+            if (Settings.settings.CurrentPlayList.Count > 0)
             {
-                await SetPlayList(Settings.settings.PlayList);
+                await SetPlayList(Settings.settings.CurrentPlayList);
             }
             else if (!string.IsNullOrEmpty(Settings.settings.RootPath))
             {

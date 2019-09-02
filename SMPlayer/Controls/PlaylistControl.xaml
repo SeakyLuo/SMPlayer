@@ -27,6 +27,7 @@
         DropCompleted="SongsListView_DropCompleted"
         IsItemClickEnabled="True"
         ItemClick="SongsListView_ItemClick"
+        ItemTemplate="{StaticResource MusicListViewTemplate}"
         ItemsSource="{Binding Songs, Mode=TwoWay}"
         ReorderMode="Enabled"
         SelectionMode="None">
@@ -68,41 +69,5 @@
                 </Setter>
             </Style>
         </ListView.ItemContainerStyle>
-        <ListView.ItemTemplate>
-            <DataTemplate x:DataType="data:Music">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="8*" />
-                        <ColumnDefinition Width="3*" />
-                        <ColumnDefinition Width="5*" />
-                        <ColumnDefinition Width="1*" />
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Horizontal">
-                        <FontIcon
-                            x:Name="PlayingIcon"
-                            Margin="0,0,16,0"
-                            FontFamily="Segoe MDL2 Assets"
-                            Foreground="{StaticResource SystemColorHighlightColor}"
-                            Glyph="&#xE767;"
-                            RelativePanel.AlignLeftWithPanel="True"
-                            Visibility="{x:Bind IsPlaying, Converter={StaticResource MusicVisibilityConverter}, Mode=OneWay}" />
-                        <TextBlock Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}" Text="{x:Bind Name}" />
-                    </StackPanel>
-                    <TextBlock
-                        Grid.Column="1"
-                        Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
-                        Text="{Binding Artist}" />
-                    <TextBlock
-                        Grid.Column="2"
-                        Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
-                        Text="{Binding Album}" />
-                    <TextBlock
-                        Grid.Column="3"
-                        HorizontalAlignment="Right"
-                        Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
-                        Text="{Binding Duration, Converter={StaticResource MusicDurationConverter}}" />
-                </Grid>
-            </DataTemplate>
-        </ListView.ItemTemplate>
     </ListView>
 </UserControl>

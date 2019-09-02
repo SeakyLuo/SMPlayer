@@ -119,7 +119,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Style="{StaticResource SettingLabelStyle}" Text="Music Folder:" />
-                <AutoSuggestBox x:ConnectionId='5'
+                <AutoSuggestBox x:ConnectionId='10'
                     x:Name="PathBox"
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
@@ -134,7 +134,7 @@
                     Grid.Row="2"
                     Style="{StaticResource SettingLabelStyle}"
                     Text="Language:" />
-                <ComboBox x:ConnectionId='6'
+                <ComboBox x:ConnectionId='11'
                     x:Name="LanguageComboBox"
                     Grid.Row="2"
                     Grid.Column="1"
@@ -147,7 +147,7 @@
                     Grid.Row="3"
                     Style="{StaticResource SettingLabelStyle}"
                     Text="Notification: " />
-                <ComboBox x:ConnectionId='7'
+                <ComboBox x:ConnectionId='12'
                     x:Name="NotificationComboBox"
                     Grid.Row="3"
                     Grid.Column="1"
@@ -171,18 +171,18 @@
                     <Button.Flyout>
                         <Flyout>
                             <StackPanel>
-                                <ColorPicker x:ConnectionId='8' x:Name="ThemeColorPicker" Color="{ThemeResource SystemColorHighlightColor}" />
+                                <ColorPicker x:ConnectionId='13' x:Name="ThemeColorPicker" Color="{ThemeResource SystemColorHighlightColor}" />
                                 <Grid Margin="0,20,0,10">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <Button x:ConnectionId='9'
+                                    <Button x:ConnectionId='14'
                                         x:Name="ConfirmColorButton"
                                         HorizontalAlignment="Center"
                                                                         
                                         Content="Confirm" />
-                                    <Button x:ConnectionId='10'
+                                    <Button x:ConnectionId='15'
                                         x:Name="CancelColorButton"
                                         Grid.Column="1"
                                         HorizontalAlignment="Center"
@@ -194,7 +194,7 @@
                 </Button>
             </Grid>
         </StackPanel>
-        <local:LoadingControl x:ConnectionId='4' x:Name="SettingsLoadingControl" Text="Updating Your Music Library..." />
+        <local:LoadingControl x:ConnectionId='9' x:Name="SettingsLoadingControl" Text="Updating Your Music Library..." />
     </Grid>
 </Page>
 

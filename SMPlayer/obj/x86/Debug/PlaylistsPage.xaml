@@ -10,10 +10,6 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
         <controls:TabView x:ConnectionId='2'
             x:Name="PlaylistTabView"
             AllowDrop="True"
@@ -25,6 +21,10 @@
             IsCloseButtonOverlay="False"
                                                          
             SelectedTabWidth="200"
+                                                               
+            SelectionMode="Single"
+                                                   
+            TabNavigation="Cycle"
             TabWidthBehavior="Actual">
             <controls:TabView.Resources>
                 <x:Double x:Key="TabViewItemHeaderMinHeight">40</x:Double>
@@ -33,67 +33,142 @@
             </controls:TabView.Resources>
             <controls:TabView.ItemHeaderTemplate>
                 <DataTemplate                           >
-                    <Grid x:ConnectionId='3'>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.ContextFlyout>
+                    <StackPanel x:ConnectionId='4' Orientation="Horizontal">
+                        <StackPanel.ContextFlyout>
                             <MenuFlyout>
-                                <MenuFlyoutItem x:ConnectionId='4'
+                                <MenuFlyoutItem x:ConnectionId='5'
+                                                       
+                                    Icon="Rename"
+                                    Text="Rename PlayList" />
+                                <MenuFlyoutItem x:ConnectionId='6'
                                                           
                                     Icon="Copy"
                                     Text="Duplicate PlayList" />
-                                <MenuFlyoutItem x:ConnectionId='5'
+                                <MenuFlyoutItem x:ConnectionId='7'
                                                        
                                     Icon="Delete"
                                     Text="Delete PlayList" />
                             </MenuFlyout>
-                        </Grid.ContextFlyout>
+                        </StackPanel.ContextFlyout>
                         <SymbolIcon Symbol="Audio" />
-                        <TextBlock x:ConnectionId='6' Grid.Column="1"                                   />
-                    </Grid>
+                        <TextBlock x:ConnectionId='8'
+                            x:Name="NameTextBlock"
+                            Margin="10,0,5,0"
+                                                              />
+                        <TextBox x:ConnectionId='9'
+                            x:Name="NameTextBox"
+                            Margin="10,0,5,0"
+                            AcceptsReturn="True"
+                            Background="Transparent"
+                                                                                     
+                                                             
+                            Visibility="Collapsed" />
+                    </StackPanel>
                 </DataTemplate>
             </controls:TabView.ItemHeaderTemplate>
             <controls:TabView.ItemTemplate>
                 <DataTemplate                           >
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <TextBlock Padding="16">It has a lot of versitility out of the box for different scenarios.</TextBlock>
-                    </Grid>
+                    <ListView x:ConnectionId='11' ItemTemplate="{StaticResource MusicListViewTemplate}"                             >
+                        <ListView.Header>
+                            <controls:ScrollHeader Mode="Sticky">
+                                <Grid x:ConnectionId='12'
+                                    x:Name="PlaylistInfoGrid"
+                                    Padding="36"
+                                    Background="#222222"
+                                                                    
+                                    RequestedTheme="Dark">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image
+                                        x:Name="PlaylistCover"
+                                        Grid.RowSpan="4"
+                                        Width="180"
+                                        Height="180"
+                                        Margin="0,0,20,0" />
+                                    <TextBlock x:ConnectionId='14'
+                                        Grid.Column="1"
+                                        Style="{StaticResource HeaderTextBlockStyle}"
+                                                             />
+                                    <TextBlock x:ConnectionId='15'
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Margin="0,5"
+                                                                                                             />
+                                    <StackPanel
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Orientation="Horizontal">
+                                        <NavigationViewItem
+                                            Margin="5,0"
+                                            Padding="0,0,10,0"
+                                            Content="Shuffle"
+                                            Icon="Shuffle" />
+                                        <NavigationViewItem
+                                            Margin="5,0"
+                                            Padding="0,0,10,0"
+                                            Content="Add To"
+                                            Icon="Add" />
+                                        <NavigationViewItem
+                                            Margin="5,0"
+                                            Padding="0,0,10,0"
+                                            Content="Rename"
+                                            Icon="Edit" />
+                                        <NavigationViewItem
+                                            Margin="5,0"
+                                            Padding="0,0,10,0"
+                                            Content="Delete"
+                                            Icon="Delete" />
+                                    </StackPanel>
+                                </Grid>
+                            </controls:ScrollHeader>
+                        </ListView.Header>
+                    </ListView>
                 </DataTemplate>
             </controls:TabView.ItemTemplate>
 
             <controls:TabView.TabStartHeader>
-                <Button x:ConnectionId='8'
+                <Button x:ConnectionId='16'
                     x:Name="NewPlaylistButton"
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
                     Background="Transparent"
-                    Style="{StaticResource ButtonRevealStyle}">
+                    Style="{StaticResource ButtonRevealStyle}"
+                    ToolTipService.ToolTip="Create New Playlist">
                     <Button.Flyout>
-                        <Flyout x:ConnectionId='9' x:Name="NewPlaylistFlyout">
+                        <Flyout x:ConnectionId='17'
+                            x:Name="NewPlaylistFlyout"
+                                                             
+                                                               >
                             <StackPanel>
-                                <TextBox x:ConnectionId='10'
+                                <TextBox x:ConnectionId='18'
                                     x:Name="NewPlaylistNameTextBox"
                                     Grid.ColumnSpan="2"
                                     Width="360"
                                     Margin="20"
                                     BorderThickness="0"
                                     PlaceholderText="New Playlist Name" />
+                                <TextBlock x:ConnectionId='19'
+                                    x:Name="NamingErrorTextBox"
+                                    Margin="20,-10,20,10"
+                                    Foreground="Red"
+                                    Visibility="Collapsed" />
                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                    <Button x:ConnectionId='11'
-                                        x:Name="CreateaNewPlaylistButton"
+                                    <Button x:ConnectionId='20'
+                                        x:Name="CreateNewPlaylistButton"
                                         Grid.Row="1"
                                         Margin="10,0"
                                         Background="{ThemeResource SystemColorHighlightColor}"
-                                                                              
+                                                                             
                                         Content="Create New Playlist"
                                         Foreground="White" />
-                                    <Button x:ConnectionId='12'
+                                    <Button x:ConnectionId='21'
                                         x:Name="CancelNewPlaylistButton"
                                         Grid.Row="1"
                                         Grid.Column="1"
@@ -113,7 +188,7 @@
             </controls:TabView.TabStartHeader>
 
             <controls:TabView.TabEndHeader>
-                <Button x:ConnectionId='13'
+                <Button x:ConnectionId='22'
                     x:Name="EditPlaylistButton"
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
@@ -124,11 +199,12 @@
                     Content="&#xE70F;"
                     FontFamily="Segoe MDL2 Assets"
                     FontSize="16"
-                    Style="{StaticResource ButtonRevealStyle}" />
+                    Style="{StaticResource ButtonRevealStyle}"
+                    ToolTipService.ToolTip="Edit Playlists" />
             </controls:TabView.TabEndHeader>
 
             <controls:TabView.Footer>
-                <TextBlock x:ConnectionId='14'
+                <TextBlock x:ConnectionId='23'
                     x:Name="PlayListTabViewFooter"
                     Padding="16,8,16,8"
                     HorizontalAlignment="Right"
