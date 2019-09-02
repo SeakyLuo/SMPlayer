@@ -42,32 +42,26 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <controls:ImageEx x:ConnectionId='9'
+                            <Image x:ConnectionId='9'
                                 Grid.Row="0"
                                 Grid.Column="0"
-                                                       
-                                Style="{StaticResource CachedImageStyle}" />
-                            <controls:ImageEx x:ConnectionId='10'
+                                                        />
+                            <Image x:ConnectionId='10'
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                                        
-                                Style="{StaticResource CachedImageStyle}" />
-                            <controls:ImageEx x:ConnectionId='11'
+                                                         />
+                            <Image x:ConnectionId='11'
                                 Grid.Row="1"
                                 Grid.Column="0"
-                                                       
-                                Style="{StaticResource CachedImageStyle}" />
-                            <controls:ImageEx x:ConnectionId='12'
+                                                        />
+                            <Image x:ConnectionId='12'
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                                        
-                                Style="{StaticResource CachedImageStyle}" />
-                            <controls:ImageEx x:ConnectionId='13'
-                                x:Name="LargeThumbnail"
+                                                         />
+                            <Image x:ConnectionId='13'
                                 Grid.RowSpan="2"
                                 Grid.ColumnSpan="2"
                                                                 
-                                Style="{StaticResource CachedImageStyle}"
                                 Visibility="{Binding Converter={StaticResource LargeThumbnailVisibilityConverter}}" />
                         </Grid>
                         <TextBlock x:ConnectionId='7'

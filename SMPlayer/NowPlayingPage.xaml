@@ -30,17 +30,20 @@
                 x:Name="NewListButton"
                 Click="NewListButton_Click"
                 Icon="Add"
-                Label="Add To New Playlist" />
+                Label="Add To"
+                ToolTipService.ToolTip="Add To New Playlist" />
             <AppBarButton
                 x:Name="ClearButton"
                 Click="ClearButton_Click"
                 Icon="Clear"
-                Label="Clear All" />
+                Label="Clear All"
+                ToolTipService.ToolTip="Clear Now Playing" />
             <AppBarButton
                 x:Name="FullScreenButton"
                 Click="FullScreenButton_Click"
                 Icon="FullScreen"
-                Label="Full Window" />
+                Label="Expand Page"
+                ToolTipService.ToolTip="Full Window Display" />
         </CommandBar>
         <local:PlaylistControl
             x:Name="NowPlayingPlaylistControl"

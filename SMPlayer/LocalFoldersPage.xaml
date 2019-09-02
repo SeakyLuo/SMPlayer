@@ -42,32 +42,26 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <controls:ImageEx
+                            <Image
                                 Grid.Row="0"
                                 Grid.Column="0"
-                                Source="{x:Bind First}"
-                                Style="{StaticResource CachedImageStyle}" />
-                            <controls:ImageEx
+                                Source="{x:Bind First}" />
+                            <Image
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Source="{x:Bind Second}"
-                                Style="{StaticResource CachedImageStyle}" />
-                            <controls:ImageEx
+                                Source="{x:Bind Second}" />
+                            <Image
                                 Grid.Row="1"
                                 Grid.Column="0"
-                                Source="{x:Bind Third}"
-                                Style="{StaticResource CachedImageStyle}" />
-                            <controls:ImageEx
+                                Source="{x:Bind Third}" />
+                            <Image
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                Source="{x:Bind Fourth}"
-                                Style="{StaticResource CachedImageStyle}" />
-                            <controls:ImageEx
-                                x:Name="LargeThumbnail"
+                                Source="{x:Bind Fourth}" />
+                            <Image
                                 Grid.RowSpan="2"
                                 Grid.ColumnSpan="2"
                                 Source="{x:Bind LargeThumbnail}"
-                                Style="{StaticResource CachedImageStyle}"
                                 Visibility="{Binding Converter={StaticResource LargeThumbnailVisibilityConverter}}" />
                         </Grid>
                         <TextBlock
