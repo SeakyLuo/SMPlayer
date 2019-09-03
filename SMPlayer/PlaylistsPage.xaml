@@ -5,6 +5,7 @@
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:SMPlayer.Models"
+    xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
@@ -16,10 +17,9 @@
             CanCloseTabs="False"
             CanDragItems="True"
             CanReorderItems="True"
-            DragItemsStarting="PlaylistTabView_DragItemsStarting"
-            DropCompleted="PlaylistTabView_DropCompleted"
+            DragItemsCompleted="PlaylistTabView_DragItemsCompleted"
             IsCloseButtonOverlay="False"
-            ItemsSource="{x:Bind Playlists, Mode=TwoWay}"
+            ItemsSource="{Binding Playlists, Mode=TwoWay}"
             SelectedTabWidth="200"
             SelectionChanged="PlaylistTabView_SelectionChanged"
             SelectionMode="Single"
@@ -60,8 +60,11 @@
             </controls:TabView.ItemHeaderTemplate>
             <controls:TabView.ItemTemplate>
                 <DataTemplate x:DataType="data:Playlist">
-                    <ListView ItemTemplate="{StaticResource MusicListViewTemplate}" ItemsSource="{x:Bind Songs}">
-                        <ListView.Header>
+                    <local:PlaylistControl
+                        AllowReorder="False"
+                        AlternatingRowColor="True"
+                        ItemsSource="{x:Bind Songs, Mode=OneWay}">
+                        <local:PlaylistControl.Header>
                             <controls:ScrollHeader Mode="Sticky">
                                 <Grid
                                     x:Name="PlaylistInfoGrid"
@@ -86,42 +89,57 @@
                                         Margin="0,0,20,0" />
                                     <TextBlock
                                         Grid.Column="1"
+                                        FontSize="36"
                                         Style="{StaticResource HeaderTextBlockStyle}"
                                         Text="{x:Bind Name, Mode=OneWay}" />
                                     <TextBlock
                                         Grid.Row="1"
                                         Grid.Column="1"
                                         Margin="0,5"
-                                        Text="{x:Bind Songs, Converter={StaticResource SongCountConverter}}" />
+                                        Text="{x:Bind Songs, Converter={StaticResource SongCountConverter}, Mode=OneWay}" />
                                     <StackPanel
                                         Grid.Row="2"
                                         Grid.Column="1"
                                         Orientation="Horizontal">
+                                        <StackPanel.Resources>
+                                            <Style x:Key="Margin" TargetType="NavigationViewItem">
+                                                <Setter Property="Margin" Value="5,0" />
+                                                <Setter Property="Padding" Value="0,0,10,0" />
+                                            </Style>
+                                        </StackPanel.Resources>
                                         <NavigationViewItem
-                                            Margin="5,0"
-                                            Padding="0,0,10,0"
+                                            Margin="-5,0"
                                             Content="Shuffle"
-                                            Icon="Shuffle" />
+                                            Icon="Shuffle"
+                                            IsEnabled="{x:Bind Songs, Converter={StaticResource EnabledConverter}, Mode=OneWay}"
+                                            Style="{StaticResource Margin}"
+                                            Tapped="Shuffle_Tapped" />
                                         <NavigationViewItem
-                                            Margin="5,0"
-                                            Padding="0,0,10,0"
                                             Content="Add To"
-                                            Icon="Add" />
+                                            Icon="Add"
+                                            IsEnabled="{x:Bind Songs, Converter={StaticResource EnabledConverter}, Mode=OneWay}"
+                                            Style="{StaticResource Margin}"
+                                            Tapped="AddTo_Tapped" />
                                         <NavigationViewItem
-                                            Margin="5,0"
-                                            Padding="0,0,10,0"
                                             Content="Rename"
-                                            Icon="Edit" />
+                                            Icon="Edit"
+                                            Style="{StaticResource Margin}"
+                                            Tapped="Rename_Tapped" />
                                         <NavigationViewItem
-                                            Margin="5,0"
-                                            Padding="0,0,10,0"
                                             Content="Delete"
-                                            Icon="Delete" />
+                                            Icon="Delete"
+                                            Style="{StaticResource Margin}"
+                                            Tapped="Delete_Tapped" />
+                                        <NavigationViewItem
+                                            Content="More"
+                                            Icon="More"
+                                            Style="{StaticResource Margin}"
+                                            Tapped="More_Tapped" />
                                     </StackPanel>
                                 </Grid>
                             </controls:ScrollHeader>
-                        </ListView.Header>
-                    </ListView>
+                        </local:PlaylistControl.Header>
+                    </local:PlaylistControl>
                 </DataTemplate>
             </controls:TabView.ItemTemplate>
 
@@ -162,7 +180,7 @@
                     Padding="16,8,16,8"
                     HorizontalAlignment="Right"
                     FontSize="16"
-                    FontWeight="Bold" />
+                    FontWeight="SemiBold" />
             </controls:TabView.Footer>
         </controls:TabView>
     </Grid>

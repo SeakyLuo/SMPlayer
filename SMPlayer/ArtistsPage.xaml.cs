@@ -96,7 +96,7 @@ namespace SMPlayer
             args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? Helper.WhiteSmokeBrush : Helper.WhiteBrush;
         }
 
-        private async void SetMusicAndPlay(Music music, IEnumerable<Music> playlist)
+        private async void SetMusicAndPlay(Music music, ICollection<Music> playlist)
         {
             if (!music.Equals(MediaHelper.CurrentMusic))
             {
@@ -138,7 +138,7 @@ namespace SMPlayer
         }
 
         public void MediaEnded() { return; }
-        public void ShuffleChanged(IEnumerable<Music> newPlayList, bool isShuffle) { return; }
+        public void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle) { return; }
 
     }
 }

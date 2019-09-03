@@ -127,6 +127,7 @@
     <Compile Include="ArtistsPage.xaml.cs">
       <DependentUpon>ArtistsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\AddToMenuFlyoutHelper.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Controls\LoadingControl.xaml.cs">
       <DependentUpon>LoadingControl.xaml</DependentUpon>
@@ -390,7 +391,9 @@
   <ItemGroup>
     <None Include="app.manifest" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Dialogs\" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

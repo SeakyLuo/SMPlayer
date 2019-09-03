@@ -27,7 +27,7 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class PlaylistsPage : Page, RenameActionListener
     {
-        private ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
+        public static ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
         private Dictionary<string, List<BitmapImage>> PlaylistThumbnailDict = new Dictionary<string, List<BitmapImage>>();
         private Random random = new Random();
         private RenameDialog dialog;
@@ -35,6 +35,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            PlaylistTabView.ItemsSource = Playlists;
             foreach (var list in Settings.settings.Playlists)
                 Playlists.Add(list);
             SetFooterText();
@@ -68,15 +69,14 @@ namespace SMPlayer
         {
             var flyoutItem = sender as MenuFlyoutItem;
             var playlist = flyoutItem.DataContext as Playlist;
-            dialog = new RenameDialog(this as RenameActionListener, "Rename", playlist.Name);
+            dialog = new RenameDialog(this as RenameActionListener, TitleOption.Rename, playlist.Name);
             await dialog.ShowAsync();
         }
-
 
         private void DuplicateClick(object sender, RoutedEventArgs e)
         {
             var target = (sender as MenuFlyoutItem).DataContext as Playlist;
-            int next = FindNextName(target.Name);
+            int next = Settings.settings.FindNextPlaylistNameIndex(target.Name);
             string name = string.Format("{0} {1}", target.Name, next), prev = next == 1 ? target.Name : string.Format("{0} {1}", target.Name, next - 1);
             var duplicate = target.Duplicate(name);
             int index = Settings.settings.Playlists.FindLastIndex((p) => p.Name.StartsWith(prev)) + 1;
@@ -87,8 +87,7 @@ namespace SMPlayer
         private async void NewPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
             string name = "Playlist";
-            int index = FindNextName(name);
-            dialog = new RenameDialog(this as RenameActionListener, "Create New Playlist", index == 0 ? name : string.Format("{0} {1}", name, index));
+            dialog = new RenameDialog(this as RenameActionListener, TitleOption.NewPlaylist, Settings.settings.FindNextPlaylistName(name));
             await dialog.ShowAsync();
         }
 
@@ -106,14 +105,9 @@ namespace SMPlayer
             }
         }
 
-        private void PlaylistTabView_DropCompleted(UIElement sender, DropCompletedEventArgs args)
+        private void PlaylistTabView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
-
-        }
-
-        private void PlaylistTabView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
-        {
-
+            Settings.settings.Playlists = (List<Playlist>)PlaylistTabView.ItemsSource;
         }
 
         private void PlaylistTabView_TabClosing(object sender, TabClosingEventArgs e)
@@ -145,15 +139,6 @@ namespace SMPlayer
             await messageDialog.ShowAsync();
         }
 
-        private int FindNextName(string Name)
-        {
-            var siblings = Settings.settings.Playlists.FindAll((p) => p.Name.StartsWith(Name)).Select((p) => p.Name).ToHashSet();
-            for (int i = 1; i <= siblings.Count; i++)
-                if (!siblings.Contains(string.Format("{0} {1}", Name, i)))
-                    return i;
-            return 0;
-        }
-
         private async void PlaylistInfoGrid_Loaded(object sender, RoutedEventArgs e)
         {
             var grid = sender as Grid;
@@ -171,27 +156,75 @@ namespace SMPlayer
         {
             if (string.IsNullOrEmpty(NewName) || string.IsNullOrWhiteSpace(NewName))
             {
-                dialog.ShowError("Playlist name cannot be empty or whitespaces!");
+                dialog.ShowError(ErrorOption.EmptyOrWhiteSpace);
                 return false;
             }
             if (Settings.settings.Playlists.FindIndex((p) => p.Name == NewName) != -1)
             {
-                dialog.ShowError("This name has been used!");
+                dialog.ShowError(ErrorOption.Used);
                 return false;
             }
-            if (string.IsNullOrEmpty(OldName))
+            switch (dialog.Option)
             {
-                Playlist playlist = new Playlist(NewName);
-                Playlists.Add(playlist);
-                Settings.settings.Playlists.Add(playlist);
-            }
-            else if (OldName != NewName)
-            {
-                int index = Settings.settings.Playlists.FindIndex((p) => p.Name == OldName);
-                Settings.settings.Playlists[index].Name = NewName;
-                Playlists[index].Name = NewName;
+                case TitleOption.NewPlaylist:
+                    Playlist playlist = new Playlist(NewName);
+                    Playlists.Add(playlist);
+                    Settings.settings.Playlists.Add(playlist);
+                    break;
+                case TitleOption.Rename:
+                    if (OldName != NewName)
+                    {
+                        int index = Settings.settings.Playlists.FindIndex((p) => p.Name == OldName);
+                        Settings.settings.Playlists[index].Name = NewName;
+                        Playlists[index].Name = NewName;
+                    }
+                    break;
             }
             return true;
+        }
+        private void Shuffle_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var playlist = (sender as NavigationViewItem).DataContext as Playlist;
+            MediaHelper.ShuffleAndPlay(playlist.Songs);
+        }
+        private void AddTo_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var playlist = (sender as NavigationViewItem).DataContext as Playlist;
+            var helper = new AddToMenuFlyout();
+            helper.GetMenuFlyout().ShowAt(sender as FrameworkElement);
+        }
+        private async void Rename_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var playlist = (sender as NavigationViewItem).DataContext as Playlist;
+            dialog = new RenameDialog(this as RenameActionListener, TitleOption.Rename, playlist.Name);
+            await dialog.ShowAsync();
+        }
+        private void Delete_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var playlist = (sender as NavigationViewItem).DataContext as Playlist;
+            DeletePlaylist(playlist);
+        }
+        private void More_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var playlist = (sender as NavigationViewItem).DataContext as Playlist;
+            MenuFlyout flyout = new MenuFlyout();
+            flyout.Items.Add(new MenuFlyoutItem()
+            {
+                Icon = new SymbolIcon(Symbol.Pin),
+                Text = "Pin to Start"
+            });
+            flyout.Items.Add(new MenuFlyoutSeparator());
+            foreach (var criterion in Playlist.Criteria)
+            {
+                var radioItem = new ToggleMenuFlyoutItem()
+                {
+                    Text = "Sort By " + criterion.ToStr(),
+                    IsChecked = playlist.Criterion == criterion
+                };
+                radioItem.Click += (send, args) => playlist.Criterion = criterion;
+                flyout.Items.Add(radioItem);
+            }
+            flyout.ShowAt(sender as FrameworkElement);
         }
     }
 }

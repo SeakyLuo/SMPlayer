@@ -1,10 +1,11 @@
-﻿<Page x:ConnectionId='1'
+﻿<Page
     x:Class="SMPlayer.PlaylistsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:SMPlayer.Models"
+    xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
@@ -16,10 +17,9 @@
             CanCloseTabs="False"
             CanDragItems="True"
             CanReorderItems="True"
-                                                                 
-                                                         
+                                                                   
             IsCloseButtonOverlay="False"
-                                                         
+            ItemsSource="{Binding Playlists, Mode=TwoWay}"
             SelectedTabWidth="200"
                                                                
             SelectionMode="Single"
@@ -60,8 +60,11 @@
             </controls:TabView.ItemHeaderTemplate>
             <controls:TabView.ItemTemplate>
                 <DataTemplate                           >
-                    <ListView x:ConnectionId='10' ItemTemplate="{StaticResource MusicListViewTemplate}"                             >
-                        <ListView.Header>
+                    <local:PlaylistControl x:ConnectionId='10'
+                        AllowReorder="False"
+                        AlternatingRowColor="True"
+                                                                 >
+                        <local:PlaylistControl.Header>
                             <controls:ScrollHeader Mode="Sticky">
                                 <Grid x:ConnectionId='11'
                                     x:Name="PlaylistInfoGrid"
@@ -86,47 +89,62 @@
                                         Margin="0,0,20,0" />
                                     <TextBlock x:ConnectionId='13'
                                         Grid.Column="1"
+                                        FontSize="36"
                                         Style="{StaticResource HeaderTextBlockStyle}"
                                                                           />
                                     <TextBlock x:ConnectionId='14'
                                         Grid.Row="1"
                                         Grid.Column="1"
                                         Margin="0,5"
-                                                                                                             />
+                                                                                                                          />
                                     <StackPanel
                                         Grid.Row="2"
                                         Grid.Column="1"
                                         Orientation="Horizontal">
-                                        <NavigationViewItem
-                                            Margin="5,0"
-                                            Padding="0,0,10,0"
+                                        <StackPanel.Resources>
+                                            <Style x:Key="Margin" TargetType="NavigationViewItem">
+                                                <Setter Property="Margin" Value="5,0" />
+                                                <Setter Property="Padding" Value="0,0,10,0" />
+                                            </Style>
+                                        </StackPanel.Resources>
+                                        <NavigationViewItem x:ConnectionId='15'
+                                            Margin="-5,0"
                                             Content="Shuffle"
-                                            Icon="Shuffle" />
-                                        <NavigationViewItem
-                                            Margin="5,0"
-                                            Padding="0,0,10,0"
+                                            Icon="Shuffle"
+                                                                                                                                
+                                            Style="{StaticResource Margin}"
+                                                                    />
+                                        <NavigationViewItem x:ConnectionId='16'
                                             Content="Add To"
-                                            Icon="Add" />
-                                        <NavigationViewItem
-                                            Margin="5,0"
-                                            Padding="0,0,10,0"
+                                            Icon="Add"
+                                                                                                                                
+                                            Style="{StaticResource Margin}"
+                                                                  />
+                                        <NavigationViewItem x:ConnectionId='17'
                                             Content="Rename"
-                                            Icon="Edit" />
-                                        <NavigationViewItem
-                                            Margin="5,0"
-                                            Padding="0,0,10,0"
+                                            Icon="Edit"
+                                            Style="{StaticResource Margin}"
+                                                                   />
+                                        <NavigationViewItem x:ConnectionId='18'
                                             Content="Delete"
-                                            Icon="Delete" />
+                                            Icon="Delete"
+                                            Style="{StaticResource Margin}"
+                                                                   />
+                                        <NavigationViewItem x:ConnectionId='19'
+                                            Content="More"
+                                            Icon="More"
+                                            Style="{StaticResource Margin}"
+                                                                 />
                                     </StackPanel>
                                 </Grid>
                             </controls:ScrollHeader>
-                        </ListView.Header>
-                    </ListView>
+                        </local:PlaylistControl.Header>
+                    </local:PlaylistControl>
                 </DataTemplate>
             </controls:TabView.ItemTemplate>
 
             <controls:TabView.TabStartHeader>
-                <Button x:ConnectionId='15'
+                <Button x:ConnectionId='20'
                     x:Name="NewPlaylistButton"
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
@@ -141,7 +159,7 @@
             </controls:TabView.TabStartHeader>
 
             <controls:TabView.TabEndHeader>
-                <Button x:ConnectionId='16'
+                <Button x:ConnectionId='21'
                     x:Name="EditPlaylistButton"
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
@@ -157,12 +175,12 @@
             </controls:TabView.TabEndHeader>
 
             <controls:TabView.Footer>
-                <TextBlock x:ConnectionId='17'
+                <TextBlock x:ConnectionId='22'
                     x:Name="PlayListTabViewFooter"
                     Padding="16,8,16,8"
                     HorizontalAlignment="Right"
                     FontSize="16"
-                    FontWeight="Bold" />
+                    FontWeight="SemiBold" />
             </controls:TabView.Footer>
         </controls:TabView>
     </Grid>

@@ -127,7 +127,7 @@ namespace SMPlayer
             Settings.settings.Mode = mode;
         }
 
-        public static async Task SetPlayList(IEnumerable<Music> playlist)
+        public static async Task SetPlayList(ICollection<Music> playlist)
         {
             if (Helper.SamePlayList(playlist, CurrentPlayList)) return;
             Pause();
@@ -152,6 +152,13 @@ namespace SMPlayer
             ShuffledPlayList.Clear();
             if (!OrderedPlayList.Contains(CurrentMusic))
                 CurrentMusic = null;
+        }
+
+        public static async void ShuffleAndPlay(ICollection<Music> playlist)
+        {
+            SetMode(PlayMode.Shuffle);
+            await SetPlayList(playlist);
+            Play();
         }
 
         public static void AddMediaControlListener(MediaControlListener listener)
@@ -242,6 +249,6 @@ namespace SMPlayer
         void Tick();
         void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason);
         void MediaEnded();
-        void ShuffleChanged(IEnumerable<Music> newPlayList, bool isShuffle);
+        void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle);
     }
 }

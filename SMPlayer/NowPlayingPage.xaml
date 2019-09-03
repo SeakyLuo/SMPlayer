@@ -27,19 +27,16 @@
             DefaultLabelPosition="Right"
             IsOpen="False">
             <AppBarButton
-                x:Name="NewListButton"
-                Click="NewListButton_Click"
+                Click="AddToButton_Click"
                 Icon="Add"
-                Label="Add To"
+                Label="Save To"
                 ToolTipService.ToolTip="Add To New Playlist" />
             <AppBarButton
-                x:Name="ClearButton"
                 Click="ClearButton_Click"
                 Icon="Clear"
                 Label="Clear All"
                 ToolTipService.ToolTip="Clear Now Playing" />
             <AppBarButton
-                x:Name="FullScreenButton"
                 Click="FullScreenButton_Click"
                 Icon="FullScreen"
                 Label="Expand Page"

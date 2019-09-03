@@ -44,40 +44,6 @@ namespace SMPlayer
         private static string Lyrics = "";
         public static SolidColorBrush GetHighlightBrush() { return new SolidColorBrush(Settings.settings.ThemeColor); }
 
-        public static MenuFlyout GetAddToPlaylistFlyout()
-        {
-            MenuFlyout flyout = new MenuFlyout();
-            flyout.Items.Add(new MenuFlyoutItem()
-            {
-                Icon = new FontIcon() { Glyph = "\uEC4F" },
-                Text = "Now Playing"
-            });
-            flyout.Items.Add(new MenuFlyoutSeparator());
-            flyout.Items.Add(new MenuFlyoutItem()
-            {
-                Icon = new SymbolIcon(Symbol.Add),
-                Text = "New Playlist"
-            });
-            foreach (var playlist in Settings.settings.Playlists)
-            {
-                var item = new MenuFlyoutItem()
-                {
-                    Icon = new SymbolIcon(Symbol.Audio),
-                    Text = playlist.Name
-                };
-                item.Tapped += (sender, args) =>
-                {
-                    var target = (sender as MenuFlyoutItem).DataContext;
-                    var targetlist = Settings.settings.Playlists.Find((p) => p.Name == item.Text);
-                    if (target is Music)
-                        targetlist.Add(target as Music);
-                    else
-                        targetlist.Add(target as IEnumerable<Music>);
-                };
-                flyout.Items.Add(item);
-            }
-            return flyout;
-        }
 
         public static string GetVolumeIcon(double volume)
         {
@@ -86,7 +52,6 @@ namespace SMPlayer
             if (volume < 67) return "\uE994";
             return "\uE995";
         }
-
         public static bool SamePlayList(IEnumerable<Music> list1, IEnumerable<Music> list2)
         {
             return list1.Count() == list2.Count() && list1.Zip(list2, (m1, m2) => m1.Equals(m2)).All((res) => res);

@@ -29,7 +29,6 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class NowPlayingPage : Page
     {
-        public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         public NowPlayingPage()
         {
             this.InitializeComponent();
@@ -51,9 +50,13 @@ namespace SMPlayer
                 // Clicking twice quickly will cause this exception
             }
         }
-        private void NewListButton_Click(object sender, RoutedEventArgs e)
+        private void AddToButton_Click(object sender, RoutedEventArgs e)
         {
-
+            var name = "Now Playing - " + DateTime.Now.ToString("yy/MM/dd");
+            int index = Settings.settings.FindNextPlaylistNameIndex(name);
+            var realname = index == 0 ? name : string.Format("{0} ({1})", name, index);
+            var helper = new AddToMenuFlyout() { Data = PlaylistControl.Songs };
+            helper.GetPlaylistsMenuFlyout(realname).ShowAt(sender as FrameworkElement);
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)

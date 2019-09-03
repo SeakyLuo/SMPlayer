@@ -646,7 +646,7 @@ namespace SMPlayer
             ArtistTextBlock.Text = "";
         }
 
-        public void ShuffleChanged(IEnumerable<Music> newPlayList, bool isShuffle) { return; }
+        public void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle) { return; }
     }
 
     public interface MusicControlListener

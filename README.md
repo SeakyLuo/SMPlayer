@@ -20,4 +20,8 @@ Check FullVolumeButton to PointerOver background less.
 # TO FIX
 VisualStateManager. (GridAlbumView, MusicGridInfo)
 
-Update after drag and drop in Playlist Control.
+Full Screen.
+
+NaviSearchBar TextBox style change.
+
+MusicLibrary Flash.

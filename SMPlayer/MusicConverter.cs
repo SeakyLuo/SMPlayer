@@ -32,7 +32,7 @@ namespace SMPlayer
             return string.Format("{0}:{1}{2}", minute, zero, second);
         }
 
-        public static string ToTime(IEnumerable<Music> list)
+        public static string ToTime(ICollection<Music> list)
         {
             int total_seconds = list.Sum((music) => music.Duration);
             if (total_seconds == 0) return "";
@@ -163,13 +163,10 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is IEnumerable<AlbumView>)
+            if (value is ICollection<AlbumView>)
             {
-                var list = (IEnumerable<AlbumView>)value;
-                int songs = 0;
-                foreach (var album in (IEnumerable<AlbumView>)value)
-                    songs += album.Songs.Count;
-                return string.Format("Albums: {0}   Songs: {1}", list.Count(), songs);
+                var list = (ICollection<AlbumView>)value;
+                return string.Format("Albums: {0} • Songs: {1}", list.Count(), list.Sum((a) => a.Songs.Count));
             }
             return "";
         }
@@ -184,12 +181,29 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is IEnumerable<Music>)
+            if (value is ICollection<Music>)
             {
-                var list = (IEnumerable<Music>)value;
-                return string.Format("Songs: {0}   {1}", list.Count(), MusicDurationConverter.ToTime(list));
+                var list = (ICollection<Music>)value;
+                int count = list.Count();
+                string countStr = "Songs: " + count.ToString();
+                return count == 0 ? countStr : string.Format("{0} • {1}", countStr, MusicDurationConverter.ToTime(list));
             }
             return "";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
+
+    class EnabledConverter : Windows.UI.Xaml.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value is ICollection<Music>)
+                return (value as ICollection<Music>).Count > 0;
+            return false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

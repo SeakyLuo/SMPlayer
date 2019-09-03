@@ -42,6 +42,19 @@ namespace SMPlayer.Models
             LastPage = "";
             Playlists = new List<Playlist>();
         }
+        public int FindNextPlaylistNameIndex(string Name)
+        {
+            var siblings = Playlists.FindAll((p) => p.Name.StartsWith(Name)).Select((p) => p.Name).ToHashSet();
+            for (int i = 1; i <= siblings.Count; i++)
+                if (!siblings.Contains(string.Format("{0} {1}", Name, i)))
+                    return i;
+            return 0;
+        }
+        public string FindNextPlaylistName(string Name)
+        {
+            int index = FindNextPlaylistNameIndex(Name);
+            return index == 0 ? Name : string.Format("{0} {1}", Name, index);
+        }
 
         public static async Task Init()
         {

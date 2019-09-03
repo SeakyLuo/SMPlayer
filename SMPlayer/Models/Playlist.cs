@@ -12,6 +12,7 @@ namespace SMPlayer.Models
     [Serializable]
     public class Playlist : INotifyPropertyChanged
     {
+        public static SortBy[] Criteria = new SortBy[] { SortBy.Title, SortBy.Artist, SortBy.Album, SortBy.Duration, SortBy.PlayCount };
         private string name;
         public string Name
         {
@@ -23,6 +24,17 @@ namespace SMPlayer.Models
                     name = value;
                     OnPropertyChanged();
                 }
+            }
+        }
+        private SortBy criterion = SortBy.Title;
+        public SortBy Criterion
+        {
+            get => criterion;
+            set
+            {
+                if (criterion == value) return;
+                criterion = value;
+                Sort();
             }
         }
 
@@ -38,6 +50,12 @@ namespace SMPlayer.Models
             this.Songs = new ObservableCollection<Music>();
         }
 
+        public Playlist(string Name, Music music)
+        {
+            this.Name = Name;
+            this.Songs = new ObservableCollection<Music>() { music };
+        }
+
         public Playlist(string Name, IEnumerable<Music> Songs)
         {
             this.Name = Name;
@@ -49,16 +67,19 @@ namespace SMPlayer.Models
             return new Playlist(NewName, Songs);
         }
 
-        public void Add(Music music)
+        public void Add(object item)
         {
-            Songs.Add(music);
-            OnPropertyChanged();
-        }
-
-        public void Add(IEnumerable<Music> playlist)
-        {
-            foreach (var music in playlist) Songs.Add(music);
-            OnPropertyChanged();
+            if (item is Music && !Songs.Contains(item))
+                Songs.Add(item as Music);
+            else if (item is ICollection<Music>)
+            {
+                var set = Songs.ToHashSet();
+                foreach (var music in item as ICollection<Music>)
+                    if (!set.Contains(music))
+                        Songs.Add(music);
+            }
+            else return;
+            Sort();
         }
 
         public async Task<List<BitmapImage>> GetThumbnails()
@@ -73,7 +94,64 @@ namespace SMPlayer.Models
             // Raise the PropertyChanged event, passing the name of the property whose value has changed.
             this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public void Sort()
+        {
+            List<Music> list;
+            switch (criterion)
+            {
+                case SortBy.Title:
+                    list = Songs.OrderBy((m) => m.Name).ToList();
+                    break;
+                case SortBy.Artist:
+                    list = Songs.OrderBy((m) => m.Artist).ToList();
+                    break;
+                case SortBy.Album:
+                    list = Songs.OrderBy((m) => m.Album).ToList();
+                    break;
+                case SortBy.Duration:
+                    list = Songs.OrderBy((m) => m.Duration).ToList();
+                    break;
+                case SortBy.PlayCount:
+                    list = Songs.OrderBy((m) => m.PlayCount).ToList();
+                    break;
+                default:
+                    return;
+            }
+            Songs = new ObservableCollection<Music>(list);
+            OnPropertyChanged();
+        }
+    }
+    
+    public enum SortBy
+    {
+        Title = 0,
+        Artist = 1,
+        Album = 2,
+        Duration = 3,
+        PlayCount = 4
     }
 
+    public static class SortByConverter
+    {
+        public static string ToStr(this SortBy criterion)
+        {
+            switch (criterion)
+            {
+                case SortBy.Title:
+                    return "Title";
+                case SortBy.Artist:
+                    return "Artist";
+                case SortBy.Album:
+                    return "Album";
+                case SortBy.Duration:
+                    return "Duration";
+                case SortBy.PlayCount:
+                    return "Play Count";
+                default:
+                    return "";
+            }
+        }
+    }
 }
 

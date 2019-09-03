@@ -7,7 +7,7 @@
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="PlaylistController"
-    Loaded="PlaylistController_Loaded"
+    Loading="PlaylistController_Loading"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -23,33 +23,27 @@
         CanDrag="True"
         CanReorderItems="True"
         ContainerContentChanging="SongsListView_ContainerContentChanging"
-        DragItemsStarting="SongsListView_DragItemsStarting"
-        DropCompleted="SongsListView_DropCompleted"
         IsItemClickEnabled="True"
         ItemClick="SongsListView_ItemClick"
-        ItemTemplate="{StaticResource MusicListViewTemplate}"
         ItemsSource="{Binding Songs, Mode=TwoWay}"
         ReorderMode="Enabled"
         SelectionMode="None">
         <ListView.ItemContainerStyle>
             <Style TargetType="ListViewItem">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                <Setter Property="ContextFlyout">
-                    <Setter.Value>
-                        <MenuFlyout>
+            </Style>
+        </ListView.ItemContainerStyle>
+        <ListView.ItemTemplate>
+            <DataTemplate x:DataType="data:Music">
+                <Grid>
+                    <Grid.ContextFlyout>
+                        <MenuFlyout Opening="ListViewItemContextFlyout_Opening">
                             <MenuFlyoutItem
                                 x:Name="PlayItem"
                                 Click="PlayItem_Click"
                                 Icon="Play"
                                 Text="Play" />
-                            <MenuFlyoutSubItem
-                                x:Name="AddToPlaylistsItem"
-                                Icon="Add"
-                                Text="Add To Playlists">
-                                <MenuFlyoutItem Text="Create New Playlist" />
-                                <MenuFlyoutSeparator />
-                                <MenuFlyoutItem Icon="List" Text="My Favorites" />
-                            </MenuFlyoutSubItem>
+                            <!--  AddToPlaylistsItem  -->
                             <MenuFlyoutItem
                                 x:Name="DeleteItem"
                                 Click="DeleteItem_Click"
@@ -65,9 +59,39 @@
                                 Icon="Upload"
                                 Text="Move To Top" />
                         </MenuFlyout>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </ListView.ItemContainerStyle>
+                    </Grid.ContextFlyout>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="8*" />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <FontIcon
+                            x:Name="PlayingIcon"
+                            Margin="0,0,16,0"
+                            FontFamily="Segoe MDL2 Assets"
+                            Foreground="{StaticResource SystemColorHighlightColor}"
+                            Glyph="&#xE767;"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            Visibility="{Binding IsPlaying, Converter={StaticResource MusicVisibilityConverter}, Mode=OneWay}" />
+                        <TextBlock Foreground="{Binding IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}" Text="{Binding Name}" />
+                    </StackPanel>
+                    <TextBlock
+                        Grid.Column="1"
+                        Foreground="{Binding IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
+                        Text="{Binding Artist}" />
+                    <TextBlock
+                        Grid.Column="2"
+                        Foreground="{Binding IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
+                        Text="{Binding Album}" />
+                    <TextBlock
+                        Grid.Column="3"
+                        HorizontalAlignment="Right"
+                        Foreground="{Binding IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
+                        Text="{Binding Duration, Converter={StaticResource MusicDurationConverter}}" />
+                </Grid>
+            </DataTemplate>
+        </ListView.ItemTemplate>
     </ListView>
 </UserControl>

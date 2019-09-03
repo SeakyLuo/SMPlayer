@@ -151,7 +151,7 @@ namespace SMPlayer
             SetAllSongs(temp.ToList());
         }
 
-        public static void SetAllSongs(IEnumerable<Music> songs)
+        public static void SetAllSongs(ICollection<Music> songs)
         {
             if (AllSongs == null) AllSongs = new ObservableCollection<Music>();
             else AllSongs.Clear();
@@ -179,6 +179,6 @@ namespace SMPlayer
 
         public void MediaEnded() { return; }
 
-        public void ShuffleChanged(IEnumerable<Music> newPlayList, bool isShuffle) { return; }
+        public void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle) { return; }
     }
 }

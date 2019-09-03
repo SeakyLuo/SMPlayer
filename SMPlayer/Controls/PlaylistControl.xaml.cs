@@ -30,15 +30,56 @@ namespace SMPlayer
         public static ElementTheme CurrentTheme;
         private static List<MusicRequestListener> MusicRequestListeners = new List<MusicRequestListener>();
         public bool AlternatingRowColor { get; set; }
+        public bool AllowReorder
+        {
+            get => SongsListView.CanReorderItems;
+            set
+            {
+                SongsListView.CanReorderItems = value;
+                SongsListView.AllowDrop = value;
+                SongsListView.CanDrag = value;
+            }
+        }
+        public object Header
+        {
+            set => SongsListView.Header = value;
+        }
+        public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register("Header", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
+        public object ItemsSource
+        {
+            get => SongsListView.ItemsSource;
+            set
+            {
+                SongsListView.ItemsSource = value;
+            }
+        }
         public PlaylistControl()
         {
             this.InitializeComponent();
-            SongsListView.ItemsSource = Songs;
+            MediaHelper.AddMediaControlListener(this as MediaControlListener);
+            if (ItemsSource == null)
+                ItemsSource = Songs;
         }
 
-        private void PlaylistController_Loaded(object sender, RoutedEventArgs e)
+        private void PlaylistController_Loading(FrameworkElement sender, object args)
         {
             CurrentTheme = Theme;
+        }
+
+        private void ListViewItemContextFlyout_Opening(object sender, object e)
+        {
+            var flyout = sender as MenuFlyout;
+            var helper = new AddToMenuFlyout() { Data = (flyout.Target as ListViewItem).Content };
+            if (flyout.Items[1].Name == AddToMenuFlyout.AddToSubItemName) flyout.Items[1] = helper.GetMenuFlyoutSubItem();
+            else flyout.Items.Insert(1, helper.GetMenuFlyoutSubItem());
+
+        }
+        public static void AddMusic(object item)
+        {
+            if (item is Music)
+                Songs.Add(item as Music);
+            else if (item is ICollection<Music>)
+                foreach (var music in item as ICollection<Music>) Songs.Add(music);
         }
 
         public static void AddMusicRequestListener(MusicRequestListener listener)
@@ -46,14 +87,13 @@ namespace SMPlayer
             MusicRequestListeners.Add(listener);
         }
 
-        public static void SetPlaylist(IEnumerable<Music> playlist)
+        public static void SetPlaylist(ICollection<Music> playlist)
         {
             if (Helper.SamePlayList(Songs, playlist)) return;
             Songs.Clear();
             foreach (var music in playlist)
             {
-                if (music.Equals(MediaHelper.CurrentMusic))
-                    music.IsPlaying = true;
+                music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
                 Songs.Add(music);
             }
         }
@@ -85,7 +125,7 @@ namespace SMPlayer
                 FindMusicAndSetPlaying(next, true);
             });
         }
-        public void ShuffleChanged(IEnumerable<Music> newPlayList, bool isShuffle)
+        public void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle)
         {
             Songs.Clear();
             foreach (var music in newPlayList) Songs.Add(music);
@@ -114,21 +154,6 @@ namespace SMPlayer
             Music music = (sender as MenuFlyoutItem).DataContext as Music;
             Songs.Move(Songs.IndexOf(music), 0);
             MediaHelper.MoveMusic(music, 0);
-        }
-
-        private void ClearButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void SongsListView_DropCompleted(UIElement sender, DropCompletedEventArgs args)
-        {
-
-        }
-
-        private void SongsListView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
-        {
-
         }
     }
 }
