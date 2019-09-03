@@ -69,7 +69,7 @@ namespace SMPlayer
         private void ListViewItemContextFlyout_Opening(object sender, object e)
         {
             var flyout = sender as MenuFlyout;
-            var helper = new AddToMenuFlyout() { Data = (flyout.Target as ListViewItem).Content };
+            var helper = new AddToMenuFlyout() { Data = (flyout.Target as Grid).DataContext };
             if (flyout.Items[1].Name == AddToMenuFlyout.AddToSubItemName) flyout.Items[1] = helper.GetMenuFlyoutSubItem();
             else flyout.Items.Insert(1, helper.GetMenuFlyoutSubItem());
 

@@ -34,20 +34,27 @@ namespace SMPlayer
     {
         public static NowPlayingFullPage Instance { get => (Window.Current.Content as Frame).Content as NowPlayingFullPage; }
         private MusicProperties musicProperties;
-        private string Lyrics;
+        private string Lyrics = "";
         private Music CurrentMusic;
         public NowPlayingFullPage()
         {
             this.InitializeComponent();
             MediaControl.AddMusicRequestListener(this as MusicRequestListener);
+            MediaHelper.AddMediaControlListener(this as MediaControlListener);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             FullMediaControl.Update();
             PlaylistControl.SetPlaylist(MediaHelper.CurrentPlayList);
+            SetMusic(MediaHelper.CurrentMusic);
+        }
+
+        public void SetMusic(Music music)
+        {
             SetMusicInfo(MediaHelper.CurrentMusic);
             SetLyrics(MediaHelper.CurrentMusic);
+            CurrentMusic = music;
         }
 
         public void SetMusicProperties(MusicProperties properties)
@@ -152,25 +159,25 @@ namespace SMPlayer
 
         public void Tick() { return; }
 
-        public void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
+        public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
         {
-            if (!current.Equals(CurrentMusic) ||
+            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+            {
                 // if being modified and not saved
-                musicProperties.Title != TitleTextBox.Text ||
-                musicProperties.Subtitle != SubtitleTextBox.Text ||
-                musicProperties.Artist != ArtistTextBox.Text ||
-                musicProperties.AlbumArtist != AlbumArtistTextBox.Text ||
-                musicProperties.Publisher != PublisherTextBox.Text ||
-                Lyrics != LyricsTextBox.Text ||
-                PlayCountTextBox.Text == "" && CurrentMusic.PlayCount != 0 ||
-                int.TryParse(PlayCountTextBox.Text, out int PlayCount) && CurrentMusic.PlayCount != PlayCount ||
-                TrackNumberTextBox.Text == "" && musicProperties.TrackNumber != 0 ||
-                uint.TryParse(TrackNumberTextBox.Text, out uint TrackNumber) && musicProperties.TrackNumber != TrackNumber ||
-                YearTextBox.Text == "" && musicProperties.Year != 0 ||
-                uint.TryParse(YearTextBox.Text, out uint Year) && musicProperties.Year != Year)
-                return;
-            MusicInfoRequested(next);
-            LyricsRequested(next);
+                if (musicProperties.Title != TitleTextBox.Text) return;
+                if (musicProperties.Subtitle != SubtitleTextBox.Text) return;
+                if (musicProperties.Artist != ArtistTextBox.Text) return;
+                if (musicProperties.AlbumArtist != AlbumArtistTextBox.Text) return;
+                if (musicProperties.Publisher != PublisherTextBox.Text) return;
+                if (Lyrics.Replace('\n', '\r') == LyricsTextBox.Text) return; // bug
+                if (PlayCountTextBox.Text == "" && CurrentMusic.PlayCount != 0) return;
+                if (int.TryParse(PlayCountTextBox.Text, out int PlayCount) && CurrentMusic.PlayCount != PlayCount) return;
+                if (TrackNumberTextBox.Text == "" && musicProperties.TrackNumber != 0) return;
+                if (uint.TryParse(TrackNumberTextBox.Text, out uint TrackNumber) && musicProperties.TrackNumber != TrackNumber) return;
+                if (YearTextBox.Text == "" && musicProperties.Year != 0) return;
+                if (uint.TryParse(YearTextBox.Text, out uint Year) && musicProperties.Year != Year) return;
+                SetMusic(next);
+            });
         }
 
         public void MediaEnded() { return; }
@@ -179,7 +186,7 @@ namespace SMPlayer
 
         public async void SetMusicInfo(Music music)
         {
-            CurrentMusic = music;
+            if (music.Equals(CurrentMusic)) return;
             var file = await StorageFile.GetFileFromPathAsync(music.Path);
             SetBasicProperties(file);
             SetMusicProperties(musicProperties = await music.GetMusicProperties());
@@ -192,8 +199,9 @@ namespace SMPlayer
 
         public async void SetLyrics(Music music)
         {
-            CurrentMusic = music;
-            Lyrics = await music.GetLyrics();
+            if (music.Equals(CurrentMusic)) return;
+            var lyrics = await music.GetLyrics();
+            Lyrics = string.IsNullOrEmpty(lyrics) ? "" : lyrics;
             LyricsTextBox.Text = Lyrics;
         }
 

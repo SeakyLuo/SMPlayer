@@ -440,10 +440,10 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Image">
       <RootProperty Name="Source" />
-      <RootProperty Name="Visibility" />
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
       <RootProperty Name="Margin" />
+      <RootProperty Name="Visibility" />
       <RootProperty Name="Stretch" />
       <RootProperty Name="VerticalAlignment" />
     </RootType>
@@ -481,13 +481,6 @@
       <RootMethod Name="SetAlignBottomWithPanel" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ListViewItem" />
-    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.ImageEx">
-      <RootProperty Name="Width" />
-      <RootProperty Name="Height" />
-      <RootProperty Name="Margin" />
-      <RootProperty Name="Source" />
-      <RootProperty Name="Style" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.SymbolIcon">
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Foreground" />

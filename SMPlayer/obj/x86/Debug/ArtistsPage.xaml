@@ -125,14 +125,13 @@
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
                                         <RelativePanel>
-                                            <controls:ImageEx x:ConnectionId='25'
+                                            <Image x:ConnectionId='25'
                                                 x:Name="AlbumCover"
                                                 Width="80"
                                                 Height="80"
                                                 Margin="10"
                                                 RelativePanel.AlignLeftWithPanel="True"
-                                                                       
-                                                Style="{StaticResource CachedImageStyle}" />
+                                                                                     />
                                             <StackPanel
                                                 Margin="0,10"
                                                 RelativePanel.LeftOf="AlbumMoreButton"
@@ -141,11 +140,11 @@
                                                     VerticalAlignment="Center"
                                                     FontSize="18"
                                                     FontWeight="Bold"
-                                                                         />
+                                                                                      />
                                                 <TextBlock x:ConnectionId='28'
                                                     x:Name="SongCountTextBlock"
                                                     Margin="0,10"
-                                                                                                                         />
+                                                                                                                                      />
                                             </StackPanel>
                                             <Button
                                                 x:Name="AlbumMoreButton"
