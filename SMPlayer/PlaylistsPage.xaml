@@ -55,14 +55,6 @@
                             x:Name="NameTextBlock"
                             Margin="10,0,5,0"
                             Text="{x:Bind Name, Mode=OneWay}" />
-                        <TextBox
-                            x:Name="NameTextBox"
-                            Margin="10,0,5,0"
-                            AcceptsReturn="True"
-                            Background="Transparent"
-                            ManipulationCompleted="NameTextBox_ManipulationCompleted"
-                            Text="{x:Bind Name, Mode=TwoWay}"
-                            Visibility="Collapsed" />
                     </StackPanel>
                 </DataTemplate>
             </controls:TabView.ItemHeaderTemplate>
@@ -95,7 +87,7 @@
                                     <TextBlock
                                         Grid.Column="1"
                                         Style="{StaticResource HeaderTextBlockStyle}"
-                                        Text="{x:Bind Name}" />
+                                        Text="{x:Bind Name, Mode=OneWay}" />
                                     <TextBlock
                                         Grid.Row="1"
                                         Grid.Column="1"
@@ -139,48 +131,9 @@
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
                     Background="Transparent"
+                    Click="NewPlaylistButton_Click"
                     Style="{StaticResource ButtonRevealStyle}"
                     ToolTipService.ToolTip="Create New Playlist">
-                    <Button.Flyout>
-                        <Flyout
-                            x:Name="NewPlaylistFlyout"
-                            Closed="NewPlaylistFlyout_Closed"
-                            Opening="NewPlaylistFlyout_Opening">
-                            <StackPanel>
-                                <TextBox
-                                    x:Name="NewPlaylistNameTextBox"
-                                    Grid.ColumnSpan="2"
-                                    Width="360"
-                                    Margin="20"
-                                    BorderThickness="0"
-                                    PlaceholderText="New Playlist Name" />
-                                <TextBlock
-                                    x:Name="NamingErrorTextBox"
-                                    Margin="20,-10,20,10"
-                                    Foreground="Red"
-                                    Visibility="Collapsed" />
-                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                    <Button
-                                        x:Name="CreateNewPlaylistButton"
-                                        Grid.Row="1"
-                                        Margin="10,0"
-                                        Background="{ThemeResource SystemColorHighlightColor}"
-                                        Click="CreateNewPlaylistButton_Click"
-                                        Content="Create New Playlist"
-                                        Foreground="White" />
-                                    <Button
-                                        x:Name="CancelNewPlaylistButton"
-                                        Grid.Row="1"
-                                        Grid.Column="1"
-                                        Margin="10,0"
-                                        Background="Transparent"
-                                        Click="CancelNewPlaylistButton_Click"
-                                        Content="Cancel"
-                                        Foreground="{ThemeResource SystemColorHighlightColor}" />
-                                </StackPanel>
-                            </StackPanel>
-                        </Flyout>
-                    </Button.Flyout>
                     <Viewbox MaxWidth="16" MaxHeight="16">
                         <SymbolIcon Symbol="Add" />
                     </Viewbox>

@@ -55,23 +55,15 @@
                             x:Name="NameTextBlock"
                             Margin="10,0,5,0"
                                                               />
-                        <TextBox x:ConnectionId='9'
-                            x:Name="NameTextBox"
-                            Margin="10,0,5,0"
-                            AcceptsReturn="True"
-                            Background="Transparent"
-                                                                                     
-                                                             
-                            Visibility="Collapsed" />
                     </StackPanel>
                 </DataTemplate>
             </controls:TabView.ItemHeaderTemplate>
             <controls:TabView.ItemTemplate>
                 <DataTemplate                           >
-                    <ListView x:ConnectionId='11' ItemTemplate="{StaticResource MusicListViewTemplate}"                             >
+                    <ListView x:ConnectionId='10' ItemTemplate="{StaticResource MusicListViewTemplate}"                             >
                         <ListView.Header>
                             <controls:ScrollHeader Mode="Sticky">
-                                <Grid x:ConnectionId='12'
+                                <Grid x:ConnectionId='11'
                                     x:Name="PlaylistInfoGrid"
                                     Padding="36"
                                     Background="#222222"
@@ -92,11 +84,11 @@
                                         Width="180"
                                         Height="180"
                                         Margin="0,0,20,0" />
-                                    <TextBlock x:ConnectionId='14'
+                                    <TextBlock x:ConnectionId='13'
                                         Grid.Column="1"
                                         Style="{StaticResource HeaderTextBlockStyle}"
-                                                             />
-                                    <TextBlock x:ConnectionId='15'
+                                                                          />
+                                    <TextBlock x:ConnectionId='14'
                                         Grid.Row="1"
                                         Grid.Column="1"
                                         Margin="0,5"
@@ -134,53 +126,14 @@
             </controls:TabView.ItemTemplate>
 
             <controls:TabView.TabStartHeader>
-                <Button x:ConnectionId='16'
+                <Button x:ConnectionId='15'
                     x:Name="NewPlaylistButton"
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
                     Background="Transparent"
+                                                   
                     Style="{StaticResource ButtonRevealStyle}"
                     ToolTipService.ToolTip="Create New Playlist">
-                    <Button.Flyout>
-                        <Flyout x:ConnectionId='17'
-                            x:Name="NewPlaylistFlyout"
-                                                             
-                                                               >
-                            <StackPanel>
-                                <TextBox x:ConnectionId='18'
-                                    x:Name="NewPlaylistNameTextBox"
-                                    Grid.ColumnSpan="2"
-                                    Width="360"
-                                    Margin="20"
-                                    BorderThickness="0"
-                                    PlaceholderText="New Playlist Name" />
-                                <TextBlock x:ConnectionId='19'
-                                    x:Name="NamingErrorTextBox"
-                                    Margin="20,-10,20,10"
-                                    Foreground="Red"
-                                    Visibility="Collapsed" />
-                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                    <Button x:ConnectionId='20'
-                                        x:Name="CreateNewPlaylistButton"
-                                        Grid.Row="1"
-                                        Margin="10,0"
-                                        Background="{ThemeResource SystemColorHighlightColor}"
-                                                                             
-                                        Content="Create New Playlist"
-                                        Foreground="White" />
-                                    <Button x:ConnectionId='21'
-                                        x:Name="CancelNewPlaylistButton"
-                                        Grid.Row="1"
-                                        Grid.Column="1"
-                                        Margin="10,0"
-                                        Background="Transparent"
-                                                                             
-                                        Content="Cancel"
-                                        Foreground="{ThemeResource SystemColorHighlightColor}" />
-                                </StackPanel>
-                            </StackPanel>
-                        </Flyout>
-                    </Button.Flyout>
                     <Viewbox MaxWidth="16" MaxHeight="16">
                         <SymbolIcon Symbol="Add" />
                     </Viewbox>
@@ -188,7 +141,7 @@
             </controls:TabView.TabStartHeader>
 
             <controls:TabView.TabEndHeader>
-                <Button x:ConnectionId='22'
+                <Button x:ConnectionId='16'
                     x:Name="EditPlaylistButton"
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
@@ -204,7 +157,7 @@
             </controls:TabView.TabEndHeader>
 
             <controls:TabView.Footer>
-                <TextBlock x:ConnectionId='23'
+                <TextBlock x:ConnectionId='17'
                     x:Name="PlayListTabViewFooter"
                     Padding="16,8,16,8"
                     HorizontalAlignment="Right"

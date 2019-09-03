@@ -10,6 +10,7 @@
     <RootPropertyPathName Name="Artist" />
     <RootPropertyPathName Name="Name" />
     <RootPropertyPathName Name="Songs" />
+    <RootPropertyPathName Name="PlaceholderForeground" />
     <RootPropertyPathName Name="AllSongs" />
     <RootPropertyPathName Name="PlayCount" />
     <RootPropertyPathName Name="Favorite" />
@@ -41,7 +42,9 @@
       <RootProperty Name="HorizontalTextAlignment" />
       <RootProperty Name="Width" />
       <RootProperty Name="FontFamily" />
+      <RootProperty Name="FontStyle" />
       <RootProperty Name="Padding" />
+      <RootProperty Name="IsHitTestVisible" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.FrameworkElement">
       <RootProperty Name="Margin" />
@@ -68,7 +71,11 @@
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="KeyboardAccelerators" />
       <RootProperty Name="BorderBrush" />
+      <RootProperty Name="MinWidth" />
+      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="BorderThickness" />
+      <RootProperty Name="IsTabStop" />
+      <RootProperty Name="Visibility" />
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Control">
@@ -185,6 +192,7 @@
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
       <RootProperty Name="FontSize" />
+      <RootProperty Name="VerticalAlignment" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Automation.AutomationProperties">
       <RootMethod Name="GetAccessibilityView" />
@@ -239,6 +247,8 @@
       <RootProperty Name="Opacity" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="Padding" />
+      <RootProperty Name="BorderBrush" />
+      <RootProperty Name="BorderThickness" />
       <RootEvent Name="Loaded" />
       <RootMethod Name="GetRow" />
       <RootMethod Name="SetRow" />
@@ -304,11 +314,10 @@
       <RootProperty Name="Background" />
       <RootProperty Name="RequestedTheme" />
       <RootProperty Name="TextWrapping" />
-      <RootProperty Name="AcceptsReturn" />
-      <RootProperty Name="Text" />
-      <RootProperty Name="Visibility" />
+      <RootProperty Name="SelectionHighlightColor" />
+      <RootProperty Name="SelectionFlyout" />
+      <RootProperty Name="Height" />
       <RootEvent Name="BeforeTextChanging" />
-      <RootEvent Name="ManipulationCompleted" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Canvas">
       <RootMethod Name="GetZIndex" />
@@ -316,8 +325,29 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ScrollViewer">
       <RootProperty Name="Content" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="Padding" />
+      <RootProperty Name="HorizontalScrollBarVisibility" />
+      <RootProperty Name="HorizontalScrollMode" />
+      <RootProperty Name="IsDeferredScrollingEnabled" />
+      <RootProperty Name="IsHorizontalRailEnabled" />
+      <RootProperty Name="IsTabStop" />
+      <RootProperty Name="IsVerticalRailEnabled" />
+      <RootProperty Name="VerticalScrollBarVisibility" />
+      <RootProperty Name="VerticalScrollMode" />
+      <RootProperty Name="ZoomMode" />
       <RootMethod Name="GetBringIntoViewOnFocusChange" />
       <RootMethod Name="SetBringIntoViewOnFocusChange" />
+      <RootMethod Name="GetHorizontalScrollMode" />
+      <RootMethod Name="SetHorizontalScrollMode" />
+      <RootMethod Name="GetVerticalScrollMode" />
+      <RootMethod Name="SetVerticalScrollMode" />
+      <RootMethod Name="GetHorizontalScrollBarVisibility" />
+      <RootMethod Name="SetHorizontalScrollBarVisibility" />
+      <RootMethod Name="GetVerticalScrollBarVisibility" />
+      <RootMethod Name="SetVerticalScrollBarVisibility" />
+      <RootMethod Name="GetIsDeferredScrollingEnabled" />
+      <RootMethod Name="SetIsDeferredScrollingEnabled" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.Popup">
       <RootProperty Name="Child" />
@@ -331,6 +361,10 @@
       <RootProperty Name="Margin" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="BorderBrush" />
+      <RootProperty Name="MinWidth" />
+      <RootProperty Name="MinHeight" />
+      <RootProperty Name="Background" />
+      <RootProperty Name="CornerRadius" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.TranslateTransform" />
     <RootType FullName="Windows.UI.Xaml.Controls.ListView">
@@ -371,6 +405,8 @@
     <RootType FullName="Windows.UI.Xaml.Data.Binding">
       <RootProperty Name="Converter" />
       <RootProperty Name="Mode" />
+      <RootProperty Name="RelativeSource" />
+      <RootProperty Name="TargetNullValue" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.RelativePanel">
       <RootProperty Name="Children" />
@@ -529,8 +565,6 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Flyout">
       <RootProperty Name="Content" />
-      <RootEvent Name="Closed" />
-      <RootEvent Name="Opening" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Input.KeyboardAccelerator">
       <RootProperty Name="Key" />
@@ -571,6 +605,19 @@
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.ListViewItemPresenter">
       <RootProperty Name="SelectedPointerOverBackground" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ContentDialog">
+      <RootProperty Name="Resources" />
+      <RootProperty Name="Content" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Media.Animation.DoubleAnimation">
+      <RootProperty Name="To" />
+      <RootProperty Name="Duration" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Data.RelativeSource">
+      <RootProperty Name="Mode" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Visibility" />
+    <RootType FullName="SMPlayer.RenameDialog" />
     <RootType FullName="SMPlayer.SearchPage" />
     <RootType FullName="SMPlayer.RecentPage" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGrid">

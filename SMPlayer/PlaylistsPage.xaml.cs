@@ -25,11 +25,12 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class PlaylistsPage : Page
+    public sealed partial class PlaylistsPage : Page, RenameActionListener
     {
         private ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
         private Dictionary<string, List<BitmapImage>> PlaylistThumbnailDict = new Dictionary<string, List<BitmapImage>>();
         private Random random = new Random();
+        private RenameDialog dialog;
         public PlaylistsPage()
         {
             this.InitializeComponent();
@@ -63,22 +64,14 @@ namespace SMPlayer
             var playlist = (sender as MenuFlyoutItem).DataContext as Playlist;
             DeletePlaylist(playlist);
         }
-        private void RenameClick(object sender, RoutedEventArgs e)
+        private async void RenameClick(object sender, RoutedEventArgs e)
         {
             var flyoutItem = sender as MenuFlyoutItem;
-            var tab = (TabViewItem)PlaylistTabView.ContainerFromItem(flyoutItem.DataContext);
-            var header = tab.HeaderTemplate.LoadContent();
-            RenameHeader(header, true, true);
+            var playlist = flyoutItem.DataContext as Playlist;
+            dialog = new RenameDialog(this as RenameActionListener, "Rename", playlist.Name);
+            await dialog.ShowAsync();
         }
 
-        private void RenameHeader(DependencyObject header, bool isEdit, bool selectAll)
-        {
-            var NameTextBlock = (TextBlock)VisualTreeHelper.GetChild(header, 1);
-            NameTextBlock.Visibility = isEdit ? Visibility.Visible : Visibility.Collapsed;
-            TextBox NameTextBox = (TextBox)VisualTreeHelper.GetChild(header, 2);
-            NameTextBox.Visibility = isEdit ? Visibility.Collapsed : Visibility.Visible;
-            if (selectAll) NameTextBox.SelectAll();
-        }
 
         private void DuplicateClick(object sender, RoutedEventArgs e)
         {
@@ -91,31 +84,12 @@ namespace SMPlayer
             Settings.settings.Playlists.Insert(index, duplicate);
         }
 
-        private void CancelNewPlaylistButton_Click(object sender, RoutedEventArgs e)
+        private async void NewPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
-            NewPlaylistFlyout.Hide();
-        }
-
-        private void CreateNewPlaylistButton_Click(object sender, RoutedEventArgs e)
-        {
-            string name = NewPlaylistNameTextBox.Text;
-            if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
-            {
-                NamingErrorTextBox.Text = "Playlist name cannot be empty or whitespaces!";
-                NamingErrorTextBox.Visibility = Visibility.Visible;
-                return;
-            }
-            if (Settings.settings.Playlists.FindIndex((p) => p.Name == name) != -1)
-            {
-                NamingErrorTextBox.Text = "This name has been used!";
-                NamingErrorTextBox.Visibility = Visibility.Visible;
-                return;
-            }
-            Playlist playlist = new Playlist(name);
-            Playlists.Add(playlist);
-            Settings.settings.Playlists.Add(playlist);
-            NewPlaylistFlyout.Hide();
-            NewPlaylistNameTextBox.Text = "";
+            string name = "Playlist";
+            int index = FindNextName(name);
+            dialog = new RenameDialog(this as RenameActionListener, "Create New Playlist", index == 0 ? name : string.Format("{0} {1}", name, index));
+            await dialog.ShowAsync();
         }
 
         private void EditPlaylistButton_Click(object sender, RoutedEventArgs e)
@@ -124,25 +98,11 @@ namespace SMPlayer
             {
                 EditPlaylistButton.Content = "\uE73E";
                 PlaylistTabView.CanCloseTabs = true;
-
-                foreach (var playlist in Playlists)
-                {
-                    var tab = (TabViewItem)PlaylistTabView.ContainerFromItem(playlist);
-                    var header = tab.HeaderTemplate.LoadContent();
-                    RenameHeader(header, true, false);
-                }
             }
             else
             {
                 EditPlaylistButton.Content = "\uE70F";
                 PlaylistTabView.CanCloseTabs = false;
-
-                foreach (var playlist in Playlists)
-                {
-                    var tab = (TabViewItem)PlaylistTabView.ContainerFromItem(playlist);
-                    var header = tab.HeaderTemplate.LoadContent();
-                    RenameHeader(header, false, false);
-                }
             }
         }
 
@@ -185,26 +145,6 @@ namespace SMPlayer
             await messageDialog.ShowAsync();
         }
 
-        private async void ShowNamingError()
-        {
-            var messageDialog = new MessageDialog("This name has been used!")
-            {
-                Title = "Error"
-            };
-            messageDialog.Commands.Add(new UICommand("Ok"));
-            await messageDialog.ShowAsync();
-        }
-
-        private void NameTextBox_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
-        {
-
-        }
-
-        private void NewPlaylistFlyout_Closed(object sender, object e)
-        {
-            NamingErrorTextBox.Visibility = Visibility.Collapsed;
-        }
-
         private int FindNextName(string Name)
         {
             var siblings = Settings.settings.Playlists.FindAll((p) => p.Name.StartsWith(Name)).Select((p) => p.Name).ToHashSet();
@@ -212,14 +152,6 @@ namespace SMPlayer
                 if (!siblings.Contains(string.Format("{0} {1}", Name, i)))
                     return i;
             return 0;
-        }
-
-        private void NewPlaylistFlyout_Opening(object sender, object e)
-        {
-            string name = "Playlist";
-            int index = FindNextName(name);
-            NewPlaylistNameTextBox.Text = index == 0 ? name : string.Format("{0} {1}", name, index);
-            NewPlaylistNameTextBox.SelectAll();
         }
 
         private async void PlaylistInfoGrid_Loaded(object sender, RoutedEventArgs e)
@@ -233,6 +165,33 @@ namespace SMPlayer
                 PlaylistThumbnailDict[playlist.Name] = thumbnails;
             }
             thumbnail.Source = thumbnails.Count == 0 ? Helper.DefaultAlbumCover : thumbnails[random.Next(thumbnails.Count)];
+        }
+
+        public bool Confirm(string OldName, string NewName)
+        {
+            if (string.IsNullOrEmpty(NewName) || string.IsNullOrWhiteSpace(NewName))
+            {
+                dialog.ShowError("Playlist name cannot be empty or whitespaces!");
+                return false;
+            }
+            if (Settings.settings.Playlists.FindIndex((p) => p.Name == NewName) != -1)
+            {
+                dialog.ShowError("This name has been used!");
+                return false;
+            }
+            if (string.IsNullOrEmpty(OldName))
+            {
+                Playlist playlist = new Playlist(NewName);
+                Playlists.Add(playlist);
+                Settings.settings.Playlists.Add(playlist);
+            }
+            else if (OldName != NewName)
+            {
+                int index = Settings.settings.Playlists.FindIndex((p) => p.Name == OldName);
+                Settings.settings.Playlists[index].Name = NewName;
+                Playlists[index].Name = NewName;
+            }
+            return true;
         }
     }
 }
