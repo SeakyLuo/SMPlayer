@@ -43,10 +43,10 @@
                     <Grid
                         Width="180"
                         Height="240"
+                        Tapped="Grid_Tapped"
                         Margin="10">
                         <Grid.ContextFlyout>
                             <MenuFlyout Opening="MenuFlyout_Opening" />
-
                         </Grid.ContextFlyout>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />

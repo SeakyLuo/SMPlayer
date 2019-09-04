@@ -19,6 +19,14 @@ namespace SMPlayer.Models
             this.Albums = Albums;
         }
 
+        public List<Music> GetSongs()
+        {
+            List<Music> list = new List<Music>();
+            foreach (var album in Albums)
+                list.AddRange(album.Songs.ToList());
+            return list;
+        }
+
         public override bool Equals(object obj)
         {
             return obj != null && obj is ArtistView && Name == (obj as ArtistView).Name;

@@ -17,10 +17,12 @@ namespace SMPlayer.Models
         public BitmapImage Third { get; set; }
         public BitmapImage Fourth { get; set; }
         public BitmapImage LargeThumbnail { get; set; }
+        private FolderTree Tree;
         public GridFolderView() { }
 
         public async Task Init(FolderTree tree)
         {
+            Tree = tree;
             List<BitmapImage> thumbnails = new List<BitmapImage>();
             var folder = await StorageFolder.GetFolderFromPathAsync(tree.Path);
             Name = folder.DisplayName;
@@ -45,6 +47,11 @@ namespace SMPlayer.Models
                 Third = thumbnails[2];
                 Fourth = thumbnails[3];
             }
+        }
+
+        public List<Music> GetSongs()
+        {
+            return Tree.Flatten();
         }
 
         public override bool Equals(object obj)

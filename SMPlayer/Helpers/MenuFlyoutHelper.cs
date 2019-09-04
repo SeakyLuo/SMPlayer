@@ -177,16 +177,18 @@ namespace SMPlayer
         {
             MenuFlyout flyout;
             MenuFlyoutHelper helper;
+            object dataContext;
             if (sender is MenuFlyout)
             {
                 flyout = sender as MenuFlyout;
-                helper = new MenuFlyoutHelper() { Data = (flyout.Target as Windows.UI.Xaml.FrameworkElement).DataContext };
+                dataContext = (flyout.Target as Windows.UI.Xaml.FrameworkElement).DataContext;
             }
             else
             {
                 flyout = new MenuFlyout();
-                helper = new MenuFlyoutHelper() { Data = (sender as Windows.UI.Xaml.FrameworkElement).DataContext };
+                dataContext = (sender as Windows.UI.Xaml.FrameworkElement).DataContext;
             }
+            helper = new MenuFlyoutHelper() { Data = FindMusic(dataContext) };
             var items = GetMenu(helper).Items;
             if (flyout.Items.Count >= index + items.Count && flyout.Items[index].Name == MusicMenuName)
             {
@@ -199,6 +201,17 @@ namespace SMPlayer
                     flyout.Items.Insert(index, item);
             }
             return flyout;
+        }
+
+        private static object FindMusic(object obj)
+        {
+            if (obj is Music || obj is ICollection<Music>) return obj;
+            else if (obj is ArtistView) return (obj as ArtistView).GetSongs();
+            else if (obj is AlbumView) return (obj as AlbumView).Songs;
+            else if (obj is Playlist) return (obj as Playlist).Songs;
+            else if (obj is GridFolderView) return (obj as GridFolderView).GetSongs();
+            else if (obj is GridMusicView) return (obj as GridMusicView).Source;
+            return null;
         }
     }
 

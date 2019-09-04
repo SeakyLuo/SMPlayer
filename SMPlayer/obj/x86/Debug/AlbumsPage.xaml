@@ -43,10 +43,10 @@
                     <Grid x:ConnectionId='6'
                         Width="180"
                         Height="240"
+                                            
                         Margin="10">
                         <Grid.ContextFlyout>
                             <MenuFlyout x:ConnectionId='7'                              />
-
                         </Grid.ContextFlyout>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />

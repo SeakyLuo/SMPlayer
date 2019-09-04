@@ -249,6 +249,7 @@
       <RootProperty Name="Padding" />
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="BorderThickness" />
+      <RootEvent Name="Tapped" />
       <RootEvent Name="Loaded" />
       <RootMethod Name="GetRow" />
       <RootMethod Name="SetRow" />
