@@ -54,7 +54,7 @@
                 <Grid Background="Transparent">
                     <local:PlaylistControl
                         x:Name="FullPlaylistControl"
-                        Margin="10"
+                        Margin="0,10,0,0"
                         AlternatingRowColor="False"
                         Theme="Dark" />
                 </Grid>

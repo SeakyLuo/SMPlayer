@@ -61,19 +61,14 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             MediaHelper.AddMediaControlListener(this as MediaControlListener);
-            //CurrentTheme = Theme;
             if (ItemsSource == null) ItemsSource = NowPlayingPlaylist;
         }
 
         private void PlaylistController_Loading(FrameworkElement sender, object args)
         {
-            //CurrentTheme = Theme;
-        }
-
-        private void PlaylistController_Loaded(object sender, RoutedEventArgs e)
-        {
             CurrentTheme = Theme;
         }
+
         public static void AddMusic(object item)
         {
             if (item is Music)

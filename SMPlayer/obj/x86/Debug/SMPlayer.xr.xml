@@ -5,15 +5,15 @@
   </Roots.Interfaces>
   <Roots.PropertyPathNames>
     <RootPropertyPathName Name="NowPlayingPlaylist" />
-    <RootPropertyPathName Name="IsPlaying" />
-    <RootPropertyPathName Name="Duration" />
-    <RootPropertyPathName Name="Album" />
-    <RootPropertyPathName Name="Artist" />
-    <RootPropertyPathName Name="Name" />
     <RootPropertyPathName Name="PlaceholderForeground" />
     <RootPropertyPathName Name="AllSongs" />
     <RootPropertyPathName Name="PlayCount" />
     <RootPropertyPathName Name="Favorite" />
+    <RootPropertyPathName Name="Duration" />
+    <RootPropertyPathName Name="Album" />
+    <RootPropertyPathName Name="Artist" />
+    <RootPropertyPathName Name="Name" />
+    <RootPropertyPathName Name="IsPlaying" />
     <RootPropertyPathName Name="Playlists" />
   </Roots.PropertyPathNames>
   <Roots.RootTypes>
@@ -492,7 +492,6 @@
     <RootType FullName="SMPlayer.ArtistsPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.UserControl">
       <RootProperty Name="Content" />
-      <RootEvent Name="Loaded" />
       <RootEvent Name="Loading" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.Loading">

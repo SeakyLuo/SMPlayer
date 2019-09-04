@@ -149,7 +149,7 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.Equals(true) ? Helper.GetHighlightBrush() : 
+            return value.Equals(true) ? Helper.GetHighlightBrush() :
                                         PlaylistControl.CurrentTheme == ElementTheme.Dark ? Helper.WhiteSmokeBrush : Helper.BlackBrush;
         }
 
