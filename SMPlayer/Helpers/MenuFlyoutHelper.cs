@@ -161,22 +161,32 @@ namespace SMPlayer
             return flyout;
         }
 
-        public static void InsertPlaylistMenu(object sender, int index = 0)
+        public static MenuFlyout InsertPlaylistMenu(object sender, int index = 0)
         {
-            InsertMenu((helper) => helper.GetPlaylistMenuFlyout(), sender, index);
+            return InsertMenu((helper) => helper.GetPlaylistMenuFlyout(), sender, index);
         }
-        public static void InsertMusicMenu(object sender, int index = 0)
+        public static MenuFlyout InsertMusicMenu(object sender, int index = 0)
         {
-            InsertMenu((helper) => helper.GetMusicMenuFlyout(), sender, index);
+            return InsertMenu((helper) => helper.GetMusicMenuFlyout(), sender, index);
         }
-        public static void InsertRemovableMusicMenu(object sender, int index = 0)
+        public static MenuFlyout InsertRemovableMusicMenu(object sender, int index = 0)
         {
-            InsertMenu((helper) => helper.GetRemovableMusicMenuFlyout(), sender, index);
+            return InsertMenu((helper) => helper.GetRemovableMusicMenuFlyout(), sender, index);
         }
-        private static void InsertMenu(Func<MenuFlyoutHelper, MenuFlyout> GetMenu, object sender, int index = 0)
+        private static MenuFlyout InsertMenu(Func<MenuFlyoutHelper, MenuFlyout> GetMenu, object sender, int index = 0)
         {
-            var flyout = sender as MenuFlyout;
-            var helper = new MenuFlyoutHelper() { Data = (flyout.Target as Windows.UI.Xaml.FrameworkElement).DataContext };
+            MenuFlyout flyout;
+            MenuFlyoutHelper helper;
+            if (sender is MenuFlyout)
+            {
+                flyout = sender as MenuFlyout;
+                helper = new MenuFlyoutHelper() { Data = (flyout.Target as Windows.UI.Xaml.FrameworkElement).DataContext };
+            }
+            else
+            {
+                flyout = new MenuFlyout();
+                helper = new MenuFlyoutHelper() { Data = (sender as Windows.UI.Xaml.FrameworkElement).DataContext };
+            }
             var items = GetMenu(helper).Items;
             if (flyout.Items.Count >= index + items.Count && flyout.Items[index].Name == MusicMenuName)
             {
@@ -188,6 +198,7 @@ namespace SMPlayer
                 foreach (var item in items.Reverse())
                     flyout.Items.Insert(index, item);
             }
+            return flyout;
         }
     }
 

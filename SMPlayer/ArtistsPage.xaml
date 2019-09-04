@@ -54,7 +54,7 @@
                         Background="Transparent"
                         Orientation="Horizontal">
                         <StackPanel.ContextFlyout>
-                            <MenuFlyout Opening="InsertPlaylistMenu" />
+                            <MenuFlyout Opening="OpenPlaylistMenuFlyout" />
                         </StackPanel.ContextFlyout>
                         <Grid>
                             <Ellipse
@@ -82,11 +82,6 @@
                                 <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
                                 <Setter Property="FontSize" Value="18" />
                                 <Setter Property="CornerRadius" Value="20" />
-                                <Setter Property="ContextFlyout">
-                                    <Setter.Value>
-                                        <MenuFlyout Opening="InsertPlaylistMenu" />
-                                    </Setter.Value>
-                                </Setter>
                             </Style>
                         </Grid.Resources>
                         <Grid.RowDefinitions>
@@ -116,13 +111,8 @@
                                 Background="{ThemeResource SystemColorHighlightColor}"
                                 Foreground="{ThemeResource AppBarBackgroundThemeBrush}"
                                 RelativePanel.AlignRightWithPanel="True"
-                                Style="{StaticResource MoreButtonStyle}">
-                                <Button.ContextFlyout>
-                                    <MenuFlyout Opening="InsertPlaylistMenu">
-                                        <MenuFlyoutItem Icon="Shuffle" Text="Shuffle Album" />
-                                    </MenuFlyout>
-                                </Button.ContextFlyout>
-                            </Button>
+                                Style="{StaticResource MoreButtonStyle}"
+                                Tapped="ShowPlaylistMenuFlyout" />
                             <Border
                                 Width="1000"
                                 Height="1"
@@ -182,7 +172,8 @@
                                                 Background="Transparent"
                                                 Foreground="{ThemeResource SystemColorHighlightColor}"
                                                 RelativePanel.AlignRightWithPanel="True"
-                                                Style="{StaticResource MoreButtonStyle}" />
+                                                Style="{StaticResource MoreButtonStyle}"
+                                                Tapped="ShowPlaylistMenuFlyout" />
                                         </RelativePanel>
                                         <ListView
                                             x:Name="SongsListView"
@@ -195,15 +186,17 @@
                                             SelectionMode="None">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate x:DataType="data:Music">
-                                                    <Grid Margin="12,0,0,0" Background="Transparent">
+                                                    <Grid
+                                                        Margin="12,0,0,0"
+                                                        Background="Transparent">
+                                                        <Grid.ContextFlyout>
+                                                            <MenuFlyout Opening="OpenMusicMenuFlyout" />
+                                                        </Grid.ContextFlyout>
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="Auto" />
                                                             <ColumnDefinition Width="*" />
                                                             <ColumnDefinition Width="Auto" />
                                                         </Grid.ColumnDefinitions>
-                                                        <Grid.ContextFlyout>
-                                                            <MenuFlyout Opening="InsertMenuFlyoutAt1" />
-                                                        </Grid.ContextFlyout>
                                                         <StackPanel x:Name="HeaderPanel" Orientation="Horizontal">
                                                             <FontIcon
                                                                 x:Name="PlayingIcon"

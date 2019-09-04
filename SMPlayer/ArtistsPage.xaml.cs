@@ -140,11 +140,15 @@ namespace SMPlayer
         public void MediaEnded() { return; }
         public void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle) { return; }
 
-        private void InsertPlaylistMenu(object sender, object e)
+        private void ShowPlaylistMenuFlyout(object sender, TappedRoutedEventArgs e)
+        {
+            MenuFlyoutHelper.InsertPlaylistMenu(sender).ShowAt(sender as Button);
+        }
+        private void OpenPlaylistMenuFlyout(object sender, object e)
         {
             MenuFlyoutHelper.InsertPlaylistMenu(sender);
         }
-        private void InsertMenuFlyoutAt1(object sender, object e)
+        private void OpenMusicMenuFlyout(object sender, object e)
         {
             MenuFlyoutHelper.InsertMusicMenu(sender);
         }

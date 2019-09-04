@@ -58,7 +58,6 @@
       <RootProperty Name="Background" />
       <RootProperty Name="Foreground" />
       <RootProperty Name="Style" />
-      <RootProperty Name="ContextFlyout" />
       <RootProperty Name="Content" />
       <RootProperty Name="Template" />
       <RootProperty Name="Width" />
@@ -75,6 +74,7 @@
       <RootProperty Name="IsTabStop" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="FontFamily" />
+      <RootEvent Name="Tapped" />
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Control">
@@ -480,11 +480,6 @@
       <RootMethod Name="GetAlignBottomWithPanel" />
       <RootMethod Name="SetAlignBottomWithPanel" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutItem">
-      <RootProperty Name="Icon" />
-      <RootProperty Name="Text" />
-      <RootEvent Name="Click" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.SymbolIcon">
       <RootProperty Name="RenderTransformOrigin" />
       <RootProperty Name="Symbol" />
@@ -559,6 +554,11 @@
     <RootType FullName="Windows.UI.Xaml.Controls.ToolTipService">
       <RootMethod Name="GetToolTip" />
       <RootMethod Name="SetToolTip" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutItem">
+      <RootProperty Name="Icon" />
+      <RootProperty Name="Text" />
+      <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Flyout">
       <RootProperty Name="Content" />

@@ -34,7 +34,7 @@
             <DataTemplate x:DataType="data:Music">
                 <Grid Background="Transparent">
                     <Grid.ContextFlyout>
-                        <MenuFlyout Opening="ListViewItemContextFlyout_Opening">
+                        <MenuFlyout Opening="OpenMusicMenuFlyout">
                             <MenuFlyoutItem
                                 x:Name="MoveToTopItem"
                                 Click="MoveToTopItem_Click"

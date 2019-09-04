@@ -74,11 +74,6 @@ namespace SMPlayer
         {
             CurrentTheme = Theme;
         }
-
-        private void ListViewItemContextFlyout_Opening(object sender, object e)
-        {
-            MenuFlyoutHelper.InsertRemovableMusicMenu(sender);
-        }
         public static void AddMusic(object item)
         {
             if (item is Music)
@@ -164,6 +159,10 @@ namespace SMPlayer
         private void SongsListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
 
+        }
+        private void OpenMusicMenuFlyout(object sender, object e)
+        {
+            MenuFlyoutHelper.InsertRemovableMusicMenu(sender);
         }
     }
 }
