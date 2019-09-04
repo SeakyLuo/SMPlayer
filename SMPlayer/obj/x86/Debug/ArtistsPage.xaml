@@ -10,6 +10,13 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <Style x:Key="StretchingListViewItemStyle" TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+    </Page.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -24,6 +31,7 @@
             Grid.Row="1"
             BackButtonBehavior="Automatic"
             CompactModeThresholdWidth="720"
+            ItemContainerStyle="{StaticResource StretchingListViewItemStyle}"
                                                        >
             <controls:MasterDetailsView.MasterHeader>
                 <Grid Margin="10,0,5,10">
@@ -40,7 +48,14 @@
             </controls:MasterDetailsView.MasterHeader>
             <controls:MasterDetailsView.ItemTemplate>
                 <DataTemplate                             >
-                    <StackPanel x:ConnectionId='7' Margin="5" Orientation="Horizontal">
+                    <StackPanel x:ConnectionId='7'
+                        Padding="15,5"
+                        HorizontalAlignment="Stretch"
+                        Background="Transparent"
+                        Orientation="Horizontal">
+                        <StackPanel.ContextFlyout>
+                            <MenuFlyout x:ConnectionId='8'                              />
+                        </StackPanel.ContextFlyout>
                         <Grid>
                             <Ellipse
                                 Width="36"
@@ -48,7 +63,7 @@
                                 Fill="DarkGray" />
                             <FontIcon Foreground="White" Glyph="&#xE8D4;" />
                         </Grid>
-                        <TextBlock x:ConnectionId='8'
+                        <TextBlock x:ConnectionId='9'
                             x:Name="ArtistNameTextBlock"
                             Margin="10"
                                                 
@@ -58,7 +73,22 @@
             </controls:MasterDetailsView.ItemTemplate>
             <controls:MasterDetailsView.DetailsTemplate>
                 <DataTemplate                             >
-                    <Grid x:ConnectionId='10'>
+                    <Grid x:ConnectionId='11'>
+                        <Grid.Resources>
+                            <Style x:Key="MoreButtonStyle" TargetType="Button">
+                                <Setter Property="Width" Value="40" />
+                                <Setter Property="Height" Value="40" />
+                                <Setter Property="Content" Value="&#xE712;" />
+                                <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+                                <Setter Property="FontSize" Value="18" />
+                                <Setter Property="CornerRadius" Value="20" />
+                                <Setter Property="ContextFlyout">
+                                    <Setter.Value>
+                                        <MenuFlyout x:ConnectionId='12'                              />
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Grid.Resources>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
@@ -81,19 +111,18 @@
                                     FontSize="18"
                                                                                                                 />
                             </StackPanel>
-                            <Grid
+                            <Button
                                 Margin="36,12"
-                                VerticalAlignment="Center"
-                                RelativePanel.AlignRightWithPanel="True">
-                                <Ellipse
-                                    Width="36"
-                                    Height="36"
-                                    Fill="{ThemeResource SystemColorHighlightColor}" />
-                                <SymbolIcon
-                                    VerticalAlignment="Center"
-                                    Foreground="{ThemeResource AppBarBackgroundThemeBrush}"
-                                    Symbol="More" />
-                            </Grid>
+                                Background="{ThemeResource SystemColorHighlightColor}"
+                                Foreground="{ThemeResource AppBarBackgroundThemeBrush}"
+                                RelativePanel.AlignRightWithPanel="True"
+                                Style="{StaticResource MoreButtonStyle}">
+                                <Button.ContextFlyout>
+                                    <MenuFlyout x:ConnectionId='28'                             >
+                                        <MenuFlyoutItem Icon="Shuffle" Text="Shuffle Album" />
+                                    </MenuFlyout>
+                                </Button.ContextFlyout>
+                            </Button>
                             <Border
                                 Width="1000"
                                 Height="1"
@@ -103,7 +132,7 @@
                                 BorderThickness="2"
                                 RelativePanel.AlignBottomWithPanel="True" />
                         </RelativePanel>
-                        <ListView x:ConnectionId='11'
+                        <ListView x:ConnectionId='13'
                             x:Name="AlbumsListView"
                             Grid.Row="1"
                             HorizontalAlignment="Stretch"
@@ -112,11 +141,12 @@
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    <Setter Property="Padding" Value="0" />
                                 </Style>
                             </ListView.ItemContainerStyle>
                             <ListView.ItemTemplate>
                                 <DataTemplate                            >
-                                    <Grid x:ConnectionId='13' Margin="10,0,0,30">
+                                    <Grid x:ConnectionId='15' Margin="15,0,15,30">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="*" />
@@ -125,23 +155,23 @@
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
                                         <RelativePanel>
-                                            <Image x:ConnectionId='25'
+                                            <Image x:ConnectionId='24'
                                                 x:Name="AlbumCover"
                                                 Width="80"
                                                 Height="80"
                                                 Margin="10"
                                                 RelativePanel.AlignLeftWithPanel="True"
-                                                                                     />
+                                                                        />
                                             <StackPanel
                                                 Margin="0,10"
                                                 RelativePanel.LeftOf="AlbumMoreButton"
                                                 RelativePanel.RightOf="AlbumCover">
-                                                <TextBlock x:ConnectionId='27'
+                                                <TextBlock x:ConnectionId='26'
                                                     VerticalAlignment="Center"
                                                     FontSize="18"
                                                     FontWeight="Bold"
-                                                                                      />
-                                                <TextBlock x:ConnectionId='28'
+                                                                         />
+                                                <TextBlock x:ConnectionId='27'
                                                     x:Name="SongCountTextBlock"
                                                     Margin="0,10"
                                                                                                                                       />
@@ -150,67 +180,32 @@
                                                 x:Name="AlbumMoreButton"
                                                 Margin="0,40,20,0"
                                                 Background="Transparent"
-                                                Content="&#xE712;"
-                                                FontFamily="Segoe MDL2 Assets"
-                                                FontSize="18"
                                                 Foreground="{ThemeResource SystemColorHighlightColor}"
-                                                RelativePanel.AlignRightWithPanel="True">
-                                                <Button.Flyout>
-                                                    <MenuFlyout>
-                                                        <MenuFlyoutItem Icon="Add" Text="Add To Now Playing" />
-                                                        <MenuFlyoutItem Icon="Shuffle" Text="Shuffle Album" />
-                                                    </MenuFlyout>
-                                                </Button.Flyout>
-                                            </Button>
+                                                RelativePanel.AlignRightWithPanel="True"
+                                                Style="{StaticResource MoreButtonStyle}" />
                                         </RelativePanel>
-                                        <ListView x:ConnectionId='14'
+                                        <ListView x:ConnectionId='16'
                                             x:Name="SongsListView"
                                             Grid.Row="1"
                                                                                                              
                                             IsItemClickEnabled="True"
                                                                                
+                                            ItemContainerStyle="{StaticResource StretchingListViewItemStyle}"
                                                                                      
                                             SelectionMode="None">
-                                            <ListView.ItemContainerStyle>
-                                                <Style TargetType="ListViewItem">
-                                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                                </Style>
-                                            </ListView.ItemContainerStyle>
                                             <ListView.ItemTemplate>
                                                 <DataTemplate                        >
-                                                    <Grid x:ConnectionId='16' Margin="12,0,0,0">
+                                                    <Grid x:ConnectionId='18' Margin="12,0,0,0" Background="Transparent">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="Auto" />
                                                             <ColumnDefinition Width="*" />
                                                             <ColumnDefinition Width="Auto" />
                                                         </Grid.ColumnDefinitions>
                                                         <Grid.ContextFlyout>
-                                                            <MenuFlyout>
-                                                                <MenuFlyoutItem x:ConnectionId='17'
-                                                                    x:Name="PlayItem"
-                                                                                          
-                                                                    Icon="Play"
-                                                                    Text="Play" />
-                                                                <MenuFlyoutSubItem
-                                                                    x:Name="AddToPlaylistsItem"
-                                                                    Icon="Add"
-                                                                    Text="Add To Playlists">
-                                                                    <MenuFlyoutItem Text="Create New Playlist" />
-                                                                    <MenuFlyoutSeparator />
-                                                                    <MenuFlyoutItem Icon="List" Text="My Favorites" />
-                                                                </MenuFlyoutSubItem>
-                                                                <MenuFlyoutItem
-                                                                    x:Name="DeleteItem"
-                                                                    Icon="Delete"
-                                                                    Text="Delete From Disk" />
-                                                                <MenuFlyoutItem
-                                                                    x:Name="MusicInfoItem"
-                                                                    Icon="MusicInfo"
-                                                                    Text="Music Info" />
-                                                            </MenuFlyout>
+                                                            <MenuFlyout x:ConnectionId='19'                               />
                                                         </Grid.ContextFlyout>
                                                         <StackPanel x:Name="HeaderPanel" Orientation="Horizontal">
-                                                            <FontIcon x:ConnectionId='23'
+                                                            <FontIcon x:ConnectionId='22'
                                                                 x:Name="PlayingIcon"
                                                                 Margin="0,0,16,0"
                                                                 FontFamily="Segoe MDL2 Assets"
@@ -218,15 +213,15 @@
                                                                 Glyph="&#xE767;"
                                                                 RelativePanel.AlignLeftWithPanel="True"
                                                                                                                                                                   />
-                                                            <TextBlock x:ConnectionId='24'
+                                                            <TextBlock x:ConnectionId='23'
                                                                 x:Name="MusicNameTextBlcok"
                                                                 Grid.Column="1"
                                                                                                                                                           
                                                                                      />
                                                         </StackPanel>
-                                                        <TextBlock x:ConnectionId='22'
+                                                        <TextBlock x:ConnectionId='21'
                                                             Grid.Column="2"
-                                                            Margin="10,0,10,0"
+                                                            Margin="10,0,15,0"
                                                                                                                                                       
                                                                                                                                         />
                                                     </Grid>

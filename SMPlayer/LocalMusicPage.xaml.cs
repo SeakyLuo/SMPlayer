@@ -67,5 +67,10 @@ namespace SMPlayer
             }
             LocalLoadingControl.Visibility = Visibility.Collapsed;
         }
+
+        private void MenuFlyout_Opening(object sender, object e)
+        {
+            MenuFlyoutHelper.InsertMusicMenu(sender);
+        }
     }
 }

@@ -67,7 +67,7 @@ namespace SMPlayer
             PlayList.CurrentItemChanged += (sender, args) =>
             {
                 if (sender.CurrentItemIndex >= OrderedPlayList.Count) return;
-                Music current = CurrentMusic?.Copy(), next = OrderedPlayList[Convert.ToInt32(sender.CurrentItemIndex)];
+                Music current = CurrentMusic?.Copy(), next = PlayList.Items[Convert.ToInt32(sender.CurrentItemIndex)].Source.CustomProperties["Source"] as Music;
                 // Switching Folder Cause this
                 if (!next.Equals(current))
                 {

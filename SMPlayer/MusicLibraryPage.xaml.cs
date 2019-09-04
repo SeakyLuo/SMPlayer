@@ -100,9 +100,9 @@ namespace SMPlayer
             music.CopyFrom(after);
         }
 
-        private void AddToMyFavorites_Click(object sender, RoutedEventArgs e)
+        private void MenuFlyout_Opening(object sender, object e)
         {
-            
+            MenuFlyoutHelper.InsertMusicMenu(sender);
         }
 
         private void DeleteItem_Click(object sender, RoutedEventArgs e)

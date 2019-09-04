@@ -110,34 +110,7 @@
                 <Style TargetType="controls:DataGridRow">
                     <Setter Property="controls:DataGridRow.ContextFlyout">
                         <Setter.Value>
-                            <MenuFlyout>
-                                <MenuFlyoutItem x:ConnectionId='5'
-                                    x:Name="PlayItem"
-                                                          
-                                    Icon="Play"
-                                    Text="Play" />
-                                <MenuFlyoutSubItem x:ConnectionId='6'
-                                    x:Name="AddToPlaylistsItem"
-                                    Icon="Add"
-                                    Text="Add To Playlists">
-                                    <MenuFlyoutItem Text="Create New Playlist" />
-                                    <MenuFlyoutSeparator />
-                                    <MenuFlyoutItem x:ConnectionId='9'
-                                                                      
-                                        Icon="List"
-                                        Text="My Favorites" />
-                                </MenuFlyoutSubItem>
-                                <MenuFlyoutItem x:ConnectionId='7'
-                                    x:Name="DeleteItem"
-                                                            
-                                    Icon="Delete"
-                                    Text="Delete From Disk" />
-                                <MenuFlyoutItem x:ConnectionId='8'
-                                    x:Name="MusicInfoItem"
-                                                               
-                                    Icon="MusicInfo"
-                                    Text="Music Info" />
-                            </MenuFlyout>
+                            <MenuFlyout x:ConnectionId='5'                              />
                         </Setter.Value>
                     </Setter>
                 </Style>

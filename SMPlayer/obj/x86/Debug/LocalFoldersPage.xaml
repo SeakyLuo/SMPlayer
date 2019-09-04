@@ -76,6 +76,9 @@
                             Foreground="Gray"
                             HorizontalTextAlignment="Left"
                                                        />
+                        <StackPanel.ContextFlyout>
+                            <MenuFlyout x:ConnectionId='14'                              />
+                        </StackPanel.ContextFlyout>
                     </StackPanel>
                 </DataTemplate>
             </GridView.ItemTemplate>

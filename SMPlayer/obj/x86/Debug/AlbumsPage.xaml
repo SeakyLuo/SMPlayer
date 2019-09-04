@@ -45,18 +45,8 @@
                         Height="240"
                         Margin="10">
                         <Grid.ContextFlyout>
-                            <MenuFlyout>
-                                <MenuFlyoutItem Icon="Shuffle" Text="Shuffle" />
-                                <MenuFlyoutSubItem Text="Add To Playlist">
-                                    <MenuFlyoutItem Text="Now Playing">
-                                        <MenuFlyoutItem.Icon>
-                                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC4F;" />
-                                        </MenuFlyoutItem.Icon>
-                                    </MenuFlyoutItem>
-                                    <MenuFlyoutSeparator />
-                                    <MenuFlyoutItem Icon="Add" Text="New Playlist" />
-                                </MenuFlyoutSubItem>
-                            </MenuFlyout>
+                            <MenuFlyout x:ConnectionId='7'                              />
+
                         </Grid.ContextFlyout>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -71,9 +61,9 @@
                             OffsetY="5"
                             ShadowOpacity="0"
                             Color="Gray">
-                            <Image x:ConnectionId='10'                         />
+                            <Image x:ConnectionId='11'                         />
                         </controls:DropShadowPanel>
-                        <TextBlock x:ConnectionId='8'
+                        <TextBlock x:ConnectionId='9'
                             Grid.Row="1"
                             Margin="0,5,0,3"
                             FontWeight="SemiBold"
@@ -82,7 +72,7 @@
                             TextAlignment="Left"
                             TextWrapping="Wrap"
                                                                                                                 />
-                        <TextBlock x:ConnectionId='9'
+                        <TextBlock x:ConnectionId='10'
                             Grid.Row="2"
                             FontSize="12"
                             Foreground="Gray"

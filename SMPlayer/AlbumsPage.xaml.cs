@@ -94,5 +94,10 @@ namespace SMPlayer
             Notified = 2;
             Setup();
         }
+
+        private void MenuFlyout_Opening(object sender, object e)
+        {
+            MenuFlyoutHelper.InsertPlaylistMenu(sender, 1);
+        }
     }
 }

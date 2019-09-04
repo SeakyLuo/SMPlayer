@@ -97,28 +97,59 @@ namespace SMPlayer
             return bitmapImage;
         }
 
-        public static async Task<Brush> GetThumbnailMainColor()
+        public static async Task<string> SaveThumbnail(UIElement image, bool isCurrent)
         {
-            var decoder = await BitmapDecoder.CreateAsync(await Thumbnail.OpenAsync(FileAccessMode.Read));
-            uint width = decoder.PixelWidth, height = decoder.PixelHeight;
-            var data = await decoder.GetPixelDataAsync(BitmapPixelFormat.Bgra8,
-                                                       BitmapAlphaMode.Straight,
-                                                       new BitmapTransform()
-                                                       {
-                                                           Bounds = new BitmapBounds() { Width = 1, Height = 1, X = width / 4, Y = width / 4 }
-                                                       },
-                                                       ExifOrientationMode.IgnoreExifOrientation,
-                                                       ColorManagementMode.DoNotColorManage);
-            var bgra = data.DetachPixelData();
-            Color color = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0]);
-            return new AcrylicBrush()
+            var bitmap = new RenderTargetBitmap();
+            try
             {
-                BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
-                FallbackColor = color,
-                TintOpacity = 0.75,
-                TintColor = color
-            };
+                await bitmap.RenderAsync(image);
+            }
+            catch (ArgumentException)
+            {
+                return "";
+            }
+            var pixels = await bitmap.GetPixelsAsync();
+            byte[] bytes = pixels.ToArray();
+            string filename = $@"{Guid.NewGuid()}.png";
+            StorageFile thumbnail;
+            while (true)
+            {
+                try
+                {
+                    thumbnail = await ThumbnailFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
+                    if (isCurrent) Thumbnail = thumbnail;
+                    break;
+                }
+                catch (FileLoadException)
+                {
+                    System.Threading.Thread.Sleep(250);
+                    continue;
+                }
+            }
+            using (IRandomAccessStream stream = await thumbnail.OpenAsync(FileAccessMode.ReadWrite))
+            {
+                var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, stream);
+                encoder.SetPixelData(BitmapPixelFormat.Bgra8,
+                                     BitmapAlphaMode.Ignore,
+                                     (uint)bitmap.PixelWidth,
+                                     (uint)bitmap.PixelHeight,
+                                     200,
+                                     200,
+                                     bytes);
+
+                await encoder.FlushAsync();
+            }
+            return filename;
         }
+
+        public static async Task<Brush> GetThumbnailMainColor(UIElement image, bool isCurrent)
+        {
+            var filename = await SaveThumbnail(image, isCurrent);
+            if (string.IsNullOrEmpty(filename)) return null;
+            var file = await ThumbnailFolder.GetFileAsync(filename);
+            return await ColorHelper.GetThumbnailMainColor(file);
+        }
+
         public static void SetBackButtonVisible(bool isVisible)
         {
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = isVisible ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
@@ -190,47 +221,6 @@ namespace SMPlayer
 
             // Update the existing notification's data by using tag/group
             toastNotifier.Update(data, ToastTag, ToastGroup);
-        }
-
-        public static async Task SaveThumbnail(UIElement image)
-        {
-            var bitmap = new RenderTargetBitmap();
-            try
-            {
-                await bitmap.RenderAsync(image);
-            }
-            catch (ArgumentException)
-            {
-                return;
-            }
-            var pixels = await bitmap.GetPixelsAsync();
-            while (true)
-            {
-                try
-                {
-                    Thumbnail = await ThumbnailFolder.CreateFileAsync($@"{Guid.NewGuid()}.png", CreationCollisionOption.ReplaceExisting);
-                    break;
-                }
-                catch (FileLoadException)
-                {
-                    System.Threading.Thread.Sleep(250);
-                    continue;
-                }
-            }
-            using (IRandomAccessStream stream = await Thumbnail.OpenAsync(FileAccessMode.ReadWrite))
-            {
-                var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, stream);
-                byte[] bytes = pixels.ToArray();
-                encoder.SetPixelData(BitmapPixelFormat.Bgra8,
-                                     BitmapAlphaMode.Ignore,
-                                     (uint)bitmap.PixelWidth,
-                                     (uint)bitmap.PixelHeight,
-                                     200,
-                                     200,
-                                     bytes);
-
-                await encoder.FlushAsync();
-            }
         }
 
         public static void UpdateTile(Music music)

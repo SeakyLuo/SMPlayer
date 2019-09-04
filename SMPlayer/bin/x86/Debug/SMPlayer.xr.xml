@@ -4,7 +4,7 @@
     <RootInterface FullName="Windows.UI.Xaml.Data.IValueConverter" />
   </Roots.Interfaces>
   <Roots.PropertyPathNames>
-    <RootPropertyPathName Name="Songs" />
+    <RootPropertyPathName Name="NowPlayingPlaylist" />
     <RootPropertyPathName Name="IsPlaying" />
     <RootPropertyPathName Name="Duration" />
     <RootPropertyPathName Name="Album" />
@@ -56,24 +56,25 @@
     <RootType FullName="Windows.UI.Xaml.Controls.Button">
       <RootProperty Name="Margin" />
       <RootProperty Name="Background" />
-      <RootProperty Name="Content" />
-      <RootProperty Name="FontFamily" />
-      <RootProperty Name="FontSize" />
       <RootProperty Name="Foreground" />
-      <RootProperty Name="Flyout" />
       <RootProperty Name="Style" />
+      <RootProperty Name="ContextFlyout" />
+      <RootProperty Name="Content" />
       <RootProperty Name="Template" />
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="CornerRadius" />
+      <RootProperty Name="FontSize" />
       <RootProperty Name="KeyboardAccelerators" />
+      <RootProperty Name="Flyout" />
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="MinWidth" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="BorderThickness" />
       <RootProperty Name="IsTabStop" />
       <RootProperty Name="Visibility" />
+      <RootProperty Name="FontFamily" />
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Control">
@@ -98,8 +99,8 @@
     <RootType FullName="Windows.UI.Xaml.Controls.FontIcon">
       <RootProperty Name="FontFamily" />
       <RootProperty Name="FontSize" />
-      <RootProperty Name="Glyph" />
       <RootProperty Name="Foreground" />
+      <RootProperty Name="Glyph" />
       <RootProperty Name="Margin" />
       <RootProperty Name="Visibility" />
     </RootType>
@@ -241,10 +242,10 @@
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
       <RootProperty Name="ContextFlyout" />
-      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="RequestedTheme" />
       <RootProperty Name="Opacity" />
       <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Padding" />
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="BorderThickness" />
@@ -385,10 +386,12 @@
       <RootProperty Name="SelectionMode" />
       <RootProperty Name="AllowDrop" />
       <RootProperty Name="CanDrag" />
+      <RootProperty Name="CanDragItems" />
       <RootProperty Name="CanReorderItems" />
       <RootProperty Name="ReorderMode" />
       <RootEvent Name="ContainerContentChanging" />
       <RootEvent Name="ItemClick" />
+      <RootEvent Name="DragItemsCompleted" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.Animation.TransitionCollection" />
     <RootType FullName="Windows.UI.Xaml.Controls.Page">
@@ -418,17 +421,6 @@
       <RootProperty Name="Items" />
       <RootEvent Name="Opening" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutItem">
-      <RootProperty Name="Icon" />
-      <RootProperty Name="Text" />
-      <RootEvent Name="Click" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutSubItem">
-      <RootProperty Name="Text" />
-      <RootProperty Name="Items" />
-      <RootProperty Name="Icon" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutSeparator" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DropShadowPanel">
       <RootProperty Name="VerticalContentAlignment" />
       <RootProperty Name="BlurRadius" />
@@ -446,11 +438,14 @@
       <RootProperty Name="Visibility" />
       <RootProperty Name="Stretch" />
       <RootProperty Name="VerticalAlignment" />
+      <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="SMPlayer.AlbumsPage" />
+    <RootType FullName="Windows.UI.Xaml.Controls.ListViewItem" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.MasterDetailsView">
       <RootProperty Name="BackButtonBehavior" />
       <RootProperty Name="CompactModeThresholdWidth" />
+      <RootProperty Name="ItemContainerStyle" />
       <RootProperty Name="ItemsSource" />
       <RootProperty Name="MasterHeader" />
       <RootProperty Name="ItemTemplate" />
@@ -458,13 +453,18 @@
       <RootProperty Name="NoSelectionContent" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.StackPanel">
-      <RootProperty Name="Margin" />
-      <RootProperty Name="Orientation" />
-      <RootProperty Name="Children" />
-      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Padding" />
       <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="Background" />
+      <RootProperty Name="Orientation" />
       <RootProperty Name="ContextFlyout" />
+      <RootProperty Name="Children" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Resources" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ContentControl">
+      <RootProperty Name="Content" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.RelativePanel">
       <RootProperty Name="Children" />
@@ -480,12 +480,14 @@
       <RootMethod Name="GetAlignBottomWithPanel" />
       <RootMethod Name="SetAlignBottomWithPanel" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.ListViewItem" />
+    <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutItem">
+      <RootProperty Name="Icon" />
+      <RootProperty Name="Text" />
+      <RootEvent Name="Click" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.SymbolIcon">
-      <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="Foreground" />
-      <RootProperty Name="Symbol" />
       <RootProperty Name="RenderTransformOrigin" />
+      <RootProperty Name="Symbol" />
       <RootProperty Name="RenderTransform" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.CompositeTransform">
@@ -495,7 +497,7 @@
     <RootType FullName="SMPlayer.ArtistsPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.UserControl">
       <RootProperty Name="Content" />
-      <RootProperty Name="Resources" />
+      <RootEvent Name="Loaded" />
       <RootEvent Name="Loading" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.Loading">
@@ -564,6 +566,10 @@
     <RootType FullName="Windows.UI.Xaml.Input.KeyboardAccelerator">
       <RootProperty Name="Key" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutSubItem">
+      <RootProperty Name="Icon" />
+      <RootProperty Name="Text" />
+    </RootType>
     <RootType FullName="SMPlayer.MediaControl">
       <RootProperty Name="Mode" />
     </RootType>
@@ -600,9 +606,6 @@
       <RootProperty Name="Header" />
     </RootType>
     <RootType FullName="SMPlayer.NowPlayingFullPage" />
-    <RootType FullName="Windows.UI.Xaml.Controls.Primitives.ListViewItemPresenter">
-      <RootProperty Name="SelectedPointerOverBackground" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ContentDialog">
       <RootProperty Name="Resources" />
       <RootProperty Name="Content" />

@@ -12,15 +12,15 @@ namespace SMPlayer
 {
     class ColorHelper
     {
-        public static async Task<Brush> GetThumbnailMainColor()
+        public static async Task<Brush> GetThumbnailMainColor(StorageFile Thumbnail)
         {
-            var decoder = await BitmapDecoder.CreateAsync(await Helper.Thumbnail.OpenAsync(FileAccessMode.Read));
+            var decoder = await BitmapDecoder.CreateAsync(await Thumbnail.OpenAsync(FileAccessMode.Read));
             uint width = decoder.PixelWidth, height = decoder.PixelHeight;
             var data = await decoder.GetPixelDataAsync(BitmapPixelFormat.Bgra8,
                                                        BitmapAlphaMode.Straight,
                                                        new BitmapTransform()
                                                        {
-                                                           Bounds = new BitmapBounds() { Width = 1, Height = 1, X = width / 2, Y = width / 2 }
+                                                           Bounds = new BitmapBounds() { Width = 1, Height = 1, X = width / 4, Y = height / 4 }
                                                        },
                                                        ExifOrientationMode.IgnoreExifOrientation,
                                                        ColorManagementMode.DoNotColorManage);
@@ -34,9 +34,9 @@ namespace SMPlayer
                 TintColor = color
             };
         }
-        public static async Task<Brush> GetThumbnailMainColorCommon()
+        public static async Task<Brush> GetThumbnailMainColorCommon(StorageFile Thumbnail)
         {
-            var decoder = await BitmapDecoder.CreateAsync(await Helper.Thumbnail.OpenAsync(FileAccessMode.Read));
+            var decoder = await BitmapDecoder.CreateAsync(await Thumbnail.OpenAsync(FileAccessMode.Read));
             uint width = decoder.PixelWidth, height = decoder.PixelHeight;
             Dictionary<byte, int>[] dict = new Dictionary<byte, int>[4];
             for (int n = 0; n < 4; n++) dict[n] = new Dictionary<byte, int>();
@@ -70,9 +70,9 @@ namespace SMPlayer
             };
         }
 
-        public static async Task<Brush> GetThumbnailMainColorAverage()
+        public static async Task<Brush> GetThumbnailMainColorAverage(StorageFile Thumbnail)
         {
-            var decoder = await BitmapDecoder.CreateAsync(await Helper.Thumbnail.OpenAsync(FileAccessMode.Read));
+            var decoder = await BitmapDecoder.CreateAsync(await Thumbnail.OpenAsync(FileAccessMode.Read));
             uint width = decoder.PixelWidth, height = decoder.PixelHeight;
             byte[] bgra = new byte[4];
             for (uint i = 0; i < width - 1; i++)

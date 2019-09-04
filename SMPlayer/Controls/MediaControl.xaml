@@ -23,7 +23,8 @@
                 x:Name="MainMusicInfoGrid"
                 Grid.Column="0"
                 Margin="0"
-                HorizontalAlignment="Left">
+                HorizontalAlignment="Left"
+                Background="Transparent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />

@@ -284,8 +284,8 @@ namespace SMPlayer
             RightTimeTextBlock.Text = MusicDurationConverter.ToTime(music.Duration);
             if (music.Favorite) LikeMusic(false);
             else DislikeMusic(false);
-            await Helper.SaveThumbnail(AlbumCover);
-            MainMediaControlGrid.Background = await Helper.GetThumbnailMainColor();
+            if (Mode != MediaControlMode.Full)
+                MainMediaControlGrid.Background = await Helper.GetThumbnailMainColor(AlbumCover, true);
             Helper.UpdateTile(music);
             Settings.settings.LastMusic = music;
         }

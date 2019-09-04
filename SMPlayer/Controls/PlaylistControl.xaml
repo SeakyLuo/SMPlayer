@@ -7,25 +7,22 @@
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="PlaylistController"
+    Loaded="PlaylistController_Loaded"
     Loading="PlaylistController_Loading"
     mc:Ignorable="d">
-
-    <UserControl.Resources>
-        <Style x:Key="SelectedPointerOverBackground" TargetType="ListViewItemPresenter">
-            <Setter Property="SelectedPointerOverBackground" Value="White" />
-        </Style>
-    </UserControl.Resources>
 
     <ListView
         x:Name="SongsListView"
         Grid.Row="1"
         AllowDrop="True"
         CanDrag="True"
+        CanDragItems="True"
         CanReorderItems="True"
         ContainerContentChanging="SongsListView_ContainerContentChanging"
+        DragItemsCompleted="SongsListView_DragItemsCompleted"
         IsItemClickEnabled="True"
         ItemClick="SongsListView_ItemClick"
-        ItemsSource="{Binding Songs, Mode=TwoWay}"
+        ItemsSource="{Binding NowPlayingPlaylist, Mode=TwoWay}"
         ReorderMode="Enabled"
         SelectionMode="None">
         <ListView.ItemContainerStyle>
@@ -38,21 +35,6 @@
                 <Grid Background="Transparent">
                     <Grid.ContextFlyout>
                         <MenuFlyout Opening="ListViewItemContextFlyout_Opening">
-                            <MenuFlyoutItem
-                                x:Name="PlayItem"
-                                Click="PlayItem_Click"
-                                Icon="Play"
-                                Text="Play" />
-                            <!--  AddToPlaylistsItem  -->
-                            <MenuFlyoutItem
-                                x:Name="DeleteItem"
-                                Click="DeleteItem_Click"
-                                Icon="Delete"
-                                Text="Remove From PlayList" />
-                            <MenuFlyoutItem
-                                x:Name="MusicInfoItem"
-                                Icon="MusicInfo"
-                                Text="Music Info" />
                             <MenuFlyoutItem
                                 x:Name="MoveToTopItem"
                                 Click="MoveToTopItem_Click"

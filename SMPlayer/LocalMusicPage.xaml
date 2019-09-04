@@ -30,11 +30,9 @@
             SelectionMode="Single">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:GridMusicView">
-                    <Grid Margin="5">
+                    <Grid Margin="5" Background="Transparent">
                         <Grid.ContextFlyout>
-                            <MenuFlyout>
-                                <MenuFlyoutItem Icon="Delete" Text="Delete From Disk" />
-                            </MenuFlyout>
+                            <MenuFlyout Opening="MenuFlyout_Opening" />
                         </Grid.ContextFlyout>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />

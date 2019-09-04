@@ -169,7 +169,7 @@ namespace SMPlayer
                 if (musicProperties.Artist != ArtistTextBox.Text) return;
                 if (musicProperties.AlbumArtist != AlbumArtistTextBox.Text) return;
                 if (musicProperties.Publisher != PublisherTextBox.Text) return;
-                if (Lyrics.Replace('\n', '\r') == LyricsTextBox.Text) return; // bug
+                if (Lyrics != LyricsTextBox.Text) return;
                 if (PlayCountTextBox.Text == "" && CurrentMusic.PlayCount != 0) return;
                 if (int.TryParse(PlayCountTextBox.Text, out int PlayCount) && CurrentMusic.PlayCount != PlayCount) return;
                 if (TrackNumberTextBox.Text == "" && musicProperties.TrackNumber != 0) return;
@@ -201,8 +201,8 @@ namespace SMPlayer
         {
             if (music.Equals(CurrentMusic)) return;
             var lyrics = await music.GetLyrics();
-            Lyrics = string.IsNullOrEmpty(lyrics) ? "" : lyrics;
-            LyricsTextBox.Text = Lyrics;
+            LyricsTextBox.Text = string.IsNullOrEmpty(lyrics) ? "" : lyrics;
+            Lyrics = LyricsTextBox.Text;
         }
 
         public void LyricsRequested(Music music)

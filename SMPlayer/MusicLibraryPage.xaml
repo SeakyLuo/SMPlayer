@@ -110,34 +110,7 @@
                 <Style TargetType="controls:DataGridRow">
                     <Setter Property="controls:DataGridRow.ContextFlyout">
                         <Setter.Value>
-                            <MenuFlyout>
-                                <MenuFlyoutItem
-                                    x:Name="PlayItem"
-                                    Click="PlayItem_Click"
-                                    Icon="Play"
-                                    Text="Play" />
-                                <MenuFlyoutSubItem
-                                    x:Name="AddToPlaylistsItem"
-                                    Icon="Add"
-                                    Text="Add To Playlists">
-                                    <MenuFlyoutItem Text="Create New Playlist" />
-                                    <MenuFlyoutSeparator />
-                                    <MenuFlyoutItem
-                                        Click="AddToMyFavorites_Click"
-                                        Icon="List"
-                                        Text="My Favorites" />
-                                </MenuFlyoutSubItem>
-                                <MenuFlyoutItem
-                                    x:Name="DeleteItem"
-                                    Click="DeleteItem_Click"
-                                    Icon="Delete"
-                                    Text="Delete From Disk" />
-                                <MenuFlyoutItem
-                                    x:Name="MusicInfoItem"
-                                    Click="MusicInfoItem_Click"
-                                    Icon="MusicInfo"
-                                    Text="Music Info" />
-                            </MenuFlyout>
+                            <MenuFlyout Opening="MenuFlyout_Opening" />
                         </Setter.Value>
                     </Setter>
                 </Style>

@@ -23,7 +23,3 @@ VisualStateManager. (GridAlbumView, MusicGridInfo)
 Full Screen.
 
 NaviSearchBar TextBox style change.
-
-MusicLibrary Flash.
-
-Switch music lyrics bug.

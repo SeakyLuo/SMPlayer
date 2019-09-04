@@ -21,7 +21,8 @@ namespace SMPlayer
 {
     public sealed partial class PlaylistControl : UserControl, MediaControlListener
     {
-        public static ObservableCollection<Music> Songs = new ObservableCollection<Music>();
+        public static ObservableCollection<Music> NowPlayingPlaylist = new ObservableCollection<Music>();
+        private ObservableCollection<Music> CurrentPlaylist = new ObservableCollection<Music>();
         public ElementTheme Theme
         {
             get => SongsListView.RequestedTheme;
@@ -50,36 +51,40 @@ namespace SMPlayer
             get => SongsListView.ItemsSource;
             set
             {
+                CurrentPlaylist = new ObservableCollection<Music>(value as ICollection<Music>);
                 SongsListView.ItemsSource = value;
             }
         }
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
+
         public PlaylistControl()
         {
             this.InitializeComponent();
             MediaHelper.AddMediaControlListener(this as MediaControlListener);
-            if (ItemsSource == null)
-                ItemsSource = Songs;
+            //CurrentTheme = Theme;
+            if (ItemsSource == null) ItemsSource = NowPlayingPlaylist;
         }
 
         private void PlaylistController_Loading(FrameworkElement sender, object args)
+        {
+            //CurrentTheme = Theme;
+        }
+
+        private void PlaylistController_Loaded(object sender, RoutedEventArgs e)
         {
             CurrentTheme = Theme;
         }
 
         private void ListViewItemContextFlyout_Opening(object sender, object e)
         {
-            var flyout = sender as MenuFlyout;
-            var helper = new AddToMenuFlyout() { Data = (flyout.Target as Grid).DataContext };
-            if (flyout.Items[1].Name == AddToMenuFlyout.AddToSubItemName) flyout.Items[1] = helper.GetMenuFlyoutSubItem();
-            else flyout.Items.Insert(1, helper.GetMenuFlyoutSubItem());
-
+            MenuFlyoutHelper.InsertRemovableMusicMenu(sender);
         }
         public static void AddMusic(object item)
         {
             if (item is Music)
-                Songs.Add(item as Music);
+                NowPlayingPlaylist.Add(item as Music);
             else if (item is ICollection<Music>)
-                foreach (var music in item as ICollection<Music>) Songs.Add(music);
+                foreach (var music in item as ICollection<Music>) NowPlayingPlaylist.Add(music);
         }
 
         public static void AddMusicRequestListener(MusicRequestListener listener)
@@ -89,12 +94,12 @@ namespace SMPlayer
 
         public static void SetPlaylist(ICollection<Music> playlist)
         {
-            if (Helper.SamePlayList(Songs, playlist)) return;
-            Songs.Clear();
+            if (Helper.SamePlayList(NowPlayingPlaylist, playlist)) return;
+            NowPlayingPlaylist.Clear();
             foreach (var music in playlist)
             {
                 music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
-                Songs.Add(music);
+                NowPlayingPlaylist.Add(music);
             }
         }
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
@@ -113,7 +118,7 @@ namespace SMPlayer
 
         private void FindMusicAndSetPlaying(Music target, bool isPlaying)
         {
-            var music = Songs.FirstOrDefault((m) => m.Equals(target));
+            var music = CurrentPlaylist.FirstOrDefault((m) => m.Equals(target));
             if (music != null) music.IsPlaying = isPlaying;
         }
 
@@ -127,8 +132,8 @@ namespace SMPlayer
         }
         public void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle)
         {
-            Songs.Clear();
-            foreach (var music in newPlayList) Songs.Add(music);
+            CurrentPlaylist.Clear();
+            foreach (var music in newPlayList) CurrentPlaylist.Add(music);
         }
         public void MediaEnded() { return; }
 
@@ -144,7 +149,7 @@ namespace SMPlayer
             if (music.Equals(MediaHelper.CurrentMusic))
             {
                 MediaHelper.NextMusic();
-                Songs.Remove(music);
+                CurrentPlaylist.Remove(music);
                 MediaHelper.RemoveMusic(music);
             }
         }
@@ -152,8 +157,13 @@ namespace SMPlayer
         private void MoveToTopItem_Click(object sender, RoutedEventArgs e)
         {
             Music music = (sender as MenuFlyoutItem).DataContext as Music;
-            Songs.Move(Songs.IndexOf(music), 0);
+            CurrentPlaylist.Move(CurrentPlaylist.IndexOf(music), 0);
             MediaHelper.MoveMusic(music, 0);
+        }
+
+        private void SongsListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
+        {
+
         }
     }
 }

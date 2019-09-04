@@ -76,6 +76,9 @@
                             Foreground="Gray"
                             HorizontalTextAlignment="Left"
                             Text="{x:Bind MusicCount}" />
+                        <StackPanel.ContextFlyout>
+                            <MenuFlyout Opening="MenuFlyout_Opening" />
+                        </StackPanel.ContextFlyout>
                     </StackPanel>
                 </DataTemplate>
             </GridView.ItemTemplate>

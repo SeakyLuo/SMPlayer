@@ -150,6 +150,10 @@ namespace SMPlayer
                 PlaylistThumbnailDict[playlist.Name] = thumbnails;
             }
             thumbnail.Source = thumbnails.Count == 0 ? Helper.DefaultAlbumCover : thumbnails[random.Next(thumbnails.Count)];
+            thumbnail.Loaded += async (_s, _e) =>
+            {
+                grid.Background = await Helper.GetThumbnailMainColor(thumbnail, false);
+            };
         }
 
         public bool Confirm(string OldName, string NewName)
@@ -190,8 +194,8 @@ namespace SMPlayer
         private void AddTo_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var playlist = (sender as NavigationViewItem).DataContext as Playlist;
-            var helper = new AddToMenuFlyout();
-            helper.GetMenuFlyout().ShowAt(sender as FrameworkElement);
+            var helper = new MenuFlyoutHelper();
+            helper.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
         }
         private async void Rename_Tapped(object sender, TappedRoutedEventArgs e)
         {
@@ -225,6 +229,12 @@ namespace SMPlayer
                 flyout.Items.Add(radioItem);
             }
             flyout.ShowAt(sender as FrameworkElement);
+        }
+
+        private void PlaylistCover_Loaded(object sender, RoutedEventArgs e)
+        {
+            var thumbnail = sender as Image;
+            //(thumbnail.Parent as Grid).Background = await Helper.GetThumbnailMainColor(thumbnail, false);
         }
     }
 }

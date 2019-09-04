@@ -55,8 +55,8 @@ namespace SMPlayer
             var name = "Now Playing - " + DateTime.Now.ToString("yy/MM/dd");
             int index = Settings.settings.FindNextPlaylistNameIndex(name);
             var realname = index == 0 ? name : string.Format("{0} ({1})", name, index);
-            var helper = new AddToMenuFlyout() { Data = PlaylistControl.Songs };
-            helper.GetPlaylistsMenuFlyout(realname).ShowAt(sender as FrameworkElement);
+            var helper = new MenuFlyoutHelper() { Data = PlaylistControl.NowPlayingPlaylist };
+            helper.GetAddToPlaylistsMenuFlyout(realname).ShowAt(sender as FrameworkElement);
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
