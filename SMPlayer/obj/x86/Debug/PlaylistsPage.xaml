@@ -68,7 +68,6 @@
                             <controls:ScrollHeader Mode="Sticky">
                                 <Grid x:ConnectionId='11'
                                     x:Name="PlaylistInfoGrid"
-                                    Margin="0,0,0,15"
                                     Padding="30"
                                     Background="#222222"
                                                                     
@@ -104,11 +103,15 @@
                                         Grid.Column="1"
                                         Background="Transparent"
                                         DefaultLabelPosition="Right"
+                                        FlowDirection="LeftToRight"
                                         IsOpen="False">
                                         <CommandBar.Resources>
-                                            <Style x:Key="Margin" TargetType="AppBarButton">
+                                            <Style x:Key="PlaylistHeaderAppBarButtonStyle" TargetType="AppBarButton">
                                                 <Setter Property="Margin" Value="5,0" />
                                                 <Setter Property="Padding" Value="0,0,10,0" />
+                                                <Setter Property="CornerRadius" Value="20" />
+                                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                             </Style>
                                         </CommandBar.Resources>
                                         <AppBarButton x:ConnectionId='15'
@@ -116,34 +119,47 @@
                                             Icon="Shuffle"
                                                                                                                                 
                                             Label="Shuffle"
-                                            Style="{StaticResource Margin}"
+                                            Style="{StaticResource PlaylistHeaderAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Shuffle Playlist" />
                                         <AppBarButton x:ConnectionId='16'
                                                                
                                             Icon="Add"
                                                                                                                                 
                                             Label="Add To"
-                                            Style="{StaticResource Margin}"
+                                            Style="{StaticResource PlaylistHeaderAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Add To Playlist" />
-
                                         <AppBarButton x:ConnectionId='17'
                                                                 
                                             Icon="Edit"
                                             Label="Rename"
-                                            Style="{StaticResource Margin}"
+                                            Style="{StaticResource PlaylistHeaderAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Rename Playlist" />
                                         <AppBarButton x:ConnectionId='18'
                                                                 
                                             Icon="Delete"
                                             Label="Delete"
-                                            Style="{StaticResource Margin}"
+                                            Style="{StaticResource PlaylistHeaderAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Delete Playlist" />
                                         <AppBarButton x:ConnectionId='19'
                                                               
                                             Icon="More"
                                             Label="More"
-                                            Style="{StaticResource Margin}"
-                                            ToolTipService.ToolTip="More" />
+                                            Style="{StaticResource PlaylistHeaderAppBarButtonStyle}"
+                                            ToolTipService.ToolTip="More Options" />
+                                        <CommandBar.SecondaryCommands>
+                                            <AppBarButton
+                                                Icon="Pin"
+                                                HorizontalAlignment="Stretch"
+                                                HorizontalContentAlignment="Stretch"
+                                                Label="Pin to Start"
+                                                ToolTipService.ToolTip="Pin Playlist to the Start Menu" />
+                                            <AppBarSeparator />
+                                            <AppBarToggleButton Label="Sort By Name" />
+                                            <AppBarToggleButton Label="Sort By Artist" />
+                                            <AppBarToggleButton Label="Sort By Album" />
+                                            <AppBarToggleButton Label="Sort By Duration" />
+                                            <AppBarToggleButton Label="Sort By Play Count" />
+                                        </CommandBar.SecondaryCommands>
                                     </CommandBar>
                                 </Grid>
                             </controls:ScrollHeader>

@@ -59,7 +59,7 @@ namespace SMPlayer
             }
         }
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
-
+ 
         public PlaylistControl()
         {
             this.InitializeComponent();

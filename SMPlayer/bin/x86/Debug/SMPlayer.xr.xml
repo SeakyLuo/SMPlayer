@@ -490,6 +490,7 @@
     <RootType FullName="SMPlayer.ArtistsPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.UserControl">
       <RootProperty Name="Content" />
+      <RootProperty Name="Resources" />
       <RootEvent Name="Loading" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.Loading">
@@ -665,13 +666,17 @@
       <RootProperty Name="DefaultLabelPosition" />
       <RootProperty Name="IsOpen" />
       <RootProperty Name="PrimaryCommands" />
+      <RootProperty Name="FlowDirection" />
       <RootProperty Name="Resources" />
+      <RootProperty Name="SecondaryCommands" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">
       <RootProperty Name="Icon" />
       <RootProperty Name="IsEnabled" />
       <RootProperty Name="Label" />
       <RootProperty Name="Style" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="HorizontalContentAlignment" />
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="SMPlayer.NowPlayingPage" />
@@ -700,6 +705,10 @@
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.ScrollHeader">
       <RootProperty Name="Mode" />
       <RootProperty Name="Content" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.AppBarSeparator" />
+    <RootType FullName="Windows.UI.Xaml.Controls.AppBarToggleButton">
+      <RootProperty Name="Label" />
     </RootType>
     <RootType FullName="SMPlayer.PlaylistsPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.ComboBox">

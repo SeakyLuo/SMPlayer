@@ -10,6 +10,12 @@
     Loading="PlaylistController_Loading"
     mc:Ignorable="d">
 
+    <UserControl.Resources>
+        <Style x:Key="PlaylistListViewItemStyle" TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+    </UserControl.Resources>
+
     <ListView
         x:Name="SongsListView"
         Grid.Row="1"
@@ -21,14 +27,9 @@
         DragItemsCompleted="SongsListView_DragItemsCompleted"
         IsItemClickEnabled="True"
         ItemClick="SongsListView_ItemClick"
+        ItemContainerStyle="{StaticResource PlaylistListViewItemStyle}"
         ReorderMode="Enabled"
         SelectionMode="None">
-        <ListView.ItemContainerStyle>
-            <Style TargetType="ListViewItem">
-                <Setter Property="Margin" Value="15,0" />
-                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            </Style>
-        </ListView.ItemContainerStyle>
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="data:Music">
                 <Grid Background="Transparent">

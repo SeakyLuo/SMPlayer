@@ -50,7 +50,7 @@
         <local:PlaylistControl
             x:Name="NowPlayingPlaylistControl"
             Grid.Row="2"
-            Margin="0,10,0,0"
+            Margin="10,10,10,0"
             AlternatingRowColor="True"
             Theme="Light" />
     </Grid>
