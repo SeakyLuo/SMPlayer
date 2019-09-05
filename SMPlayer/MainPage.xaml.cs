@@ -63,6 +63,7 @@ namespace SMPlayer
             MainNavigationView.IsPaneOpen = Settings.settings.IsNavigationCollapsed;
             MainMediaControl.SetMusicGridInfoTapped((sender, args) =>
             {
+                if (MediaHelper.CurrentMusic == null) return;
                 Frame.Navigate(typeof(NowPlayingFullPage), null, new DrillInNavigationTransitionInfo());
                 Helper.SetBackButtonVisible(true);
             });

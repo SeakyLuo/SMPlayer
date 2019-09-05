@@ -99,45 +99,52 @@
                                         Grid.Column="1"
                                         Margin="0,5"
                                         Text="{x:Bind Songs, Converter={StaticResource SongCountConverter}, Mode=OneWay}" />
-                                    <StackPanel
+                                    <CommandBar
                                         Grid.Row="2"
                                         Grid.Column="1"
-                                        Orientation="Horizontal">
-                                        <StackPanel.Resources>
-                                            <Style x:Key="Margin" TargetType="NavigationViewItem">
+                                        Background="Transparent"
+                                        DefaultLabelPosition="Right"
+                                        IsOpen="False">
+                                        <CommandBar.Resources>
+                                            <Style x:Key="Margin" TargetType="AppBarButton">
                                                 <Setter Property="Margin" Value="5,0" />
                                                 <Setter Property="Padding" Value="0,0,10,0" />
                                             </Style>
-                                        </StackPanel.Resources>
-                                        <NavigationViewItem
-                                            Margin="-5,0"
-                                            Content="Shuffle"
+                                        </CommandBar.Resources>
+                                        <AppBarButton
+                                            Click="Shuffle_Click"
                                             Icon="Shuffle"
                                             IsEnabled="{x:Bind Songs, Converter={StaticResource EnabledConverter}, Mode=OneWay}"
+                                            Label="Shuffle"
                                             Style="{StaticResource Margin}"
-                                            Tapped="Shuffle_Tapped" />
-                                        <NavigationViewItem
-                                            Content="Add To"
+                                            ToolTipService.ToolTip="Shuffle Playlist" />
+                                        <AppBarButton
+                                            Click="AddTo_Click"
                                             Icon="Add"
                                             IsEnabled="{x:Bind Songs, Converter={StaticResource EnabledConverter}, Mode=OneWay}"
+                                            Label="Add To"
                                             Style="{StaticResource Margin}"
-                                            Tapped="AddTo_Tapped" />
-                                        <NavigationViewItem
-                                            Content="Rename"
+                                            ToolTipService.ToolTip="Add To Playlist" />
+
+                                        <AppBarButton
+                                            Click="Rename_Click"
                                             Icon="Edit"
+                                            Label="Rename"
                                             Style="{StaticResource Margin}"
-                                            Tapped="Rename_Tapped" />
-                                        <NavigationViewItem
-                                            Content="Delete"
+                                            ToolTipService.ToolTip="Rename Playlist" />
+                                        <AppBarButton
+                                            Click="Delete_Click"
                                             Icon="Delete"
+                                            Label="Delete"
                                             Style="{StaticResource Margin}"
-                                            Tapped="Delete_Tapped" />
-                                        <NavigationViewItem
-                                            Content="More"
+                                            ToolTipService.ToolTip="Delete Playlist" />
+                                        <AppBarButton
+                                            Click="More_Click"
                                             Icon="More"
+                                            Label="More"
                                             Style="{StaticResource Margin}"
-                                            Tapped="More_Tapped" />
-                                    </StackPanel>
+                                            ToolTipService.ToolTip="More" />
+                                    </CommandBar>
                                 </Grid>
                             </controls:ScrollHeader>
                         </local:PlaylistControl.Header>

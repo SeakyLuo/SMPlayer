@@ -186,31 +186,30 @@ namespace SMPlayer
             }
             return true;
         }
-        private void Shuffle_Tapped(object sender, TappedRoutedEventArgs e)
+
+        private void Shuffle_Click(object sender, RoutedEventArgs e)
         {
-            var playlist = (sender as NavigationViewItem).DataContext as Playlist;
+            var playlist = (sender as FrameworkElement).DataContext as Playlist;
             MediaHelper.ShuffleAndPlay(playlist.Songs);
         }
-        private void AddTo_Tapped(object sender, TappedRoutedEventArgs e)
+        private void AddTo_Click(object sender, RoutedEventArgs e)
         {
-            var playlist = (sender as NavigationViewItem).DataContext as Playlist;
-            var helper = new MenuFlyoutHelper();
-            helper.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
+            MenuFlyoutHelper.InsertAddToMenu(sender).ShowAt(sender as FrameworkElement);
         }
-        private async void Rename_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void Rename_Click(object sender, RoutedEventArgs e)
         {
-            var playlist = (sender as NavigationViewItem).DataContext as Playlist;
+            var playlist = (sender as FrameworkElement).DataContext as Playlist;
             dialog = new RenameDialog(this as RenameActionListener, TitleOption.Rename, playlist.Name);
             await dialog.ShowAsync();
         }
-        private void Delete_Tapped(object sender, TappedRoutedEventArgs e)
+        private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            var playlist = (sender as NavigationViewItem).DataContext as Playlist;
+            var playlist = (sender as FrameworkElement).DataContext as Playlist;
             DeletePlaylist(playlist);
         }
-        private void More_Tapped(object sender, TappedRoutedEventArgs e)
+        private void More_Click(object sender, RoutedEventArgs e)
         {
-            var playlist = (sender as NavigationViewItem).DataContext as Playlist;
+            var playlist = (sender as FrameworkElement).DataContext as Playlist;
             MenuFlyout flyout = new MenuFlyout();
             flyout.Items.Add(new MenuFlyoutItem()
             {
@@ -230,7 +229,6 @@ namespace SMPlayer
             }
             flyout.ShowAt(sender as FrameworkElement);
         }
-
         private void PlaylistCover_Loaded(object sender, RoutedEventArgs e)
         {
             var thumbnail = sender as Image;

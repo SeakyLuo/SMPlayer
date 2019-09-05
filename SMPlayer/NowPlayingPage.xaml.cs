@@ -33,6 +33,10 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            PlaylistControl.NowPlayingPlaylist.CollectionChanged += (sender, args) =>
+            {
+                SaveToButton.IsEnabled = ClearButton.IsEnabled = FullScreenButton.IsEnabled = PlaylistControl.NowPlayingPlaylist.Count != 0;
+            };
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -50,7 +54,7 @@ namespace SMPlayer
                 // Clicking twice quickly will cause this exception
             }
         }
-        private void AddToButton_Click(object sender, RoutedEventArgs e)
+        private void SaveToButton_Click(object sender, RoutedEventArgs e)
         {
             var name = "Now Playing - " + DateTime.Now.ToString("yy/MM/dd");
             int index = Settings.settings.FindNextPlaylistNameIndex(name);

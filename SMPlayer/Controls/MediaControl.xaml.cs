@@ -619,6 +619,7 @@ namespace SMPlayer
                     Played(current);
                 next.IsPlaying = true;
                 SetMusic(next);
+                if (MediaHelper.IsPlaying) PlayMusic();
                 if (current != null && !Window.Current.Visible) Helper.ShowToast(next);
             });
         }

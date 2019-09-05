@@ -26,18 +26,24 @@
             DefaultLabelPosition="Right"
             IsOpen="False">
             <AppBarButton
-                Click="AddToButton_Click"
+                x:Name="SaveToButton"
+                Click="SaveToButton_Click"
                 Icon="Add"
+                IsEnabled="False"
                 Label="Save To"
-                ToolTipService.ToolTip="Add To New Playlist" />
+                ToolTipService.ToolTip="Save To New Playlist" />
             <AppBarButton
+                x:Name="ClearButton"
                 Click="ClearButton_Click"
                 Icon="Clear"
+                IsEnabled="False"
                 Label="Clear All"
                 ToolTipService.ToolTip="Clear Now Playing" />
             <AppBarButton
+                x:Name="FullScreenButton"
                 Click="FullScreenButton_Click"
                 Icon="FullScreen"
+                IsEnabled="False"
                 Label="Expand Page"
                 ToolTipService.ToolTip="Full Window Display" />
         </CommandBar>

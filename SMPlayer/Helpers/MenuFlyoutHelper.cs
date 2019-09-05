@@ -160,7 +160,10 @@ namespace SMPlayer
             flyout.Items.Insert(2, removeItem);
             return flyout;
         }
-
+        public static MenuFlyout InsertAddToMenu(object sender, int index = 0)
+        {
+            return InsertMenu((helper) => helper.GetAddToMenuFlyout(), sender, index);
+        }
         public static MenuFlyout InsertPlaylistMenu(object sender, int index = 0)
         {
             return InsertMenu((helper) => helper.GetPlaylistMenuFlyout(), sender, index);

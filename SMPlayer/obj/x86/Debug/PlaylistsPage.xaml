@@ -99,45 +99,52 @@
                                         Grid.Column="1"
                                         Margin="0,5"
                                                                                                                           />
-                                    <StackPanel
+                                    <CommandBar
                                         Grid.Row="2"
                                         Grid.Column="1"
-                                        Orientation="Horizontal">
-                                        <StackPanel.Resources>
-                                            <Style x:Key="Margin" TargetType="NavigationViewItem">
+                                        Background="Transparent"
+                                        DefaultLabelPosition="Right"
+                                        IsOpen="False">
+                                        <CommandBar.Resources>
+                                            <Style x:Key="Margin" TargetType="AppBarButton">
                                                 <Setter Property="Margin" Value="5,0" />
                                                 <Setter Property="Padding" Value="0,0,10,0" />
                                             </Style>
-                                        </StackPanel.Resources>
-                                        <NavigationViewItem x:ConnectionId='15'
-                                            Margin="-5,0"
-                                            Content="Shuffle"
+                                        </CommandBar.Resources>
+                                        <AppBarButton x:ConnectionId='15'
+                                                                 
                                             Icon="Shuffle"
                                                                                                                                 
+                                            Label="Shuffle"
                                             Style="{StaticResource Margin}"
-                                                                    />
-                                        <NavigationViewItem x:ConnectionId='16'
-                                            Content="Add To"
+                                            ToolTipService.ToolTip="Shuffle Playlist" />
+                                        <AppBarButton x:ConnectionId='16'
+                                                               
                                             Icon="Add"
                                                                                                                                 
+                                            Label="Add To"
                                             Style="{StaticResource Margin}"
-                                                                  />
-                                        <NavigationViewItem x:ConnectionId='17'
-                                            Content="Rename"
+                                            ToolTipService.ToolTip="Add To Playlist" />
+
+                                        <AppBarButton x:ConnectionId='17'
+                                                                
                                             Icon="Edit"
+                                            Label="Rename"
                                             Style="{StaticResource Margin}"
-                                                                   />
-                                        <NavigationViewItem x:ConnectionId='18'
-                                            Content="Delete"
+                                            ToolTipService.ToolTip="Rename Playlist" />
+                                        <AppBarButton x:ConnectionId='18'
+                                                                
                                             Icon="Delete"
+                                            Label="Delete"
                                             Style="{StaticResource Margin}"
-                                                                   />
-                                        <NavigationViewItem x:ConnectionId='19'
-                                            Content="More"
+                                            ToolTipService.ToolTip="Delete Playlist" />
+                                        <AppBarButton x:ConnectionId='19'
+                                                              
                                             Icon="More"
+                                            Label="More"
                                             Style="{StaticResource Margin}"
-                                                                 />
-                                    </StackPanel>
+                                            ToolTipService.ToolTip="More" />
+                                    </CommandBar>
                                 </Grid>
                             </controls:ScrollHeader>
                         </local:PlaylistControl.Header>

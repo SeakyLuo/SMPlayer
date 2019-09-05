@@ -460,7 +460,6 @@
       <RootProperty Name="Children" />
       <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="Resources" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ContentControl">
       <RootProperty Name="Content" />
@@ -517,8 +516,6 @@
       <RootProperty Name="Icon" />
       <RootProperty Name="Style" />
       <RootProperty Name="Visibility" />
-      <RootProperty Name="Margin" />
-      <RootProperty Name="IsEnabled" />
       <RootProperty Name="SelectsOnInvoked" />
       <RootProperty Name="Tag" />
       <RootEvent Name="Tapped" />
@@ -668,10 +665,13 @@
       <RootProperty Name="DefaultLabelPosition" />
       <RootProperty Name="IsOpen" />
       <RootProperty Name="PrimaryCommands" />
+      <RootProperty Name="Resources" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">
       <RootProperty Name="Icon" />
+      <RootProperty Name="IsEnabled" />
       <RootProperty Name="Label" />
+      <RootProperty Name="Style" />
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="SMPlayer.NowPlayingPage" />

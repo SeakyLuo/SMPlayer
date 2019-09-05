@@ -29,7 +29,7 @@ namespace SMPlayer
             int second = seconds % 60;
             string zero = second < 10 ? "0" : "";
             int minute = (seconds - second) / 60;
-            return string.Format("{0}:{1}{2}", minute, zero, second);
+            return $"{minute}:{zero}{second}";
         }
 
         public static string ToTime(ICollection<Music> list)
@@ -43,10 +43,10 @@ namespace SMPlayer
             minutes %= 60;
             hours %= 60;
             days %= 24;
-            string second = seconds != 0 && (total_seconds < 60 || minutes < 10) ? string.Format("{0} {1}", seconds, TryPlural("second", seconds)) : "",
-                   minute = minutes == 0 || days > 0 ? "" : string.Format("{0} {1} ", minutes, TryPlural("minute", minutes)),
-                   hour = hours == 0 ? "" : string.Format("{0} {1} ", hours, TryPlural("hour", hours)),
-                   day = days == 0 ? "" : string.Format("{0} {1} ", days, TryPlural("day", days));
+            string second = seconds != 0 && (total_seconds < 60 || minutes < 10) ? $"{seconds} {TryPlural("second", seconds)}" : "",
+                   minute = minutes == 0 || days > 0 ? "" : $"{minutes} {TryPlural("minute", minutes)}",
+                   hour = hours == 0 ? "" : $"{hours} {TryPlural("hour", hours)}",
+                   day = days == 0 ? "" : $"{days} {TryPlural("day", days)}";
             return day + hour + minute + second;
         }
 
@@ -166,7 +166,7 @@ namespace SMPlayer
             if (value is ICollection<AlbumView>)
             {
                 var list = (ICollection<AlbumView>)value;
-                return string.Format("Albums: {0} • Songs: {1}", list.Count(), list.Sum((a) => a.Songs.Count));
+                return $"Albums: {list.Count()} • Songs: {list.Sum((a) => a.Songs.Count)}";
             }
             return "";
         }
@@ -186,7 +186,7 @@ namespace SMPlayer
                 var list = (ICollection<Music>)value;
                 int count = list.Count();
                 string countStr = "Songs: " + count.ToString();
-                return count == 0 ? countStr : string.Format("{0} • {1}", countStr, MusicDurationConverter.ToTime(list));
+                return count == 0 ? countStr : $"{countStr} • {MusicDurationConverter.ToTime(list)}";
             }
             return "";
         }

@@ -164,7 +164,7 @@ namespace SMPlayer
             var item = PlayList.Items.FirstOrDefault((i) => i.Source.CustomProperties["Source"].Equals(music));
             if (item == null) return;
             PlayList.Items.Remove(item);
-            PlayList.Items.Insert(0, item);
+            PlayList.Items.Insert(toIndex, item);
         }
 
         public static int IndexOf(Music music)

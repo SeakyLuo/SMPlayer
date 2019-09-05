@@ -26,18 +26,24 @@
             DefaultLabelPosition="Right"
             IsOpen="False">
             <AppBarButton x:ConnectionId='4'
-                                         
+                x:Name="SaveToButton"
+                                          
                 Icon="Add"
+                IsEnabled="False"
                 Label="Save To"
-                ToolTipService.ToolTip="Add To New Playlist" />
+                ToolTipService.ToolTip="Save To New Playlist" />
             <AppBarButton x:ConnectionId='5'
+                x:Name="ClearButton"
                                          
                 Icon="Clear"
+                IsEnabled="False"
                 Label="Clear All"
                 ToolTipService.ToolTip="Clear Now Playing" />
             <AppBarButton x:ConnectionId='6'
+                x:Name="FullScreenButton"
                                               
                 Icon="FullScreen"
+                IsEnabled="False"
                 Label="Expand Page"
                 ToolTipService.ToolTip="Full Window Display" />
         </CommandBar>
