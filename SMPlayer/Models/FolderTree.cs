@@ -77,6 +77,11 @@ namespace SMPlayer.Models
             return Files.Contains(music) || Trees.Any((tree) => tree.Contains(music));
         }
 
+        public bool IsEmpty()
+        {
+            return Files.Count == 0 && Trees.All((tree) => tree.IsEmpty());
+        }
+
         public void Update(FolderTree tree)
         {
             // Merge to this tree

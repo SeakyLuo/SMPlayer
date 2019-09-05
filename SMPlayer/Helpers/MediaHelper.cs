@@ -16,7 +16,7 @@ namespace SMPlayer
     public static class MediaHelper
     {
         public static Music CurrentMusic;
-        public static List<Music> CurrentPlayList
+        public static List<Music> CurrentPlaylist
         {
             get
             {
@@ -57,7 +57,7 @@ namespace SMPlayer
         public static DispatcherTimer Timer = new DispatcherTimer {  Interval = TimeSpan.FromSeconds(1) };
         private static List<MediaControlListener> MediaControlListeners = new List<MediaControlListener>();
 
-        public async static Task Init()
+        public async static void Init()
         {
             Timer.Tick += (sender, e) =>
             {
@@ -83,15 +83,7 @@ namespace SMPlayer
             };
 
             while (Settings.settings == null) { System.Threading.Thread.Sleep(500); }
-            if (Settings.settings.CurrentPlayList.Count > 0)
-            {
-                await SetPlayList(Settings.settings.CurrentPlayList);
-            }
-            else if (!string.IsNullOrEmpty(Settings.settings.RootPath))
-            {
-                while (MusicLibraryPage.AllSongs == null) { }
-                await SetPlayList(MusicLibraryPage.AllSongs);
-            }
+            await SetPlaylist(PlaylistControl.NowPlayingPlaylist);
             Player.Volume = Settings.settings.Volume;
             MoveToMusic(Settings.settings.LastMusic);
             SetMode(Settings.settings.Mode);
@@ -123,13 +115,13 @@ namespace SMPlayer
             PlayList.ShuffleEnabled = isShuffle;
             if (!isShuffle) ShuffledPlayList.Clear();
             foreach (var listener in MediaControlListeners)
-                listener.ShuffleChanged(CurrentPlayList, isShuffle);
+                listener.ShuffleChanged(CurrentPlaylist, isShuffle);
             Settings.settings.Mode = mode;
         }
 
-        public static async Task SetPlayList(ICollection<Music> playlist)
+        public static async Task SetPlaylist(ICollection<Music> playlist)
         {
-            if (Helper.SamePlayList(playlist, CurrentPlayList)) return;
+            if (Helper.SamePlayList(playlist, CurrentPlaylist)) return;
             Pause();
             PlayList.Items.Clear();
             foreach (var music in playlist)
@@ -152,12 +144,13 @@ namespace SMPlayer
             ShuffledPlayList.Clear();
             if (!OrderedPlayList.Contains(CurrentMusic))
                 CurrentMusic = null;
+            PlaylistControl.SetPlaylist(CurrentPlaylist);
         }
 
         public static async void ShuffleAndPlay(ICollection<Music> playlist)
         {
             SetMode(PlayMode.Shuffle);
-            await SetPlayList(playlist);
+            await SetPlaylist(playlist);
             Play();
         }
 
@@ -224,7 +217,7 @@ namespace SMPlayer
         public static void MoveToMusic(Music music)
         {
             if (music == null) return;
-            for (int i = 0; i < CurrentPlayList.Count; i++)
+            for (int i = 0; i < CurrentPlaylist.Count; i++)
             {
                 if (PlayList.Items[i].Source.CustomProperties["Source"].Equals(music))
                 {

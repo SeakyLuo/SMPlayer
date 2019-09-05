@@ -109,7 +109,7 @@ namespace SMPlayer
         private async void LocalShuffleItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var tree = History.Peek();
-            await MediaHelper.SetPlayList(LocalFrame.SourcePageType == typeof(LocalMusicPage) ? tree.Flatten() : tree.Files);
+            await MediaHelper.SetPlaylist(LocalFrame.SourcePageType == typeof(LocalMusicPage) ? tree.Flatten() : tree.Files);
             MainPage.Instance.SetShuffle(true);
             MediaHelper.Play();
         }

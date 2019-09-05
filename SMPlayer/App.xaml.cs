@@ -44,7 +44,6 @@ namespace SMPlayer
         protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
             await Settings.Init();
-            await MusicLibraryPage.Init();
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -79,7 +78,9 @@ namespace SMPlayer
                 Window.Current.Activate();
             }
 
-            await MediaHelper.Init();
+            MusicLibraryPage.Init();
+            PlaylistControl.Init();
+            MediaHelper.Init();
             Window.Current.VisibilityChanged += CheckLibrary;
 
             // If background task is already registered, do nothing
@@ -125,6 +126,7 @@ namespace SMPlayer
             Helper.ResumeTile();
             Settings.Save();
             MusicLibraryPage.Save();
+            PlaylistControl.Save();
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
         }

@@ -46,7 +46,7 @@ namespace SMPlayer
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             FullMediaControl.Update();
-            PlaylistControl.SetPlaylist(MediaHelper.CurrentPlayList);
+            //PlaylistControl.SetPlaylist(MediaHelper.CurrentPlaylist);
             SetMusic(MediaHelper.CurrentMusic);
         }
 
@@ -186,7 +186,7 @@ namespace SMPlayer
 
         public async void SetMusicInfo(Music music)
         {
-            if (music.Equals(CurrentMusic)) return;
+            if (music == null || music.Equals(CurrentMusic)) return;
             var file = await StorageFile.GetFileFromPathAsync(music.Path);
             SetBasicProperties(file);
             SetMusicProperties(musicProperties = await music.GetMusicProperties());

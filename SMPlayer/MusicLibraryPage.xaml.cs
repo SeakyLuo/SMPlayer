@@ -49,7 +49,7 @@ namespace SMPlayer
                 await Dispatcher.RunIdleAsync((args) => { CheckLibrary(); libraryChecked = true; });
         }
 
-        public static async Task Init()
+        public static async void Init()
         {
             AllSongs = JsonFileHelper.Convert<ObservableCollection<Music>>(await JsonFileHelper.ReadAsync(FILENAME));
             if (AllSongs == null) AllSongs = new ObservableCollection<Music>();
@@ -64,8 +64,8 @@ namespace SMPlayer
             if (Helper.SamePlayList(AllSongs, newLibrary)) return;
             tree.Update(Settings.settings.Tree);
             Settings.settings.Tree = tree;
-            if (Helper.SamePlayList(AllSongs, MediaHelper.CurrentPlayList))
-                await MediaHelper.SetPlayList(newLibrary);
+            if (Helper.SamePlayList(AllSongs, MediaHelper.CurrentPlaylist))
+                await MediaHelper.SetPlaylist(newLibrary);
             SetAllSongs(newLibrary);
             Save();
         }
@@ -88,7 +88,7 @@ namespace SMPlayer
 
         private async void PlayMusic(Music music)
         {
-            await MediaHelper.SetPlayList(AllSongs.ToList());
+            await MediaHelper.SetPlaylist(AllSongs);
             MainPage.Instance.SetMusicAndPlay(music);
         }
 

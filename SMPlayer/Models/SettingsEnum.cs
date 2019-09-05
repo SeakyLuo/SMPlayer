@@ -9,8 +9,10 @@ namespace SMPlayer.Models
     public enum AppLanguage
     {
         FollowSystem = 0,
-        Chinese = 1,
-        English = 2
+        SimplifiedChinese = 1,
+        TraditionalChinese = 2,
+        English = 3,
+        Japanese = 4
     }
 
     public enum PlayMode
@@ -30,7 +32,7 @@ namespace SMPlayer.Models
     public enum ShowNotification
     {
         Always = 0,
-        MusicChange = 1,
+        MusicChanged = 1,
         Never = 2
     }
 }

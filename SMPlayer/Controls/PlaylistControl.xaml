@@ -21,7 +21,6 @@
         DragItemsCompleted="SongsListView_DragItemsCompleted"
         IsItemClickEnabled="True"
         ItemClick="SongsListView_ItemClick"
-        ItemsSource="{Binding NowPlayingPlaylist, Mode=TwoWay}"
         ReorderMode="Enabled"
         SelectionMode="None">
         <ListView.ItemContainerStyle>
@@ -43,7 +42,7 @@
                         </MenuFlyout>
                     </Grid.ContextFlyout>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="8*" />
+                        <ColumnDefinition Width="6*" />
                         <ColumnDefinition Width="3*" />
                         <ColumnDefinition Width="5*" />
                         <ColumnDefinition Width="1*" />

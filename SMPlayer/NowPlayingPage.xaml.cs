@@ -37,7 +37,7 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            PlaylistControl.SetPlaylist(MediaHelper.CurrentPlayList);
+            //PlaylistControl.SetPlaylist(MediaHelper.CurrentPlaylist);
         }
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
         {

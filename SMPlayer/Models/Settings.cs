@@ -22,7 +22,6 @@ namespace SMPlayer.Models
         public double Volume { get; set; }
         public bool IsNavigationCollapsed { get; set; }
         public Color ThemeColor { get; set; }
-        public List<Music> CurrentPlayList { get; set; }
         public ShowNotification Notification { get; set; }
         public string LastPage { get; set; }
         public List<Playlist> Playlists { get; set; }
@@ -38,7 +37,6 @@ namespace SMPlayer.Models
             Volume = 50.0d;
             IsNavigationCollapsed = true;
             ThemeColor = (Color)Windows.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(typeof(Color), "#0078D7");
-            CurrentPlayList = new List<Music>();
             LastPage = "";
             Playlists = new List<Playlist>();
         }
@@ -79,13 +77,6 @@ namespace SMPlayer.Models
 
         public static void Save()
         {
-            if (!Helper.SamePlayList(settings.CurrentPlayList, MediaHelper.CurrentPlayList))
-            {
-                if (MediaHelper.CurrentPlayList.Count == MusicLibraryPage.AllSongs.Count)
-                    settings.CurrentPlayList.Clear();
-                else
-                    settings.CurrentPlayList = MediaHelper.CurrentPlayList;
-            }
             JsonFileHelper.SaveAsync(FILENAME, settings);
         }
 

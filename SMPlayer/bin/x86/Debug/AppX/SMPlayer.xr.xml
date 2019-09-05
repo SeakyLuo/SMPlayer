@@ -4,7 +4,6 @@
     <RootInterface FullName="Windows.UI.Xaml.Data.IValueConverter" />
   </Roots.Interfaces>
   <Roots.PropertyPathNames>
-    <RootPropertyPathName Name="NowPlayingPlaylist" />
     <RootPropertyPathName Name="PlaceholderForeground" />
     <RootPropertyPathName Name="AllSongs" />
     <RootPropertyPathName Name="PlayCount" />
@@ -58,6 +57,7 @@
       <RootProperty Name="Background" />
       <RootProperty Name="Foreground" />
       <RootProperty Name="Style" />
+      <RootProperty Name="Flyout" />
       <RootProperty Name="Content" />
       <RootProperty Name="Template" />
       <RootProperty Name="Width" />
@@ -66,7 +66,6 @@
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="FontSize" />
       <RootProperty Name="KeyboardAccelerators" />
-      <RootProperty Name="Flyout" />
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="MinWidth" />
       <RootProperty Name="VerticalAlignment" />
@@ -74,7 +73,6 @@
       <RootProperty Name="IsTabStop" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="FontFamily" />
-      <RootEvent Name="Tapped" />
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Control">
@@ -508,9 +506,9 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Data.Binding">
       <RootProperty Name="Converter" />
-      <RootProperty Name="Mode" />
       <RootProperty Name="RelativeSource" />
       <RootProperty Name="TargetNullValue" />
+      <RootProperty Name="Mode" />
     </RootType>
     <RootType FullName="SMPlayer.LocalFoldersPage" />
     <RootType FullName="SMPlayer.LocalMusicPage" />
@@ -707,6 +705,7 @@
     <RootType FullName="Windows.UI.Xaml.Controls.ComboBox">
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Items" />
+      <RootEvent Name="SelectionChanged" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ColorPicker">
       <RootProperty Name="Color" />

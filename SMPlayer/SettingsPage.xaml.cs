@@ -28,6 +28,8 @@ namespace SMPlayer
     public sealed partial class SettingsPage : Page
     {
         private static List<AfterPathSetListener> listeners = new List<AfterPathSetListener>();
+        public static AppLanguage[] LanguageOptions = { AppLanguage.FollowSystem, AppLanguage.SimplifiedChinese, AppLanguage.TraditionalChinese, AppLanguage.English, AppLanguage.Japanese };
+        public static ShowNotification[] NotificationOptions = { ShowNotification.Always, ShowNotification.MusicChanged, ShowNotification.Never };
         public SettingsPage()
         {
             this.InitializeComponent();
@@ -47,7 +49,7 @@ namespace SMPlayer
             Settings.settings.RootPath = folder.Path;
             await Settings.SetTreeFolder(folder);
             foreach (var listener in listeners) listener.PathSet(folder.Path);
-            await MediaHelper.SetPlayList(MusicLibraryPage.AllSongs);
+            PlaylistControl.NowPlayingPlaylist.Clear();
             Settings.Save();
             PathBox.Text = folder.Path;
             SettingsLoadingControl.IsLoading = false;
@@ -57,6 +59,8 @@ namespace SMPlayer
         {
             PathBox.Text = Settings.settings.RootPath;
             LanguageComboBox.SelectedItem = Settings.settings.Language;
+            NotificationComboBox.SelectedItem = Settings.settings.Notification;
+            ThemeColorPicker.Color = Settings.settings.ThemeColor;
         }
 
         public static void AddAfterPathSetListener(AfterPathSetListener listener)
@@ -67,6 +71,16 @@ namespace SMPlayer
         private void ConfirmColorButton_Click(object sender, RoutedEventArgs e)
         {
             Settings.settings.ThemeColor = ThemeColorPicker.Color;
+        }
+
+        private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Settings.settings.Language = LanguageOptions[(sender as ComboBox).SelectedIndex];
+        }
+
+        private void NotificationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Settings.settings.Notification = NotificationOptions[(sender as ComboBox).SelectedIndex];
         }
     }
 

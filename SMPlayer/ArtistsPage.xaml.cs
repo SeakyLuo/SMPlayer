@@ -101,7 +101,7 @@ namespace SMPlayer
             if (!music.Equals(MediaHelper.CurrentMusic))
             {
                 FindMusicAndSetPlaying(MediaHelper.CurrentMusic, false);
-                await MediaHelper.SetPlayList(playlist);
+                await MediaHelper.SetPlaylist(playlist);
             }
             MainPage.Instance.SetMusicAndPlay(music);
         }
@@ -140,10 +140,6 @@ namespace SMPlayer
         public void MediaEnded() { return; }
         public void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle) { return; }
 
-        private void ShowPlaylistMenuFlyout(object sender, TappedRoutedEventArgs e)
-        {
-            MenuFlyoutHelper.InsertPlaylistMenu(sender).ShowAt(sender as Button);
-        }
         private void OpenPlaylistMenuFlyout(object sender, object e)
         {
             MenuFlyoutHelper.InsertPlaylistMenu(sender);

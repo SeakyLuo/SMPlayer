@@ -143,7 +143,7 @@ namespace SMPlayer
             else
             {
                 var item = (NavigationViewItem)args.InvokedItemContainer;
-                if (item.Name == "NaviSearchItem")
+                if (item.Name.StartsWith("NaviSearch"))
                 {
                     // Search
                     Open_Navigation();

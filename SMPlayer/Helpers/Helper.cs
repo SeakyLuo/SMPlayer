@@ -23,7 +23,7 @@ namespace SMPlayer
     public static class Helper
     {
         public const string ToastTaskName = "ToastBackgroundTask";
-        public const string LogoPath = "ms-appx:///Asserts/monotone_no_bg.png";
+        public const string LogoPath = "ms-appx:///Assets/monotone_no_bg.png";
         public const string DefaultAlbumCoverPath = "ms-appx:///Assets/monotone_bg_wide.png";
         public const string ThumbnailNotFoundPath = "ms-appx:///Assets/colorful_bg_wide.png";
         public const string ToastTag = "SMPlayerMediaToastTag";

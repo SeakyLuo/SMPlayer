@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -21,6 +23,7 @@ namespace SMPlayer
 {
     public sealed partial class PlaylistControl : UserControl, MediaControlListener
     {
+        private const string FILENAME = "NowPlayingPlaylist.json";
         public static ObservableCollection<Music> NowPlayingPlaylist = new ObservableCollection<Music>();
         private ObservableCollection<Music> CurrentPlaylist = new ObservableCollection<Music>();
         public ElementTheme Theme
@@ -67,6 +70,28 @@ namespace SMPlayer
         private void PlaylistController_Loading(FrameworkElement sender, object args)
         {
             CurrentTheme = Theme;
+        }
+
+        public static async void Init()
+        {
+            var playlist = JsonFileHelper.Convert<ObservableCollection<string>>(await JsonFileHelper.ReadAsync(FILENAME));
+            if (playlist == null || MediaHelper.CurrentMusic == null) return;
+            else if (playlist.Count == 0) foreach (var music in MusicLibraryPage.AllSongs) NowPlayingPlaylist.Add(music);
+            else
+            {
+                var hashset = MusicLibraryPage.AllSongs.ToHashSet();
+                foreach (var music in playlist)
+                    NowPlayingPlaylist.Add(hashset.First((m) => m.Name == music));
+            }
+        }
+        public static void Save()
+        {
+            ICollection<Music> playlist;
+            if (MediaHelper.CurrentPlaylist.Count == MusicLibraryPage.AllSongs.Count)
+                playlist = new List<Music>();
+            else
+                playlist = MediaHelper.CurrentPlaylist; // OrderedPlaylist?
+            JsonFileHelper.SaveAsync(FILENAME, playlist.Select((m) => m.Name));
         }
 
         public static void AddMusic(object item)

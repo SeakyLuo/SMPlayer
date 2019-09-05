@@ -41,7 +41,7 @@ namespace SMPlayer
         {
             var item = (GridMusicView)e.ClickedItem;
             if (!Tree.Equals(LocalPage.History.Peek()))
-                await MediaHelper.SetPlayList(GridItems.Select((m) => m.Source).ToList());
+                await MediaHelper.SetPlaylist(GridItems.Select((m) => m.Source).ToList());
             MainPage.Instance.SetMusicAndPlay(item.Source);
         }
 

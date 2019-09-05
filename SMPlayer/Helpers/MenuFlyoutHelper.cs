@@ -100,9 +100,9 @@ namespace SMPlayer
                 Text = "Shuffle",
                 Name = PlaylistMenuName
             };
-            shuffleItem.Click += (s, args) =>
+            shuffleItem.Click += async (s, args) =>
             {
-                PlaylistControl.SetPlaylist(Data as ICollection<Music>);
+                await MediaHelper.SetPlaylist(Data as ICollection<Music>);
             };
             flyout.Items.Add(shuffleItem);
             flyout.Items.Add(GetAddToMenuFlyoutSubItem());

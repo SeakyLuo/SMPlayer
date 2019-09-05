@@ -111,8 +111,11 @@
                                 Background="{ThemeResource SystemColorHighlightColor}"
                                 Foreground="{ThemeResource AppBarBackgroundThemeBrush}"
                                 RelativePanel.AlignRightWithPanel="True"
-                                Style="{StaticResource MoreButtonStyle}"
-                                Tapped="ShowPlaylistMenuFlyout" />
+                                Style="{StaticResource MoreButtonStyle}">
+                                <Button.Flyout>
+                                    <MenuFlyout Opening="OpenPlaylistMenuFlyout" />
+                                </Button.Flyout>
+                            </Button>
                             <Border
                                 Width="1000"
                                 Height="1"
@@ -172,8 +175,11 @@
                                                 Background="Transparent"
                                                 Foreground="{ThemeResource SystemColorHighlightColor}"
                                                 RelativePanel.AlignRightWithPanel="True"
-                                                Style="{StaticResource MoreButtonStyle}"
-                                                Tapped="ShowPlaylistMenuFlyout" />
+                                                Style="{StaticResource MoreButtonStyle}">
+                                                <Button.Flyout>
+                                                    <MenuFlyout Opening="OpenPlaylistMenuFlyout" />
+                                                </Button.Flyout>
+                                            </Button>
                                         </RelativePanel>
                                         <ListView
                                             x:Name="SongsListView"
@@ -186,9 +192,7 @@
                                             SelectionMode="None">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate x:DataType="data:Music">
-                                                    <Grid
-                                                        Margin="12,0,0,0"
-                                                        Background="Transparent">
+                                                    <Grid Margin="12,0,0,0" Background="Transparent">
                                                         <Grid.ContextFlyout>
                                                             <MenuFlyout Opening="OpenMusicMenuFlyout" />
                                                         </Grid.ContextFlyout>

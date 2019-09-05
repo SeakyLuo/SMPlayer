@@ -17,6 +17,8 @@ Change LikeButton to ToggleButton.
 
 Check FullVolumeButton to PointerOver background less.
 
+Auto Scrolling Text
+
 # TO FIX
 VisualStateManager. (GridAlbumView, MusicGridInfo)
 

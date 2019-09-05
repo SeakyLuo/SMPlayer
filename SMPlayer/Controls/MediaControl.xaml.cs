@@ -275,7 +275,7 @@ namespace SMPlayer
 
         public async void SetMusic(Music music)
         {
-            if (music == null) return;
+            if (music == null) { AlbumCover.Source = Helper.DefaultAlbumCover; return; };
             AlbumCover.Source = await Helper.GetThumbnail(music);
             TitleTextBlock.Text = music.Name;
             ArtistTextBlock.Text = music.Artist;
@@ -418,8 +418,8 @@ namespace SMPlayer
             {
                 if (MediaHelper.CurrentMusic == null)
                 {
-                    if (MediaHelper.CurrentPlayList.Count == 0) return;
-                    MediaHelper.MoveToMusic(MediaHelper.CurrentPlayList[0]);
+                    if (MediaHelper.CurrentPlaylist.Count == 0) return;
+                    MediaHelper.MoveToMusic(MediaHelper.CurrentPlaylist[0]);
                 }
                 PlayMusic();
             }

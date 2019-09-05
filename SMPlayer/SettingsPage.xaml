@@ -138,10 +138,13 @@
                     x:Name="LanguageComboBox"
                     Grid.Row="2"
                     Grid.Column="1"
-                    VerticalAlignment="Center">
+                    VerticalAlignment="Center"
+                    SelectionChanged="LanguageComboBox_SelectionChanged">
                     <ComboBoxItem Content="Follow System" IsSelected="True" />
-                    <ComboBoxItem Content="Chinese" />
+                    <ComboBoxItem Content="Chinese (Simplified)" />
+                    <ComboBoxItem Content="Chinese (Traditional)" />
                     <ComboBoxItem Content="English" />
+                    <ComboBoxItem Content="Japanese" />
                 </ComboBox>
                 <TextBlock
                     Grid.Row="3"
@@ -151,9 +154,10 @@
                     x:Name="NotificationComboBox"
                     Grid.Row="3"
                     Grid.Column="1"
-                    VerticalAlignment="Center">
+                    VerticalAlignment="Center"
+                    SelectionChanged="NotificationComboBox_SelectionChanged">
                     <ComboBoxItem Content="Always Shown" IsSelected="True" />
-                    <ComboBoxItem Content="Music Change" />
+                    <ComboBoxItem Content="Music Changed" />
                     <ComboBoxItem Content="Never" />
                 </ComboBox>
                 <TextBlock
