@@ -68,8 +68,8 @@ namespace SMPlayer
             foreach (var music in playlist.Songs)
                 music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
 
-            var c = tabview.ContainerFromIndex(tabview.SelectedIndex);
-            int count = VisualTreeHelper.GetChildrenCount(c);
+            //var c = tabview.ContainerFromIndex(tabview.SelectedIndex);
+            //int count = VisualTreeHelper.GetChildrenCount(c);
             //var grid = VisualTreeHelper.GetChild(template, 0) as Grid;
             //var thumbnail = grid.Children[0] as Image;
             //if (!PlaylistThumbnailDict.TryGetValue(playlist.Name, out List<BitmapImage> thumbnails))
