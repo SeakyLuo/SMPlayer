@@ -22,7 +22,7 @@
         <controls:DataGrid
             x:Name="MusicLibraryDataGrid"
             Grid.Row="1"
-            Margin="10"
+            Margin="10,10,10,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             AlternatingRowBackground="WhiteSmoke"
@@ -42,7 +42,7 @@
             HorizontalScrollBarVisibility="Visible"
             IsDoubleTapEnabled="True"
             IsReadOnly="True"
-            ItemsSource="{Binding AllSongs, Mode=OneWay}"
+            ItemsSource="{x:Bind allSongs, Mode=OneWay}"
             SelectionMode="Extended"
             Sorting="MusicLibraryDataGrid_Sorting"
             VerticalScrollBarVisibility="Visible">
@@ -116,16 +116,5 @@
                 </Style>
             </controls:DataGrid.RowStyle>
         </controls:DataGrid>
-
-        <ProgressRing
-            x:Name="MusicLibraryProgressRing"
-            Grid.Row="1"
-            Width="100"
-            Height="100"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            IsActive="False"
-            Visibility="Collapsed" />
     </Grid>
-
 </Page>

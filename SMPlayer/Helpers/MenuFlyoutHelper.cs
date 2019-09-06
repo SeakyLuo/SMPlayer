@@ -11,6 +11,7 @@ namespace SMPlayer
     class MenuFlyoutHelper
     {
         public object Data;
+        public ICollection<Music> Datalist;
         public const string AddToSubItemName = "AddToSubItem";
         public const string PlaylistMenuName = "ShuffleItem";
         public const string MusicMenuName = "PlayItem";
@@ -100,6 +101,7 @@ namespace SMPlayer
                 Text = "Shuffle",
                 Name = PlaylistMenuName
             };
+            ToolTipService.SetToolTip(shuffleItem, new ToolTip() { Content = "Shuffle and Play" });
             shuffleItem.Click += async (s, args) =>
             {
                 await MediaHelper.SetPlaylist(Data as ICollection<Music>);
@@ -110,6 +112,7 @@ namespace SMPlayer
         }
         public MenuFlyout GetMusicMenuFlyout()
         {
+            var music = Data as Music;
             var flyout = new MenuFlyout();
             var playItem = new MenuFlyoutItem()
             {
@@ -117,6 +120,7 @@ namespace SMPlayer
                 Text = "Play",
                 Name = MusicMenuName
             };
+            ToolTipService.SetToolTip(playItem, new ToolTip() { Content = $"Play {music.Name}" });
             playItem.Click += (s, args) =>
             {
 

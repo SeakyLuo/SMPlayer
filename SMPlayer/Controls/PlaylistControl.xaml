@@ -2,6 +2,8 @@
     x:Class="SMPlayer.PlaylistControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Interactions="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:SMPlayer.Models"
     xmlns:local="using:SMPlayer"
@@ -34,13 +36,7 @@
             <DataTemplate x:DataType="data:Music">
                 <Grid Background="Transparent">
                     <Grid.ContextFlyout>
-                        <MenuFlyout Opening="OpenMusicMenuFlyout">
-                            <MenuFlyoutItem
-                                x:Name="MoveToTopItem"
-                                Click="MoveToTopItem_Click"
-                                Icon="Upload"
-                                Text="Move To Top" />
-                        </MenuFlyout>
+                        <MenuFlyout Opening="OpenMusicMenuFlyout" />
                     </Grid.ContextFlyout>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="6*" />
@@ -60,9 +56,45 @@
                         <TextBlock Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}" Text="{x:Bind Name}" />
                     </StackPanel>
                     <TextBlock
+                        x:Name="ArtistTextBlock"
                         Grid.Column="1"
                         Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
-                        Text="{x:Bind Artist}" />
+                        Text="{x:Bind Artist}">
+                        <!--<Interactivity:Interaction.Behaviors>
+                            <Interactions:DataTriggerBehavior
+                                Binding="{x:Bind IsPlaying}"
+                                ComparisonCondition="Equal"
+                                Value="True">
+                                <Interactions:ChangePropertyAction
+                                    PropertyName="Foreground"
+                                    TargetObject="{Binding ElementName=ArtistTextBlock}"
+                                    Value="{StaticResource SystemColorHighlightColor}" />
+                            </Interactions:DataTriggerBehavior>
+                            <Interactions:DataTriggerBehavior
+                                Binding="{x:Bind IsPlaying}"
+                                ComparisonCondition="Equal"
+                                Value="False">
+                                <Interactions:DataTriggerBehavior
+                                    Binding="{Binding CurrentTheme}"
+                                    ComparisonCondition="Equal"
+                                    Value="Dark">
+                                    <Interactions:ChangePropertyAction
+                                        PropertyName="Foreground"
+                                        TargetObject="{Binding ElementName=ArtistTextBlock}"
+                                        Value="White" />
+                                </Interactions:DataTriggerBehavior>
+                                <Interactions:DataTriggerBehavior
+                                    Binding="{Binding CurrentTheme}"
+                                    ComparisonCondition="NotEqual"
+                                    Value="Dark">
+                                    <Interactions:ChangePropertyAction
+                                        PropertyName="Foreground"
+                                        TargetObject="{Binding ElementName=ArtistTextBlock}"
+                                        Value="Black" />
+                                </Interactions:DataTriggerBehavior>
+                            </Interactions:DataTriggerBehavior>
+                        </Interactivity:Interaction.Behaviors>-->
+                    </TextBlock>
                     <TextBlock
                         Grid.Column="2"
                         Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"

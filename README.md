@@ -19,6 +19,8 @@ Check FullVolumeButton to PointerOver background less.
 
 Auto Scrolling Text
 
+Shy header.
+
 # TO FIX
 VisualStateManager. (GridAlbumView, MusicGridInfo)
 

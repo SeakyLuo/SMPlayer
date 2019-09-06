@@ -28,6 +28,11 @@ namespace SMPlayer
     public sealed partial class PlaylistsPage : Page, RenameActionListener
     {
         public static ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
+        private ObservableCollection<Playlist> playlists
+        {
+            get => Playlists;
+            set => Playlists = value;
+        }
         private Dictionary<string, List<BitmapImage>> PlaylistThumbnailDict = new Dictionary<string, List<BitmapImage>>();
         private Random random = new Random();
         private RenameDialog dialog;
@@ -35,7 +40,6 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            PlaylistTabView.ItemsSource = Playlists;
             foreach (var list in Settings.settings.Playlists)
                 Playlists.Add(list);
             SetFooterText();

@@ -70,17 +70,20 @@
                         PlaceholderText="Search"
                         QueryIcon="Find"
                                                                      
-                        Style="{StaticResource BorderlessAutoSuggestBoxStyle}" />
+                        Style="{StaticResource BorderlessAutoSuggestBoxStyle}"
+                        ToolTipService.ToolTip="Search" />
                 </NavigationViewItem>
                 <NavigationViewItem x:ConnectionId='6'
                     x:Name="MusicLibraryItem"
                     Content="Songs"
                     Icon="Library"
-                    Tag="Music Library" />
+                    Tag="Music Library"
+                    ToolTipService.ToolTip="Music Library" />
                 <NavigationViewItem x:ConnectionId='7'
                     x:Name="ArtistsItem"
                     Content="Artists"
-                    Tag="Artists">
+                    Tag="Artists"
+                    ToolTipService.ToolTip="Group By Artist">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8D4;" />
                     </NavigationViewItem.Icon>
@@ -88,13 +91,17 @@
                 <NavigationViewItem x:ConnectionId='8'
                     x:Name="AlbumsItem"
                     Content="Albums"
-                    Tag="Album">
+                    Tag="Album"
+                    ToolTipService.ToolTip="Group By Album">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE93C;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItemSeparator />
-                <NavigationViewItem x:ConnectionId='9' x:Name="NowPlayingItem" Content="Now Playing">
+                <NavigationViewItem x:ConnectionId='9'
+                    x:Name="NowPlayingItem"
+                    Content="Now Playing"
+                    ToolTipService.ToolTip="Now Playing">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEC4F;" />
                     </NavigationViewItem.Icon>
@@ -102,6 +109,7 @@
                 <NavigationViewItem x:ConnectionId='10'
                     x:Name="RecentItem"
                     Content="Recent"
+                    ToolTipService.ToolTip="Recently Played"
                     Tag="Recent">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE823;" />
@@ -110,6 +118,7 @@
                 <NavigationViewItem x:ConnectionId='11'
                     x:Name="LocalItem"
                     Content="Local"
+                    ToolTipService.ToolTip="Local Folders and Music Files"
                     Tag="Local Folders">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC4E;" />
@@ -117,6 +126,7 @@
                 </NavigationViewItem>
                 <NavigationViewItem x:ConnectionId='12'
                     x:Name="PlaylistsItem"
+                    ToolTipService.ToolTip="Playlists"
                     Content="Playlists"
                     Tag="Playlists">
                     <NavigationViewItem.Icon>
@@ -125,6 +135,7 @@
                 </NavigationViewItem>
                 <NavigationViewItem x:ConnectionId='13'
                     x:Name="MyFavoritesItem"
+                    ToolTipService.ToolTip="My Favorite Music"
                     Content="My Favorites"
                     Tag="My Favorites">
                     <NavigationViewItem.Icon>
@@ -137,7 +148,6 @@
                 IsNavigationStackEnabled="True"
                                                 />
         </NavigationView>
-
         <local:MediaControl x:ConnectionId='3'
             x:Name="MainMediaControl"
             Grid.Row="1"

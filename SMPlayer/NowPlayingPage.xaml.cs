@@ -33,15 +33,17 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            PlaylistControl.NowPlayingPlaylist.CollectionChanged += (sender, args) =>
-            {
-                SaveToButton.IsEnabled = ClearButton.IsEnabled = FullScreenButton.IsEnabled = PlaylistControl.NowPlayingPlaylist.Count != 0;
-            };
+            PlaylistControl.NowPlayingPlaylist.CollectionChanged += (sender, args) => SetEnabled();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            //PlaylistControl.SetPlaylist(MediaHelper.CurrentPlaylist);
+            SetEnabled();
+        }
+
+        private void SetEnabled()
+        {
+            SaveToButton.IsEnabled = ClearButton.IsEnabled = FullScreenButton.IsEnabled = PlaylistControl.NowPlayingPlaylist.Count != 0;
         }
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
         {

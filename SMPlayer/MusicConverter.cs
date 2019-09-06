@@ -43,10 +43,10 @@ namespace SMPlayer
             minutes %= 60;
             hours %= 60;
             days %= 24;
-            string second = seconds != 0 && (total_seconds < 60 || minutes < 10) ? $"{seconds} {TryPlural("second", seconds)}" : "",
-                   minute = minutes == 0 || days > 0 ? "" : $"{minutes} {TryPlural("minute", minutes)}",
-                   hour = hours == 0 ? "" : $"{hours} {TryPlural("hour", hours)}",
-                   day = days == 0 ? "" : $"{days} {TryPlural("day", days)}";
+            string second = seconds != 0 && (total_seconds < 60 || minutes < 10) ? $"{seconds} {TryPlural("second", seconds)} " : "",
+                   minute = minutes == 0 || days > 0 ? "" : $"{minutes} {TryPlural("minute", minutes)} ",
+                   hour = hours == 0 ? "" : $"{hours} {TryPlural("hour", hours)} ",
+                   day = days == 0 ? "" : $"{days} {TryPlural("day", days)} ";
             return day + hour + minute + second;
         }
 

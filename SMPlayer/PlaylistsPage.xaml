@@ -19,7 +19,7 @@
             CanReorderItems="True"
             DragItemsCompleted="PlaylistTabView_DragItemsCompleted"
             IsCloseButtonOverlay="False"
-            ItemsSource="{Binding Playlists, Mode=TwoWay}"
+            ItemsSource="{x:Bind playlists, Mode=TwoWay}"
             SelectedTabWidth="200"
             SelectionChanged="PlaylistTabView_SelectionChanged"
             SelectionMode="Single"
@@ -103,51 +103,41 @@
                                         Grid.Column="1"
                                         Background="Transparent"
                                         DefaultLabelPosition="Right">
-                                        <CommandBar.Resources>
-                                            <Style x:Key="PlaylistHeaderAppBarButtonStyle" TargetType="AppBarButton">
-                                                <Setter Property="Margin" Value="5,0" />
-                                                <Setter Property="Padding" Value="0,0,10,0" />
-                                                <Setter Property="CornerRadius" Value="20" />
-                                                <Setter Property="HorizontalAlignment" Value="Stretch" />
-                                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                            </Style>
-                                        </CommandBar.Resources>
                                         <AppBarButton
                                             Click="Shuffle_Click"
                                             Icon="Shuffle"
                                             IsEnabled="{x:Bind Songs, Converter={StaticResource EnabledConverter}, Mode=OneWay}"
                                             Label="Shuffle"
-                                            Style="{StaticResource PlaylistHeaderAppBarButtonStyle}"
+                                            Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Shuffle Playlist" />
                                         <AppBarButton
                                             Click="AddTo_Click"
                                             Icon="Add"
                                             IsEnabled="{x:Bind Songs, Converter={StaticResource EnabledConverter}, Mode=OneWay}"
                                             Label="Add To"
-                                            Style="{StaticResource PlaylistHeaderAppBarButtonStyle}"
+                                            Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Add To Playlist" />
                                         <AppBarButton
                                             Click="Rename_Click"
                                             Icon="Edit"
                                             Label="Rename"
-                                            Style="{StaticResource PlaylistHeaderAppBarButtonStyle}"
+                                            Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Rename Playlist" />
                                         <AppBarButton
                                             Click="Delete_Click"
                                             Icon="Delete"
                                             Label="Delete"
-                                            Style="{StaticResource PlaylistHeaderAppBarButtonStyle}"
+                                            Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Delete Playlist" />
                                         <AppBarButton
                                             Click="More_Click"
                                             Icon="More"
                                             Label="More"
-                                            Style="{StaticResource PlaylistHeaderAppBarButtonStyle}"
+                                            Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="More Options" />
                                         <CommandBar.SecondaryCommands>
                                             <AppBarButton
                                                 HorizontalAlignment="Stretch"
-                                                HorizontalContentAlignment="Stretch"
                                                 Icon="Pin"
                                                 Label="Pin to Start"
                                                 ToolTipService.ToolTip="Pin Playlist to the Start Menu" />

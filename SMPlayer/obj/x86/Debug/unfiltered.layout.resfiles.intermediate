@@ -56,9 +56,13 @@ ArtistsPage.xbf
 Controls\LoadingControl.xbf
 Controls\MediaControl.xbf
 Controls\PlaylistControl.xbf
-ControlTemplates\MediaControlButtonTemplate.xbf
-ControlTemplates\MediaControlSliderTemplate.xbf
-ControlTemplates\MediaControlToggleButton.xbf
+Dialogs\RenameDialog.xbf
+Dictionaries\BorderlessAutoSuggestBox.xbf
+Dictionaries\BorderlessTextBox.xbf
+Dictionaries\MediaControlButton.xbf
+Dictionaries\MediaControlToggleButton.xbf
+Dictionaries\MediaSlider.xbf
+Dictionaries\PlaylistAppBarButton.xbf
 LocalFoldersPage.xbf
 LocalMusicPage.xbf
 LocalPage.xbf
@@ -71,7 +75,6 @@ NowPlayingFullPage.xbf
 NowPlayingPage.xbf
 PlaylistsPage.xbf
 RecentPage.xbf
-RenameDialog.xbf
 SearchPage.xbf
 SettingsPage.xbf
 SMPlayer.xr.xml

@@ -1,4 +1,4 @@
-﻿<Page
+﻿<Page x:ConnectionId='1'
     x:Class="SMPlayer.PlaylistsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -19,7 +19,7 @@
             CanReorderItems="True"
                                                                    
             IsCloseButtonOverlay="False"
-            ItemsSource="{Binding Playlists, Mode=TwoWay}"
+                                                         
             SelectedTabWidth="200"
                                                                
             SelectionMode="Single"
@@ -102,55 +102,43 @@
                                         Grid.Row="2"
                                         Grid.Column="1"
                                         Background="Transparent"
-                                        DefaultLabelPosition="Right"
-                                        FlowDirection="LeftToRight"
-                                        IsOpen="False">
-                                        <CommandBar.Resources>
-                                            <Style x:Key="PlaylistHeaderAppBarButtonStyle" TargetType="AppBarButton">
-                                                <Setter Property="Margin" Value="5,0" />
-                                                <Setter Property="Padding" Value="0,0,10,0" />
-                                                <Setter Property="CornerRadius" Value="20" />
-                                                <Setter Property="HorizontalAlignment" Value="Stretch" />
-                                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                            </Style>
-                                        </CommandBar.Resources>
+                                        DefaultLabelPosition="Right">
                                         <AppBarButton x:ConnectionId='15'
                                                                  
                                             Icon="Shuffle"
                                                                                                                                 
                                             Label="Shuffle"
-                                            Style="{StaticResource PlaylistHeaderAppBarButtonStyle}"
+                                            Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Shuffle Playlist" />
                                         <AppBarButton x:ConnectionId='16'
                                                                
                                             Icon="Add"
                                                                                                                                 
                                             Label="Add To"
-                                            Style="{StaticResource PlaylistHeaderAppBarButtonStyle}"
+                                            Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Add To Playlist" />
                                         <AppBarButton x:ConnectionId='17'
                                                                 
                                             Icon="Edit"
                                             Label="Rename"
-                                            Style="{StaticResource PlaylistHeaderAppBarButtonStyle}"
+                                            Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Rename Playlist" />
                                         <AppBarButton x:ConnectionId='18'
                                                                 
                                             Icon="Delete"
                                             Label="Delete"
-                                            Style="{StaticResource PlaylistHeaderAppBarButtonStyle}"
+                                            Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Delete Playlist" />
                                         <AppBarButton x:ConnectionId='19'
                                                               
                                             Icon="More"
                                             Label="More"
-                                            Style="{StaticResource PlaylistHeaderAppBarButtonStyle}"
+                                            Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="More Options" />
                                         <CommandBar.SecondaryCommands>
                                             <AppBarButton
-                                                Icon="Pin"
                                                 HorizontalAlignment="Stretch"
-                                                HorizontalContentAlignment="Stretch"
+                                                Icon="Pin"
                                                 Label="Pin to Start"
                                                 ToolTipService.ToolTip="Pin Playlist to the Start Menu" />
                                             <AppBarSeparator />

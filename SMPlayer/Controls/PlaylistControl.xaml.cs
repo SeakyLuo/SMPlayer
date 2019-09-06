@@ -124,9 +124,10 @@ namespace SMPlayer
                 args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? Helper.WhiteSmokeBrush : Helper.WhiteBrush;
         }
 
-        private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
+        private async void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Music music = (Music)e.ClickedItem;
+            await MediaHelper.SetPlaylist(CurrentPlaylist);
             ((Window.Current.Content as Frame).Content as MediaControlContainer).SetMusicAndPlay(music);
         }
         public void Tick() { return; }
@@ -169,13 +170,6 @@ namespace SMPlayer
             }
         }
 
-        private void MoveToTopItem_Click(object sender, RoutedEventArgs e)
-        {
-            Music music = (sender as MenuFlyoutItem).DataContext as Music;
-            CurrentPlaylist.Move(CurrentPlaylist.IndexOf(music), 0);
-            MediaHelper.MoveMusic(music, 0);
-        }
-
         private void SongsListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
 
@@ -183,6 +177,22 @@ namespace SMPlayer
         private void OpenMusicMenuFlyout(object sender, object e)
         {
             MenuFlyoutHelper.InsertRemovableMusicMenu(sender);
+            if (AllowReorder)
+            {
+                var flyout = sender as MenuFlyout;
+                var item = new MenuFlyoutItem()
+                {
+                    Text = "Move To Top",
+                    Icon = new SymbolIcon(Symbol.Upload)
+                };
+                item.Click += (s, args) =>
+                {
+                    Music music = (s as MenuFlyoutItem).DataContext as Music;
+                    CurrentPlaylist.Move(CurrentPlaylist.IndexOf(music), 0);
+                    MediaHelper.MoveMusic(music, 0);
+                };
+                flyout.Items.Add(item);
+            }
         }
     }
 }

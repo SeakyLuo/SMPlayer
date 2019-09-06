@@ -22,7 +22,7 @@
         <controls:DataGrid x:ConnectionId='3'
             x:Name="MusicLibraryDataGrid"
             Grid.Row="1"
-            Margin="10"
+            Margin="10,10,10,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             AlternatingRowBackground="WhiteSmoke"
@@ -42,7 +42,7 @@
             HorizontalScrollBarVisibility="Visible"
             IsDoubleTapEnabled="True"
             IsReadOnly="True"
-            ItemsSource="{Binding AllSongs, Mode=OneWay}"
+                                                        
             SelectionMode="Extended"
                                                   
             VerticalScrollBarVisibility="Visible">
@@ -110,23 +110,12 @@
                 <Style TargetType="controls:DataGridRow">
                     <Setter Property="controls:DataGridRow.ContextFlyout">
                         <Setter.Value>
-                            <MenuFlyout x:ConnectionId='5'                              />
+                            <MenuFlyout x:ConnectionId='4'                              />
                         </Setter.Value>
                     </Setter>
                 </Style>
             </controls:DataGrid.RowStyle>
         </controls:DataGrid>
-
-        <ProgressRing x:ConnectionId='4'
-            x:Name="MusicLibraryProgressRing"
-            Grid.Row="1"
-            Width="100"
-            Height="100"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            IsActive="False"
-            Visibility="Collapsed" />
     </Grid>
-
 </Page>
 

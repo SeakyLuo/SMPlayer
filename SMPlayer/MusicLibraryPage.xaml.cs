@@ -18,6 +18,7 @@ using Windows.Storage;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using Windows.UI.Core;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -29,14 +30,18 @@ namespace SMPlayer
     public sealed partial class MusicLibraryPage : Page, MusicControlListener, MediaControlListener
     {
         private const string FILENAME = "MusicLibrary.json";
-        public static ObservableCollection<Music> AllSongs;
+        public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
+        private ObservableCollection<Music> allSongs
+        {
+            get => AllSongs;
+            set => AllSongs = value;
+        }
         private bool libraryChecked = false;
 
         public MusicLibraryPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MusicLibraryDataGrid.ItemsSource = AllSongs;
             MediaControl.AddMusicControlListener(this as MusicControlListener);
             MediaHelper.AddMediaControlListener(this as MediaControlListener);
         }
@@ -51,8 +56,9 @@ namespace SMPlayer
 
         public static async void Init()
         {
-            AllSongs = JsonFileHelper.Convert<ObservableCollection<Music>>(await JsonFileHelper.ReadAsync(FILENAME));
-            if (AllSongs == null) AllSongs = new ObservableCollection<Music>();
+            var temp = JsonFileHelper.Convert<ObservableCollection<Music>>(await JsonFileHelper.ReadAsync(FILENAME));
+            if (temp == null) return;
+            AllSongs = temp;
         }
 
         public static async void CheckLibrary()
@@ -105,20 +111,10 @@ namespace SMPlayer
             MenuFlyoutHelper.InsertMusicMenu(sender);
         }
 
-        private void DeleteItem_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void MusicInfoItem_Click(object sender, RoutedEventArgs e)
-        {
-            var list = AllSongs;
-        }
-
         private void MusicLibraryDataGrid_Sorting(object sender, DataGridColumnEventArgs e)
         {
             string header = e.Column.Header.ToString();
-            IEnumerable<Music> temp;
+            IEnumerable<Music> temp = null;
             switch (header)
             {
                 case "Name":
@@ -136,8 +132,6 @@ namespace SMPlayer
                 case "Play Count":
                     temp = AllSongs.OrderBy((music) => music.PlayCount);
                     break;
-                default:
-                    return;
             }
             foreach (var column in MusicLibraryDataGrid.Columns)
                 if (column.Header.ToString() != header)
@@ -153,8 +147,7 @@ namespace SMPlayer
 
         public static void SetAllSongs(ICollection<Music> songs)
         {
-            if (AllSongs == null) AllSongs = new ObservableCollection<Music>();
-            else AllSongs.Clear();
+            AllSongs.Clear();
             foreach (var item in songs) AllSongs.Add(item);
         }
 
@@ -163,7 +156,6 @@ namespace SMPlayer
         private void FindMusicAndSetPlaying(Music target, bool isPlaying)
         {
             if (target == null) return;
-            while (AllSongs == null) { System.Threading.Thread.Sleep(500); }
             var music = AllSongs.FirstOrDefault((m) => m.Equals(target));
             if (music != null) music.IsPlaying = isPlaying;
         }
@@ -174,6 +166,7 @@ namespace SMPlayer
             {
                 FindMusicAndSetPlaying(current, false);
                 FindMusicAndSetPlaying(next, true);
+                var s = MusicLibraryDataGrid.ItemsSource as ObservableCollection<Music>;
             });
         }
 
