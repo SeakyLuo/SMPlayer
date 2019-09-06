@@ -64,7 +64,7 @@ namespace SMPlayer
 
         private void MenuFlyout_Opening(object sender, object e)
         {
-            MenuFlyoutHelper.InsertPlaylistMenu(sender, 0);
+            MenuFlyoutHelper.SetPlaylistMenu(sender);
         }
     }
 }

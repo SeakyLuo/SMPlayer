@@ -97,7 +97,7 @@ namespace SMPlayer
 
         private void MenuFlyout_Opening(object sender, object e)
         {
-            MenuFlyoutHelper.InsertPlaylistMenu(sender);
+            MenuFlyoutHelper.SetPlaylistMenu(sender);
         }
 
         private void Grid_Tapped(object sender, TappedRoutedEventArgs e)

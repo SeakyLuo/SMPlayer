@@ -81,13 +81,12 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <Image x:ConnectionId='12'
+                                    <Image
                                         x:Name="PlaylistCover"
                                         Grid.RowSpan="4"
                                         Width="180"
                                         Height="180"
-                                        Margin="0,0,20,0"
-                                                                      />
+                                        Margin="0,0,20,0" />
                                     <TextBlock x:ConnectionId='13'
                                         Grid.Column="1"
                                         FontSize="36"

@@ -97,9 +97,15 @@ namespace SMPlayer
         public static void AddMusic(object item)
         {
             if (item is Music)
+            {
                 NowPlayingPlaylist.Add(item as Music);
+                // Add To MediaHelper
+            }
             else if (item is ICollection<Music>)
+            {
                 foreach (var music in item as ICollection<Music>) NowPlayingPlaylist.Add(music);
+                // Add To MediaHelper
+            }
         }
 
         public static void AddMusicRequestListener(MusicRequestListener listener)
@@ -153,30 +159,14 @@ namespace SMPlayer
         }
         public void MediaEnded() { return; }
 
-        private void PlayItem_Click(object sender, RoutedEventArgs e)
-        {
-            Music music = (sender as MenuFlyoutItem).DataContext as Music;
-            ((Window.Current.Content as Frame).Content as MediaControlContainer).SetMusicAndPlay(music);
-        }
-
-        private void DeleteItem_Click(object sender, RoutedEventArgs e)
-        {
-            Music music = (sender as MenuFlyoutItem).DataContext as Music;
-            if (music.Equals(MediaHelper.CurrentMusic))
-            {
-                MediaHelper.NextMusic();
-                CurrentPlaylist.Remove(music);
-                MediaHelper.RemoveMusic(music);
-            }
-        }
-
         private void SongsListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
-
+            sender.UpdateLayout(); // Refresh Row Color
+            // Change MediaHelper.CurrentPlaylist Order
         }
         private void OpenMusicMenuFlyout(object sender, object e)
         {
-            MenuFlyoutHelper.InsertRemovableMusicMenu(sender);
+            MenuFlyoutHelper.SetRemovableMusicMenu(sender);
             if (AllowReorder)
             {
                 var flyout = sender as MenuFlyout;

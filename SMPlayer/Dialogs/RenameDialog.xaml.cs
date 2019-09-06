@@ -21,14 +21,14 @@ namespace SMPlayer
     public sealed partial class RenameDialog : ContentDialog
     {
         public TitleOption Option;
-        private string OldName;
+        private string DefaultName;
         private RenameActionListener RenameListener;
-        public RenameDialog(RenameActionListener listener, TitleOption titleOption, string oldname)
+        public RenameDialog(RenameActionListener listener, TitleOption titleOption, string defaultName)
         {
             this.InitializeComponent();
             RenameListener = listener;
             Option = titleOption;
-            OldName = oldname;
+            DefaultName = defaultName;
             var dialogTitle = "";
             switch (titleOption)
             {
@@ -41,7 +41,7 @@ namespace SMPlayer
             }
             TitleTextBlock.Text = dialogTitle;
             ConfirmButton.Content = dialogTitle;
-            NewPlaylistNameTextBox.Text = oldname;
+            NewPlaylistNameTextBox.Text = defaultName;
             NewPlaylistNameTextBox.SelectAll();
         }
 
@@ -63,7 +63,7 @@ namespace SMPlayer
 
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
-            if (RenameListener.Confirm(OldName, NewPlaylistNameTextBox.Text))
+            if (RenameListener.Confirm(DefaultName, NewPlaylistNameTextBox.Text))
             {
                 this.Hide();
                 NewPlaylistNameTextBox.Text = "";
@@ -88,7 +88,8 @@ namespace SMPlayer
                 Dialog.ShowError(ErrorOption.EmptyOrWhiteSpace);
                 return false;
             }
-            if (Settings.settings.Playlists.FindIndex((p) => p.Name == NewName) != -1)
+            if (NewName == MenuFlyoutHelper.NowPlaying || NewName == MenuFlyoutHelper.MyFavorites ||
+                Settings.settings.Playlists.FindIndex((p) => p.Name == NewName) != -1)
             {
                 Dialog.ShowError(ErrorOption.Used);
                 return false;

@@ -221,7 +221,6 @@
       <RootProperty Name="Visibility" />
       <RootProperty Name="Stretch" />
       <RootProperty Name="VerticalAlignment" />
-      <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.VisualStateGroup">
       <RootProperty Name="States" />

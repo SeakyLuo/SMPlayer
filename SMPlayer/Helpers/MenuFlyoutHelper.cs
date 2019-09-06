@@ -15,68 +15,79 @@ namespace SMPlayer
         public const string AddToSubItemName = "AddToSubItem";
         public const string PlaylistMenuName = "ShuffleItem";
         public const string MusicMenuName = "PlayItem";
-        public MenuFlyout GetAddToMenuFlyout()
+        public const string NowPlaying = "Now Playing";
+        public const string MyFavorites = "My Favorites";
+        public MenuFlyout GetAddToMenuFlyout(string playlistName = "")
         {
             var flyout = new MenuFlyout();
-            foreach (var item in GetAddToMenuFlyoutSubItem().Items)
+            foreach (var item in GetAddToMenuFlyoutSubItem(playlistName).Items)
                 flyout.Items.Add(item);
             return flyout;
         }
 
-        public MenuFlyoutSubItem GetAddToMenuFlyoutSubItem()
+        public MenuFlyoutSubItem GetAddToMenuFlyoutSubItem(string PlaylistName = "")
         {
-            MenuFlyoutSubItem subItem = new MenuFlyoutSubItem()
+            MenuFlyoutSubItem addToItem = new MenuFlyoutSubItem()
             {
                 Text = "Add To",
                 Name = AddToSubItemName
             };
-            var nowPlaying = new MenuFlyoutItem()
+            ToolTipService.SetToolTip(addToItem, new ToolTip() { Content = "Add To Playlist" });
+            if (PlaylistName != NowPlaying)
             {
-                Icon = new FontIcon() { Glyph = "\uEC4F" },
-                Text = "Now Playing"
-            };
-            nowPlaying.Click += (sender, args) =>
+                var nowPlayingItem = new MenuFlyoutItem()
+                {
+                    Icon = new FontIcon() { Glyph = "\uEC4F" },
+                    Text = "Now Playing"
+                };
+                nowPlayingItem.Click += (sender, args) =>
+                {
+                    PlaylistControl.AddMusic(Data);
+                };
+                addToItem.Items.Add(nowPlayingItem);
+            }
+            if (PlaylistName != MyFavorites)
             {
-                PlaylistControl.AddMusic(Data);
-            };
-            subItem.Items.Add(nowPlaying);
-            var myFavorites = new MenuFlyoutItem()
-            {
-                Icon = new FontIcon() { Glyph = "\uEB51" },
-                Text = "My Favorites"
-            };
-            myFavorites.Click += (sender, args) =>
-            {
-                //if (target is Music)
-                //    PlaylistControl.AddMusic(target as Music);
-                //else
-                //    PlaylistControl.AddMusic(target as ICollection<Music>);
-            };
-            subItem.Items.Add(myFavorites);
-            subItem.Items.Add(new MenuFlyoutSeparator());
-            foreach (var item in GetAddToPlaylistsMenuFlyout("").Items)
-                subItem.Items.Add(item);
-            return subItem;
+                var favItem = new MenuFlyoutItem()
+                {
+                    Icon = new FontIcon() { Glyph = "\uEB51" },
+                    Text = "My Favorites"
+                };
+                favItem.Click += (sender, args) =>
+                {
+                    //if (target is Music)
+                    //    PlaylistControl.AddMusic(target as Music);
+                    //else
+                    //    PlaylistControl.AddMusic(target as ICollection<Music>);
+                };
+                addToItem.Items.Add(favItem);
+
+            }
+            addToItem.Items.Add(new MenuFlyoutSeparator());
+            foreach (var item in GetAddToPlaylistsMenuFlyout("", PlaylistName).Items)
+                addToItem.Items.Add(item);
+            return addToItem;
         }
 
-        public MenuFlyout GetAddToPlaylistsMenuFlyout(string OldName)
+        public MenuFlyout GetAddToPlaylistsMenuFlyout(string DefaultName, string PlaylistName = "")
         {
             var flyout = new MenuFlyout();
-            var newPlaylist = new MenuFlyoutItem()
+            var newPlaylistItem = new MenuFlyoutItem()
             {
                 Icon = new SymbolIcon(Symbol.Add),
                 Text = "New Playlist"
             };
-            newPlaylist.Click += async (sender, args) =>
+            newPlaylistItem.Click += async (sender, args) =>
             {
                 var listener = new VirtualRenameActionListener() { Data = Data };
-                RenameDialog dialog = new RenameDialog(listener, TitleOption.NewPlaylist, OldName);
+                RenameDialog dialog = new RenameDialog(listener, TitleOption.NewPlaylist, DefaultName);
                 listener.Dialog = dialog;
                 await dialog.ShowAsync();
             };
-            flyout.Items.Add(newPlaylist);
+            flyout.Items.Add(newPlaylistItem);
             foreach (var playlist in Settings.settings.Playlists)
             {
+                if (playlist.Name == PlaylistName) continue;
                 var item = new MenuFlyoutItem()
                 {
                     Icon = new SymbolIcon(Symbol.Audio),
@@ -92,7 +103,7 @@ namespace SMPlayer
             return flyout;
         }
 
-        public MenuFlyout GetPlaylistMenuFlyout()
+        public MenuFlyout GetPlaylistMenuFlyout(MenuFlyoutItemClickListener listener = null)
         {
             var flyout = new MenuFlyout();
             var shuffleItem = new MenuFlyoutItem()
@@ -110,7 +121,7 @@ namespace SMPlayer
             flyout.Items.Add(GetAddToMenuFlyoutSubItem());
             return flyout;
         }
-        public MenuFlyout GetMusicMenuFlyout()
+        public MenuFlyout GetMusicMenuFlyout(MenuFlyoutItemClickListener listener = null)
         {
             var music = Data as Music;
             var flyout = new MenuFlyout();
@@ -136,6 +147,7 @@ namespace SMPlayer
             {
 
             };
+            ToolTipService.SetToolTip(deleteItem, new ToolTip() { Content = $"Delete {music.Name}" });
             flyout.Items.Add(deleteItem);
             var musicInfoItem = new MenuFlyoutItem()
             {
@@ -146,11 +158,13 @@ namespace SMPlayer
             {
 
             };
+            ToolTipService.SetToolTip(deleteItem, new ToolTip() { Content = "Show Music Info" });
             flyout.Items.Add(musicInfoItem);
             return flyout;
         }
-        public MenuFlyout GetRemovableMusicMenuFlyout()
+        public MenuFlyout GetRemovableMusicMenuFlyout(MenuFlyoutItemClickListener listener = null)
         {
+            var music = Data as Music;
             var flyout = GetMusicMenuFlyout();
             var removeItem = new MenuFlyoutItem
             {
@@ -159,28 +173,34 @@ namespace SMPlayer
             };
             removeItem.Click += (sender, args) =>
             {
-
+                if (music.Equals(MediaHelper.CurrentMusic))
+                {
+                    MediaHelper.NextMusic();
+                    PlaylistControl.NowPlayingPlaylist.Remove(music);
+                    MediaHelper.RemoveMusic(music);
+                }
             };
+            ToolTipService.SetToolTip(removeItem, new ToolTip() { Content = "Remove From Playlist" });
             flyout.Items.Insert(2, removeItem);
             return flyout;
         }
-        public static MenuFlyout InsertAddToMenu(object sender, int index = 0)
+        public static MenuFlyout SetAddToMenu(object sender, string playlistName = "")
         {
-            return InsertMenu((helper) => helper.GetAddToMenuFlyout(), sender, index);
+            return SetMenu((helper) => helper.GetAddToMenuFlyout(playlistName), sender);
         }
-        public static MenuFlyout InsertPlaylistMenu(object sender, int index = 0)
+        public static MenuFlyout SetPlaylistMenu(object sender, MenuFlyoutItemClickListener listener = null)
         {
-            return InsertMenu((helper) => helper.GetPlaylistMenuFlyout(), sender, index);
+            return SetMenu((helper) => helper.GetPlaylistMenuFlyout(listener), sender);
         }
-        public static MenuFlyout InsertMusicMenu(object sender, int index = 0)
+        public static MenuFlyout SetMusicMenu(object sender, MenuFlyoutItemClickListener listener = null)
         {
-            return InsertMenu((helper) => helper.GetMusicMenuFlyout(), sender, index);
+            return SetMenu((helper) => helper.GetMusicMenuFlyout(listener), sender);
         }
-        public static MenuFlyout InsertRemovableMusicMenu(object sender, int index = 0)
+        public static MenuFlyout SetRemovableMusicMenu(object sender, MenuFlyoutItemClickListener listener = null)
         {
-            return InsertMenu((helper) => helper.GetRemovableMusicMenuFlyout(), sender, index);
+            return SetMenu((helper) => helper.GetRemovableMusicMenuFlyout(listener), sender);
         }
-        private static MenuFlyout InsertMenu(Func<MenuFlyoutHelper, MenuFlyout> GetMenu, object sender, int index = 0)
+        private static MenuFlyout SetMenu(Func<MenuFlyoutHelper, MenuFlyout> GetMenu, object sender)
         {
             MenuFlyout flyout;
             MenuFlyoutHelper helper;
@@ -189,6 +209,7 @@ namespace SMPlayer
             {
                 flyout = sender as MenuFlyout;
                 dataContext = (flyout.Target as Windows.UI.Xaml.FrameworkElement).DataContext;
+                flyout.Items.Clear();
             }
             else
             {
@@ -197,16 +218,8 @@ namespace SMPlayer
             }
             helper = new MenuFlyoutHelper() { Data = FindMusic(dataContext) };
             var items = GetMenu(helper).Items;
-            if (flyout.Items.Count >= index + items.Count && flyout.Items[index].Name == MusicMenuName)
-            {
-                for (int i = 0; i < items.Count; i++)
-                    flyout.Items[index + i] = items[i];
-            }
-            else
-            {
-                foreach (var item in items.Reverse())
-                    flyout.Items.Insert(index, item);
-            }
+            foreach (var item in items)
+                flyout.Items.Add(item);
             return flyout;
         }
 
@@ -222,8 +235,10 @@ namespace SMPlayer
         }
     }
 
-    public interface AddToMenuItemClickListener
+    public interface MenuFlyoutItemClickListener
     {
+        void Play();
+        void Delete();
 
     }
 }

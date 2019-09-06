@@ -198,7 +198,8 @@ namespace SMPlayer
         }
         private void AddTo_Click(object sender, RoutedEventArgs e)
         {
-            MenuFlyoutHelper.InsertAddToMenu(sender).ShowAt(sender as FrameworkElement);
+            var element = sender as FrameworkElement;
+            MenuFlyoutHelper.SetAddToMenu(sender, (element.DataContext as Playlist).Name).ShowAt(element);
         }
         private async void Rename_Click(object sender, RoutedEventArgs e)
         {

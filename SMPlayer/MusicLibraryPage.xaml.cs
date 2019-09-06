@@ -80,11 +80,6 @@ namespace SMPlayer
         {
             JsonFileHelper.SaveAsync(FILENAME, AllSongs);
         }
-        private void PlayItem_Click(object sender, RoutedEventArgs e)
-        {
-            var music = (sender as MenuFlyoutItem).DataContext as Music;
-            PlayMusic(music);
-        }
 
         private void MusicLibraryDataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
@@ -108,7 +103,14 @@ namespace SMPlayer
 
         private void MenuFlyout_Opening(object sender, object e)
         {
-            MenuFlyoutHelper.InsertMusicMenu(sender);
+            if (MusicLibraryDataGrid.SelectedItems.Count > 1)
+            {
+                MenuFlyoutHelper.SetPlaylistMenu(sender);
+            }
+            else
+            {
+                MenuFlyoutHelper.SetMusicMenu(sender);
+            }
         }
 
         private void MusicLibraryDataGrid_Sorting(object sender, DataGridColumnEventArgs e)

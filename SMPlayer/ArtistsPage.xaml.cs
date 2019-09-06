@@ -142,11 +142,11 @@ namespace SMPlayer
 
         private void OpenPlaylistMenuFlyout(object sender, object e)
         {
-            MenuFlyoutHelper.InsertPlaylistMenu(sender);
+            MenuFlyoutHelper.SetPlaylistMenu(sender);
         }
         private void OpenMusicMenuFlyout(object sender, object e)
         {
-            MenuFlyoutHelper.InsertMusicMenu(sender);
+            MenuFlyoutHelper.SetMusicMenu(sender);
         }
     }
 }

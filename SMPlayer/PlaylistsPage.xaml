@@ -86,8 +86,7 @@
                                         Grid.RowSpan="4"
                                         Width="180"
                                         Height="180"
-                                        Margin="0,0,20,0"
-                                        Loaded="PlaylistCover_Loaded" />
+                                        Margin="0,0,20,0" />
                                     <TextBlock
                                         Grid.Column="1"
                                         FontSize="36"
