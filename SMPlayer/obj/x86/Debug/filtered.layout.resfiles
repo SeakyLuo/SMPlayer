@@ -63,6 +63,7 @@ Dictionaries\MediaControlButton.xbf
 Dictionaries\MediaControlToggleButton.xbf
 Dictionaries\MediaSlider.xbf
 Dictionaries\PlaylistAppBarButton.xbf
+Dictionaries\PlaylistCommandBar.xbf
 LocalFoldersPage.xbf
 LocalMusicPage.xbf
 LocalPage.xbf
@@ -78,6 +79,5 @@ RecentPage.xbf
 SearchPage.xbf
 SettingsPage.xbf
 SMPlayer.xr.xml
-TemplateDictionary.xbf
 Themes\Generic.xbf
 Properties\Default.rd.xml

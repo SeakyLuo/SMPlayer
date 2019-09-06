@@ -22,7 +22,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace SMPlayer
 {
-    public sealed partial class MediaControl : UserControl, MediaControlListener, AfterPathSetListener
+    public sealed partial class MediaControl : UserControl, MusicSwitchingListener, ShuffleChangedListener, MediaControlListener, AfterPathSetListener
     {
         public enum MediaControlMode
         {
@@ -257,7 +257,9 @@ namespace SMPlayer
         public MediaControl()
         {
             this.InitializeComponent();
-            MediaHelper.AddMediaControlListener(this as MediaControlListener);
+            MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
+            MediaHelper.ShuffleChangedListeners.Add(this as ShuffleChangedListener);
+            MediaHelper.MediaControlListeners.Add(this as MediaControlListener);
             SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
         }
 
@@ -645,6 +647,7 @@ namespace SMPlayer
             AlbumCover.Source = Helper.DefaultAlbumCover;
             TitleTextBlock.Text = "";
             ArtistTextBlock.Text = "";
+            RightTimeTextBlock.Text = "0:00";
         }
 
         public void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle) { return; }

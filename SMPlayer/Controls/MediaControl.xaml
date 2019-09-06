@@ -134,7 +134,8 @@
                         Margin="20,0,10,0"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI"
-                        RelativePanel.AlignRightWithPanel="True" />
+                        RelativePanel.AlignRightWithPanel="True"
+                        Text="0:00" />
                 </Grid>
             </StackPanel>
             <StackPanel

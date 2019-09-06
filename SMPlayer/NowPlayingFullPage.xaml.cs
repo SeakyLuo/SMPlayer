@@ -30,7 +30,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class NowPlayingFullPage : Page, MediaControlContainer, MediaControlListener, MusicRequestListener
+    public sealed partial class NowPlayingFullPage : Page, MediaControlContainer, MusicSwitchingListener, MusicRequestListener
     {
         public static NowPlayingFullPage Instance { get => (Window.Current.Content as Frame).Content as NowPlayingFullPage; }
         private MusicProperties musicProperties;
@@ -40,7 +40,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             MediaControl.AddMusicRequestListener(this as MusicRequestListener);
-            MediaHelper.AddMediaControlListener(this as MediaControlListener);
+            MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -157,8 +157,6 @@ namespace SMPlayer
             FullMediaControl.SetShuffle(isShuffle);
         }
 
-        public void Tick() { return; }
-
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
@@ -179,10 +177,6 @@ namespace SMPlayer
                 SetMusic(next);
             });
         }
-
-        public void MediaEnded() { return; }
-
-        public void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle) { return; }
 
         public async void SetMusicInfo(Music music)
         {

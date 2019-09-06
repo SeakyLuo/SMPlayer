@@ -27,7 +27,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MusicLibraryPage : Page, MusicControlListener, MediaControlListener
+    public sealed partial class MusicLibraryPage : Page, MusicControlListener, MusicSwitchingListener
     {
         private const string FILENAME = "MusicLibrary.json";
         public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
@@ -43,7 +43,7 @@ namespace SMPlayer
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             MediaControl.AddMusicControlListener(this as MusicControlListener);
-            MediaHelper.AddMediaControlListener(this as MediaControlListener);
+            MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -153,8 +153,6 @@ namespace SMPlayer
             foreach (var item in songs) AllSongs.Add(item);
         }
 
-        public void Tick() { return; }
-
         private void FindMusicAndSetPlaying(Music target, bool isPlaying)
         {
             if (target == null) return;
@@ -166,14 +164,8 @@ namespace SMPlayer
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
-                FindMusicAndSetPlaying(current, false);
-                FindMusicAndSetPlaying(next, true);
-                var s = MusicLibraryDataGrid.ItemsSource as ObservableCollection<Music>;
+                MediaHelper.FindMusicAndSetPlaying(AllSongs, current, next);
             });
         }
-
-        public void MediaEnded() { return; }
-
-        public void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle) { return; }
     }
 }

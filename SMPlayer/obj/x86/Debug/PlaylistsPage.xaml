@@ -66,11 +66,10 @@
                                                                  >
                         <local:PlaylistControl.Header>
                             <controls:ScrollHeader Mode="Sticky">
-                                <Grid x:ConnectionId='11'
+                                <Grid
                                     x:Name="PlaylistInfoGrid"
                                     Padding="30"
                                     Background="#222222"
-                                                                    
                                     RequestedTheme="Dark">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
@@ -101,7 +100,8 @@
                                         Grid.Row="2"
                                         Grid.Column="1"
                                         Background="Transparent"
-                                        DefaultLabelPosition="Right">
+                                        DefaultLabelPosition="Right"
+                                        Style="{StaticResource PlaylistCommandBarStyle}">
                                         <AppBarButton x:ConnectionId='15'
                                                                  
                                             Icon="Shuffle"

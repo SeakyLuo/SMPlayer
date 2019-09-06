@@ -55,7 +55,9 @@ namespace SMPlayer
             Source = PlayList
         };
         public static DispatcherTimer Timer = new DispatcherTimer {  Interval = TimeSpan.FromSeconds(1) };
-        private static List<MediaControlListener> MediaControlListeners = new List<MediaControlListener>();
+        public static List<MediaControlListener> MediaControlListeners = new List<MediaControlListener>();
+        public static List<MusicSwitchingListener> MusicSwitchingListeners = new List<MusicSwitchingListener>();
+        public static List<ShuffleChangedListener> ShuffleChangedListeners = new List<ShuffleChangedListener>();
 
         public async static void Init()
         {
@@ -71,7 +73,7 @@ namespace SMPlayer
                 // Switching Folder Cause this
                 if (!next.Equals(current))
                 {
-                    foreach (var listener in MediaControlListeners)
+                    foreach (var listener in MusicSwitchingListeners)
                         listener.MusicSwitching(current, next, args.Reason);
                     CurrentMusic = next;
                 }
@@ -114,7 +116,7 @@ namespace SMPlayer
             bool isShuffle = mode == PlayMode.Shuffle;
             PlayList.ShuffleEnabled = isShuffle;
             if (!isShuffle) ShuffledPlayList.Clear();
-            foreach (var listener in MediaControlListeners)
+            foreach (var listener in ShuffleChangedListeners)
                 listener.ShuffleChanged(CurrentPlaylist, isShuffle);
             Settings.settings.Mode = mode;
         }
@@ -152,11 +154,6 @@ namespace SMPlayer
             SetMode(PlayMode.Shuffle);
             await SetPlaylist(playlist);
             Play();
-        }
-
-        public static void AddMediaControlListener(MediaControlListener listener)
-        {
-            MediaControlListeners.Add(listener);
         }
 
         public static void MoveMusic(Music music, int toIndex)
@@ -235,13 +232,33 @@ namespace SMPlayer
             var target = PlayList.Items.FirstOrDefault((item) => music.Equals(item.Source.CustomProperties["Source"]));
             PlayList.Items.Remove(target);
         }
+
+        public static void FindMusicAndSetPlaying(ICollection<Music> playlist, Music current, Music next)
+        {
+            bool findCurrent = current == null, findNext = next == null;
+            foreach (var music in playlist)
+            {
+                if (!findCurrent && (findCurrent = music.Equals(current)))
+                    music.IsPlaying = false;
+                if (!findNext && (findNext = music.Equals(next)))
+                    music.IsPlaying = true;
+                if (findCurrent && findNext) return;
+            }
+        }
+    }
+
+    public interface MusicSwitchingListener
+    {
+        void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason);
+    }
+    public interface ShuffleChangedListener
+    {
+        void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle);
     }
 
     public interface MediaControlListener
     {
         void Tick();
-        void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason);
         void MediaEnded();
-        void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle);
     }
 }

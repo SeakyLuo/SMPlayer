@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.Playback;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -25,7 +26,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class PlaylistsPage : Page, RenameActionListener
+    public sealed partial class PlaylistsPage : Page, RenameActionListener, MusicSwitchingListener
     {
         public static ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
         private ObservableCollection<Playlist> playlists
@@ -55,13 +56,29 @@ namespace SMPlayer
             }
             else
             {
-                PlayListTabViewFooter.Text = string.Format("Playlists: {0}", Playlists.Count);
+                PlayListTabViewFooter.Text = $"Playlists: {Playlists.Count}";
             }
         }
 
-        private void PlaylistTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void PlaylistTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Settings.settings.LastPlaylist = e.OriginalSource == null ? Playlists[0].Name : (e.OriginalSource as Playlist).Name;
+            var tabview = sender as TabView;
+            var playlist = tabview.SelectedItem as Playlist;
+            Settings.settings.LastPlaylist = playlist.Name;
+            foreach (var music in playlist.Songs)
+                music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
+
+            //var template = tabview.ItemTemplate;
+            //var grid = VisualTreeHelper.GetChild(template, 0) as Grid;
+            //var thumbnail = grid.Children[0] as Image;
+            //if (!PlaylistThumbnailDict.TryGetValue(playlist.Name, out List<BitmapImage> thumbnails))
+            //{
+            //    thumbnails = await playlist.GetThumbnails();
+            //    PlaylistThumbnailDict[playlist.Name] = thumbnails;
+            //}
+            //thumbnail.Source = thumbnails.Count == 0 ? Helper.DefaultAlbumCover : thumbnails[random.Next(thumbnails.Count)];
+            //System.Threading.Thread.Sleep(16);
+            //grid.Background = await Helper.GetThumbnailMainColor(thumbnail, false);
         }
 
         private void DeleteClick(object sender, RoutedEventArgs e)
@@ -143,23 +160,6 @@ namespace SMPlayer
             await messageDialog.ShowAsync();
         }
 
-        private async void PlaylistInfoGrid_Loaded(object sender, RoutedEventArgs e)
-        {
-            var grid = sender as Grid;
-            var playlist = grid.DataContext as Playlist;
-            var thumbnail = grid.Children[0] as Image;
-            if (!PlaylistThumbnailDict.TryGetValue(playlist.Name, out List<BitmapImage> thumbnails))
-            {
-                thumbnails = await playlist.GetThumbnails();
-                PlaylistThumbnailDict[playlist.Name] = thumbnails;
-            }
-            thumbnail.Source = thumbnails.Count == 0 ? Helper.DefaultAlbumCover : thumbnails[random.Next(thumbnails.Count)];
-            thumbnail.Loaded += async (_s, _e) =>
-            {
-                grid.Background = await Helper.GetThumbnailMainColor(thumbnail, false);
-            };
-        }
-
         public bool Confirm(string OldName, string NewName)
         {
             if (string.IsNullOrEmpty(NewName) || string.IsNullOrWhiteSpace(NewName))
@@ -238,6 +238,15 @@ namespace SMPlayer
         {
             var thumbnail = sender as Image;
             //(thumbnail.Parent as Grid).Background = await Helper.GetThumbnailMainColor(thumbnail, false);
+        }
+
+        public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+            {
+                var playlist = PlaylistTabView.SelectedItem as Playlist;
+                MediaHelper.FindMusicAndSetPlaying(playlist.Songs, current, next);
+            });
         }
     }
 }

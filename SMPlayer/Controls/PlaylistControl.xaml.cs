@@ -21,7 +21,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace SMPlayer
 {
-    public sealed partial class PlaylistControl : UserControl, MediaControlListener
+    public sealed partial class PlaylistControl : UserControl, MusicSwitchingListener, ShuffleChangedListener
     {
         private const string FILENAME = "NowPlayingPlaylist.json";
         public static ObservableCollection<Music> NowPlayingPlaylist = new ObservableCollection<Music>();
@@ -63,7 +63,8 @@ namespace SMPlayer
         public PlaylistControl()
         {
             this.InitializeComponent();
-            MediaHelper.AddMediaControlListener(this as MediaControlListener);
+            MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
+            MediaHelper.ShuffleChangedListeners.Add(this as ShuffleChangedListener);
             if (ItemsSource == null) ItemsSource = NowPlayingPlaylist;
         }
 
@@ -136,20 +137,12 @@ namespace SMPlayer
             await MediaHelper.SetPlaylist(CurrentPlaylist);
             ((Window.Current.Content as Frame).Content as MediaControlContainer).SetMusicAndPlay(music);
         }
-        public void Tick() { return; }
-
-        private void FindMusicAndSetPlaying(Music target, bool isPlaying)
-        {
-            var music = CurrentPlaylist.FirstOrDefault((m) => m.Equals(target));
-            if (music != null) music.IsPlaying = isPlaying;
-        }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
             {
-                FindMusicAndSetPlaying(current, false);
-                FindMusicAndSetPlaying(next, true);
+                MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, current, next);
             });
         }
         public void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle)
@@ -157,8 +150,6 @@ namespace SMPlayer
             CurrentPlaylist.Clear();
             foreach (var music in newPlayList) CurrentPlaylist.Add(music);
         }
-        public void MediaEnded() { return; }
-
         private void SongsListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
             sender.UpdateLayout(); // Refresh Row Color
