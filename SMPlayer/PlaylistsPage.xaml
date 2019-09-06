@@ -85,7 +85,8 @@
                                         Grid.RowSpan="4"
                                         Width="180"
                                         Height="180"
-                                        Margin="0,0,20,0" />
+                                        Margin="0,0,20,0"
+                                        Source="Assets/monotone_bg_wide.png" />
                                     <TextBlock
                                         Grid.Column="1"
                                         FontSize="36"
