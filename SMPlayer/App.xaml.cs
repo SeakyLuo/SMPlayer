@@ -79,7 +79,6 @@ namespace SMPlayer
             }
 
             MusicLibraryPage.Init();
-            PlaylistControl.Init();
             MediaHelper.Init();
             Window.Current.VisibilityChanged += CheckLibrary;
 
@@ -126,7 +125,7 @@ namespace SMPlayer
             Helper.ResumeTile();
             Settings.Save();
             MusicLibraryPage.Save();
-            PlaylistControl.Save();
+            MediaHelper.Save();
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
         }

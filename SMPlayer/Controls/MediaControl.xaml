@@ -117,6 +117,7 @@
                     <Slider
                         x:Name="MainMediaSlider"
                         Grid.Column="1"
+                        IsEnabled="False"
                         IsThumbToolTipEnabled="True"
                         ManipulationCompleted="MediaSlider_ManipulationCompleted"
                         ManipulationMode="All"
@@ -281,6 +282,7 @@
                     <Slider
                         x:Name="FullMediaSlider"
                         Grid.Column="1"
+                        IsEnabled="False"
                         IsThumbToolTipEnabled="True"
                         ManipulationCompleted="MediaSlider_ManipulationCompleted"
                         ManipulationMode="All"

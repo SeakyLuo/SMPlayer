@@ -385,6 +385,7 @@
     <RootType FullName="Windows.UI.Xaml.Controls.UserControl">
       <RootProperty Name="Content" />
       <RootProperty Name="Resources" />
+      <RootEvent Name="Loaded" />
       <RootEvent Name="Loading" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.Loading">
@@ -529,6 +530,7 @@
       <RootProperty Name="Minimum" />
       <RootProperty Name="Style" />
       <RootProperty Name="Value" />
+      <RootProperty Name="IsEnabled" />
       <RootProperty Name="IsThumbToolTipEnabled" />
       <RootProperty Name="ManipulationMode" />
       <RootProperty Name="ThumbToolTipValueConverter" />

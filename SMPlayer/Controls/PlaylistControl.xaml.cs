@@ -24,8 +24,13 @@ namespace SMPlayer
     public sealed partial class PlaylistControl : UserControl, MusicSwitchingListener, ShuffleChangedListener
     {
         private const string FILENAME = "NowPlayingPlaylist.json";
-        public static ObservableCollection<Music> NowPlayingPlaylist = new ObservableCollection<Music>();
-        private ObservableCollection<Music> CurrentPlaylist = new ObservableCollection<Music>();
+        public ObservableCollection<Music> CurrentPlaylist
+        {
+            get => currentPlaylist.Count == 0 ? MediaHelper.CurrentPlaylist : currentPlaylist;
+            set => currentPlaylist = value;
+
+        }
+        private ObservableCollection<Music> currentPlaylist = new ObservableCollection<Music>();
         public ElementTheme Theme
         {
             get => SongsListView.RequestedTheme;
@@ -65,7 +70,6 @@ namespace SMPlayer
             this.InitializeComponent();
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
             MediaHelper.ShuffleChangedListeners.Add(this as ShuffleChangedListener);
-            if (ItemsSource == null) ItemsSource = NowPlayingPlaylist;
         }
 
         private void PlaylistController_Loading(FrameworkElement sender, object args)
@@ -73,46 +77,9 @@ namespace SMPlayer
             CurrentTheme = Theme;
         }
 
-        public static async void Init()
+        private void PlaylistController_Loaded(object sender, RoutedEventArgs e)
         {
-            var playlist = JsonFileHelper.Convert<ObservableCollection<string>>(await JsonFileHelper.ReadAsync(FILENAME));
-            if (playlist == null || MediaHelper.CurrentMusic == null) return;
-            else if (playlist.Count == 0) foreach (var music in MusicLibraryPage.AllSongs) NowPlayingPlaylist.Add(music);
-            else
-            {
-                var hashset = MusicLibraryPage.AllSongs.ToHashSet();
-                foreach (var music in playlist)
-                    NowPlayingPlaylist.Add(hashset.First((m) => m.Name == music));
-            }
-        }
-        public static void Save()
-        {
-            ICollection<Music> playlist;
-            if (MediaHelper.CurrentPlaylist.Count == MusicLibraryPage.AllSongs.Count)
-                playlist = new List<Music>();
-            else
-                playlist = MediaHelper.CurrentPlaylist; // OrderedPlaylist?
-            JsonFileHelper.SaveAsync(FILENAME, playlist.Select((m) => m.Name));
-        }
-
-        public static async void AddMusic(object item)
-        {
-            if (item is Music)
-            {
-                var music = item as Music;
-                music.IsPlaying = false;
-                NowPlayingPlaylist.Add(music);
-                await MediaHelper.AddMusic(music);
-            }
-            else if (item is ICollection<Music>)
-            {
-                foreach (var music in item as ICollection<Music>)
-                {
-                    music.IsPlaying = false;
-                    NowPlayingPlaylist.Add(music);
-                    await MediaHelper.AddMusic(music);
-                }
-            }
+            if (ItemsSource == null) ItemsSource = MediaHelper.CurrentPlaylist;
         }
 
         public static void AddMusicRequestListener(MusicRequestListener listener)
@@ -120,19 +87,8 @@ namespace SMPlayer
             MusicRequestListeners.Add(listener);
         }
 
-        public static void SetPlaylist(ICollection<Music> playlist)
-        {
-            if (Helper.SamePlayList(NowPlayingPlaylist, playlist)) return;
-            NowPlayingPlaylist.Clear();
-            foreach (var music in playlist)
-            {
-                music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
-                NowPlayingPlaylist.Add(music);
-            }
-        }
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            //args.ItemContainer.Foreground = Theme == ElementTheme.Dark ? Helper.WhiteSmokeBrush : Helper.BlackBrush;
             if (AlternatingRowColor)
                 args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? Helper.WhiteSmokeBrush : Helper.WhiteBrush;
         }
@@ -149,7 +105,7 @@ namespace SMPlayer
         }
         public void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle)
         {
-            if (!AllowReorder) return;
+            if (!AllowReorder && !isShuffle) return;
             CurrentPlaylist.Clear();
             foreach (var music in newPlayList) CurrentPlaylist.Add(music);
         }

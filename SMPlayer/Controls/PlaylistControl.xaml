@@ -9,6 +9,7 @@
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="PlaylistController"
+    Loaded="PlaylistController_Loaded"
     Loading="PlaylistController_Loading"
     mc:Ignorable="d">
 

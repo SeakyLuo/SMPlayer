@@ -1,6 +1,7 @@
 ﻿using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,7 @@ namespace SMPlayer
     {
         public static bool ShuffleEnabled;
         public static Music CurrentMusic;
-        public static List<Music> CurrentPlaylist = new List<Music>();
+        public static ObservableCollection<Music> CurrentPlaylist = new ObservableCollection<Music>();
 
         public static double Position
         {
@@ -38,8 +39,9 @@ namespace SMPlayer
         public static List<MediaControlListener> MediaControlListeners = new List<MediaControlListener>();
         public static List<MusicSwitchingListener> MusicSwitchingListeners = new List<MusicSwitchingListener>();
         public static List<ShuffleChangedListener> ShuffleChangedListeners = new List<ShuffleChangedListener>();
+        private const string FILENAME = "NowPlayingPlaylist.json";
 
-        public static void Init()
+        public static async void Init()
         {
             Timer.Tick += (sender, e) =>
             {
@@ -64,13 +66,21 @@ namespace SMPlayer
                     listener.MediaEnded();
             };
 
-            SetPlaylist(PlaylistControl.NowPlayingPlaylist);
+            var playlist = JsonFileHelper.Convert<List<string>>(await JsonFileHelper.ReadAsync(FILENAME));
+            if (playlist == null) return;
+            var hashset = MusicLibraryPage.AllSongs.ToHashSet();
+            foreach (var music in playlist)
+                await AddMusic(hashset.First((m) => m.Name == music));
             while (Settings.settings == null) { System.Threading.Thread.Sleep(233); }
             Player.Volume = Settings.settings.Volume;
             MoveToMusic(Settings.settings.LastMusic);
             SetMode(Settings.settings.Mode);
         }
-        public static void SetMode(PlayMode mode)
+        public static void Save()
+        {
+            JsonFileHelper.SaveAsync(FILENAME, CurrentPlaylist.Select((m) => m.Name));
+        }
+        public static async void SetMode(PlayMode mode)
         {
             switch (mode)
             {
@@ -95,7 +105,7 @@ namespace SMPlayer
             }
             bool isShuffle = mode == PlayMode.Shuffle;
             ShuffleEnabled = isShuffle;
-            if (isShuffle) SetPlaylist(ShufflePlaylist(CurrentPlaylist, CurrentMusic));
+            if (isShuffle) await SetPlaylist(ShufflePlaylist(CurrentPlaylist, CurrentMusic));
             foreach (var listener in ShuffleChangedListeners)
                 listener.ShuffleChanged(CurrentPlaylist, isShuffle);
             Settings.settings.Mode = mode;
@@ -118,45 +128,58 @@ namespace SMPlayer
                 return;
             }
         }
-
-        public static async void SetPlaylist(ICollection<Music> playlist)
+        public static async void AddMusic(ICollection<Music> playlist)
         {
-            if (Helper.SamePlayList(playlist, CurrentPlaylist)) return;
-            int skip = 0;
+            foreach (var music in playlist)
+                await AddMusic(music);
+        }
+
+        public static async Task SetPlaylist(ICollection<Music> playlist, Music music = null)
+        {
+            int index = 0;
             if (CurrentPlaylist.Count > 0)
             {
-                if (playlist.ElementAt(0).Equals(CurrentPlaylist[0]))
-                {
-                    skip = 1;
-                    CurrentPlaylist.RemoveRange(1, CurrentPlaylist.Count - 1);
-                    for (int i = CurrentPlaylist.Count - 1; i > 0; i--)
-                        PlayBackList.Items.RemoveAt(i);
-                }
-                else
+                if (music == null)
                 {
                     CurrentPlaylist.Clear();
                     PlayBackList.Items.Clear();
                 }
+                else
+                {
+                    foreach (var item in CurrentPlaylist.ToArray())
+                    {
+                        if (item.Equals(music)) index = 1;
+                        else
+                        {
+                            CurrentPlaylist.RemoveAt(index);
+                            PlayBackList.Items.RemoveAt(index);
+                        }
+                    }
+                }
             }
-            foreach (var music in playlist.Skip(skip))
-                await AddMusic(music);
+            foreach (var item in playlist.Skip(index))
+                await AddMusic(item);
             if (!CurrentPlaylist.Contains(CurrentMusic))
                 CurrentMusic = null;
-            PlaylistControl.SetPlaylist(CurrentPlaylist);
         }
 
-        public static void SetMusicAndPlay(ICollection<Music> playlist, Music music)
+        public static async void SetMusicAndPlay(ICollection<Music> playlist, Music music)
         {
-            if (ShuffleEnabled) playlist = ShufflePlaylist(playlist, music);
-            SetPlaylist(playlist);
+            if (!Helper.SamePlaylist(CurrentPlaylist, playlist))
+            {
+                if (!music.Equals(CurrentMusic)) Pause();
+                if (ShuffleEnabled) playlist = ShufflePlaylist(playlist, music);
+                await SetPlaylist(playlist, music);
+            }
             MoveToMusic(music);
             Play();
         }
 
-        public static void ShuffleAndPlay(ICollection<Music> playlist)
+        public static async void ShuffleAndPlay(ICollection<Music> playlist)
         {
+            Pause();
             SetMode(PlayMode.Shuffle);
-            SetPlaylist(playlist);
+            await SetPlaylist(playlist);
             Play();
         }
 
@@ -231,6 +254,11 @@ namespace SMPlayer
                 PlayBackList.MoveNext();
         }
 
+        public static void MoveToMusic(int index)
+        {
+            PlayBackList.MoveTo(Convert.ToUInt32(index));
+        }
+
         public static void MoveToMusic(Music music)
         {
             if (music == null) return;
@@ -250,7 +278,12 @@ namespace SMPlayer
             int index = CurrentPlaylist.IndexOf(music);
             CurrentPlaylist.RemoveAt(index);
             PlayBackList.Items.RemoveAt(index);
-            PlaylistControl.NowPlayingPlaylist.RemoveAt(index);
+        }
+
+        public static void Clear()
+        {
+            CurrentPlaylist.Clear();
+            PlayBackList.Items.Clear();
         }
 
         public static void FindMusicAndSetPlaying(ICollection<Music> playlist, Music current, Music next)

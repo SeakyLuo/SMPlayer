@@ -39,9 +39,12 @@ namespace SMPlayer
                     Icon = new FontIcon() { Glyph = "\uEC4F" },
                     Text = "Now Playing"
                 };
-                nowPlayingItem.Click += (sender, args) =>
+                nowPlayingItem.Click += async (sender, args) =>
                 {
-                    PlaylistControl.AddMusic(Data);
+                    if (Data is Music)
+                        await MediaHelper.AddMusic(Data as Music);
+                    else if (Data is ICollection<Music>)
+                        MediaHelper.AddMusic(Data as ICollection<Music>);
                 };
                 addToItem.Items.Add(nowPlayingItem);
             }
@@ -114,7 +117,7 @@ namespace SMPlayer
             ToolTipService.SetToolTip(shuffleItem, new ToolTip() { Content = "Shuffle and Play" });
             shuffleItem.Click += (s, args) =>
             {
-                MediaHelper.SetPlaylist(Data as ICollection<Music>);
+                MediaHelper.ShuffleAndPlay(Data as ICollection<Music>);
             };
             flyout.Items.Add(shuffleItem);
             flyout.Items.Add(GetAddToMenuFlyoutSubItem());
@@ -175,7 +178,6 @@ namespace SMPlayer
                 if (music.Equals(MediaHelper.CurrentMusic))
                 {
                     MediaHelper.NextMusic();
-                    PlaylistControl.NowPlayingPlaylist.Remove(music);
                     MediaHelper.RemoveMusic(music);
                 }
             };

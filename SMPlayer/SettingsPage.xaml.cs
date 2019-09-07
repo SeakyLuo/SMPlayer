@@ -49,7 +49,7 @@ namespace SMPlayer
             Settings.settings.RootPath = folder.Path;
             await Settings.SetTreeFolder(folder);
             foreach (var listener in listeners) listener.PathSet(folder.Path);
-            PlaylistControl.NowPlayingPlaylist.Clear();
+            MediaHelper.Clear();
             Settings.Save();
             PathBox.Text = folder.Path;
             SettingsLoadingControl.IsLoading = false;

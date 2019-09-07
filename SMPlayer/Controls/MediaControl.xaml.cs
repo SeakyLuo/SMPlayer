@@ -276,7 +276,13 @@ namespace SMPlayer
 
         public async void SetMusic(Music music)
         {
-            if (music == null) { AlbumCover.Source = Helper.DefaultAlbumCover; return; };
+            if (music == null)
+            {
+                MediaSlider.IsEnabled = false;
+                AlbumCover.Source = Helper.DefaultAlbumCover;
+                return;
+            }
+            MediaSlider.IsEnabled = true;
             AlbumCover.Source = await Helper.GetThumbnail(music);
             TitleTextBlock.Text = music.Name;
             ArtistTextBlock.Text = music.Artist;
@@ -415,7 +421,7 @@ namespace SMPlayer
                 if (MediaHelper.CurrentMusic == null)
                 {
                     if (MediaHelper.CurrentPlaylist.Count == 0) return;
-                    MediaHelper.MoveToMusic(MediaHelper.CurrentPlaylist[0]);
+                    MediaHelper.MoveToMusic(0);
                 }
                 MediaHelper.Play();
             }
@@ -578,7 +584,7 @@ namespace SMPlayer
             var name = "Now Playing - " + DateTime.Now.ToString("yy/MM/dd");
             int index = Settings.settings.FindNextPlaylistNameIndex(name);
             var defaultName = index == 0 ? name : $"{name} ({index})";
-            var listener = new VirtualRenameActionListener() { Data = PlaylistControl.NowPlayingPlaylist };
+            var listener = new VirtualRenameActionListener() { Data = MediaHelper.CurrentPlaylist };
             var dialog = new RenameDialog(listener, TitleOption.NewPlaylist, defaultName);
             listener.Dialog = dialog;
             await dialog.ShowAsync();
@@ -639,6 +645,7 @@ namespace SMPlayer
             TitleTextBlock.Text = "";
             ArtistTextBlock.Text = "";
             RightTimeTextBlock.Text = "0:00";
+            MediaSlider.IsEnabled = false;
         }
 
         public void Play()
