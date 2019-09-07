@@ -23,7 +23,6 @@ namespace SMPlayer
                 flyout.Items.Add(item);
             return flyout;
         }
-
         public MenuFlyoutSubItem GetAddToMenuFlyoutSubItem(string PlaylistName = "")
         {
             MenuFlyoutSubItem addToItem = new MenuFlyoutSubItem()
@@ -70,7 +69,6 @@ namespace SMPlayer
                 addToItem.Items.Add(item);
             return addToItem;
         }
-
         public MenuFlyout GetAddToPlaylistsMenuFlyout(string DefaultName, string PlaylistName = "")
         {
             var flyout = new MenuFlyout();
@@ -150,7 +148,15 @@ namespace SMPlayer
 
             };
             ToolTipService.SetToolTip(deleteItem, new ToolTip() { Content = $"Delete {music.Name}" });
-            flyout.Items.Add(deleteItem);
+            foreach (var item in GetMusicPropertiesMenuFlyout().Items)
+                flyout.Items.Add(item);
+            return flyout;
+        }
+
+        public MenuFlyout GetMusicPropertiesMenuFlyout()
+        {
+            var music = Data as Music;
+            var flyout = new MenuFlyout();
             var musicInfoItem = new MenuFlyoutItem()
             {
                 Icon = new SymbolIcon(Symbol.MusicInfo),
@@ -160,10 +166,22 @@ namespace SMPlayer
             {
 
             };
-            ToolTipService.SetToolTip(deleteItem, new ToolTip() { Content = "Show Music Info" });
+            ToolTipService.SetToolTip(musicInfoItem, new ToolTip() { Content = "Show Music Info" });
             flyout.Items.Add(musicInfoItem);
+            var lyricsItem = new MenuFlyoutItem()
+            {
+                Icon = new FontIcon() { Glyph = "\uEC42" },
+                Text = "Lyrics"
+            };
+            lyricsItem.Click += (s, args) =>
+            {
+
+            };
+            ToolTipService.SetToolTip(lyricsItem, new ToolTip() { Content = "Show Music Lyrics" });
+            flyout.Items.Add(lyricsItem);
             return flyout;
         }
+
         public MenuFlyout GetRemovableMusicMenuFlyout(MenuFlyoutItemClickListener listener = null)
         {
             var music = Data as Music;
@@ -184,6 +202,26 @@ namespace SMPlayer
             ToolTipService.SetToolTip(removeItem, new ToolTip() { Content = "Remove From Playlist" });
             flyout.Items.Insert(2, removeItem);
             return flyout;
+        }
+        public static void InsertMusicItem(object sender, int index = 0)
+        {
+            var flyout = sender as MenuFlyout;
+            var helper = new MenuFlyoutHelper();
+            var addToItem = helper.GetAddToMenuFlyoutSubItem();
+            var propertyItems = helper.GetMusicPropertiesMenuFlyout().Items;
+            propertyItems.Insert(0, addToItem);
+            foreach (var item in propertyItems)
+                System.Diagnostics.Debug.WriteLine(item);
+            if (flyout.Items[index].Name == AddToSubItemName)
+            {
+                for (int i = 0; i < propertyItems.Count; i++)
+                    flyout.Items[i] = propertyItems[i];
+            }
+            else
+            {
+                foreach (var item in propertyItems.Reverse())
+                    flyout.Items.Insert(index, item);
+            }
         }
         public static MenuFlyout SetAddToMenu(object sender, string playlistName = "")
         {

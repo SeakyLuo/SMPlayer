@@ -192,14 +192,12 @@
                         Template="{StaticResource MediaControlButtonTemplate}"
                         ToolTipService.ToolTip="More">
                         <Button.Flyout>
-                            <MenuFlyout>
-                                <MenuFlyoutSubItem Icon="Add" Text="Add To Playlist" />
+                            <MenuFlyout Opening="MenuFlyout_Opening">
                                 <MenuFlyoutItem
                                     x:Name="FullScreenItem"
                                     Click="FullScreenButton_Click"
                                     Icon="Fullscreen"
                                     Text="Full Screen" />
-                                <MenuFlyoutItem Icon="MusicInfo" Text="Music Info" />
                             </MenuFlyout>
                         </Button.Flyout>
                     </Button>

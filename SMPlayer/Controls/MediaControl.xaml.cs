@@ -653,6 +653,21 @@ namespace SMPlayer
             PlayMusic();
         }
 
+        private void MenuFlyout_Opening(object sender, object e)
+        {
+            if (MediaHelper.CurrentMusic == null)
+            {
+                var flyout = sender as MenuFlyout;
+                if (flyout.Items[0].Name == MenuFlyoutHelper.AddToSubItemName)
+                {
+                    for (int i = 0; i < 3; i++) // HardCoded 3
+                        flyout.Items.RemoveAt(0);
+                }
+            }
+            else
+                MenuFlyoutHelper.InsertMusicItem(sender);
+        }
+
         public void Pause()
         {
             PauseMusic();

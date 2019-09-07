@@ -671,10 +671,6 @@
     <RootType FullName="Windows.UI.Xaml.Input.KeyboardAccelerator">
       <RootProperty Name="Key" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutSubItem">
-      <RootProperty Name="Icon" />
-      <RootProperty Name="Text" />
-    </RootType>
     <RootType FullName="SMPlayer.MediaControl">
       <RootProperty Name="Mode" />
     </RootType>
