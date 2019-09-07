@@ -31,6 +31,4 @@ VisualStateManager. (GridAlbumView, MusicGridInfo)
 
 Full Screen.
 
-NaviSearchBar TextBox style change.
-
 Multiple clicks of Shuffle.

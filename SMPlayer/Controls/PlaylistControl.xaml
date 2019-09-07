@@ -53,12 +53,12 @@
                             Glyph="&#xE767;"
                             RelativePanel.AlignLeftWithPanel="True"
                             Visibility="{x:Bind IsPlaying, Converter={StaticResource MusicVisibilityConverter}, Mode=OneWay}" />
-                        <TextBlock Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}" Text="{x:Bind Name}" />
+                        <TextBlock Foreground="{x:Bind IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, Mode=OneWay}" Text="{x:Bind Name}" />
                     </StackPanel>
                     <TextBlock
                         x:Name="ArtistTextBlock"
                         Grid.Column="1"
-                        Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
+                        Foreground="{x:Bind IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, Mode=OneWay}"
                         Text="{x:Bind Artist}">
                         <!--<Interactivity:Interaction.Behaviors>
                             <Interactions:DataTriggerBehavior
@@ -97,12 +97,12 @@
                     </TextBlock>
                     <TextBlock
                         Grid.Column="2"
-                        Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
+                        Foreground="{x:Bind IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, Mode=OneWay}"
                         Text="{x:Bind Album}" />
                     <TextBlock
                         Grid.Column="3"
                         HorizontalAlignment="Right"
-                        Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
+                        Foreground="{x:Bind IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, Mode=OneWay}"
                         Text="{x:Bind Duration, Converter={StaticResource MusicDurationConverter}}" />
                 </Grid>
             </DataTemplate>

@@ -22,7 +22,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace SMPlayer
 {
-    public sealed partial class MediaControl : UserControl, MusicSwitchingListener, ShuffleChangedListener, MediaControlListener, AfterPathSetListener
+    public sealed partial class MediaControl : UserControl, MusicSwitchingListener, MediaControlListener, AfterPathSetListener
     {
         public enum MediaControlMode
         {
@@ -258,7 +258,6 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
-            MediaHelper.ShuffleChangedListeners.Add(this as ShuffleChangedListener);
             MediaHelper.MediaControlListeners.Add(this as MediaControlListener);
             SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
         }
@@ -343,10 +342,7 @@ namespace SMPlayer
 
         public void SetMusicGridInfoTapped(Action<object, TappedRoutedEventArgs> action)
         {
-            MainMusicInfoGrid.Tapped += (sender, e) =>
-            {
-                action(sender, e);
-            };
+            MainMusicInfoGrid.Tapped += (sender, e) => action(sender, e);
         }
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
@@ -403,14 +399,12 @@ namespace SMPlayer
         {
             PlayButton.Content = "\uE769";
             SetToolTip(PlayButton, "Pause");
-            MediaHelper.Play();
         }
 
         public void PauseMusic()
         {
             PlayButton.Content = "\uE768";
             SetToolTip(PlayButton, "Play");
-            MediaHelper.Pause();
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
@@ -423,9 +417,12 @@ namespace SMPlayer
                     if (MediaHelper.CurrentPlaylist.Count == 0) return;
                     MediaHelper.MoveToMusic(MediaHelper.CurrentPlaylist[0]);
                 }
-                PlayMusic();
+                MediaHelper.Play();
             }
-            else PauseMusic();
+            else
+            {
+                MediaHelper.Pause();
+            }
         }
 
         private void VolumeButton_Click(object sender, RoutedEventArgs e)
@@ -564,11 +561,6 @@ namespace SMPlayer
 
         }
 
-        private void SavePlaylistButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void MusicInfoButton_Click(object sender, RoutedEventArgs e)
         {
             foreach (var listener in MusicRequestListeners)
@@ -580,16 +572,16 @@ namespace SMPlayer
             foreach (var listener in MusicRequestListeners)
                 listener.LyricsRequested(MediaHelper.CurrentMusic);
         }
-
-        private void ClearNowPlayingButton_Click(object sender, RoutedEventArgs e)
+               
+        private async void SavePlaylistItem_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-
-        private void SavePlaylistItem_Click(object sender, RoutedEventArgs e)
-        {
-
+            var name = "Now Playing - " + DateTime.Now.ToString("yy/MM/dd");
+            int index = Settings.settings.FindNextPlaylistNameIndex(name);
+            var defaultName = index == 0 ? name : $"{name} ({index})";
+            var listener = new VirtualRenameActionListener() { Data = PlaylistControl.NowPlayingPlaylist };
+            var dialog = new RenameDialog(listener, TitleOption.NewPlaylist, defaultName);
+            listener.Dialog = dialog;
+            await dialog.ShowAsync();
         }
 
         private void ClearNowPlayingItem_Click(object sender, RoutedEventArgs e)
@@ -621,7 +613,6 @@ namespace SMPlayer
                     Played(current);
                 next.IsPlaying = true;
                 SetMusic(next);
-                if (MediaHelper.IsPlaying) PlayMusic();
                 if (current != null && !Window.Current.Visible) Helper.ShowToast(next);
             });
         }
@@ -650,7 +641,15 @@ namespace SMPlayer
             RightTimeTextBlock.Text = "0:00";
         }
 
-        public void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle) { return; }
+        public void Play()
+        {
+            PlayMusic();
+        }
+
+        public void Pause()
+        {
+            PauseMusic();
+        }
     }
 
     public interface MusicControlListener
@@ -666,7 +665,6 @@ namespace SMPlayer
 
     public interface MediaControlContainer
     {
-        void SetMusicAndPlay(Music music);
         void PauseMusic();
         void SetShuffle(bool isShuffle);
     }

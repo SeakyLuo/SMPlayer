@@ -37,12 +37,13 @@ namespace SMPlayer
             base.OnNavigatedTo(e);
         }
 
-        private async void LocalMusicGridView_ItemClick(object sender, ItemClickEventArgs e)
+        private void LocalMusicGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = (GridMusicView)e.ClickedItem;
-            if (!Tree.Equals(LocalPage.History.Peek()))
-                await MediaHelper.SetPlaylist(GridItems.Select((m) => m.Source).ToList());
-            MainPage.Instance.SetMusicAndPlay(item.Source);
+            //if (!Tree.Equals(LocalPage.History.Peek()))
+            //    MediaHelper.SetPlaylist(GridItems.Select((m) => m.Source).ToList());
+            //MainPage.Instance.SetMusicAndPlay(item.Source);
+            MediaHelper.SetMusicAndPlay(GridItems.Select((m) => m.Source).ToList(), item.Source);
         }
 
         private async void Setup(FolderTree tree)

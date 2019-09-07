@@ -145,12 +145,25 @@ namespace SMPlayer
         }
     }
 
-    class RowColorConverter : Windows.UI.Xaml.Data.IValueConverter
+    class PlaylistRowColorConverter : Windows.UI.Xaml.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             return value.Equals(true) ? Helper.GetHighlightBrush() :
                                         PlaylistControl.CurrentTheme == ElementTheme.Dark ? Helper.WhiteSmokeBrush : Helper.BlackBrush;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
+
+    class RowColorConverter : Windows.UI.Xaml.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return value.Equals(true) ? Helper.GetHighlightBrush() : Helper.BlackBrush;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

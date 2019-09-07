@@ -46,7 +46,6 @@ namespace SMPlayer
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             FullMediaControl.Update();
-            //PlaylistControl.SetPlaylist(MediaHelper.CurrentPlaylist);
             SetMusic(MediaHelper.CurrentMusic);
         }
 
@@ -140,11 +139,6 @@ namespace SMPlayer
         {
             ShowResultInAppNotification.Content = text;
             ShowResultInAppNotification.Show(1500);
-        }
-
-        public void SetMusicAndPlay(Music music)
-        {
-            FullMediaControl.SetMusicAndPlay(music);
         }
 
         public void PauseMusic()

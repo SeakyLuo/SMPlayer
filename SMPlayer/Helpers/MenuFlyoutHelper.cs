@@ -11,7 +11,6 @@ namespace SMPlayer
     class MenuFlyoutHelper
     {
         public object Data;
-        public ICollection<Music> Datalist;
         public const string AddToSubItemName = "AddToSubItem";
         public const string PlaylistMenuName = "ShuffleItem";
         public const string MusicMenuName = "PlayItem";
@@ -80,7 +79,7 @@ namespace SMPlayer
             newPlaylistItem.Click += async (sender, args) =>
             {
                 var listener = new VirtualRenameActionListener() { Data = Data };
-                RenameDialog dialog = new RenameDialog(listener, TitleOption.NewPlaylist, DefaultName);
+                var dialog = new RenameDialog(listener, TitleOption.NewPlaylist, DefaultName);
                 listener.Dialog = dialog;
                 await dialog.ShowAsync();
             };
@@ -113,9 +112,9 @@ namespace SMPlayer
                 Name = PlaylistMenuName
             };
             ToolTipService.SetToolTip(shuffleItem, new ToolTip() { Content = "Shuffle and Play" });
-            shuffleItem.Click += async (s, args) =>
+            shuffleItem.Click += (s, args) =>
             {
-                await MediaHelper.SetPlaylist(Data as ICollection<Music>);
+                MediaHelper.SetPlaylist(Data as ICollection<Music>);
             };
             flyout.Items.Add(shuffleItem);
             flyout.Items.Add(GetAddToMenuFlyoutSubItem());

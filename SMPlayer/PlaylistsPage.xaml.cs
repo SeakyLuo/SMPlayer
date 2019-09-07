@@ -66,7 +66,7 @@ namespace SMPlayer
             SetBackground(PlaylistTabView.SelectedItem as Playlist);
         }
 
-        private async void SetBackground(Playlist playlist)
+        private void SetBackground(Playlist playlist)
         {
             var tab = PlaylistTabView.ContainerFromIndex(PlaylistTabView.SelectedIndex) as TabViewItem;
             //var i1 = VisualTreeHelper.GetChild(tab, 0) as Grid;
@@ -120,7 +120,7 @@ namespace SMPlayer
         {
             var target = (sender as MenuFlyoutItem).DataContext as Playlist;
             int next = Settings.settings.FindNextPlaylistNameIndex(target.Name);
-            string name = string.Format("{0} {1}", target.Name, next), prev = next == 1 ? target.Name : string.Format("{0} {1}", target.Name, next - 1);
+            string name = $"{target.Name} {next}", prev = next == 1 ? target.Name : $"{target.Name} {next - 1}";
             var duplicate = target.Duplicate(name);
             int index = Settings.settings.Playlists.FindLastIndex((p) => p.Name.StartsWith(prev)) + 1;
             Playlists.Insert(index, duplicate);

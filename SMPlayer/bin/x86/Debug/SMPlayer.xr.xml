@@ -144,6 +144,7 @@
     <RootType FullName="SMPlayer.MusicVisibilityConverter" />
     <RootType FullName="SMPlayer.ArtistAlbumInfoConverter" />
     <RootType FullName="SMPlayer.MusicIsPlayingConverter" />
+    <RootType FullName="SMPlayer.PlaylistRowColorConverter" />
     <RootType FullName="SMPlayer.RowColorConverter" />
     <RootType FullName="SMPlayer.SongCountConverter" />
     <RootType FullName="SMPlayer.EnabledConverter" />

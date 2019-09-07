@@ -72,7 +72,7 @@ namespace SMPlayer
             }
             foreach (var artist in artists.OrderBy((a) => a.Name)) Artists.Add(artist);
             ArtistsCountTextBlock.Text = "All Artists: " + Artists.Count;
-            FindMusicAndSetPlaying(MediaHelper.CurrentMusic, true);
+            FindMusicAndSetPlaying(MediaHelper.CurrentMusic);
             if (Notified == 2) Notified = 1;
             ArtistProgressBar.Visibility = Visibility.Collapsed;
             SetupStarted = false;
@@ -96,40 +96,24 @@ namespace SMPlayer
             args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? Helper.WhiteSmokeBrush : Helper.WhiteBrush;
         }
 
-        private async void SetMusicAndPlay(Music music, ICollection<Music> playlist)
+        private void SetMusicAndPlay(Music music, ICollection<Music> playlist)
         {
-            if (!music.Equals(MediaHelper.CurrentMusic))
-            {
-                FindMusicAndSetPlaying(MediaHelper.CurrentMusic, false);
-                await MediaHelper.SetPlaylist(playlist);
-            }
-            MainPage.Instance.SetMusicAndPlay(music);
+            //if (!music.Equals(MediaHelper.CurrentMusic))
+            //    FindMusicAndSetPlaying(MediaHelper.CurrentMusic, false);
+            MediaHelper.SetMusicAndPlay(playlist, music);
         }
 
-        private void PlayItem_Click(object sender, RoutedEventArgs e)
+        private void FindMusicAndSetPlaying(Music target)
         {
-            Music music = (sender as MenuFlyoutItem).DataContext as Music;
-            SetMusicAndPlay(music, Artists.First((a) => a.Name == music.Artist).Albums.First((a) => a.Name == music.Album).Songs);
-        }
-
-        private void FindMusicAndSetPlaying(Music target, bool isPlaying)
-        {
-            if (target == null) return;
-            var artist = Artists.FirstOrDefault((a) => a.Name == target.Artist);
-            if (artist == null) return;
-            var album = artist.Albums.FirstOrDefault((a) => a.Name == target.Album);
-            if (album == null) return;
-            var music = album.Songs.FirstOrDefault((m) => m.Equals(target));
-            music.IsPlaying = isPlaying;
+            foreach (var artist in Artists)
+                foreach (var album in artist.Albums)
+                    foreach (var music in album.Songs)
+                        music.IsPlaying = music.Equals(target);
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
-            {
-                foreach (var target in new Music[] { current, next })
-                    FindMusicAndSetPlaying(target, next.Equals(target));
-            });
+            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () => FindMusicAndSetPlaying(next));
         }
 
         private void OpenPlaylistMenuFlyout(object sender, object e)

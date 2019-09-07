@@ -106,10 +106,10 @@ namespace SMPlayer
             LocalGridViewItem.Visibility = Visibility.Collapsed;
         }
 
-        private async void LocalShuffleItem_Tapped(object sender, TappedRoutedEventArgs e)
+        private void LocalShuffleItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var tree = History.Peek();
-            await MediaHelper.SetPlaylist(LocalFrame.SourcePageType == typeof(LocalMusicPage) ? tree.Flatten() : tree.Files);
+            MediaHelper.SetPlaylist(LocalFrame.SourcePageType == typeof(LocalMusicPage) ? tree.Flatten() : tree.Files);
             MainPage.Instance.SetShuffle(true);
             MediaHelper.Play();
         }

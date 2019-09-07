@@ -46,6 +46,7 @@
             <local:MusicVisibilityConverter x:Key="MusicVisibilityConverter" />
             <local:ArtistAlbumInfoConverter x:Key="ArtistAlbumInfoConverter" />
             <local:MusicIsPlayingConverter x:Key="MusicIsPlayingConverter" />
+            <local:PlaylistRowColorConverter x:Key="PlaylistRowColorConverter" />
             <local:RowColorConverter x:Key="RowColorConverter" />
             <local:SongCountConverter x:Key="SongCountConverter" />
             <local:EnabledConverter x:Key="EnabledConverter" />

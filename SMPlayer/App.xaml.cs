@@ -166,9 +166,9 @@ namespace SMPlayer
                                 MediaHelper.NextMusic();
                                 break;
                             case "Pause":
-                                if ((Window.Current.Content as Frame).Content is MainPage page)
+                                if ((Window.Current.Content as Frame).Content is MediaControlContainer container)
                                 {
-                                    page.PauseMusic();
+                                    container.PauseMusic();
                                 }
                                 break;
                             default:

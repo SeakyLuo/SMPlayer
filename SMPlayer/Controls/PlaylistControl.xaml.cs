@@ -95,17 +95,23 @@ namespace SMPlayer
             JsonFileHelper.SaveAsync(FILENAME, playlist.Select((m) => m.Name));
         }
 
-        public static void AddMusic(object item)
+        public static async void AddMusic(object item)
         {
             if (item is Music)
             {
-                NowPlayingPlaylist.Add(item as Music);
-                // Add To MediaHelper
+                var music = item as Music;
+                music.IsPlaying = false;
+                NowPlayingPlaylist.Add(music);
+                await MediaHelper.AddMusic(music);
             }
             else if (item is ICollection<Music>)
             {
-                foreach (var music in item as ICollection<Music>) NowPlayingPlaylist.Add(music);
-                // Add To MediaHelper
+                foreach (var music in item as ICollection<Music>)
+                {
+                    music.IsPlaying = false;
+                    NowPlayingPlaylist.Add(music);
+                    await MediaHelper.AddMusic(music);
+                }
             }
         }
 
@@ -126,27 +132,24 @@ namespace SMPlayer
         }
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            args.ItemContainer.Foreground = Theme == ElementTheme.Dark ? Helper.WhiteSmokeBrush : Helper.BlackBrush;
+            //args.ItemContainer.Foreground = Theme == ElementTheme.Dark ? Helper.WhiteSmokeBrush : Helper.BlackBrush;
             if (AlternatingRowColor)
                 args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? Helper.WhiteSmokeBrush : Helper.WhiteBrush;
         }
 
-        private async void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
+        private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Music music = (Music)e.ClickedItem;
-            await MediaHelper.SetPlaylist(CurrentPlaylist);
-            ((Window.Current.Content as Frame).Content as MediaControlContainer).SetMusicAndPlay(music);
+            MediaHelper.SetMusicAndPlay(CurrentPlaylist, music);
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
-            {
-                MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, current, next);
-            });
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () => MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, current, next));
         }
         public void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle)
         {
+            if (!AllowReorder) return;
             CurrentPlaylist.Clear();
             foreach (var music in newPlayList) CurrentPlaylist.Add(music);
         }

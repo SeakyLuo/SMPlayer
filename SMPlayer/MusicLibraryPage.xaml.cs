@@ -71,7 +71,7 @@ namespace SMPlayer
             tree.Update(Settings.settings.Tree);
             Settings.settings.Tree = tree;
             if (Helper.SamePlayList(AllSongs, MediaHelper.CurrentPlaylist))
-                await MediaHelper.SetPlaylist(newLibrary);
+                MediaHelper.SetPlaylist(newLibrary);
             SetAllSongs(newLibrary);
             Save();
         }
@@ -84,13 +84,7 @@ namespace SMPlayer
         private void MusicLibraryDataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
             var music = (Music)MusicLibraryDataGrid.SelectedItem;
-            PlayMusic(music);
-        }
-
-        private async void PlayMusic(Music music)
-        {
-            await MediaHelper.SetPlaylist(AllSongs);
-            MainPage.Instance.SetMusicAndPlay(music);
+            MediaHelper.SetMusicAndPlay(AllSongs, music);
         }
 
         public void MusicModified(Music before, Music after)

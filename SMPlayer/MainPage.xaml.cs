@@ -195,11 +195,6 @@ namespace SMPlayer
             }
         }
 
-        public void SetMusicAndPlay(Music music)
-        {
-            MainMediaControl.SetMusicAndPlay(music);
-        }
-
         public void PauseMusic()
         {
             MainMediaControl.PauseMusic();
