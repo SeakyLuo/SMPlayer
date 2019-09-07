@@ -3,6 +3,7 @@ using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -60,17 +61,26 @@ namespace SMPlayer
             }
         }
 
-        private async void PlaylistTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            var tabview = sender as TabView;
-            var playlist = tabview.SelectedItem as Playlist;
-            Settings.settings.LastPlaylist = playlist.Name;
-            foreach (var music in playlist.Songs)
-                music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
+            SetBackground(PlaylistTabView.SelectedItem as Playlist);
+        }
 
-            //var c = tabview.ContainerFromIndex(tabview.SelectedIndex);
-            //int count = VisualTreeHelper.GetChildrenCount(c);
-            //var grid = VisualTreeHelper.GetChild(template, 0) as Grid;
+        private async void SetBackground(Playlist playlist)
+        {
+            var tab = PlaylistTabView.ContainerFromIndex(PlaylistTabView.SelectedIndex) as TabViewItem;
+            //var i1 = VisualTreeHelper.GetChild(tab, 0) as Grid;
+            //var i2 = VisualTreeHelper.GetChild(i1, 1) as Grid;
+            //int c2 = i2.Children.Count;
+            //var i3 = VisualTreeHelper.GetChild(i2, 0) as Grid;
+            //int c3 = i3.Children.Count;
+            //var i41 = VisualTreeHelper.GetChild(i3, 0);
+            //var i42 = VisualTreeHelper.GetChild(i3, 1);
+            //var i43 = VisualTreeHelper.GetChild(i3, 2);
+            //foreach(var i in i3.Children)
+            //{
+            //    Debug.WriteLine(i.ToString());
+            //}
             //var thumbnail = grid.Children[0] as Image;
             //if (!PlaylistThumbnailDict.TryGetValue(playlist.Name, out List<BitmapImage> thumbnails))
             //{
@@ -80,6 +90,17 @@ namespace SMPlayer
             //thumbnail.Source = thumbnails.Count == 0 ? Helper.DefaultAlbumCover : thumbnails[random.Next(thumbnails.Count)];
             //System.Threading.Thread.Sleep(16);
             //grid.Background = await Helper.GetThumbnailMainColor(thumbnail, false);
+        }
+
+        private void PlaylistTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var tabview = sender as TabView;
+            var playlist = tabview.SelectedItem as Playlist;
+            Settings.settings.LastPlaylist = playlist.Name;
+            foreach (var music in playlist.Songs)
+                music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
+            if (IsLoaded)
+                SetBackground(playlist);
         }
 
         private void DeleteClick(object sender, RoutedEventArgs e)

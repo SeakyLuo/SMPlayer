@@ -49,7 +49,7 @@ namespace SMPlayer
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
-            FindMusicAndSetPlaying(MediaHelper.CurrentMusic, true);
+            MediaHelper.FindMusicAndSetPlaying(AllSongs, null, MediaHelper.CurrentMusic);
             if (!libraryChecked)
                 await Dispatcher.RunIdleAsync((args) => { CheckLibrary(); libraryChecked = true; });
         }
@@ -153,19 +153,9 @@ namespace SMPlayer
             foreach (var item in songs) AllSongs.Add(item);
         }
 
-        private void FindMusicAndSetPlaying(Music target, bool isPlaying)
-        {
-            if (target == null) return;
-            var music = AllSongs.FirstOrDefault((m) => m.Equals(target));
-            if (music != null) music.IsPlaying = isPlaying;
-        }
-
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
-            {
-                MediaHelper.FindMusicAndSetPlaying(AllSongs, current, next);
-            });
+            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () => MediaHelper.FindMusicAndSetPlaying(AllSongs, current, next));
         }
     }
 }
