@@ -92,9 +92,7 @@ namespace SMPlayer
     {
         public static string ToStr(int value)
         {
-            int count = (int)value;
-            if (count > 0) return count.ToString();
-            return "";
+            return value > 0 ? value.ToString() : "";
         }
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -107,41 +105,19 @@ namespace SMPlayer
         }
     }
 
-    class MusicVisibilityConverter : Windows.UI.Xaml.Data.IValueConverter
+    class VisibilityConverter : Windows.UI.Xaml.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.Equals(true) ? Visibility.Visible : Visibility.Collapsed;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    class LargeThumbnailVisibilityConverter : Windows.UI.Xaml.Data.IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
+            if (value is string) return string.IsNullOrEmpty(value as string) ? Visibility.Collapsed : Visibility.Visible;
+            if (value is int) return value.Equals(0) ? Visibility.Collapsed : Visibility.Visible;
+            if (value is bool) return value.Equals(false) ? Visibility.Collapsed : Visibility.Visible;
             return value == null ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            return null;
-        }
-    }
-
-    class AlbumNameVisibilityConverter : Windows.UI.Xaml.Data.IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            return value is string && string.IsNullOrEmpty(value as string) ? Visibility.Collapsed : Visibility.Visible;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            return null;
+            throw new NotImplementedException();
         }
     }
 

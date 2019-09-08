@@ -66,14 +66,7 @@ namespace SMPlayer.Models
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        public Music()
-        {
-            Path = "";
-            Name = "";
-            Artist = "";
-            Album = "";
-            Duration = 0;
-        }
+        public Music() { }
         public Music(Music obj)
         {
             if (obj == null) return;

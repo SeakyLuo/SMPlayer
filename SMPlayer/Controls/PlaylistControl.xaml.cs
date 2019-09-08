@@ -64,7 +64,6 @@ namespace SMPlayer
             }
         }
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
- 
         public PlaylistControl()
         {
             this.InitializeComponent();
@@ -101,13 +100,13 @@ namespace SMPlayer
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () => MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, current, next));
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, current, next));
         }
         public void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle)
         {
-            if (!AllowReorder && !isShuffle) return;
-            CurrentPlaylist.Clear();
-            foreach (var music in newPlayList) CurrentPlaylist.Add(music);
+            //if (!isShuffle) return;
+            //CurrentPlaylist.Clear();
+            //foreach (var music in newPlayList) CurrentPlaylist.Add(music);
         }
         private void SongsListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {

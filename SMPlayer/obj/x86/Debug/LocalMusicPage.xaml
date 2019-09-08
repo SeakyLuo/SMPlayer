@@ -27,7 +27,7 @@
             IsItemClickEnabled="True"
                                                     
                                             
-            SelectionMode="Single">
+            SelectionMode="None">
             <GridView.ItemTemplate>
                 <DataTemplate                                >
                     <Grid x:ConnectionId='6' Margin="5" Background="Transparent">
@@ -48,36 +48,40 @@
                             OffsetY="2"
                             ShadowOpacity="0"
                             Color="Gray">
-                            <Image x:ConnectionId='11'
+                            <Image x:ConnectionId='12'
                                 Width="100"
                                 Height="100"
                                 Margin="0,0,5,0"
                                                             />
                         </controls:DropShadowPanel>
-                        <Grid Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <TextBlock x:ConnectionId='9'
-                                x:Name="MusicNameTextBlock"
-                                Width="160"
-                                VerticalAlignment="Top"
-                                FontSize="15"
-                                FontWeight="SemiBold"
-                                HorizontalTextAlignment="Left"
-                                MaxLines="3"
-                                                    
-                                TextWrapping="Wrap" />
-                            <TextBlock x:ConnectionId='10'
-                                Grid.Row="1"
-                                Margin="0,3,0,0"
-                                VerticalAlignment="center"
-                                FontSize="12"
-                                Foreground="Gray"
-                                HorizontalTextAlignment="Left"
-                                                       />
-                        </Grid>
+                        <RelativePanel Grid.Column="1">
+                            <StackPanel RelativePanel.AlignTopWithPanel="True">
+                                <TextBlock x:ConnectionId='10'
+                                    x:Name="MusicNameTextBlock"
+                                    Width="160"
+                                    VerticalAlignment="Top"
+                                    FontSize="15"
+                                    FontWeight="SemiBold"
+                                    HorizontalTextAlignment="Left"
+                                    MaxLines="3"
+                                                        
+                                    TextWrapping="Wrap" />
+                                <TextBlock x:ConnectionId='11'
+                                    Margin="0,3,0,0"
+                                    VerticalAlignment="center"
+                                    FontSize="12"
+                                    Foreground="Gray"
+                                    HorizontalTextAlignment="Left"
+                                                           />
+                            </StackPanel>
+                            <FontIcon x:ConnectionId='9'
+                                Margin="0,5"
+                                HorizontalAlignment="Left"
+                                Foreground="{ThemeResource SystemColorHighlightColor}"
+                                Glyph="&#xE767;"
+                                RelativePanel.AlignBottomWithPanel="True"
+                                                                                                                            />
+                        </RelativePanel>
                     </Grid>
                 </DataTemplate>
             </GridView.ItemTemplate>

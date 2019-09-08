@@ -10,10 +10,6 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
-    <Page.Resources>
-        <local:AlbumNameVisibilityConverter x:Key="AlbumNameVisibilityConverter" />
-    </Page.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -43,8 +39,8 @@
                     <Grid
                         Width="180"
                         Height="240"
-                        Tapped="Grid_Tapped"
-                        Margin="10">
+                        Margin="10"
+                        Tapped="Grid_Tapped">
                         <Grid.ContextFlyout>
                             <MenuFlyout Opening="MenuFlyout_Opening" />
                         </Grid.ContextFlyout>
@@ -71,7 +67,7 @@
                             Text="{x:Bind Name}"
                             TextAlignment="Left"
                             TextWrapping="Wrap"
-                            Visibility="{x:Bind Name, Converter={StaticResource AlbumNameVisibilityConverter}}" />
+                            Visibility="{x:Bind Name, Converter={StaticResource VisibilityConverter}}" />
                         <TextBlock
                             Grid.Row="2"
                             FontSize="12"

@@ -39,11 +39,10 @@
                 <Setter Property="HorizontalAlignment" Value="Center" />
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
-            <local:LargeThumbnailVisibilityConverter x:Key="LargeThumbnailVisibilityConverter" />
             <local:MusicDurationConverter x:Key="MusicDurationConverter" />
             <local:MusicFavoriteConverter x:Key="MusicFavoriteConverter" />
             <local:IntConverter x:Key="IntConverter" />
-            <local:MusicVisibilityConverter x:Key="MusicVisibilityConverter" />
+            <local:VisibilityConverter x:Key="VisibilityConverter" />
             <local:ArtistAlbumInfoConverter x:Key="ArtistAlbumInfoConverter" />
             <local:MusicIsPlayingConverter x:Key="MusicIsPlayingConverter" />
             <local:PlaylistRowColorConverter x:Key="PlaylistRowColorConverter" />

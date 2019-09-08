@@ -126,6 +126,7 @@
       <RootProperty Name="Visibility" />
       <RootProperty Name="Height" />
       <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="HorizontalAlignment" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ProgressRing">
       <RootProperty Name="Width" />
@@ -137,11 +138,10 @@
       <RootProperty Name="Foreground" />
       <RootProperty Name="Style" />
     </RootType>
-    <RootType FullName="SMPlayer.LargeThumbnailVisibilityConverter" />
     <RootType FullName="SMPlayer.MusicDurationConverter" />
     <RootType FullName="SMPlayer.MusicFavoriteConverter" />
     <RootType FullName="SMPlayer.IntConverter" />
-    <RootType FullName="SMPlayer.MusicVisibilityConverter" />
+    <RootType FullName="SMPlayer.VisibilityConverter" />
     <RootType FullName="SMPlayer.ArtistAlbumInfoConverter" />
     <RootType FullName="SMPlayer.MusicIsPlayingConverter" />
     <RootType FullName="SMPlayer.PlaylistRowColorConverter" />
@@ -194,6 +194,7 @@
       <RootProperty Name="Padding" />
       <RootProperty Name="CornerRadius" />
       <RootEvent Name="Tapped" />
+      <RootEvent Name="Loaded" />
       <RootMethod Name="GetRow" />
       <RootMethod Name="SetRow" />
       <RootMethod Name="GetColumn" />
@@ -204,7 +205,6 @@
       <RootMethod Name="SetRowSpan" />
     </RootType>
     <RootType FullName="SMPlayer.AlbumPage" />
-    <RootType FullName="SMPlayer.AlbumNameVisibilityConverter" />
     <RootType FullName="Windows.UI.Xaml.Controls.RowDefinition">
       <RootProperty Name="Height" />
     </RootType>
@@ -247,6 +247,7 @@
       <RootProperty Name="Visibility" />
       <RootProperty Name="Stretch" />
       <RootProperty Name="VerticalAlignment" />
+      <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.VisualStateGroup">
       <RootProperty Name="States" />
@@ -332,6 +333,8 @@
       <RootMethod Name="SetAlignRightWithPanel" />
       <RootMethod Name="GetAlignBottomWithPanel" />
       <RootMethod Name="SetAlignBottomWithPanel" />
+      <RootMethod Name="GetAlignTopWithPanel" />
+      <RootMethod Name="SetAlignTopWithPanel" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ListView">
       <RootProperty Name="HorizontalAlignment" />
@@ -426,6 +429,8 @@
       <RootProperty Name="Background" />
       <RootProperty Name="RequestedTheme" />
       <RootProperty Name="TextWrapping" />
+      <RootProperty Name="IsReadOnly" />
+      <RootProperty Name="Text" />
       <RootProperty Name="Height" />
       <RootEvent Name="BeforeTextChanging" />
     </RootType>

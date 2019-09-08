@@ -6,7 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:SMPlayer.Models"
     xmlns:local="using:SMPlayer"
-                        
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
@@ -67,10 +66,11 @@
                                                                  >
                         <local:PlaylistControl.Header>
                             <controls:ScrollHeader Mode="Sticky">
-                                <Grid
+                                <Grid x:ConnectionId='11'
                                     x:Name="PlaylistInfoGrid"
                                     Padding="30"
                                     Background="#222222"
+                                                                    
                                     RequestedTheme="Dark">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
@@ -81,12 +81,13 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <Image
+                                    <Image x:ConnectionId='12'
                                         x:Name="PlaylistCover"
                                         Grid.RowSpan="4"
                                         Width="180"
                                         Height="180"
                                         Margin="0,0,20,0"
+                                                                     
                                         Source="Assets/monotone_bg_wide.png" />
                                     <TextBlock x:ConnectionId='13'
                                         Grid.Column="1"

@@ -53,7 +53,7 @@
                             Foreground="{StaticResource SystemColorHighlightColor}"
                             Glyph="&#xE767;"
                             RelativePanel.AlignLeftWithPanel="True"
-                            Visibility="{x:Bind IsPlaying, Converter={StaticResource MusicVisibilityConverter}, Mode=OneWay}" />
+                            Visibility="{x:Bind IsPlaying, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
                         <TextBlock Foreground="{x:Bind IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, Mode=OneWay}" Text="{x:Bind Name}" />
                     </StackPanel>
                     <TextBlock

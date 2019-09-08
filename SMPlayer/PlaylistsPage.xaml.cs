@@ -38,6 +38,8 @@ namespace SMPlayer
         private Dictionary<string, List<BitmapImage>> PlaylistThumbnailDict = new Dictionary<string, List<BitmapImage>>();
         private Random random = new Random();
         private RenameDialog dialog;
+        private Image Thumbnail;
+        private Grid PlaylistInfoGrid;
         public PlaylistsPage()
         {
             this.InitializeComponent();
@@ -61,37 +63,6 @@ namespace SMPlayer
             }
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            SetBackground(PlaylistTabView.SelectedItem as Playlist);
-        }
-
-        private void SetBackground(Playlist playlist)
-        {
-            var tab = PlaylistTabView.ContainerFromIndex(PlaylistTabView.SelectedIndex) as TabViewItem;
-            //var i1 = VisualTreeHelper.GetChild(tab, 0) as Grid;
-            //var i2 = VisualTreeHelper.GetChild(i1, 1) as Grid;
-            //int c2 = i2.Children.Count;
-            //var i3 = VisualTreeHelper.GetChild(i2, 0) as Grid;
-            //int c3 = i3.Children.Count;
-            //var i41 = VisualTreeHelper.GetChild(i3, 0);
-            //var i42 = VisualTreeHelper.GetChild(i3, 1);
-            //var i43 = VisualTreeHelper.GetChild(i3, 2);
-            //foreach(var i in i3.Children)
-            //{
-            //    Debug.WriteLine(i.ToString());
-            //}
-            //var thumbnail = grid.Children[0] as Image;
-            //if (!PlaylistThumbnailDict.TryGetValue(playlist.Name, out List<BitmapImage> thumbnails))
-            //{
-            //    thumbnails = await playlist.GetThumbnails();
-            //    PlaylistThumbnailDict[playlist.Name] = thumbnails;
-            //}
-            //thumbnail.Source = thumbnails.Count == 0 ? Helper.DefaultAlbumCover : thumbnails[random.Next(thumbnails.Count)];
-            //System.Threading.Thread.Sleep(16);
-            //grid.Background = await Helper.GetThumbnailMainColor(thumbnail, false);
-        }
-
         private void PlaylistTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var tabview = sender as TabView;
@@ -100,7 +71,10 @@ namespace SMPlayer
             foreach (var music in playlist.Songs)
                 music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
             if (IsLoaded)
-                SetBackground(playlist);
+            {
+                SetPlaylistCover(playlist);
+                SetGridBackground();
+            }
         }
 
         private void DeleteClick(object sender, RoutedEventArgs e)
@@ -258,13 +232,34 @@ namespace SMPlayer
         }
         private void PlaylistCover_Loaded(object sender, RoutedEventArgs e)
         {
-            var thumbnail = sender as Image;
-            //(thumbnail.Parent as Grid).Background = await Helper.GetThumbnailMainColor(thumbnail, false);
+            Thumbnail = sender as Image;
+            SetPlaylistCover(PlaylistTabView.SelectedItem as Playlist);
+        }
+
+        private async void SetPlaylistCover(Playlist playlist)
+        {
+            if (!PlaylistThumbnailDict.TryGetValue(playlist.Name, out List<BitmapImage> thumbnails))
+            {
+                thumbnails = await playlist.GetThumbnails();
+                PlaylistThumbnailDict[playlist.Name] = thumbnails;
+            }
+            Thumbnail.Source = thumbnails.Count == 0 ? Helper.DefaultAlbumCover : thumbnails[random.Next(thumbnails.Count)];
+        }
+
+        private void PlaylistInfoGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            PlaylistInfoGrid = sender as Grid;
+            SetGridBackground();
+        }
+
+        private async void SetGridBackground()
+        {
+            PlaylistInfoGrid.Background = await Helper.GetThumbnailMainColor(Thumbnail, false);
         }
 
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
                 var playlist = PlaylistTabView.SelectedItem as Playlist;
                 MediaHelper.FindMusicAndSetPlaying(playlist.Songs, current, next);

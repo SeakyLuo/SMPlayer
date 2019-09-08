@@ -23,7 +23,7 @@
             x:Name="LargeAlbumCover"
             Grid.RowSpan="2"
             VerticalAlignment="Center"
-            Source="{x:Bind FullMediaControl.AlbumCover.Source, Mode=TwoWay}"
+            Source="{x:Bind FullMediaControl.AlbumCover.Source, Mode=OneWay}"
             Stretch="UniformToFill" />
         <Grid Background="{StaticResource AlbumBlurBrush}">
             <local:MediaControl x:Name="FullMediaControl" Mode="Full" />
@@ -179,12 +179,27 @@
                                 VerticalAlignment="Center"
                                 Text="Play Count"
                                 TextAlignment="Right" />
-                            <TextBox
-                                x:Name="PlayCountTextBox"
+                            <Grid
                                 Grid.Row="6"
                                 Grid.Column="1"
-                                Margin="20,5"
-                                BeforeTextChanging="CheckIfDigit" />
+                                Margin="20,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox
+                                    x:Name="PlayCountTextBox"
+                                    IsReadOnly="True"
+                                    Text="{x:Bind CurrentMusic.PlayCount, Converter={StaticResource IntConverter}}" />
+                                <Button
+                                    x:Name="ClearPlayCountButton"
+                                    Grid.Column="1"
+                                    Margin="5,0,0,0"
+                                    Click="ClearPlayCountButton_Click"
+                                    Content="Clear"
+                                    ToolTipService.ToolTip="Clear Play Count"
+                                    Visibility="{x:Bind CurrentMusic.PlayCount, Converter={StaticResource VisibilityConverter}}" />
+                            </Grid>
                             <TextBlock
                                 Grid.Row="7"
                                 VerticalAlignment="Center"

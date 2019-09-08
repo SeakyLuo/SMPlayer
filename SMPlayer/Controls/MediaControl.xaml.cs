@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 //https://go.microsoft.com/fwlink/?LinkId=234236 上介绍了“用户控件”项模板
@@ -245,6 +246,7 @@ namespace SMPlayer
                 }
             }
         }
+
         private ToolTip MediaControlToolTip = new ToolTip();
         private ToolTip ShuffleToolTip = new ToolTip();
         private ToolTip RepeatOneToolTip = new ToolTip();
@@ -346,10 +348,6 @@ namespace SMPlayer
             ToolTipService.SetToolTip(control, MediaControlToolTip);
         }
 
-        public void SetMusicGridInfoTapped(Action<object, TappedRoutedEventArgs> action)
-        {
-            MainMusicInfoGrid.Tapped += (sender, e) => action(sender, e);
-        }
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
             SetShuffle((bool)ShuffleButton.IsChecked);
@@ -368,7 +366,8 @@ namespace SMPlayer
             RepeatToolTip.Content = "Repeat: Disabled";
             RepeatOneToolTip.Content = "Repeat One: Disabled";
             SetToolTips();
-            MediaHelper.SetMode(isChecked ? PlayMode.Shuffle : PlayMode.Once);
+            var mode = isChecked ? PlayMode.Shuffle : PlayMode.Once;
+            if (mode != Settings.settings.Mode) MediaHelper.SetMode(mode);
         }
 
         private void RepeatButton_Click(object sender, RoutedEventArgs e)
@@ -383,7 +382,8 @@ namespace SMPlayer
             RepeatToolTip.Content = "Repeat: " + (isChecked ? "Enabled" : "Disabled");
             RepeatOneToolTip.Content = "Repeat One: Disabled";
             SetToolTips();
-            MediaHelper.SetMode(isChecked ? PlayMode.Repeat : PlayMode.Once);
+            var mode = isChecked ? PlayMode.Repeat : PlayMode.Once;
+            if (mode != Settings.settings.Mode) MediaHelper.SetMode(mode);
         }
 
         private void RepeatOneButton_Click(object sender, RoutedEventArgs e)
@@ -398,7 +398,8 @@ namespace SMPlayer
             RepeatToolTip.Content = "Repeat: Disabled";
             RepeatOneToolTip.Content = "Repeat One: " + (isChecked ? "Enabled" : "Disabled");
             SetToolTips();
-            MediaHelper.SetMode(isChecked ? PlayMode.RepeatOne : PlayMode.Once);
+            var mode = isChecked ? PlayMode.RepeatOne : PlayMode.Once;
+            if (mode != Settings.settings.Mode) MediaHelper.SetMode(mode);
         }
 
         public void PlayMusic()
@@ -535,6 +536,13 @@ namespace SMPlayer
             }
         }
 
+        private void MainMusicInfoGrid_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (MediaHelper.CurrentMusic == null) return;
+            MainPage.Instance.Frame.Navigate(typeof(NowPlayingFullPage), null, new DrillInNavigationTransitionInfo());
+            Helper.SetBackButtonVisible(true);
+        }
+
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
         {
             if (!ApplicationView.GetForCurrentView().IsFullScreenMode)
@@ -565,6 +573,12 @@ namespace SMPlayer
         private void CarouselButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void PlaylistButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var listener in MusicRequestListeners)
+                listener.PlaylistRequested(MediaHelper.CurrentPlaylist);
         }
 
         private void MusicInfoButton_Click(object sender, RoutedEventArgs e)
@@ -681,6 +695,7 @@ namespace SMPlayer
 
     public interface MusicRequestListener
     {
+        void PlaylistRequested(ICollection<Music> playlist);
         void MusicInfoRequested(Music music);
         void LyricsRequested(Music music);
     }

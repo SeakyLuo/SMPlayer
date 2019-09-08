@@ -10,10 +10,6 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
-    <Page.Resources>
-        <local:AlbumNameVisibilityConverter x:Key="AlbumNameVisibilityConverter" />
-    </Page.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -43,8 +39,8 @@
                     <Grid x:ConnectionId='6'
                         Width="180"
                         Height="240"
-                                            
-                        Margin="10">
+                        Margin="10"
+                                            >
                         <Grid.ContextFlyout>
                             <MenuFlyout x:ConnectionId='7'                              />
                         </Grid.ContextFlyout>
@@ -71,7 +67,7 @@
                                                 
                             TextAlignment="Left"
                             TextWrapping="Wrap"
-                                                                                                                />
+                                                                                                       />
                         <TextBlock x:ConnectionId='10'
                             Grid.Row="2"
                             FontSize="12"

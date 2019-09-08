@@ -30,7 +30,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class NowPlayingFullPage : Page, MediaControlContainer, MusicSwitchingListener, MusicRequestListener
+    public sealed partial class NowPlayingFullPage : Page, MediaControlContainer, MusicSwitchingListener, MusicRequestListener, MusicControlListener
     {
         public static NowPlayingFullPage Instance { get => (Window.Current.Content as Frame).Content as NowPlayingFullPage; }
         private MusicProperties musicProperties;
@@ -51,9 +51,22 @@ namespace SMPlayer
 
         public void SetMusic(Music music)
         {
-            SetMusicInfo(MediaHelper.CurrentMusic);
-            SetLyrics(MediaHelper.CurrentMusic);
+            SetMusicInfo(music);
+            SetLyrics(music);
             CurrentMusic = music;
+        }
+
+        public void SetPlayCount(Music music)
+        {
+            if (music.PlayCount == 0)
+            {
+                ToolTipService.SetToolTip(PlayCountTextBox, new ToolTip() { Content = $"{music.Name} has not been played yet." });
+            }
+            else
+            {
+                string times = MusicDurationConverter.TryPlural("time", music.PlayCount);
+                ToolTipService.SetToolTip(PlayCountTextBox, new ToolTip() { Content = $"{music.Name} has been played {music.PlayCount} {times}." });
+            }
         }
 
         public void SetMusicProperties(MusicProperties properties)
@@ -63,7 +76,7 @@ namespace SMPlayer
             ArtistTextBox.Text = musicProperties.Artist;
             AlbumTextBox.Text = musicProperties.Album;
             AlbumArtistTextBox.Text = musicProperties.AlbumArtist;
-            PlayCountTextBox.Text = IntConverter.ToStr(CurrentMusic.PlayCount);
+            SetPlayCount(CurrentMusic);
             PublisherTextBox.Text = musicProperties.Publisher;
             TrackNumberTextBox.Text = IntConverter.ToStr((int)musicProperties.TrackNumber);
             YearTextBox.Text = IntConverter.ToStr((int)musicProperties.Year);
@@ -153,7 +166,7 @@ namespace SMPlayer
 
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
                 // if being modified and not saved
                 if (musicProperties.Title != TitleTextBox.Text) return;
@@ -179,6 +192,11 @@ namespace SMPlayer
             SetBasicProperties(file);
             SetMusicProperties(musicProperties = await music.GetMusicProperties());
         }
+
+        public void PlaylistRequested(ICollection<Music> playlist)
+        {
+            NowPlayingFullBladeView.StartBringIntoView();
+        }
         public void MusicInfoRequested(Music music)
         {
             SetMusicInfo(music);
@@ -202,6 +220,19 @@ namespace SMPlayer
         private void CheckIfDigit(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
+        }
+
+        public void MusicModified(Music before, Music after)
+        {
+            if (!before.Equals(CurrentMusic)) return;
+            SetPlayCount(after);
+            CurrentMusic.PlayCount = after.PlayCount;
+        }
+
+        private void ClearPlayCountButton_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentMusic.PlayCount = 0;
+            MusicLibraryPage.AllSongs.First((m) => m.Equals(CurrentMusic)).PlayCount = 0;
         }
     }
 }

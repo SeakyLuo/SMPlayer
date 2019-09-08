@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.Playback;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -22,13 +23,14 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalMusicPage : Page
+    public sealed partial class LocalMusicPage : Page, MusicSwitchingListener
     {
         private ObservableCollection<GridMusicView> GridItems = new ObservableCollection<GridMusicView>();
         private FolderTree Tree;
         public LocalMusicPage()
         {
             this.InitializeComponent();
+            MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -40,10 +42,7 @@ namespace SMPlayer
         private void LocalMusicGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = (GridMusicView)e.ClickedItem;
-            //if (!Tree.Equals(LocalPage.History.Peek()))
-            //    MediaHelper.SetPlaylist(GridItems.Select((m) => m.Source).ToList());
-            //MainPage.Instance.SetMusicAndPlay(item.Source);
-            MediaHelper.SetMusicAndPlay(GridItems.Select((m) => m.Source).ToList(), item.Source);
+            MediaHelper.SetMusicAndPlay(Tree.Files, item.Source);
         }
 
         private async void Setup(FolderTree tree)
@@ -72,6 +71,11 @@ namespace SMPlayer
         private void MenuFlyout_Opening(object sender, object e)
         {
             MenuFlyoutHelper.SetMusicMenu(sender);
+        }
+
+        public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(Tree.Files, current, next));
         }
     }
 }

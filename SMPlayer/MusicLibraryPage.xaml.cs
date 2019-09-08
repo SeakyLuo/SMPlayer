@@ -88,8 +88,6 @@ namespace SMPlayer
         public void MusicModified(Music before, Music after)
         {
             var music = AllSongs.First((m) => m.Equals(before));
-            if (after.Equals(MediaHelper.CurrentMusic))
-                after.IsPlaying = true;
             music.CopyFrom(after);
         }
 

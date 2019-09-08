@@ -32,3 +32,5 @@ Shy header.
 VisualStateManager. (GridAlbumView, MusicGridInfo)
 
 Full Screen.
+
+PlayCount not read.

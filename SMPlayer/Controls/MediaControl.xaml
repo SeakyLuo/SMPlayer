@@ -24,7 +24,8 @@
                 Grid.Column="0"
                 Margin="0"
                 HorizontalAlignment="Left"
-                Background="Transparent">
+                Background="Transparent"
+                Tapped="MainMusicInfoGrid_Tapped">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
@@ -260,7 +261,6 @@
                         Margin="10,5,5,0"
                         FontSize="18" />
                 </Grid>
-
                 <Grid
                     Grid.Row="1"
                     Margin="10,0"
@@ -406,6 +406,13 @@
                         </Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" RelativePanel.AlignRightWithPanel="True">
+                        <Button
+                            x:Name="PlaylistButton"
+                            Click="PlaylistButton_Click"
+                            Content="&#xEC4F;"
+                            Style="{StaticResource MediaControlButtonStyle}"
+                            Template="{StaticResource MediaControlButtonTemplate}"
+                            ToolTipService.ToolTip="Now Playing Playlist" />
                         <Button
                             x:Name="MusicInfoButton"
                             Click="MusicInfoButton_Click"

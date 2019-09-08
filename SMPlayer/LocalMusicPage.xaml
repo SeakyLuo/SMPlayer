@@ -27,7 +27,7 @@
             IsItemClickEnabled="True"
             ItemClick="LocalMusicGridView_ItemClick"
             ItemsSource="{x:Bind GridItems}"
-            SelectionMode="Single">
+            SelectionMode="None">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:GridMusicView">
                     <Grid Margin="5" Background="Transparent">
@@ -54,30 +54,34 @@
                                 Margin="0,0,5,0"
                                 Source="{x:Bind Thumbnail}" />
                         </controls:DropShadowPanel>
-                        <Grid Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <TextBlock
-                                x:Name="MusicNameTextBlock"
-                                Width="160"
-                                VerticalAlignment="Top"
-                                FontSize="15"
-                                FontWeight="SemiBold"
-                                HorizontalTextAlignment="Left"
-                                MaxLines="3"
-                                Text="{x:Bind Name}"
-                                TextWrapping="Wrap" />
-                            <TextBlock
-                                Grid.Row="1"
-                                Margin="0,3,0,0"
-                                VerticalAlignment="center"
-                                FontSize="12"
-                                Foreground="Gray"
-                                HorizontalTextAlignment="Left"
-                                Text="{x:Bind Artist}" />
-                        </Grid>
+                        <RelativePanel Grid.Column="1">
+                            <StackPanel RelativePanel.AlignTopWithPanel="True">
+                                <TextBlock
+                                    x:Name="MusicNameTextBlock"
+                                    Width="160"
+                                    VerticalAlignment="Top"
+                                    FontSize="15"
+                                    FontWeight="SemiBold"
+                                    HorizontalTextAlignment="Left"
+                                    MaxLines="3"
+                                    Text="{x:Bind Name}"
+                                    TextWrapping="Wrap" />
+                                <TextBlock
+                                    Margin="0,3,0,0"
+                                    VerticalAlignment="center"
+                                    FontSize="12"
+                                    Foreground="Gray"
+                                    HorizontalTextAlignment="Left"
+                                    Text="{x:Bind Artist}" />
+                            </StackPanel>
+                            <FontIcon
+                                Margin="0,5"
+                                HorizontalAlignment="Left"
+                                Foreground="{ThemeResource SystemColorHighlightColor}"
+                                Glyph="&#xE767;"
+                                RelativePanel.AlignBottomWithPanel="True"
+                                Visibility="{x:Bind Source.IsPlaying, Converter={StaticResource MusicVisibilityConverter}}" />
+                        </RelativePanel>
                     </Grid>
                 </DataTemplate>
             </GridView.ItemTemplate>
