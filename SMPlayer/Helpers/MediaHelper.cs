@@ -38,7 +38,6 @@ namespace SMPlayer
         public static DispatcherTimer Timer = new DispatcherTimer {  Interval = TimeSpan.FromSeconds(1) };
         public static List<MediaControlListener> MediaControlListeners = new List<MediaControlListener>();
         public static List<MusicSwitchingListener> MusicSwitchingListeners = new List<MusicSwitchingListener>();
-        public static List<ShuffleChangedListener> ShuffleChangedListeners = new List<ShuffleChangedListener>();
         private const string FILENAME = "NowPlayingPlaylist.json";
 
         public static async void Init()
@@ -68,13 +67,18 @@ namespace SMPlayer
 
             var playlist = JsonFileHelper.Convert<List<string>>(await JsonFileHelper.ReadAsync(FILENAME));
             if (playlist == null) return;
+            while (Settings.settings == null) { System.Threading.Thread.Sleep(233); }
+            var settings = Settings.settings;
             var hashset = MusicLibraryPage.AllSongs.ToHashSet();
             foreach (var music in playlist)
-                await AddMusic(hashset.First((m) => m.Name == music));
-            while (Settings.settings == null) { System.Threading.Thread.Sleep(233); }
-            Player.Volume = Settings.settings.Volume;
-            MoveToMusic(Settings.settings.LastMusic);
-            SetMode(Settings.settings.Mode);
+            {
+                var target = hashset.First((m) => m.Name == music);
+                target.IsPlaying = target.Equals(settings.LastMusic);
+                await AddMusic(target);
+            }
+            Player.Volume = settings.Volume;
+            MoveToMusic(settings.LastMusic);
+            SetMode(settings.Mode);
         }
         public static void Save()
         {
@@ -106,8 +110,6 @@ namespace SMPlayer
             bool isShuffle = mode == PlayMode.Shuffle;
             ShuffleEnabled = isShuffle;
             if (isShuffle) await SetPlaylist(ShufflePlaylist(CurrentPlaylist, CurrentMusic));
-            foreach (var listener in ShuffleChangedListeners)
-                listener.ShuffleChanged(CurrentPlaylist, isShuffle);
             Settings.settings.Mode = mode;
         }
 
@@ -303,10 +305,6 @@ namespace SMPlayer
     public interface MusicSwitchingListener
     {
         void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason);
-    }
-    public interface ShuffleChangedListener
-    {
-        void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle);
     }
 
     public interface MediaControlListener

@@ -21,7 +21,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace SMPlayer
 {
-    public sealed partial class PlaylistControl : UserControl, MusicSwitchingListener, ShuffleChangedListener
+    public sealed partial class PlaylistControl : UserControl, MusicSwitchingListener
     {
         private const string FILENAME = "NowPlayingPlaylist.json";
         public ObservableCollection<Music> CurrentPlaylist
@@ -68,7 +68,6 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
-            MediaHelper.ShuffleChangedListeners.Add(this as ShuffleChangedListener);
         }
 
         private void PlaylistController_Loading(FrameworkElement sender, object args)
@@ -102,12 +101,7 @@ namespace SMPlayer
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, current, next));
         }
-        public void ShuffleChanged(ICollection<Music> newPlayList, bool isShuffle)
-        {
-            //if (!isShuffle) return;
-            //CurrentPlaylist.Clear();
-            //foreach (var music in newPlayList) CurrentPlaylist.Add(music);
-        }
+
         private void SongsListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
             sender.UpdateLayout(); // Refresh Row Color
