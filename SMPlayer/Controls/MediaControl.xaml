@@ -409,7 +409,7 @@
                         <Button
                             x:Name="PlaylistButton"
                             Click="PlaylistButton_Click"
-                            Content="&#xEC4F;"
+                            Content="&#xEA37;"
                             Style="{StaticResource MediaControlButtonStyle}"
                             Template="{StaticResource MediaControlButtonTemplate}"
                             ToolTipService.ToolTip="Now Playing Playlist" />

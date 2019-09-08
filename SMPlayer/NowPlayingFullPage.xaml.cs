@@ -195,7 +195,7 @@ namespace SMPlayer
 
         public void PlaylistRequested(ICollection<Music> playlist)
         {
-            NowPlayingFullBladeView.StartBringIntoView();
+            PlaylistBladeItem.StartBringIntoView();
         }
         public void MusicInfoRequested(Music music)
         {

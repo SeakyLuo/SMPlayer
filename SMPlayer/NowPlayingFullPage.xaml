@@ -50,7 +50,7 @@
                     <Setter Property="VerticalAlignment" Value="Center" />
                 </Style>
             </controls:BladeView.Resources>
-            <controls:BladeItem Style="{StaticResource NowPlayingFullBladeItemStyle}">
+            <controls:BladeItem x:Name="PlaylistBladeItem" Style="{StaticResource NowPlayingFullBladeItemStyle}">
                 <Grid Background="Transparent">
                     <local:PlaylistControl
                         x:Name="FullPlaylistControl"

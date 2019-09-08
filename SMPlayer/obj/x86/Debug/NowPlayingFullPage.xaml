@@ -26,7 +26,7 @@
                                                                              
             Stretch="UniformToFill" />
         <Grid Background="{StaticResource AlbumBlurBrush}">
-            <local:MediaControl x:ConnectionId='34' x:Name="FullMediaControl" Mode="Full" />
+            <local:MediaControl x:ConnectionId='35' x:Name="FullMediaControl" Mode="Full" />
         </Grid>
         <controls:BladeView x:ConnectionId='3'
             x:Name="NowPlayingFullBladeView"
@@ -50,16 +50,16 @@
                     <Setter Property="VerticalAlignment" Value="Center" />
                 </Style>
             </controls:BladeView.Resources>
-            <controls:BladeItem Style="{StaticResource NowPlayingFullBladeItemStyle}">
+            <controls:BladeItem x:ConnectionId='5' x:Name="PlaylistBladeItem" Style="{StaticResource NowPlayingFullBladeItemStyle}">
                 <Grid Background="Transparent">
-                    <local:PlaylistControl x:ConnectionId='33'
+                    <local:PlaylistControl x:ConnectionId='34'
                         x:Name="FullPlaylistControl"
                         Margin="10,10,10,0"
                         AlternatingRowColor="False"
                         Theme="Dark" />
                 </Grid>
             </controls:BladeItem>
-            <controls:BladeItem x:ConnectionId='5'
+            <controls:BladeItem x:ConnectionId='6'
                 x:Name="MusicPropertyBladeItem"
                 RequestedTheme="Dark"
                 Style="{StaticResource NowPlayingFullBladeItemStyle}">
@@ -76,14 +76,14 @@
                             Style="{StaticResource HeaderTextBlockStyle}"
                             Text="Properties"
                             TextAlignment="Left" />
-                        <Button x:ConnectionId='31'
+                        <Button x:ConnectionId='32'
                             x:Name="SaveMusicPropertiesButton"
                                                                    
                             Content="&#xE74E;"
                             RelativePanel.LeftOf="ResetMusicPropertiesButton"
                             Style="{StaticResource ScrollHeaderButtonStyle}"
                             ToolTipService.ToolTip="Save" />
-                        <Button x:ConnectionId='32'
+                        <Button x:ConnectionId='33'
                             x:Name="ResetMusicPropertiesButton"
                             Background="Transparent"
                                                                     
@@ -129,7 +129,7 @@
                                 VerticalAlignment="Center"
                                 Text="Title"
                                 TextAlignment="Right" />
-                            <TextBox x:ConnectionId='10'
+                            <TextBox x:ConnectionId='11'
                                 x:Name="TitleTextBox"
                                 Grid.Row="1"
                                 Grid.Column="1"
@@ -139,7 +139,7 @@
                                 VerticalAlignment="Center"
                                 Text="Subtitle"
                                 TextAlignment="Right" />
-                            <TextBox x:ConnectionId='11'
+                            <TextBox x:ConnectionId='12'
                                 x:Name="SubtitleTextBox"
                                 Grid.Row="2"
                                 Grid.Column="1"
@@ -149,7 +149,7 @@
                                 VerticalAlignment="Center"
                                 Text="Artist"
                                 TextAlignment="Right" />
-                            <TextBox x:ConnectionId='12'
+                            <TextBox x:ConnectionId='13'
                                 x:Name="ArtistTextBox"
                                 Grid.Row="3"
                                 Grid.Column="1"
@@ -159,7 +159,7 @@
                                 VerticalAlignment="Center"
                                 Text="Album"
                                 TextAlignment="Right" />
-                            <TextBox x:ConnectionId='13'
+                            <TextBox x:ConnectionId='14'
                                 x:Name="AlbumTextBox"
                                 Grid.Row="4"
                                 Grid.Column="1"
@@ -169,7 +169,7 @@
                                 VerticalAlignment="Center"
                                 Text="Album Artist"
                                 TextAlignment="Right" />
-                            <TextBox x:ConnectionId='14'
+                            <TextBox x:ConnectionId='15'
                                 x:Name="AlbumArtistTextBox"
                                 Grid.Row="5"
                                 Grid.Column="1"
@@ -187,11 +187,11 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <TextBox x:ConnectionId='29'
+                                <TextBox x:ConnectionId='30'
                                     x:Name="PlayCountTextBox"
                                     IsReadOnly="True"
                                                                                                                     />
-                                <Button x:ConnectionId='30'
+                                <Button x:ConnectionId='31'
                                     x:Name="ClearPlayCountButton"
                                     Grid.Column="1"
                                     Margin="5,0,0,0"
@@ -205,7 +205,7 @@
                                 VerticalAlignment="Center"
                                 Text="Publisher"
                                 TextAlignment="Right" />
-                            <TextBox x:ConnectionId='15'
+                            <TextBox x:ConnectionId='16'
                                 x:Name="PublisherTextBox"
                                 Grid.Row="7"
                                 Grid.Column="1"
@@ -215,7 +215,7 @@
                                 VerticalAlignment="Center"
                                 Text="TrackNumber"
                                 TextAlignment="Right" />
-                            <TextBox x:ConnectionId='16'
+                            <TextBox x:ConnectionId='17'
                                 x:Name="TrackNumberTextBox"
                                 Grid.Row="8"
                                 Grid.Column="1"
@@ -226,7 +226,7 @@
                                 VerticalAlignment="Center"
                                 Text=" Year"
                                 TextAlignment="Right" />
-                            <TextBox x:ConnectionId='17'
+                            <TextBox x:ConnectionId='18'
                                 x:Name="YearTextBox"
                                 Grid.Row="9"
                                 Grid.Column="1"
@@ -237,7 +237,7 @@
                                 VerticalAlignment="Center"
                                 Text="Bitrate"
                                 TextAlignment="Right" />
-                            <TextBlock x:ConnectionId='18'
+                            <TextBlock x:ConnectionId='19'
                                 x:Name="BitRateTextBox"
                                 Grid.Row="10"
                                 Grid.Column="1"
@@ -247,7 +247,7 @@
                                 VerticalAlignment="Center"
                                 Text="Composers"
                                 TextAlignment="Right" />
-                            <TextBlock x:ConnectionId='19'
+                            <TextBlock x:ConnectionId='20'
                                 x:Name="ComposersTextBox"
                                 Grid.Row="11"
                                 Grid.Column="1"
@@ -257,7 +257,7 @@
                                 VerticalAlignment="Center"
                                 Text="Conductors"
                                 TextAlignment="Right" />
-                            <TextBlock x:ConnectionId='20'
+                            <TextBlock x:ConnectionId='21'
                                 x:Name="ConductorsTextBox"
                                 Grid.Row="12"
                                 Grid.Column="1"
@@ -267,7 +267,7 @@
                                 VerticalAlignment="Center"
                                 Text="Date Created"
                                 TextAlignment="Right" />
-                            <TextBlock x:ConnectionId='21'
+                            <TextBlock x:ConnectionId='22'
                                 x:Name="DateCreatedTextBox"
                                 Grid.Row="13"
                                 Grid.Column="1"
@@ -277,7 +277,7 @@
                                 VerticalAlignment="Center"
                                 Text="Date Modified"
                                 TextAlignment="Right" />
-                            <TextBlock x:ConnectionId='22'
+                            <TextBlock x:ConnectionId='23'
                                 x:Name="DateModifiedTextBox"
                                 Grid.Row="14"
                                 Grid.Column="1"
@@ -287,7 +287,7 @@
                                 VerticalAlignment="Center"
                                 Text="Duration"
                                 TextAlignment="Right" />
-                            <TextBlock x:ConnectionId='23'
+                            <TextBlock x:ConnectionId='24'
                                 x:Name="DurationTextBox"
                                 Grid.Row="15"
                                 Grid.Column="1"
@@ -297,7 +297,7 @@
                                 VerticalAlignment="Center"
                                 Text="File Size"
                                 TextAlignment="Right" />
-                            <TextBlock x:ConnectionId='24'
+                            <TextBlock x:ConnectionId='25'
                                 x:Name="FileSizeTextBox"
                                 Grid.Row="16"
                                 Grid.Column="1"
@@ -307,7 +307,7 @@
                                 VerticalAlignment="Center"
                                 Text="File Type"
                                 TextAlignment="Right" />
-                            <TextBlock x:ConnectionId='25'
+                            <TextBlock x:ConnectionId='26'
                                 x:Name="FileTypeTextBox"
                                 Grid.Row="17"
                                 Grid.Column="1"
@@ -317,7 +317,7 @@
                                 VerticalAlignment="Center"
                                 Text="Genre"
                                 TextAlignment="Right" />
-                            <TextBlock x:ConnectionId='26'
+                            <TextBlock x:ConnectionId='27'
                                 x:Name="GenreTextBox"
                                 Grid.Row="18"
                                 Grid.Column="1"
@@ -327,7 +327,7 @@
                                 VerticalAlignment="Center"
                                 Text="Path"
                                 TextAlignment="Right" />
-                            <TextBlock x:ConnectionId='27'
+                            <TextBlock x:ConnectionId='28'
                                 x:Name="PathTextBox"
                                 Grid.Row="19"
                                 Grid.Column="1"
@@ -337,7 +337,7 @@
                                 VerticalAlignment="Center"
                                 Text="Producers"
                                 TextAlignment="Right" />
-                            <TextBlock x:ConnectionId='28'
+                            <TextBlock x:ConnectionId='29'
                                 x:Name="ProducersTextBox"
                                 Grid.Row="20"
                                 Grid.Column="1"
@@ -346,7 +346,7 @@
                     </ScrollViewer>
                 </Grid>
             </controls:BladeItem>
-            <controls:BladeItem x:ConnectionId='6' x:Name="LyricsBladeItem" Style="{StaticResource NowPlayingFullBladeItemStyle}">
+            <controls:BladeItem x:ConnectionId='7' x:Name="LyricsBladeItem" Style="{StaticResource NowPlayingFullBladeItemStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -360,14 +360,14 @@
                             Style="{StaticResource HeaderTextBlockStyle}"
                             Text="Lyrics"
                             TextAlignment="Left" />
-                        <Button x:ConnectionId='8'
+                        <Button x:ConnectionId='9'
                             x:Name="SaveLyricsButton"
                                                           
                             Content="&#xE74E;"
                             RelativePanel.LeftOf="ResetLyricsButton"
                             Style="{StaticResource ScrollHeaderButtonStyle}"
                             ToolTipService.ToolTip="Save" />
-                        <Button x:ConnectionId='9'
+                        <Button x:ConnectionId='10'
                             x:Name="ResetLyricsButton"
                             Background="Transparent"
                                                            
@@ -376,7 +376,7 @@
                             Style="{StaticResource ScrollHeaderButtonStyle}"
                             ToolTipService.ToolTip="Reset" />
                     </RelativePanel>
-                    <TextBox x:ConnectionId='7'
+                    <TextBox x:ConnectionId='8'
                         x:Name="LyricsTextBox"
                         Grid.Row="1"
                         Margin="20,0,20,10"
