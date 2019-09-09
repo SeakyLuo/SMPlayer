@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
@@ -55,11 +56,11 @@ namespace SMPlayer
         {
             if (Playlists.Count == 0)
             {
-                PlayListTabViewFooter.Text = "No Playlists";
+                PlayListTabViewFooter.Label = "No Playlists";
             }
             else
             {
-                PlayListTabViewFooter.Text = $"Playlists: {Playlists.Count}";
+                PlayListTabViewFooter.Label = $"Playlists: {Playlists.Count}";
             }
         }
 
@@ -290,6 +291,31 @@ namespace SMPlayer
         {
             var playlist = (sender as AppBarToggleButton).DataContext as Playlist;
             playlist.Criterion = SortBy.PlayCount;
+        }
+
+        private void OpenPlaylistsFlyout(object sender, object e)
+        {
+            SpinArrowAnimation.Begin();
+            var flyout = sender as MenuFlyout;
+            flyout.Items.Clear();
+            foreach (var playlist in Playlists)
+            {
+                var item = new ToggleMenuFlyoutItem()
+                {
+                    Text = playlist.Name,
+                    IsChecked = playlist.Equals(PlaylistTabView.SelectedItem)
+                };
+                item.Click += (s, args) =>
+                {
+                    PlaylistTabView.SelectedItem = playlist;
+                };
+                flyout.Items.Add(item);
+            }
+        }
+
+        private void ClosePlaylistsFlyout(object sender, object e)
+        {
+            SpinArrowAnimation.Begin();
         }
     }
 }

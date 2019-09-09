@@ -23,7 +23,6 @@ namespace SMPlayer
 {
     public sealed partial class PlaylistControl : UserControl, MusicSwitchingListener
     {
-        private const string FILENAME = "NowPlayingPlaylist.json";
         public ObservableCollection<Music> CurrentPlaylist
         {
             get => currentPlaylist.Count == 0 ? MediaHelper.CurrentPlaylist : currentPlaylist;

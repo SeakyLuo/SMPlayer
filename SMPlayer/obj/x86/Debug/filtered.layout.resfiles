@@ -53,12 +53,14 @@ AlbumPage.xbf
 AlbumsPage.xbf
 App.xbf
 ArtistsPage.xbf
+Controls\IconTextButton.xbf
 Controls\LoadingControl.xbf
 Controls\MediaControl.xbf
 Controls\PlaylistControl.xbf
 Dialogs\RenameDialog.xbf
 Dictionaries\BorderlessAutoSuggestBox.xbf
 Dictionaries\BorderlessTextBox.xbf
+Dictionaries\IconTextButton.xbf
 Dictionaries\LikeToggleButton.xbf
 Dictionaries\MediaControlButton.xbf
 Dictionaries\MediaControlToggleButton.xbf

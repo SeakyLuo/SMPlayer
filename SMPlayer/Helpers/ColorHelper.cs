@@ -28,7 +28,7 @@ namespace SMPlayer
             Color color = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0]);
             return new AcrylicBrush()
             {
-                BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
+                BackgroundSource = AcrylicBackgroundSource.Backdrop,
                 FallbackColor = color,
                 TintOpacity = 0.75,
                 TintColor = color

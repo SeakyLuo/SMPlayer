@@ -10,6 +10,16 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <Storyboard x:Name="SpinArrowAnimation">
+            <DoubleAnimation
+                Storyboard.TargetName="UpArrowIcon"
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                By="180"
+                Duration="0:0:0.25" />
+        </Storyboard>
+    </Page.Resources>
+
     <Grid>
         <controls:TabView
             x:Name="PlaylistTabView"
@@ -121,7 +131,7 @@
                                             ToolTipService.ToolTip="Add To Playlist" />
                                         <AppBarButton
                                             Click="Rename_Click"
-                                            Icon="Edit"
+                                            Icon="Rename"
                                             Label="Rename"
                                             Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Rename Playlist" />
@@ -199,12 +209,30 @@
             </controls:TabView.TabEndHeader>
 
             <controls:TabView.Footer>
-                <TextBlock
+                <local:IconTextButton
                     x:Name="PlayListTabViewFooter"
-                    Padding="16,8,16,8"
+                    Margin="0,5,10,5"
                     HorizontalAlignment="Right"
                     FontSize="16"
-                    FontWeight="SemiBold" />
+                    FontWeight="SemiBold"
+                    LabelPosition="Left"
+                    ToolTipService.ToolTip="Show All Playlists">
+                    <local:IconTextButton.Icon>
+                        <FontIcon
+                            x:Name="UpArrowIcon"
+                            FontFamily="Segoe MDL2 Assets"
+                            FontWeight="{x:Bind PlayListTabViewFooter.FontWeight}"
+                            Glyph="&#xE70E;"
+                            RenderTransformOrigin=".5,.5">
+                            <FontIcon.RenderTransform>
+                                <RotateTransform />
+                            </FontIcon.RenderTransform>
+                        </FontIcon>
+                    </local:IconTextButton.Icon>
+                    <local:IconTextButton.Flyout>
+                        <MenuFlyout Closed="ClosePlaylistsFlyout" Opening="OpenPlaylistsFlyout" />
+                    </local:IconTextButton.Flyout>
+                </local:IconTextButton>
             </controls:TabView.Footer>
         </controls:TabView>
     </Grid>

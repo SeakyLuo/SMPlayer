@@ -10,8 +10,18 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <Storyboard x:ConnectionId='2' x:Name="SpinArrowAnimation">
+            <DoubleAnimation
+                Storyboard.TargetName="UpArrowIcon"
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                By="180"
+                Duration="0:0:0.25" />
+        </Storyboard>
+    </Page.Resources>
+
     <Grid>
-        <controls:TabView x:ConnectionId='2'
+        <controls:TabView x:ConnectionId='3'
             x:Name="PlaylistTabView"
             AllowDrop="True"
             CanCloseTabs="False"
@@ -33,25 +43,25 @@
             </controls:TabView.Resources>
             <controls:TabView.ItemHeaderTemplate>
                 <DataTemplate                           >
-                    <StackPanel x:ConnectionId='4' Orientation="Horizontal">
+                    <StackPanel x:ConnectionId='5' Orientation="Horizontal">
                         <StackPanel.ContextFlyout>
                             <MenuFlyout>
-                                <MenuFlyoutItem x:ConnectionId='5'
+                                <MenuFlyoutItem x:ConnectionId='6'
                                                        
                                     Icon="Rename"
                                     Text="Rename PlayList" />
-                                <MenuFlyoutItem x:ConnectionId='6'
+                                <MenuFlyoutItem x:ConnectionId='7'
                                                           
                                     Icon="Copy"
                                     Text="Duplicate PlayList" />
-                                <MenuFlyoutItem x:ConnectionId='7'
+                                <MenuFlyoutItem x:ConnectionId='8'
                                                        
                                     Icon="Delete"
                                     Text="Delete PlayList" />
                             </MenuFlyout>
                         </StackPanel.ContextFlyout>
                         <SymbolIcon Symbol="Audio" />
-                        <TextBlock x:ConnectionId='8'
+                        <TextBlock x:ConnectionId='9'
                             x:Name="NameTextBlock"
                             Margin="10,0,5,0"
                                                               />
@@ -60,13 +70,13 @@
             </controls:TabView.ItemHeaderTemplate>
             <controls:TabView.ItemTemplate>
                 <DataTemplate                           >
-                    <local:PlaylistControl x:ConnectionId='10'
+                    <local:PlaylistControl x:ConnectionId='11'
                         AllowReorder="False"
                         AlternatingRowColor="True"
                                                                  >
                         <local:PlaylistControl.Header>
                             <controls:ScrollHeader Mode="Sticky">
-                                <Grid x:ConnectionId='11'
+                                <Grid x:ConnectionId='12'
                                     x:Name="PlaylistInfoGrid"
                                     Padding="30"
                                     Background="#222222"
@@ -81,7 +91,7 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <Image x:ConnectionId='12'
+                                    <Image x:ConnectionId='13'
                                         x:Name="PlaylistCover"
                                         Grid.RowSpan="4"
                                         Width="180"
@@ -89,12 +99,12 @@
                                         Margin="0,0,20,0"
                                                                      
                                         Source="Assets/monotone_bg_wide.png" />
-                                    <TextBlock x:ConnectionId='13'
+                                    <TextBlock x:ConnectionId='14'
                                         Grid.Column="1"
                                         FontSize="36"
                                         Style="{StaticResource HeaderTextBlockStyle}"
                                                                           />
-                                    <TextBlock x:ConnectionId='14'
+                                    <TextBlock x:ConnectionId='15'
                                         Grid.Row="1"
                                         Grid.Column="1"
                                         Margin="0,5"
@@ -105,27 +115,27 @@
                                         Background="Transparent"
                                         DefaultLabelPosition="Right"
                                         Style="{StaticResource PlaylistCommandBarStyle}">
-                                        <AppBarButton x:ConnectionId='15'
+                                        <AppBarButton x:ConnectionId='16'
                                                                  
                                             Icon="Shuffle"
                                                                                                                                 
                                             Label="Shuffle"
                                             Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Shuffle Playlist" />
-                                        <AppBarButton x:ConnectionId='16'
+                                        <AppBarButton x:ConnectionId='17'
                                                                
                                             Icon="Add"
                                                                                                                                 
                                             Label="Add To"
                                             Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Add To Playlist" />
-                                        <AppBarButton x:ConnectionId='17'
+                                        <AppBarButton x:ConnectionId='18'
                                                                 
-                                            Icon="Edit"
+                                            Icon="Rename"
                                             Label="Rename"
                                             Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Rename Playlist" />
-                                        <AppBarButton x:ConnectionId='18'
+                                        <AppBarButton x:ConnectionId='19'
                                                                 
                                             Icon="Delete"
                                             Label="Delete"
@@ -138,23 +148,23 @@
                                                 Label="Pin to Start"
                                                 ToolTipService.ToolTip="Pin Playlist to the Start Menu" />
                                             <AppBarSeparator />
-                                            <AppBarToggleButton x:ConnectionId='19'
+                                            <AppBarToggleButton x:ConnectionId='20'
                                                                         
                                                                                                                                                                       
                                                 Label="Sort By Name" />
-                                            <AppBarToggleButton x:ConnectionId='20'
+                                            <AppBarToggleButton x:ConnectionId='21'
                                                                           
                                                                                                                                                                        
                                                 Label="Sort By Artist" />
-                                            <AppBarToggleButton x:ConnectionId='21'
+                                            <AppBarToggleButton x:ConnectionId='22'
                                                                          
                                                                                                                                                                       
                                                 Label="Sort By Album" />
-                                            <AppBarToggleButton x:ConnectionId='22'
+                                            <AppBarToggleButton x:ConnectionId='23'
                                                                             
                                                                                                                                                                          
                                                 Label="Sort By Duration" />
-                                            <AppBarToggleButton x:ConnectionId='23'
+                                            <AppBarToggleButton x:ConnectionId='24'
                                                                              
                                                                                                                                                                            
                                                 Label="Sort By Play Count" />
@@ -168,7 +178,7 @@
             </controls:TabView.ItemTemplate>
 
             <controls:TabView.TabStartHeader>
-                <Button x:ConnectionId='24'
+                <Button x:ConnectionId='25'
                     x:Name="NewPlaylistButton"
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
@@ -183,7 +193,7 @@
             </controls:TabView.TabStartHeader>
 
             <controls:TabView.TabEndHeader>
-                <Button x:ConnectionId='25'
+                <Button x:ConnectionId='26'
                     x:Name="EditPlaylistButton"
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
@@ -199,12 +209,30 @@
             </controls:TabView.TabEndHeader>
 
             <controls:TabView.Footer>
-                <TextBlock x:ConnectionId='26'
+                <local:IconTextButton x:ConnectionId='27'
                     x:Name="PlayListTabViewFooter"
-                    Padding="16,8,16,8"
+                    Margin="0,5,10,5"
                     HorizontalAlignment="Right"
                     FontSize="16"
-                    FontWeight="SemiBold" />
+                    FontWeight="SemiBold"
+                    LabelPosition="Left"
+                    ToolTipService.ToolTip="Show All Playlists">
+                    <local:IconTextButton.Icon>
+                        <FontIcon x:ConnectionId='28'
+                            x:Name="UpArrowIcon"
+                            FontFamily="Segoe MDL2 Assets"
+                                                                                  
+                            Glyph="&#xE70E;"
+                            RenderTransformOrigin=".5,.5">
+                            <FontIcon.RenderTransform>
+                                <RotateTransform />
+                            </FontIcon.RenderTransform>
+                        </FontIcon>
+                    </local:IconTextButton.Icon>
+                    <local:IconTextButton.Flyout>
+                        <MenuFlyout x:ConnectionId='29'                                                             />
+                    </local:IconTextButton.Flyout>
+                </local:IconTextButton>
             </controls:TabView.Footer>
         </controls:TabView>
     </Grid>

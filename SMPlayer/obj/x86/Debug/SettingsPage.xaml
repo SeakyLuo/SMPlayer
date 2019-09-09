@@ -173,23 +173,24 @@
                     Background="{ThemeResource SystemColorHotlightColor}"
                     Style="{StaticResource SolidColorButton}">
                     <Button.Flyout>
-                        <Flyout>
+                        <Flyout x:ConnectionId='13' x:Name="ColorPickerFlyout">
                             <StackPanel>
-                                <ColorPicker x:ConnectionId='13' x:Name="ThemeColorPicker" Color="{ThemeResource SystemColorHighlightColor}" />
+                                <ColorPicker x:ConnectionId='14' x:Name="ThemeColorPicker" Color="{ThemeResource SystemColorHighlightColor}" />
                                 <Grid Margin="0,20,0,10">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <Button x:ConnectionId='14'
+                                    <Button x:ConnectionId='15'
                                         x:Name="ConfirmColorButton"
                                         HorizontalAlignment="Center"
                                                                         
                                         Content="Confirm" />
-                                    <Button x:ConnectionId='15'
+                                    <Button x:ConnectionId='16'
                                         x:Name="CancelColorButton"
                                         Grid.Column="1"
                                         HorizontalAlignment="Center"
+                                                                       
                                         Content="Cancel" />
                                 </Grid>
                             </StackPanel>

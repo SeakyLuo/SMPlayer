@@ -71,6 +71,12 @@ namespace SMPlayer
         private void ConfirmColorButton_Click(object sender, RoutedEventArgs e)
         {
             Settings.settings.ThemeColor = ThemeColorPicker.Color;
+            ColorPickerFlyout.Hide();
+        }
+
+        private void CancelColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            ColorPickerFlyout.Hide();
         }
 
         private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
