@@ -62,29 +62,17 @@
                             <Grid>
 
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition x:Name="ContentControlColumnDefinition" Width="*" />
-                                    <ColumnDefinition x:Name="PrimaryItemsControlColumnDefinition" Width="Auto" />
+                                    <ColumnDefinition x:Name="PrimaryItemsControlColumnDefinition" Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <!--
                                     Use a ContentControl rather than a ContentPresenter so that IsEnabled can be set to false
                                     in the Minimal/HiddenClosed states to remove it from being a tab-stop candidate.
                                 -->
-                                <ContentControl
-                                    x:Name="ContentControl"
-                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                    Content="{TemplateBinding Content}"
-                                    ContentTemplate="{TemplateBinding ContentTemplate}"
-                                    ContentTransitions="{TemplateBinding ContentTransitions}"
-                                    Foreground="{TemplateBinding Foreground}"
-                                    IsTabStop="False" />
                                 <ItemsControl
                                     x:Name="PrimaryItemsControl"
                                     Grid.Column="1"
                                     MinHeight="{ThemeResource AppBarThemeCompactHeight}"
-                                    HorizontalAlignment="Right"
+                                    HorizontalAlignment="Left"
                                     IsTabStop="False">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
@@ -366,13 +354,6 @@
                                                     KeyTime="0:0:0.467"
                                                     Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.MinimalVerticalDelta}" />
                                             </DoubleAnimationUsingKeyFrames>
-                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ContentControl" Storyboard.TargetProperty="Opacity">
-                                                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
-                                                <SplineDoubleKeyFrame
-                                                    KeySpline="0.1,0.9 0.2,1.0"
-                                                    KeyTime="0:0:0.467"
-                                                    Value="1" />
-                                            </DoubleAnimationUsingKeyFrames>
                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PrimaryItemsControl" Storyboard.TargetProperty="Opacity">
                                                 <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
                                                 <SplineDoubleKeyFrame
@@ -426,13 +407,7 @@
                                                     KeyTime="0:0:0.167"
                                                     Value="0" />
                                             </DoubleAnimationUsingKeyFrames>
-                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ContentControl" Storyboard.TargetProperty="Opacity">
-                                                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="1" />
-                                                <SplineDoubleKeyFrame
-                                                    KeySpline="0.2,0 0,1"
-                                                    KeyTime="0:0:0.167"
-                                                    Value="0" />
-                                            </DoubleAnimationUsingKeyFrames>
+     
                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PrimaryItemsControl" Storyboard.TargetProperty="Opacity">
                                                 <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="1" />
                                                 <SplineDoubleKeyFrame
@@ -479,13 +454,6 @@
                                                     KeySpline="0.1,0.9 0.2,1.0"
                                                     KeyTime="0:0:0.467"
                                                     Value="0" />
-                                            </DoubleAnimationUsingKeyFrames>
-                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ContentControl" Storyboard.TargetProperty="Opacity">
-                                                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
-                                                <SplineDoubleKeyFrame
-                                                    KeySpline="0.1,0.9 0.2,1.0"
-                                                    KeyTime="0:0:0.467"
-                                                    Value="1" />
                                             </DoubleAnimationUsingKeyFrames>
                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PrimaryItemsControl" Storyboard.TargetProperty="Opacity">
                                                 <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
@@ -540,13 +508,6 @@
                                                     KeySpline="0.2,0 0,1"
                                                     KeyTime="0:0:0.167"
                                                     Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.MinimalVerticalDelta}" />
-                                            </DoubleAnimationUsingKeyFrames>
-                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ContentControl" Storyboard.TargetProperty="Opacity">
-                                                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="1" />
-                                                <SplineDoubleKeyFrame
-                                                    KeySpline="0.2,0 0,1"
-                                                    KeyTime="0:0:0.167"
-                                                    Value="0" />
                                             </DoubleAnimationUsingKeyFrames>
                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PrimaryItemsControl" Storyboard.TargetProperty="Opacity">
                                                 <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="1" />
@@ -781,15 +742,6 @@
                                         <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ClipGeometryTransform" Storyboard.TargetProperty="Y">
                                             <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.MinimalVerticalDelta}" />
                                         </DoubleAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentControl" Storyboard.TargetProperty="IsHitTestVisible">
-                                            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="False" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentControl" Storyboard.TargetProperty="IsEnabled">
-                                            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="False" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ContentControl" Storyboard.TargetProperty="Opacity">
-                                            <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
-                                        </DoubleAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MoreButton" Storyboard.TargetProperty="Padding">
                                             <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="14,11,14,0" />
                                         </ObjectAnimationUsingKeyFrames>
@@ -871,9 +823,6 @@
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MoreButton" Storyboard.TargetProperty="IsTabStop">
                                             <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="False" />
                                         </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentControl" Storyboard.TargetProperty="IsEnabled">
-                                            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="False" />
-                                        </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PrimaryItemsControl" Storyboard.TargetProperty="IsEnabled">
                                             <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="False" />
                                         </ObjectAnimationUsingKeyFrames>
@@ -948,7 +897,6 @@
                                 <VisualState x:Name="DynamicOverflowDisabled" />
                                 <VisualState x:Name="DynamicOverflowEnabled">
                                     <VisualState.Setters>
-                                        <Setter Target="ContentControlColumnDefinition.Width" Value="Auto" />
                                         <Setter Target="PrimaryItemsControlColumnDefinition.Width" Value="*" />
                                     </VisualState.Setters>
                                 </VisualState>

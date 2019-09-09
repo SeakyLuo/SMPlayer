@@ -209,24 +209,20 @@ namespace SMPlayer
             var playlist = (sender as FrameworkElement).DataContext as Playlist;
             DeletePlaylist(playlist);
         }
-        private void More_Click(object sender, RoutedEventArgs e)
+        private void SortBy_Click(object sender, RoutedEventArgs e)
         {
+            string reverse = "Reverse Playlist";
             var playlist = (sender as FrameworkElement).DataContext as Playlist;
             MenuFlyout flyout = new MenuFlyout();
-            flyout.Items.Add(new MenuFlyoutItem()
-            {
-                Icon = new SymbolIcon(Symbol.Pin),
-                Text = "Pin to Start"
-            });
-            flyout.Items.Add(new MenuFlyoutSeparator());
             foreach (var criterion in Playlist.Criteria)
             {
+                bool isChecked = playlist.Criterion == criterion;
                 var radioItem = new ToggleMenuFlyoutItem()
                 {
-                    Text = "Sort By " + criterion.ToStr(),
-                    IsChecked = playlist.Criterion == criterion
+                    Text = isChecked ? reverse : "Sort By " + criterion.ToStr(),
+                    IsChecked = isChecked
                 };
-                radioItem.Click += (send, args) => playlist.Criterion = criterion;
+                radioItem.Click += (send, args) => playlist.SetCriterionAndSort(criterion);
                 flyout.Items.Add(radioItem);
             }
             flyout.ShowAt(sender as FrameworkElement);
@@ -267,32 +263,6 @@ namespace SMPlayer
             });
         }
 
-        private void SortByName_Click(object sender, RoutedEventArgs e)
-        {
-            var playlist = (sender as AppBarToggleButton).DataContext as Playlist;
-            playlist.Criterion = SortBy.Title;
-        }
-        private void SortByArtist_Click(object sender, RoutedEventArgs e)
-        {
-            var playlist = (sender as AppBarToggleButton).DataContext as Playlist;
-            playlist.Criterion = SortBy.Artist;
-        }
-        private void SortByAlbum_Click(object sender, RoutedEventArgs e)
-        {
-            var playlist = (sender as AppBarToggleButton).DataContext as Playlist;
-            playlist.Criterion = SortBy.Album;
-        }
-        private void SortByDuration_Click(object sender, RoutedEventArgs e)
-        {
-            var playlist = (sender as AppBarToggleButton).DataContext as Playlist;
-            playlist.Criterion = SortBy.Duration;
-        }
-        private void SortByPlayCount_Click(object sender, RoutedEventArgs e)
-        {
-            var playlist = (sender as AppBarToggleButton).DataContext as Playlist;
-            playlist.Criterion = SortBy.PlayCount;
-        }
-
         private void OpenPlaylistsFlyout(object sender, object e)
         {
             SpinArrowAnimation.Begin();
@@ -317,5 +287,6 @@ namespace SMPlayer
         {
             SpinArrowAnimation.Begin();
         }
+
     }
 }

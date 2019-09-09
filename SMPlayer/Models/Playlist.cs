@@ -26,16 +26,10 @@ namespace SMPlayer.Models
                 }
             }
         }
-        private SortBy criterion = SortBy.Title;
         public SortBy Criterion
         {
-            get => criterion;
-            set
-            {
-                if (criterion == value) return;
-                criterion = value;
-                Sort();
-            }
+            get;
+            set;
         }
 
         public ObservableCollection<Music> Songs { get; set; }
@@ -95,10 +89,23 @@ namespace SMPlayer.Models
             this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public void SetCriterionAndSort(SortBy criterion)
+        {
+            if (Criterion == criterion)
+            {
+                Reverse();
+            }
+            else
+            {
+                Criterion = criterion;
+                Sort();
+            }
+        }
+
         public void Sort()
         {
             List<Music> list;
-            switch (criterion)
+            switch (Criterion)
             {
                 case SortBy.Title:
                     list = Songs.OrderBy((m) => m.Name).ToList();
@@ -118,7 +125,14 @@ namespace SMPlayer.Models
                 default:
                     return;
             }
-            Songs = new ObservableCollection<Music>(list);
+            for (int i = 0; i < Songs.Count; i++) Songs[i] = list[i];
+            OnPropertyChanged();
+        }
+
+        public void Reverse()
+        {
+            var list = Songs.Reverse();
+            for (int i = 0; i < Songs.Count; i++) Songs[i] = list.ElementAt(i);
             OnPropertyChanged();
         }
     }

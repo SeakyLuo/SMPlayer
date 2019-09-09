@@ -223,7 +223,6 @@
     <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.BindExtension">
       <RootProperty Name="Converter" />
       <RootProperty Name="Mode" />
-      <RootProperty Name="ConverterParameter" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.DataTemplate">
       <RootProperty Name="Template" />
@@ -314,14 +313,6 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ContentControl">
       <RootProperty Name="Content" />
-      <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="HorizontalContentAlignment" />
-      <RootProperty Name="VerticalContentAlignment" />
-      <RootProperty Name="ContentTemplate" />
-      <RootProperty Name="ContentTransitions" />
-      <RootProperty Name="Foreground" />
-      <RootProperty Name="IsTabStop" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ColumnDefinition">
       <RootProperty Name="Width" />
@@ -609,7 +600,6 @@
       <RootProperty Name="IsOpen" />
       <RootProperty Name="PrimaryCommands" />
       <RootProperty Name="Style" />
-      <RootProperty Name="SecondaryCommands" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBar">
       <RootProperty Name="ClosedDisplayMode" />
@@ -734,8 +724,8 @@
       <RootProperty Name="Icon" />
       <RootProperty Name="IsEnabled" />
       <RootProperty Name="Label" />
+      <RootProperty Name="Margin" />
       <RootProperty Name="Style" />
-      <RootProperty Name="HorizontalAlignment" />
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ContentDialog">
@@ -813,12 +803,6 @@
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.ScrollHeader">
       <RootProperty Name="Mode" />
       <RootProperty Name="Content" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.AppBarSeparator" />
-    <RootType FullName="Windows.UI.Xaml.Controls.AppBarToggleButton">
-      <RootProperty Name="IsChecked" />
-      <RootProperty Name="Label" />
-      <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.RotateTransform" />
     <RootType FullName="SMPlayer.PlaylistsPage" />

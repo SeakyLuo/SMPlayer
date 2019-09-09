@@ -13,9 +13,9 @@
     <Page.Resources>
         <Storyboard x:Name="SpinArrowAnimation">
             <DoubleAnimation
+                By="180"
                 Storyboard.TargetName="UpArrowIcon"
                 Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
-                By="180"
                 Duration="0:0:0.25" />
         </Storyboard>
     </Page.Resources>
@@ -120,6 +120,7 @@
                                             Icon="Shuffle"
                                             IsEnabled="{x:Bind Songs, Converter={StaticResource EnabledConverter}, Mode=OneWay}"
                                             Label="Shuffle"
+                                            Margin="-10,0,0,0"
                                             Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Shuffle Playlist" />
                                         <AppBarButton
@@ -141,34 +142,17 @@
                                             Label="Delete"
                                             Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Delete Playlist" />
-                                        <CommandBar.SecondaryCommands>
-                                            <AppBarButton
-                                                HorizontalAlignment="Stretch"
-                                                Icon="Pin"
-                                                Label="Pin to Start"
-                                                ToolTipService.ToolTip="Pin Playlist to the Start Menu" />
-                                            <AppBarSeparator />
-                                            <AppBarToggleButton
-                                                Click="SortByName_Click"
-                                                IsChecked="{x:Bind Criterion, Converter={StaticResource CriterionConverter}, ConverterParameter='Title', Mode=OneWay}"
-                                                Label="Sort By Name" />
-                                            <AppBarToggleButton
-                                                Click="SortByArtist_Click"
-                                                IsChecked="{x:Bind Criterion, Converter={StaticResource CriterionConverter}, ConverterParameter='Artist', Mode=OneWay}"
-                                                Label="Sort By Artist" />
-                                            <AppBarToggleButton
-                                                Click="SortByAlbum_Click"
-                                                IsChecked="{x:Bind Criterion, Converter={StaticResource CriterionConverter}, ConverterParameter='Album', Mode=OneWay}"
-                                                Label="Sort By Album" />
-                                            <AppBarToggleButton
-                                                Click="SortByDuration_Click"
-                                                IsChecked="{x:Bind Criterion, Converter={StaticResource CriterionConverter}, ConverterParameter='Duration', Mode=OneWay}"
-                                                Label="Sort By Duration" />
-                                            <AppBarToggleButton
-                                                Click="SortByPlayCount_Click"
-                                                IsChecked="{x:Bind Criterion, Converter={StaticResource CriterionConverter}, ConverterParameter='Play Count', Mode=OneWay}"
-                                                Label="Sort By Play Count" />
-                                        </CommandBar.SecondaryCommands>
+                                        <AppBarButton
+                                            Icon="Pin"
+                                            Label="Pin to Start"
+                                            Style="{StaticResource PlaylistAppBarButtonStyle}"
+                                            ToolTipService.ToolTip="Pin Playlist to the Start Menu" />
+                                        <AppBarButton
+                                            Click="SortBy_Click"
+                                            Icon="Sort"
+                                            Label="Sort By"
+                                            Style="{StaticResource PlaylistAppBarButtonStyle}"
+                                            ToolTipService.ToolTip="Sort Playlist" />
                                     </CommandBar>
                                 </Grid>
                             </controls:ScrollHeader>
