@@ -131,12 +131,6 @@
                                             Label="Delete"
                                             Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Delete Playlist" />
-                                        <AppBarButton x:ConnectionId='19'
-                                                              
-                                            Icon="More"
-                                            Label="More"
-                                            Style="{StaticResource PlaylistAppBarButtonStyle}"
-                                            ToolTipService.ToolTip="More Options" />
                                         <CommandBar.SecondaryCommands>
                                             <AppBarButton
                                                 HorizontalAlignment="Stretch"
@@ -144,11 +138,26 @@
                                                 Label="Pin to Start"
                                                 ToolTipService.ToolTip="Pin Playlist to the Start Menu" />
                                             <AppBarSeparator />
-                                            <AppBarToggleButton Label="Sort By Name" />
-                                            <AppBarToggleButton Label="Sort By Artist" />
-                                            <AppBarToggleButton Label="Sort By Album" />
-                                            <AppBarToggleButton Label="Sort By Duration" />
-                                            <AppBarToggleButton Label="Sort By Play Count" />
+                                            <AppBarToggleButton x:ConnectionId='19'
+                                                                        
+                                                                                                                                                                      
+                                                Label="Sort By Name" />
+                                            <AppBarToggleButton x:ConnectionId='20'
+                                                                          
+                                                                                                                                                                       
+                                                Label="Sort By Artist" />
+                                            <AppBarToggleButton x:ConnectionId='21'
+                                                                         
+                                                                                                                                                                      
+                                                Label="Sort By Album" />
+                                            <AppBarToggleButton x:ConnectionId='22'
+                                                                            
+                                                                                                                                                                         
+                                                Label="Sort By Duration" />
+                                            <AppBarToggleButton x:ConnectionId='23'
+                                                                             
+                                                                                                                                                                           
+                                                Label="Sort By Play Count" />
                                         </CommandBar.SecondaryCommands>
                                     </CommandBar>
                                 </Grid>
@@ -159,7 +168,7 @@
             </controls:TabView.ItemTemplate>
 
             <controls:TabView.TabStartHeader>
-                <Button x:ConnectionId='20'
+                <Button x:ConnectionId='24'
                     x:Name="NewPlaylistButton"
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
@@ -174,7 +183,7 @@
             </controls:TabView.TabStartHeader>
 
             <controls:TabView.TabEndHeader>
-                <Button x:ConnectionId='21'
+                <Button x:ConnectionId='25'
                     x:Name="EditPlaylistButton"
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
@@ -190,7 +199,7 @@
             </controls:TabView.TabEndHeader>
 
             <controls:TabView.Footer>
-                <TextBlock x:ConnectionId='22'
+                <TextBlock x:ConnectionId='26'
                     x:Name="PlayListTabViewFooter"
                     Padding="16,8,16,8"
                     HorizontalAlignment="Right"

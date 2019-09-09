@@ -148,6 +148,7 @@
     <RootType FullName="SMPlayer.RowColorConverter" />
     <RootType FullName="SMPlayer.SongCountConverter" />
     <RootType FullName="SMPlayer.EnabledConverter" />
+    <RootType FullName="SMPlayer.CriterionConverter" />
     <RootType FullName="Windows.UI.Xaml.Media.AcrylicBrush">
       <RootProperty Name="BackgroundSource" />
       <RootProperty Name="FallbackColor" />
@@ -219,6 +220,7 @@
     <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.BindExtension">
       <RootProperty Name="Converter" />
       <RootProperty Name="Mode" />
+      <RootProperty Name="ConverterParameter" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.DataTemplate">
       <RootProperty Name="Template" />
@@ -799,7 +801,9 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarSeparator" />
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarToggleButton">
+      <RootProperty Name="IsChecked" />
       <RootProperty Name="Label" />
+      <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="SMPlayer.PlaylistsPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.ComboBox">

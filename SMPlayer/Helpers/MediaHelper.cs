@@ -206,24 +206,19 @@ namespace SMPlayer
             return list;
         }
 
-        public static void MoveMusic(Music music, int toIndex)
+        public static void MoveMusic(Music music, int to)
         {
             int index = CurrentPlaylist.IndexOf(music);
             if (index == -1) return;
-            var item = PlayBackList.Items[index];
-            PlayBackList.Items.RemoveAt(index);
-            PlayBackList.Items.Insert(toIndex, item);
+            MoveMusic(index, to);
         }
 
-        public static void SwitchMusic(Music music1, Music music2)
+        public static void MoveMusic(int from, int to)
         {
-            int index1 = CurrentPlaylist.IndexOf(music1);
-            if (index1 == -1) return;
-            int index2 = CurrentPlaylist.IndexOf(music2);
-            if (index2 == -1) return;
-            var temp = PlayBackList.Items[index1];
-            PlayBackList.Items[index1] = PlayBackList.Items[index2];
-            PlayBackList.Items[index2] = temp;
+            CurrentPlaylist.Move(from, to);
+            var item = PlayBackList.Items[from];
+            PlayBackList.Items.RemoveAt(from);
+            PlayBackList.Items.Insert(to, item);
         }
 
         public static void Play()

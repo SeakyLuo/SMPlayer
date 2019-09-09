@@ -50,6 +50,7 @@
             <local:RowColorConverter x:Key="RowColorConverter" />
             <local:SongCountConverter x:Key="SongCountConverter" />
             <local:EnabledConverter x:Key="EnabledConverter" />
+            <local:CriterionConverter x:Key="CriterionConverter" />
             <AcrylicBrush
                 x:Key="MediaControlPlayButtonBorderBrush"
                 BackgroundSource="Backdrop"

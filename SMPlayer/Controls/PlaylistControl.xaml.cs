@@ -104,8 +104,18 @@ namespace SMPlayer
 
         private void SongsListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
-            sender.UpdateLayout(); // Refresh Row Color
-            // Change MediaHelper.CurrentPlaylist Order
+            int from = -1, to = 0;
+            for (int i = 0; i < sender.Items.Count; i++)
+            {
+                var container = sender.ContainerFromIndex(i) as ListViewItem;
+                container.Background = i % 2 == 0 ? Helper.WhiteSmokeBrush : Helper.WhiteBrush;
+                if (!MediaHelper.CurrentPlaylist[i].Equals(args.Items[0]))
+                {
+                    if (from < 0) from = i;
+                    else to = i;
+                }
+            }
+            MediaHelper.MoveMusic(from, to);
         }
         private void OpenMusicMenuFlyout(object sender, object e)
         {
@@ -121,7 +131,6 @@ namespace SMPlayer
                 item.Click += (s, args) =>
                 {
                     Music music = (s as MenuFlyoutItem).DataContext as Music;
-                    CurrentPlaylist.Move(CurrentPlaylist.IndexOf(music), 0);
                     MediaHelper.MoveMusic(music, 0);
                 };
                 flyout.Items.Add(item);

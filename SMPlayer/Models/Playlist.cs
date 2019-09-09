@@ -152,6 +152,25 @@ namespace SMPlayer.Models
                     return "";
             }
         }
+
+        public static SortBy FromStr(string criterion)
+        {
+            switch (criterion)
+            {
+                case "Title":
+                    return SortBy.Title;
+                case "Artist":
+                    return SortBy.Artist;
+                case "Album":
+                    return SortBy.Album;
+                case "Duration":
+                    return SortBy.Duration;
+                case "Play Count":
+                    return SortBy.PlayCount;
+                default:
+                    return SortBy.Title;
+            }
+        }
     }
 }
 

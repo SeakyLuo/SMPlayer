@@ -265,5 +265,31 @@ namespace SMPlayer
                 MediaHelper.FindMusicAndSetPlaying(playlist.Songs, current, next);
             });
         }
+
+        private void SortByName_Click(object sender, RoutedEventArgs e)
+        {
+            var playlist = (sender as AppBarToggleButton).DataContext as Playlist;
+            playlist.Criterion = SortBy.Title;
+        }
+        private void SortByArtist_Click(object sender, RoutedEventArgs e)
+        {
+            var playlist = (sender as AppBarToggleButton).DataContext as Playlist;
+            playlist.Criterion = SortBy.Artist;
+        }
+        private void SortByAlbum_Click(object sender, RoutedEventArgs e)
+        {
+            var playlist = (sender as AppBarToggleButton).DataContext as Playlist;
+            playlist.Criterion = SortBy.Album;
+        }
+        private void SortByDuration_Click(object sender, RoutedEventArgs e)
+        {
+            var playlist = (sender as AppBarToggleButton).DataContext as Playlist;
+            playlist.Criterion = SortBy.Duration;
+        }
+        private void SortByPlayCount_Click(object sender, RoutedEventArgs e)
+        {
+            var playlist = (sender as AppBarToggleButton).DataContext as Playlist;
+            playlist.Criterion = SortBy.PlayCount;
+        }
     }
 }

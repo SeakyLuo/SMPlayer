@@ -200,4 +200,16 @@ namespace SMPlayer
             return null;
         }
     }
+    class CriterionConverter : Windows.UI.Xaml.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return ((SortBy)value) == SortByConverter.FromStr(parameter as string);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
 }
