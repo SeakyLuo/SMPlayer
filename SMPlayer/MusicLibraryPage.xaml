@@ -25,6 +25,7 @@
             Margin="10,10,10,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
+            x:DefaultBindMode="OneWay"
             AlternatingRowBackground="WhiteSmoke"
             AlternatingRowForeground="Gray"
             AreRowDetailsFrozen="False"
@@ -42,7 +43,6 @@
             HorizontalScrollBarVisibility="Visible"
             IsDoubleTapEnabled="True"
             IsReadOnly="True"
-            ItemsSource="{x:Bind allSongs, Mode=OneWay}"
             SelectionMode="Extended"
             Sorting="MusicLibraryDataGrid_Sorting"
             VerticalScrollBarVisibility="Visible">

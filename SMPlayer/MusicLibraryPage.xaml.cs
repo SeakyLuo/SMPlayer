@@ -31,17 +31,13 @@ namespace SMPlayer
     {
         private const string FILENAME = "MusicLibrary.json";
         public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
-        private ObservableCollection<Music> allSongs
-        {
-            get => AllSongs;
-            set => AllSongs = value;
-        }
         private bool libraryChecked = false;
 
         public MusicLibraryPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            MusicLibraryDataGrid.ItemsSource = AllSongs;
             MediaControl.AddMusicControlListener(this as MusicControlListener);
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
         }
@@ -82,6 +78,7 @@ namespace SMPlayer
         private void MusicLibraryDataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
             var music = (Music)MusicLibraryDataGrid.SelectedItem;
+            if (music == null) return;
             MediaHelper.SetMusicAndPlay(AllSongs, music);
         }
 

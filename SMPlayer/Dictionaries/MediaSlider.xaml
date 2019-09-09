@@ -1,13 +1,9 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SMPlayer">
-    <AcrylicBrush
-        x:Key="MediaControlSliderThumbAcrylicBrush"
-        BackgroundSource="Backdrop"
-        FallbackColor="{StaticResource SystemChromeMediumColor}"
-        TintColor="{StaticResource SystemChromeAltHighColor}"
-        TintOpacity="0" />
+    xmlns:local="using:SMPlayer"
+    xmlns:media="using:Microsoft.Toolkit.Uwp.UI.Media">
+    <media:BackdropBlurBrush x:Key="MediaControlSliderThumbBlurBrush" Amount="50" />
     <Style x:Key="MediaProgressSliderStyle" TargetType="Slider">
         <Setter Property="Background" Value="{ThemeResource SliderTrackFill}" />
         <Setter Property="BorderThickness" Value="{ThemeResource SliderBorderThemeThickness}" />
@@ -32,7 +28,7 @@
                                         <ControlTemplate TargetType="Thumb">
                                             <Ellipse
                                                 x:Name="ellipse"
-                                                Fill="{ThemeResource MediaControlSliderThumbAcrylicBrush}"
+                                                Fill="{StaticResource MediaControlSliderThumbBlurBrush}"
                                                 Stroke="{TemplateBinding FocusVisualPrimaryBrush}"
                                                 StrokeThickness="3.6" />
                                         </ControlTemplate>
@@ -266,9 +262,6 @@
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="VerticalTrackRect" Storyboard.TargetProperty="Fill">
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SliderTrackFillPointerOver}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="HorizontalThumb" Storyboard.TargetProperty="Background">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource MediaControlSliderThumbAcrylicBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="VerticalThumb" Storyboard.TargetProperty="Background">
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SliderThumbBackgroundPointerOver}" />

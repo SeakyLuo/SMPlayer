@@ -16,15 +16,9 @@ Cache Artists Result.
 
 Add SwipeControl.
 
-MediControlButton Style.
-
 FullMediaControl Album Flipview.
 
-Change LikeButton to ToggleButton.
-
-Check FullVolumeButton to PointerOver background less.
-
-Auto Scrolling Text
+Auto Scrolling Text.
 
 Shy header.
 

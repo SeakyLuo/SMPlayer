@@ -525,7 +525,11 @@
       <RootProperty Name="Content" />
       <RootProperty Name="Style" />
       <RootProperty Name="Template" />
+      <RootProperty Name="IsEnabled" />
       <RootEvent Name="Click" />
+    </RootType>
+    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Media.BackdropBlurBrush">
+      <RootProperty Name="Amount" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Slider">
       <RootProperty Name="Width" />
@@ -681,9 +685,6 @@
     </RootType>
     <RootType FullName="SMPlayer.MusicListPage" />
     <RootType FullName="SMPlayer.MyFavoritesPage" />
-    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Media.BackdropBlurBrush">
-      <RootProperty Name="Amount" />
-    </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.BladeView">
       <RootProperty Name="BladeMode" />
       <RootProperty Name="Resources" />
@@ -746,7 +747,6 @@
       <RootProperty Name="HorizontalScrollBarVisibility" />
       <RootProperty Name="IsDoubleTapEnabled" />
       <RootProperty Name="IsReadOnly" />
-      <RootProperty Name="ItemsSource" />
       <RootProperty Name="SelectionMode" />
       <RootProperty Name="VerticalScrollBarVisibility" />
       <RootProperty Name="Columns" />

@@ -57,6 +57,7 @@ namespace SMPlayer
                 {
                     GridMusicView gridItem = new GridMusicView();
                     await gridItem.Init(file);
+                    gridItem.Source.IsPlaying = gridItem.Source.Equals(MediaHelper.CurrentMusic);
                     GridItems.Add(gridItem);
                 }
             }
@@ -75,7 +76,19 @@ namespace SMPlayer
 
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(Tree.Files, current, next));
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                bool findCurrent = current == null, findNext = next == null;
+                foreach (var item in GridItems)
+                {
+                    var music = item.Source;
+                    if (!findCurrent && (findCurrent = music.Equals(current)))
+                        music.IsPlaying = false;
+                    if (!findNext && (findNext = music.Equals(next)))
+                        music.IsPlaying = true;
+                    if (findCurrent && findNext) return;
+                }
+            });
         }
     }
 }

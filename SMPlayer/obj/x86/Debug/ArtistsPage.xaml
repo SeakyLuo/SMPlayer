@@ -144,9 +144,6 @@
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
                                         <RelativePanel>
                                             <Image x:ConnectionId='23'
                                                 x:Name="AlbumCover"
@@ -209,7 +206,7 @@
                                                                 Foreground="{StaticResource SystemColorHighlightColor}"
                                                                 Glyph="&#xE767;"
                                                                 RelativePanel.AlignLeftWithPanel="True"
-                                                                                                                                                                  />
+                                                                                                                                                             />
                                                             <TextBlock x:ConnectionId='22'
                                                                 x:Name="MusicNameTextBlcok"
                                                                 Grid.Column="1"

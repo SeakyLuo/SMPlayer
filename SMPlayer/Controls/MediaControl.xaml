@@ -62,7 +62,7 @@
                     <VisualStateGroup x:Name="CommonStates">
                         <VisualState x:Name="PointerOver">
                             <Storyboard>
-                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MainMusicInfoGrid" Storyboard.TargetProperty="Background">
                                     <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPointerOverBackgroundThemeBrush}" />
                                 </ObjectAnimationUsingKeyFrames>
                             </Storyboard>
@@ -161,12 +161,12 @@
                         Style="{StaticResource MediaProgressSliderStyle}"
                         ValueChanged="VolumeSlider_ValueChanged"
                         Value="50" />
-                    <Button
-                        x:Name="MainLikeButton"
+                    <ToggleButton
+                        x:Name="MainLikeToggleButton"
                         Click="LikeButton_Click"
                         Content="&#xEB51;"
-                        Style="{StaticResource MediaControlButtonStyle}"
-                        Template="{StaticResource MediaControlButtonTemplate}" />
+                        Style="{StaticResource MediaControlToggleButtonStyle}"
+                        Template="{StaticResource LikeToggleButtonStyle}" />
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                     <ToggleButton
@@ -365,25 +365,26 @@
                             Click="ShuffleButton_Click"
                             Content="&#xE8B1;"
                             Style="{StaticResource MediaControlToggleButtonStyle}"
-                            Template="{StaticResource MediaControlToggleButtonTemplate}" />
+                            Template="{StaticResource DarkMediaControlToggleButtonTemplate}" />
                         <ToggleButton
                             x:Name="FullRepeatButton"
                             Click="RepeatButton_Click"
                             Content="&#xE8EE;"
                             Style="{StaticResource MediaControlToggleButtonStyle}"
-                            Template="{StaticResource MediaControlToggleButtonTemplate}" />
+                            Template="{StaticResource DarkMediaControlToggleButtonTemplate}" />
                         <ToggleButton
                             x:Name="FullRepeatOneButton"
                             Click="RepeatOneButton_Click"
                             Content="&#xE8ED;"
                             Style="{StaticResource MediaControlToggleButtonStyle}"
-                            Template="{StaticResource MediaControlToggleButtonTemplate}" />
-                        <Button
-                            x:Name="FullLikeButton"
+                            Template="{StaticResource DarkMediaControlToggleButtonTemplate}" />
+                        <ToggleButton
+                            x:Name="FullLikeToggleButton"
                             Click="LikeButton_Click"
                             Content="&#xEB51;"
-                            Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource MediaControlButtonTemplate}" />
+                            IsEnabled="False"
+                            Style="{StaticResource MediaControlToggleButtonStyle}"
+                            Template="{StaticResource LikeToggleButtonStyle}" />
                         <Button
                             Content="&#xE712;"
                             Style="{StaticResource MediaControlButtonStyle}"
@@ -433,7 +434,7 @@
                             Content="&#xE7C5;"
                             Style="{StaticResource MediaControlButtonStyle}"
                             Template="{StaticResource MediaControlButtonTemplate}"
-                            ToolTipService.ToolTip="Carousel Mode" />
+                            ToolTipService.ToolTip="Carousel View" />
                         <Button
                             x:Name="FullScreenButton"
                             Click="FullScreenButton_Click"

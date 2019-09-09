@@ -59,6 +59,7 @@ Controls\PlaylistControl.xbf
 Dialogs\RenameDialog.xbf
 Dictionaries\BorderlessAutoSuggestBox.xbf
 Dictionaries\BorderlessTextBox.xbf
+Dictionaries\LikeToggleButton.xbf
 Dictionaries\MediaControlButton.xbf
 Dictionaries\MediaControlToggleButton.xbf
 Dictionaries\MediaSlider.xbf

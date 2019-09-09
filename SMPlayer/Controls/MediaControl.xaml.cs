@@ -186,16 +186,16 @@ namespace SMPlayer
                 }
             }
         }
-        public Button LikeButton
+        public ToggleButton LikeToggleButton
         {
             get
             {
                 switch (mode)
                 {
                     case MediaControlMode.Main:
-                        return MainLikeButton;
+                        return MainLikeToggleButton;
                     case MediaControlMode.Full:
-                        return FullLikeButton;
+                        return FullLikeToggleButton;
                     default:
                         return null;
                 }
@@ -280,8 +280,7 @@ namespace SMPlayer
         {
             if (music == null)
             {
-                MediaSlider.IsEnabled = false;
-                AlbumCover.Source = Helper.DefaultAlbumCover;
+                PathSet("");
                 return;
             }
             MediaSlider.IsEnabled = true;
@@ -291,6 +290,7 @@ namespace SMPlayer
             FullAlbumTextBlock.Text = music.Album;
             MediaSlider.Maximum = music.Duration;
             RightTimeTextBlock.Text = MusicDurationConverter.ToTime(music.Duration);
+            LikeToggleButton.IsEnabled = true;
             if (music.Favorite) LikeMusic(false);
             else DislikeMusic(false);
             if (Mode != MediaControlMode.Full)
@@ -461,18 +461,16 @@ namespace SMPlayer
 
         public void LikeMusic(bool isClick = true)
         {
-            LikeButton.Content = "\uEB52";
-            LikeButton.Foreground = Helper.RedBrush;
-            ToolTipService.SetToolTip(LikeButton, "Undo Like");
+            ToolTipService.SetToolTip(LikeToggleButton, "Undo Favorite");
             if (isClick) SetMusicFavorite(true);
+            else LikeToggleButton.IsChecked = true;
         }
 
         public void DislikeMusic(bool isClick = true)
         {
-            LikeButton.Content = "\uEB51";
-            LikeButton.Foreground = Helper.WhiteBrush;
-            ToolTipService.SetToolTip(LikeButton, "Like");
+            ToolTipService.SetToolTip(LikeToggleButton, "Set As Favorite");
             if (isClick) SetMusicFavorite(false);
+            else LikeToggleButton.IsChecked = false;
         }
 
         private void SetMusicFavorite(bool favorite)
@@ -484,8 +482,8 @@ namespace SMPlayer
 
         private void LikeButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = (Button)sender;
-            if (button.Content.ToString() == "\uEB51") LikeMusic();
+            var button = sender as ToggleButton;
+            if (button.IsChecked == true) LikeMusic();
             else DislikeMusic();
         }
 
@@ -659,6 +657,7 @@ namespace SMPlayer
             TitleTextBlock.Text = "";
             ArtistTextBlock.Text = "";
             RightTimeTextBlock.Text = "0:00";
+            LikeToggleButton.IsEnabled = false;
             MediaSlider.IsEnabled = false;
         }
 

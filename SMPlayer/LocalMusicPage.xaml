@@ -80,7 +80,7 @@
                                 Foreground="{ThemeResource SystemColorHighlightColor}"
                                 Glyph="&#xE767;"
                                 RelativePanel.AlignBottomWithPanel="True"
-                                Visibility="{x:Bind Source.IsPlaying, Converter={StaticResource MusicVisibilityConverter}}" />
+                                Visibility="{x:Bind Source.IsPlaying, Converter={StaticResource VisibilityConverter},Mode=OneWay}" />
                         </RelativePanel>
                     </Grid>
                 </DataTemplate>

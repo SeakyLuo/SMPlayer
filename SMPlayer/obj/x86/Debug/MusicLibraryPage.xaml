@@ -25,6 +25,7 @@
             Margin="10,10,10,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
+                                      
             AlternatingRowBackground="WhiteSmoke"
             AlternatingRowForeground="Gray"
             AreRowDetailsFrozen="False"
@@ -42,7 +43,6 @@
             HorizontalScrollBarVisibility="Visible"
             IsDoubleTapEnabled="True"
             IsReadOnly="True"
-                                                        
             SelectionMode="Extended"
                                                   
             VerticalScrollBarVisibility="Visible">
