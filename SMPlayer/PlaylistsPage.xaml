@@ -206,12 +206,11 @@
                     VerticalAlignment="Stretch"
                     Background="WhiteSmoke"
                     BorderThickness="0"
+                    Click="NewPlaylistButton_Click"
                     Content="&#xE710;"
                     FontFamily="Segoe MDL2 Assets"
                     FontSize="16"
-                    Click="NewPlaylistButton_Click"
-                    ToolTipService.ToolTip="Create New Playlist">
-                </Button>
+                    ToolTipService.ToolTip="Create New Playlist" />
             </controls:TabView.TabStartHeader>
 
             <controls:TabView.TabEndHeader>

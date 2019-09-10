@@ -283,7 +283,6 @@
       <RootProperty Name="Margin" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="Stretch" />
-      <RootProperty Name="VerticalAlignment" />
       <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.VisualStateGroup">
@@ -376,6 +375,7 @@
       <RootProperty Name="CanDrag" />
       <RootProperty Name="CanDragItems" />
       <RootProperty Name="CanReorderItems" />
+      <RootProperty Name="Opacity" />
       <RootProperty Name="ReorderMode" />
       <RootEvent Name="ContainerContentChanging" />
       <RootEvent Name="ItemClick" />
@@ -743,6 +743,10 @@
     </RootType>
     <RootType FullName="SMPlayer.MusicListPage" />
     <RootType FullName="SMPlayer.MyFavoritesPage" />
+    <RootType FullName="Windows.UI.Xaml.Media.ImageBrush">
+      <RootProperty Name="ImageSource" />
+      <RootProperty Name="Stretch" />
+    </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.BladeView">
       <RootProperty Name="BladeMode" />
       <RootProperty Name="Resources" />
@@ -763,9 +767,11 @@
       <RootProperty Name="RequestedTheme" />
     </RootType>
     <RootType FullName="SMPlayer.PlaylistControl">
-      <RootProperty Name="Margin" />
+      <RootProperty Name="Padding" />
       <RootProperty Name="AlternatingRowColor" />
+      <RootProperty Name="Background" />
       <RootProperty Name="Theme" />
+      <RootProperty Name="Margin" />
       <RootProperty Name="AllowReorder" />
       <RootProperty Name="ItemsSource" />
       <RootProperty Name="Header" />

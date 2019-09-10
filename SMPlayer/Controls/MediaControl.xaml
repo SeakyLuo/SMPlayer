@@ -205,7 +205,7 @@
         </Grid>
         <Grid
             x:Name="FullMediaControlGrid"
-            Background="Black"
+            Background="{x:Bind Background}"
             Opacity="0.75"
             RequestedTheme="Dark"
             Visibility="Visible">

@@ -12,29 +12,29 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Grid.Resources>
-            <media:BackdropBlurBrush x:Key="AlbumBlurBrush" Amount="50" />
-        </Grid.Resources>
+        <Grid.Background>
+            <ImageBrush ImageSource="{x:Bind FullMediaControl.AlbumCover.Source, Mode=OneWay}" Stretch="UniformToFill" />
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Image
-            x:Name="LargeAlbumCover"
-            Grid.RowSpan="2"
-            VerticalAlignment="Center"
-            Source="{x:Bind FullMediaControl.AlbumCover.Source, Mode=OneWay}"
-            Stretch="UniformToFill" />
-        <Grid Background="{StaticResource AlbumBlurBrush}">
-            <local:MediaControl x:Name="FullMediaControl" Mode="Full" />
+        <Grid Grid.RowSpan="2">
+            <Grid.Background>
+                <AcrylicBrush
+                    FallbackColor="Black"
+                    TintColor="Black"
+                    TintOpacity="0.75" />
+            </Grid.Background>
         </Grid>
+        <local:MediaControl x:Name="FullMediaControl" Mode="Full" />
         <controls:BladeView
             x:Name="NowPlayingFullBladeView"
             Grid.Row="1"
             BladeMode="Fullscreen">
             <controls:BladeView.Resources>
                 <Style x:Key="NowPlayingFullBladeItemStyle" TargetType="controls:BladeItem">
-                    <Setter Property="Background" Value="{StaticResource AlbumBlurBrush}" />
+                    <Setter Property="Background" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="IsOpen" Value="True" />
                     <Setter Property="TitleBarVisibility" Value="Collapsed" />
@@ -51,13 +51,12 @@
                 </Style>
             </controls:BladeView.Resources>
             <controls:BladeItem x:Name="PlaylistBladeItem" Style="{StaticResource NowPlayingFullBladeItemStyle}">
-                <Grid Background="Transparent">
-                    <local:PlaylistControl
-                        x:Name="FullPlaylistControl"
-                        Margin="10,10,10,0"
-                        AlternatingRowColor="False"
-                        Theme="Dark" />
-                </Grid>
+                <local:PlaylistControl
+                    x:Name="FullPlaylistControl"
+                    Padding="10,10,10,0"
+                    AlternatingRowColor="False"
+                    Background="Transparent"
+                    Theme="Dark" />
             </controls:BladeItem>
             <controls:BladeItem
                 x:Name="MusicPropertyBladeItem"
@@ -93,10 +92,7 @@
                             ToolTipService.ToolTip="Reset" />
                     </RelativePanel>
                     <ScrollViewer Grid.Row="1">
-                        <Grid
-                            Padding="20,0"
-                            Background="{StaticResource AlbumBlurBrush}"
-                            RequestedTheme="Dark">
+                        <Grid Padding="20,0" RequestedTheme="Dark">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />

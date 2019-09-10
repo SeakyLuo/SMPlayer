@@ -22,7 +22,9 @@
     <ListView
         x:Name="SongsListView"
         Grid.Row="1"
+        Padding="{x:Bind Padding}"
         AllowDrop="True"
+        Background="{x:Bind Background}"
         CanDrag="True"
         CanDragItems="True"
         CanReorderItems="True"
@@ -31,6 +33,7 @@
         IsItemClickEnabled="True"
         ItemClick="SongsListView_ItemClick"
         ItemContainerStyle="{StaticResource PlaylistListViewItemStyle}"
+        Opacity="{x:Bind Opacity}"
         ReorderMode="Enabled"
         SelectionMode="None">
         <ListView.ItemTemplate>

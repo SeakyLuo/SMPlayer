@@ -407,7 +407,7 @@
                                                     KeyTime="0:0:0.167"
                                                     Value="0" />
                                             </DoubleAnimationUsingKeyFrames>
-     
+
                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PrimaryItemsControl" Storyboard.TargetProperty="Opacity">
                                                 <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="1" />
                                                 <SplineDoubleKeyFrame
