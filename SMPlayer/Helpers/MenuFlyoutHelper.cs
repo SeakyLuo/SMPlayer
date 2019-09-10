@@ -268,7 +268,7 @@ namespace SMPlayer
             else if (obj is ArtistView) return (obj as ArtistView).GetSongs();
             else if (obj is AlbumView) return (obj as AlbumView).Songs;
             else if (obj is Playlist) return (obj as Playlist).Songs;
-            else if (obj is GridFolderView) return (obj as GridFolderView).GetSongs();
+            else if (obj is GridFolderView) return (obj as GridFolderView).Songs;
             else if (obj is GridMusicView) return (obj as GridMusicView).Source;
             return null;
         }

@@ -36,18 +36,14 @@ namespace SMPlayer
             Setup();
         }
 
-        private void GridAlbumViewItem_PointerEntered(object sender, PointerRoutedEventArgs e)
+        private void GridViewItem_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            //var shadow = (DropShadowPanel)sender;
-            //shadow.ShadowOpacity = 0;
-            VisualStateManager.GoToState(this, "PointerOver", true);
+            VisualStateManager.GoToState(sender as Control, "PointerOver", true);
         }
 
-        private void GridAlbumViewItem_PointerExited(object sender, PointerRoutedEventArgs e)
+        private void GridViewItem_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            //var shadow = (DropShadowPanel)sender;
-            //shadow.ShadowOpacity = 1;
-            VisualStateManager.GoToState(this, "Normal", true);
+            VisualStateManager.GoToState(sender as Control, "Normal", true);
         }
 
         private async void Setup()
@@ -102,7 +98,18 @@ namespace SMPlayer
             MenuFlyoutHelper.SetPlaylistMenu(sender);
         }
 
-        private void Grid_Tapped(object sender, TappedRoutedEventArgs e)
+        private void PlayAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            var data = (sender as Button).DataContext as AlbumView;
+            MediaHelper.ShuffleAndPlay(data.Songs);
+        }
+        private void AddToButton_Click(object sender, RoutedEventArgs e)
+        {
+            var data = (sender as Button).DataContext as AlbumView;
+            new MenuFlyoutHelper().GetAddToPlaylistsMenuFlyout(data.Name).ShowAt(sender as FrameworkElement);
+        }
+
+        private void GridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Frame.Navigate(typeof(AlbumPage), (sender as FrameworkElement).DataContext);
         }

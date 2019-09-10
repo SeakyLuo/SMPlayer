@@ -72,7 +72,11 @@
                         Content="&#xE892;"
                         Style="{StaticResource MediaControlButtonStyle}"
                         Template="{StaticResource MediaControlButtonTemplate}"
-                        ToolTipService.ToolTip="Previous" />
+                        ToolTipService.ToolTip="Previous">
+                        <Button.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="Left" Modifiers="Control" />
+                        </Button.KeyboardAccelerators>
+                    </Button>
                     <Button
                         x:Name="MainPlayButton"
                         Width="48"
@@ -94,7 +98,11 @@
                         Content="&#xE893;"
                         Style="{StaticResource MediaControlButtonStyle}"
                         Template="{StaticResource MediaControlButtonTemplate}"
-                        ToolTipService.ToolTip="Next" />
+                        ToolTipService.ToolTip="Next">
+                        <Button.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="Right" Modifiers="Control" />
+                        </Button.KeyboardAccelerators>
+                    </Button>
                 </StackPanel>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -300,7 +308,11 @@
                             Content="&#xE892;"
                             Style="{StaticResource MediaControlButtonStyle}"
                             Template="{StaticResource MediaControlButtonTemplate}"
-                            ToolTipService.ToolTip="Previous" />
+                            ToolTipService.ToolTip="Previous">
+                            <Button.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="Left" Modifiers="Control" />
+                            </Button.KeyboardAccelerators>
+                        </Button>
                         <Button
                             x:Name="FullPlayButton"
                             Width="48"
@@ -321,7 +333,11 @@
                             Content="&#xE893;"
                             Style="{StaticResource MediaControlButtonStyle}"
                             Template="{StaticResource MediaControlButtonTemplate}"
-                            ToolTipService.ToolTip="Next" />
+                            ToolTipService.ToolTip="Next">
+                            <Button.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="Right" Modifiers="Control" />
+                            </Button.KeyboardAccelerators>
+                        </Button>
                         <Button
                             Content="&#xE15D;"
                             Style="{StaticResource MediaControlButtonStyle}"

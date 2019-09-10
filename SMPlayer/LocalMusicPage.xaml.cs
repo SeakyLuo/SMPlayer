@@ -90,5 +90,14 @@ namespace SMPlayer
                 }
             });
         }
+        private void GridViewItem_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(sender as Control, "PointerOver", true);
+        }
+
+        private void GridViewItem_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(sender as Control, "Normal", true);
+        }
     }
 }

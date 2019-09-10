@@ -72,7 +72,8 @@ namespace SMPlayer
             var hashset = MusicLibraryPage.AllSongs.ToHashSet();
             foreach (var music in playlist)
             {
-                var target = hashset.First((m) => m.Name == music);
+                var target = hashset.FirstOrDefault((m) => m.Name == music);
+                if (target == null) continue; // Reset Path Cause This
                 target.IsPlaying = target.Equals(settings.LastMusic);
                 await AddMusic(target);
             }

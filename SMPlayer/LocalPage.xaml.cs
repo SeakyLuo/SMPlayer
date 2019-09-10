@@ -57,7 +57,6 @@ namespace SMPlayer
         private void LocalNavigationView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
         {
             if (History.Count == 1) return;
-            // Go Back To the Page that has more items
             var tree = History.Pop();
             int last;
             PageStackEntry page;
@@ -70,28 +69,16 @@ namespace SMPlayer
             LocalFrame.GoBack();
             var info = History.Peek().GetTreeInfo();
             SetText(info);
-            PopToTargetPage(page, last, IsBackToMusicPage(info) ? "LocalMusicPage" : "LocalFoldersPage");
-            LocalFrame.GoBack();
-            SetBackButtonVisibility();
-        }
-
-        private void PopToTargetPage(PageStackEntry page, int last, string target)
-        {
-            if (page.SourcePageType.Name == target) return;
-            int i;
-            for (i = last - 1; i > 0; i--)
+            switch (page.SourcePageType.Name)
             {
-                if (LocalFrame.BackStack[i].SourcePageType.Name == target)
-                {
-                    last = i;
-                    while (last > i)
-                    {
-                        LocalFrame.BackStack.RemoveAt(last);
-                        last--;
-                    }
+                case "LocalFoldersPage":
+                    LocalFoldersItem.IsSelected = true;
                     break;
-                }
+                case "LocalMusicPage":
+                    LocalSongsItem.IsSelected = true;
+                    break;
             }
+            SetBackButtonVisibility();
         }
 
         private void LocalListViewItem_Tapped(object sender, TappedRoutedEventArgs e)
@@ -115,9 +102,9 @@ namespace SMPlayer
         private void SetText(TreeInfo info)
         {
             TitleTextBlock.Text = string.IsNullOrEmpty(info.Directory) ? "No Music" : info.Directory;
-            LocalFoldersItem.Content = string.Format("Folders ({0})", info.Folders);
+            LocalFoldersItem.Content = $"Folders ({info.Folders})";
             LocalFoldersItem.IsEnabled = info.Folders != 0;
-            LocalSongsItem.Content = string.Format("Songs ({0})", info.Songs);
+            LocalSongsItem.Content = $"Songs ({info.Songs})";
             LocalSongsItem.IsEnabled = info.Songs != 0;
         }
 

@@ -32,20 +32,19 @@
             Grid.Row="1"
             Margin="10"
             IsItemClickEnabled="True"
+                                          
+            ItemContainerStyle="{StaticResource DropShadowGridViewItemStyle}"
                                          
             SelectionMode="None">
             <GridView.ItemTemplate>
                 <DataTemplate                            >
-                    <UserControl x:ConnectionId='6'>
-                        <Grid x:ConnectionId='7'
+                    <UserControl x:ConnectionId='6'                                                                                        >
+                        <Grid
                             Width="180"
                             Height="240"
-                            Margin="10"
-                                                                             
-                                                                           
-                                                >
+                            Margin="10">
                             <Grid.ContextFlyout>
-                                <MenuFlyout x:ConnectionId='8'                              />
+                                <MenuFlyout x:ConnectionId='7'                              />
                             </Grid.ContextFlyout>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -53,15 +52,31 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <controls:DropShadowPanel
-                                x:Name="AlbumShadowPanel"
+                                x:Name="ShadowPanel"
                                 VerticalContentAlignment="Top"
                                 BlurRadius="25"
                                 OffsetX="5"
                                 OffsetY="5"
                                 ShadowOpacity="0"
                                 Color="Gray">
-                                <Image x:ConnectionId='12'                         />
+                                <Image x:ConnectionId='14'                         />
                             </controls:DropShadowPanel>
+                            <StackPanel
+                                x:Name="ButtonStackPanel"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal"
+                                Visibility="Collapsed">
+                                <Button x:ConnectionId='12'
+                                                               
+                                    Content="&#xE768;"
+                                    Style="{StaticResource HoverButtonStyle}"
+                                    ToolTipService.ToolTip="Play All" />
+                                <Button x:ConnectionId='13'
+                                                             
+                                    Content="&#xE710;"
+                                    Style="{StaticResource HoverButtonStyle}"
+                                    ToolTipService.ToolTip="Add To" />
+                            </StackPanel>
                             <TextBlock x:ConnectionId='10'
                                 Grid.Row="1"
                                 Margin="0,5,0,3"
@@ -79,17 +94,14 @@
                                 TextAlignment="Left" />
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
-                                    <VisualState x:Name="Normal">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="AlbumShadowPanel" Storyboard.TargetProperty="ShadowOpacity">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="0" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
+                                    <VisualState x:Name="Normal" />
                                     <VisualState x:Name="PointerOver">
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="AlbumShadowPanel" Storyboard.TargetProperty="ShadowOpacity">
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ShadowPanel" Storyboard.TargetProperty="ShadowOpacity">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="1" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonStackPanel" Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>

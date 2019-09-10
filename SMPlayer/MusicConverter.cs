@@ -135,6 +135,27 @@ namespace SMPlayer
         }
     }
 
+    class ColorConverter : Windows.UI.Xaml.Data.IValueConverter
+    {
+        public static Windows.UI.Xaml.Media.SolidColorBrush StringToColor(string color)
+        {
+            switch (color)
+            {
+                case "Gray": return new Windows.UI.Xaml.Media.SolidColorBrush(Windows.UI.Colors.Gray);
+                default: return Helper.BlackBrush;
+            }
+        }
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return value.Equals(true) ? Helper.GetHighlightBrush() : StringToColor((string)parameter);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
+
     class RowColorConverter : Windows.UI.Xaml.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

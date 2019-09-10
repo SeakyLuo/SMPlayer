@@ -15,6 +15,8 @@
                 <ResourceDictionary Source="Dictionaries/MediaControlToggleButton.xaml" />
                 <ResourceDictionary Source="Dictionaries/PlaylistCommandBar.xaml" />
                 <ResourceDictionary Source="Dictionaries/LikeToggleButton.xaml" />
+                <ResourceDictionary Source="Dictionaries/HoverButton.xaml" />
+                <ResourceDictionary Source="Dictionaries/DropShadowGridViewItem.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style x:Key="TitleTextBlockStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="40" />
@@ -47,6 +49,7 @@
             <local:ArtistAlbumInfoConverter x:Key="ArtistAlbumInfoConverter" />
             <local:MusicIsPlayingConverter x:Key="MusicIsPlayingConverter" />
             <local:PlaylistRowColorConverter x:Key="PlaylistRowColorConverter" />
+            <local:ColorConverter x:Key="ColorConverter" />
             <local:RowColorConverter x:Key="RowColorConverter" />
             <local:SongCountConverter x:Key="SongCountConverter" />
             <local:EnabledConverter x:Key="EnabledConverter" />

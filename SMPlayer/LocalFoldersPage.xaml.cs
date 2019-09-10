@@ -66,5 +66,26 @@ namespace SMPlayer
         {
             MenuFlyoutHelper.SetPlaylistMenu(sender);
         }
+
+        private void GridViewItem_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(sender as Control, "PointerOver", true);
+        }
+
+        private void GridViewItem_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(sender as Control, "Normal", true);
+        }
+
+        private void PlayAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            var data = (sender as Button).DataContext as GridFolderView;
+            MediaHelper.ShuffleAndPlay(data.Songs);
+        }
+        private void AddToButton_Click(object sender, RoutedEventArgs e)
+        {
+            var data = (sender as Button).DataContext as GridFolderView;
+            new MenuFlyoutHelper().GetAddToPlaylistsMenuFlyout(data.Name).ShowAt(sender as FrameworkElement);
+        }
     }
 }

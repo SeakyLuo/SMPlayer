@@ -17,13 +17,23 @@ namespace SMPlayer.Models
         public BitmapImage Third { get; set; }
         public BitmapImage Fourth { get; set; }
         public BitmapImage LargeThumbnail { get; set; }
+        public List<Music> Songs
+        {
+            get
+            {
+                if (songs == null)
+                    songs = Tree.Flatten();
+                return songs;
+            }
+        }
+        private List<Music> songs;
         private FolderTree Tree;
         public GridFolderView() { }
 
         public async Task Init(FolderTree tree)
         {
             Tree = tree;
-            List<BitmapImage> thumbnails = new List<BitmapImage>();
+            List<BitmapImage> thumbnails = new List<BitmapImage>(4);
             var folder = await StorageFolder.GetFolderFromPathAsync(tree.Path);
             Name = folder.DisplayName;
             MusicCount = "Songs: " + tree.Files.Count;
@@ -47,11 +57,6 @@ namespace SMPlayer.Models
                 Third = thumbnails[2];
                 Fourth = thumbnails[3];
             }
-        }
-
-        public List<Music> GetSongs()
-        {
-            return Tree.Flatten();
         }
 
         public override bool Equals(object obj)

@@ -22,7 +22,11 @@ Auto Scrolling Text.
 
 Shy header.
 
+Show in explorer.
+
 # TO FIX
 Full Screen.
 
 PlayCount not read.
+
+Overlap HamburgerButton and NewTab.
