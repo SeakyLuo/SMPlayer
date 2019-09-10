@@ -38,14 +38,16 @@ namespace SMPlayer
 
         private void GridAlbumViewItem_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            var shadow = (DropShadowPanel)sender;
-            shadow.ShadowOpacity = 0;
+            //var shadow = (DropShadowPanel)sender;
+            //shadow.ShadowOpacity = 0;
+            VisualStateManager.GoToState(this, "PointerOver", true);
         }
 
         private void GridAlbumViewItem_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            var shadow = (DropShadowPanel)sender;
-            shadow.ShadowOpacity = 1;
+            //var shadow = (DropShadowPanel)sender;
+            //shadow.ShadowOpacity = 1;
+            VisualStateManager.GoToState(this, "Normal", true);
         }
 
         private async void Setup()

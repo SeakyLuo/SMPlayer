@@ -681,6 +681,16 @@ namespace SMPlayer
                 MenuFlyoutHelper.InsertMusicItem(sender);
         }
 
+        private void MainMusicInfoGrid_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(this, "PointerOver", true);
+        }
+
+        private void MainMusicInfoGrid_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(this, "Normal", true);
+        }
+
         public void Pause()
         {
             PauseMusic();

@@ -42,6 +42,16 @@ namespace SMPlayer
         {
             if (this.Flyout != null) Flyout.ShowAt(sender as FrameworkElement);
         }
+
+        private void Root_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(this, "PointerOver", true);
+        }
+
+        private void Root_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(this, "Normal", true);
+        }
     }
 
     public enum IconTextButtonLabelPosition

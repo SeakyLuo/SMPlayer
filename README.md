@@ -23,8 +23,6 @@ Auto Scrolling Text.
 Shy header.
 
 # TO FIX
-VisualStateManager. (GridAlbumView, MusicGridInfo)
-
 Full Screen.
 
 PlayCount not read.

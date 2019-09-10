@@ -9,8 +9,11 @@
 
     <Grid
         x:Name="Root"
+        Padding="{x:Bind Padding}"
         Background="{x:Bind Background}"
         CornerRadius="{x:Bind CornerRadius}"
+        PointerEntered="Root_PointerEntered"
+        PointerExited="Root_PointerExited"
         Tapped="Root_Tapped">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -44,11 +47,8 @@
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="CommonStates">
                 <VisualState x:Name="Normal">
-                    <VisualState.Setters>
-                        <Setter Target="Root.CornerRadius" Value="20" />
-                    </VisualState.Setters>
                     <Storyboard>
-                        <PointerUpThemeAnimation Storyboard.TargetName="ContentRoot" />
+                        <PointerUpThemeAnimation Storyboard.TargetName="LabelTextBlock" />
                     </Storyboard>
                 </VisualState>
                 <VisualState x:Name="PointerOver">

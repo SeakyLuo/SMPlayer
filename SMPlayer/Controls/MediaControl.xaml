@@ -22,9 +22,11 @@
             <Grid
                 x:Name="MainMusicInfoGrid"
                 Grid.Column="0"
-                Margin="0"
+                Padding="0,0,5,0"
                 HorizontalAlignment="Left"
                 Background="Transparent"
+                PointerEntered="MainMusicInfoGrid_PointerEntered"
+                PointerExited="MainMusicInfoGrid_PointerExited"
                 Tapped="MainMusicInfoGrid_Tapped">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
@@ -58,21 +60,13 @@
                     VerticalAlignment="Top"
                     FontSize="18"
                     FontWeight="Bold" />
-                <VisualStateManager.VisualStateGroups>
-                    <VisualStateGroup x:Name="CommonStates">
-                        <VisualState x:Name="PointerOver">
-                            <Storyboard>
-                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MainMusicInfoGrid" Storyboard.TargetProperty="Background">
-                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPointerOverBackgroundThemeBrush}" />
-                                </ObjectAnimationUsingKeyFrames>
-                            </Storyboard>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateManager.VisualStateGroups>
             </Grid>
 
             <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <StackPanel
+                    Margin="5"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
                     <Button
                         Click="PrevButton_Click"
                         Content="&#xE892;"
@@ -113,7 +107,6 @@
                         Margin="10,0,20,0"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI"
-                        RelativePanel.AlignLeftWithPanel="True"
                         Text="0:00" />
                     <Slider
                         x:Name="MainMediaSlider"
@@ -125,8 +118,6 @@
                         ManipulationStarted="MediaSlider_ManipulationStarted"
                         ManipulationStarting="MediaSlider_ManipulationStarting"
                         Minimum="0"
-                        RelativePanel.LeftOf="RightTimeTextBlock"
-                        RelativePanel.RightOf="LeftTimeTextBlock"
                         Style="{StaticResource MediaProgressSliderStyle}"
                         ThumbToolTipValueConverter="{StaticResource MusicDurationConverter}"
                         ValueChanged="MediaSlider_ValueChanged" />
@@ -136,7 +127,6 @@
                         Margin="20,0,10,0"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI"
-                        RelativePanel.AlignRightWithPanel="True"
                         Text="0:00" />
                 </Grid>
             </StackPanel>
@@ -453,5 +443,41 @@
                 </RelativePanel>
             </Grid>
         </Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal">
+                    <Storyboard>
+                        <PointerUpThemeAnimation Storyboard.TargetName="MainMusicInfoGrid" />
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="PointerOver">
+                    <VisualState.Setters>
+                        <Setter Target="MainMusicInfoGrid.(RevealBrush.State)" Value="PointerOver" />
+                        <Setter Target="MainMusicInfoGrid.Background" Value="{ThemeResource AppBarButtonRevealBackgroundPointerOver}" />
+                    </VisualState.Setters>
+                    <Storyboard>
+                        <PointerUpThemeAnimation Storyboard.TargetName="MainMusicInfoGrid" />
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+            <VisualStateGroup x:Name="WidthChange">
+                <VisualState x:Name="NarrowLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainAlbumCover.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="WideLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="600" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainAlbumCover.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </UserControl>

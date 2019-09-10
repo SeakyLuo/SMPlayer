@@ -181,6 +181,7 @@
       <RootProperty Name="Resources" />
       <RootProperty Name="ColumnDefinitions" />
       <RootProperty Name="Background" />
+      <RootProperty Name="Padding" />
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="BorderThickness" />
@@ -196,7 +197,8 @@
       <RootProperty Name="RequestedTheme" />
       <RootProperty Name="Opacity" />
       <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="Padding" />
+      <RootEvent Name="PointerEntered" />
+      <RootEvent Name="PointerExited" />
       <RootEvent Name="Tapped" />
       <RootEvent Name="Loaded" />
       <RootMethod Name="GetRow" />
@@ -226,6 +228,12 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.DataTemplate">
       <RootProperty Name="Template" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.UserControl">
+      <RootProperty Name="Content" />
+      <RootProperty Name="Resources" />
+      <RootEvent Name="Loaded" />
+      <RootEvent Name="Loading" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.VisualStateManager">
       <RootMethod Name="GetVisualStateGroups" />
@@ -261,6 +269,7 @@
     <RootType FullName="Windows.UI.Xaml.VisualState">
       <RootProperty Name="Storyboard" />
       <RootProperty Name="Setters" />
+      <RootProperty Name="StateTriggers" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.Animation.Storyboard">
       <RootProperty Name="Children" />
@@ -382,12 +391,6 @@
       <RootProperty Name="ScaleY" />
     </RootType>
     <RootType FullName="SMPlayer.ArtistsPage" />
-    <RootType FullName="Windows.UI.Xaml.Controls.UserControl">
-      <RootProperty Name="Content" />
-      <RootProperty Name="Resources" />
-      <RootEvent Name="Loaded" />
-      <RootEvent Name="Loading" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Viewbox">
       <RootProperty Name="Height" />
       <RootProperty Name="HorizontalAlignment" />
@@ -395,8 +398,6 @@
       <RootProperty Name="Child" />
       <RootProperty Name="Width" />
       <RootProperty Name="Margin" />
-      <RootProperty Name="MaxWidth" />
-      <RootProperty Name="MaxHeight" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Automation.AutomationProperties">
       <RootMethod Name="GetAccessibilityView" />
@@ -425,8 +426,9 @@
     <RootType FullName="Windows.UI.Xaml.Media.Animation.PointerDownThemeAnimation" />
     <RootType FullName="Windows.UI.Xaml.Media.Animation.PointerUpThemeAnimation" />
     <RootType FullName="SMPlayer.IconTextButton">
-      <RootProperty Name="Margin" />
+      <RootProperty Name="Padding" />
       <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="FontSize" />
       <RootProperty Name="FontWeight" />
       <RootProperty Name="LabelPosition" />
@@ -599,6 +601,8 @@
       <RootProperty Name="DefaultLabelPosition" />
       <RootProperty Name="IsOpen" />
       <RootProperty Name="PrimaryCommands" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Style" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBar">
@@ -686,6 +690,9 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Input.KeyboardAccelerator">
       <RootProperty Name="Key" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.AdaptiveTrigger">
+      <RootProperty Name="MinWindowWidth" />
     </RootType>
     <RootType FullName="SMPlayer.MediaControl">
       <RootProperty Name="Mode" />
@@ -785,7 +792,6 @@
       <RootProperty Name="CanReorderItems" />
       <RootProperty Name="IsCloseButtonOverlay" />
       <RootProperty Name="ItemsSource" />
-      <RootProperty Name="SelectedTabWidth" />
       <RootProperty Name="SelectionMode" />
       <RootProperty Name="TabNavigation" />
       <RootProperty Name="TabWidthBehavior" />

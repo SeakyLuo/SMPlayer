@@ -225,6 +225,7 @@ namespace SMPlayer
 
         public static void UpdateTile(Music music)
         {
+            if (Thumbnail == null) return;
             string uri = Thumbnail.Path;
             var tileContent = new TileContent()
             {

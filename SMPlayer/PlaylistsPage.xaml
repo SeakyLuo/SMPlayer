@@ -30,7 +30,6 @@
             DragItemsCompleted="PlaylistTabView_DragItemsCompleted"
             IsCloseButtonOverlay="False"
             ItemsSource="{x:Bind playlists, Mode=TwoWay}"
-            SelectedTabWidth="200"
             SelectionChanged="PlaylistTabView_SelectionChanged"
             SelectionMode="Single"
             TabClosing="PlaylistTabView_TabClosing"
@@ -43,7 +42,7 @@
             </controls:TabView.Resources>
             <controls:TabView.ItemHeaderTemplate>
                 <DataTemplate x:DataType="data:Playlist">
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Background="WhiteSmoke" Orientation="Horizontal">
                         <StackPanel.ContextFlyout>
                             <MenuFlyout>
                                 <MenuFlyoutItem
@@ -86,6 +85,7 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
@@ -93,34 +93,39 @@
                                     </Grid.ColumnDefinitions>
                                     <Image
                                         x:Name="PlaylistCover"
-                                        Grid.RowSpan="4"
+                                        Grid.RowSpan="3"
                                         Width="180"
                                         Height="180"
                                         Margin="0,0,20,0"
                                         Loaded="PlaylistCover_Loaded"
                                         Source="Assets/monotone_bg_wide.png" />
                                     <TextBlock
+                                        x:Name="PlaylistNameTextBlock"
                                         Grid.Column="1"
                                         FontSize="36"
                                         Style="{StaticResource HeaderTextBlockStyle}"
                                         Text="{x:Bind Name, Mode=OneWay}" />
                                     <TextBlock
+                                        x:Name="PlaylistInfoTextBlock"
                                         Grid.Row="1"
                                         Grid.Column="1"
                                         Margin="0,5"
                                         Text="{x:Bind Songs, Converter={StaticResource SongCountConverter}, Mode=OneWay}" />
                                     <CommandBar
+                                        x:Name="PlaylistCommandBar"
                                         Grid.Row="2"
                                         Grid.Column="1"
+                                        Margin="-10,0,0,0"
+                                        VerticalAlignment="Bottom"
                                         Background="Transparent"
                                         DefaultLabelPosition="Right"
                                         Style="{StaticResource PlaylistCommandBarStyle}">
                                         <AppBarButton
+                                            Margin="0,0,0,0"
                                             Click="Shuffle_Click"
                                             Icon="Shuffle"
                                             IsEnabled="{x:Bind Songs, Converter={StaticResource EnabledConverter}, Mode=OneWay}"
                                             Label="Shuffle"
-                                            Margin="-10,0,0,0"
                                             Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Shuffle Playlist" />
                                         <AppBarButton
@@ -137,24 +142,56 @@
                                             Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Rename Playlist" />
                                         <AppBarButton
-                                            Click="Delete_Click"
-                                            Icon="Delete"
-                                            Label="Delete"
+                                            Click="SortBy_Click"
+                                            Icon="Sort"
+                                            Label="Sort By"
                                             Style="{StaticResource PlaylistAppBarButtonStyle}"
-                                            ToolTipService.ToolTip="Delete Playlist" />
+                                            ToolTipService.ToolTip="Sort Playlist" />
                                         <AppBarButton
                                             Icon="Pin"
                                             Label="Pin to Start"
                                             Style="{StaticResource PlaylistAppBarButtonStyle}"
                                             ToolTipService.ToolTip="Pin Playlist to the Start Menu" />
                                         <AppBarButton
-                                            Click="SortBy_Click"
-                                            Icon="Sort"
-                                            Label="Sort By"
+                                            Click="Delete_Click"
+                                            Icon="Delete"
+                                            Label="Delete"
                                             Style="{StaticResource PlaylistAppBarButtonStyle}"
-                                            ToolTipService.ToolTip="Sort Playlist" />
+                                            ToolTipService.ToolTip="Delete Playlist" />
                                     </CommandBar>
                                 </Grid>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="WidthChange">
+                                        <VisualState x:Name="NarrowLayout">
+                                            <VisualState.StateTriggers>
+                                                <AdaptiveTrigger MinWindowWidth="0" />
+                                            </VisualState.StateTriggers>
+                                            <VisualState.Setters>
+                                                <Setter Target="PlaylistCover.(Grid.RowSpan)" Value="1" />
+                                                <Setter Target="PlaylistNameTextBlock.(Grid.Column)" Value="0" />
+                                                <Setter Target="PlaylistInfoTextBlock.(Grid.Column)" Value="0" />
+                                                <Setter Target="PlaylistCommandBar.(Grid.Column)" Value="0" />
+                                                <Setter Target="PlaylistNameTextBlock.(Grid.Row)" Value="1" />
+                                                <Setter Target="PlaylistInfoTextBlock.(Grid.Row)" Value="2" />
+                                                <Setter Target="PlaylistCommandBar.(Grid.Row)" Value="3" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="WideLayout">
+                                            <VisualState.StateTriggers>
+                                                <AdaptiveTrigger MinWindowWidth="1000" />
+                                            </VisualState.StateTriggers>
+                                            <VisualState.Setters>
+                                                <Setter Target="PlaylistCover.(Grid.RowSpan)" Value="4" />
+                                                <Setter Target="PlaylistNameTextBlock.(Grid.Column)" Value="1" />
+                                                <Setter Target="PlaylistInfoTextBlock.(Grid.Column)" Value="1" />
+                                                <Setter Target="PlaylistCommandBar.(Grid.Column)" Value="1" />
+                                                <Setter Target="PlaylistNameTextBlock.(Grid.Row)" Value="0" />
+                                                <Setter Target="PlaylistInfoTextBlock.(Grid.Row)" Value="1" />
+                                                <Setter Target="PlaylistCommandBar.(Grid.Row)" Value="2" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
                             </controls:ScrollHeader>
                         </local:PlaylistControl.Header>
                     </local:PlaylistControl>
@@ -165,14 +202,15 @@
                 <Button
                     x:Name="NewPlaylistButton"
                     Width="48"
-                    Height="{StaticResource TabViewItemHeaderMinHeight}"
-                    Background="Transparent"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="WhiteSmoke"
+                    BorderThickness="0"
+                    Content="&#xE710;"
+                    FontFamily="Segoe MDL2 Assets"
+                    FontSize="16"
                     Click="NewPlaylistButton_Click"
-                    Style="{StaticResource ButtonRevealStyle}"
                     ToolTipService.ToolTip="Create New Playlist">
-                    <Viewbox MaxWidth="16" MaxHeight="16">
-                        <SymbolIcon Symbol="Add" />
-                    </Viewbox>
                 </Button>
             </controls:TabView.TabStartHeader>
 
@@ -181,7 +219,6 @@
                     x:Name="EditPlaylistButton"
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
-                    Margin="-1,0,0,0"
                     Background="Transparent"
                     BorderThickness="1"
                     Click="EditPlaylistButton_Click"
@@ -195,8 +232,9 @@
             <controls:TabView.Footer>
                 <local:IconTextButton
                     x:Name="PlayListTabViewFooter"
-                    Margin="0,5,10,5"
+                    Padding="10,5"
                     HorizontalAlignment="Right"
+                    VerticalAlignment="Stretch"
                     FontSize="16"
                     FontWeight="SemiBold"
                     LabelPosition="Left"
