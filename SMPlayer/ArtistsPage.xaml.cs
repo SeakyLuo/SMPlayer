@@ -29,7 +29,7 @@ namespace SMPlayer
     {
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
         private bool SetupStarted = false;
-        private int Notified = 0;
+        private NotifiedStatus Notified = NotifiedStatus.Ready;
 
         public ArtistsPage()
         {
@@ -37,15 +37,19 @@ namespace SMPlayer
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
-            Setup();
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Artists.Count == 0) Setup();
         }
 
         private async void Setup()
         {
             if (SetupStarted) return;
-            if (Notified == 1)
+            if (Notified == NotifiedStatus.Finished)
             {
-                Notified = 0;
+                Notified = NotifiedStatus.Ready;
                 return;
             }
             SetupStarted = true;
@@ -73,14 +77,14 @@ namespace SMPlayer
             foreach (var artist in artists.OrderBy((a) => a.Name)) Artists.Add(artist);
             ArtistsCountTextBlock.Text = "All Artists: " + Artists.Count;
             FindMusicAndSetPlaying(MediaHelper.CurrentMusic);
-            if (Notified == 2) Notified = 1;
+            if (Notified == NotifiedStatus.Started) Notified = NotifiedStatus.Finished;
             ArtistProgressBar.Visibility = Visibility.Collapsed;
             SetupStarted = false;
         }
 
         public void PathSet(string path)
         {
-            Notified = 2;
+            Notified = NotifiedStatus.Started;
             Setup();
         }
 

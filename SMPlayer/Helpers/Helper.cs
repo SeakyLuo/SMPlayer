@@ -41,8 +41,17 @@ namespace SMPlayer
         public static SolidColorBrush RedBrush = new SolidColorBrush(Colors.Red);
         public static SolidColorBrush WhiteSmokeBrush = new SolidColorBrush(Colors.WhiteSmoke);
         public static SolidColorBrush BlackBrush = new SolidColorBrush(Colors.Black);
+        public static bool BackButtonVisible
+        {
+            get => SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility == AppViewBackButtonVisibility.Visible;
+            set => SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = value ? AppViewBackButtonVisibility.Visible
+                                                                                                   : AppViewBackButtonVisibility.Collapsed;
+        }
+        public static SolidColorBrush HighlightBrush
+        {
+            get => new SolidColorBrush(Settings.settings.ThemeColor);
+        }
         private static string Lyrics = "";
-        public static SolidColorBrush GetHighlightBrush() { return new SolidColorBrush(Settings.settings.ThemeColor); }
 
 
         public static string GetVolumeIcon(double volume)
@@ -150,10 +159,6 @@ namespace SMPlayer
             return await ColorHelper.GetThumbnailMainColor(file);
         }
 
-        public static void SetBackButtonVisible(bool isVisible)
-        {
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = isVisible ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
-        }
         public static async void ShowToast(Music music)
         {
             ShowNotification status = Settings.settings.Notification;
@@ -358,5 +363,9 @@ namespace SMPlayer
             // And send the notification to the primary tile
             tileUpdater.Update(tileNotification);
         }
+    }
+    public enum NotifiedStatus
+    {
+        Started = 0, Finished = 1, Ready = 2
     }
 }

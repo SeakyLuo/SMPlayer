@@ -27,13 +27,17 @@ namespace SMPlayer
     {
         private ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         private bool SetupStarted = false;
-        private int Notified = 0;
+        private NotifiedStatus Notified = NotifiedStatus.Ready;
         public AlbumsPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            SettingsPage.AddAfterPathSetListener(this);
-            Setup();
+            SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Albums.Count == 0) Setup(); // Constructor not called
         }
 
         private void GridViewItem_PointerEntered(object sender, PointerRoutedEventArgs e)
@@ -49,9 +53,9 @@ namespace SMPlayer
         private async void Setup()
         {
             if (SetupStarted) return;
-            if (Notified == 1)
+            if (Notified == NotifiedStatus.Finished)
             {
-                Notified = 0;
+                Notified = NotifiedStatus.Ready;
                 return;
             }
             SetupStarted = true;
@@ -81,7 +85,7 @@ namespace SMPlayer
                 albums.Add(album);
             }
             foreach (var album in albums.OrderBy((a) => a.Name).ThenBy((a) => a.Artist)) Albums.Add(album);
-            if (Notified == 2) Notified = 1;
+            if (Notified == NotifiedStatus.Started) Notified = NotifiedStatus.Finished;
             AlbumPageProgressRing.Visibility = Visibility.Collapsed;
             AlbumPageProgressRing.IsActive = false;
             SetupStarted = false;
@@ -89,7 +93,7 @@ namespace SMPlayer
 
         public void PathSet(string path)
         {
-            Notified = 2;
+            Notified = NotifiedStatus.Started;
             Setup();
         }
 

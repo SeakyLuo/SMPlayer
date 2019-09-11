@@ -45,6 +45,7 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            TitleBarHelper.SetFullTitleBar();
             FullMediaControl.Update();
             SetMusic(MediaHelper.CurrentMusic);
         }

@@ -50,7 +50,7 @@ namespace SMPlayer
                 if (Frame.CanGoBack)
                 {
                     Frame.GoBack(new DrillInNavigationTransitionInfo());
-                    Helper.SetBackButtonVisible(NaviFrame.CanGoBack);
+                    Helper.BackButtonVisible = NaviFrame.CanGoBack;
                 }
                 else if (NaviFrame.CanGoBack)
                 {
@@ -59,39 +59,27 @@ namespace SMPlayer
             };
 
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            Window.Current.SetTitleBar(AppTitleBar);
             MainNavigationView.IsPaneOpen = Settings.settings.IsNavigationCollapsed;
+            if (MainNavigationView.IsPaneOpen) MainNavigationView_PaneOpening(null, null);
+            else MainNavigationView_PaneClosing(null, null);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            TitleBarHelper.SetMainTitleBar();
             MainMediaControl.Update();
             if (NaviFrame.SourcePageType != null && NaviFrame.SourcePageType.Name.StartsWith(Settings.settings.LastPage)) return;
             SwitchPage(Settings.settings.LastPage);
         }
 
-        private void MainNavigationView_PaneClosing(NavigationView sender, object args)
-        {
-            NaviSearchBarItem.Visibility = Visibility.Collapsed;
-            NaviSearchItem.Visibility = Visibility.Visible;
-        }
-
-        private void Open_Navigation()
-        {
-            NaviSearchBarItem.Visibility = Visibility.Visible;
-            NaviSearchItem.Visibility = Visibility.Collapsed;
-        }
-
-        private void MainNavigationView_PaneOpening(NavigationView sender, object args)
-        {
-            Open_Navigation();
-        }
-
         private void NaviSearchBar_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            if (NaviSearchBar.Text.Length > 0)
+            string text = NaviSearchBar.Text.Trim();
+            if (text.Length > 0)
             {
-                NaviFrame.Navigate(typeof(SearchPage));
-                Helper.SetBackButtonVisible(true);
+                NaviFrame.Navigate(typeof(SearchPage), text);
+                Helper.BackButtonVisible = true;
             }
         }
 
@@ -137,23 +125,13 @@ namespace SMPlayer
             else
             {
                 var item = (NavigationViewItem)args.InvokedItemContainer;
-                if (item.Name.StartsWith("NaviSearch"))
-                {
-                    // Search
-                    Open_Navigation();
-                    MainNavigationView.IsPaneOpen = true;
-                    NaviSearchBar.Focus(FocusState.Programmatic);
-                }
-                else
-                {
-                    SwitchPage(item.Name.Substring(0, item.Name.Length - 4));
-                }
+                SwitchPage(item.Name.Substring(0, item.Name.Length - 4));
             }
         }
 
         private void NaviFrame_Navigated(object sender, NavigationEventArgs e)
         {
-            Helper.SetBackButtonVisible(NaviFrame.CanGoBack);
+            Helper.BackButtonVisible = NaviFrame.CanGoBack;
             switch (NaviFrame.CurrentSourcePageType.Name)
             {
                 case "MusicLibraryPage":
@@ -196,6 +174,22 @@ namespace SMPlayer
         public void SetShuffle(bool isShuffle)
         {
             MainMediaControl.SetShuffle(isShuffle);
+        }
+
+        private void MainNavigationView_PaneOpening(NavigationView sender, object args)
+        {
+            VisualStateManager.GoToState(this, "Open", true);
+
+            // On BackButton Visibility Change
+            if (Helper.BackButtonVisible)
+                AppTitle.Margin = new Thickness(40, 0, 40, 0);
+            else
+                AppTitle.Margin = new Thickness(0, 0, 0, 0);
+        }
+
+        private void MainNavigationView_PaneClosing(NavigationView sender, NavigationViewPaneClosingEventArgs args)
+        {
+            VisualStateManager.GoToState(this, "Close", true);
         }
     }
 }

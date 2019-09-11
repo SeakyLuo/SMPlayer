@@ -74,7 +74,6 @@ namespace SMPlayer
         }
     }
 
-
     class MusicIsPlayingConverter : Windows.UI.Xaml.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
@@ -125,7 +124,7 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.Equals(true) ? Helper.GetHighlightBrush() :
+            return value.Equals(true) ? Helper.HighlightBrush :
                                         PlaylistControl.CurrentTheme == ElementTheme.Dark ? Helper.WhiteSmokeBrush : Helper.BlackBrush;
         }
 
@@ -147,7 +146,7 @@ namespace SMPlayer
         }
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.Equals(true) ? Helper.GetHighlightBrush() : StringToColor((string)parameter);
+            return value.Equals(true) ? Helper.HighlightBrush : StringToColor((string)parameter);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -160,7 +159,7 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.Equals(true) ? Helper.GetHighlightBrush() : Helper.BlackBrush;
+            return value.Equals(true) ? Helper.HighlightBrush : Helper.BlackBrush;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

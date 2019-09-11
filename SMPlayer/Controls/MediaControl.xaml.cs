@@ -538,7 +538,7 @@ namespace SMPlayer
         {
             if (MediaHelper.CurrentMusic == null) return;
             MainPage.Instance.Frame.Navigate(typeof(NowPlayingFullPage), null, new DrillInNavigationTransitionInfo());
-            Helper.SetBackButtonVisible(true);
+            Helper.BackButtonVisible = true;
         }
 
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)

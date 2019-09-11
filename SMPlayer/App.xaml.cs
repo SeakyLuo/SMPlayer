@@ -67,6 +67,10 @@ namespace SMPlayer
 
             if (e.PrelaunchActivated == false)
             {
+                if (Windows.Foundation.Metadata.ApiInformation.IsMethodPresent("Windows.ApplicationModel.Core.CoreApplication", "EnablePrelaunch"))
+                {
+                    Windows.ApplicationModel.Core.CoreApplication.EnablePrelaunch(true);
+                }
                 if (rootFrame.Content == null)
                 {
                     // 当导航堆栈尚未还原时，导航到第一页，

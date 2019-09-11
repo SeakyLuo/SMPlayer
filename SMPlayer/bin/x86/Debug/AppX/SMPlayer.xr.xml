@@ -5,7 +5,16 @@
   </Roots.Interfaces>
   <Roots.PropertyPathNames>
     <RootPropertyPathName Name="PlaceholderForeground" />
+    <RootPropertyPathName Name="IsPaneOpen" />
     <RootPropertyPathName Name="TemplateSettings" />
+    <RootPropertyPathName Name="LeftPaneVisibility" />
+    <RootPropertyPathName Name="SingleSelectionFollowsFocus" />
+    <RootPropertyPathName Name="TopPadding" />
+    <RootPropertyPathName Name="TopPaneVisibility" />
+    <RootPropertyPathName Name="OverflowButtonVisibility" />
+    <RootPropertyPathName Name="PaneToggleButtonVisibility" />
+    <RootPropertyPathName Name="BackButtonVisibility" />
+    <RootPropertyPathName Name="CompactPaneLength" />
     <RootPropertyPathName Name="ClipRect" />
     <RootPropertyPathName Name="CompactVerticalDelta" />
     <RootPropertyPathName Name="CommandBarTemplateSettings" />
@@ -84,12 +93,13 @@
       <RootProperty Name="FontSize" />
       <RootProperty Name="IsTabStop" />
       <RootProperty Name="Visibility" />
+      <RootProperty Name="Width" />
+      <RootProperty Name="IsEnabled" />
       <RootProperty Name="MinHeight" />
       <RootProperty Name="Padding" />
       <RootProperty Name="IsAccessKeyScope" />
       <RootProperty Name="Template" />
       <RootProperty Name="KeyboardAccelerators" />
-      <RootProperty Name="Width" />
       <RootProperty Name="Height" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="CornerRadius" />
@@ -189,18 +199,18 @@
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="BorderThickness" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Visibility" />
       <RootProperty Name="MinHeight" />
       <RootProperty Name="MinWidth" />
-      <RootProperty Name="Visibility" />
       <RootProperty Name="Clip" />
-      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="XYFocusKeyboardNavigation" />
       <RootProperty Name="RenderTransform" />
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="MaxHeight" />
       <RootProperty Name="RequestedTheme" />
       <RootProperty Name="Opacity" />
-      <RootProperty Name="HorizontalAlignment" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
       <RootEvent Name="Tapped" />
@@ -271,6 +281,7 @@
       <RootProperty Name="ContextFlyout" />
       <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="XYFocusKeyboardNavigation" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ToolTipService">
       <RootMethod Name="GetToolTip" />
@@ -335,9 +346,18 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ContentControl">
       <RootProperty Name="Content" />
+      <RootProperty Name="HorizontalContentAlignment" />
+      <RootProperty Name="VerticalContentAlignment" />
+      <RootProperty Name="IsTabStop" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="MinHeight" />
+      <RootProperty Name="ContentTemplate" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="MinWidth" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ColumnDefinition">
       <RootProperty Name="Width" />
+      <RootProperty Name="MinWidth" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.RelativePanel">
       <RootProperty Name="Children" />
@@ -416,6 +436,8 @@
     <RootType FullName="Windows.UI.Xaml.Automation.AutomationProperties">
       <RootMethod Name="GetAccessibilityView" />
       <RootMethod Name="SetAccessibilityView" />
+      <RootMethod Name="GetLandmarkType" />
+      <RootMethod Name="SetLandmarkType" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ContentPresenter">
       <RootProperty Name="Content" />
@@ -468,7 +490,6 @@
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="PlaceholderText" />
       <RootProperty Name="QueryIcon" />
-      <RootProperty Name="Width" />
       <RootProperty Name="Style" />
       <RootEvent Name="QuerySubmitted" />
     </RootType>
@@ -546,13 +567,16 @@
       <RootProperty Name="To" />
       <RootProperty Name="Duration" />
       <RootProperty Name="By" />
+      <RootProperty Name="EnableDependentAnimation" />
+      <RootProperty Name="From" />
+      <RootProperty Name="EasingFunction" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Data.Binding">
       <RootProperty Name="RelativeSource" />
       <RootProperty Name="TargetNullValue" />
       <RootProperty Name="Path" />
-      <RootProperty Name="Converter" />
       <RootProperty Name="Mode" />
+      <RootProperty Name="Converter" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Data.RelativeSource">
       <RootProperty Name="Mode" />
@@ -587,6 +611,90 @@
       <RootProperty Name="SelectionCheckMarkVisualEnabled" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.ScaleTransform" />
+    <RootType FullName="Windows.UI.Xaml.Controls.NavigationView">
+      <RootProperty Name="PaneToggleButtonStyle" />
+      <RootProperty Name="CompactPaneLength" />
+      <RootProperty Name="IsBackButtonVisible" />
+      <RootProperty Name="IsBackEnabled" />
+      <RootProperty Name="IsSettingsVisible" />
+      <RootProperty Name="PaneDisplayMode" />
+      <RootProperty Name="MenuItems" />
+      <RootProperty Name="PaneFooter" />
+      <RootProperty Name="Content" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="TabNavigation" />
+      <RootProperty Name="AutoSuggestBox" />
+      <RootEvent Name="BackRequested" />
+      <RootEvent Name="ItemInvoked" />
+      <RootEvent Name="PaneClosing" />
+      <RootEvent Name="PaneOpening" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.NavigationViewItem">
+      <RootProperty Name="Icon" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="Content" />
+      <RootProperty Name="Visibility" />
+      <RootProperty Name="Tag" />
+      <RootEvent Name="Tapped" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.Primitives.NavigationViewItemPresenter">
+      <RootProperty Name="Margin" />
+      <RootProperty Name="Padding" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="HorizontalContentAlignment" />
+      <RootProperty Name="VerticalContentAlignment" />
+      <RootProperty Name="Background" />
+      <RootProperty Name="BorderBrush" />
+      <RootProperty Name="BorderThickness" />
+      <RootProperty Name="Content" />
+      <RootProperty Name="ContentTemplate" />
+      <RootProperty Name="ContentTemplateSelector" />
+      <RootProperty Name="ContentTransitions" />
+      <RootProperty Name="Foreground" />
+      <RootProperty Name="Icon" />
+      <RootProperty Name="IsTabStop" />
+      <RootProperty Name="UseSystemFocusVisuals" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.SplitView">
+      <RootProperty Name="Background" />
+      <RootProperty Name="CompactPaneLength" />
+      <RootProperty Name="DisplayMode" />
+      <RootProperty Name="IsPaneOpen" />
+      <RootProperty Name="IsTabStop" />
+      <RootProperty Name="OpenPaneLength" />
+      <RootProperty Name="PaneBackground" />
+      <RootProperty Name="Pane" />
+      <RootProperty Name="Content" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.NavigationViewList">
+      <RootProperty Name="Margin" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="IsItemClickEnabled" />
+      <RootProperty Name="ItemContainerStyle" />
+      <RootProperty Name="ItemContainerStyleSelector" />
+      <RootProperty Name="ItemTemplate" />
+      <RootProperty Name="ItemTemplateSelector" />
+      <RootProperty Name="SelectedItem" />
+      <RootProperty Name="SelectionMode" />
+      <RootProperty Name="SingleSelectionFollowsFocus" />
+      <RootProperty Name="ItemsPanel" />
+      <RootProperty Name="ItemContainerTransitions" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.Flyout">
+      <RootProperty Name="Placement" />
+      <RootProperty Name="ShouldConstrainToRootBounds" />
+      <RootProperty Name="FlyoutPresenterStyle" />
+      <RootProperty Name="Content" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.FlyoutPresenter" />
+    <RootType FullName="Windows.UI.Xaml.Controls.ItemsPanelTemplate">
+      <RootProperty Name="Template" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ItemsStackPanel">
+      <RootProperty Name="Orientation" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ToolTip" />
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.ToggleButton">
       <RootProperty Name="Content" />
       <RootProperty Name="Style" />
@@ -683,9 +791,6 @@
       <RootProperty Name="IsTabStop" />
       <RootProperty Name="ItemsPanel" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.ItemsPanelTemplate">
-      <RootProperty Name="Template" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.VisualTransition">
       <RootProperty Name="GeneratedDuration" />
       <RootProperty Name="From" />
@@ -694,30 +799,6 @@
     </RootType>
     <RootType FullName="SMPlayer.LocalFoldersPage" />
     <RootType FullName="SMPlayer.LocalMusicPage" />
-    <RootType FullName="Windows.UI.Xaml.Controls.NavigationViewItem">
-      <RootProperty Name="Content" />
-      <RootProperty Name="Icon" />
-      <RootProperty Name="Style" />
-      <RootProperty Name="Visibility" />
-      <RootProperty Name="SelectsOnInvoked" />
-      <RootProperty Name="Tag" />
-      <RootEvent Name="Tapped" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.NavigationView">
-      <RootProperty Name="IsBackButtonVisible" />
-      <RootProperty Name="IsBackEnabled" />
-      <RootProperty Name="IsSettingsVisible" />
-      <RootProperty Name="PaneDisplayMode" />
-      <RootProperty Name="MenuItems" />
-      <RootProperty Name="PaneFooter" />
-      <RootProperty Name="Content" />
-      <RootProperty Name="Background" />
-      <RootProperty Name="TabNavigation" />
-      <RootEvent Name="BackRequested" />
-      <RootEvent Name="ItemInvoked" />
-      <RootEvent Name="PaneClosing" />
-      <RootEvent Name="PaneOpening" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Frame">
       <RootProperty Name="IsNavigationStackEnabled" />
       <RootEvent Name="Navigated" />
@@ -727,9 +808,6 @@
       <RootProperty Name="Icon" />
       <RootProperty Name="Text" />
       <RootEvent Name="Click" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.Flyout">
-      <RootProperty Name="Content" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Input.KeyboardAccelerator">
       <RootProperty Name="Key" />
@@ -876,6 +954,12 @@
     </RootType>
     <RootType FullName="SMPlayer.SettingsPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.NavigationViewItemSeparator" />
+    <RootType FullName="Windows.UI.Xaml.Media.Animation.BounceEase">
+      <RootProperty Name="EasingMode" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Media.Animation.PowerEase">
+      <RootProperty Name="EasingMode" />
+    </RootType>
     <RootType FullName="SMPlayer.MainPage" />
   </Roots.RootTypes>
 </Roots>

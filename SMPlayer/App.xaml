@@ -17,6 +17,7 @@
                 <ResourceDictionary Source="Dictionaries/LikeToggleButton.xaml" />
                 <ResourceDictionary Source="Dictionaries/HoverButton.xaml" />
                 <ResourceDictionary Source="Dictionaries/DropShadowGridViewItem.xaml" />
+                <ResourceDictionary Source="Dictionaries/MainNavigationView.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style x:Key="TitleTextBlockStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="40" />

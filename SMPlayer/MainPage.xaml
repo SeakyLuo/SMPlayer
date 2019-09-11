@@ -2,6 +2,8 @@
     x:Class="SMPlayer.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:appmodel="using:Windows.ApplicationModel"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -23,56 +25,69 @@
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Margin" Value="20,0,0,0" />
         </Style>
-        <AcrylicBrush
-            x:Key="NavigationViewDefaultPaneBackground"
-            BackgroundSource="HostBackdrop"
-            FallbackColor="{StaticResource SystemChromeMediumColor}"
-            TintColor="{StaticResource SystemChromeAltHighColor}"
-            TintOpacity="0.8" />
-        <AcrylicBrush
-            x:Key="NavigationViewTopPaneBackground"
-            BackgroundSource="HostBackdrop"
-            FallbackColor="{StaticResource SystemChromeMediumColor}"
-            TintColor="{StaticResource SystemChromeAltHighColor}"
-            TintOpacity="0.8" />
-        <AcrylicBrush
-            x:Key="NavigationViewExpandedPaneBackground"
-            BackgroundSource="HostBackdrop"
-            FallbackColor="{StaticResource SystemChromeMediumColor}"
-            TintColor="{StaticResource SystemChromeAltHighColor}"
-            TintOpacity="0.8" />
     </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <Grid
+            x:Name="AppTitleBar"
+            Width="{x:Bind MainNavigationView.OpenPaneLength}"
+            Height="32"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+            <TextBlock
+                x:Name="AppTitle"
+                Padding="10"
+                VerticalAlignment="Center"
+                IsHitTestVisible="False"
+                Style="{StaticResource CaptionTextBlockStyle}"
+                Text="{x:Bind appmodel:Package.Current.DisplayName}" />
+            <!--<Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>-->
+            <!--<Button>
+                <SymbolIcon Symbol="Back" />
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="Hello" />
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+            <TextBlock
+                x:Name="AppTitle"
+                Grid.Column="1"
+                Padding="10"
+                VerticalAlignment="Center"
+                IsHitTestVisible="False"
+                Style="{StaticResource CaptionTextBlockStyle}"
+                Text="{x:Bind appmodel:Package.Current.DisplayName}" />-->
+        </Grid>
         <NavigationView
             x:Name="MainNavigationView"
-            Background="{ThemeResource SystemControlAcrylicElementBrush}"
+            Grid.Row="1"
             IsBackButtonVisible="Collapsed"
             IsBackEnabled="True"
             ItemInvoked="MainNavigationView_ItemInvoked"
             PaneClosing="MainNavigationView_PaneClosing"
             PaneOpening="MainNavigationView_PaneOpening"
+            Style="{StaticResource MainNavigationViewStyle}"
             TabNavigation="Cycle">
+            <NavigationView.AutoSuggestBox>
+                <AutoSuggestBox
+                    x:Name="NaviSearchBar"
+                    PlaceholderText="Search"
+                    QueryIcon="Find"
+                    QuerySubmitted="NaviSearchBar_QuerySubmitted"
+                    Style="{StaticResource BorderlessAutoSuggestBoxStyle}"
+                    ToolTipService.ToolTip="Search" />
+            </NavigationView.AutoSuggestBox>
             <NavigationView.MenuItems>
-                <NavigationViewItem
-                    x:Name="NaviSearchItem"
-                    Icon="Find"
-                    SelectsOnInvoked="False"
-                    Visibility="Collapsed" />
-                <NavigationViewItem x:Name="NaviSearchBarItem" SelectsOnInvoked="False">
-                    <AutoSuggestBox
-                        x:Name="NaviSearchBar"
-                        Width="290"
-                        PlaceholderText="Search"
-                        QueryIcon="Find"
-                        QuerySubmitted="NaviSearchBar_QuerySubmitted"
-                        Style="{StaticResource BorderlessAutoSuggestBoxStyle}"
-                        ToolTipService.ToolTip="Search" />
-                </NavigationViewItem>
                 <NavigationViewItem
                     x:Name="MusicLibraryItem"
                     Content="Songs"
@@ -109,8 +124,8 @@
                 <NavigationViewItem
                     x:Name="RecentItem"
                     Content="Recent"
-                    ToolTipService.ToolTip="Recently Played"
-                    Tag="Recent">
+                    Tag="Recent"
+                    ToolTipService.ToolTip="Recently Played">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE823;" />
                     </NavigationViewItem.Icon>
@@ -118,26 +133,26 @@
                 <NavigationViewItem
                     x:Name="LocalItem"
                     Content="Local"
-                    ToolTipService.ToolTip="Local Folders and Music Files"
-                    Tag="Local Folders">
+                    Tag="Local Folders"
+                    ToolTipService.ToolTip="Local Folders and Music Files">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC4E;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem
                     x:Name="PlaylistsItem"
-                    ToolTipService.ToolTip="Playlists"
                     Content="Playlists"
-                    Tag="Playlists">
+                    Tag="Playlists"
+                    ToolTipService.ToolTip="Playlists">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEA37;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem
                     x:Name="MyFavoritesItem"
-                    ToolTipService.ToolTip="My Favorite Music"
                     Content="My Favorites"
-                    Tag="My Favorites">
+                    Tag="My Favorites"
+                    ToolTipService.ToolTip="My Favorite Music">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEB51;" />
                     </NavigationViewItem.Icon>
@@ -150,7 +165,66 @@
         </NavigationView>
         <local:MediaControl
             x:Name="MainMediaControl"
-            Grid.Row="1"
+            Grid.Row="2"
             Mode="Main" />
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="WindowWidthChange">
+                <VisualState x:Name="NarrowLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainNavigationView.(NavigationView.PaneDisplayMode)" Value="LeftCompact" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="WideLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="700" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+            <VisualStateGroup x:Name="NavigationViewPaneStateChange">
+                <VisualState x:Name="Open">
+                    <VisualState.Setters>
+                        <Setter Target="AppTitle.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                    <VisualState.Storyboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                EnableDependentAnimation="True"
+                                Storyboard.TargetName="AppTitleBar"
+                                Storyboard.TargetProperty="Width"
+                                From="{x:Bind MainNavigationView.CompactPaneLength}"
+                                To="{x:Bind MainNavigationView.OpenPaneLength}"
+                                Duration="0:0:0.1">
+                                <DoubleAnimation.EasingFunction>
+                                    <PowerEase EasingMode="EaseOut" />
+                                </DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </VisualState.Storyboard>
+                </VisualState>
+                <VisualState x:Name="Close">
+                    <VisualState.Setters>
+                        <Setter Target="AppTitle.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                    <VisualState.Storyboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                EnableDependentAnimation="True"
+                                Storyboard.TargetName="AppTitleBar"
+                                Storyboard.TargetProperty="Width"
+                                From="{x:Bind MainNavigationView.OpenPaneLength}"
+                                To="{x:Bind MainNavigationView.CompactPaneLength}"
+                                Duration="0:0:0.1">
+                                <DoubleAnimation.EasingFunction>
+                                    <BounceEase EasingMode="EaseOut" />
+                                </DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </VisualState.Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </Page>

@@ -302,6 +302,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dictionaries\MainNavigationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dictionaries\MediaControlButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

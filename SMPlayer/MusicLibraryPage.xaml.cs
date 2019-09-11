@@ -38,8 +38,8 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MusicLibraryDataGrid.ItemsSource = AllSongs;
             listener = this as AfterSongsSetListener;
+            listener.SongsSet(AllSongs);
             SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
             MediaControl.AddMusicControlListener(this as MusicControlListener);
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
@@ -143,7 +143,7 @@ namespace SMPlayer
             if (songs == null) return;
             AllSongs.Clear();
             foreach (var item in songs) AllSongs.Add(item);
-            listener.SongsSet(AllSongs);
+            if (listener != null) listener.SongsSet(AllSongs);
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
