@@ -86,13 +86,13 @@
       <RootProperty Name="Visibility" />
       <RootProperty Name="MinHeight" />
       <RootProperty Name="Padding" />
-      <RootProperty Name="CornerRadius" />
       <RootProperty Name="IsAccessKeyScope" />
       <RootProperty Name="Template" />
       <RootProperty Name="KeyboardAccelerators" />
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
       <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="CornerRadius" />
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="FontFamily" />
       <RootEvent Name="Click" />
@@ -828,8 +828,8 @@
       <RootProperty Name="Tag" />
       <RootProperty Name="CellStyle" />
       <RootProperty Name="MinWidth" />
+      <RootProperty Name="CanUserReorder" />
       <RootProperty Name="MaxWidth" />
-      <RootProperty Name="IsReadOnly" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGridCell" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGridRow" />

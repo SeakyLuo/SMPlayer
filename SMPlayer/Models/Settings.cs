@@ -66,8 +66,7 @@ namespace SMPlayer.Models
             {
                 settings = JsonFileHelper.Convert<Settings>(json);
                 if (string.IsNullOrEmpty(settings.RootPath)) return;
-                var folder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
-                AfterTreeSet(folder);
+                Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
             }
 
             Helper.ThumbnailFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Thumbnails", CreationCollisionOption.OpenIfExists);
@@ -78,19 +77,6 @@ namespace SMPlayer.Models
         public static void Save()
         {
             JsonFileHelper.SaveAsync(FILENAME, settings);
-        }
-
-        public static async Task SetTreeFolder(StorageFolder folder)
-        {
-            await settings.Tree.Init(folder);
-            AfterTreeSet(folder);
-        }
-
-        private static void AfterTreeSet(StorageFolder folder)
-        {
-            MusicLibraryPage.SetAllSongs(settings.Tree.Flatten());
-            MusicLibraryPage.Save();
-            Helper.CurrentFolder = folder;
         }
     }
 }

@@ -81,26 +81,26 @@
                                     </ItemsControl.ItemsPanel>
                                 </ItemsControl>
                             </Grid>
-                            <Button
-                                x:Name="MoreButton"
-                                Grid.Column="1"
-                                MinHeight="{ThemeResource AppBarThemeCompactHeight}"
-                                Padding="{ThemeResource CommandBarMoreButtonMargin}"
-                                VerticalAlignment="Top"
-                                Control.IsTemplateKeyTipTarget="True"
-                                CornerRadius="20"
-                                Foreground="{TemplateBinding Foreground}"
-                                IsAccessKeyScope="True"
-                                Style="{StaticResource EllipsisButton}"
-                                Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.EffectiveOverflowButtonVisibility}">
-                                <FontIcon
-                                    x:Name="EllipsisIcon"
-                                    Height="{ThemeResource AppBarExpandButtonCircleDiameter}"
-                                    VerticalAlignment="Center"
-                                    FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                    FontSize="20"
-                                    Glyph="&#xE10C;" />
-                            </Button>
+                            <Border Grid.Column="1" CornerRadius="20">
+                                <Button
+                                    x:Name="MoreButton"
+                                    MinHeight="{ThemeResource AppBarThemeCompactHeight}"
+                                    Padding="{ThemeResource CommandBarMoreButtonMargin}"
+                                    VerticalAlignment="Top"
+                                    Control.IsTemplateKeyTipTarget="True"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    IsAccessKeyScope="True"
+                                    Style="{StaticResource EllipsisButton}"
+                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.EffectiveOverflowButtonVisibility}">
+                                    <FontIcon
+                                        x:Name="EllipsisIcon"
+                                        Height="{ThemeResource AppBarExpandButtonCircleDiameter}"
+                                        VerticalAlignment="Center"
+                                        FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                        FontSize="20"
+                                        Glyph="&#xE10C;" />
+                                </Button>
+                            </Border>
                             <Popup x:Name="OverflowPopup">
                                 <Popup.RenderTransform>
                                     <TranslateTransform x:Name="OverflowPopupOffsetTransform" />

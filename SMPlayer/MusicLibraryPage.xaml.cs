@@ -27,17 +27,20 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MusicLibraryPage : Page, MusicControlListener, MusicSwitchingListener
+    public sealed partial class MusicLibraryPage : Page, MusicControlListener, MusicSwitchingListener, AfterPathSetListener, AfterSongsSetListener
     {
         private const string FILENAME = "MusicLibrary.json";
         public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
         private bool libraryChecked = false;
+        private static AfterSongsSetListener listener;
 
         public MusicLibraryPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             MusicLibraryDataGrid.ItemsSource = AllSongs;
+            listener = this as AfterSongsSetListener;
+            SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
             MediaControl.AddMusicControlListener(this as MusicControlListener);
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
         }
@@ -47,14 +50,12 @@ namespace SMPlayer
             if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
             MediaHelper.FindMusicAndSetPlaying(AllSongs, null, MediaHelper.CurrentMusic);
             if (!libraryChecked)
-                await Dispatcher.RunIdleAsync((args) => { CheckLibrary(); libraryChecked = true; });
+                await Dispatcher.RunIdleAsync((args) => { libraryChecked = true; CheckLibrary(); });
         }
 
         public static async void Init()
         {
-            var temp = JsonFileHelper.Convert<ObservableCollection<Music>>(await JsonFileHelper.ReadAsync(FILENAME));
-            if (temp == null) return;
-            AllSongs = temp;
+            SetAllSongs(JsonFileHelper.Convert<ObservableCollection<Music>>(await JsonFileHelper.ReadAsync(FILENAME)));
         }
 
         public static async void CheckLibrary()
@@ -121,6 +122,8 @@ namespace SMPlayer
                 case "Play Count":
                     temp = AllSongs.OrderBy((music) => music.PlayCount);
                     break;
+                default:
+                    return;
             }
             foreach (var column in MusicLibraryDataGrid.Columns)
                 if (column.Header.ToString() != header)
@@ -132,17 +135,35 @@ namespace SMPlayer
             }
             else e.Column.SortDirection = DataGridSortDirection.Ascending;
             SetAllSongs(temp.ToList());
+            MusicLibraryDataGrid.ItemsSource = AllSongs;
         }
 
         public static void SetAllSongs(ICollection<Music> songs)
         {
+            if (songs == null) return;
             AllSongs.Clear();
             foreach (var item in songs) AllSongs.Add(item);
+            listener.SongsSet(AllSongs);
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () => MediaHelper.FindMusicAndSetPlaying(AllSongs, current, next));
         }
+
+        public void PathSet(string path)
+        {
+            SetAllSongs(Settings.settings.Tree.Flatten());
+        }
+
+        public void SongsSet(ICollection<Music> songs)
+        {
+            MusicLibraryDataGrid.ItemsSource = songs;
+        }
+    }
+
+    interface AfterSongsSetListener
+    {
+        void SongsSet(ICollection<Music> songs);
     }
 }

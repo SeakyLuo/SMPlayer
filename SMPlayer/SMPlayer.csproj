@@ -135,6 +135,7 @@
     <Compile Include="Controls\LoadingControl.xaml.cs">
       <DependentUpon>LoadingControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\TitleBarHelper.cs" />
     <Compile Include="LocalFoldersPage.xaml.cs">
       <DependentUpon>LocalFoldersPage.xaml</DependentUpon>
     </Compile>

@@ -10,21 +10,31 @@ using Windows.UI.Xaml.Media;
 
 namespace SMPlayer
 {
-    class ColorHelper
+    public static class ColorHelper
     {
+        private struct Size
+        {
+            public uint Width, Height;
+            public Size(uint Width, uint Height)
+            {
+                this.Width = Width;
+                this.Height = Height;
+            }
+        }
+
         public static async Task<Brush> GetThumbnailMainColor(StorageFile Thumbnail)
         {
             var decoder = await BitmapDecoder.CreateAsync(await Thumbnail.OpenAsync(FileAccessMode.Read));
             uint width = decoder.PixelWidth, height = decoder.PixelHeight;
-            var data = await decoder.GetPixelDataAsync(BitmapPixelFormat.Bgra8,
-                                                       BitmapAlphaMode.Straight,
-                                                       new BitmapTransform()
-                                                       {
-                                                           Bounds = new BitmapBounds() { Width = 1, Height = 1, X = width / 4, Y = height / 4 }
-                                                       },
-                                                       ExifOrientationMode.IgnoreExifOrientation,
-                                                       ColorManagementMode.DoNotColorManage);
-            var bgra = data.DetachPixelData();
+            Size[] TargetPositions = { new Size(width / 4, height / 4), new Size(width * 3 / 4, height / 4), 
+                                       new Size(width / 4, height * 3 / 4), new Size(width * 3 / 4, height * 3 / 4) };
+            byte[] bgra = { 0, 0, 0, 255 };
+            foreach (var size in TargetPositions)
+            {
+                bgra = await GetPixelData(decoder, size.Width, size.Height);
+                byte b = bgra[0], g = bgra[1], r = bgra[2];
+                if (b < 200 && g < 200 && r < 200) break;
+            }
             Color color = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0]);
             return new AcrylicBrush()
             {
@@ -44,15 +54,7 @@ namespace SMPlayer
             {
                 for (uint j = 0; j < height - 1; j++)
                 {
-                    var data = await decoder.GetPixelDataAsync(BitmapPixelFormat.Bgra8,
-                                                               BitmapAlphaMode.Straight,
-                                                               new BitmapTransform()
-                                                               {
-                                                                   Bounds = new BitmapBounds() { Width = 1, Height = 1, X = i, Y = j }
-                                                               },
-                                                               ExifOrientationMode.IgnoreExifOrientation,
-                                                               ColorManagementMode.DoNotColorManage);
-                    var bytes = data.DetachPixelData();
+                    var bytes = await GetPixelData(decoder, i, j);
                     for (int n = 0; n < 4; n++)
                         dict[n][bytes[n]] = dict[n].GetValueOrDefault(bytes[n], 0) + 1;
                 }
@@ -63,11 +65,24 @@ namespace SMPlayer
             Color color = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0]);
             return new AcrylicBrush()
             {
-                BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
+                BackgroundSource = AcrylicBackgroundSource.Backdrop,
                 FallbackColor = color,
                 TintOpacity = 0.75,
                 TintColor = color
             };
+        }
+
+        private static async Task<byte[]> GetPixelData(BitmapDecoder decoder, uint x, uint y)
+        {
+            var data = await decoder.GetPixelDataAsync(BitmapPixelFormat.Bgra8,
+                                           BitmapAlphaMode.Straight,
+                                           new BitmapTransform()
+                                           {
+                                               Bounds = new BitmapBounds() { Width = 1, Height = 1, X = x, Y = y }
+                                           },
+                                           ExifOrientationMode.IgnoreExifOrientation,
+                                           ColorManagementMode.DoNotColorManage);
+            return data.DetachPixelData();
         }
 
         public static async Task<Brush> GetThumbnailMainColorAverage(StorageFile Thumbnail)
@@ -79,15 +94,7 @@ namespace SMPlayer
             {
                 for (uint j = 0; j < height - 1; j++)
                 {
-                    var data = await decoder.GetPixelDataAsync(BitmapPixelFormat.Bgra8,
-                                                               BitmapAlphaMode.Straight,
-                                                               new BitmapTransform()
-                                                               {
-                                                                   Bounds = new BitmapBounds() { Width = 1, Height = 1, X = i, Y = j }
-                                                               },
-                                                               ExifOrientationMode.IgnoreExifOrientation,
-                                                               ColorManagementMode.DoNotColorManage);
-                    var bytes = data.DetachPixelData();
+                    var bytes = await GetPixelData(decoder, i, j);
                     for (int n = 0; n < 4; n++)
                         bgra[n] += bytes[n];
                 }
@@ -97,7 +104,7 @@ namespace SMPlayer
             Color color = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0]);
             return new AcrylicBrush()
             {
-                BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
+                BackgroundSource = AcrylicBackgroundSource.Backdrop,
                 FallbackColor = color,
                 TintOpacity = 0.75,
                 TintColor = color

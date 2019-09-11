@@ -45,9 +45,10 @@ namespace SMPlayer
             StorageFolder folder = await picker.PickSingleFolderAsync();
             if (folder == null || folder.Path == Settings.settings.RootPath) return;
             SettingsLoadingControl.IsLoading = true;
+            Helper.CurrentFolder = folder;
             Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
             Settings.settings.RootPath = folder.Path;
-            await Settings.SetTreeFolder(folder);
+            await Settings.settings.Tree.Init(folder);
             foreach (var listener in listeners) listener.PathSet(folder.Path);
             MediaHelper.Clear();
             Settings.Save();

@@ -683,11 +683,13 @@ namespace SMPlayer
 
         private void MainMusicInfoGrid_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
+            if (MediaHelper.CurrentMusic == null) return;
             VisualStateManager.GoToState(this, "PointerOver", true);
         }
 
         private void MainMusicInfoGrid_PointerExited(object sender, PointerRoutedEventArgs e)
         {
+            if (MediaHelper.CurrentMusic == null) return;
             VisualStateManager.GoToState(this, "Normal", true);
         }
 

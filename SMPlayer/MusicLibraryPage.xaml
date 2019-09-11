@@ -82,15 +82,16 @@
                     Header="Album" />
                 <controls:DataGridTextColumn
                     MinWidth="100"
+                    CanUserReorder="True"
                     MaxWidth="120"
                     Binding="{Binding Duration, Converter={StaticResource MusicDurationConverter}}"
-                    Header="Duration"
-                    IsReadOnly="True" />
+                    Header="Duration" />
                 <controls:DataGridTextColumn
                     MinWidth="100"
                     Binding="{Binding Favorite, Converter={StaticResource MusicFavoriteConverter}, Mode=OneWay}"
                     CanUserResize="False"
                     Foreground="Red"
+                    CanUserReorder="False"
                     Header="Favorite">
                     <controls:DataGridTextColumn.CellStyle>
                         <Style TargetType="controls:DataGridCell">
