@@ -35,18 +35,23 @@
         </Grid.RowDefinitions>
         <Grid
             x:Name="AppTitleBar"
-            Width="{x:Bind MainNavigationView.OpenPaneLength}"
             Height="32"
-            HorizontalAlignment="Left"
+            HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
-            Background="{ThemeResource SystemControlAcrylicWindowBrush}">
-            <TextBlock
-                x:Name="AppTitle"
-                Padding="10"
-                VerticalAlignment="Center"
-                IsHitTestVisible="False"
-                Style="{StaticResource CaptionTextBlockStyle}"
-                Text="{x:Bind appmodel:Package.Current.DisplayName}" />
+            Background="Transparent"
+            IsHitTestVisible="True">
+            <Border
+                x:Name="AppTitleBorder"
+                Width="{x:Bind MainNavigationView.OpenPaneLength}"
+                HorizontalAlignment="Left"
+                Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+                <TextBlock
+                    x:Name="AppTitle"
+                    Padding="10"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{x:Bind appmodel:Package.Current.DisplayName}" />
+            </Border>
             <!--<Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -169,9 +174,17 @@
             Mode="Main" />
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WindowWidthChange">
-                <VisualState x:Name="NarrowLayout">
+                <VisualState x:Name="MinimumLayout">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainNavigationView.(NavigationView.PaneDisplayMode)" Value="LeftMinimal" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="NarrowLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="600" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="MainNavigationView.(NavigationView.PaneDisplayMode)" Value="LeftCompact" />
@@ -179,7 +192,7 @@
                 </VisualState>
                 <VisualState x:Name="WideLayout">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="700" />
+                        <AdaptiveTrigger MinWindowWidth="750" />
                     </VisualState.StateTriggers>
                 </VisualState>
             </VisualStateGroup>
@@ -192,7 +205,7 @@
                         <Storyboard>
                             <DoubleAnimation
                                 EnableDependentAnimation="True"
-                                Storyboard.TargetName="AppTitleBar"
+                                Storyboard.TargetName="AppTitleBorder"
                                 Storyboard.TargetProperty="Width"
                                 From="{x:Bind MainNavigationView.CompactPaneLength}"
                                 To="{x:Bind MainNavigationView.OpenPaneLength}"
@@ -212,7 +225,7 @@
                         <Storyboard>
                             <DoubleAnimation
                                 EnableDependentAnimation="True"
-                                Storyboard.TargetName="AppTitleBar"
+                                Storyboard.TargetName="AppTitleBorder"
                                 Storyboard.TargetProperty="Width"
                                 From="{x:Bind MainNavigationView.OpenPaneLength}"
                                 To="{x:Bind MainNavigationView.CompactPaneLength}"

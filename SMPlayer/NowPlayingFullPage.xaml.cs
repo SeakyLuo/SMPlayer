@@ -41,11 +41,12 @@ namespace SMPlayer
             this.InitializeComponent();
             MediaControl.AddMusicRequestListener(this as MusicRequestListener);
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
+            TitleBarHelper.SetFullTitleBar();
+            Window.Current.SetTitleBar(EmptyTitleBar);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            TitleBarHelper.SetFullTitleBar();
             FullMediaControl.Update();
             SetMusic(MediaHelper.CurrentMusic);
         }
@@ -234,6 +235,11 @@ namespace SMPlayer
         {
             CurrentMusic.PlayCount = 0;
             MusicLibraryPage.AllSongs.First((m) => m.Equals(CurrentMusic)).PlayCount = 0;
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.GoBack();
         }
     }
 }

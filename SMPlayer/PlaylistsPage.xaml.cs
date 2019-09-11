@@ -56,11 +56,13 @@ namespace SMPlayer
         {
             if (Playlists.Count == 0)
             {
-                PlayListTabViewFooter.Label = "No Playlists";
+                ShowAllPlaylistButton.Label = "No Playlists";
+                SortByButton.Visibility = Visibility.Collapsed;
             }
             else
             {
-                PlayListTabViewFooter.Label = $"Playlists: {Playlists.Count}";
+                ShowAllPlaylistButton.Label = $"Playlists: {Playlists.Count}";
+                SortByButton.Visibility = Visibility.Visible;
             }
         }
 
@@ -71,11 +73,10 @@ namespace SMPlayer
             Settings.settings.LastPlaylist = playlist.Name;
             foreach (var music in playlist.Songs)
                 music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
-            if (IsLoaded)
-            {
-                SetPlaylistCover(playlist);
-                SetGridBackground();
-            }
+            SortByButton.Label = "Sort By " + playlist.Criterion.ToStr();
+            if (!IsLoaded) return;
+            SetPlaylistCover(playlist);
+            SetGridBackground();
         }
 
         private void DeleteClick(object sender, RoutedEventArgs e)
@@ -125,7 +126,7 @@ namespace SMPlayer
 
         private void PlaylistTabView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
-            Settings.settings.Playlists = (List<Playlist>)PlaylistTabView.ItemsSource;
+            Settings.settings.Playlists = (PlaylistTabView.ItemsSource as ObservableCollection<Playlist>).ToList();
         }
 
         private void PlaylistTabView_TabClosing(object sender, TabClosingEventArgs e)
@@ -209,24 +210,6 @@ namespace SMPlayer
             var playlist = (sender as FrameworkElement).DataContext as Playlist;
             DeletePlaylist(playlist);
         }
-        private void SortBy_Click(object sender, RoutedEventArgs e)
-        {
-            string reverse = "Reverse Playlist";
-            var playlist = (sender as FrameworkElement).DataContext as Playlist;
-            MenuFlyout flyout = new MenuFlyout();
-            foreach (var criterion in Playlist.Criteria)
-            {
-                bool isChecked = playlist.Criterion == criterion;
-                var radioItem = new ToggleMenuFlyoutItem()
-                {
-                    Text = isChecked ? reverse : "Sort By " + criterion.ToStr(),
-                    IsChecked = isChecked
-                };
-                radioItem.Click += (send, args) => playlist.SetCriterionAndSort(criterion);
-                flyout.Items.Add(radioItem);
-            }
-            flyout.ShowAt(sender as FrameworkElement);
-        }
         private void PlaylistCover_Loaded(object sender, RoutedEventArgs e)
         {
             Thumbnail = sender as Image;
@@ -241,6 +224,7 @@ namespace SMPlayer
                 PlaylistThumbnailDict[playlist.Name] = thumbnails;
             }
             Thumbnail.Source = thumbnails.Count == 0 ? Helper.DefaultAlbumCover : thumbnails[random.Next(thumbnails.Count)];
+            if (PlaylistInfoGrid != null) SetGridBackground();
         }
 
         private void PlaylistInfoGrid_Loaded(object sender, RoutedEventArgs e)
@@ -287,6 +271,30 @@ namespace SMPlayer
         {
             SpinArrowAnimation.Begin();
         }
-
+        private void OpenSortPlaylistsFlyout(object sender, object e)
+        {
+            var playlist = PlaylistTabView.SelectedItem as Playlist;
+            var flyout = sender as MenuFlyout;
+            flyout.Items.Clear();
+            var reverseItem = new MenuFlyoutItem() { Text = "Reverse Playlist" };
+            reverseItem.Click += (send, args) => playlist.Reverse();
+            flyout.Items.Add(reverseItem);
+            flyout.Items.Add(new MenuFlyoutSeparator());
+            foreach (var criterion in Playlist.Criteria)
+            {
+                string sortby = "Sort By " + criterion.ToStr();
+                var radioItem = new ToggleMenuFlyoutItem()
+                {
+                    Text = sortby,
+                    IsChecked = playlist.Criterion == criterion
+                };
+                radioItem.Click += (send, args) =>
+                {
+                    playlist.SetCriterionAndSort(criterion);
+                    SortByButton.Label = sortby;
+                };
+                flyout.Items.Add(radioItem);
+            }
+        }
     }
 }

@@ -47,22 +47,26 @@ namespace SMPlayer
             this.InitializeComponent();
             SystemNavigationManager.GetForCurrentView().BackRequested += (s, e) =>
             {
-                if (Frame.CanGoBack)
-                {
-                    Frame.GoBack(new DrillInNavigationTransitionInfo());
-                    Helper.BackButtonVisible = NaviFrame.CanGoBack;
-                }
-                else if (NaviFrame.CanGoBack)
-                {
-                    NaviFrame.GoBack();
-                }
+                if (NaviFrame.CanGoBack) NaviFrame.GoBack();
             };
 
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            Window.Current.SetTitleBar(AppTitleBar);
+
             MainNavigationView.IsPaneOpen = Settings.settings.IsNavigationCollapsed;
             if (MainNavigationView.IsPaneOpen) MainNavigationView_PaneOpening(null, null);
             else MainNavigationView_PaneClosing(null, null);
+
+            // Hide default title bar.
+            var coreTitleBar = Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+            UpdateTitleBarLayout(coreTitleBar);
+
+            // Set XAML element as a draggable region.
+            Window.Current.SetTitleBar(AppTitleBar);
+
+            // Register a handler for when the size of the overlaid caption control changes.
+            // For example, when the app moves to a screen with a different DPI.
+            coreTitleBar.LayoutMetricsChanged += (sender, args) => UpdateTitleBarLayout(sender);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -71,6 +75,18 @@ namespace SMPlayer
             MainMediaControl.Update();
             if (NaviFrame.SourcePageType != null && NaviFrame.SourcePageType.Name.StartsWith(Settings.settings.LastPage)) return;
             SwitchPage(Settings.settings.LastPage);
+        }
+
+        private void UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar coreTitleBar)
+        {
+            // Get the size of the caption controls area and back button 
+            // (returned in logical pixels), and move your content around as necessary.
+            //LeftPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayLeftInset);
+            //RightPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayRightInset);
+            //TitleBarButton.Margin = new Thickness(0, 0, coreTitleBar.SystemOverlayRightInset, 0);
+
+            // Update title bar control size as needed to account for system size changes.
+            AppTitleBar.Height = coreTitleBar.Height;
         }
 
         private void NaviSearchBar_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
@@ -181,10 +197,10 @@ namespace SMPlayer
             VisualStateManager.GoToState(this, "Open", true);
 
             // On BackButton Visibility Change
-            if (Helper.BackButtonVisible)
-                AppTitle.Margin = new Thickness(40, 0, 40, 0);
-            else
-                AppTitle.Margin = new Thickness(0, 0, 0, 0);
+            //if (Helper.BackButtonVisible)
+            //    AppTitle.Margin = new Thickness(40, 0, 40, 0);
+            //else
+            //    AppTitle.Margin = new Thickness(0, 0, 0, 0);
         }
 
         private void MainNavigationView_PaneClosing(NavigationView sender, NavigationViewPaneClosingEventArgs args)

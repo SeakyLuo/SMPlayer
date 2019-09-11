@@ -38,11 +38,7 @@ namespace SMPlayer
             titleBar.ForegroundColor = Windows.UI.Colors.White;
             titleBar.BackgroundColor = Windows.UI.Colors.Transparent;
             titleBar.ButtonForegroundColor = Windows.UI.Colors.White;
-            titleBar.ButtonBackgroundColor = Models.Settings.settings.ThemeColor;
-            //titleBar.ButtonHoverForegroundColor = Windows.UI.Colors.White;
-            //titleBar.ButtonHoverBackgroundColor = Windows.UI.Colors.MediumBlue;
-            //titleBar.ButtonPressedForegroundColor = Windows.UI.Colors.White;
-            //titleBar.ButtonPressedBackgroundColor = Windows.UI.Colors.DarkBlue;
+            titleBar.ButtonBackgroundColor = Windows.UI.Colors.Transparent;
 
             // Set inactive window colors
             titleBar.InactiveForegroundColor = Windows.UI.Colors.White;

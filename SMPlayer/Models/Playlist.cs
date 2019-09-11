@@ -26,11 +26,7 @@ namespace SMPlayer.Models
                 }
             }
         }
-        public SortBy Criterion
-        {
-            get;
-            set;
-        }
+        public SortBy Criterion { get; set; }
 
         public ObservableCollection<Music> Songs { get; set; }
 
@@ -131,8 +127,8 @@ namespace SMPlayer.Models
 
         public void Reverse()
         {
-            var list = Songs.Reverse();
-            for (int i = 0; i < Songs.Count; i++) Songs[i] = list.ElementAt(i);
+            var list = Songs.Reverse().ToList();
+            for (int i = 0; i < Songs.Count; i++) Songs[i] = list[i];
             OnPropertyChanged();
         }
     }

@@ -26,7 +26,9 @@ namespace SMPlayer
             get => labelPosition;
             set
             {
-                Grid.SetColumn(LabelTextBlock, value == IconTextButtonLabelPosition.Left ? 0 : 2);
+                bool isLeft = value == IconTextButtonLabelPosition.Left;
+                Grid.SetColumn(LabelTextBlock, isLeft ? 0 : 2);
+                LabelTextBlock.Margin = new Thickness(isLeft ? 0 : 10, 0, isLeft ? 10 : 0, 0);
                 labelPosition = value;
             }
         }
