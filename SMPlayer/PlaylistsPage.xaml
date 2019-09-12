@@ -283,5 +283,22 @@
                 </controls:ScrollHeader>
             </controls:TabView.Footer>
         </controls:TabView>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="WidthChange">
+                <VisualState x:Name="Normal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource MinimalNavigationViewWindowWidth}" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="NaviCompact">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="NewPlaylistButton.Margin" Value="40,0,0,0" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </Page>

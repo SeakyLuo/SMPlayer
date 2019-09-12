@@ -42,6 +42,7 @@ namespace SMPlayer
             MediaControl.AddMusicRequestListener(this as MusicRequestListener);
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
             TitleBarHelper.SetFullTitleBar();
+            //Helper.BackButtonVisible = true;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

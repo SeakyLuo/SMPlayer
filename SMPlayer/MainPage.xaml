@@ -205,7 +205,7 @@
                 </VisualState>
                 <VisualState x:Name="WideLayout">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="750" />
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource MinimalNavigationViewWindowWidth}" />
                     </VisualState.StateTriggers>
                 </VisualState>
             </VisualStateGroup>

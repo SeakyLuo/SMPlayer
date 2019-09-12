@@ -212,6 +212,7 @@ namespace SMPlayer
         private void MainNavigationView_PaneOpening(NavigationView sender, object args)
         {
             VisualStateManager.GoToState(this, "Open", true);
+            //MainNavigationView.Background = Resources[""]
 
             // On BackButton Visibility Change
             //if (Helper.BackButtonVisible)

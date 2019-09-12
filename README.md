@@ -28,3 +28,5 @@ Show in explorer.
 Full Screen.
 
 PlayCount not read.
+
+Quick return footer.
