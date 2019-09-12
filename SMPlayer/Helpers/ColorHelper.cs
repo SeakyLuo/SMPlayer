@@ -31,18 +31,21 @@ namespace SMPlayer
             }
         }
 
+        private const int MIN_VALUE = 50;
+        private const int MAX_VALUE = 200;
+
         public static async Task<Brush> GetThumbnailMainColor(StorageFile Thumbnail)
         {
             var decoder = await BitmapDecoder.CreateAsync(await Thumbnail.OpenAsync(FileAccessMode.Read));
             uint width = decoder.PixelWidth, height = decoder.PixelHeight;
-            Size[] TargetPositions = { new Size(width / 4, height / 4), new Size(width * 3 / 4, height / 4), 
-                                       new Size(width / 4, height * 3 / 4), new Size(width * 3 / 4, height * 3 / 4) };
+            Size[] TargetPositions = { new Size(1 / 4, 1 / 4), new Size(3 / 4, 1 / 4), 
+                                       new Size(1 / 4, 3 / 4), new Size(3 / 4, 3 / 4),
+                                       new Size(1 / 2, 1 / 2) };
             byte[] bgra = { 0, 0, 0, 255 };
             foreach (var size in TargetPositions)
             {
                 bgra = await GetPixelData(decoder, size.Width, size.Height);
-                byte b = bgra[0], g = bgra[1], r = bgra[2];
-                if (b < 200 && g < 200 && r < 200) break;
+                if (bgra.SkipLast(1).All((v) => MIN_VALUE <= v && v <= MAX_VALUE)) break;
             }
             Color color = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0]);
             return new AcrylicBrush()
