@@ -19,11 +19,7 @@
                 <ResourceDictionary Source="Dictionaries/DropShadowGridViewItem.xaml" />
                 <ResourceDictionary Source="Dictionaries/MainNavigationView.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Style x:Key="TitleTextBlockStyle" TargetType="TextBlock">
-                <Setter Property="FontSize" Value="40" />
-                <Setter Property="FontWeight" Value="Bold" />
-                <Setter Property="Margin" Value="20,20,0,20" />
-            </Style>
+            <x:Double x:Key="MinimalNavigationViewWindowWidth">720</x:Double>
             <Style x:Key="FontIconButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />

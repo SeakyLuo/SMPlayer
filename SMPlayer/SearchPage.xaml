@@ -8,10 +8,5 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
-    <Grid>
-        <TextBlock
-            x:Name="MusicLibraryTitleTextBlock"
-            Style="{StaticResource TitleTextBlockStyle}"
-            Text="Search Result" />
-    </Grid>
+    <Grid />
 </Page>

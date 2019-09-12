@@ -12,17 +12,8 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <TextBlock
-            x:Name="MusicLibraryTitleTextBlock"
-            Style="{StaticResource TitleTextBlockStyle}"
-            Text="Albums" />
         <ProgressRing
             x:Name="AlbumPageProgressRing"
-            Grid.Row="1"
             Width="100"
             Height="100"
             HorizontalAlignment="Center"
@@ -30,7 +21,6 @@
             IsActive="False"
             Visibility="Collapsed" />
         <GridView
-            Grid.Row="1"
             Margin="10"
             IsItemClickEnabled="True"
             ItemClick="GridView_ItemClick"

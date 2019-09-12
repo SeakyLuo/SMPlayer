@@ -19,17 +19,8 @@
     </Page.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <TextBlock
-            x:Name="MusicLibraryTitleTextBlock"
-            Style="{StaticResource TitleTextBlockStyle}"
-            Text="Artists" />
         <controls:MasterDetailsView
             x:Name="ArtistMasterDetailsView"
-            Grid.Row="1"
             BackButtonBehavior="Automatic"
             CompactModeThresholdWidth="720"
             ItemContainerStyle="{StaticResource StretchingListViewItemStyle}"

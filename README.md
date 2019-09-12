@@ -28,5 +28,3 @@ Show in explorer.
 Full Screen.
 
 PlayCount not read.
-
-Overlap HamburgerButton and NewTab.

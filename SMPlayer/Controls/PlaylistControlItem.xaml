@@ -6,8 +6,6 @@
     xmlns:local="using:SMPlayer.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:triggers="using:SMPlayer.Triggers"
-    d:DesignHeight="300"
-    d:DesignWidth="400"
     mc:Ignorable="d">
 
     <Grid x:Name="ContentGrid" Background="Transparent">
@@ -56,9 +54,10 @@
         <TextBlock
             x:Name="DurationTextBlock"
             Grid.Row="0"
-            Grid.Column="3"
             Grid.RowSpan="1"
+            Grid.Column="3"
             HorizontalAlignment="Right"
+            VerticalAlignment="Center"
             Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
             Text="{Binding Duration, Converter={StaticResource MusicDurationConverter}}" />
         <TextBlock
@@ -67,9 +66,9 @@
             Grid.ColumnSpan="3"
             Margin="0,2"
             HorizontalAlignment="Left"
-            Visibility="Collapsed"
             Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
-            Text="{Binding Converter={StaticResource MusicArtistAlbumConverter}}" />
+            Text="{Binding Converter={StaticResource MusicArtistAlbumConverter}}"
+            Visibility="Collapsed" />
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">
                 <VisualState x:Name="Normal" />
@@ -78,7 +77,10 @@
                         <triggers:ControlSizeTrigger MinWidth="750" TargetElement="{x:Bind ContentGrid}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="TitlePanel.ColumnSpan" Value="3" />
+                        <Setter Target="TitleColumnDefinition.Width" Value="Auto" />
+                        <Setter Target="PlayingIcon.FontSize" Value="14" />
+                        <Setter Target="PlayingIcon.Margin" Value="0,0,8,0" />
+                        <Setter Target="TitlePanel.(Grid.ColumnSpan)" Value="3" />
                         <Setter Target="TitleTextBlock.FontSize" Value="16" />
                         <Setter Target="ArtistTextBlock.Visibility" Value="Collapsed" />
                         <Setter Target="AlbumTextBlock.Visibility" Value="Collapsed" />

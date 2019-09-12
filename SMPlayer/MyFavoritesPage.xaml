@@ -8,14 +8,5 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <TextBlock
-            x:Name="MusicLibraryTitleTextBlock"
-            Style="{StaticResource TitleTextBlockStyle}"
-            Text="My Favorites" />
-    </Grid>
+    <Grid />
 </Page>

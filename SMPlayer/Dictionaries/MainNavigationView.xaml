@@ -151,7 +151,7 @@
                                         Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.OverflowButtonVisibility}">
 
                                         <Button.Flyout>
-                                            <Flyout Placement="Bottom" ShouldConstrainToRootBounds="False">
+                                            <Flyout Placement="Bottom">
                                                 <Flyout.FlyoutPresenterStyle>
                                                     <Style TargetType="FlyoutPresenter">
                                                         <Setter Property="Padding" Value="0,8" />
@@ -259,12 +259,11 @@
                                         <Grid
                                             x:Name="AutoSuggestArea"
                                             Grid.Row="3"
-                                            Height="{ThemeResource NavigationViewTopPaneHeight}"
                                             VerticalAlignment="Center">
 
                                             <ContentControl
                                                 x:Name="PaneAutoSuggestBoxPresenter"
-                                                Margin="{ThemeResource NavigationViewAutoSuggestBoxMargin}"
+                                                Margin="10,10,10,0"
                                                 HorizontalContentAlignment="Stretch"
                                                 VerticalContentAlignment="Center"
                                                 IsTabStop="False" />
@@ -315,28 +314,20 @@
                                     <Grid x:Name="ContentGrid">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
 
-                                        <Grid
-                                            x:Name="ContentTopPadding"
-                                            Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.TopPadding}"
-                                            Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.LeftPaneVisibility}" />
-
                                         <ContentControl
                                             x:Name="HeaderContent"
-                                            Grid.Row="1"
-                                            MinHeight="{StaticResource PaneToggleButtonHeight}"
+                                            Grid.Row="0"
                                             HorizontalContentAlignment="Stretch"
                                             VerticalContentAlignment="Stretch"
                                             Content="{TemplateBinding Header}"
                                             ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                            IsTabStop="False"
-                                            Style="{StaticResource NavigationViewTitleHeaderContentControlTextStyle}" />
+                                            IsTabStop="False" />
 
                                         <ContentPresenter
-                                            Grid.Row="2"
+                                            Grid.Row="1"
                                             AutomationProperties.LandmarkType="Main"
                                             Content="{TemplateBinding Content}" />
                                     </Grid>
@@ -357,13 +348,14 @@
 
                                 <VisualState x:Name="Minimal">
                                     <VisualState.Setters>
-                                        <Setter Target="HeaderContent.Margin" Value="48,5,0,0" />
+                                        <Setter Target="HeaderContent.Margin" Value="40,0,0,0" />
+                                        <Setter Target="TogglePaneButton.Background" Value="WhiteSmoke" />
                                     </VisualState.Setters>
                                 </VisualState>
                                 <VisualState x:Name="TopNavigationMinimal" />
                                 <VisualState x:Name="MinimalWithBackButton">
                                     <VisualState.Setters>
-                                        <Setter Target="HeaderContent.Margin" Value="104,5,0,0" />
+                                        <Setter Target="HeaderContent.Margin" Value="100,0,0,0" />
                                     </VisualState.Setters>
                                 </VisualState>
 

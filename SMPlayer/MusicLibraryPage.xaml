@@ -11,14 +11,6 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <TextBlock
-            x:Name="MusicLibraryTitleTextBlock"
-            Style="{StaticResource TitleTextBlockStyle}"
-            Text="Music Library" />
         <controls:DataGrid
             x:Name="MusicLibraryDataGrid"
             Grid.Row="1"
@@ -82,16 +74,16 @@
                     Header="Album" />
                 <controls:DataGridTextColumn
                     MinWidth="100"
-                    CanUserReorder="True"
                     MaxWidth="120"
                     Binding="{Binding Duration, Converter={StaticResource MusicDurationConverter}}"
+                    CanUserReorder="True"
                     Header="Duration" />
                 <controls:DataGridTextColumn
                     MinWidth="100"
                     Binding="{Binding Favorite, Converter={StaticResource MusicFavoriteConverter}, Mode=OneWay}"
+                    CanUserReorder="False"
                     CanUserResize="False"
                     Foreground="Red"
-                    CanUserReorder="False"
                     Header="Favorite">
                     <controls:DataGridTextColumn.CellStyle>
                         <Style TargetType="controls:DataGridCell">

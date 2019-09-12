@@ -41,6 +41,13 @@ namespace SMPlayer
             SetBackButtonVisibility();
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            TreeInfo info = History.Peek().GetTreeInfo();
+            MainPage.Instance.SetHeaderText(string.IsNullOrEmpty(info.Directory) ? "No Music" : info.Directory);
+        }
+
         private void LocalNavigationView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
             var item = (NavigationViewItem)LocalNavigationView.SelectedItem;
@@ -101,7 +108,7 @@ namespace SMPlayer
 
         private void SetText(TreeInfo info)
         {
-            TitleTextBlock.Text = string.IsNullOrEmpty(info.Directory) ? "No Music" : info.Directory;
+            MainPage.Instance.SetHeaderText(string.IsNullOrEmpty(info.Directory) ? "No Music" : info.Directory);
             LocalFoldersItem.Content = $"Folders ({info.Folders})";
             LocalFoldersItem.IsEnabled = info.Folders != 0;
             LocalSongsItem.Content = $"Songs ({info.Songs})";

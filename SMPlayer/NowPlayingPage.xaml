@@ -13,15 +13,9 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock
-            x:Name="MusicLibraryTitleTextBlock"
-            Style="{StaticResource TitleTextBlockStyle}"
-            Text="Now Playing" />
         <CommandBar
-            Grid.Row="1"
             Background="Transparent"
             DefaultLabelPosition="Right"
             IsOpen="False">
@@ -49,7 +43,7 @@
         </CommandBar>
         <local:PlaylistControl
             x:Name="NowPlayingPlaylistControl"
-            Grid.Row="2"
+            Grid.Row="1"
             Margin="10,10,10,0"
             AlternatingRowColor="True"
             Theme="Light" />

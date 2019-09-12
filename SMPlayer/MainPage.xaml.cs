@@ -131,6 +131,10 @@ namespace SMPlayer
             }
             Settings.settings.LastPage = name;
         }
+        public void SetHeaderText(string header)
+        {
+            MainNavigationViewHeader.Text = header;
+        }
         private void MainNavigationView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
             if (args.IsSettingsInvoked)
@@ -147,39 +151,52 @@ namespace SMPlayer
 
         private void NaviFrame_Navigated(object sender, NavigationEventArgs e)
         {
+            bool visible = true;
             Helper.BackButtonVisible = NaviFrame.CanGoBack;
             switch (NaviFrame.CurrentSourcePageType.Name)
             {
                 case "MusicLibraryPage":
+                    SetHeaderText("Music Library");
                     MainNavigationView.SelectedItem = MusicLibraryItem;
                     break;
                 case "ArtistsPage":
+                    SetHeaderText("Artists");
                     MainNavigationView.SelectedItem = ArtistsItem;
                     break;
                 case "AlbumsPage":
+                    SetHeaderText("Albums");
                     MainNavigationView.SelectedItem = AlbumsItem;
                     break;
                 case "NowPlayingPage":
+                    SetHeaderText("Now Playing");
                     MainNavigationView.SelectedItem = NowPlayingItem;
                     break;
                 case "RecentPage":
+                    SetHeaderText("Recent");
                     MainNavigationView.SelectedItem = RecentItem;
                     break;
                 case "LocalPage":
                     MainNavigationView.SelectedItem = LocalItem;
                     break;
                 case "PlaylistsPage":
+                    visible = false;
                     MainNavigationView.SelectedItem = PlaylistsItem;
                     break;
                 case "MyFavoritesPage":
+                    SetHeaderText("My Favorites");
                     MainNavigationView.SelectedItem = MyFavoritesItem;
                     break;
+                case "SearchPage":
+                    SetHeaderText("Search Result");
+                    break;
                 case "SettingsPage":
+                    SetHeaderText("Settings");
                     MainNavigationView.SelectedItem = MainNavigationView.SettingsItem;
                     break;
                 default:
-                    return;
+                    break;
             }
+            HeaderGrid.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public void PauseMusic()
