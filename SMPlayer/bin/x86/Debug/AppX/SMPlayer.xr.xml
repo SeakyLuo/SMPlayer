@@ -29,7 +29,6 @@
     <RootPropertyPathName Name="OverflowContentClipRect" />
     <RootPropertyPathName Name="OverflowContentHeight" />
     <RootPropertyPathName Name="MinimalVerticalDelta" />
-    <RootPropertyPathName Name="PlaylistDataTemplateControl" />
     <RootPropertyPathName Name="KeyboardAcceleratorTextMinWidth" />
     <RootPropertyPathName Name="PlayCount" />
     <RootPropertyPathName Name="Favorite" />
@@ -243,6 +242,7 @@
       <RootProperty Name="Converter" />
       <RootProperty Name="Mode" />
       <RootProperty Name="ConverterParameter" />
+      <RootProperty Name="Path" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.DataTemplate">
       <RootProperty Name="Template" />

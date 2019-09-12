@@ -40,7 +40,7 @@
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="data:Music">
                 <UserControl x:Name="PlaylistDataTemplateControl">
-                    <Grid Background="Transparent">
+                    <Grid Background="Transparent" x:Name="ContentGrid">
                         <Grid.ContextFlyout>
                             <MenuFlyout Opening="OpenMusicMenuFlyout" />
                         </Grid.ContextFlyout>
@@ -84,12 +84,12 @@
                             <VisualStateGroup x:Name="WidthChange">
                                 <VisualState x:Name="Width1000">
                                     <VisualState.StateTriggers>
-                                        <triggers:ControlSizeTrigger MinWidth="1000" TargetElement="{x:Bind Path=PlaylistDataTemplateControl}" />
+                                        <triggers:ControlSizeTrigger MinWidth="1000" TargetElement="{x:Bind Path=ContentGrid}" />
                                     </VisualState.StateTriggers>
                                 </VisualState>
                                 <VisualState x:Name="Width800">
                                     <VisualState.StateTriggers>
-                                        <triggers:ControlSizeTrigger MinWidth="800" TargetElement="{x:Bind Path=PlaylistDataTemplateControl}" />
+                                        <triggers:ControlSizeTrigger MinWidth="800" TargetElement="{x:Bind Path=ContentGrid}" />
                                     </VisualState.StateTriggers>
                                     <VisualState.Setters>
                                         <Setter Target="AlbumTextBlock.Visibility" Value="Collapsed" />
