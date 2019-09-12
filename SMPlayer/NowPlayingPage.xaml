@@ -13,12 +13,25 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <CommandBar
+            x:Name="NowPlayingCommandBar"
+            Grid.Row="1"
             Background="Transparent"
             DefaultLabelPosition="Right"
-            IsOpen="False">
+            IsOpen="False"
+            OverflowButtonVisibility="Collapsed">
+            <CommandBar.Content>
+                <TextBlock
+                    x:Name="CommandBarHeaderTextBlock"
+                    Padding="50,10,0,10"
+                    Style="{StaticResource CompactHeaderStyle}"
+                    Text="Now Playing"
+                    TextAlignment="Center"
+                    Visibility="Collapsed" />
+            </CommandBar.Content>
             <AppBarButton
                 x:Name="SaveToButton"
                 Click="SaveToButton_Click"
@@ -38,14 +51,33 @@
                 Click="FullScreenButton_Click"
                 Icon="FullScreen"
                 IsEnabled="False"
-                Label="Expand Page"
+                Label="Expand View"
                 ToolTipService.ToolTip="Full Window Display" />
         </CommandBar>
         <local:PlaylistControl
             x:Name="NowPlayingPlaylistControl"
-            Grid.Row="1"
-            Margin="10,10,10,0"
+            Grid.Row="2"
+            Margin="10,0"
             AlternatingRowColor="True"
             Theme="Light" />
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="WidthChange">
+                <VisualState x:Name="WideLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource MinimalNavigationViewWindowWidth}" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Minimal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="CommandBarHeaderTextBlock.Visibility" Value="Visible" />
+                        <Setter Target="NowPlayingPlaylistControl.Margin" Value="10,10,10,0" />
+                        <Setter Target="NowPlayingCommandBar.Background" Value="{StaticResource MinimalTitleBarColor}" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </Page>

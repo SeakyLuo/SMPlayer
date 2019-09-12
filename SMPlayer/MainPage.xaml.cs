@@ -49,6 +49,10 @@ namespace SMPlayer
             {
                 if (NaviFrame.CanGoBack) NaviFrame.GoBack();
             };
+            Window.Current.SizeChanged += (sender, e) =>
+            {
+                HeaderGrid.Visibility = e.Size.Width < 720 && Settings.settings.LastPage == "NowPlaying" ? Visibility.Collapsed : Visibility.Visible;
+            };
 
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
@@ -151,52 +155,60 @@ namespace SMPlayer
 
         private void NaviFrame_Navigated(object sender, NavigationEventArgs e)
         {
-            bool visible = true;
             Helper.BackButtonVisible = NaviFrame.CanGoBack;
             switch (NaviFrame.CurrentSourcePageType.Name)
             {
                 case "MusicLibraryPage":
                     SetHeaderText("Music Library");
+                    HeaderGrid.Visibility = Visibility.Visible;
                     MainNavigationView.SelectedItem = MusicLibraryItem;
                     break;
                 case "ArtistsPage":
                     SetHeaderText("Artists");
+                    HeaderGrid.Visibility = Visibility.Visible;
                     MainNavigationView.SelectedItem = ArtistsItem;
                     break;
                 case "AlbumsPage":
                     SetHeaderText("Albums");
+                    HeaderGrid.Visibility = Visibility.Visible;
                     MainNavigationView.SelectedItem = AlbumsItem;
                     break;
                 case "NowPlayingPage":
-                    SetHeaderText("Now Playing");
+                    SetHeaderText("NowPlaying");
+                    HeaderGrid.Visibility = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? Visibility.Collapsed : Visibility.Visible;
                     MainNavigationView.SelectedItem = NowPlayingItem;
                     break;
                 case "RecentPage":
                     SetHeaderText("Recent");
+                    HeaderGrid.Visibility = Visibility.Visible;
                     MainNavigationView.SelectedItem = RecentItem;
                     break;
                 case "LocalPage":
+                    HeaderGrid.Visibility = Visibility.Visible;
                     MainNavigationView.SelectedItem = LocalItem;
                     break;
                 case "PlaylistsPage":
-                    visible = false;
+                    HeaderGrid.Visibility = Visibility.Collapsed;
                     MainNavigationView.SelectedItem = PlaylistsItem;
                     break;
                 case "MyFavoritesPage":
                     SetHeaderText("My Favorites");
+                    HeaderGrid.Visibility = Visibility.Visible;
                     MainNavigationView.SelectedItem = MyFavoritesItem;
                     break;
                 case "SearchPage":
                     SetHeaderText("Search Result");
+                    HeaderGrid.Visibility = Visibility.Visible;
                     break;
                 case "SettingsPage":
                     SetHeaderText("Settings");
+                    HeaderGrid.Visibility = Visibility.Visible;
                     MainNavigationView.SelectedItem = MainNavigationView.SettingsItem;
                     break;
                 default:
+                    Debug.WriteLine("Navigate to " + NaviFrame.CurrentSourcePageType.Name);
                     break;
             }
-            HeaderGrid.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public void PauseMusic()
@@ -224,6 +236,33 @@ namespace SMPlayer
         private void MainNavigationView_PaneClosing(NavigationView sender, NavigationViewPaneClosingEventArgs args)
         {
             VisualStateManager.GoToState(this, "Close", true);
+        }
+
+        private void HeaderSearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainNavigationViewHeader.Visibility = Visibility.Collapsed;
+            HeaderSearchButton.Visibility = Visibility.Collapsed;
+            HeaderNaviSearchBar.Visibility = Visibility.Visible;
+        }
+
+        private void HeaderNaviSearchBar_LosingFocus(UIElement sender, LosingFocusEventArgs args)
+        {
+            Debug.WriteLine("HeaderNaviSearchBar_LosingFocus");
+            //MainNavigationViewHeader.Visibility = Visibility.Visible;
+            //HeaderSearchButton.Visibility = Visibility.Visible;
+            //HeaderNaviSearchBar.Visibility = Visibility.Collapsed;
+        }
+
+        private void HeaderNaviSearchBar_FocusDisengaged(Control sender, FocusDisengagedEventArgs args)
+        {
+            Debug.WriteLine("HeaderNaviSearchBar_FocusDisengaged");
+
+        }
+
+        private void HeaderNaviSearchBar_NoFocusCandidateFound(UIElement sender, NoFocusCandidateFoundEventArgs args)
+        {
+            Debug.WriteLine("HeaderNaviSearchBar_NoFocusCandidateFound");
+
         }
     }
 }

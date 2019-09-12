@@ -42,6 +42,7 @@
                                     x:Name="TogglePaneButton"
                                     VerticalAlignment="Top"
                                     AutomationProperties.LandmarkType="Navigation"
+                                    Background="Transparent"
                                     Style="{TemplateBinding PaneToggleButtonStyle}"
                                     Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.PaneToggleButtonVisibility}">
                                     <TextBlock
@@ -337,7 +338,7 @@
                                 <VisualState x:Name="Minimal">
                                     <VisualState.Setters>
                                         <Setter Target="HeaderContent.Margin" Value="40,0,0,0" />
-                                        <Setter Target="TogglePaneButton.Background" Value="WhiteSmoke" />
+                                        <Setter Target="TogglePaneButton.Background" Value="{StaticResource MinimalTitleBarColor}" />
                                     </VisualState.Setters>
                                 </VisualState>
                                 <VisualState x:Name="TopNavigationMinimal" />

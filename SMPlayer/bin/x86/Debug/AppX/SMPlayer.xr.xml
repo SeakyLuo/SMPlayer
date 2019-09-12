@@ -46,7 +46,33 @@
       <RootProperty Name="MergedDictionaries" />
       <RootProperty Name="Source" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Media.SolidColorBrush">
+      <RootProperty Name="Color" />
+      <RootProperty Name="Opacity" />
+    </RootType>
     <RootType FullName="System.Double" />
+    <RootType FullName="Windows.UI.Xaml.Controls.TextBlock">
+      <RootProperty Name="FontSize" />
+      <RootProperty Name="FontWeight" />
+      <RootProperty Name="Padding" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="MaxLines" />
+      <RootProperty Name="Text" />
+      <RootProperty Name="TextAlignment" />
+      <RootProperty Name="TextWrapping" />
+      <RootProperty Name="Visibility" />
+      <RootProperty Name="Foreground" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="FontFamily" />
+      <RootProperty Name="FontStyle" />
+      <RootProperty Name="IsHitTestVisible" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="HorizontalTextAlignment" />
+      <RootProperty Name="Width" />
+      <RootProperty Name="TextTrimming" />
+      <RootProperty Name="MinWidth" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Button">
       <RootProperty Name="Content" />
       <RootProperty Name="Style" />
@@ -264,28 +290,6 @@
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="XYFocusKeyboardNavigation" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.TextBlock">
-      <RootProperty Name="Margin" />
-      <RootProperty Name="FontWeight" />
-      <RootProperty Name="MaxLines" />
-      <RootProperty Name="Text" />
-      <RootProperty Name="TextAlignment" />
-      <RootProperty Name="TextWrapping" />
-      <RootProperty Name="Visibility" />
-      <RootProperty Name="FontSize" />
-      <RootProperty Name="Foreground" />
-      <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="FontFamily" />
-      <RootProperty Name="FontStyle" />
-      <RootProperty Name="Padding" />
-      <RootProperty Name="IsHitTestVisible" />
-      <RootProperty Name="Style" />
-      <RootProperty Name="HorizontalTextAlignment" />
-      <RootProperty Name="Width" />
-      <RootProperty Name="TextTrimming" />
-      <RootProperty Name="MinWidth" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ToolTipService">
       <RootMethod Name="GetToolTip" />
       <RootMethod Name="SetToolTip" />
@@ -482,10 +486,6 @@
       <RootProperty Name="Background" />
       <RootProperty Name="Content" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Media.SolidColorBrush">
-      <RootProperty Name="Opacity" />
-      <RootProperty Name="Color" />
-    </RootType>
     <RootType FullName="SMPlayer.LoadingControl">
       <RootProperty Name="Text" />
     </RootType>
@@ -511,8 +511,13 @@
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="PlaceholderText" />
       <RootProperty Name="QueryIcon" />
+      <RootProperty Name="Margin" />
       <RootProperty Name="Style" />
+      <RootProperty Name="Visibility" />
       <RootEvent Name="QuerySubmitted" />
+      <RootEvent Name="FocusDisengaged" />
+      <RootEvent Name="LosingFocus" />
+      <RootEvent Name="NoFocusCandidateFound" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.TextBox">
       <RootProperty Name="SelectionHighlightColor" />
@@ -768,6 +773,8 @@
       <RootProperty Name="Background" />
       <RootProperty Name="DefaultLabelPosition" />
       <RootProperty Name="IsOpen" />
+      <RootProperty Name="OverflowButtonVisibility" />
+      <RootProperty Name="Content" />
       <RootProperty Name="PrimaryCommands" />
       <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
