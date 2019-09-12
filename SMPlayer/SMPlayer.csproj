@@ -130,6 +130,9 @@
     <Compile Include="Controls\IconTextButton.xaml.cs">
       <DependentUpon>IconTextButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PlaylistControlItem.xaml.cs">
+      <DependentUpon>PlaylistControlItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\MenuFlyoutHelper.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Controls\LoadingControl.xaml.cs">
@@ -280,6 +283,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\LoadingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PlaylistControlItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

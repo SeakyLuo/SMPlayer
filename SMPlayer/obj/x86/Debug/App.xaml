@@ -55,6 +55,7 @@
             <local:SongCountConverter x:Key="SongCountConverter" />
             <local:EnabledConverter x:Key="EnabledConverter" />
             <local:CriterionConverter x:Key="CriterionConverter" />
+            <local:MusicArtistAlbumConverter x:Key="MusicArtistAlbumConverter" />
             <AcrylicBrush
                 x:Key="MediaControlPlayButtonBorderBrush"
                 BackgroundSource="Backdrop"

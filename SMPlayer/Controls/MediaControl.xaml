@@ -118,13 +118,33 @@
                     ToolTipService.ToolTip="More"
                     Visibility="Collapsed">
                     <Button.Flyout>
-                        <MenuFlyout Opening="MenuFlyout_Opening">
-                            <MenuFlyoutItem
-                                x:Name="MainMediaControlMoreFullScreenItem"
-                                Click="FullScreenButton_Click"
-                                Icon="Fullscreen"
-                                Text="Full Screen" />
-                        </MenuFlyout>
+                        <Flyout Opening="MainMediaControlMoreFlyout_Opening">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button
+                                        x:Name="MainMoreVolumeButton"
+                                        Click="VolumeButton_Click"
+                                        Content="&#xE15D;"
+                                        Style="{StaticResource MediaControlButtonStyle}"
+                                        Template="{StaticResource MediaControlButtonTemplate}" />
+                                    <Slider
+                                        x:Name="MainMoreVolumeSlider"
+                                        Width="100"
+                                        Margin="10,0,20,0"
+                                        VerticalAlignment="Center"
+                                        Maximum="100"
+                                        Minimum="0"
+                                        Style="{StaticResource MediaProgressSliderStyle}"
+                                        ValueChanged="VolumeSlider_ValueChanged"
+                                        Value="50" />
+                                </StackPanel>
+                                <local:IconTextButton
+                                    x:Name="MainMediaControlMoreFullScreenItem"
+                                    Tapped="MainMediaControlMoreFullScreenItem_Tapped"
+                                    Icon="Fullscreen"
+                                    Label="Full Screen" />
+                            </StackPanel>
+                        </Flyout>
                     </Button.Flyout>
                 </Button>
             </StackPanel>
@@ -226,12 +246,20 @@
                     Template="{StaticResource MediaControlButtonTemplate}"
                     ToolTipService.ToolTip="More">
                     <Button.Flyout>
-                        <MenuFlyout Opening="MenuFlyout_Opening">
+                        <MenuFlyout Opening="MainMoreMenuFlyout_Opening">
                             <MenuFlyoutItem
                                 x:Name="MainMoreFullScreenItem"
                                 Click="FullScreenButton_Click"
                                 Icon="Fullscreen"
                                 Text="Full Screen" />
+                            <MenuFlyoutItem
+                                x:Name="MainMiniPlayItem"
+                                Click="MiniPlayButton_Click"
+                                Text="Mini Play">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE744;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
                         </MenuFlyout>
                     </Button.Flyout>
                 </Button>

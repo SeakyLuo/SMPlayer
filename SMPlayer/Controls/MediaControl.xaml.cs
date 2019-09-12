@@ -163,7 +163,7 @@ namespace SMPlayer
                 switch (mode)
                 {
                     case MediaControlMode.Main:
-                        return MainVolumeButton;
+                        return MainMediaControlMoreButton.Visibility == Visibility.Visible ? MainMoreVolumeButton : MainVolumeButton;
                     case MediaControlMode.Full:
                         return FullVolumeButton;
                     default:
@@ -178,7 +178,7 @@ namespace SMPlayer
                 switch (mode)
                 {
                     case MediaControlMode.Main:
-                        return MainVolumeSlider;
+                        return MainMediaControlMoreButton.Visibility == Visibility.Visible ? MainMoreVolumeSlider : MainVolumeSlider;
                     case MediaControlMode.Full:
                         return FullVolumeSlider;
                     default:
@@ -455,7 +455,7 @@ namespace SMPlayer
             double volume = e.NewValue / 100;
             MediaHelper.Player.Volume = volume;
             string icon = Helper.GetVolumeIcon(e.NewValue);
-            VolumeButton.Content = icon;
+            if (VolumeButton != null) VolumeButton.Content = icon;
             Settings.settings.Volume = volume;
         }
 
@@ -543,13 +543,13 @@ namespace SMPlayer
         private static SymbolIcon FullScreenIcon = new SymbolIcon(Symbol.FullScreen);
         private static SymbolIcon BackToWindowIcon = new SymbolIcon(Symbol.BackToWindow);
 
-        private void FullScreenButton_Click(object sender, RoutedEventArgs e)
+        private void FullScreenClick()
         {
             if (!ApplicationView.GetForCurrentView().IsFullScreenMode)
             {
                 ApplicationView.GetForCurrentView().ExitFullScreenMode();
                 MainMediaControlMoreFullScreenItem.Icon = FullScreenIcon;
-                MainMediaControlMoreFullScreenItem.Text = "Full Screen";
+                MainMediaControlMoreFullScreenItem.Label = "Full Screen";
                 MainMoreFullScreenItem.Icon = FullScreenIcon;
                 MainMoreFullScreenItem.Text = "Full Screen";
                 FullScreenButton.Content = "\uE740";
@@ -560,13 +560,22 @@ namespace SMPlayer
                 if (ApplicationView.GetForCurrentView().TryEnterFullScreenMode())
                 {
                     MainMediaControlMoreFullScreenItem.Icon = BackToWindowIcon;
-                    MainMediaControlMoreFullScreenItem.Text = "Exit Full Screen";
+                    MainMediaControlMoreFullScreenItem.Label = "Exit Full Screen";
                     MainMoreFullScreenItem.Icon = BackToWindowIcon;
                     MainMoreFullScreenItem.Text = "Exit Full Screen";
                     FullScreenButton.Content = "\uE73F";
                     SetToolTip(FullScreenButton, "Exit Full Screen");
                 }
             }
+        }
+        private void FullScreenButton_Click(object sender, RoutedEventArgs e)
+        {
+            FullScreenClick();
+        }
+
+        private void MainMediaControlMoreFullScreenItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            FullScreenClick();
         }
 
         private void MiniPlayButton_Click(object sender, RoutedEventArgs e)
@@ -672,7 +681,7 @@ namespace SMPlayer
             PlayMusic();
         }
 
-        private void MenuFlyout_Opening(object sender, object e)
+        private void MainMoreMenuFlyout_Opening(object sender, object e)
         {
             if (MediaHelper.CurrentMusic == null)
             {
@@ -685,6 +694,11 @@ namespace SMPlayer
             }
             else
                 MenuFlyoutHelper.InsertMusicItem(sender);
+        }
+
+        private void MainMediaControlMoreFlyout_Opening(object sender, object e)
+        {
+
         }
 
         private void MainMusicInfoGrid_PointerEntered(object sender, PointerRoutedEventArgs e)

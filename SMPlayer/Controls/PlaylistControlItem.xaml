@@ -1,0 +1,93 @@
+﻿<UserControl
+    x:Class="SMPlayer.Controls.PlaylistControlItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:SMPlayer.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:triggers="using:SMPlayer.Triggers"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    mc:Ignorable="d">
+
+    <Grid x:Name="ContentGrid" Background="Transparent">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="TitleColumnDefinition" Width="6*" />
+            <ColumnDefinition x:Name="ArtistColumnDefinition" Width="3*" />
+            <ColumnDefinition x:Name="AlbumColumnDefinition" Width="5*" />
+            <ColumnDefinition x:Name="DurationColumnDefinition" Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="TitleRow" Height="Auto" />
+            <RowDefinition x:Name="AlbumArtistRow" Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel
+            x:Name="TitlePanel"
+            Grid.Row="0"
+            Grid.Column="0"
+            Orientation="Horizontal">
+            <FontIcon
+                x:Name="PlayingIcon"
+                Margin="0,0,16,0"
+                FontFamily="Segoe MDL2 Assets"
+                Foreground="{StaticResource SystemColorHighlightColor}"
+                Glyph="&#xE767;"
+                RelativePanel.AlignLeftWithPanel="True"
+                Visibility="{Binding IsPlaying, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
+            <TextBlock
+                x:Name="TitleTextBlock"
+                Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=White, Mode=OneWay}"
+                Text="{Binding Name}" />
+        </StackPanel>
+        <TextBlock
+            x:Name="ArtistTextBlock"
+            Grid.Row="0"
+            Grid.Column="1"
+            Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
+            Text="{Binding Artist}"
+            Visibility="Visible" />
+        <TextBlock
+            x:Name="AlbumTextBlock"
+            Grid.Row="0"
+            Grid.Column="2"
+            Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
+            Text="{Binding Album}"
+            Visibility="Visible" />
+        <TextBlock
+            x:Name="DurationTextBlock"
+            Grid.Row="0"
+            Grid.Column="3"
+            Grid.RowSpan="1"
+            HorizontalAlignment="Right"
+            Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
+            Text="{Binding Duration, Converter={StaticResource MusicDurationConverter}}" />
+        <TextBlock
+            x:Name="ArtistAlbumTextBlock"
+            Grid.Row="1"
+            Grid.ColumnSpan="3"
+            Margin="0,2"
+            HorizontalAlignment="Left"
+            Visibility="Collapsed"
+            Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
+            Text="{Binding Converter={StaticResource MusicArtistAlbumConverter}}" />
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="WidthChange">
+                <VisualState x:Name="Normal" />
+                <VisualState x:Name="Width750">
+                    <VisualState.StateTriggers>
+                        <triggers:ControlSizeTrigger MinWidth="750" TargetElement="{x:Bind ContentGrid}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="TitlePanel.ColumnSpan" Value="3" />
+                        <Setter Target="TitleTextBlock.FontSize" Value="16" />
+                        <Setter Target="ArtistTextBlock.Visibility" Value="Collapsed" />
+                        <Setter Target="AlbumTextBlock.Visibility" Value="Collapsed" />
+                        <Setter Target="ArtistAlbumTextBlock.Visibility" Value="Visible" />
+                        <Setter Target="DurationTextBlock.(Grid.RowSpan)" Value="2" />
+                        <Setter Target="ContentGrid.Padding" Value="5,5" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+</UserControl>

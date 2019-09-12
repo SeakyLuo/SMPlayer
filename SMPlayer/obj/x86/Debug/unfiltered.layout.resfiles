@@ -57,6 +57,7 @@ Controls\IconTextButton.xbf
 Controls\LoadingControl.xbf
 Controls\MediaControl.xbf
 Controls\PlaylistControl.xbf
+Controls\PlaylistControlItem.xbf
 Dialogs\RenameDialog.xbf
 Dictionaries\BorderlessAutoSuggestBox.xbf
 Dictionaries\BorderlessTextBox.xbf

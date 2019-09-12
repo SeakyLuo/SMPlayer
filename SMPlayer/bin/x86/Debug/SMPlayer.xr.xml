@@ -4,6 +4,11 @@
     <RootInterface FullName="Windows.UI.Xaml.Data.IValueConverter" />
   </Roots.Interfaces>
   <Roots.PropertyPathNames>
+    <RootPropertyPathName Name="IsPlaying" />
+    <RootPropertyPathName Name="Duration" />
+    <RootPropertyPathName Name="Album" />
+    <RootPropertyPathName Name="Artist" />
+    <RootPropertyPathName Name="Name" />
     <RootPropertyPathName Name="PlaceholderForeground" />
     <RootPropertyPathName Name="IsPaneOpen" />
     <RootPropertyPathName Name="TemplateSettings" />
@@ -32,11 +37,6 @@
     <RootPropertyPathName Name="KeyboardAcceleratorTextMinWidth" />
     <RootPropertyPathName Name="PlayCount" />
     <RootPropertyPathName Name="Favorite" />
-    <RootPropertyPathName Name="Duration" />
-    <RootPropertyPathName Name="Album" />
-    <RootPropertyPathName Name="Artist" />
-    <RootPropertyPathName Name="Name" />
-    <RootPropertyPathName Name="IsPlaying" />
   </Roots.PropertyPathNames>
   <Roots.RootTypes>
     <RootType FullName="Windows.UI.Xaml.Application">
@@ -166,6 +166,7 @@
     <RootType FullName="SMPlayer.SongCountConverter" />
     <RootType FullName="SMPlayer.EnabledConverter" />
     <RootType FullName="SMPlayer.CriterionConverter" />
+    <RootType FullName="SMPlayer.MusicArtistAlbumConverter" />
     <RootType FullName="Windows.UI.Xaml.Media.AcrylicBrush">
       <RootProperty Name="BackgroundSource" />
       <RootProperty Name="FallbackColor" />
@@ -220,10 +221,10 @@
       <RootMethod Name="SetRow" />
       <RootMethod Name="GetColumn" />
       <RootMethod Name="SetColumn" />
-      <RootMethod Name="GetColumnSpan" />
-      <RootMethod Name="SetColumnSpan" />
       <RootMethod Name="GetRowSpan" />
       <RootMethod Name="SetRowSpan" />
+      <RootMethod Name="GetColumnSpan" />
+      <RootMethod Name="SetColumnSpan" />
     </RootType>
     <RootType FullName="SMPlayer.AlbumPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.RowDefinition">
@@ -242,7 +243,6 @@
       <RootProperty Name="Converter" />
       <RootProperty Name="Mode" />
       <RootProperty Name="ConverterParameter" />
-      <RootProperty Name="Path" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.DataTemplate">
       <RootProperty Name="Template" />
@@ -467,13 +467,14 @@
     <RootType FullName="Windows.UI.Xaml.Media.Animation.PointerDownThemeAnimation" />
     <RootType FullName="Windows.UI.Xaml.Media.Animation.PointerUpThemeAnimation" />
     <RootType FullName="SMPlayer.IconTextButton">
+      <RootProperty Name="Icon" />
+      <RootProperty Name="Label" />
       <RootProperty Name="Padding" />
       <RootProperty Name="LabelPosition" />
       <RootProperty Name="Style" />
-      <RootProperty Name="Icon" />
       <RootProperty Name="Flyout" />
       <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="Label" />
+      <RootEvent Name="Tapped" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.Loading">
       <RootProperty Name="Background" />
@@ -485,6 +486,22 @@
     </RootType>
     <RootType FullName="SMPlayer.LoadingControl">
       <RootProperty Name="Text" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Data.Binding">
+      <RootProperty Name="Converter" />
+      <RootProperty Name="ConverterParameter" />
+      <RootProperty Name="Mode" />
+      <RootProperty Name="RelativeSource" />
+      <RootProperty Name="TargetNullValue" />
+      <RootProperty Name="Path" />
+    </RootType>
+    <RootType FullName="SMPlayer.Triggers.ControlSizeTrigger">
+      <RootProperty Name="MinWidth" />
+      <RootProperty Name="TargetElement" />
+    </RootType>
+    <RootType FullName="SMPlayer.Controls.PlaylistControlItem">
+      <RootProperty Name="DataContext" />
+      <RootProperty Name="ContextFlyout" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AutoSuggestBox">
       <RootProperty Name="TextBoxStyle" />
@@ -572,13 +589,6 @@
       <RootProperty Name="EnableDependentAnimation" />
       <RootProperty Name="From" />
       <RootProperty Name="EasingFunction" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Data.Binding">
-      <RootProperty Name="RelativeSource" />
-      <RootProperty Name="TargetNullValue" />
-      <RootProperty Name="Path" />
-      <RootProperty Name="Mode" />
-      <RootProperty Name="Converter" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Data.RelativeSource">
       <RootProperty Name="Mode" />
@@ -688,6 +698,7 @@
       <RootProperty Name="ShouldConstrainToRootBounds" />
       <RootProperty Name="FlyoutPresenterStyle" />
       <RootProperty Name="Content" />
+      <RootEvent Name="Opening" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.FlyoutPresenter" />
     <RootType FullName="Windows.UI.Xaml.Controls.ItemsPanelTemplate">
@@ -857,10 +868,6 @@
       <RootProperty Name="Header" />
     </RootType>
     <RootType FullName="SMPlayer.NowPlayingFullPage" />
-    <RootType FullName="SMPlayer.Triggers.ControlSizeTrigger">
-      <RootProperty Name="MinWidth" />
-      <RootProperty Name="TargetElement" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">
       <RootProperty Name="Icon" />
       <RootProperty Name="IsEnabled" />

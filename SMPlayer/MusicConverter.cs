@@ -235,4 +235,17 @@ namespace SMPlayer
             return null;
         }
     }
+    class MusicArtistAlbumConverter : Windows.UI.Xaml.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            Music music = value as Music;
+            return $"{music.Artist} • {music.Album}";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
