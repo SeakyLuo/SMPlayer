@@ -29,6 +29,7 @@
     <RootPropertyPathName Name="OverflowContentClipRect" />
     <RootPropertyPathName Name="OverflowContentHeight" />
     <RootPropertyPathName Name="MinimalVerticalDelta" />
+    <RootPropertyPathName Name="PlaylistDataTemplateControl" />
     <RootPropertyPathName Name="KeyboardAcceleratorTextMinWidth" />
     <RootPropertyPathName Name="PlayCount" />
     <RootPropertyPathName Name="Favorite" />
@@ -856,6 +857,10 @@
       <RootProperty Name="Header" />
     </RootType>
     <RootType FullName="SMPlayer.NowPlayingFullPage" />
+    <RootType FullName="SMPlayer.Triggers.ControlSizeTrigger">
+      <RootProperty Name="MinWidth" />
+      <RootProperty Name="TargetElement" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">
       <RootProperty Name="Icon" />
       <RootProperty Name="IsEnabled" />

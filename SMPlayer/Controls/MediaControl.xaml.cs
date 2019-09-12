@@ -540,13 +540,18 @@ namespace SMPlayer
             MainPage.Instance.Frame.Navigate(typeof(NowPlayingFullPage), null, new DrillInNavigationTransitionInfo());
         }
 
+        private static SymbolIcon FullScreenIcon = new SymbolIcon(Symbol.FullScreen);
+        private static SymbolIcon BackToWindowIcon = new SymbolIcon(Symbol.BackToWindow);
+
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
         {
             if (!ApplicationView.GetForCurrentView().IsFullScreenMode)
             {
                 ApplicationView.GetForCurrentView().ExitFullScreenMode();
-                FullScreenItem.Icon = new SymbolIcon(Symbol.FullScreen);
-                FullScreenItem.Text = "Full Screen";
+                MainMediaControlMoreFullScreenItem.Icon = FullScreenIcon;
+                MainMediaControlMoreFullScreenItem.Text = "Full Screen";
+                MainMoreFullScreenItem.Icon = FullScreenIcon;
+                MainMoreFullScreenItem.Text = "Full Screen";
                 FullScreenButton.Content = "\uE740";
                 SetToolTip(FullScreenButton, "Full Screen");
             }
@@ -554,8 +559,10 @@ namespace SMPlayer
             {
                 if (ApplicationView.GetForCurrentView().TryEnterFullScreenMode())
                 {
-                    FullScreenItem.Icon = new SymbolIcon(Symbol.BackToWindow);
-                    FullScreenItem.Text = "Exit Full Screen";
+                    MainMediaControlMoreFullScreenItem.Icon = BackToWindowIcon;
+                    MainMediaControlMoreFullScreenItem.Text = "Exit Full Screen";
+                    MainMoreFullScreenItem.Icon = BackToWindowIcon;
+                    MainMoreFullScreenItem.Text = "Exit Full Screen";
                     FullScreenButton.Content = "\uE73F";
                     SetToolTip(FullScreenButton, "Exit Full Screen");
                 }

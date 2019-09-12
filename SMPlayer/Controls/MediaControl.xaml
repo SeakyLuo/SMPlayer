@@ -14,13 +14,19 @@
             Background="{ThemeResource SystemControlAcrylicElementBrush}"
             RequestedTheme="Dark"
             Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition x:Name="MainButtonColumnDefinition" Width="*" />
             </Grid.ColumnDefinitions>
             <Grid
                 x:Name="MainMusicInfoGrid"
+                Grid.Row="0"
+                Grid.RowSpan="2"
                 Grid.Column="0"
                 Padding="0,0,5,0"
                 HorizontalAlignment="Left"
@@ -49,159 +55,188 @@
                     x:Name="MainTitleTextBlock"
                     Grid.Row="0"
                     Grid.Column="1"
-                    Margin="10,0,5,5"
+                    Margin="10,5,10,5"
                     VerticalAlignment="Bottom"
                     FontSize="24" />
                 <TextBlock
                     x:Name="MainArtistTextBlock"
                     Grid.Row="1"
                     Grid.Column="1"
-                    Margin="10,5,5,0"
+                    Margin="10,5,10,5"
                     VerticalAlignment="Top"
                     FontSize="18"
                     FontWeight="Bold" />
             </Grid>
 
-            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                <StackPanel
-                    Margin="5"
-                    HorizontalAlignment="Center"
-                    Orientation="Horizontal">
-                    <Button
-                        Click="PrevButton_Click"
-                        Content="&#xE892;"
-                        Style="{StaticResource MediaControlButtonStyle}"
-                        Template="{StaticResource MediaControlButtonTemplate}"
-                        ToolTipService.ToolTip="Previous">
-                        <Button.KeyboardAccelerators>
-                            <KeyboardAccelerator Key="Left" Modifiers="Control" />
-                        </Button.KeyboardAccelerators>
-                    </Button>
-                    <Button
-                        x:Name="MainPlayButton"
-                        Width="48"
-                        Height="48"
-                        HorizontalAlignment="Center"
-                        BorderBrush="{StaticResource MediaControlPlayButtonBorderBrush}"
-                        Click="PlayButton_Click"
-                        Content="&#xE768;"
-                        CornerRadius="25"
-                        FontSize="24"
-                        Style="{StaticResource MediaControlButtonStyle}"
-                        Template="{StaticResource MediaControlButtonTemplate}">
-                        <Button.KeyboardAccelerators>
-                            <KeyboardAccelerator Key="F3" />
-                        </Button.KeyboardAccelerators>
-                    </Button>
-                    <Button
-                        Click="NextButton_Click"
-                        Content="&#xE893;"
-                        Style="{StaticResource MediaControlButtonStyle}"
-                        Template="{StaticResource MediaControlButtonTemplate}"
-                        ToolTipService.ToolTip="Next">
-                        <Button.KeyboardAccelerators>
-                            <KeyboardAccelerator Key="Right" Modifiers="Control" />
-                        </Button.KeyboardAccelerators>
-                    </Button>
-                </StackPanel>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock
-                        x:Name="MainLeftTimeTextBlock"
-                        Margin="10,0,20,0"
-                        VerticalAlignment="Center"
-                        FontFamily="Segoe UI"
-                        Text="0:00" />
-                    <Slider
-                        x:Name="MainMediaSlider"
-                        Grid.Column="1"
-                        IsEnabled="False"
-                        IsThumbToolTipEnabled="True"
-                        ManipulationCompleted="MediaSlider_ManipulationCompleted"
-                        ManipulationMode="All"
-                        ManipulationStarted="MediaSlider_ManipulationStarted"
-                        ManipulationStarting="MediaSlider_ManipulationStarting"
-                        Minimum="0"
-                        Style="{StaticResource MediaProgressSliderStyle}"
-                        ThumbToolTipValueConverter="{StaticResource MusicDurationConverter}"
-                        ValueChanged="MediaSlider_ValueChanged" />
-                    <TextBlock
-                        x:Name="MainRightTimeTextBlock"
-                        Grid.Column="2"
-                        Margin="20,0,10,0"
-                        VerticalAlignment="Center"
-                        FontFamily="Segoe UI"
-                        Text="0:00" />
-                </Grid>
-            </StackPanel>
             <StackPanel
+                x:Name="MainMediaControlPanel"
+                Grid.Column="1"
+                Margin="5"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <Button
+                    Click="PrevButton_Click"
+                    Content="&#xE892;"
+                    Style="{StaticResource MediaControlButtonStyle}"
+                    Template="{StaticResource MediaControlButtonTemplate}"
+                    ToolTipService.ToolTip="Previous">
+                    <Button.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Left" Modifiers="Control" />
+                    </Button.KeyboardAccelerators>
+                </Button>
+                <Button
+                    x:Name="MainPlayButton"
+                    Width="48"
+                    Height="48"
+                    HorizontalAlignment="Center"
+                    BorderBrush="{StaticResource MediaControlPlayButtonBorderBrush}"
+                    Click="PlayButton_Click"
+                    Content="&#xE768;"
+                    CornerRadius="25"
+                    FontSize="24"
+                    Style="{StaticResource MediaControlButtonStyle}"
+                    Template="{StaticResource MediaControlButtonTemplate}">
+                    <Button.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="F3" />
+                    </Button.KeyboardAccelerators>
+                </Button>
+                <Button
+                    Click="NextButton_Click"
+                    Content="&#xE893;"
+                    Style="{StaticResource MediaControlButtonStyle}"
+                    Template="{StaticResource MediaControlButtonTemplate}"
+                    ToolTipService.ToolTip="Next">
+                    <Button.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Right" Modifiers="Control" />
+                    </Button.KeyboardAccelerators>
+                </Button>
+                <Button
+                    x:Name="MainMediaControlMoreButton"
+                    Content="&#xE712;"
+                    Style="{StaticResource MediaControlButtonStyle}"
+                    Template="{StaticResource MediaControlButtonTemplate}"
+                    ToolTipService.ToolTip="More"
+                    Visibility="Collapsed">
+                    <Button.Flyout>
+                        <MenuFlyout Opening="MenuFlyout_Opening">
+                            <MenuFlyoutItem
+                                x:Name="MainMediaControlMoreFullScreenItem"
+                                Click="FullScreenButton_Click"
+                                Icon="Fullscreen"
+                                Text="Full Screen" />
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+            </StackPanel>
+            <Grid
+                x:Name="MainMediaSliderGrid"
+                Grid.Row="1"
+                Grid.Column="1"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    x:Name="MainLeftTimeTextBlock"
+                    Margin="10,0,20,0"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI"
+                    Text="0:00" />
+                <Slider
+                    x:Name="MainMediaSlider"
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    IsEnabled="False"
+                    IsThumbToolTipEnabled="True"
+                    ManipulationCompleted="MediaSlider_ManipulationCompleted"
+                    ManipulationMode="All"
+                    ManipulationStarted="MediaSlider_ManipulationStarted"
+                    ManipulationStarting="MediaSlider_ManipulationStarting"
+                    Minimum="0"
+                    Style="{StaticResource MediaProgressSliderStyle}"
+                    ThumbToolTipValueConverter="{StaticResource MusicDurationConverter}"
+                    ValueChanged="MediaSlider_ValueChanged" />
+                <TextBlock
+                    x:Name="MainRightTimeTextBlock"
+                    Grid.Column="2"
+                    Margin="20,0,10,0"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI"
+                    Text="0:00" />
+            </Grid>
+            <StackPanel
+                x:Name="MainVolumeControlPanel"
                 Grid.Column="2"
                 HorizontalAlignment="Right"
-                VerticalAlignment="Center">
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Button
-                        x:Name="MainVolumeButton"
-                        Click="VolumeButton_Click"
-                        Content="&#xE15D;"
-                        Style="{StaticResource MediaControlButtonStyle}"
-                        Template="{StaticResource MediaControlButtonTemplate}" />
-                    <Slider
-                        x:Name="MainVolumeSlider"
-                        Width="100"
-                        Margin="10,0,20,0"
-                        VerticalAlignment="Center"
-                        Maximum="100"
-                        Minimum="0"
-                        Style="{StaticResource MediaProgressSliderStyle}"
-                        ValueChanged="VolumeSlider_ValueChanged"
-                        Value="50" />
-                    <ToggleButton
-                        x:Name="MainLikeToggleButton"
-                        Click="LikeButton_Click"
-                        Content="&#xEB51;"
-                        Style="{StaticResource MediaControlToggleButtonStyle}"
-                        Template="{StaticResource LikeToggleButtonStyle}" />
-                </StackPanel>
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <ToggleButton
-                        x:Name="MainShuffleButton"
-                        Click="ShuffleButton_Click"
-                        Content="&#xE8B1;"
-                        Style="{StaticResource MediaControlToggleButtonStyle}"
-                        Template="{StaticResource MediaControlToggleButtonTemplate}" />
-                    <ToggleButton
-                        x:Name="MainRepeatButton"
-                        Click="RepeatButton_Click"
-                        Content="&#xE8EE;"
-                        Style="{StaticResource MediaControlToggleButtonStyle}"
-                        Template="{StaticResource MediaControlToggleButtonTemplate}" />
-                    <ToggleButton
-                        x:Name="MainRepeatOneButton"
-                        Click="RepeatOneButton_Click"
-                        Content="&#xE8ED;"
-                        Style="{StaticResource MediaControlToggleButtonStyle}"
-                        Template="{StaticResource MediaControlToggleButtonTemplate}" />
-                    <Button
-                        Content="&#xE712;"
-                        Style="{StaticResource MediaControlButtonStyle}"
-                        Template="{StaticResource MediaControlButtonTemplate}"
-                        ToolTipService.ToolTip="More">
-                        <Button.Flyout>
-                            <MenuFlyout Opening="MenuFlyout_Opening">
-                                <MenuFlyoutItem
-                                    x:Name="FullScreenItem"
-                                    Click="FullScreenButton_Click"
-                                    Icon="Fullscreen"
-                                    Text="Full Screen" />
-                            </MenuFlyout>
-                        </Button.Flyout>
-                    </Button>
-                </StackPanel>
+                Orientation="Horizontal">
+                <Button
+                    x:Name="MainVolumeButton"
+                    Click="VolumeButton_Click"
+                    Content="&#xE15D;"
+                    Style="{StaticResource MediaControlButtonStyle}"
+                    Template="{StaticResource MediaControlButtonTemplate}" />
+                <Slider
+                    x:Name="MainVolumeSlider"
+                    Width="100"
+                    Margin="10,0,20,0"
+                    VerticalAlignment="Center"
+                    Maximum="100"
+                    Minimum="0"
+                    Style="{StaticResource MediaProgressSliderStyle}"
+                    ValueChanged="VolumeSlider_ValueChanged"
+                    Value="50" />
+                <ToggleButton
+                    x:Name="MainLikeToggleButton"
+                    Click="LikeButton_Click"
+                    Content="&#xEB51;"
+                    Style="{StaticResource MediaControlToggleButtonStyle}"
+                    Template="{StaticResource LikeToggleButtonStyle}" />
             </StackPanel>
+
+            <StackPanel
+                x:Name="MainButtonsPanel"
+                Grid.Row="1"
+                Grid.Column="2"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+                <ToggleButton
+                    x:Name="MainShuffleButton"
+                    Click="ShuffleButton_Click"
+                    Content="&#xE8B1;"
+                    Style="{StaticResource MediaControlToggleButtonStyle}"
+                    Template="{StaticResource MediaControlToggleButtonTemplate}" />
+                <ToggleButton
+                    x:Name="MainRepeatButton"
+                    Click="RepeatButton_Click"
+                    Content="&#xE8EE;"
+                    Style="{StaticResource MediaControlToggleButtonStyle}"
+                    Template="{StaticResource MediaControlToggleButtonTemplate}" />
+                <ToggleButton
+                    x:Name="MainRepeatOneButton"
+                    Click="RepeatOneButton_Click"
+                    Content="&#xE8ED;"
+                    Style="{StaticResource MediaControlToggleButtonStyle}"
+                    Template="{StaticResource MediaControlToggleButtonTemplate}" />
+                <Button
+                    Content="&#xE712;"
+                    Style="{StaticResource MediaControlButtonStyle}"
+                    Template="{StaticResource MediaControlButtonTemplate}"
+                    ToolTipService.ToolTip="More">
+                    <Button.Flyout>
+                        <MenuFlyout Opening="MenuFlyout_Opening">
+                            <MenuFlyoutItem
+                                x:Name="MainMoreFullScreenItem"
+                                Click="FullScreenButton_Click"
+                                Icon="Fullscreen"
+                                Text="Full Screen" />
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+            </StackPanel>
+
         </Grid>
         <Grid
             x:Name="FullMediaControlGrid"
@@ -469,7 +504,7 @@
                 <VisualState x:Name="PointerOver">
                     <VisualState.Setters>
                         <Setter Target="MainMusicInfoGrid.(RevealBrush.State)" Value="PointerOver" />
-                        <Setter Target="MainMusicInfoGrid.Background" Value="{ThemeResource AppBarButtonRevealBackgroundPointerOver}" />
+                        <Setter Target="MainMusicInfoGrid.Background" Value="{ThemeResource ButtonRevealBackgroundPointerOver}" />
                     </VisualState.Setters>
                     <Storyboard>
                         <PointerUpThemeAnimation Storyboard.TargetName="MainMusicInfoGrid" />
@@ -483,15 +518,37 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="MainAlbumCover.Visibility" Value="Collapsed" />
+                        <Setter Target="MainShuffleButton.Visibility" Value="Collapsed" />
+                        <Setter Target="MainLikeToggleButton.Visibility" Value="Collapsed" />
+                        <Setter Target="MainButtonsPanel.Visibility" Value="Collapsed" />
+                        <Setter Target="MainVolumeControlPanel.Visibility" Value="Collapsed" />
+                        <Setter Target="MainMusicInfoGrid.Padding" Value="5,0" />
+                        <Setter Target="MainMusicInfoGrid.(Grid.RowSpan)" Value="1" />
+                        <Setter Target="MainMusicInfoGrid.(Grid.ColumnSpan)" Value="2" />
+                        <Setter Target="MainMediaSliderGrid.(Grid.Column)" Value="0" />
+                        <Setter Target="MainMediaSliderGrid.(Grid.ColumnSpan)" Value="3" />
+                        <Setter Target="MainMediaSliderGrid.HorizontalAlignment" Value="Stretch" />
+                        <Setter Target="MainMediaControlPanel.(Grid.Column)" Value="2" />
+                        <Setter Target="MainMediaControlMoreButton.Visibility" Value="Visible" />
+                        <Setter Target="MainTitleTextBlock.Margin" Value="10,5,5,0" />
+                        <Setter Target="MainTitleTextBlock.FontSize" Value="20" />
+                        <Setter Target="MainArtistTextBlock.Margin" Value="10,0,5,5" />
+                        <Setter Target="MainArtistTextBlock.FontSize" Value="16" />
+                        <Setter Target="MainButtonColumnDefinition.Width" Value="Auto" />
                     </VisualState.Setters>
                 </VisualState>
-                <VisualState x:Name="WideLayout">
+                <VisualState x:Name="Width640">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="600" />
+                        <AdaptiveTrigger MinWindowWidth="640" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="MainAlbumCover.Visibility" Value="Visible" />
+                        <Setter Target="MainLikeToggleButton.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Width800">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>

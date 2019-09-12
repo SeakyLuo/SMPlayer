@@ -87,7 +87,7 @@ namespace SMPlayer
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
             if (AlternatingRowColor)
-                args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? Helper.WhiteSmokeBrush : Helper.WhiteBrush;
+                args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? ColorHelper.WhiteSmokeBrush : ColorHelper.WhiteBrush;
         }
 
         private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -107,7 +107,7 @@ namespace SMPlayer
             for (int i = 0; i < sender.Items.Count; i++)
             {
                 var container = sender.ContainerFromIndex(i) as ListViewItem;
-                container.Background = i % 2 == 0 ? Helper.WhiteSmokeBrush : Helper.WhiteBrush;
+                container.Background = i % 2 == 0 ? ColorHelper.WhiteSmokeBrush : ColorHelper.WhiteBrush;
                 if (!MediaHelper.CurrentPlaylist[i].Equals(args.Items[0]))
                 {
                     if (from < 0) from = i;

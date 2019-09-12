@@ -12,6 +12,15 @@ namespace SMPlayer
 {
     public static class ColorHelper
     {
+        public static SolidColorBrush WhiteBrush = new SolidColorBrush(Colors.White);
+        public static SolidColorBrush RedBrush = new SolidColorBrush(Colors.Red);
+        public static SolidColorBrush WhiteSmokeBrush = new SolidColorBrush(Colors.WhiteSmoke);
+        public static SolidColorBrush GrayBrush = new SolidColorBrush(Colors.Gray);
+        public static SolidColorBrush BlackBrush = new SolidColorBrush(Colors.Black);
+        public static SolidColorBrush HighlightBrush
+        {
+            get => new SolidColorBrush(Models.Settings.settings.ThemeColor);
+        }
         private struct Size
         {
             public uint Width, Height;

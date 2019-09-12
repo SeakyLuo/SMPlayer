@@ -42,7 +42,6 @@ namespace SMPlayer
             MediaControl.AddMusicRequestListener(this as MusicRequestListener);
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
             TitleBarHelper.SetFullTitleBar();
-            Window.Current.SetTitleBar(EmptyTitleBar);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

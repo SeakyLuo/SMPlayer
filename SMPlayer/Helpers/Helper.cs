@@ -37,19 +37,11 @@ namespace SMPlayer
         public static ToastNotifier toastNotifier = ToastNotificationManager.CreateToastNotifier();
         public static ToastAudio SlientToast = new ToastAudio() { Silent = true };
         public static TileUpdater tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
-        public static SolidColorBrush WhiteBrush = new SolidColorBrush(Colors.White);
-        public static SolidColorBrush RedBrush = new SolidColorBrush(Colors.Red);
-        public static SolidColorBrush WhiteSmokeBrush = new SolidColorBrush(Colors.WhiteSmoke);
-        public static SolidColorBrush BlackBrush = new SolidColorBrush(Colors.Black);
         public static bool BackButtonVisible
         {
             get => SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility == AppViewBackButtonVisibility.Visible;
             set => SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = value ? AppViewBackButtonVisibility.Visible
                                                                                                    : AppViewBackButtonVisibility.Collapsed;
-        }
-        public static SolidColorBrush HighlightBrush
-        {
-            get => new SolidColorBrush(Settings.settings.ThemeColor);
         }
         private static string Lyrics = "";
 

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace SMPlayer
 {
@@ -124,8 +125,9 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.Equals(true) ? Helper.HighlightBrush :
-                                        PlaylistControl.CurrentTheme == ElementTheme.Dark ? Helper.WhiteSmokeBrush : Helper.BlackBrush;
+            if (value.Equals(true)) return ColorHelper.HighlightBrush;
+            else if (PlaylistControl.CurrentTheme != ElementTheme.Dark) return ColorHelper.BlackBrush;
+            return ColorConverter.StringToColor((string)parameter);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -136,17 +138,18 @@ namespace SMPlayer
 
     class ColorConverter : Windows.UI.Xaml.Data.IValueConverter
     {
-        public static Windows.UI.Xaml.Media.SolidColorBrush StringToColor(string color)
+        public static SolidColorBrush StringToColor(string color)
         {
             switch (color)
             {
-                case "Gray": return new Windows.UI.Xaml.Media.SolidColorBrush(Windows.UI.Colors.Gray);
-                default: return Helper.BlackBrush;
+                case "White": return ColorHelper.WhiteBrush;
+                case "Gray": return ColorHelper.GrayBrush;
+                default: return ColorHelper.BlackBrush;
             }
         }
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.Equals(true) ? Helper.HighlightBrush : StringToColor((string)parameter);
+            return value.Equals(true) ? ColorHelper.HighlightBrush : StringToColor((string)parameter);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -159,7 +162,7 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.Equals(true) ? Helper.HighlightBrush : Helper.BlackBrush;
+            return value.Equals(true) ? ColorHelper.HighlightBrush : ColorHelper.BlackBrush;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

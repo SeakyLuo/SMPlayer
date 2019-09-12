@@ -242,6 +242,7 @@
       <RootProperty Name="Converter" />
       <RootProperty Name="Mode" />
       <RootProperty Name="ConverterParameter" />
+      <RootProperty Name="Path" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.DataTemplate">
       <RootProperty Name="Template" />
@@ -856,6 +857,10 @@
       <RootProperty Name="Header" />
     </RootType>
     <RootType FullName="SMPlayer.NowPlayingFullPage" />
+    <RootType FullName="SMPlayer.Triggers.ControlSizeTrigger">
+      <RootProperty Name="MinWidth" />
+      <RootProperty Name="TargetElement" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">
       <RootProperty Name="Icon" />
       <RootProperty Name="IsEnabled" />
