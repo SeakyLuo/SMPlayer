@@ -23,11 +23,17 @@
             x:Name="AppTitleBar"
             Height="32"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Center"
+            VerticalAlignment="Stretch"
             Background="Transparent"
             IsHitTestVisible="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="LeftPaddingColumn" Width="0" />
+                <ColumnDefinition />
+                <ColumnDefinition x:Name="RightPaddingColumn" Width="0" />
+            </Grid.ColumnDefinitions>
             <Border
                 x:Name="AppTitleBorder"
+                Grid.Column="1"
                 Width="{x:Bind MainNavigationView.OpenPaneLength}"
                 HorizontalAlignment="Left"
                 Background="{ThemeResource SystemControlAcrylicWindowBrush}">
@@ -38,27 +44,16 @@
                     Style="{StaticResource CaptionTextBlockStyle}"
                     Text="{x:Bind appmodel:Package.Current.DisplayName}" />
             </Border>
-            <!--<Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>-->
-            <!--<Button>
-                <SymbolIcon Symbol="Back" />
-                <Button.Flyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem Text="Hello" />
-                    </MenuFlyout>
-                </Button.Flyout>
-            </Button>
-            <TextBlock
-                x:Name="AppTitle"
-                Grid.Column="1"
-                Padding="10"
-                VerticalAlignment="Center"
-                IsHitTestVisible="False"
-                Style="{StaticResource CaptionTextBlockStyle}"
-                Text="{x:Bind appmodel:Package.Current.DisplayName}" />-->
         </Grid>
+        <Button
+            x:Name="BackButton"
+            Width="40"
+            Height="32"
+            HorizontalAlignment="Left"
+            Background="Transparent"
+            Click="BackButton_Click"
+            Style="{StaticResource BackButtonStyle}"
+            Visibility="Visible" />
         <NavigationView
             x:Name="MainNavigationView"
             Grid.Row="1"
@@ -205,6 +200,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="AppTitleBar.Background" Value="{StaticResource MinimalTitleBarColor}" />
+                        <Setter Target="BackButton.Background" Value="{StaticResource MinimalTitleBarColor}" />
                         <Setter Target="MainNavigationView.(NavigationView.PaneDisplayMode)" Value="LeftMinimal" />
                         <Setter Target="HeaderGrid.Height" Value="40" />
                         <Setter Target="HeaderGrid.Background" Value="{StaticResource MinimalTitleBarColor}" />
@@ -222,6 +218,8 @@
                 <VisualState x:Name="Open">
                     <VisualState.Setters>
                         <Setter Target="AppTitle.Visibility" Value="Visible" />
+                        <Setter Target="BackButton.Background" Value="Transparent" />
+                        <Setter Target="AppTitleBorder.Background" Value="{ThemeResource SystemControlAcrylicWindowBrush}" />
                     </VisualState.Setters>
                     <VisualState.Storyboard>
                         <Storyboard>
@@ -242,6 +240,8 @@
                 <VisualState x:Name="Close">
                     <VisualState.Setters>
                         <Setter Target="AppTitle.Visibility" Value="Collapsed" />
+                        <Setter Target="BackButton.Background" Value="{StaticResource MinimalTitleBarColor}" />
+                        <Setter Target="AppTitleBorder.Background" Value="{StaticResource MinimalTitleBarColor}" />
                     </VisualState.Setters>
                     <VisualState.Storyboard>
                         <Storyboard>

@@ -41,14 +41,34 @@ namespace SMPlayer
             this.InitializeComponent();
             MediaControl.AddMusicRequestListener(this as MusicRequestListener);
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
-            TitleBarHelper.SetFullTitleBar();
-            //Helper.BackButtonVisible = true;
+
+            // Hide default title bar.
+            var coreTitleBar = Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar;
+            Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
+            UpdateTitleBarLayout(coreTitleBar);
+
+            // Register a handler for when the size of the overlaid caption control changes.
+            // For example, when the app moves to a screen with a different DPI.
+            coreTitleBar.LayoutMetricsChanged += (sender, args) => UpdateTitleBarLayout(sender);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            TitleBarHelper.SetFullTitleBar();
+            Window.Current.SetTitleBar(AppTitleBar); // Set XAML element as a draggable region.
             FullMediaControl.Update();
             SetMusic(MediaHelper.CurrentMusic);
+        }
+        private void UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar coreTitleBar)
+        {
+            // Get the size of the caption controls area and back button 
+            // (returned in logical pixels), and move your content around as necessary.
+            LeftPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayLeftInset);
+            RightPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayRightInset);
+            BackButton.Margin = new Thickness(0, 0, coreTitleBar.SystemOverlayRightInset, 0);
+
+            // Update title bar control size as needed to account for system size changes.
+            AppTitleBar.Height = coreTitleBar.Height;
         }
 
         public void SetMusic(Music music)

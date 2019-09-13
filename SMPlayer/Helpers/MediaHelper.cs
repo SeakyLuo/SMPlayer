@@ -138,11 +138,7 @@ namespace SMPlayer
             int index = 0;
             if (CurrentPlaylist.Count > 0)
             {
-                if (music == null)
-                {
-                    CurrentPlaylist.Clear();
-                    PlayBackList.Items.Clear();
-                }
+                if (music == null) Clear();
                 else
                 {
                     Debug.WriteLine(music.Name);

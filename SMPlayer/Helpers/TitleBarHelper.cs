@@ -10,7 +10,6 @@ namespace SMPlayer
     {
         public static void SetMainTitleBar()
         {
-            Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             var titleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
 
             // Set active window colors
@@ -31,7 +30,6 @@ namespace SMPlayer
         }
         public static void SetFullTitleBar()
         {
-            Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             var titleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
 
             // Set active window colors

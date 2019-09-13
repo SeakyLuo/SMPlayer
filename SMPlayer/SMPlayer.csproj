@@ -293,6 +293,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dictionaries\BackButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dictionaries\BorderlessAutoSuggestBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

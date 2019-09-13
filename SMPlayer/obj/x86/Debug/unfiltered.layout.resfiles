@@ -61,6 +61,7 @@ Controls\MediaControl.xbf
 Controls\PlaylistControl.xbf
 Controls\PlaylistControlItem.xbf
 Dialogs\RenameDialog.xbf
+Dictionaries\BackButton.xbf
 Dictionaries\BorderlessAutoSuggestBox.xbf
 Dictionaries\BorderlessTextBox.xbf
 Dictionaries\DropShadowGridViewItem.xbf

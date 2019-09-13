@@ -37,12 +37,7 @@ namespace SMPlayer
         public static ToastNotifier toastNotifier = ToastNotificationManager.CreateToastNotifier();
         public static ToastAudio SlientToast = new ToastAudio() { Silent = true };
         public static TileUpdater tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
-        public static bool BackButtonVisible
-        {
-            get => SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility == AppViewBackButtonVisibility.Visible;
-            set => SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = value ? AppViewBackButtonVisibility.Visible
-                                                                                                   : AppViewBackButtonVisibility.Collapsed;
-        }
+
         private static string Lyrics = "";
 
 

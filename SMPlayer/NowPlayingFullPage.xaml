@@ -28,21 +28,26 @@
             </Grid.Background>
         </Grid>
         <Grid
-            x:Name="EmptyTitleBar"
+            x:Name="AppTitleBar"
             Height="32"
             HorizontalAlignment="Stretch"
             Background="Transparent"
             IsHitTestVisible="True">
-            <Button
-                x:Name="BackButton"
-                Width="48"
-                VerticalAlignment="Stretch"
-                Background="{ThemeResource SystemColorHighlightColor}"
-                Click="BackButton_Click"
-                Content="&#xE72B;"
-                FontFamily="Segoe MDL2 Assets"
-                Foreground="White" />
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="LeftPaddingColumn" Width="0" />
+                <ColumnDefinition />
+                <ColumnDefinition x:Name="RightPaddingColumn" Width="0" />
+            </Grid.ColumnDefinitions>
         </Grid>
+        <Button
+            x:Name="BackButton"
+            Grid.Column="1"
+            Width="48"
+            VerticalAlignment="Stretch"
+            Background="{ThemeResource SystemColorHighlightColor}"
+            Click="BackButton_Click"
+            Foreground="White"
+            Style="{StaticResource BackButtonStyle}" />
         <local:MediaControl
             x:Name="FullMediaControl"
             Grid.Row="1"

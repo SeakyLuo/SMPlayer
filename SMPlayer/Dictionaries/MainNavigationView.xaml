@@ -259,6 +259,7 @@
                                             <Button
                                                 x:Name="PaneAutoSuggestButton"
                                                 Width="{TemplateBinding CompactPaneLength}"
+                                                BorderThickness="0"
                                                 Style="{ThemeResource NavigationViewPaneSearchButtonStyle}"
                                                 Visibility="Collapsed" />
                                         </Grid>

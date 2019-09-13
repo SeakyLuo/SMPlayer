@@ -45,10 +45,6 @@ namespace SMPlayer
         public MainPage()
         {
             this.InitializeComponent();
-            SystemNavigationManager.GetForCurrentView().BackRequested += (s, e) =>
-            {
-                if (NaviFrame.CanGoBack) NaviFrame.GoBack();
-            };
             Window.Current.SizeChanged += (sender, e) =>
             {
                 HeaderGrid.Visibility = e.Size.Width < 720 && Settings.settings.LastPage == "NowPlaying" ? Visibility.Collapsed : Visibility.Visible;
@@ -62,11 +58,8 @@ namespace SMPlayer
 
             // Hide default title bar.
             var coreTitleBar = Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar;
-            coreTitleBar.ExtendViewIntoTitleBar = true;
+            Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             UpdateTitleBarLayout(coreTitleBar);
-
-            // Set XAML element as a draggable region.
-            Window.Current.SetTitleBar(AppTitleBar);
 
             // Register a handler for when the size of the overlaid caption control changes.
             // For example, when the app moves to a screen with a different DPI.
@@ -76,6 +69,9 @@ namespace SMPlayer
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             TitleBarHelper.SetMainTitleBar();
+
+            // Set XAML element as a draggable region.
+            Window.Current.SetTitleBar(AppTitleBar);
             MainMediaControl.Update();
             if (NaviFrame.SourcePageType != null && NaviFrame.SourcePageType.Name.StartsWith(Settings.settings.LastPage)) return;
             SwitchPage(Settings.settings.LastPage);
@@ -85,12 +81,31 @@ namespace SMPlayer
         {
             // Get the size of the caption controls area and back button 
             // (returned in logical pixels), and move your content around as necessary.
-            //LeftPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayLeftInset);
-            //RightPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayRightInset);
-            //TitleBarButton.Margin = new Thickness(0, 0, coreTitleBar.SystemOverlayRightInset, 0);
+            LeftPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayLeftInset);
+            RightPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayRightInset);
+            BackButton.Margin = new Thickness(0, 0, coreTitleBar.SystemOverlayRightInset, 0);
 
             // Update title bar control size as needed to account for system size changes.
             AppTitleBar.Height = coreTitleBar.Height;
+        }
+
+        private void SetBackButtonVisible(bool visible)
+        {
+            if (visible)
+            {
+                AppTitle.Margin = new Thickness(40, 0, 40, 0);
+                BackButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                AppTitle.Margin = new Thickness(0, 0, 0, 0);
+                BackButton.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (NaviFrame.CanGoBack) NaviFrame.GoBack();
         }
 
         private void NaviSearchBar_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
@@ -99,7 +114,7 @@ namespace SMPlayer
             if (text.Length > 0)
             {
                 NaviFrame.Navigate(typeof(SearchPage), text);
-                Helper.BackButtonVisible = true;
+                SetBackButtonVisible(true);
             }
         }
 
@@ -155,7 +170,7 @@ namespace SMPlayer
 
         private void NaviFrame_Navigated(object sender, NavigationEventArgs e)
         {
-            Helper.BackButtonVisible = NaviFrame.CanGoBack;
+            SetBackButtonVisible(NaviFrame.CanGoBack);
             switch (NaviFrame.CurrentSourcePageType.Name)
             {
                 case "MusicLibraryPage":
@@ -238,10 +253,6 @@ namespace SMPlayer
             //MainNavigationView.Background = Resources[""]
 
             // On BackButton Visibility Change
-            //if (Helper.BackButtonVisible)
-            //    AppTitle.Margin = new Thickness(40, 0, 40, 0);
-            //else
-            //    AppTitle.Margin = new Thickness(0, 0, 0, 0);
         }
 
         private void MainNavigationView_PaneClosing(NavigationView sender, NavigationViewPaneClosingEventArgs args)

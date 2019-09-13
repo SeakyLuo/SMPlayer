@@ -17,6 +17,7 @@
                 <ResourceDictionary Source="Dictionaries/HoverButton.xaml" />
                 <ResourceDictionary Source="Dictionaries/DropShadowGridViewItem.xaml" />
                 <ResourceDictionary Source="Dictionaries/MainNavigationView.xaml" />
+                <ResourceDictionary Source="Dictionaries/BackButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush x:Key="MinimalTitleBarColor" Color="LightGray" />
             <x:Double x:Key="MinimalNavigationViewWindowWidth">720</x:Double>

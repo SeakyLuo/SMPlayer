@@ -243,3 +243,6 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\PlaylistCon
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\PlaylistControlItem.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Controls\PlaylistControlItem.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SMPlayer.csprojAssemblyReference.cache
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Dictionaries\BackButton.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dictionaries\BackButton.xaml
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dictionaries\BackButton.xbf

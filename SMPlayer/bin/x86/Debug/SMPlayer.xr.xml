@@ -107,16 +107,16 @@
       <RootProperty Name="HorizontalContentAlignment" />
       <RootProperty Name="Padding" />
       <RootProperty Name="CornerRadius" />
-      <RootProperty Name="IsTabStop" />
-      <RootProperty Name="UseSystemFocusVisuals" />
-      <RootProperty Name="Template" />
+      <RootProperty Name="BackgroundSizing" />
       <RootProperty Name="Foreground" />
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="BorderThickness" />
+      <RootProperty Name="FontWeight" />
+      <RootProperty Name="UseSystemFocusVisuals" />
+      <RootProperty Name="Template" />
+      <RootProperty Name="IsTabStop" />
       <RootProperty Name="TabNavigation" />
       <RootProperty Name="VerticalContentAlignment" />
-      <RootProperty Name="BackgroundSizing" />
-      <RootProperty Name="FontWeight" />
       <RootProperty Name="IsFocusEngagementEnabled" />
       <RootMethod Name="GetIsTemplateFocusTarget" />
       <RootMethod Name="SetIsTemplateFocusTarget" />
@@ -128,10 +128,10 @@
       <RootProperty Name="Width" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="FocusVisualMargin" />
       <RootProperty Name="MinWidth" />
       <RootProperty Name="MinHeight" />
       <RootProperty Name="Margin" />
-      <RootProperty Name="FocusVisualMargin" />
       <RootProperty Name="RequestedTheme" />
       <RootProperty Name="AllowFocusOnInteraction" />
     </RootType>
@@ -461,13 +461,13 @@
       <RootProperty Name="BorderThickness" />
       <RootProperty Name="ContentTemplate" />
       <RootProperty Name="ContentTransitions" />
+      <RootProperty Name="CornerRadius" />
       <RootProperty Name="FontSize" />
       <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="FontWeight" />
       <RootProperty Name="TextWrapping" />
       <RootProperty Name="Visibility" />
-      <RootProperty Name="CornerRadius" />
       <RootProperty Name="FontFamily" />
       <RootProperty Name="RenderTransformOrigin" />
       <RootProperty Name="RenderTransform" />
@@ -505,6 +505,11 @@
       <RootProperty Name="DataContext" />
       <RootProperty Name="ContextFlyout" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ControlTemplate">
+      <RootProperty Name="TargetType" />
+      <RootProperty Name="Template" />
+    </RootType>
+    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.TemplateBindingExtension" />
     <RootType FullName="Windows.UI.Xaml.Controls.AutoSuggestBox">
       <RootProperty Name="TextBoxStyle" />
       <RootProperty Name="HorizontalAlignment" />
@@ -566,11 +571,6 @@
       <RootMethod Name="GetBringIntoViewOnFocusChange" />
       <RootMethod Name="SetBringIntoViewOnFocusChange" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.ControlTemplate">
-      <RootProperty Name="TargetType" />
-      <RootProperty Name="Template" />
-    </RootType>
-    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.TemplateBindingExtension" />
     <RootType FullName="Windows.UI.Xaml.Media.Animation.DoubleAnimation">
       <RootProperty Name="To" />
       <RootProperty Name="Duration" />
