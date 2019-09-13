@@ -22,6 +22,7 @@
         <StackPanel
             x:Name="TitlePanel"
             Grid.Row="0"
+            Margin="0,0,10,0"
             Grid.Column="0"
             Orientation="Horizontal">
             <FontIcon
@@ -39,12 +40,14 @@
         </StackPanel>
         <TextBlock
             x:Name="ArtistTextBlock"
+            Margin="0,0,10,0"
             Grid.Row="0"
             Grid.Column="1"
             Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
             Text="{Binding Artist}"
             Visibility="Visible" />
         <TextBlock
+            Margin="0,0,10,0"
             x:Name="AlbumTextBlock"
             Grid.Row="0"
             Grid.Column="2"

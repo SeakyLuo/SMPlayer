@@ -107,10 +107,10 @@
       <RootProperty Name="HorizontalContentAlignment" />
       <RootProperty Name="Padding" />
       <RootProperty Name="CornerRadius" />
+      <RootProperty Name="BorderThickness" />
       <RootProperty Name="BackgroundSizing" />
       <RootProperty Name="Foreground" />
       <RootProperty Name="BorderBrush" />
-      <RootProperty Name="BorderThickness" />
       <RootProperty Name="FontWeight" />
       <RootProperty Name="UseSystemFocusVisuals" />
       <RootProperty Name="Template" />

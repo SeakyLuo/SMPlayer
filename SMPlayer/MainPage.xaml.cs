@@ -203,7 +203,7 @@ namespace SMPlayer
                     MainNavigationView.SelectedItem = AlbumsItem;
                     break;
                 case "NowPlayingPage":
-                    SetHeaderText("NowPlaying");
+                    SetHeaderText("Now Playing");
                     HeaderGrid.Visibility = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? Visibility.Collapsed : Visibility.Visible;
                     MainNavigationView.SelectedItem = NowPlayingItem;
                     break;

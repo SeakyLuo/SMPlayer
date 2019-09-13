@@ -57,7 +57,7 @@
         <local:PlaylistControl
             x:Name="NowPlayingPlaylistControl"
             Grid.Row="2"
-            Margin="10,0"
+            Margin="10,10,10,0"
             AlternatingRowColor="True"
             Theme="Light" />
         <VisualStateManager.VisualStateGroups>
@@ -73,7 +73,6 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="CommandBarHeaderTextBlock.Visibility" Value="Visible" />
-                        <Setter Target="NowPlayingPlaylistControl.Margin" Value="10,10,10,0" />
                         <Setter Target="NowPlayingCommandBar.Background" Value="{StaticResource MinimalTitleBarColor}" />
                     </VisualState.Setters>
                 </VisualState>

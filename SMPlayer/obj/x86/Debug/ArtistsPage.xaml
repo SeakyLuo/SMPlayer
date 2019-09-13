@@ -57,7 +57,8 @@
                         </Grid>
                         <TextBlock x:ConnectionId='8'
                             x:Name="ArtistNameTextBlock"
-                            Margin="10"
+                            Margin="10,0"
+                            VerticalAlignment="Center"
                                                 
                             TextAlignment="Start" />
                     </StackPanel>
@@ -74,6 +75,7 @@
                                 <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
                                 <Setter Property="FontSize" Value="18" />
                                 <Setter Property="CornerRadius" Value="20" />
+                                <Setter Property="BorderThickness" Value="0" />
                             </Style>
                         </Grid.Resources>
                         <Grid.RowDefinitions>
@@ -87,27 +89,32 @@
                             <StackPanel
                                 Margin="20,10,0,20"
                                 VerticalAlignment="Center"
-                                RelativePanel.AlignLeftWithPanel="True">
-                                <TextBlock x:ConnectionId='28'
+                                RelativePanel.AlignLeftWithPanel="True"
+                                RelativePanel.LeftOf="MoreButton">
+                                <TextBlock x:ConnectionId='29'
                                     Margin="0,0,0,10"
                                     FontSize="24"
                                     FontWeight="Bold"
-                                                         />
-                                <TextBlock x:ConnectionId='29'
+                                                        
+                                    TextWrapping="WrapWholeWords" />
+                                <TextBlock x:ConnectionId='30'
                                     x:Name="ArtistInfoTextBlock"
                                     FontSize="18"
-                                                                                                                />
+                                                                                                               
+                                    TextWrapping="WrapWholeWords" />
                             </StackPanel>
                             <Button
-                                Margin="36,12"
+                                x:Name="MoreButton"
+                                Margin="12,12,36,12"
                                 Background="{ThemeResource SystemColorHighlightColor}"
                                 Foreground="{ThemeResource AppBarBackgroundThemeBrush}"
                                 RelativePanel.AlignRightWithPanel="True"
                                 Style="{StaticResource MoreButtonStyle}">
                                 <Button.Flyout>
-                                    <MenuFlyout x:ConnectionId='27'                                  />
+                                    <MenuFlyout x:ConnectionId='28'                                  />
                                 </Button.Flyout>
                             </Button>
+                            <!--  Separator  -->
                             <Border
                                 Width="1000"
                                 Height="1"
