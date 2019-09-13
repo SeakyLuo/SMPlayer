@@ -385,7 +385,7 @@
                             Click="PrevButton_Click"
                             Content="&#xE892;"
                             Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource MediaControlButtonTemplate}"
+                            Template="{StaticResource DarkMediaControlButtonTemplate}"
                             ToolTipService.ToolTip="Previous">
                             <Button.KeyboardAccelerators>
                                 <KeyboardAccelerator Key="Left" Modifiers="Control" />
@@ -401,12 +401,12 @@
                             CornerRadius="25"
                             FontSize="24"
                             Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource MediaControlButtonTemplate}" />
+                            Template="{StaticResource DarkMediaControlButtonTemplate}" />
                         <Button
                             Click="NextButton_Click"
                             Content="&#xE893;"
                             Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource MediaControlButtonTemplate}"
+                            Template="{StaticResource DarkMediaControlButtonTemplate}"
                             ToolTipService.ToolTip="Next">
                             <Button.KeyboardAccelerators>
                                 <KeyboardAccelerator Key="Right" Modifiers="Control" />
@@ -415,7 +415,7 @@
                         <Button
                             Content="&#xE15D;"
                             Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource MediaControlButtonTemplate}"
+                            Template="{StaticResource DarkMediaControlButtonTemplate}"
                             ToolTipService.ToolTip="Volume">
                             <Button.Flyout>
                                 <Flyout>
@@ -425,7 +425,7 @@
                                             Click="VolumeButton_Click"
                                             Content="&#xE15D;"
                                             Style="{StaticResource MediaControlButtonStyle}"
-                                            Template="{StaticResource MediaControlButtonTemplate}" />
+                                            Template="{StaticResource DarkMediaControlButtonTemplate}" />
                                         <Slider
                                             x:Name="FullVolumeSlider"
                                             Width="100"
@@ -468,7 +468,7 @@
                         <Button
                             Content="&#xE712;"
                             Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource MediaControlButtonTemplate}"
+                            Template="{StaticResource DarkMediaControlButtonTemplate}"
                             ToolTipService.ToolTip="More">
                             <Button.Flyout>
                                 <MenuFlyout>
@@ -492,42 +492,42 @@
                             Click="PlaylistButton_Click"
                             Content="&#xEA37;"
                             Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource MediaControlButtonTemplate}"
+                            Template="{StaticResource DarkMediaControlButtonTemplate}"
                             ToolTipService.ToolTip="Now Playing Playlist" />
                         <Button
                             x:Name="MusicInfoButton"
                             Click="MusicInfoButton_Click"
                             Content="&#xE90B;"
                             Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource MediaControlButtonTemplate}"
+                            Template="{StaticResource DarkMediaControlButtonTemplate}"
                             ToolTipService.ToolTip="Show Music Info" />
                         <Button
                             x:Name="LyricsButton"
                             Click="LyricsButton_Click"
                             Content="&#xEC42;"
                             Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource MediaControlButtonTemplate}"
+                            Template="{StaticResource DarkMediaControlButtonTemplate}"
                             ToolTipService.ToolTip="Show Lyrics" />
                         <Button
                             x:Name="CarouselButton"
                             Click="CarouselButton_Click"
                             Content="&#xE7C5;"
                             Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource MediaControlButtonTemplate}"
+                            Template="{StaticResource DarkMediaControlButtonTemplate}"
                             ToolTipService.ToolTip="Carousel View" />
                         <Button
                             x:Name="FullScreenButton"
                             Click="FullScreenButton_Click"
                             Content="&#xE740;"
                             Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource MediaControlButtonTemplate}"
+                            Template="{StaticResource DarkMediaControlButtonTemplate}"
                             ToolTipService.ToolTip="Full Screen" />
                         <Button
                             x:Name="MiniPlayButton"
                             Click="MiniPlayButton_Click"
                             Content="&#xE744;"
                             Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource MediaControlButtonTemplate}"
+                            Template="{StaticResource DarkMediaControlButtonTemplate}"
                             ToolTipService.ToolTip="Mini Player" />
                     </StackPanel>
                 </RelativePanel>

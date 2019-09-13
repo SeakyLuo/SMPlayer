@@ -70,12 +70,33 @@
                 </Style>
             </controls:BladeView.Resources>
             <controls:BladeItem x:Name="PlaylistBladeItem" Style="{StaticResource NowPlayingFullBladeItemStyle}">
-                <local:PlaylistControl
-                    x:Name="FullPlaylistControl"
-                    Padding="10,10,10,0"
-                    AlternatingRowColor="False"
-                    Background="Transparent"
-                    Theme="Dark" />
+                <UserControl>
+                    <Grid>
+                        <local:PlaylistControl
+                            x:Name="FullPlaylistControl"
+                            Margin="10,10,10,0"
+                            AlternatingRowColor="False"
+                            Background="Transparent"
+                            Theme="Dark" />
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="WideLayout">
+                                    <VisualState.StateTriggers>
+                                        <AdaptiveTrigger MinWindowWidth="750" />
+                                    </VisualState.StateTriggers>
+                                </VisualState>
+                                <VisualState x:Name="NarrowLayout">
+                                    <VisualState.StateTriggers>
+                                        <AdaptiveTrigger MinWindowWidth="0" />
+                                    </VisualState.StateTriggers>
+                                    <VisualState.Setters>
+                                        <Setter Target="FullPlaylistControl.Margin" Value="0" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </UserControl>
             </controls:BladeItem>
             <controls:BladeItem
                 x:Name="MusicPropertyBladeItem"
@@ -411,21 +432,4 @@
             StackMode="Replace"
             VerticalOffset="100" />
     </Grid>
-    <VisualStateManager.VisualStateGroups>
-        <VisualStateGroup x:Name="CommonStates">
-            <VisualState x:Name="WideLayout">
-                <VisualState.StateTriggers>
-                    <AdaptiveTrigger MinWindowWidth="750" />
-                </VisualState.StateTriggers>
-            </VisualState>
-            <VisualState x:Name="NarrowLayout">
-                <VisualState.StateTriggers>
-                    <AdaptiveTrigger MinWindowWidth="0" />
-                </VisualState.StateTriggers>
-                <VisualState.Setters>
-                    <Setter Target="FullPlaylistControl.Padding" Value="0" />
-                </VisualState.Setters>
-            </VisualState>
-        </VisualStateGroup>
-    </VisualStateManager.VisualStateGroups>
 </Page>

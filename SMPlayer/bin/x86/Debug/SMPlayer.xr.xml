@@ -844,7 +844,6 @@
       <RootProperty Name="AlternatingRowColor" />
       <RootProperty Name="ItemsSource" />
       <RootProperty Name="Visibility" />
-      <RootProperty Name="Padding" />
       <RootProperty Name="Background" />
       <RootProperty Name="Theme" />
       <RootProperty Name="AllowReorder" />
