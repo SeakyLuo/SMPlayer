@@ -87,11 +87,11 @@
       <RootProperty Name="IsTabStop" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="Width" />
+      <RootProperty Name="Height" />
       <RootProperty Name="IsEnabled" />
       <RootProperty Name="MinHeight" />
       <RootProperty Name="Padding" />
       <RootProperty Name="IsAccessKeyScope" />
-      <RootProperty Name="Height" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="Template" />
       <RootProperty Name="KeyboardAccelerators" />

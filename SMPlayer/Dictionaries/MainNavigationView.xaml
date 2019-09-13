@@ -29,6 +29,7 @@
                             <Grid x:Name="ButtonHolderGrid" Grid.Row="1">
                                 <Button
                                     x:Name="NavigationViewBackButton"
+                                    Height="32"
                                     VerticalAlignment="Top"
                                     FontSize="12"
                                     IsEnabled="{TemplateBinding IsBackEnabled}"
@@ -331,15 +332,14 @@
 
                                 <VisualState x:Name="Expanded">
                                     <VisualState.Setters>
-                                        <Setter Target="RootSplitView.PaneBackground" Value="{ThemeResource MainNavigationViewBackground}" />
-                                        <Setter Target="TogglePaneButton.Background" Value="{ThemeResource MainNavigationViewBackground}" />
+                                        <Setter Target="RootSplitView.PaneBackground" Value="{StaticResource MainNavigationViewBackground}" />
+                                        <Setter Target="TogglePaneButton.Background" Value="{StaticResource MainNavigationViewBackground}" />
                                     </VisualState.Setters>
                                 </VisualState>
 
                                 <VisualState x:Name="Minimal">
                                     <VisualState.Setters>
                                         <Setter Target="HeaderContent.Margin" Value="40,0,0,0" />
-                                        <Setter Target="TogglePaneButton.Background" Value="{StaticResource MinimalTitleBarColor}" />
                                     </VisualState.Setters>
                                 </VisualState>
                                 <VisualState x:Name="TopNavigationMinimal" />

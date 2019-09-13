@@ -26,7 +26,7 @@
             ItemContainerStyle="{StaticResource StretchingListViewItemStyle}"
                                                        >
             <controls:MasterDetailsView.MasterHeader>
-                <Grid Margin="10,0,5,10">
+                <Grid Margin="10">
                     <TextBlock x:ConnectionId='3'
                         x:Name="ArtistsCountTextBlock"
                         VerticalAlignment="Center"

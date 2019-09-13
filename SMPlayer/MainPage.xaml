@@ -36,25 +36,17 @@
                 Grid.Column="1"
                 Width="{x:Bind MainNavigationView.OpenPaneLength}"
                 HorizontalAlignment="Left"
-                Background="{ThemeResource SystemControlAcrylicWindowBrush}">
-                <TextBlock
-                    x:Name="AppTitle"
-                    Padding="10,0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    Style="{StaticResource CaptionTextBlockStyle}"
-                    Text="{x:Bind appmodel:Package.Current.DisplayName}" />
-            </Border>
+                Background="{StaticResource MainNavigationViewBackground}" />
+            <TextBlock
+                x:Name="AppTitle"
+                Grid.Column="1"
+                Padding="10,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Style="{StaticResource CaptionTextBlockStyle}"
+                Text="{x:Bind appmodel:Package.Current.DisplayName}"
+                Visibility="Collapsed" />
         </Grid>
-        <Button
-            x:Name="BackButton"
-            Width="40"
-            Height="32"
-            HorizontalAlignment="Left"
-            Background="Transparent"
-            Click="BackButton_Click"
-            Style="{StaticResource BackButtonStyle}"
-            Visibility="Visible" />
         <NavigationView
             x:Name="MainNavigationView"
             Grid.Row="1"
@@ -74,7 +66,8 @@
                     <TextBlock
                         x:Name="MainNavigationViewHeader"
                         VerticalAlignment="Center"
-                        Style="{ThemeResource TitleBarHeaderStyle}" />
+                        Style="{ThemeResource TitleBarHeaderStyle}"
+                        Visibility="Visible" />
                     <Button
                         x:Name="HeaderSearchButton"
                         Grid.Column="1"
@@ -89,7 +82,7 @@
                         FontFamily="Segoe MDL2 Assets"
                         Visibility="Collapsed" />
                     <AutoSuggestBox
-                        x:Name="HeaderNaviSearchBar"
+                        x:Name="HeaderSearchBar"
                         Grid.ColumnSpan="2"
                         Margin="10,0"
                         VerticalAlignment="Center"
@@ -98,7 +91,7 @@
                         NoFocusCandidateFound="HeaderNaviSearchBar_NoFocusCandidateFound"
                         PlaceholderText="Search"
                         QueryIcon="Find"
-                        QuerySubmitted="NaviSearchBar_QuerySubmitted"
+                        QuerySubmitted="SearchBar_QuerySubmitted"
                         Style="{StaticResource BorderlessAutoSuggestBoxStyle}"
                         ToolTipService.ToolTip="Search"
                         Visibility="Collapsed" />
@@ -109,7 +102,7 @@
                     x:Name="NaviSearchBar"
                     PlaceholderText="Search"
                     QueryIcon="Find"
-                    QuerySubmitted="NaviSearchBar_QuerySubmitted"
+                    QuerySubmitted="SearchBar_QuerySubmitted"
                     Style="{StaticResource BorderlessAutoSuggestBoxStyle}"
                     ToolTipService.ToolTip="Search" />
             </NavigationView.AutoSuggestBox>
@@ -189,6 +182,22 @@
                 IsNavigationStackEnabled="True"
                 Navigated="NaviFrame_Navigated" />
         </NavigationView>
+        <Button
+            x:Name="BackButton"
+            Width="40"
+            Height="32"
+            HorizontalAlignment="Left"
+            Background="Transparent"
+            Click="BackButton_Click"
+            Style="{StaticResource BackButtonStyle}"
+            Visibility="Collapsed" />
+        <Button
+            x:Name="FakeTogglePaneButton"
+            Grid.Row="1"
+            Background="{StaticResource MinimalTitleBarColor}"
+            Click="FakeTogglePaneButton_Click"
+            Style="{ThemeResource PaneToggleButtonStyle}"
+            Visibility="Collapsed" />
         <local:MediaControl
             x:Name="MainMediaControl"
             Grid.Row="2"
@@ -201,6 +210,8 @@
                         <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
+                        <Setter Target="FakeTogglePaneButton.Visibility" Value="Visible" />
+                        <Setter Target="AppTitle.Visibility" Value="Visible" />
                         <Setter Target="AppTitleBar.Background" Value="{StaticResource MinimalTitleBarColor}" />
                         <Setter Target="BackButton.Background" Value="{StaticResource MinimalTitleBarColor}" />
                         <Setter Target="MainNavigationView.(NavigationView.PaneDisplayMode)" Value="LeftMinimal" />
@@ -219,7 +230,9 @@
             <VisualStateGroup x:Name="NavigationViewPaneStateChange">
                 <VisualState x:Name="Open">
                     <VisualState.Setters>
+                        <Setter Target="FakeTogglePaneButton.Visibility" Value="Collapsed" />
                         <Setter Target="BackButton.Background" Value="Transparent" />
+                        <Setter Target="AppTitle.Visibility" Value="Visible" />
                         <Setter Target="AppTitleBorder.Background" Value="{ThemeResource SystemControlAcrylicWindowBrush}" />
                     </VisualState.Setters>
                     <VisualState.Storyboard>
@@ -230,7 +243,7 @@
                                 Storyboard.TargetProperty="Width"
                                 From="{x:Bind MainNavigationView.CompactPaneLength}"
                                 To="{x:Bind MainNavigationView.OpenPaneLength}"
-                                Duration="0:0:0.1">
+                                Duration="0:0:0">
                                 <DoubleAnimation.EasingFunction>
                                     <PowerEase EasingMode="EaseOut" />
                                 </DoubleAnimation.EasingFunction>
@@ -241,7 +254,6 @@
                 <VisualState x:Name="Close">
                     <VisualState.Setters>
                         <Setter Target="BackButton.Background" Value="{StaticResource MinimalTitleBarColor}" />
-                        <Setter Target="AppTitleBorder.Background" Value="{StaticResource MinimalTitleBarColor}" />
                     </VisualState.Setters>
                     <VisualState.Storyboard>
                         <Storyboard>
@@ -251,7 +263,7 @@
                                 Storyboard.TargetProperty="Width"
                                 From="{x:Bind MainNavigationView.OpenPaneLength}"
                                 To="{x:Bind MainNavigationView.CompactPaneLength}"
-                                Duration="0:0:0.1">
+                                Duration="0:0:0">
                                 <DoubleAnimation.EasingFunction>
                                     <BounceEase EasingMode="EaseOut" />
                                 </DoubleAnimation.EasingFunction>

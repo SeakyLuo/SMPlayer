@@ -45,10 +45,7 @@ namespace SMPlayer
         public MainPage()
         {
             this.InitializeComponent();
-            Window.Current.SizeChanged += (sender, e) =>
-            {
-                HeaderGrid.Visibility = e.Size.Width < 720 && Settings.settings.LastPage == "NowPlaying" ? Visibility.Collapsed : Visibility.Visible;
-            };
+            Window.Current.SizeChanged += Current_SizeChanged;
 
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
@@ -63,6 +60,15 @@ namespace SMPlayer
             // Register a handler for when the title bar visibility changes.
             // For example, when the title bar is invoked in full screen mode.
             coreTitleBar.IsVisibleChanged += (sender, args) => AppTitleBar.Visibility = sender.IsVisible ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void Current_SizeChanged(object sender, WindowSizeChangedEventArgs e)
+        {
+            bool isMinimal = e.Size.Width < 720;
+            HeaderGrid.Visibility = isMinimal && Settings.settings.LastPage == "NowPlaying" ? Visibility.Collapsed : Visibility.Visible;
+            if (!MainNavigationView.IsPaneOpen)
+                if (isMinimal) CloseMinimal();
+                else CloseNormal();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -92,7 +98,7 @@ namespace SMPlayer
         {
             if (visible)
             {
-                AppTitle.Margin = new Thickness(40, 0, 40, 0);
+                AppTitle.Margin = new Thickness(40, 0, 0, 0);
                 BackButton.Visibility = Visibility.Visible;
             }
             else
@@ -107,13 +113,22 @@ namespace SMPlayer
             if (NaviFrame.CanGoBack) NaviFrame.GoBack();
         }
 
-        private void NaviSearchBar_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private void FakeTogglePaneButton_Click(object sender, RoutedEventArgs e)
+        {
+            (sender as Button).Visibility = Visibility.Collapsed;
+            MainNavigationView.IsPaneOpen = true;
+        }
+        private void SearchBar_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             string text = NaviSearchBar.Text.Trim();
             if (text.Length > 0)
             {
                 NaviFrame.Navigate(typeof(SearchPage), text);
                 SetBackButtonVisible(true);
+            }
+            else if (HeaderSearchBar.Visibility == Visibility.Visible)
+            {
+                HideHeaderSearchBar();
             }
         }
 
@@ -254,22 +269,43 @@ namespace SMPlayer
         private void MainNavigationView_PaneClosing(NavigationView sender, NavigationViewPaneClosingEventArgs args)
         {
             VisualStateManager.GoToState(this, "Close", true);
-            AppTitle.Visibility = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? Visibility.Visible : Visibility.Collapsed;
+            if (MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal)
+                CloseMinimal();
+            else
+                CloseNormal();
         }
 
         private void HeaderSearchButton_Click(object sender, RoutedEventArgs e)
         {
             MainNavigationViewHeader.Visibility = Visibility.Collapsed;
             HeaderSearchButton.Visibility = Visibility.Collapsed;
-            HeaderNaviSearchBar.Visibility = Visibility.Visible;
+            HeaderSearchBar.Visibility = Visibility.Visible;
+        }
+
+        private void HideHeaderSearchBar()
+        {
+            MainNavigationViewHeader.Visibility = Visibility.Visible;
+            HeaderSearchButton.Visibility = Visibility.Visible;
+            HeaderSearchBar.Visibility = Visibility.Collapsed;
+        }
+
+        private void CloseMinimal()
+        {
+            AppTitle.Visibility = Visibility.Visible;
+            FakeTogglePaneButton.Visibility = Visibility.Visible;
+            AppTitleBorder.Background = Application.Current.Resources["MinimalTitleBarColor"] as Brush;
+        }
+
+        private void CloseNormal()
+        {
+            AppTitle.Visibility = Visibility.Collapsed;
+            FakeTogglePaneButton.Visibility = Visibility.Collapsed;
+            AppTitleBorder.Background = Application.Current.Resources["MainNavigationViewBackground"] as Brush;
         }
 
         private void HeaderNaviSearchBar_LosingFocus(UIElement sender, LosingFocusEventArgs args)
         {
             Debug.WriteLine("HeaderNaviSearchBar_LosingFocus");
-            //MainNavigationViewHeader.Visibility = Visibility.Visible;
-            //HeaderSearchButton.Visibility = Visibility.Visible;
-            //HeaderNaviSearchBar.Visibility = Visibility.Collapsed;
         }
 
         private void HeaderNaviSearchBar_FocusDisengaged(Control sender, FocusDisengagedEventArgs args)
@@ -281,7 +317,6 @@ namespace SMPlayer
         private void HeaderNaviSearchBar_NoFocusCandidateFound(UIElement sender, NoFocusCandidateFoundEventArgs args)
         {
             Debug.WriteLine("HeaderNaviSearchBar_NoFocusCandidateFound");
-
         }
     }
 }
