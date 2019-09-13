@@ -10,6 +10,8 @@ Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
 
+DarkLikeToggleButton?
+
 Localization.
 
 Cache Artists Result.
@@ -33,4 +35,8 @@ PlayCount not read.
 
 Quick return footer.
 
-NavigationView Size and AppViewBackButton.
+NowPlayingFullPage play count.
+
+Save lyrics.
+
+TreeView error.

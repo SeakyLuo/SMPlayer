@@ -132,7 +132,6 @@
       <RootProperty Name="MinWidth" />
       <RootProperty Name="MinHeight" />
       <RootProperty Name="Margin" />
-      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="AllowFocusOnInteraction" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.FontIcon">
@@ -408,9 +407,11 @@
       <RootProperty Name="CanReorderItems" />
       <RootProperty Name="Opacity" />
       <RootProperty Name="ReorderMode" />
+      <RootProperty Name="RequestedTheme" />
       <RootEvent Name="ContainerContentChanging" />
       <RootEvent Name="ItemClick" />
       <RootEvent Name="DragItemsCompleted" />
+      <RootEvent Name="DragItemsStarting" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Border">
       <RootProperty Name="Width" />
@@ -872,13 +873,19 @@
     </RootType>
     <RootType FullName="SMPlayer.MusicListPage" />
     <RootType FullName="SMPlayer.MyFavoritesPage" />
+    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.BladeItem">
+      <RootProperty Name="IsOpen" />
+      <RootProperty Name="TitleBarVisibility" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="Content" />
+      <RootProperty Name="RequestedTheme" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.ImageBrush">
       <RootProperty Name="ImageSource" />
       <RootProperty Name="Stretch" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.BladeView">
       <RootProperty Name="BladeMode" />
-      <RootProperty Name="Resources" />
       <RootProperty Name="Items" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.InAppNotification">
@@ -887,13 +894,6 @@
       <RootProperty Name="ShowDismissButton" />
       <RootProperty Name="StackMode" />
       <RootProperty Name="VerticalOffset" />
-    </RootType>
-    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.BladeItem">
-      <RootProperty Name="IsOpen" />
-      <RootProperty Name="TitleBarVisibility" />
-      <RootProperty Name="Style" />
-      <RootProperty Name="Content" />
-      <RootProperty Name="RequestedTheme" />
     </RootType>
     <RootType FullName="SMPlayer.NowPlayingFullPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">

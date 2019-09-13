@@ -101,18 +101,35 @@ namespace SMPlayer
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, current, next));
         }
 
+        private List<Music> beforeDragging;
+
+        private void SongsListView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
+        {
+            beforeDragging = MediaHelper.CurrentPlaylist.ToList();
+        }
+
         private void SongsListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
-            int from = -1, to = 0;
+            int from = -1, to = -1;
             for (int i = 0; i < sender.Items.Count; i++)
             {
-                var container = sender.ContainerFromIndex(i) as ListViewItem;
-                container.Background = i % 2 == 0 ? ColorHelper.WhiteSmokeBrush : ColorHelper.WhiteBrush;
-                if (!MediaHelper.CurrentPlaylist[i].Equals(args.Items[0]))
+                if (Theme != ElementTheme.Dark)
+                {
+                    var container = sender.ContainerFromIndex(i) as ListViewItem;
+                    container.Background = i % 2 == 0 ? ColorHelper.WhiteSmokeBrush : ColorHelper.WhiteBrush;
+                }
+                if (!MediaHelper.CurrentPlaylist[i].Equals(beforeDragging[i]))
                 {
                     if (from < 0) from = i;
                     else to = i;
                 }
+            }
+            if (from == -1 || to == -1) return;
+            if (beforeDragging[to].Equals(MediaHelper.CurrentPlaylist[from]))
+            {
+                int temp = from;
+                from = to;
+                to = temp;
             }
             MediaHelper.MoveMusic(from, to);
         }

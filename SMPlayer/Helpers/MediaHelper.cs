@@ -206,12 +206,12 @@ namespace SMPlayer
         {
             int index = CurrentPlaylist.IndexOf(music);
             if (index == -1) return;
+            CurrentPlaylist.Move(index, to);
             MoveMusic(index, to);
         }
 
         public static void MoveMusic(int from, int to)
         {
-            CurrentPlaylist.Move(from, to);
             var item = PlayBackList.Items[from];
             PlayBackList.Items.RemoveAt(from);
             PlayBackList.Items.Insert(to, item);

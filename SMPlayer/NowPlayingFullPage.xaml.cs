@@ -171,6 +171,11 @@ namespace SMPlayer
             ShowNotification("Lyrics Updated!");
         }
 
+        private void SearchLyricsButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         public void ShowNotification(string text)
         {
             ShowResultInAppNotification.Content = text;

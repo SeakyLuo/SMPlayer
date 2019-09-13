@@ -10,6 +10,28 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <Style x:Key="NowPlayingFullBladeItemStyle" TargetType="controls:BladeItem">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="IsOpen" Value="True" />
+            <Setter Property="TitleBarVisibility" Value="Collapsed" />
+        </Style>
+        <Style x:Key="ScrollHeaderButtonStyle" TargetType="Button">
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Margin" Value="15" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="CornerRadius" Value="20" />
+        </Style>
+    </Page.Resources>
+
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="{x:Bind FullMediaControl.AlbumCover.Source, Mode=OneWay}" Stretch="UniformToFill" />
@@ -56,24 +78,6 @@
             x:Name="NowPlayingFullBladeView"
             Grid.Row="2"
             BladeMode="Fullscreen">
-            <controls:BladeView.Resources>
-                <Style x:Key="NowPlayingFullBladeItemStyle" TargetType="controls:BladeItem">
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="IsOpen" Value="True" />
-                    <Setter Property="TitleBarVisibility" Value="Collapsed" />
-                </Style>
-                <Style x:Key="ScrollHeaderButtonStyle" TargetType="Button">
-                    <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
-                    <Setter Property="FontSize" Value="20" />
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="Width" Value="40" />
-                    <Setter Property="Height" Value="40" />
-                    <Setter Property="RequestedTheme" Value="Dark" />
-                    <Setter Property="Margin" Value="15" />
-                    <Setter Property="VerticalAlignment" Value="Center" />
-                </Style>
-            </controls:BladeView.Resources>
             <controls:BladeItem x:Name="PlaylistBladeItem" Style="{StaticResource NowPlayingFullBladeItemStyle}">
                 <UserControl>
                     <Grid>
@@ -126,7 +130,7 @@
                             Content="&#xE74E;"
                             RelativePanel.LeftOf="ResetMusicPropertiesButton"
                             Style="{StaticResource ScrollHeaderButtonStyle}"
-                            ToolTipService.ToolTip="Save" />
+                            ToolTipService.ToolTip="Save Properties" />
                         <Button
                             x:Name="ResetMusicPropertiesButton"
                             Background="Transparent"
@@ -134,7 +138,7 @@
                             Content="&#xE72C;"
                             RelativePanel.AlignRightWithPanel="True"
                             Style="{StaticResource ScrollHeaderButtonStyle}"
-                            ToolTipService.ToolTip="Reset" />
+                            ToolTipService.ToolTip="Reset Properties" />
                     </RelativePanel>
                     <ScrollViewer Grid.Row="1">
                         <Grid Padding="20,0" RequestedTheme="Dark">
@@ -174,7 +178,8 @@
                                 x:Name="TitleTextBox"
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                Margin="20,5" />
+                                Margin="20,5"
+                                Style="{StaticResource BorderlessTextBoxStyle}" />
                             <TextBlock
                                 Grid.Row="2"
                                 VerticalAlignment="Center"
@@ -184,7 +189,8 @@
                                 x:Name="SubtitleTextBox"
                                 Grid.Row="2"
                                 Grid.Column="1"
-                                Margin="20,5" />
+                                Margin="20,5"
+                                Style="{StaticResource BorderlessTextBoxStyle}" />
                             <TextBlock
                                 Grid.Row="3"
                                 VerticalAlignment="Center"
@@ -194,7 +200,8 @@
                                 x:Name="ArtistTextBox"
                                 Grid.Row="3"
                                 Grid.Column="1"
-                                Margin="20,5" />
+                                Margin="20,5"
+                                Style="{StaticResource BorderlessTextBoxStyle}" />
                             <TextBlock
                                 Grid.Row="4"
                                 VerticalAlignment="Center"
@@ -204,7 +211,8 @@
                                 x:Name="AlbumTextBox"
                                 Grid.Row="4"
                                 Grid.Column="1"
-                                Margin="20,5" />
+                                Margin="20,5"
+                                Style="{StaticResource BorderlessTextBoxStyle}" />
                             <TextBlock
                                 Grid.Row="5"
                                 VerticalAlignment="Center"
@@ -214,7 +222,8 @@
                                 x:Name="AlbumArtistTextBox"
                                 Grid.Row="5"
                                 Grid.Column="1"
-                                Margin="20,5" />
+                                Margin="20,5"
+                                Style="{StaticResource BorderlessTextBoxStyle}" />
                             <TextBlock
                                 Grid.Row="6"
                                 VerticalAlignment="Center"
@@ -231,11 +240,14 @@
                                 <TextBox
                                     x:Name="PlayCountTextBox"
                                     IsReadOnly="True"
+                                    Style="{StaticResource BorderlessTextBoxStyle}"
                                     Text="{x:Bind CurrentMusic.PlayCount, Converter={StaticResource IntConverter}}" />
                                 <Button
                                     x:Name="ClearPlayCountButton"
                                     Grid.Column="1"
+                                    Height="30"
                                     Margin="5,0,0,0"
+                                    BorderThickness="0"
                                     Click="ClearPlayCountButton_Click"
                                     Content="Clear"
                                     ToolTipService.ToolTip="Clear Play Count"
@@ -250,7 +262,8 @@
                                 x:Name="PublisherTextBox"
                                 Grid.Row="7"
                                 Grid.Column="1"
-                                Margin="20,5" />
+                                Margin="20,5"
+                                Style="{StaticResource BorderlessTextBoxStyle}" />
                             <TextBlock
                                 Grid.Row="8"
                                 VerticalAlignment="Center"
@@ -261,7 +274,8 @@
                                 Grid.Row="8"
                                 Grid.Column="1"
                                 Margin="20,5"
-                                BeforeTextChanging="CheckIfDigit" />
+                                BeforeTextChanging="CheckIfDigit"
+                                Style="{StaticResource BorderlessTextBoxStyle}" />
                             <TextBlock
                                 Grid.Row="9"
                                 VerticalAlignment="Center"
@@ -272,7 +286,8 @@
                                 Grid.Row="9"
                                 Grid.Column="1"
                                 Margin="20,5"
-                                BeforeTextChanging="CheckIfDigit" />
+                                BeforeTextChanging="CheckIfDigit"
+                                Style="{StaticResource BorderlessTextBoxStyle}" />
                             <TextBlock
                                 Grid.Row="10"
                                 VerticalAlignment="Center"
@@ -402,12 +417,19 @@
                             Text="Lyrics"
                             TextAlignment="Left" />
                         <Button
+                            x:Name="SearchLyricsButton"
+                            Click="SearchLyricsButton_Click"
+                            Content="&#xE721;"
+                            RelativePanel.LeftOf="SaveLyricsButton"
+                            Style="{StaticResource ScrollHeaderButtonStyle}"
+                            ToolTipService.ToolTip="Search Lyrics" />
+                        <Button
                             x:Name="SaveLyricsButton"
                             Click="SaveLyricsButton_Click"
                             Content="&#xE74E;"
                             RelativePanel.LeftOf="ResetLyricsButton"
                             Style="{StaticResource ScrollHeaderButtonStyle}"
-                            ToolTipService.ToolTip="Save" />
+                            ToolTipService.ToolTip="Save Lyrics" />
                         <Button
                             x:Name="ResetLyricsButton"
                             Background="Transparent"
@@ -415,7 +437,7 @@
                             Content="&#xE72C;"
                             RelativePanel.AlignRightWithPanel="True"
                             Style="{StaticResource ScrollHeaderButtonStyle}"
-                            ToolTipService.ToolTip="Reset" />
+                            ToolTipService.ToolTip="Reset Lyrics" />
                     </RelativePanel>
                     <TextBox
                         x:Name="LyricsTextBox"
