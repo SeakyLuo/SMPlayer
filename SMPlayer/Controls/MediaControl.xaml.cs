@@ -262,6 +262,15 @@ namespace SMPlayer
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
             MediaHelper.MediaControlListeners.Add(this as MediaControlListener);
             SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
+            MediaHelper.Player.PlaybackSession.PlaybackStateChanged += async (sender, args) =>
+            {
+                // For F3 Support
+                await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+                {
+                    if (sender.PlaybackState == MediaPlaybackState.Playing) PlayMusic();
+                    else if (sender.PlaybackState == MediaPlaybackState.Paused) PauseMusic();
+                });
+            };
         }
 
         public void Update()
@@ -351,6 +360,8 @@ namespace SMPlayer
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
             SetShuffle((bool)ShuffleButton.IsChecked);
+            if (MediaHelper.ShuffleEnabled)
+                MediaHelper.ShuffleOthers();
         }
         private void SetToolTips()
         {
@@ -489,19 +500,16 @@ namespace SMPlayer
 
         private void PrevButton_Click(object sender, RoutedEventArgs e)
         {
+            MediaSlider.Value = 0;
             if (MediaHelper.Position > 5)
-            {
                 MediaHelper.Position = 0;
-                MediaSlider.Value = 0;
-            }
             else
-            {
                 MediaHelper.PrevMusic();
-            }
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
+            MediaSlider.Value = 0;
             MediaHelper.NextMusic();
         }
 
@@ -734,6 +742,5 @@ namespace SMPlayer
     public interface MediaControlContainer
     {
         void PauseMusic();
-        void SetShuffle(bool isShuffle);
     }
 }

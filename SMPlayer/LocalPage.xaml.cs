@@ -26,6 +26,8 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class LocalPage : Page, LocalSetter, AfterPathSetListener
     {
+        public static ViewModeChangedListener MusicViewModeChangedListener;
+        public static ViewModeChangedListener FolderViewModeChangedListener;
         public static Stack<FolderTree> History = new Stack<FolderTree>();
         public LocalPage()
         {
@@ -88,16 +90,38 @@ namespace SMPlayer
             SetBackButtonVisibility();
         }
 
+        private void SetLocalGridView(bool isGridView)
+        {
+            LocalGridViewItem.Visibility = isGridView ? Visibility.Collapsed : Visibility.Visible;
+            LocalListViewItem.Visibility = isGridView ? Visibility.Visible : Visibility.Collapsed;
+        }
+
         private void LocalListViewItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            LocalListViewItem.Visibility = Visibility.Collapsed;
-            LocalGridViewItem.Visibility = Visibility.Visible;
+            bool isGridView = false;
+            SetLocalGridView(isGridView);
+            SetMode(isGridView);
         }
 
         private void LocalGridViewItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            LocalListViewItem.Visibility = Visibility.Visible;
-            LocalGridViewItem.Visibility = Visibility.Collapsed;
+            bool isGridView = true;
+            SetLocalGridView(isGridView);
+            SetMode(isGridView);
+        }
+
+        public void SetMode(bool isGridView)
+        {
+            if (LocalFrame.CurrentSourcePageType.Name == "LocalFoldersPage")
+            {
+                Settings.settings.LocalFolderGridView = isGridView;
+                if (FolderViewModeChangedListener != null) FolderViewModeChangedListener.ModeChanged(isGridView);
+            }
+            else
+            {
+                Settings.settings.LocalMusicGridView = isGridView;
+                if (MusicViewModeChangedListener != null) MusicViewModeChangedListener.ModeChanged(isGridView);
+            }
         }
 
         private void LocalShuffleItem_Tapped(object sender, TappedRoutedEventArgs e)
@@ -126,11 +150,13 @@ namespace SMPlayer
             {
                 LocalNavigationView.SelectedItem = LocalSongsItem;
                 LocalFrame.Navigate(typeof(LocalMusicPage), tree);
+                SetLocalGridView(Settings.settings.LocalMusicGridView);
             }
             else if (info.Folders > 0)
             {
                 LocalNavigationView.SelectedItem = LocalFoldersItem;
                 LocalFrame.Navigate(typeof(LocalFoldersPage), tree);
+                SetLocalGridView(Settings.settings.LocalFolderGridView);
             }
         }
 
@@ -148,5 +174,10 @@ namespace SMPlayer
     public interface LocalSetter
     {
         void SetPage(FolderTree tree);
+    }
+
+    public interface ViewModeChangedListener
+    {
+        void ModeChanged(bool isGridView);
     }
 }

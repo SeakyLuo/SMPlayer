@@ -92,7 +92,7 @@
                     BorderBrush="{StaticResource MediaControlPlayButtonBorderBrush}"
                     Click="PlayButton_Click"
                     Content="&#xE768;"
-                    CornerRadius="25"
+                    CornerRadius="24"
                     FontSize="24"
                     Style="{StaticResource MediaControlButtonStyle}"
                     Template="{StaticResource MediaControlButtonTemplate}">
@@ -140,9 +140,9 @@
                                 </StackPanel>
                                 <local:IconTextButton
                                     x:Name="MainMediaControlMoreFullScreenItem"
-                                    Tapped="MainMediaControlMoreFullScreenItem_Tapped"
                                     Icon="Fullscreen"
-                                    Label="Full Screen" />
+                                    Label="Full Screen"
+                                    Tapped="MainMediaControlMoreFullScreenItem_Tapped" />
                             </StackPanel>
                         </Flyout>
                     </Button.Flyout>
@@ -221,6 +221,7 @@
                 Grid.Row="1"
                 Grid.Column="2"
                 HorizontalAlignment="Right"
+                VerticalAlignment="Center"
                 Orientation="Horizontal">
                 <ToggleButton
                     x:Name="MainShuffleButton"
@@ -241,7 +242,10 @@
                     Style="{StaticResource MediaControlToggleButtonStyle}"
                     Template="{StaticResource MediaControlToggleButtonTemplate}" />
                 <Button
+                    Width="36"
+                    Height="36"
                     Content="&#xE712;"
+                    FontSize="16"
                     Style="{StaticResource MediaControlButtonStyle}"
                     Template="{StaticResource MediaControlButtonTemplate}"
                     ToolTipService.ToolTip="More">

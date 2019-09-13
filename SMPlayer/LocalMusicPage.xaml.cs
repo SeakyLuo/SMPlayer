@@ -23,20 +23,23 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalMusicPage : Page, MusicSwitchingListener
+    public sealed partial class LocalMusicPage : Page, MusicSwitchingListener, ViewModeChangedListener
     {
         private ObservableCollection<GridMusicView> GridItems = new ObservableCollection<GridMusicView>();
+        private ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         private FolderTree Tree;
         public LocalMusicPage()
         {
             this.InitializeComponent();
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
+            LocalPage.MusicViewModeChangedListener = this as ViewModeChangedListener;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             Setup((FolderTree)e.Parameter);
             base.OnNavigatedTo(e);
+            ModeChanged(Settings.settings.LocalMusicGridView);
         }
 
         private void LocalMusicGridView_ItemClick(object sender, ItemClickEventArgs e)
@@ -53,12 +56,15 @@ namespace SMPlayer
             try
             {
                 GridItems.Clear();
+                Songs.Clear();
                 foreach (var file in tree.Files)
                 {
+                    var copy = file.Copy();
+                    copy.IsPlaying = copy.Equals(MediaHelper.CurrentMusic);
                     GridMusicView gridItem = new GridMusicView();
-                    await gridItem.Init(file);
-                    gridItem.Source.IsPlaying = gridItem.Source.Equals(MediaHelper.CurrentMusic);
+                    await gridItem.Init(copy);
                     GridItems.Add(gridItem);
+                    Songs.Add(copy);
                 }
             }
             catch (InvalidOperationException)
@@ -86,7 +92,16 @@ namespace SMPlayer
                         music.IsPlaying = false;
                     if (!findNext && (findNext = music.Equals(next)))
                         music.IsPlaying = true;
-                    if (findCurrent && findNext) return;
+                    if (findCurrent && findNext) break;
+                }
+                findCurrent = current == null; findNext = next == null;
+                foreach (var music in Songs)
+                {
+                    if (!findCurrent && (findCurrent = music.Equals(current)))
+                        music.IsPlaying = false;
+                    if (!findNext && (findNext = music.Equals(next)))
+                        music.IsPlaying = true;
+                    if (findCurrent && findNext) break;
                 }
             });
         }
@@ -98,6 +113,26 @@ namespace SMPlayer
         private void GridViewItem_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             VisualStateManager.GoToState(sender as Control, "Normal", true);
+        }
+
+        private void AddToButton_Click(object sender, RoutedEventArgs e)
+        {
+            var data = (sender as Button).DataContext as GridMusicView;
+            new MenuFlyoutHelper().GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
+        }
+
+        public void ModeChanged(bool isGridView)
+        {
+            if (isGridView)
+            {
+                LocalMusicGridView.Visibility = Visibility.Visible;
+                LocalPlaylist.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                LocalMusicGridView.Visibility = Visibility.Collapsed;
+                LocalPlaylist.Visibility = Visibility.Visible;
+            }
         }
     }
 }

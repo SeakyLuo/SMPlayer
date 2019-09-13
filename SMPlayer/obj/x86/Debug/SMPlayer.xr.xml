@@ -91,10 +91,10 @@
       <RootProperty Name="MinHeight" />
       <RootProperty Name="Padding" />
       <RootProperty Name="IsAccessKeyScope" />
+      <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="Template" />
       <RootProperty Name="KeyboardAccelerators" />
       <RootProperty Name="Height" />
-      <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="FontFamily" />
@@ -289,6 +289,8 @@
       <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="XYFocusKeyboardNavigation" />
+      <RootProperty Name="IsDoubleTapEnabled" />
+      <RootEvent Name="DoubleTapped" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ToolTipService">
       <RootMethod Name="GetToolTip" />
@@ -821,7 +823,34 @@
       <RootProperty Name="To" />
       <RootProperty Name="Storyboard" />
     </RootType>
+    <RootType FullName="SMPlayer.TemplateSelector.FolderTreeTemplateSelector">
+      <RootProperty Name="FileTemplate" />
+      <RootProperty Name="FolderTemplate" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.TreeViewItem">
+      <RootProperty Name="Content" />
+      <RootProperty Name="IsDoubleTapEnabled" />
+      <RootProperty Name="IsExpanded" />
+      <RootProperty Name="ItemsSource" />
+      <RootEvent Name="DoubleTapped" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.TreeView">
+      <RootProperty Name="ItemTemplateSelector" />
+      <RootProperty Name="ItemsSource" />
+      <RootProperty Name="Visibility" />
+    </RootType>
     <RootType FullName="SMPlayer.LocalFoldersPage" />
+    <RootType FullName="SMPlayer.PlaylistControl">
+      <RootProperty Name="Margin" />
+      <RootProperty Name="AlternatingRowColor" />
+      <RootProperty Name="ItemsSource" />
+      <RootProperty Name="Visibility" />
+      <RootProperty Name="Padding" />
+      <RootProperty Name="Background" />
+      <RootProperty Name="Theme" />
+      <RootProperty Name="AllowReorder" />
+      <RootProperty Name="Header" />
+    </RootType>
     <RootType FullName="SMPlayer.LocalMusicPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.Frame">
       <RootProperty Name="IsNavigationStackEnabled" />
@@ -867,16 +896,6 @@
       <RootProperty Name="Style" />
       <RootProperty Name="Content" />
       <RootProperty Name="RequestedTheme" />
-    </RootType>
-    <RootType FullName="SMPlayer.PlaylistControl">
-      <RootProperty Name="Padding" />
-      <RootProperty Name="AlternatingRowColor" />
-      <RootProperty Name="Background" />
-      <RootProperty Name="Theme" />
-      <RootProperty Name="Margin" />
-      <RootProperty Name="AllowReorder" />
-      <RootProperty Name="ItemsSource" />
-      <RootProperty Name="Header" />
     </RootType>
     <RootType FullName="SMPlayer.NowPlayingFullPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">

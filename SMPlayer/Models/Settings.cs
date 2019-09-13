@@ -28,6 +28,9 @@ namespace SMPlayer.Models
 
         public string LastPlaylist { get; set; }
 
+        public bool LocalMusicGridView { get; set; }
+        public bool LocalFolderGridView { get; set; }
+
         public Settings()
         {
             RootPath = "";
@@ -39,6 +42,9 @@ namespace SMPlayer.Models
             ThemeColor = (Color)Windows.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(typeof(Color), "#0078D7");
             LastPage = "";
             Playlists = new List<Playlist>();
+            LastPlaylist = "";
+            LocalMusicGridView = true;
+            LocalFolderGridView = true;
         }
         public int FindNextPlaylistNameIndex(string Name)
         {

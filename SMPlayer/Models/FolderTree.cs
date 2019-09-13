@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,11 +9,12 @@ using Windows.Storage;
 namespace SMPlayer.Models
 {
     [Serializable]
-    public class FolderTree
+    public class FolderTree: INotifyPropertyChanged
     {
         public List<FolderTree> Trees = new List<FolderTree>();
         public List<Music> Files = new List<Music>();
         public string Path = "";
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public FolderTree() { }
         public FolderTree(FolderTree tree)
@@ -25,6 +27,7 @@ namespace SMPlayer.Models
             Trees = tree.Trees;
             Files = tree.Files;
             Path = tree.Path;
+            OnPropertyChanged();
         }
 
         public async Task Init(StorageFolder folder)
@@ -91,6 +94,7 @@ namespace SMPlayer.Models
             foreach (var file in tree.Files)
                 if (set.Contains(file))
                     Files.First((f) => f.Equals(file)).CopyFrom(file);
+            OnPropertyChanged();
         }
 
         public List<Music> Flatten()
@@ -110,6 +114,12 @@ namespace SMPlayer.Models
         public string GetDirectory()
         {
             return Path.Substring(Path.LastIndexOf("\\") + 1);
+        }
+
+        public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            // Raise the PropertyChanged event, passing the name of the property whose value has changed.
+            this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public override bool Equals(object obj)

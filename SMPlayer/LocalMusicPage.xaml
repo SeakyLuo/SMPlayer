@@ -32,7 +32,7 @@
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:GridMusicView">
                     <UserControl PointerEntered="GridViewItem_PointerEntered" PointerExited="GridViewItem_PointerExited">
-                        <Grid Margin="5" Background="Transparent">
+                        <Grid Margin="4" Background="Transparent">
                             <Grid.ContextFlyout>
                                 <MenuFlyout Opening="MenuFlyout_Opening" />
                             </Grid.ContextFlyout>
@@ -51,10 +51,21 @@
                                 OffsetY="2"
                                 ShadowOpacity="0"
                                 Color="Gray">
-                                <Image
-                                    Width="100"
-                                    Height="100"
-                                    Source="{x:Bind Thumbnail}" />
+                                <Grid>
+                                    <Image
+                                        Width="100"
+                                        Height="100"
+                                        Source="{x:Bind Thumbnail}" />
+                                    <Button
+                                        x:Name="AddToButton"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Click="AddToButton_Click"
+                                        Content="&#xE710;"
+                                        Style="{StaticResource HoverButtonStyle}"
+                                        ToolTipService.ToolTip="Add To"
+                                        Visibility="Collapsed" />
+                                </Grid>
                             </controls:DropShadowPanel>
                             <RelativePanel Grid.Column="1">
                                 <StackPanel RelativePanel.AlignTopWithPanel="True">
@@ -93,6 +104,9 @@
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ShadowPanel" Storyboard.TargetProperty="ShadowOpacity">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="1" />
                                             </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="AddToButton" Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
+                                            </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
                                 </VisualStateGroup>
@@ -102,5 +116,12 @@
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>
+        <local:PlaylistControl
+            x:Name="LocalPlaylist"
+            Grid.Row="1"
+            Margin="10"
+            AlternatingRowColor="True"
+            ItemsSource="{x:Bind Songs}"
+            Visibility="Collapsed" />
     </Grid>
 </Page>

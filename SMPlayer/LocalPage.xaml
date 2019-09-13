@@ -42,15 +42,17 @@
                 <StackPanel Orientation="Horizontal">
                     <NavigationViewItem
                         x:Name="LocalShuffleItem"
-                        Content="Shuffle All"
+                        Content="Shuffle"
                         Icon="Shuffle"
                         Style="{StaticResource TopNavigationViewFooterItemStyle}"
-                        Tapped="LocalShuffleItem_Tapped" />
+                        Tapped="LocalShuffleItem_Tapped"
+                        ToolTipService.ToolTip="Shuffle And Play" />
                     <NavigationViewItem
                         x:Name="LocalListViewItem"
                         Icon="List"
                         Style="{StaticResource TopNavigationViewFooterItemStyle}"
                         Tapped="LocalListViewItem_Tapped"
+                        ToolTipService.ToolTip="Change to List View"
                         Visibility="Visible">
                         <Viewbox Width="60">
                             <TextBlock FontSize="14" Text="List View" />
@@ -61,6 +63,7 @@
                         Content="Grid View"
                         Style="{StaticResource TopNavigationViewFooterItemStyle}"
                         Tapped="LocalGridViewItem_Tapped"
+                        ToolTipService.ToolTip="Change to Grid View"
                         Visibility="Collapsed">
                         <NavigationViewItem.Icon>
                             <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF0E2;" />

@@ -85,7 +85,7 @@ namespace SMPlayer
         {
             JsonFileHelper.SaveAsync(FILENAME, CurrentPlaylist.Select((m) => m.Name));
         }
-        public static async void SetMode(PlayMode mode)
+        public static void SetMode(PlayMode mode)
         {
             switch (mode)
             {
@@ -105,13 +105,9 @@ namespace SMPlayer
                     Player.IsLoopingEnabled = false;
                     PlayBackList.AutoRepeatEnabled = true;
                     break;
-                default:
-                    break;
             }
-            bool isShuffle = mode == PlayMode.Shuffle;
-            ShuffleEnabled = isShuffle;
-            if (isShuffle) await SetPlaylist(ShufflePlaylist(CurrentPlaylist, CurrentMusic));
             Settings.settings.Mode = mode;
+            ShuffleEnabled = mode == PlayMode.Shuffle;
         }
 
         public static async Task AddMusic(Music music)
@@ -182,8 +178,13 @@ namespace SMPlayer
         {
             Pause();
             SetMode(PlayMode.Shuffle);
-            await SetPlaylist(playlist);
+            await SetPlaylist(ShufflePlaylist(CurrentPlaylist, null));
             Play();
+        }
+
+        public static async void ShuffleOthers()
+        {
+            await SetPlaylist(ShufflePlaylist(CurrentPlaylist, CurrentMusic));
         }
 
         public static List<Music> ShufflePlaylist(ICollection<Music> playlist, Music music = null)

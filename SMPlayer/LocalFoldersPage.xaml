@@ -7,8 +7,49 @@
     xmlns:data="using:SMPlayer.Models"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:templateselector="using:SMPlayer.TemplateSelector"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <DataTemplate x:Key="FolderTemplate" x:DataType="data:FolderTree">
+            <TreeViewItem
+                DoubleTapped="FolderTreeItem_DoubleTapped"
+                IsDoubleTapEnabled="True"
+                IsExpanded="False"
+                ItemsSource="{x:Bind Files}">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.ContextFlyout>
+                        <MenuFlyout Opening="OpenPlaylistFlyout" />
+                    </StackPanel.ContextFlyout>
+                    <SymbolIcon Symbol="Folder" />
+                    <TextBlock Margin="0,0,10,0" />
+                    <TextBlock Text="{x:Bind Path}" />
+                </StackPanel>
+            </TreeViewItem>
+        </DataTemplate>
+
+        <DataTemplate x:Key="FileTemplate" x:DataType="data:Music">
+            <TreeViewItem>
+                <StackPanel
+                    DoubleTapped="FileItem_DoubleTapped"
+                    IsDoubleTapEnabled="True"
+                    Orientation="Horizontal">
+                    <StackPanel.ContextFlyout>
+                        <MenuFlyout Opening="OpenMusicFlyout" />
+                    </StackPanel.ContextFlyout>
+                    <Image Width="20" Source="Assets/colorful_no_bg.png" />
+                    <TextBlock Margin="0,0,10,0" />
+                    <TextBlock Text="{x:Bind Name}" />
+                </StackPanel>
+            </TreeViewItem>
+        </DataTemplate>
+
+        <templateselector:FolderTreeTemplateSelector
+            x:Key="FolderTreeTemplateSelector"
+            FileTemplate="{StaticResource FileTemplate}"
+            FolderTemplate="{StaticResource FolderTemplate}" />
+    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -33,7 +74,7 @@
                     <UserControl PointerEntered="GridViewItem_PointerEntered" PointerExited="GridViewItem_PointerExited">
                         <StackPanel Margin="10">
                             <StackPanel.ContextFlyout>
-                                <MenuFlyout Opening="MenuFlyout_Opening" />
+                                <MenuFlyout Opening="OpenPlaylistFlyout" />
                             </StackPanel.ContextFlyout>
                             <controls:DropShadowPanel
                                 x:Name="ShadowPanel"
@@ -128,5 +169,10 @@
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>
+        <TreeView
+            x:Name="LocalFolderTreeView"
+            ItemTemplateSelector="{StaticResource FolderTreeTemplateSelector}"
+            ItemsSource="{x:Bind Tree}"
+            Visibility="Collapsed" />
     </Grid>
 </Page>

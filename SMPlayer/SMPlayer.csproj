@@ -133,6 +133,7 @@
     <Compile Include="Controls\PlaylistControlItem.xaml.cs">
       <DependentUpon>PlaylistControlItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TemplateSelector\FolderTreeTemplateSelector.cs" />
     <Compile Include="Helpers\MenuFlyoutHelper.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Controls\LoadingControl.xaml.cs">
@@ -210,6 +211,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\colorful_bg_wide.png" />
+    <Content Include="Assets\colorful_no_bg.png" />
+    <Content Include="Assets\colorful_no_bg_wide.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-125.png" />
     <Content Include="Assets\LargeTile.scale-150.png" />

@@ -22,7 +22,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalFoldersPage : Page
+    public sealed partial class LocalFoldersPage : Page, ViewModeChangedListener
     {
         private ObservableCollection<GridFolderView> GridItems = new ObservableCollection<GridFolderView>();
         private FolderTree Tree;
@@ -32,12 +32,14 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            LocalPage.FolderViewModeChangedListener = this as ViewModeChangedListener;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             Setup((FolderTree)e.Parameter);
             base.OnNavigatedTo(e);
+            ModeChanged(Settings.settings.LocalFolderGridView);
         }
 
         private void LocalFoldersGridView_ItemClick(object sender, ItemClickEventArgs e)
@@ -62,9 +64,13 @@ namespace SMPlayer
             LocalLoadingControl.Visibility = Visibility.Collapsed;
         }
 
-        private void MenuFlyout_Opening(object sender, object e)
+        private void OpenPlaylistFlyout(object sender, object e)
         {
             MenuFlyoutHelper.SetPlaylistMenu(sender);
+        }
+        private void OpenMusicFlyout(object sender, object e)
+        {
+            MenuFlyoutHelper.SetMusicMenu(sender);
         }
 
         private void GridViewItem_PointerEntered(object sender, PointerRoutedEventArgs e)
@@ -86,6 +92,29 @@ namespace SMPlayer
         {
             var data = (sender as Button).DataContext as GridFolderView;
             new MenuFlyoutHelper().GetAddToPlaylistsMenuFlyout(data.Name).ShowAt(sender as FrameworkElement);
+        }
+
+        public void ModeChanged(bool isGridView)
+        {
+            if (isGridView)
+            {
+                LocalFoldersGridView.Visibility = Visibility.Visible;
+                LocalFolderTreeView.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                LocalFoldersGridView.Visibility = Visibility.Collapsed;
+                LocalFolderTreeView.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void FolderTreeItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+
+        }
+        private void FileItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -161,11 +161,6 @@ namespace SMPlayer
             FullMediaControl.PauseMusic();
         }
 
-        public void SetShuffle(bool isShuffle)
-        {
-            FullMediaControl.SetShuffle(isShuffle);
-        }
-
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>

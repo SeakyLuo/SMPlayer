@@ -216,11 +216,6 @@ namespace SMPlayer
             MainMediaControl.PauseMusic();
         }
 
-        public void SetShuffle(bool isShuffle)
-        {
-            MainMediaControl.SetShuffle(isShuffle);
-        }
-
         private void MainNavigationView_PaneOpening(NavigationView sender, object args)
         {
             VisualStateManager.GoToState(this, "Open", true);
