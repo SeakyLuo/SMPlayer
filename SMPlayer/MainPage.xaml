@@ -39,7 +39,8 @@
                 Background="{ThemeResource SystemControlAcrylicWindowBrush}">
                 <TextBlock
                     x:Name="AppTitle"
-                    Padding="10"
+                    Padding="10,0"
+                    HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
                     Style="{StaticResource CaptionTextBlockStyle}"
                     Text="{x:Bind appmodel:Package.Current.DisplayName}" />
@@ -82,6 +83,7 @@
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Background="Transparent"
+                        BorderThickness="0"
                         Click="HeaderSearchButton_Click"
                         Content="&#xE11A;"
                         FontFamily="Segoe MDL2 Assets"
@@ -217,7 +219,6 @@
             <VisualStateGroup x:Name="NavigationViewPaneStateChange">
                 <VisualState x:Name="Open">
                     <VisualState.Setters>
-                        <Setter Target="AppTitle.Visibility" Value="Visible" />
                         <Setter Target="BackButton.Background" Value="Transparent" />
                         <Setter Target="AppTitleBorder.Background" Value="{ThemeResource SystemControlAcrylicWindowBrush}" />
                     </VisualState.Setters>
@@ -239,7 +240,6 @@
                 </VisualState>
                 <VisualState x:Name="Close">
                     <VisualState.Setters>
-                        <Setter Target="AppTitle.Visibility" Value="Collapsed" />
                         <Setter Target="BackButton.Background" Value="{StaticResource MinimalTitleBarColor}" />
                         <Setter Target="AppTitleBorder.Background" Value="{StaticResource MinimalTitleBarColor}" />
                     </VisualState.Setters>

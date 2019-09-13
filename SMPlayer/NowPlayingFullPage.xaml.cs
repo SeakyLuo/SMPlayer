@@ -42,20 +42,21 @@ namespace SMPlayer
             MediaControl.AddMusicRequestListener(this as MusicRequestListener);
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
 
-            // Hide default title bar.
             var coreTitleBar = Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar;
-            Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
-            UpdateTitleBarLayout(coreTitleBar);
-
             // Register a handler for when the size of the overlaid caption control changes.
             // For example, when the app moves to a screen with a different DPI.
             coreTitleBar.LayoutMetricsChanged += (sender, args) => UpdateTitleBarLayout(sender);
+            // Register a handler for when the title bar visibility changes.
+            // For example, when the title bar is invoked in full screen mode.
+            coreTitleBar.IsVisibleChanged += (sender, args) => AppTitleBar.Visibility = sender.IsVisible ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             TitleBarHelper.SetFullTitleBar();
-            Window.Current.SetTitleBar(AppTitleBar); // Set XAML element as a draggable region.
+            Window.Current.SetTitleBar(AppTitleBar);
+            UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar);
+
             FullMediaControl.Update();
             SetMusic(MediaHelper.CurrentMusic);
         }

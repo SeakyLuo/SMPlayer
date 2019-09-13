@@ -56,22 +56,21 @@ namespace SMPlayer
             if (MainNavigationView.IsPaneOpen) MainNavigationView_PaneOpening(null, null);
             else MainNavigationView_PaneClosing(null, null);
 
-            // Hide default title bar.
             var coreTitleBar = Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar;
-            Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
-            UpdateTitleBarLayout(coreTitleBar);
-
             // Register a handler for when the size of the overlaid caption control changes.
             // For example, when the app moves to a screen with a different DPI.
             coreTitleBar.LayoutMetricsChanged += (sender, args) => UpdateTitleBarLayout(sender);
+            // Register a handler for when the title bar visibility changes.
+            // For example, when the title bar is invoked in full screen mode.
+            coreTitleBar.IsVisibleChanged += (sender, args) => AppTitleBar.Visibility = sender.IsVisible ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             TitleBarHelper.SetMainTitleBar();
-
-            // Set XAML element as a draggable region.
             Window.Current.SetTitleBar(AppTitleBar);
+            UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar);
+
             MainMediaControl.Update();
             if (NaviFrame.SourcePageType != null && NaviFrame.SourcePageType.Name.StartsWith(Settings.settings.LastPage)) return;
             SwitchPage(Settings.settings.LastPage);
@@ -250,14 +249,12 @@ namespace SMPlayer
         private void MainNavigationView_PaneOpening(NavigationView sender, object args)
         {
             VisualStateManager.GoToState(this, "Open", true);
-            //MainNavigationView.Background = Resources[""]
-
-            // On BackButton Visibility Change
         }
 
         private void MainNavigationView_PaneClosing(NavigationView sender, NavigationViewPaneClosingEventArgs args)
         {
             VisualStateManager.GoToState(this, "Close", true);
+            AppTitle.Visibility = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void HeaderSearchButton_Click(object sender, RoutedEventArgs e)
