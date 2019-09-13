@@ -1,5 +1,5 @@
 # SMPlayer
-A Simple Music Player that manages local music files better than Groove.
+A Simple Music Player that manages local music files based on the UI of Groove Music.
 
 # TO RUN
 Download it and open it using Visual Studio.
@@ -24,9 +24,13 @@ Shy header.
 
 Show in explorer.
 
+Clickable text.
+
 # TO FIX
 Full Screen.
 
 PlayCount not read.
 
 Quick return footer.
+
+NavigationView Size and AppViewBackButton.

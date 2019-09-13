@@ -31,14 +31,16 @@ namespace SMPlayer
             }
         }
 
-        private const int MIN_VALUE = 30;
-        private const int MAX_VALUE = 220;
+        private const int MIN_VALUE = 15;
+        private const int MAX_VALUE = 240;
 
         public static async Task<Brush> GetThumbnailMainColor(StorageFile Thumbnail)
         {
             var decoder = await BitmapDecoder.CreateAsync(await Thumbnail.OpenAsync(FileAccessMode.Read));
             uint width = decoder.PixelWidth, height = decoder.PixelHeight;
-            Size[] TargetPositions = { new Size(width / 4, height / 4), new Size(width * 3 / 4, height / 4), 
+            Size[] TargetPositions = { new Size(width / 8, height / 8), new Size(width * 7 / 8, height / 8),
+                                       new Size(width * 7 / 8, height / 8), new Size(width * 7 / 8, height * 7 / 8),
+                                       new Size(width / 4, height / 4), new Size(width * 3 / 4, height / 4), 
                                        new Size(width / 4, height * 3 / 4), new Size(width * 3 / 4, height * 3 / 4),
                                        new Size(width / 2, height / 2) };
             byte[] bgra = { 0, 0, 0, 255 };

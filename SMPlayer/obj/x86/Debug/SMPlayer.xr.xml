@@ -91,10 +91,10 @@
       <RootProperty Name="MinHeight" />
       <RootProperty Name="Padding" />
       <RootProperty Name="IsAccessKeyScope" />
+      <RootProperty Name="Height" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="Template" />
       <RootProperty Name="KeyboardAccelerators" />
-      <RootProperty Name="Height" />
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="FontFamily" />
@@ -177,8 +177,8 @@
       <RootProperty Name="FallbackColor" />
       <RootProperty Name="TintColor" />
       <RootProperty Name="TintOpacity" />
+      <RootProperty Name="Opacity" />
     </RootType>
-    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.StaticResourceExtension" />
     <RootType FullName="Windows.UI.Xaml.Setter">
       <RootProperty Name="Property" />
       <RootProperty Name="Value" />
@@ -215,9 +215,9 @@
       <RootProperty Name="RenderTransform" />
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="MaxHeight" />
-      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="Opacity" />
       <RootProperty Name="IsHitTestVisible" />
+      <RootProperty Name="RequestedTheme" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
       <RootEvent Name="Tapped" />
@@ -241,6 +241,7 @@
       <RootProperty Name="ItemTemplate" />
       <RootEvent Name="ItemClick" />
     </RootType>
+    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.StaticResourceExtension" />
     <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.BindExtension">
       <RootProperty Name="Converter" />
       <RootProperty Name="Mode" />
@@ -488,9 +489,7 @@
       <RootProperty Name="Background" />
       <RootProperty Name="Content" />
     </RootType>
-    <RootType FullName="SMPlayer.LoadingControl">
-      <RootProperty Name="Text" />
-    </RootType>
+    <RootType FullName="SMPlayer.LoadingControl" />
     <RootType FullName="Windows.UI.Xaml.Data.Binding">
       <RootProperty Name="Converter" />
       <RootProperty Name="ConverterParameter" />
@@ -747,7 +746,9 @@
       <RootProperty Name="Height" />
       <RootProperty Name="DataContext" />
       <RootProperty Name="FocusVisualMargin" />
+      <RootProperty Name="RenderTransformOrigin" />
       <RootProperty Name="Style" />
+      <RootProperty Name="RenderTransform" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.RangeBase">
       <RootProperty Name="Minimum" />
@@ -836,7 +837,6 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.TreeView">
       <RootProperty Name="ItemTemplateSelector" />
-      <RootProperty Name="ItemsSource" />
       <RootProperty Name="Visibility" />
     </RootType>
     <RootType FullName="SMPlayer.LocalFoldersPage" />

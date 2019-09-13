@@ -79,9 +79,9 @@
                             <controls:DropShadowPanel
                                 x:Name="ShadowPanel"
                                 VerticalContentAlignment="Top"
-                                BlurRadius="25"
-                                OffsetX="5"
-                                OffsetY="5"
+                                BlurRadius="10"
+                                OffsetX="10"
+                                OffsetY="10"
                                 ShadowOpacity="0"
                                 Color="Gray">
                                 <Grid
@@ -172,7 +172,6 @@
         <TreeView
             x:Name="LocalFolderTreeView"
             ItemTemplateSelector="{StaticResource FolderTreeTemplateSelector}"
-            ItemsSource="{x:Bind Tree}"
             Visibility="Collapsed" />
     </Grid>
 </Page>

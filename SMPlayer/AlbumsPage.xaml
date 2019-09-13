@@ -46,7 +46,7 @@
                                 x:Name="ShadowPanel"
                                 VerticalContentAlignment="Top"
                                 BlurRadius="25"
-                                OffsetX="5"
+                                OffsetX="10"
                                 OffsetY="5"
                                 ShadowOpacity="0"
                                 Color="Gray">

@@ -58,10 +58,13 @@
                                         Source="{x:Bind Thumbnail}" />
                                     <Button
                                         x:Name="AddToButton"
+                                        Width="36"
+                                        Height="36"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Click="AddToButton_Click"
                                         Content="&#xE710;"
+                                        FontSize="16"
                                         Style="{StaticResource HoverButtonStyle}"
                                         ToolTipService.ToolTip="Add To"
                                         Visibility="Collapsed" />

@@ -44,16 +44,17 @@ namespace SMPlayer
             picker.FileTypeFilter.Add("*");
             StorageFolder folder = await picker.PickSingleFolderAsync();
             if (folder == null || folder.Path == Settings.settings.RootPath) return;
-            SettingsLoadingControl.IsLoading = true;
+            MainPage.Instance.ShowLoading("Loading from your music library...");
             Helper.CurrentFolder = folder;
             Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
             Settings.settings.RootPath = folder.Path;
             await Settings.settings.Tree.Init(folder);
+            MainPage.Instance.UpdateLoadingText("Updating your music library...");
             foreach (var listener in listeners) listener.PathSet(folder.Path);
             MediaHelper.Clear();
             Settings.Save();
             PathBox.Text = folder.Path;
-            SettingsLoadingControl.IsLoading = false;
+            MainPage.Instance.StopLoading();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

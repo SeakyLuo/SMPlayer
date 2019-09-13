@@ -216,6 +216,22 @@ namespace SMPlayer
             MainMediaControl.PauseMusic();
         }
 
+        public void ShowLoading(string text)
+        {
+            MainLoadingControl.Text = text;
+            MainLoadingControl.IsLoading = true;
+        }
+
+        public void UpdateLoadingText(string text)
+        {
+            MainLoadingControl.Text = text;
+        }
+
+        public void StopLoading()
+        {
+            MainLoadingControl.IsLoading = false;
+        }
+
         private void MainNavigationView_PaneOpening(NavigationView sender, object args)
         {
             VisualStateManager.GoToState(this, "Open", true);

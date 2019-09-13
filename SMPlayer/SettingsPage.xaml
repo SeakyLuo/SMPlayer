@@ -110,7 +110,6 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -130,12 +129,12 @@
                 </AutoSuggestBox.QueryIcon>
             </AutoSuggestBox>
             <TextBlock
-                Grid.Row="2"
+                Grid.Row="1"
                 Style="{StaticResource SettingLabelStyle}"
                 Text="Language:" />
             <ComboBox
                 x:Name="LanguageComboBox"
-                Grid.Row="2"
+                Grid.Row="1"
                 Grid.Column="1"
                 VerticalAlignment="Center"
                 SelectionChanged="LanguageComboBox_SelectionChanged">
@@ -146,12 +145,12 @@
                 <ComboBoxItem Content="Japanese" />
             </ComboBox>
             <TextBlock
-                Grid.Row="3"
+                Grid.Row="2"
                 Style="{StaticResource SettingLabelStyle}"
                 Text="Notification: " />
             <ComboBox
                 x:Name="NotificationComboBox"
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.Column="1"
                 VerticalAlignment="Center"
                 SelectionChanged="NotificationComboBox_SelectionChanged">
@@ -160,11 +159,11 @@
                 <ComboBoxItem Content="Never" />
             </ComboBox>
             <TextBlock
-                Grid.Row="4"
+                Grid.Row="3"
                 Style="{StaticResource SettingLabelStyle}"
                 Text="Theme:" />
             <Button
-                Grid.Row="4"
+                Grid.Row="3"
                 Grid.Column="1"
                 Width="30"
                 Height="30"
@@ -197,6 +196,5 @@
                 </Button.Flyout>
             </Button>
         </Grid>
-        <local:LoadingControl x:Name="SettingsLoadingControl" Text="Updating Your Music Library..." />
     </Grid>
 </Page>

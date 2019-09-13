@@ -196,6 +196,7 @@
             x:Name="MainMediaControl"
             Grid.Row="2"
             Mode="Main" />
+        <local:LoadingControl x:Name="MainLoadingControl" Grid.RowSpan="3" />
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WindowWidthChange">
                 <VisualState x:Name="MinimumLayout">

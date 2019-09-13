@@ -234,7 +234,8 @@ namespace SMPlayer
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            Frame.GoBack();
+            if (Frame.CanGoBack)
+                Frame.GoBack();
         }
     }
 }

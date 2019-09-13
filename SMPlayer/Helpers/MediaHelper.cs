@@ -145,15 +145,13 @@ namespace SMPlayer
                 }
                 else
                 {
+                    Debug.WriteLine(music.Name);
                     foreach (var item in CurrentPlaylist.ToArray())
                     {
                         if (item.Equals(music)) index = 1;
-                        else
-                        {
-                            CurrentPlaylist.RemoveAt(index);
-                            PlayBackList.Items.RemoveAt(index);
-                        }
+                        else RemoveMusic(item);
                     }
+                    Debug.WriteLine(new string('=', 20));
                 }
             }
             foreach (var item in playlist.Skip(index))
@@ -178,13 +176,13 @@ namespace SMPlayer
         {
             Pause();
             SetMode(PlayMode.Shuffle);
-            await SetPlaylist(ShufflePlaylist(CurrentPlaylist, null));
+            await SetPlaylist(ShufflePlaylist(playlist));
             Play();
         }
 
         public static async void ShuffleOthers()
         {
-            await SetPlaylist(ShufflePlaylist(CurrentPlaylist, CurrentMusic));
+            await SetPlaylist(ShufflePlaylist(CurrentPlaylist, CurrentMusic), CurrentMusic);
         }
 
         public static List<Music> ShufflePlaylist(ICollection<Music> playlist, Music music = null)

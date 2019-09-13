@@ -127,25 +127,26 @@ namespace SMPlayer
         private void LocalShuffleItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var tree = History.Peek();
-            MediaHelper.ShuffleAndPlay(LocalFrame.SourcePageType == typeof(LocalMusicPage) ? tree.Flatten() : tree.Files);
+            MediaHelper.ShuffleAndPlay(LocalFrame.SourcePageType == typeof(LocalMusicPage) ? tree.Files : tree.Flatten());
         }
 
-        private void SetText(TreeInfo info)
+        private void SetText(TreeInfo info, bool setHeader = true)
         {
-            MainPage.Instance.SetHeaderText(string.IsNullOrEmpty(info.Directory) ? "No Music" : info.Directory);
+            if (setHeader)
+                MainPage.Instance.SetHeaderText(string.IsNullOrEmpty(info.Directory) ? "No Music" : info.Directory);
             LocalFoldersItem.Content = $"Folders ({info.Folders})";
             LocalFoldersItem.IsEnabled = info.Folders != 0;
             LocalSongsItem.Content = $"Songs ({info.Songs})";
             LocalSongsItem.IsEnabled = info.Songs != 0;
         }
 
-        public void SetPage(FolderTree tree)
+        public void SetPage(FolderTree tree, bool setHeader = true)
         {
             if (History.Count > 0 && History.Peek() == tree) return;
             History.Push(tree);
             SetBackButtonVisibility();
             TreeInfo info = tree.GetTreeInfo();
-            SetText(info);
+            SetText(info, setHeader);
             if (IsBackToMusicPage(info))
             {
                 LocalNavigationView.SelectedItem = LocalSongsItem;
@@ -168,12 +169,12 @@ namespace SMPlayer
         public void PathSet(string path)
         {
             History.Clear();
-            SetPage(Settings.settings.Tree);
+            SetPage(Settings.settings.Tree, false);
         }
     }
     public interface LocalSetter
     {
-        void SetPage(FolderTree tree);
+        void SetPage(FolderTree tree, bool setHeader = true);
     }
 
     public interface ViewModeChangedListener

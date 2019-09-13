@@ -63,12 +63,11 @@
             <local:EnabledConverter x:Key="EnabledConverter" />
             <local:CriterionConverter x:Key="CriterionConverter" />
             <local:MusicArtistAlbumConverter x:Key="MusicArtistAlbumConverter" />
-
             <AcrylicBrush
                 x:Key="MediaControlPlayButtonBorderBrush"
                 BackgroundSource="Backdrop"
-                FallbackColor="{StaticResource SystemChromeMediumColor}"
-                TintColor="{StaticResource SystemChromeAltHighColor}"
+                FallbackColor="White"
+                TintColor="White"
                 TintOpacity="0.2" />
         </ResourceDictionary>
     </Application.Resources>

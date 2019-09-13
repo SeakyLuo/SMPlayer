@@ -7,12 +7,20 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <UserControl.Resources>
+        <AcrylicBrush
+            x:Key="DefaultMediaControlGridBackground"
+            BackgroundSource="Backdrop"
+            FallbackColor="{ThemeResource SystemColorHighlightColor}"
+            TintColor="{ThemeResource SystemColorHighlightColor}"
+            TintOpacity="0.8" />
+    </UserControl.Resources>
+
     <Grid>
         <Grid
             x:Name="MainMediaControlGrid"
             Grid.Row="1"
-            Background="{ThemeResource SystemControlAcrylicElementBrush}"
-            RequestedTheme="Dark"
+            Background="{StaticResource DefaultMediaControlGridBackground}"
             Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -57,7 +65,8 @@
                     Grid.Column="1"
                     Margin="10,5,10,5"
                     VerticalAlignment="Bottom"
-                    FontSize="24" />
+                    FontSize="24"
+                    Foreground="White" />
                 <TextBlock
                     x:Name="MainArtistTextBlock"
                     Grid.Row="1"
@@ -65,7 +74,8 @@
                     Margin="10,5,10,5"
                     VerticalAlignment="Top"
                     FontSize="18"
-                    FontWeight="Bold" />
+                    FontWeight="Bold"
+                    Foreground="White" />
             </Grid>
 
             <StackPanel
@@ -95,11 +105,7 @@
                     CornerRadius="24"
                     FontSize="24"
                     Style="{StaticResource MediaControlButtonStyle}"
-                    Template="{StaticResource MediaControlButtonTemplate}">
-                    <Button.KeyboardAccelerators>
-                        <KeyboardAccelerator Key="F3" />
-                    </Button.KeyboardAccelerators>
-                </Button>
+                    Template="{StaticResource MediaControlButtonTemplate}" />
                 <Button
                     Click="NextButton_Click"
                     Content="&#xE893;"
@@ -164,6 +170,7 @@
                     Margin="10,0,20,0"
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI"
+                    Foreground="White"
                     Text="0:00" />
                 <Slider
                     x:Name="MainMediaSlider"
@@ -185,6 +192,7 @@
                     Margin="20,0,10,0"
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI"
+                    Foreground="White"
                     Text="0:00" />
             </Grid>
             <StackPanel
@@ -274,7 +282,6 @@
             x:Name="FullMediaControlGrid"
             Background="{x:Bind Background}"
             Opacity="0.75"
-            RequestedTheme="Dark"
             Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -312,19 +319,22 @@
                         Grid.Column="1"
                         Margin="10,0,5,5"
                         FontSize="24"
-                        FontWeight="Bold" />
+                        FontWeight="Bold"
+                        Foreground="White" />
                     <TextBlock
                         x:Name="FullArtistTextBlock"
                         Grid.Row="1"
                         Grid.Column="1"
                         Margin="10,5,5,0"
-                        FontSize="18" />
+                        FontSize="18"
+                        Foreground="White" />
                     <TextBlock
                         x:Name="FullAlbumTextBlock"
                         Grid.Row="2"
                         Grid.Column="1"
                         Margin="10,5,5,0"
-                        FontSize="18" />
+                        FontSize="18"
+                        Foreground="White" />
                 </Grid>
                 <Grid
                     Grid.Row="1"
@@ -340,6 +350,7 @@
                         Margin="10,0,20,0"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI"
+                        Foreground="White"
                         RelativePanel.AlignLeftWithPanel="True"
                         Text="0:00" />
                     <Slider
@@ -363,6 +374,7 @@
                         Margin="20,0,10,0"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI"
+                        Foreground="White"
                         RelativePanel.AlignRightWithPanel="True" />
                 </Grid>
                 <RelativePanel Grid.Row="2" Margin="10">
@@ -390,11 +402,7 @@
                             CornerRadius="25"
                             FontSize="24"
                             Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource MediaControlButtonTemplate}">
-                            <Button.KeyboardAccelerators>
-                                <KeyboardAccelerator Key="F3" />
-                            </Button.KeyboardAccelerators>
-                        </Button>
+                            Template="{StaticResource MediaControlButtonTemplate}" />
                         <Button
                             Click="NextButton_Click"
                             Content="&#xE893;"
