@@ -215,7 +215,6 @@
       <RootProperty Name="RenderTransform" />
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="MaxHeight" />
-      <RootProperty Name="Opacity" />
       <RootProperty Name="IsHitTestVisible" />
       <RootProperty Name="RequestedTheme" />
       <RootEvent Name="PointerEntered" />

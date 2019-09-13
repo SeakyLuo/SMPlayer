@@ -281,7 +281,6 @@
         <Grid
             x:Name="FullMediaControlGrid"
             Background="{x:Bind Background}"
-            Opacity="0.75"
             Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

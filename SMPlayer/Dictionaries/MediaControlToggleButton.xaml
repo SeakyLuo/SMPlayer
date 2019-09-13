@@ -108,6 +108,11 @@
             </VisualStateManager.VisualStateGroups>
         </ContentPresenter>
     </ControlTemplate>
+    <AcrylicBrush
+        x:Key="DarkMediaControlCheckedBorderBrush"
+        FallbackColor="White"
+        TintColor="White"
+        TintOpacity="0.6" />
     <ControlTemplate x:Key="DarkMediaControlToggleButtonTemplate" TargetType="ToggleButton">
         <ContentPresenter
             x:Name="ContentPresenter"
@@ -132,14 +137,8 @@
                     </VisualState>
                     <VisualState x:Name="PointerOver">
                         <Storyboard>
-                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource MediaControlToggleButtonPointerOverBackgroundBrush}" />
-                            </ObjectAnimationUsingKeyFrames>
-                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource MediaControlToggleButtonPointerOverBorderBrush}" />
-                            </ObjectAnimationUsingKeyFrames>
                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ToggleButtonForegroundPointerOver}" />
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource DarkMediaControlCheckedBorderBrush}" />
                             </ObjectAnimationUsingKeyFrames>
                             <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
                         </Storyboard>
@@ -147,38 +146,37 @@
                     <VisualState x:Name="Pressed">
                         <Storyboard>
                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPointerOver}" />
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource DarkMediaControlCheckedBorderBrush}" />
                             </ObjectAnimationUsingKeyFrames>
                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPointerOver}" />
-                            </ObjectAnimationUsingKeyFrames>
-                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPointerOver}" />
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent" />
                             </ObjectAnimationUsingKeyFrames>
                             <PointerDownThemeAnimation Storyboard.TargetName="ContentPresenter" />
                         </Storyboard>
                     </VisualState>
                     <VisualState x:Name="Checked">
                         <Storyboard>
-                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPointerOver}" />
-                            </ObjectAnimationUsingKeyFrames>
                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPointerOver}" />
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource DarkMediaControlCheckedBorderBrush}" />
                             </ObjectAnimationUsingKeyFrames>
                             <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
                         </Storyboard>
                     </VisualState>
                     <VisualState x:Name="CheckedPointerOver">
                         <Storyboard>
-                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPointerOver}" />
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource DarkMediaControlCheckedBorderBrush}" />
                             </ObjectAnimationUsingKeyFrames>
                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPointerOver}" />
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource DarkMediaControlCheckedBorderBrush}" />
                             </ObjectAnimationUsingKeyFrames>
-                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPointerOver}" />
+                            <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="CheckedPressed">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource DarkMediaControlCheckedBorderBrush}" />
                             </ObjectAnimationUsingKeyFrames>
                             <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
                         </Storyboard>
