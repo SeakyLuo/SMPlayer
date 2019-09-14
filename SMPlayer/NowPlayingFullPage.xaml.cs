@@ -83,10 +83,14 @@ namespace SMPlayer
         {
             if (music.PlayCount == 0)
             {
+                PlayCountTextBox.Text = "";
+                ClearPlayCountButton.Visibility = Visibility.Collapsed;
                 ToolTipService.SetToolTip(PlayCountTextBox, new ToolTip() { Content = $"{music.Name} has not been played yet." });
             }
             else
             {
+                PlayCountTextBox.Text = music.PlayCount.ToString();
+                ClearPlayCountButton.Visibility = Visibility.Visible;
                 string times = MusicDurationConverter.TryPlural("time", music.PlayCount);
                 ToolTipService.SetToolTip(PlayCountTextBox, new ToolTip() { Content = $"{music.Name} has been played {music.PlayCount} {times}." });
             }

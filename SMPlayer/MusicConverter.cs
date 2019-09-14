@@ -110,8 +110,8 @@ namespace SMPlayer
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (value is string) return string.IsNullOrEmpty(value as string) ? Visibility.Collapsed : Visibility.Visible;
-            if (value is int) return value.Equals(0) ? Visibility.Collapsed : Visibility.Visible;
             if (value is bool) return value.Equals(false) ? Visibility.Collapsed : Visibility.Visible;
+            if (value is int) return value.Equals(0) ? Visibility.Collapsed : Visibility.Visible;
             return value == null ? Visibility.Collapsed : Visibility.Visible;
         }
 

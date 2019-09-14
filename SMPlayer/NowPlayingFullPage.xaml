@@ -29,6 +29,32 @@
             <Setter Property="CornerRadius" Value="20" />
             <Setter Property="Template" Value="{StaticResource DarkMediaControlButtonTemplate}" />
         </Style>
+        <Style
+            x:Key="MusicPropertyTextBoxStyle"
+            BasedOn="{StaticResource BorderlessTextBoxStyle}"
+            TargetType="TextBox">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Margin" Value="20,5" />
+            <Setter Property="RequestedTheme" Value="Dark" />
+        </Style>
+        <Style x:Key="MusicPropertyBaseTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Padding" Value="0,5" />
+        </Style>
+        <Style
+            x:Key="MusicPropertyTextBlockStyle"
+            BasedOn="{StaticResource MusicPropertyBaseTextBlockStyle}"
+            TargetType="TextBlock">
+            <Setter Property="Margin" Value="20,5" />
+            <Setter Property="TextAlignment" Value="Left" />
+        </Style>
+        <Style
+            x:Key="MusicPropertyLabelStyle"
+            BasedOn="{StaticResource MusicPropertyBaseTextBlockStyle}"
+            TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,5" />
+            <Setter Property="TextAlignment" Value="Right" />
+        </Style>
     </Page.Resources>
 
     <Grid>
@@ -115,7 +141,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <RelativePanel Margin="40,10,20,10">
+                    <RelativePanel Margin="40,0,20,20">
                         <TextBlock
                             FontWeight="SemiBold"
                             Foreground="White"
@@ -140,263 +166,81 @@
                             ToolTipService.ToolTip="Reset Properties" />
                     </RelativePanel>
                     <ScrollViewer Grid.Row="1">
-                        <Grid Padding="20,0" RequestedTheme="Dark">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
+                        <Grid Padding="20,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock
-                                Grid.Row="1"
-                                VerticalAlignment="Center"
-                                Text="Title"
-                                TextAlignment="Right" />
-                            <TextBox
-                                x:Name="TitleTextBox"
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                Margin="20,5"
-                                Style="{StaticResource BorderlessTextBoxStyle}" />
-                            <TextBlock
-                                Grid.Row="2"
-                                VerticalAlignment="Center"
-                                Text="Subtitle"
-                                TextAlignment="Right" />
-                            <TextBox
-                                x:Name="SubtitleTextBox"
-                                Grid.Row="2"
-                                Grid.Column="1"
-                                Margin="20,5"
-                                Style="{StaticResource BorderlessTextBoxStyle}" />
-                            <TextBlock
-                                Grid.Row="3"
-                                VerticalAlignment="Center"
-                                Text="Artist"
-                                TextAlignment="Right" />
-                            <TextBox
-                                x:Name="ArtistTextBox"
-                                Grid.Row="3"
-                                Grid.Column="1"
-                                Margin="20,5"
-                                Style="{StaticResource BorderlessTextBoxStyle}" />
-                            <TextBlock
-                                Grid.Row="4"
-                                VerticalAlignment="Center"
-                                Text="Album"
-                                TextAlignment="Right" />
-                            <TextBox
-                                x:Name="AlbumTextBox"
-                                Grid.Row="4"
-                                Grid.Column="1"
-                                Margin="20,5"
-                                Style="{StaticResource BorderlessTextBoxStyle}" />
-                            <TextBlock
-                                Grid.Row="5"
-                                VerticalAlignment="Center"
-                                Text="Album Artist"
-                                TextAlignment="Right" />
-                            <TextBox
-                                x:Name="AlbumArtistTextBox"
-                                Grid.Row="5"
-                                Grid.Column="1"
-                                Margin="20,5"
-                                Style="{StaticResource BorderlessTextBoxStyle}" />
-                            <TextBlock
-                                Grid.Row="6"
-                                VerticalAlignment="Center"
-                                Text="Play Count"
-                                TextAlignment="Right" />
-                            <Grid
-                                Grid.Row="6"
-                                Grid.Column="1"
-                                Margin="20,5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Title" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Subtitle" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Artist" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Album" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Album Artist" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Play Count" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Publisher" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="TrackNumber" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Year" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Bitrate" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Composers" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Conductors" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Date Created" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Date Modified" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Duration" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="File Size" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="File Type" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Genre" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Path" />
+                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Producers" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBox x:Name="TitleTextBox" Style="{StaticResource MusicPropertyTextBoxStyle}" />
+                                <TextBox x:Name="SubtitleTextBox" Style="{StaticResource MusicPropertyTextBoxStyle}" />
+                                <TextBox x:Name="ArtistTextBox" Style="{StaticResource MusicPropertyTextBoxStyle}" />
+                                <TextBox x:Name="AlbumTextBox" Style="{StaticResource MusicPropertyTextBoxStyle}" />
+                                <TextBox x:Name="AlbumArtistTextBox" Style="{StaticResource MusicPropertyTextBoxStyle}" />
+                                <Grid Margin="20,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox
+                                        x:Name="PlayCountTextBox"
+                                        Grid.Column="0"
+                                        Margin="0"
+                                        IsReadOnly="True"
+                                        Style="{StaticResource MusicPropertyTextBoxStyle}" />
+                                    <Button
+                                        x:Name="ClearPlayCountButton"
+                                        Grid.Column="1"
+                                        Height="30"
+                                        Margin="10,0,0,0"
+                                        BorderThickness="0"
+                                        Click="ClearPlayCountButton_Click"
+                                        Content="Clear"
+                                        ToolTipService.ToolTip="Clear Play Count" />
+                                </Grid>
+                                <TextBox x:Name="PublisherTextBox" Style="{StaticResource MusicPropertyTextBoxStyle}" />
                                 <TextBox
-                                    x:Name="PlayCountTextBox"
-                                    IsReadOnly="True"
-                                    Style="{StaticResource BorderlessTextBoxStyle}"
-                                    Text="{x:Bind CurrentMusic.PlayCount, Converter={StaticResource IntConverter}}" />
-                                <Button
-                                    x:Name="ClearPlayCountButton"
-                                    Grid.Column="1"
-                                    Height="30"
-                                    Margin="5,0,0,0"
-                                    BorderThickness="0"
-                                    Click="ClearPlayCountButton_Click"
-                                    Content="Clear"
-                                    ToolTipService.ToolTip="Clear Play Count"
-                                    Visibility="{x:Bind CurrentMusic.PlayCount, Converter={StaticResource VisibilityConverter}}" />
-                            </Grid>
-                            <TextBlock
-                                Grid.Row="7"
-                                VerticalAlignment="Center"
-                                Text="Publisher"
-                                TextAlignment="Right" />
-                            <TextBox
-                                x:Name="PublisherTextBox"
-                                Grid.Row="7"
-                                Grid.Column="1"
-                                Margin="20,5"
-                                Style="{StaticResource BorderlessTextBoxStyle}" />
-                            <TextBlock
-                                Grid.Row="8"
-                                VerticalAlignment="Center"
-                                Text="TrackNumber"
-                                TextAlignment="Right" />
-                            <TextBox
-                                x:Name="TrackNumberTextBox"
-                                Grid.Row="8"
-                                Grid.Column="1"
-                                Margin="20,5"
-                                BeforeTextChanging="CheckIfDigit"
-                                Style="{StaticResource BorderlessTextBoxStyle}" />
-                            <TextBlock
-                                Grid.Row="9"
-                                VerticalAlignment="Center"
-                                Text=" Year"
-                                TextAlignment="Right" />
-                            <TextBox
-                                x:Name="YearTextBox"
-                                Grid.Row="9"
-                                Grid.Column="1"
-                                Margin="20,5"
-                                BeforeTextChanging="CheckIfDigit"
-                                Style="{StaticResource BorderlessTextBoxStyle}" />
-                            <TextBlock
-                                Grid.Row="10"
-                                VerticalAlignment="Center"
-                                Text="Bitrate"
-                                TextAlignment="Right" />
-                            <TextBlock
-                                x:Name="BitRateTextBox"
-                                Grid.Row="10"
-                                Grid.Column="1"
-                                Margin="20,5" />
-                            <TextBlock
-                                Grid.Row="11"
-                                VerticalAlignment="Center"
-                                Text="Composers"
-                                TextAlignment="Right" />
-                            <TextBlock
-                                x:Name="ComposersTextBox"
-                                Grid.Row="11"
-                                Grid.Column="1"
-                                Margin="20,5" />
-                            <TextBlock
-                                Grid.Row="12"
-                                VerticalAlignment="Center"
-                                Text="Conductors"
-                                TextAlignment="Right" />
-                            <TextBlock
-                                x:Name="ConductorsTextBox"
-                                Grid.Row="12"
-                                Grid.Column="1"
-                                Margin="20,5" />
-                            <TextBlock
-                                Grid.Row="13"
-                                VerticalAlignment="Center"
-                                Text="Date Created"
-                                TextAlignment="Right" />
-                            <TextBlock
-                                x:Name="DateCreatedTextBox"
-                                Grid.Row="13"
-                                Grid.Column="1"
-                                Margin="20,5" />
-                            <TextBlock
-                                Grid.Row="14"
-                                VerticalAlignment="Center"
-                                Text="Date Modified"
-                                TextAlignment="Right" />
-                            <TextBlock
-                                x:Name="DateModifiedTextBox"
-                                Grid.Row="14"
-                                Grid.Column="1"
-                                Margin="20,5" />
-                            <TextBlock
-                                Grid.Row="15"
-                                VerticalAlignment="Center"
-                                Text="Duration"
-                                TextAlignment="Right" />
-                            <TextBlock
-                                x:Name="DurationTextBox"
-                                Grid.Row="15"
-                                Grid.Column="1"
-                                Margin="20,5" />
-                            <TextBlock
-                                Grid.Row="16"
-                                VerticalAlignment="Center"
-                                Text="File Size"
-                                TextAlignment="Right" />
-                            <TextBlock
-                                x:Name="FileSizeTextBox"
-                                Grid.Row="16"
-                                Grid.Column="1"
-                                Margin="20,5" />
-                            <TextBlock
-                                Grid.Row="17"
-                                VerticalAlignment="Center"
-                                Text="File Type"
-                                TextAlignment="Right" />
-                            <TextBlock
-                                x:Name="FileTypeTextBox"
-                                Grid.Row="17"
-                                Grid.Column="1"
-                                Margin="20,5" />
-                            <TextBlock
-                                Grid.Row="18"
-                                VerticalAlignment="Center"
-                                Text="Genre"
-                                TextAlignment="Right" />
-                            <TextBlock
-                                x:Name="GenreTextBox"
-                                Grid.Row="18"
-                                Grid.Column="1"
-                                Margin="20,5" />
-                            <TextBlock
-                                Grid.Row="19"
-                                VerticalAlignment="Center"
-                                Text="Path"
-                                TextAlignment="Right" />
-                            <TextBlock
-                                x:Name="PathTextBox"
-                                Grid.Row="19"
-                                Grid.Column="1"
-                                Margin="20,5" />
-                            <TextBlock
-                                Grid.Row="20"
-                                VerticalAlignment="Center"
-                                Text="Producers"
-                                TextAlignment="Right" />
-                            <TextBlock
-                                x:Name="ProducersTextBox"
-                                Grid.Row="20"
-                                Grid.Column="1"
-                                Margin="20,5" />
+                                    x:Name="TrackNumberTextBox"
+                                    BeforeTextChanging="CheckIfDigit"
+                                    Style="{StaticResource MusicPropertyTextBoxStyle}" />
+                                <TextBox
+                                    x:Name="YearTextBox"
+                                    BeforeTextChanging="CheckIfDigit"
+                                    Style="{StaticResource MusicPropertyTextBoxStyle}" />
+                                <TextBlock x:Name="BitRateTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
+                                <TextBlock x:Name="ComposersTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
+                                <TextBlock x:Name="ConductorsTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
+                                <TextBlock x:Name="DateCreatedTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
+                                <TextBlock x:Name="DateModifiedTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
+                                <TextBlock x:Name="DurationTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
+                                <TextBlock x:Name="FileSizeTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
+                                <TextBlock x:Name="FileTypeTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
+                                <TextBlock x:Name="GenreTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
+                                <TextBlock x:Name="PathTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
+                                <TextBlock x:Name="ProducersTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
+                            </StackPanel>
                         </Grid>
                     </ScrollViewer>
                 </Grid>

@@ -31,13 +31,7 @@ Clickable text.
 # TO FIX
 Full Screen.
 
-PlayCount not read.
-
 Quick return footer.
-
-NowPlayingFullPage play count.
-
-Save lyrics.
 
 TreeView error.
 
