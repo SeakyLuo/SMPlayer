@@ -42,7 +42,7 @@
             </controls:TabView.Resources>
             <controls:TabView.ItemHeaderTemplate>
                 <DataTemplate x:DataType="data:Playlist">
-                    <StackPanel Background="WhiteSmoke" Orientation="Horizontal">
+                    <StackPanel Background="Transparent" Orientation="Horizontal">
                         <StackPanel.ContextFlyout>
                             <MenuFlyout>
                                 <MenuFlyoutItem
@@ -79,9 +79,8 @@
                                     <Grid
                                         x:Name="PlaylistInfoGrid"
                                         Padding="10"
-                                        Background="#222222"
-                                        Loaded="PlaylistInfoGrid_Loaded"
-                                        RequestedTheme="Dark">
+                                        Background="{ThemeResource SystemColorHighlightColor}"
+                                        Loaded="PlaylistInfoGrid_Loaded">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
@@ -106,6 +105,7 @@
                                             Margin="0,5"
                                             VerticalAlignment="Center"
                                             FontSize="36"
+                                            Foreground="White"
                                             Style="{StaticResource HeaderTextBlockStyle}"
                                             Text="{x:Bind Name, Mode=OneWay}" />
                                         <TextBlock
@@ -114,6 +114,7 @@
                                             Grid.Column="1"
                                             Margin="0,5"
                                             VerticalAlignment="Top"
+                                            Foreground="White"
                                             Text="{x:Bind Songs, Converter={StaticResource SongCountConverter}, Mode=OneWay}" />
                                         <CommandBar
                                             x:Name="PlaylistCommandBar"
@@ -123,6 +124,7 @@
                                             VerticalAlignment="Bottom"
                                             Background="Transparent"
                                             DefaultLabelPosition="Right"
+                                            RequestedTheme="Dark"
                                             Style="{StaticResource PlaylistCommandBarStyle}">
                                             <AppBarButton
                                                 Margin="0,0,0,0"
@@ -213,6 +215,7 @@
                     Content="&#xE710;"
                     FontFamily="Segoe MDL2 Assets"
                     FontSize="16"
+                    Style="{ThemeResource ButtonRevealStyle}"
                     ToolTipService.ToolTip="Create New Playlist" />
             </controls:TabView.TabStartHeader>
 
@@ -222,7 +225,7 @@
                     Width="48"
                     Height="{StaticResource TabViewItemHeaderMinHeight}"
                     Background="Transparent"
-                    BorderThickness="1"
+                    BorderThickness="0"
                     Click="EditPlaylistButton_Click"
                     Content="&#xE70F;"
                     FontFamily="Segoe MDL2 Assets"
@@ -269,7 +272,7 @@
                             Padding="10,5"
                             HorizontalAlignment="Right"
                             Icon="Sort"
-                            Label="Sort"
+                            Label="Sort By Title"
                             LabelPosition="Right"
                             RelativePanel.AlignLeftWithPanel="True"
                             Style="{StaticResource IconTextButtonStyle}"

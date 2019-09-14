@@ -20,14 +20,13 @@
         </Style>
         <Style
             x:Key="ScrollHeaderButtonStyle"
-            BasedOn="{StaticResource MediaControlButtonStyle}"
+            BasedOn="{StaticResource DarkMediaControlButtonStyle}"
             TargetType="Button">
             <Setter Property="Width" Value="40" />
             <Setter Property="Height" Value="40" />
             <Setter Property="Margin" Value="10" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="CornerRadius" Value="20" />
-            <Setter Property="Template" Value="{StaticResource DarkMediaControlButtonTemplate}" />
         </Style>
         <Style
             x:Key="MusicPropertyTextBoxStyle"
@@ -69,6 +68,7 @@
         <Grid Grid.RowSpan="3">
             <Grid.Background>
                 <AcrylicBrush
+                    BackgroundSource="Backdrop"
                     FallbackColor="Black"
                     TintColor="Black"
                     TintOpacity="0.75" />
@@ -299,6 +299,7 @@
                         AcceptsReturn="True"
                         Background="Transparent"
                         BorderThickness="0"
+                        IsSpellCheckEnabled="False"
                         RequestedTheme="Dark"
                         TextWrapping="Wrap" />
                 </Grid>

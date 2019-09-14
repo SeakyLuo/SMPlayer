@@ -69,14 +69,19 @@ namespace SMPlayer
         private void PlaylistTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var tabview = sender as TabView;
+            if (tabview.SelectedIndex == -1)
+            {
+                // If CurrentTab is deleted
+                if (playlists.Count > 0) tabview.SelectedIndex = playlists.Count - 1;
+                return;
+            }
             var playlist = tabview.SelectedItem as Playlist;
             Settings.settings.LastPlaylist = playlist.Name;
             foreach (var music in playlist.Songs)
                 music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
             SortByButton.Label = "Sort By " + playlist.Criterion.ToStr();
-            if (!IsLoaded) return;
-            SetPlaylistCover(playlist);
-            SetGridBackground();
+            if (Thumbnail != null) SetPlaylistCover(playlist);
+            if (PlaylistInfoGrid != null) SetGridBackground();
         }
 
         private void DeleteClick(object sender, RoutedEventArgs e)
@@ -223,6 +228,7 @@ namespace SMPlayer
                 thumbnails = await playlist.GetThumbnails();
                 PlaylistThumbnailDict[playlist.Name] = thumbnails;
             }
+            if (Thumbnail == null) return;
             Thumbnail.Source = thumbnails.Count == 0 ? Helper.DefaultAlbumCover : thumbnails[random.Next(thumbnails.Count)];
             if (PlaylistInfoGrid != null) SetGridBackground();
         }
@@ -235,7 +241,8 @@ namespace SMPlayer
 
         private async void SetGridBackground()
         {
-            PlaylistInfoGrid.Background = await Helper.GetThumbnailMainColor(Thumbnail, false);
+            var playlist = PlaylistTabView.SelectedItem as Playlist;
+            PlaylistInfoGrid.Background = playlist.Songs.Count == 0 ? ColorHelper.HighlightBrush : await Helper.GetThumbnailMainColor(Thumbnail, false);
         }
 
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)

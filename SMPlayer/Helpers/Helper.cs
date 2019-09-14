@@ -96,30 +96,35 @@ namespace SMPlayer
         public static async Task<string> SaveThumbnail(UIElement image, bool isCurrent)
         {
             var bitmap = new RenderTargetBitmap();
+            byte[] bytes;
             try
             {
                 await bitmap.RenderAsync(image);
+                var pixels = await bitmap.GetPixelsAsync();
+                bytes = pixels.ToArray();
             }
             catch (ArgumentException)
             {
                 return "";
             }
-            var pixels = await bitmap.GetPixelsAsync();
-            byte[] bytes = pixels.ToArray();
             string filename = $@"{Guid.NewGuid()}.png";
             StorageFile thumbnail;
             while (true)
             {
                 try
                 {
-                    thumbnail = await ThumbnailFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
+                    while (true)
+                    {
+                        thumbnail = await ThumbnailFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
+                        if (thumbnail == null) System.Threading.Thread.Sleep(233);
+                        else break;
+                    }
                     if (isCurrent) Thumbnail = thumbnail;
                     break;
                 }
                 catch (FileLoadException)
                 {
-                    System.Threading.Thread.Sleep(250);
-                    continue;
+                    System.Threading.Thread.Sleep(233);
                 }
             }
             using (IRandomAccessStream stream = await thumbnail.OpenAsync(FileAccessMode.ReadWrite))
@@ -140,10 +145,22 @@ namespace SMPlayer
 
         public static async Task<Brush> GetThumbnailMainColor(UIElement image, bool isCurrent)
         {
+            if (image == null) return ColorHelper.HighlightBrush;
             var filename = await SaveThumbnail(image, isCurrent);
-            if (string.IsNullOrEmpty(filename)) return null;
+            if (string.IsNullOrEmpty(filename)) return ColorHelper.HighlightBrush;
             var file = await ThumbnailFolder.GetFileAsync(filename);
-            return await ColorHelper.GetThumbnailMainColor(file);
+            while (true)
+            {
+                try
+                {
+                    return await ColorHelper.GetThumbnailMainColor(file);
+                }
+                catch (ArgumentException)
+                {
+                    // The specified buffer index is not within the buffer capacity.
+                    System.Threading.Thread.Sleep(233);
+                }
+            }
         }
 
         public static async void ShowToast(Music music)

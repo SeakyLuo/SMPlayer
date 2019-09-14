@@ -146,10 +146,6 @@ namespace SMPlayer.Models
             var file = await StorageFile.GetFileFromPathAsync(Path);
             using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(file), TagLib.ReadStyle.Average))
             {
-                //read the raw tags
-                var tags = tagFile.GetTag(TagLib.TagTypes.Id3v2, true);
-
-                // do stuff with the tags 
                 return tagFile.Tag.Lyrics;
             }
         }

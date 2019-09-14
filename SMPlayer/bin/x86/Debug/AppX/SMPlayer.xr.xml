@@ -93,7 +93,6 @@
       <RootProperty Name="Padding" />
       <RootProperty Name="IsAccessKeyScope" />
       <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="Template" />
       <RootProperty Name="KeyboardAccelerators" />
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="BorderBrush" />
@@ -216,7 +215,6 @@
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="MaxHeight" />
       <RootProperty Name="IsHitTestVisible" />
-      <RootProperty Name="RequestedTheme" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
       <RootEvent Name="Tapped" />
@@ -543,6 +541,7 @@
       <RootProperty Name="SelectionFlyout" />
       <RootProperty Name="AcceptsReturn" />
       <RootProperty Name="Background" />
+      <RootProperty Name="IsSpellCheckEnabled" />
       <RootProperty Name="RequestedTheme" />
       <RootProperty Name="TextWrapping" />
       <RootProperty Name="IsReadOnly" />
@@ -632,6 +631,12 @@
       <RootProperty Name="SelectionCheckMarkVisualEnabled" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.ScaleTransform" />
+    <RootType FullName="Windows.UI.Xaml.Controls.Primitives.ToggleButton">
+      <RootProperty Name="Content" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="IsEnabled" />
+      <RootEvent Name="Click" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.NavigationView">
       <RootProperty Name="PaneToggleButtonStyle" />
       <RootProperty Name="CompactPaneLength" />
@@ -718,13 +723,6 @@
       <RootProperty Name="Orientation" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ToolTip" />
-    <RootType FullName="Windows.UI.Xaml.Controls.Primitives.ToggleButton">
-      <RootProperty Name="Content" />
-      <RootProperty Name="Style" />
-      <RootProperty Name="Template" />
-      <RootProperty Name="IsEnabled" />
-      <RootEvent Name="Click" />
-    </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Media.BackdropBlurBrush">
       <RootProperty Name="Amount" />
     </RootType>
@@ -734,11 +732,11 @@
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Maximum" />
       <RootProperty Name="Minimum" />
-      <RootProperty Name="Style" />
       <RootProperty Name="Value" />
       <RootProperty Name="IsEnabled" />
       <RootProperty Name="IsThumbToolTipEnabled" />
       <RootProperty Name="ManipulationMode" />
+      <RootProperty Name="Style" />
       <RootProperty Name="ThumbToolTipValueConverter" />
       <RootEvent Name="ValueChanged" />
       <RootEvent Name="ManipulationCompleted" />
@@ -785,6 +783,7 @@
       <RootProperty Name="PrimaryCommands" />
       <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="Style" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBar">

@@ -260,6 +260,7 @@ namespace SMPlayer
         private void ClearPlayCountButton_Click(object sender, RoutedEventArgs e)
         {
             CurrentMusic.PlayCount = 0;
+            SetPlayCount(CurrentMusic);
             MusicLibraryPage.AllSongs.First((m) => m.Equals(CurrentMusic)).PlayCount = 0;
         }
 

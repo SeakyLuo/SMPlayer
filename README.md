@@ -10,6 +10,8 @@ Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
 
+Now Playing Back Button pointer over.
+
 DarkLikeToggleButton?
 
 Localization.

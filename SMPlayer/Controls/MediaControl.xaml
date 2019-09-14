@@ -88,7 +88,6 @@
                     Click="PrevButton_Click"
                     Content="&#xE892;"
                     Style="{StaticResource MediaControlButtonStyle}"
-                    Template="{StaticResource MediaControlButtonTemplate}"
                     ToolTipService.ToolTip="Previous">
                     <Button.KeyboardAccelerators>
                         <KeyboardAccelerator Key="Left" Modifiers="Control" />
@@ -104,13 +103,11 @@
                     Content="&#xE768;"
                     CornerRadius="24"
                     FontSize="24"
-                    Style="{StaticResource MediaControlButtonStyle}"
-                    Template="{StaticResource MediaControlButtonTemplate}" />
+                    Style="{StaticResource MediaControlButtonStyle}" />
                 <Button
                     Click="NextButton_Click"
                     Content="&#xE893;"
                     Style="{StaticResource MediaControlButtonStyle}"
-                    Template="{StaticResource MediaControlButtonTemplate}"
                     ToolTipService.ToolTip="Next">
                     <Button.KeyboardAccelerators>
                         <KeyboardAccelerator Key="Right" Modifiers="Control" />
@@ -120,7 +117,6 @@
                     x:Name="MainMediaControlMoreButton"
                     Content="&#xE712;"
                     Style="{StaticResource MediaControlButtonStyle}"
-                    Template="{StaticResource MediaControlButtonTemplate}"
                     ToolTipService.ToolTip="More"
                     Visibility="Collapsed">
                     <Button.Flyout>
@@ -131,8 +127,7 @@
                                         x:Name="MainMoreVolumeButton"
                                         Click="VolumeButton_Click"
                                         Content="&#xE15D;"
-                                        Style="{StaticResource MediaControlButtonStyle}"
-                                        Template="{StaticResource MediaControlButtonTemplate}" />
+                                        Style="{StaticResource MediaControlButtonStyle}" />
                                     <Slider
                                         x:Name="MainMoreVolumeSlider"
                                         Width="100"
@@ -204,8 +199,7 @@
                     x:Name="MainVolumeButton"
                     Click="VolumeButton_Click"
                     Content="&#xE15D;"
-                    Style="{StaticResource MediaControlButtonStyle}"
-                    Template="{StaticResource MediaControlButtonTemplate}" />
+                    Style="{StaticResource MediaControlButtonStyle}" />
                 <Slider
                     x:Name="MainVolumeSlider"
                     Width="100"
@@ -220,8 +214,7 @@
                     x:Name="MainLikeToggleButton"
                     Click="LikeButton_Click"
                     Content="&#xEB51;"
-                    Style="{StaticResource MediaControlToggleButtonStyle}"
-                    Template="{StaticResource LikeToggleButtonStyle}" />
+                    Style="{StaticResource LikeToggleButtonStyle}" />
             </StackPanel>
 
             <StackPanel
@@ -235,27 +228,23 @@
                     x:Name="MainShuffleButton"
                     Click="ShuffleButton_Click"
                     Content="&#xE8B1;"
-                    Style="{StaticResource MediaControlToggleButtonStyle}"
-                    Template="{StaticResource MediaControlToggleButtonTemplate}" />
+                    Style="{StaticResource MediaControlToggleButtonStyle}" />
                 <ToggleButton
                     x:Name="MainRepeatButton"
                     Click="RepeatButton_Click"
                     Content="&#xE8EE;"
-                    Style="{StaticResource MediaControlToggleButtonStyle}"
-                    Template="{StaticResource MediaControlToggleButtonTemplate}" />
+                    Style="{StaticResource MediaControlToggleButtonStyle}" />
                 <ToggleButton
                     x:Name="MainRepeatOneButton"
                     Click="RepeatOneButton_Click"
                     Content="&#xE8ED;"
-                    Style="{StaticResource MediaControlToggleButtonStyle}"
-                    Template="{StaticResource MediaControlToggleButtonTemplate}" />
+                    Style="{StaticResource MediaControlToggleButtonStyle}" />
                 <Button
                     Width="36"
                     Height="36"
                     Content="&#xE712;"
                     FontSize="16"
                     Style="{StaticResource MediaControlButtonStyle}"
-                    Template="{StaticResource MediaControlButtonTemplate}"
                     ToolTipService.ToolTip="More">
                     <Button.Flyout>
                         <MenuFlyout Opening="MainMoreMenuFlyout_Opening">
@@ -384,8 +373,7 @@
                         <Button
                             Click="PrevButton_Click"
                             Content="&#xE892;"
-                            Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource DarkMediaControlButtonTemplate}"
+                            Style="{StaticResource DarkMediaControlButtonStyle}"
                             ToolTipService.ToolTip="Previous">
                             <Button.KeyboardAccelerators>
                                 <KeyboardAccelerator Key="Left" Modifiers="Control" />
@@ -400,13 +388,11 @@
                             Content="&#xE768;"
                             CornerRadius="25"
                             FontSize="24"
-                            Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource DarkMediaControlButtonTemplate}" />
+                            Style="{StaticResource DarkMediaControlButtonStyle}" />
                         <Button
                             Click="NextButton_Click"
                             Content="&#xE893;"
-                            Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource DarkMediaControlButtonTemplate}"
+                            Style="{StaticResource DarkMediaControlButtonStyle}"
                             ToolTipService.ToolTip="Next">
                             <Button.KeyboardAccelerators>
                                 <KeyboardAccelerator Key="Right" Modifiers="Control" />
@@ -414,8 +400,7 @@
                         </Button>
                         <Button
                             Content="&#xE15D;"
-                            Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource DarkMediaControlButtonTemplate}"
+                            Style="{StaticResource DarkMediaControlButtonStyle}"
                             ToolTipService.ToolTip="Volume">
                             <Button.Flyout>
                                 <Flyout>
@@ -424,16 +409,16 @@
                                             x:Name="FullVolumeButton"
                                             Click="VolumeButton_Click"
                                             Content="&#xE15D;"
-                                            Style="{StaticResource MediaControlButtonStyle}"
-                                            Template="{StaticResource DarkMediaControlButtonTemplate}" />
+                                            FontSize="20"
+                                            Foreground="Black"
+                                            Style="{StaticResource MediaControlButtonStyle}" />
                                         <Slider
                                             x:Name="FullVolumeSlider"
-                                            Width="100"
+                                            Width="160"
                                             Margin="10,0,20,0"
                                             VerticalAlignment="Center"
                                             Maximum="100"
                                             Minimum="0"
-                                            Style="{StaticResource MediaProgressSliderStyle}"
                                             ValueChanged="VolumeSlider_ValueChanged"
                                             Value="50" />
                                     </StackPanel>
@@ -444,31 +429,26 @@
                             x:Name="FullShuffleButton"
                             Click="ShuffleButton_Click"
                             Content="&#xE8B1;"
-                            Style="{StaticResource MediaControlToggleButtonStyle}"
-                            Template="{StaticResource DarkMediaControlToggleButtonTemplate}" />
+                            Style="{StaticResource DarkMediaControlToggleButtonStyle}" />
                         <ToggleButton
                             x:Name="FullRepeatButton"
                             Click="RepeatButton_Click"
                             Content="&#xE8EE;"
-                            Style="{StaticResource MediaControlToggleButtonStyle}"
-                            Template="{StaticResource DarkMediaControlToggleButtonTemplate}" />
+                            Style="{StaticResource DarkMediaControlToggleButtonStyle}" />
                         <ToggleButton
                             x:Name="FullRepeatOneButton"
                             Click="RepeatOneButton_Click"
                             Content="&#xE8ED;"
-                            Style="{StaticResource MediaControlToggleButtonStyle}"
-                            Template="{StaticResource DarkMediaControlToggleButtonTemplate}" />
+                            Style="{StaticResource DarkMediaControlToggleButtonStyle}" />
                         <ToggleButton
                             x:Name="FullLikeToggleButton"
                             Click="LikeButton_Click"
                             Content="&#xEB51;"
                             IsEnabled="False"
-                            Style="{StaticResource MediaControlToggleButtonStyle}"
-                            Template="{StaticResource LikeToggleButtonStyle}" />
+                            Style="{StaticResource LikeToggleButtonStyle}" />
                         <Button
                             Content="&#xE712;"
-                            Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource DarkMediaControlButtonTemplate}"
+                            Style="{StaticResource DarkMediaControlButtonStyle}"
                             ToolTipService.ToolTip="More">
                             <Button.Flyout>
                                 <MenuFlyout>
@@ -491,43 +471,37 @@
                             x:Name="PlaylistButton"
                             Click="PlaylistButton_Click"
                             Content="&#xEA37;"
-                            Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource DarkMediaControlButtonTemplate}"
+                            Style="{StaticResource DarkMediaControlButtonStyle}"
                             ToolTipService.ToolTip="Now Playing Playlist" />
                         <Button
                             x:Name="MusicInfoButton"
                             Click="MusicInfoButton_Click"
                             Content="&#xE90B;"
-                            Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource DarkMediaControlButtonTemplate}"
+                            Style="{StaticResource DarkMediaControlButtonStyle}"
                             ToolTipService.ToolTip="Show Music Info" />
                         <Button
                             x:Name="LyricsButton"
                             Click="LyricsButton_Click"
                             Content="&#xEC42;"
-                            Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource DarkMediaControlButtonTemplate}"
+                            Style="{StaticResource DarkMediaControlButtonStyle}"
                             ToolTipService.ToolTip="Show Lyrics" />
                         <Button
                             x:Name="CarouselButton"
                             Click="CarouselButton_Click"
                             Content="&#xE7C5;"
-                            Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource DarkMediaControlButtonTemplate}"
+                            Style="{StaticResource DarkMediaControlButtonStyle}"
                             ToolTipService.ToolTip="Carousel View" />
                         <Button
                             x:Name="FullScreenButton"
                             Click="FullScreenButton_Click"
                             Content="&#xE740;"
-                            Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource DarkMediaControlButtonTemplate}"
+                            Style="{StaticResource DarkMediaControlButtonStyle}"
                             ToolTipService.ToolTip="Full Screen" />
                         <Button
                             x:Name="MiniPlayButton"
                             Click="MiniPlayButton_Click"
                             Content="&#xE744;"
-                            Style="{StaticResource MediaControlButtonStyle}"
-                            Template="{StaticResource DarkMediaControlButtonTemplate}"
+                            Style="{StaticResource DarkMediaControlButtonStyle}"
                             ToolTipService.ToolTip="Mini Player" />
                     </StackPanel>
                 </RelativePanel>

@@ -65,7 +65,8 @@ namespace SMPlayer
         private void Current_SizeChanged(object sender, WindowSizeChangedEventArgs e)
         {
             bool isMinimal = e.Size.Width < 720;
-            HeaderGrid.Visibility = isMinimal && Settings.settings.LastPage == "NowPlaying" ? Visibility.Collapsed : Visibility.Visible;
+            bool collapsed = (isMinimal && Settings.settings.LastPage == "NowPlaying") || Settings.settings.LastPage == "Playlists";
+            HeaderGrid.Visibility = collapsed ? Visibility.Collapsed : Visibility.Visible;
             if (!MainNavigationView.IsPaneOpen)
                 if (isMinimal) CloseMinimal();
                 else CloseNormal();
