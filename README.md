@@ -40,3 +40,5 @@ NowPlayingFullPage play count.
 Save lyrics.
 
 TreeView error.
+
+MasterView long artist name.

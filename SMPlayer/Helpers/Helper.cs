@@ -198,7 +198,7 @@ namespace SMPlayer
             };
             toast.Data.Values["MediaControlPosition"] = "0";
             toast.Data.Values["MediaControlPositionTime"] = "0:00";
-            toast.Data.Values["Lyrics"] = string.IsNullOrEmpty(Lyrics = await music.GetLyrics()) ? NoLyricsAvailable : "" ;
+            toast.Data.Values["Lyrics"] = string.IsNullOrEmpty(Lyrics = await music.GetLyricsAsync()) ? NoLyricsAvailable : "" ;
 
             toastNotifier.Show(toast);
         }

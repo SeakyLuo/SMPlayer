@@ -155,25 +155,26 @@ namespace SMPlayer
 
         private async void SaveLyricsButton_Click(object sender, RoutedEventArgs e)
         {
-            //var mf = TagLib.File.Create(new TagLib.File.LocalFileAbstraction(CurrentMusic.Path), TagLib.ReadStyle.Average);
-            //mf.Tag.Lyrics = Lyrics;
-            //mf.Save();
-            var file = await StorageFile.GetFileFromPathAsync(CurrentMusic.Path);
-            using (var stream = await file.OpenAsync(FileAccessMode.ReadWrite))
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
-                using (var mp3 = new Mp3(stream.AsStream(), Mp3Permissions.ReadWrite))
+                SavingLyricsProgressRing.Visibility = Visibility.Visible;
+                LyricsTextBox.IsEnabled = false;
+                var music = await CurrentMusic.GetStorageFileAsync();
+                using (var file = TagLib.File.Create(new MusicFileAbstraction(music), TagLib.ReadStyle.Average))
                 {
-                    var tag = mp3.GetTag(Id3TagFamily.Version2X);
-                    tag.Lyrics[0] = Lyrics;
-                    mp3.WriteTag(tag, tag.Version, WriteConflictAction.Replace);
+                    Lyrics = LyricsTextBox.Text;
+                    file.Tag.Lyrics = Lyrics;
+                    file.Save();
                 }
-            }
-            ShowNotification("Lyrics Updated!");
+                SavingLyricsProgressRing.Visibility = Visibility.Collapsed;
+                LyricsTextBox.IsEnabled = true;
+                ShowNotification("Lyrics Updated!");
+            });
         }
 
         private void SearchLyricsButton_Click(object sender, RoutedEventArgs e)
         {
-
+            ShowNotification("Searching Lyrics!");
         }
 
         public void ShowNotification(string text)
@@ -213,7 +214,7 @@ namespace SMPlayer
             if (music == null || music.Equals(CurrentMusic)) return;
             var file = await StorageFile.GetFileFromPathAsync(music.Path);
             SetBasicProperties(file);
-            SetMusicProperties(musicProperties = await music.GetMusicProperties());
+            SetMusicProperties(musicProperties = await music.GetMusicPropertiesAsync());
         }
 
         public void PlaylistRequested(ICollection<Music> playlist)
@@ -229,7 +230,7 @@ namespace SMPlayer
         public async void SetLyrics(Music music)
         {
             if (music.Equals(CurrentMusic)) return;
-            var lyrics = await music.GetLyrics();
+            var lyrics = await music.GetLyricsAsync();
             LyricsTextBox.Text = string.IsNullOrEmpty(lyrics) ? "" : lyrics;
             Lyrics = LyricsTextBox.Text;
         }

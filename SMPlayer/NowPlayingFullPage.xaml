@@ -18,17 +18,16 @@
             <Setter Property="IsOpen" Value="True" />
             <Setter Property="TitleBarVisibility" Value="Collapsed" />
         </Style>
-        <Style x:Key="ScrollHeaderButtonStyle" TargetType="Button">
-            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
-            <Setter Property="FontSize" Value="20" />
-            <Setter Property="Background" Value="Transparent" />
+        <Style
+            x:Key="ScrollHeaderButtonStyle"
+            BasedOn="{StaticResource MediaControlButtonStyle}"
+            TargetType="Button">
             <Setter Property="Width" Value="40" />
             <Setter Property="Height" Value="40" />
-            <Setter Property="Margin" Value="15" />
-            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Margin" Value="10" />
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="BorderThickness" Value="0" />
             <Setter Property="CornerRadius" Value="20" />
+            <Setter Property="Template" Value="{StaticResource DarkMediaControlButtonTemplate}" />
         </Style>
     </Page.Resources>
 
@@ -439,10 +438,21 @@
                             Style="{StaticResource ScrollHeaderButtonStyle}"
                             ToolTipService.ToolTip="Reset Lyrics" />
                     </RelativePanel>
+                    <ProgressBar
+                        x:Name="SavingLyricsProgressRing"
+                        Grid.Row="1"
+                        Margin="10,0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        Foreground="White"
+                        IsIndeterminate="True"
+                        RelativePanel.AlignBottomWithPanel="True"
+                        Visibility="Collapsed" />
                     <TextBox
                         x:Name="LyricsTextBox"
                         Grid.Row="1"
-                        Margin="20,0,20,10"
+                        Margin="20,10"
+                        AcceptsReturn="True"
                         Background="Transparent"
                         BorderThickness="0"
                         RequestedTheme="Dark"
@@ -452,7 +462,7 @@
         </controls:BladeView>
         <controls:InAppNotification
             x:Name="ShowResultInAppNotification"
-            Grid.Row="1"
+            Grid.Row="2"
             AnimationDuration="00:00:00.1000000"
             HorizontalOffset="0"
             ShowDismissButton="True"

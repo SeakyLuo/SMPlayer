@@ -54,7 +54,7 @@ namespace SMPlayer.Models
                 }
                 foreach (var file in await folder.GetFilesAsync())
                     if (file.Name.EndsWith("mp3"))
-                        newTree.Files.Add(await Music.GetMusic(file.Path));
+                        newTree.Files.Add(await Music.Async(file.Path));
                 CopyFrom(newTree);
             }
             else
@@ -70,7 +70,7 @@ namespace SMPlayer.Models
                 Files.Clear();
                 foreach (var file in await folder.GetFilesAsync())
                     if (file.Name.EndsWith("mp3"))
-                        Files.Add(await Music.GetMusic(file.Path));
+                        Files.Add(await Music.Async(file.Path));
             }
             Path = folder.Path;
         }

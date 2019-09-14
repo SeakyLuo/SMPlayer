@@ -344,6 +344,9 @@
       <RootProperty Name="IsIndeterminate" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="Style" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="Foreground" />
+      <RootProperty Name="Visibility" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Shapes.Ellipse">
       <RootProperty Name="Width" />
@@ -537,6 +540,7 @@
       <RootProperty Name="Style" />
       <RootProperty Name="UseSystemFocusVisuals" />
       <RootProperty Name="SelectionFlyout" />
+      <RootProperty Name="AcceptsReturn" />
       <RootProperty Name="Background" />
       <RootProperty Name="RequestedTheme" />
       <RootProperty Name="TextWrapping" />

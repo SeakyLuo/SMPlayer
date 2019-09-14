@@ -133,6 +133,7 @@
     <Compile Include="Controls\PlaylistControlItem.xaml.cs">
       <DependentUpon>PlaylistControlItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\MusicHelper.cs" />
     <Compile Include="TemplateSelector\FolderTreeTemplateSelector.cs" />
     <Compile Include="Helpers\MenuFlyoutHelper.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />

@@ -118,34 +118,39 @@ namespace SMPlayer.Models
             return Path.Substring(Settings.settings.RootPath.Length + 1); // Plus one due to "/"
         }
 
-        public async Task<MusicProperties> GetMusicProperties()
+        public async Task<MusicProperties> GetMusicPropertiesAsync()
         {
             var file = await StorageFile.GetFileFromPathAsync(Path);
             return await file.Properties.GetMusicPropertiesAsync();
         }
 
-        public static async Task<Music> GetMusic(string source)
+        public static async Task<Music> Async(string source)
         {
             var file = await StorageFile.GetFileFromPathAsync(source);
             return new Music(source, await file.Properties.GetMusicPropertiesAsync());
         }
 
-        public static async Task<Music> GetMusic(Uri source)
+        public static async Task<Music> GetMusicAsync(Uri source)
         {
             var file = await StorageFile.GetFileFromApplicationUriAsync(source);
             return new Music(source.AbsolutePath, await file.Properties.GetMusicPropertiesAsync());
         }
 
-        public async Task<string> GetLyrics()
+        public async Task<StorageFile> GetStorageFileAsync()
+        {
+            return await StorageFile.GetFileFromPathAsync(Path);
+        }
+
+        public async Task<string> GetLyricsAsync()
         {
             var file = await StorageFile.GetFileFromPathAsync(Path);
-            using (var stream = await file.OpenAsync(FileAccessMode.Read))
+            using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(file), TagLib.ReadStyle.Average))
             {
-                using (var mp3 = new Mp3(stream.AsStream()))
-                {
-                    var lyrics = mp3.GetTag(Id3TagFamily.Version2X).Lyrics.Select((l) => l.Lyrics);
-                    return string.Join("\n", lyrics);
-                }
+                //read the raw tags
+                var tags = tagFile.GetTag(TagLib.TagTypes.Id3v2, true);
+
+                // do stuff with the tags 
+                return tagFile.Tag.Lyrics;
             }
         }
 
