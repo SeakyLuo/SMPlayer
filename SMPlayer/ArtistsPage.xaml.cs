@@ -25,7 +25,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class ArtistsPage : Page, AfterPathSetListener, MusicSwitchingListener
+    public sealed partial class ArtistsPage : Page, AfterSongsSetListener, MusicSwitchingListener
     {
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
         private bool SetupStarted = false;
@@ -35,7 +35,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
+            MusicLibraryPage.AddAfterSongsSetListener(this as AfterSongsSetListener);
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
         }
 
@@ -82,7 +82,7 @@ namespace SMPlayer
             SetupStarted = false;
         }
 
-        public void PathSet(string path)
+        public void SongsSet(ICollection<Music> songs)
         {
             Notified = NotifiedStatus.Started;
             Setup();

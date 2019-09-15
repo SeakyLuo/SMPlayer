@@ -23,7 +23,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class AlbumsPage : Page, AfterPathSetListener
+    public sealed partial class AlbumsPage : Page, AfterSongsSetListener
     {
         private ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         private bool SetupStarted = false;
@@ -32,7 +32,8 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
+            System.Diagnostics.Debug.WriteLine("Albums");
+            MusicLibraryPage.AddAfterSongsSetListener(this as AfterSongsSetListener);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -91,7 +92,7 @@ namespace SMPlayer
             SetupStarted = false;
         }
 
-        public void PathSet(string path)
+        public void SongsSet(ICollection<Music> songs)
         {
             Notified = NotifiedStatus.Started;
             Setup();
@@ -110,7 +111,8 @@ namespace SMPlayer
         private void AddToButton_Click(object sender, RoutedEventArgs e)
         {
             var data = (sender as Button).DataContext as AlbumView;
-            new MenuFlyoutHelper().GetAddToPlaylistsMenuFlyout(data.Name).ShowAt(sender as FrameworkElement);
+            var helper = new MenuFlyoutHelper() { Data = data.Songs };
+            helper.GetAddToPlaylistsMenuFlyout(data.Name).ShowAt(sender as FrameworkElement);
         }
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)

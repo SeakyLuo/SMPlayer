@@ -32,14 +32,14 @@ namespace SMPlayer
         private const string FILENAME = "MusicLibrary.json";
         public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
         private bool libraryChecked = false;
-        private static AfterSongsSetListener listener;
+        private static List<AfterSongsSetListener> listeners = new List<AfterSongsSetListener>();
 
         public MusicLibraryPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            listener = this as AfterSongsSetListener;
-            listener.SongsSet(AllSongs);
+            listeners.Add(this as AfterSongsSetListener);
+            SongsSet(AllSongs);
             SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
             MediaControl.AddMusicControlListener(this as MusicControlListener);
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
@@ -75,6 +75,8 @@ namespace SMPlayer
         {
             JsonFileHelper.SaveAsync(FILENAME, AllSongs);
         }
+
+        public static void AddAfterSongsSetListener(AfterSongsSetListener listener) { listeners.Add(listener); }
 
         private void MusicLibraryDataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
@@ -143,7 +145,7 @@ namespace SMPlayer
             if (songs == null) return;
             AllSongs.Clear();
             foreach (var item in songs) AllSongs.Add(item);
-            if (listener != null) listener.SongsSet(AllSongs);
+            foreach (var listener in listeners) listener.SongsSet(AllSongs);
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
@@ -162,7 +164,7 @@ namespace SMPlayer
         }
     }
 
-    interface AfterSongsSetListener
+    public interface AfterSongsSetListener
     {
         void SongsSet(ICollection<Music> songs);
     }

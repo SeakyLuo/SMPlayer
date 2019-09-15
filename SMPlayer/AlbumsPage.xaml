@@ -31,7 +31,7 @@
                 <DataTemplate x:DataType="data:AlbumView">
                     <UserControl PointerEntered="GridViewItem_PointerEntered" PointerExited="GridViewItem_PointerExited">
                         <Grid
-                            Width="180"
+                            Width="160"
                             Height="240"
                             Margin="10">
                             <Grid.ContextFlyout>
@@ -45,12 +45,15 @@
                             <controls:DropShadowPanel
                                 x:Name="ShadowPanel"
                                 VerticalContentAlignment="Top"
-                                BlurRadius="25"
-                                OffsetX="10"
+                                BlurRadius="10"
+                                OffsetX="5"
                                 OffsetY="5"
                                 ShadowOpacity="0"
                                 Color="Gray">
-                                <Image Source="{x:Bind Cover}" />
+                                <Image
+                                    Width="160"
+                                    Height="160"
+                                    Source="{x:Bind Cover}" />
                             </controls:DropShadowPanel>
                             <StackPanel
                                 x:Name="ButtonStackPanel"
