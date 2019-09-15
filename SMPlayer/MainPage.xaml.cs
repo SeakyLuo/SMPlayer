@@ -65,7 +65,9 @@ namespace SMPlayer
         private void Current_SizeChanged(object sender, WindowSizeChangedEventArgs e)
         {
             bool isMinimal = e.Size.Width < 720;
-            bool collapsed = (isMinimal && Settings.settings.LastPage == "NowPlaying") || Settings.settings.LastPage == "Playlists";
+            bool collapsed = (isMinimal && Settings.settings.LastPage == "NowPlaying") ||
+                             Settings.settings.LastPage == "Playlists" ||
+                             Settings.settings.LastPage == "AlbumPage";
             HeaderGrid.Visibility = collapsed ? Visibility.Collapsed : Visibility.Visible;
             if (!MainNavigationView.IsPaneOpen)
                 if (isMinimal) PaneCloseMinimal();
@@ -197,6 +199,9 @@ namespace SMPlayer
                     SetHeaderText("Artists");
                     HeaderGrid.Visibility = Visibility.Visible;
                     MainNavigationView.SelectedItem = ArtistsItem;
+                    break;
+                case "AlbumPage":
+                    HeaderGrid.Visibility = Visibility.Collapsed;
                     break;
                 case "AlbumsPage":
                     SetHeaderText("Albums");

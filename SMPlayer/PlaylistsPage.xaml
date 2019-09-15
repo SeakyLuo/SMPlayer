@@ -74,10 +74,7 @@
             </controls:TabView.ItemHeaderTemplate>
             <controls:TabView.ItemTemplate>
                 <DataTemplate x:DataType="data:Playlist">
-                    <local:HeaderedPlaylistControl
-                        IsPlaylist="True"
-                        Loaded="HeaderedPlaylistControl_Loaded"
-                        MusicCollection="{x:Bind Mode=OneWay}" />
+                    <local:HeaderedPlaylistControl IsPlaylist="True" Loaded="HeaderedPlaylistControl_Loaded" />
                 </DataTemplate>
             </controls:TabView.ItemTemplate>
 

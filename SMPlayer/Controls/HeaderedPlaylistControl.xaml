@@ -6,13 +6,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Loaded="UserControl_Loaded"
     mc:Ignorable="d">
 
     <local:PlaylistControl
+        x:Name="HeaderedPlaylist"
         AllowReorder="False"
-        AlternatingRowColor="True"
-        ItemsSource="{x:Bind MusicCollection.Songs, Mode=OneWay}">
+        AlternatingRowColor="True">
         <local:PlaylistControl.Header>
             <controls:ScrollHeader Mode="Sticky">
                 <UserControl>
@@ -44,16 +43,14 @@
                             VerticalAlignment="Center"
                             FontSize="36"
                             Foreground="White"
-                            Style="{StaticResource HeaderTextBlockStyle}"
-                            Text="{x:Bind MusicCollection.Name, Mode=OneWay}" />
+                            Style="{StaticResource HeaderTextBlockStyle}" />
                         <TextBlock
                             x:Name="PlaylistInfoTextBlock"
                             Grid.Row="1"
                             Grid.Column="1"
                             Margin="0,5"
                             VerticalAlignment="Top"
-                            Foreground="White"
-                            Text="{x:Bind MusicCollection.Songs, Converter={StaticResource SongCountConverter}, Mode=OneWay}" />
+                            Foreground="White" />
                         <CommandBar
                             x:Name="PlaylistCommandBar"
                             Grid.Row="2"
@@ -64,39 +61,40 @@
                             DefaultLabelPosition="Right"
                             Style="{StaticResource PlaylistCommandBarStyle}">
                             <AppBarButton
+                                x:Name="ShuffleButton"
                                 Margin="0"
                                 Click="Shuffle_Click"
                                 Icon="Shuffle"
-                                IsEnabled="{x:Bind MusicCollection.Songs, Converter={StaticResource EnabledConverter}, Mode=OneWay}"
                                 Label="Shuffle"
                                 Style="{StaticResource PlaylistAppBarButtonStyle}"
                                 ToolTipService.ToolTip="Shuffle Playlist" />
                             <AppBarButton
+                                x:Name="AddToButton"
                                 Click="AddTo_Click"
                                 Icon="Add"
-                                IsEnabled="{x:Bind MusicCollection.Songs, Converter={StaticResource EnabledConverter}, Mode=OneWay}"
                                 Label="Add To"
                                 Style="{StaticResource PlaylistAppBarButtonStyle}"
                                 ToolTipService.ToolTip="Add To Playlist" />
                             <AppBarButton
+                                x:Name="RenameButton"
                                 Click="Rename_Click"
                                 Icon="Rename"
                                 Label="Rename"
                                 Style="{StaticResource PlaylistAppBarButtonStyle}"
-                                ToolTipService.ToolTip="Rename Playlist"
-                                Visibility="{x:Bind IsPlaylist, Converter={StaticResource VisibilityConverter}}" />
+                                ToolTipService.ToolTip="Rename Playlist" />
                             <AppBarButton
+                                Click="PinToStart_Click"
                                 Icon="Pin"
                                 Label="Pin to Start"
                                 Style="{StaticResource PlaylistAppBarButtonStyle}"
                                 ToolTipService.ToolTip="Pin Playlist to the Start Menu" />
                             <AppBarButton
+                                x:Name="DeleteButton"
                                 Click="Delete_Click"
                                 Icon="Delete"
                                 Label="Delete"
                                 Style="{StaticResource PlaylistAppBarButtonStyle}"
-                                ToolTipService.ToolTip="Delete Playlist"
-                                Visibility="{x:Bind IsPlaylist, Converter={StaticResource VisibilityConverter}}" />
+                                ToolTipService.ToolTip="Delete Playlist" />
                         </CommandBar>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="WidthChange">

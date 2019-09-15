@@ -189,6 +189,11 @@
       <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.ThemeResourceExtension" />
+    <RootType FullName="SMPlayer.HeaderedPlaylistControl">
+      <RootProperty Name="IsPlaylist" />
+      <RootEvent Name="Loaded" />
+    </RootType>
+    <RootType FullName="SMPlayer.AlbumPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.Grid">
       <RootProperty Name="Children" />
       <RootProperty Name="Width" />
@@ -226,7 +231,6 @@
       <RootMethod Name="GetColumnSpan" />
       <RootMethod Name="SetColumnSpan" />
     </RootType>
-    <RootType FullName="SMPlayer.AlbumPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.GridView">
       <RootProperty Name="Margin" />
       <RootProperty Name="IsItemClickEnabled" />
@@ -250,6 +254,7 @@
       <RootProperty Name="Resources" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
+      <RootEvent Name="Tapped" />
       <RootEvent Name="Loaded" />
       <RootEvent Name="Loading" />
     </RootType>
@@ -827,9 +832,9 @@
     <RootType FullName="SMPlayer.PlaylistControl">
       <RootProperty Name="AllowReorder" />
       <RootProperty Name="AlternatingRowColor" />
-      <RootProperty Name="ItemsSource" />
       <RootProperty Name="Header" />
       <RootProperty Name="Margin" />
+      <RootProperty Name="ItemsSource" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="Background" />
       <RootProperty Name="Theme" />
@@ -841,19 +846,13 @@
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">
       <RootProperty Name="Margin" />
       <RootProperty Name="Icon" />
-      <RootProperty Name="IsEnabled" />
       <RootProperty Name="Label" />
       <RootProperty Name="Style" />
-      <RootProperty Name="Visibility" />
+      <RootProperty Name="IsEnabled" />
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.AdaptiveTrigger">
       <RootProperty Name="MinWindowWidth" />
-    </RootType>
-    <RootType FullName="SMPlayer.HeaderedPlaylistControl">
-      <RootProperty Name="IsPlaylist" />
-      <RootProperty Name="MusicCollection" />
-      <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="SMPlayer.TemplateSelector.FolderTreeTemplateSelector">
       <RootProperty Name="FileTemplate" />

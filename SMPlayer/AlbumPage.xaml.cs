@@ -26,5 +26,13 @@ namespace SMPlayer
         {
             this.InitializeComponent();
         }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            var album = e.Parameter as Models.AlbumView;
+            var playlist = new Models.Playlist(album.Name, album.Songs);
+            AlbumPlaylistControl.SetMusicCollection(playlist);
+        }
     }
 }

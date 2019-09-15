@@ -191,7 +191,7 @@ namespace SMPlayer
 
     class SongCountConverter : Windows.UI.Xaml.Data.IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, string language)
+        public static string ToStr(object value)
         {
             if (value is ICollection<Music>)
             {
@@ -201,6 +201,10 @@ namespace SMPlayer
                 return count == 0 ? countStr : $"{countStr} • {MusicDurationConverter.ToTime(list)}";
             }
             return "";
+        }
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return ToStr(value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

@@ -23,13 +23,15 @@
         <GridView
             Margin="10"
             IsItemClickEnabled="True"
-            ItemClick="GridView_ItemClick"
             ItemContainerStyle="{StaticResource DropShadowGridViewItemStyle}"
             ItemsSource="{x:Bind Albums}"
             SelectionMode="None">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:AlbumView">
-                    <UserControl PointerEntered="GridViewItem_PointerEntered" PointerExited="GridViewItem_PointerExited">
+                    <UserControl
+                        PointerEntered="GridViewItem_PointerEntered"
+                        PointerExited="GridViewItem_PointerExited"
+                        Tapped="GridViewItem_Tapped">
                         <Grid
                             Width="160"
                             Height="240"

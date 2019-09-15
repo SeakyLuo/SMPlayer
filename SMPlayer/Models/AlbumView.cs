@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage.FileProperties;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMPlayer.Models
@@ -13,7 +14,6 @@ namespace SMPlayer.Models
         public string Name { get; set; }
         public string Artist { get; set; }
         public BitmapImage Cover { get; set; }
-
         public ObservableCollection<Music> Songs { get; set; }
         public AlbumView(string Name, string Artist, BitmapImage Cover, IEnumerable<Music> Songs)
         {

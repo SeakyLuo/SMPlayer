@@ -70,7 +70,7 @@ namespace SMPlayer
                 Windows.UI.Xaml.Media.Imaging.BitmapImage thumbnail = null;
                 foreach (Music m in group)
                 {
-                    thumbnail = await Helper.GetThumbnail(m.Path, false);
+                    thumbnail = await Helper.GetThumbnailAsync(m.GetShortPath(), false);
                     if (thumbnail != null)
                     {
                         music = m;
@@ -114,8 +114,7 @@ namespace SMPlayer
             var helper = new MenuFlyoutHelper() { Data = data.Songs };
             helper.GetAddToPlaylistsMenuFlyout(data.Name).ShowAt(sender as FrameworkElement);
         }
-
-        private void GridView_ItemClick(object sender, ItemClickEventArgs e)
+        private void GridViewItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Frame.Navigate(typeof(AlbumPage), (sender as FrameworkElement).DataContext);
         }

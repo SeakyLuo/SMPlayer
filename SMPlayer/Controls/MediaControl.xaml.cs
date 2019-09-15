@@ -293,7 +293,9 @@ namespace SMPlayer
                 return;
             }
             MediaSlider.IsEnabled = true;
-            AlbumCover.Source = await Helper.GetThumbnail(music);
+            var thumbnail = await Helper.GetStorageItemThumbnailAsync(music.Path);
+            Debug.WriteLine("mediacontrol");
+            AlbumCover.Source = thumbnail == null ? Helper.DefaultAlbumCover : thumbnail.GetBitmapImage();
             TitleTextBlock.Text = music.Name;
             ArtistTextBlock.Text = music.Artist;
             FullAlbumTextBlock.Text = music.Album;
@@ -303,9 +305,10 @@ namespace SMPlayer
             if (music.Favorite) LikeMusic(false);
             else DislikeMusic(false);
             if (Mode != MediaControlMode.Full)
-                MainMediaControlGrid.Background = await Helper.GetThumbnailMainColor(AlbumCover, true);
+                MainMediaControlGrid.Background = await thumbnail.GetDisplayColor();
             Helper.UpdateTile(music);
             Settings.settings.LastMusic = music;
+            thumbnail.Dispose();
         }
         public void SetMusicAndPlay(Music music)
         {

@@ -23,42 +23,34 @@ namespace SMPlayer
     {
         public Playlist MusicCollection { get; set; }
         public bool IsPlaylist { get; set; }
-        private static Dictionary<string, List<BitmapImage>> PlaylistThumbnailDict = new Dictionary<string, List<BitmapImage>>();
+        private static Dictionary<string, List<MusicDisplayItem>> PlaylistDisplayDict = new Dictionary<string, List<MusicDisplayItem>>();
         private static readonly Random random = new Random();
         private static RenameDialog dialog;
         public HeaderedPlaylistControl()
         {
             this.InitializeComponent();
         }
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            SetPlaylistArt(MusicCollection);
-        }
 
-        public async void SetPlaylistArt(Playlist playlist)
+        public async void SetMusicCollection(Playlist playlist)
         {
-            if (!PlaylistThumbnailDict.TryGetValue(playlist.Name, out List<BitmapImage> PlaylistCovers))
+            MusicCollection = playlist;
+            HeaderedPlaylist.ItemsSource = playlist.Songs;
+            PlaylistNameTextBlock.Text = playlist.Name;
+            PlaylistInfoTextBlock.Text = SongCountConverter.ToStr(playlist.Songs);
+            ShuffleButton.IsEnabled = playlist.Songs.Count != 0;
+            AddToButton.IsEnabled = playlist.Songs.Count != 0;
+            RenameButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
+            DeleteButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
+            if (!PlaylistDisplayDict.TryGetValue(playlist.Name, out List<MusicDisplayItem> MusicDisplayItems))
             {
-                PlaylistCovers = await playlist.GetThumbnailsAsync();
-                PlaylistThumbnailDict[playlist.Name] = PlaylistCovers;
+                MusicDisplayItems = await playlist.GetMusicDisplayItems();
+                if (MusicDisplayItems.Count == 0)
+                    MusicDisplayItems = new List<MusicDisplayItem>() { new MusicDisplayItem(Helper.DefaultAlbumCover, ColorHelper.HighlightBrush) };
+                PlaylistDisplayDict[playlist.Name] = MusicDisplayItems;
             }
-            PlaylistCover.Source = PlaylistCovers.Count == 0 ? Helper.DefaultAlbumCover : PlaylistCovers[random.Next(PlaylistCovers.Count)];
-            PlaylistInfoGrid.Background = playlist.Songs.Count == 0 ? ColorHelper.HighlightBrush : await Helper.GetThumbnailMainColor(PlaylistCover, false);
-        }
-
-        private async void SetPlaylistCover(Playlist playlist)
-        {
-            if (!PlaylistThumbnailDict.TryGetValue(playlist.Name, out List<BitmapImage> PlaylistCovers))
-            {
-                PlaylistCovers = await playlist.GetThumbnailsAsync();
-                PlaylistThumbnailDict[playlist.Name] = PlaylistCovers;
-            }
-            PlaylistCover.Source = PlaylistCovers.Count == 0 ? Helper.DefaultAlbumCover : PlaylistCovers[random.Next(PlaylistCovers.Count)];
-        }
-
-        private async void SetGridBackground()
-        {
-            PlaylistInfoGrid.Background = MusicCollection.Songs.Count == 0 ? ColorHelper.HighlightBrush : await Helper.GetThumbnailMainColor(PlaylistCover, false);
+            var item = MusicDisplayItems[random.Next(MusicDisplayItems.Count)];
+            PlaylistCover.Source = item.Thumbnail;
+            PlaylistInfoGrid.Background = item.Color;
         }
 
         public bool Confirm(string OldName, string NewName)
@@ -68,24 +60,26 @@ namespace SMPlayer
 
         private void Shuffle_Click(object sender, RoutedEventArgs e)
         {
-            var playlist = (sender as FrameworkElement).DataContext as Playlist;
-            MediaHelper.ShuffleAndPlay(playlist.Songs);
+            MediaHelper.ShuffleAndPlay(MusicCollection.Songs);
         }
         private void AddTo_Click(object sender, RoutedEventArgs e)
         {
             var element = sender as FrameworkElement;
-            MenuFlyoutHelper.SetAddToMenu(sender, (element.DataContext as Playlist).Name).ShowAt(element);
+            MenuFlyoutHelper.SetAddToMenu(sender, MusicCollection.Name).ShowAt(element);
         }
         private async void Rename_Click(object sender, RoutedEventArgs e)
         {
-            var playlist = (sender as FrameworkElement).DataContext as Playlist;
-            dialog = new RenameDialog(this as RenameActionListener, TitleOption.Rename, playlist.Name);
+            dialog = new RenameDialog(this as RenameActionListener, TitleOption.Rename, MusicCollection.Name);
             await dialog.ShowAsync();
         }
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            var playlist = (sender as FrameworkElement).DataContext as Playlist;
-            PlaylistsPage.DeletePlaylist(playlist);
+            PlaylistsPage.DeletePlaylist(MusicCollection);
+        }
+
+        private void PinToStart_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)

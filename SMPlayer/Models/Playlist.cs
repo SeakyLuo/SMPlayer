@@ -72,19 +72,28 @@ namespace SMPlayer.Models
             Sort();
         }
 
-        public async Task<List<BitmapImage>> GetThumbnailsAsync()
+        public async Task<List<MusicDisplayItem>> GetMusicDisplayItems()
         {
-            List<BitmapImage> Thumbnails = new List<BitmapImage>();
+            var result = new List<MusicDisplayItem>();
             foreach (var group in Songs.GroupBy((m) => m.Album))
-                Thumbnails.Add(await Helper.GetThumbnail(group.ElementAt(0).Path, true));
-            return Thumbnails;
+            {
+                foreach (var music in group)
+                {
+                    var thumbnail = await Helper.GetStorageItemThumbnailAsync(music.GetShortPath());
+                    if (thumbnail != null)
+                    {
+                        result.Add(new MusicDisplayItem(thumbnail.GetBitmapImage(), await thumbnail.GetDisplayColor()));
+                        break;
+                    }
+                }
+            }
+            return result;
         }
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
             // Raise the PropertyChanged event, passing the name of the property whose value has changed.
             this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
-
         public void SetCriterionAndSort(SortBy criterion)
         {
             if (Criterion == criterion)

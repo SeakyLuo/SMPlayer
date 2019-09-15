@@ -77,7 +77,7 @@ namespace SMPlayer
             foreach (var music in playlist.Songs)
                 music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
             SortByButton.Label = "Sort By " + playlist.Criterion.ToStr();
-            if (playlistControl != null) playlistControl.SetPlaylistArt(playlist);
+            if (playlistControl != null) playlistControl.SetMusicCollection(playlist);
         }
 
         private void DeleteClick(object sender, RoutedEventArgs e)
@@ -248,6 +248,7 @@ namespace SMPlayer
         private void HeaderedPlaylistControl_Loaded(object sender, RoutedEventArgs e)
         {
             playlistControl = sender as HeaderedPlaylistControl;
+            playlistControl.SetMusicCollection(PlaylistTabView.SelectedItem as Playlist);
         }
     }
 }
