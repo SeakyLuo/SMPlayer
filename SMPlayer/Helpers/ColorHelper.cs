@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.UI;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
 namespace SMPlayer
@@ -17,9 +18,18 @@ namespace SMPlayer
         public static SolidColorBrush WhiteSmokeBrush = new SolidColorBrush(Colors.WhiteSmoke);
         public static SolidColorBrush GrayBrush = new SolidColorBrush(Colors.Gray);
         public static SolidColorBrush BlackBrush = new SolidColorBrush(Colors.Black);
+        public static SolidColorBrush TransparentBrush = new SolidColorBrush(Colors.Transparent);
         public static SolidColorBrush HighlightBrush
         {
             get => new SolidColorBrush(Models.Settings.settings.ThemeColor);
+        }
+        public static Brush MinimalTitleBarColor
+        {
+            get => Application.Current.Resources["MinimalTitleBarColor"] as Brush;
+        }
+        public static Brush MainNavigationViewBackground
+        {
+            get => Application.Current.Resources["MainNavigationViewBackground"] as Brush;
         }
         private struct Size
         {

@@ -11,7 +11,7 @@
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
         <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="Margin" Value="5,0" />
+        <Setter Property="Margin" Value="10,0" />
         <Setter Property="Padding" Value="0,0,10,0" />
         <Setter Property="Width" Value="Auto" />
         <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}" />

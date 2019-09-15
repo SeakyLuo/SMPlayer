@@ -90,11 +90,9 @@
             x:Name="BackButton"
             Grid.Column="1"
             Width="48"
-            VerticalAlignment="Stretch"
-            Background="{ThemeResource SystemColorHighlightColor}"
+            Height="30"
             Click="BackButton_Click"
-            Foreground="White"
-            Style="{StaticResource BackButtonStyle}" />
+            Style="{StaticResource DarkBackButtonStyle}" />
         <local:MediaControl
             x:Name="FullMediaControl"
             Grid.Row="1"

@@ -95,15 +95,9 @@
                 </Button>
                 <Button
                     x:Name="MainPlayButton"
-                    Width="48"
-                    Height="48"
-                    HorizontalAlignment="Center"
-                    BorderBrush="{StaticResource MediaControlPlayButtonBorderBrush}"
                     Click="PlayButton_Click"
                     Content="&#xE768;"
-                    CornerRadius="24"
-                    FontSize="24"
-                    Style="{StaticResource MediaControlButtonStyle}" />
+                    Style="{StaticResource MediaControlPlayButtonStyle}" />
                 <Button
                     Click="NextButton_Click"
                     Content="&#xE893;"

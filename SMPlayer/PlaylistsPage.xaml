@@ -18,6 +18,11 @@
                 Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
                 Duration="0:0:0.25" />
         </Storyboard>
+        <Style x:Key="PlaylistIconTextButtonStyle" TargetType="local:IconTextButton">
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
     </Page.Resources>
 
     <Grid>
@@ -124,10 +129,9 @@
                                             VerticalAlignment="Bottom"
                                             Background="Transparent"
                                             DefaultLabelPosition="Right"
-                                            RequestedTheme="Dark"
                                             Style="{StaticResource PlaylistCommandBarStyle}">
                                             <AppBarButton
-                                                Margin="0,0,0,0"
+                                                Margin="0"
                                                 Click="Shuffle_Click"
                                                 Icon="Shuffle"
                                                 IsEnabled="{x:Bind Songs, Converter={StaticResource EnabledConverter}, Mode=OneWay}"
@@ -235,55 +239,42 @@
             </controls:TabView.TabEndHeader>
 
             <controls:TabView.Footer>
-                <controls:ScrollHeader Mode="QuickReturn">
-                    <RelativePanel>
-                        <RelativePanel.Resources>
-                            <Style x:Key="IconTextButtonStyle" TargetType="local:IconTextButton">
-                                <Setter Property="VerticalAlignment" Value="Stretch" />
-                                <Setter Property="FontSize" Value="16" />
-                                <Setter Property="FontWeight" Value="SemiBold" />
-                            </Style>
-                        </RelativePanel.Resources>
-                        <local:IconTextButton
-                            x:Name="ShowAllPlaylistButton"
-                            Padding="10,5"
-                            LabelPosition="Left"
-                            RelativePanel.AlignRightWithPanel="True"
-                            Style="{StaticResource IconTextButtonStyle}"
-                            ToolTipService.ToolTip="Show All Playlists">
-                            <local:IconTextButton.Icon>
-                                <FontIcon
-                                    x:Name="UpArrowIcon"
-                                    FontFamily="Segoe MDL2 Assets"
-                                    FontWeight="{x:Bind ShowAllPlaylistButton.FontWeight}"
-                                    Glyph="&#xE70E;"
-                                    RenderTransformOrigin=".5,.5">
-                                    <FontIcon.RenderTransform>
-                                        <RotateTransform />
-                                    </FontIcon.RenderTransform>
-                                </FontIcon>
-                            </local:IconTextButton.Icon>
-                            <local:IconTextButton.Flyout>
-                                <MenuFlyout Closed="ClosePlaylistsFlyout" Opening="OpenPlaylistsFlyout" />
-                            </local:IconTextButton.Flyout>
-                        </local:IconTextButton>
-                        <local:IconTextButton
-                            x:Name="SortByButton"
-                            Padding="10,5"
-                            HorizontalAlignment="Right"
-                            Icon="Sort"
-                            Label="Sort By Title"
-                            LabelPosition="Right"
-                            RelativePanel.AlignLeftWithPanel="True"
-                            Style="{StaticResource IconTextButtonStyle}"
-                            ToolTipService.ToolTip="Sort Playlists">
-                            <local:IconTextButton.Flyout>
-                                <MenuFlyout Opening="OpenSortPlaylistsFlyout" />
-                            </local:IconTextButton.Flyout>
-                        </local:IconTextButton>
-                    </RelativePanel>
-
-                </controls:ScrollHeader>
+                <RelativePanel>
+                    <local:IconTextButton
+                        x:Name="ShowAllPlaylistButton"
+                        Padding="10,5"
+                        LabelPosition="Left"
+                        RelativePanel.AlignRightWithPanel="True"
+                        Style="{StaticResource PlaylistIconTextButtonStyle}"
+                        ToolTipService.ToolTip="Show All Playlists">
+                        <local:IconTextButton.Icon>
+                            <FontIcon
+                                x:Name="UpArrowIcon"
+                                FontFamily="Segoe MDL2 Assets"
+                                FontWeight="{x:Bind ShowAllPlaylistButton.FontWeight}"
+                                Glyph="&#xE70E;"
+                                RenderTransformOrigin=".5,.5">
+                                <FontIcon.RenderTransform>
+                                    <RotateTransform />
+                                </FontIcon.RenderTransform>
+                            </FontIcon>
+                        </local:IconTextButton.Icon>
+                        <local:IconTextButton.Flyout>
+                            <MenuFlyout Closed="ClosePlaylistsFlyout" Opening="OpenPlaylistsFlyout" />
+                        </local:IconTextButton.Flyout>
+                    </local:IconTextButton>
+                    <local:IconTextButton
+                        x:Name="SortByButton"
+                        Padding="10,5"
+                        HorizontalAlignment="Right"
+                        Icon="Sort"
+                        Label="Sort By Title"
+                        LabelPosition="Right"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        Style="{StaticResource PlaylistIconTextButtonStyle}"
+                        Tapped="SortByButton_Tapped"
+                        ToolTipService.ToolTip="Sort Playlists" />
+                </RelativePanel>
             </controls:TabView.Footer>
         </controls:TabView>
         <VisualStateManager.VisualStateGroups>

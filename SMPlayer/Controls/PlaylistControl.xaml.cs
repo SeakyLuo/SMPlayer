@@ -53,6 +53,13 @@ namespace SMPlayer
             set => SongsListView.Header = value;
         }
         public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register("Header", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
+
+        public object Footer
+        {
+            set => SongsListView.Footer = value;
+        }
+        public static readonly DependencyProperty FooterProperty = DependencyProperty.Register("Footer", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
+
         public object ItemsSource
         {
             get => SongsListView.ItemsSource;

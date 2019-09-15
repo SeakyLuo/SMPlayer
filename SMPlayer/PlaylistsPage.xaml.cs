@@ -278,11 +278,11 @@ namespace SMPlayer
         {
             SpinArrowAnimation.Begin();
         }
-        private void OpenSortPlaylistsFlyout(object sender, object e)
+
+        private void SortByButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var playlist = PlaylistTabView.SelectedItem as Playlist;
-            var flyout = sender as MenuFlyout;
-            flyout.Items.Clear();
+            var flyout = new MenuFlyout();
             var reverseItem = new MenuFlyoutItem() { Text = "Reverse Playlist" };
             reverseItem.Click += (send, args) => playlist.Reverse();
             flyout.Items.Add(reverseItem);
@@ -298,7 +298,7 @@ namespace SMPlayer
                 radioItem.Click += (send, args) =>
                 {
                     playlist.SetCriterionAndSort(criterion);
-                    SortByButton.Label = sortby;
+                    (sender as IconTextButton).Label = sortby;
                 };
                 flyout.Items.Add(radioItem);
             }

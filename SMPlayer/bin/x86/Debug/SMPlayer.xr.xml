@@ -37,6 +37,8 @@
     <RootPropertyPathName Name="KeyboardAcceleratorTextMinWidth" />
     <RootPropertyPathName Name="PlayCount" />
     <RootPropertyPathName Name="Favorite" />
+    <RootPropertyPathName Name="ShowAllPlaylistButton" />
+    <RootPropertyPathName Name="FontWeight" />
   </Roots.PropertyPathNames>
   <Roots.RootTypes>
     <RootType FullName="Windows.UI.Xaml.Application">
@@ -95,7 +97,6 @@
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="KeyboardAccelerators" />
       <RootProperty Name="CornerRadius" />
-      <RootProperty Name="BorderBrush" />
       <RootProperty Name="FontFamily" />
       <RootEvent Name="Click" />
     </RootType>
@@ -128,10 +129,10 @@
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="FocusVisualMargin" />
+      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="MinWidth" />
       <RootProperty Name="MinHeight" />
       <RootProperty Name="Margin" />
-      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="AllowFocusOnInteraction" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.FontIcon">
@@ -374,7 +375,6 @@
     <RootType FullName="Windows.UI.Xaml.Controls.RelativePanel">
       <RootProperty Name="Children" />
       <RootProperty Name="Margin" />
-      <RootProperty Name="Resources" />
       <RootMethod Name="GetAlignLeftWithPanel" />
       <RootMethod Name="SetAlignLeftWithPanel" />
       <RootMethod Name="GetLeftOf" />
@@ -427,6 +427,7 @@
       <RootProperty Name="MinWidth" />
       <RootProperty Name="MinHeight" />
       <RootProperty Name="CornerRadius" />
+      <RootProperty Name="RequestedTheme" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.SymbolIcon">
       <RootProperty Name="RenderTransformOrigin" />
@@ -783,7 +784,6 @@
       <RootProperty Name="PrimaryCommands" />
       <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="Style" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBar">
@@ -818,6 +818,7 @@
     <RootType FullName="Windows.UI.Xaml.Controls.ItemsControl">
       <RootProperty Name="MinHeight" />
       <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="IsTabStop" />
       <RootProperty Name="ItemsPanel" />
     </RootType>
@@ -852,6 +853,7 @@
       <RootProperty Name="Theme" />
       <RootProperty Name="AllowReorder" />
       <RootProperty Name="Header" />
+      <RootProperty Name="Footer" />
     </RootType>
     <RootType FullName="SMPlayer.LocalMusicPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.Frame">
@@ -973,7 +975,6 @@
       <RootProperty Name="ItemTemplate" />
       <RootProperty Name="TabStartHeader" />
       <RootProperty Name="TabEndHeader" />
-      <RootProperty Name="Footer" />
       <RootEvent Name="DragItemsCompleted" />
       <RootEvent Name="SelectionChanged" />
       <RootEvent Name="TabClosing" />

@@ -68,8 +68,8 @@ namespace SMPlayer
             bool collapsed = (isMinimal && Settings.settings.LastPage == "NowPlaying") || Settings.settings.LastPage == "Playlists";
             HeaderGrid.Visibility = collapsed ? Visibility.Collapsed : Visibility.Visible;
             if (!MainNavigationView.IsPaneOpen)
-                if (isMinimal) CloseMinimal();
-                else CloseNormal();
+                if (isMinimal) PaneCloseMinimal();
+                else PaneCloseNormal();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -239,6 +239,7 @@ namespace SMPlayer
                     Debug.WriteLine("Navigate to " + NaviFrame.CurrentSourcePageType.Name);
                     break;
             }
+            SetFakeTogglePaneButtonBackground();
         }
 
         public void PauseMusic()
@@ -271,9 +272,9 @@ namespace SMPlayer
         {
             VisualStateManager.GoToState(this, "Close", true);
             if (MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal)
-                CloseMinimal();
+                PaneCloseMinimal();
             else
-                CloseNormal();
+                PaneCloseNormal();
         }
 
         private void HeaderSearchButton_Click(object sender, RoutedEventArgs e)
@@ -290,18 +291,24 @@ namespace SMPlayer
             HeaderSearchBar.Visibility = Visibility.Collapsed;
         }
 
-        private void CloseMinimal()
+        private void PaneCloseMinimal()
         {
             AppTitle.Visibility = Visibility.Visible;
+            AppTitleBorder.Background = ColorHelper.MinimalTitleBarColor;
             FakeTogglePaneButton.Visibility = Visibility.Visible;
-            AppTitleBorder.Background = Application.Current.Resources["MinimalTitleBarColor"] as Brush;
+            SetFakeTogglePaneButtonBackground();
         }
 
-        private void CloseNormal()
+        private void SetFakeTogglePaneButtonBackground()
+        {
+            FakeTogglePaneButton.Background = NaviFrame.CurrentSourcePageType.Name.StartsWith("Playlists") ? ColorHelper.WhiteBrush : ColorHelper.MinimalTitleBarColor;
+        }
+
+        private void PaneCloseNormal()
         {
             AppTitle.Visibility = Visibility.Collapsed;
+            AppTitleBorder.Background = ColorHelper.MainNavigationViewBackground;
             FakeTogglePaneButton.Visibility = Visibility.Collapsed;
-            AppTitleBorder.Background = Application.Current.Resources["MainNavigationViewBackground"] as Brush;
         }
 
         private void HeaderNaviSearchBar_LosingFocus(UIElement sender, LosingFocusEventArgs args)
