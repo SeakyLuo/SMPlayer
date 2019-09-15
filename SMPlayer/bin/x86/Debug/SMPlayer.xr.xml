@@ -217,7 +217,6 @@
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
       <RootEvent Name="Tapped" />
-      <RootEvent Name="Loaded" />
       <RootMethod Name="GetRow" />
       <RootMethod Name="SetRow" />
       <RootMethod Name="GetColumn" />
@@ -300,7 +299,6 @@
       <RootProperty Name="Margin" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="Stretch" />
-      <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.VisualStateGroup">
       <RootProperty Name="States" />
@@ -774,15 +772,15 @@
       <RootProperty Name="VerticalAlignment" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.CommandBar">
+      <RootProperty Name="Margin" />
+      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Background" />
       <RootProperty Name="DefaultLabelPosition" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="PrimaryCommands" />
       <RootProperty Name="IsOpen" />
       <RootProperty Name="OverflowButtonVisibility" />
       <RootProperty Name="Content" />
-      <RootProperty Name="PrimaryCommands" />
-      <RootProperty Name="Margin" />
-      <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="Style" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBar">
       <RootProperty Name="ClosedDisplayMode" />
@@ -826,6 +824,37 @@
       <RootProperty Name="To" />
       <RootProperty Name="Storyboard" />
     </RootType>
+    <RootType FullName="SMPlayer.PlaylistControl">
+      <RootProperty Name="AllowReorder" />
+      <RootProperty Name="AlternatingRowColor" />
+      <RootProperty Name="ItemsSource" />
+      <RootProperty Name="Header" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="Visibility" />
+      <RootProperty Name="Background" />
+      <RootProperty Name="Theme" />
+    </RootType>
+    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.ScrollHeader">
+      <RootProperty Name="Mode" />
+      <RootProperty Name="Content" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">
+      <RootProperty Name="Margin" />
+      <RootProperty Name="Icon" />
+      <RootProperty Name="IsEnabled" />
+      <RootProperty Name="Label" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="Visibility" />
+      <RootEvent Name="Click" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.AdaptiveTrigger">
+      <RootProperty Name="MinWindowWidth" />
+    </RootType>
+    <RootType FullName="SMPlayer.HeaderedPlaylistControl">
+      <RootProperty Name="IsPlaylist" />
+      <RootProperty Name="MusicCollection" />
+      <RootEvent Name="Loaded" />
+    </RootType>
     <RootType FullName="SMPlayer.TemplateSelector.FolderTreeTemplateSelector">
       <RootProperty Name="FileTemplate" />
       <RootProperty Name="FolderTemplate" />
@@ -842,16 +871,6 @@
       <RootProperty Name="Visibility" />
     </RootType>
     <RootType FullName="SMPlayer.LocalFoldersPage" />
-    <RootType FullName="SMPlayer.PlaylistControl">
-      <RootProperty Name="Margin" />
-      <RootProperty Name="AlternatingRowColor" />
-      <RootProperty Name="ItemsSource" />
-      <RootProperty Name="Visibility" />
-      <RootProperty Name="Background" />
-      <RootProperty Name="Theme" />
-      <RootProperty Name="AllowReorder" />
-      <RootProperty Name="Header" />
-    </RootType>
     <RootType FullName="SMPlayer.LocalMusicPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.Frame">
       <RootProperty Name="IsNavigationStackEnabled" />
@@ -866,9 +885,6 @@
     <RootType FullName="Windows.UI.Xaml.Input.KeyboardAccelerator">
       <RootProperty Name="Key" />
       <RootProperty Name="Modifiers" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.AdaptiveTrigger">
-      <RootProperty Name="MinWindowWidth" />
     </RootType>
     <RootType FullName="SMPlayer.MediaControl">
       <RootProperty Name="Mode" />
@@ -898,14 +914,6 @@
       <RootProperty Name="VerticalOffset" />
     </RootType>
     <RootType FullName="SMPlayer.NowPlayingFullPage" />
-    <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">
-      <RootProperty Name="Icon" />
-      <RootProperty Name="IsEnabled" />
-      <RootProperty Name="Label" />
-      <RootProperty Name="Margin" />
-      <RootProperty Name="Style" />
-      <RootEvent Name="Click" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ContentDialog">
       <RootProperty Name="Resources" />
       <RootProperty Name="Content" />
@@ -976,10 +984,6 @@
       <RootEvent Name="DragItemsCompleted" />
       <RootEvent Name="SelectionChanged" />
       <RootEvent Name="TabClosing" />
-    </RootType>
-    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.ScrollHeader">
-      <RootProperty Name="Mode" />
-      <RootProperty Name="Content" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.RotateTransform" />
     <RootType FullName="SMPlayer.PlaylistsPage" />

@@ -72,7 +72,7 @@ namespace SMPlayer.Models
             Sort();
         }
 
-        public async Task<List<BitmapImage>> GetThumbnails()
+        public async Task<List<BitmapImage>> GetThumbnailsAsync()
         {
             List<BitmapImage> Thumbnails = new List<BitmapImage>();
             foreach (var group in Songs.GroupBy((m) => m.Album))

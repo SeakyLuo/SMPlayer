@@ -367,6 +367,9 @@
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Dictionaries\PlaylistCommandBar.xbf">
       <PackagePath>Dictionaries\PlaylistCommandBar.xbf</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Controls\HeaderedPlaylistControl.xbf">
+      <PackagePath>Controls\HeaderedPlaylistControl.xbf</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\LocalFoldersPage.xbf">
       <PackagePath>LocalFoldersPage.xbf</PackagePath>
     </AppxPackagedFile>

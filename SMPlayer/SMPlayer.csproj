@@ -133,6 +133,9 @@
     <Compile Include="Controls\PlaylistControlItem.xaml.cs">
       <DependentUpon>PlaylistControlItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\HeaderedPlaylistControl.xaml.cs">
+      <DependentUpon>HeaderedPlaylistControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\MusicHelper.cs" />
     <Compile Include="TemplateSelector\FolderTreeTemplateSelector.cs" />
     <Compile Include="Helpers\MenuFlyoutHelper.cs" />
@@ -335,6 +338,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dictionaries\PlaylistCommandBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\HeaderedPlaylistControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

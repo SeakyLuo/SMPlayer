@@ -246,3 +246,8 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SMPlayer.csprojAssem
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Dictionaries\BackButton.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dictionaries\BackButton.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dictionaries\BackButton.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Controls\HeaderedPlaylistControl.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\HeaderedPlaylistControl.g.i.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\HeaderedPlaylistControl.g.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\HeaderedPlaylistControl.xaml
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\HeaderedPlaylistControl.xbf

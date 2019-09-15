@@ -28,7 +28,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class PlaylistsPage : Page, RenameActionListener, MusicSwitchingListener
+    public sealed partial class PlaylistsPage : Page, RenameActionListener
     {
         public static ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
         private ObservableCollection<Playlist> playlists
@@ -36,11 +36,8 @@ namespace SMPlayer
             get => Playlists;
             set => Playlists = value;
         }
-        private Dictionary<string, List<BitmapImage>> PlaylistThumbnailDict = new Dictionary<string, List<BitmapImage>>();
-        private Random random = new Random();
         private RenameDialog dialog;
-        private Image Thumbnail;
-        private Grid PlaylistInfoGrid;
+        private HeaderedPlaylistControl playlistControl;
         public PlaylistsPage()
         {
             this.InitializeComponent();
@@ -80,8 +77,7 @@ namespace SMPlayer
             foreach (var music in playlist.Songs)
                 music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
             SortByButton.Label = "Sort By " + playlist.Criterion.ToStr();
-            if (Thumbnail != null) SetPlaylistCover(playlist);
-            if (PlaylistInfoGrid != null) SetGridBackground();
+            if (playlistControl != null) playlistControl.SetPlaylistArt(playlist);
         }
 
         private void DeleteClick(object sender, RoutedEventArgs e)
@@ -89,6 +85,7 @@ namespace SMPlayer
             var playlist = (sender as MenuFlyoutItem).DataContext as Playlist;
             DeletePlaylist(playlist);
         }
+
         private async void RenameClick(object sender, RoutedEventArgs e)
         {
             var flyoutItem = sender as MenuFlyoutItem;
@@ -141,7 +138,7 @@ namespace SMPlayer
             DeletePlaylist(playlist);
         }
 
-        private async void DeletePlaylist(Playlist playlist)
+        public static async void DeletePlaylist(Playlist playlist)
         {
             // Create the message dialog and set its content
             var messageDialog = new MessageDialog(string.Format("Do you want to delete playlist {0}?", playlist.Name))
@@ -165,6 +162,10 @@ namespace SMPlayer
 
         public bool Confirm(string OldName, string NewName)
         {
+            return ConfirmRenaming(dialog, OldName, NewName);
+        }
+        public static bool ConfirmRenaming(RenameDialog dialog, string OldName, string NewName)
+        {
             if (string.IsNullOrEmpty(NewName) || string.IsNullOrWhiteSpace(NewName))
             {
                 dialog.ShowError(ErrorOption.EmptyOrWhiteSpace);
@@ -179,7 +180,7 @@ namespace SMPlayer
             {
                 case TitleOption.NewPlaylist:
                     Playlist playlist = new Playlist(NewName);
-                    Playlists.Add(playlist);
+                    PlaylistsPage.Playlists.Add(playlist);
                     Settings.settings.Playlists.Add(playlist);
                     break;
                 case TitleOption.Rename:
@@ -187,71 +188,11 @@ namespace SMPlayer
                     {
                         int index = Settings.settings.Playlists.FindIndex((p) => p.Name == OldName);
                         Settings.settings.Playlists[index].Name = NewName;
-                        Playlists[index].Name = NewName;
+                        PlaylistsPage.Playlists[index].Name = NewName;
                     }
                     break;
             }
             return true;
-        }
-
-        private void Shuffle_Click(object sender, RoutedEventArgs e)
-        {
-            var playlist = (sender as FrameworkElement).DataContext as Playlist;
-            MediaHelper.ShuffleAndPlay(playlist.Songs);
-        }
-        private void AddTo_Click(object sender, RoutedEventArgs e)
-        {
-            var element = sender as FrameworkElement;
-            MenuFlyoutHelper.SetAddToMenu(sender, (element.DataContext as Playlist).Name).ShowAt(element);
-        }
-        private async void Rename_Click(object sender, RoutedEventArgs e)
-        {
-            var playlist = (sender as FrameworkElement).DataContext as Playlist;
-            dialog = new RenameDialog(this as RenameActionListener, TitleOption.Rename, playlist.Name);
-            await dialog.ShowAsync();
-        }
-        private void Delete_Click(object sender, RoutedEventArgs e)
-        {
-            var playlist = (sender as FrameworkElement).DataContext as Playlist;
-            DeletePlaylist(playlist);
-        }
-        private void PlaylistCover_Loaded(object sender, RoutedEventArgs e)
-        {
-            Thumbnail = sender as Image;
-            SetPlaylistCover(PlaylistTabView.SelectedItem as Playlist);
-        }
-
-        private async void SetPlaylistCover(Playlist playlist)
-        {
-            if (!PlaylistThumbnailDict.TryGetValue(playlist.Name, out List<BitmapImage> thumbnails))
-            {
-                thumbnails = await playlist.GetThumbnails();
-                PlaylistThumbnailDict[playlist.Name] = thumbnails;
-            }
-            if (Thumbnail == null) return;
-            Thumbnail.Source = thumbnails.Count == 0 ? Helper.DefaultAlbumCover : thumbnails[random.Next(thumbnails.Count)];
-            if (PlaylistInfoGrid != null) SetGridBackground();
-        }
-
-        private void PlaylistInfoGrid_Loaded(object sender, RoutedEventArgs e)
-        {
-            PlaylistInfoGrid = sender as Grid;
-            SetGridBackground();
-        }
-
-        private async void SetGridBackground()
-        {
-            var playlist = PlaylistTabView.SelectedItem as Playlist;
-            PlaylistInfoGrid.Background = playlist.Songs.Count == 0 ? ColorHelper.HighlightBrush : await Helper.GetThumbnailMainColor(Thumbnail, false);
-        }
-
-        public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
-        {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            {
-                var playlist = PlaylistTabView.SelectedItem as Playlist;
-                MediaHelper.FindMusicAndSetPlaying(playlist.Songs, current, next);
-            });
         }
 
         private void OpenPlaylistsFlyout(object sender, object e)
@@ -302,6 +243,11 @@ namespace SMPlayer
                 };
                 flyout.Items.Add(radioItem);
             }
+        }
+
+        private void HeaderedPlaylistControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            playlistControl = sender as HeaderedPlaylistControl;
         }
     }
 }
