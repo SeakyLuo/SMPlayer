@@ -379,9 +379,12 @@ namespace SMPlayer
         {
             RepeatButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            ShuffleToolTip.Content = "Shuffle: " + (isChecked ? "Enabled" : "Disabled");
-            RepeatToolTip.Content = "Repeat: Disabled";
-            RepeatOneToolTip.Content = "Repeat One: Disabled";
+            ShuffleToolTip.Content = MainMoreShuffleButton.Label = "Shuffle: " + (isChecked ? "Enabled" : "Disabled");
+            RepeatToolTip.Content = MainMoreRepeatButton.Label = "Repeat: Disabled";
+            RepeatOneToolTip.Content = MainMoreRepeatOneButton.Label = "Repeat One: Disabled";
+            MainMoreShuffleButton.IconBackground = ColorHelper.GrayBrush;
+            MainMoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
+            MainMoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
             SetToolTips();
             var mode = isChecked ? PlayMode.Shuffle : PlayMode.Once;
             if (mode != Settings.settings.Mode) MediaHelper.SetMode(mode);
@@ -398,9 +401,12 @@ namespace SMPlayer
         {
             ShuffleButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            ShuffleToolTip.Content = "Shuffle: Disabled";
-            RepeatToolTip.Content = "Repeat: " + (isChecked ? "Enabled" : "Disabled");
-            RepeatOneToolTip.Content = "Repeat One: Disabled";
+            ShuffleToolTip.Content = MainMoreShuffleButton.Label = "Shuffle: Disabled";
+            RepeatToolTip.Content = MainMoreRepeatButton.Label = "Repeat: " + (isChecked ? "Enabled" : "Disabled");
+            RepeatOneToolTip.Content = MainMoreRepeatOneButton.Label = "Repeat One: Disabled";
+            MainMoreShuffleButton.IconBackground = ColorHelper.TransparentBrush;
+            MainMoreRepeatButton.IconBackground = ColorHelper.GrayBrush;
+            MainMoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
             SetToolTips();
             var mode = isChecked ? PlayMode.Repeat : PlayMode.Once;
             if (mode != Settings.settings.Mode) MediaHelper.SetMode(mode);
@@ -418,9 +424,12 @@ namespace SMPlayer
         {
             ShuffleButton.IsChecked = false;
             RepeatButton.IsChecked = false;
-            ShuffleToolTip.Content = "Shuffle: Disabled";
-            RepeatToolTip.Content = "Repeat: Disabled";
-            RepeatOneToolTip.Content = "Repeat One: " + (isChecked ? "Enabled" : "Disabled");
+            ShuffleToolTip.Content = MainMoreShuffleButton.Label = "Shuffle: Disabled";
+            RepeatToolTip.Content = MainMoreRepeatButton.Label = "Repeat: Disabled";
+            RepeatOneToolTip.Content = MainMoreRepeatOneButton.Label = "Repeat One: " + (isChecked ? "Enabled" : "Disabled");
+            MainMoreShuffleButton.IconBackground = ColorHelper.TransparentBrush;
+            MainMoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
+            MainMoreRepeatOneButton.IconBackground = ColorHelper.GrayBrush;
             SetToolTips();
             var mode = isChecked ? PlayMode.RepeatOne : PlayMode.Once;
             if (mode != Settings.settings.Mode) MediaHelper.SetMode(mode);
@@ -603,11 +612,6 @@ namespace SMPlayer
         private void MoreMiniPlayItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
             MiniPlayButton_Click(sender, null);
-        }
-
-        private void CarouselButton_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void PlaylistButton_Click(object sender, RoutedEventArgs e)

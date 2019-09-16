@@ -19,7 +19,7 @@
                 <Setter Property="LabelPosition" Value="Right" />
                 <Setter Property="Padding" Value="4,2,15,2" />
                 <Setter Property="FontSize" Value="14" />
-                <Setter Property="Height" Value="30" />
+                <Setter Property="Height" Value="36" />
             </Style.Setters>
         </Style>
         <Style x:Key="MediaControlIconTextButtonFontIcon" TargetType="FontIcon">
@@ -131,8 +131,8 @@
                             <StackPanel Margin="-12,-4">
                                 <local:IconTextButton
                                     x:Name="MainMoreShuffleButton"
-                                    IconTextMargin="10,0,0,0"
                                     IconRadius="15"
+                                    IconTextMargin="10,0,0,0"
                                     Label="Shuffle: Disabled"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
                                     Tapped="MoreShuffleButton_Tapped">
@@ -153,8 +153,8 @@
                                 </local:IconTextButton>
                                 <local:IconTextButton
                                     x:Name="MainMoreRepeatOneButton"
-                                    IconTextMargin="10,0,0,0"
                                     IconRadius="15"
+                                    IconTextMargin="10,0,0,0"
                                     Label="Repeat One: Disabled"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
                                     Tapped="MoreRepeatOneButton_Tapped">
@@ -180,7 +180,7 @@
                                         Foreground="Black" />
                                     <Slider
                                         x:Name="MainMoreVolumeSlider"
-                                        Width="150"
+                                        Width="135"
                                         Padding="5,0,0,0"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Center"
@@ -204,8 +204,8 @@
                                 </local:IconTextButton>
                                 <local:IconTextButton
                                     x:Name="MainMediaControlMoreMiniPlayItem"
-                                    IconTextMargin="10,0,0,0"
                                     IconRadius="15"
+                                    IconTextMargin="10,0,0,0"
                                     Label="Mini Play"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
                                     Tapped="MoreMiniPlayItem_Tapped">
@@ -522,6 +522,45 @@
                             <Button.Flyout>
                                 <MenuFlyout>
                                     <MenuFlyoutItem
+                                        x:Name="PlaylistItem"
+                                        Click="SavePlaylistItem_Click"
+                                        Text="Now Playing Playlist"
+                                        Visibility="Collapsed">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xEA37;" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutItem
+                                        x:Name="MusicInfoItem"
+                                        Click="MusicInfoButton_Click"
+                                        Icon="MusicInfo"
+                                        Text="Show Music Info"
+                                        Visibility="Collapsed" />
+                                    <MenuFlyoutItem
+                                        x:Name="LyricsItem"
+                                        Click="LyricsButton_Click"
+                                        Text="Show Lyrics"
+                                        Visibility="Collapsed">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xEC42;" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutItem
+                                        x:Name="FullScreenItem"
+                                        Click="FullScreenButton_Click"
+                                        Icon="Fullscreen"
+                                        Text="Full Screen"
+                                        Visibility="Collapsed" />
+                                    <MenuFlyoutItem
+                                        x:Name="MiniPlayItem"
+                                        Click="MiniPlayButton_Click"
+                                        Text="Mini Player"
+                                        Visibility="Collapsed">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xE744;" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutItem
                                         x:Name="SavePlaylistItem"
                                         Click="SavePlaylistItem_Click"
                                         Icon="Add"
@@ -541,37 +580,36 @@
                             Click="PlaylistButton_Click"
                             Content="&#xEA37;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
-                            ToolTipService.ToolTip="Now Playing Playlist" />
+                            ToolTipService.ToolTip="Now Playing Playlist"
+                            Visibility="Visible" />
                         <Button
                             x:Name="MusicInfoButton"
                             Click="MusicInfoButton_Click"
                             Content="&#xE90B;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
-                            ToolTipService.ToolTip="Show Music Info" />
+                            ToolTipService.ToolTip="Show Music Info"
+                            Visibility="Visible" />
                         <Button
                             x:Name="LyricsButton"
                             Click="LyricsButton_Click"
                             Content="&#xEC42;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
-                            ToolTipService.ToolTip="Show Lyrics" />
-                        <Button
-                            x:Name="CarouselButton"
-                            Click="CarouselButton_Click"
-                            Content="&#xE7C5;"
-                            Style="{StaticResource DarkMediaControlButtonStyle}"
-                            ToolTipService.ToolTip="Carousel View" />
+                            ToolTipService.ToolTip="Show Lyrics"
+                            Visibility="Visible" />
                         <Button
                             x:Name="FullScreenButton"
                             Click="FullScreenButton_Click"
                             Content="&#xE740;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
-                            ToolTipService.ToolTip="Full Screen" />
+                            ToolTipService.ToolTip="Full Screen"
+                            Visibility="Visible" />
                         <Button
                             x:Name="MiniPlayButton"
                             Click="MiniPlayButton_Click"
                             Content="&#xE744;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
-                            ToolTipService.ToolTip="Mini Player" />
+                            ToolTipService.ToolTip="Mini Player"
+                            Visibility="Visible" />
                     </StackPanel>
                 </RelativePanel>
             </Grid>
@@ -599,6 +637,7 @@
                         <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
+                        <!--  Main  -->
                         <Setter Target="MainAlbumCover.Visibility" Value="Collapsed" />
                         <Setter Target="MainShuffleButton.Visibility" Value="Collapsed" />
                         <Setter Target="MainLikeToggleButton.Visibility" Value="Collapsed" />
@@ -617,6 +656,18 @@
                         <Setter Target="MainArtistTextBlock.Margin" Value="10,0,5,5" />
                         <Setter Target="MainArtistTextBlock.FontSize" Value="16" />
                         <Setter Target="MainButtonColumnDefinition.Width" Value="Auto" />
+                        <!--  Full  -->
+                        <Setter Target="PlaylistButton.Visibility" Value="Collapsed" />
+                        <Setter Target="MusicInfoButton.Visibility" Value="Collapsed" />
+                        <Setter Target="LyricsButton.Visibility" Value="Collapsed" />
+                        <Setter Target="FullScreenButton.Visibility" Value="Collapsed" />
+                        <Setter Target="MiniPlayButton.Visibility" Value="Collapsed" />
+                        <!--  Menu  -->
+                        <Setter Target="PlaylistItem.Visibility" Value="Visible" />
+                        <Setter Target="MusicInfoItem.Visibility" Value="Visible" />
+                        <Setter Target="LyricsItem.Visibility" Value="Visible" />
+                        <Setter Target="FullScreenItem.Visibility" Value="Visible" />
+                        <Setter Target="MiniPlayItem.Visibility" Value="Visible" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Width640">
@@ -624,7 +675,14 @@
                         <AdaptiveTrigger MinWindowWidth="640" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
+                        <!--  Main  -->
                         <Setter Target="MainLikeToggleButton.Visibility" Value="Collapsed" />
+                        <!--  Full  -->
+                        <Setter Target="FullScreenButton.Visibility" Value="Collapsed" />
+                        <Setter Target="MiniPlayButton.Visibility" Value="Collapsed" />
+                        <!--  Menu  -->
+                        <Setter Target="FullScreenItem.Visibility" Value="Visible" />
+                        <Setter Target="MiniPlayItem.Visibility" Value="Visible" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Width800">

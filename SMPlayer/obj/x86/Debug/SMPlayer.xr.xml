@@ -478,8 +478,8 @@
     <RootType FullName="Windows.UI.Xaml.Media.Animation.PointerUpThemeAnimation" />
     <RootType FullName="SMPlayer.IconTextButton">
       <RootProperty Name="LabelPosition" />
-      <RootProperty Name="IconTextMargin" />
       <RootProperty Name="IconRadius" />
+      <RootProperty Name="IconTextMargin" />
       <RootProperty Name="Label" />
       <RootProperty Name="Style" />
       <RootProperty Name="Icon" />
@@ -888,8 +888,9 @@
     </RootType>
     <RootType FullName="SMPlayer.LocalPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutItem">
-      <RootProperty Name="Icon" />
       <RootProperty Name="Text" />
+      <RootProperty Name="Visibility" />
+      <RootProperty Name="Icon" />
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Input.KeyboardAccelerator">

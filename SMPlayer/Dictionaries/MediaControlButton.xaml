@@ -114,6 +114,7 @@
         x:Key="DarkMediaControlButtonStyle"
         BasedOn="{StaticResource MediaControlBaseButtonStyle}"
         TargetType="Button">
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
