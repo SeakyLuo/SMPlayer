@@ -10,8 +10,6 @@ Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
 
-DarkLikeToggleButton?
-
 Localization.
 
 Cache Artists Result.
@@ -30,6 +28,8 @@ Clickable text.
 
 AlbumPage set TitleBar.
 
+Loading Progress.
+
 # TO FIX
 
 TreeView error.
@@ -43,3 +43,7 @@ Scroll Header Not sticky.
 Quick return footer.
 
 AutoSuggestBox lose focus.
+
+AfterSongsSet.
+
+Set Album Cover.

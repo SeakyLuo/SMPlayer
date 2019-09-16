@@ -202,7 +202,10 @@
             x:Name="MainMediaControl"
             Grid.Row="2"
             Mode="Main" />
-        <local:LoadingControl x:Name="MainLoadingControl" Grid.RowSpan="3" />
+        <local:LoadingControl
+            x:Name="MainLoadingControl"
+            Grid.RowSpan="3"
+            FontSize="36" />
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WindowWidthChange">
                 <VisualState x:Name="MinimumLayout">
@@ -219,6 +222,7 @@
                         <Setter Target="HeaderGrid.Background" Value="{StaticResource MinimalTitleBarColor}" />
                         <Setter Target="HeaderSearchButton.Visibility" Value="Visible" />
                         <Setter Target="MainNavigationViewHeader.Style" Value="{StaticResource CompactHeaderStyle}" />
+                        <Setter Target="MainLoadingControl.FontSize" Value="24" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="WideLayout">

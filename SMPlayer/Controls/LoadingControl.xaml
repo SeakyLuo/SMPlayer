@@ -6,8 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="300"
-    d:DesignWidth="400"
     mc:Ignorable="d">
 
     <controls:Loading x:Name="MainControl">
@@ -26,7 +24,7 @@
                 x:Name="LoadingTextBlock"
                 Margin="0,45,0,0"
                 HorizontalAlignment="Center"
-                FontSize="36"
+                FontSize="{x:Bind FontSize}"
                 Foreground="White"
                 Text="Loading..." />
         </StackPanel>

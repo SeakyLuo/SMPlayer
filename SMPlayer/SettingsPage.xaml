@@ -10,17 +10,31 @@
     Loaded="Page_Loaded"
     mc:Ignorable="d">
     <Page.Resources>
+        <x:Double x:Key="SmallLabelFontSize">20</x:Double>
         <Style x:Key="SettingLabelStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="24" />
             <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Start" />
             <Setter Property="Margin" Value="0,9,20,9" />
+            <Setter Property="Height" Value="32" />
         </Style>
-        <Style x:Key="SolidColorButton" TargetType="Button">
+        <Style x:Key="MarginSetter" TargetType="Control">
+            <Setter Property="Margin" Value="9" />
+        </Style>
+        <AcrylicBrush
+            x:Key="SolidColorButtonPointerOverBrush"
+            FallbackColor="{ThemeResource SystemColorHotlightColor}"
+            Opacity="0.8"
+            TintColor="{ThemeResource SystemColorHotlightColor}" />
+        <Style
+            x:Key="SolidColorButton"
+            BasedOn="{StaticResource MarginSetter}"
+            TargetType="Button">
             <Setter Property="Background" Value="{ThemeResource ButtonBackground}" />
             <Setter Property="BackgroundSizing" Value="OuterBorderEdge" />
             <Setter Property="Foreground" Value="{ThemeResource ButtonForeground}" />
             <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}" />
-            <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}" />
+            <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Padding" Value="{StaticResource ButtonPadding}" />
             <Setter Property="HorizontalAlignment" Value="Left" />
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -56,7 +70,7 @@
                                     <VisualState x:Name="PointerOver">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPointerOver}" />
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PointerOverHighlightBackgroundBrush}" />
                                             </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPointerOver}" />
@@ -70,7 +84,7 @@
                                     <VisualState x:Name="Pressed">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPressed}" />
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PressedHighlightBackgroundBrush}" />
                                             </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPressed}" />
@@ -103,68 +117,62 @@
         </Style>
     </Page.Resources>
 
-    <Grid>
-        <Grid Margin="20,10,40,10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Style="{StaticResource SettingLabelStyle}" Text="Music Folder:" />
+    <Grid Padding="20,10,20,10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+            <TextBlock
+                x:Name="MusicFolderLabel"
+                Style="{StaticResource SettingLabelStyle}"
+                Text="Music Folder:" />
+            <TextBlock
+                x:Name="LanguageLabel"
+                Style="{StaticResource SettingLabelStyle}"
+                Text="Language:" />
+            <TextBlock
+                x:Name="NotificationLabel"
+                Style="{StaticResource SettingLabelStyle}"
+                Text="Notification: " />
+            <TextBlock
+                x:Name="ThemeLabel"
+                Style="{StaticResource SettingLabelStyle}"
+                Text="Theme:" />
+        </StackPanel>
+        <StackPanel Grid.Column="1">
             <AutoSuggestBox
                 x:Name="PathBox"
-                Grid.Column="1"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
                 PlaceholderText="The Root Folder of Your Music Library"
-                QuerySubmitted="PathBox_QuerySubmitted">
+                QuerySubmitted="PathBox_QuerySubmitted"
+                Style="{StaticResource MarginSetter}">
                 <AutoSuggestBox.QueryIcon>
                     <FontIcon Glyph="&#xE838;" />
                 </AutoSuggestBox.QueryIcon>
             </AutoSuggestBox>
-            <TextBlock
-                Grid.Row="1"
-                Style="{StaticResource SettingLabelStyle}"
-                Text="Language:" />
             <ComboBox
                 x:Name="LanguageComboBox"
-                Grid.Row="1"
-                Grid.Column="1"
                 VerticalAlignment="Center"
-                SelectionChanged="LanguageComboBox_SelectionChanged">
+                SelectionChanged="LanguageComboBox_SelectionChanged"
+                Style="{StaticResource MarginSetter}">
                 <ComboBoxItem Content="Follow System" IsSelected="True" />
                 <ComboBoxItem Content="Chinese (Simplified)" />
                 <ComboBoxItem Content="Chinese (Traditional)" />
                 <ComboBoxItem Content="English" />
                 <ComboBoxItem Content="Japanese" />
             </ComboBox>
-            <TextBlock
-                Grid.Row="2"
-                Style="{StaticResource SettingLabelStyle}"
-                Text="Notification: " />
             <ComboBox
                 x:Name="NotificationComboBox"
-                Grid.Row="2"
-                Grid.Column="1"
                 VerticalAlignment="Center"
-                SelectionChanged="NotificationComboBox_SelectionChanged">
+                SelectionChanged="NotificationComboBox_SelectionChanged"
+                Style="{StaticResource MarginSetter}">
                 <ComboBoxItem Content="Always Shown" IsSelected="True" />
                 <ComboBoxItem Content="Music Changed" />
                 <ComboBoxItem Content="Never" />
             </ComboBox>
-            <TextBlock
-                Grid.Row="3"
-                Style="{StaticResource SettingLabelStyle}"
-                Text="Theme:" />
             <Button
-                Grid.Row="3"
-                Grid.Column="1"
                 Width="30"
                 Height="30"
                 HorizontalAlignment="Left"
@@ -195,6 +203,34 @@
                     </Flyout>
                 </Button.Flyout>
             </Button>
-        </Grid>
+        </StackPanel>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="WidthChange">
+                <VisualState x:Name="Wide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource MinimalNavigationViewWindowWidth}" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MusicFolderLabel" Storyboard.TargetProperty="FontSize">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SmallLabelFontSize}" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LanguageLabel" Storyboard.TargetProperty="FontSize">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SmallLabelFontSize}" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="NotificationLabel" Storyboard.TargetProperty="FontSize">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SmallLabelFontSize}" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ThemeLabel" Storyboard.TargetProperty="FontSize">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SmallLabelFontSize}" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </Page>
