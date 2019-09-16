@@ -11,12 +11,28 @@
     mc:Ignorable="d">
 
     <Page.Resources>
+        <x:Double x:Key="PlaylistTabFooterHeight">30</x:Double>
+        <x:Double x:Key="PlaylistTabFooterTranslationOffset">20</x:Double>
         <Storyboard x:Name="SpinArrowAnimation">
             <DoubleAnimation
                 By="180"
                 Storyboard.TargetName="UpArrowIcon"
                 Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
                 Duration="0:0:0.25" />
+        </Storyboard>
+        <Storyboard x:Name="HideFooterAnimation">
+            <DoubleAnimation
+                Storyboard.TargetName="PlaylistFooter"
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                To="0"
+                Duration="0:0:0.1" />
+        </Storyboard>
+        <Storyboard x:Name="ShowFooterAnimation">
+            <DoubleAnimation
+                Storyboard.TargetName="PlaylistFooter"
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                To="{StaticResource PlaylistTabFooterHeight}"
+                Duration="0:0:0" />
         </Storyboard>
         <Style x:Key="PlaylistIconTextButtonStyle" TargetType="local:IconTextButton">
             <Setter Property="VerticalAlignment" Value="Stretch" />
@@ -41,9 +57,7 @@
             TabNavigation="Cycle"
             TabWidthBehavior="Actual">
             <controls:TabView.Resources>
-                <x:Double x:Key="TabViewItemHeaderMinHeight">40</x:Double>
-                <x:Double x:Key="TabViewItemHeaderMinWidth">48</x:Double>
-                <x:Double x:Key="TabViewItemHeaderMaxWidth">200</x:Double>
+                <x:Double x:Key="TabViewItemHeaderMaxWidth">300</x:Double>
             </controls:TabView.Resources>
             <controls:TabView.ItemHeaderTemplate>
                 <DataTemplate x:DataType="data:Playlist">
@@ -99,7 +113,6 @@
                 <Button
                     x:Name="EditPlaylistButton"
                     Width="48"
-                    Height="{StaticResource TabViewItemHeaderMinHeight}"
                     Background="Transparent"
                     BorderThickness="0"
                     Click="EditPlaylistButton_Click"
@@ -111,10 +124,17 @@
             </controls:TabView.TabEndHeader>
 
             <controls:TabView.Footer>
-                <RelativePanel>
+                <RelativePanel
+                    x:Name="PlaylistFooter"
+                    Height="{StaticResource PlaylistTabFooterHeight}"
+                    RenderTransformOrigin="0,0">
+                    <RelativePanel.RenderTransform>
+                        <TranslateTransform />
+                    </RelativePanel.RenderTransform>
                     <local:IconTextButton
                         x:Name="ShowAllPlaylistButton"
                         Padding="10,5"
+                        IconTextMargin="0,0,10,0"
                         LabelPosition="Left"
                         RelativePanel.AlignRightWithPanel="True"
                         Style="{StaticResource PlaylistIconTextButtonStyle}"
@@ -140,6 +160,7 @@
                         Padding="10,5"
                         HorizontalAlignment="Right"
                         Icon="Sort"
+                        IconTextMargin="10,0,0,0"
                         Label="Sort By Title"
                         LabelPosition="Right"
                         RelativePanel.AlignLeftWithPanel="True"

@@ -9,6 +9,7 @@
 
     <Grid
         x:Name="Root"
+        Margin="{x:Bind Margin}"
         Padding="{x:Bind Padding}"
         Background="{x:Bind Background}"
         CornerRadius="{x:Bind CornerRadius}"
@@ -20,10 +21,9 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <Viewbox
-            x:Name="ContentViewbox"
+        <Border
+            x:Name="IconBackgroundBorder"
             Grid.Column="1"
-            Height="{ThemeResource AppBarButtonContentHeight}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
             AutomationProperties.AccessibilityView="Raw">
@@ -31,11 +31,11 @@
                 x:Name="IconContent"
                 Content="{x:Bind Icon}"
                 Foreground="{x:Bind Foreground}" />
-        </Viewbox>
+        </Border>
         <TextBlock
             x:Name="LabelTextBlock"
             Grid.Column="2"
-            Margin="10,0,0,0"
+            Margin="{x:Bind IconTextMargin}"
             VerticalAlignment="Center"
             AutomationProperties.AccessibilityView="Raw"
             FontSize="{x:Bind FontSize}"

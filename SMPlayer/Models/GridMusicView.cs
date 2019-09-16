@@ -20,7 +20,7 @@ namespace SMPlayer.Models
         {
             Name = music.Name;
             Artist = string.IsNullOrEmpty(music.Artist) ? "Unknown Artist" : music.Artist;
-            Thumbnail = await Helper.GetThumbnailAsync(music.Path);
+            Thumbnail = await Helper.GetThumbnailAsync(music);
             Source = music;
         }
 

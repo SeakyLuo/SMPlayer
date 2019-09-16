@@ -40,7 +40,7 @@ namespace SMPlayer.Models
             BitmapImage thumbnail;
             foreach (var music in tree.Files.OrderBy((m) => m.Name))
             {
-                thumbnail = await Helper.GetThumbnailAsync(music.Path, false);
+                thumbnail = await Helper.GetThumbnailAsync(music, false);
                 if (thumbnail != null) thumbnails.Add(thumbnail);
                 if (thumbnails.Count == 4) break;
             }

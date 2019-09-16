@@ -38,6 +38,7 @@ namespace SMPlayer
         public static ElementTheme CurrentTheme;
         private static List<MusicRequestListener> MusicRequestListeners = new List<MusicRequestListener>();
         public bool AlternatingRowColor { get; set; }
+        public PlaylistScrollListener ScrollListener;
         public bool AllowReorder
         {
             get => SongsListView.CanReorderItems;
@@ -159,5 +160,18 @@ namespace SMPlayer
                 flyout.Items.Add(item);
             }
         }
+
+        private double ScrollPosition = 0d;
+        private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+        {
+            var viewer = sender as ScrollViewer;
+            if (ScrollListener != null) ScrollListener.Scrolled(ScrollPosition, viewer.VerticalOffset);
+            ScrollPosition = viewer.VerticalOffset;
+        }
+    }
+
+    public interface PlaylistScrollListener
+    {
+        void Scrolled(double before, double after);
     }
 }

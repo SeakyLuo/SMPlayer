@@ -28,11 +28,44 @@ namespace SMPlayer
             {
                 bool isLeft = value == IconTextButtonLabelPosition.Left;
                 Grid.SetColumn(LabelTextBlock, isLeft ? 0 : 2);
-                LabelTextBlock.Margin = new Thickness(isLeft ? 0 : 10, 0, isLeft ? 10 : 0, 0);
                 labelPosition = value;
             }
         }
         private IconTextButtonLabelPosition labelPosition;
+        public static readonly DependencyProperty LabelPositionProperty = DependencyProperty.Register("LabelPosition", 
+                                                                                                      typeof(IconTextButtonLabelPosition), 
+                                                                                                      typeof(IconTextButton), 
+                                                                                                      new PropertyMetadata(IconTextButtonLabelPosition.Left));
+        public Thickness IconTextMargin
+        {
+            get => LabelTextBlock.Margin;
+            set => LabelTextBlock.Margin = value;
+        }
+        public static readonly DependencyProperty IconTextMarginProperty = DependencyProperty.Register("IconTextMargin",
+                                                                                                       typeof(Thickness),
+                                                                                                       typeof(IconTextButton),
+                                                                                                       new PropertyMetadata(null));
+
+        public Brush IconBackground
+        {
+            get => IconBackgroundBorder.Background;
+            set => IconBackgroundBorder.Background = value;
+        }
+
+        public double IconRadius
+        {
+            get => IconBackgroundBorder.CornerRadius.TopLeft;
+            set
+            {
+                IconBackgroundBorder.Width = value * 2;
+                IconBackgroundBorder.Height = value * 2;
+                IconBackgroundBorder.CornerRadius = new CornerRadius(value);
+            }
+        }
+        public static readonly DependencyProperty IconRadiusProperty = DependencyProperty.Register("IconRadius",
+                                                                                              typeof(double),
+                                                                                              typeof(IconTextButton),
+                                                                                              new PropertyMetadata(15));
 
         public FlyoutBase Flyout { get; set; }
         public IconTextButton()

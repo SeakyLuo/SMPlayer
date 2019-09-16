@@ -70,7 +70,7 @@ namespace SMPlayer
                 Windows.UI.Xaml.Media.Imaging.BitmapImage thumbnail = null;
                 foreach (Music m in group)
                 {
-                    thumbnail = await Helper.GetThumbnailAsync(m.GetShortPath(), false);
+                    thumbnail = await Helper.GetThumbnailAsync(m, false);
                     if (thumbnail != null)
                     {
                         music = m;

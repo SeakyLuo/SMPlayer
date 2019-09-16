@@ -293,8 +293,7 @@ namespace SMPlayer
                 return;
             }
             MediaSlider.IsEnabled = true;
-            var thumbnail = await Helper.GetStorageItemThumbnailAsync(music.Path);
-            Debug.WriteLine("mediacontrol");
+            var thumbnail = await Helper.GetStorageItemThumbnailAsync(music);
             AlbumCover.Source = thumbnail == null ? Helper.DefaultAlbumCover : thumbnail.GetBitmapImage();
             TitleTextBlock.Text = music.Name;
             ArtistTextBlock.Text = music.Artist;
@@ -366,6 +365,10 @@ namespace SMPlayer
             if (MediaHelper.ShuffleEnabled)
                 MediaHelper.ShuffleOthers();
         }
+        private void MoreShuffleButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            ShuffleButton_Click(sender, null);
+        }
         private void SetToolTips()
         {
             ToolTipService.SetToolTip(ShuffleButton, ShuffleToolTip);
@@ -383,10 +386,13 @@ namespace SMPlayer
             var mode = isChecked ? PlayMode.Shuffle : PlayMode.Once;
             if (mode != Settings.settings.Mode) MediaHelper.SetMode(mode);
         }
-
         private void RepeatButton_Click(object sender, RoutedEventArgs e)
         {
             SetRepeat((bool)RepeatButton.IsChecked);
+        }
+        private void MoreRepeatButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            RepeatButton_Click(sender, null);
         }
         public void SetRepeat(bool isChecked)
         {
@@ -403,6 +409,10 @@ namespace SMPlayer
         private void RepeatOneButton_Click(object sender, RoutedEventArgs e)
         {
             SetRepeatOne((bool)RepeatOneButton.IsChecked);
+        }
+        private void MoreRepeatOneButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            RepeatOneButton_Click(sender, null);
         }
         public void SetRepeatOne(bool isChecked)
         {
@@ -554,7 +564,7 @@ namespace SMPlayer
         private static SymbolIcon FullScreenIcon = new SymbolIcon(Symbol.FullScreen);
         private static SymbolIcon BackToWindowIcon = new SymbolIcon(Symbol.BackToWindow);
 
-        private void FullScreenClick()
+        private void FullScreenButton_Click(object sender, RoutedEventArgs e)
         {
             if (!ApplicationView.GetForCurrentView().IsFullScreenMode)
             {
@@ -579,19 +589,20 @@ namespace SMPlayer
                 }
             }
         }
-        private void FullScreenButton_Click(object sender, RoutedEventArgs e)
-        {
-            FullScreenClick();
-        }
 
-        private void MainMediaControlMoreFullScreenItem_Tapped(object sender, TappedRoutedEventArgs e)
+        private void MoreFullScreenItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            FullScreenClick();
+            FullScreenButton_Click(sender, null);
         }
 
         private void MiniPlayButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void MoreMiniPlayItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            MiniPlayButton_Click(sender, null);
         }
 
         private void CarouselButton_Click(object sender, RoutedEventArgs e)

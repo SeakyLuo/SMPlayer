@@ -1,5 +1,4 @@
-﻿using Id3;
-using Microsoft.Toolkit.Uwp.Notifications;
+﻿using Microsoft.Toolkit.Uwp.Notifications;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;

@@ -26,27 +26,6 @@
           "lib/uap10.0/ColorCode.UWP.dll": {}
         }
       },
-      "ID3/0.6.0": {
-        "type": "package",
-        "dependencies": {
-          "JetBrains.Annotations": "2018.3.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Id3.Net.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Id3.Net.dll": {}
-        }
-      },
-      "JetBrains.Annotations/2018.3.0": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/JetBrains.Annotations.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/JetBrains.Annotations.dll": {}
-        }
-      },
       "Microsoft.Net.Native.Compiler/2.2.7-rel-27913-00": {
         "type": "package",
         "dependencies": {
@@ -647,27 +626,6 @@
         },
         "runtime": {
           "lib/uap10.0/ColorCode.UWP.dll": {}
-        }
-      },
-      "ID3/0.6.0": {
-        "type": "package",
-        "dependencies": {
-          "JetBrains.Annotations": "2018.3.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Id3.Net.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Id3.Net.dll": {}
-        }
-      },
-      "JetBrains.Annotations/2018.3.0": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/JetBrains.Annotations.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/JetBrains.Annotations.dll": {}
         }
       },
       "Microsoft.Net.Native.Compiler/2.2.7-rel-27913-00": {
@@ -1372,27 +1330,6 @@
         },
         "runtime": {
           "lib/uap10.0/ColorCode.UWP.dll": {}
-        }
-      },
-      "ID3/0.6.0": {
-        "type": "package",
-        "dependencies": {
-          "JetBrains.Annotations": "2018.3.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Id3.Net.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Id3.Net.dll": {}
-        }
-      },
-      "JetBrains.Annotations/2018.3.0": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/JetBrains.Annotations.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/JetBrains.Annotations.dll": {}
         }
       },
       "Microsoft.Net.Native.Compiler/2.2.7-rel-27913-00": {
@@ -2100,27 +2037,6 @@
           "lib/uap10.0/ColorCode.UWP.dll": {}
         }
       },
-      "ID3/0.6.0": {
-        "type": "package",
-        "dependencies": {
-          "JetBrains.Annotations": "2018.3.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Id3.Net.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Id3.Net.dll": {}
-        }
-      },
-      "JetBrains.Annotations/2018.3.0": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/JetBrains.Annotations.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/JetBrains.Annotations.dll": {}
-        }
-      },
       "Microsoft.Net.Native.Compiler/2.2.7-rel-27913-00": {
         "type": "package",
         "dependencies": {
@@ -2811,27 +2727,6 @@
         },
         "runtime": {
           "lib/uap10.0/ColorCode.UWP.dll": {}
-        }
-      },
-      "ID3/0.6.0": {
-        "type": "package",
-        "dependencies": {
-          "JetBrains.Annotations": "2018.3.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Id3.Net.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Id3.Net.dll": {}
-        }
-      },
-      "JetBrains.Annotations/2018.3.0": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/JetBrains.Annotations.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/JetBrains.Annotations.dll": {}
         }
       },
       "Microsoft.Net.Native.Compiler/2.2.7-rel-27913-00": {
@@ -3536,27 +3431,6 @@
         },
         "runtime": {
           "lib/uap10.0/ColorCode.UWP.dll": {}
-        }
-      },
-      "ID3/0.6.0": {
-        "type": "package",
-        "dependencies": {
-          "JetBrains.Annotations": "2018.3.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Id3.Net.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Id3.Net.dll": {}
-        }
-      },
-      "JetBrains.Annotations/2018.3.0": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/JetBrains.Annotations.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/JetBrains.Annotations.dll": {}
         }
       },
       "Microsoft.Net.Native.Compiler/2.2.7-rel-27913-00": {
@@ -4264,27 +4138,6 @@
           "lib/uap10.0/ColorCode.UWP.dll": {}
         }
       },
-      "ID3/0.6.0": {
-        "type": "package",
-        "dependencies": {
-          "JetBrains.Annotations": "2018.3.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Id3.Net.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Id3.Net.dll": {}
-        }
-      },
-      "JetBrains.Annotations/2018.3.0": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/JetBrains.Annotations.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/JetBrains.Annotations.dll": {}
-        }
-      },
       "Microsoft.Net.Native.Compiler/2.2.7-rel-27913-00": {
         "type": "package",
         "dependencies": {
@@ -4987,27 +4840,6 @@
         },
         "runtime": {
           "lib/uap10.0/ColorCode.UWP.dll": {}
-        }
-      },
-      "ID3/0.6.0": {
-        "type": "package",
-        "dependencies": {
-          "JetBrains.Annotations": "2018.3.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Id3.Net.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Id3.Net.dll": {}
-        }
-      },
-      "JetBrains.Annotations/2018.3.0": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/JetBrains.Annotations.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/JetBrains.Annotations.dll": {}
         }
       },
       "Microsoft.Net.Native.Compiler/2.2.7-rel-27913-00": {
@@ -5717,42 +5549,6 @@
         "lib/uap10.0/ColorCode.UWP.dll",
         "lib/uap10.0/ColorCode.UWP.pdb",
         "lib/uap10.0/ColorCode.UWP.pri"
-      ]
-    },
-    "ID3/0.6.0": {
-      "sha512": "7oHf3mjkeJp5xHAOqE0y9xxnFbJH7VifL1EHjRNHY6LiC2LeMERTTmEQBJXaqrIJ5KgehUkY5XhuskaPoanUqA==",
-      "type": "package",
-      "path": "id3/0.6.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "id3.0.6.0.nupkg.sha512",
-        "id3.nuspec",
-        "lib/net40/Id3.Net.dll",
-        "lib/net40/Id3.Net.xml",
-        "lib/netstandard2.0/Id3.Net.dll",
-        "lib/netstandard2.0/Id3.Net.xml"
-      ]
-    },
-    "JetBrains.Annotations/2018.3.0": {
-      "sha512": "Hbt5edAd7OfnYwsRayYguECzIJ4FUWDGjeEHsmxIgEpBbqZglhpxqjPWnWN/pEQM1HFGojMrR9dsywmC8pPTeQ==",
-      "type": "package",
-      "path": "jetbrains.annotations/2018.3.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "jetbrains.annotations.2018.3.0.nupkg.sha512",
-        "jetbrains.annotations.nuspec",
-        "lib/net20/JetBrains.Annotations.dll",
-        "lib/net20/JetBrains.Annotations.xml",
-        "lib/netstandard1.0/JetBrains.Annotations.deps.json",
-        "lib/netstandard1.0/JetBrains.Annotations.dll",
-        "lib/netstandard1.0/JetBrains.Annotations.xml",
-        "lib/netstandard2.0/JetBrains.Annotations.deps.json",
-        "lib/netstandard2.0/JetBrains.Annotations.dll",
-        "lib/netstandard2.0/JetBrains.Annotations.xml",
-        "lib/portable40-net40+sl5+win8+wp8+wpa81/JetBrains.Annotations.dll",
-        "lib/portable40-net40+sl5+win8+wp8+wpa81/JetBrains.Annotations.xml"
       ]
     },
     "Microsoft.Net.Native.Compiler/2.2.7-rel-27913-00": {
@@ -10611,7 +10407,6 @@
   },
   "projectFileDependencyGroups": {
     "UAP,Version=v10.0.17763": [
-      "ID3 >= 0.6.0",
       "Microsoft.NETCore.UniversalWindowsPlatform >= 6.2.9",
       "Microsoft.Toolkit.Uwp.Notifications >= 5.1.1",
       "Microsoft.Toolkit.Uwp.UI.Controls >= 5.1.1",
@@ -10660,10 +10455,6 @@
     "frameworks": {
       "uap10.0.17763": {
         "dependencies": {
-          "ID3": {
-            "target": "Package",
-            "version": "[0.6.0, )"
-          },
           "Microsoft.NETCore.UniversalWindowsPlatform": {
             "target": "Package",
             "version": "[6.2.9, )"

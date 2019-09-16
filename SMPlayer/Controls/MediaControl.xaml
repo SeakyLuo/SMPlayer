@@ -14,6 +14,19 @@
             FallbackColor="{ThemeResource SystemColorHighlightColor}"
             TintColor="{ThemeResource SystemColorHighlightColor}"
             TintOpacity="0.8" />
+        <Style x:Key="MediaControlIconTextButtonStyle" TargetType="local:IconTextButton">
+            <Style.Setters>
+                <Setter Property="LabelPosition" Value="Right" />
+                <Setter Property="Padding" Value="4,2,15,2" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="Height" Value="30" />
+            </Style.Setters>
+        </Style>
+        <Style x:Key="MediaControlIconTextButtonFontIcon" TargetType="FontIcon">
+            <Style.Setters>
+                <Setter Property="FontSize" Value="14" />
+            </Style.Setters>
+        </Style>
     </UserControl.Resources>
 
     <Grid>
@@ -115,29 +128,91 @@
                     Visibility="Collapsed">
                     <Button.Flyout>
                         <Flyout Opening="MainMediaControlMoreFlyout_Opening">
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal">
+                            <StackPanel Margin="-12,-4">
+                                <local:IconTextButton
+                                    x:Name="MainMoreShuffleButton"
+                                    IconTextMargin="10,0,0,0"
+                                    IconRadius="15"
+                                    Label="Shuffle: Disabled"
+                                    Style="{StaticResource MediaControlIconTextButtonStyle}"
+                                    Tapped="MoreShuffleButton_Tapped">
+                                    <local:IconTextButton.Icon>
+                                        <FontIcon Glyph="&#xE8B1;" Style="{StaticResource MediaControlIconTextButtonFontIcon}" />
+                                    </local:IconTextButton.Icon>
+                                </local:IconTextButton>
+                                <local:IconTextButton
+                                    x:Name="MainMoreRepeatButton"
+                                    IconRadius="15"
+                                    IconTextMargin="10,0,0,0"
+                                    Label="Repeat: Disabled"
+                                    Style="{StaticResource MediaControlIconTextButtonStyle}"
+                                    Tapped="MoreRepeatButton_Tapped">
+                                    <local:IconTextButton.Icon>
+                                        <FontIcon Glyph="&#xE8EE;" Style="{StaticResource MediaControlIconTextButtonFontIcon}" />
+                                    </local:IconTextButton.Icon>
+                                </local:IconTextButton>
+                                <local:IconTextButton
+                                    x:Name="MainMoreRepeatOneButton"
+                                    IconTextMargin="10,0,0,0"
+                                    IconRadius="15"
+                                    Label="Repeat One: Disabled"
+                                    Style="{StaticResource MediaControlIconTextButtonStyle}"
+                                    Tapped="MoreRepeatOneButton_Tapped">
+                                    <local:IconTextButton.Icon>
+                                        <FontIcon Glyph="&#xE8ED;" Style="{StaticResource MediaControlIconTextButtonFontIcon}" />
+                                    </local:IconTextButton.Icon>
+                                </local:IconTextButton>
+                                <StackPanel
+                                    Margin="6,2,15,2"
+                                    HorizontalAlignment="Stretch"
+                                    Orientation="Horizontal">
                                     <Button
                                         x:Name="MainMoreVolumeButton"
+                                        Width="30"
+                                        Height="30"
+                                        Background="Transparent"
+                                        BorderThickness="0"
                                         Click="VolumeButton_Click"
                                         Content="&#xE15D;"
-                                        Style="{StaticResource MediaControlButtonStyle}" />
+                                        CornerRadius="15"
+                                        FontFamily="Segoe MDL2 Assets"
+                                        FontSize="14"
+                                        Foreground="Black" />
                                     <Slider
                                         x:Name="MainMoreVolumeSlider"
-                                        Width="100"
-                                        Margin="10,0,20,0"
+                                        Width="150"
+                                        Padding="5,0,0,0"
+                                        HorizontalAlignment="Stretch"
                                         VerticalAlignment="Center"
+                                        Foreground="Black"
                                         Maximum="100"
                                         Minimum="0"
-                                        Style="{StaticResource MediaProgressSliderStyle}"
+                                        Style="{StaticResource DarkMediaProgressSliderStyle}"
                                         ValueChanged="VolumeSlider_ValueChanged"
                                         Value="50" />
                                 </StackPanel>
                                 <local:IconTextButton
                                     x:Name="MainMediaControlMoreFullScreenItem"
-                                    Icon="Fullscreen"
+                                    IconRadius="15"
+                                    IconTextMargin="10,0,0,0"
                                     Label="Full Screen"
-                                    Tapped="MainMediaControlMoreFullScreenItem_Tapped" />
+                                    Style="{StaticResource MediaControlIconTextButtonStyle}"
+                                    Tapped="MoreFullScreenItem_Tapped">
+                                    <local:IconTextButton.Icon>
+                                        <FontIcon Glyph="&#xE740;" Style="{StaticResource MediaControlIconTextButtonFontIcon}" />
+                                    </local:IconTextButton.Icon>
+                                </local:IconTextButton>
+                                <local:IconTextButton
+                                    x:Name="MainMediaControlMoreMiniPlayItem"
+                                    IconTextMargin="10,0,0,0"
+                                    IconRadius="15"
+                                    Label="Mini Play"
+                                    Style="{StaticResource MediaControlIconTextButtonStyle}"
+                                    Tapped="MoreMiniPlayItem_Tapped">
+                                    <local:IconTextButton.Icon>
+                                        <FontIcon Glyph="&#xE744;" Style="{StaticResource MediaControlIconTextButtonFontIcon}" />
+                                    </local:IconTextButton.Icon>
+                                </local:IconTextButton>
                             </StackPanel>
                         </Flyout>
                     </Button.Flyout>

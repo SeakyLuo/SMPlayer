@@ -112,6 +112,7 @@ namespace SMPlayer
             if (value is string) return string.IsNullOrEmpty(value as string) ? Visibility.Collapsed : Visibility.Visible;
             if (value is bool) return value.Equals(false) ? Visibility.Collapsed : Visibility.Visible;
             if (value is int) return value.Equals(0) ? Visibility.Collapsed : Visibility.Visible;
+            if (value is Visibility) return value.Equals(Visibility.Visible) ? Visibility.Collapsed : Visibility.Visible;
             return value == null ? Visibility.Collapsed : Visibility.Visible;
         }
 

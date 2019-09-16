@@ -60,9 +60,9 @@ namespace SMPlayer
             return "";
         }
 
-        public static async Task<BitmapImage> GetThumbnailAsync(string path, bool withDefault = true)
+        public static async Task<BitmapImage> GetThumbnailAsync(Music music, bool withDefault = true)
         {
-            using (var thumbnail = await GetStorageItemThumbnailAsync(path))
+            using (var thumbnail = await GetStorageItemThumbnailAsync(music))
             {
                 if (thumbnail != null && thumbnail.Type == ThumbnailType.Image)
                 {
@@ -72,9 +72,10 @@ namespace SMPlayer
             return withDefault ? DefaultAlbumCover : null;
         }
 
-        public static async Task<StorageItemThumbnail> GetStorageItemThumbnailAsync(string path)
+        public static async Task<StorageItemThumbnail> GetStorageItemThumbnailAsync(Music music)
         {
-            var file = await CurrentFolder.GetFileAsync(path);
+            //var file = await CurrentFolder.GetFileAsync(music.GetShortPath());
+            var file = await StorageFile.GetFileFromPathAsync(music.Path);
             return await file.GetThumbnailAsync(ThumbnailMode.MusicView, 500);
         }
         public static BitmapImage GetBitmapImage(this StorageItemThumbnail thumbnail)

@@ -28,11 +28,18 @@ Show in explorer.
 
 Clickable text.
 
-Quick return footer.
+AlbumPage set TitleBar.
 
 # TO FIX
-Full Screen.
 
 TreeView error.
 
+Full Screen.
+
 MasterView long artist name.
+
+Scroll Header Not sticky.
+
+Quick return footer.
+
+AutoSuggestBox lose focus.

@@ -79,7 +79,7 @@ namespace SMPlayer.Models
             {
                 foreach (var music in group)
                 {
-                    var thumbnail = await Helper.GetStorageItemThumbnailAsync(music.GetShortPath());
+                    var thumbnail = await Helper.GetStorageItemThumbnailAsync(music);
                     if (thumbnail != null)
                     {
                         result.Add(new MusicDisplayItem(thumbnail.GetBitmapImage(), await thumbnail.GetDisplayColor()));

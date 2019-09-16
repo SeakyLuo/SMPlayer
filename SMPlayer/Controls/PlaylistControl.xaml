@@ -20,34 +20,39 @@
         </Style>
     </UserControl.Resources>
 
-    <ListView
-        x:Name="SongsListView"
-        Grid.Row="1"
-        Padding="{x:Bind Padding}"
-        x:DefaultBindMode="OneWay"
-        AllowDrop="True"
-        Background="{x:Bind Background}"
-        CanDrag="True"
-        CanDragItems="True"
-        CanReorderItems="True"
-        ContainerContentChanging="SongsListView_ContainerContentChanging"
-        DragItemsCompleted="SongsListView_DragItemsCompleted"
-        DragItemsStarting="SongsListView_DragItemsStarting"
-        IsItemClickEnabled="True"
-        ItemClick="SongsListView_ItemClick"
-        ItemContainerStyle="{StaticResource PlaylistListViewItemStyle}"
-        Opacity="{x:Bind Opacity}"
-        ReorderMode="Enabled"
-        RequestedTheme="{x:Bind Theme}"
-        SelectionMode="None">
-        <ListView.ItemTemplate>
-            <DataTemplate x:DataType="data:Music">
-                <local:PlaylistControlItem DataContext="{Binding}">
-                    <local:PlaylistControlItem.ContextFlyout>
-                        <MenuFlyout Opening="OpenMusicMenuFlyout" />
-                    </local:PlaylistControlItem.ContextFlyout>
-                </local:PlaylistControlItem>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+    <ScrollViewer
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        ViewChanged="ScrollViewer_ViewChanged">
+        <ListView
+            x:Name="SongsListView"
+            Grid.Row="1"
+            Padding="{x:Bind Padding}"
+            x:DefaultBindMode="OneWay"
+            AllowDrop="True"
+            Background="{x:Bind Background}"
+            CanDrag="True"
+            CanDragItems="True"
+            CanReorderItems="True"
+            ContainerContentChanging="SongsListView_ContainerContentChanging"
+            DragItemsCompleted="SongsListView_DragItemsCompleted"
+            DragItemsStarting="SongsListView_DragItemsStarting"
+            IsItemClickEnabled="True"
+            ItemClick="SongsListView_ItemClick"
+            ItemContainerStyle="{StaticResource PlaylistListViewItemStyle}"
+            Opacity="{x:Bind Opacity}"
+            ReorderMode="Enabled"
+            RequestedTheme="{x:Bind Theme}"
+            SelectionMode="None">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="data:Music">
+                    <local:PlaylistControlItem DataContext="{Binding}">
+                        <local:PlaylistControlItem.ContextFlyout>
+                            <MenuFlyout Opening="OpenMusicMenuFlyout" />
+                        </local:PlaylistControlItem.ContextFlyout>
+                    </local:PlaylistControlItem>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ScrollViewer>
 </UserControl>

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using SMPlayer.Models;
-using Id3;
 using Windows.Media.Core;
 using System.ComponentModel;
 using System.IO;

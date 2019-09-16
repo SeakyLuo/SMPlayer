@@ -65,7 +65,7 @@ namespace SMPlayer
                     Windows.UI.Xaml.Media.Imaging.BitmapImage thumbnail = null;
                     foreach (var music in songs)
                     {
-                        thumbnail = await Helper.GetThumbnailAsync(music.Path, false);
+                        thumbnail = await Helper.GetThumbnailAsync(music, false);
                         if (thumbnail != null) break;
                     }
                     if (thumbnail == null) thumbnail = Helper.DefaultAlbumCover;

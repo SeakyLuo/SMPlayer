@@ -34,12 +34,6 @@
     <AppxPackagedFile Include="C:\Users\Seaky\.nuget\packages\colorcode.uwp\2.0.6\lib\uap10.0\ColorCode.UWP.dll">
       <PackagePath>ColorCode.UWP.dll</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Seaky\.nuget\packages\id3\0.6.0\lib\netstandard2.0\Id3.Net.dll">
-      <PackagePath>Id3.Net.dll</PackagePath>
-    </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Seaky\.nuget\packages\jetbrains.annotations\2018.3.0\lib\netstandard2.0\JetBrains.Annotations.dll">
-      <PackagePath>JetBrains.Annotations.dll</PackagePath>
-    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\.nuget\packages\microsoft.toolkit\5.1.1\lib\netstandard2.0\Microsoft.Toolkit.dll">
       <PackagePath>Microsoft.Toolkit.dll</PackagePath>
     </AppxPackagedFile>

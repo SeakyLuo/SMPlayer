@@ -43,8 +43,6 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\ColorCode.Core.dll
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\ColorCode.Core.pdb
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\ColorCode.UWP.dll
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\ColorCode.UWP.pdb
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Id3.Net.dll
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\JetBrains.Annotations.dll
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Microsoft.Toolkit.dll
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Microsoft.Toolkit.pdb
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Microsoft.Toolkit.Parsers.dll
