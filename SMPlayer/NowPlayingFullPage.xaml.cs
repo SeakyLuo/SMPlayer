@@ -58,6 +58,7 @@ namespace SMPlayer
 
             FullMediaControl.Update();
             SetMusic(MediaHelper.CurrentMusic);
+            FullPlaylistControl.ScrollToMusic(MediaHelper.CurrentMusic);
         }
         private void UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar coreTitleBar)
         {
@@ -202,7 +203,6 @@ namespace SMPlayer
                 if (musicProperties.AlbumArtist != AlbumArtistTextBox.Text) return;
                 if (musicProperties.Publisher != PublisherTextBox.Text) return;
                 if (Lyrics != LyricsTextBox.Text) return;
-                if (PlayCountTextBox.Text == "" && CurrentMusic.PlayCount != 0) return;
                 if (int.TryParse(PlayCountTextBox.Text, out int PlayCount) && CurrentMusic.PlayCount != PlayCount) return;
                 if (TrackNumberTextBox.Text == "" && musicProperties.TrackNumber != 0) return;
                 if (uint.TryParse(TrackNumberTextBox.Text, out uint TrackNumber) && musicProperties.TrackNumber != TrackNumber) return;

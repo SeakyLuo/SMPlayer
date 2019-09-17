@@ -19,44 +19,54 @@ namespace SMPlayer
 {
     public sealed partial class IconTextButton : UserControl
     {
-        public string Label { get; set; }
+        public string Label
+        {
+            get => (string)GetValue(LabelProperty);
+            set => SetValue(LabelProperty, value);
+        }
+        public static readonly DependencyProperty LabelProperty = DependencyProperty.Register("Label",
+                                                                                              typeof(string),
+                                                                                              typeof(IconTextButton),
+                                                                                              new PropertyMetadata(""));
         public IconElement Icon { get; set; }
         public IconTextButtonLabelPosition LabelPosition
         {
-            get => labelPosition;
+            get => (IconTextButtonLabelPosition)GetValue(LabelPositionProperty);
             set
             {
-                bool isLeft = value == IconTextButtonLabelPosition.Left;
-                Grid.SetColumn(LabelTextBlock, isLeft ? 0 : 2);
-                labelPosition = value;
+                SetValue(LabelPositionProperty, value);
+                Grid.SetColumn(LabelTextBlock, value == IconTextButtonLabelPosition.Left ? 0 : 2);
             }
         }
-        private IconTextButtonLabelPosition labelPosition;
         public static readonly DependencyProperty LabelPositionProperty = DependencyProperty.Register("LabelPosition", 
                                                                                                       typeof(IconTextButtonLabelPosition), 
                                                                                                       typeof(IconTextButton), 
                                                                                                       new PropertyMetadata(IconTextButtonLabelPosition.Left));
         public Thickness IconTextMargin
         {
-            get => LabelTextBlock.Margin;
-            set => LabelTextBlock.Margin = value;
+            get => (Thickness)GetValue(IconTextMarginProperty);
+            set => SetValue(IconTextMarginProperty, value);
         }
         public static readonly DependencyProperty IconTextMarginProperty = DependencyProperty.Register("IconTextMargin",
                                                                                                        typeof(Thickness),
                                                                                                        typeof(IconTextButton),
                                                                                                        new PropertyMetadata(null));
-
         public Brush IconBackground
         {
-            get => IconBackgroundBorder.Background;
-            set => IconBackgroundBorder.Background = value;
+            get { return (Brush)GetValue(IconBackgroundProperty); }
+            set { SetValue(IconBackgroundProperty, value); }
         }
+        public static readonly DependencyProperty IconBackgroundProperty = DependencyProperty.Register("IconBackground",
+                                                                                              typeof(Brush),
+                                                                                              typeof(IconTextButton),
+                                                                                              new PropertyMetadata(null));
 
         public double IconRadius
         {
-            get => IconBackgroundBorder.CornerRadius.TopLeft;
+            get => (double)GetValue(IconRadiusProperty);
             set
             {
+                SetValue(IconRadiusProperty, value);
                 IconBackgroundBorder.Width = value * 2;
                 IconBackgroundBorder.Height = value * 2;
                 IconBackgroundBorder.CornerRadius = new CornerRadius(value);

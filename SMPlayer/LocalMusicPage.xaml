@@ -23,7 +23,7 @@
         <GridView
             x:Name="LocalMusicGridView"
             Grid.Row="1"
-            Margin="10"
+            Margin="5"
             IsItemClickEnabled="True"
             ItemClick="LocalMusicGridView_ItemClick"
             ItemContainerStyle="{StaticResource DropShadowGridViewItemStyle}"
@@ -32,7 +32,7 @@
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:GridMusicView">
                     <UserControl PointerEntered="GridViewItem_PointerEntered" PointerExited="GridViewItem_PointerExited">
-                        <Grid Margin="4" Background="Transparent">
+                        <Grid Margin="3" Background="Transparent">
                             <Grid.ContextFlyout>
                                 <MenuFlyout Opening="MenuFlyout_Opening" />
                             </Grid.ContextFlyout>
@@ -58,8 +58,8 @@
                                         Source="{x:Bind Thumbnail}" />
                                     <Button
                                         x:Name="AddToButton"
-                                        Width="36"
-                                        Height="36"
+                                        Width="40"
+                                        Height="40"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Click="AddToButton_Click"
@@ -100,6 +100,21 @@
                                     Visibility="{x:Bind Source.IsPlaying, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
                             </RelativePanel>
                             <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="WidthChange">
+                                    <VisualState x:Name="Wide">
+                                        <VisualState.StateTriggers>
+                                            <AdaptiveTrigger MinWindowWidth="{StaticResource MinimalNavigationViewWindowWidth}" />
+                                        </VisualState.StateTriggers>
+                                    </VisualState>
+                                    <VisualState x:Name="Narrow">
+                                        <VisualState.StateTriggers>
+                                            <AdaptiveTrigger MinWindowWidth="0" />
+                                        </VisualState.StateTriggers>
+                                        <VisualState.Setters>
+                                            <Setter Target="MusicNameTextBlock.Width" Value="400" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
                                 <VisualStateGroup x:Name="CommonStates">
                                     <VisualState x:Name="Normal" />
                                     <VisualState x:Name="PointerOver">
@@ -126,5 +141,19 @@
             AlternatingRowColor="True"
             ItemsSource="{x:Bind Songs}"
             Visibility="Collapsed" />
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="WidthChange">
+                <VisualState x:Name="Wide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource MinimalNavigationViewWindowWidth}" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </Page>

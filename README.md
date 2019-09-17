@@ -44,6 +44,7 @@ Quick return footer.
 
 AutoSuggestBox lose focus.
 
-AfterSongsSet.
+NowPlayingFull Scroll Into View.
 
-Set Album Cover.
+NowPlayingFull play count repeat one.
+

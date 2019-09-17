@@ -428,8 +428,8 @@
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="BorderThickness" />
       <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="Child" />
       <RootProperty Name="Background" />
+      <RootProperty Name="Child" />
       <RootProperty Name="MinWidth" />
       <RootProperty Name="MinHeight" />
       <RootProperty Name="CornerRadius" />
@@ -477,12 +477,14 @@
     <RootType FullName="Windows.UI.Xaml.Media.Animation.PointerDownThemeAnimation" />
     <RootType FullName="Windows.UI.Xaml.Media.Animation.PointerUpThemeAnimation" />
     <RootType FullName="SMPlayer.IconTextButton">
-      <RootProperty Name="LabelPosition" />
-      <RootProperty Name="IconRadius" />
       <RootProperty Name="IconTextMargin" />
       <RootProperty Name="Label" />
       <RootProperty Name="Style" />
       <RootProperty Name="Icon" />
+      <RootProperty Name="Width" />
+      <RootProperty Name="Visibility" />
+      <RootProperty Name="LabelPosition" />
+      <RootProperty Name="IconRadius" />
       <RootProperty Name="Padding" />
       <RootProperty Name="Flyout" />
       <RootProperty Name="HorizontalAlignment" />
@@ -665,9 +667,7 @@
       <RootProperty Name="Icon" />
       <RootProperty Name="Style" />
       <RootProperty Name="Content" />
-      <RootProperty Name="Visibility" />
       <RootProperty Name="Tag" />
-      <RootEvent Name="Tapped" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.NavigationViewItemPresenter">
       <RootProperty Name="Margin" />
@@ -877,13 +877,6 @@
     </RootType>
     <RootType FullName="SMPlayer.LocalFoldersPage" />
     <RootType FullName="SMPlayer.LocalMusicPage" />
-    <RootType FullName="Windows.UI.Xaml.Controls.Viewbox">
-      <RootProperty Name="Width" />
-      <RootProperty Name="Child" />
-      <RootProperty Name="Height" />
-      <RootProperty Name="Margin" />
-      <RootProperty Name="HorizontalAlignment" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Frame">
       <RootProperty Name="IsNavigationStackEnabled" />
       <RootEvent Name="Navigated" />
@@ -927,6 +920,12 @@
       <RootProperty Name="VerticalOffset" />
     </RootType>
     <RootType FullName="SMPlayer.NowPlayingFullPage" />
+    <RootType FullName="Windows.UI.Xaml.Controls.Viewbox">
+      <RootProperty Name="Height" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="Child" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ContentDialog">
       <RootProperty Name="Resources" />
       <RootProperty Name="Content" />

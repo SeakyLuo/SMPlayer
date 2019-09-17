@@ -41,8 +41,8 @@ namespace SMPlayer
             }
         }
 
-        private const int MIN_VALUE = 15;
-        private const int MAX_VALUE = 240;
+        private const int MIN_VALUE = 25;
+        private const int MAX_VALUE = 210;
 
         private static async Task<byte[]> GetPixelData(BitmapDecoder decoder, uint x, uint y)
         {
@@ -73,6 +73,9 @@ namespace SMPlayer
                 if (bgra.SkipLast(1).All((v) => MIN_VALUE <= v && v <= MAX_VALUE)) break;
             }
             Color color = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0]);
+            System.Diagnostics.Debug.WriteLine($"R: {bgra[2]}");
+            System.Diagnostics.Debug.WriteLine($"G: {bgra[1]}");
+            System.Diagnostics.Debug.WriteLine($"B: {bgra[0]}");
             return new AcrylicBrush()
             {
                 BackgroundSource = AcrylicBackgroundSource.Backdrop,

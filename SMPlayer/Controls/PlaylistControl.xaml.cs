@@ -109,6 +109,13 @@ namespace SMPlayer
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, current, next));
         }
 
+        public void ScrollToMusic(Music music)
+        {
+            var item = SongsListView.ContainerFromItem(music) as ListViewItem;
+            if (item == null) return;
+            item.StartBringIntoView();
+        }
+
         private List<Music> beforeDragging;
 
         private void SongsListView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)

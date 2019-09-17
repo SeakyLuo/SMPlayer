@@ -12,9 +12,12 @@
 
     <Page.Resources>
         <SolidColorBrush x:Key="NavigationViewTopPaneBackground" Color="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
-        <Style x:Key="TopNavigationViewFooterItemStyle" TargetType="NavigationViewItem">
-            <Setter Property="Margin" Value="0,0,5,0" />
-            <Setter Property="Padding" Value="0,0,15,0" />
+        <Style x:Key="TopNavigationViewFooterItemStyle" TargetType="Control">
+            <Setter Property="Margin" Value="3,0,2,0" />
+            <Setter Property="Padding" Value="5,0,5,0" />
+        </Style>
+        <Style x:Key="FontIconSizeSetter" TargetType="FontIcon">
+            <Setter Property="FontSize" Value="18" />
         </Style>
     </Page.Resources>
 
@@ -40,38 +43,67 @@
             </NavigationView.MenuItems>
             <NavigationView.PaneFooter>
                 <StackPanel Orientation="Horizontal">
-                    <NavigationViewItem
+                    <local:IconTextButton
                         x:Name="LocalShuffleItem"
-                        Content="Shuffle"
-                        Icon="Shuffle"
+                        IconTextMargin="10,0,5,0"
+                        Label="Shuffle"
                         Style="{StaticResource TopNavigationViewFooterItemStyle}"
                         Tapped="LocalShuffleItem_Tapped"
-                        ToolTipService.ToolTip="Shuffle And Play" />
-                    <NavigationViewItem
+                        ToolTipService.ToolTip="Shuffle And Play">
+                        <local:IconTextButton.Icon>
+                            <FontIcon Glyph="&#xE8B1;" Style="{StaticResource FontIconSizeSetter}" />
+                        </local:IconTextButton.Icon>
+                    </local:IconTextButton>
+                    <local:IconTextButton
                         x:Name="LocalListViewItem"
-                        Icon="List"
+                        Width="105"
+                        IconTextMargin="10,0,5,0"
+                        Label="List View"
                         Style="{StaticResource TopNavigationViewFooterItemStyle}"
                         Tapped="LocalListViewItem_Tapped"
                         ToolTipService.ToolTip="Change to List View"
                         Visibility="Visible">
-                        <Viewbox Width="60">
-                            <TextBlock FontSize="14" Text="List View" />
-                        </Viewbox>
-                    </NavigationViewItem>
-                    <NavigationViewItem
+                        <local:IconTextButton.Icon>
+                            <FontIcon Glyph="&#xE292;" Style="{StaticResource FontIconSizeSetter}" />
+                        </local:IconTextButton.Icon>
+                    </local:IconTextButton>
+                    <local:IconTextButton
                         x:Name="LocalGridViewItem"
-                        Content="Grid View"
+                        IconTextMargin="10,0,5,0"
+                        Label="Grid View"
                         Style="{StaticResource TopNavigationViewFooterItemStyle}"
                         Tapped="LocalGridViewItem_Tapped"
                         ToolTipService.ToolTip="Change to Grid View"
                         Visibility="Collapsed">
-                        <NavigationViewItem.Icon>
-                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF0E2;" />
-                        </NavigationViewItem.Icon>
-                    </NavigationViewItem>
+                        <local:IconTextButton.Icon>
+                            <FontIcon Glyph="&#xF0E2;" Style="{StaticResource FontIconSizeSetter}" />
+                        </local:IconTextButton.Icon>
+                    </local:IconTextButton>
                 </StackPanel>
             </NavigationView.PaneFooter>
             <Frame x:Name="LocalFrame" IsNavigationStackEnabled="True" />
         </NavigationView>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="WidthChange">
+                <VisualState x:Name="Wide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource MinimalNavigationViewWindowWidth}" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--<Setter Target="LocalShuffleItem.Label" Value="" />
+                        <Setter Target="LocalListViewItem.Label" Value="" />
+                        <Setter Target="LocalGridViewItem.Label" Value="" />
+                        <Setter Target="LocalShuffleItem.IconTextMargin" Value="0" />
+                        <Setter Target="LocalListViewItem.IconTextMargin" Value="0" />
+                        <Setter Target="LocalGridViewItem.IconTextMargin" Value="0" />-->
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </Page>

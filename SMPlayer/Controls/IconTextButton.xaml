@@ -26,7 +26,8 @@
             Grid.Column="1"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
-            AutomationProperties.AccessibilityView="Raw">
+            AutomationProperties.AccessibilityView="Raw"
+            Background="{x:Bind IconBackground}">
             <ContentPresenter
                 x:Name="IconContent"
                 Content="{x:Bind Icon}"

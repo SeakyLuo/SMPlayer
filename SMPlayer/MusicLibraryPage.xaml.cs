@@ -32,6 +32,7 @@ namespace SMPlayer
         private const string FILENAME = "MusicLibrary.json";
         public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
         private bool libraryChecked = false;
+        private static bool libraryReset = false;
         private static List<AfterSongsSetListener> listeners = new List<AfterSongsSetListener>();
 
         public MusicLibraryPage()
@@ -76,7 +77,11 @@ namespace SMPlayer
             JsonFileHelper.SaveAsync(FILENAME, AllSongs);
         }
 
-        public static void AddAfterSongsSetListener(AfterSongsSetListener listener) { listeners.Add(listener); }
+        public static void AddAfterSongsSetListener(AfterSongsSetListener listener)
+        {
+            listeners.Add(listener);
+            if (libraryReset) listener.SongsSet(AllSongs);
+        }
 
         private void MusicLibraryDataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
@@ -143,6 +148,7 @@ namespace SMPlayer
         public static void SetAllSongs(ICollection<Music> songs)
         {
             if (songs == null) return;
+            libraryReset = true;
             AllSongs.Clear();
             foreach (var item in songs) AllSongs.Add(item);
             foreach (var listener in listeners) listener.SongsSet(AllSongs);
