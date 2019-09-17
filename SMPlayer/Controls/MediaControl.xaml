@@ -297,17 +297,29 @@
                     x:Name="MainShuffleButton"
                     Click="ShuffleButton_Click"
                     Content="&#xE8B1;"
-                    Style="{StaticResource MediaControlToggleButtonStyle}" />
+                    Style="{StaticResource MediaControlToggleButtonStyle}">
+                    <ToggleButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="S" Modifiers="Menu" />
+                    </ToggleButton.KeyboardAccelerators>
+                </ToggleButton>
                 <ToggleButton
                     x:Name="MainRepeatButton"
                     Click="RepeatButton_Click"
                     Content="&#xE8EE;"
-                    Style="{StaticResource MediaControlToggleButtonStyle}" />
+                    Style="{StaticResource MediaControlToggleButtonStyle}">
+                    <ToggleButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="R" Modifiers="Menu" />
+                    </ToggleButton.KeyboardAccelerators>
+                </ToggleButton>
                 <ToggleButton
                     x:Name="MainRepeatOneButton"
                     Click="RepeatOneButton_Click"
                     Content="&#xE8ED;"
-                    Style="{StaticResource MediaControlToggleButtonStyle}" />
+                    Style="{StaticResource MediaControlToggleButtonStyle}">
+                    <ToggleButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="1" Modifiers="Menu" />
+                    </ToggleButton.KeyboardAccelerators>
+                </ToggleButton>
                 <Button
                     Width="36"
                     Height="36"
@@ -498,17 +510,29 @@
                             x:Name="FullShuffleButton"
                             Click="ShuffleButton_Click"
                             Content="&#xE8B1;"
-                            Style="{StaticResource DarkMediaControlToggleButtonStyle}" />
+                            Style="{StaticResource DarkMediaControlToggleButtonStyle}">
+                            <ToggleButton.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="S" Modifiers="Menu" />
+                            </ToggleButton.KeyboardAccelerators>
+                        </ToggleButton>
                         <ToggleButton
                             x:Name="FullRepeatButton"
                             Click="RepeatButton_Click"
                             Content="&#xE8EE;"
-                            Style="{StaticResource DarkMediaControlToggleButtonStyle}" />
+                            Style="{StaticResource DarkMediaControlToggleButtonStyle}">
+                            <ToggleButton.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="R" Modifiers="Menu" />
+                            </ToggleButton.KeyboardAccelerators>
+                        </ToggleButton>
                         <ToggleButton
                             x:Name="FullRepeatOneButton"
                             Click="RepeatOneButton_Click"
                             Content="&#xE8ED;"
-                            Style="{StaticResource DarkMediaControlToggleButtonStyle}" />
+                            Style="{StaticResource DarkMediaControlToggleButtonStyle}">
+                            <ToggleButton.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="1" Modifiers="Menu" />
+                            </ToggleButton.KeyboardAccelerators>
+                        </ToggleButton>
                         <ToggleButton
                             x:Name="FullLikeToggleButton"
                             Click="LikeButton_Click"

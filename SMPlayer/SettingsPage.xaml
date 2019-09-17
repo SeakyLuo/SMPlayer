@@ -139,6 +139,7 @@
                 x:Name="ThemeLabel"
                 Style="{StaticResource SettingLabelStyle}"
                 Text="Theme:" />
+            <TextBlock Style="{StaticResource SettingLabelStyle}" />
         </StackPanel>
         <StackPanel Grid.Column="1">
             <AutoSuggestBox
@@ -203,6 +204,12 @@
                     </Flyout>
                 </Button.Flyout>
             </Button>
+            <Button
+                Background="Transparent"
+                Content="Show All Keyboard Shortcuts"
+                BorderThickness="0"
+                Foreground="{ThemeResource SystemColorHighlightColor}"
+                Style="{StaticResource MarginSetter}" />
         </StackPanel>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">
@@ -215,20 +222,13 @@
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MusicFolderLabel" Storyboard.TargetProperty="FontSize">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SmallLabelFontSize}" />
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LanguageLabel" Storyboard.TargetProperty="FontSize">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SmallLabelFontSize}" />
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="NotificationLabel" Storyboard.TargetProperty="FontSize">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SmallLabelFontSize}" />
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ThemeLabel" Storyboard.TargetProperty="FontSize">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SmallLabelFontSize}" />
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
+                    <VisualState.Setters>
+                        <Setter Target="MusicFolderLabel.FontSize" Value="{StaticResource SmallLabelFontSize}" />
+                        <Setter Target="LanguageLabel.FontSize" Value="{StaticResource SmallLabelFontSize}" />
+                        <Setter Target="NotificationLabel.FontSize" Value="{StaticResource SmallLabelFontSize}" />
+                        <Setter Target="NotificationLabel.FontSize" Value="{StaticResource SmallLabelFontSize}" />
+                        <Setter Target="ThemeLabel.FontSize" Value="{StaticResource SmallLabelFontSize}" />
+                    </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>

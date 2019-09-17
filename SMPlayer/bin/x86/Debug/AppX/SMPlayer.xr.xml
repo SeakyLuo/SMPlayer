@@ -641,6 +641,7 @@
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.ToggleButton">
       <RootProperty Name="Content" />
       <RootProperty Name="Style" />
+      <RootProperty Name="KeyboardAccelerators" />
       <RootProperty Name="IsEnabled" />
       <RootEvent Name="Click" />
     </RootType>

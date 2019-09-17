@@ -166,7 +166,7 @@ namespace SMPlayer
             // Create NotificationData and make sure the sequence number is incremented
             // since last update, or assign 0 for updating regardless of order
             var data = new NotificationData { SequenceNumber = 0 };
-            data.Values["MediaControlPosition"] = (MediaHelper.Position / 100).ToString();
+            data.Values["MediaControlPosition"] = (MediaHelper.Position / MediaHelper.CurrentMusic.Duration).ToString();
             data.Values["MediaControlPositionTime"] = MusicDurationConverter.ToTime(MediaHelper.Position);
             data.Values["Lyrics"] = GetLyricByTime(MediaHelper.Position);
 
