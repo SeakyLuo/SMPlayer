@@ -22,8 +22,6 @@ Auto Scrolling Text.
 
 Shy header.
 
-Show in explorer.
-
 Clickable text.
 
 AlbumPage set TitleBar.

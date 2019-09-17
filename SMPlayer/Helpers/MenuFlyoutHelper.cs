@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI.Xaml.Controls;
 
 namespace SMPlayer
@@ -138,6 +140,20 @@ namespace SMPlayer
             };
             flyout.Items.Add(playItem);
             flyout.Items.Add(GetAddToMenuFlyoutSubItem());
+            var showInExplorerItem = new MenuFlyoutItem()
+            {
+                Icon = new FontIcon() { Glyph = "\uE838" },
+                Text = "Show In Explorer"
+            };
+            showInExplorerItem.Click += async (s, args) =>
+            {
+                var file = await StorageFile.GetFileFromPathAsync(music.Path);
+                var options = new Windows.System.FolderLauncherOptions();
+                options.ItemsToSelect.Add(file);
+                await Windows.System.Launcher.LaunchFolderAsync(await file.GetParentAsync(), options);
+            };
+            ToolTipService.SetToolTip(showInExplorerItem, new ToolTip() { Content = "Show In Explorer" });
+            flyout.Items.Add(showInExplorerItem);
             var deleteItem = new MenuFlyoutItem()
             {
                 Icon = new SymbolIcon(Symbol.Delete),
@@ -148,6 +164,7 @@ namespace SMPlayer
 
             };
             ToolTipService.SetToolTip(deleteItem, new ToolTip() { Content = $"Delete {music.Name}" });
+            flyout.Items.Add(deleteItem);
             foreach (var item in GetMusicPropertiesMenuFlyout().Items)
                 flyout.Items.Add(item);
             return flyout;
