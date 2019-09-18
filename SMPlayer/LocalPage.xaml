@@ -95,12 +95,12 @@
                         <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <!--<Setter Target="LocalShuffleItem.Label" Value="" />
+                        <Setter Target="LocalShuffleItem.Label" Value="" />
                         <Setter Target="LocalListViewItem.Label" Value="" />
                         <Setter Target="LocalGridViewItem.Label" Value="" />
                         <Setter Target="LocalShuffleItem.IconTextMargin" Value="0" />
                         <Setter Target="LocalListViewItem.IconTextMargin" Value="0" />
-                        <Setter Target="LocalGridViewItem.IconTextMargin" Value="0" />-->
+                        <Setter Target="LocalGridViewItem.IconTextMargin" Value="0" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

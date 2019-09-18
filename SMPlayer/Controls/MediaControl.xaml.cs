@@ -566,7 +566,7 @@ namespace SMPlayer
 
         private void MainMusicInfoGrid_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            if (MediaHelper.CurrentMusic == null) return;
+            if (MediaHelper.CurrentMusic == null || MainPage.Instance == null) return;
             MainPage.Instance.Frame.Navigate(typeof(NowPlayingFullPage), null, new DrillInNavigationTransitionInfo());
         }
 

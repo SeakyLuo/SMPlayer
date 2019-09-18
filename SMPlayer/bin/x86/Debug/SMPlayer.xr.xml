@@ -5,9 +5,9 @@
   </Roots.Interfaces>
   <Roots.PropertyPathNames>
     <RootPropertyPathName Name="IsPlaying" />
-    <RootPropertyPathName Name="Duration" />
     <RootPropertyPathName Name="Album" />
     <RootPropertyPathName Name="Artist" />
+    <RootPropertyPathName Name="Duration" />
     <RootPropertyPathName Name="Name" />
     <RootPropertyPathName Name="PlaceholderForeground" />
     <RootPropertyPathName Name="IsPaneOpen" />
@@ -220,6 +220,7 @@
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="MaxHeight" />
       <RootProperty Name="IsHitTestVisible" />
+      <RootProperty Name="Translation" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
       <RootEvent Name="Tapped" />
@@ -366,8 +367,8 @@
       <RootProperty Name="Foreground" />
       <RootProperty Name="IsHitTestVisible" />
       <RootProperty Name="IsTabStop" />
-      <RootProperty Name="HorizontalContentAlignment" />
       <RootProperty Name="ContentTemplate" />
+      <RootProperty Name="HorizontalContentAlignment" />
       <RootProperty Name="MinWidth" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ColumnDefinition">
@@ -496,6 +497,16 @@
     </RootType>
     <RootType FullName="SMPlayer.LoadingControl">
       <RootProperty Name="FontSize" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.HyperlinkButton">
+      <RootProperty Name="Margin" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Content" />
+      <RootProperty Name="Foreground" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="Visibility" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Data.Binding">
       <RootProperty Name="Converter" />
@@ -921,6 +932,28 @@
       <RootProperty Name="VerticalOffset" />
     </RootType>
     <RootType FullName="SMPlayer.NowPlayingFullPage" />
+    <RootType FullName="Windows.UI.Xaml.Controls.SwipeControl">
+      <RootProperty Name="LeftItems" />
+      <RootProperty Name="RightItems" />
+      <RootProperty Name="Content" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.SwipeItems">
+      <RootProperty Name="Mode" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.SwipeItem">
+      <RootProperty Name="Text" />
+      <RootProperty Name="IconSource" />
+      <RootProperty Name="Background" />
+      <RootProperty Name="Foreground" />
+      <RootEvent Name="Invoked" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.FontIconSource">
+      <RootProperty Name="Foreground" />
+      <RootProperty Name="Glyph" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.SymbolIconSource">
+      <RootProperty Name="Symbol" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Viewbox">
       <RootProperty Name="Height" />
       <RootProperty Name="Margin" />

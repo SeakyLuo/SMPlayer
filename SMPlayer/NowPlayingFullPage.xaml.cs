@@ -263,10 +263,14 @@ namespace SMPlayer
             MusicLibraryPage.AllSongs.First((m) => m.Equals(CurrentMusic)).PlayCount = 0;
         }
 
+        public void GoBack()
+        {
+            if (Frame.CanGoBack) Frame.GoBack();
+        }
+
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Frame.CanGoBack)
-                Frame.GoBack();
+            GoBack();
         }
     }
 }

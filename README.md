@@ -14,15 +14,11 @@ Localization.
 
 Cache Artists Result.
 
-Add SwipeControl.
-
 FullMediaControl Album Flipview.
 
 Auto Scrolling Text.
 
 Shy header.
-
-Clickable text.
 
 AlbumPage set TitleBar.
 
@@ -46,3 +42,4 @@ NowPlayingFull Scroll Into View.
 
 NowPlayingFull play count repeat one.
 
+Add Album Art to Music.

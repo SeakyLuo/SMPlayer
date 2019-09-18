@@ -23,5 +23,21 @@ namespace SMPlayer.Controls
         {
             this.InitializeComponent();
         }
+
+        private void Album_Click(object sender, RoutedEventArgs e)
+        {
+            if (NowPlayingFullPage.Instance != null) NowPlayingFullPage.Instance.GoBack();
+            var button = (sender as HyperlinkButton);
+            var album = button.Content.ToString();
+            var playlist = new Models.Playlist(album);
+            foreach (var music in MusicLibraryPage.AllSongs)
+                if (music.Album == album)
+                    playlist.Add(music);
+            MainPage.Instance.NavigateToPage(typeof(AlbumPage), playlist);
+        }
+        private void Artist_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

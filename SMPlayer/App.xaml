@@ -18,6 +18,7 @@
                 <ResourceDictionary Source="Dictionaries/DropShadowGridViewItem.xaml" />
                 <ResourceDictionary Source="Dictionaries/MainNavigationView.xaml" />
                 <ResourceDictionary Source="Dictionaries/BackButton.xaml" />
+                <ResourceDictionary Source="Dictionaries/TextButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush
                 x:Key="PointerOverHighlightBackgroundBrush"

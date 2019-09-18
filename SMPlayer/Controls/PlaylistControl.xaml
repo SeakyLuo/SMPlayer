@@ -46,11 +46,37 @@
             SelectionMode="None">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="data:Music">
-                    <local:PlaylistControlItem DataContext="{Binding}">
-                        <local:PlaylistControlItem.ContextFlyout>
-                            <MenuFlyout Opening="OpenMusicMenuFlyout" />
-                        </local:PlaylistControlItem.ContextFlyout>
-                    </local:PlaylistControlItem>
+                    <SwipeControl>
+                        <SwipeControl.LeftItems>
+                            <SwipeItems Mode="Reveal">
+                                <SwipeItem
+                                    Invoked="FavoriteItem_Invoked"
+                                    Text="Favorite">
+                                    <SwipeItem.IconSource>
+                                        <FontIconSource Foreground="Red" Glyph="{x:Bind Favorite, Converter={StaticResource MusicFavoriteConverter}, ConverterParameter=Heart, Mode=OneWay}" />
+                                    </SwipeItem.IconSource>
+                                </SwipeItem>
+                            </SwipeItems>
+                        </SwipeControl.LeftItems>
+                        <SwipeControl.RightItems>
+                            <SwipeItems Mode="Execute">
+                                <SwipeItem
+                                    Background="Red"
+                                    Foreground="White"
+                                    Invoked="RemoveItem_Invoked"
+                                    Text="Remove">
+                                    <SwipeItem.IconSource>
+                                        <SymbolIconSource Symbol="Remove" />
+                                    </SwipeItem.IconSource>
+                                </SwipeItem>
+                            </SwipeItems>
+                        </SwipeControl.RightItems>
+                        <local:PlaylistControlItem DataContext="{Binding}">
+                            <local:PlaylistControlItem.ContextFlyout>
+                                <MenuFlyout Opening="OpenMusicMenuFlyout" />
+                            </local:PlaylistControlItem.ContextFlyout>
+                        </local:PlaylistControlItem>
+                    </SwipeControl>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

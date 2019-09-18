@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,6 +31,8 @@ namespace SMPlayer.Models
 
         public bool LocalMusicGridView { get; set; }
         public bool LocalFolderGridView { get; set; }
+        public ObservableCollection<Music> FavSongs { get; set; }
+        public ObservableCollection<object> RecentPlayed { get; set; }
 
         public Settings()
         {
@@ -45,6 +48,8 @@ namespace SMPlayer.Models
             LastPlaylist = "";
             LocalMusicGridView = true;
             LocalFolderGridView = true;
+            FavSongs = new ObservableCollection<Music>();
+            RecentPlayed = new ObservableCollection<object>();
         }
         public int FindNextPlaylistNameIndex(string Name)
         {
@@ -75,7 +80,12 @@ namespace SMPlayer.Models
                 Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
             }
 
-            Helper.ThumbnailFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Thumbnails", CreationCollisionOption.OpenIfExists);
+            while (true)
+            {
+                Helper.ThumbnailFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Thumbnails", CreationCollisionOption.OpenIfExists);
+                if (Helper.ThumbnailFolder == null) System.Threading.Thread.Sleep(233);
+                else break;
+            }
             foreach (var item in await Helper.ThumbnailFolder.GetFilesAsync())
                 await item.DeleteAsync();
         }
@@ -83,6 +93,18 @@ namespace SMPlayer.Models
         public static void Save()
         {
             JsonFileHelper.SaveAsync(FILENAME, settings);
+        }
+
+        public void LikeMusic(Music music)
+        {
+            music.Favorite = true;
+            FavSongs.Add(music);
+        }
+
+        public void DislikeMusic(Music music)
+        {
+            FavSongs.Remove(music);
+            music.Favorite = false;
         }
     }
 }

@@ -22,6 +22,7 @@
         <Grid
             x:Name="AppTitleBar"
             Height="32"
+            Translation="0,0,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Background="Transparent"

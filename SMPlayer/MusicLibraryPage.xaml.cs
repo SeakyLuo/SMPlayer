@@ -54,7 +54,7 @@ namespace SMPlayer
                 await Dispatcher.RunIdleAsync((args) => { libraryChecked = true; CheckLibrary(); });
         }
 
-        public static async void Init()
+        public static async Task Init()
         {
             SetAllSongs(JsonFileHelper.Convert<ObservableCollection<Music>>(await JsonFileHelper.ReadAsync(FILENAME)));
         }

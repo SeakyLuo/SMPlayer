@@ -8,7 +8,10 @@
     xmlns:triggers="using:SMPlayer.Triggers"
     mc:Ignorable="d">
 
-    <Grid x:Name="ContentGrid" Background="Transparent">
+    <Grid
+        x:Name="ContentGrid"
+        Height="30"
+        Background="Transparent">
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="TitleColumnDefinition" Width="6*" />
             <ColumnDefinition x:Name="ArtistColumnDefinition" Width="3*" />
@@ -22,8 +25,9 @@
         <StackPanel
             x:Name="TitlePanel"
             Grid.Row="0"
-            Margin="0,0,10,0"
             Grid.Column="0"
+            Margin="0,0,10,0"
+            VerticalAlignment="Center"
             Orientation="Horizontal">
             <FontIcon
                 x:Name="PlayingIcon"
@@ -38,21 +42,27 @@
                 Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=White, Mode=OneWay}"
                 Text="{Binding Name}" />
         </StackPanel>
-        <TextBlock
-            x:Name="ArtistTextBlock"
-            Margin="0,0,10,0"
+        <HyperlinkButton
+            x:Name="ArtistTextButton"
             Grid.Row="0"
             Grid.Column="1"
-            Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
-            Text="{Binding Artist}"
-            Visibility="Visible" />
-        <TextBlock
             Margin="0,0,10,0"
-            x:Name="AlbumTextBlock"
+            VerticalAlignment="Center"
+            Click="Artist_Click"
+            Content="{Binding Artist}"
+            Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
+            Style="{StaticResource TextButtonStyle}"
+            Visibility="Visible" />
+        <HyperlinkButton
+            x:Name="AlbumTextButton"
             Grid.Row="0"
             Grid.Column="2"
+            Margin="0,0,10,0"
+            VerticalAlignment="Center"
+            Click="Album_Click"
+            Content="{Binding Album}"
             Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
-            Text="{Binding Album}"
+            Style="{StaticResource TextButtonStyle}"
             Visibility="Visible" />
         <TextBlock
             x:Name="DurationTextBlock"
@@ -63,8 +73,42 @@
             VerticalAlignment="Center"
             Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
             Text="{Binding Duration, Converter={StaticResource MusicDurationConverter}}" />
+        <StackPanel
+            x:Name="LongArtistAlbumPanel"
+            Grid.Row="1"
+            Grid.ColumnSpan="3"
+            Margin="0,-1"
+            Orientation="Horizontal"
+            Visibility="Collapsed">
+            <HyperlinkButton
+                x:Name="LongArtistTextButton"
+                Grid.Row="0"
+                Grid.Column="1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Click="Artist_Click"
+                Content="{Binding Artist}"
+                Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
+                Style="{StaticResource TextButtonStyle}" />
+            <TextBlock
+                Margin="5,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
+                Text="•" />
+            <HyperlinkButton
+                x:Name="LongAlbumTextButton"
+                Grid.Row="0"
+                Grid.Column="2"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Click="Album_Click"
+                Content="{Binding Album}"
+                Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
+                Style="{StaticResource TextButtonStyle}" />
+        </StackPanel>
         <TextBlock
-            x:Name="ArtistAlbumTextBlock"
+            x:Name="ArtistAlbumTextButton"
             Grid.Row="1"
             Grid.ColumnSpan="3"
             Margin="0,2"
@@ -85,11 +129,13 @@
                         <Setter Target="PlayingIcon.Margin" Value="0,0,8,0" />
                         <Setter Target="TitlePanel.(Grid.ColumnSpan)" Value="3" />
                         <Setter Target="TitleTextBlock.FontSize" Value="16" />
-                        <Setter Target="ArtistTextBlock.Visibility" Value="Collapsed" />
-                        <Setter Target="AlbumTextBlock.Visibility" Value="Collapsed" />
-                        <Setter Target="ArtistAlbumTextBlock.Visibility" Value="Visible" />
+                        <Setter Target="ArtistTextButton.Visibility" Value="Collapsed" />
+                        <Setter Target="AlbumTextButton.Visibility" Value="Collapsed" />
+                        <!--<Setter Target="ArtistAlbumTextButton.Visibility" Value="Visible" />-->
+                        <Setter Target="LongArtistAlbumPanel.Visibility" Value="Visible" />
                         <Setter Target="DurationTextBlock.(Grid.RowSpan)" Value="2" />
                         <Setter Target="ContentGrid.Padding" Value="5,5" />
+                        <Setter Target="ContentGrid.Height" Value="Auto" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

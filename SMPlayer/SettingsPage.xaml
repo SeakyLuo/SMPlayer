@@ -18,14 +18,16 @@
             <Setter Property="Margin" Value="0,9,20,9" />
             <Setter Property="Height" Value="32" />
         </Style>
+        <Style x:Key="MinimalSettingLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Start" />
+            <Setter Property="Margin" Value="0,10,10,10" />
+            <Setter Property="Height" Value="30" />
+        </Style>
         <Style x:Key="MarginSetter" TargetType="Control">
             <Setter Property="Margin" Value="9" />
         </Style>
-        <AcrylicBrush
-            x:Key="SolidColorButtonPointerOverBrush"
-            FallbackColor="{ThemeResource SystemColorHotlightColor}"
-            Opacity="0.8"
-            TintColor="{ThemeResource SystemColorHotlightColor}" />
         <Style
             x:Key="SolidColorButton"
             BasedOn="{StaticResource MarginSetter}"
@@ -191,25 +193,30 @@
                                 <Button
                                     x:Name="ConfirmColorButton"
                                     HorizontalAlignment="Center"
+                                    Background="{ThemeResource SystemColorHighlightColor}"
+                                    BorderThickness="0"
                                     Click="ConfirmColorButton_Click"
-                                    Content="Confirm" />
+                                    Content="Confirm"
+                                    Foreground="White" />
                                 <Button
                                     x:Name="CancelColorButton"
                                     Grid.Column="1"
                                     HorizontalAlignment="Center"
+                                    Background="Transparent"
+                                    BorderThickness="0"
                                     Click="CancelColorButton_Click"
-                                    Content="Cancel" />
+                                    Content="Cancel"
+                                    Foreground="{ThemeResource SystemColorHighlightColor}" />
                             </Grid>
                         </StackPanel>
                     </Flyout>
                 </Button.Flyout>
             </Button>
-            <Button
-                Background="Transparent"
+            <HyperlinkButton
+                Margin="9"
                 Content="Show All Keyboard Shortcuts"
-                BorderThickness="0"
-                Foreground="{ThemeResource SystemColorHighlightColor}"
-                Style="{StaticResource MarginSetter}" />
+                Style="{StaticResource TextBlockButtonStyle}" />
+
         </StackPanel>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">
@@ -223,11 +230,10 @@
                         <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="MusicFolderLabel.FontSize" Value="{StaticResource SmallLabelFontSize}" />
-                        <Setter Target="LanguageLabel.FontSize" Value="{StaticResource SmallLabelFontSize}" />
-                        <Setter Target="NotificationLabel.FontSize" Value="{StaticResource SmallLabelFontSize}" />
-                        <Setter Target="NotificationLabel.FontSize" Value="{StaticResource SmallLabelFontSize}" />
-                        <Setter Target="ThemeLabel.FontSize" Value="{StaticResource SmallLabelFontSize}" />
+                        <Setter Target="MusicFolderLabel.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
+                        <Setter Target="LanguageLabel.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
+                        <Setter Target="NotificationLabel.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
+                        <Setter Target="ThemeLabel.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

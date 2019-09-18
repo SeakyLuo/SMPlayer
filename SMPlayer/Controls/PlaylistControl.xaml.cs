@@ -92,10 +92,15 @@ namespace SMPlayer
             MusicRequestListeners.Add(listener);
         }
 
+        public static Brush GetRowBackground(int index)
+        {
+            return index % 2 == 0 ? ColorHelper.WhiteSmokeBrush : ColorHelper.WhiteBrush;
+        }
+
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
             if (AlternatingRowColor)
-                args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? ColorHelper.WhiteSmokeBrush : ColorHelper.WhiteBrush;
+                args.ItemContainer.Background = GetRowBackground(args.ItemIndex);
         }
 
         private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -111,9 +116,7 @@ namespace SMPlayer
 
         public void ScrollToMusic(Music music)
         {
-            var item = SongsListView.ContainerFromItem(music) as ListViewItem;
-            if (item == null) return;
-            item.StartBringIntoView();
+            SongsListView.ScrollIntoView(music);
         }
 
         private List<Music> beforeDragging;
@@ -174,6 +177,21 @@ namespace SMPlayer
             var viewer = sender as ScrollViewer;
             if (ScrollListener != null) ScrollListener.Scrolled(ScrollPosition, viewer.VerticalOffset);
             ScrollPosition = viewer.VerticalOffset;
+        }
+
+        private void RemoveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
+        {
+            var music = args.SwipeControl.DataContext as Music;
+            int index = CurrentPlaylist.IndexOf(music);
+            CurrentPlaylist.RemoveAt(index);
+            for (int i = index; i < CurrentPlaylist.Count; i++)
+                (SongsListView.ContainerFromIndex(i) as ListViewItem).Background = GetRowBackground(i);
+        }
+
+        private void FavoriteItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
+        {
+            var music = args.SwipeControl.DataContext as Music;
+            Settings.settings.LikeMusic(music);
         }
     }
 

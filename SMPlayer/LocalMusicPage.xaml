@@ -90,6 +90,15 @@
                                         Foreground="{x:Bind Source.IsPlaying, Converter={StaticResource ColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
                                         HorizontalTextAlignment="Left"
                                         Text="{x:Bind Artist}" />
+                                    <TextBlock
+                                        x:Name="AlbumTextBlock"
+                                        Margin="0,3,0,0"
+                                        VerticalAlignment="center"
+                                        FontSize="12"
+                                        Foreground="{x:Bind Source.IsPlaying, Converter={StaticResource ColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
+                                        HorizontalTextAlignment="Left"
+                                        Text="{x:Bind Source.Album}"
+                                        Visibility="Collapsed" />
                                 </StackPanel>
                                 <FontIcon
                                     Margin="0,5"
@@ -112,6 +121,7 @@
                                         </VisualState.StateTriggers>
                                         <VisualState.Setters>
                                             <Setter Target="MusicNameTextBlock.Width" Value="400" />
+                                            <Setter Target="AlbumTextBlock.Visibility" Value="Visible" />
                                         </VisualState.Setters>
                                     </VisualState>
                                 </VisualStateGroup>

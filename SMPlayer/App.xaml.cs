@@ -82,7 +82,7 @@ namespace SMPlayer
                 Window.Current.Activate();
             }
             Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
-            MusicLibraryPage.Init();
+            await MusicLibraryPage.Init();
             MediaHelper.Init();
             Window.Current.VisibilityChanged += CheckLibrary;
 

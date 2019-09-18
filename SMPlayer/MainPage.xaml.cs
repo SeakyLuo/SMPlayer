@@ -65,9 +65,9 @@ namespace SMPlayer
         private void Current_SizeChanged(object sender, WindowSizeChangedEventArgs e)
         {
             bool isMinimal = e.Size.Width < 720;
-            bool collapsed = (isMinimal && Settings.settings.LastPage == "NowPlaying") ||
-                             Settings.settings.LastPage == "Playlists" ||
-                             Settings.settings.LastPage == "AlbumPage";
+            var page = NaviFrame.CurrentSourcePageType.Name;
+            bool collapsed = (isMinimal && page == "NowPlayingPage") ||
+                             page == "PlaylistsPage";
             HeaderGrid.Visibility = collapsed ? Visibility.Collapsed : Visibility.Visible;
             if (!MainNavigationView.IsPaneOpen)
                 if (isMinimal) PaneCloseMinimal();
@@ -133,6 +133,12 @@ namespace SMPlayer
             {
                 HideHeaderSearchBar();
             }
+        }
+
+        public void NavigateToPage(Type page, object parameter = null, NavigationTransitionInfo infoOverride = null)
+        {
+            if (NaviFrame.CurrentSourcePageType == page) return;
+            NaviFrame.Navigate(page, parameter, infoOverride);
         }
 
         private void SwitchPage(string name)
@@ -201,7 +207,7 @@ namespace SMPlayer
                     MainNavigationView.SelectedItem = ArtistsItem;
                     break;
                 case "AlbumPage":
-                    HeaderGrid.Visibility = Visibility.Collapsed;
+                    HeaderGrid.Visibility = Visibility.Visible;
                     break;
                 case "AlbumsPage":
                     SetHeaderText("Albums");

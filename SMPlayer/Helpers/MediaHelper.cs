@@ -42,6 +42,21 @@ namespace SMPlayer
 
         public static async void Init()
         {
+            var playlist = JsonFileHelper.Convert<List<string>>(await JsonFileHelper.ReadAsync(FILENAME));
+            if (playlist == null) return;
+            while (Settings.settings == null) { System.Threading.Thread.Sleep(233); }
+            var settings = Settings.settings;
+            var hashset = MusicLibraryPage.AllSongs.ToHashSet();
+            foreach (var music in playlist)
+            {
+                var target = hashset.FirstOrDefault((m) => m.Name == music);
+                if (target == null) continue; // Reset Path Cause This
+                target.IsPlaying = target.Equals(settings.LastMusic);
+                await AddMusic(target);
+            }
+            Player.Volume = settings.Volume;
+            MoveToMusic(settings.LastMusic);
+
             Timer.Tick += (sender, e) =>
             {
                 foreach (var listener in MediaControlListeners)
@@ -57,6 +72,7 @@ namespace SMPlayer
                     foreach (var listener in MusicSwitchingListeners)
                         listener.MusicSwitching(current, next, args.Reason);
                     CurrentMusic = next;
+                    settings.LastMusic = next;
                 }
             };
             Player.MediaEnded += (sender, args) =>
@@ -64,22 +80,6 @@ namespace SMPlayer
                 foreach (var listener in MediaControlListeners)
                     listener.MediaEnded();
             };
-
-            var playlist = JsonFileHelper.Convert<List<string>>(await JsonFileHelper.ReadAsync(FILENAME));
-            if (playlist == null) return;
-            while (Settings.settings == null) { System.Threading.Thread.Sleep(233); }
-            var settings = Settings.settings;
-            var hashset = MusicLibraryPage.AllSongs.ToHashSet();
-            foreach (var music in playlist)
-            {
-                var target = hashset.FirstOrDefault((m) => m.Name == music);
-                if (target == null) continue; // Reset Path Cause This
-                target.IsPlaying = target.Equals(settings.LastMusic);
-                await AddMusic(target);
-            }
-            Player.Volume = settings.Volume;
-            MoveToMusic(settings.LastMusic);
-            SetMode(settings.Mode);
         }
         public static void Save()
         {
@@ -161,8 +161,8 @@ namespace SMPlayer
             if (!Helper.SamePlaylist(CurrentPlaylist, playlist))
             {
                 if (!music.Equals(CurrentMusic)) Pause();
-                if (ShuffleEnabled) playlist = ShufflePlaylist(playlist, music);
-                await SetPlaylist(playlist, music);
+                if (ShuffleEnabled) await SetPlaylist(ShufflePlaylist(playlist, music), music);
+                else await SetPlaylist(playlist);
             }
             MoveToMusic(music);
             Play();

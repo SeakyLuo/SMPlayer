@@ -9,7 +9,7 @@
         BackgroundSource="Backdrop"
         FallbackColor="DarkGray"
         TintColor="DarkGray"
-        TintOpacity="0.5" />
+        TintOpacity="0.8" />
     <Style x:Key="MediaProgressSliderStyle" TargetType="Slider">
         <Setter Property="Background" Value="{ThemeResource SliderTrackFill}" />
         <Setter Property="BorderThickness" Value="{ThemeResource SliderBorderThemeThickness}" />

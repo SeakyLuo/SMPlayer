@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using SMPlayer.Models;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -30,8 +31,14 @@ namespace SMPlayer
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            var album = e.Parameter as Models.AlbumView;
-            var playlist = new Models.Playlist(album.Name, album.Songs);
+            Playlist playlist = null;
+            if (e.Parameter is AlbumView)
+            {
+                var album = e.Parameter as AlbumView;
+                playlist = new Playlist(album.Name, album.Songs);
+            }
+            else if (e.Parameter is Playlist)
+                playlist = e.Parameter as Playlist;
             AlbumPlaylistControl.SetMusicCollection(playlist);
         }
     }
