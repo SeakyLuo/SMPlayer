@@ -41,7 +41,7 @@ namespace SMPlayer
             }
         }
 
-        private const int MIN_VALUE = 25;
+        private const int MIN_VALUE = 10;
         private const int MAX_VALUE = 210;
 
         private static async Task<byte[]> GetPixelData(BitmapDecoder decoder, uint x, uint y)

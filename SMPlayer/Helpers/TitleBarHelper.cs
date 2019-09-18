@@ -28,7 +28,7 @@ namespace SMPlayer
             titleBar.ButtonInactiveForegroundColor = Windows.UI.Colors.Black;
             titleBar.ButtonInactiveBackgroundColor = Windows.UI.Colors.Transparent;
         }
-        public static void SetFullTitleBar()
+        public static void SetDarkTitleBar()
         {
             var titleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
 

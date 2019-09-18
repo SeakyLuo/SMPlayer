@@ -22,6 +22,19 @@ namespace SMPlayer
     public sealed partial class HeaderedPlaylistControl : UserControl, RenameActionListener
     {
         public Playlist MusicCollection { get; set; }
+        public Brush HeaderBackground
+        {
+            get
+            {
+                return headerBackground;
+            }
+            set
+            {
+                headerBackground = value;
+                PlaylistInfoGrid.Background = value;
+            }
+        }
+        private Brush headerBackground = ColorHelper.HighlightBrush;
         public bool IsPlaylist { get; set; }
         private static Dictionary<string, List<MusicDisplayItem>> PlaylistDisplayDict = new Dictionary<string, List<MusicDisplayItem>>();
         private static readonly Random random = new Random();
@@ -36,12 +49,12 @@ namespace SMPlayer
             this.InitializeComponent();
         }
 
-        public async void SetMusicCollection(Playlist playlist)
+        public async System.Threading.Tasks.Task SetMusicCollection(Playlist playlist)
         {
             MusicCollection = playlist;
             HeaderedPlaylist.ItemsSource = playlist.Songs;
             PlaylistNameTextBlock.Text = playlist.Name;
-            PlaylistInfoTextBlock.Text = SongCountConverter.ToStr(playlist.Songs);
+            SetPlaylistInfo(SongCountConverter.ToStr(playlist.Songs));
             ShuffleButton.IsEnabled = playlist.Songs.Count != 0;
             AddToButton.IsEnabled = playlist.Songs.Count != 0;
             RenameButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
@@ -55,7 +68,13 @@ namespace SMPlayer
             }
             var item = MusicDisplayItems[random.Next(MusicDisplayItems.Count)];
             PlaylistCover.Source = item.Thumbnail;
-            PlaylistInfoGrid.Background = item.Color;
+            HeaderBackground = item.Color;
+        }
+
+        public void SetPlaylistInfo(string info)
+        {
+            if (string.IsNullOrEmpty(PlaylistInfoTextBlock.Text))
+                PlaylistInfoTextBlock.Text = info;
         }
 
         public bool Confirm(string OldName, string NewName)

@@ -52,7 +52,7 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            TitleBarHelper.SetFullTitleBar();
+            TitleBarHelper.SetDarkTitleBar();
             Window.Current.SetTitleBar(AppTitleBar);
             UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar);
 

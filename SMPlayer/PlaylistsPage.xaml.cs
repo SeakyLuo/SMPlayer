@@ -63,7 +63,7 @@ namespace SMPlayer
             }
         }
 
-        private void PlaylistTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void PlaylistTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var tabview = sender as TabView;
             if (tabview.SelectedIndex == -1)
@@ -77,7 +77,8 @@ namespace SMPlayer
             foreach (var music in playlist.Songs)
                 music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
             SortByButton.Label = "Sort By " + playlist.Criterion.ToStr();
-            if (playlistControl != null) playlistControl.SetMusicCollection(playlist);
+            if (playlistControl != null)
+                await playlistControl.SetMusicCollection(playlist);
         }
 
         private void DeleteClick(object sender, RoutedEventArgs e)
@@ -245,11 +246,11 @@ namespace SMPlayer
             }
         }
 
-        private void HeaderedPlaylistControl_Loaded(object sender, RoutedEventArgs e)
+        private async void HeaderedPlaylistControl_Loaded(object sender, RoutedEventArgs e)
         {
             playlistControl = sender as HeaderedPlaylistControl;
-            playlistControl.SetMusicCollection(PlaylistTabView.SelectedItem as Playlist);
             playlistControl.ScrollListener = this as PlaylistScrollListener;
+            await playlistControl.SetMusicCollection(PlaylistTabView.SelectedItem as Playlist);
         }
 
         public void Scrolled(double before, double after)

@@ -28,18 +28,22 @@ namespace SMPlayer
             this.InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
             Playlist playlist = null;
-            if (e.Parameter is AlbumView)
+            bool isAlbum = e.Parameter is AlbumView;
+            if (isAlbum)
             {
                 var album = e.Parameter as AlbumView;
                 playlist = new Playlist(album.Name, album.Songs);
+                AlbumPlaylistControl.SetPlaylistInfo(album.Artist);
             }
             else if (e.Parameter is Playlist)
                 playlist = e.Parameter as Playlist;
-            AlbumPlaylistControl.SetMusicCollection(playlist);
+            TitleBarHelper.SetDarkTitleBar();
+            await AlbumPlaylistControl.SetMusicCollection(playlist);
+            MainPage.Instance.SetTitleBarBackground(AlbumPlaylistControl.HeaderBackground);
         }
     }
 }

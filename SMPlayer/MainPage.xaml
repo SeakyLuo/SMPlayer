@@ -22,11 +22,11 @@
         <Grid
             x:Name="AppTitleBar"
             Height="32"
-            Translation="0,0,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Background="Transparent"
-            IsHitTestVisible="True">
+            IsHitTestVisible="True"
+            Translation="0,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="LeftPaddingColumn" Width="0" />
                 <ColumnDefinition />
@@ -216,11 +216,8 @@
                     <VisualState.Setters>
                         <Setter Target="FakeTogglePaneButton.Visibility" Value="Visible" />
                         <Setter Target="AppTitle.Visibility" Value="Visible" />
-                        <Setter Target="AppTitleBar.Background" Value="{StaticResource MinimalTitleBarColor}" />
-                        <Setter Target="BackButton.Background" Value="{StaticResource MinimalTitleBarColor}" />
-                        <Setter Target="MainNavigationView.(NavigationView.PaneDisplayMode)" Value="LeftMinimal" />
+                        <Setter Target="MainNavigationView.PaneDisplayMode" Value="LeftMinimal" />
                         <Setter Target="HeaderGrid.Height" Value="40" />
-                        <Setter Target="HeaderGrid.Background" Value="{StaticResource MinimalTitleBarColor}" />
                         <Setter Target="HeaderSearchButton.Visibility" Value="Visible" />
                         <Setter Target="MainNavigationViewHeader.Style" Value="{StaticResource CompactHeaderStyle}" />
                         <Setter Target="MainLoadingControl.FontSize" Value="24" />
@@ -237,7 +234,9 @@
                     <VisualState.Setters>
                         <Setter Target="FakeTogglePaneButton.Visibility" Value="Collapsed" />
                         <Setter Target="BackButton.Background" Value="Transparent" />
+                        <Setter Target="BackButton.Foreground" Value="Black" />
                         <Setter Target="AppTitle.Visibility" Value="Visible" />
+                        <Setter Target="AppTitle.Foreground" Value="Black" />
                         <Setter Target="AppTitleBorder.Background" Value="{ThemeResource SystemControlAcrylicWindowBrush}" />
                     </VisualState.Setters>
                     <VisualState.Storyboard>
