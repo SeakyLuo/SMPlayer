@@ -66,7 +66,7 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value.Equals(true) ? "\uEB52" : (string)parameter == "" ? "" : "\uEB51";
+            return value.Equals(true) ? "\uEB52" : string.IsNullOrEmpty((string)parameter) ? "" : "\uEB51";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

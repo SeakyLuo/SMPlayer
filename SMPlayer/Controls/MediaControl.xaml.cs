@@ -367,7 +367,8 @@ namespace SMPlayer
         }
         private void MoreShuffleButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            ShuffleButton_Click(sender, null);
+            ShuffleButton.IsChecked = !ShuffleButton.IsChecked;
+            ShuffleButton_Click(ShuffleButton, null);
         }
         private void SetToolTips()
         {
@@ -382,7 +383,7 @@ namespace SMPlayer
             ShuffleToolTip.Content = MainMoreShuffleButton.Label = "Shuffle: " + (isChecked ? "Enabled" : "Disabled");
             RepeatToolTip.Content = MainMoreRepeatButton.Label = "Repeat: Disabled";
             RepeatOneToolTip.Content = MainMoreRepeatOneButton.Label = "Repeat One: Disabled";
-            MainMoreShuffleButton.IconBackground = ColorHelper.GrayBrush;
+            MainMoreShuffleButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
             MainMoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
             MainMoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
             SetToolTips();
@@ -395,7 +396,8 @@ namespace SMPlayer
         }
         private void MoreRepeatButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            RepeatButton_Click(sender, null);
+            RepeatButton.IsChecked = !RepeatButton.IsChecked;
+            RepeatButton_Click(RepeatButton, null);
         }
         public void SetRepeat(bool isChecked)
         {
@@ -405,7 +407,7 @@ namespace SMPlayer
             RepeatToolTip.Content = MainMoreRepeatButton.Label = "Repeat: " + (isChecked ? "Enabled" : "Disabled");
             RepeatOneToolTip.Content = MainMoreRepeatOneButton.Label = "Repeat One: Disabled";
             MainMoreShuffleButton.IconBackground = ColorHelper.TransparentBrush;
-            MainMoreRepeatButton.IconBackground = ColorHelper.GrayBrush;
+            MainMoreRepeatButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
             MainMoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
             SetToolTips();
             var mode = isChecked ? PlayMode.Repeat : PlayMode.Once;
@@ -418,7 +420,8 @@ namespace SMPlayer
         }
         private void MoreRepeatOneButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            RepeatOneButton_Click(sender, null);
+            RepeatOneButton.IsChecked = !RepeatOneButton.IsChecked;
+            RepeatOneButton_Click(RepeatOneButton, null);
         }
         public void SetRepeatOne(bool isChecked)
         {
@@ -429,7 +432,7 @@ namespace SMPlayer
             RepeatOneToolTip.Content = MainMoreRepeatOneButton.Label = "Repeat One: " + (isChecked ? "Enabled" : "Disabled");
             MainMoreShuffleButton.IconBackground = ColorHelper.TransparentBrush;
             MainMoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
-            MainMoreRepeatOneButton.IconBackground = ColorHelper.GrayBrush;
+            MainMoreRepeatOneButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
             SetToolTips();
             var mode = isChecked ? PlayMode.RepeatOne : PlayMode.Once;
             if (mode != Settings.settings.Mode) MediaHelper.SetMode(mode);

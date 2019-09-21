@@ -326,7 +326,7 @@ namespace SMPlayer
             if (page != "AlbumPage")
             {
                 TitleBarHelper.SetMainTitleBar();
-                SetTitleBarBackground(ColorHelper.MinimalTitleBarColor);
+                SetTitleBarBackground(MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? ColorHelper.MinimalTitleBarColor : ColorHelper.TransparentBrush);
                 SetFakeTogglePaneButtonBackground();
             }
         }

@@ -76,7 +76,7 @@
                     x:Name="MainTitleScrollViewer"
                     Grid.Row="0"
                     Grid.Column="1"
-                    Margin="10,5,10,5">
+                    Margin="10,5">
                     <TextBlock
                         x:Name="MainTitleTextBlock"
                         VerticalAlignment="Bottom"
@@ -87,7 +87,7 @@
                     x:Name="MainArtistTextBlock"
                     Grid.Row="1"
                     Grid.Column="1"
-                    Margin="10,5,10,5"
+                    Margin="10,5"
                     VerticalAlignment="Top"
                     FontSize="18"
                     FontWeight="Bold"
@@ -130,7 +130,7 @@
                     Visibility="Collapsed">
                     <Button.Flyout>
                         <Flyout Opening="MainMediaControlMoreFlyout_Opening">
-                            <StackPanel Margin="-12,-4">
+                            <StackPanel Width="200" Margin="-12,-4">
                                 <local:IconTextButton
                                     x:Name="MainMoreShuffleButton"
                                     IconRadius="15"
@@ -183,7 +183,7 @@
                                     <Slider
                                         x:Name="MainMoreVolumeSlider"
                                         Width="135"
-                                        Padding="5,0,0,0"
+                                        Margin="10,0,0,0"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Center"
                                         Foreground="Black"
@@ -664,6 +664,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <!--  Main  -->
+                        <Setter Target="MainTitleScrollViewer.Margin" Value="0,5,10,5" />
                         <Setter Target="MainAlbumCover.Visibility" Value="Collapsed" />
                         <Setter Target="MainShuffleButton.Visibility" Value="Collapsed" />
                         <Setter Target="MainLikeToggleButton.Visibility" Value="Collapsed" />

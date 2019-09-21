@@ -220,7 +220,6 @@
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="MaxHeight" />
       <RootProperty Name="IsHitTestVisible" />
-      <RootProperty Name="Translation" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
       <RootEvent Name="Tapped" />
