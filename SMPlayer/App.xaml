@@ -19,6 +19,7 @@
                 <ResourceDictionary Source="Dictionaries/MainNavigationView.xaml" />
                 <ResourceDictionary Source="Dictionaries/BackButton.xaml" />
                 <ResourceDictionary Source="Dictionaries/TextButton.xaml" />
+                <ResourceDictionary Source="Dictionaries/IconButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush
                 x:Key="PointerOverHighlightBackgroundBrush"

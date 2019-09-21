@@ -72,6 +72,7 @@
       <RootProperty Name="Width" />
       <RootProperty Name="TextTrimming" />
       <RootProperty Name="MinWidth" />
+      <RootProperty Name="Height" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Button">
       <RootProperty Name="Content" />
@@ -292,6 +293,7 @@
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="XYFocusKeyboardNavigation" />
       <RootProperty Name="IsDoubleTapEnabled" />
+      <RootProperty Name="Width" />
       <RootEvent Name="DoubleTapped" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ToolTipService">
@@ -754,7 +756,6 @@
       <RootProperty Name="ManipulationMode" />
       <RootProperty Name="Style" />
       <RootProperty Name="ThumbToolTipValueConverter" />
-      <RootProperty Name="Padding" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="Foreground" />
       <RootEvent Name="ValueChanged" />

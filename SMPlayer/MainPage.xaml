@@ -47,11 +47,10 @@
                         Height="40"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
-                        Background="Transparent"
                         BorderThickness="0"
                         Click="HeaderSearchButton_Click"
                         Content="&#xE11A;"
-                        FontFamily="Segoe MDL2 Assets"
+                        Style="{StaticResource IconButtonStyle}"
                         Visibility="Collapsed" />
                     <AutoSuggestBox
                         x:Name="HeaderSearchBar"
@@ -159,38 +158,31 @@
             Height="32"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Background="Transparent"
-            IsHitTestVisible="True">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition x:Name="LeftPaddingColumn" Width="0" />
-                <ColumnDefinition />
-                <ColumnDefinition x:Name="RightPaddingColumn" Width="0" />
-            </Grid.ColumnDefinitions>
+            Background="Transparent">
             <Border
                 x:Name="AppTitleBorder"
-                Grid.Column="1"
                 Width="{x:Bind MainNavigationView.OpenPaneLength}"
                 HorizontalAlignment="Left"
-                Background="{StaticResource MainNavigationViewBackground}" />
-            <TextBlock
-                x:Name="AppTitle"
-                Grid.Column="1"
-                Padding="10,0"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
-                Style="{StaticResource CaptionTextBlockStyle}"
-                Text="{x:Bind appmodel:Package.Current.DisplayName}"
-                Visibility="Collapsed" />
+                VerticalAlignment="Stretch"
+                Background="Transparent" />
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    x:Name="BackButton"
+                    Background="Transparent"
+                    Click="BackButton_Click"
+                    Style="{StaticResource BackButtonStyle}"
+                    Visibility="Collapsed" />
+                <TextBlock
+                    x:Name="AppTitle"
+                    Height="{x:Bind AppTitleBar.Height, Mode=OneWay}"
+                    Padding="10,8"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{x:Bind appmodel:Package.Current.DisplayName}"
+                    Visibility="Collapsed" />
+            </StackPanel>
         </Grid>
-        <Button
-            x:Name="BackButton"
-            Width="40"
-            Height="32"
-            HorizontalAlignment="Left"
-            Background="Transparent"
-            Click="BackButton_Click"
-            Style="{StaticResource BackButtonStyle}"
-            Visibility="Collapsed" />
         <Button
             x:Name="FakeTogglePaneButton"
             Grid.Row="1"

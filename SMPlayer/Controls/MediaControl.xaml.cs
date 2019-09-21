@@ -279,10 +279,10 @@ namespace SMPlayer
             if (MediaHelper.IsPlaying) PlayMusic();
             else PauseMusic();
 
-            Settings settings = Settings.settings;
-            VolumeButton.Content = Helper.GetVolumeIcon(settings.Volume);
-            VolumeSlider.Value = settings.Volume * 100;
-            SetPlayMode(settings.Mode);
+            double volume = Settings.settings.Volume * 100;
+            VolumeButton.Content = Helper.GetVolumeIcon(volume);
+            VolumeSlider.Value = volume;
+            SetPlayMode(Settings.settings.Mode);
         }
 
         public async void SetMusic(Music music)

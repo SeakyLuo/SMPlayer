@@ -43,7 +43,8 @@ namespace SMPlayer
                 playlist = e.Parameter as Playlist;
             TitleBarHelper.SetDarkTitleBar();
             await AlbumPlaylistControl.SetMusicCollection(playlist);
-            MainPage.Instance.SetTitleBarBackground(AlbumPlaylistControl.HeaderBackground);
+            MainPage.Instance.TitleBarBackground = AlbumPlaylistControl.HeaderBackground;
+            MainPage.Instance.TitleBarForeground = MainPage.Instance.IsMinimal ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
         }
     }
 }

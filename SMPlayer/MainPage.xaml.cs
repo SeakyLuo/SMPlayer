@@ -41,10 +41,11 @@ namespace SMPlayer
             // This will return null when your current page is not a MainPage instance!
             get => (Window.Current.Content as Frame).Content as MainPage;
         }
+        public bool IsMinimal { get => MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal; }
         public Brush TitleBarBackground
         {
             get => AppTitleBarBackground;
-            set => AppTitleBarBackground = AppTitleBar.Background = HeaderGrid.Background = FakeTogglePaneButton.Background = BackButton.Background = value;
+            set => AppTitleBarBackground = AppTitleBar.Background = HeaderGrid.Background = FakeTogglePaneButton.Background = value;
         }
         private Brush AppTitleBarBackground;
         public Brush TitleBarForeground
@@ -83,9 +84,9 @@ namespace SMPlayer
             bool collapsed = (page == "NowPlayingPage" && isMinimal) ||
                              page == "PlaylistsPage" || 
                              (isAlbum && !isMinimal);
-            AppTitleBorder.Background = isMinimal ? ColorHelper.TransparentBrush : ColorHelper.MinimalTitleBarColor;
+            AppTitleBorder.Background = isMinimal ? ColorHelper.TransparentBrush : ColorHelper.MainNavigationViewBackground;
             TitleBarForeground = isMinimal && isAlbum ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
-            TitleBarBackground = isMinimal ? isAlbum ? TitleBarBackground : ColorHelper.MinimalTitleBarColor : ColorHelper.TransparentBrush;
+            if (!isAlbum) TitleBarBackground = isMinimal ? ColorHelper.MinimalTitleBarColor : ColorHelper.TransparentBrush;
             HeaderGrid.Visibility = collapsed ? Visibility.Collapsed : Visibility.Visible;
             if (!MainNavigationView.IsPaneOpen)
                 if (isMinimal) PaneCloseMinimal();
@@ -105,12 +106,6 @@ namespace SMPlayer
 
         private void UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar coreTitleBar)
         {
-            // Get the size of the caption controls area and back button 
-            // (returned in logical pixels), and move your content around as necessary.
-            LeftPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayLeftInset);
-            RightPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayRightInset);
-            BackButton.Margin = new Thickness(0, 0, coreTitleBar.SystemOverlayRightInset, 0);
-
             // Update title bar control size as needed to account for system size changes.
             AppTitleBar.Height = coreTitleBar.Height;
         }
@@ -136,10 +131,10 @@ namespace SMPlayer
         {
             AppTitle.Visibility = Visibility.Visible;
             FakeTogglePaneButton.Visibility = Visibility.Visible;
-            bool isMiniAlbum = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal && NaviFrame.CurrentSourcePageType.Name == "AlbumPage";
-            AppTitle.Foreground = BackButton.Foreground = isMiniAlbum ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
+            bool isAlbum = NaviFrame.CurrentSourcePageType.Name == "AlbumPage";
+            AppTitle.Foreground = BackButton.Foreground = isAlbum ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
             AppTitleBorder.Background = ColorHelper.TransparentBrush;
-            if (beforeOpenTitleBarBackground == null)
+            if (beforeOpenTitleBarBackground == null || !isAlbum)
             {
                 SetFakeTogglePaneButtonBackground();
             }
@@ -150,17 +145,6 @@ namespace SMPlayer
             }
         }
 
-        private void SetFakeTogglePaneButtonBackground()
-        {
-            FakeTogglePaneButton.Background = NaviFrame.CurrentSourcePageType.Name.StartsWith("Playlists") ? ColorHelper.TransparentBrush : TitleBarBackground;
-        }
-
-        public void SetTitleBarBackground(Brush brush)
-        {
-            TitleBarBackground = brush;
-            TitleBarForeground = brush == ColorHelper.MinimalTitleBarColor ? ColorHelper.BlackBrush : ColorHelper.WhiteBrush;
-        }
-
         private void PaneCloseNormal()
         {
             AppTitle.Visibility = Visibility.Collapsed;
@@ -168,18 +152,14 @@ namespace SMPlayer
             FakeTogglePaneButton.Visibility = Visibility.Collapsed;
         }
 
+        private void SetFakeTogglePaneButtonBackground()
+        {
+            FakeTogglePaneButton.Background = NaviFrame.CurrentSourcePageType.Name.StartsWith("Playlists") ? ColorHelper.TransparentBrush : TitleBarBackground;
+        }
+
         private void SetBackButtonVisible(bool visible)
         {
-            if (visible)
-            {
-                AppTitle.Margin = new Thickness(40, 0, 0, 0);
-                BackButton.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                AppTitle.Margin = new Thickness(0, 0, 0, 0);
-                BackButton.Visibility = Visibility.Collapsed;
-            }
+            BackButton.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
@@ -326,7 +306,8 @@ namespace SMPlayer
             if (page != "AlbumPage")
             {
                 TitleBarHelper.SetMainTitleBar();
-                SetTitleBarBackground(MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? ColorHelper.MinimalTitleBarColor : ColorHelper.TransparentBrush);
+                TitleBarBackground = IsMinimal ? ColorHelper.MinimalTitleBarColor : ColorHelper.TransparentBrush;
+                TitleBarForeground = ColorHelper.BlackBrush;
                 SetFakeTogglePaneButtonBackground();
             }
         }
