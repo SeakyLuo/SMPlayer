@@ -19,35 +19,6 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid
-            x:Name="AppTitleBar"
-            Height="32"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Background="Transparent"
-            IsHitTestVisible="True"
-            Translation="0,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition x:Name="LeftPaddingColumn" Width="0" />
-                <ColumnDefinition />
-                <ColumnDefinition x:Name="RightPaddingColumn" Width="0" />
-            </Grid.ColumnDefinitions>
-            <Border
-                x:Name="AppTitleBorder"
-                Grid.Column="1"
-                Width="{x:Bind MainNavigationView.OpenPaneLength}"
-                HorizontalAlignment="Left"
-                Background="{StaticResource MainNavigationViewBackground}" />
-            <TextBlock
-                x:Name="AppTitle"
-                Grid.Column="1"
-                Padding="10,0"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
-                Style="{StaticResource CaptionTextBlockStyle}"
-                Text="{x:Bind appmodel:Package.Current.DisplayName}"
-                Visibility="Collapsed" />
-        </Grid>
         <NavigationView
             x:Name="MainNavigationView"
             Grid.Row="1"
@@ -183,6 +154,34 @@
                 IsNavigationStackEnabled="True"
                 Navigated="NaviFrame_Navigated" />
         </NavigationView>
+        <Grid
+            x:Name="AppTitleBar"
+            Height="32"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="Transparent"
+            IsHitTestVisible="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="LeftPaddingColumn" Width="0" />
+                <ColumnDefinition />
+                <ColumnDefinition x:Name="RightPaddingColumn" Width="0" />
+            </Grid.ColumnDefinitions>
+            <Border
+                x:Name="AppTitleBorder"
+                Grid.Column="1"
+                Width="{x:Bind MainNavigationView.OpenPaneLength}"
+                HorizontalAlignment="Left"
+                Background="{StaticResource MainNavigationViewBackground}" />
+            <TextBlock
+                x:Name="AppTitle"
+                Grid.Column="1"
+                Padding="10,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Style="{StaticResource CaptionTextBlockStyle}"
+                Text="{x:Bind appmodel:Package.Current.DisplayName}"
+                Visibility="Collapsed" />
+        </Grid>
         <Button
             x:Name="BackButton"
             Width="40"

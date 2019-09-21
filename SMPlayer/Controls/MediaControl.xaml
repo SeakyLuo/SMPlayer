@@ -72,14 +72,17 @@
                     Height="100"
                     Source="Assets/monotone_bg_wide.png"
                     Stretch="UniformToFill" />
-                <TextBlock
-                    x:Name="MainTitleTextBlock"
+                <ScrollViewer
+                    x:Name="MainTitleScrollViewer"
                     Grid.Row="0"
                     Grid.Column="1"
-                    Margin="10,5,10,5"
-                    VerticalAlignment="Bottom"
-                    FontSize="24"
-                    Foreground="White" />
+                    Margin="10,5,10,5">
+                    <TextBlock
+                        x:Name="MainTitleTextBlock"
+                        VerticalAlignment="Bottom"
+                        FontSize="24"
+                        Foreground="White" />
+                </ScrollViewer>
                 <TextBlock
                     x:Name="MainArtistTextBlock"
                     Grid.Row="1"
@@ -90,7 +93,6 @@
                     FontWeight="Bold"
                     Foreground="White" />
             </Grid>
-
             <StackPanel
                 x:Name="MainMediaControlPanel"
                 Grid.Column="1"

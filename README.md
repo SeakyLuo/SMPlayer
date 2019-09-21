@@ -20,9 +20,11 @@ Auto Scrolling Text.
 
 Shy header.
 
-AlbumPage set TitleBar.
-
 Loading Progress.
+
+Add Album Art to Music.
+
+Minimal Search Button PointerOver foreground.
 
 # TO FIX
 
@@ -42,4 +44,3 @@ NowPlayingFull Scroll Into View.
 
 NowPlayingFull play count repeat one.
 
-Add Album Art to Music.

@@ -12,9 +12,10 @@
 
     <Page.Resources>
         <SolidColorBrush x:Key="NavigationViewTopPaneBackground" Color="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
-        <Style x:Key="TopNavigationViewFooterItemStyle" TargetType="Control">
+        <Style x:Key="TopNavigationViewFooterItemStyle" TargetType="local:IconTextButton">
             <Setter Property="Margin" Value="3,0,2,0" />
             <Setter Property="Padding" Value="5,0,5,0" />
+            <Setter Property="IconTextMargin" Value="10,0,5,0" />
         </Style>
         <Style x:Key="FontIconSizeSetter" TargetType="FontIcon">
             <Setter Property="FontSize" Value="18" />
@@ -45,7 +46,6 @@
                 <StackPanel Orientation="Horizontal">
                     <local:IconTextButton
                         x:Name="LocalShuffleItem"
-                        IconTextMargin="10,0,5,0"
                         Label="Shuffle"
                         Style="{StaticResource TopNavigationViewFooterItemStyle}"
                         Tapped="LocalShuffleItem_Tapped"
@@ -57,7 +57,6 @@
                     <local:IconTextButton
                         x:Name="LocalListViewItem"
                         Width="105"
-                        IconTextMargin="10,0,5,0"
                         Label="List View"
                         Style="{StaticResource TopNavigationViewFooterItemStyle}"
                         Tapped="LocalListViewItem_Tapped"
@@ -69,7 +68,7 @@
                     </local:IconTextButton>
                     <local:IconTextButton
                         x:Name="LocalGridViewItem"
-                        IconTextMargin="10,0,5,0"
+                        Width="105"
                         Label="Grid View"
                         Style="{StaticResource TopNavigationViewFooterItemStyle}"
                         Tapped="LocalGridViewItem_Tapped"
@@ -101,6 +100,8 @@
                         <Setter Target="LocalShuffleItem.IconTextMargin" Value="0" />
                         <Setter Target="LocalListViewItem.IconTextMargin" Value="0" />
                         <Setter Target="LocalGridViewItem.IconTextMargin" Value="0" />
+                        <Setter Target="LocalListViewItem.Width" Value="Auto" />
+                        <Setter Target="LocalGridViewItem.Width" Value="Auto" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

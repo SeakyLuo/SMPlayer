@@ -27,7 +27,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
             AutomationProperties.AccessibilityView="Raw"
-            Background="{x:Bind IconBackground}">
+            Background="{x:Bind IconBackground, Mode=OneWay}">
             <ContentPresenter
                 x:Name="IconContent"
                 Content="{x:Bind Icon}"
@@ -36,13 +36,13 @@
         <TextBlock
             x:Name="LabelTextBlock"
             Grid.Column="2"
-            Margin="{x:Bind IconTextMargin}"
+            Margin="{x:Bind IconTextMargin, Mode=OneWay}"
             VerticalAlignment="Center"
             AutomationProperties.AccessibilityView="Raw"
             FontSize="{x:Bind FontSize}"
             FontWeight="{x:Bind FontWeight}"
             Foreground="{x:Bind Foreground}"
-            Text="{x:Bind Label}"
+            Text="{x:Bind Label, Mode=OneWay}"
             TextAlignment="Center"
             TextWrapping="Wrap" />
         <VisualStateManager.VisualStateGroups>
