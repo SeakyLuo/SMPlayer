@@ -79,13 +79,8 @@
             Height="32"
             HorizontalAlignment="Stretch"
             Background="Transparent"
-            IsHitTestVisible="True">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition x:Name="LeftPaddingColumn" Width="0" />
-                <ColumnDefinition />
-                <ColumnDefinition x:Name="RightPaddingColumn" Width="0" />
-            </Grid.ColumnDefinitions>
-        </Grid>
+            IsHitTestVisible="True" />
+
         <Button
             x:Name="BackButton"
             Grid.Column="1"

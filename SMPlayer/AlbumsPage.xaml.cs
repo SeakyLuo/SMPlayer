@@ -32,7 +32,6 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            System.Diagnostics.Debug.WriteLine("Albums");
             MusicLibraryPage.AddAfterSongsSetListener(this as AfterSongsSetListener);
         }
 
@@ -114,9 +113,10 @@ namespace SMPlayer
             var helper = new MenuFlyoutHelper() { Data = data.Songs };
             helper.GetAddToPlaylistsMenuFlyout(data.Name).ShowAt(sender as FrameworkElement);
         }
-        private void GridViewItem_Tapped(object sender, TappedRoutedEventArgs e)
+
+        private void GridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            Frame.Navigate(typeof(AlbumPage), (sender as FrameworkElement).DataContext);
+            Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
         }
     }
 }

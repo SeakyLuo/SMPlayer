@@ -76,7 +76,9 @@
                     x:Name="MainTitleScrollViewer"
                     Grid.Row="0"
                     Grid.Column="1"
-                    Margin="10,5">
+                    Margin="10,5"
+                    HorizontalScrollBarVisibility="Hidden"
+                    VerticalScrollBarVisibility="Disabled">
                     <TextBlock
                         x:Name="MainTitleTextBlock"
                         VerticalAlignment="Bottom"

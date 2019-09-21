@@ -183,9 +183,16 @@ namespace SMPlayer
         {
             var music = args.SwipeControl.DataContext as Music;
             int index = CurrentPlaylist.IndexOf(music);
-            CurrentPlaylist.RemoveAt(index);
-            for (int i = index; i < CurrentPlaylist.Count; i++)
-                (SongsListView.ContainerFromIndex(i) as ListViewItem).Background = GetRowBackground(i);
+            if (Theme == ElementTheme.Dark)
+            {
+                MediaHelper.RemoveMusic(index);
+                ItemsSource = MediaHelper.CurrentPlaylist;
+            }
+            else
+            {
+                for (int i = index; i < CurrentPlaylist.Count; i++)
+                    (SongsListView.ContainerFromIndex(i) as ListViewItem).Background = GetRowBackground(i);
+            }
         }
 
         private void FavoriteItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)

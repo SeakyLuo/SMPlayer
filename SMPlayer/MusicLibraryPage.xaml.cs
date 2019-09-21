@@ -27,7 +27,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MusicLibraryPage : Page, MusicControlListener, MusicSwitchingListener, AfterPathSetListener, AfterSongsSetListener
+    public sealed partial class MusicLibraryPage : Page, MusicControlListener, MusicSwitchingListener, AfterSongsSetListener
     {
         private const string FILENAME = "MusicLibrary.json";
         public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
@@ -41,7 +41,6 @@ namespace SMPlayer
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             listeners.Add(this as AfterSongsSetListener);
             SongsSet(AllSongs);
-            SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
             MediaControl.AddMusicControlListener(this as MusicControlListener);
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
         }
@@ -157,11 +156,6 @@ namespace SMPlayer
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () => MediaHelper.FindMusicAndSetPlaying(AllSongs, current, next));
-        }
-
-        public void PathSet(string path)
-        {
-            SetAllSongs(Settings.settings.Tree.Flatten());
         }
 
         public void SongsSet(ICollection<Music> songs)

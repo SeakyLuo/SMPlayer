@@ -42,8 +42,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            foreach (var list in Settings.settings.Playlists)
-                Playlists.Add(list);
+            Playlists = new ObservableCollection<Playlist>(Settings.settings.Playlists);
             SetFooterText();
             Playlists.CollectionChanged += (sender, e) => SetFooterText();
             PlaylistTabView.SelectedIndex = Settings.settings.Playlists.FindIndex((p) => p.Name == Settings.settings.LastPlaylist);

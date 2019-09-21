@@ -24,15 +24,8 @@ namespace SMPlayer
         public Playlist MusicCollection { get; set; }
         public Brush HeaderBackground
         {
-            get
-            {
-                return headerBackground;
-            }
-            set
-            {
-                headerBackground = value;
-                PlaylistInfoGrid.Background = value;
-            }
+            get => headerBackground;
+            set => PlaylistInfoGrid.Background = headerBackground = value;
         }
         private Brush headerBackground = ColorHelper.HighlightBrush;
         public bool IsPlaylist { get; set; }

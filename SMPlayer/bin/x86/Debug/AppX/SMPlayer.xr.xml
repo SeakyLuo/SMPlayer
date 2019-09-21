@@ -256,7 +256,6 @@
       <RootProperty Name="Resources" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
-      <RootEvent Name="Tapped" />
       <RootEvent Name="Loaded" />
       <RootEvent Name="Loading" />
     </RootType>
@@ -959,6 +958,8 @@
       <RootProperty Name="Margin" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="Child" />
+      <RootProperty Name="Width" />
+      <RootProperty Name="VerticalAlignment" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ContentDialog">
       <RootProperty Name="Resources" />

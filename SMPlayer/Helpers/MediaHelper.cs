@@ -268,7 +268,11 @@ namespace SMPlayer
 
         public static void RemoveMusic(Music music)
         {
-            int index = CurrentPlaylist.IndexOf(music);
+            RemoveMusic(CurrentPlaylist.IndexOf(music));
+        }
+
+        public static void RemoveMusic(int index)
+        {
             CurrentPlaylist.RemoveAt(index);
             PlayBackList.Items.RemoveAt(index);
         }

@@ -50,6 +50,7 @@ namespace SMPlayer
             Settings.settings.RootPath = folder.Path;
             await Settings.settings.Tree.Init(folder);
             MainPage.Instance.UpdateLoadingText("Updating your music library...");
+            MusicLibraryPage.SetAllSongs(Settings.settings.Tree.Flatten());
             foreach (var listener in listeners) listener.PathSet(folder.Path);
             MediaHelper.Clear();
             Settings.Save();

@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:SMPlayer">
     <Style x:Key="BackButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="{ThemeResource ButtonBackground}" />
         <Setter Property="BackgroundSizing" Value="OuterBorderEdge" />
         <Setter Property="Foreground" Value="{ThemeResource ButtonForeground}" />
         <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}" />
@@ -29,7 +28,6 @@
                         HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                         VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                         AutomationProperties.AccessibilityView="Raw"
-                        Background="{TemplateBinding Background}"
                         BackgroundSizing="{TemplateBinding BackgroundSizing}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
