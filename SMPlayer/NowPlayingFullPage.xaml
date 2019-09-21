@@ -90,7 +90,7 @@
             x:Name="BackButton"
             Grid.Column="1"
             Width="48"
-            Height="30"
+            Height="32"
             Click="BackButton_Click"
             Style="{StaticResource DarkBackButtonStyle}" />
         <local:MediaControl

@@ -159,7 +159,16 @@ namespace SMPlayer
 
         private void SetBackButtonVisible(bool visible)
         {
-            BackButton.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+            if (visible)
+            {
+                AppTitle.Margin = new Thickness(40, 0, 0, 0);
+                BackButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                AppTitle.Margin = new Thickness(0, 0, 0, 0);
+                BackButton.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

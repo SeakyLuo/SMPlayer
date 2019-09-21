@@ -94,6 +94,9 @@
                         <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
+                        <Setter Target="LocalShuffleItem.Padding" Value="10,0" />
+                        <Setter Target="LocalListViewItem.Padding" Value="10,0" />
+                        <Setter Target="LocalGridViewItem.Padding" Value="10,0" />
                         <Setter Target="LocalShuffleItem.Label" Value="" />
                         <Setter Target="LocalListViewItem.Label" Value="" />
                         <Setter Target="LocalGridViewItem.Label" Value="" />

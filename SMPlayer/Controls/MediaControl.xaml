@@ -549,7 +549,7 @@
                                 <MenuFlyout>
                                     <MenuFlyoutItem
                                         x:Name="PlaylistItem"
-                                        Click="SavePlaylistItem_Click"
+                                        Click="PlaylistButton_Click"
                                         Text="Now Playing Playlist"
                                         Visibility="Collapsed">
                                         <MenuFlyoutItem.Icon>

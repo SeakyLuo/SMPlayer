@@ -498,6 +498,7 @@ namespace SMPlayer
         public void LikeMusic(bool isClick = true)
         {
             ToolTipService.SetToolTip(LikeToggleButton, "Undo Favorite");
+            Settings.settings.LikeMusic(MediaHelper.CurrentMusic);
             if (isClick) SetMusicFavorite(true);
             else LikeToggleButton.IsChecked = true;
         }
@@ -505,6 +506,7 @@ namespace SMPlayer
         public void DislikeMusic(bool isClick = true)
         {
             ToolTipService.SetToolTip(LikeToggleButton, "Set As Favorite");
+            Settings.settings.DislikeMusic(MediaHelper.CurrentMusic);
             if (isClick) SetMusicFavorite(false);
             else LikeToggleButton.IsChecked = false;
         }

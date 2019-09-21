@@ -181,7 +181,9 @@ namespace SMPlayer
             };
             musicInfoItem.Click += (s, args) =>
             {
-
+                if (MediaHelper.CurrentMusic == null) return;
+                MainPage.Instance.Frame.Navigate(typeof(NowPlayingFullPage));
+                NowPlayingFullPage.Instance.MusicInfoRequested(MediaHelper.CurrentMusic);
             };
             ToolTipService.SetToolTip(musicInfoItem, new ToolTip() { Content = "Show Music Info" });
             flyout.Items.Add(musicInfoItem);
@@ -192,7 +194,9 @@ namespace SMPlayer
             };
             lyricsItem.Click += (s, args) =>
             {
-
+                if (MediaHelper.CurrentMusic == null) return;
+                MainPage.Instance.Frame.Navigate(typeof(NowPlayingFullPage));
+                NowPlayingFullPage.Instance.LyricsRequested(MediaHelper.CurrentMusic);
             };
             ToolTipService.SetToolTip(lyricsItem, new ToolTip() { Content = "Show Music Lyrics" });
             flyout.Items.Add(lyricsItem);

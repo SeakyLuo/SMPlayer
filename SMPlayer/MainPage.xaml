@@ -165,24 +165,22 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Stretch"
                 Background="Transparent" />
-            <StackPanel Orientation="Horizontal">
-                <Button
-                    x:Name="BackButton"
-                    Background="Transparent"
-                    Click="BackButton_Click"
-                    Style="{StaticResource BackButtonStyle}"
-                    Visibility="Collapsed" />
-                <TextBlock
-                    x:Name="AppTitle"
-                    Height="{x:Bind AppTitleBar.Height, Mode=OneWay}"
-                    Padding="10,8"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    Style="{StaticResource CaptionTextBlockStyle}"
-                    Text="{x:Bind appmodel:Package.Current.DisplayName}"
-                    Visibility="Collapsed" />
-            </StackPanel>
+            <TextBlock
+                x:Name="AppTitle"
+                Height="{x:Bind AppTitleBar.Height, Mode=OneWay}"
+                Padding="10,8"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Style="{StaticResource CaptionTextBlockStyle}"
+                Text="{x:Bind appmodel:Package.Current.DisplayName}"
+                Visibility="Collapsed" />
         </Grid>
+        <Button
+            x:Name="BackButton"
+            Background="Transparent"
+            Click="BackButton_Click"
+            Style="{StaticResource BackButtonStyle}"
+            Visibility="Collapsed" />
         <Button
             x:Name="FakeTogglePaneButton"
             Grid.Row="1"
