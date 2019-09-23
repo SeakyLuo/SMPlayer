@@ -26,6 +26,7 @@ namespace SMPlayer
     {
         private ObservableCollection<GridFolderView> GridItems = new ObservableCollection<GridFolderView>();
         private FolderTree Tree;
+        private ObservableCollection<FolderTree> TreeViewSource = new ObservableCollection<FolderTree>();
         public static LocalSetter setter;
         
         public LocalFoldersPage()
@@ -52,6 +53,8 @@ namespace SMPlayer
         {
             if (Tree == tree) return;
             Tree = tree;
+            TreeViewSource.Remove(tree);
+            TreeViewSource.Add(tree);
             LocalLoadingControl.Visibility = Visibility.Visible;
             GridItems.Clear();
             setter.SetPage(tree);

@@ -55,12 +55,6 @@
                 <Setter Property="Width" Value="50" />
                 <Setter Property="FontSize" Value="24" />
             </Style>
-            <Style x:Key="LoadProgressRingStyle" TargetType="ProgressRing">
-                <Setter Property="Width" Value="100" />
-                <Setter Property="Height" Value="100" />
-                <Setter Property="HorizontalAlignment" Value="Center" />
-                <Setter Property="VerticalAlignment" Value="Center" />
-            </Style>
             <local:MusicDurationConverter x:Key="MusicDurationConverter" />
             <local:MusicFavoriteConverter x:Key="MusicFavoriteConverter" />
             <local:IntConverter x:Key="IntConverter" />

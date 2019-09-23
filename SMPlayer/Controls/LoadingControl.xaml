@@ -6,27 +6,76 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:triggers="using:SMPlayer.Triggers"
     mc:Ignorable="d">
 
-    <controls:Loading x:Name="MainControl">
-        <controls:Loading.Background>
+    <UserControl.Resources>
+        <Style x:Key="NormalProgressStyle" TargetType="Control">
+            <Setter Property="Width" Value="150" />
+            <Setter Property="Height" Value="150" />
+        </Style>
+        <Style x:Key="SmallProgressStyle" TargetType="Control">
+            <Setter Property="Width" Value="120" />
+            <Setter Property="Height" Value="120" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid
+        x:Name="ContentGrid"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch">
+        <Grid.Background>
             <SolidColorBrush Opacity="0.75" Color="Black" />
-        </controls:Loading.Background>
-        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <ProgressRing
-                x:Name="LoadingProgressRing"
-                Width="150"
-                Height="150"
-                Foreground="White"
-                IsActive="True"
-                Style="{StaticResource LoadProgressRingStyle}" />
-            <TextBlock
-                x:Name="LoadingTextBlock"
-                Margin="0,45,0,0"
-                HorizontalAlignment="Center"
-                FontSize="{x:Bind FontSize}"
-                Foreground="White"
-                Text="Loading..." />
-        </StackPanel>
-    </controls:Loading>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ProgressRing
+            x:Name="LoadingProgressRing"
+            VerticalAlignment="Bottom"
+            Foreground="White"
+            IsActive="True"
+            Style="{StaticResource NormalProgressStyle}"
+            Visibility="{x:Bind LoadingProgressBar.Visibility, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
+        <controls:RadialProgressBar
+            x:Name="LoadingProgressBar"
+            VerticalAlignment="Bottom"
+            Background="Transparent"
+            Foreground="{ThemeResource SystemColorHighlightColor}"
+            Maximum="{x:Bind Max, Mode=OneWay}"
+            Minimum="0"
+            Outline="White"
+            Style="{StaticResource NormalProgressStyle}"
+            Thickness="12"
+            Visibility="{x:Bind IsDeterminant, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
+            Value="{x:Bind Progress, Mode=OneWay}" />
+        <TextBlock
+            x:Name="LoadingTextBlock"
+            Grid.Row="1"
+            Margin="20,45"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            FontSize="36"
+            Foreground="White"
+            Text="{x:Bind Text, Mode=OneWay}"
+            TextWrapping="WrapWholeWords" />
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="WidthChange">
+                <VisualState x:Name="Normal" />
+                <VisualState x:Name="Width750">
+                    <VisualState.StateTriggers>
+                        <triggers:ControlSizeTrigger MinWidth="{StaticResource MinimalNavigationViewWindowWidth}" TargetElement="{x:Bind ContentGrid}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="LoadingProgressRing.Style" Value="{StaticResource SmallProgressStyle}" />
+                        <Setter Target="LoadingProgressBar.Style" Value="{StaticResource SmallProgressStyle}" />
+                        <Setter Target="LoadingProgressBar.Thickness" Value="8" />
+                        <Setter Target="LoadingTextBlock.FontSize" Value="30" />
+                        <Setter Target="LoadingTextBlock.Margin" Value="20,36" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
 </UserControl>

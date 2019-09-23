@@ -17,14 +17,13 @@
                 DoubleTapped="FolderTreeItem_DoubleTapped"
                 IsDoubleTapEnabled="True"
                 IsExpanded="False"
-                ItemsSource="{x:Bind Files}">
+                ItemsSource="{x:Bind Files, Mode=OneWay}">
                 <StackPanel Orientation="Horizontal">
                     <StackPanel.ContextFlyout>
                         <MenuFlyout Opening="OpenPlaylistFlyout" />
                     </StackPanel.ContextFlyout>
-                    <SymbolIcon Symbol="Folder" />
-                    <TextBlock Margin="0,0,10,0" />
-                    <TextBlock Text="{x:Bind Path}" />
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" />
+                    <TextBlock Margin="10,0,10,0" Text="{x:Bind Path, Mode=OneWay}" />
                 </StackPanel>
             </TreeViewItem>
         </DataTemplate>
@@ -40,7 +39,7 @@
                     </StackPanel.ContextFlyout>
                     <Image Width="20" Source="Assets/colorful_no_bg.png" />
                     <TextBlock Margin="0,0,10,0" />
-                    <TextBlock Text="{x:Bind Name}" />
+                    <TextBlock Margin="0,0,10,0" Text="{x:Bind Name}" />
                 </StackPanel>
             </TreeViewItem>
         </DataTemplate>
@@ -171,7 +170,11 @@
         </GridView>
         <TreeView
             x:Name="LocalFolderTreeView"
+            Margin="0,5,0,0"
             ItemTemplateSelector="{StaticResource FolderTreeTemplateSelector}"
+            ItemsSource="{x:Bind TreeViewSource, Mode=OneWay}"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Stretch"
             Visibility="Collapsed" />
     </Grid>
 </Page>

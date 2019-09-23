@@ -123,10 +123,14 @@ namespace SMPlayer.Models
             return await file.Properties.GetMusicPropertiesAsync();
         }
 
+        public static async Task<Music> GetMusicAsync(StorageFile file)
+        {
+            return new Music(file.Path, await file.Properties.GetMusicPropertiesAsync());
+        }
+
         public static async Task<Music> GetMusicAsync(string source)
         {
-            var file = await StorageFile.GetFileFromPathAsync(source);
-            return new Music(source, await file.Properties.GetMusicPropertiesAsync());
+            return await GetMusicAsync(await StorageFile.GetFileFromPathAsync(source));
         }
 
         public static async Task<Music> GetMusicAsync(Uri source)

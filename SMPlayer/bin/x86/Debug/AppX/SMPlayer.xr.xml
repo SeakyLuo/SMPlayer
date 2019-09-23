@@ -4,8 +4,8 @@
     <RootInterface FullName="Windows.UI.Xaml.Data.IValueConverter" />
   </Roots.Interfaces>
   <Roots.PropertyPathNames>
-    <RootPropertyPathName Name="IsPlaying" />
     <RootPropertyPathName Name="Album" />
+    <RootPropertyPathName Name="IsPlaying" />
     <RootPropertyPathName Name="Artist" />
     <RootPropertyPathName Name="Duration" />
     <RootPropertyPathName Name="Name" />
@@ -149,16 +149,6 @@
       <RootProperty Name="RenderTransformOrigin" />
       <RootProperty Name="RenderTransform" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.ProgressRing">
-      <RootProperty Name="Width" />
-      <RootProperty Name="Height" />
-      <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="IsActive" />
-      <RootProperty Name="Visibility" />
-      <RootProperty Name="Foreground" />
-      <RootProperty Name="Style" />
-    </RootType>
     <RootType FullName="SMPlayer.MusicDurationConverter" />
     <RootType FullName="SMPlayer.MusicFavoriteConverter" />
     <RootType FullName="SMPlayer.IntConverter" />
@@ -208,10 +198,10 @@
       <RootProperty Name="Background" />
       <RootProperty Name="Padding" />
       <RootProperty Name="CornerRadius" />
-      <RootProperty Name="BorderBrush" />
-      <RootProperty Name="BorderThickness" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="BorderBrush" />
+      <RootProperty Name="BorderThickness" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="MinHeight" />
       <RootProperty Name="MinWidth" />
@@ -232,6 +222,16 @@
       <RootMethod Name="SetRowSpan" />
       <RootMethod Name="GetColumnSpan" />
       <RootMethod Name="SetColumnSpan" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ProgressRing">
+      <RootProperty Name="Width" />
+      <RootProperty Name="Height" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="IsActive" />
+      <RootProperty Name="Visibility" />
+      <RootProperty Name="Foreground" />
+      <RootProperty Name="Style" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.GridView">
       <RootProperty Name="Margin" />
@@ -491,12 +491,25 @@
       <RootProperty Name="HorizontalAlignment" />
       <RootEvent Name="Tapped" />
     </RootType>
-    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.Loading">
+    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.RadialProgressBar">
+      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Background" />
-      <RootProperty Name="Content" />
+      <RootProperty Name="Foreground" />
+      <RootProperty Name="Maximum" />
+      <RootProperty Name="Minimum" />
+      <RootProperty Name="Outline" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="Thickness" />
+      <RootProperty Name="Visibility" />
+      <RootProperty Name="Value" />
+    </RootType>
+    <RootType FullName="SMPlayer.Triggers.ControlSizeTrigger">
+      <RootProperty Name="MinWidth" />
+      <RootProperty Name="TargetElement" />
     </RootType>
     <RootType FullName="SMPlayer.LoadingControl">
-      <RootProperty Name="FontSize" />
+      <RootProperty Name="IsDeterminant" />
+      <RootProperty Name="Visibility" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.HyperlinkButton">
       <RootProperty Name="Margin" />
@@ -515,10 +528,6 @@
       <RootProperty Name="RelativeSource" />
       <RootProperty Name="TargetNullValue" />
       <RootProperty Name="Path" />
-    </RootType>
-    <RootType FullName="SMPlayer.Triggers.ControlSizeTrigger">
-      <RootProperty Name="MinWidth" />
-      <RootProperty Name="TargetElement" />
     </RootType>
     <RootType FullName="SMPlayer.Controls.PlaylistControlItem">
       <RootProperty Name="DataContext" />
@@ -883,7 +892,11 @@
       <RootEvent Name="DoubleTapped" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.TreeView">
+      <RootProperty Name="Margin" />
       <RootProperty Name="ItemTemplateSelector" />
+      <RootProperty Name="ItemsSource" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="HorizontalContentAlignment" />
       <RootProperty Name="Visibility" />
     </RootType>
     <RootType FullName="SMPlayer.LocalFoldersPage" />

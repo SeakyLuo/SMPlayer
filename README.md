@@ -20,15 +20,9 @@ Auto Scrolling Text.
 
 Shy header.
 
-Loading Progress.
-
 Add Album Art to Music.
 
-Minimal Search Button PointerOver foreground.
-
 # TO FIX
-
-TreeView error.
 
 Full Screen.
 

@@ -9,7 +9,7 @@ using Windows.Storage;
 namespace SMPlayer.Models
 {
     [Serializable]
-    public class FolderTree: INotifyPropertyChanged
+    public class FolderTree : INotifyPropertyChanged
     {
         public List<FolderTree> Trees = new List<FolderTree>();
         public List<Music> Files = new List<Music>();
@@ -24,13 +24,26 @@ namespace SMPlayer.Models
 
         public void CopyFrom(FolderTree tree)
         {
-            Trees = tree.Trees;
-            Files = tree.Files;
+            Trees = tree.Trees.ToList();
+            Files = tree.Files.ToList();
             Path = tree.Path;
             OnPropertyChanged();
         }
 
-        public async Task Init(StorageFolder folder)
+        public static async Task<int> CountMusicAsync(StorageFolder folder)
+        {
+            int count = (await folder.GetFilesAsync()).Count((f) => IsMusicFile(f));
+            foreach (var sub in await folder.GetFoldersAsync())
+                count += await CountMusicAsync(sub);
+            return count;
+        }
+
+        public async Task Init(StorageFolder folder, TreeInitProgressListener listener = null)
+        {
+            await Init(folder, listener, new TreeInitProgressIndicator() { Max = listener == null ? 0 : await CountMusicAsync(folder) });
+        }
+
+        private async Task Init(StorageFolder folder, TreeInitProgressListener listener, TreeInitProgressIndicator indicator)
         {
             if (!string.IsNullOrEmpty(Path) && folder.Path.StartsWith(Path))
             {
@@ -41,20 +54,37 @@ namespace SMPlayer.Models
                     tree = Trees.Find((t) => folder.Path.StartsWith(t.Path));
                 } while (tree.Path != folder.Path);
                 CopyFrom(tree);
+                listener.Update(folder.DisplayName, "", 0, 0);
             }
             else if (Path.StartsWith(folder.Path))
             {
-                // New folder is a Subfolder of the current folder
+                // Current folder is a Subfolder of the new folder
                 FolderTree newTree = new FolderTree();
-                foreach (var subFolder in await folder.GetFoldersAsync())
+                var folders = await folder.GetFoldersAsync();
+                for (int i = 0; i < folders.Count; i++)
                 {
-                    var tree = subFolder.Path == Path ? new FolderTree() : new FolderTree(this);
-                    await tree.Init(subFolder);
+                    var subFolder = folders[i];
+                    FolderTree tree;
+                    if (subFolder.Path == Path)
+                    {
+                        tree = new FolderTree();
+                        await tree.Init(subFolder, listener, indicator);
+                    }
+                    else
+                    {
+                        tree = new FolderTree(this);
+                    }
                     newTree.Trees.Add(tree);
                 }
                 foreach (var file in await folder.GetFilesAsync())
-                    if (file.Name.EndsWith("mp3"))
-                        newTree.Files.Add(await Music.GetMusicAsync(file.Path));
+                {
+                    if (IsMusicFile(file))
+                    {
+                        Music music = await Music.GetMusicAsync(file);
+                        listener?.Update(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
+                        newTree.Files.Add(music);
+                    }
+                }
                 CopyFrom(newTree);
             }
             else
@@ -64,13 +94,19 @@ namespace SMPlayer.Models
                 foreach (var subFolder in await folder.GetFoldersAsync())
                 {
                     var tree = new FolderTree();
-                    await tree.Init(subFolder);
+                    await tree.Init(subFolder, listener, indicator);
                     Trees.Add(tree);
                 }
                 Files.Clear();
                 foreach (var file in await folder.GetFilesAsync())
-                    if (file.Name.EndsWith("mp3"))
-                        Files.Add(await Music.GetMusicAsync(file.Path));
+                {
+                    if (IsMusicFile(file))
+                    {
+                        Music music = await Music.GetMusicAsync(file);
+                        listener?.Update(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
+                        Files.Add(music);
+                    }
+                }
             }
             Path = folder.Path;
         }
@@ -116,6 +152,11 @@ namespace SMPlayer.Models
             return Path.Substring(Path.LastIndexOf("\\") + 1);
         }
 
+        public static bool IsMusicFile(StorageFile file)
+        {
+            return file.FileType.Contains("mp3");
+        }
+
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
             // Raise the PropertyChanged event, passing the name of the property whose value has changed.
@@ -143,5 +184,17 @@ namespace SMPlayer.Models
             this.Folders = Folders;
             this.Songs = Songs;
         }
+    }
+
+    class TreeInitProgressIndicator
+    {
+        public int Progress = 0;
+        public int Max = 0;
+        public int Update() { return ++Progress; }
+    }
+
+    public interface TreeInitProgressListener
+    {
+        void Update(string folder, string file, int progress, int max);
     }
 }

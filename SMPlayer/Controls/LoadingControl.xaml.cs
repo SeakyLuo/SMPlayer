@@ -19,28 +19,35 @@ namespace SMPlayer
 {
     public sealed partial class LoadingControl : UserControl
     {
-        public bool IsLoading
-        {
-            get => MainControl.IsLoading;
-            set => MainControl.IsLoading = value;
-        }
         public string Text
         {
-            get => LoadingTextBlock.Text;
-            set => LoadingTextBlock.Text = value;
+            get => (string)GetValue(TextProperty);
+            set => SetValue(TextProperty, value);
         }
-
-        public Brush TextForeground
+        public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text",
+                                                                                              typeof(string),
+                                                                                              typeof(LoadingControl),
+                                                                                              new PropertyMetadata("Loading..."));
+        public double Progress
         {
-            get => LoadingTextBlock.Foreground;
-            set => LoadingTextBlock.Foreground = value;
+            get => (double)GetValue(ProgressProperty);
+            set => SetValue(ProgressProperty, value);
         }
+        public static readonly DependencyProperty ProgressProperty = DependencyProperty.Register("Progress",
+                                                                                                 typeof(double),
+                                                                                                 typeof(LoadingControl),
+                                                                                                 new PropertyMetadata(0d));
 
-        public Brush ProgressForeground
+        public bool IsDeterminant { get; set; }
+        public double Max
         {
-            get => LoadingProgressRing.Foreground;
-            set => LoadingProgressRing.Foreground = value;
+            get => (double)GetValue(MaxProperty);
+            set => SetValue(MaxProperty, value);
         }
+        public static readonly DependencyProperty MaxProperty = DependencyProperty.Register("Max",
+                                                                                        typeof(double),
+                                                                                        typeof(LoadingControl),
+                                                                                        new PropertyMetadata(0d));
         public LoadingControl()
         {
             this.InitializeComponent();

@@ -54,7 +54,7 @@ namespace SMPlayer
             set => AppTitleBarForeground = AppTitle.Foreground = MainNavigationViewHeader.Foreground = HeaderSearchButton.Foreground = FakeTogglePaneButton.Foreground = BackButton.Foreground = value;
         }
         private Brush AppTitleBarForeground;
-
+        public LoadingControl Loader { get => MainLoadingControl; }
 
         public MainPage()
         {
@@ -324,22 +324,6 @@ namespace SMPlayer
         public void PauseMusic()
         {
             MainMediaControl.PauseMusic();
-        }
-
-        public void ShowLoading(string text)
-        {
-            MainLoadingControl.Text = text;
-            MainLoadingControl.IsLoading = true;
-        }
-
-        public void UpdateLoadingText(string text)
-        {
-            MainLoadingControl.Text = text;
-        }
-
-        public void StopLoading()
-        {
-            MainLoadingControl.IsLoading = false;
         }
 
         private void HeaderSearchButton_Click(object sender, RoutedEventArgs e)
