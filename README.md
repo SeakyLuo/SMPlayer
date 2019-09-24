@@ -26,8 +26,6 @@ Remove/Deletion Dialog.
 
 Full Screen.
 
-MasterView long artist name.
-
 NowPlayingFull play count repeat one.
 
 NowPlayingFull Scroll Into View.

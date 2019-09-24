@@ -72,19 +72,18 @@
                     Height="100"
                     Source="Assets/monotone_bg_wide.png"
                     Stretch="UniformToFill" />
-                <ScrollViewer
-                    x:Name="MainTitleScrollViewer"
+                <local:ScrollingTextBlock
                     Grid.Row="0"
                     Grid.Column="1"
-                    Margin="10,5"
-                    HorizontalScrollBarVisibility="Hidden"
-                    VerticalScrollBarVisibility="Disabled">
-                    <TextBlock
-                        x:Name="MainTitleTextBlock"
-                        VerticalAlignment="Bottom"
-                        FontSize="24"
-                        Foreground="White" />
-                </ScrollViewer>
+                    Margin="10,5">
+                    <local:ScrollingTextBlock.Content>
+                        <TextBlock
+                            x:Name="MainTitleTextBlock"
+                            VerticalAlignment="Bottom"
+                            FontSize="24"
+                            Foreground="White" />
+                    </local:ScrollingTextBlock.Content>
+                </local:ScrollingTextBlock>
                 <TextBlock
                     x:Name="MainArtistTextBlock"
                     Grid.Row="1"
@@ -131,7 +130,7 @@
                     ToolTipService.ToolTip="More"
                     Visibility="Collapsed">
                     <Button.Flyout>
-                        <Flyout Opening="MainMediaControlMoreFlyout_Opening">
+                        <Flyout>
                             <StackPanel Width="200" Margin="-12,-4">
                                 <local:IconTextButton
                                     x:Name="MainMoreShuffleButton"
@@ -195,6 +194,28 @@
                                         ValueChanged="VolumeSlider_ValueChanged"
                                         Value="50" />
                                 </StackPanel>
+                                <local:IconTextButton
+                                    x:Name="MainMediaControlMoreMusicInfoItem"
+                                    IconRadius="15"
+                                    IconTextMargin="10,0,0,0"
+                                    Label="Music Info"
+                                    Style="{StaticResource MediaControlIconTextButtonStyle}"
+                                    Tapped="MainMediaControlMoreMusicInfoItem_Tapped">
+                                    <local:IconTextButton.Icon>
+                                        <FontIcon Glyph="&#xE90B;" Style="{StaticResource MediaControlIconTextButtonFontIcon}" />
+                                    </local:IconTextButton.Icon>
+                                </local:IconTextButton>
+                                <local:IconTextButton
+                                    x:Name="MainMediaControlMoreLyricsItem"
+                                    IconRadius="15"
+                                    IconTextMargin="10,0,0,0"
+                                    Label="Show Lyrics"
+                                    Style="{StaticResource MediaControlIconTextButtonStyle}"
+                                    Tapped="MainMediaControlMoreLyricsItem_Tapped">
+                                    <local:IconTextButton.Icon>
+                                        <FontIcon Glyph="&#xEC42;" Style="{StaticResource MediaControlIconTextButtonFontIcon}" />
+                                    </local:IconTextButton.Icon>
+                                </local:IconTextButton>
                                 <local:IconTextButton
                                     x:Name="MainMediaControlMoreFullScreenItem"
                                     IconRadius="15"

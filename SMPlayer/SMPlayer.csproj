@@ -136,6 +136,12 @@
     <Compile Include="Controls\HeaderedPlaylistControl.xaml.cs">
       <DependentUpon>HeaderedPlaylistControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ScrollingTextBlock.xaml.cs">
+      <DependentUpon>ScrollingTextBlock.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\RemoveDialog.xaml.cs">
+      <DependentUpon>RemoveDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\MusicHelper.cs" />
     <Compile Include="TemplateSelector\FolderTreeTemplateSelector.cs" />
     <Compile Include="Helpers\MenuFlyoutHelper.cs" />
@@ -295,6 +301,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\PlaylistControlItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ScrollingTextBlock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\RemoveDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

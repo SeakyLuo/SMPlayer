@@ -1,0 +1,17 @@
+﻿<UserControl
+    x:Class="SMPlayer.ScrollingTextBlock"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:SMPlayer.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <ScrollViewer
+        x:Name="TextScrollViewer"
+        HorizontalScrollBarVisibility="Hidden"
+        PointerEntered="TextScrollViewer_PointerEntered"
+        VerticalScrollBarVisibility="Disabled">
+        <ContentPresenter x:Name="ContentText" Content="{x:Bind Content, Mode=OneWay}" />
+    </ScrollViewer>
+</UserControl>

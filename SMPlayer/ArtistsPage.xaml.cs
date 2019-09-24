@@ -30,6 +30,7 @@ namespace SMPlayer
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
         private bool SetupStarted = false;
         private NotifiedStatus Notified = NotifiedStatus.Ready;
+        private Dictionary<string, DispatcherTimer> TimerDict = new Dictionary<string, DispatcherTimer>();
 
         public ArtistsPage()
         {
@@ -53,6 +54,7 @@ namespace SMPlayer
                 return;
             }
             SetupStarted = true;
+            TimerDict.Clear();
             ArtistsCountTextBlock.Text = "";
             ArtistProgressBar.Visibility = Visibility.Visible;
             Artists.Clear();
@@ -92,19 +94,12 @@ namespace SMPlayer
         {
             Music music = (Music)e.ClickedItem;
             ListView listView = (ListView)sender;
-            SetMusicAndPlay(music, listView.ItemsSource as ObservableCollection<Music>);
+            MediaHelper.SetMusicAndPlay(listView.ItemsSource as ObservableCollection<Music>, music);
         }
 
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
             args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? ColorHelper.WhiteSmokeBrush : ColorHelper.WhiteBrush;
-        }
-
-        private void SetMusicAndPlay(Music music, ICollection<Music> playlist)
-        {
-            //if (!music.Equals(MediaHelper.CurrentMusic))
-            //    FindMusicAndSetPlaying(MediaHelper.CurrentMusic, false);
-            MediaHelper.SetMusicAndPlay(playlist, music);
         }
 
         private void FindMusicAndSetPlaying(Music target)

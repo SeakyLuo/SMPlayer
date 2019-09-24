@@ -190,7 +190,7 @@ namespace SMPlayer
             var lyricsItem = new MenuFlyoutItem()
             {
                 Icon = new FontIcon() { Glyph = "\uEC42" },
-                Text = "Lyrics"
+                Text = "Show Lyrics"
             };
             lyricsItem.Click += (s, args) =>
             {

@@ -251,7 +251,6 @@ namespace SMPlayer
         private ToolTip ShuffleToolTip = new ToolTip();
         private ToolTip RepeatOneToolTip = new ToolTip();
         private ToolTip RepeatToolTip = new ToolTip();
-        private DispatcherTimer ScrollingTextTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(16) };
 
         private bool ShouldUpdate = true, SliderClicked = false;
         private static List<MusicControlListener> MusicControlListeners = new List<MusicControlListener>();
@@ -271,15 +270,6 @@ namespace SMPlayer
                     if (sender.PlaybackState == MediaPlaybackState.Playing) PlayMusic();
                     else if (sender.PlaybackState == MediaPlaybackState.Paused) PauseMusic();
                 });
-            };
-            ScrollingTextTimer.Tick += (sender, e) =>
-            {
-                MainTitleScrollViewer.ChangeView(MainTitleScrollViewer.HorizontalOffset + 2, null, null);
-                if (MainTitleScrollViewer.HorizontalOffset == MainTitleScrollViewer.ScrollableWidth)
-                {
-                    MainTitleScrollViewer.ChangeView(0, null, null);
-                    ScrollingTextTimer.Stop();
-                }
             };
         }
 
@@ -737,23 +727,29 @@ namespace SMPlayer
                 MenuFlyoutHelper.InsertMusicItem(sender);
         }
 
-        private void MainMediaControlMoreFlyout_Opening(object sender, object e)
-        {
-
-        }
-
         private void MainMusicInfoGrid_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             if (MediaHelper.CurrentMusic == null) return;
             VisualStateManager.GoToState(this, "PointerOver", true);
-            if (ScrollingTextTimer.IsEnabled) return;
-            ScrollingTextTimer.Start();
         }
 
         private void MainMusicInfoGrid_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             if (MediaHelper.CurrentMusic == null) return;
             VisualStateManager.GoToState(this, "Normal", true);
+        }
+
+        private void MainMediaControlMoreMusicInfoItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            MainPage.Instance?.Frame.Navigate(typeof(NowPlayingFullPage));
+            NowPlayingFullPage.Instance.MusicInfoRequested(MediaHelper.CurrentMusic);
+            NowPlayingFullPage.Instance.LyricsRequested(MediaHelper.CurrentMusic);
+        }
+
+        private void MainMediaControlMoreLyricsItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            MainPage.Instance?.Frame.Navigate(typeof(NowPlayingFullPage));
+            NowPlayingFullPage.Instance.MusicInfoRequested(MediaHelper.CurrentMusic);
         }
 
         public void Pause()

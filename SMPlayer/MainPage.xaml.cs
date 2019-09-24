@@ -55,11 +55,11 @@ namespace SMPlayer
         }
         private Brush AppTitleBarForeground;
         public LoadingControl Loader { get => MainLoadingControl; }
+        private bool PageUnset = true;
 
         public MainPage()
         {
             this.InitializeComponent();
-            SwitchPage(Settings.settings.LastPage);
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             MainNavigationView.IsPaneOpen = Settings.settings.IsNavigationCollapsed;
             if (MainNavigationView.IsPaneOpen) MainNavigationView_PaneOpening(null, null);
@@ -99,8 +99,11 @@ namespace SMPlayer
             UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar);
 
             MainMediaControl.Update();
-            //if (NaviFrame.SourcePageType != null && NaviFrame.SourcePageType.Name.StartsWith(Settings.settings.LastPage)) return;
-            //SwitchPage(Settings.settings.LastPage);
+            if (PageUnset)
+            {
+                SwitchPage(Settings.settings.LastPage);
+                PageUnset = false;
+            }
         }
 
         private void UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar coreTitleBar)
