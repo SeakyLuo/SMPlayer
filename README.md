@@ -16,11 +16,11 @@ Cache Artists Result.
 
 FullMediaControl Album Flipview.
 
-Auto Scrolling Text.
-
 Sticky Shy header.
 
 Add Album Art to Music.
+
+Remove/Deletion Dialog.
 
 # TO FIX
 
@@ -28,12 +28,8 @@ Full Screen.
 
 MasterView long artist name.
 
-AutoSuggestBox lose focus.
-
-NowPlayingFull Scroll Into View.
-
 NowPlayingFull play count repeat one.
 
-NowPlayingFull album click.
+NowPlayingFull Scroll Into View.
 
 Main More Lyrics Click.

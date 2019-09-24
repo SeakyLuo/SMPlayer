@@ -251,6 +251,7 @@ namespace SMPlayer
         private ToolTip ShuffleToolTip = new ToolTip();
         private ToolTip RepeatOneToolTip = new ToolTip();
         private ToolTip RepeatToolTip = new ToolTip();
+        private DispatcherTimer ScrollingTextTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(16) };
 
         private bool ShouldUpdate = true, SliderClicked = false;
         private static List<MusicControlListener> MusicControlListeners = new List<MusicControlListener>();
@@ -270,6 +271,15 @@ namespace SMPlayer
                     if (sender.PlaybackState == MediaPlaybackState.Playing) PlayMusic();
                     else if (sender.PlaybackState == MediaPlaybackState.Paused) PauseMusic();
                 });
+            };
+            ScrollingTextTimer.Tick += (sender, e) =>
+            {
+                MainTitleScrollViewer.ChangeView(MainTitleScrollViewer.HorizontalOffset + 2, null, null);
+                if (MainTitleScrollViewer.HorizontalOffset == MainTitleScrollViewer.ScrollableWidth)
+                {
+                    MainTitleScrollViewer.ChangeView(0, null, null);
+                    ScrollingTextTimer.Stop();
+                }
             };
         }
 
@@ -736,6 +746,8 @@ namespace SMPlayer
         {
             if (MediaHelper.CurrentMusic == null) return;
             VisualStateManager.GoToState(this, "PointerOver", true);
+            if (ScrollingTextTimer.IsEnabled) return;
+            ScrollingTextTimer.Start();
         }
 
         private void MainMusicInfoGrid_PointerExited(object sender, PointerRoutedEventArgs e)

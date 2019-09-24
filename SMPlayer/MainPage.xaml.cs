@@ -59,14 +59,13 @@ namespace SMPlayer
         public MainPage()
         {
             this.InitializeComponent();
-            Window.Current.SizeChanged += Current_SizeChanged;
-
+            SwitchPage(Settings.settings.LastPage);
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-
             MainNavigationView.IsPaneOpen = Settings.settings.IsNavigationCollapsed;
             if (MainNavigationView.IsPaneOpen) MainNavigationView_PaneOpening(null, null);
             else MainNavigationView_PaneClosing(null, null);
 
+            Window.Current.SizeChanged += Current_SizeChanged;
             var coreTitleBar = Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar;
             // Register a handler for when the size of the overlaid caption control changes.
             // For example, when the app moves to a screen with a different DPI.
@@ -100,8 +99,8 @@ namespace SMPlayer
             UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar);
 
             MainMediaControl.Update();
-            if (NaviFrame.SourcePageType != null && NaviFrame.SourcePageType.Name.StartsWith(Settings.settings.LastPage)) return;
-            SwitchPage(Settings.settings.LastPage);
+            //if (NaviFrame.SourcePageType != null && NaviFrame.SourcePageType.Name.StartsWith(Settings.settings.LastPage)) return;
+            //SwitchPage(Settings.settings.LastPage);
         }
 
         private void UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar coreTitleBar)
@@ -338,22 +337,6 @@ namespace SMPlayer
             MainNavigationViewHeader.Visibility = Visibility.Visible;
             HeaderSearchButton.Visibility = Visibility.Visible;
             HeaderSearchBar.Visibility = Visibility.Collapsed;
-        }
-
-        private void HeaderNaviSearchBar_LosingFocus(UIElement sender, LosingFocusEventArgs args)
-        {
-            Debug.WriteLine("HeaderNaviSearchBar_LosingFocus");
-        }
-
-        private void HeaderNaviSearchBar_FocusDisengaged(Control sender, FocusDisengagedEventArgs args)
-        {
-            Debug.WriteLine("HeaderNaviSearchBar_FocusDisengaged");
-
-        }
-
-        private void HeaderNaviSearchBar_NoFocusCandidateFound(UIElement sender, NoFocusCandidateFoundEventArgs args)
-        {
-            Debug.WriteLine("HeaderNaviSearchBar_NoFocusCandidateFound");
         }
     }
 }

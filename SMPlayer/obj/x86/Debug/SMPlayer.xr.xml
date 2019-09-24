@@ -563,9 +563,6 @@
       <RootProperty Name="Margin" />
       <RootProperty Name="Visibility" />
       <RootEvent Name="QuerySubmitted" />
-      <RootEvent Name="FocusDisengaged" />
-      <RootEvent Name="LosingFocus" />
-      <RootEvent Name="NoFocusCandidateFound" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.TextBox">
       <RootProperty Name="SelectionHighlightColor" />

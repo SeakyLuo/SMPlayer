@@ -32,11 +32,7 @@ namespace SMPlayer
         private static Dictionary<string, List<MusicDisplayItem>> PlaylistDisplayDict = new Dictionary<string, List<MusicDisplayItem>>();
         private static readonly Random random = new Random();
         private static RenameDialog dialog;
-        public PlaylistScrollListener ScrollListener
-        {
-            get => HeaderedPlaylist.ScrollListener;
-            set => HeaderedPlaylist.ScrollListener = value;
-        }
+        public PlaylistControl Playlist { get => HeaderedPlaylist; }
         public HeaderedPlaylistControl()
         {
             this.InitializeComponent();

@@ -49,6 +49,7 @@ namespace SMPlayer
                 SongsListView.CanDrag = value;
             }
         }
+
         public object Header
         {
             set => SongsListView.Header = value;
@@ -71,6 +72,8 @@ namespace SMPlayer
             }
         }
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
+        public List<PlaylistRemoveListener> RemoveListeners = new List<PlaylistRemoveListener>();
+        public bool ShowRemoveDialog { get; set; }
         public PlaylistControl()
         {
             this.InitializeComponent();
@@ -190,9 +193,14 @@ namespace SMPlayer
             }
             else
             {
+                CurrentPlaylist.RemoveAt(index);
                 for (int i = index; i < CurrentPlaylist.Count; i++)
-                    (SongsListView.ContainerFromIndex(i) as ListViewItem).Background = GetRowBackground(i);
+                {
+                    var container = SongsListView.ContainerFromIndex(i) as ListViewItem;
+                    container.Background = GetRowBackground(i);
+                }
             }
+            foreach (var listener in RemoveListeners) listener.MusicRemoved(index, music);
         }
 
         private void FavoriteItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
@@ -200,6 +208,11 @@ namespace SMPlayer
             var music = args.SwipeControl.DataContext as Music;
             Settings.settings.LikeMusic(music);
         }
+    }
+
+    public interface PlaylistRemoveListener
+    {
+        void MusicRemoved(int index, Music music);
     }
 
     public interface PlaylistScrollListener

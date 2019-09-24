@@ -28,7 +28,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class PlaylistsPage : Page, RenameActionListener, PlaylistScrollListener
+    public sealed partial class PlaylistsPage : Page, RenameActionListener, PlaylistScrollListener, PlaylistRemoveListener
     {
         public static ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
         private ObservableCollection<Playlist> playlists
@@ -248,7 +248,8 @@ namespace SMPlayer
         private async void HeaderedPlaylistControl_Loaded(object sender, RoutedEventArgs e)
         {
             playlistControl = sender as HeaderedPlaylistControl;
-            playlistControl.ScrollListener = this as PlaylistScrollListener;
+            playlistControl.Playlist.ScrollListener = this as PlaylistScrollListener;
+            playlistControl.Playlist.RemoveListeners.Add(this as PlaylistRemoveListener);
             await playlistControl.SetMusicCollection(PlaylistTabView.SelectedItem as Playlist);
         }
 
@@ -278,6 +279,12 @@ namespace SMPlayer
             {
                 direction = ScrollDirection.None;
             }
+        }
+
+        public void MusicRemoved(int index, Music music)
+        {
+            (PlaylistTabView.SelectedItem as Playlist).Songs.RemoveAt(index);
+            //(PlaylistTabView.SelectedItem as Playlist).Songs.Remove(music);
         }
     }
 }
