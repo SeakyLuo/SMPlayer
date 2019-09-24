@@ -72,18 +72,14 @@
                     Height="100"
                     Source="Assets/monotone_bg_wide.png"
                     Stretch="UniformToFill" />
-                <local:ScrollingTextBlock
+                <TextBlock
+                    x:Name="MainTitleTextBlock"
                     Grid.Row="0"
                     Grid.Column="1"
-                    Margin="10,5">
-                    <local:ScrollingTextBlock.Content>
-                        <TextBlock
-                            x:Name="MainTitleTextBlock"
-                            VerticalAlignment="Bottom"
-                            FontSize="24"
-                            Foreground="White" />
-                    </local:ScrollingTextBlock.Content>
-                </local:ScrollingTextBlock>
+                    Margin="10,5"
+                    VerticalAlignment="Bottom"
+                    FontSize="24"
+                    Foreground="White" />
                 <TextBlock
                     x:Name="MainArtistTextBlock"
                     Grid.Row="1"

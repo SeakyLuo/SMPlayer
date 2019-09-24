@@ -55,15 +55,12 @@
                                 Fill="DarkGray" />
                             <FontIcon Foreground="White" Glyph="&#xE8D4;" />
                         </Grid>
-                        <local:ScrollingTextBlock Margin="10,0">
-                            <local:ScrollingTextBlock.Content>
-                                <TextBlock
-                                    x:Name="ArtistNameTextBlock"
-                                    VerticalAlignment="Center"
-                                    Text="{x:Bind Name}"
-                                    TextAlignment="Start" />
-                            </local:ScrollingTextBlock.Content>
-                        </local:ScrollingTextBlock>
+                        <TextBlock
+                            x:Name="ArtistNameTextBlock"
+                            Margin="10,0"
+                            VerticalAlignment="Center"
+                            Text="{x:Bind Name}"
+                            TextAlignment="Start" />
                     </StackPanel>
                 </DataTemplate>
             </controls:MasterDetailsView.ItemTemplate>

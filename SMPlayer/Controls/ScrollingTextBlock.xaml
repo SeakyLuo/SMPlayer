@@ -12,6 +12,9 @@
         HorizontalScrollBarVisibility="Hidden"
         PointerEntered="TextScrollViewer_PointerEntered"
         VerticalScrollBarVisibility="Disabled">
-        <ContentPresenter x:Name="ContentText" Content="{x:Bind Content, Mode=OneWay}" />
+        <StackPanel>
+            <TextBlock x:Name="NormalTextBlock" />
+            <TextBlock x:Name="PointerOverTextBlock" Visibility="Collapsed" />
+        </StackPanel>
     </ScrollViewer>
 </UserControl>

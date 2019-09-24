@@ -19,7 +19,7 @@ namespace SMPlayer
 {
     public sealed partial class ScrollingTextBlock : UserControl
     {
-        private DispatcherTimer timer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(16) };
+        private readonly DispatcherTimer timer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(16) };
         public ScrollingTextBlock()
         {
             this.InitializeComponent();
@@ -29,6 +29,7 @@ namespace SMPlayer
                 if (TextScrollViewer.HorizontalOffset == TextScrollViewer.ScrollableWidth)
                 {
                     TextScrollViewer.ChangeView(0, null, null);
+                    PointerOverTextBlock.Visibility = Visibility.Collapsed;
                     timer.Stop();
                 }
             };
@@ -37,6 +38,7 @@ namespace SMPlayer
         private void TextScrollViewer_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             if (timer.IsEnabled) return;
+            PointerOverTextBlock.Visibility = Visibility.Visible;
             timer.Start();
         }
     }
