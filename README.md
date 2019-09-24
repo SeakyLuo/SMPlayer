@@ -22,6 +22,10 @@ Add Album Art to Music.
 
 Remove/Deletion Dialog.
 
+MasterView Back Button.
+
+LocalFolderView open in explorer.
+
 # TO FIX
 
 Full Screen.
@@ -31,3 +35,5 @@ NowPlayingFull play count repeat one.
 NowPlayingFull Scroll Into View.
 
 Main More Lyrics Click.
+
+Play Count added twice.

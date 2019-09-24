@@ -7,14 +7,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <ScrollViewer
-        x:Name="TextScrollViewer"
-        HorizontalScrollBarVisibility="Hidden"
-        PointerEntered="TextScrollViewer_PointerEntered"
-        VerticalScrollBarVisibility="Disabled">
-        <StackPanel>
-            <TextBlock x:Name="NormalTextBlock" />
-            <TextBlock x:Name="PointerOverTextBlock" Visibility="Collapsed" />
-        </StackPanel>
-    </ScrollViewer>
+    <Grid>
+        <ScrollViewer
+            x:Name="TextScrollViewer"
+            HorizontalScrollBarVisibility="Hidden"
+            PointerEntered="TextScrollViewer_PointerEntered"
+            VerticalScrollBarVisibility="Disabled">
+            <StackPanel>
+                <TextBlock x:Name="NormalTextBlock" />
+                <TextBlock x:Name="PointerOverTextBlock" Visibility="Collapsed" />
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

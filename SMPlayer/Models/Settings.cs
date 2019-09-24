@@ -97,8 +97,22 @@ namespace SMPlayer.Models
 
         public void LikeMusic(Music music)
         {
+            if (FavSongs.Contains(music)) return;
             music.Favorite = true;
             FavSongs.Add(music);
+        }
+
+        public void LikeMusic(ICollection<Music> playlist)
+        {
+            var hashset = FavSongs.ToHashSet();
+            foreach (var music in playlist)
+            {
+                if (!hashset.Contains(music))
+                {
+                    music.Favorite = true;
+                    FavSongs.Add(music);
+                }
+            }
         }
 
         public void DislikeMusic(Music music)

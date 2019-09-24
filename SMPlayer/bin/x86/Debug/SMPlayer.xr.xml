@@ -364,10 +364,6 @@
       <RootProperty Name="Margin" />
       <RootProperty Name="Foreground" />
     </RootType>
-    <RootType FullName="SMPlayer.ScrollingTextBlock">
-      <RootProperty Name="Margin" />
-      <RootProperty Name="Content" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Shapes.Ellipse">
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
@@ -593,6 +589,17 @@
       <RootMethod Name="GetZoomMode" />
       <RootMethod Name="SetZoomMode" />
     </RootType>
+    <RootType FullName="SMPlayer.ScrollingTextBlock" />
+    <RootType FullName="Windows.UI.Xaml.Controls.ContentDialog">
+      <RootProperty Name="Title" />
+      <RootProperty Name="PrimaryButtonText" />
+      <RootProperty Name="SecondaryButtonText" />
+      <RootProperty Name="Content" />
+      <RootProperty Name="Resources" />
+      <RootEvent Name="PrimaryButtonClick" />
+      <RootEvent Name="SecondaryButtonClick" />
+    </RootType>
+    <RootType FullName="SMPlayer.Dialogs.RemoveDialog" />
     <RootType FullName="Windows.UI.Xaml.Controls.ControlTemplate">
       <RootProperty Name="TargetType" />
       <RootProperty Name="Template" />
@@ -897,7 +904,6 @@
       <RootProperty Name="Placement" />
       <RootProperty Name="FlyoutPresenterStyle" />
       <RootProperty Name="Content" />
-      <RootEvent Name="Opening" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.FlyoutPresenter" />
     <RootType FullName="Windows.UI.Xaml.Controls.ItemsStackPanel">
@@ -1089,10 +1095,6 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.SymbolIconSource">
       <RootProperty Name="Symbol" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.ContentDialog">
-      <RootProperty Name="Resources" />
-      <RootProperty Name="Content" />
     </RootType>
     <RootType FullName="SMPlayer.RenameDialog" />
     <RootType FullName="SMPlayer.SearchPage" />

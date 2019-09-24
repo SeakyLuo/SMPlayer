@@ -58,10 +58,10 @@ namespace SMPlayer
                 };
                 favItem.Click += (sender, args) =>
                 {
-                    //if (target is Music)
-                    //    PlaylistControl.AddMusic(target as Music);
-                    //else
-                    //    PlaylistControl.AddMusic(target as ICollection<Music>);
+                    if (Data is Music)
+                        Settings.settings.LikeMusic(Data as Music);
+                    else if (Data is ICollection<Music>)
+                        Settings.settings.LikeMusic(Data as ICollection<Music>);
                 };
                 addToItem.Items.Add(favItem);
 
