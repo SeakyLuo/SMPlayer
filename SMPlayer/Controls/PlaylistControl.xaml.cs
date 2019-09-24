@@ -206,4 +206,9 @@ namespace SMPlayer
     {
         void Scrolled(double before, double after);
     }
+
+    public enum ScrollDirection
+    {
+        None = 0, Up = 1, Down = 2
+    }
 }

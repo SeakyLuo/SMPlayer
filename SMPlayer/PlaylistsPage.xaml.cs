@@ -252,17 +252,31 @@ namespace SMPlayer
             await playlistControl.SetMusicCollection(PlaylistTabView.SelectedItem as Playlist);
         }
 
+        private ScrollDirection direction;
+
         public void Scrolled(double before, double after)
         {
             if (after > before + 3)
             {
                 // scroll down
-                ShowFooterAnimation.Begin();
+                if (direction != ScrollDirection.Down)
+                {
+                    direction = ScrollDirection.Down;
+                    ShowFooterAnimation.Begin();
+                }
             }
             else if (after < before - 3)
             {
                 // scroll up
-                HideFooterAnimation.Begin();
+                if (direction != ScrollDirection.Up)
+                {
+                    direction = ScrollDirection.Up;
+                    HideFooterAnimation.Begin();
+                }
+            }
+            else
+            {
+                direction = ScrollDirection.None;
             }
         }
     }
