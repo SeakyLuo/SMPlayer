@@ -18,7 +18,7 @@ FullMediaControl Album Flipview.
 
 Auto Scrolling Text.
 
-Shy header.
+Sticky Shy header.
 
 Add Album Art to Music.
 
@@ -27,8 +27,6 @@ Add Album Art to Music.
 Full Screen.
 
 MasterView long artist name.
-
-Quick return footer.
 
 AutoSuggestBox lose focus.
 

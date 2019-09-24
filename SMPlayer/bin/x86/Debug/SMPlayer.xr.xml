@@ -390,10 +390,6 @@
     <RootType FullName="Windows.UI.Xaml.Controls.RelativePanel">
       <RootProperty Name="Children" />
       <RootProperty Name="Margin" />
-      <RootProperty Name="Height" />
-      <RootProperty Name="Background" />
-      <RootProperty Name="RenderTransformOrigin" />
-      <RootProperty Name="RenderTransform" />
       <RootMethod Name="GetAlignLeftWithPanel" />
       <RootMethod Name="SetAlignLeftWithPanel" />
       <RootMethod Name="GetLeftOf" />
@@ -503,8 +499,8 @@
       <RootProperty Name="LabelPosition" />
       <RootProperty Name="IconRadius" />
       <RootProperty Name="Padding" />
-      <RootProperty Name="Flyout" />
       <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="Flyout" />
       <RootEvent Name="Tapped" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.RadialProgressBar">
@@ -687,7 +683,6 @@
       <RootProperty Name="ItemTemplate" />
       <RootProperty Name="TabStartHeader" />
       <RootProperty Name="TabEndHeader" />
-      <RootProperty Name="Footer" />
       <RootEvent Name="DragItemsCompleted" />
       <RootEvent Name="SelectionChanged" />
       <RootEvent Name="TabClosing" />

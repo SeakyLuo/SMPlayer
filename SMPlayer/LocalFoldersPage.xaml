@@ -57,6 +57,7 @@
             Visibility="Collapsed" />
         <GridView
             x:Name="LocalFoldersGridView"
+            Grid.Row="1"
             Margin="5"
             IsItemClickEnabled="True"
             ItemClick="LocalFoldersGridView_ItemClick"
@@ -165,6 +166,7 @@
         </GridView>
         <TreeView
             x:Name="LocalFolderTreeView"
+            Grid.Row="1"
             Margin="0,5,0,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"

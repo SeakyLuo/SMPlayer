@@ -199,7 +199,6 @@
             <ContentPresenter
                 Grid.Row="3"
                 Grid.ColumnSpan="6"
-                Background="Transparent"
                 Content="{TemplateBinding Footer}"
                 ContentTemplate="{TemplateBinding FooterTemplate}" />
         </Grid>
