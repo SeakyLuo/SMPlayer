@@ -20,6 +20,7 @@
                 <ResourceDictionary Source="Dictionaries/BackButton.xaml" />
                 <ResourceDictionary Source="Dictionaries/TextButton.xaml" />
                 <ResourceDictionary Source="Dictionaries/IconButton.xaml" />
+                <ResourceDictionary Source="Dictionaries/PlaylistTabView.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush
                 x:Key="PointerOverHighlightBackgroundBrush"

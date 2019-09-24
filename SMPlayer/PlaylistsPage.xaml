@@ -54,11 +54,9 @@
             SelectionChanged="PlaylistTabView_SelectionChanged"
             SelectionMode="Single"
             TabClosing="PlaylistTabView_TabClosing"
+            Style="{ThemeResource PlaylistTabViewStyle}"
             TabNavigation="Cycle"
             TabWidthBehavior="Actual">
-            <controls:TabView.Resources>
-                <x:Double x:Key="TabViewItemHeaderMaxWidth">300</x:Double>
-            </controls:TabView.Resources>
             <controls:TabView.ItemHeaderTemplate>
                 <DataTemplate x:DataType="data:Playlist">
                     <StackPanel Background="Transparent" Orientation="Horizontal">
@@ -127,6 +125,7 @@
                 <RelativePanel
                     x:Name="PlaylistFooter"
                     Height="{StaticResource PlaylistTabFooterHeight}"
+                    Background="Transparent"
                     RenderTransformOrigin="0,0">
                     <RelativePanel.RenderTransform>
                         <TranslateTransform />
