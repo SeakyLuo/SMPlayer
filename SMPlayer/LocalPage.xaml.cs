@@ -46,16 +46,23 @@ namespace SMPlayer
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            TreeInfo info = History.Peek().GetTreeInfo();
+            TreeInfo info = History.Peek().Info;
             MainPage.Instance.SetHeaderText(string.IsNullOrEmpty(info.Directory) ? "No Music" : info.Directory);
         }
 
         private void LocalNavigationView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
             var item = (NavigationViewItem)LocalNavigationView.SelectedItem;
-            Type page = item.Name == "LocalFoldersItem" ? typeof(LocalFoldersPage) : typeof(LocalMusicPage);
+            bool isFolders = item.Name == "LocalFoldersItem";
+            Type page = isFolders ? typeof(LocalFoldersPage) : typeof(LocalMusicPage);
             if (LocalFrame.CurrentSourcePageType != page)
-                LocalFrame.Navigate(page, History.Peek());
+            {
+                if (LocalFrame.CanGoBack && LocalFrame.BackStack.Last().SourcePageType == page)
+                    LocalFrame.GoBack();
+                else
+                    LocalFrame.Navigate(page, History.Peek());
+                SetLocalGridView(isFolders ? Settings.settings.LocalFolderGridView : Settings.settings.LocalMusicGridView);
+            }
         }
 
         private void SetBackButtonVisibility()
@@ -76,7 +83,7 @@ namespace SMPlayer
                 else break;
             } while (true);
             LocalFrame.GoBack();
-            var info = History.Peek().GetTreeInfo();
+            var info = History.Peek().Info;
             SetText(info);
             switch (page.SourcePageType.Name)
             {
@@ -92,8 +99,16 @@ namespace SMPlayer
 
         private void SetLocalGridView(bool isGridView)
         {
-            LocalGridViewItem.Visibility = isGridView ? Visibility.Collapsed : Visibility.Visible;
-            LocalListViewItem.Visibility = isGridView ? Visibility.Visible : Visibility.Collapsed;
+            if (isGridView)
+            {
+                LocalGridViewItem.Visibility = Visibility.Collapsed;
+                LocalListViewItem.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                LocalGridViewItem.Visibility = Visibility.Visible;
+                LocalListViewItem.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void LocalListViewItem_Tapped(object sender, TappedRoutedEventArgs e)
@@ -145,7 +160,7 @@ namespace SMPlayer
             if (History.Count > 0 && History.Peek() == tree) return;
             History.Push(tree);
             SetBackButtonVisibility();
-            TreeInfo info = tree.GetTreeInfo();
+            TreeInfo info = tree.Info;
             SetText(info, setHeader);
             if (IsBackToMusicPage(info))
             {

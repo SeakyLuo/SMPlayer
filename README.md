@@ -4,7 +4,7 @@ A Simple Music Player that manages local music files based on the UI of Groove M
 # TO RUN
 Download it and open it using Visual Studio.
 
-Build it .with local computer.
+Build it with local computer.
 
 Go to Settings and Set the Root Folder of your music files.
 
@@ -28,8 +28,6 @@ Full Screen.
 
 MasterView long artist name.
 
-Scroll Header Not sticky.
-
 Quick return footer.
 
 AutoSuggestBox lose focus.
@@ -41,5 +39,3 @@ NowPlayingFull play count repeat one.
 NowPlayingFull album click.
 
 Main More Lyrics Click.
-
-FakeToggleButton PointerOver background.

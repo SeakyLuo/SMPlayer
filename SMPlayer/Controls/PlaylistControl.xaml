@@ -2,8 +2,6 @@
     x:Class="SMPlayer.PlaylistControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Interactions="using:Microsoft.Xaml.Interactions.Core"
-    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:SMPlayer.Models"
     xmlns:local="using:SMPlayer.Controls"
@@ -50,10 +48,12 @@
                         <SwipeControl.LeftItems>
                             <SwipeItems Mode="Reveal">
                                 <SwipeItem
+                                    Background="Transparent"
+                                    Foreground="Red"
                                     Invoked="FavoriteItem_Invoked"
                                     Text="Favorite">
                                     <SwipeItem.IconSource>
-                                        <FontIconSource Foreground="Red" Glyph="{x:Bind Favorite, Converter={StaticResource MusicFavoriteConverter}, ConverterParameter=Heart, Mode=OneWay}" />
+                                        <FontIconSource Glyph="{x:Bind Favorite, Converter={StaticResource MusicFavoriteConverter}, ConverterParameter=Heart, Mode=OneWay}" />
                                     </SwipeItem.IconSource>
                                 </SwipeItem>
                             </SwipeItems>

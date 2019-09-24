@@ -12,36 +12,28 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <DataTemplate x:Key="FolderTemplate" x:DataType="data:FolderTree">
-            <TreeViewItem
-                DoubleTapped="FolderTreeItem_DoubleTapped"
+        <x:Double x:Key="IconSize">20</x:Double>
+        <DataTemplate x:Key="FolderTemplate" x:DataType="TreeViewNode">
+            <StackPanel
+                DoubleTapped="FolderTemplate_DoubleTapped"
                 IsDoubleTapEnabled="True"
-                IsExpanded="False"
-                ItemsSource="{x:Bind Files, Mode=OneWay}">
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel.ContextFlyout>
-                        <MenuFlyout Opening="OpenPlaylistFlyout" />
-                    </StackPanel.ContextFlyout>
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" />
-                    <TextBlock Margin="10,0,10,0" Text="{x:Bind Path, Mode=OneWay}" />
-                </StackPanel>
-            </TreeViewItem>
+                Orientation="Horizontal">
+                <StackPanel.ContextFlyout>
+                    <MenuFlyout Opening="OpenPlaylistFlyout" />
+                </StackPanel.ContextFlyout>
+                <Image Width="{StaticResource IconSize}" Source="Assets/folder.png" />
+                <TextBlock Margin="10,0" Text="{Binding Content.Directory, Mode=OneWay}" />
+            </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="FileTemplate" x:DataType="data:Music">
-            <TreeViewItem>
-                <StackPanel
-                    DoubleTapped="FileItem_DoubleTapped"
-                    IsDoubleTapEnabled="True"
-                    Orientation="Horizontal">
-                    <StackPanel.ContextFlyout>
-                        <MenuFlyout Opening="OpenMusicFlyout" />
-                    </StackPanel.ContextFlyout>
-                    <Image Width="20" Source="Assets/colorful_no_bg.png" />
-                    <TextBlock Margin="0,0,10,0" />
-                    <TextBlock Margin="0,0,10,0" Text="{x:Bind Name}" />
-                </StackPanel>
-            </TreeViewItem>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel.ContextFlyout>
+                    <MenuFlyout Opening="OpenMusicFlyout" />
+                </StackPanel.ContextFlyout>
+                <Image Width="{StaticResource IconSize}" Source="Assets/colorful_no_bg.png" />
+                <TextBlock Margin="10,0" Text="{Binding Content.Name, Mode=OneWay}" />
+            </StackPanel>
         </DataTemplate>
 
         <templateselector:FolderTreeTemplateSelector
@@ -59,10 +51,13 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Rectangle x:Name="LoadingControlPlaceHolder" Height="4" />
-        <ProgressBar x:Name="LocalLoadingControl" IsIndeterminate="True" />
+        <ProgressBar
+            x:Name="LocalLoadingControl"
+            IsIndeterminate="True"
+            Visibility="Collapsed" />
         <GridView
             x:Name="LocalFoldersGridView"
-            Margin="10"
+            Margin="5"
             IsItemClickEnabled="True"
             ItemClick="LocalFoldersGridView_ItemClick"
             ItemContainerStyle="{StaticResource DropShadowGridViewItemStyle}"
@@ -171,10 +166,13 @@
         <TreeView
             x:Name="LocalFolderTreeView"
             Margin="0,5,0,0"
-            ItemTemplateSelector="{StaticResource FolderTreeTemplateSelector}"
-            ItemsSource="{x:Bind TreeViewSource, Mode=OneWay}"
             HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
             HorizontalContentAlignment="Stretch"
+            Collapsed="LocalFolderTreeView_Collapsed"
+            Expanding="LocalFolderTreeView_Expanding"
+            ItemInvoked="LocalFolderTreeView_ItemInvoked"
+            ItemTemplateSelector="{StaticResource FolderTreeTemplateSelector}"
             Visibility="Collapsed" />
     </Grid>
 </Page>

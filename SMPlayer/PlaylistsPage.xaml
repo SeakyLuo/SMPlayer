@@ -13,6 +13,7 @@
     <Page.Resources>
         <x:Double x:Key="PlaylistTabFooterHeight">30</x:Double>
         <x:Double x:Key="PlaylistTabFooterTranslationOffset">20</x:Double>
+        <x:Double x:Key="HeaderButtonWidth">40</x:Double>
         <Storyboard x:Name="SpinArrowAnimation">
             <DoubleAnimation
                 By="180"
@@ -53,8 +54,8 @@
             ItemsSource="{x:Bind playlists, Mode=TwoWay}"
             SelectionChanged="PlaylistTabView_SelectionChanged"
             SelectionMode="Single"
-            TabClosing="PlaylistTabView_TabClosing"
             Style="{ThemeResource PlaylistTabViewStyle}"
+            TabClosing="PlaylistTabView_TabClosing"
             TabNavigation="Cycle"
             TabWidthBehavior="Actual">
             <controls:TabView.ItemHeaderTemplate>
@@ -93,8 +94,7 @@
             <controls:TabView.TabStartHeader>
                 <Button
                     x:Name="NewPlaylistButton"
-                    Width="40"
-                    Height="40"
+                    Width="{StaticResource HeaderButtonWidth}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Background="Transparent"
@@ -110,7 +110,8 @@
             <controls:TabView.TabEndHeader>
                 <Button
                     x:Name="EditPlaylistButton"
-                    Width="48"
+                    Width="{StaticResource HeaderButtonWidth}"
+                    VerticalAlignment="Stretch"
                     Background="Transparent"
                     BorderThickness="0"
                     Click="EditPlaylistButton_Click"

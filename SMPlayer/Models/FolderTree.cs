@@ -15,6 +15,9 @@ namespace SMPlayer.Models
         public List<Music> Files = new List<Music>();
         public string Path = "";
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        public TreeInfo Info { get => new TreeInfo(Directory, Trees.Count, Files.Count); }
+        public bool IsEmpty { get => Files.Count == 0 && Trees.All((tree) => tree.IsEmpty); }
+        public string Directory { get => Path.Substring(Path.LastIndexOf("\\") + 1); }
 
         public FolderTree() { }
         public FolderTree(FolderTree tree)
@@ -116,11 +119,6 @@ namespace SMPlayer.Models
             return Files.Contains(music) || Trees.Any((tree) => tree.Contains(music));
         }
 
-        public bool IsEmpty()
-        {
-            return Files.Count == 0 && Trees.All((tree) => tree.IsEmpty());
-        }
-
         public void Update(FolderTree tree)
         {
             // Merge to this tree
@@ -140,16 +138,6 @@ namespace SMPlayer.Models
                 list.AddRange(branch.Flatten());
             list.AddRange(Files);
             return list;
-        }
-
-        public TreeInfo GetTreeInfo()
-        {
-            return new TreeInfo(GetDirectory(), Trees.Count, Files.Count);
-        }
-
-        public string GetDirectory()
-        {
-            return Path.Substring(Path.LastIndexOf("\\") + 1);
         }
 
         public static bool IsMusicFile(StorageFile file)

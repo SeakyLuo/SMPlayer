@@ -26,7 +26,6 @@ namespace SMPlayer
     {
         private ObservableCollection<GridFolderView> GridItems = new ObservableCollection<GridFolderView>();
         private FolderTree Tree;
-        private ObservableCollection<FolderTree> TreeViewSource = new ObservableCollection<FolderTree>();
         public static LocalSetter setter;
         
         public LocalFoldersPage()
@@ -53,8 +52,11 @@ namespace SMPlayer
         {
             if (Tree == tree) return;
             Tree = tree;
-            TreeViewSource.Remove(tree);
-            TreeViewSource.Add(tree);
+            LocalFolderTreeView.RootNodes.Clear();
+            LocalFolderTreeView.RootNodes.Add(FillTreeNode(new TreeViewNode()
+            {
+                Content = tree,  IsExpanded = true,  HasUnrealizedChildren = true
+            }));
             LocalLoadingControl.Visibility = Visibility.Visible;
             GridItems.Clear();
             setter.SetPage(tree);
@@ -112,11 +114,44 @@ namespace SMPlayer
             }
         }
 
-        private void FolderTreeItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        private TreeViewNode FillTreeNode(TreeViewNode node)
         {
-
+            var tree = node.Content as FolderTree;
+            foreach (var item in tree.Trees)
+                node.Children.Add(FillTreeNode(new TreeViewNode() { Content = item, HasUnrealizedChildren = true }));
+            foreach(var item in tree.Files)
+                node.Children.Add(new TreeViewNode() { Content = item });
+            return node;
         }
-        private void FileItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+
+        private void LocalFolderTreeView_Expanding(TreeView sender, TreeViewExpandingEventArgs args)
+        {
+            if (args.Node.HasUnrealizedChildren)
+            {
+                FillTreeNode(args.Node);
+            }
+        }
+
+        private void LocalFolderTreeView_Collapsed(TreeView sender, TreeViewCollapsedEventArgs args)
+        {
+            args.Node.Children.Clear();
+            args.Node.HasUnrealizedChildren = true;
+        }
+
+        private void LocalFolderTreeView_ItemInvoked(TreeView sender, TreeViewItemInvokedEventArgs args)
+        {
+            var node = args.InvokedItem as TreeViewNode;
+            if (node.Content is FolderTree)
+            {
+                node.IsExpanded = !node.IsExpanded;
+            }
+            else if (node.Content is Music)
+            {
+                MediaHelper.SetMusicAndPlay((node.Parent.Content as FolderTree).Files, node.Content as Music);
+            }
+        }
+
+        private void FolderTemplate_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
 
         }

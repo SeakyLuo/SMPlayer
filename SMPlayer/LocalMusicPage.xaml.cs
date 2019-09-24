@@ -31,6 +31,7 @@ namespace SMPlayer
         public LocalMusicPage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
             MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
             LocalPage.MusicViewModeChangedListener = this as ViewModeChangedListener;
         }

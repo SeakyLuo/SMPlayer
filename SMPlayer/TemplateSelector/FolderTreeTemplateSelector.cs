@@ -15,8 +15,9 @@ namespace SMPlayer.TemplateSelector
 
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
-            if (item is Models.FolderTree) return FolderTemplate;
-            if (item is Models.Music) return FileTemplate;
+            var content = (item as TreeViewNode).Content;
+            if (content is Models.FolderTree) return FolderTemplate;
+            if (content is Models.Music) return FileTemplate;
             return null;
         }
     }

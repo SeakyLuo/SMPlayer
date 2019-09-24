@@ -217,6 +217,7 @@
     <Content Include="Assets\colorful_bg_wide.png" />
     <Content Include="Assets\colorful_no_bg.png" />
     <Content Include="Assets\colorful_no_bg_wide.png" />
+    <Content Include="Assets\folder.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-125.png" />
     <Content Include="Assets\LargeTile.scale-150.png" />
