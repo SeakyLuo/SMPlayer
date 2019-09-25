@@ -9,10 +9,10 @@
 
     <Grid
         x:Name="Root"
-        Margin="{x:Bind Margin}"
-        Padding="{x:Bind Padding}"
-        Background="{x:Bind Background}"
-        CornerRadius="{x:Bind CornerRadius}"
+        Margin="{x:Bind Margin, Mode=OneWay}"
+        Padding="{x:Bind Padding, Mode=OneWay}"
+        Background="{x:Bind Background, Mode=OneWay}"
+        CornerRadius="{x:Bind CornerRadius, Mode=OneWay}"
         PointerEntered="Root_PointerEntered"
         PointerExited="Root_PointerExited"
         Tapped="Root_Tapped">
@@ -21,27 +21,29 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <Border
+        <Ellipse
             x:Name="IconBackgroundBorder"
             Grid.Column="1"
+            Width="{x:Bind IconRadius, Mode=OneWay}"
+            Height="{x:Bind IconRadius, Mode=OneWay}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
             AutomationProperties.AccessibilityView="Raw"
-            Background="{x:Bind IconBackground, Mode=OneWay}">
-            <ContentPresenter
-                x:Name="IconContent"
-                Content="{x:Bind Icon}"
-                Foreground="{x:Bind Foreground}" />
-        </Border>
+            Fill="{x:Bind IconBackground, Mode=OneWay}" />
+        <ContentPresenter
+            x:Name="IconContent"
+            Grid.Column="1"
+            Content="{x:Bind Icon, Mode=OneWay}"
+            Foreground="{x:Bind Foreground, Mode=OneWay}" />
         <TextBlock
             x:Name="LabelTextBlock"
             Grid.Column="2"
             Margin="{x:Bind IconTextMargin, Mode=OneWay}"
             VerticalAlignment="Center"
             AutomationProperties.AccessibilityView="Raw"
-            FontSize="{x:Bind FontSize}"
-            FontWeight="{x:Bind FontWeight}"
-            Foreground="{x:Bind Foreground}"
+            FontSize="{x:Bind FontSize, Mode=OneWay}"
+            FontWeight="{x:Bind FontWeight, Mode=OneWay}"
+            Foreground="{x:Bind Foreground, Mode=OneWay}"
             Text="{x:Bind Label, Mode=OneWay}"
             TextAlignment="Center"
             TextWrapping="Wrap" />

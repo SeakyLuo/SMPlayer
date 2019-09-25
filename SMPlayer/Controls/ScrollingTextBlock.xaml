@@ -7,16 +7,30 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <UserControl.Resources>
+        <Style x:Key="ScrollingTextScrollViewerStyle" TargetType="ScrollViewer">
+            <Setter Property="HorizontalScrollBarVisibility" Value="Hidden" />
+            <Setter Property="VerticalScrollBarVisibility" Value="Disabled" />
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
-        <ScrollViewer
-            x:Name="TextScrollViewer"
-            HorizontalScrollBarVisibility="Hidden"
-            PointerEntered="TextScrollViewer_PointerEntered"
-            VerticalScrollBarVisibility="Disabled">
-            <StackPanel>
-                <TextBlock x:Name="NormalTextBlock" />
-                <TextBlock x:Name="PointerOverTextBlock" Visibility="Collapsed" />
-            </StackPanel>
+        <ScrollViewer x:Name="TextScrollViewer" Style="{StaticResource ScrollingTextScrollViewerStyle}">
+            <TextBlock
+                x:Name="NormalTextBlock"
+                FontSize="{x:Bind FontSize, Mode=OneWay}"
+                FontWeight="{x:Bind FontWeight, Mode=OneWay}"
+                Foreground="{x:Bind Foreground, Mode=OneWay}"
+                TextAlignment="{x:Bind TextAlignment, Mode=OneWay}" />
+        </ScrollViewer>
+        <ScrollViewer x:Name="RealScrollViewer" Style="{StaticResource ScrollingTextScrollViewerStyle}">
+            <TextBlock
+                x:Name="ScrollTextBlock"
+                FontSize="{x:Bind FontSize, Mode=OneWay}"
+                FontWeight="{x:Bind FontWeight, Mode=OneWay}"
+                Foreground="{x:Bind Foreground, Mode=OneWay}"
+                TextAlignment="{x:Bind TextAlignment, Mode=OneWay}"
+                Visibility="Collapsed" />
         </ScrollViewer>
     </Grid>
 </UserControl>

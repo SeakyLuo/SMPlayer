@@ -66,7 +66,7 @@ namespace SMPlayer
                 }
             }
         }
-        public TextBlock TitleTextBlock
+        public ScrollingTextBlock TitleTextBlock
         {
             get
             {
@@ -81,7 +81,7 @@ namespace SMPlayer
                 }
             }
         }
-        public TextBlock ArtistTextBlock
+        public ScrollingTextBlock ArtistTextBlock
         {
             get
             {
@@ -731,6 +731,8 @@ namespace SMPlayer
         {
             if (MediaHelper.CurrentMusic == null) return;
             VisualStateManager.GoToState(this, "PointerOver", true);
+            MainTitleTextBlock.StartScrolling();
+            MainArtistTextBlock.StartScrolling();
         }
 
         private void MainMusicInfoGrid_PointerExited(object sender, PointerRoutedEventArgs e)

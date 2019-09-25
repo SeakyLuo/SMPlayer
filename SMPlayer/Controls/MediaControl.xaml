@@ -20,6 +20,7 @@
                 <Setter Property="Padding" Value="4,2,15,2" />
                 <Setter Property="FontSize" Value="14" />
                 <Setter Property="Height" Value="36" />
+                <Setter Property="IconTextMargin" Value="10,0,0,0" />
             </Style.Setters>
         </Style>
         <Style x:Key="MediaControlIconTextButtonFontIcon" TargetType="FontIcon">
@@ -72,7 +73,7 @@
                     Height="100"
                     Source="Assets/monotone_bg_wide.png"
                     Stretch="UniformToFill" />
-                <TextBlock
+                <local:ScrollingTextBlock
                     x:Name="MainTitleTextBlock"
                     Grid.Row="0"
                     Grid.Column="1"
@@ -80,7 +81,7 @@
                     VerticalAlignment="Bottom"
                     FontSize="24"
                     Foreground="White" />
-                <TextBlock
+                <local:ScrollingTextBlock
                     x:Name="MainArtistTextBlock"
                     Grid.Row="1"
                     Grid.Column="1"
@@ -130,8 +131,6 @@
                             <StackPanel Width="200" Margin="-12,-4">
                                 <local:IconTextButton
                                     x:Name="MainMoreShuffleButton"
-                                    IconRadius="15"
-                                    IconTextMargin="10,0,0,0"
                                     Label="Shuffle: Disabled"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
                                     Tapped="MoreShuffleButton_Tapped">
@@ -141,8 +140,6 @@
                                 </local:IconTextButton>
                                 <local:IconTextButton
                                     x:Name="MainMoreRepeatButton"
-                                    IconRadius="15"
-                                    IconTextMargin="10,0,0,0"
                                     Label="Repeat: Disabled"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
                                     Tapped="MoreRepeatButton_Tapped">
@@ -152,8 +149,6 @@
                                 </local:IconTextButton>
                                 <local:IconTextButton
                                     x:Name="MainMoreRepeatOneButton"
-                                    IconRadius="15"
-                                    IconTextMargin="10,0,0,0"
                                     Label="Repeat One: Disabled"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
                                     Tapped="MoreRepeatOneButton_Tapped">
@@ -162,7 +157,7 @@
                                     </local:IconTextButton.Icon>
                                 </local:IconTextButton>
                                 <StackPanel
-                                    Margin="6,2,15,2"
+                                    Margin="4,2,15,2"
                                     HorizontalAlignment="Stretch"
                                     Orientation="Horizontal">
                                     <Button
@@ -192,8 +187,6 @@
                                 </StackPanel>
                                 <local:IconTextButton
                                     x:Name="MainMediaControlMoreMusicInfoItem"
-                                    IconRadius="15"
-                                    IconTextMargin="10,0,0,0"
                                     Label="Music Info"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
                                     Tapped="MainMediaControlMoreMusicInfoItem_Tapped">
@@ -203,8 +196,6 @@
                                 </local:IconTextButton>
                                 <local:IconTextButton
                                     x:Name="MainMediaControlMoreLyricsItem"
-                                    IconRadius="15"
-                                    IconTextMargin="10,0,0,0"
                                     Label="Show Lyrics"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
                                     Tapped="MainMediaControlMoreLyricsItem_Tapped">
@@ -214,8 +205,6 @@
                                 </local:IconTextButton>
                                 <local:IconTextButton
                                     x:Name="MainMediaControlMoreFullScreenItem"
-                                    IconRadius="15"
-                                    IconTextMargin="10,0,0,0"
                                     Label="Full Screen"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
                                     Tapped="MoreFullScreenItem_Tapped">
@@ -225,8 +214,6 @@
                                 </local:IconTextButton>
                                 <local:IconTextButton
                                     x:Name="MainMediaControlMoreMiniPlayItem"
-                                    IconRadius="15"
-                                    IconTextMargin="10,0,0,0"
                                     Label="Mini Play"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
                                     Tapped="MoreMiniPlayItem_Tapped">
@@ -403,7 +390,7 @@
                         Height="120"
                         Source="Assets/colorful_bg_wide.png"
                         Stretch="UniformToFill" />
-                    <TextBlock
+                    <local:ScrollingTextBlock
                         x:Name="FullTitleTextBlock"
                         Grid.Row="0"
                         Grid.Column="1"
@@ -411,14 +398,14 @@
                         FontSize="24"
                         FontWeight="Bold"
                         Foreground="White" />
-                    <TextBlock
+                    <local:ScrollingTextBlock
                         x:Name="FullArtistTextBlock"
                         Grid.Row="1"
                         Grid.Column="1"
                         Margin="10,5,5,0"
                         FontSize="18"
                         Foreground="White" />
-                    <TextBlock
+                    <local:ScrollingTextBlock
                         x:Name="FullAlbumTextBlock"
                         Grid.Row="2"
                         Grid.Column="1"

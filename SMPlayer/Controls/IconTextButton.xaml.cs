@@ -64,18 +64,12 @@ namespace SMPlayer
         public double IconRadius
         {
             get => (double)GetValue(IconRadiusProperty);
-            set
-            {
-                SetValue(IconRadiusProperty, value);
-                IconBackgroundBorder.Width = value * 2;
-                IconBackgroundBorder.Height = value * 2;
-                IconBackgroundBorder.CornerRadius = new CornerRadius(value);
-            }
+            set => SetValue(IconRadiusProperty, value);
         }
         public static readonly DependencyProperty IconRadiusProperty = DependencyProperty.Register("IconRadius",
                                                                                               typeof(double),
                                                                                               typeof(IconTextButton),
-                                                                                              new PropertyMetadata(15));
+                                                                                              new PropertyMetadata(30d));
 
         public FlyoutBase Flyout { get; set; }
         public IconTextButton()

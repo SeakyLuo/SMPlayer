@@ -364,10 +364,20 @@
       <RootProperty Name="Margin" />
       <RootProperty Name="Foreground" />
     </RootType>
+    <RootType FullName="SMPlayer.ScrollingTextBlock">
+      <RootProperty Name="Margin" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Text" />
+      <RootProperty Name="FontSize" />
+      <RootProperty Name="FontWeight" />
+      <RootProperty Name="Foreground" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Shapes.Ellipse">
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
       <RootProperty Name="Fill" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Stroke" />
       <RootProperty Name="StrokeThickness" />
     </RootType>
@@ -438,7 +448,6 @@
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="BorderThickness" />
-      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Background" />
       <RootProperty Name="Child" />
       <RootProperty Name="MinWidth" />
@@ -446,6 +455,7 @@
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="RequestedTheme" />
+      <RootProperty Name="VerticalAlignment" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.SymbolIcon">
       <RootProperty Name="RenderTransformOrigin" />
@@ -498,7 +508,6 @@
       <RootProperty Name="Width" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="LabelPosition" />
-      <RootProperty Name="IconRadius" />
       <RootProperty Name="Padding" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="Flyout" />
@@ -551,6 +560,7 @@
     <RootType FullName="Windows.UI.Xaml.Controls.ScrollViewer">
       <RootProperty Name="HorizontalScrollBarVisibility" />
       <RootProperty Name="VerticalScrollBarVisibility" />
+      <RootProperty Name="Style" />
       <RootProperty Name="Content" />
       <RootProperty Name="Margin" />
       <RootProperty Name="Padding" />
@@ -565,10 +575,8 @@
       <RootProperty Name="BringIntoViewOnFocusChange" />
       <RootProperty Name="IsHorizontalScrollChainingEnabled" />
       <RootProperty Name="IsVerticalScrollChainingEnabled" />
-      <RootProperty Name="Style" />
       <RootProperty Name="TabNavigation" />
       <RootProperty Name="HorizontalAlignment" />
-      <RootEvent Name="PointerEntered" />
       <RootEvent Name="ViewChanged" />
       <RootMethod Name="GetHorizontalScrollMode" />
       <RootMethod Name="SetHorizontalScrollMode" />
@@ -589,7 +597,6 @@
       <RootMethod Name="GetZoomMode" />
       <RootMethod Name="SetZoomMode" />
     </RootType>
-    <RootType FullName="SMPlayer.ScrollingTextBlock" />
     <RootType FullName="Windows.UI.Xaml.Controls.ContentDialog">
       <RootProperty Name="Title" />
       <RootProperty Name="PrimaryButtonText" />
