@@ -61,8 +61,8 @@ namespace SMPlayer
             var name = "Now Playing - " + DateTime.Now.ToString("yy/MM/dd");
             int index = Settings.settings.FindNextPlaylistNameIndex(name);
             var defaultName = index == 0 ? name : $"{name} ({index})";
-            var helper = new MenuFlyoutHelper() { Data = MediaHelper.CurrentPlaylist };
-            helper.GetAddToPlaylistsMenuFlyout(defaultName, MenuFlyoutHelper.NowPlaying).ShowAt(sender as FrameworkElement);
+            var helper = new MenuFlyoutHelper() { Data = MediaHelper.CurrentPlaylist, DefaultPlaylistName = defaultName };
+            helper.GetAddToPlaylistsMenuFlyout(MenuFlyoutHelper.NowPlaying).ShowAt(sender as FrameworkElement);
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)

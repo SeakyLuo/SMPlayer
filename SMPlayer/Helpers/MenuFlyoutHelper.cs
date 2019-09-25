@@ -13,7 +13,8 @@ namespace SMPlayer
 {
     class MenuFlyoutHelper
     {
-        public object Data;
+        public object Data { get; set; }
+        public string DefaultPlaylistName { get; set; }
         public const string AddToSubItemName = "AddToSubItem";
         public const string PlaylistMenuName = "ShuffleItem";
         public const string MusicMenuName = "PlayItem";
@@ -65,14 +66,13 @@ namespace SMPlayer
                         Settings.settings.LikeMusic(Data as ICollection<Music>);
                 };
                 addToItem.Items.Add(favItem);
-
             }
             addToItem.Items.Add(new MenuFlyoutSeparator());
-            foreach (var item in GetAddToPlaylistsMenuFlyout("", PlaylistName).Items)
+            foreach (var item in GetAddToPlaylistsMenuFlyout(PlaylistName).Items)
                 addToItem.Items.Add(item);
             return addToItem;
         }
-        public MenuFlyout GetAddToPlaylistsMenuFlyout(string DefaultName, string PlaylistName = "")
+        public MenuFlyout GetAddToPlaylistsMenuFlyout(string CurrentPlaylistName = "")
         {
             var flyout = new MenuFlyout();
             var newPlaylistItem = new MenuFlyoutItem()
@@ -83,14 +83,14 @@ namespace SMPlayer
             newPlaylistItem.Click += async (sender, args) =>
             {
                 var listener = new VirtualRenameActionListener() { Data = Data };
-                var dialog = new RenameDialog(listener, TitleOption.NewPlaylist, DefaultName);
+                var dialog = new RenameDialog(listener, TitleOption.NewPlaylist, DefaultPlaylistName);
                 listener.Dialog = dialog;
                 await dialog.ShowAsync();
             };
             flyout.Items.Add(newPlaylistItem);
             foreach (var playlist in Settings.settings.Playlists)
             {
-                if (playlist.Name == PlaylistName) continue;
+                if (playlist.Name == CurrentPlaylistName) continue;
                 var item = new MenuFlyoutItem()
                 {
                     Icon = new SymbolIcon(Symbol.Audio),
@@ -124,6 +124,14 @@ namespace SMPlayer
             flyout.Items.Add(GetAddToMenuFlyoutSubItem());
             return flyout;
         }
+        public static MenuFlyoutItem ShowInExplorerItem
+        {
+            get => new MenuFlyoutItem()
+            {
+                Icon = new FontIcon() { Glyph = "\uE838" },
+                Text = "Show In Explorer"
+            };
+        }
         public MenuFlyout GetMusicMenuFlyout(MenuFlyoutItemClickListener listener = null)
         {
             var music = Data as Music;
@@ -137,15 +145,11 @@ namespace SMPlayer
             ToolTipService.SetToolTip(playItem, new ToolTip() { Content = $"Play {music.Name}" });
             playItem.Click += (s, args) =>
             {
-
+                MediaHelper.SetMusicAndPlay(music);
             };
             flyout.Items.Add(playItem);
             flyout.Items.Add(GetAddToMenuFlyoutSubItem());
-            var showInExplorerItem = new MenuFlyoutItem()
-            {
-                Icon = new FontIcon() { Glyph = "\uE838" },
-                Text = "Show In Explorer"
-            };
+            var showInExplorerItem = ShowInExplorerItem;
             showInExplorerItem.Click += async (s, args) =>
             {
                 var file = await StorageFile.GetFileFromPathAsync(music.Path);
@@ -265,19 +269,23 @@ namespace SMPlayer
         {
             MenuFlyout flyout;
             MenuFlyoutHelper helper;
-            object dataContext;
+            object data;
             if (sender is MenuFlyout)
             {
                 flyout = sender as MenuFlyout;
-                dataContext = (flyout.Target as Windows.UI.Xaml.FrameworkElement).DataContext;
+                data = (flyout.Target as Windows.UI.Xaml.FrameworkElement).DataContext;
                 flyout.Items.Clear();
             }
             else
             {
                 flyout = new MenuFlyout();
-                dataContext = (sender as Windows.UI.Xaml.FrameworkElement).DataContext;
+                data = (sender as Windows.UI.Xaml.FrameworkElement).DataContext;
             }
-            helper = new MenuFlyoutHelper() { Data = FindMusic(dataContext) };
+            helper = new MenuFlyoutHelper()
+            {
+                Data = FindMusic(data),
+                DefaultPlaylistName = Settings.settings.FindNextPlaylistName(FindPlaylistName(data))
+            };
             var items = GetMenu(helper).Items;
             foreach (var item in items)
                 flyout.Items.Add(item);
@@ -292,7 +300,18 @@ namespace SMPlayer
             else if (obj is Playlist) return (obj as Playlist).Songs;
             else if (obj is GridFolderView) return (obj as GridFolderView).Songs;
             else if (obj is GridMusicView) return (obj as GridMusicView).Source;
+            else if (obj is TreeViewNode) return ((obj as TreeViewNode).Content as FolderTree).Files;
             return null;
+        }
+
+        private static string FindPlaylistName(object obj)
+        {
+            if (obj is ArtistView) return (obj as ArtistView).Name;
+            else if (obj is AlbumView) return (obj as AlbumView).Name;
+            else if (obj is Playlist) return (obj as Playlist).Name;
+            else if (obj is GridFolderView) return (obj as GridFolderView).Name;
+            else if (obj is TreeViewNode) return ((obj as TreeViewNode).Content as FolderTree).Directory;
+            return "";
         }
     }
 

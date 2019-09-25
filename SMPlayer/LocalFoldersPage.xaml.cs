@@ -71,7 +71,18 @@ namespace SMPlayer
 
         private void OpenPlaylistFlyout(object sender, object e)
         {
+            var flyout = sender as MenuFlyout;
+            var tree = (flyout.Target.DataContext as TreeViewNode).Content as FolderTree;
             MenuFlyoutHelper.SetPlaylistMenu(sender);
+            var ShowInExplorerItem = MenuFlyoutHelper.ShowInExplorerItem;
+            ShowInExplorerItem.Click += async (s, args) =>
+            {
+                var folder = await Windows.Storage.StorageFolder.GetFolderFromPathAsync(tree.Path);
+                var options = new Windows.System.FolderLauncherOptions();
+                options.ItemsToSelect.Add(folder);
+                await Windows.System.Launcher.LaunchFolderAsync(folder, options);
+            };
+            flyout.Items.Add(ShowInExplorerItem);
         }
         private void OpenMusicFlyout(object sender, object e)
         {
@@ -96,8 +107,8 @@ namespace SMPlayer
         private void AddToButton_Click(object sender, RoutedEventArgs e)
         {
             var data = (sender as Button).DataContext as GridFolderView;
-            var helper = new MenuFlyoutHelper() { Data = data.Songs };
-            helper.GetAddToPlaylistsMenuFlyout(data.Name).ShowAt(sender as FrameworkElement);
+            var helper = new MenuFlyoutHelper() { Data = data.Songs, DefaultPlaylistName = data.Name };
+            helper.GetAddToPlaylistsMenuFlyout().ShowAt(sender as FrameworkElement);
         }
 
         public void ModeChanged(bool isGridView)

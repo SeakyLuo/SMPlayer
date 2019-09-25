@@ -22,8 +22,6 @@ Add Album Art to Music.
 
 MasterView Back Button.
 
-LocalFolderView open in explorer.
-
 # TO FIX
 
 Full Screen.

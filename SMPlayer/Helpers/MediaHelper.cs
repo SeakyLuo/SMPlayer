@@ -157,6 +157,14 @@ namespace SMPlayer
                 CurrentMusic = null;
         }
 
+        public static void SetMusicAndPlay(Music music)
+        {
+            CurrentPlaylist.Clear();
+            CurrentPlaylist.Add(music);
+            MoveToMusic(music);
+            Play();
+        }
+
         public static async void SetMusicAndPlay(ICollection<Music> playlist, Music music)
         {
             if (!Helper.SamePlaylist(CurrentPlaylist, playlist))

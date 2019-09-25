@@ -110,8 +110,8 @@ namespace SMPlayer
         private void AddToButton_Click(object sender, RoutedEventArgs e)
         {
             var data = (sender as Button).DataContext as AlbumView;
-            var helper = new MenuFlyoutHelper() { Data = data.Songs };
-            helper.GetAddToPlaylistsMenuFlyout(data.Name).ShowAt(sender as FrameworkElement);
+            var helper = new MenuFlyoutHelper() { Data = data.Songs, DefaultPlaylistName = data.Name };
+            helper.GetAddToPlaylistsMenuFlyout().ShowAt(sender as FrameworkElement);
         }
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)
