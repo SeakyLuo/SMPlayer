@@ -164,9 +164,18 @@ namespace SMPlayer
                 Icon = new SymbolIcon(Symbol.Delete),
                 Text = "Delete From Disk"
             };
-            deleteItem.Click += (s, args) =>
+            deleteItem.Click += async (s, args) =>
             {
-
+                await new RemoveDialog()
+                {
+                    Message = $"You are deleting {music.Name} from your disk. This operation is irrevertible.\nDo you want to continue?",
+                    Confirm = async () =>
+                    {
+                        StorageFile file = await StorageFile.GetFileFromPathAsync(music.Path);
+                        await file.DeleteAsync();
+                        // Need To Remove From Playlist
+                    }
+                }.ShowAsync();
             };
             ToolTipService.SetToolTip(deleteItem, new ToolTip() { Content = $"Delete {music.Name}" });
             flyout.Items.Add(deleteItem);

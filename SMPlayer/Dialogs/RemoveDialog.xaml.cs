@@ -41,18 +41,18 @@ namespace SMPlayer.Dialogs
             this.InitializeComponent();
         }
 
-        public UICommand Confirm { get; set; }
-        public UICommand Cancel { get; set; }
+        public Action Confirm { get; set; }
+        public Action Cancel { get; set; }
 
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
-            Confirm?.Invoked.Invoke(Confirm);
+            Confirm?.Invoke();
             this.Hide();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            Cancel?.Invoked.Invoke(Cancel);
+            Cancel?.Invoke();
             this.Hide();
         }
     }

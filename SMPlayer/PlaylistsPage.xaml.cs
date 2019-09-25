@@ -146,7 +146,7 @@ namespace SMPlayer
             {
                 DeleteDialog = new RemoveDialog()
                 {
-                    Confirm = new UICommand("Confirm", new UICommandInvokedHandler((command) => RemovePlaylist(playlist)))
+                    Confirm = () => RemovePlaylist(playlist)
                 };
             }
             if (DeleteDialog.IsChecked)

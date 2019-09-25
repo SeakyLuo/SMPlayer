@@ -15,6 +15,7 @@
         <x:Double x:Key="IconSize">20</x:Double>
         <DataTemplate x:Key="FolderTemplate" x:DataType="TreeViewNode">
             <StackPanel
+                Background="Transparent"
                 DoubleTapped="FolderTemplate_DoubleTapped"
                 IsDoubleTapEnabled="True"
                 Orientation="Horizontal">
@@ -26,8 +27,8 @@
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="FileTemplate" x:DataType="data:Music">
-            <StackPanel Orientation="Horizontal">
+        <DataTemplate x:Key="FileTemplate" x:DataType="TreeViewNode">
+            <StackPanel Background="Transparent" Orientation="Horizontal">
                 <StackPanel.ContextFlyout>
                     <MenuFlyout Opening="OpenMusicFlyout" />
                 </StackPanel.ContextFlyout>
@@ -175,6 +176,12 @@
             Expanding="LocalFolderTreeView_Expanding"
             ItemInvoked="LocalFolderTreeView_ItemInvoked"
             ItemTemplateSelector="{StaticResource FolderTreeTemplateSelector}"
-            Visibility="Collapsed" />
+            Visibility="Collapsed">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </TreeView.ItemContainerStyle>
+        </TreeView>
     </Grid>
 </Page>

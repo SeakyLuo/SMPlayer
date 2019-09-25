@@ -74,15 +74,16 @@ namespace SMPlayer
             var flyout = sender as MenuFlyout;
             var tree = (flyout.Target.DataContext as TreeViewNode).Content as FolderTree;
             MenuFlyoutHelper.SetPlaylistMenu(sender);
-            var ShowInExplorerItem = MenuFlyoutHelper.ShowInExplorerItem;
-            ShowInExplorerItem.Click += async (s, args) =>
+            var showInExplorerItem = MenuFlyoutHelper.ShowInExplorerItem;
+            ToolTipService.SetToolTip(showInExplorerItem, new ToolTip() { Content = "Show In Explorer" });
+            showInExplorerItem.Click += async (s, args) =>
             {
                 var folder = await Windows.Storage.StorageFolder.GetFolderFromPathAsync(tree.Path);
                 var options = new Windows.System.FolderLauncherOptions();
                 options.ItemsToSelect.Add(folder);
                 await Windows.System.Launcher.LaunchFolderAsync(folder, options);
             };
-            flyout.Items.Add(ShowInExplorerItem);
+            flyout.Items.Add(showInExplorerItem);
         }
         private void OpenMusicFlyout(object sender, object e)
         {
@@ -164,7 +165,8 @@ namespace SMPlayer
 
         private void FolderTemplate_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
-
+            var tree = ((sender as StackPanel).DataContext as TreeViewNode).Content as FolderTree;
+            setter.SetPage(tree);
         }
     }
 }
