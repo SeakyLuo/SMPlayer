@@ -22,7 +22,7 @@
         <controls:MasterDetailsView
             x:Name="ArtistMasterDetailsView"
             BackButtonBehavior="Automatic"
-            CompactModeThresholdWidth="720"
+            CompactModeThresholdWidth="{StaticResource MinimalNavigationViewWindowWidth}"
             ItemContainerStyle="{StaticResource StretchingListViewItemStyle}"
             ItemsSource="{x:Bind Artists, Mode=OneWay}">
             <controls:MasterDetailsView.MasterHeader>
@@ -44,7 +44,8 @@
                         Padding="15,5"
                         HorizontalAlignment="Stretch"
                         Background="Transparent"
-                        Orientation="Horizontal">
+                        Orientation="Horizontal"
+                        PointerEntered="Artist_PointerEntered">
                         <StackPanel.ContextFlyout>
                             <MenuFlyout Opening="OpenPlaylistMenuFlyout" />
                         </StackPanel.ContextFlyout>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.UI.Controls;
+using SMPlayer.Dialogs;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class PlaylistsPage : Page, RenameActionListener, PlaylistScrollListener, PlaylistRemoveListener
+    public sealed partial class PlaylistsPage : Page, RenameActionListener, PlaylistScrollListener, RemoveMusicListener
     {
         public static ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
         private ObservableCollection<Playlist> playlists
@@ -36,7 +37,7 @@ namespace SMPlayer
             get => Playlists;
             set => Playlists = value;
         }
-        private RenameDialog dialog;
+        private Dialogs.RenameDialog dialog;
         private HeaderedPlaylistControl playlistControl;
         public PlaylistsPage()
         {
@@ -47,6 +48,7 @@ namespace SMPlayer
             Playlists.CollectionChanged += (sender, e) => SetFooterText();
             PlaylistTabView.SelectedIndex = Settings.settings.Playlists.FindIndex((p) => p.Name == Settings.settings.LastPlaylist);
         }
+        private static RemoveDialog DeleteDialog;
 
         public void SetFooterText()
         {
@@ -90,7 +92,7 @@ namespace SMPlayer
         {
             var flyoutItem = sender as MenuFlyoutItem;
             var playlist = flyoutItem.DataContext as Playlist;
-            dialog = new RenameDialog(this as RenameActionListener, TitleOption.Rename, playlist.Name);
+            dialog = new Dialogs.RenameDialog(this as RenameActionListener, TitleOption.Rename, playlist.Name);
             await dialog.ShowAsync();
         }
 
@@ -108,7 +110,7 @@ namespace SMPlayer
         private async void NewPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
             string name = "Playlist";
-            dialog = new RenameDialog(this as RenameActionListener, TitleOption.NewPlaylist, Settings.settings.FindNextPlaylistName(name));
+            dialog = new Dialogs.RenameDialog(this as RenameActionListener, TitleOption.NewPlaylist, Settings.settings.FindNextPlaylistName(name));
             await dialog.ShowAsync();
         }
 
@@ -140,31 +142,35 @@ namespace SMPlayer
 
         public static async void DeletePlaylist(Playlist playlist)
         {
-            // Create the message dialog and set its content
-            var messageDialog = new MessageDialog(string.Format("Do you want to delete playlist {0}?", playlist.Name))
+            if (DeleteDialog == null)
             {
-                Title = "Warning",
-                DefaultCommandIndex = 1, // Set the command that will be invoked by default
-                CancelCommandIndex = 1 // Set the command to be invoked when escape is pressed
-            };
-
-            // Add commands and set their callbacks; both buttons use the same callback function instead of inline event handlers
-            messageDialog.Commands.Add(new UICommand("Yes", new UICommandInvokedHandler((command) =>
+                DeleteDialog = new RemoveDialog()
+                {
+                    Confirm = new UICommand("Confirm", new UICommandInvokedHandler((command) => RemovePlaylist(playlist)))
+                };
+            }
+            if (DeleteDialog.IsChecked)
             {
-                Playlists.Remove(playlist);
-                Settings.settings.Playlists.Remove(playlist);
-            })));
-            messageDialog.Commands.Add(new UICommand("No"));
+                RemovePlaylist(playlist);
+            }
+            else
+            {
+                DeleteDialog.Message = $"Do you want to remove playlist {playlist.Name}?";
+                await DeleteDialog.ShowAsync();
+            }
+        }
 
-            // Show the message dialog
-            await messageDialog.ShowAsync();
+        private static void RemovePlaylist(Playlist playlist)
+        {
+            Playlists.Remove(playlist);
+            Settings.settings.Playlists.Remove(playlist);
         }
 
         public bool Confirm(string OldName, string NewName)
         {
             return ConfirmRenaming(dialog, OldName, NewName);
         }
-        public static bool ConfirmRenaming(RenameDialog dialog, string OldName, string NewName)
+        public static bool ConfirmRenaming(Dialogs.RenameDialog dialog, string OldName, string NewName)
         {
             if (string.IsNullOrEmpty(NewName) || string.IsNullOrWhiteSpace(NewName))
             {
@@ -249,7 +255,7 @@ namespace SMPlayer
         {
             playlistControl = sender as HeaderedPlaylistControl;
             playlistControl.Playlist.ScrollListener = this as PlaylistScrollListener;
-            playlistControl.Playlist.RemoveListeners.Add(this as PlaylistRemoveListener);
+            playlistControl.Playlist.RemoveListeners.Add(this as RemoveMusicListener);
             await playlistControl.SetMusicCollection(PlaylistTabView.SelectedItem as Playlist);
         }
 

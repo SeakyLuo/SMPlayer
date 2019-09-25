@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -16,13 +17,13 @@ using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“内容对话框”项模板
 
-namespace SMPlayer
+namespace SMPlayer.Dialogs
 {
     public sealed partial class RenameDialog : ContentDialog
     {
-        public TitleOption Option;
-        private string DefaultName;
-        private RenameActionListener RenameListener;
+        public TitleOption Option { get; set; }
+        public string DefaultName { get; set; }
+        public RenameActionListener RenameListener { get; set; }
         public RenameDialog(RenameActionListener listener, TitleOption titleOption, string defaultName)
         {
             this.InitializeComponent();
@@ -71,7 +72,7 @@ namespace SMPlayer
             }
         }
 
-        private void CancelNewPlaylistButton_Click(object sender, RoutedEventArgs e)
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
         }

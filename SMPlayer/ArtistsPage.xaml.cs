@@ -25,7 +25,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class ArtistsPage : Page, AfterSongsSetListener, MusicSwitchingListener
+    public sealed partial class ArtistsPage : Page, AfterSongsSetListener, SwitchMusicListener
     {
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
         private bool SetupStarted = false;
@@ -36,7 +36,7 @@ namespace SMPlayer
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             MusicLibraryPage.AddAfterSongsSetListener(this as AfterSongsSetListener);
-            MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
+            MediaHelper.SwitchMusicListeners.Add(this as SwitchMusicListener);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -120,6 +120,11 @@ namespace SMPlayer
         private void OpenMusicMenuFlyout(object sender, object e)
         {
             MenuFlyoutHelper.SetMusicMenu(sender);
+        }
+
+        private void Artist_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            ((sender as StackPanel).Children[1] as ScrollingTextBlock).StartScrolling();
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -19,17 +20,34 @@ namespace SMPlayer.Dialogs
 {
     public sealed partial class RemoveDialog : ContentDialog
     {
+        public bool IsChecked
+        {
+            get => (bool)DisplayCheckBox.IsChecked;
+            set => DisplayCheckBox.IsChecked = value;
+        }
+        public string Message
+        {
+            get => MessageTextBlock.Text;
+            set => MessageTextBlock.Text = value;
+        }
         public RemoveDialog()
         {
             this.InitializeComponent();
         }
 
-        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        public UICommand Confirm { get; set; }
+        public UICommand Cancel { get; set; }
+
+        private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
+            Confirm?.Invoked.Invoke(Confirm);
+            this.Hide();
         }
 
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            Cancel?.Invoked.Invoke(Cancel);
+            this.Hide();
         }
     }
 }

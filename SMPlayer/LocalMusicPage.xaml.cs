@@ -23,7 +23,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalMusicPage : Page, MusicSwitchingListener, ViewModeChangedListener
+    public sealed partial class LocalMusicPage : Page, SwitchMusicListener, ViewModeChangedListener
     {
         private ObservableCollection<GridMusicView> GridItems = new ObservableCollection<GridMusicView>();
         private ObservableCollection<Music> Songs = new ObservableCollection<Music>();
@@ -32,7 +32,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
+            MediaHelper.SwitchMusicListeners.Add(this as SwitchMusicListener);
             LocalPage.MusicViewModeChangedListener = this as ViewModeChangedListener;
         }
 

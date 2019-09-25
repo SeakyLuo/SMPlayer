@@ -59,6 +59,7 @@
             Grid.Row="2"
             Margin="10,10,10,0"
             AlternatingRowColor="True"
+            IsNowPlaying="True"
             Theme="Light" />
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">

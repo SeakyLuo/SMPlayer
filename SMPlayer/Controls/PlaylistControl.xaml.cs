@@ -9,6 +9,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -21,11 +22,12 @@ using Windows.UI.Xaml.Navigation;
 
 namespace SMPlayer
 {
-    public sealed partial class PlaylistControl : UserControl, MusicSwitchingListener
+    public sealed partial class PlaylistControl : UserControl, SwitchMusicListener
     {
+        public bool IsNowPlaying { get; set; }
         public ObservableCollection<Music> CurrentPlaylist
         {
-            get => currentPlaylist.Count == 0 ? MediaHelper.CurrentPlaylist : currentPlaylist;
+            get => IsNowPlaying ? MediaHelper.CurrentPlaylist : currentPlaylist;
             set => currentPlaylist = value;
 
         }
@@ -72,12 +74,12 @@ namespace SMPlayer
             }
         }
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
-        public List<PlaylistRemoveListener> RemoveListeners = new List<PlaylistRemoveListener>();
-        public bool ShowRemoveDialog { get; set; }
+        public List<RemoveMusicListener> RemoveListeners = new List<RemoveMusicListener>();
+        public static Dialogs.RemoveDialog DeleteDialog;
         public PlaylistControl()
         {
             this.InitializeComponent();
-            MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
+            MediaHelper.SwitchMusicListeners.Add(this as SwitchMusicListener);
         }
 
         private void PlaylistController_Loading(FrameworkElement sender, object args)
@@ -182,18 +184,34 @@ namespace SMPlayer
             ScrollPosition = viewer.VerticalOffset;
         }
 
-        private void RemoveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
+        private async void RemoveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
         {
             var music = args.SwipeControl.DataContext as Music;
-            int index = CurrentPlaylist.IndexOf(music);
-            if (Theme == ElementTheme.Dark)
+            if (DeleteDialog == null)
             {
-                MediaHelper.RemoveMusic(index);
-                ItemsSource = MediaHelper.CurrentPlaylist;
+                DeleteDialog = new Dialogs.RemoveDialog()
+                {
+                    Confirm = new UICommand("Confirm", new UICommandInvokedHandler((command) => RemoveMusic(music)))
+                };
+            }
+            if (DeleteDialog.IsChecked)
+            {
+                RemoveMusic(music);
             }
             else
             {
-                CurrentPlaylist.RemoveAt(index);
+                DeleteDialog.Message = $"Do you want to remove {music.Name} from your playlist?";
+                await DeleteDialog.ShowAsync();
+            }
+        }
+
+        private void RemoveMusic(Music music)
+        {
+            int index = CurrentPlaylist.IndexOf(music);
+            if (IsNowPlaying) MediaHelper.RemoveMusic(index);
+            else CurrentPlaylist.RemoveAt(index);
+            if (Theme != ElementTheme.Dark)
+            {
                 for (int i = index; i < CurrentPlaylist.Count; i++)
                 {
                     var container = SongsListView.ContainerFromIndex(i) as ListViewItem;
@@ -208,11 +226,6 @@ namespace SMPlayer
             var music = args.SwipeControl.DataContext as Music;
             Settings.settings.LikeMusic(music);
         }
-    }
-
-    public interface PlaylistRemoveListener
-    {
-        void MusicRemoved(int index, Music music);
     }
 
     public interface PlaylistScrollListener

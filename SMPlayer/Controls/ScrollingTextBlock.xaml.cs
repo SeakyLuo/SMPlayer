@@ -52,7 +52,8 @@ namespace SMPlayer
                 double offset = ScrollTextBlock.ActualWidth - NormalTextBlock.ActualWidth;
                 // Scroll it horizontally.
                 // Notice the Math.Min here. You cannot scroll more than offset.
-                // " + 2" is just the distance it advances.
+                // " + 2" is just the distance it advances,
+                // meaning that it also controls the speed of the animation.
                 RealScrollViewer.ChangeView(Math.Min(RealScrollViewer.HorizontalOffset + 2, offset), null, null);
                 // If scroll to the offset
                 if (RealScrollViewer.HorizontalOffset == offset)

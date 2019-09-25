@@ -29,7 +29,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class NowPlayingFullPage : Page, MediaControlContainer, MusicSwitchingListener, MusicRequestListener, MusicControlListener
+    public sealed partial class NowPlayingFullPage : Page, MediaControlContainer, SwitchMusicListener, MusicRequestListener, MusicControlListener
     {
         public static NowPlayingFullPage Instance { get => (Window.Current.Content as Frame).Content as NowPlayingFullPage; }
         private MusicProperties musicProperties;
@@ -39,7 +39,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             MediaControl.AddMusicRequestListener(this as MusicRequestListener);
-            MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
+            MediaHelper.SwitchMusicListeners.Add(this as SwitchMusicListener);
 
             var coreTitleBar = Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar;
             // Register a handler for when the size of the overlaid caption control changes.

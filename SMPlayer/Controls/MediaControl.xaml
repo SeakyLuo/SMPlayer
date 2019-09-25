@@ -670,7 +670,6 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <!--  Main  -->
-                        <!--<Setter Target="MainTitleScrollViewer.Margin" Value="0,5,10,5" />-->
                         <Setter Target="MainAlbumCover.Visibility" Value="Collapsed" />
                         <Setter Target="MainShuffleButton.Visibility" Value="Collapsed" />
                         <Setter Target="MainLikeToggleButton.Visibility" Value="Collapsed" />

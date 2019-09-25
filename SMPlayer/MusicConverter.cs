@@ -199,7 +199,7 @@ namespace SMPlayer
                 var list = (ICollection<Music>)value;
                 int count = list.Count();
                 string countStr = "Songs: " + count.ToString();
-                return count == 0 ? countStr : $"{countStr} • {MusicDurationConverter.ToTime(list)}";
+                return count < 2 ? countStr : $"{countStr} • {MusicDurationConverter.ToTime(list)}";
             }
             return "";
         }

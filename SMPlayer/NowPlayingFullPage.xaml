@@ -104,6 +104,7 @@
                             Margin="10,10,10,0"
                             AlternatingRowColor="False"
                             Background="Transparent"
+                            IsNowPlaying="True"
                             Theme="Dark" />
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">

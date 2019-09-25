@@ -1,4 +1,5 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Dialogs;
+using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,7 +24,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace SMPlayer
 {
-    public sealed partial class MediaControl : UserControl, MusicSwitchingListener, MediaControlListener, AfterPathSetListener
+    public sealed partial class MediaControl : UserControl, SwitchMusicListener, MediaControlListener, AfterPathSetListener, RemoveMusicListener
     {
         public enum MediaControlMode
         {
@@ -259,8 +260,9 @@ namespace SMPlayer
         public MediaControl()
         {
             this.InitializeComponent();
-            MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
+            MediaHelper.SwitchMusicListeners.Add(this as SwitchMusicListener);
             MediaHelper.MediaControlListeners.Add(this as MediaControlListener);
+            MediaHelper.RemoveMusicListeners.Add(this as RemoveMusicListener);
             SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
             MediaHelper.Player.PlaybackSession.PlaybackStateChanged += async (sender, args) =>
             {
@@ -289,7 +291,7 @@ namespace SMPlayer
         {
             if (music == null)
             {
-                PathSet("");
+                ClearMusic();
                 return;
             }
             MediaSlider.IsEnabled = true;
@@ -695,7 +697,7 @@ namespace SMPlayer
             });
         }
 
-        public void PathSet(string path)
+        public void ClearMusic()
         {
             PauseMusic();
             MediaSlider.Value = 0;
@@ -705,6 +707,11 @@ namespace SMPlayer
             RightTimeTextBlock.Text = "0:00";
             LikeToggleButton.IsEnabled = false;
             MediaSlider.IsEnabled = false;
+        }
+
+        public void PathSet(string path)
+        {
+            ClearMusic();
         }
 
         public void Play()
@@ -757,6 +764,12 @@ namespace SMPlayer
         public void Pause()
         {
             PauseMusic();
+        }
+
+        public void MusicRemoved(int index, Music music)
+        {
+            if (MediaHelper.CurrentPlaylist.Count == 0)
+                ClearMusic();
         }
     }
 

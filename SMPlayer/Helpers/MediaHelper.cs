@@ -35,9 +35,10 @@ namespace SMPlayer
         {
             Source = PlayBackList
         };
+        public static List<RemoveMusicListener> RemoveMusicListeners = new List<RemoveMusicListener>();
         public static DispatcherTimer Timer = new DispatcherTimer {  Interval = TimeSpan.FromSeconds(1) };
         public static List<MediaControlListener> MediaControlListeners = new List<MediaControlListener>();
-        public static List<MusicSwitchingListener> MusicSwitchingListeners = new List<MusicSwitchingListener>();
+        public static List<SwitchMusicListener> SwitchMusicListeners = new List<SwitchMusicListener>();
         private const string FILENAME = "NowPlayingPlaylist.json";
 
         public static async void Init()
@@ -69,7 +70,7 @@ namespace SMPlayer
                 // Switching Folder Cause this
                 if (!next.Equals(current))
                 {
-                    foreach (var listener in MusicSwitchingListeners)
+                    foreach (var listener in SwitchMusicListeners)
                         listener.MusicSwitching(current, next, args.Reason);
                     CurrentMusic = next;
                     settings.LastMusic = next;
@@ -273,8 +274,10 @@ namespace SMPlayer
 
         public static void RemoveMusic(int index)
         {
+            Music music = CurrentPlaylist[index];
             CurrentPlaylist.RemoveAt(index);
             PlayBackList.Items.RemoveAt(index);
+            foreach (var listener in RemoveMusicListeners) listener.MusicRemoved(index, music);
         }
 
         public static void Clear()
@@ -297,7 +300,12 @@ namespace SMPlayer
         }
     }
 
-    public interface MusicSwitchingListener
+    public interface RemoveMusicListener
+    {
+        void MusicRemoved(int index, Music music);
+    }
+
+    public interface SwitchMusicListener
     {
         void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason);
     }

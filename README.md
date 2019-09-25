@@ -20,8 +20,6 @@ Sticky Shy header.
 
 Add Album Art to Music.
 
-Remove/Deletion Dialog.
-
 MasterView Back Button.
 
 LocalFolderView open in explorer.

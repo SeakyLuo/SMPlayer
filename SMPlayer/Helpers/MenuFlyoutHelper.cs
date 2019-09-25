@@ -1,4 +1,5 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Dialogs;
+using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

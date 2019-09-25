@@ -27,7 +27,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MusicLibraryPage : Page, MusicControlListener, MusicSwitchingListener, AfterSongsSetListener
+    public sealed partial class MusicLibraryPage : Page, MusicControlListener, SwitchMusicListener, AfterSongsSetListener
     {
         private const string FILENAME = "MusicLibrary.json";
         public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
@@ -42,7 +42,7 @@ namespace SMPlayer
             listeners.Add(this as AfterSongsSetListener);
             SongsSet(AllSongs);
             MediaControl.AddMusicControlListener(this as MusicControlListener);
-            MediaHelper.MusicSwitchingListeners.Add(this as MusicSwitchingListener);
+            MediaHelper.SwitchMusicListeners.Add(this as SwitchMusicListener);
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
