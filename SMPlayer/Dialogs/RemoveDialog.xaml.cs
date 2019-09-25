@@ -30,6 +30,12 @@ namespace SMPlayer.Dialogs
             get => MessageTextBlock.Text;
             set => MessageTextBlock.Text = value;
         }
+        public Visibility CheckBoxVisibility
+        {
+            get => DisplayCheckBox.Visibility;
+            set => DisplayCheckBox.Visibility = value;
+        }
+
         public RemoveDialog()
         {
             this.InitializeComponent();

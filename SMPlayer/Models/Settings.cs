@@ -53,10 +53,13 @@ namespace SMPlayer.Models
         }
         public int FindNextPlaylistNameIndex(string Name)
         {
-            var siblings = Playlists.FindAll((p) => p.Name.StartsWith(Name)).Select((p) => p.Name).ToHashSet();
-            for (int i = 1; i <= siblings.Count; i++)
-                if (!siblings.Contains($"{Name} {i}"))
-                    return i;
+            if (!string.IsNullOrEmpty(Name))
+            {
+                var siblings = Playlists.FindAll((p) => p.Name.StartsWith(Name)).Select((p) => p.Name).ToHashSet();
+                for (int i = 1; i <= siblings.Count; i++)
+                    if (!siblings.Contains($"{Name} {i}"))
+                        return i;
+            }
             return 0;
         }
         public string FindNextPlaylistName(string Name)
