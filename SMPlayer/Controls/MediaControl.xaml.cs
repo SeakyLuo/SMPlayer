@@ -761,13 +761,12 @@ namespace SMPlayer
         {
             MainPage.Instance?.Frame.Navigate(typeof(NowPlayingFullPage));
             NowPlayingFullPage.Instance.MusicInfoRequested(MediaHelper.CurrentMusic);
-            NowPlayingFullPage.Instance.LyricsRequested(MediaHelper.CurrentMusic);
         }
 
         private void MainMediaControlMoreLyricsItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
             MainPage.Instance?.Frame.Navigate(typeof(NowPlayingFullPage));
-            NowPlayingFullPage.Instance.MusicInfoRequested(MediaHelper.CurrentMusic);
+            NowPlayingFullPage.Instance.LyricsRequested(MediaHelper.CurrentMusic);
         }
 
         public void Pause()

@@ -35,6 +35,8 @@ namespace SMPlayer
         private MusicProperties musicProperties;
         private string Lyrics = "";
         private Music CurrentMusic;
+        private bool MusicInfoRequestedWhenUnloaded = false;
+        private bool LyricsRequestedWhenUnloaded = false;
         public NowPlayingFullPage()
         {
             this.InitializeComponent();
@@ -60,6 +62,17 @@ namespace SMPlayer
             FullMediaControl.Update();
             SetMusic(MediaHelper.CurrentMusic);
             FullPlaylistControl.ScrollToMusic(MediaHelper.CurrentMusic);
+
+            if (MusicInfoRequestedWhenUnloaded)
+            {
+                MusicPropertyBladeItem.StartBringIntoView();
+                MusicInfoRequestedWhenUnloaded = false;
+            }
+            else if (LyricsRequestedWhenUnloaded)
+            {
+                LyricsBladeItem.StartBringIntoView();
+                LyricsRequestedWhenUnloaded = false;
+            }
         }
         private void UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar coreTitleBar)
         {
@@ -222,7 +235,10 @@ namespace SMPlayer
         public void MusicInfoRequested(Music music)
         {
             SetMusicInfo(music);
-            MusicPropertyBladeItem.StartBringIntoView();
+            if (IsLoaded)
+                MusicPropertyBladeItem.StartBringIntoView();
+            else
+                MusicInfoRequestedWhenUnloaded = true;
         }
 
         public async void SetLyrics(Music music)
@@ -236,7 +252,10 @@ namespace SMPlayer
         public void LyricsRequested(Music music)
         {
             SetLyrics(music);
-            LyricsBladeItem.StartBringIntoView();
+            if (IsLoaded)
+                LyricsBladeItem.StartBringIntoView();
+            else
+                LyricsRequestedWhenUnloaded = true;
         }
 
         private void CheckIfDigit(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
