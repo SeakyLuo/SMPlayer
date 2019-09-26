@@ -448,6 +448,7 @@
       <RootEvent Name="ItemClick" />
       <RootEvent Name="DragItemsCompleted" />
       <RootEvent Name="DragItemsStarting" />
+      <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Border">
       <RootProperty Name="Width" />
@@ -1087,6 +1088,7 @@
       <RootProperty Name="Style" />
       <RootProperty Name="Content" />
       <RootProperty Name="RequestedTheme" />
+      <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.ImageBrush">
       <RootProperty Name="ImageSource" />

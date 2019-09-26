@@ -128,6 +128,7 @@
             </controls:BladeItem>
             <controls:BladeItem
                 x:Name="MusicPropertyBladeItem"
+                Loaded="MusicPropertyBladeItem_Loaded"
                 RequestedTheme="Dark"
                 Style="{StaticResource NowPlayingFullBladeItemStyle}">
                 <Grid>
@@ -239,7 +240,10 @@
                     </ScrollViewer>
                 </Grid>
             </controls:BladeItem>
-            <controls:BladeItem x:Name="LyricsBladeItem" Style="{StaticResource NowPlayingFullBladeItemStyle}">
+            <controls:BladeItem
+                x:Name="LyricsBladeItem"
+                Loaded="LyricsBladeItem_Loaded"
+                Style="{StaticResource NowPlayingFullBladeItemStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />

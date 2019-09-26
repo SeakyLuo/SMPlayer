@@ -708,13 +708,14 @@ namespace SMPlayer
         public void ClearMusic()
         {
             PauseMusic();
-            MediaSlider.Value = 0;
             AlbumCover.Source = Helper.DefaultAlbumCover;
             TitleTextBlock.Text = "";
             ArtistTextBlock.Text = "";
             FullAlbumTextBlock.Text = "";
             RightTimeTextBlock.Text = "0:00";
             LikeToggleButton.IsEnabled = false;
+            LikeToggleButton.IsChecked = false;
+            MediaSlider.Value = 0;
             MediaSlider.IsEnabled = false;
         }
 

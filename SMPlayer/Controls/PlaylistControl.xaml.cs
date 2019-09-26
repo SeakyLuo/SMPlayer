@@ -54,12 +54,14 @@ namespace SMPlayer
 
         public object Header
         {
+            get => SongsListView.Header;
             set => SongsListView.Header = value;
         }
         public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register("Header", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
 
         public object Footer
         {
+            get => SongsListView.Footer;
             set => SongsListView.Footer = value;
         }
         public static readonly DependencyProperty FooterProperty = DependencyProperty.Register("Footer", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
@@ -72,6 +74,10 @@ namespace SMPlayer
                 CurrentPlaylist = new ObservableCollection<Music>(value as ICollection<Music>);
                 SongsListView.ItemsSource = value;
             }
+        }
+        public ScrollViewer ScrollViewer
+        {
+            get => PlaylistScrollViewer;
         }
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
         public List<RemoveMusicListener> RemoveListeners = new List<RemoveMusicListener>();
@@ -117,11 +123,6 @@ namespace SMPlayer
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, current, next));
-        }
-
-        public void ScrollToMusic(Music music)
-        {
-            SongsListView.ScrollIntoView(music);
         }
 
         private List<Music> beforeDragging;
@@ -226,6 +227,24 @@ namespace SMPlayer
             var music = args.SwipeControl.DataContext as Music;
             if (music.Favorite) Settings.settings.DislikeMusic(music);
             else Settings.settings.LikeMusic(music);
+        }
+
+        private Music ScrollToMusicRequestedWhenUnloaded = null;
+        public void ScrollToMusic(Music music)
+        {
+            if (SongsListView.IsLoaded)
+                SongsListView.ScrollIntoView(music);
+            else
+                ScrollToMusicRequestedWhenUnloaded = music;
+        }
+
+        private void SongsListView_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (ScrollToMusicRequestedWhenUnloaded != null)
+            {
+                SongsListView.ScrollIntoView(ScrollToMusicRequestedWhenUnloaded);
+                ScrollToMusicRequestedWhenUnloaded = null;
+            }
         }
     }
 

@@ -40,9 +40,9 @@ namespace SMPlayer
         public NowPlayingFullPage()
         {
             this.InitializeComponent();
-            MediaControl.AddMusicRequestListener(this as MusicRequestListener);
-            MediaControl.AddMusicControlListener(this as MusicControlListener);
-            MediaHelper.SwitchMusicListeners.Add(this as SwitchMusicListener);
+            MediaControl.AddMusicRequestListener(this);
+            MediaControl.AddMusicControlListener(this);
+            MediaHelper.SwitchMusicListeners.Add(this);
 
             var coreTitleBar = Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar;
             // Register a handler for when the size of the overlaid caption control changes.
@@ -62,17 +62,6 @@ namespace SMPlayer
             FullMediaControl.Update();
             SetMusic(MediaHelper.CurrentMusic);
             FullPlaylistControl.ScrollToMusic(MediaHelper.CurrentMusic);
-
-            if (MusicInfoRequestedWhenUnloaded)
-            {
-                MusicPropertyBladeItem.StartBringIntoView();
-                MusicInfoRequestedWhenUnloaded = false;
-            }
-            else if (LyricsRequestedWhenUnloaded)
-            {
-                LyricsBladeItem.StartBringIntoView();
-                LyricsRequestedWhenUnloaded = false;
-            }
         }
         private void UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar coreTitleBar)
         {
@@ -235,10 +224,8 @@ namespace SMPlayer
         public void MusicInfoRequested(Music music)
         {
             SetMusicInfo(music);
-            if (IsLoaded)
+            if (!(MusicInfoRequestedWhenUnloaded = MusicPropertyBladeItem.IsLoaded))
                 MusicPropertyBladeItem.StartBringIntoView();
-            else
-                MusicInfoRequestedWhenUnloaded = true;
         }
 
         public async void SetLyrics(Music music)
@@ -252,10 +239,8 @@ namespace SMPlayer
         public void LyricsRequested(Music music)
         {
             SetLyrics(music);
-            if (IsLoaded)
+            if (!(LyricsRequestedWhenUnloaded = LyricsBladeItem.IsLoaded))
                 LyricsBladeItem.StartBringIntoView();
-            else
-                LyricsRequestedWhenUnloaded = true;
         }
 
         private void CheckIfDigit(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
@@ -285,6 +270,24 @@ namespace SMPlayer
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             GoBack();
+        }
+
+        private void MusicPropertyBladeItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (MusicInfoRequestedWhenUnloaded)
+            {
+                MusicPropertyBladeItem.StartBringIntoView();
+                MusicInfoRequestedWhenUnloaded = false;
+            }
+        }
+
+        private void LyricsBladeItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (LyricsRequestedWhenUnloaded)
+            {
+                LyricsBladeItem.StartBringIntoView();
+                LyricsRequestedWhenUnloaded = false;
+            }
         }
     }
 }

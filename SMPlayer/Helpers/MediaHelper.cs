@@ -113,7 +113,7 @@ namespace SMPlayer
         {
             try
             {
-                var file = await Helper.CurrentFolder.GetFileAsync(music.GetShortPath());
+                var file = await StorageFile.GetFileFromPathAsync(music.Path);
                 var source = MediaSource.CreateFromStorageFile(file);
                 music.IsPlaying = false;
                 source.CustomProperties.Add("Source", music);
