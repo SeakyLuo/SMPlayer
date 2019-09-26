@@ -168,12 +168,14 @@ namespace SMPlayer
             {
                 await new RemoveDialog()
                 {
-                    Message = $"You are deleting {music.Name} from your disk. This operation is irrevertible.\nDo you want to continue?",
+                    Message = $"You are deleting {music.Name} from your device.\nThis operation is irrevertible.\nDo you want to continue?",
                     Confirm = async () =>
                     {
                         StorageFile file = await StorageFile.GetFileFromPathAsync(music.Path);
                         await file.DeleteAsync();
-                        // Need To Remove From Playlist
+                        MusicLibraryPage.AllSongs.Remove(music);
+                        Settings.settings.DeleteMusic(music);
+                        MediaHelper.RemoveMusic(music);
                     }
                 }.ShowAsync();
             };

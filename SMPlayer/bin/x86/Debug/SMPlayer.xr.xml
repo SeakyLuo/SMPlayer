@@ -76,6 +76,7 @@
       <RootProperty Name="Foreground" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="MinWidth" />
       <RootProperty Name="FontFamily" />
       <RootProperty Name="FontStyle" />
       <RootProperty Name="IsHitTestVisible" />
@@ -84,7 +85,6 @@
       <RootProperty Name="Height" />
       <RootProperty Name="HorizontalTextAlignment" />
       <RootProperty Name="TextTrimming" />
-      <RootProperty Name="MinWidth" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Button">
       <RootProperty Name="Content" />

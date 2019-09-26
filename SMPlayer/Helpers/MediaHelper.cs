@@ -68,14 +68,10 @@ namespace SMPlayer
             {
                 if (sender.CurrentItemIndex >= CurrentPlaylist.Count) return;
                 Music current = CurrentMusic?.Copy(), next = args.NewItem.Source.CustomProperties["Source"] as Music;
-                // Switching Folder Cause them to be equal
-                if (!next.Equals(current))
-                {
-                    foreach (var listener in SwitchMusicListeners)
-                        listener.MusicSwitching(current, next, args.Reason);
-                    CurrentMusic = next;
-                    settings.LastMusic = next;
-                }
+                foreach (var listener in SwitchMusicListeners)
+                    listener.MusicSwitching(current, next, args.Reason);
+                CurrentMusic = next;
+                settings.LastMusic = next;
             };
             Player.MediaEnded += (sender, args) =>
             {
@@ -285,6 +281,7 @@ namespace SMPlayer
         public static void RemoveMusic(int index)
         {
             Music music = CurrentPlaylist[index];
+            if (music.Equals(CurrentMusic)) CurrentMusic = null;
             CurrentPlaylist.RemoveAt(index);
             PlayBackList.Items.RemoveAt(index);
             foreach (var listener in RemoveMusicListeners) listener.MusicRemoved(index, music);

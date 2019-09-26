@@ -123,5 +123,12 @@ namespace SMPlayer.Models
             FavSongs.Remove(music);
             music.Favorite = false;
         }
+
+        public void DeleteMusic(Music music)
+        {
+            foreach (var playlist in Playlists)
+                playlist.Songs.Remove(music);
+            FavSongs.Remove(music);
+        }
     }
 }

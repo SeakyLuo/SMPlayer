@@ -24,10 +24,6 @@ MasterView Back Button.
 
 # TO FIX
 
-Full Screen.
-
-NowPlayingFull play count repeat one.
-
 NowPlayingFull Scroll Into View.
 
 Main More Lyrics Click.

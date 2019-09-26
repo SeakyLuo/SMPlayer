@@ -406,6 +406,7 @@
     <StackPanel>
         <TextBlock
             x:Name="MessageTextBlock"
+            MinWidth="400"
             FontSize="20"
             Text="Place Holder"
             TextWrapping="WrapWholeWords" />

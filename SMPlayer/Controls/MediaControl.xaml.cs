@@ -280,6 +280,8 @@ namespace SMPlayer
             SetMusic(MediaHelper.CurrentMusic);
             if (MediaHelper.IsPlaying) PlayMusic();
             else PauseMusic();
+            if (ApplicationView.GetForCurrentView().IsFullScreenMode) SetExitFullScreen();
+            else SetFullScreen();
 
             double volume = Settings.settings.Volume * 100;
             VolumeButton.Content = Helper.GetVolumeIcon(volume);
@@ -579,30 +581,42 @@ namespace SMPlayer
 
         private static SymbolIcon FullScreenIcon = new SymbolIcon(Symbol.FullScreen);
         private static SymbolIcon BackToWindowIcon = new SymbolIcon(Symbol.BackToWindow);
+        private void SetFullScreen()
+        {
+            string tooltip = "Full Screen";
+            MainMediaControlMoreFullScreenItem.Icon = FullScreenIcon;
+            MainMediaControlMoreFullScreenItem.Label = tooltip;
+            MainMoreFullScreenItem.Icon = FullScreenIcon;
+            MainMoreFullScreenItem.Text = tooltip;
+            FullScreenItem.Icon = FullScreenIcon;
+            FullScreenItem.Text = tooltip;
+            FullScreenButton.Content = "\uE740";
+            SetToolTip(FullScreenButton, tooltip);
+        }
+
+        private void SetExitFullScreen()
+        {
+            string tooltip = "Exit Full Screen";
+            MainMediaControlMoreFullScreenItem.Icon = BackToWindowIcon;
+            MainMediaControlMoreFullScreenItem.Label = tooltip;
+            MainMoreFullScreenItem.Icon = BackToWindowIcon;
+            MainMoreFullScreenItem.Text = tooltip;
+            FullScreenItem.Icon = BackToWindowIcon;
+            FullScreenItem.Text = tooltip;
+            FullScreenButton.Content = "\uE73F";
+            SetToolTip(FullScreenButton, tooltip);
+        }
 
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!ApplicationView.GetForCurrentView().IsFullScreenMode)
+            if (ApplicationView.GetForCurrentView().IsFullScreenMode)
             {
                 ApplicationView.GetForCurrentView().ExitFullScreenMode();
-                MainMediaControlMoreFullScreenItem.Icon = FullScreenIcon;
-                MainMediaControlMoreFullScreenItem.Label = "Full Screen";
-                MainMoreFullScreenItem.Icon = FullScreenIcon;
-                MainMoreFullScreenItem.Text = "Full Screen";
-                FullScreenButton.Content = "\uE740";
-                SetToolTip(FullScreenButton, "Full Screen");
+                SetFullScreen();
             }
-            else
+            else if (ApplicationView.GetForCurrentView().TryEnterFullScreenMode())
             {
-                if (ApplicationView.GetForCurrentView().TryEnterFullScreenMode())
-                {
-                    MainMediaControlMoreFullScreenItem.Icon = BackToWindowIcon;
-                    MainMediaControlMoreFullScreenItem.Label = "Exit Full Screen";
-                    MainMoreFullScreenItem.Icon = BackToWindowIcon;
-                    MainMoreFullScreenItem.Text = "Exit Full Screen";
-                    FullScreenButton.Content = "\uE73F";
-                    SetToolTip(FullScreenButton, "Exit Full Screen");
-                }
+                SetExitFullScreen();
             }
         }
 
@@ -698,6 +712,7 @@ namespace SMPlayer
             AlbumCover.Source = Helper.DefaultAlbumCover;
             TitleTextBlock.Text = "";
             ArtistTextBlock.Text = "";
+            FullAlbumTextBlock.Text = "";
             RightTimeTextBlock.Text = "0:00";
             LikeToggleButton.IsEnabled = false;
             MediaSlider.IsEnabled = false;
