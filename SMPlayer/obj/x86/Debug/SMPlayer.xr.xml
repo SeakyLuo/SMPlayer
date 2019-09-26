@@ -38,6 +38,11 @@
     <RootPropertyPathName Name="OverflowContentClipRect" />
     <RootPropertyPathName Name="OverflowContentHeight" />
     <RootPropertyPathName Name="MinimalVerticalDelta" />
+    <RootPropertyPathName Name="TreeViewItemTemplateSettings" />
+    <RootPropertyPathName Name="Indentation" />
+    <RootPropertyPathName Name="ExpandedGlyphVisibility" />
+    <RootPropertyPathName Name="CollapsedGlyphVisibility" />
+    <RootPropertyPathName Name="DragItemsCount" />
     <RootPropertyPathName Name="Content" />
     <RootPropertyPathName Name="Directory" />
     <RootPropertyPathName Name="KeyboardAcceleratorTextMinWidth" />
@@ -75,11 +80,11 @@
       <RootProperty Name="FontStyle" />
       <RootProperty Name="IsHitTestVisible" />
       <RootProperty Name="Style" />
-      <RootProperty Name="HorizontalTextAlignment" />
       <RootProperty Name="Width" />
+      <RootProperty Name="Height" />
+      <RootProperty Name="HorizontalTextAlignment" />
       <RootProperty Name="TextTrimming" />
       <RootProperty Name="MinWidth" />
-      <RootProperty Name="Height" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Button">
       <RootProperty Name="Content" />
@@ -221,6 +226,7 @@
       <RootProperty Name="XYFocusKeyboardNavigation" />
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="MaxHeight" />
+      <RootProperty Name="Opacity" />
       <RootProperty Name="IsHitTestVisible" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
@@ -458,6 +464,7 @@
       <RootProperty Name="Visibility" />
       <RootProperty Name="RequestedTheme" />
       <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="IsHitTestVisible" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.SymbolIcon">
       <RootProperty Name="RenderTransformOrigin" />
@@ -609,6 +616,11 @@
       <RootProperty Name="Content" />
       <RootProperty Name="IsChecked" />
       <RootProperty Name="Style" />
+      <RootProperty Name="Width" />
+      <RootProperty Name="MinWidth" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="IsTabStop" />
+      <RootProperty Name="Visibility" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ControlTemplate">
       <RootProperty Name="TargetType" />
@@ -1032,11 +1044,15 @@
       <RootProperty Name="FileTemplate" />
       <RootProperty Name="FolderTemplate" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.TreeViewItem">
+      <RootProperty Name="GlyphBrush" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.TreeView">
       <RootProperty Name="Margin" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="HorizontalContentAlignment" />
+      <RootProperty Name="ItemContainerStyle" />
       <RootProperty Name="ItemTemplateSelector" />
       <RootProperty Name="Visibility" />
       <RootEvent Name="Collapsed" />

@@ -309,7 +309,11 @@ namespace SMPlayer
             else if (obj is Playlist) return (obj as Playlist).Songs;
             else if (obj is GridFolderView) return (obj as GridFolderView).Songs;
             else if (obj is GridMusicView) return (obj as GridMusicView).Source;
-            else if (obj is TreeViewNode) return ((obj as TreeViewNode).Content as FolderTree).Files;
+            else if (obj is TreeViewNode node)
+            {
+                if (node.Content is FolderTree tree) return tree.Files;
+                return node.Content as Music;
+            }
             return null;
         }
 
@@ -319,7 +323,7 @@ namespace SMPlayer
             else if (obj is AlbumView) return (obj as AlbumView).Name;
             else if (obj is Playlist) return (obj as Playlist).Name;
             else if (obj is GridFolderView) return (obj as GridFolderView).Name;
-            else if (obj is TreeViewNode) return ((obj as TreeViewNode).Content as FolderTree).Directory;
+            else if (obj is TreeViewNode node && node.Content is FolderTree tree) return tree.Directory;
             return "";
         }
     }
