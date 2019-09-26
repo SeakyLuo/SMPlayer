@@ -22,8 +22,24 @@ Add Album Art to Music.
 
 MasterView Back Button.
 
+Keyboard Shortcut dialog.
+
+ThemeColor change.
+
+Pin to start.
+
+Multi-Select.
+
+Search Lyrics.
+
+Animations.
+
+Handle Music Not Found.
+
+Mini play.
+
 # TO FIX
 
-NowPlayingFull Scroll Into View.
+IsPlaying.
 
-Main More Lyrics Click.
+Bad performance when given many music files.
