@@ -173,13 +173,13 @@ namespace SMPlayer
 
         private void SearchLyricsButton_Click(object sender, RoutedEventArgs e)
         {
-            ShowNotification("Searching Lyrics!");
+            ShowNotification("Searching Lyrics...");
         }
 
-        public void ShowNotification(string text)
+        public void ShowNotification(string message, int duration = 1500)
         {
-            ShowResultInAppNotification.Content = text;
-            ShowResultInAppNotification.Show(1500);
+            ShowResultInAppNotification.Content = message;
+            ShowResultInAppNotification.Show(duration);
         }
 
         public void PauseMusic()

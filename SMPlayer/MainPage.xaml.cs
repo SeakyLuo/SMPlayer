@@ -341,5 +341,11 @@ namespace SMPlayer
             HeaderSearchButton.Visibility = Visibility.Visible;
             HeaderSearchBar.Visibility = Visibility.Collapsed;
         }
+
+        public void ShowNotification(string message, int duration = 1500)
+        {
+            ShowResultInAppNotification.Content = message;
+            ShowResultInAppNotification.Show(duration);
+        }
     }
 }

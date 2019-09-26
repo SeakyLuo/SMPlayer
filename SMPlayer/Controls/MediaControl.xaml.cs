@@ -749,6 +749,7 @@ namespace SMPlayer
             VisualStateManager.GoToState(this, "PointerOver", true);
             MainTitleTextBlock.StartScrolling();
             MainArtistTextBlock.StartScrolling();
+            MainPage.Instance.ShowNotification("111", 150000);
         }
 
         private void MainMusicInfoGrid_PointerExited(object sender, PointerRoutedEventArgs e)

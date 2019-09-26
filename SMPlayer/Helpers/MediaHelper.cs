@@ -280,6 +280,7 @@ namespace SMPlayer
 
         public static void RemoveMusic(int index)
         {
+            if (index == -1) return;
             Music music = CurrentPlaylist[index];
             if (music.Equals(CurrentMusic)) CurrentMusic = null;
             CurrentPlaylist.RemoveAt(index);

@@ -176,6 +176,8 @@ namespace SMPlayer
                         MusicLibraryPage.AllSongs.Remove(music);
                         Settings.settings.DeleteMusic(music);
                         MediaHelper.RemoveMusic(music);
+                        MainPage.Instance?.ShowNotification($"{music.Name} is deleted!");
+                        NowPlayingFullPage.Instance?.ShowNotification($"{music.Name} is deleted!");
                     }
                 }.ShowAsync();
             };

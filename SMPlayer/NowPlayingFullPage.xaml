@@ -302,7 +302,7 @@
         <controls:InAppNotification
             x:Name="ShowResultInAppNotification"
             Grid.Row="2"
-            AnimationDuration="00:00:00.1000000"
+            AnimationDuration="0:0:0.1"
             HorizontalOffset="0"
             ShowDismissButton="True"
             StackMode="Replace"

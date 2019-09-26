@@ -278,6 +278,14 @@
             Grid.RowSpan="3"
             IsDeterminant="True"
             Visibility="Collapsed" />
+        <controls:InAppNotification
+            x:Name="ShowResultInAppNotification"
+            Grid.Row="1"
+            AnimationDuration="0:0:0.1"
+            HorizontalOffset="0"
+            ShowDismissButton="True"
+            StackMode="Replace"
+            VerticalOffset="100" />
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WindowWidthChange">
                 <VisualState x:Name="MinimumLayout">
