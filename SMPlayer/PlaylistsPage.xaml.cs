@@ -254,8 +254,8 @@ namespace SMPlayer
         private async void HeaderedPlaylistControl_Loaded(object sender, RoutedEventArgs e)
         {
             playlistControl = sender as HeaderedPlaylistControl;
-            playlistControl.Playlist.ScrollListener = this as PlaylistScrollListener;
-            playlistControl.Playlist.RemoveListeners.Add(this as RemoveMusicListener);
+            playlistControl.Playlist.ScrollListener = this;
+            playlistControl.Playlist.RemoveListeners.Add(this);
             await playlistControl.SetMusicCollection(PlaylistTabView.SelectedItem as Playlist);
         }
 
@@ -290,7 +290,6 @@ namespace SMPlayer
         public void MusicRemoved(int index, Music music)
         {
             (PlaylistTabView.SelectedItem as Playlist).Songs.RemoveAt(index);
-            //(PlaylistTabView.SelectedItem as Playlist).Songs.Remove(music);
         }
     }
 }

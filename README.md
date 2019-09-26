@@ -31,5 +31,3 @@ NowPlayingFull play count repeat one.
 NowPlayingFull Scroll Into View.
 
 Main More Lyrics Click.
-
-Play Count added twice.

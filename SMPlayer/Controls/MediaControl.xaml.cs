@@ -652,7 +652,7 @@ namespace SMPlayer
 
         private void ClearNowPlayingItem_Click(object sender, RoutedEventArgs e)
         {
-
+            MediaHelper.Clear();
         }
         public void Tick()
         {
@@ -663,21 +663,18 @@ namespace SMPlayer
             if (!Window.Current.Visible) Helper.UpdateToast();
         }
 
-
-        private void Played(Music music)
-        {
-            Music before = music.Copy();
-            music.Played();
-            NotifyMusicModifiedListeners(before, music);
-        }
-
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
                 if (reason == MediaPlaybackItemChangedReason.EndOfStream)
-                    Played(current);
+                {
+                    Music before = current.Copy();
+                    current.Played();
+                    NotifyMusicModifiedListeners(before, current);
+                }
                 next.IsPlaying = true;
+                MediaSlider.Value = 0;
                 SetMusic(next);
                 if (current != null && !Window.Current.Visible) Helper.ShowToast(next);
             });
@@ -687,13 +684,10 @@ namespace SMPlayer
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                MediaHelper.Timer.Stop();
+                MediaHelper.CurrentMusic.IsPlaying = false;
                 if (Settings.settings.Mode == PlayMode.Once)
-                {
                     PlayButton.Content = "\uE768";
-                    MediaSlider.Value = 0;
-                }
-                Played(MediaHelper.CurrentMusic);
+                MediaSlider.Value = 0;
             });
         }
 

@@ -57,6 +57,7 @@ namespace SMPlayer
             }
             Player.Volume = settings.Volume;
             MoveToMusic(settings.LastMusic);
+            SetMode(Settings.settings.Mode);
 
             Timer.Tick += (sender, e) =>
             {
@@ -67,7 +68,7 @@ namespace SMPlayer
             {
                 if (sender.CurrentItemIndex >= CurrentPlaylist.Count) return;
                 Music current = CurrentMusic?.Copy(), next = args.NewItem.Source.CustomProperties["Source"] as Music;
-                // Switching Folder Cause this
+                // Switching Folder Cause them to be equal
                 if (!next.Equals(current))
                 {
                     foreach (var listener in SwitchMusicListeners)
@@ -78,6 +79,7 @@ namespace SMPlayer
             };
             Player.MediaEnded += (sender, args) =>
             {
+                Timer.Stop();
                 foreach (var listener in MediaControlListeners)
                     listener.MediaEnded();
             };
@@ -125,7 +127,7 @@ namespace SMPlayer
             }
             catch (System.IO.FileNotFoundException)
             {
-                return;
+                
             }
         }
         public static async void AddMusic(ICollection<Music> playlist)
@@ -290,8 +292,10 @@ namespace SMPlayer
 
         public static void Clear()
         {
+            CurrentMusic = null;
             CurrentPlaylist.Clear();
             PlayBackList.Items.Clear();
+            foreach (var listener in RemoveMusicListeners) listener.MusicRemoved(-1, CurrentMusic);
         }
 
         public static void FindMusicAndSetPlaying(ICollection<Music> playlist, Music current, Music next)

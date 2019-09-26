@@ -47,14 +47,7 @@ namespace SMPlayer
         }
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                MainPage.Instance.Frame.Navigate(typeof(NowPlayingFullPage));
-            }
-            catch (NullReferenceException)
-            {
-                // Clicking twice quickly will cause this exception
-            }
+            MainPage.Instance?.Frame.Navigate(typeof(NowPlayingFullPage));
         }
         private void SaveToButton_Click(object sender, RoutedEventArgs e)
         {
@@ -67,7 +60,7 @@ namespace SMPlayer
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-
+            MediaHelper.Clear();
         }
     }
 }

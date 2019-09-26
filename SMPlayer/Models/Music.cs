@@ -109,7 +109,11 @@ namespace SMPlayer.Models
 
         public void Played()
         {
-            PlayCount += 1;
+            if (IsPlaying)
+            {
+                PlayCount++;
+                IsPlaying = false;
+            }
         }
 
         public string GetShortPath()

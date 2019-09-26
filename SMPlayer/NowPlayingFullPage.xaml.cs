@@ -39,6 +39,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             MediaControl.AddMusicRequestListener(this as MusicRequestListener);
+            MediaControl.AddMusicControlListener(this as MusicControlListener);
             MediaHelper.SwitchMusicListeners.Add(this as SwitchMusicListener);
 
             var coreTitleBar = Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar;

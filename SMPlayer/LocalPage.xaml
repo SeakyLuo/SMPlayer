@@ -56,7 +56,7 @@
                     </local:IconTextButton>
                     <local:IconTextButton
                         x:Name="LocalListViewItem"
-                        Width="105"
+                        Width="110"
                         Label="List View"
                         Style="{StaticResource TopNavigationViewFooterItemStyle}"
                         Tapped="LocalListViewItem_Tapped"
@@ -68,7 +68,7 @@
                     </local:IconTextButton>
                     <local:IconTextButton
                         x:Name="LocalGridViewItem"
-                        Width="105"
+                        Width="110"
                         Label="Grid View"
                         Style="{StaticResource TopNavigationViewFooterItemStyle}"
                         Tapped="LocalGridViewItem_Tapped"
