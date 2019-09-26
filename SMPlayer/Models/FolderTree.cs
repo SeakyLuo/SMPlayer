@@ -119,6 +119,11 @@ namespace SMPlayer.Models
             return Files.Contains(music) || Trees.Any((tree) => tree.Contains(music));
         }
 
+        public bool RemoveMusic(Music music)
+        {
+            return Files.Remove(music) || Trees.Find((tree) => music.Path.StartsWith(tree.Path)).RemoveMusic(music);
+        }
+
         public void Update(FolderTree tree)
         {
             // Merge to this tree

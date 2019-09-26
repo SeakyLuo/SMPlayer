@@ -8,5 +8,5 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
-    <Grid />
+    <local:HeaderedPlaylistControl x:Name="MyFavoritesPlaylistControl" IsPlaylist="False" />
 </Page>

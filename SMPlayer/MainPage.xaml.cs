@@ -55,6 +55,14 @@ namespace SMPlayer
         }
         private Brush AppTitleBarForeground;
         public LoadingControl Loader { get => MainLoadingControl; }
+        public bool IsTitleBarColorful
+        {
+            get
+            {
+                var page = NaviFrame.CurrentSourcePageType.Name;
+                return page == "AlbumPage" || page == "MyFavoritesPage";
+            }
+        }
         private bool PageUnset = true;
 
         public MainPage()
@@ -79,13 +87,13 @@ namespace SMPlayer
         {
             bool isMinimal = e.Size.Width < 720;
             var page = NaviFrame.CurrentSourcePageType.Name;
-            bool isAlbum = page == "AlbumPage";
+            bool isTitleBarColorful = IsTitleBarColorful;
             bool collapsed = (page == "NowPlayingPage" && isMinimal) ||
                              page == "PlaylistsPage" || 
-                             (isAlbum && !isMinimal);
+                             (isTitleBarColorful && !isMinimal);
             AppTitleBorder.Background = isMinimal ? ColorHelper.TransparentBrush : ColorHelper.MainNavigationViewBackground;
-            TitleBarForeground = isMinimal && isAlbum ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
-            if (!isAlbum) TitleBarBackground = isMinimal ? ColorHelper.MinimalTitleBarColor : ColorHelper.TransparentBrush;
+            TitleBarForeground = isMinimal && isTitleBarColorful ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
+            if (!isTitleBarColorful) TitleBarBackground = isMinimal ? ColorHelper.MinimalTitleBarColor : ColorHelper.TransparentBrush;
             HeaderGrid.Visibility = collapsed ? Visibility.Collapsed : Visibility.Visible;
             if (!MainNavigationView.IsPaneOpen)
                 if (isMinimal) PaneCloseMinimal();
@@ -133,10 +141,10 @@ namespace SMPlayer
         {
             AppTitle.Visibility = Visibility.Visible;
             FakeTogglePaneButton.Visibility = Visibility.Visible;
-            bool isAlbum = NaviFrame.CurrentSourcePageType.Name == "AlbumPage";
-            AppTitle.Foreground = BackButton.Foreground = isAlbum ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
+            bool isTitleBarColorful = IsTitleBarColorful;
+            AppTitle.Foreground = BackButton.Foreground = isTitleBarColorful ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
             AppTitleBorder.Background = ColorHelper.TransparentBrush;
-            if (beforeOpenTitleBarBackground == null || !isAlbum)
+            if (beforeOpenTitleBarBackground == null || !isTitleBarColorful)
             {
                 SetFakeTogglePaneButtonBackground();
             }
@@ -297,8 +305,7 @@ namespace SMPlayer
                     MainNavigationView.SelectedItem = PlaylistsItem;
                     break;
                 case "MyFavoritesPage":
-                    SetHeaderText("My Favorites");
-                    HeaderGrid.Visibility = Visibility.Visible;
+                    HeaderGrid.Visibility = Visibility.Collapsed;
                     MainNavigationView.SelectedItem = MyFavoritesItem;
                     break;
                 case "SearchPage":
@@ -314,7 +321,7 @@ namespace SMPlayer
                     Debug.WriteLine("Navigate to " + NaviFrame.CurrentSourcePageType.Name);
                     break;
             }
-            if (page != "AlbumPage")
+            if (!IsTitleBarColorful)
             {
                 TitleBarHelper.SetMainTitleBar();
                 TitleBarBackground = IsMinimal ? ColorHelper.MinimalTitleBarColor : ColorHelper.TransparentBrush;

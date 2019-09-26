@@ -224,7 +224,8 @@ namespace SMPlayer
         private void FavoriteItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
         {
             var music = args.SwipeControl.DataContext as Music;
-            Settings.settings.LikeMusic(music);
+            if (music.Favorite) Settings.settings.DislikeMusic(music);
+            else Settings.settings.LikeMusic(music);
         }
     }
 

@@ -126,6 +126,7 @@ namespace SMPlayer.Models
 
         public void DeleteMusic(Music music)
         {
+            Tree.RemoveMusic(music);
             foreach (var playlist in Playlists)
                 playlist.Songs.Remove(music);
             FavSongs.Remove(music);
