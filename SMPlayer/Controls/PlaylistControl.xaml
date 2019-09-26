@@ -39,14 +39,13 @@
             IsItemClickEnabled="True"
             ItemClick="SongsListView_ItemClick"
             ItemContainerStyle="{StaticResource PlaylistListViewItemStyle}"
-            Loaded="SongsListView_Loaded"
             Opacity="{x:Bind Opacity}"
             ReorderMode="Enabled"
             RequestedTheme="{x:Bind Theme}"
             SelectionMode="None">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="data:Music">
-                    <SwipeControl>
+                    <SwipeControl Loaded="SwipeControl_Loaded">
                         <SwipeControl.LeftItems>
                             <SwipeItems Mode="Reveal">
                                 <SwipeItem

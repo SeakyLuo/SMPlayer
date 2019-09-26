@@ -39,9 +39,11 @@
                         <TextBlock
                             x:Name="PlaylistNameTextBlock"
                             Grid.Column="1"
+                            MaxLines="2"
                             Margin="0,5"
                             VerticalAlignment="Center"
                             FontSize="36"
+                            ToolTipService.ToolTip="{x:Bind PlaylistNameTextBlock.Text, Mode=OneWay}"
                             Foreground="White"
                             Style="{StaticResource HeaderTextBlockStyle}" />
                         <TextBlock

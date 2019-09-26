@@ -229,21 +229,21 @@ namespace SMPlayer
             else Settings.settings.LikeMusic(music);
         }
 
-        private Music ScrollToMusicRequestedWhenUnloaded = null;
+        private int ScrollToMusicRequestedWhenUnloaded = -1;
         public void ScrollToMusic(Music music)
         {
             if (SongsListView.IsLoaded)
                 SongsListView.ScrollIntoView(music);
             else
-                ScrollToMusicRequestedWhenUnloaded = music;
+                ScrollToMusicRequestedWhenUnloaded = CurrentPlaylist.IndexOf(music);
         }
 
-        private void SongsListView_Loaded(object sender, RoutedEventArgs e)
+        private void SwipeControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (ScrollToMusicRequestedWhenUnloaded != null)
+            if (ScrollToMusicRequestedWhenUnloaded != -1 && SongsListView.ContainerFromIndex(ScrollToMusicRequestedWhenUnloaded) is ListViewItem container)
             {
-                SongsListView.ScrollIntoView(ScrollToMusicRequestedWhenUnloaded);
-                ScrollToMusicRequestedWhenUnloaded = null;
+                container.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true });
+                ScrollToMusicRequestedWhenUnloaded = -1;
             }
         }
     }

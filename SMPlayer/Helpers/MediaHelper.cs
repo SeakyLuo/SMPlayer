@@ -298,15 +298,17 @@ namespace SMPlayer
 
         public static void FindMusicAndSetPlaying(ICollection<Music> playlist, Music current, Music next)
         {
-            bool findCurrent = current == null, findNext = next == null;
             foreach (var music in playlist)
-            {
-                if (!findCurrent && (findCurrent = music.Equals(current)))
-                    music.IsPlaying = false;
-                if (!findNext && (findNext = music.Equals(next)))
-                    music.IsPlaying = true;
-                if (findCurrent && findNext) return;
-            }
+                music.IsPlaying = music.Equals(next);
+            //bool findCurrent = current == null, findNext = next == null;
+            //foreach (var music in playlist)
+            //{
+            //    if (!findCurrent && (findCurrent = music.Equals(current)))
+            //        music.IsPlaying = false;
+            //    if (!findNext && (findNext = music.Equals(next)))
+            //        music.IsPlaying = true;
+            //    if (findCurrent && findNext) return;
+            //}
         }
     }
 

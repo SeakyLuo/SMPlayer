@@ -448,7 +448,6 @@
       <RootEvent Name="ItemClick" />
       <RootEvent Name="DragItemsCompleted" />
       <RootEvent Name="DragItemsStarting" />
-      <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Border">
       <RootProperty Name="Width" />
@@ -1110,6 +1109,7 @@
       <RootProperty Name="LeftItems" />
       <RootProperty Name="RightItems" />
       <RootProperty Name="Content" />
+      <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.SwipeItems">
       <RootProperty Name="Mode" />

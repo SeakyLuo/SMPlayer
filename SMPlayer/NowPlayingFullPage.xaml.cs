@@ -211,7 +211,7 @@ namespace SMPlayer
 
         public async void SetMusicInfo(Music music)
         {
-            if (music == null || music.Equals(CurrentMusic)) return;
+            if (music == null) return;
             var file = await StorageFile.GetFileFromPathAsync(music.Path);
             SetBasicProperties(file);
             SetMusicProperties(musicProperties = await music.GetMusicPropertiesAsync());
@@ -224,13 +224,13 @@ namespace SMPlayer
         public void MusicInfoRequested(Music music)
         {
             SetMusicInfo(music);
-            if (!(MusicInfoRequestedWhenUnloaded = MusicPropertyBladeItem.IsLoaded))
-                MusicPropertyBladeItem.StartBringIntoView();
+            MusicPropertyBladeItem.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true });
+            MusicInfoRequestedWhenUnloaded = !MusicPropertyBladeItem.IsLoaded;
         }
 
         public async void SetLyrics(Music music)
         {
-            if (music.Equals(CurrentMusic)) return;
+            if (music == null) return;
             var lyrics = await music.GetLyricsAsync();
             LyricsTextBox.Text = string.IsNullOrEmpty(lyrics) ? "" : lyrics;
             Lyrics = LyricsTextBox.Text;
@@ -239,8 +239,8 @@ namespace SMPlayer
         public void LyricsRequested(Music music)
         {
             SetLyrics(music);
-            if (!(LyricsRequestedWhenUnloaded = LyricsBladeItem.IsLoaded))
-                LyricsBladeItem.StartBringIntoView();
+            LyricsBladeItem.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true });
+            LyricsRequestedWhenUnloaded = !LyricsBladeItem.IsLoaded;
         }
 
         private void CheckIfDigit(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
