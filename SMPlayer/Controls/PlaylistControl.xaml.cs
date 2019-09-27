@@ -75,11 +75,11 @@ namespace SMPlayer
                 SongsListView.ItemsSource = value;
             }
         }
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
         public ScrollViewer ScrollViewer
         {
             get => SongsListView.GetFirstDescendantOfType<ScrollViewer>();
         }
-        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
         public List<RemoveMusicListener> RemoveListeners = new List<RemoveMusicListener>();
         public static Dialogs.RemoveDialog DeleteDialog;
         public PlaylistControl()
@@ -96,6 +96,12 @@ namespace SMPlayer
         private void PlaylistController_Loaded(object sender, RoutedEventArgs e)
         {
             if (ItemsSource == null) ItemsSource = MediaHelper.CurrentPlaylist;
+            ScrollViewer.ViewChanged += (s, args) =>
+            {
+                var viewer = s as ScrollViewer;
+                if (ScrollListener != null) ScrollListener.Scrolled(ScrollPosition, viewer.VerticalOffset);
+                ScrollPosition = viewer.VerticalOffset;
+            };
         }
 
         public static void AddMusicRequestListener(MusicRequestListener listener)

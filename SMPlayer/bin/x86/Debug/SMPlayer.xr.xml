@@ -438,6 +438,7 @@
       <RootProperty Name="BorderThickness" />
       <RootProperty Name="DisplayMemberPath" />
       <RootProperty Name="ItemTemplateSelector" />
+      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="AllowDrop" />
       <RootProperty Name="CanDrag" />
       <RootProperty Name="CanDragItems" />
@@ -587,8 +588,6 @@
       <RootProperty Name="IsHorizontalScrollChainingEnabled" />
       <RootProperty Name="IsVerticalScrollChainingEnabled" />
       <RootProperty Name="TabNavigation" />
-      <RootProperty Name="HorizontalAlignment" />
-      <RootEvent Name="ViewChanged" />
       <RootMethod Name="GetHorizontalScrollMode" />
       <RootMethod Name="SetHorizontalScrollMode" />
       <RootMethod Name="GetVerticalScrollMode" />
@@ -989,8 +988,8 @@
       <RootProperty Name="PrimaryCommands" />
       <RootProperty Name="IsDynamicOverflowEnabled" />
       <RootProperty Name="OverflowButtonVisibility" />
-      <RootProperty Name="IsOpen" />
       <RootProperty Name="Content" />
+      <RootProperty Name="IsOpen" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBar">
       <RootProperty Name="ClosedDisplayMode" />

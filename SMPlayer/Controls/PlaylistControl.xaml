@@ -18,68 +18,65 @@
         </Style>
     </UserControl.Resources>
 
-    <ScrollViewer
-        x:Name="PlaylistScrollViewer"
+    <ListView
+        x:Name="SongsListView"
+        Grid.Row="1"
+        Padding="{x:Bind Padding}"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
-        ViewChanged="ScrollViewer_ViewChanged">
-        <ListView
-            x:Name="SongsListView"
-            Grid.Row="1"
-            Padding="{x:Bind Padding}"
-            x:DefaultBindMode="OneWay"
-            AllowDrop="True"
-            Background="{x:Bind Background}"
-            CanDrag="True"
-            CanDragItems="True"
-            CanReorderItems="True"
-            ContainerContentChanging="SongsListView_ContainerContentChanging"
-            DragItemsCompleted="SongsListView_DragItemsCompleted"
-            DragItemsStarting="SongsListView_DragItemsStarting"
-            IsItemClickEnabled="True"
-            ItemClick="SongsListView_ItemClick"
-            ItemContainerStyle="{StaticResource PlaylistListViewItemStyle}"
-            Opacity="{x:Bind Opacity}"
-            ReorderMode="Enabled"
-            RequestedTheme="{x:Bind Theme}"
-            SelectionMode="None">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="data:Music">
-                    <SwipeControl Loaded="SwipeControl_Loaded">
-                        <SwipeControl.LeftItems>
-                            <SwipeItems Mode="Reveal">
-                                <SwipeItem
-                                    Background="Transparent"
-                                    Foreground="Red"
-                                    Invoked="FavoriteItem_Invoked"
-                                    Text="Favorite">
-                                    <SwipeItem.IconSource>
-                                        <FontIconSource Glyph="{x:Bind Favorite, Converter={StaticResource MusicFavoriteConverter}, ConverterParameter=Heart, Mode=OneWay}" />
-                                    </SwipeItem.IconSource>
-                                </SwipeItem>
-                            </SwipeItems>
-                        </SwipeControl.LeftItems>
-                        <SwipeControl.RightItems>
-                            <SwipeItems Mode="Execute">
-                                <SwipeItem
-                                    Background="Red"
-                                    Foreground="White"
-                                    Invoked="RemoveItem_Invoked"
-                                    Text="Remove">
-                                    <SwipeItem.IconSource>
-                                        <SymbolIconSource Symbol="Remove" />
-                                    </SwipeItem.IconSource>
-                                </SwipeItem>
-                            </SwipeItems>
-                        </SwipeControl.RightItems>
-                        <local:PlaylistControlItem DataContext="{Binding}">
-                            <local:PlaylistControlItem.ContextFlyout>
-                                <MenuFlyout Opening="OpenMusicMenuFlyout" />
-                            </local:PlaylistControlItem.ContextFlyout>
-                        </local:PlaylistControlItem>
-                    </SwipeControl>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </ScrollViewer>
+        x:DefaultBindMode="OneWay"
+        AllowDrop="True"
+        Background="{x:Bind Background}"
+        CanDrag="True"
+        CanDragItems="True"
+        CanReorderItems="True"
+        ContainerContentChanging="SongsListView_ContainerContentChanging"
+        DragItemsCompleted="SongsListView_DragItemsCompleted"
+        DragItemsStarting="SongsListView_DragItemsStarting"
+        IsItemClickEnabled="True"
+        ItemClick="SongsListView_ItemClick"
+        ItemContainerStyle="{StaticResource PlaylistListViewItemStyle}"
+        Opacity="{x:Bind Opacity}"
+        ReorderMode="Enabled"
+        RequestedTheme="{x:Bind Theme}"
+        SelectionMode="None">
+        <ListView.ItemTemplate>
+            <DataTemplate x:DataType="data:Music">
+                <SwipeControl Loaded="SwipeControl_Loaded">
+                    <SwipeControl.LeftItems>
+                        <SwipeItems Mode="Reveal">
+                            <SwipeItem
+                                Background="Transparent"
+                                Foreground="Red"
+                                Invoked="FavoriteItem_Invoked"
+                                Text="Favorite">
+                                <SwipeItem.IconSource>
+                                    <FontIconSource Glyph="{x:Bind Favorite, Converter={StaticResource MusicFavoriteConverter}, ConverterParameter=Heart, Mode=OneWay}" />
+                                </SwipeItem.IconSource>
+                            </SwipeItem>
+                        </SwipeItems>
+                    </SwipeControl.LeftItems>
+                    <SwipeControl.RightItems>
+                        <SwipeItems Mode="Execute">
+                            <SwipeItem
+                                Background="Red"
+                                Foreground="White"
+                                Invoked="RemoveItem_Invoked"
+                                Text="Remove">
+                                <SwipeItem.IconSource>
+                                    <SymbolIconSource Symbol="Remove" />
+                                </SwipeItem.IconSource>
+                            </SwipeItem>
+                        </SwipeItems>
+                    </SwipeControl.RightItems>
+                    <local:PlaylistControlItem DataContext="{Binding}">
+                        <local:PlaylistControlItem.ContextFlyout>
+                            <MenuFlyout Opening="OpenMusicMenuFlyout" />
+                        </local:PlaylistControlItem.ContextFlyout>
+                    </local:PlaylistControlItem>
+                </SwipeControl>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+
 </UserControl>

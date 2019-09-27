@@ -11,15 +11,46 @@
     <GridView>
         <GridView.Header>
             <CommandBar
+                x:Name="RecentCommandBar"
                 Background="Transparent"
                 DefaultLabelPosition="Right"
                 IsDynamicOverflowEnabled="False"
                 OverflowButtonVisibility="Collapsed">
-                <AppBarButton Icon="Clear" Label="Clear All" />
+                <CommandBar.Content>
+                    <TextBlock
+                        x:Name="CommandBarHeaderTextBlock"
+                        Padding="50,10,0,10"
+                        Style="{StaticResource CompactHeaderStyle}"
+                        Text="Recent"
+                        TextAlignment="Center"
+                        Visibility="Collapsed" />
+                </CommandBar.Content>
+                <AppBarButton
+                    Icon="Clear"
+                    Label="Clear All"
+                    ToolTipService.ToolTip="Clear History" />
             </CommandBar>
         </GridView.Header>
         <GridView.ItemTemplate>
             <DataTemplate />
         </GridView.ItemTemplate>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="WidthChange">
+                <VisualState x:Name="WideLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource MinimalNavigationViewWindowWidth}" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Minimal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="CommandBarHeaderTextBlock.Visibility" Value="Visible" />
+                        <Setter Target="RecentCommandBar.Background" Value="{StaticResource MinimalTitleBarColor}" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </GridView>
 </Page>
