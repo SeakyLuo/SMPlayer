@@ -32,7 +32,7 @@ namespace SMPlayer.Models
         public bool LocalMusicGridView { get; set; }
         public bool LocalFolderGridView { get; set; }
         public ObservableCollection<string> FavSongs { get; set; }
-        public ObservableCollection<string> RecentPlayed { get; set; }
+        public ObservableCollection<string> Recent { get; set; }
 
         public Settings()
         {
@@ -49,7 +49,7 @@ namespace SMPlayer.Models
             LocalMusicGridView = true;
             LocalFolderGridView = true;
             FavSongs = new ObservableCollection<string>();
-            RecentPlayed = new ObservableCollection<string>();
+            Recent = new ObservableCollection<string>();
         }
         public int FindNextPlaylistNameIndex(string Name)
         {
@@ -134,8 +134,8 @@ namespace SMPlayer.Models
 
         public void Played(Music music)
         {
-            music.Played();
-            RecentPlayed.Insert(0, music.Path);
+            if (music == null) return;
+            Recent.Insert(0, music.Path);
         }
     }
 }

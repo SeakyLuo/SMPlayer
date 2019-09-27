@@ -18,10 +18,10 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Rectangle x:Name="LoadingControlPlaceHolder" Height="4" />
-        <ProgressBar x:Name="LocalLoadingControl" IsIndeterminate="True" />
+        <Rectangle x:Name="LoadingPlaceHolder" Height="4" />
+        <ProgressBar x:Name="LoadingProgressBar" IsIndeterminate="True" />
         <local:GridMusicControl
-            x:Name="LocalMusicGridView"
+            x:Name="GridMusicView"
             Grid.Row="1"
             Margin="5" />
         <local:PlaylistControl

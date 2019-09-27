@@ -38,6 +38,7 @@ namespace SMPlayer
         public async void Setup(ICollection<Music> collection)
         {
             GridMusicCollection.Clear();
+            MusicCollection.Clear();
             foreach (var file in collection)
             {
                 var copy = file.Copy();

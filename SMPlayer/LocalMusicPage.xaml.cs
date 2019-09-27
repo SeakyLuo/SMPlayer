@@ -46,12 +46,12 @@ namespace SMPlayer
         {
             if (Tree == tree) return;
             Tree = tree;
-            LocalLoadingControl.Visibility = Visibility.Visible;
+            LoadingProgressBar.Visibility = Visibility.Visible;
             try
             {
-                LocalMusicGridView.Setup(tree.Files);
+                GridMusicView.Setup(tree.Files);
                 Songs.Clear();
-                foreach (var music in LocalMusicGridView.MusicCollection)
+                foreach (var music in GridMusicView.MusicCollection)
                     Songs.Add(music);
             }
             catch (InvalidOperationException)
@@ -59,7 +59,7 @@ namespace SMPlayer
                 // Loading while Set New Folder will cause this Exception
                 System.Diagnostics.Debug.WriteLine("InvalidOperationException On Local Music Page");
             }
-            LocalLoadingControl.Visibility = Visibility.Collapsed;
+            LoadingProgressBar.Visibility = Visibility.Collapsed;
         }
 
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
@@ -71,12 +71,12 @@ namespace SMPlayer
         {
             if (isGridView)
             {
-                LocalMusicGridView.Visibility = Visibility.Visible;
+                GridMusicView.Visibility = Visibility.Visible;
                 LocalPlaylist.Visibility = Visibility.Collapsed;
             }
             else
             {
-                LocalMusicGridView.Visibility = Visibility.Collapsed;
+                GridMusicView.Visibility = Visibility.Collapsed;
                 LocalPlaylist.Visibility = Visibility.Visible;
             }
         }

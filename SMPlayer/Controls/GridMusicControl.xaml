@@ -16,7 +16,7 @@
         IsItemClickEnabled="True"
         ItemClick="MusicGridView_ItemClick"
         ItemContainerStyle="{StaticResource DropShadowGridViewItemStyle}"
-        ItemsSource="{x:Bind MusicCollection, Mode=OneWay}"
+        ItemsSource="{x:Bind GridMusicCollection, Mode=OneWay}"
         SelectionMode="None">
         <GridView.ItemTemplate>
             <DataTemplate x:DataType="data:GridMusicView">

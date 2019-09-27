@@ -26,5 +26,24 @@ namespace SMPlayer
         {
             this.InitializeComponent();
         }
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Setup(Models.Settings.settings.Recent);
+        }
+
+        private void Setup(ICollection<string> paths)
+        {
+            LoadingProgressBar.Visibility = Visibility.Visible;
+            try
+            {
+                GridMusicView.Setup(MusicLibraryPage.ConvertMusicPathToCollection(paths));
+            }
+            catch (InvalidOperationException)
+            {
+                // Loading while Set New Folder will cause this Exception
+                System.Diagnostics.Debug.WriteLine("InvalidOperationException On Local Music Page");
+            }
+            LoadingProgressBar.Visibility = Visibility.Collapsed;
+        }
     }
 }

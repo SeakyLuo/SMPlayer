@@ -6,34 +6,50 @@
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="Page_Loaded"
     mc:Ignorable="d">
 
-    <GridView>
-        <GridView.Header>
-            <CommandBar
-                x:Name="RecentCommandBar"
-                Background="Transparent"
-                DefaultLabelPosition="Right"
-                IsDynamicOverflowEnabled="False"
-                OverflowButtonVisibility="Collapsed">
-                <CommandBar.Content>
-                    <TextBlock
-                        x:Name="CommandBarHeaderTextBlock"
-                        Padding="50,10,0,10"
-                        Style="{StaticResource CompactHeaderStyle}"
-                        Text="Recent"
-                        TextAlignment="Center"
-                        Visibility="Collapsed" />
-                </CommandBar.Content>
-                <AppBarButton
-                    Icon="Clear"
-                    Label="Clear All"
-                    ToolTipService.ToolTip="Clear History" />
-            </CommandBar>
-        </GridView.Header>
-        <GridView.ItemTemplate>
-            <DataTemplate />
-        </GridView.ItemTemplate>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <CommandBar
+            x:Name="RecentCommandBar"
+            Background="Transparent"
+            DefaultLabelPosition="Right"
+            IsDynamicOverflowEnabled="False"
+            OverflowButtonVisibility="Collapsed">
+            <CommandBar.Content>
+                <TextBlock
+                    x:Name="CommandBarHeaderTextBlock"
+                    Padding="50,10,0,10"
+                    Style="{StaticResource CompactHeaderStyle}"
+                    Text="Recent"
+                    TextAlignment="Center"
+                    Visibility="Collapsed" />
+            </CommandBar.Content>
+            <AppBarButton
+                Icon="Clear"
+                Label="Clear All"
+                ToolTipService.ToolTip="Clear History" />
+        </CommandBar>
+        <Rectangle
+            x:Name="LoadingPlaceHolder"
+            Grid.Row="1"
+            Height="4" />
+        <ProgressBar
+            x:Name="LoadingProgressBar"
+            Grid.Row="1"
+            IsIndeterminate="True" />
+        <local:GridMusicControl
+            x:Name="GridMusicView"
+            Grid.Row="2"
+            Margin="5" />
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">
                 <VisualState x:Name="WideLayout">
@@ -52,5 +68,5 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-    </GridView>
+    </Grid>
 </Page>

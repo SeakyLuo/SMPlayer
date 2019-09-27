@@ -684,9 +684,10 @@ namespace SMPlayer
                 if (reason == MediaPlaybackItemChangedReason.EndOfStream)
                 {
                     Music before = current.Copy();
-                    Settings.settings.Played(current);
+                    current.Played();
                     NotifyMusicModifiedListeners(before, current);
                 }
+                Settings.settings.Played(current);
                 next.IsPlaying = true;
                 MediaSlider.Value = 0;
                 SetMusic(next);
