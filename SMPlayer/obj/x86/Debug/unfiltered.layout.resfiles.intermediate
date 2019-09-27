@@ -56,6 +56,7 @@ AlbumPage.xbf
 AlbumsPage.xbf
 App.xbf
 ArtistsPage.xbf
+Controls\ArtistPage.xbf
 Controls\HeaderedPlaylistControl.xbf
 Controls\IconTextButton.xbf
 Controls\LoadingControl.xbf

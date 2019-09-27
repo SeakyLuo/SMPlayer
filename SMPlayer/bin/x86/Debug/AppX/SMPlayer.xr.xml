@@ -257,6 +257,7 @@
       <RootProperty Name="ItemsSource" />
       <RootProperty Name="SelectionMode" />
       <RootProperty Name="ItemTemplate" />
+      <RootProperty Name="Header" />
       <RootEvent Name="ItemClick" />
     </RootType>
     <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.StaticResourceExtension">
@@ -476,6 +477,7 @@
       <RootProperty Name="ScaleY" />
     </RootType>
     <RootType FullName="SMPlayer.ArtistsPage" />
+    <RootType FullName="SMPlayer.Controls.ArtistPage" />
     <RootType FullName="Windows.UI.Xaml.Automation.AutomationProperties">
       <RootMethod Name="GetAccessibilityView" />
       <RootMethod Name="SetAccessibilityView" />
@@ -985,8 +987,9 @@
       <RootProperty Name="DefaultLabelPosition" />
       <RootProperty Name="Style" />
       <RootProperty Name="PrimaryCommands" />
-      <RootProperty Name="IsOpen" />
+      <RootProperty Name="IsDynamicOverflowEnabled" />
       <RootProperty Name="OverflowButtonVisibility" />
+      <RootProperty Name="IsOpen" />
       <RootProperty Name="Content" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBar">
@@ -1024,10 +1027,6 @@
       <RootProperty Name="Background" />
       <RootProperty Name="IsNowPlaying" />
       <RootProperty Name="Theme" />
-    </RootType>
-    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.ScrollHeader">
-      <RootProperty Name="Mode" />
-      <RootProperty Name="Content" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">
       <RootProperty Name="Margin" />

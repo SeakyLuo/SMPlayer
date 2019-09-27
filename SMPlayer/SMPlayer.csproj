@@ -127,6 +127,9 @@
     <Compile Include="ArtistsPage.xaml.cs">
       <DependentUpon>ArtistsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ArtistPage.xaml.cs">
+      <DependentUpon>ArtistPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\IconTextButton.xaml.cs">
       <DependentUpon>IconTextButton.xaml</DependentUpon>
     </Compile>
@@ -174,6 +177,7 @@
     <Compile Include="ExpressionBuilder\ReferenceNodes\ExpressionBuilder.SpotLightReferenceNode.cs" />
     <Compile Include="ExpressionBuilder\ReferenceNodes\ExpressionBuilder.SurfaceBrushReferenceNode.cs" />
     <Compile Include="ExpressionBuilder\ReferenceNodes\ExpressionBuilder.VisualReferenceNode.cs" />
+    <Compile Include="Helpers\VisualTreeHelperExtensions.cs" />
     <Compile Include="Helpers\MusicHelper.cs" />
     <Compile Include="TemplateSelector\FolderTreeTemplateSelector.cs" />
     <Compile Include="Helpers\MenuFlyoutHelper.cs" />
@@ -321,6 +325,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ArtistsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ArtistPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -8,5 +8,18 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
-    <Grid />
+    <GridView>
+        <GridView.Header>
+            <CommandBar
+                Background="Transparent"
+                DefaultLabelPosition="Right"
+                IsDynamicOverflowEnabled="False"
+                OverflowButtonVisibility="Collapsed">
+                <AppBarButton Icon="Clear" Label="Clear All" />
+            </CommandBar>
+        </GridView.Header>
+        <GridView.ItemTemplate>
+            <DataTemplate />
+        </GridView.ItemTemplate>
+    </GridView>
 </Page>

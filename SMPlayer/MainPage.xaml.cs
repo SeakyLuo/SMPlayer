@@ -293,7 +293,7 @@ namespace SMPlayer
                     break;
                 case "RecentPage":
                     SetHeaderText("Recent");
-                    HeaderGrid.Visibility = Visibility.Visible;
+                    HeaderGrid.Visibility = Visibility.Collapsed;
                     MainNavigationView.SelectedItem = RecentItem;
                     break;
                 case "LocalPage":

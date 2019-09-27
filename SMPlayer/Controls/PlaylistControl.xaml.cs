@@ -77,7 +77,7 @@ namespace SMPlayer
         }
         public ScrollViewer ScrollViewer
         {
-            get => PlaylistScrollViewer;
+            get => SongsListView.GetFirstDescendantOfType<ScrollViewer>();
         }
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
         public List<RemoveMusicListener> RemoveListeners = new List<RemoveMusicListener>();
