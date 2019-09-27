@@ -31,8 +31,8 @@ namespace SMPlayer.Models
 
         public bool LocalMusicGridView { get; set; }
         public bool LocalFolderGridView { get; set; }
-        public ObservableCollection<Music> FavSongs { get; set; }
-        public ObservableCollection<object> RecentPlayed { get; set; }
+        public ObservableCollection<string> FavSongs { get; set; }
+        public ObservableCollection<string> RecentPlayed { get; set; }
 
         public Settings()
         {
@@ -48,8 +48,8 @@ namespace SMPlayer.Models
             LastPlaylist = "";
             LocalMusicGridView = true;
             LocalFolderGridView = true;
-            FavSongs = new ObservableCollection<Music>();
-            RecentPlayed = new ObservableCollection<object>();
+            FavSongs = new ObservableCollection<string>();
+            RecentPlayed = new ObservableCollection<string>();
         }
         public int FindNextPlaylistNameIndex(string Name)
         {
@@ -100,9 +100,9 @@ namespace SMPlayer.Models
 
         public void LikeMusic(Music music)
         {
-            if (FavSongs.Contains(music)) return;
+            if (FavSongs.Contains(music.Path)) return;
             music.Favorite = true;
-            FavSongs.Add(music);
+            FavSongs.Add(music.Path);
         }
 
         public void LikeMusic(ICollection<Music> playlist)
@@ -110,17 +110,17 @@ namespace SMPlayer.Models
             var hashset = FavSongs.ToHashSet();
             foreach (var music in playlist)
             {
-                if (!hashset.Contains(music))
+                if (!hashset.Contains(music.Path))
                 {
                     music.Favorite = true;
-                    FavSongs.Add(music);
+                    FavSongs.Add(music.Path);
                 }
             }
         }
 
         public void DislikeMusic(Music music)
         {
-            FavSongs.Remove(music);
+            FavSongs.Remove(music.Path);
             music.Favorite = false;
         }
 
@@ -129,7 +129,13 @@ namespace SMPlayer.Models
             Tree.RemoveMusic(music);
             foreach (var playlist in Playlists)
                 playlist.Songs.Remove(music);
-            FavSongs.Remove(music);
+            FavSongs.Remove(music.Path);
+        }
+
+        public void Played(Music music)
+        {
+            music.Played();
+            RecentPlayed.Insert(0, music.Path);
         }
     }
 }

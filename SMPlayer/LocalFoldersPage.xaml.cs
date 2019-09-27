@@ -72,7 +72,9 @@ namespace SMPlayer
         private void OpenPlaylistFlyout(object sender, object e)
         {
             var flyout = sender as MenuFlyout;
-            var tree = (flyout.Target.DataContext as TreeViewNode).Content as FolderTree;
+            FolderTree tree = null;
+            if (flyout.Target.DataContext is GridFolderView gridFolderView) tree = gridFolderView.Tree;
+            else if (flyout.Target.DataContext is TreeViewNode node) tree = node.Content as FolderTree;
             MenuFlyoutHelper.SetPlaylistMenu(sender);
             var showInExplorerItem = MenuFlyoutHelper.ShowInExplorerItem;
             ToolTipService.SetToolTip(showInExplorerItem, new ToolTip() { Content = "Show In Explorer" });

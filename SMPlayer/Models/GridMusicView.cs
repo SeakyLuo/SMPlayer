@@ -7,7 +7,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMPlayer.Models
 {
-    class GridMusicView
+    public class GridMusicView
     {
         public string Name { get; set; }
         public string Artist { get; set; }
@@ -26,12 +26,12 @@ namespace SMPlayer.Models
 
         public override bool Equals(object obj)
         {
-            return obj != null && obj is GridMusicView && Name == (obj as GridFolderView).Name;
+            return obj != null && obj is GridMusicView && Source.Path == (obj as GridMusicView).Source.Path;
         }
 
         public override int GetHashCode()
         {
-            return Name.GetHashCode();
+            return Source.Path.GetHashCode();
         }
     }
 }

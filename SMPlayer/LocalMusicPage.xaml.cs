@@ -25,7 +25,6 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class LocalMusicPage : Page, SwitchMusicListener, ViewModeChangedListener
     {
-        private ObservableCollection<GridMusicView> GridItems = new ObservableCollection<GridMusicView>();
         private ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         private FolderTree Tree;
         public LocalMusicPage()
@@ -43,30 +42,17 @@ namespace SMPlayer
             ModeChanged(Settings.settings.LocalMusicGridView);
         }
 
-        private void LocalMusicGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            var item = (GridMusicView)e.ClickedItem;
-            MediaHelper.SetMusicAndPlay(Tree.Files, item.Source);
-        }
-
-        private async void Setup(FolderTree tree)
+        private void Setup(FolderTree tree)
         {
             if (Tree == tree) return;
             Tree = tree;
             LocalLoadingControl.Visibility = Visibility.Visible;
             try
             {
-                GridItems.Clear();
+                LocalMusicGridView.Setup(tree.Files);
                 Songs.Clear();
-                foreach (var file in tree.Files)
-                {
-                    var copy = file.Copy();
-                    copy.IsPlaying = copy.Equals(MediaHelper.CurrentMusic);
-                    GridMusicView gridItem = new GridMusicView();
-                    await gridItem.Init(copy);
-                    GridItems.Add(gridItem);
-                    Songs.Add(copy);
-                }
+                foreach (var music in LocalMusicGridView.MusicCollection)
+                    Songs.Add(music);
             }
             catch (InvalidOperationException)
             {
@@ -76,50 +62,9 @@ namespace SMPlayer
             LocalLoadingControl.Visibility = Visibility.Collapsed;
         }
 
-        private void MenuFlyout_Opening(object sender, object e)
-        {
-            MenuFlyoutHelper.SetMusicMenu(sender);
-        }
-
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            {
-                bool findCurrent = current == null, findNext = next == null;
-                foreach (var item in GridItems)
-                {
-                    var music = item.Source;
-                    if (!findCurrent && (findCurrent = music.Equals(current)))
-                        music.IsPlaying = false;
-                    if (!findNext && (findNext = music.Equals(next)))
-                        music.IsPlaying = true;
-                    if (findCurrent && findNext) break;
-                }
-                findCurrent = current == null; findNext = next == null;
-                foreach (var music in Songs)
-                {
-                    if (!findCurrent && (findCurrent = music.Equals(current)))
-                        music.IsPlaying = false;
-                    if (!findNext && (findNext = music.Equals(next)))
-                        music.IsPlaying = true;
-                    if (findCurrent && findNext) break;
-                }
-            });
-        }
-        private void GridViewItem_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            VisualStateManager.GoToState(sender as Control, "PointerOver", true);
-        }
-
-        private void GridViewItem_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            VisualStateManager.GoToState(sender as Control, "Normal", true);
-        }
-
-        private void AddToButton_Click(object sender, RoutedEventArgs e)
-        {
-            var data = (sender as Button).DataContext as GridMusicView;
-            new MenuFlyoutHelper().GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(Songs, current, next));
         }
 
         public void ModeChanged(bool isGridView)

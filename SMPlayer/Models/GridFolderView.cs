@@ -17,17 +17,12 @@ namespace SMPlayer.Models
         public BitmapImage Third { get; set; }
         public BitmapImage Fourth { get; set; }
         public BitmapImage LargeThumbnail { get; set; }
+        public FolderTree Tree { get; private set; }
         public List<Music> Songs
         {
-            get
-            {
-                if (songs == null)
-                    songs = Tree.Flatten();
-                return songs;
-            }
+            get => songs == null ? songs = Tree.Flatten() : songs;
         }
         private List<Music> songs;
-        private FolderTree Tree;
         public GridFolderView() { }
 
         public async Task Init(FolderTree tree)

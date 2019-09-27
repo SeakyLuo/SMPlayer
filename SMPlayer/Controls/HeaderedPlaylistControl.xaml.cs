@@ -121,7 +121,7 @@ namespace SMPlayer
             var scrollViewer = HeaderedPlaylist.ScrollViewer;
 
             // Update the ZIndex of the header container so that the header is above the items when scrolling
-            var headerPresenter = (UIElement)VisualTreeHelper.GetParent(PlaylistInfoGrid);
+            var headerPresenter = (UIElement)VisualTreeHelper.GetParent(HeaderControl);
             var headerContainer = (UIElement)VisualTreeHelper.GetParent(headerPresenter);
             Canvas.SetZIndex(headerContainer, 1);
 
@@ -146,7 +146,7 @@ namespace SMPlayer
             var blurEffect = new GaussianBlurEffect()
             {
                 Name = "blur",
-                BlurAmount = 0.0f,
+                BlurAmount = 0f,
                 BorderMode = EffectBorderMode.Hard,
                 Optimization = EffectOptimization.Balanced,
                 Source = new CompositionEffectSourceParameter("source")
@@ -227,6 +227,11 @@ namespace SMPlayer
 
             ExpressionNode buttonOffsetAnimation = progressNode * -100;
             buttonVisual.StartAnimation("Offset.Y", buttonOffsetAnimation);
+        }
+
+        private void PlaylistInfoGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            SetShyHeader();
         }
     }
 }

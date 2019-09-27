@@ -75,15 +75,15 @@
       <RootProperty Name="Visibility" />
       <RootProperty Name="Foreground" />
       <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Width" />
+      <RootProperty Name="HorizontalTextAlignment" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="MinWidth" />
       <RootProperty Name="FontFamily" />
       <RootProperty Name="FontStyle" />
       <RootProperty Name="IsHitTestVisible" />
       <RootProperty Name="Style" />
-      <RootProperty Name="Width" />
       <RootProperty Name="Height" />
-      <RootProperty Name="HorizontalTextAlignment" />
       <RootProperty Name="TextTrimming" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Button">
@@ -93,19 +93,19 @@
       <RootProperty Name="Background" />
       <RootProperty Name="Foreground" />
       <RootProperty Name="Flyout" />
-      <RootProperty Name="BorderThickness" />
-      <RootProperty Name="MinWidth" />
-      <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="FontSize" />
-      <RootProperty Name="IsTabStop" />
-      <RootProperty Name="Visibility" />
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="FontSize" />
+      <RootProperty Name="Visibility" />
+      <RootProperty Name="BorderThickness" />
+      <RootProperty Name="MinWidth" />
+      <RootProperty Name="IsTabStop" />
       <RootProperty Name="IsEnabled" />
       <RootProperty Name="MinHeight" />
       <RootProperty Name="Padding" />
       <RootProperty Name="IsAccessKeyScope" />
-      <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="KeyboardAccelerators" />
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="FontFamily" />
@@ -154,10 +154,10 @@
       <RootProperty Name="Glyph" />
       <RootProperty Name="Margin" />
       <RootProperty Name="Visibility" />
+      <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="Opacity" />
       <RootProperty Name="Height" />
       <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="Style" />
       <RootProperty Name="FontWeight" />
       <RootProperty Name="RenderTransformOrigin" />
@@ -231,6 +231,7 @@
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
       <RootEvent Name="Tapped" />
+      <RootEvent Name="Loaded" />
       <RootMethod Name="GetRow" />
       <RootMethod Name="SetRow" />
       <RootMethod Name="GetColumn" />
@@ -334,8 +335,8 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.VisualState">
       <RootProperty Name="Storyboard" />
-      <RootProperty Name="Setters" />
       <RootProperty Name="StateTriggers" />
+      <RootProperty Name="Setters" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.Animation.Storyboard">
       <RootProperty Name="Children" />
@@ -479,6 +480,12 @@
     </RootType>
     <RootType FullName="SMPlayer.ArtistsPage" />
     <RootType FullName="SMPlayer.Controls.ArtistPage" />
+    <RootType FullName="Windows.UI.Xaml.AdaptiveTrigger">
+      <RootProperty Name="MinWindowWidth" />
+    </RootType>
+    <RootType FullName="SMPlayer.GridMusicControl">
+      <RootProperty Name="Margin" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Automation.AutomationProperties">
       <RootMethod Name="GetAccessibilityView" />
       <RootMethod Name="SetAccessibilityView" />
@@ -1034,9 +1041,6 @@
       <RootProperty Name="Style" />
       <RootProperty Name="IsEnabled" />
       <RootEvent Name="Click" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.AdaptiveTrigger">
-      <RootProperty Name="MinWindowWidth" />
     </RootType>
     <RootType FullName="SMPlayer.TemplateSelector.FolderTreeTemplateSelector">
       <RootProperty Name="FileTemplate" />

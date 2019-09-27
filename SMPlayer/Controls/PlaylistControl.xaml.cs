@@ -82,6 +82,8 @@ namespace SMPlayer
         }
         public List<RemoveMusicListener> RemoveListeners = new List<RemoveMusicListener>();
         public static Dialogs.RemoveDialog DeleteDialog;
+
+        private bool ViewChangedUnadded = false;
         public PlaylistControl()
         {
             this.InitializeComponent();
@@ -96,12 +98,16 @@ namespace SMPlayer
         private void PlaylistController_Loaded(object sender, RoutedEventArgs e)
         {
             if (ItemsSource == null) ItemsSource = MediaHelper.CurrentPlaylist;
-            ScrollViewer.ViewChanged += (s, args) =>
+            if (ViewChangedUnadded)
             {
-                var viewer = s as ScrollViewer;
-                if (ScrollListener != null) ScrollListener.Scrolled(ScrollPosition, viewer.VerticalOffset);
-                ScrollPosition = viewer.VerticalOffset;
-            };
+                ScrollViewer.ViewChanged += (s, args) =>
+                {
+                    var viewer = s as ScrollViewer;
+                    if (ScrollListener != null) ScrollListener.Scrolled(ScrollPosition, viewer.VerticalOffset);
+                    ScrollPosition = viewer.VerticalOffset;
+                    ViewChangedUnadded = false;
+                };
+            }
         }
 
         public static void AddMusicRequestListener(MusicRequestListener listener)

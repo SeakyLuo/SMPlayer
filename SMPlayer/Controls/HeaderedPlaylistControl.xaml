@@ -13,10 +13,11 @@
         AllowReorder="False"
         AlternatingRowColor="True">
         <local:PlaylistControl.Header>
-            <UserControl>
+            <UserControl x:Name="HeaderControl">
                 <Grid
                     x:Name="PlaylistInfoGrid"
                     Padding="10"
+                    Loaded="PlaylistInfoGrid_Loaded"
                     Background="{ThemeResource SystemColorHighlightColor}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />

@@ -16,8 +16,6 @@ Cache Artists Result.
 
 FullMediaControl Album Flipview.
 
-Sticky Shy header.
-
 Add Album Art to Music.
 
 MasterView Back Button.

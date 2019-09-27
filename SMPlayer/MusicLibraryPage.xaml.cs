@@ -31,6 +31,7 @@ namespace SMPlayer
     {
         private const string FILENAME = "MusicLibrary.json";
         public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
+        private static HashSet<Music> MusicSet = new HashSet<Music>();
         private bool libraryChecked = false;
         private static bool libraryReset = false;
         private static List<AfterSongsSetListener> listeners = new List<AfterSongsSetListener>();
@@ -150,7 +151,17 @@ namespace SMPlayer
             libraryReset = true;
             AllSongs.Clear();
             foreach (var item in songs) AllSongs.Add(item);
+            MusicSet = AllSongs.ToHashSet();
             foreach (var listener in listeners) listener.SongsSet(AllSongs);
+        }
+
+        public static List<Music> ConvertMusicPathToCollection(ICollection<string> paths)
+        {
+            List<Music> collection = new List<Music>();
+            foreach (var path in paths)
+                if (MusicSet.FirstOrDefault((m) => m.Path == path) is Music music)
+                    collection.Add(music);
+            return collection;
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
