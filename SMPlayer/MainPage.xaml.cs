@@ -95,6 +95,7 @@ namespace SMPlayer
             TitleBarForeground = isMinimal && isTitleBarColorful ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
             if (!isTitleBarColorful) TitleBarBackground = isMinimal ? ColorHelper.MinimalTitleBarColor : ColorHelper.TransparentBrush;
             HeaderGrid.Visibility = collapsed ? Visibility.Collapsed : Visibility.Visible;
+            if (page == "SearchPage") SetHeaderText(SearchPage.GetSearchHeader(SearchPage.History.Peek(), IsMinimal));
             if (!MainNavigationView.IsPaneOpen)
                 if (isMinimal) PaneCloseMinimal();
                 else PaneCloseNormal();
@@ -191,15 +192,18 @@ namespace SMPlayer
             (sender as Button).Visibility = Visibility.Collapsed;
             MainNavigationView.IsPaneOpen = true;
         }
+
         private void SearchBar_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            string text = NaviSearchBar.Text.Trim();
+            string text = sender.Text.Trim();
             if (text.Length > 0)
             {
                 NaviFrame.Navigate(typeof(SearchPage), text);
                 SetBackButtonVisible(true);
+                if (MainNavigationView.DisplayMode != NavigationViewDisplayMode.Expanded)
+                    MainNavigationView.IsPaneOpen = false;
             }
-            else if (HeaderSearchBar.Visibility == Visibility.Visible)
+            if (HeaderSearchBar.Visibility == Visibility.Visible)
             {
                 HideHeaderSearchBar();
             }
@@ -310,7 +314,6 @@ namespace SMPlayer
                     MainNavigationView.SelectedItem = MyFavoritesItem;
                     break;
                 case "SearchPage":
-                    SetHeaderText("Search Result");
                     HeaderGrid.Visibility = Visibility.Visible;
                     break;
                 case "SettingsPage":

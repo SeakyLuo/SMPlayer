@@ -76,6 +76,13 @@ namespace SMPlayer
             }
         }
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
+        public bool HideAlbum
+        {
+            get => (bool)GetValue(HideAlbumProperty);
+            set => SetValue(HideAlbumProperty, value);
+        }
+        public static readonly DependencyProperty HideAlbumProperty = DependencyProperty.Register("HideAlbum", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(null));
+
         public ScrollViewer ScrollViewer
         {
             get => SongsListView.GetFirstDescendantOfType<ScrollViewer>();
@@ -83,7 +90,6 @@ namespace SMPlayer
         public List<RemoveMusicListener> RemoveListeners = new List<RemoveMusicListener>();
         public static Dialogs.RemoveDialog DeleteDialog;
 
-        private bool ViewChangedUnadded = false;
         public PlaylistControl()
         {
             this.InitializeComponent();
@@ -95,19 +101,23 @@ namespace SMPlayer
             CurrentTheme = Theme;
         }
 
+        private bool ViewChangedUnadded = true;
         private void PlaylistController_Loaded(object sender, RoutedEventArgs e)
         {
             if (ItemsSource == null) ItemsSource = MediaHelper.CurrentPlaylist;
             if (ViewChangedUnadded)
             {
-                ScrollViewer.ViewChanged += (s, args) =>
-                {
-                    var viewer = s as ScrollViewer;
-                    if (ScrollListener != null) ScrollListener.Scrolled(ScrollPosition, viewer.VerticalOffset);
-                    ScrollPosition = viewer.VerticalOffset;
-                    ViewChangedUnadded = false;
-                };
+                ScrollViewer.ViewChanged += ScrollViewer_ViewChanged;
+                ViewChangedUnadded = false;
             }
+        }
+
+        private double ScrollPosition = 0d;
+        private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+        {
+            var viewer = sender as ScrollViewer;
+            if (ScrollListener != null) ScrollListener.Scrolled(ScrollPosition, viewer.VerticalOffset);
+            ScrollPosition = viewer.VerticalOffset;
         }
 
         public static void AddMusicRequestListener(MusicRequestListener listener)
@@ -187,14 +197,6 @@ namespace SMPlayer
                 };
                 flyout.Items.Add(item);
             }
-        }
-
-        private double ScrollPosition = 0d;
-        private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
-        {
-            var viewer = sender as ScrollViewer;
-            if (ScrollListener != null) ScrollListener.Scrolled(ScrollPosition, viewer.VerticalOffset);
-            ScrollPosition = viewer.VerticalOffset;
         }
 
         private async void RemoveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)

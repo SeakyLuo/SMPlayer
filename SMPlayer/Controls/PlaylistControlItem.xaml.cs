@@ -19,6 +19,12 @@ namespace SMPlayer.Controls
 {
     public sealed partial class PlaylistControlItem : UserControl
     {
+        public bool HideAlbum
+        {
+            get => (bool)GetValue(HideAlbumProperty);
+            set => SetValue(HideAlbumProperty, value);
+        }
+        public static readonly DependencyProperty HideAlbumProperty = DependencyProperty.Register("HideAlbum", typeof(bool), typeof(PlaylistControlItem), new PropertyMetadata(null));
         public PlaylistControlItem()
         {
             this.InitializeComponent();
@@ -37,6 +43,7 @@ namespace SMPlayer.Controls
         }
         private void Artist_Click(object sender, RoutedEventArgs e)
         {
+            if (NowPlayingFullPage.Instance != null) NowPlayingFullPage.Instance.GoBack();
 
         }
     }

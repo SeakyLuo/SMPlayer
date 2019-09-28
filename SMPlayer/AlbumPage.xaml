@@ -8,5 +8,8 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
-    <local:HeaderedPlaylistControl x:Name="AlbumPlaylistControl" IsPlaylist="False" />
+    <local:HeaderedPlaylistControl
+        x:Name="AlbumPlaylistControl"
+        HideAlbum="False"
+        IsPlaylist="False" />
 </Page>

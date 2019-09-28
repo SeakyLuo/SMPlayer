@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Data;
 
 namespace SMPlayer
 {
-    class MusicDurationConverter : Windows.UI.Xaml.Data.IValueConverter
+    class MusicDurationConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -62,7 +63,7 @@ namespace SMPlayer
         }
     }
 
-    class MusicFavoriteConverter : Windows.UI.Xaml.Data.IValueConverter
+    class MusicFavoriteConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -75,7 +76,7 @@ namespace SMPlayer
         }
     }
 
-    class MusicIsPlayingConverter : Windows.UI.Xaml.Data.IValueConverter
+    class MusicIsPlayingConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -88,7 +89,7 @@ namespace SMPlayer
         }
     }
 
-    class IntConverter : Windows.UI.Xaml.Data.IValueConverter
+    class IntConverter : IValueConverter
     {
         public static string ToStr(int value)
         {
@@ -105,15 +106,17 @@ namespace SMPlayer
         }
     }
 
-    class VisibilityConverter : Windows.UI.Xaml.Data.IValueConverter
+    class VisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is string) return string.IsNullOrEmpty(value as string) ? Visibility.Collapsed : Visibility.Visible;
-            if (value is bool) return value.Equals(false) ? Visibility.Collapsed : Visibility.Visible;
-            if (value is int) return value.Equals(0) ? Visibility.Collapsed : Visibility.Visible;
-            if (value is Visibility) return value.Equals(Visibility.Visible) ? Visibility.Collapsed : Visibility.Visible;
-            return value == null ? Visibility.Collapsed : Visibility.Visible;
+            bool collapsed;
+            if (value is string) collapsed = string.IsNullOrEmpty(value as string);
+            else if (value is bool) collapsed = value.Equals(false);
+            else if (value is int) collapsed = value.Equals(0);
+            else if (value is Visibility) collapsed = value.Equals(Visibility.Visible);
+            else collapsed = value == null;
+            return collapsed ^ !string.IsNullOrEmpty(parameter as string) ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -122,7 +125,7 @@ namespace SMPlayer
         }
     }
 
-    class PlaylistRowColorConverter : Windows.UI.Xaml.Data.IValueConverter
+    class PlaylistRowColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -137,7 +140,7 @@ namespace SMPlayer
         }
     }
 
-    class ColorConverter : Windows.UI.Xaml.Data.IValueConverter
+    class ColorConverter : IValueConverter
     {
         public static SolidColorBrush StringToColor(string color)
         {
@@ -159,7 +162,7 @@ namespace SMPlayer
         }
     }
 
-    class RowColorConverter : Windows.UI.Xaml.Data.IValueConverter
+    class RowColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -172,7 +175,7 @@ namespace SMPlayer
         }
     }
 
-    class ArtistAlbumInfoConverter : Windows.UI.Xaml.Data.IValueConverter
+    class ArtistAlbumInfoConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -190,7 +193,7 @@ namespace SMPlayer
         }
     }
 
-    class SongCountConverter : Windows.UI.Xaml.Data.IValueConverter
+    class SongCountConverter : IValueConverter
     {
         public static string ToStr(object value)
         {
@@ -214,7 +217,7 @@ namespace SMPlayer
         }
     }
 
-    class EnabledConverter : Windows.UI.Xaml.Data.IValueConverter
+    class EnabledConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -228,7 +231,7 @@ namespace SMPlayer
             return null;
         }
     }
-    class CriterionConverter : Windows.UI.Xaml.Data.IValueConverter
+    class CriterionConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -240,7 +243,7 @@ namespace SMPlayer
             return null;
         }
     }
-    class MusicArtistAlbumConverter : Windows.UI.Xaml.Data.IValueConverter
+    class MusicArtistAlbumConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {

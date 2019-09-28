@@ -40,16 +40,6 @@ namespace SMPlayer
             if (Albums.Count == 0) Setup(); // Constructor not called
         }
 
-        private void GridViewItem_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            VisualStateManager.GoToState(sender as Control, "PointerOver", true);
-        }
-
-        private void GridViewItem_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            VisualStateManager.GoToState(sender as Control, "Normal", true);
-        }
-
         private async void Setup()
         {
             if (SetupStarted) return;
@@ -95,23 +85,6 @@ namespace SMPlayer
         {
             Notified = NotifiedStatus.Started;
             Setup();
-        }
-
-        private void MenuFlyout_Opening(object sender, object e)
-        {
-            MenuFlyoutHelper.SetPlaylistMenu(sender);
-        }
-
-        private void PlayAllButton_Click(object sender, RoutedEventArgs e)
-        {
-            var data = (sender as Button).DataContext as AlbumView;
-            MediaHelper.ShuffleAndPlay(data.Songs);
-        }
-        private void AddToButton_Click(object sender, RoutedEventArgs e)
-        {
-            var data = (sender as Button).DataContext as AlbumView;
-            var helper = new MenuFlyoutHelper() { Data = data.Songs, DefaultPlaylistName = data.Name };
-            helper.GetAddToPlaylistsMenuFlyout().ShowAt(sender as FrameworkElement);
         }
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)

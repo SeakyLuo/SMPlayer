@@ -64,30 +64,28 @@
                                 <TextBlock
                                     x:Name="MusicNameTextBlock"
                                     Width="160"
-                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
                                     FontSize="15"
                                     FontWeight="SemiBold"
                                     Foreground="{x:Bind Source.IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
-                                    HorizontalTextAlignment="Left"
                                     MaxLines="3"
                                     Text="{x:Bind Name}"
                                     TextTrimming="CharacterEllipsis"
                                     TextWrapping="Wrap" />
                                 <TextBlock
                                     Margin="0,3,0,0"
-                                    VerticalAlignment="center"
+                                    HorizontalAlignment="Left"
                                     FontSize="12"
                                     Foreground="{x:Bind Source.IsPlaying, Converter={StaticResource ColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
-                                    HorizontalTextAlignment="Left"
                                     Text="{x:Bind Artist}"
                                     TextTrimming="CharacterEllipsis" />
                                 <TextBlock
                                     x:Name="AlbumTextBlock"
                                     Margin="0,3,0,0"
+                                    HorizontalAlignment="Left"
                                     VerticalAlignment="center"
                                     FontSize="12"
                                     Foreground="{x:Bind Source.IsPlaying, Converter={StaticResource ColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
-                                    HorizontalTextAlignment="Left"
                                     Text="{x:Bind Source.Album}"
                                     TextTrimming="CharacterEllipsis"
                                     Visibility="Collapsed" />

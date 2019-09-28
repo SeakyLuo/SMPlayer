@@ -36,6 +36,12 @@ namespace SMPlayer
             set => PlaylistInfoGrid.Background = headerBackground = value;
         }
         private Brush headerBackground = ColorHelper.HighlightBrush;
+        public bool HideAlbum
+        {
+            get => HeaderedPlaylist.HideAlbum;
+            set => HeaderedPlaylist.HideAlbum = value;
+        }
+
         public bool IsPlaylist { get; set; }
         private static Dictionary<string, List<MusicDisplayItem>> PlaylistDisplayDict = new Dictionary<string, List<MusicDisplayItem>>();
         private static readonly Random random = new Random();
@@ -130,7 +136,7 @@ namespace SMPlayer
             var scrollViewer = HeaderedPlaylist.ScrollViewer;
 
             // Update the ZIndex of the header container so that the header is above the items when scrolling
-            var headerPresenter = (UIElement)VisualTreeHelper.GetParent(HeaderControl);
+            var headerPresenter = (UIElement)VisualTreeHelper.GetParent(HeaderedPlaylist);
             var headerContainer = (UIElement)VisualTreeHelper.GetParent(headerPresenter);
             Canvas.SetZIndex(headerContainer, 1);
 

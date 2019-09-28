@@ -22,9 +22,32 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class SearchPage : Page
     {
+        public static Stack<string> History = new Stack<string>();
         public SearchPage()
         {
             this.InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            if (e.Parameter is string text)
+            {
+                // User Search
+                MainPage.Instance.SetHeaderText(GetSearchHeader(text, MainPage.Instance.IsMinimal));
+                History.Push(text);
+            }
+            else
+            {
+                // Back to Search Page
+                MainPage.Instance.SetHeaderText(GetSearchHeader(History.Pop(), MainPage.Instance.IsMinimal));
+            }
+        }
+
+        public static string GetSearchHeader(string text, bool isMinimal)
+        {
+            string header = $"\"{text}\"";
+            return isMinimal ? header : $"Search Result of {header}";
         }
     }
 }

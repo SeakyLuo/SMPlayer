@@ -130,6 +130,9 @@
     <Compile Include="ArtistsPage.xaml.cs">
       <DependentUpon>ArtistsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\GridAlbumControl.xaml.cs">
+      <DependentUpon>GridAlbumControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\GridMusicControl.xaml.cs">
       <DependentUpon>GridMusicControl.xaml</DependentUpon>
     </Compile>
@@ -332,6 +335,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ArtistsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\GridAlbumControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
