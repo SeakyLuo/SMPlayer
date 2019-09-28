@@ -25,10 +25,11 @@ namespace SMPlayer
         public RecentPage()
         {
             this.InitializeComponent();
-        }
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
             Setup(Models.Settings.settings.Recent);
+            Models.Settings.settings.Recent.CollectionChanged += (sender, args) =>
+            {
+                GridMusicView.Setup(MusicLibraryPage.ConvertMusicPathToCollection((ICollection<string>)args.NewItems));
+            };
         }
 
         private void Setup(ICollection<string> paths)
@@ -44,6 +45,12 @@ namespace SMPlayer
                 System.Diagnostics.Debug.WriteLine("InvalidOperationException On Local Music Page");
             }
             LoadingProgressBar.Visibility = Visibility.Collapsed;
+        }
+
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            Models.Settings.settings.Recent.Clear();
+            Setup(Models.Settings.settings.Recent);
         }
     }
 }

@@ -72,17 +72,17 @@ namespace SMPlayer.Models
             Sort();
         }
 
-        public async Task<List<MusicDisplayItem>> GetMusicDisplayItems()
+        public async Task<List<MusicDisplayItem>> GetMusicDisplayItemsAsync()
         {
             var result = new List<MusicDisplayItem>();
             foreach (var group in Songs.GroupBy((m) => m.Album))
             {
                 foreach (var music in group)
                 {
-                    var thumbnail = await Helper.GetStorageItemThumbnailAsync(music);
-                    if (thumbnail != null)
+                    var item = await music.GetMusicDisplayItemAsync();
+                    if (!item.IsNull)
                     {
-                        result.Add(new MusicDisplayItem(thumbnail.GetBitmapImage(), await thumbnail.GetDisplayColor()));
+                        result.Add(item);
                         break;
                     }
                 }

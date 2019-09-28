@@ -135,6 +135,7 @@ namespace SMPlayer.Models
         public void Played(Music music)
         {
             if (music == null) return;
+            Recent.Remove(music.Path);
             Recent.Insert(0, music.Path);
         }
     }

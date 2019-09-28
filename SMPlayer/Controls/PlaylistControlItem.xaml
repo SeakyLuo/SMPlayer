@@ -109,10 +109,14 @@
         </StackPanel>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">
-                <VisualState x:Name="Normal" />
-                <VisualState x:Name="Width750">
+                <VisualState x:Name="Normal">
                     <VisualState.StateTriggers>
-                        <triggers:ControlSizeTrigger MinWidth="750" TargetElement="{x:Bind ContentGrid}" />
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="ChangeLayout">
+                    <VisualState.StateTriggers>
+                        <triggers:ControlSizeTrigger MinWidth="800" TargetElement="{x:Bind ContentGrid}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="TitleColumnDefinition.Width" Value="Auto" />

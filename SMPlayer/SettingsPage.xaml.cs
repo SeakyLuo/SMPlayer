@@ -45,7 +45,7 @@ namespace SMPlayer
             StorageFolder folder = await picker.PickSingleFolderAsync();
             if (folder == null || folder.Path == Settings.settings.RootPath) return;
             MainPage.Instance.Loader.Text = "Loading from your music library...";
-            MainPage.Instance.Loader.Visibility = Visibility.Visible;
+            MainPage.Instance.Loader.StartLoading();
             Helper.CurrentFolder = folder;
             Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
             await Settings.settings.Tree.Init(folder, this as TreeInitProgressListener);
@@ -62,7 +62,7 @@ namespace SMPlayer
             MediaHelper.Clear();
             Settings.Save();
             PathBox.Text = folder.Path;
-            MainPage.Instance.Loader.Visibility = Visibility.Collapsed;
+            MainPage.Instance.Loader.FinishLoading();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

@@ -27,7 +27,7 @@ namespace SMPlayer
                 flyout.Items.Add(item);
             return flyout;
         }
-        public MenuFlyoutSubItem GetAddToMenuFlyoutSubItem(string PlaylistName = "")
+        public MenuFlyoutSubItem GetAddToMenuFlyoutSubItem(string playlistName = "")
         {
             MenuFlyoutSubItem addToItem = new MenuFlyoutSubItem()
             {
@@ -35,7 +35,7 @@ namespace SMPlayer
                 Name = AddToSubItemName
             };
             ToolTipService.SetToolTip(addToItem, new ToolTip() { Content = "Add To Playlist" });
-            if (PlaylistName != NowPlaying)
+            if (playlistName != NowPlaying)
             {
                 var nowPlayingItem = new MenuFlyoutItem()
                 {
@@ -51,7 +51,7 @@ namespace SMPlayer
                 };
                 addToItem.Items.Add(nowPlayingItem);
             }
-            if (PlaylistName != MyFavorites)
+            if (playlistName != MyFavorites)
             {
                 var favItem = new MenuFlyoutItem()
                 {
@@ -68,7 +68,7 @@ namespace SMPlayer
                 addToItem.Items.Add(favItem);
             }
             addToItem.Items.Add(new MenuFlyoutSeparator());
-            foreach (var item in GetAddToPlaylistsMenuFlyout(PlaylistName).Items)
+            foreach (var item in GetAddToPlaylistsMenuFlyout(playlistName).Items)
                 addToItem.Items.Add(item);
             return addToItem;
         }

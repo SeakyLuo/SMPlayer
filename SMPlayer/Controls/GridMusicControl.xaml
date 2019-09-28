@@ -71,6 +71,7 @@
                                     HorizontalTextAlignment="Left"
                                     MaxLines="3"
                                     Text="{x:Bind Name}"
+                                    TextTrimming="CharacterEllipsis"
                                     TextWrapping="Wrap" />
                                 <TextBlock
                                     Margin="0,3,0,0"
@@ -78,7 +79,8 @@
                                     FontSize="12"
                                     Foreground="{x:Bind Source.IsPlaying, Converter={StaticResource ColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
                                     HorizontalTextAlignment="Left"
-                                    Text="{x:Bind Artist}" />
+                                    Text="{x:Bind Artist}"
+                                    TextTrimming="CharacterEllipsis" />
                                 <TextBlock
                                     x:Name="AlbumTextBlock"
                                     Margin="0,3,0,0"
@@ -87,6 +89,7 @@
                                     Foreground="{x:Bind Source.IsPlaying, Converter={StaticResource ColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
                                     HorizontalTextAlignment="Left"
                                     Text="{x:Bind Source.Album}"
+                                    TextTrimming="CharacterEllipsis"
                                     Visibility="Collapsed" />
                             </StackPanel>
                             <FontIcon

@@ -317,13 +317,21 @@ namespace SMPlayer
 
     public struct MusicDisplayItem
     {
-        public BitmapImage Thumbnail { get; set; }
-        public Brush Color { get; set; }
+        public BitmapImage Thumbnail { get; private set; }
+        public Brush Color { get; private set; }
+
+        public bool IsNull
+        {
+            get => Thumbnail == null && Color == null;
+        }
+
+        public static MusicDisplayItem DefaultItem = new MusicDisplayItem(Helper.DefaultAlbumCover, ColorHelper.HighlightBrush);
 
         public MusicDisplayItem(BitmapImage bitmap, Brush color)
         {
             Thumbnail = bitmap;
             Color = color;
         }
+
     }
 }

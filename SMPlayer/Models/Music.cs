@@ -157,6 +157,12 @@ namespace SMPlayer.Models
             }
         }
 
+        public async Task<MusicDisplayItem> GetMusicDisplayItemAsync()
+        {
+            var thumbnail = await Helper.GetStorageItemThumbnailAsync(this);
+            return new MusicDisplayItem(thumbnail?.GetBitmapImage(), await thumbnail?.GetDisplayColor());
+        }
+
         int IComparable<Music>.CompareTo(Music other)
         {
             return string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(other.Name) ? 0 : Name.CompareTo(other.Name);

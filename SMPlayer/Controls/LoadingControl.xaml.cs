@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Composition;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -51,6 +53,16 @@ namespace SMPlayer
         public LoadingControl()
         {
             this.InitializeComponent();
+        }
+
+        public void StartLoading()
+        {
+            this.Visibility = Visibility.Visible;
+        }
+
+        public void FinishLoading()
+        {
+            this.Visibility = Visibility.Visible;
         }
     }
 }

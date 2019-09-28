@@ -72,10 +72,10 @@ namespace SMPlayer
         private void OpenPlaylistFlyout(object sender, object e)
         {
             var flyout = sender as MenuFlyout;
+            MenuFlyoutHelper.SetPlaylistMenu(sender);
             FolderTree tree = null;
             if (flyout.Target.DataContext is GridFolderView gridFolderView) tree = gridFolderView.Tree;
             else if (flyout.Target.DataContext is TreeViewNode node) tree = node.Content as FolderTree;
-            MenuFlyoutHelper.SetPlaylistMenu(sender);
             var showInExplorerItem = MenuFlyoutHelper.ShowInExplorerItem;
             ToolTipService.SetToolTip(showInExplorerItem, new ToolTip() { Content = "Show In Explorer" });
             showInExplorerItem.Click += async (s, args) =>
@@ -111,7 +111,7 @@ namespace SMPlayer
         {
             var data = (sender as Button).DataContext as GridFolderView;
             var helper = new MenuFlyoutHelper() { Data = data.Songs, DefaultPlaylistName = data.Name };
-            helper.GetAddToPlaylistsMenuFlyout().ShowAt(sender as FrameworkElement);
+            helper.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
         }
 
         public void ModeChanged(bool isGridView)

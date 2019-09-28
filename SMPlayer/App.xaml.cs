@@ -44,6 +44,7 @@ namespace SMPlayer
         protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
             await Settings.Init();
+            await MusicLibraryPage.Init();
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -82,7 +83,6 @@ namespace SMPlayer
                 Window.Current.Activate();
             }
             Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
-            await MusicLibraryPage.Init();
             MediaHelper.Init();
             Window.Current.VisibilityChanged += CheckLibrary;
 

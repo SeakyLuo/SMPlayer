@@ -17,8 +17,8 @@
                 <Grid
                     x:Name="PlaylistInfoGrid"
                     Padding="10"
-                    Loaded="PlaylistInfoGrid_Loaded"
-                    Background="{ThemeResource SystemColorHighlightColor}">
+                    Background="{ThemeResource SystemColorHighlightColor}"
+                    Loaded="PlaylistInfoGrid_Loaded">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -29,6 +29,12 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+                    <!--<Rectangle x:Name="BackgroundRectangle" Height="300" Width="1050" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                        <Rectangle.Fill>
+                            <ImageBrush x:Name="BackgroundImage" ImageSource="ms-appx:///Assets/Abstract/Abstract-4.jpg" Stretch="UniformToFill" Opacity="0.6"/>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <Rectangle x:Name="OverlayRectangle" Fill="#BFCFB5C0" Width="1050" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top"/>-->
                     <Image
                         x:Name="PlaylistCover"
                         Grid.RowSpan="3"
@@ -45,6 +51,7 @@
                         Foreground="White"
                         MaxLines="2"
                         Style="{StaticResource HeaderTextBlockStyle}"
+                        TextTrimming="CharacterEllipsis"
                         ToolTipService.ToolTip="{x:Bind PlaylistNameTextBlock.Text, Mode=OneWay}" />
                     <TextBlock
                         x:Name="PlaylistInfoTextBlock"

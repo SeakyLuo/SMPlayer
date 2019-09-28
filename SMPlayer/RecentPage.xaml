@@ -6,7 +6,6 @@
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    Loaded="Page_Loaded"
     mc:Ignorable="d">
 
     <Grid>
@@ -34,6 +33,7 @@
                     Visibility="Collapsed" />
             </CommandBar.Content>
             <AppBarButton
+                Click="ClearButton_Click"
                 Icon="Clear"
                 Label="Clear All"
                 ToolTipService.ToolTip="Clear History" />

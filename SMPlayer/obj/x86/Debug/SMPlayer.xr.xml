@@ -353,6 +353,7 @@
       <RootProperty Name="Value" />
     </RootType>
     <RootType FullName="SMPlayer.AlbumsPage" />
+    <RootType FullName="SMPlayer.ArtistPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.ListViewItem" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.MasterDetailsView">
       <RootProperty Name="BackButtonBehavior" />
@@ -478,7 +479,6 @@
       <RootProperty Name="ScaleY" />
     </RootType>
     <RootType FullName="SMPlayer.ArtistsPage" />
-    <RootType FullName="SMPlayer.Controls.ArtistPage" />
     <RootType FullName="Windows.UI.Xaml.AdaptiveTrigger">
       <RootProperty Name="MinWindowWidth" />
     </RootType>

@@ -21,6 +21,7 @@ using Windows.UI.Composition;
 using Windows.UI.Xaml.Hosting;
 using ExpressionBuilder;
 using EF = ExpressionBuilder.ExpressionFunctions;
+using System.Threading.Tasks;
 
 //https://go.microsoft.com/fwlink/?LinkId=234236 上介绍了“用户控件”项模板
 
@@ -45,7 +46,7 @@ namespace SMPlayer
             this.InitializeComponent();
         }
 
-        public async System.Threading.Tasks.Task SetMusicCollection(Playlist playlist)
+        public async Task SetMusicCollection(Playlist playlist)
         {
             MusicCollection = playlist;
             HeaderedPlaylist.ItemsSource = playlist.Songs;
@@ -55,14 +56,22 @@ namespace SMPlayer
             AddToButton.IsEnabled = playlist.Songs.Count != 0;
             RenameButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
             DeleteButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
-            if (!PlaylistDisplayDict.TryGetValue(playlist.Name, out List<MusicDisplayItem> MusicDisplayItems))
+            MusicDisplayItem item;
+            if (PlaylistDisplayDict.TryGetValue(playlist.Name, out List<MusicDisplayItem> MusicDisplayItems))
             {
-                MusicDisplayItems = await playlist.GetMusicDisplayItems();
-                if (MusicDisplayItems.Count == 0)
-                    MusicDisplayItems = new List<MusicDisplayItem>() { new MusicDisplayItem(Helper.DefaultAlbumCover, ColorHelper.HighlightBrush) };
-                PlaylistDisplayDict[playlist.Name] = MusicDisplayItems;
+                item = MusicDisplayItems[random.Next(MusicDisplayItems.Count)];
             }
-            var item = MusicDisplayItems[random.Next(MusicDisplayItems.Count)];
+            else
+            {
+                MusicDisplayItems = await playlist.GetMusicDisplayItemsAsync();
+                if (MusicDisplayItems.Count == 0)
+                    item = MusicDisplayItem.DefaultItem;
+                else
+                {
+                    PlaylistDisplayDict[playlist.Name] = MusicDisplayItems;
+                    item = MusicDisplayItems[random.Next(MusicDisplayItems.Count)];
+                }
+            }
             PlaylistCover.Source = item.Thumbnail;
             HeaderBackground = item.Color;
         }

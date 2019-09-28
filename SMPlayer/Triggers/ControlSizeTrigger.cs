@@ -10,43 +10,24 @@ namespace SMPlayer.Triggers
 {
     class ControlSizeTrigger : StateTriggerBase
     {
-        static SortedSet<double> MinHeights = new SortedSet<double>();
-        static SortedSet<double> MinWidths = new SortedSet<double>();
         //private variables
-        private double _minHeight = -1, _minWidth = -1;
+        private double _minWidth = -1, _minHeight = -1;
         private FrameworkElement _targetElement;
         private double _currentHeight, _currentWidth;
         //public properties to set from XAML
         public double MinHeight
         {
-            get
-            {
-                return _minHeight;
-            }
-            set
-            {
-                MinHeights.Add(value);
-                _minHeight = value;
-            }
+            get => _minHeight;
+            set => _minHeight = value;
         }
         public double MinWidth
         {
-            get
-            {
-                return _minWidth;
-            }
-            set
-            {
-                MinWidths.Add(value);
-                _minWidth = value;
-            }
+            get => _minWidth;
+            set => _minWidth = value;
         }
         public FrameworkElement TargetElement
         {
-            get
-            {
-                return _targetElement;
-            }
+            get => _targetElement;
             set
             {
                 if (_targetElement != null)
@@ -76,13 +57,13 @@ namespace SMPlayer.Triggers
                     SetActive((_currentHeight <= _minHeight) && (_currentWidth <= _minWidth));
                 }
                 //if only one of them is set, then only that condition needs to be satisfied
-                else if (_minWidth > 0)
+                else if (_minWidth >= 0)
                 {
-                    SetActive(MinWidths.FirstOrDefault((m) => _currentWidth < m) == _minWidth);
+                    SetActive(_currentWidth <= _minWidth);
                 }
                 else
                 {
-                    SetActive(MinHeights.FirstOrDefault((m) => _currentHeight < m) == _minHeight);
+                    SetActive(_currentHeight <= _minHeight);
                 }
             }
             else

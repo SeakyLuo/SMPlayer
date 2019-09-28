@@ -305,7 +305,8 @@ namespace SMPlayer
                     MainNavigationView.SelectedItem = PlaylistsItem;
                     break;
                 case "MyFavoritesPage":
-                    HeaderGrid.Visibility = Visibility.Collapsed;
+                    SetHeaderText("");
+                    HeaderGrid.Visibility = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? Visibility.Visible : Visibility.Collapsed;
                     MainNavigationView.SelectedItem = MyFavoritesItem;
                     break;
                 case "SearchPage":
