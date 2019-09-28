@@ -46,7 +46,7 @@
     <RootPropertyPathName Name="DragItemsCount" />
     <RootPropertyPathName Name="Content" />
     <RootPropertyPathName Name="Directory" />
-    <RootPropertyPathName Name="HideAlbum" />
+    <RootPropertyPathName Name="ShowAlbumText" />
     <RootPropertyPathName Name="KeyboardAcceleratorTextMinWidth" />
     <RootPropertyPathName Name="PlayCount" />
     <RootPropertyPathName Name="Favorite" />
@@ -198,8 +198,8 @@
       <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="SMPlayer.HeaderedPlaylistControl">
-      <RootProperty Name="HideAlbum" />
       <RootProperty Name="IsPlaylist" />
+      <RootProperty Name="ShowAlbumText" />
       <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="SMPlayer.AlbumPage" />
@@ -580,7 +580,7 @@
     </RootType>
     <RootType FullName="SMPlayer.Controls.PlaylistControlItem">
       <RootProperty Name="DataContext" />
-      <RootProperty Name="HideAlbum" />
+      <RootProperty Name="ShowAlbumText" />
       <RootProperty Name="ContextFlyout" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ScrollViewer">

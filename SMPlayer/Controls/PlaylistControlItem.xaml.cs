@@ -19,12 +19,12 @@ namespace SMPlayer.Controls
 {
     public sealed partial class PlaylistControlItem : UserControl
     {
-        public bool HideAlbum
+        public bool ShowAlbumText
         {
-            get => (bool)GetValue(HideAlbumProperty);
-            set => SetValue(HideAlbumProperty, value);
+            get => (bool)GetValue(ShowAlbumTextProperty);
+            set => SetValue(ShowAlbumTextProperty, value);
         }
-        public static readonly DependencyProperty HideAlbumProperty = DependencyProperty.Register("HideAlbum", typeof(bool), typeof(PlaylistControlItem), new PropertyMetadata(null));
+        public static readonly DependencyProperty ShowAlbumTextProperty = DependencyProperty.Register("ShowAlbumText", typeof(bool), typeof(PlaylistControlItem), new PropertyMetadata(true));
         public PlaylistControlItem()
         {
             this.InitializeComponent();

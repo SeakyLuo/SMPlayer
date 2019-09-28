@@ -63,7 +63,7 @@
             Content="{Binding Album}"
             Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
             Style="{StaticResource TextButtonStyle}"
-            Visibility="{x:Bind HideAlbum, Converter={StaticResource VisibilityConverter}, ConverterParameter=f}" />
+            Visibility="{x:Bind ShowAlbumText, Converter={StaticResource VisibilityConverter}}" />
         <TextBlock
             x:Name="DurationTextBlock"
             Grid.Row="0"
@@ -96,7 +96,7 @@
                 VerticalAlignment="Center"
                 Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
                 Text="•"
-                Visibility="{x:Bind HideAlbum, Converter={StaticResource VisibilityConverter}, ConverterParameter=f}" />
+                Visibility="{x:Bind ShowAlbumText, Converter={StaticResource VisibilityConverter}}" />
             <HyperlinkButton
                 x:Name="LongAlbumTextButton"
                 Grid.Row="0"
@@ -107,7 +107,7 @@
                 Content="{Binding Album}"
                 Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
                 Style="{StaticResource TextButtonStyle}"
-                Visibility="{x:Bind HideAlbum, Converter={StaticResource VisibilityConverter}, ConverterParameter=f}" />
+                Visibility="{x:Bind ShowAlbumText, Converter={StaticResource VisibilityConverter}}" />
         </StackPanel>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">

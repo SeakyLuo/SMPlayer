@@ -10,6 +10,6 @@
 
     <local:HeaderedPlaylistControl
         x:Name="AlbumPlaylistControl"
-        HideAlbum="False"
-        IsPlaylist="False" />
+        IsPlaylist="False"
+        ShowAlbumText="False" />
 </Page>

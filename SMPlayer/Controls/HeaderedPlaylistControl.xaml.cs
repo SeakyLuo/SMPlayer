@@ -36,10 +36,10 @@ namespace SMPlayer
             set => PlaylistInfoGrid.Background = headerBackground = value;
         }
         private Brush headerBackground = ColorHelper.HighlightBrush;
-        public bool HideAlbum
+        public bool ShowAlbumText
         {
-            get => HeaderedPlaylist.HideAlbum;
-            set => HeaderedPlaylist.HideAlbum = value;
+            get => HeaderedPlaylist.ShowAlbumText;
+            set => HeaderedPlaylist.ShowAlbumText = value;
         }
 
         public bool IsPlaylist { get; set; }

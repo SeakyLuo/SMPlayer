@@ -69,7 +69,7 @@
                             </SwipeItem>
                         </SwipeItems>
                     </SwipeControl.RightItems>
-                    <local:PlaylistControlItem DataContext="{x:Bind}" HideAlbum="{Binding HideAlbum}">
+                    <local:PlaylistControlItem DataContext="{x:Bind}" ShowAlbumText="{Binding ShowAlbumText}">
                         <local:PlaylistControlItem.ContextFlyout>
                             <MenuFlyout Opening="OpenMusicMenuFlyout" />
                         </local:PlaylistControlItem.ContextFlyout>

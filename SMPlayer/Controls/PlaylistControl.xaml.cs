@@ -76,12 +76,12 @@ namespace SMPlayer
             }
         }
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
-        public bool HideAlbum
+        public bool ShowAlbumText
         {
-            get => (bool)GetValue(HideAlbumProperty);
-            set => SetValue(HideAlbumProperty, value);
+            get => (bool)GetValue(ShowAlbumTextProperty);
+            set => SetValue(ShowAlbumTextProperty, value);
         }
-        public static readonly DependencyProperty HideAlbumProperty = DependencyProperty.Register("HideAlbum", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(null));
+        public static readonly DependencyProperty ShowAlbumTextProperty = DependencyProperty.Register("ShowAlbumText", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(true));
 
         public ScrollViewer ScrollViewer
         {

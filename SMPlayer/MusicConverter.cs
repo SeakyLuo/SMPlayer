@@ -116,7 +116,7 @@ namespace SMPlayer
             else if (value is int) collapsed = value.Equals(0);
             else if (value is Visibility) collapsed = value.Equals(Visibility.Visible);
             else collapsed = value == null;
-            return collapsed ^ !string.IsNullOrEmpty(parameter as string) ? Visibility.Collapsed : Visibility.Visible;
+            return collapsed ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
