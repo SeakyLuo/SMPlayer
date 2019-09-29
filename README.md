@@ -38,6 +38,8 @@ Mini play.
 
 Artist Page.
 
+Improved IconTextButton PointerOverStyle.
+
 # TO FIX
 
 Bad performance when given many music files.

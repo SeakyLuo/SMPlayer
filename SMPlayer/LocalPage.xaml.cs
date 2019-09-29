@@ -192,6 +192,7 @@ namespace SMPlayer
             if (History.Count == 0) return;
             var tree = History.Peek();
             var menu = sender as MenuFlyout;
+            menu.Items.Clear();
             var helper = new MenuFlyoutHelper()
             {
                 Data = tree.Files,

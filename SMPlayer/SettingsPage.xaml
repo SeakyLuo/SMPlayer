@@ -213,10 +213,13 @@
                 </Button.Flyout>
             </Button>
             <HyperlinkButton
-                Margin="9"
+                Margin="9,0"
                 Content="Show All Keyboard Shortcuts"
                 Style="{StaticResource TextBlockButtonStyle}" />
-
+            <HyperlinkButton
+                Margin="9,0"
+                Content="Bug Report"
+                Style="{StaticResource TextBlockButtonStyle}" />
         </StackPanel>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">
