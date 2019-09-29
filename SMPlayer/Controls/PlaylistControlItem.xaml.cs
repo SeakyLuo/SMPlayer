@@ -22,7 +22,11 @@ namespace SMPlayer.Controls
         public bool ShowAlbumText
         {
             get => (bool)GetValue(ShowAlbumTextProperty);
-            set => SetValue(ShowAlbumTextProperty, value);
+            set
+            {
+                SetValue(ShowAlbumTextProperty, value);
+                AlbumTextButton.Visibility = LongArtistAlbumPanelDot.Visibility = LongArtistTextButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
         public static readonly DependencyProperty ShowAlbumTextProperty = DependencyProperty.Register("ShowAlbumText", typeof(bool), typeof(PlaylistControlItem), new PropertyMetadata(true));
         public PlaylistControlItem()

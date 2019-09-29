@@ -114,14 +114,14 @@
                                         </Button.Flyout>
                                     </Button>
                                     <ProgressBar
-                                        Width="1000"
+                                        Width="1200"
                                         Margin="20,5"
                                         IsIndeterminate="True"
                                         RelativePanel.AlignBottomWithPanel="True"
                                         Visibility="{x:Bind IsUnloaded, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
                                     <!--  Separator  -->
                                     <Border
-                                        Width="1000"
+                                        Width="1200"
                                         Height="1"
                                         Margin="80,0"
                                         HorizontalAlignment="Stretch"

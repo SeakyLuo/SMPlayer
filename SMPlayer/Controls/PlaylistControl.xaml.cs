@@ -114,7 +114,7 @@ namespace SMPlayer
             {
                 ScrollViewer.ViewChanged += (s, args) =>
                 {
-                    var viewer = sender as ScrollViewer;
+                    var viewer = s as ScrollViewer;
                     if (ScrollListener != null) ScrollListener.Scrolled(ScrollPosition, viewer.VerticalOffset);
                     ScrollPosition = viewer.VerticalOffset;
                 };

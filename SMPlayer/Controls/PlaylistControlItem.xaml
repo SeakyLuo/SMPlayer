@@ -62,8 +62,7 @@
             Click="Album_Click"
             Content="{Binding Album}"
             Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
-            Style="{StaticResource TextButtonStyle}"
-            Visibility="{x:Bind ShowAlbumText, Converter={StaticResource VisibilityConverter}}" />
+            Style="{StaticResource TextButtonStyle}" />
         <TextBlock
             x:Name="DurationTextBlock"
             Grid.Row="0"
@@ -91,12 +90,12 @@
                 Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
                 Style="{StaticResource TextButtonStyle}" />
             <TextBlock
+                x:Name="LongArtistAlbumPanelDot"
                 Margin="5,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
-                Text="•"
-                Visibility="{x:Bind ShowAlbumText, Converter={StaticResource VisibilityConverter}}" />
+                Text="•" />
             <HyperlinkButton
                 x:Name="LongAlbumTextButton"
                 Grid.Row="0"
@@ -106,8 +105,7 @@
                 Click="Album_Click"
                 Content="{Binding Album}"
                 Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
-                Style="{StaticResource TextButtonStyle}"
-                Visibility="{x:Bind ShowAlbumText, Converter={StaticResource VisibilityConverter}}" />
+                Style="{StaticResource TextButtonStyle}" />
         </StackPanel>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">
@@ -118,7 +116,7 @@
                 </VisualState>
                 <VisualState x:Name="ChangeLayout">
                     <VisualState.StateTriggers>
-                        <triggers:ControlSizeTrigger MinWidth="800" TargetElement="{x:Bind ContentGrid}" />
+                        <triggers:ControlSizeTrigger MinWidth="800" TargetElement="{Binding ContentGrid}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="TitleColumnDefinition.Width" Value="Auto" />

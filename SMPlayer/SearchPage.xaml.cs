@@ -33,6 +33,7 @@ namespace SMPlayer
         public SearchPage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -57,13 +58,13 @@ namespace SMPlayer
 
         public void SearchArtists(string text)
         {
-            Artists = MusicLibraryPage.AllSongs.Where((m) => m.Artist.Contains(text)).Select((m) => m.Artist).ToHashSet().OrderBy((s) => s).ToList();
+            Artists = MusicLibraryPage.AllSongs.Where((m) => IsTargetArtist(m, text)).Select((m) => m.Artist).ToHashSet().OrderBy((s) => s).ToList();
         }
 
         public void SearchAlbums(string text)
         {
             Albums.Clear();
-            foreach (var group in MusicLibraryPage.AllSongs.Where((m) => m.Album.Contains(text) || m.Artist.Contains(text)).GroupBy((m) => m.Album))
+            foreach (var group in MusicLibraryPage.AllSongs.Where((m) => IsTargetAlbum(m, text)).GroupBy((m) => m.Album))
             {
                 Music music = group.ElementAt(0);
                 Albums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy((m) => m.Name).ThenBy((m) => m.Artist)));
@@ -75,31 +76,49 @@ namespace SMPlayer
             LimitedSongs.Clear();
             foreach (var music in MusicLibraryPage.AllSongs)
             {
-                if (IsTarget(music, text))
+                if (IsTargetMusic(music, text))
                     LimitedSongs.Add(music);
                 if (LimitedSongs.Count == 5)
                     break;
             }
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
             {
-                MusicLibraryPage.AllSongs.Where((music) => IsTarget(music, text)).ToList().ForEach((m) => Songs.Add(m));
+                MusicLibraryPage.AllSongs.Where((music) => IsTargetMusic(music, text)).ToList().ForEach((m) => Songs.Add(m));
             });
         }
 
         public void SearchPlaylists(string text)
         {
-            Playlists = PlaylistsPage.Playlists.Where((playlist) => playlist.Name.Contains(text) || playlist.Songs.Any((music) => IsTarget(music, text))).ToList();
+            Playlists = PlaylistsPage.Playlists.Where((playlist) => IsTargetPlaylist(playlist, text)).ToList();
         }
 
-        public bool IsTarget(Music music, string text)
+        public static bool IsTargetArtist(Music music, string text)
         {
-            return music.Name.Contains(text) || music.Album.Contains(text) || music.Artist.Contains(text);
+            return music.Name.ToLower().Contains(text) || music.Album.ToLower().Contains(text) || music.Artist.ToLower().Contains(text);
+        }
+        public static bool IsTargetAlbum(Music music, string text)
+        {
+            return music.Album.ToLower().Contains(text) || music.Artist.ToLower().Contains(text);
+        }
+        public static bool IsTargetMusic(Music music, string text)
+        {
+            return music.Name.ToLower().Contains(text) || music.Album.ToLower().Contains(text) || music.Artist.ToLower().Contains(text);
+        }
+
+        public static bool IsTargetPlaylist(Playlist playlist, string text)
+        {
+            return playlist.Name.Contains(text) || playlist.Songs.Any((music) => IsTargetMusic(music, text));
         }
 
         public static string GetSearchHeader(string text, bool isMinimal)
         {
             string header = $"\"{text}\"";
             return isMinimal ? header : $"Search Result of {header}";
+        }
+
+        private void ViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+
         }
     }
 }

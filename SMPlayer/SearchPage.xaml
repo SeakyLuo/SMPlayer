@@ -28,7 +28,8 @@
                     Foreground="{StaticResource SystemColorHighlightColor}"
                     Icon="ViewAll"
                     Label="View All"
-                    RelativePanel.AlignRightWithPanel="True" />
+                    RelativePanel.AlignRightWithPanel="True"
+                    Tapped="ViewAllButton_Tapped" />
             </RelativePanel>
             <controls:Carousel
                 x:Name="SearchArtistsView"
@@ -81,7 +82,8 @@
                     Foreground="{StaticResource SystemColorHighlightColor}"
                     Icon="ViewAll"
                     Label="View All"
-                    RelativePanel.AlignRightWithPanel="True" />
+                    RelativePanel.AlignRightWithPanel="True"
+                    Tapped="ViewAllButton_Tapped" />
             </RelativePanel>
             <controls:Carousel
                 x:Name="SearchAlbumView"
@@ -105,7 +107,8 @@
                     Foreground="{StaticResource SystemColorHighlightColor}"
                     Icon="ViewAll"
                     Label="View All"
-                    RelativePanel.AlignRightWithPanel="True" />
+                    RelativePanel.AlignRightWithPanel="True"
+                    Tapped="ViewAllButton_Tapped" />
             </RelativePanel>
             <local:PlaylistControl
                 x:Name="SearchMusicView"
@@ -123,7 +126,8 @@
                     Foreground="{StaticResource SystemColorHighlightColor}"
                     Icon="ViewAll"
                     Label="View All"
-                    RelativePanel.AlignRightWithPanel="True" />
+                    RelativePanel.AlignRightWithPanel="True"
+                    Tapped="ViewAllButton_Tapped" />
             </RelativePanel>
             <controls:Carousel
                 x:Name="SearchPlaylistView"

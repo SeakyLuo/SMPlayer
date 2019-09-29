@@ -10,6 +10,7 @@
     <RootPropertyPathName Name="Album" />
     <RootPropertyPathName Name="IsPlaying" />
     <RootPropertyPathName Name="Duration" />
+    <RootPropertyPathName Name="ContentGrid" />
     <RootPropertyPathName Name="PlaceholderForeground" />
     <RootPropertyPathName Name="ScrollableWidth" />
     <RootPropertyPathName Name="IsCloseButtonOverlay" />
