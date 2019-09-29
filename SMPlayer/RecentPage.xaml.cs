@@ -28,16 +28,16 @@ namespace SMPlayer
             Setup(Models.Settings.settings.Recent);
             Models.Settings.settings.Recent.CollectionChanged += (sender, args) =>
             {
-                GridMusicView.Setup(MusicLibraryPage.ConvertMusicPathToCollection((ICollection<string>)args.NewItems));
+                Setup(Models.Settings.settings.Recent);
             };
         }
 
-        private void Setup(ICollection<string> paths)
+        private async void Setup(ICollection<string> paths)
         {
             LoadingProgressBar.Visibility = Visibility.Visible;
             try
             {
-                GridMusicView.Setup(MusicLibraryPage.ConvertMusicPathToCollection(paths));
+                await GridMusicView.Setup(MusicLibraryPage.ConvertMusicPathToCollection(paths));
             }
             catch (InvalidOperationException)
             {
@@ -50,7 +50,6 @@ namespace SMPlayer
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
             Models.Settings.settings.Recent.Clear();
-            Setup(Models.Settings.settings.Recent);
         }
     }
 }

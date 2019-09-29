@@ -40,7 +40,11 @@
                 <NavigationViewItem
                     x:Name="LocalSongsItem"
                     Content="Songs"
-                    Icon="MusicInfo" />
+                    Icon="MusicInfo">
+                    <NavigationViewItem.ContextFlyout>
+                        <MenuFlyout Opening="MenuFlyout_Opening" />
+                    </NavigationViewItem.ContextFlyout>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
             <NavigationView.PaneFooter>
                 <StackPanel Orientation="Horizontal">

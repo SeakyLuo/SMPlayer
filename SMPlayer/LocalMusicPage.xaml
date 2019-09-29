@@ -19,7 +19,10 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Rectangle x:Name="LoadingPlaceHolder" Height="4" />
-        <ProgressBar x:Name="LoadingProgressBar" IsIndeterminate="True" />
+        <ProgressBar
+            x:Name="LoadingProgressBar"
+            IsIndeterminate="True"
+            Visibility="Collapsed" />
         <local:GridMusicControl
             x:Name="GridMusicView"
             Grid.Row="1"

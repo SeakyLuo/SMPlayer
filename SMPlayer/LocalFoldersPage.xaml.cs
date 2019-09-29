@@ -76,16 +76,7 @@ namespace SMPlayer
             FolderTree tree = null;
             if (flyout.Target.DataContext is GridFolderView gridFolderView) tree = gridFolderView.Tree;
             else if (flyout.Target.DataContext is TreeViewNode node) tree = node.Content as FolderTree;
-            var showInExplorerItem = MenuFlyoutHelper.ShowInExplorerItem;
-            ToolTipService.SetToolTip(showInExplorerItem, new ToolTip() { Content = "Show In Explorer" });
-            showInExplorerItem.Click += async (s, args) =>
-            {
-                var folder = await Windows.Storage.StorageFolder.GetFolderFromPathAsync(tree.Path);
-                var options = new Windows.System.FolderLauncherOptions();
-                options.ItemsToSelect.Add(folder);
-                await Windows.System.Launcher.LaunchFolderAsync(folder, options);
-            };
-            flyout.Items.Add(showInExplorerItem);
+            flyout.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(tree.Path, Windows.Storage.StorageItemTypes.Folder));
         }
         private void OpenMusicFlyout(object sender, object e)
         {

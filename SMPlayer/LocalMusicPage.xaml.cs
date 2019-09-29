@@ -42,14 +42,14 @@ namespace SMPlayer
             ModeChanged(Settings.settings.LocalMusicGridView);
         }
 
-        private void Setup(FolderTree tree)
+        private async void Setup(FolderTree tree)
         {
             if (Tree == tree) return;
             Tree = tree;
             LoadingProgressBar.Visibility = Visibility.Visible;
             try
             {
-                GridMusicView.Setup(tree.Files);
+                await GridMusicView.Setup(tree.Files);
                 Songs.Clear();
                 foreach (var music in GridMusicView.MusicCollection)
                     Songs.Add(music);

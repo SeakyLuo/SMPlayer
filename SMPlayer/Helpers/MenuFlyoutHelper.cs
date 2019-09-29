@@ -124,13 +124,36 @@ namespace SMPlayer
             flyout.Items.Add(GetAddToMenuFlyoutSubItem());
             return flyout;
         }
-        public static MenuFlyoutItem ShowInExplorerItem
+        public static MenuFlyoutItem GetShowInExplorerItem(string path, StorageItemTypes type)
         {
-            get => new MenuFlyoutItem()
+            var item = new MenuFlyoutItem()
             {
                 Icon = new FontIcon() { Glyph = "\uE838" },
                 Text = "Show In Explorer"
             };
+            item.Click += async (s, args) =>
+            {
+                var options = new Windows.System.FolderLauncherOptions();
+                StorageFolder folder;
+                switch (type)
+                {
+                    case StorageItemTypes.File:
+                        var file = await StorageFile.GetFileFromPathAsync(path);
+                        options.ItemsToSelect.Add(file);
+                        folder = await file.GetParentAsync();
+                        break;
+                    case StorageItemTypes.Folder:
+                        folder = await StorageFolder.GetFolderFromPathAsync(path);
+                        options.ItemsToSelect.Add(folder);
+                        break;
+                    case StorageItemTypes.None:
+                    default:
+                        return;
+                }
+                await Windows.System.Launcher.LaunchFolderAsync(folder, options);
+            };
+            ToolTipService.SetToolTip(item, new ToolTip() { Content = "Show In Explorer" });
+            return item;
         }
         public MenuFlyout GetMusicMenuFlyout(MenuFlyoutItemClickListener listener = null)
         {
@@ -149,16 +172,7 @@ namespace SMPlayer
             };
             flyout.Items.Add(playItem);
             flyout.Items.Add(GetAddToMenuFlyoutSubItem());
-            var showInExplorerItem = ShowInExplorerItem;
-            showInExplorerItem.Click += async (s, args) =>
-            {
-                var file = await StorageFile.GetFileFromPathAsync(music.Path);
-                var options = new Windows.System.FolderLauncherOptions();
-                options.ItemsToSelect.Add(file);
-                await Windows.System.Launcher.LaunchFolderAsync(await file.GetParentAsync(), options);
-            };
-            ToolTipService.SetToolTip(showInExplorerItem, new ToolTip() { Content = "Show In Explorer" });
-            flyout.Items.Add(showInExplorerItem);
+            flyout.Items.Add(GetShowInExplorerItem(music.Path, StorageItemTypes.File));
             var deleteItem = new MenuFlyoutItem()
             {
                 Icon = new SymbolIcon(Symbol.Delete),

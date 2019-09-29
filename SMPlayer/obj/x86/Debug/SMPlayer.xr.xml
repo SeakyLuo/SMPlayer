@@ -903,6 +903,7 @@
       <RootProperty Name="Icon" />
       <RootProperty Name="Style" />
       <RootProperty Name="Content" />
+      <RootProperty Name="ContextFlyout" />
       <RootProperty Name="Tag" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.NavigationViewItemPresenter">

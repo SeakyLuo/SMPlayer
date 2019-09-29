@@ -186,6 +186,20 @@ namespace SMPlayer
             History.Clear();
             SetPage(Settings.settings.Tree, false);
         }
+
+        private void MenuFlyout_Opening(object sender, object e)
+        {
+            if (History.Count == 0) return;
+            var tree = History.Peek();
+            var menu = sender as MenuFlyout;
+            var helper = new MenuFlyoutHelper()
+            {
+                Data = tree.Files,
+                DefaultPlaylistName = tree.Directory
+            };
+            menu.Items.Add(helper.GetAddToMenuFlyoutSubItem());
+            menu.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(tree.Path, StorageItemTypes.Folder));
+        }
     }
     public interface LocalSetter
     {

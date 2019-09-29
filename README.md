@@ -40,10 +40,10 @@ Artist Page.
 
 # TO FIX
 
-IsPlaying.
-
 Bad performance when given many music files.
 
 Bad performance of Loading NowPlayingFull.
 
 CommandBar of Playlist.
+
+Shuffle.

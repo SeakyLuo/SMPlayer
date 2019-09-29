@@ -35,18 +35,17 @@ namespace SMPlayer
             MediaHelper.SetMusicAndPlay(MusicCollection, item.Source);
         }
 
-        public async void Setup(ICollection<Music> collection)
+        public async System.Threading.Tasks.Task Setup(ICollection<Music> collection)
         {
+            MusicCollection = collection.ToList();
             GridMusicCollection.Clear();
-            MusicCollection.Clear();
-            foreach (var file in collection)
+            foreach (var music in collection)
             {
-                var copy = file.Copy();
+                var copy = music.Copy();
                 copy.IsPlaying = copy.Equals(MediaHelper.CurrentMusic);
                 GridMusicView gridItem = new GridMusicView();
                 await gridItem.Init(copy);
                 GridMusicCollection.Add(gridItem);
-                MusicCollection.Add(copy);
             }
         }
 
