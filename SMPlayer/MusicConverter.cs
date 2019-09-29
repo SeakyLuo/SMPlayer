@@ -175,24 +175,6 @@ namespace SMPlayer
         }
     }
 
-    class ArtistAlbumInfoConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            if (value is ICollection<AlbumView>)
-            {
-                var list = (ICollection<AlbumView>)value;
-                return $"Albums: {list.Count()} • Songs: {list.Sum((a) => a.Songs.Count)}";
-            }
-            return "";
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            return null;
-        }
-    }
-
     class SongCountConverter : IValueConverter
     {
         public static string ToStr(object value)

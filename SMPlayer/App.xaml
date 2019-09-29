@@ -61,7 +61,6 @@
             <local:MusicFavoriteConverter x:Key="MusicFavoriteConverter" />
             <local:IntConverter x:Key="IntConverter" />
             <local:VisibilityConverter x:Key="VisibilityConverter" />
-            <local:ArtistAlbumInfoConverter x:Key="ArtistAlbumInfoConverter" />
             <local:MusicIsPlayingConverter x:Key="MusicIsPlayingConverter" />
             <local:PlaylistRowColorConverter x:Key="PlaylistRowColorConverter" />
             <local:ColorConverter x:Key="ColorConverter" />

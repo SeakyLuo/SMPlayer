@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,18 +10,43 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMPlayer.Models
 {
-    class AlbumView
+    public class AlbumView : INotifyPropertyChanged
     {
         public string Name { get; set; }
         public string Artist { get; set; }
-        public BitmapImage Cover { get; set; }
         public ObservableCollection<Music> Songs { get; set; }
-        public AlbumView(string Name, string Artist, BitmapImage Cover, IEnumerable<Music> Songs)
+        public BitmapImage Cover
+        {
+            get => thumbnail;
+            set
+            {
+                if (value == null) return;
+                thumbnail = value;
+                OnPropertyChanged();
+            }
+        }
+        private BitmapImage thumbnail = null;
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+        public AlbumView(string Name, string Artist, IEnumerable<Music> Songs)
         {
             this.Name = string.IsNullOrEmpty(Name) ? "Unknown Album" : Name;
             this.Artist = string.IsNullOrEmpty(Artist) ? "Unknown Artist" : Artist;
-            this.Cover = Cover;
             this.Songs = new ObservableCollection<Music>(Songs);
+            FindThumbnail();
+        }
+
+        public async void FindThumbnail()
+        {
+            foreach (var music in Songs)
+                if ((Cover = await Helper.GetThumbnailAsync(music, false)) != null)
+                    break;
+            if (Cover == null) Cover = Helper.DefaultAlbumCover;
+        }
+        public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            // Raise the PropertyChanged event, passing the name of the property whose value has changed.
+            this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public override bool Equals(object obj)

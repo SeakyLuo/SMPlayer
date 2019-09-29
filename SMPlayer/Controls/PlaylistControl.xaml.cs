@@ -101,23 +101,25 @@ namespace SMPlayer
             CurrentTheme = Theme;
         }
 
-        private bool ViewChangedUnadded = true;
         private void PlaylistController_Loaded(object sender, RoutedEventArgs e)
         {
             if (ItemsSource == null) ItemsSource = MediaHelper.CurrentPlaylist;
-            if (ViewChangedUnadded)
-            {
-                ScrollViewer.ViewChanged += ScrollViewer_ViewChanged;
-                ViewChangedUnadded = false;
-            }
         }
 
+        private bool ViewChangedUnadded = true;
         private double ScrollPosition = 0d;
-        private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+        private void SongsListView_Loaded(object sender, RoutedEventArgs e)
         {
-            var viewer = sender as ScrollViewer;
-            if (ScrollListener != null) ScrollListener.Scrolled(ScrollPosition, viewer.VerticalOffset);
-            ScrollPosition = viewer.VerticalOffset;
+            if (ViewChangedUnadded && ScrollViewer != null)
+            {
+                ScrollViewer.ViewChanged += (s, args) =>
+                {
+                    var viewer = sender as ScrollViewer;
+                    if (ScrollListener != null) ScrollListener.Scrolled(ScrollPosition, viewer.VerticalOffset);
+                    ScrollPosition = viewer.VerticalOffset;
+                };
+                ViewChangedUnadded = false;
+            }
         }
 
         public static void AddMusicRequestListener(MusicRequestListener listener)

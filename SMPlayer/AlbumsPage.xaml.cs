@@ -40,7 +40,7 @@ namespace SMPlayer
             if (Albums.Count == 0) Setup(); // Constructor not called
         }
 
-        private async void Setup()
+        private void Setup()
         {
             if (SetupStarted) return;
             if (Notified == NotifiedStatus.Finished)
@@ -55,24 +55,8 @@ namespace SMPlayer
             List<AlbumView> albums = new List<AlbumView>();
             foreach (var group in MusicLibraryPage.AllSongs.GroupBy((m) => m.Album))
             {
-                Music music = null;
-                Windows.UI.Xaml.Media.Imaging.BitmapImage thumbnail = null;
-                foreach (Music m in group)
-                {
-                    thumbnail = await Helper.GetThumbnailAsync(m, false);
-                    if (thumbnail != null)
-                    {
-                        music = m;
-                        break;
-                    }
-                }
-                if (music == null)
-                {
-                    music = group.ElementAt(0);
-                    thumbnail = Helper.DefaultAlbumCover;
-                }
-                var album = new AlbumView(music.Album, music.Artist, thumbnail, group.OrderBy((m) => m.Name).ThenBy((m) => m.Artist));
-                albums.Add(album);
+                Music music = group.ElementAt(0);
+                albums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy((m) => m.Name).ThenBy((m) => m.Artist)));
             }
             foreach (var album in albums.OrderBy((a) => a.Name).ThenBy((a) => a.Artist)) Albums.Add(album);
             if (Notified == NotifiedStatus.Started) Notified = NotifiedStatus.Finished;

@@ -31,6 +31,8 @@ namespace SMPlayer
     {
         private const string FILENAME = "MusicLibrary.json";
         public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
+        public static bool IsLibraryUnchangedAfterChecking = true;
+
         private static HashSet<Music> MusicSet = new HashSet<Music>();
         private bool libraryChecked = false;
         private static bool libraryReset = false;
@@ -65,7 +67,8 @@ namespace SMPlayer
             var tree = new FolderTree();
             await tree.Init(Helper.CurrentFolder);
             var newLibrary = tree.Flatten();
-            if (Helper.SamePlaylist(AllSongs, newLibrary)) return;
+            IsLibraryUnchangedAfterChecking = Helper.SamePlaylist(AllSongs, newLibrary);
+            if (IsLibraryUnchangedAfterChecking) return;
             tree.Update(Settings.settings.Tree);
             Settings.settings.Tree = tree;
             SetAllSongs(newLibrary);

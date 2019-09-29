@@ -62,7 +62,7 @@ namespace SMPlayer
 
         public void FinishLoading()
         {
-            this.Visibility = Visibility.Visible;
+            this.Visibility = Visibility.Collapsed;
         }
     }
 }

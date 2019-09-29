@@ -36,6 +36,7 @@
         IsItemClickEnabled="True"
         ItemClick="SongsListView_ItemClick"
         ItemContainerStyle="{StaticResource PlaylistListViewItemStyle}"
+        Loaded="SongsListView_Loaded"
         Opacity="{x:Bind Opacity}"
         ReorderMode="Enabled"
         RequestedTheme="{x:Bind Theme}"

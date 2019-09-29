@@ -44,7 +44,7 @@ namespace SMPlayer
             if (Artists.Count == 0) Setup();
         }
 
-        private async void Setup()
+        private void Setup()
         {
             if (SetupStarted) return;
             if (Notified == NotifiedStatus.Finished)
@@ -58,23 +58,9 @@ namespace SMPlayer
             Artists.Clear();
             List<ArtistView> artists = new List<ArtistView>();
             foreach (var group in MusicLibraryPage.AllSongs.GroupBy((m) => m.Artist))
-            {
-                ObservableCollection<AlbumView> albums = new ObservableCollection<AlbumView>();
-                foreach (var songs in group.GroupBy((m) => m.Album))
-                {
-                    Windows.UI.Xaml.Media.Imaging.BitmapImage thumbnail = null;
-                    foreach (var music in songs)
-                    {
-                        thumbnail = await Helper.GetThumbnailAsync(music, false);
-                        if (thumbnail != null) break;
-                    }
-                    if (thumbnail == null) thumbnail = Helper.DefaultAlbumCover;
-                    var album = new AlbumView(songs.Key, group.Key, thumbnail, songs.OrderBy((m) => m.Name));
-                    albums.Add(album);
-                }
-                artists.Add(new ArtistView(group.Key, albums));
-            }
-            foreach (var artist in artists.OrderBy((a) => a.Name)) Artists.Add(artist);
+                artists.Add(new ArtistView(group.Key));
+            foreach (var artist in artists.OrderBy((a) => a.Name))
+                Artists.Add(artist);
             ArtistsCountTextBlock.Text = "All Artists: " + Artists.Count;
             FindMusicAndSetPlaying(MediaHelper.CurrentMusic);
             if (Notified == NotifiedStatus.Started) Notified = NotifiedStatus.Finished;
@@ -86,6 +72,16 @@ namespace SMPlayer
         {
             Notified = NotifiedStatus.Started;
             Setup();
+        }
+
+        private async void Artist_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                var artist = (sender as FrameworkElement).DataContext as ArtistView;
+                if (artist.IsUnloaded || !MusicLibraryPage.IsLibraryUnchangedAfterChecking)
+                    artist.Load();
+            });
         }
 
         private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
