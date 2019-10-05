@@ -49,3 +49,5 @@ Bad performance of Loading NowPlayingFull.
 CommandBar of Playlist.
 
 Shuffle.
+
+ControlSizeTrigger not called.

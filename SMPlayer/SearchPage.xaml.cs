@@ -55,12 +55,18 @@ namespace SMPlayer
                 MainPage.Instance.SetHeaderText(GetSearchHeader(History.Pop(), MainPage.Instance.IsMinimal));
             }
         }
-
+        public static bool IsTargetArtist(Music music, string text)
+        {
+            return music.Name.ToLower().Contains(text) || music.Album.ToLower().Contains(text) || music.Artist.ToLower().Contains(text);
+        }
         public void SearchArtists(string text)
         {
             Artists = MusicLibraryPage.AllSongs.Where((m) => IsTargetArtist(m, text)).Select((m) => m.Artist).ToHashSet().OrderBy((s) => s).ToList();
         }
-
+        public static bool IsTargetAlbum(Music music, string text)
+        {
+            return music.Album.ToLower().Contains(text) || music.Artist.ToLower().Contains(text);
+        }
         public void SearchAlbums(string text)
         {
             Albums.Clear();
@@ -70,7 +76,10 @@ namespace SMPlayer
                 Albums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy((m) => m.Name).ThenBy((m) => m.Artist)));
             }
         }
-
+        public static bool IsTargetMusic(Music music, string text)
+        {
+            return music.Name.ToLower().Contains(text) || music.Album.ToLower().Contains(text) || music.Artist.ToLower().Contains(text);
+        }
         public async void SearchSongs(string text)
         {
             LimitedSongs.Clear();
@@ -86,28 +95,13 @@ namespace SMPlayer
                 MusicLibraryPage.AllSongs.Where((music) => IsTargetMusic(music, text)).ToList().ForEach((m) => Songs.Add(m));
             });
         }
-
-        public void SearchPlaylists(string text)
-        {
-            Playlists = PlaylistsPage.Playlists.Where((playlist) => IsTargetPlaylist(playlist, text)).ToList();
-        }
-
-        public static bool IsTargetArtist(Music music, string text)
-        {
-            return music.Name.ToLower().Contains(text) || music.Album.ToLower().Contains(text) || music.Artist.ToLower().Contains(text);
-        }
-        public static bool IsTargetAlbum(Music music, string text)
-        {
-            return music.Album.ToLower().Contains(text) || music.Artist.ToLower().Contains(text);
-        }
-        public static bool IsTargetMusic(Music music, string text)
-        {
-            return music.Name.ToLower().Contains(text) || music.Album.ToLower().Contains(text) || music.Artist.ToLower().Contains(text);
-        }
-
         public static bool IsTargetPlaylist(Playlist playlist, string text)
         {
             return playlist.Name.Contains(text) || playlist.Songs.Any((music) => IsTargetMusic(music, text));
+        }
+        public void SearchPlaylists(string text)
+        {
+            Playlists = PlaylistsPage.Playlists.Where((playlist) => IsTargetPlaylist(playlist, text)).ToList();
         }
 
         public static string GetSearchHeader(string text, bool isMinimal)

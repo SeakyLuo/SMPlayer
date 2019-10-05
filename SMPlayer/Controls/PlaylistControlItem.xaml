@@ -62,7 +62,8 @@
             Click="Album_Click"
             Content="{Binding Album}"
             Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
-            Style="{StaticResource TextButtonStyle}" />
+            Style="{StaticResource TextButtonStyle}"
+            Visibility="{x:Bind ShowAlbumText, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
         <TextBlock
             x:Name="DurationTextBlock"
             Grid.Row="0"
@@ -95,7 +96,8 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
-                Text="•" />
+                Text="•"
+                Visibility="{x:Bind ShowAlbumText, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
             <HyperlinkButton
                 x:Name="LongAlbumTextButton"
                 Grid.Row="0"
@@ -105,15 +107,11 @@
                 Click="Album_Click"
                 Content="{Binding Album}"
                 Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
-                Style="{StaticResource TextButtonStyle}" />
+                Style="{StaticResource TextButtonStyle}"
+                Visibility="{x:Bind ShowAlbumText, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
         </StackPanel>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">
-                <VisualState x:Name="Normal">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                </VisualState>
                 <VisualState x:Name="ChangeLayout">
                     <VisualState.StateTriggers>
                         <triggers:ControlSizeTrigger MinWidth="800" TargetElement="{Binding ContentGrid}" />
