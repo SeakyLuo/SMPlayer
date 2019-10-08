@@ -159,8 +159,7 @@ namespace SMPlayer
             switch (args.TaskInstance.Task.Name)
             {
                 case Helper.ToastTaskName:
-                    var details = args.TaskInstance.TriggerDetails as Windows.UI.Notifications.ToastNotificationActionTriggerDetail;
-                    if (details != null)
+                    if (args.TaskInstance.TriggerDetails is Windows.UI.Notifications.ToastNotificationActionTriggerDetail details)
                     {
                         // Perform tasks
                         switch (details.Argument)
@@ -178,10 +177,8 @@ namespace SMPlayer
                                 break;
                         }
                     }
-
                     break;
             }
-
             deferral.Complete();
         }
     }

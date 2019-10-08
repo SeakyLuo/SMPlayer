@@ -12,8 +12,18 @@ namespace SMPlayer.Models
 {
     public class AlbumView : INotifyPropertyChanged
     {
-        public string Name { get; set; }
-        public string Artist { get; set; }
+        public string Name
+        {
+            get => _Name;
+            set => _Name = string.IsNullOrEmpty(value) ? "Unknown Album" : value;
+        }
+        private string _Name;
+        public string Artist
+        {
+            get => _Artist;
+            set => _Artist = string.IsNullOrEmpty(value) ? "Unknown Artist" : value;
+        }
+        private string _Artist;
         public ObservableCollection<Music> Songs { get; set; }
         public BitmapImage Cover
         {
@@ -28,10 +38,12 @@ namespace SMPlayer.Models
         private BitmapImage thumbnail = null;
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
+        public AlbumView() { }
+
         public AlbumView(string Name, string Artist, IEnumerable<Music> Songs)
         {
-            this.Name = string.IsNullOrEmpty(Name) ? "Unknown Album" : Name;
-            this.Artist = string.IsNullOrEmpty(Artist) ? "Unknown Artist" : Artist;
+            this.Name = Name;
+            this.Artist = Artist;
             this.Songs = new ObservableCollection<Music>(Songs);
             FindThumbnail();
         }

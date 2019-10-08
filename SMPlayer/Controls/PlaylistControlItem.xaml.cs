@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using SMPlayer.Models;
 
 //https://go.microsoft.com/fwlink/?LinkId=234236 上介绍了“用户控件”项模板
 
@@ -37,13 +38,17 @@ namespace SMPlayer.Controls
         private void Album_Click(object sender, RoutedEventArgs e)
         {
             if (NowPlayingFullPage.Instance != null) NowPlayingFullPage.Instance.GoBack();
-            var button = (sender as HyperlinkButton);
-            var album = button.Content.ToString();
-            var playlist = new Models.Playlist(album);
+            var data = DataContext as Music;
+            var playlist = new System.Collections.ObjectModel.ObservableCollection<Music>();
             foreach (var music in MusicLibraryPage.AllSongs)
-                if (music.Album == album)
+                if (music.Album == data.Album)
                     playlist.Add(music);
-            MainPage.Instance.NavigateToPage(typeof(AlbumPage), playlist);
+            MainPage.Instance.NavigateToPage(typeof(AlbumPage), new AlbumView()
+            {
+                Name = data.Album,
+                Artist = data.Artist,
+                Songs = playlist
+            });
         }
         private void Artist_Click(object sender, RoutedEventArgs e)
         {

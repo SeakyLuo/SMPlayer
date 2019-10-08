@@ -74,7 +74,6 @@ namespace SMPlayer
 
         public static async Task<StorageItemThumbnail> GetStorageItemThumbnailAsync(Music music)
         {
-            //var file = await CurrentFolder.GetFileAsync(music.GetShortPath());
             var file = await StorageFile.GetFileFromPathAsync(music.Path);
             return await file.GetThumbnailAsync(ThumbnailMode.MusicView, 500);
         }
