@@ -31,7 +31,7 @@ namespace SMPlayer
         public const string ToastGroup = "SMPlayerMediaToastGroup";
         public const string NoLyricsAvailable = "No Lyrics Available";
 
-        public static StorageFolder CurrentFolder, ThumbnailFolder;
+        public static StorageFolder CurrentFolder;
         public static StorageFile Thumbnail;
         public static BitmapImage DefaultAlbumCover = new BitmapImage(new Uri(DefaultAlbumCoverPath));
         public static BitmapImage ThumbnailNotFoundImage = new BitmapImage(new Uri(ThumbnailNotFoundPath));
@@ -64,12 +64,15 @@ namespace SMPlayer
         {
             using (var thumbnail = await GetStorageItemThumbnailAsync(music))
             {
-                if (thumbnail != null && thumbnail.Type == ThumbnailType.Image)
-                {
+                if (thumbnail.IsThumbnail())
                     return thumbnail.GetBitmapImage();
-                }
             }
             return withDefault ? DefaultAlbumCover : null;
+        }
+
+        public static bool IsThumbnail(this StorageItemThumbnail thumbnail)
+        {
+            return thumbnail != null && thumbnail.Type == ThumbnailType.Image;
         }
 
         public static async Task<StorageItemThumbnail> GetStorageItemThumbnailAsync(Music music)
@@ -83,22 +86,7 @@ namespace SMPlayer
             bitmapImage.SetSource(thumbnail);
             return bitmapImage;
         }
-        public static async void SaveThumbnail(this StorageItemThumbnail thumbnail)
-        {
-            using (var stream = thumbnail.CloneStream())
-            {
-                var decoder = await BitmapDecoder.CreateAsync(stream);
-                var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
-                var filename = $@"{Guid.NewGuid()}.png";
-                Thumbnail = await ThumbnailFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
-                using (var filestream = await Thumbnail.OpenAsync(FileAccessMode.ReadWrite))
-                {
-                    var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, filestream);
-                    encoder.SetSoftwareBitmap(softwareBitmap);
-                    await encoder.FlushAsync();
-                }
-            }
-        }
+
         public static async Task<Brush> GetDisplayColor(this StorageItemThumbnail thumbnail)
         {
             return await ColorHelper.GetThumbnailMainColor(thumbnail.CloneStream());

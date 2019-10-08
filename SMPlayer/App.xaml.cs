@@ -45,6 +45,7 @@ namespace SMPlayer
         {
             await Settings.Init();
             await MusicLibraryPage.Init();
+            MediaHelper.Init();
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -83,7 +84,6 @@ namespace SMPlayer
                 Window.Current.Activate();
             }
             Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
-            MediaHelper.Init();
             Window.Current.VisibilityChanged += CheckLibrary;
 
             // If background task is already registered, do nothing

@@ -83,14 +83,6 @@ namespace SMPlayer.Models
                 Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
             }
 
-            while (true)
-            {
-                Helper.ThumbnailFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Thumbnails", CreationCollisionOption.OpenIfExists);
-                if (Helper.ThumbnailFolder == null) System.Threading.Thread.Sleep(233);
-                else break;
-            }
-            foreach (var item in await Helper.ThumbnailFolder.GetFilesAsync())
-                await item.DeleteAsync();
         }
 
         public static void Save()

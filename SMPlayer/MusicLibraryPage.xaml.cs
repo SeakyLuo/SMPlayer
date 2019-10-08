@@ -67,8 +67,7 @@ namespace SMPlayer
             var tree = new FolderTree();
             await tree.Init(Helper.CurrentFolder);
             var newLibrary = tree.Flatten();
-            IsLibraryUnchangedAfterChecking = Helper.SamePlaylist(AllSongs, newLibrary);
-            if (IsLibraryUnchangedAfterChecking) return;
+            if (IsLibraryUnchangedAfterChecking = Helper.SamePlaylist(AllSongs, newLibrary)) return;
             tree.Update(Settings.settings.Tree);
             Settings.settings.Tree = tree;
             SetAllSongs(newLibrary);
