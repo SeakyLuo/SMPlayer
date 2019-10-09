@@ -114,7 +114,7 @@
             <VisualStateGroup x:Name="WidthChange">
                 <VisualState x:Name="ChangeLayout">
                     <VisualState.StateTriggers>
-                        <triggers:ControlSizeTrigger MinWidth="800" TargetElement="{Binding ContentGrid}" />
+                        <triggers:ControlSizeTrigger MinWidth="800" TargetElement="{x:Bind ContentGrid}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="TitleColumnDefinition.Width" Value="Auto" />

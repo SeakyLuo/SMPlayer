@@ -25,11 +25,11 @@ namespace SMPlayer
     public sealed partial class SearchPage : Page
     {
         public static Stack<string> History = new Stack<string>();
-        public List<string> Artists = new List<string>();
+        public ObservableCollection<string> Artists = new ObservableCollection<string>();
         public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
-        public ObservableCollection<Music> LimitedSongs = new ObservableCollection<Music>();
         public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
-        public List<Playlist> Playlists = new List<Playlist>();
+        public ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
+        public const int ArtistLimit = 10, AlbumLimit = 10, SongLimit = 5, PlaylistLimit = 10;
         public SearchPage()
         {
             this.InitializeComponent();
@@ -39,20 +39,21 @@ namespace SMPlayer
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (e.Parameter is string text)
+            string text = e.Parameter as string;
+            // User Search
+            if (History.Count > 0 && text == History.Peek())
             {
-                // User Search
+                // Back to Search Page
+                MainPage.Instance.SetHeaderText(GetSearchHeader(History.Peek(), MainPage.Instance.IsMinimal));
+            }
+            else
+            {
                 MainPage.Instance.SetHeaderText(GetSearchHeader(text, MainPage.Instance.IsMinimal));
                 History.Push(text);
                 SearchArtists(text);
                 SearchAlbums(text);
                 SearchSongs(text);
                 SearchPlaylists(text);
-            }
-            else
-            {
-                // Back to Search Page
-                MainPage.Instance.SetHeaderText(GetSearchHeader(History.Pop(), MainPage.Instance.IsMinimal));
             }
         }
         public static bool IsTargetArtist(Music music, string text)
@@ -61,7 +62,12 @@ namespace SMPlayer
         }
         public void SearchArtists(string text)
         {
-            Artists = MusicLibraryPage.AllSongs.Where((m) => IsTargetArtist(m, text)).Select((m) => m.Artist).ToHashSet().OrderBy((s) => s).ToList();
+            Artists.Clear();
+            foreach (var artist in MusicLibraryPage.AllSongs.Where((m) => IsTargetArtist(m, text)).Select((m) => m.Artist).ToHashSet().OrderBy((s) => s))
+            {
+                Artists.Add(artist);
+                if (Artists.Count == ArtistLimit) break;
+            }
         }
         public static bool IsTargetAlbum(Music music, string text)
         {
@@ -74,34 +80,38 @@ namespace SMPlayer
             {
                 Music music = group.ElementAt(0);
                 Albums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy((m) => m.Name).ThenBy((m) => m.Artist)));
+                if (Albums.Count == AlbumLimit) break;
             }
         }
         public static bool IsTargetMusic(Music music, string text)
         {
             return music.Name.ToLower().Contains(text) || music.Album.ToLower().Contains(text) || music.Artist.ToLower().Contains(text);
         }
-        public async void SearchSongs(string text)
+        public void SearchSongs(string text)
         {
-            LimitedSongs.Clear();
+            Songs.Clear();
             foreach (var music in MusicLibraryPage.AllSongs)
             {
-                if (IsTargetMusic(music, text))
-                    LimitedSongs.Add(music);
-                if (LimitedSongs.Count == 5)
-                    break;
+                if (IsTargetMusic(music, text)) Songs.Add(music);
+                if (Songs.Count == SongLimit) break;
             }
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
-            {
-                MusicLibraryPage.AllSongs.Where((music) => IsTargetMusic(music, text)).ToList().ForEach((m) => Songs.Add(m));
-            });
         }
         public static bool IsTargetPlaylist(Playlist playlist, string text)
         {
             return playlist.Name.Contains(text) || playlist.Songs.Any((music) => IsTargetMusic(music, text));
         }
-        public void SearchPlaylists(string text)
+        public async void SearchPlaylists(string text)
         {
-            Playlists = PlaylistsPage.Playlists.Where((playlist) => IsTargetPlaylist(playlist, text)).ToList();
+            Playlists.Clear();
+            foreach (var playlist in Settings.settings.Playlists)
+            {
+                if (IsTargetPlaylist(playlist, text))
+                {
+                    playlist.DisplayItem = Songs.Count > 0 ? await Songs[0].GetMusicDisplayItemAsync() : MusicDisplayItem.DefaultItem;
+                    Playlists.Add(playlist);
+                }
+                if (Playlists.Count == PlaylistLimit) break;
+            }
         }
 
         public static string GetSearchHeader(string text, bool isMinimal)
@@ -113,6 +123,37 @@ namespace SMPlayer
         private void ViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
 
+        }
+
+        private void SearchAlbumView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
+        }
+    }
+
+    class ViewAllConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            int count = (int)value;
+            switch ((string)parameter)
+            {
+                case "Artists":
+                    return count > SearchPage.ArtistLimit ? Visibility.Visible : Visibility.Collapsed;
+                case "Albums":
+                    return count > SearchPage.AlbumLimit ? Visibility.Visible : Visibility.Collapsed;
+                case "Songs":
+                    return count > SearchPage.SongLimit ? Visibility.Visible : Visibility.Collapsed;
+                case "Playlists":
+                    return count > SearchPage.PlaylistLimit ? Visibility.Visible : Visibility.Collapsed;
+                default:
+                    return Visibility.Collapsed;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
         }
     }
 }

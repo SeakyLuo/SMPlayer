@@ -10,138 +10,154 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
-    <StackPanel
-        Margin="10,5"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch">
-        <StackPanel x:Name="NoResultPanel" Visibility="Collapsed">
-            <TextBlock x:Name="NoResultTextBlock" Text="No result is found. Please check your spelling." />
+    <Page.Resources>
+        <Style x:Key="HorizontalListViewStyle" TargetType="ListView">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="ItemsPanel" Value="{StaticResource HorizontalPanel}" />
+            <Setter Property="SelectionMode" Value="None" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Enabled" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
+            <Setter Property="ScrollViewer.VerticalScrollMode" Value="Disabled" />
+        </Style>
+        <ItemsPanelTemplate x:Key="HorizontalPanel">
+            <StackPanel Orientation="Horizontal" />
+        </ItemsPanelTemplate>
+        <local:ViewAllConverter x:Key="ViewAllConverter" />
+    </Page.Resources>
+
+    <ScrollViewer>
+        <StackPanel Margin="20,5">
+            <StackPanel x:Name="NoResultPanel" Visibility="Collapsed">
+                <TextBlock x:Name="NoResultTextBlock" Text="No result is found. Please check your spelling." />
+            </StackPanel>
+            <StackPanel Visibility="{x:Bind Artists.Count, Converter={StaticResource VisibilityConverter}}">
+                <RelativePanel Margin="0,0,0,5">
+                    <TextBlock
+                        VerticalAlignment="Stretch"
+                        FontSize="18"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        Text="Artists" />
+                    <local:IconTextButton
+                        Foreground="{StaticResource SystemColorHighlightColor}"
+                        Icon="ViewAll"
+                        Visibility="{x:Bind Artists.Count, Converter={StaticResource ViewAllConverter}, ConverterParameter=Artists}"
+                        Label="View All"
+                        RelativePanel.AlignRightWithPanel="True"
+                        Tapped="ViewAllButton_Tapped" />
+                </RelativePanel>
+                <ListView
+                    x:Name="SearchArtistsView"
+                    ItemsSource="{x:Bind Artists}"
+                    Style="{StaticResource HorizontalListViewStyle}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <StackPanel Margin="10,5">
+                                <Grid>
+                                    <Ellipse
+                                        Width="120"
+                                        Height="120"
+                                        Fill="DarkGray" />
+                                    <FontIcon
+                                        FontSize="50"
+                                        Foreground="White"
+                                        Glyph="&#xE8D4;" />
+                                </Grid>
+                                <TextBlock
+                                    MaxWidth="120"
+                                    Margin="0,5"
+                                    HorizontalAlignment="Center"
+                                    FontSize="16"
+                                    MaxLines="2"
+                                    Text="{x:Bind}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+            <StackPanel Margin="0,30" Visibility="{x:Bind Albums.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                <RelativePanel Margin="0,0,0,5">
+                    <TextBlock
+                        VerticalAlignment="Stretch"
+                        FontSize="18"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        Text="Albums" />
+                    <local:IconTextButton
+                        Foreground="{StaticResource SystemColorHighlightColor}"
+                        Visibility="{x:Bind Albums.Count, Converter={StaticResource ViewAllConverter}, ConverterParameter=Albums}"
+                        Icon="ViewAll"
+                        Label="View All"
+                        RelativePanel.AlignRightWithPanel="True"
+                        Tapped="ViewAllButton_Tapped" />
+                </RelativePanel>
+                <ListView
+                    x:Name="SearchAlbumView"
+                    ItemClick="SearchAlbumView_ItemClick"
+                    ItemsSource="{x:Bind Albums}"
+                    Style="{StaticResource HorizontalListViewStyle}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="data:AlbumView">
+                            <local:GridAlbumControl DataContext="{Binding}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+            <StackPanel Margin="0,30" Visibility="{x:Bind Songs.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                <RelativePanel Margin="0,0,0,5">
+                    <TextBlock
+                        VerticalAlignment="Stretch"
+                        FontSize="18"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        Text="Songs" />
+                    <local:IconTextButton
+                        Foreground="{StaticResource SystemColorHighlightColor}"
+                        Icon="ViewAll"
+                        Visibility="{x:Bind Songs.Count, Converter={StaticResource ViewAllConverter}, ConverterParameter=Songs}"
+                        Label="View All"
+                        RelativePanel.AlignRightWithPanel="True"
+                        Tapped="ViewAllButton_Tapped" />
+                </RelativePanel>
+                <local:PlaylistControl
+                    x:Name="SearchMusicView"
+                    AlternatingRowColor="True"
+                    Background="Transparent"
+                    ItemsSource="{x:Bind Songs}" />
+            </StackPanel>
+            <StackPanel Margin="0,30" Visibility="{x:Bind Playlists.Count, Converter={StaticResource VisibilityConverter}}">
+                <RelativePanel Margin="0,0,0,5">
+                    <TextBlock
+                        VerticalAlignment="Stretch"
+                        FontSize="18"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        Text="Playlist" />
+                    <local:IconTextButton
+                        Foreground="{StaticResource SystemColorHighlightColor}"
+                        Icon="ViewAll"
+                        Visibility="{x:Bind Playlists.Count, Converter={StaticResource ViewAllConverter}, ConverterParameter=Playlist}"
+                        Label="View All"
+                        RelativePanel.AlignRightWithPanel="True"
+                        Tapped="ViewAllButton_Tapped" />
+                </RelativePanel>
+                <ListView
+                    x:Name="SearchPlaylistView"
+                    ItemsSource="{x:Bind Playlists}"
+                    Style="{StaticResource HorizontalListViewStyle}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="data:Playlist">
+                            <StackPanel>
+                                <Image
+                                    Width="160"
+                                    Height="160"
+                                    Source="{x:Bind DisplayItem.Thumbnail, Mode=OneWay}" />
+                                <TextBlock
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{x:Bind Name, Mode=OneWay}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
         </StackPanel>
-        <StackPanel Visibility="{x:Bind Artists.Count, Converter={StaticResource VisibilityConverter}}">
-            <RelativePanel Margin="0,0,0,5">
-                <TextBlock
-                    VerticalAlignment="Stretch"
-                    FontSize="18"
-                    RelativePanel.AlignLeftWithPanel="True"
-                    Text="Artists" />
-                <local:IconTextButton
-                    Foreground="{StaticResource SystemColorHighlightColor}"
-                    Icon="ViewAll"
-                    Label="View All"
-                    RelativePanel.AlignRightWithPanel="True"
-                    Tapped="ViewAllButton_Tapped" />
-            </RelativePanel>
-            <controls:Carousel
-                x:Name="SearchArtistsView"
-                Background="Transparent"
-                InvertPositive="True"
-                ItemDepth="20"
-                ItemMargin="0"
-                ItemRotationX="0"
-                ItemRotationY="19"
-                ItemRotationZ="0"
-                ItemsSource="{x:Bind Artists}"
-                Orientation="Horizontal"
-                SelectedIndex="0">
-                <controls:Carousel.EasingFunction>
-                    <CubicEase EasingMode="EaseOut" />
-                </controls:Carousel.EasingFunction>
-                <controls:Carousel.ItemTemplate>
-                    <DataTemplate x:DataType="x:String">
-                        <StackPanel Margin="10,5">
-                            <Grid>
-                                <Ellipse
-                                    Width="120"
-                                    Height="120"
-                                    Fill="DarkGray" />
-                                <FontIcon
-                                    FontSize="50"
-                                    Foreground="White"
-                                    Glyph="&#xE8D4;" />
-                            </Grid>
-                            <TextBlock
-                                MaxWidth="120"
-                                Margin="0,5"
-                                HorizontalAlignment="Center"
-                                FontSize="16"
-                                MaxLines="2"
-                                Text="{x:Bind}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </controls:Carousel.ItemTemplate>
-            </controls:Carousel>
-        </StackPanel>
-        <StackPanel Margin="0,20" Visibility="{x:Bind Albums.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
-            <RelativePanel Margin="0,0,0,5">
-                <TextBlock
-                    VerticalAlignment="Stretch"
-                    FontSize="18"
-                    RelativePanel.AlignLeftWithPanel="True"
-                    Text="Albums" />
-                <local:IconTextButton
-                    Foreground="{StaticResource SystemColorHighlightColor}"
-                    Icon="ViewAll"
-                    Label="View All"
-                    RelativePanel.AlignRightWithPanel="True"
-                    Tapped="ViewAllButton_Tapped" />
-            </RelativePanel>
-            <controls:Carousel
-                x:Name="SearchAlbumView"
-                Background="Transparent"
-                ItemsSource="{x:Bind Albums}">
-                <controls:Carousel.ItemTemplate>
-                    <DataTemplate x:DataType="data:AlbumView">
-                        <local:GridAlbumControl DataContext="{x:Bind}" />
-                    </DataTemplate>
-                </controls:Carousel.ItemTemplate>
-            </controls:Carousel>
-        </StackPanel>
-        <StackPanel Margin="0,20" Visibility="{x:Bind LimitedSongs.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
-            <RelativePanel Margin="0,0,0,5">
-                <TextBlock
-                    VerticalAlignment="Stretch"
-                    FontSize="18"
-                    RelativePanel.AlignLeftWithPanel="True"
-                    Text="Songs" />
-                <local:IconTextButton
-                    Foreground="{StaticResource SystemColorHighlightColor}"
-                    Icon="ViewAll"
-                    Label="View All"
-                    RelativePanel.AlignRightWithPanel="True"
-                    Tapped="ViewAllButton_Tapped" />
-            </RelativePanel>
-            <local:PlaylistControl
-                x:Name="SearchMusicView"
-                Background="Transparent"
-                ItemsSource="{x:Bind LimitedSongs}" />
-        </StackPanel>
-        <StackPanel Margin="0,20" Visibility="{x:Bind Playlists.Count, Converter={StaticResource VisibilityConverter}}">
-            <RelativePanel Margin="0,0,0,5">
-                <TextBlock
-                    VerticalAlignment="Stretch"
-                    FontSize="18"
-                    RelativePanel.AlignLeftWithPanel="True"
-                    Text="Playlist" />
-                <local:IconTextButton
-                    Foreground="{StaticResource SystemColorHighlightColor}"
-                    Icon="ViewAll"
-                    Label="View All"
-                    RelativePanel.AlignRightWithPanel="True"
-                    Tapped="ViewAllButton_Tapped" />
-            </RelativePanel>
-            <controls:Carousel
-                x:Name="SearchPlaylistView"
-                Background="Transparent"
-                ItemsSource="{x:Bind Playlists}">
-                <controls:Carousel.ItemTemplate>
-                    <DataTemplate x:DataType="data:Playlist">
-                        <StackPanel>
-                            <Image Width="160" Height="160" />
-                            <TextBlock Text="{x:Bind Name}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </controls:Carousel.ItemTemplate>
-            </controls:Carousel>
-        </StackPanel>
-    </StackPanel>
+    </ScrollViewer>
 </Page>

@@ -40,14 +40,13 @@ namespace SMPlayer.Models
 
         public AlbumView() { }
 
-        public AlbumView(string Name, string Artist, IEnumerable<Music> Songs)
+        public AlbumView(string name, string artist, IEnumerable<Music> songs)
         {
-            this.Name = Name;
-            this.Artist = Artist;
-            this.Songs = new ObservableCollection<Music>(Songs);
+            Name = name;
+            Artist = artist;
+            Songs = new ObservableCollection<Music>(songs);
             FindThumbnail();
         }
-
         public async void FindThumbnail()
         {
             foreach (var music in Songs)

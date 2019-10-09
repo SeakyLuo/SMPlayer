@@ -214,6 +214,10 @@
             </Button>
             <HyperlinkButton
                 Margin="9,0"
+                Content="Update Music Library"
+                Style="{StaticResource TextBlockButtonStyle}" />
+            <HyperlinkButton
+                Margin="9,0"
                 Content="Show All Keyboard Shortcuts"
                 Style="{StaticResource TextBlockButtonStyle}" />
             <HyperlinkButton

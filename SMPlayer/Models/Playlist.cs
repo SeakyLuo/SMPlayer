@@ -27,6 +27,7 @@ namespace SMPlayer.Models
             }
         }
         public SortBy Criterion { get; set; }
+        public MusicDisplayItem DisplayItem { get;set; }
 
         public ObservableCollection<Music> Songs { get; set; }
 

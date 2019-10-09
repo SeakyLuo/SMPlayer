@@ -10,7 +10,6 @@
     <RootPropertyPathName Name="Album" />
     <RootPropertyPathName Name="IsPlaying" />
     <RootPropertyPathName Name="Duration" />
-    <RootPropertyPathName Name="ContentGrid" />
     <RootPropertyPathName Name="PlaceholderForeground" />
     <RootPropertyPathName Name="ScrollableWidth" />
     <RootPropertyPathName Name="IsCloseButtonOverlay" />
@@ -387,6 +386,7 @@
       <RootProperty Name="Opacity" />
       <RootProperty Name="ReorderMode" />
       <RootProperty Name="RequestedTheme" />
+      <RootProperty Name="Style" />
       <RootEvent Name="ContainerContentChanging" />
       <RootEvent Name="ItemClick" />
       <RootEvent Name="DragItemsCompleted" />
@@ -763,6 +763,7 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ListViewBase">
       <RootProperty Name="IsSwipeEnabled" />
+      <RootProperty Name="SelectionMode" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ItemsControl">
       <RootProperty Name="ItemContainerTransitions" />
@@ -1148,23 +1149,7 @@
       <RootProperty Name="Symbol" />
     </RootType>
     <RootType FullName="SMPlayer.Dialogs.RenameDialog" />
-    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.Carousel">
-      <RootProperty Name="Background" />
-      <RootProperty Name="ItemsSource" />
-      <RootProperty Name="ItemTemplate" />
-      <RootProperty Name="InvertPositive" />
-      <RootProperty Name="ItemDepth" />
-      <RootProperty Name="ItemMargin" />
-      <RootProperty Name="ItemRotationX" />
-      <RootProperty Name="ItemRotationY" />
-      <RootProperty Name="ItemRotationZ" />
-      <RootProperty Name="Orientation" />
-      <RootProperty Name="SelectedIndex" />
-      <RootProperty Name="EasingFunction" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Media.Animation.CubicEase">
-      <RootProperty Name="EasingMode" />
-    </RootType>
+    <RootType FullName="SMPlayer.ViewAllConverter" />
     <RootType FullName="SMPlayer.SearchPage" />
     <RootType FullName="SMPlayer.RecentPage" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGrid">
