@@ -260,10 +260,10 @@ namespace SMPlayer
         public MediaControl()
         {
             this.InitializeComponent();
-            MediaHelper.SwitchMusicListeners.Add(this as SwitchMusicListener);
-            MediaHelper.MediaControlListeners.Add(this as MediaControlListener);
-            MediaHelper.RemoveMusicListeners.Add(this as RemoveMusicListener);
-            SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
+            MediaHelper.SwitchMusicListeners.Add(this);
+            MediaHelper.MediaControlListeners.Add(this);
+            MediaHelper.RemoveMusicListeners.Add(this);
+            SettingsPage.AddAfterPathSetListener(this);
             MediaHelper.Player.PlaybackSession.PlaybackStateChanged += async (sender, args) =>
             {
                 // For F3 Support

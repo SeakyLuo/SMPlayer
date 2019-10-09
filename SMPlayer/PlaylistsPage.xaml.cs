@@ -170,7 +170,7 @@ namespace SMPlayer
         {
             return ConfirmRenaming(dialog, OldName, NewName);
         }
-        public static bool ConfirmRenaming(Dialogs.RenameDialog dialog, string OldName, string NewName)
+        public static bool ConfirmRenaming(RenameDialog dialog, string OldName, string NewName)
         {
             if (string.IsNullOrEmpty(NewName) || string.IsNullOrWhiteSpace(NewName))
             {
@@ -249,6 +249,7 @@ namespace SMPlayer
                 };
                 flyout.Items.Add(radioItem);
             }
+            flyout.ShowAt(sender as FrameworkElement);
         }
 
         private async void HeaderedPlaylistControl_Loaded(object sender, RoutedEventArgs e)

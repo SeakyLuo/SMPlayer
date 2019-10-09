@@ -299,8 +299,8 @@
       <RootProperty Name="Foreground" />
       <RootProperty Name="IsHitTestVisible" />
       <RootProperty Name="IsTabStop" />
-      <RootProperty Name="ContentTemplate" />
       <RootProperty Name="HorizontalContentAlignment" />
+      <RootProperty Name="ContentTemplate" />
       <RootProperty Name="MinWidth" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.MasterDetailsView">

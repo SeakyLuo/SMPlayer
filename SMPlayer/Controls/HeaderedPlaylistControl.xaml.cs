@@ -90,7 +90,12 @@ namespace SMPlayer
 
         public bool Confirm(string OldName, string NewName)
         {
-            return PlaylistsPage.ConfirmRenaming(dialog, OldName, NewName);
+            bool successful = PlaylistsPage.ConfirmRenaming(dialog, OldName, NewName);
+            if (successful)
+            {
+                PlaylistNameTextBlock.Text = NewName;
+            }
+            return successful;
         }
 
         private void Shuffle_Click(object sender, RoutedEventArgs e)
@@ -104,7 +109,7 @@ namespace SMPlayer
         }
         private async void Rename_Click(object sender, RoutedEventArgs e)
         {
-            dialog = new RenameDialog(this as RenameActionListener, TitleOption.Rename, MusicCollection.Name);
+            dialog = new RenameDialog(this, TitleOption.Rename, MusicCollection.Name);
             await dialog.ShowAsync();
         }
         private void Delete_Click(object sender, RoutedEventArgs e)

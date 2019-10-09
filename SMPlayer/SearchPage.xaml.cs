@@ -55,11 +55,12 @@ namespace SMPlayer
                 SearchAlbums(text);
                 SearchSongs(text);
                 SearchPlaylists(text);
+                NoResultPanel.Visibility = Artists.Count == 0 && Albums.Count == 0 && Songs.Count == 0 && Playlists.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
             }
         }
         public static bool IsTargetArtist(Music music, string text)
         {
-            return music.Name.ToLower().Contains(text) || music.Album.ToLower().Contains(text) || music.Artist.ToLower().Contains(text);
+            return music.Artist.ToLower().Contains(text);
         }
         public void SearchArtists(string text)
         {
@@ -112,7 +113,7 @@ namespace SMPlayer
                 if (IsTargetPlaylist(playlist, text))
                 {
                     if (PlaylistsViewAll = Playlists.Count == PlaylistLimit) break;
-                    playlist.DisplayItem = Songs.Count > 0 ? await Songs[0].GetMusicDisplayItemAsync() : MusicDisplayItem.DefaultItem;
+                    playlist.DisplayItem = playlist.Songs.Count > 0 ? await playlist.Songs[0].GetMusicDisplayItemAsync() : MusicDisplayItem.DefaultItem;
                     Playlists.Add(playlist);
                 }
             }

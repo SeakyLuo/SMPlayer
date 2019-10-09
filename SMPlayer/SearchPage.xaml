@@ -41,7 +41,7 @@
             <StackPanel x:Name="NoResultPanel" Visibility="Collapsed">
                 <TextBlock x:Name="NoResultTextBlock" Text="No result is found. Please check your spelling." />
             </StackPanel>
-            <StackPanel Visibility="{x:Bind Artists.Count, Converter={StaticResource VisibilityConverter}}">
+            <StackPanel Visibility="{x:Bind Artists.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                 <RelativePanel Style="{StaticResource RelativePanelStyle}">
                     <TextBlock
                         RelativePanel.AlignLeftWithPanel="True"
@@ -132,7 +132,7 @@
                     <TextBlock
                         RelativePanel.AlignLeftWithPanel="True"
                         Style="{StaticResource HeaderTextBlockStyle}"
-                        Text="Playlist" />
+                        Text="Playlists" />
                     <local:IconTextButton
                         Icon="ViewAll"
                         RelativePanel.AlignRightWithPanel="True"

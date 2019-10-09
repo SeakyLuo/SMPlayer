@@ -51,7 +51,7 @@
             Click="Artist_Click"
             Content="{Binding Artist}"
             Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
-            Style="{StaticResource TextButtonStyle}"
+            Style="{StaticResource TextBlockButtonStyle}"
             Visibility="Visible" />
         <HyperlinkButton
             x:Name="AlbumTextButton"
@@ -62,7 +62,7 @@
             Click="Album_Click"
             Content="{Binding Album}"
             Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
-            Style="{StaticResource TextButtonStyle}"
+            Style="{StaticResource TextBlockButtonStyle}"
             Visibility="{x:Bind ShowAlbumText, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
         <TextBlock
             x:Name="DurationTextBlock"
@@ -89,7 +89,7 @@
                 Click="Artist_Click"
                 Content="{Binding Artist}"
                 Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
-                Style="{StaticResource TextButtonStyle}" />
+                Style="{StaticResource TextBlockButtonStyle}" />
             <TextBlock
                 x:Name="LongArtistAlbumPanelDot"
                 Margin="5,0"
@@ -107,7 +107,7 @@
                 Click="Album_Click"
                 Content="{Binding Album}"
                 Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
-                Style="{StaticResource TextButtonStyle}"
+                Style="{StaticResource TextBlockButtonStyle}"
                 Visibility="{x:Bind ShowAlbumText, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
         </StackPanel>
         <VisualStateManager.VisualStateGroups>
