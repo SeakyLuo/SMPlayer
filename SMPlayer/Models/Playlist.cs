@@ -81,7 +81,7 @@ namespace SMPlayer.Models
                 foreach (var music in group)
                 {
                     var item = await music.GetMusicDisplayItemAsync();
-                    if (!item.IsNull)
+                    if (!item.IsDefault)
                     {
                         result.Add(item);
                         break;

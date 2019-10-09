@@ -29,6 +29,7 @@ namespace SMPlayer
         public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         public ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
+        private bool ArtistsViewAll = false, AlbumsViewAll = false, SongsViewAll = false, PlaylistsViewAll = false;
         public const int ArtistLimit = 10, AlbumLimit = 10, SongLimit = 5, PlaylistLimit = 10;
         public SearchPage()
         {
@@ -65,8 +66,8 @@ namespace SMPlayer
             Artists.Clear();
             foreach (var artist in MusicLibraryPage.AllSongs.Where((m) => IsTargetArtist(m, text)).Select((m) => m.Artist).ToHashSet().OrderBy((s) => s))
             {
+                if (ArtistsViewAll = Artists.Count == ArtistLimit) break;
                 Artists.Add(artist);
-                if (Artists.Count == ArtistLimit) break;
             }
         }
         public static bool IsTargetAlbum(Music music, string text)
@@ -78,9 +79,9 @@ namespace SMPlayer
             Albums.Clear();
             foreach (var group in MusicLibraryPage.AllSongs.Where((m) => IsTargetAlbum(m, text)).GroupBy((m) => m.Album))
             {
+                if (AlbumsViewAll = Albums.Count == AlbumLimit) break;
                 Music music = group.ElementAt(0);
                 Albums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy((m) => m.Name).ThenBy((m) => m.Artist)));
-                if (Albums.Count == AlbumLimit) break;
             }
         }
         public static bool IsTargetMusic(Music music, string text)
@@ -92,8 +93,11 @@ namespace SMPlayer
             Songs.Clear();
             foreach (var music in MusicLibraryPage.AllSongs)
             {
-                if (IsTargetMusic(music, text)) Songs.Add(music);
-                if (Songs.Count == SongLimit) break;
+                if (IsTargetMusic(music, text))
+                {
+                    if (SongsViewAll = Songs.Count == SongLimit) break;
+                    Songs.Add(music);
+                }
             }
         }
         public static bool IsTargetPlaylist(Playlist playlist, string text)
@@ -107,10 +111,10 @@ namespace SMPlayer
             {
                 if (IsTargetPlaylist(playlist, text))
                 {
+                    if (PlaylistsViewAll = Playlists.Count == PlaylistLimit) break;
                     playlist.DisplayItem = Songs.Count > 0 ? await Songs[0].GetMusicDisplayItemAsync() : MusicDisplayItem.DefaultItem;
                     Playlists.Add(playlist);
                 }
-                if (Playlists.Count == PlaylistLimit) break;
             }
         }
 
@@ -128,32 +132,6 @@ namespace SMPlayer
         private void SearchAlbumView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
-        }
-    }
-
-    class ViewAllConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            int count = (int)value;
-            switch ((string)parameter)
-            {
-                case "Artists":
-                    return count > SearchPage.ArtistLimit ? Visibility.Visible : Visibility.Collapsed;
-                case "Albums":
-                    return count > SearchPage.AlbumLimit ? Visibility.Visible : Visibility.Collapsed;
-                case "Songs":
-                    return count > SearchPage.SongLimit ? Visibility.Visible : Visibility.Collapsed;
-                case "Playlists":
-                    return count > SearchPage.PlaylistLimit ? Visibility.Visible : Visibility.Collapsed;
-                default:
-                    return Visibility.Collapsed;
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotImplementedException();
         }
     }
 }

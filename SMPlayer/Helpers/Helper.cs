@@ -307,18 +307,18 @@ namespace SMPlayer
         public BitmapImage Thumbnail { get; private set; }
         public Brush Color { get; private set; }
 
-        public bool IsNull
-        {
-            get => Thumbnail == null && Color == null;
-        }
+        public bool IsDefault { get; private set; }
 
-        public static MusicDisplayItem DefaultItem = new MusicDisplayItem(Helper.DefaultAlbumCover, ColorHelper.HighlightBrush);
+        public static MusicDisplayItem DefaultItem = new MusicDisplayItem(Helper.DefaultAlbumCover, ColorHelper.HighlightBrush)
+        {
+            IsDefault = true
+        };
 
         public MusicDisplayItem(BitmapImage bitmap, Brush color)
         {
             Thumbnail = bitmap;
             Color = color;
+            IsDefault = false;
         }
-
     }
 }

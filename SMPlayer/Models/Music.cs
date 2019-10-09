@@ -160,7 +160,7 @@ namespace SMPlayer.Models
         public async Task<MusicDisplayItem> GetMusicDisplayItemAsync()
         {
             var thumbnail = await Helper.GetStorageItemThumbnailAsync(this);
-            return new MusicDisplayItem(thumbnail?.GetBitmapImage(), await thumbnail?.GetDisplayColor());
+            return thumbnail.IsThumbnail() ? new MusicDisplayItem(thumbnail.GetBitmapImage(), await thumbnail.GetDisplayColor()) : MusicDisplayItem.DefaultItem;
         }
 
         int IComparable<Music>.CompareTo(Music other)

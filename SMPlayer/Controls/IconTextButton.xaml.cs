@@ -28,7 +28,15 @@ namespace SMPlayer
                                                                                               typeof(string),
                                                                                               typeof(IconTextButton),
                                                                                               new PropertyMetadata(""));
-        public IconElement Icon { get; set; }
+        public IconElement Icon
+        {
+            get => (IconElement)GetValue(IconProperty);
+            set => SetValue(IconProperty, value);
+        }
+        public static readonly DependencyProperty IconProperty = DependencyProperty.Register("Icon",
+                                                                                      typeof(IconElement),
+                                                                                      typeof(IconTextButton),
+                                                                                      new PropertyMetadata(null));
         public IconTextButtonLabelPosition LabelPosition
         {
             get => (IconTextButtonLabelPosition)GetValue(LabelPositionProperty);

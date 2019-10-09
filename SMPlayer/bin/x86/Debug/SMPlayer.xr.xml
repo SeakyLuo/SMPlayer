@@ -401,6 +401,7 @@
       <RootProperty Name="Background" />
       <RootProperty Name="Children" />
       <RootProperty Name="Margin" />
+      <RootProperty Name="Style" />
       <RootMethod Name="GetAlignLeftWithPanel" />
       <RootMethod Name="SetAlignLeftWithPanel" />
       <RootMethod Name="GetLeftOf" />
@@ -552,7 +553,6 @@
       <RootProperty Name="Width" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="LabelPosition" />
-      <RootProperty Name="Foreground" />
       <RootProperty Name="Padding" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="Flyout" />
@@ -1149,7 +1149,6 @@
       <RootProperty Name="Symbol" />
     </RootType>
     <RootType FullName="SMPlayer.Dialogs.RenameDialog" />
-    <RootType FullName="SMPlayer.ViewAllConverter" />
     <RootType FullName="SMPlayer.SearchPage" />
     <RootType FullName="SMPlayer.RecentPage" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGrid">
