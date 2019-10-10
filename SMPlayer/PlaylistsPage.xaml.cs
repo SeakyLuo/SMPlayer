@@ -37,7 +37,8 @@ namespace SMPlayer
             get => Playlists;
             set => Playlists = value;
         }
-        private Dialogs.RenameDialog dialog;
+        private RenameDialog dialog;
+        private static RemoveDialog DeleteDialog;
         private HeaderedPlaylistControl playlistControl;
         public PlaylistsPage()
         {
@@ -48,7 +49,15 @@ namespace SMPlayer
             Playlists.CollectionChanged += (sender, e) => SetFooterText();
             PlaylistTabView.SelectedIndex = Settings.settings.Playlists.FindIndex((p) => p.Name == Settings.settings.LastPlaylist);
         }
-        private static RemoveDialog DeleteDialog;
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            if (e.Parameter is Playlist playlist)
+            {
+                PlaylistTabView.SelectedItem = playlist;
+            }
+        }
 
         public void SetFooterText()
         {

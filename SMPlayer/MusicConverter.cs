@@ -179,14 +179,21 @@ namespace SMPlayer
     {
         public static string ToStr(object value)
         {
-            if (value is ICollection<Music>)
+            if (value is ICollection<Music> list)
             {
-                var list = (ICollection<Music>)value;
                 int count = list.Count();
-                string countStr = "Songs: " + count.ToString();
+                string countStr = SongCount(count);
                 return count < 2 ? countStr : $"{countStr} • {MusicDurationConverter.ToTime(list)}";
             }
+            else if (value is int count)
+            {
+                return SongCount(count);
+            }
             return "";
+        }
+        public static string SongCount(int count)
+        {
+            return "Songs: " + count.ToString();
         }
         public object Convert(object value, Type targetType, object parameter, string language)
         {

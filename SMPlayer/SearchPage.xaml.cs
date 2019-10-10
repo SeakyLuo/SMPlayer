@@ -58,6 +58,7 @@ namespace SMPlayer
                 NoResultPanel.Visibility = Artists.Count == 0 && Albums.Count == 0 && Songs.Count == 0 && Playlists.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
             }
         }
+
         public static bool IsTargetArtist(Music music, string text)
         {
             return music.Artist.ToLower().Contains(text);
@@ -89,6 +90,7 @@ namespace SMPlayer
         {
             return music.Name.ToLower().Contains(text) || music.Album.ToLower().Contains(text) || music.Artist.ToLower().Contains(text);
         }
+
         public void SearchSongs(string text)
         {
             Songs.Clear();
@@ -105,7 +107,8 @@ namespace SMPlayer
         {
             return playlist.Name.Contains(text) || playlist.Songs.Any((music) => IsTargetMusic(music, text));
         }
-        public async void SearchPlaylists(string text)
+
+        public void SearchPlaylists(string text)
         {
             Playlists.Clear();
             foreach (var playlist in Settings.settings.Playlists)
@@ -113,7 +116,6 @@ namespace SMPlayer
                 if (IsTargetPlaylist(playlist, text))
                 {
                     if (PlaylistsViewAll = Playlists.Count == PlaylistLimit) break;
-                    playlist.DisplayItem = playlist.Songs.Count > 0 ? await playlist.Songs[0].GetMusicDisplayItemAsync() : MusicDisplayItem.DefaultItem;
                     Playlists.Add(playlist);
                 }
             }
@@ -133,6 +135,42 @@ namespace SMPlayer
         private void SearchAlbumView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
+        }
+
+        private void SearchPlaylistView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Frame.Navigate(typeof(PlaylistsPage), e.ClickedItem);
+        }
+
+        public static ICollection<Music> FindSongs(object data)
+        {
+            if (data is AlbumView album) return album.Songs;
+            else if (data is Playlist playlist) return playlist.Songs;
+            return null;
+        }
+
+        private void PlayAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            var data = (sender as Button).DataContext;
+            var songs = FindSongs(data);
+            if (songs != null) MediaHelper.ShuffleAndPlay(songs);
+        }
+        private void AddToButton_Click(object sender, RoutedEventArgs e)
+        {
+            var data = (sender as Button).DataContext as AlbumView;
+            var songs = FindSongs((sender as Button).DataContext);
+            var helper = new MenuFlyoutHelper() { Data = songs, DefaultPlaylistName = data.Name };
+            helper.GetAddToPlaylistsMenuFlyout().ShowAt(sender as FrameworkElement);
+        }
+
+        private void DataTemplate_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(sender as Control, "PointerOver", true);
+        }
+
+        private void DataTemplate_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(sender as Control, "Normal", true);
         }
     }
 }

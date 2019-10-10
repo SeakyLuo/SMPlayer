@@ -63,7 +63,7 @@ namespace SMPlayer
                 return page == "AlbumPage" || page == "MyFavoritesPage";
             }
         }
-        private bool PageUnset = true;
+        private static bool PageUnset = true;
 
         public MainPage()
         {
@@ -111,6 +111,8 @@ namespace SMPlayer
             if (PageUnset)
             {
                 SwitchPage(Settings.settings.LastPage);
+                foreach (var playlist in Settings.settings.Playlists)
+                    playlist.SetDisplayItem();
                 PageUnset = false;
             }
         }

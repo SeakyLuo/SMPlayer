@@ -33,7 +33,6 @@ namespace SMPlayer.Models
                 catch (FileLoadException)
                 {
                     System.Threading.Thread.Sleep(1000);
-                    continue;
                 }
             }
         }

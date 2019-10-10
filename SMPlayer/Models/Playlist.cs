@@ -27,7 +27,9 @@ namespace SMPlayer.Models
             }
         }
         public SortBy Criterion { get; set; }
-        public MusicDisplayItem DisplayItem { get;set; }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public MusicDisplayItem DisplayItem { get; set; }
 
         public ObservableCollection<Music> Songs { get; set; }
 
@@ -71,6 +73,22 @@ namespace SMPlayer.Models
             }
             else return;
             Sort();
+        }
+
+        public async void SetDisplayItem()
+        {
+            if (Songs.Count == 0)
+            {
+                DisplayItem = MusicDisplayItem.DefaultItem;
+            }
+            else
+            {
+                foreach (var song in Songs)
+                {
+                    DisplayItem = await song.GetMusicDisplayItemAsync();
+                    if (!DisplayItem.IsDefault) return;
+                }
+            }
         }
 
         public async Task<List<MusicDisplayItem>> GetMusicDisplayItemsAsync()
