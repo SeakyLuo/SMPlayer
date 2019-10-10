@@ -320,6 +320,10 @@ namespace SMPlayer
                     HeaderGrid.Visibility = Visibility.Visible;
                     MainNavigationView.SelectedItem = null;
                     break;
+                case "SearchResultPage":
+                    HeaderGrid.Visibility = Visibility.Visible;
+                    MainNavigationView.SelectedItem = null;
+                    break;
                 case "SettingsPage":
                     SetHeaderText("Settings");
                     HeaderGrid.Visibility = Visibility.Visible;

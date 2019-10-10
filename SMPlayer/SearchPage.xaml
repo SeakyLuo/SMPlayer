@@ -152,7 +152,7 @@
                         Icon="ViewAll"
                         RelativePanel.AlignRightWithPanel="True"
                         Style="{StaticResource ViewAllButtonStyle}"
-                        Tapped="ViewAllButton_Tapped" />
+                        Tapped="ArtistsViewAllButton_Tapped" />
                 </RelativePanel>
                 <ListView
                     x:Name="SearchArtistsView"
@@ -160,7 +160,7 @@
                     ItemsSource="{x:Bind Artists}"
                     Style="{StaticResource HorizontalListViewStyle}">
                     <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="x:String">
+                        <DataTemplate x:DataType="data:Playlist">
                             <UserControl
                                 Margin="5"
                                 PointerEntered="UserControl_PointerEntered"
@@ -170,9 +170,15 @@
                                         <Grid>
                                             <controls:DropShadowPanel
                                                 x:Name="ShadowPanel"
-                                                BlurRadius="10"
-                                                ShadowOpacity="0">
-                                                <Ellipse Width="120" Height="120" />
+                                                BlurRadius="15"
+                                                OffsetX="2"
+                                                OffsetY="3"
+                                                ShadowOpacity="0"
+                                                Color="DarkGray">
+                                                <Ellipse
+                                                    Width="120"
+                                                    Height="120"
+                                                    Fill="White" />
                                             </controls:DropShadowPanel>
                                             <Grid
                                                 Width="120"
@@ -208,7 +214,7 @@
                                         HorizontalAlignment="Center"
                                         FontSize="16"
                                         MaxLines="2"
-                                        Text="{x:Bind}" />
+                                        Text="{x:Bind Name}" />
                                     <VisualStateManager.VisualStateGroups>
                                         <VisualStateGroup x:Name="CommonStates">
                                             <VisualState x:Name="Normal" />
@@ -241,7 +247,7 @@
                         Icon="ViewAll"
                         RelativePanel.AlignRightWithPanel="True"
                         Style="{StaticResource ViewAllButtonStyle}"
-                        Tapped="ViewAllButton_Tapped" />
+                        Tapped="AlbumsViewAllButton_Tapped" />
                 </RelativePanel>
                 <ListView
                     x:Name="SearchAlbumView"
@@ -266,7 +272,7 @@
                         Icon="ViewAll"
                         RelativePanel.AlignRightWithPanel="True"
                         Style="{StaticResource ViewAllButtonStyle}"
-                        Tapped="ViewAllButton_Tapped" />
+                        Tapped="SongsViewAllButton_Tapped" />
                 </RelativePanel>
                 <local:PlaylistControl
                     x:Name="SearchMusicView"
@@ -285,7 +291,7 @@
                         Icon="ViewAll"
                         RelativePanel.AlignRightWithPanel="True"
                         Style="{StaticResource ViewAllButtonStyle}"
-                        Tapped="ViewAllButton_Tapped" />
+                        Tapped="PlaylistsViewAllButton_Tapped" />
                 </RelativePanel>
                 <ListView
                     x:Name="SearchPlaylistView"
