@@ -1202,6 +1202,7 @@
     <RootType FullName="SMPlayer.NowPlayingPage" />
     <RootType FullName="Windows.UI.Xaml.Media.RotateTransform" />
     <RootType FullName="SMPlayer.PlaylistsPage" />
+    <RootType FullName="SMPlayer.SearchResultPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.ComboBox">
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Style" />

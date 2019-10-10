@@ -74,16 +74,6 @@ namespace SMPlayer
             }
             ArtistsViewAllButton.Visibility = ArtistsViewAll ? Visibility.Visible : Visibility.Collapsed;
         }
-        private void ArtistsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            string text = History.Peek();
-            var list = new List<Playlist>();
-            foreach (var group in MusicLibraryPage.AllSongs.Where((m) => IsTargetArtist(m, text)).GroupBy((m) => m.Artist).OrderBy((g) => g.Key))
-            {
-                list.Add(new Playlist(group.Key, group));
-            }
-            Frame.Navigate(typeof(SearchResultPage), list);
-        }
         public static bool IsTargetAlbum(Music music, string text)
         {
             return music.Album.ToLower().Contains(text) || music.Artist.ToLower().Contains(text);
@@ -99,18 +89,6 @@ namespace SMPlayer
                 Albums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy((m) => m.Name).ThenBy((m) => m.Artist)));
             }
             AlbumsViewAllButton.Visibility = AlbumsViewAll ? Visibility.Visible : Visibility.Collapsed;
-        }
-
-        private void AlbumsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            string text = History.Peek();
-            var list = new List<AlbumView>();
-            foreach (var group in MusicLibraryPage.AllSongs.Where((m) => IsTargetAlbum(m, text)).GroupBy((m) => m.Album))
-            {
-                Music music = group.ElementAt(0);
-                list.Add(new AlbumView(music.Album, music.Artist, group.OrderBy((m) => m.Name).ThenBy((m) => m.Artist)));
-            }
-            Frame.Navigate(typeof(SearchResultPage), list);
         }
         public static bool IsTargetMusic(Music music, string text)
         {
@@ -130,16 +108,6 @@ namespace SMPlayer
                 }
             }
             SongsViewAllButton.Visibility = SongsViewAll ? Visibility.Visible : Visibility.Collapsed;
-        }
-
-        private void SongsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            string text = History.Peek();
-            var list = new List<Music>();
-            foreach (var music in MusicLibraryPage.AllSongs)
-                if (IsTargetMusic(music, text))
-                    list.Add(music);
-            Frame.Navigate(typeof(SearchResultPage), list);
         }
         public static bool IsTargetPlaylist(Playlist playlist, string text)
         {
@@ -161,16 +129,6 @@ namespace SMPlayer
             PlaylistsViewAllButton.Visibility = ArtistsViewAll ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        private void PlaylistsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            string text = History.Peek();
-            var list = new List<AlbumView>();
-            foreach (var playlist in Settings.settings.Playlists)
-                if (IsTargetPlaylist(playlist, text))
-                    list.Add(playlist.ToAlbumView());
-            Frame.Navigate(typeof(SearchResultPage), list);
-        }
-
         public static string GetSearchHeader(string text, bool isMinimal)
         {
             string header = $"\"{text}\"";
@@ -190,6 +148,23 @@ namespace SMPlayer
         private void SearchPlaylistView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Frame.Navigate(typeof(PlaylistsPage), e.ClickedItem);
+        }
+        private void ArtistsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SearchResultPage), "Artists");
+        }
+        private void AlbumsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SearchResultPage), "Albums");
+        }
+        private void SongsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SearchResultPage), "Songs");
+        }
+
+        private void PlaylistsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SearchResultPage), "Playlists");
         }
 
         public static ICollection<Music> FindSongs(object data)
