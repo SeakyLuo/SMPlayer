@@ -18,8 +18,6 @@ FullMediaControl Album Flipview.
 
 Add Album Art to Music.
 
-MasterView Back Button.
-
 Keyboard Shortcut dialog.
 
 ThemeColor change.
@@ -38,8 +36,6 @@ Mini play.
 
 Artist Page.
 
-Improved IconTextButton PointerOverStyle.
-
 # TO FIX
 
 Bad performance when given many music files.
@@ -47,7 +43,3 @@ Bad performance when given many music files.
 Bad performance of Loading NowPlayingFull.
 
 CommandBar of Playlist.
-
-ControlSizeTrigger not called.
-
-Loading order.

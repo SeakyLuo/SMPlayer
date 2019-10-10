@@ -80,7 +80,14 @@ namespace SMPlayer.Models
             {
                 settings = JsonFileHelper.Convert<Settings>(json);
                 if (string.IsNullOrEmpty(settings.RootPath)) return;
-                Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
+                try
+                {
+                    Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
+                }
+                catch (Exception)
+                {
+
+                }
             }
 
         }

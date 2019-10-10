@@ -21,8 +21,10 @@
         <Style x:Key="ViewAllButtonStyle" TargetType="local:IconTextButton">
             <Setter Property="Label" Value="View All" />
             <Setter Property="Foreground" Value="{ThemeResource SystemColorHighlightColor}" />
+            <Setter Property="Visibility" Value="Collapsed" />
         </Style>
         <Style x:Key="HorizontalListViewStyle" TargetType="ListView">
+            <Setter Property="IsItemClickEnabled" Value="True" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="ItemsPanel" Value="{StaticResource HorizontalPanel}" />
             <Setter Property="SelectionMode" Value="None" />
@@ -30,6 +32,104 @@
             <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Enabled" />
             <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
             <Setter Property="ScrollViewer.VerticalScrollMode" Value="Disabled" />
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style BasedOn="{StaticResource ListViewItemRevealStyle}" TargetType="ListViewItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <ListViewItemPresenter
+                                        x:Name="Root"
+                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        CheckBoxBrush="{ThemeResource ListViewItemCheckBoxBrush}"
+                                        CheckBrush="{ThemeResource ListViewItemCheckBrush}"
+                                        CheckMode="{ThemeResource ListViewItemCheckMode}"
+                                        ContentMargin="{TemplateBinding Padding}"
+                                        ContentTransitions="{TemplateBinding ContentTransitions}"
+                                        Control.IsTemplateFocusTarget="True"
+                                        DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}"
+                                        DragBackground="{ThemeResource ListViewItemDragBackground}"
+                                        DragForeground="{ThemeResource ListViewItemDragForeground}"
+                                        DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}"
+                                        FocusBorderBrush="{ThemeResource ListViewItemFocusBorderBrush}"
+                                        FocusSecondaryBorderBrush="{ThemeResource ListViewItemFocusSecondaryBorderBrush}"
+                                        FocusVisualMargin="{TemplateBinding FocusVisualMargin}"
+                                        PlaceholderBackground="{ThemeResource ListViewItemPlaceholderBackground}"
+                                        PointerOverBackground="Transparent"
+                                        PointerOverForeground="{ThemeResource ListViewItemForegroundPointerOver}"
+                                        PressedBackground="Transparent"
+                                        ReorderHintOffset="{ThemeResource ListViewItemReorderHintThemeOffset}"
+                                        RevealBackground="{ThemeResource ListViewItemRevealBackground}"
+                                        RevealBorderBrush="{ThemeResource ListViewItemRevealBorderBrush}"
+                                        RevealBorderThickness="{ThemeResource ListViewItemRevealBorderThemeThickness}"
+                                        SelectedBackground="{ThemeResource ListViewItemBackgroundSelected}"
+                                        SelectedForeground="{ThemeResource ListViewItemForegroundSelected}"
+                                        SelectedPointerOverBackground="{ThemeResource ListViewItemBackgroundSelectedPointerOver}"
+                                        SelectedPressedBackground="{ThemeResource ListViewItemBackgroundSelectedPressed}"
+                                        SelectionCheckMarkVisualEnabled="{ThemeResource ListViewItemSelectionCheckMarkVisualEnabled}">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="Normal" />
+                                                <VisualState x:Name="Selected" />
+
+                                                <VisualState x:Name="PointerOver">
+                                                    <VisualState.Setters>
+                                                        <Setter Target="Root.(RevealBrush.State)" Value="PointerOver" />
+                                                        <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPointerOver}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+
+                                                <VisualState x:Name="PointerOverSelected">
+                                                    <VisualState.Setters>
+                                                        <Setter Target="Root.(RevealBrush.State)" Value="PointerOver" />
+                                                        <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPointerOver}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="PointerOverPressed">
+                                                    <VisualState.Setters>
+                                                        <Setter Target="Root.(RevealBrush.State)" Value="Pressed" />
+                                                        <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPressed}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+
+                                                <VisualState x:Name="Pressed">
+                                                    <VisualState.Setters>
+                                                        <Setter Target="Root.(RevealBrush.State)" Value="Pressed" />
+                                                        <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPressed}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+
+                                                <VisualState x:Name="PressedSelected">
+                                                    <VisualState.Setters>
+                                                        <Setter Target="Root.(RevealBrush.State)" Value="Pressed" />
+                                                        <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPressed}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+
+                                            </VisualStateGroup>
+
+                                            <VisualStateGroup x:Name="DisabledStates">
+                                                <VisualState x:Name="Enabled" />
+
+                                                <VisualState x:Name="Disabled">
+                                                    <VisualState.Setters>
+                                                        <Setter Target="Root.RevealBorderThickness" Value="0" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+
+                                            </VisualStateGroup>
+
+                                        </VisualStateManager.VisualStateGroups>
+                                    </ListViewItemPresenter>
+
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+
+                    </Style>
+                </Setter.Value>
+            </Setter>
         </Style>
         <ItemsPanelTemplate x:Key="HorizontalPanel">
             <StackPanel Orientation="Horizontal" />
@@ -39,7 +139,7 @@
     <ScrollViewer>
         <StackPanel Margin="20,5">
             <StackPanel x:Name="NoResultPanel" Visibility="Collapsed">
-                <TextBlock x:Name="NoResultTextBlock" Text="No result is found. Please check your spelling." />
+                <TextBlock FontSize="20" Text="No result is found. Please check your spelling." />
             </StackPanel>
             <StackPanel Visibility="{x:Bind Artists.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                 <RelativePanel Style="{StaticResource RelativePanelStyle}">
@@ -48,37 +148,84 @@
                         Style="{StaticResource HeaderTextBlockStyle}"
                         Text="Artists" />
                     <local:IconTextButton
+                        x:Name="ArtistsViewAllButton"
                         Icon="ViewAll"
                         RelativePanel.AlignRightWithPanel="True"
                         Style="{StaticResource ViewAllButtonStyle}"
-                        Tapped="ViewAllButton_Tapped"
-                        Visibility="{x:Bind ArtistsViewAll, Converter={StaticResource VisibilityConverter}}" />
+                        Tapped="ViewAllButton_Tapped" />
                 </RelativePanel>
                 <ListView
                     x:Name="SearchArtistsView"
+                    ItemClick="SearchArtistsView_ItemClick"
                     ItemsSource="{x:Bind Artists}"
                     Style="{StaticResource HorizontalListViewStyle}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="x:String">
-                            <StackPanel Margin="10,5">
-                                <Grid>
-                                    <Ellipse
-                                        Width="120"
-                                        Height="120"
-                                        Fill="DarkGray" />
-                                    <FontIcon
-                                        FontSize="50"
-                                        Foreground="White"
-                                        Glyph="&#xE8D4;" />
-                                </Grid>
-                                <TextBlock
-                                    MaxWidth="120"
-                                    Margin="0,5"
-                                    HorizontalAlignment="Center"
-                                    FontSize="16"
-                                    MaxLines="2"
-                                    Text="{x:Bind}" />
-                            </StackPanel>
+                            <UserControl
+                                Margin="5"
+                                PointerEntered="UserControl_PointerEntered"
+                                PointerExited="UserControl_PointerExited">
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid>
+                                            <controls:DropShadowPanel
+                                                x:Name="ShadowPanel"
+                                                BlurRadius="10"
+                                                ShadowOpacity="0">
+                                                <Ellipse Width="120" Height="120" />
+                                            </controls:DropShadowPanel>
+                                            <Grid
+                                                Width="120"
+                                                Height="120"
+                                                Background="DarkGray"
+                                                CornerRadius="60">
+                                                <FontIcon
+                                                    FontSize="50"
+                                                    Foreground="White"
+                                                    Glyph="&#xE8D4;" />
+                                            </Grid>
+                                        </Grid>
+                                        <StackPanel
+                                            x:Name="ButtonStackPanel"
+                                            HorizontalAlignment="Center"
+                                            Orientation="Horizontal"
+                                            Visibility="Collapsed">
+                                            <Button
+                                                Click="PlayAllButton_Click"
+                                                Content="&#xE768;"
+                                                Style="{StaticResource HoverButtonStyle}"
+                                                ToolTipService.ToolTip="Play All" />
+                                            <Button
+                                                Click="AddToButton_Click"
+                                                Content="&#xE710;"
+                                                Style="{StaticResource HoverButtonStyle}"
+                                                ToolTipService.ToolTip="Add To" />
+                                        </StackPanel>
+                                    </Grid>
+                                    <TextBlock
+                                        MaxWidth="120"
+                                        Margin="0,5"
+                                        HorizontalAlignment="Center"
+                                        FontSize="16"
+                                        MaxLines="2"
+                                        Text="{x:Bind}" />
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup x:Name="CommonStates">
+                                            <VisualState x:Name="Normal" />
+                                            <VisualState x:Name="PointerOver">
+                                                <Storyboard>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ShadowPanel" Storyboard.TargetProperty="ShadowOpacity">
+                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="1" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonStackPanel" Storyboard.TargetProperty="Visibility">
+                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                </StackPanel>
+                            </UserControl>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -90,11 +237,11 @@
                         Style="{StaticResource HeaderTextBlockStyle}"
                         Text="Albums" />
                     <local:IconTextButton
+                        x:Name="AlbumsViewAllButton"
                         Icon="ViewAll"
                         RelativePanel.AlignRightWithPanel="True"
                         Style="{StaticResource ViewAllButtonStyle}"
-                        Tapped="ViewAllButton_Tapped"
-                        Visibility="{x:Bind AlbumsViewAll, Converter={StaticResource VisibilityConverter}}" />
+                        Tapped="ViewAllButton_Tapped" />
                 </RelativePanel>
                 <ListView
                     x:Name="SearchAlbumView"
@@ -103,7 +250,7 @@
                     Style="{StaticResource HorizontalListViewStyle}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="data:AlbumView">
-                            <local:GridAlbumControl DataContext="{Binding}" />
+                            <local:DropShadowControl DataContext="{Binding}" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -115,11 +262,11 @@
                         Style="{StaticResource HeaderTextBlockStyle}"
                         Text="Songs" />
                     <local:IconTextButton
+                        x:Name="SongsViewAllButton"
                         Icon="ViewAll"
                         RelativePanel.AlignRightWithPanel="True"
                         Style="{StaticResource ViewAllButtonStyle}"
-                        Tapped="ViewAllButton_Tapped"
-                        Visibility="{x:Bind SongsViewAll, Converter={StaticResource VisibilityConverter}}" />
+                        Tapped="ViewAllButton_Tapped" />
                 </RelativePanel>
                 <local:PlaylistControl
                     x:Name="SearchMusicView"
@@ -134,11 +281,11 @@
                         Style="{StaticResource HeaderTextBlockStyle}"
                         Text="Playlists" />
                     <local:IconTextButton
+                        x:Name="PlaylistsViewAllButton"
                         Icon="ViewAll"
                         RelativePanel.AlignRightWithPanel="True"
                         Style="{StaticResource ViewAllButtonStyle}"
-                        Tapped="ViewAllButton_Tapped"
-                        Visibility="{x:Bind PlaylistsViewAll, Converter={StaticResource VisibilityConverter}}" />
+                        Tapped="ViewAllButton_Tapped" />
                 </RelativePanel>
                 <ListView
                     x:Name="SearchPlaylistView"
@@ -146,74 +293,8 @@
                     ItemsSource="{x:Bind Playlists}"
                     Style="{StaticResource HorizontalListViewStyle}">
                     <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="data:Playlist">
-                            <UserControl PointerEntered="DataTemplate_PointerEntered" PointerExited="DataTemplate_PointerExited">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <controls:DropShadowPanel
-                                        x:Name="ShadowPanel"
-                                        VerticalContentAlignment="Top"
-                                        BlurRadius="10"
-                                        OffsetX="5"
-                                        OffsetY="5"
-                                        ShadowOpacity="0"
-                                        Color="Gray">
-                                        <Image
-                                            Width="160"
-                                            Height="160"
-                                            Source="{x:Bind DisplayItem.Thumbnail, Mode=OneWay}" />
-                                    </controls:DropShadowPanel>
-                                    <StackPanel
-                                        x:Name="ButtonStackPanel"
-                                        HorizontalAlignment="Center"
-                                        Orientation="Horizontal"
-                                        Visibility="Collapsed">
-                                        <Button
-                                            Click="PlayAllButton_Click"
-                                            Content="&#xE768;"
-                                            Style="{StaticResource HoverButtonStyle}"
-                                            ToolTipService.ToolTip="Play All" />
-                                        <Button
-                                            Click="AddToButton_Click"
-                                            Content="&#xE710;"
-                                            Style="{StaticResource HoverButtonStyle}"
-                                            ToolTipService.ToolTip="Add To" />
-                                    </StackPanel>
-                                    <TextBlock
-                                        Grid.Row="1"
-                                        Margin="0,5,0,3"
-                                        FontWeight="SemiBold"
-                                        MaxLines="2"
-                                        Text="{x:Bind Name, Mode=OneWay}"
-                                        TextAlignment="Left"
-                                        TextWrapping="Wrap" />
-                                    <TextBlock
-                                        Grid.Row="2"
-                                        FontSize="12"
-                                        Foreground="Gray"
-                                        Text="{x:Bind Songs.Count, Converter={StaticResource SongCountConverter}, Mode=OneWay}"
-                                        TextAlignment="Left" />
-                                </Grid>
-                                <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroup x:Name="CommonStates">
-                                        <VisualState x:Name="Normal" />
-                                        <VisualState x:Name="PointerOver">
-                                            <Storyboard>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ShadowPanel" Storyboard.TargetProperty="ShadowOpacity">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="1" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonStackPanel" Storyboard.TargetProperty="Visibility">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </VisualState>
-                                    </VisualStateGroup>
-                                </VisualStateManager.VisualStateGroups>
-                            </UserControl>
+                        <DataTemplate x:DataType="data:AlbumView">
+                            <local:DropShadowControl DataContext="{Binding}" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

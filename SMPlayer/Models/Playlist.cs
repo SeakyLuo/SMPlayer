@@ -75,7 +75,7 @@ namespace SMPlayer.Models
             Sort();
         }
 
-        public async void SetDisplayItem()
+        public async Task SetDisplayItemAsync()
         {
             if (Songs.Count == 0)
             {
@@ -86,7 +86,7 @@ namespace SMPlayer.Models
                 foreach (var song in Songs)
                 {
                     DisplayItem = await song.GetMusicDisplayItemAsync();
-                    if (!DisplayItem.IsDefault) return;
+                    if (!DisplayItem.IsDefault) break;
                 }
             }
         }
@@ -108,6 +108,18 @@ namespace SMPlayer.Models
             }
             return result;
         }
+
+        public AlbumView ToAlbumView()
+        {
+            return new AlbumView()
+            {
+                Name = Name,
+                Artist = SongCountConverter.GetSongCount(Songs.Count),
+                Songs = Songs,
+                Cover = DisplayItem.Thumbnail
+            };
+        }
+
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
             // Raise the PropertyChanged event, passing the name of the property whose value has changed.

@@ -215,15 +215,15 @@
             <HyperlinkButton
                 Margin="9,0"
                 Content="Update Music Library"
-                Style="{StaticResource TextBlockButtonStyle}" />
+                Style="{ThemeResource TextBlockButtonStyle}" />
             <HyperlinkButton
                 Margin="9,0"
                 Content="Show All Keyboard Shortcuts"
-                Style="{StaticResource TextBlockButtonStyle}" />
+                Style="{ThemeResource TextBlockButtonStyle}" />
             <HyperlinkButton
                 Margin="9,0"
                 Content="Bug Report"
-                Style="{StaticResource TextBlockButtonStyle}" />
+                Style="{ThemeResource TextBlockButtonStyle}" />
         </StackPanel>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">

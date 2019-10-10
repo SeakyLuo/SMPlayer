@@ -108,15 +108,17 @@ namespace SMPlayer
 
     class VisibilityConverter : IValueConverter
     {
+        public static bool IsCollapsed(object value)
+        {
+            if (value is string str) return string.IsNullOrEmpty(str);
+            else if (value is bool) return value.Equals(false);
+            else if (value is int) return value.Equals(0);
+            else if (value is Visibility) return value.Equals(Visibility.Visible);
+            return value == null;
+        }
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            bool collapsed;
-            if (value is string) collapsed = string.IsNullOrEmpty(value as string);
-            else if (value is bool) collapsed = value.Equals(false);
-            else if (value is int) collapsed = value.Equals(0);
-            else if (value is Visibility) collapsed = value.Equals(Visibility.Visible);
-            else collapsed = value == null;
-            return collapsed ? Visibility.Collapsed : Visibility.Visible;
+            return IsCollapsed(value) ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -182,16 +184,16 @@ namespace SMPlayer
             if (value is ICollection<Music> list)
             {
                 int count = list.Count();
-                string countStr = SongCount(count);
+                string countStr = GetSongCount(count);
                 return count < 2 ? countStr : $"{countStr} • {MusicDurationConverter.ToTime(list)}";
             }
             else if (value is int count)
             {
-                return SongCount(count);
+                return GetSongCount(count);
             }
             return "";
         }
-        public static string SongCount(int count)
+        public static string GetSongCount(int count)
         {
             return "Songs: " + count.ToString();
         }

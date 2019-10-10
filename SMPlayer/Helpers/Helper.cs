@@ -302,11 +302,10 @@ namespace SMPlayer
         Started = 0, Finished = 1, Ready = 2
     }
 
-    public struct MusicDisplayItem
+    public class MusicDisplayItem
     {
         public BitmapImage Thumbnail { get; private set; }
         public Brush Color { get; private set; }
-
         public bool IsDefault { get; private set; }
 
         public static MusicDisplayItem DefaultItem = new MusicDisplayItem(Helper.DefaultAlbumCover, ColorHelper.HighlightBrush)
@@ -319,6 +318,11 @@ namespace SMPlayer
             Thumbnail = bitmap;
             Color = color;
             IsDefault = false;
+        }
+
+        public static bool IsNullOrEmpty(MusicDisplayItem item)
+        {
+            return item == null || item.Thumbnail == null || item.Color == null;
         }
     }
 }

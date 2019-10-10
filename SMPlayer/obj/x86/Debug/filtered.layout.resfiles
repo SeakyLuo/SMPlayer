@@ -57,7 +57,7 @@ AlbumsPage.xbf
 App.xbf
 ArtistPage.xbf
 ArtistsPage.xbf
-Controls\GridAlbumControl.xbf
+Controls\DropShadowControl.xbf
 Controls\GridMusicControl.xbf
 Controls\HeaderedPlaylistControl.xbf
 Controls\IconTextButton.xbf
@@ -88,7 +88,6 @@ LocalPage.xbf
 MainPage.xbf
 Microsoft.UI.Xaml\DensityStyles\Compact.xbf
 MusicLibraryPage.xbf
-MusicListPage.xbf
 MyFavoritesPage.xbf
 NowPlayingFullPage.xbf
 NowPlayingPage.xbf

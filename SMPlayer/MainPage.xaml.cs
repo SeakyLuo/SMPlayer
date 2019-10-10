@@ -101,7 +101,7 @@ namespace SMPlayer
                 else PaneCloseNormal();
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             TitleBarHelper.SetMainTitleBar();
             Window.Current.SetTitleBar(AppTitleBar);
@@ -112,7 +112,7 @@ namespace SMPlayer
             {
                 SwitchPage(Settings.settings.LastPage);
                 foreach (var playlist in Settings.settings.Playlists)
-                    playlist.SetDisplayItem();
+                    await playlist.SetDisplayItemAsync();
                 PageUnset = false;
             }
         }
@@ -286,6 +286,7 @@ namespace SMPlayer
                 case "AlbumPage":
                     SetHeaderText("Album");
                     HeaderGrid.Visibility = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? Visibility.Visible : Visibility.Collapsed;
+                    MainNavigationView.SelectedItem = null;
                     break;
                 case "AlbumsPage":
                     SetHeaderText("Albums");
@@ -317,6 +318,7 @@ namespace SMPlayer
                     break;
                 case "SearchPage":
                     HeaderGrid.Visibility = Visibility.Visible;
+                    MainNavigationView.SelectedItem = null;
                     break;
                 case "SettingsPage":
                     SetHeaderText("Settings");
@@ -325,6 +327,7 @@ namespace SMPlayer
                     break;
                 default:
                     Debug.WriteLine("Navigate to " + NaviFrame.CurrentSourcePageType.Name);
+                    MainNavigationView.SelectedItem = null;
                     break;
             }
             if (!IsTitleBarColorful)

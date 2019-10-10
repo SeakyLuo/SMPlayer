@@ -130,8 +130,8 @@
     <Compile Include="ArtistsPage.xaml.cs">
       <DependentUpon>ArtistsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\GridAlbumControl.xaml.cs">
-      <DependentUpon>GridAlbumControl.xaml</DependentUpon>
+    <Compile Include="Controls\DropShadowControl.xaml.cs">
+      <DependentUpon>DropShadowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\GridMusicControl.xaml.cs">
       <DependentUpon>GridMusicControl.xaml</DependentUpon>
@@ -230,9 +230,6 @@
     <Compile Include="Models\SettingsEnum.cs" />
     <Compile Include="MusicLibraryPage.xaml.cs">
       <DependentUpon>MusicLibraryPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MusicListPage.xaml.cs">
-      <DependentUpon>MusicListPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MusicConverter.cs" />
     <Compile Include="MyFavoritesPage.xaml.cs">
@@ -338,7 +335,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\GridAlbumControl.xaml">
+    <Page Include="Controls\DropShadowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -435,10 +432,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\MediaControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MusicListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

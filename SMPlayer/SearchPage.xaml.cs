@@ -28,13 +28,13 @@ namespace SMPlayer
         public ObservableCollection<string> Artists = new ObservableCollection<string>();
         public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
-        public ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
-        private bool ArtistsViewAll = false, AlbumsViewAll = false, SongsViewAll = false, PlaylistsViewAll = false;
+        public ObservableCollection<AlbumView> Playlists = new ObservableCollection<AlbumView>();
+        public bool ArtistsViewAll, AlbumsViewAll, SongsViewAll, PlaylistsViewAll;
         public const int ArtistLimit = 10, AlbumLimit = 10, SongLimit = 5, PlaylistLimit = 10;
         public SearchPage()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Required;
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -66,11 +66,13 @@ namespace SMPlayer
         public void SearchArtists(string text)
         {
             Artists.Clear();
+            ArtistsViewAll = false;
             foreach (var artist in MusicLibraryPage.AllSongs.Where((m) => IsTargetArtist(m, text)).Select((m) => m.Artist).ToHashSet().OrderBy((s) => s))
             {
                 if (ArtistsViewAll = Artists.Count == ArtistLimit) break;
                 Artists.Add(artist);
             }
+            ArtistsViewAllButton.Visibility = ArtistsViewAll ? Visibility.Visible : Visibility.Collapsed;
         }
         public static bool IsTargetAlbum(Music music, string text)
         {
@@ -79,12 +81,14 @@ namespace SMPlayer
         public void SearchAlbums(string text)
         {
             Albums.Clear();
+            AlbumsViewAll = false;
             foreach (var group in MusicLibraryPage.AllSongs.Where((m) => IsTargetAlbum(m, text)).GroupBy((m) => m.Album))
             {
                 if (AlbumsViewAll = Albums.Count == AlbumLimit) break;
                 Music music = group.ElementAt(0);
                 Albums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy((m) => m.Name).ThenBy((m) => m.Artist)));
             }
+            AlbumsViewAllButton.Visibility = AlbumsViewAll ? Visibility.Visible : Visibility.Collapsed;
         }
         public static bool IsTargetMusic(Music music, string text)
         {
@@ -94,6 +98,7 @@ namespace SMPlayer
         public void SearchSongs(string text)
         {
             Songs.Clear();
+            SongsViewAll = false;
             foreach (var music in MusicLibraryPage.AllSongs)
             {
                 if (IsTargetMusic(music, text))
@@ -102,6 +107,7 @@ namespace SMPlayer
                     Songs.Add(music);
                 }
             }
+            SongsViewAllButton.Visibility = SongsViewAll ? Visibility.Visible : Visibility.Collapsed;
         }
         public static bool IsTargetPlaylist(Playlist playlist, string text)
         {
@@ -111,14 +117,16 @@ namespace SMPlayer
         public void SearchPlaylists(string text)
         {
             Playlists.Clear();
+            PlaylistsViewAll = false;
             foreach (var playlist in Settings.settings.Playlists)
             {
                 if (IsTargetPlaylist(playlist, text))
                 {
                     if (PlaylistsViewAll = Playlists.Count == PlaylistLimit) break;
-                    Playlists.Add(playlist);
+                    Playlists.Add(playlist.ToAlbumView());
                 }
             }
+            PlaylistsViewAllButton.Visibility = ArtistsViewAll ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public static string GetSearchHeader(string text, bool isMinimal)
@@ -135,6 +143,11 @@ namespace SMPlayer
         private void SearchAlbumView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
+        }
+
+        private void SearchArtistsView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+
         }
 
         private void SearchPlaylistView_ItemClick(object sender, ItemClickEventArgs e)
@@ -163,12 +176,12 @@ namespace SMPlayer
             helper.GetAddToPlaylistsMenuFlyout().ShowAt(sender as FrameworkElement);
         }
 
-        private void DataTemplate_PointerEntered(object sender, PointerRoutedEventArgs e)
+        private void UserControl_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             VisualStateManager.GoToState(sender as Control, "PointerOver", true);
         }
 
-        private void DataTemplate_PointerExited(object sender, PointerRoutedEventArgs e)
+        private void UserControl_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             VisualStateManager.GoToState(sender as Control, "Normal", true);
         }

@@ -69,14 +69,13 @@ namespace SMPlayer
             }
             else
             {
-                MusicDisplayItems = await playlist.GetMusicDisplayItemsAsync();
-                if (MusicDisplayItems.Count == 0)
-                    item = MusicDisplayItem.DefaultItem;
-                else
+                if (MusicDisplayItem.IsNullOrEmpty(playlist.DisplayItem))
+                    await playlist.SetDisplayItemAsync();
+                item = playlist.DisplayItem;
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                 {
-                    PlaylistDisplayDict[playlist.Name] = MusicDisplayItems;
-                    item = MusicDisplayItems[random.Next(MusicDisplayItems.Count)];
-                }
+                    PlaylistDisplayDict[playlist.Name] = await playlist.GetMusicDisplayItemsAsync();
+                });
             }
             PlaylistCover.Source = item.Thumbnail;
             HeaderBackground = item.Color;

@@ -78,12 +78,10 @@
                     x:Name="MusicLibraryItem"
                     Content="Songs"
                     Icon="Library"
-                    Tag="Music Library"
                     ToolTipService.ToolTip="Music Library" />
                 <NavigationViewItem
                     x:Name="ArtistsItem"
                     Content="Artists"
-                    Tag="Artists"
                     ToolTipService.ToolTip="Group By Artist">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8D4;" />
@@ -92,7 +90,6 @@
                 <NavigationViewItem
                     x:Name="AlbumsItem"
                     Content="Albums"
-                    Tag="Album"
                     ToolTipService.ToolTip="Group By Album">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE93C;" />
@@ -119,7 +116,6 @@
                 <NavigationViewItem
                     x:Name="LocalItem"
                     Content="Local"
-                    Tag="Local Folders"
                     ToolTipService.ToolTip="Local Folders and Music Files">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC4E;" />
@@ -128,7 +124,6 @@
                 <NavigationViewItem
                     x:Name="PlaylistsItem"
                     Content="Playlists"
-                    Tag="Playlists"
                     ToolTipService.ToolTip="Playlists">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEA37;" />
@@ -137,7 +132,6 @@
                 <NavigationViewItem
                     x:Name="MyFavoritesItem"
                     Content="My Favorites"
-                    Tag="My Favorites"
                     ToolTipService.ToolTip="My Favorite Music">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEB51;" />

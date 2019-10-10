@@ -18,9 +18,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace SMPlayer
 {
-    public sealed partial class GridAlbumControl : UserControl
+    public sealed partial class DropShadowControl : UserControl
     {
-        public GridAlbumControl()
+        public DropShadowControl()
         {
             this.InitializeComponent();
         }
