@@ -24,7 +24,7 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class SearchResultPage : Page
     {
-        private string Keyword;
+        private string keyword, target;
         public ObservableCollection<Playlist> Artists = new ObservableCollection<Playlist>();
         public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
@@ -35,42 +35,51 @@ namespace SMPlayer
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
+        private void AlbumsGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
+        }
+
+        private void PlaylistGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Frame.Navigate(typeof(PlaylistsPage), e.ClickedItem);
+        }
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            string text = (string)e.Parameter;
-            if (text == Keyword) return;
-            LoadingProgressBar.Visibility = Visibility.Visible;
-            Keyword = text;
-            switch (Keyword)
+            MainPage.Instance.SetHeaderText(SearchPage.GetSearchHeader(SearchPage.History.Peek(), MainPage.Instance.IsMinimal));
+            if (keyword == SearchPage.History.Peek() && (string)e.Parameter == target) return;
+            target = (string)e.Parameter;
+            keyword = SearchPage.History.Peek();
+            LoadingProgress.IsActive = true;
+            Artists.Clear();
+            Albums.Clear();
+            Songs.Clear();
+            Playlists.Clear();
+            switch (target)
             {
                 case "Artists":
-                    Artists.Clear();
-                    foreach (var group in MusicLibraryPage.AllSongs.Where((m) => SearchPage.IsTargetArtist(m, text)).GroupBy((m) => m.Artist).OrderBy((g) => g.Key))
+                    foreach (var group in MusicLibraryPage.AllSongs.Where((m) => SearchPage.IsTargetArtist(m, keyword)).GroupBy((m) => m.Artist).OrderBy((g) => g.Key))
                         Artists.Add(new Playlist(group.Key, group));
                     break;
                 case "Albums":
-                    Albums.Clear();
-                    foreach (var group in MusicLibraryPage.AllSongs.Where((m) => SearchPage.IsTargetAlbum(m, text)).GroupBy((m) => m.Album))
+                    foreach (var group in MusicLibraryPage.AllSongs.Where((m) => SearchPage.IsTargetAlbum(m, keyword)).GroupBy((m) => m.Album).OrderBy((g) => g.Key))
                     {
                         Music music = group.ElementAt(0);
                         Albums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy((m) => m.Name).ThenBy((m) => m.Artist)));
                     }
                     break;
                 case "Songs":
-                    Songs.Clear();
-                    foreach (var music in MusicLibraryPage.AllSongs)
-                        if (SearchPage.IsTargetMusic(music, text))
-                            Songs.Add(music);
+                    foreach (var music in MusicLibraryPage.AllSongs.Where((m) => SearchPage.IsTargetMusic(m, keyword)).OrderBy((m) => m.Name).ThenBy((m) => m.Artist))
+                        Songs.Add(music);
                     break;
                 case "Playlists":
-                    Playlists.Clear();
-                    foreach (var playlist in Settings.settings.Playlists)
-                        if (SearchPage.IsTargetPlaylist(playlist, text))
-                            Playlists.Add(playlist.ToAlbumView());
+                    foreach (var playlist in Settings.settings.Playlists.Where((p) => SearchPage.IsTargetPlaylist(p, keyword)).OrderBy((p) => p.Name))
+                        Playlists.Add(playlist.ToAlbumView());
                     break;
             }
-            LoadingProgressBar.Visibility = Visibility.Collapsed;
+            LoadingProgress.IsActive = false;
         }
     }
 }

@@ -29,7 +29,6 @@ namespace SMPlayer
         public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         public ObservableCollection<AlbumView> Playlists = new ObservableCollection<AlbumView>();
-        public bool ArtistsViewAll, AlbumsViewAll, SongsViewAll, PlaylistsViewAll;
         public const int ArtistLimit = 10, AlbumLimit = 10, SongLimit = 5, PlaylistLimit = 10;
         public SearchPage()
         {
@@ -37,71 +36,73 @@ namespace SMPlayer
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            ArtistsViewAllButton.Visibility = SearchArtistView.GetFirstDescendantOfType<ScrollViewer>()?.ScrollableWidth == 0 ? Visibility.Collapsed : Visibility.Visible;
+            AlbumsViewAllButton.Visibility = SearchAlbumView.GetFirstDescendantOfType<ScrollViewer>()?.ScrollableWidth == 0 ? Visibility.Collapsed : Visibility.Visible;
+            PlaylistsViewAllButton.Visibility = SearchPlaylistView.GetFirstDescendantOfType<ScrollViewer>()?.ScrollableWidth == 0 ? Visibility.Collapsed : Visibility.Visible;
+        }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            string text = e.Parameter as string;
+            string keyword = e.Parameter as string;
             // User Search
-            if (History.Count > 0 && text == History.Peek())
+            if (History.Count > 0 && keyword == History.Peek())
             {
                 // Back to Search Page
                 MainPage.Instance.SetHeaderText(GetSearchHeader(History.Peek(), MainPage.Instance.IsMinimal));
             }
             else
             {
-                MainPage.Instance.SetHeaderText(GetSearchHeader(text, MainPage.Instance.IsMinimal));
-                History.Push(text);
-                SearchArtists(text);
-                SearchAlbums(text);
-                SearchSongs(text);
-                SearchPlaylists(text);
+                MainPage.Instance.SetHeaderText(GetSearchHeader(keyword, MainPage.Instance.IsMinimal));
+                History.Push(keyword);
+                SearchArtists(keyword);
+                SearchAlbums(keyword);
+                SearchSongs(keyword);
+                SearchPlaylists(keyword);
                 NoResultPanel.Visibility = Artists.Count == 0 && Albums.Count == 0 && Songs.Count == 0 && Playlists.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
-        public static bool IsTargetArtist(Music music, string text)
+        public static bool IsTargetArtist(Music music, string keyword)
         {
-            return music.Artist.ToLower().Contains(text);
+            return music.Artist.ToLower().Contains(keyword);
         }
-        public void SearchArtists(string text)
+        public void SearchArtists(string keyword)
         {
             Artists.Clear();
-            ArtistsViewAll = false;
-            foreach (var group in MusicLibraryPage.AllSongs.Where((m) => IsTargetArtist(m, text)).GroupBy((m) => m.Artist).OrderBy((g) => g.Key))
+            foreach (var group in MusicLibraryPage.AllSongs.Where((m) => IsTargetArtist(m, keyword)).GroupBy((m) => m.Artist))
             {
-                if (ArtistsViewAll = Artists.Count == ArtistLimit) break;
                 Artists.Add(new Playlist(group.Key, group));
+                if (Artists.Count == ArtistLimit) break;
             }
-            ArtistsViewAllButton.Visibility = ArtistsViewAll ? Visibility.Visible : Visibility.Collapsed;
         }
-        public static bool IsTargetAlbum(Music music, string text)
+        public static bool IsTargetAlbum(Music music, string keyword)
         {
-            return music.Album.ToLower().Contains(text) || music.Artist.ToLower().Contains(text);
+            return music.Album.ToLower().Contains(keyword) || music.Artist.ToLower().Contains(keyword);
         }
-        public void SearchAlbums(string text)
+        public void SearchAlbums(string keyword)
         {
             Albums.Clear();
-            AlbumsViewAll = false;
-            foreach (var group in MusicLibraryPage.AllSongs.Where((m) => IsTargetAlbum(m, text)).GroupBy((m) => m.Album))
+            foreach (var group in MusicLibraryPage.AllSongs.Where((m) => IsTargetAlbum(m, keyword)).GroupBy((m) => m.Album))
             {
-                if (AlbumsViewAll = Albums.Count == AlbumLimit) break;
                 Music music = group.ElementAt(0);
                 Albums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy((m) => m.Name).ThenBy((m) => m.Artist)));
+                if (Albums.Count == AlbumLimit) break;
             }
-            AlbumsViewAllButton.Visibility = AlbumsViewAll ? Visibility.Visible : Visibility.Collapsed;
         }
-        public static bool IsTargetMusic(Music music, string text)
+        public static bool IsTargetMusic(Music music, string keyword)
         {
-            return music.Name.ToLower().Contains(text) || music.Album.ToLower().Contains(text) || music.Artist.ToLower().Contains(text);
+            return music.Name.ToLower().Contains(keyword) || music.Album.ToLower().Contains(keyword) || music.Artist.ToLower().Contains(keyword);
         }
 
-        public void SearchSongs(string text)
+        public void SearchSongs(string keyword)
         {
             Songs.Clear();
-            SongsViewAll = false;
+            bool SongsViewAll = false;
             foreach (var music in MusicLibraryPage.AllSongs)
             {
-                if (IsTargetMusic(music, text))
+                if (IsTargetMusic(music, keyword))
                 {
                     if (SongsViewAll = Songs.Count == SongLimit) break;
                     Songs.Add(music);
@@ -109,35 +110,28 @@ namespace SMPlayer
             }
             SongsViewAllButton.Visibility = SongsViewAll ? Visibility.Visible : Visibility.Collapsed;
         }
-        public static bool IsTargetPlaylist(Playlist playlist, string text)
+        public static bool IsTargetPlaylist(Playlist playlist, string keyword)
         {
-            return playlist.Name.Contains(text) || playlist.Songs.Any((music) => IsTargetMusic(music, text));
+            return playlist.Name.Contains(keyword) || playlist.Songs.Any((music) => IsTargetMusic(music, keyword));
         }
 
-        public void SearchPlaylists(string text)
+        public void SearchPlaylists(string keyword)
         {
             Playlists.Clear();
-            PlaylistsViewAll = false;
             foreach (var playlist in Settings.settings.Playlists)
             {
-                if (IsTargetPlaylist(playlist, text))
+                if (IsTargetPlaylist(playlist, keyword))
                 {
-                    if (PlaylistsViewAll = Playlists.Count == PlaylistLimit) break;
                     Playlists.Add(playlist.ToAlbumView());
+                    if (Playlists.Count == PlaylistLimit) break;
                 }
             }
-            PlaylistsViewAllButton.Visibility = ArtistsViewAll ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        public static string GetSearchHeader(string text, bool isMinimal)
+        public static string GetSearchHeader(string keyword, bool isMinimal)
         {
-            string header = $"\"{text}\"";
+            string header = $"\"{keyword}\"";
             return isMinimal ? header : $"Search Result of {header}";
-        }
-
-        private void SearchArtistsView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-
         }
 
         private void SearchAlbumView_ItemClick(object sender, ItemClickEventArgs e)
@@ -153,6 +147,7 @@ namespace SMPlayer
         {
             Frame.Navigate(typeof(SearchResultPage), "Artists");
         }
+
         private void AlbumsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Frame.Navigate(typeof(SearchResultPage), "Albums");
@@ -165,37 +160,6 @@ namespace SMPlayer
         private void PlaylistsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Frame.Navigate(typeof(SearchResultPage), "Playlists");
-        }
-
-        public static ICollection<Music> FindSongs(object data)
-        {
-            if (data is AlbumView album) return album.Songs;
-            else if (data is Playlist playlist) return playlist.Songs;
-            return null;
-        }
-
-        private void PlayAllButton_Click(object sender, RoutedEventArgs e)
-        {
-            var data = (sender as Button).DataContext;
-            var songs = FindSongs(data);
-            if (songs != null) MediaHelper.ShuffleAndPlay(songs);
-        }
-        private void AddToButton_Click(object sender, RoutedEventArgs e)
-        {
-            var data = (sender as Button).DataContext as AlbumView;
-            var songs = FindSongs((sender as Button).DataContext);
-            var helper = new MenuFlyoutHelper() { Data = songs, DefaultPlaylistName = data.Name };
-            helper.GetAddToPlaylistsMenuFlyout().ShowAt(sender as FrameworkElement);
-        }
-
-        private void UserControl_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            VisualStateManager.GoToState(sender as Control, "PointerOver", true);
-        }
-
-        private void UserControl_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            VisualStateManager.GoToState(sender as Control, "Normal", true);
         }
     }
 }

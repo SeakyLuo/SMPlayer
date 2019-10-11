@@ -130,6 +130,9 @@
     <Compile Include="ArtistsPage.xaml.cs">
       <DependentUpon>ArtistsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ArtistItemControl.xaml.cs">
+      <DependentUpon>ArtistItemControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DropShadowControl.xaml.cs">
       <DependentUpon>DropShadowControl.xaml</DependentUpon>
     </Compile>
@@ -335,6 +338,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ArtistsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ArtistItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

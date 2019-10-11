@@ -4,8 +4,8 @@
     <RootInterface FullName="Windows.UI.Xaml.Data.IValueConverter" />
   </Roots.Interfaces>
   <Roots.PropertyPathNames>
-    <RootPropertyPathName Name="Artist" />
     <RootPropertyPathName Name="Name" />
+    <RootPropertyPathName Name="Artist" />
     <RootPropertyPathName Name="Cover" />
     <RootPropertyPathName Name="Album" />
     <RootPropertyPathName Name="IsPlaying" />
@@ -75,10 +75,10 @@
       <RootProperty Name="Text" />
       <RootProperty Name="TextWrapping" />
       <RootProperty Name="Foreground" />
+      <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="MaxLines" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="Width" />
-      <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="TextTrimming" />
       <RootProperty Name="MinWidth" />
       <RootProperty Name="FontFamily" />
@@ -87,7 +87,6 @@
       <RootProperty Name="Style" />
       <RootProperty Name="Height" />
       <RootProperty Name="HorizontalTextAlignment" />
-      <RootProperty Name="MaxWidth" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Button">
       <RootProperty Name="Margin" />
@@ -212,8 +211,8 @@
       <RootProperty Name="ColumnDefinitions" />
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
-      <RootProperty Name="Padding" />
       <RootProperty Name="CornerRadius" />
+      <RootProperty Name="Padding" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="BorderBrush" />
@@ -261,6 +260,8 @@
       <RootProperty Name="ItemsSource" />
       <RootProperty Name="SelectionMode" />
       <RootProperty Name="ItemTemplate" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="Visibility" />
       <RootEvent Name="ItemClick" />
     </RootType>
     <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.StaticResourceExtension">
@@ -460,7 +461,7 @@
     <RootType FullName="Windows.UI.Xaml.Controls.UserControl">
       <RootProperty Name="Content" />
       <RootProperty Name="Resources" />
-      <RootProperty Name="Margin" />
+      <RootEvent Name="Tapped" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
       <RootEvent Name="Loaded" />
@@ -469,19 +470,19 @@
     <RootType FullName="Windows.UI.Xaml.VisualStateManager">
       <RootMethod Name="GetVisualStateGroups" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ToolTipService">
+      <RootMethod Name="GetToolTip" />
+      <RootMethod Name="SetToolTip" />
+    </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DropShadowPanel">
-      <RootProperty Name="VerticalContentAlignment" />
       <RootProperty Name="BlurRadius" />
       <RootProperty Name="OffsetX" />
       <RootProperty Name="OffsetY" />
       <RootProperty Name="ShadowOpacity" />
       <RootProperty Name="Color" />
       <RootProperty Name="Content" />
+      <RootProperty Name="VerticalContentAlignment" />
       <RootProperty Name="Margin" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.ToolTipService">
-      <RootMethod Name="GetToolTip" />
-      <RootMethod Name="SetToolTip" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.VisualStateGroup">
       <RootProperty Name="States" />
@@ -506,6 +507,9 @@
     <RootType FullName="Windows.UI.Xaml.Media.Animation.DiscreteObjectKeyFrame">
       <RootProperty Name="KeyTime" />
       <RootProperty Name="Value" />
+    </RootType>
+    <RootType FullName="SMPlayer.ArtistItemControl">
+      <RootProperty Name="DataContext" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.AdaptiveTrigger">
       <RootProperty Name="MinWindowWidth" />
@@ -1058,6 +1062,7 @@
       <RootProperty Name="Background" />
       <RootProperty Name="IsNowPlaying" />
       <RootProperty Name="Theme" />
+      <RootProperty Name="Style" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">
       <RootProperty Name="Margin" />

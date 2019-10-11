@@ -57,6 +57,7 @@ AlbumsPage.xbf
 App.xbf
 ArtistPage.xbf
 ArtistsPage.xbf
+Controls\ArtistItemControl.xbf
 Controls\DropShadowControl.xbf
 Controls\GridMusicControl.xbf
 Controls\HeaderedPlaylistControl.xbf
