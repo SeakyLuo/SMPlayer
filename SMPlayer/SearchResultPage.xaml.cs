@@ -24,7 +24,7 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class SearchResultPage : Page
     {
-        private string keyword, target;
+        private string keyword;
         public ObservableCollection<Playlist> Artists = new ObservableCollection<Playlist>();
         public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
@@ -48,16 +48,18 @@ namespace SMPlayer
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            MainPage.Instance.SetHeaderText(SearchPage.GetSearchHeader(SearchPage.History.Peek(), MainPage.Instance.IsMinimal));
-            if (keyword == SearchPage.History.Peek() && (string)e.Parameter == target) return;
-            target = (string)e.Parameter;
+            if (e.NavigationMode == NavigationMode.Back)
+            {
+                MainPage.Instance.SetHeaderText(SearchPage.GetSearchHeader(SearchPage.History.Peek(), MainPage.Instance.IsMinimal));
+                return;
+            }
             keyword = SearchPage.History.Peek();
             LoadingProgress.IsActive = true;
             Artists.Clear();
             Albums.Clear();
             Songs.Clear();
             Playlists.Clear();
-            switch (target)
+            switch ((string)e.Parameter)
             {
                 case "Artists":
                     foreach (var group in MusicLibraryPage.AllSongs.Where((m) => SearchPage.IsTargetArtist(m, keyword)).GroupBy((m) => m.Artist).OrderBy((g) => g.Key))

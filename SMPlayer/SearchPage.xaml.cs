@@ -47,7 +47,7 @@ namespace SMPlayer
             base.OnNavigatedTo(e);
             string keyword = e.Parameter as string;
             // User Search
-            if (History.Count > 0 && keyword == History.Peek())
+            if (e.NavigationMode == NavigationMode.Back)
             {
                 // Back to Search Page
                 MainPage.Instance.SetHeaderText(GetSearchHeader(History.Peek(), MainPage.Instance.IsMinimal));
@@ -62,6 +62,13 @@ namespace SMPlayer
                 SearchPlaylists(keyword);
                 NoResultPanel.Visibility = Artists.Count == 0 && Albums.Count == 0 && Songs.Count == 0 && Playlists.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
             }
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            if (e.NavigationMode == NavigationMode.Back)
+                History.Pop();
         }
 
         public static bool IsTargetArtist(Music music, string keyword)
