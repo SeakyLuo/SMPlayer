@@ -32,7 +32,7 @@ namespace SMPlayer
         public const string ToastGroup = "SMPlayerMediaToastGroup";
         public const string NoLyricsAvailable = "No Lyrics Available";
 
-        public static StorageFolder CurrentFolder, ThumbnailFolder;
+        public static StorageFolder CurrentFolder, ThumbnailFolder, SecondaryTileFolder;
         public static BitmapImage DefaultAlbumCover = new BitmapImage(new Uri(DefaultAlbumCoverPath));
         public static BitmapImage ThumbnailNotFoundImage = new BitmapImage(new Uri(ThumbnailNotFoundPath));
         public static ToastNotifier toastNotifier = ToastNotificationManager.CreateToastNotifier();
@@ -40,6 +40,19 @@ namespace SMPlayer
         public static TileUpdater tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
 
         private static string Lyrics = "";
+
+        public static async Task<bool> CheckIfFileExistsAsync(string path)
+        {
+            try
+            {
+                await StorageFile.GetFileFromPathAsync(path);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
 
         public static void SetToolTip(this DependencyObject obj, string tooltip)
         {
@@ -80,7 +93,11 @@ namespace SMPlayer
 
         public static async Task<StorageItemThumbnail> GetStorageItemThumbnailAsync(Music music)
         {
-            var file = await StorageFile.GetFileFromPathAsync(music.Path);
+            return await GetStorageItemThumbnailAsync(music.Path);
+        }
+        public static async Task<StorageItemThumbnail> GetStorageItemThumbnailAsync(string path)
+        {
+            var file = await StorageFile.GetFileFromPathAsync(path);
             return await file.GetThumbnailAsync(ThumbnailMode.MusicView, 500);
         }
         public static BitmapImage GetBitmapImage(this StorageItemThumbnail thumbnail)
@@ -167,7 +184,7 @@ namespace SMPlayer
         public static async void UpdateTile(StorageItemThumbnail itemThumbnail, Music music)
         {
             if (itemThumbnail == null) return;
-            var thumbnail = await itemThumbnail.SaveAsync(music.Name);
+            var thumbnail = await itemThumbnail.SaveAsync(ThumbnailFolder, string.IsNullOrEmpty(music.Album) ? music.Name : music.Album);
             string uri = thumbnail.Path;
             var tileContent = new TileContent()
             {
@@ -304,11 +321,14 @@ namespace SMPlayer
         public static async Task<bool> PinToStartAsync(Playlist playlist, bool isPlaylist)
         {
             var tilename = playlist.Name;
-            var tile = new SecondaryTile(isPlaylist ? tilename : $"{tilename}+++{playlist.Artist}",
-                                         tilename,
-                                         isPlaylist.ToString(),
-                                         new Uri(playlist.DisplayItem.Path),
-                                         TileSize.Default);
+            var tileid = isPlaylist ? tilename : $"{tilename}+++{playlist.Artist}";
+            var path = LogoPath;
+            if (playlist.DisplayItem.Source != null && await SecondaryTileFolder.TryGetItemAsync(tilename) == null)
+            {
+                var thumbnail = await (await GetStorageItemThumbnailAsync(playlist.DisplayItem.Source.Path)).SaveAsync(SecondaryTileFolder, tilename);
+                path = thumbnail.Path;
+            }
+            var tile = new SecondaryTile(tileid, tilename, isPlaylist.ToString(), new Uri(path), TileSize.Default);
             tile.VisualElements.ShowNameOnSquare150x150Logo = tile.VisualElements.ShowNameOnSquare310x310Logo = tile.VisualElements.ShowNameOnWide310x150Logo = true;
             bool isPinned = SecondaryTile.Exists(tilename);
             if (isPinned) await tile.RequestDeleteAsync();
@@ -316,19 +336,23 @@ namespace SMPlayer
             return !isPinned;
         }
 
-        public static async Task<StorageFile> SaveAsync(this StorageItemThumbnail thumbnail, string name)
+        public static async Task<StorageFile> SaveAsync(this StorageItemThumbnail thumbnail, StorageFolder folder, string name)
         {
             using (var stream = thumbnail.CloneStream())
             {
                 var decoder = await BitmapDecoder.CreateAsync(stream);
                 var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
                 var filename = $"{name}.png";
-                var file = await ThumbnailFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
-                using (var filestream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                var item = await folder.TryGetItemAsync(filename);
+                var file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
+                if (item == null)
                 {
-                    var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, filestream);
-                    encoder.SetSoftwareBitmap(softwareBitmap);
-                    await encoder.FlushAsync();
+                    using (var filestream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                    {
+                        var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, filestream);
+                        encoder.SetSoftwareBitmap(softwareBitmap);
+                        await encoder.FlushAsync();
+                    }
                 }
                 return file;
             }

@@ -14,20 +14,15 @@ namespace SMPlayer.Models
         public BitmapImage Thumbnail { get; private set; }
         public Brush Color { get; private set; }
         public bool IsDefault { get; private set; }
+        public Music Source { get; private set; }
 
-        public string Path { get; private set; }
+        public static MusicDisplayItem DefaultItem = new MusicDisplayItem(Helper.DefaultAlbumCover, ColorHelper.HighlightBrush);
 
-        public static MusicDisplayItem DefaultItem = new MusicDisplayItem(Helper.DefaultAlbumCover, ColorHelper.HighlightBrush)
-        {
-            IsDefault = true,
-            Path = Helper.LogoPath
-        };
-
-        public MusicDisplayItem(StorageItemThumbnail thumbnail, Brush color, string path)
+        public MusicDisplayItem(StorageItemThumbnail thumbnail, Brush color, Music music)
         {
             Thumbnail = thumbnail.GetBitmapImage();
             Color = color;
-            Path = path;
+            Source = music;
             IsDefault = false;
         }
 
@@ -35,7 +30,6 @@ namespace SMPlayer.Models
         {
             Thumbnail = bitmap;
             Color = color;
-            Path = Helper.LogoPath;
             IsDefault = true;
         }
 

@@ -80,7 +80,6 @@ namespace SMPlayer.Models
             {
                 settings = JsonFileHelper.Convert<Settings>(json);
                 if (string.IsNullOrEmpty(settings.RootPath)) return;
-                Helper.ThumbnailFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Thumbnails", CreationCollisionOption.OpenIfExists);
                 try
                 {
                     Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
@@ -89,6 +88,10 @@ namespace SMPlayer.Models
                 {
 
                 }
+                Helper.ThumbnailFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Thumbnails", CreationCollisionOption.OpenIfExists);
+                foreach (var item in await Helper.ThumbnailFolder.GetFilesAsync())
+                    await item.DeleteAsync();
+                Helper.SecondaryTileFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("SecondaryTiles", CreationCollisionOption.OpenIfExists);
             }
 
         }
