@@ -33,7 +33,6 @@ namespace SMPlayer
         public const string NoLyricsAvailable = "No Lyrics Available";
 
         public static StorageFolder CurrentFolder, ThumbnailFolder;
-        public static StorageFile Thumbnail;
         public static BitmapImage DefaultAlbumCover = new BitmapImage(new Uri(DefaultAlbumCoverPath));
         public static BitmapImage ThumbnailNotFoundImage = new BitmapImage(new Uri(ThumbnailNotFoundPath));
         public static ToastNotifier toastNotifier = ToastNotificationManager.CreateToastNotifier();
@@ -165,10 +164,11 @@ namespace SMPlayer
             toastNotifier.Update(data, ToastTag, ToastGroup);
         }
 
-        public static void UpdateTile(Music music)
+        public static async void UpdateTile(StorageItemThumbnail itemThumbnail, Music music)
         {
-            if (Thumbnail == null) return;
-            string uri = Thumbnail.Path;
+            if (itemThumbnail == null) return;
+            var thumbnail = await itemThumbnail.SaveAsync(music.Name);
+            string uri = thumbnail.Path;
             var tileContent = new TileContent()
             {
                 Visual = new TileVisual()
@@ -316,20 +316,21 @@ namespace SMPlayer
             return !isPinned;
         }
 
-        public static async void SaveThumbnail(this StorageItemThumbnail thumbnail, string name)
+        public static async Task<StorageFile> SaveAsync(this StorageItemThumbnail thumbnail, string name)
         {
             using (var stream = thumbnail.CloneStream())
             {
                 var decoder = await BitmapDecoder.CreateAsync(stream);
                 var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
                 var filename = $"{name}.png";
-                Thumbnail = await ThumbnailFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
-                using (var filestream = await Thumbnail.OpenAsync(FileAccessMode.ReadWrite))
+                var file = await ThumbnailFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
+                using (var filestream = await file.OpenAsync(FileAccessMode.ReadWrite))
                 {
                     var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, filestream);
                     encoder.SetSoftwareBitmap(softwareBitmap);
                     await encoder.FlushAsync();
                 }
+                return file;
             }
         }
     }

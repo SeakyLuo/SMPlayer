@@ -14,6 +14,8 @@ Localization.
 
 Mini play.
 
+Handle Music Not Found.
+
 ThemeColor change.
 
 Add Album Art to Music.
@@ -24,12 +26,10 @@ Search Lyrics.
 
 Animations.
 
-Handle Music Not Found.
-
 # TO FIX
 
 Bad performance when given many music files.
 
 Bad performance of Loading NowPlayingFull.
 
-Tile icon.
+Play music too slow.

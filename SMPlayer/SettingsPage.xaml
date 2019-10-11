@@ -161,10 +161,10 @@
                 SelectionChanged="LanguageComboBox_SelectionChanged"
                 Style="{StaticResource MarginSetter}">
                 <ComboBoxItem Content="Follow System" IsSelected="True" />
-                <ComboBoxItem Content="Chinese (Simplified)" />
-                <ComboBoxItem Content="Chinese (Traditional)" />
+                <ComboBoxItem Content="简体中文" />
+                <ComboBoxItem Content="繁體中文" />
                 <ComboBoxItem Content="English" />
-                <ComboBoxItem Content="Japanese" />
+                <ComboBoxItem Content="日本語" />
             </ComboBox>
             <ComboBox
                 x:Name="NotificationComboBox"

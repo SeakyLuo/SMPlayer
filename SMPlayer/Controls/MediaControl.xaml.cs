@@ -310,7 +310,7 @@ namespace SMPlayer
             else DislikeMusic(false);
             if (Mode == MediaControlMode.Main)
                 MainMediaControlGrid.Background = isThumbnail ? await thumbnail.GetDisplayColor() : ColorHelper.HighlightBrush;
-            Helper.UpdateTile(music);
+            Helper.UpdateTile(thumbnail, music);
             thumbnail.Dispose();
         }
         public void SetMusicAndPlay(Music music)
