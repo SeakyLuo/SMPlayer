@@ -37,11 +37,18 @@ namespace SMPlayer
                 Playlist playlist = null;
                 if (e.Parameter is AlbumView album)
                 {
-                    playlist = new Playlist(album.Name, album.Songs);
+                    playlist = album.ToPlaylist();
                     AlbumPlaylistControl.SetPlaylistInfo(album.Artist);
                 }
                 else if (e.Parameter is Playlist)
                     playlist = e.Parameter as Playlist;
+                else if (e.Parameter is string albumText)
+                {
+                    int index = albumText.IndexOf("+++");
+                    string albumName = albumText.Substring(0, index), albumArtist = albumText.Substring(index + 3);
+                    playlist = new Playlist(albumName, MusicLibraryPage.AllSongs.Where((m) => m.Album == albumName && m.Artist == albumArtist));
+                    AlbumPlaylistControl.SetPlaylistInfo(albumArtist);
+                }
                 await AlbumPlaylistControl.SetMusicCollection(playlist);
             }
             TitleBarHelper.SetDarkTitleBar();

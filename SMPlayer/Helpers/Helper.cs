@@ -14,6 +14,7 @@ using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Notifications;
+using Windows.UI.StartScreen;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -31,7 +32,7 @@ namespace SMPlayer
         public const string ToastGroup = "SMPlayerMediaToastGroup";
         public const string NoLyricsAvailable = "No Lyrics Available";
 
-        public static StorageFolder CurrentFolder;
+        public static StorageFolder CurrentFolder, ThumbnailFolder;
         public static StorageFile Thumbnail;
         public static BitmapImage DefaultAlbumCover = new BitmapImage(new Uri(DefaultAlbumCoverPath));
         public static BitmapImage ThumbnailNotFoundImage = new BitmapImage(new Uri(ThumbnailNotFoundPath));
@@ -41,7 +42,10 @@ namespace SMPlayer
 
         private static string Lyrics = "";
 
-
+        public static void SetToolTip(this DependencyObject obj, string tooltip)
+        {
+            ToolTipService.SetToolTip(obj, new ToolTip() { Content = tooltip });
+        }
         public static string GetVolumeIcon(double volume)
         {
             if (volume == 0) return "\uE992";
@@ -296,33 +300,41 @@ namespace SMPlayer
             // And send the notification to the primary tile
             tileUpdater.Update(tileNotification);
         }
+
+        public static async Task<bool> PinToStartAsync(Playlist playlist, bool isPlaylist)
+        {
+            var tilename = playlist.Name;
+            var tile = new SecondaryTile(isPlaylist ? tilename : $"{tilename}+++{playlist.Artist}",
+                                         tilename,
+                                         isPlaylist.ToString(),
+                                         new Uri(playlist.DisplayItem.Path),
+                                         TileSize.Default);
+            tile.VisualElements.ShowNameOnSquare150x150Logo = tile.VisualElements.ShowNameOnSquare310x310Logo = tile.VisualElements.ShowNameOnWide310x150Logo = true;
+            bool isPinned = SecondaryTile.Exists(tilename);
+            if (isPinned) await tile.RequestDeleteAsync();
+            else await tile.RequestCreateAsync();
+            return !isPinned;
+        }
+
+        public static async void SaveThumbnail(this StorageItemThumbnail thumbnail, string name)
+        {
+            using (var stream = thumbnail.CloneStream())
+            {
+                var decoder = await BitmapDecoder.CreateAsync(stream);
+                var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
+                var filename = $"{name}.png";
+                Thumbnail = await ThumbnailFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
+                using (var filestream = await Thumbnail.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, filestream);
+                    encoder.SetSoftwareBitmap(softwareBitmap);
+                    await encoder.FlushAsync();
+                }
+            }
+        }
     }
     public enum NotifiedStatus
     {
         Started = 0, Finished = 1, Ready = 2
-    }
-
-    public class MusicDisplayItem
-    {
-        public BitmapImage Thumbnail { get; private set; }
-        public Brush Color { get; private set; }
-        public bool IsDefault { get; private set; }
-
-        public static MusicDisplayItem DefaultItem = new MusicDisplayItem(Helper.DefaultAlbumCover, ColorHelper.HighlightBrush)
-        {
-            IsDefault = true
-        };
-
-        public MusicDisplayItem(BitmapImage bitmap, Brush color)
-        {
-            Thumbnail = bitmap;
-            Color = color;
-            IsDefault = false;
-        }
-
-        public static bool IsNullOrEmpty(MusicDisplayItem item)
-        {
-            return item == null || item.Thumbnail == null || item.Color == null;
-        }
     }
 }

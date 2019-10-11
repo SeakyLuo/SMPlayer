@@ -36,7 +36,6 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-
                         <Image
                             x:Name="PlaylistCover"
                             Grid.RowSpan="3"
@@ -94,6 +93,7 @@
                                 Style="{StaticResource PlaylistAppBarButtonStyle}"
                                 ToolTipService.ToolTip="Rename Playlist" />
                             <AppBarButton
+                                x:Name="PinToStartButton"
                                 Click="PinToStart_Click"
                                 Icon="Pin"
                                 Label="Pin to Start"

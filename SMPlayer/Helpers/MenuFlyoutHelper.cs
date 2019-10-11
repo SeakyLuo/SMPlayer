@@ -31,7 +31,7 @@ namespace SMPlayer
                 Text = "Add To",
                 Name = AddToSubItemName
             };
-            ToolTipService.SetToolTip(addToItem, new ToolTip() { Content = "Add To Playlist" });
+            addToItem.SetToolTip("Add To Playlist");
             if (playlistName != NowPlaying)
             {
                 var nowPlayingItem = new MenuFlyoutItem()
@@ -80,10 +80,11 @@ namespace SMPlayer
             newPlaylistItem.Click += async (sender, args) =>
             {
                 var listener = new VirtualRenameActionListener() { Data = Data };
-                var dialog = new RenameDialog(listener, TitleOption.NewPlaylist, DefaultPlaylistName);
+                var dialog = new RenameDialog(listener, RenameOption.New, DefaultPlaylistName);
                 listener.Dialog = dialog;
                 await dialog.ShowAsync();
             };
+            newPlaylistItem.SetToolTip("Create a New Playlist");
             flyout.Items.Add(newPlaylistItem);
             foreach (var playlist in Settings.settings.Playlists)
             {
@@ -112,7 +113,7 @@ namespace SMPlayer
                 Text = "Shuffle",
                 Name = PlaylistMenuName
             };
-            ToolTipService.SetToolTip(shuffleItem, new ToolTip() { Content = "Shuffle and Play" });
+            shuffleItem.SetToolTip("Shuffle and Play");
             shuffleItem.Click += (s, args) =>
             {
                 MediaHelper.ShuffleAndPlay(Data as ICollection<Music>);
@@ -149,7 +150,7 @@ namespace SMPlayer
                 }
                 await Windows.System.Launcher.LaunchFolderAsync(folder, options);
             };
-            ToolTipService.SetToolTip(item, new ToolTip() { Content = "Show In Explorer" });
+            item.SetToolTip("Show In Explorer");
             return item;
         }
         public MenuFlyout GetMusicMenuFlyout(MenuFlyoutItemClickListener listener = null)
@@ -162,7 +163,7 @@ namespace SMPlayer
                 Text = "Play",
                 Name = MusicMenuName
             };
-            ToolTipService.SetToolTip(playItem, new ToolTip() { Content = $"Play {music.Name}" });
+            playItem.SetToolTip($"Play {music.Name}");
             playItem.Click += (s, args) =>
             {
                 MediaHelper.SetMusicAndPlay(music);
@@ -192,7 +193,7 @@ namespace SMPlayer
                     }
                 }.ShowAsync();
             };
-            ToolTipService.SetToolTip(deleteItem, new ToolTip() { Content = $"Delete {music.Name}" });
+            deleteItem.SetToolTip($"Delete {music.Name}");
             flyout.Items.Add(deleteItem);
             foreach (var item in GetMusicPropertiesMenuFlyout().Items)
                 flyout.Items.Add(item);
@@ -214,7 +215,7 @@ namespace SMPlayer
                 MainPage.Instance.Frame.Navigate(typeof(NowPlayingFullPage));
                 NowPlayingFullPage.Instance.MusicInfoRequested(MediaHelper.CurrentMusic);
             };
-            ToolTipService.SetToolTip(musicInfoItem, new ToolTip() { Content = "Show Music Info" });
+            musicInfoItem.SetToolTip("Show Music Info");
             flyout.Items.Add(musicInfoItem);
             var lyricsItem = new MenuFlyoutItem()
             {
@@ -227,7 +228,7 @@ namespace SMPlayer
                 MainPage.Instance.Frame.Navigate(typeof(NowPlayingFullPage));
                 NowPlayingFullPage.Instance.LyricsRequested(MediaHelper.CurrentMusic);
             };
-            ToolTipService.SetToolTip(lyricsItem, new ToolTip() { Content = "Show Music Lyrics" });
+            lyricsItem.SetToolTip("Show Music Lyrics");
             flyout.Items.Add(lyricsItem);
             return flyout;
         }
@@ -249,7 +250,7 @@ namespace SMPlayer
                     MediaHelper.RemoveMusic(music);
                 }
             };
-            ToolTipService.SetToolTip(removeItem, new ToolTip() { Content = "Remove From Playlist" });
+            removeItem.SetToolTip("Remove From Playlist");
             flyout.Items.Insert(2, removeItem);
             return flyout;
         }

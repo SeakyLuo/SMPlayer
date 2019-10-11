@@ -57,6 +57,10 @@ namespace SMPlayer
             {
                 PlaylistTabView.SelectedItem = playlist;
             }
+            else if (e.Parameter is string playlistName)
+            {
+                PlaylistTabView.SelectedItem = Playlists.FirstOrDefault((p) => p.Name == playlistName);
+            }
         }
 
         public void SetFooterText()
@@ -101,7 +105,7 @@ namespace SMPlayer
         {
             var flyoutItem = sender as MenuFlyoutItem;
             var playlist = flyoutItem.DataContext as Playlist;
-            dialog = new Dialogs.RenameDialog(this as RenameActionListener, TitleOption.Rename, playlist.Name);
+            dialog = new RenameDialog(this, RenameOption.Rename, playlist.Name);
             await dialog.ShowAsync();
         }
 
@@ -119,7 +123,7 @@ namespace SMPlayer
         private async void NewPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
             string name = "Playlist";
-            dialog = new Dialogs.RenameDialog(this as RenameActionListener, TitleOption.NewPlaylist, Settings.settings.FindNextPlaylistName(name));
+            dialog = new RenameDialog(this, RenameOption.New, Settings.settings.FindNextPlaylistName(name));
             await dialog.ShowAsync();
         }
 
@@ -179,35 +183,12 @@ namespace SMPlayer
         {
             return ConfirmRenaming(dialog, OldName, NewName);
         }
-        public static bool ConfirmRenaming(RenameDialog dialog, string OldName, string NewName)
+        public static bool ConfirmRenaming(RenameDialog dialog, string oldName, string newName)
         {
-            if (string.IsNullOrEmpty(NewName) || string.IsNullOrWhiteSpace(NewName))
+            return new VirtualRenameActionListener()
             {
-                dialog.ShowError(ErrorOption.EmptyOrWhiteSpace);
-                return false;
-            }
-            if (Settings.settings.Playlists.FindIndex((p) => p.Name == NewName) != -1)
-            {
-                dialog.ShowError(ErrorOption.Used);
-                return false;
-            }
-            switch (dialog.Option)
-            {
-                case TitleOption.NewPlaylist:
-                    Playlist playlist = new Playlist(NewName);
-                    PlaylistsPage.Playlists.Add(playlist);
-                    Settings.settings.Playlists.Add(playlist);
-                    break;
-                case TitleOption.Rename:
-                    if (OldName != NewName)
-                    {
-                        int index = Settings.settings.Playlists.FindIndex((p) => p.Name == OldName);
-                        Settings.settings.Playlists[index].Name = NewName;
-                        PlaylistsPage.Playlists[index].Name = NewName;
-                    }
-                    break;
-            }
-            return true;
+                Dialog = dialog
+            }.Confirm(oldName, newName);
         }
 
         private void OpenPlaylistsFlyout(object sender, object e)

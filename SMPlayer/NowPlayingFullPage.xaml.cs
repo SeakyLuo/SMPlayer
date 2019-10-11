@@ -175,7 +175,7 @@ namespace SMPlayer
 
         private void SearchLyricsButton_Click(object sender, RoutedEventArgs e)
         {
-            ShowNotification("Searching Lyrics...");
+            ShowNotification("Not Implemented");
         }
 
         public void ShowNotification(string message, int duration = 1500)

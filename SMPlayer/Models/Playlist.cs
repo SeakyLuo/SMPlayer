@@ -31,6 +31,9 @@ namespace SMPlayer.Models
         [Newtonsoft.Json.JsonIgnore]
         public MusicDisplayItem DisplayItem { get; set; }
 
+        [Newtonsoft.Json.JsonIgnore]
+        public string Artist { get; set; }
+
         public ObservableCollection<Music> Songs { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };

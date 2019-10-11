@@ -80,6 +80,7 @@ namespace SMPlayer.Models
             {
                 settings = JsonFileHelper.Convert<Settings>(json);
                 if (string.IsNullOrEmpty(settings.RootPath)) return;
+                Helper.ThumbnailFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Thumbnails", CreationCollisionOption.OpenIfExists);
                 try
                 {
                     Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
@@ -137,5 +138,51 @@ namespace SMPlayer.Models
             Recent.Remove(music.Path);
             Recent.Insert(0, music.Path);
         }
+
+        public NamingError CheckPlaylistNamingError(string newName)
+        {
+            if (string.IsNullOrEmpty(newName) || string.IsNullOrWhiteSpace(newName))
+                return NamingError.EmptyOrWhiteSpace;
+            if (newName == MenuFlyoutHelper.NowPlaying || newName == MenuFlyoutHelper.MyFavorites ||
+                Playlists.FindIndex((p) => p.Name == newName) != -1)
+                return NamingError.Used;
+            if (newName.Contains("+++"))
+                return NamingError.Special;
+            return NamingError.Good;
+        }
+
+        public void RenamePlaylist(string oldName, string newName, RenameOption option, object data = null)
+        {
+            switch (option)
+            {
+                case RenameOption.New:
+                    Playlist playlist = new Playlist(newName);
+                    if (data != null) playlist.Add(data);
+                    Playlists.Add(playlist);
+                    PlaylistsPage.Playlists.Add(playlist);
+                    break;
+                case RenameOption.Rename:
+                    if (oldName == newName) break;
+                    int index = Playlists.FindIndex((p) => p.Name == oldName);
+                    Playlists[index].Name = newName;
+                    PlaylistsPage.Playlists[index].Name = newName;
+                    break;
+            }
+        }
+
+    }
+
+    public enum NamingError
+    {
+        Good = 0,
+        EmptyOrWhiteSpace = 1,
+        Used = 2,
+        Special = 3
+    }
+
+    public enum RenameOption
+    {
+        New = 0,
+        Rename = 1
     }
 }

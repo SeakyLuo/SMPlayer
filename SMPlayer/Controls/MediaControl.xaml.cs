@@ -659,7 +659,7 @@ namespace SMPlayer
             int index = Settings.settings.FindNextPlaylistNameIndex(name);
             var defaultName = index == 0 ? name : $"{name} ({index})";
             var listener = new VirtualRenameActionListener() { Data = MediaHelper.CurrentPlaylist };
-            var dialog = new RenameDialog(listener, TitleOption.NewPlaylist, defaultName);
+            var dialog = new RenameDialog(listener, RenameOption.New, defaultName);
             listener.Dialog = dialog;
             await dialog.ShowAsync();
         }

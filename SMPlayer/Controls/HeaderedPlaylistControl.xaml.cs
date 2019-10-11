@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 
 namespace SMPlayer
 {
-    public sealed partial class HeaderedPlaylistControl : UserControl, RenameActionListener
+    public sealed partial class HeaderedPlaylistControl : UserControl
     {
         public Playlist MusicCollection { get; set; }
         public Brush HeaderBackground
@@ -87,16 +87,6 @@ namespace SMPlayer
             PlaylistInfoTextBlock.Text = info;
         }
 
-        public bool Confirm(string OldName, string NewName)
-        {
-            bool successful = PlaylistsPage.ConfirmRenaming(dialog, OldName, NewName);
-            if (successful)
-            {
-                PlaylistNameTextBlock.Text = NewName;
-            }
-            return successful;
-        }
-
         private void Shuffle_Click(object sender, RoutedEventArgs e)
         {
             MediaHelper.ShuffleAndPlay(MusicCollection.Songs);
@@ -112,17 +102,40 @@ namespace SMPlayer
         }
         private async void Rename_Click(object sender, RoutedEventArgs e)
         {
-            dialog = new RenameDialog(this, TitleOption.Rename, MusicCollection.Name);
+            dialog = new RenameDialog(Confirm, RenameOption.Rename, MusicCollection.Name);
             await dialog.ShowAsync();
         }
+
+        public bool Confirm(string OldName, string NewName)
+        {
+            bool successful = PlaylistsPage.ConfirmRenaming(dialog, OldName, NewName);
+            if (successful)
+            {
+                PlaylistNameTextBlock.Text = NewName;
+            }
+            return successful;
+        }
+
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             PlaylistsPage.DeletePlaylist(MusicCollection);
         }
 
-        private void PinToStart_Click(object sender, RoutedEventArgs e)
+        private SymbolIcon PinIcon = new SymbolIcon(Symbol.Pin);
+        private SymbolIcon UnPinIcon = new SymbolIcon(Symbol.UnPin);
+        private async void PinToStart_Click(object sender, RoutedEventArgs e)
         {
-
+            bool isPinned = await Helper.PinToStartAsync(MusicCollection, IsPlaylist);
+            if (isPinned)
+            {
+                PinToStartButton.Icon = PinIcon;
+                PinToStartButton.Content = "Pin To Start";
+            }
+            else
+            {
+                PinToStartButton.Icon = UnPinIcon;
+                PinToStartButton.Content = "UnPin";
+            }
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)

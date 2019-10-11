@@ -35,6 +35,14 @@ namespace SMPlayer
             this.InitializeComponent();
         }
 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            PathBox.Text = Settings.settings.RootPath;
+            LanguageComboBox.SelectedItem = Settings.settings.Language;
+            NotificationComboBox.SelectedItem = Settings.settings.Notification;
+            ThemeColorPicker.Color = Settings.settings.ThemeColor;
+        }
+
         private async void PathBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             FolderPicker picker = new FolderPicker
@@ -63,14 +71,6 @@ namespace SMPlayer
             Settings.Save();
             PathBox.Text = folder.Path;
             MainPage.Instance.Loader.FinishLoading();
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            PathBox.Text = Settings.settings.RootPath;
-            LanguageComboBox.SelectedItem = Settings.settings.Language;
-            NotificationComboBox.SelectedItem = Settings.settings.Notification;
-            ThemeColorPicker.Color = Settings.settings.ThemeColor;
         }
 
         public static void AddAfterPathSetListener(AfterPathSetListener listener)

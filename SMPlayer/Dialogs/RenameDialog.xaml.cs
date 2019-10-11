@@ -21,22 +21,31 @@ namespace SMPlayer.Dialogs
 {
     public sealed partial class RenameDialog : ContentDialog
     {
-        public TitleOption Option { get; set; }
+        public RenameOption Option { get; set; }
         public string DefaultName { get; set; }
-        public RenameActionListener RenameListener { get; set; }
-        public RenameDialog(RenameActionListener listener, TitleOption titleOption, string defaultName)
+        public Func<string, string, bool> Confirm { get; set; }
+
+        public RenameDialog(Func<string, string, bool> confirm, RenameOption option, string defaultName)
+        {
+            Constructor(confirm, option, defaultName);
+        }
+        public RenameDialog(RenameActionListener listener, RenameOption option, string defaultName)
+        {
+            Constructor(listener.Confirm, option, defaultName);
+        }
+        private void Constructor(Func<string, string, bool> confirm, RenameOption option, string defaultName)
         {
             this.InitializeComponent();
-            RenameListener = listener;
-            Option = titleOption;
+            Confirm = confirm;
+            Option = option;
             DefaultName = defaultName;
             var dialogTitle = "";
-            switch (titleOption)
+            switch (option)
             {
-                case TitleOption.NewPlaylist:
+                case RenameOption.New:
                     dialogTitle = "Create New Playlist";
                     break;
-                case TitleOption.Rename:
+                case RenameOption.Rename:
                     dialogTitle = "Rename";
                     break;
             }
@@ -46,16 +55,19 @@ namespace SMPlayer.Dialogs
             NewPlaylistNameTextBox.SelectAll();
         }
 
-        public void ShowError(ErrorOption error)
+        public void ShowError(NamingError error)
         {
             string text = "";
             switch (error)
             {
-                case ErrorOption.EmptyOrWhiteSpace:
+                case NamingError.EmptyOrWhiteSpace:
                     text = "Playlist name cannot be empty or whitespaces!";
                     break;
-                case ErrorOption.Used:
+                case NamingError.Used:
                     text = "This name has been used!";
+                    break;
+                case NamingError.Special:
+                    text = "Playlist name cannot have \"+++\"!";
                     break;
             }
             NamingErrorTextBox.Text = text;
@@ -64,7 +76,7 @@ namespace SMPlayer.Dialogs
 
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
-            if (RenameListener.Confirm(DefaultName, NewPlaylistNameTextBox.Text))
+            if (Confirm(DefaultName, NewPlaylistNameTextBox.Text))
             {
                 this.Hide();
                 NewPlaylistNameTextBox.Text = "";
@@ -82,52 +94,21 @@ namespace SMPlayer.Dialogs
     {
         public RenameDialog Dialog;
         public object Data;
-        public bool Confirm(string OldName, string NewName)
+        public bool Confirm(string oldName, string newName)
         {
-            if (string.IsNullOrEmpty(NewName) || string.IsNullOrWhiteSpace(NewName))
+            NamingError error = Settings.settings.CheckPlaylistNamingError(newName);
+            if (error != NamingError.Good)
             {
-                Dialog.ShowError(ErrorOption.EmptyOrWhiteSpace);
+                Dialog.ShowError(error);
                 return false;
             }
-            if (NewName == MenuFlyoutHelper.NowPlaying || NewName == MenuFlyoutHelper.MyFavorites ||
-                Settings.settings.Playlists.FindIndex((p) => p.Name == NewName) != -1)
-            {
-                Dialog.ShowError(ErrorOption.Used);
-                return false;
-            }
-            switch (Dialog.Option)
-            {
-                case TitleOption.NewPlaylist:
-                    Playlist playlist = new Playlist(NewName);
-                    if (Data != null) playlist.Add(Data);
-                    Settings.settings.Playlists.Add(playlist);
-                    PlaylistsPage.Playlists.Add(playlist);
-                    break;
-                case TitleOption.Rename:
-                    if (OldName == NewName) break;
-                    int index = Settings.settings.Playlists.FindIndex((p) => p.Name == OldName);
-                    Settings.settings.Playlists[index].Name = NewName;
-                    PlaylistsPage.Playlists[index].Name = NewName;
-                    break;
-            }
+            Settings.settings.RenamePlaylist(oldName, newName, Dialog.Option, Data);
             return true;
         }
     }
 
     public interface RenameActionListener
     {
-        bool Confirm(string OldName, string NewName);
-    }
-
-    public enum TitleOption
-    {
-        NewPlaylist = 0,
-        Rename = 1
-    }
-
-    public enum ErrorOption
-    {
-        EmptyOrWhiteSpace = 0,
-        Used = 1
+        bool Confirm(string oldName, string newName);
     }
 }

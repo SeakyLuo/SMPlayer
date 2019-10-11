@@ -54,6 +54,14 @@ namespace SMPlayer.Models
                     break;
             if (Cover == null) Cover = Helper.DefaultAlbumCover;
         }
+
+        public Playlist ToPlaylist()
+        {
+            return new Playlist(Name, Songs)
+            {
+                Artist = Artist
+            };
+        }
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
             // Raise the PropertyChanged event, passing the name of the property whose value has changed.

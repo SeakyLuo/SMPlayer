@@ -12,17 +12,11 @@ Go to Settings and Set the Root Folder of your music files.
 
 Localization.
 
-Cache Artists Result.
-
-FullMediaControl Album Flipview.
-
-Add Album Art to Music.
-
-Keyboard Shortcut dialog.
+Mini play.
 
 ThemeColor change.
 
-Pin to start.
+Add Album Art to Music.
 
 Multi-Select.
 
@@ -32,14 +26,10 @@ Animations.
 
 Handle Music Not Found.
 
-Mini play.
-
-Artist Page.
-
 # TO FIX
 
 Bad performance when given many music files.
 
 Bad performance of Loading NowPlayingFull.
 
-CommandBar of Playlist.
+Tile icon.
