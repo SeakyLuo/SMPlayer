@@ -464,6 +464,7 @@
       <RootEvent Name="Tapped" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
+      <RootEvent Name="SizeChanged" />
       <RootEvent Name="Loaded" />
       <RootEvent Name="Loading" />
     </RootType>
@@ -668,6 +669,7 @@
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Opacity" />
       <RootProperty Name="Visibility" />
+      <RootProperty Name="HorizontalAlignment" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.Animation.DoubleAnimation">
       <RootProperty Name="To" />

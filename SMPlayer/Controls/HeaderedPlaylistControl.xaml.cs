@@ -33,7 +33,7 @@ namespace SMPlayer
         public Brush HeaderBackground
         {
             get => headerBackground;
-            set => PlaylistInfoGrid.Background = headerBackground = value;
+            set => OverlayRectangle.Fill = headerBackground = value;
         }
         private Brush headerBackground = ColorHelper.HighlightBrush;
         public bool ShowAlbumText
@@ -74,7 +74,8 @@ namespace SMPlayer
                 item = playlist.DisplayItem;
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                 {
-                    PlaylistDisplayDict[playlist.Name] = await playlist.GetMusicDisplayItemsAsync();
+                    var items = await playlist.GetMusicDisplayItemsAsync();
+                    if (items.Count > 0) PlaylistDisplayDict[playlist.Name] = items;
                 });
             }
             PlaylistCover.Source = item.Thumbnail;
@@ -83,8 +84,7 @@ namespace SMPlayer
 
         public void SetPlaylistInfo(string info)
         {
-            if (string.IsNullOrEmpty(PlaylistInfoTextBlock.Text))
-                PlaylistInfoTextBlock.Text = info;
+            PlaylistInfoTextBlock.Text = info;
         }
 
         public bool Confirm(string OldName, string NewName)
@@ -103,8 +103,12 @@ namespace SMPlayer
         }
         private void AddTo_Click(object sender, RoutedEventArgs e)
         {
-            var element = sender as FrameworkElement;
-            MenuFlyoutHelper.SetAddToMenu(sender, MusicCollection.Name).ShowAt(element);
+            var helper = new MenuFlyoutHelper()
+            {
+                Data = MusicCollection.Songs,
+                DefaultPlaylistName = Settings.settings.FindNextPlaylistName(MusicCollection.Name)
+            };
+            helper.GetAddToMenuFlyout(MusicCollection.Name).ShowAt(sender as FrameworkElement);
         }
         private async void Rename_Click(object sender, RoutedEventArgs e)
         {
@@ -181,10 +185,10 @@ namespace SMPlayer
             // Create a Visual for applying the blur effect
             _blurredBackgroundImageVisual = _compositor.CreateSpriteVisual();
             _blurredBackgroundImageVisual.Brush = blurBrush;
-            _blurredBackgroundImageVisual.Size = new Vector2((float)PlaylistInfoGrid.ActualWidth, (float)PlaylistInfoGrid.ActualHeight);
+            _blurredBackgroundImageVisual.Size = new Vector2((float)OverlayRectangle.ActualWidth, (float)OverlayRectangle.ActualHeight);
 
             // Insert the blur visual at the right point in the Visual Tree
-            ElementCompositionPreview.SetElementChildVisual(PlaylistInfoGrid, _blurredBackgroundImageVisual);
+            ElementCompositionPreview.SetElementChildVisual(OverlayRectangle, _blurredBackgroundImageVisual);
 
             // Create and start an ExpressionAnimation to track scroll progress over the desired distance
             ExpressionNode progressAnimation = EF.Clamp(-scrollingProperties.Translation.Y / clampSizeNode, 0, 1);
@@ -244,13 +248,21 @@ namespace SMPlayer
             ExpressionNode contentOffsetAnimation = progressNode * 100;
             textVisual.StartAnimation("Offset.Y", contentOffsetAnimation);
 
-            ExpressionNode buttonOffsetAnimation = progressNode * -100;
-            buttonVisual.StartAnimation("Offset.Y", buttonOffsetAnimation);
+            //ExpressionNode buttonOffsetAnimation = progressNode * -100;
+            //buttonVisual.StartAnimation("Offset.Y", buttonOffsetAnimation);
         }
 
         private void PlaylistInfoGrid_Loaded(object sender, RoutedEventArgs e)
         {
             SetShyHeader();
+        }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (_blurredBackgroundImageVisual != null)
+            {
+                _blurredBackgroundImageVisual.Size = new Vector2((float)OverlayRectangle.ActualWidth, (float)OverlayRectangle.ActualHeight);
+            }
         }
     }
 }

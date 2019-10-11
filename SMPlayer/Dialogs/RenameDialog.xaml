@@ -289,7 +289,11 @@
                 BorderThickness="0"
                 Click="ConfirmButton_Click"
                 Content="Confirm"
-                Foreground="White" />
+                Foreground="White">
+                <Button.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="Enter" />
+                </Button.KeyboardAccelerators>
+            </Button>
             <Button
                 x:Name="CancelButton"
                 Grid.Row="1"

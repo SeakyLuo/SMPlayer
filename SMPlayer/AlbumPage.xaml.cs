@@ -26,23 +26,25 @@ namespace SMPlayer
         public AlbumPage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            Playlist playlist = null;
-            bool isAlbum = e.Parameter is AlbumView;
-            if (isAlbum)
+            if (e.NavigationMode == NavigationMode.New)
             {
-                var album = e.Parameter as AlbumView;
-                playlist = new Playlist(album.Name, album.Songs);
-                AlbumPlaylistControl.SetPlaylistInfo(album.Artist);
+                Playlist playlist = null;
+                if (e.Parameter is AlbumView album)
+                {
+                    playlist = new Playlist(album.Name, album.Songs);
+                    AlbumPlaylistControl.SetPlaylistInfo(album.Artist);
+                }
+                else if (e.Parameter is Playlist)
+                    playlist = e.Parameter as Playlist;
+                await AlbumPlaylistControl.SetMusicCollection(playlist);
             }
-            else if (e.Parameter is Playlist)
-                playlist = e.Parameter as Playlist;
             TitleBarHelper.SetDarkTitleBar();
-            await AlbumPlaylistControl.SetMusicCollection(playlist);
             MainPage.Instance.TitleBarBackground = AlbumPlaylistControl.HeaderBackground;
             MainPage.Instance.TitleBarForeground = MainPage.Instance.IsMinimal ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
         }

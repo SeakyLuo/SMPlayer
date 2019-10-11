@@ -26,12 +26,14 @@ namespace SMPlayer
         public MyFavoritesPage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            await MyFavoritesPlaylistControl.SetMusicCollection(new Playlist("My Favorites", MusicLibraryPage.ConvertMusicPathToCollection(Settings.settings.FavSongs)));
+            if (e.NavigationMode != NavigationMode.Back)
+                await MyFavoritesPlaylistControl.SetMusicCollection(new Playlist("My Favorites", MusicLibraryPage.ConvertMusicPathToCollection(Settings.settings.FavSongs)));
             TitleBarHelper.SetDarkTitleBar();
             MainPage.Instance.TitleBarBackground = MyFavoritesPlaylistControl.HeaderBackground;
             MainPage.Instance.TitleBarForeground = MainPage.Instance.IsMinimal ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;

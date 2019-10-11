@@ -15,11 +15,8 @@ namespace SMPlayer
     {
         public object Data { get; set; }
         public string DefaultPlaylistName { get; set; }
-        public const string AddToSubItemName = "AddToSubItem";
-        public const string PlaylistMenuName = "ShuffleItem";
-        public const string MusicMenuName = "PlayItem";
-        public const string NowPlaying = "Now Playing";
-        public const string MyFavorites = "My Favorites";
+        public const string AddToSubItemName = "AddToSubItem", PlaylistMenuName = "ShuffleItem", MusicMenuName = "PlayItem",
+                            NowPlaying = "Now Playing", MyFavorites = "My Favorites";
         public MenuFlyout GetAddToMenuFlyout(string playlistName = "")
         {
             var flyout = new MenuFlyout();

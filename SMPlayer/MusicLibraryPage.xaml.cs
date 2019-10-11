@@ -33,7 +33,6 @@ namespace SMPlayer
         public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
         public static bool IsLibraryUnchangedAfterChecking = true;
 
-        private static HashSet<Music> MusicSet = new HashSet<Music>();
         private bool libraryChecked = false;
         private static bool libraryReset = false;
         private static List<AfterSongsSetListener> listeners = new List<AfterSongsSetListener>();
@@ -153,7 +152,6 @@ namespace SMPlayer
             libraryReset = true;
             AllSongs.Clear();
             foreach (var item in songs) AllSongs.Add(item);
-            MusicSet = AllSongs.ToHashSet();
             foreach (var listener in listeners) listener.SongsSet(AllSongs);
         }
 
@@ -161,7 +159,7 @@ namespace SMPlayer
         {
             List<Music> collection = new List<Music>();
             foreach (var path in paths)
-                if (MusicSet.FirstOrDefault((m) => m.Path == path) is Music music)
+                if (AllSongs.FirstOrDefault((m) => m.Path == path) is Music music)
                     collection.Add(music);
             return collection;
         }

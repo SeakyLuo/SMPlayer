@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    SizeChanged="UserControl_SizeChanged"
     mc:Ignorable="d">
 
     <local:PlaylistControl
@@ -14,97 +15,99 @@
         AlternatingRowColor="True">
         <local:PlaylistControl.Header>
             <UserControl x:Name="HeaderControl">
-                <Grid
-                    x:Name="PlaylistInfoGrid"
-                    Padding="10"
-                    Background="{ThemeResource SystemColorHighlightColor}"
-                    Loaded="PlaylistInfoGrid_Loaded">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <!--<Rectangle x:Name="BackgroundRectangle" Height="300" Width="1050" HorizontalAlignment="Left" VerticalAlignment="Top" >
-                        <Rectangle.Fill>
-                            <ImageBrush x:Name="BackgroundImage" ImageSource="ms-appx:///Assets/Abstract/Abstract-4.jpg" Stretch="UniformToFill" Opacity="0.6"/>
-                        </Rectangle.Fill>
-                    </Rectangle>
-                    <Rectangle x:Name="OverlayRectangle" Fill="#BFCFB5C0" Width="1050" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top"/>-->
-                    <Image
-                        x:Name="PlaylistCover"
-                        Grid.RowSpan="3"
-                        Width="180"
-                        Height="180"
-                        Margin="20"
-                        Source="Assets/monotone_bg_wide.png" />
-                    <TextBlock
-                        x:Name="PlaylistNameTextBlock"
-                        Grid.Column="1"
-                        Margin="0,5"
-                        VerticalAlignment="Center"
-                        FontSize="36"
-                        Foreground="White"
-                        MaxLines="2"
-                        Style="{StaticResource HeaderTextBlockStyle}"
-                        TextTrimming="CharacterEllipsis"
-                        ToolTipService.ToolTip="{x:Bind PlaylistNameTextBlock.Text, Mode=OneWay}" />
-                    <TextBlock
-                        x:Name="PlaylistInfoTextBlock"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Margin="0,5"
-                        VerticalAlignment="Top"
-                        Foreground="White" />
-                    <CommandBar
-                        x:Name="PlaylistCommandBar"
-                        Grid.Row="2"
-                        Grid.Column="1"
-                        Margin="-10,0,0,10"
-                        VerticalAlignment="Bottom"
+                <Grid>
+                    <Rectangle
+                        x:Name="OverlayRectangle"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Fill="{ThemeResource SystemColorHighlightColor}" />
+                    <Grid
+                        x:Name="PlaylistInfoGrid"
+                        Padding="10"
                         Background="Transparent"
-                        DefaultLabelPosition="Right"
-                        Style="{StaticResource PlaylistCommandBarStyle}">
-                        <AppBarButton
-                            x:Name="ShuffleButton"
-                            Margin="0"
-                            Click="Shuffle_Click"
-                            Icon="Shuffle"
-                            Label="Shuffle"
-                            Style="{StaticResource PlaylistAppBarButtonStyle}"
-                            ToolTipService.ToolTip="Shuffle Playlist" />
-                        <AppBarButton
-                            x:Name="AddToButton"
-                            Click="AddTo_Click"
-                            Icon="Add"
-                            Label="Add To"
-                            Style="{StaticResource PlaylistAppBarButtonStyle}"
-                            ToolTipService.ToolTip="Add To Playlist" />
-                        <AppBarButton
-                            x:Name="RenameButton"
-                            Click="Rename_Click"
-                            Icon="Rename"
-                            Label="Rename"
-                            Style="{StaticResource PlaylistAppBarButtonStyle}"
-                            ToolTipService.ToolTip="Rename Playlist" />
-                        <AppBarButton
-                            Click="PinToStart_Click"
-                            Icon="Pin"
-                            Label="Pin to Start"
-                            Style="{StaticResource PlaylistAppBarButtonStyle}"
-                            ToolTipService.ToolTip="Pin Playlist to the Start Menu" />
-                        <AppBarButton
-                            x:Name="DeleteButton"
-                            Click="Delete_Click"
-                            Icon="Delete"
-                            Label="Delete"
-                            Style="{StaticResource PlaylistAppBarButtonStyle}"
-                            ToolTipService.ToolTip="Delete Playlist" />
-                    </CommandBar>
+                        Loaded="PlaylistInfoGrid_Loaded">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image
+                            x:Name="PlaylistCover"
+                            Grid.RowSpan="3"
+                            Width="180"
+                            Height="180"
+                            Margin="20"
+                            Source="Assets/monotone_bg_wide.png" />
+                        <TextBlock
+                            x:Name="PlaylistNameTextBlock"
+                            Grid.Column="1"
+                            Margin="0,5"
+                            VerticalAlignment="Center"
+                            FontSize="36"
+                            Foreground="White"
+                            MaxLines="2"
+                            Style="{StaticResource HeaderTextBlockStyle}"
+                            TextTrimming="CharacterEllipsis"
+                            ToolTipService.ToolTip="{x:Bind PlaylistNameTextBlock.Text, Mode=OneWay}" />
+                        <TextBlock
+                            x:Name="PlaylistInfoTextBlock"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="0,5"
+                            VerticalAlignment="Top"
+                            Foreground="White" />
+                        <CommandBar
+                            x:Name="PlaylistCommandBar"
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Margin="-10,0,0,10"
+                            VerticalAlignment="Bottom"
+                            Background="Transparent"
+                            DefaultLabelPosition="Right"
+                            Style="{StaticResource PlaylistCommandBarStyle}">
+                            <AppBarButton
+                                x:Name="ShuffleButton"
+                                Margin="0"
+                                Click="Shuffle_Click"
+                                Icon="Shuffle"
+                                Label="Shuffle"
+                                Style="{StaticResource PlaylistAppBarButtonStyle}"
+                                ToolTipService.ToolTip="Shuffle Playlist" />
+                            <AppBarButton
+                                x:Name="AddToButton"
+                                Click="AddTo_Click"
+                                Icon="Add"
+                                Label="Add To"
+                                Style="{StaticResource PlaylistAppBarButtonStyle}"
+                                ToolTipService.ToolTip="Add To Playlist" />
+                            <AppBarButton
+                                x:Name="RenameButton"
+                                Click="Rename_Click"
+                                Icon="Rename"
+                                Label="Rename"
+                                Style="{StaticResource PlaylistAppBarButtonStyle}"
+                                ToolTipService.ToolTip="Rename Playlist" />
+                            <AppBarButton
+                                Click="PinToStart_Click"
+                                Icon="Pin"
+                                Label="Pin to Start"
+                                Style="{StaticResource PlaylistAppBarButtonStyle}"
+                                ToolTipService.ToolTip="Pin Playlist to the Start Menu" />
+                            <AppBarButton
+                                x:Name="DeleteButton"
+                                Click="Delete_Click"
+                                Icon="Delete"
+                                Label="Delete"
+                                Style="{StaticResource PlaylistAppBarButtonStyle}"
+                                ToolTipService.ToolTip="Delete Playlist" />
+                        </CommandBar>
+                    </Grid>
                     <VisualStateManager.VisualStateGroups>
                         <VisualStateGroup x:Name="WidthChange">
                             <VisualState x:Name="NarrowLayout">
