@@ -516,16 +516,22 @@ namespace SMPlayer
         public void LikeMusic(bool isClick = true)
         {
             LikeToggleButton.SetToolTip("Undo Favorite");
-            Settings.settings.LikeMusic(MediaHelper.CurrentMusic);
-            if (isClick) SetMusicFavorite(true);
+            if (isClick)
+            {
+                SetMusicFavorite(true);
+                Settings.settings.LikeMusic(MediaHelper.CurrentMusic);
+            }
             else LikeToggleButton.IsChecked = true;
         }
 
         public void DislikeMusic(bool isClick = true)
         {
             LikeToggleButton.SetToolTip("Set As Favorite");
-            Settings.settings.DislikeMusic(MediaHelper.CurrentMusic);
-            if (isClick) SetMusicFavorite(false);
+            if (isClick)
+            {
+                SetMusicFavorite(false);
+                Settings.settings.DislikeMusic(MediaHelper.CurrentMusic);
+            }
             else LikeToggleButton.IsChecked = false;
         }
 

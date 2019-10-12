@@ -64,7 +64,8 @@ namespace SMPlayer
             if (playlist == null || playlist.Count == 0) return;
             var settings = Settings.settings;
             if (settings.LastMusic == null)
-                CurrentMusic = settings.LastMusic = MusicLibraryPage.AllSongs.FirstOrDefault((m) => m.Name == playlist[0]);
+                 settings.LastMusic = MusicLibraryPage.AllSongs.FirstOrDefault((m) => m.Name == playlist[0]);
+            CurrentMusic = settings.LastMusic;
             foreach (var music in playlist)
             {
                 var target = MusicLibraryPage.AllSongs.FirstOrDefault((m) => m.Name == music);
@@ -134,11 +135,8 @@ namespace SMPlayer
         {
             try
             {
-                var file = await StorageFile.GetFileFromPathAsync(music.Path);
-                var source = MediaSource.CreateFromStorageFile(file);
                 music.IsPlaying = false;
-                source.CustomProperties.Add("Source", music);
-                var item = new MediaPlaybackItem(source);
+                var item = await music.GetMediaPlaybackItemAsync();
                 PlaybackList.Items.Add(item);
                 CurrentPlaylist.Add(music);
             }
@@ -159,7 +157,7 @@ namespace SMPlayer
             foreach (var item in playlist)
                 await AddMusic(item);
             if (!CurrentPlaylist.Contains(CurrentMusic))
-                CurrentMusic = null;
+                CurrentMusic = CurrentPlaylist[0];
         }
 
         public static async void SetMusicAndPlay(Music music)

@@ -9,6 +9,7 @@ using SMPlayer.Models;
 using Windows.Media.Core;
 using System.ComponentModel;
 using System.IO;
+using Windows.Media.Playback;
 
 namespace SMPlayer.Models
 {
@@ -161,6 +162,15 @@ namespace SMPlayer.Models
         {
             var thumbnail = await Helper.GetStorageItemThumbnailAsync(this);
             return thumbnail.IsThumbnail() ? new MusicDisplayItem(thumbnail, await thumbnail.GetDisplayColor(), this) : MusicDisplayItem.DefaultItem;
+        }
+
+
+        public async Task<MediaPlaybackItem> GetMediaPlaybackItemAsync()
+        {
+            var file = await GetStorageFileAsync();
+            var source = MediaSource.CreateFromStorageFile(file);
+            source.CustomProperties.Add("Source", this);
+            return new MediaPlaybackItem(source);
         }
 
         int IComparable<Music>.CompareTo(Music other)

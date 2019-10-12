@@ -124,9 +124,17 @@ namespace SMPlayer
             UpdateMusicLibrary(Helper.CurrentFolder);
         }
 
-        private void BugReport_Click(object sender, RoutedEventArgs e)
+        private async void BugReport_Click(object sender, RoutedEventArgs e)
         {
+            if (await Windows.System.Launcher.LaunchUriAsync(new Uri("https://github.com/SeakyLuo/SMPlayer/issues")))
+            {
 
+            }
+            else
+            {
+                MainPage.Instance.ShowNotification("Unable to Open a Web Browser");
+            }
+        
         }
     }
 

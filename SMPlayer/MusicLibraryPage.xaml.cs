@@ -155,12 +155,17 @@ namespace SMPlayer
             foreach (var listener in listeners) listener.SongsSet(AllSongs);
         }
 
-        public static List<Music> ConvertMusicPathToCollection(ICollection<string> paths)
+        public static List<Music> ConvertMusicPathToCollection(ICollection<string> paths, bool isFavorite = false)
         {
             List<Music> collection = new List<Music>();
             foreach (var path in paths)
+            {
                 if (AllSongs.FirstOrDefault((m) => m.Path == path) is Music music)
+                {
+                    if (isFavorite) music.Favorite = true;
                     collection.Add(music);
+                }
+            }
             return collection;
         }
 

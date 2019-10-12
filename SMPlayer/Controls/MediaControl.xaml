@@ -68,7 +68,7 @@
                     Grid.Column="0"
                     Width="100"
                     Height="100"
-                    Source="Assets/monotone_bg_wide.png"
+                    Source="ms-appx:///Assets/monotone_bg_wide.png"
                     Stretch="UniformToFill" />
                 <local:ScrollingTextBlock
                     x:Name="MainTitleTextBlock"
