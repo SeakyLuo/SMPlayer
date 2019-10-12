@@ -80,7 +80,7 @@ namespace SMPlayer
             Artists.Clear();
             foreach (var group in MusicLibraryPage.AllSongs.Where((m) => IsTargetArtist(m, keyword)).GroupBy((m) => m.Artist))
             {
-                Artists.Add(new Playlist(group.Key, group));
+                Artists.Add(new Playlist(group.Key, group) { Artist = group.Key });
                 if (Artists.Count == ArtistLimit) break;
             }
         }
@@ -153,6 +153,11 @@ namespace SMPlayer
         private void ArtistsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Frame.Navigate(typeof(SearchResultPage), "Artists");
+        }
+
+        private void SearchArtistView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Frame.Navigate(typeof(ArtistsPage), e.ClickedItem);
         }
 
         private void AlbumsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)

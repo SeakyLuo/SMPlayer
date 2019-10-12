@@ -265,11 +265,6 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\GridMusicCo
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\GridMusicControl.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\GridMusicControl.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Controls\GridMusicControl.xbf
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\ArtistPage.g.i.cs
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\ArtistPage.g.cs
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\ArtistPage.xaml
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\ArtistPage.xbf
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\ArtistPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Controls\DropShadowControl.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\DropShadowControl.g.i.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\DropShadowControl.g.cs

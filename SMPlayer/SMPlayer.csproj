@@ -124,9 +124,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ArtistPage.xaml.cs">
-      <DependentUpon>ArtistPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ArtistsPage.xaml.cs">
       <DependentUpon>ArtistsPage.xaml</DependentUpon>
     </Compile>
@@ -334,10 +331,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="AlbumsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ArtistPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

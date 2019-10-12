@@ -118,7 +118,7 @@
                                         Margin="20,5"
                                         IsIndeterminate="True"
                                         RelativePanel.AlignBottomWithPanel="True"
-                                        Visibility="{x:Bind IsUnloaded, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
+                                        Visibility="{x:Bind NotLoaded, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
                                     <!--  Separator  -->
                                     <Border
                                         Width="1200"

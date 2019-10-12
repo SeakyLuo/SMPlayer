@@ -53,7 +53,7 @@ namespace SMPlayer.Controls
         private void Artist_Click(object sender, RoutedEventArgs e)
         {
             if (NowPlayingFullPage.Instance != null) NowPlayingFullPage.Instance.GoBack();
-
+            MainPage.Instance.NavigateToPage(typeof(ArtistsPage), (sender as HyperlinkButton).Content);
         }
     }
 }

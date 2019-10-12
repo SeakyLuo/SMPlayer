@@ -292,7 +292,6 @@
       <RootProperty Name="Path" />
     </RootType>
     <RootType FullName="SMPlayer.AlbumsPage" />
-    <RootType FullName="SMPlayer.ArtistPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.ListViewItem" />
     <RootType FullName="Windows.UI.Xaml.Controls.ContentControl">
       <RootProperty Name="Content" />
@@ -465,7 +464,6 @@
     <RootType FullName="Windows.UI.Xaml.Controls.UserControl">
       <RootProperty Name="Content" />
       <RootProperty Name="Resources" />
-      <RootEvent Name="Tapped" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
       <RootEvent Name="SizeChanged" />

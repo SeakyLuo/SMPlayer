@@ -5,10 +5,10 @@
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:SMPlayer.Models"
-    Loaded="Page_Loaded"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="Page_Loaded"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -157,6 +157,7 @@
                 </RelativePanel>
                 <ListView
                     x:Name="SearchArtistView"
+                    ItemClick="SearchArtistView_ItemClick"
                     ItemsSource="{x:Bind Artists}"
                     Style="{StaticResource HorizontalListViewStyle}">
                     <ListView.ItemTemplate>

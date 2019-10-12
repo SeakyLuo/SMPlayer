@@ -13,16 +13,18 @@ namespace SMPlayer.Models
         public string Name { get; set; }
         public ObservableCollection<AlbumView> Albums { get; set; }
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
-        public bool IsUnloaded
+        public bool NotLoaded
         {
-            get => isUnloaded;
+            get => notLoaded;
             set
             {
-                isUnloaded = value;
+                notLoaded = value;
+                if (!notLoaded)
+                    ArtistInfo = $"Albums: {Albums.Count} • Songs: {Songs.Count}";
                 OnPropertyChanged();
             }
         }
-        private bool isUnloaded = true;
+        private bool notLoaded = true;
         public string ArtistInfo
         {
             get => info;
@@ -33,37 +35,42 @@ namespace SMPlayer.Models
             }
         }
         private string info = "";
-        public List<Music> Songs
-        {
-            get
-            {
-                List<Music> list = new List<Music>();
-                foreach (var album in Albums)
-                    list.AddRange(album.Songs.ToList());
-                return list;
-            }
-        }
+        public List<Music> Songs { get; set; }
         public ArtistView(string Name)
         {
             this.Name = Name;
             this.Albums = new ObservableCollection<AlbumView>();
         }
 
-        public ArtistView(string Name, ObservableCollection<AlbumView> Albums)
+        public ArtistView(string Name, ICollection<Music> Songs)
         {
             this.Name = Name;
-            this.Albums = Albums;
+            this.Songs = Songs.ToList();
+            Albums = new ObservableCollection<AlbumView>();
+            foreach (var group in Songs.GroupBy((m) => m.Album).OrderBy((g) => g.Key))
+                Albums.Add(new AlbumView(group.Key, Name, group));
+            NotLoaded = false;
         }
 
         public void Load()
         {
-            IsUnloaded = true;
-            var songs = MusicLibraryPage.AllSongs.Where((m) => m.Artist == Name);
-            var groups = songs.GroupBy((m) => m.Album);
-            ArtistInfo = $"Albums: {groups.Count()} • Songs: {songs.Count()}";
+            NotLoaded = true;
+            Songs = MusicLibraryPage.AllSongs.Where((m) => m.Artist == Name).ToList();
+            var groups = Songs.GroupBy((m) => m.Album).OrderBy((g) => g.Key);
             foreach (var group in groups)
                 Albums.Add(new AlbumView(group.Key, group.Key, group.OrderBy((m) => m.Name)));
-            IsUnloaded = false;
+            NotLoaded = false;
+        }
+
+        public void CopyFrom(Playlist playlist)
+        {
+            NotLoaded = true;
+            Name = playlist.Artist;
+            Songs = playlist.Songs.ToList();
+            Albums = new ObservableCollection<AlbumView>();
+            foreach (var group in Songs.GroupBy((m) => m.Album).OrderBy((g) => g.Key))
+                Albums.Add(new AlbumView(group.Key, Name, group));
+            NotLoaded = false;
         }
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {

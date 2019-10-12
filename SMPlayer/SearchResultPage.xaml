@@ -35,6 +35,7 @@
             VerticalAlignment="Center"
             IsActive="False" />
         <GridView
+            ItemClick="ArtistsGridView_ItemClick"
             ItemsSource="{x:Bind Artists}"
             Style="{StaticResource GridViewStyle}"
             Visibility="{x:Bind Artists.Count, Converter={StaticResource VisibilityConverter}}">

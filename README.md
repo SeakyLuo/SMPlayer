@@ -12,9 +12,9 @@ Go to Settings and Set the Root Folder of your music files.
 
 Localization.
 
-Mini play.
-
 Handle Music Not Found.
+
+Mini Mode NowPlaying playlist, music info, lyrics...
 
 ThemeColor change.
 

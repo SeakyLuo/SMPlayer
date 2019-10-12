@@ -30,18 +30,41 @@ namespace SMPlayer
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
         private bool SetupStarted = false;
         private NotifiedStatus Notified = NotifiedStatus.Ready;
+        private object targetArtist;
 
         public ArtistsPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MusicLibraryPage.AddAfterSongsSetListener(this as AfterSongsSetListener);
-            MediaHelper.SwitchMusicListeners.Add(this as SwitchMusicListener);
+            MusicLibraryPage.AddAfterSongsSetListener(this);
+            MediaHelper.SwitchMusicListeners.Add(this);
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            if (Artists.Count == 0) Setup();
+            targetArtist = e.Parameter;
+        }
+        
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Artists.Count == 0) Setup();
+            if (targetArtist == null) return;
+            ArtistView artist = null;
+            if (targetArtist is string artistName)
+            {
+                artist = Artists.FirstOrDefault((a) => a.Name == artistName);
+                if (artist.NotLoaded || !MusicLibraryPage.IsLibraryUnchangedAfterChecking)
+                    artist.Load();
+            }
+            else if (targetArtist is Playlist playlist)
+            {
+                artist = Artists.FirstOrDefault((a) => a.Name == playlist.Artist);
+                if (artist.NotLoaded || !MusicLibraryPage.IsLibraryUnchangedAfterChecking)
+                    artist.CopyFrom(playlist);
+            }
+            ArtistMasterDetailsView.SelectedItem = artist;
+            targetArtist = null;
         }
 
         private void Setup()
@@ -79,7 +102,7 @@ namespace SMPlayer
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 var artist = (sender as FrameworkElement).DataContext as ArtistView;
-                if (artist.IsUnloaded || !MusicLibraryPage.IsLibraryUnchangedAfterChecking)
+                if (artist.NotLoaded || !MusicLibraryPage.IsLibraryUnchangedAfterChecking)
                     artist.Load();
             });
         }

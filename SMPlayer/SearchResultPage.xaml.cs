@@ -35,6 +35,11 @@ namespace SMPlayer
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
+        private void ArtistsGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Frame.Navigate(typeof(ArtistsPage), e.ClickedItem);
+        }
+
         private void AlbumsGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
@@ -63,7 +68,7 @@ namespace SMPlayer
             {
                 case "Artists":
                     foreach (var group in MusicLibraryPage.AllSongs.Where((m) => SearchPage.IsTargetArtist(m, keyword)).GroupBy((m) => m.Artist).OrderBy((g) => g.Key))
-                        Artists.Add(new Playlist(group.Key, group));
+                        Artists.Add(new Playlist(group.Key, group) { Artist = group.Key });
                     break;
                 case "Albums":
                     foreach (var group in MusicLibraryPage.AllSongs.Where((m) => SearchPage.IsTargetAlbum(m, keyword)).GroupBy((m) => m.Album).OrderBy((g) => g.Key))
