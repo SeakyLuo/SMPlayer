@@ -9,7 +9,6 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
-
 Localization.
 
 Handle Music Not Found.
@@ -32,4 +31,4 @@ Bad performance when given many music files.
 
 Bad performance of Loading NowPlayingFull.
 
-Play music too slow.
+Large MainMoreFullScreen.

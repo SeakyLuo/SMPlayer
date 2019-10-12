@@ -214,10 +214,12 @@
             </Button>
             <HyperlinkButton
                 Margin="9,0"
+                Click="UpdateMusicLibrary_Click"
                 Content="Update Music Library"
                 Style="{ThemeResource TextBlockButtonStyle}" />
             <HyperlinkButton
                 Margin="9,0"
+                Click="BugReport_Click"
                 Content="Bug Report"
                 Style="{ThemeResource TextBlockButtonStyle}" />
         </StackPanel>

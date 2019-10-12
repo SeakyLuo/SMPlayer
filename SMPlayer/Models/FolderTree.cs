@@ -48,7 +48,7 @@ namespace SMPlayer.Models
 
         private async Task Init(StorageFolder folder, TreeInitProgressListener listener, TreeInitProgressIndicator indicator)
         {
-            if (!string.IsNullOrEmpty(Path) && folder.Path.StartsWith(Path))
+            if (!string.IsNullOrEmpty(Path) && folder.Path != Path && folder.Path.StartsWith(Path))
             {
                 // New folder is a Subfolder of the current folder
                 FolderTree tree;

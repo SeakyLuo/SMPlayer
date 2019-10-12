@@ -62,16 +62,14 @@ namespace SMPlayer
         {
             var playlist = JsonFileHelper.Convert<List<string>>(await JsonFileHelper.ReadAsync(FILENAME));
             if (playlist == null || playlist.Count == 0) return;
-            while (Settings.settings == null) { System.Threading.Thread.Sleep(233); }
             var settings = Settings.settings;
-            var hashset = MusicLibraryPage.AllSongs.ToHashSet();
             if (settings.LastMusic == null)
-                settings.LastMusic = hashset.FirstOrDefault((m) => m.Name == playlist[0]);
+                CurrentMusic = settings.LastMusic = MusicLibraryPage.AllSongs.FirstOrDefault((m) => m.Name == playlist[0]);
             foreach (var music in playlist)
             {
-                var target = hashset.FirstOrDefault((m) => m.Name == music);
+                var target = MusicLibraryPage.AllSongs.FirstOrDefault((m) => m.Name == music);
                 if (target == null) continue; // Reset Path Cause This
-                target.IsPlaying = target.Equals(settings.LastMusic);
+                target.IsPlaying = target.Equals(CurrentMusic);
                 await AddMusic(target);
             }
             Player.Volume = settings.Volume;
@@ -314,15 +312,6 @@ namespace SMPlayer
         {
             foreach (var music in playlist)
                 music.IsPlaying = music.Equals(next);
-            //bool findCurrent = current == null, findNext = next == null;
-            //foreach (var music in playlist)
-            //{
-            //    if (!findCurrent && (findCurrent = music.Equals(current)))
-            //        music.IsPlaying = false;
-            //    if (!findNext && (findNext = music.Equals(next)))
-            //        music.IsPlaying = true;
-            //    if (findCurrent && findNext) return;
-            //}
         }
     }
 

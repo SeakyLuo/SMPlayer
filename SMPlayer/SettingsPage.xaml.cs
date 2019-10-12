@@ -51,11 +51,19 @@ namespace SMPlayer
             };
             picker.FileTypeFilter.Add("*");
             StorageFolder folder = await picker.PickSingleFolderAsync();
-            if (folder == null || folder.Path == Settings.settings.RootPath) return;
+            if (folder != null)
+            {
+                Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
+                UpdateMusicLibrary(folder);
+            }
+        }
+
+        public async void UpdateMusicLibrary(StorageFolder folder)
+        {
+            if (folder == null) return;
             MainPage.Instance.Loader.Text = "Loading from your music library...";
             MainPage.Instance.Loader.StartLoading();
             Helper.CurrentFolder = folder;
-            Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
             await Settings.settings.Tree.Init(folder, this as TreeInitProgressListener);
             Settings.settings.RootPath = folder.Path;
             MainPage.Instance.Loader.Text = "Updating your music library...";
@@ -109,6 +117,16 @@ namespace SMPlayer
             {
                 MainPage.Instance.Loader.Text = file;
             }
+        }
+
+        private void UpdateMusicLibrary_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateMusicLibrary(Helper.CurrentFolder);
+        }
+
+        private void BugReport_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 

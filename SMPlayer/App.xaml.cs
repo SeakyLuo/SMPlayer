@@ -139,12 +139,7 @@ namespace SMPlayer
 
         private async void CheckLibrary(object sender, Windows.UI.Core.VisibilityChangedEventArgs e)
         {
-            WindowVisible = e.Visible;
-            if (e.Visible)
-            {
-
-            }
-            else
+            if (!(WindowVisible = e.Visible))
             {
                 await Window.Current.Content.Dispatcher.RunIdleAsync((args) =>
                 {

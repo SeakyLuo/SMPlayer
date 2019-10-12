@@ -293,7 +293,7 @@ namespace SMPlayer
                 });
             };
         }
-
+        private Music CurrentMusic = null;
         public void Update()
         {
             SetMusic(MediaHelper.CurrentMusic);
@@ -311,6 +311,8 @@ namespace SMPlayer
 
         public async void SetMusic(Music music)
         {
+            if (CurrentMusic == music) return;
+            CurrentMusic = music;
             if (music == null)
             {
                 ClearMusic();
@@ -415,7 +417,7 @@ namespace SMPlayer
         {
             RepeatButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            ShuffleToolTip.Content = MainMoreShuffleButton.Label = "Shuffle: " + (isChecked ? "Enabled" : "Disabled");
+            ShuffleToolTip.Content = MainMoreShuffleButton.Label = $"Shuffle: " + (isChecked ? "Enabled" : "Disabled");
             RepeatToolTip.Content = MainMoreRepeatButton.Label = "Repeat: Disabled";
             RepeatOneToolTip.Content = MainMoreRepeatOneButton.Label = "Repeat One: Disabled";
             MainMoreShuffleButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
