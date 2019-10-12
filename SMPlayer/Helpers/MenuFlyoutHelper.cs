@@ -163,7 +163,7 @@ namespace SMPlayer
                 Text = "Play",
                 Name = MusicMenuName
             };
-            playItem.SetToolTip($"Play {music.Name}");
+            playItem.SetToolTip($"Play \"{music.Name}\"");
             playItem.Click += (s, args) =>
             {
                 MediaHelper.SetMusicAndPlay(music);

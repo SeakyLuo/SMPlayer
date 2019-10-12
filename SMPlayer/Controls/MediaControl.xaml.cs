@@ -267,11 +267,6 @@ namespace SMPlayer
             }
         }
 
-        private ToolTip MediaControlToolTip = new ToolTip();
-        private ToolTip ShuffleToolTip = new ToolTip();
-        private ToolTip RepeatOneToolTip = new ToolTip();
-        private ToolTip RepeatToolTip = new ToolTip();
-
         private bool ShouldUpdate = true, SliderClicked = false;
         private static List<MusicControlListener> MusicControlListeners = new List<MusicControlListener>();
         private static List<MusicRequestListener> MusicRequestListeners = new List<MusicRequestListener>();
@@ -390,12 +385,6 @@ namespace SMPlayer
             }
         }
 
-        public void SetToolTip(DependencyObject control, string content)
-        {
-            MediaControlToolTip.Content = content;
-            ToolTipService.SetToolTip(control, MediaControlToolTip);
-        }
-
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
             SetShuffle((bool)ShuffleButton.IsChecked);
@@ -407,23 +396,17 @@ namespace SMPlayer
             ShuffleButton.IsChecked = !ShuffleButton.IsChecked;
             ShuffleButton_Click(ShuffleButton, null);
         }
-        private void SetToolTips()
-        {
-            ToolTipService.SetToolTip(ShuffleButton, ShuffleToolTip);
-            ToolTipService.SetToolTip(RepeatButton, RepeatToolTip);
-            ToolTipService.SetToolTip(RepeatOneButton, RepeatOneToolTip);
-        }
+
         public void SetShuffle(bool isChecked)
         {
             RepeatButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            ShuffleToolTip.Content = MainMoreShuffleButton.Label = $"Shuffle: " + (isChecked ? "Enabled" : "Disabled");
-            RepeatToolTip.Content = MainMoreRepeatButton.Label = "Repeat: Disabled";
-            RepeatOneToolTip.Content = MainMoreRepeatOneButton.Label = "Repeat One: Disabled";
+            ShuffleButton.SetToolTip(MainMoreShuffleButton.Label = $"Shuffle: " + (isChecked ? "Enabled" : "Disabled"));
+            RepeatButton.SetToolTip(MainMoreRepeatButton.Label = "Repeat: Disabled");
+            RepeatOneButton.SetToolTip(MainMoreRepeatOneButton.Label = "Repeat One: Disabled");
             MainMoreShuffleButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
             MainMoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
             MainMoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
-            SetToolTips();
             var mode = isChecked ? PlayMode.Shuffle : PlayMode.Once;
             if (mode != Settings.settings.Mode) MediaHelper.SetMode(mode);
         }
@@ -440,13 +423,12 @@ namespace SMPlayer
         {
             ShuffleButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            ShuffleToolTip.Content = MainMoreShuffleButton.Label = "Shuffle: Disabled";
-            RepeatToolTip.Content = MainMoreRepeatButton.Label = "Repeat: " + (isChecked ? "Enabled" : "Disabled");
-            RepeatOneToolTip.Content = MainMoreRepeatOneButton.Label = "Repeat One: Disabled";
+            ShuffleButton.SetToolTip(MainMoreShuffleButton.Label = "Shuffle: Disabled");
+            RepeatButton.SetToolTip(MainMoreRepeatButton.Label = "Repeat: " + (isChecked ? "Enabled" : "Disabled"));
+            RepeatOneButton.SetToolTip(MainMoreRepeatOneButton.Label = "Repeat One: Disabled");
             MainMoreShuffleButton.IconBackground = ColorHelper.TransparentBrush;
             MainMoreRepeatButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
             MainMoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
-            SetToolTips();
             var mode = isChecked ? PlayMode.Repeat : PlayMode.Once;
             if (mode != Settings.settings.Mode) MediaHelper.SetMode(mode);
         }
@@ -464,13 +446,12 @@ namespace SMPlayer
         {
             ShuffleButton.IsChecked = false;
             RepeatButton.IsChecked = false;
-            ShuffleToolTip.Content = MainMoreShuffleButton.Label = "Shuffle: Disabled";
-            RepeatToolTip.Content = MainMoreRepeatButton.Label = "Repeat: Disabled";
-            RepeatOneToolTip.Content = MainMoreRepeatOneButton.Label = "Repeat One: " + (isChecked ? "Enabled" : "Disabled");
+            ShuffleButton.SetToolTip(MainMoreShuffleButton.Label = "Shuffle: Disabled");
+            RepeatButton.SetToolTip(MainMoreRepeatButton.Label = "Repeat: Disabled");
+            RepeatOneButton.SetToolTip(MainMoreRepeatOneButton.Label = "Repeat One: " + (isChecked ? "Enabled" : "Disabled"));
             MainMoreShuffleButton.IconBackground = ColorHelper.TransparentBrush;
             MainMoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
             MainMoreRepeatOneButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
-            SetToolTips();
             var mode = isChecked ? PlayMode.RepeatOne : PlayMode.Once;
             if (mode != Settings.settings.Mode) MediaHelper.SetMode(mode);
         }
@@ -478,13 +459,13 @@ namespace SMPlayer
         public void PlayMusic()
         {
             PlayButton.Content = "\uE769";
-            SetToolTip(PlayButton, "Pause");
+            PlayButton.SetToolTip("Pause");
         }
 
         public void PauseMusic()
         {
             PlayButton.Content = "\uE768";
-            SetToolTip(PlayButton, "Play");
+            PlayButton.SetToolTip("Play");
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
@@ -510,13 +491,13 @@ namespace SMPlayer
             var button = (Button)sender;
             if (button.Content.ToString() == "\uE74F")
             {
-                SetToolTip(button, "Mute");
+                button.SetToolTip("Mute");
                 MediaHelper.Player.IsMuted = false;
                 button.Content = Helper.GetVolumeIcon(VolumeSlider.Value);
             }
             else
             {
-                SetToolTip(button, "Undo Mute");
+                button.SetToolTip("Undo Mute");
                 MediaHelper.Player.IsMuted = true;
                 button.Content = "\uE74F";
             }
@@ -534,7 +515,7 @@ namespace SMPlayer
 
         public void LikeMusic(bool isClick = true)
         {
-            ToolTipService.SetToolTip(LikeToggleButton, "Undo Favorite");
+            LikeToggleButton.SetToolTip("Undo Favorite");
             Settings.settings.LikeMusic(MediaHelper.CurrentMusic);
             if (isClick) SetMusicFavorite(true);
             else LikeToggleButton.IsChecked = true;
@@ -542,7 +523,7 @@ namespace SMPlayer
 
         public void DislikeMusic(bool isClick = true)
         {
-            ToolTipService.SetToolTip(LikeToggleButton, "Set As Favorite");
+            LikeToggleButton.SetToolTip("Set As Favorite");
             Settings.settings.DislikeMusic(MediaHelper.CurrentMusic);
             if (isClick) SetMusicFavorite(false);
             else LikeToggleButton.IsChecked = false;
@@ -624,7 +605,7 @@ namespace SMPlayer
             FullScreenItem.Icon = FullScreenIcon;
             FullScreenItem.Text = tooltip;
             FullScreenButton.Content = "\uE740";
-            SetToolTip(FullScreenButton, tooltip);
+            FullScreenButton.SetToolTip(tooltip);
         }
 
         private void SetExitFullScreen()
@@ -637,7 +618,7 @@ namespace SMPlayer
             FullScreenItem.Icon = BackToWindowIcon;
             FullScreenItem.Text = tooltip;
             FullScreenButton.Content = "\uE73F";
-            SetToolTip(FullScreenButton, tooltip);
+            FullScreenButton.SetToolTip(tooltip);
         }
 
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)

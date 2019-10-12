@@ -56,7 +56,7 @@ namespace SMPlayer
 
         public static void SetToolTip(this DependencyObject obj, string tooltip)
         {
-            ToolTipService.SetToolTip(obj, new ToolTip() { Content = tooltip });
+            ToolTipService.SetToolTip(obj, tooltip);
         }
         public static string GetVolumeIcon(double volume)
         {

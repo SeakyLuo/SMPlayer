@@ -162,29 +162,23 @@ namespace SMPlayer
                 CurrentMusic = null;
         }
 
-        public static void SetMusicAndPlay(Music music)
+        public static async void SetMusicAndPlay(Music music)
         {
-            CurrentPlaylist.Clear();
-            CurrentPlaylist.Add(music);
-            MoveToMusic(music);
+            if (CurrentPlaylist.Count > 0) Clear();
+            await AddMusic(music);
             Play();
         }
 
         public static async void SetMusicAndPlay(ICollection<Music> playlist, Music music)
         {
-            if (!Helper.SamePlaylist(CurrentPlaylist, playlist))
-            {
-                if (!music.Equals(CurrentMusic)) Pause();
-                if (ShuffleEnabled) await SetPlaylist(ShufflePlaylist(playlist, music));
-                else await SetPlaylist(playlist);
-            }
+            if (ShuffleEnabled) await SetPlaylist(ShufflePlaylist(playlist, music));
+            else if (!Helper.SamePlaylist(CurrentPlaylist, playlist)) await SetPlaylist(playlist);
             MoveToMusic(music);
             Play();
         }
 
         public static async void ShuffleAndPlay(ICollection<Music> playlist)
         {
-            Pause();
             SetMode(PlayMode.Shuffle);
             await SetPlaylist(ShufflePlaylist(playlist));
             Play();
