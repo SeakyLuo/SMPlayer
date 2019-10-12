@@ -28,7 +28,7 @@ namespace SMPlayer
     {
         public enum MediaControlMode
         {
-            Main = 0, Full = 1
+            Main = 0, Full = 1, Mini = 2
         }
         private MediaControlMode mode;
         public MediaControlMode Mode
@@ -41,13 +41,18 @@ namespace SMPlayer
                     case MediaControlMode.Main:
                         MainMediaControlGrid.Visibility = Visibility.Visible;
                         FullMediaControlGrid.Visibility = Visibility.Collapsed;
+                        MiniMediaControlGrid.Visibility = Visibility.Collapsed;
                         break;
                     case MediaControlMode.Full:
                         MainMediaControlGrid.Visibility = Visibility.Collapsed;
                         FullMediaControlGrid.Visibility = Visibility.Visible;
+                        MiniMediaControlGrid.Visibility = Visibility.Collapsed;
                         break;
-                    default:
-                        return;
+                    case MediaControlMode.Mini:
+                        MainMediaControlGrid.Visibility = Visibility.Collapsed;
+                        FullMediaControlGrid.Visibility = Visibility.Collapsed;
+                        MiniMediaControlGrid.Visibility = Visibility.Visible;
+                        break;
                 }
                 mode = value;
             }
@@ -62,6 +67,8 @@ namespace SMPlayer
                         return MainAlbumCover;
                     case MediaControlMode.Full:
                         return FullAlbumCover;
+                    case MediaControlMode.Mini:
+                        return MiniAlbumCover;
                     default:
                         return null;
                 }
@@ -77,6 +84,8 @@ namespace SMPlayer
                         return MainTitleTextBlock;
                     case MediaControlMode.Full:
                         return FullTitleTextBlock;
+                    case MediaControlMode.Mini:
+                        return MiniTitleTextBlock;
                     default:
                         return null;
                 }
@@ -92,6 +101,8 @@ namespace SMPlayer
                         return MainArtistTextBlock;
                     case MediaControlMode.Full:
                         return FullArtistTextBlock;
+                    case MediaControlMode.Mini:
+                        return MiniArtistTextBlock;
                     default:
                         return null;
                 }
@@ -107,6 +118,8 @@ namespace SMPlayer
                         return MainPlayButton;
                     case MediaControlMode.Full:
                         return FullPlayButton;
+                    case MediaControlMode.Mini:
+                        return MiniPlayButton;
                     default:
                         return null;
                 }
@@ -152,6 +165,8 @@ namespace SMPlayer
                         return MainMediaSlider;
                     case MediaControlMode.Full:
                         return FullMediaSlider;
+                    case MediaControlMode.Mini:
+                        return MiniMediaSlider;
                     default:
                         return null;
                 }
@@ -167,6 +182,8 @@ namespace SMPlayer
                         return MainMediaControlMoreButton.Visibility == Visibility.Visible ? MainMoreVolumeButton : MainVolumeButton;
                     case MediaControlMode.Full:
                         return FullVolumeButton;
+                    case MediaControlMode.Mini:
+                        return MiniMoreVolumeButton;
                     default:
                         return null;
                 }
@@ -182,6 +199,8 @@ namespace SMPlayer
                         return MainMediaControlMoreButton.Visibility == Visibility.Visible ? MainMoreVolumeSlider : MainVolumeSlider;
                     case MediaControlMode.Full:
                         return FullVolumeSlider;
+                    case MediaControlMode.Mini:
+                        return MiniMoreVolumeSlider;
                     default:
                         return null;
                 }
@@ -286,7 +305,8 @@ namespace SMPlayer
             double volume = Settings.settings.Volume * 100;
             VolumeButton.Content = Helper.GetVolumeIcon(volume);
             VolumeSlider.Value = volume;
-            SetPlayMode(Settings.settings.Mode);
+            if (Mode != MediaControlMode.Mini)
+                SetPlayMode(Settings.settings.Mode);
         }
 
         public async void SetMusic(Music music)
@@ -302,14 +322,25 @@ namespace SMPlayer
             AlbumCover.Source = isThumbnail ? thumbnail.GetBitmapImage() : Helper.DefaultAlbumCover;
             TitleTextBlock.Text = music.Name;
             ArtistTextBlock.Text = music.Artist;
-            FullAlbumTextBlock.Text = music.Album;
             MediaSlider.Maximum = music.Duration;
-            RightTimeTextBlock.Text = MusicDurationConverter.ToTime(music.Duration);
-            LikeToggleButton.IsEnabled = true;
-            if (music.Favorite) LikeMusic(false);
-            else DislikeMusic(false);
-            if (Mode == MediaControlMode.Main)
-                MainMediaControlGrid.Background = isThumbnail ? await thumbnail.GetDisplayColor() : ColorHelper.HighlightBrush;
+            if (RightTimeTextBlock != null) RightTimeTextBlock.Text = MusicDurationConverter.ToTime(music.Duration);
+            if (LikeToggleButton != null)
+            {
+                LikeToggleButton.IsEnabled = true;
+                if (music.Favorite) LikeMusic(false);
+                else DislikeMusic(false);
+            }
+            switch (Mode)
+            {
+                case MediaControlMode.Main:
+                    MainMediaControlGrid.Background = isThumbnail ? await thumbnail.GetDisplayColor() : ColorHelper.HighlightBrush;
+                    break;
+                case MediaControlMode.Full:
+                    FullAlbumTextBlock.Text = music.Album;
+                    break;
+                case MediaControlMode.Mini:
+                    break;
+            }
             Helper.UpdateTile(thumbnail, music);
             thumbnail.Dispose();
         }
@@ -624,15 +655,26 @@ namespace SMPlayer
         {
             FullScreenButton_Click(sender, null);
         }
-
-        private void MiniPlayButton_Click(object sender, RoutedEventArgs e)
+        private async void MiniModeButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (MediaHelper.CurrentMusic == null || !ApplicationView.GetForCurrentView().IsViewModeSupported(ApplicationViewMode.CompactOverlay)) return;
+            if (ApplicationView.GetForCurrentView().ViewMode == ApplicationViewMode.Default)
+            {
+                (Window.Current.Content as Frame).Navigate(typeof(MiniModePage));
+                var pref = ViewModePreferences.CreateDefault(ApplicationViewMode.CompactOverlay);
+                pref.CustomSize = new Size(300, 300);
+                await ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.CompactOverlay, pref);
+            }
+            else
+            {
+                (Window.Current.Content as Frame).GoBack();
+                await ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.Default);
+            }
         }
 
-        private void MoreMiniPlayItem_Tapped(object sender, TappedRoutedEventArgs e)
+        private void MoreMiniModeItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            MiniPlayButton_Click(sender, null);
+            MiniModeButton_Click(sender, null);
         }
 
         private void PlaylistButton_Click(object sender, RoutedEventArgs e)
@@ -713,9 +755,12 @@ namespace SMPlayer
             TitleTextBlock.Text = "";
             ArtistTextBlock.Text = "";
             FullAlbumTextBlock.Text = "";
-            RightTimeTextBlock.Text = "0:00";
-            LikeToggleButton.IsEnabled = false;
-            LikeToggleButton.IsChecked = false;
+            if (RightTimeTextBlock != null) RightTimeTextBlock.Text = "0:00";
+            if (LikeToggleButton != null)
+            {
+                LikeToggleButton.IsEnabled = false;
+                LikeToggleButton.IsChecked = false;
+            }
             MediaSlider.Value = 0;
             MediaSlider.IsEnabled = false;
         }

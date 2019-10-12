@@ -79,6 +79,16 @@ namespace SMPlayer
                                                                                               typeof(IconTextButton),
                                                                                               new PropertyMetadata(30d));
 
+        public bool IsHighlightAll
+        {
+            get => (bool)GetValue(IsHighlightAllProperty);
+            set => SetValue(IsHighlightAllProperty, value);
+        }
+        public static readonly DependencyProperty IsHighlightAllProperty = DependencyProperty.Register("IsHighlightAll",
+                                                                                                             typeof(bool),
+                                                                                                             typeof(IconTextButton),
+                                                                                                             new PropertyMetadata(false));
+
         public FlyoutBase Flyout { get; set; }
         public IconTextButton()
         {
@@ -92,12 +102,17 @@ namespace SMPlayer
 
         private void Root_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            VisualStateManager.GoToState(this, "PointerOver", true);
+            VisualStateManager.GoToState(this, IsHighlightAll ? "PointerOverHighlightAll" : "PointerOver", true);
         }
 
         private void Root_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             VisualStateManager.GoToState(this, "Normal", true);
+        }
+
+        private void Root_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(this, IsHighlightAll ? "PressedHighlightAll" : "Pressed", true);
         }
     }
 

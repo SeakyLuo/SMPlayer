@@ -15,6 +15,7 @@
         CornerRadius="{x:Bind CornerRadius, Mode=OneWay}"
         PointerEntered="Root_PointerEntered"
         PointerExited="Root_PointerExited"
+        PointerPressed="Root_PointerPressed"
         Tapped="Root_Tapped">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -70,6 +71,28 @@
                     </VisualState.Setters>
                     <Storyboard>
                         <PointerDownThemeAnimation Storyboard.TargetName="Root" />
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="PointerOverHighlightAll">
+                    <VisualState.Setters>
+                        <Setter Target="Root.(RevealBrush.State)" Value="PointerOver" />
+                        <Setter Target="Root.Background" Value="{ThemeResource AppBarButtonRevealBackgroundPointerOver}" />
+                        <Setter Target="IconContent.Foreground" Value="{ThemeResource AppBarButtonForegroundPointerOver}" />
+                        <Setter Target="LabelTextBlock.Foreground" Value="{ThemeResource AppBarButtonForegroundPointerOver}" />
+                    </VisualState.Setters>
+                    <Storyboard>
+                        <PointerUpThemeAnimation Storyboard.TargetName="LabelTextBlock" />
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="PressedHighlightAll">
+                    <VisualState.Setters>
+                        <Setter Target="Root.(RevealBrush.State)" Value="Pressed" />
+                        <Setter Target="Root.Background" Value="{ThemeResource AppBarButtonRevealBackgroundPressed}" />
+                        <Setter Target="IconContent.Foreground" Value="{ThemeResource AppBarButtonForegroundPressed}" />
+                        <Setter Target="LabelTextBlock.Foreground" Value="{ThemeResource AppBarButtonForegroundPressed}" />
+                    </VisualState.Setters>
+                    <Storyboard>
+                        <PointerDownThemeAnimation Storyboard.TargetName="LabelTextBlock" />
                     </Storyboard>
                 </VisualState>
             </VisualStateGroup>

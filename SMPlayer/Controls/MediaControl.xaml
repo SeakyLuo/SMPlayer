@@ -15,18 +15,15 @@
             TintColor="{ThemeResource SystemColorHighlightColor}"
             TintOpacity="0.8" />
         <Style x:Key="MediaControlIconTextButtonStyle" TargetType="local:IconTextButton">
-            <Style.Setters>
-                <Setter Property="LabelPosition" Value="Right" />
-                <Setter Property="Padding" Value="4,2,15,2" />
-                <Setter Property="FontSize" Value="14" />
-                <Setter Property="Height" Value="36" />
-                <Setter Property="IconTextMargin" Value="10,0,0,0" />
-            </Style.Setters>
+            <Setter Property="LabelPosition" Value="Right" />
+            <Setter Property="Padding" Value="4,2,15,2" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Height" Value="36" />
+            <Setter Property="IconTextMargin" Value="10,0,0,0" />
+            <Setter Property="IsHighlightAll" Value="True" />
         </Style>
         <Style x:Key="MediaControlIconTextButtonFontIcon" TargetType="FontIcon">
-            <Style.Setters>
-                <Setter Property="FontSize" Value="14" />
-            </Style.Setters>
+            <Setter Property="FontSize" Value="14" />
         </Style>
     </UserControl.Resources>
 
@@ -213,10 +210,10 @@
                                     </local:IconTextButton.Icon>
                                 </local:IconTextButton>
                                 <local:IconTextButton
-                                    x:Name="MainMediaControlMoreMiniPlayItem"
-                                    Label="Mini Play"
+                                    x:Name="MainMediaControlMoreMiniModeItem"
+                                    Label="Mini Mode"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
-                                    Tapped="MoreMiniPlayItem_Tapped">
+                                    Tapped="MoreMiniModeItem_Tapped">
                                     <local:IconTextButton.Icon>
                                         <FontIcon Glyph="&#xE744;" Style="{StaticResource MediaControlIconTextButtonFontIcon}" />
                                     </local:IconTextButton.Icon>
@@ -343,9 +340,9 @@
                                 Icon="Fullscreen"
                                 Text="Full Screen" />
                             <MenuFlyoutItem
-                                x:Name="MainMiniPlayItem"
-                                Click="MiniPlayButton_Click"
-                                Text="Mini Play">
+                                x:Name="MainMiniModeItem"
+                                Click="MiniModeButton_Click"
+                                Text="Mini Mode">
                                 <MenuFlyoutItem.Icon>
                                     <FontIcon Glyph="&#xE744;" />
                                 </MenuFlyoutItem.Icon>
@@ -354,12 +351,11 @@
                     </Button.Flyout>
                 </Button>
             </StackPanel>
-
         </Grid>
         <Grid
             x:Name="FullMediaControlGrid"
             Background="{x:Bind Background}"
-            Visibility="Visible">
+            Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -584,9 +580,9 @@
                                         Text="Full Screen"
                                         Visibility="Collapsed" />
                                     <MenuFlyoutItem
-                                        x:Name="MiniPlayItem"
-                                        Click="MiniPlayButton_Click"
-                                        Text="Mini Player"
+                                        x:Name="MiniModeItem"
+                                        Click="MiniModeButton_Click"
+                                        Text="Mini Mode"
                                         Visibility="Collapsed">
                                         <MenuFlyoutItem.Icon>
                                             <FontIcon Glyph="&#xE744;" />
@@ -636,15 +632,124 @@
                             ToolTipService.ToolTip="Full Screen"
                             Visibility="Visible" />
                         <Button
-                            x:Name="MiniPlayButton"
-                            Click="MiniPlayButton_Click"
+                            x:Name="MiniModeButton"
+                            Click="MiniModeButton_Click"
                             Content="&#xE744;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
-                            ToolTipService.ToolTip="Mini Player"
+                            ToolTipService.ToolTip="Mini Mode"
                             Visibility="Visible" />
                     </StackPanel>
                 </RelativePanel>
             </Grid>
+        </Grid>
+        <Grid x:Name="MiniMediaControlGrid" Visibility="Visible">
+            <Image x:Name="MiniAlbumCover" Source="ms-appx:///Assets/colorful_bg_wide.png" />
+            <Grid
+                Background="Black"
+                Opacity="0.75"
+                Visibility="Visible">
+                <StackPanel
+                    x:Name="MiniMediaControlMusicControlButtonPanel"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <Button
+                        Click="PrevButton_Click"
+                        Content="&#xE892;"
+                        Style="{StaticResource DarkMediaControlButtonStyle}"
+                        ToolTipService.ToolTip="Previous">
+                        <Button.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="Left" Modifiers="Control" />
+                        </Button.KeyboardAccelerators>
+                    </Button>
+                    <Button
+                        x:Name="MiniPlayButton"
+                        Width="48"
+                        Height="48"
+                        HorizontalAlignment="Center"
+                        Click="PlayButton_Click"
+                        Content="&#xE768;"
+                        CornerRadius="25"
+                        FontSize="24"
+                        Style="{StaticResource DarkMediaControlButtonStyle}" />
+                    <Button
+                        Click="NextButton_Click"
+                        Content="&#xE893;"
+                        Style="{StaticResource DarkMediaControlButtonStyle}"
+                        ToolTipService.ToolTip="Next">
+                        <Button.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="Right" Modifiers="Control" />
+                        </Button.KeyboardAccelerators>
+                    </Button>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Bottom">
+                    <local:ScrollingTextBlock
+                        x:Name="MiniTitleTextBlock"
+                        HorizontalAlignment="Center"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Foreground="White" />
+                    <local:ScrollingTextBlock
+                        x:Name="MiniArtistTextBlock"
+                        Margin="3"
+                        HorizontalAlignment="Center"
+                        Foreground="White" />
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button Content="&#xE712;" Style="{StaticResource DarkMediaControlButtonStyle}">
+                            <Button.Flyout>
+                                <Flyout>
+                                    <StackPanel Width="200" Margin="-12,-4">
+                                        <local:IconTextButton
+                                            x:Name="MiniMediaControlMoreMiniModeItem"
+                                            Label="Exit Mini Mode"
+                                            Style="{StaticResource MediaControlIconTextButtonStyle}"
+                                            Tapped="MoreMiniModeItem_Tapped">
+                                            <local:IconTextButton.Icon>
+                                                <FontIcon Glyph="&#xE744;" Style="{StaticResource MediaControlIconTextButtonFontIcon}" />
+                                            </local:IconTextButton.Icon>
+                                        </local:IconTextButton>
+                                        <StackPanel
+                                            Margin="4,2,15,2"
+                                            HorizontalAlignment="Stretch"
+                                            Orientation="Horizontal">
+                                            <Button
+                                                x:Name="MiniMoreVolumeButton"
+                                                Width="30"
+                                                Height="30"
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                Click="VolumeButton_Click"
+                                                Content="&#xE15D;"
+                                                CornerRadius="15"
+                                                FontFamily="Segoe MDL2 Assets"
+                                                FontSize="14"
+                                                Foreground="Black" />
+                                            <Slider
+                                                x:Name="MiniMoreVolumeSlider"
+                                                Width="135"
+                                                Margin="10,0,0,0"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Center"
+                                                Foreground="Black"
+                                                Maximum="100"
+                                                Minimum="0"
+                                                Style="{StaticResource DarkMediaProgressSliderStyle}"
+                                                ValueChanged="VolumeSlider_ValueChanged"
+                                                Value="50" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+                    </StackPanel>
+                    <Slider
+                        x:Name="MiniMediaSlider"
+                        Margin="0,0,0,-15"
+                        Minimum="0"
+                        Style="{StaticResource ThumblessMediaProgressSliderStyle}" />
+                </StackPanel>
+            </Grid>
+
         </Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="CommonStates">
@@ -693,13 +798,13 @@
                         <Setter Target="MusicInfoButton.Visibility" Value="Collapsed" />
                         <Setter Target="LyricsButton.Visibility" Value="Collapsed" />
                         <Setter Target="FullScreenButton.Visibility" Value="Collapsed" />
-                        <Setter Target="MiniPlayButton.Visibility" Value="Collapsed" />
+                        <Setter Target="MiniModeButton.Visibility" Value="Collapsed" />
                         <!--  Menu  -->
                         <Setter Target="PlaylistItem.Visibility" Value="Visible" />
                         <Setter Target="MusicInfoItem.Visibility" Value="Visible" />
                         <Setter Target="LyricsItem.Visibility" Value="Visible" />
                         <Setter Target="FullScreenItem.Visibility" Value="Visible" />
-                        <Setter Target="MiniPlayItem.Visibility" Value="Visible" />
+                        <Setter Target="MiniModeItem.Visibility" Value="Visible" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Width640">
@@ -711,10 +816,10 @@
                         <Setter Target="MainLikeToggleButton.Visibility" Value="Collapsed" />
                         <!--  Full  -->
                         <Setter Target="FullScreenButton.Visibility" Value="Collapsed" />
-                        <Setter Target="MiniPlayButton.Visibility" Value="Collapsed" />
+                        <Setter Target="MiniModeButton.Visibility" Value="Collapsed" />
                         <!--  Menu  -->
                         <Setter Target="FullScreenItem.Visibility" Value="Visible" />
-                        <Setter Target="MiniPlayItem.Visibility" Value="Visible" />
+                        <Setter Target="MiniModeItem.Visibility" Value="Visible" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Width800">

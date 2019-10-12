@@ -34,9 +34,13 @@ namespace SMPlayer
             base.OnNavigatedTo(e);
             if (e.NavigationMode != NavigationMode.Back)
                 await MyFavoritesPlaylistControl.SetMusicCollection(new Playlist("My Favorites", MusicLibraryPage.ConvertMusicPathToCollection(Settings.settings.FavSongs)));
-            TitleBarHelper.SetDarkTitleBar();
             MainPage.Instance.TitleBarBackground = MyFavoritesPlaylistControl.HeaderBackground;
             MainPage.Instance.TitleBarForeground = MainPage.Instance.IsMinimal ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            TitleBarHelper.SetDarkTitleBar();
         }
     }
 }

@@ -50,10 +50,14 @@ namespace SMPlayer
                     AlbumPlaylistControl.SetPlaylistInfo(albumArtist);
                 }
                 await AlbumPlaylistControl.SetMusicCollection(playlist);
+                MainPage.Instance.TitleBarBackground = AlbumPlaylistControl.HeaderBackground;
+                MainPage.Instance.TitleBarForeground = MainPage.Instance.IsMinimal ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
             }
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
             TitleBarHelper.SetDarkTitleBar();
-            MainPage.Instance.TitleBarBackground = AlbumPlaylistControl.HeaderBackground;
-            MainPage.Instance.TitleBarForeground = MainPage.Instance.IsMinimal ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
         }
     }
 }

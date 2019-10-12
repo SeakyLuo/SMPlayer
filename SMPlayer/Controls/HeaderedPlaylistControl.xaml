@@ -42,7 +42,7 @@
                             Width="180"
                             Height="180"
                             Margin="20"
-                            Source="Assets/monotone_bg_wide.png" />
+                            Source="ms-appx:///Assets/monotone_bg_wide.png" />
                         <TextBlock
                             x:Name="PlaylistNameTextBlock"
                             Grid.Column="1"

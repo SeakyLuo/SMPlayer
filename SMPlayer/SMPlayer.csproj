@@ -188,6 +188,9 @@
     <Compile Include="ExpressionBuilder\ReferenceNodes\ExpressionBuilder.VisualReferenceNode.cs" />
     <Compile Include="Helpers\VisualTreeHelperExtensions.cs" />
     <Compile Include="Helpers\MusicHelper.cs" />
+    <Compile Include="MiniModePage.xaml.cs">
+      <DependentUpon>MiniModePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\MusicDisplayItem.cs" />
     <Compile Include="SearchResultPage.xaml.cs">
       <DependentUpon>SearchResultPage.xaml</DependentUpon>
@@ -443,6 +446,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\MediaControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MiniModePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
