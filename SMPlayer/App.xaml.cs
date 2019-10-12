@@ -130,11 +130,16 @@ namespace SMPlayer
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             Helper.ResumeTile();
+            Save();
+            //TODO: 保存应用程序状态并停止任何后台活动
+            deferral.Complete();
+        }
+
+        public static void Save()
+        {
             Settings.Save();
             MusicLibraryPage.Save();
             MediaHelper.Save();
-            //TODO: 保存应用程序状态并停止任何后台活动
-            deferral.Complete();
         }
 
         private async void CheckLibrary(object sender, Windows.UI.Core.VisibilityChangedEventArgs e)
