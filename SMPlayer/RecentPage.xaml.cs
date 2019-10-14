@@ -22,19 +22,25 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class RecentPage : Page
     {
+        private bool Modified = true;
         public RecentPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            Setup(Models.Settings.settings.Recent);
             Models.Settings.settings.Recent.CollectionChanged += (sender, args) =>
             {
-                Setup(Models.Settings.settings.Recent);
+                Modified = true;
             };
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Setup(Models.Settings.settings.Recent);
         }
 
         private async void Setup(ICollection<string> paths)
         {
+            if (!Modified) return;
             LoadingProgressBar.Visibility = Visibility.Visible;
             try
             {
@@ -45,6 +51,7 @@ namespace SMPlayer
                 // Loading while Set New Folder will cause this Exception
                 System.Diagnostics.Debug.WriteLine("InvalidOperationException On Local Music Page");
             }
+            Modified = false;
             LoadingProgressBar.Visibility = Visibility.Collapsed;
         }
 

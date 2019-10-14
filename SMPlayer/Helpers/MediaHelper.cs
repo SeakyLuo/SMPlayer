@@ -88,7 +88,7 @@ namespace SMPlayer
             {
                 if (sender.CurrentItemIndex >= CurrentPlaylist.Count) return;
                 Music current = CurrentMusic?.Copy(), next = args.NewItem.GetMusic();
-                if (current != next)
+                if (!next.Equals(current))
                 {
                     foreach (var listener in SwitchMusicListeners)
                         listener.MusicSwitching(current, next, args.Reason);

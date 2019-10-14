@@ -27,6 +27,7 @@ namespace SMPlayer
         public GridMusicControl()
         {
             this.InitializeComponent();
+            MediaHelper.SwitchMusicListeners.Add(this);
         }
 
         private void MusicGridView_ItemClick(object sender, ItemClickEventArgs e)
@@ -71,19 +72,7 @@ namespace SMPlayer
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            {
-                bool findCurrent = current == null, findNext = next == null;
-                foreach (var item in GridMusicCollection)
-                {
-                    var music = item.Source;
-                    if (!findCurrent && (findCurrent = music.Equals(current)))
-                        music.IsPlaying = false;
-                    if (!findNext && (findNext = music.Equals(next)))
-                        music.IsPlaying = true;
-                    if (findCurrent && findNext) break;
-                }
-            });
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(MusicCollection, current, next));
         }
     }
 }
