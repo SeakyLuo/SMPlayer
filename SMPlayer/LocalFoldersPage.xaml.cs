@@ -25,7 +25,8 @@ namespace SMPlayer
     public sealed partial class LocalFoldersPage : Page, ViewModeChangedListener
     {
         private ObservableCollection<GridFolderView> GridItems = new ObservableCollection<GridFolderView>();
-        private FolderTree Tree;
+        private FolderTree CurrentTree;
+        private string TreePath;
         public static LocalSetter setter;
         
         public LocalFoldersPage()
@@ -37,30 +38,25 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            //Setup(Tree);
-            //ModeChanged(Settings.settings.LocalFolderGridView);
+            Setup(CurrentTree);
+            ModeChanged(Settings.settings.LocalFolderGridView);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //base.OnNavigatedTo(e);
-            //Tree = (FolderTree)e.Parameter;
-
             base.OnNavigatedTo(e);
-            Setup((FolderTree)e.Parameter);
-            ModeChanged(Settings.settings.LocalFolderGridView);
+            CurrentTree = (FolderTree)e.Parameter;
         }
 
         private void LocalFoldersGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var folderView = (GridFolderView)e.ClickedItem;
-            setter.SetPage(Tree.Trees[GridItems.IndexOf(folderView)]);
+            setter.SetPage(CurrentTree.Trees[GridItems.IndexOf(folderView)]);
         }
 
         private async void Setup(FolderTree tree)
         {
-            if (Tree == tree) return;
-            Tree = tree;
+            if (TreePath == tree.Path) return;
             LocalFolderTreeView.RootNodes.Clear();
             LocalFolderTreeView.RootNodes.Add(FillTreeNode(new TreeViewNode()
             {
@@ -75,6 +71,8 @@ namespace SMPlayer
                 await gridItem.Init(branch);
                 GridItems.Add(gridItem);
             }
+            TreePath = tree.Path;
+            CurrentTree = tree;
             LocalLoadingControl.Visibility = Visibility.Collapsed;
         }
 

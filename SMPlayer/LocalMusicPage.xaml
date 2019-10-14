@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:SMPlayer.Models"
     xmlns:local="using:SMPlayer"
+    Loaded="Page_Loaded"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
@@ -32,7 +33,7 @@
             Grid.Row="1"
             Margin="10"
             AlternatingRowColor="True"
-            ItemsSource="{x:Bind Songs}"
+            ItemsSource="{x:Bind Songs, Mode=OneWay}"
             Visibility="Collapsed" />
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">

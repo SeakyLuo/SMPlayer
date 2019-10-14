@@ -22,7 +22,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace SMPlayer
 {
-    public sealed partial class PlaylistControl : UserControl, SwitchMusicListener
+    public sealed partial class PlaylistControl : UserControl, SwitchMusicListener, RemoveMusicListener
     {
         public bool IsNowPlaying { get; set; }
         public ObservableCollection<Music> CurrentPlaylist
@@ -93,7 +93,8 @@ namespace SMPlayer
         public PlaylistControl()
         {
             this.InitializeComponent();
-            MediaHelper.SwitchMusicListeners.Add(this as SwitchMusicListener);
+            MediaHelper.SwitchMusicListeners.Add(this);
+            MediaHelper.RemoveMusicListeners.Add(this);
         }
 
         private void PlaylistController_Loading(FrameworkElement sender, object args)
@@ -147,6 +148,11 @@ namespace SMPlayer
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, current, next));
+        }
+
+        public async void MusicRemoved(int index, Music music)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, null, music));
         }
 
         private List<Music> beforeDragging;

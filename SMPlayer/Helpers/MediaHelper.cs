@@ -60,18 +60,20 @@ namespace SMPlayer
 
         public static async void Init()
         {
-            var playlist = JsonFileHelper.Convert<List<string>>(await JsonFileHelper.ReadAsync(FILENAME));
-            if (playlist == null || playlist.Count == 0) return;
             var settings = Settings.settings;
-            if (settings.LastMusic == null)
-                 settings.LastMusic = MusicLibraryPage.AllSongs.FirstOrDefault((m) => m.Name == playlist[0]);
-            CurrentMusic = settings.LastMusic;
-            foreach (var music in playlist)
+            var playlist = JsonFileHelper.Convert<List<string>>(await JsonFileHelper.ReadAsync(FILENAME));
+            if (playlist != null && playlist.Count != 0)
             {
-                var target = MusicLibraryPage.AllSongs.FirstOrDefault((m) => m.Name == music);
-                if (target == null) continue; // Reset Path Cause This
-                target.IsPlaying = target.Equals(CurrentMusic);
-                await AddMusic(target);
+                if (settings.LastMusic == null)
+                    settings.LastMusic = MusicLibraryPage.AllSongs.FirstOrDefault((m) => m.Name == playlist[0]);
+                CurrentMusic = settings.LastMusic;
+                foreach (var music in playlist)
+                {
+                    var target = MusicLibraryPage.AllSongs.FirstOrDefault((m) => m.Name == music);
+                    if (target == null) continue; // Reset Path Cause This
+                    target.IsPlaying = target.Equals(CurrentMusic);
+                    await AddMusic(target);
+                }
             }
             Player.Volume = settings.Volume;
             MoveToMusic(settings.LastMusic);
@@ -86,10 +88,13 @@ namespace SMPlayer
             {
                 if (sender.CurrentItemIndex >= CurrentPlaylist.Count) return;
                 Music current = CurrentMusic?.Copy(), next = args.NewItem.GetMusic();
-                foreach (var listener in SwitchMusicListeners)
-                    listener.MusicSwitching(current, next, args.Reason);
-                CurrentMusic = next;
-                settings.LastMusic = next;
+                if (current != next)
+                {
+                    foreach (var listener in SwitchMusicListeners)
+                        listener.MusicSwitching(current, next, args.Reason);
+                    CurrentMusic = next;
+                    settings.LastMusic = next;
+                }
             };
             Player.MediaEnded += (sender, args) =>
             {

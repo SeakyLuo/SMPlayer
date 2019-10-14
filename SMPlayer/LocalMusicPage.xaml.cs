@@ -26,7 +26,8 @@ namespace SMPlayer
     public sealed partial class LocalMusicPage : Page, SwitchMusicListener, ViewModeChangedListener
     {
         private ObservableCollection<Music> Songs = new ObservableCollection<Music>();
-        private FolderTree Tree;
+        private FolderTree CurrentTree;
+        private string TreePath;
         public LocalMusicPage()
         {
             this.InitializeComponent();
@@ -35,31 +36,50 @@ namespace SMPlayer
             LocalPage.MusicViewModeChangedListener = this;
         }
 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Setup(CurrentTree);
+            ModeChanged(Settings.settings.LocalMusicGridView);
+        }
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            Setup((FolderTree)e.Parameter);
-            ModeChanged(Settings.settings.LocalMusicGridView);
+            CurrentTree = (FolderTree)e.Parameter;
         }
 
         private async void Setup(FolderTree tree)
         {
-            if (Tree == tree) return;
-            Tree = tree;
+            if (TreePath == tree.Path) return;
             LoadingProgressBar.Visibility = Visibility.Visible;
             try
             {
-                await GridMusicView.Setup(tree.Files);
-                Songs.Clear();
-                foreach (var music in GridMusicView.MusicCollection)
-                    Songs.Add(music);
+                if (GridMusicView.Visibility == Visibility.Visible)
+                {
+                    await GridMusicView.Setup(tree.Files);
+                    SetSongs(tree.Files);
+                }
+                else
+                {
+                    SetSongs(tree.Files);
+                    await GridMusicView.Setup(tree.Files);
+                }
             }
             catch (InvalidOperationException)
             {
                 // Loading while Set New Folder will cause this Exception
                 System.Diagnostics.Debug.WriteLine("InvalidOperationException On Local Music Page");
             }
+            TreePath = tree.Path;
+            CurrentTree = tree;
             LoadingProgressBar.Visibility = Visibility.Collapsed;
+        }
+
+        private void SetSongs(ICollection<Music> songs)
+        {
+            Songs.Clear();
+            foreach (var music in songs)
+                Songs.Add(music);
         }
 
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)

@@ -40,11 +40,6 @@ namespace SMPlayer
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             SetBackButtonVisibility();
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
             TreeInfo info = History.Peek().Info;
             MainPage.Instance.SetHeaderText(string.IsNullOrEmpty(info.Directory) ? "No Music" : info.Directory);
         }
@@ -172,6 +167,10 @@ namespace SMPlayer
                 LocalNavigationView.SelectedItem = LocalFoldersItem;
                 LocalFrame.Navigate(typeof(LocalFoldersPage), tree);
                 SetLocalGridView(Settings.settings.LocalFolderGridView);
+            }
+            else
+            {
+                LocalNavigationView.SelectedItem = null;
             }
         }
 

@@ -559,9 +559,9 @@
       <RootProperty Name="Style" />
       <RootProperty Name="Icon" />
       <RootProperty Name="Width" />
+      <RootProperty Name="IsHighlightAll" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="LabelPosition" />
-      <RootProperty Name="IsHighlightAll" />
       <RootProperty Name="Padding" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="Flyout" />
