@@ -97,8 +97,7 @@
                                 Click="PinToStart_Click"
                                 Icon="Pin"
                                 Label="Pin to Start"
-                                Style="{StaticResource PlaylistAppBarButtonStyle}"
-                                ToolTipService.ToolTip="Pin Playlist to the Start Menu" />
+                                Style="{StaticResource PlaylistAppBarButtonStyle}" />
                             <AppBarButton
                                 x:Name="DeleteButton"
                                 Click="Delete_Click"

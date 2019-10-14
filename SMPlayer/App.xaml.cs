@@ -78,10 +78,9 @@ namespace SMPlayer
                     // 当导航堆栈尚未还原时，导航到第一页，
                     // 并通过将所需信息作为导航参数传入来配置
                     // 参数
-                    if (e.TileId == "App")
-                        rootFrame.Navigate(typeof(MainPage), e.Arguments);
-                    else
-                        rootFrame.Navigate(bool.Parse(e.Arguments) ? typeof(PlaylistsPage) : typeof(AlbumPage), e.TileId);
+                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    if (e.TileId != "App")
+                        MainPage.Instance.NavigateToPage(bool.Parse(e.Arguments) ? typeof(PlaylistsPage) : typeof(AlbumPage), e.TileId);
                 }
                 // 确保当前窗口处于活动状态
                 Window.Current.Activate();

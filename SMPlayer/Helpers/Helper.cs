@@ -325,15 +325,14 @@ namespace SMPlayer
             var path = LogoPath;
             if (playlist.DisplayItem.Source != null && await SecondaryTileFolder.TryGetItemAsync(tilename) == null)
             {
-                var thumbnail = await (await GetStorageItemThumbnailAsync(playlist.DisplayItem.Source.Path)).SaveAsync(SecondaryTileFolder, tilename);
-                path = thumbnail.Path;
+                await (await GetStorageItemThumbnailAsync(playlist.DisplayItem.Source.Path)).SaveAsync(SecondaryTileFolder, tilename);
+                path = $"ms-appdata:///local/SecondaryTiles/{tilename}.png";
             }
             var tile = new SecondaryTile(tileid, tilename, isPlaylist.ToString(), new Uri(path), TileSize.Default);
             tile.VisualElements.ShowNameOnSquare150x150Logo = tile.VisualElements.ShowNameOnSquare310x310Logo = tile.VisualElements.ShowNameOnWide310x150Logo = true;
-            bool isPinned = SecondaryTile.Exists(tilename);
-            if (isPinned) await tile.RequestDeleteAsync();
+            if (SecondaryTile.Exists(tilename)) await tile.RequestDeleteAsync();
             else await tile.RequestCreateAsync();
-            return !isPinned;
+            return SecondaryTile.Exists(tilename);
         }
 
         public static async Task<StorageFile> SaveAsync(this StorageItemThumbnail thumbnail, StorageFolder folder, string name)

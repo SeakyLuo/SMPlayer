@@ -5,8 +5,7 @@
   xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
-  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-  IgnorableNamespaces="uap mp uap3 rescap">
+  IgnorableNamespaces="uap mp uap3">
 
   <Identity
     Name="23778SeakyTheLoner.SMPlayer"
@@ -50,8 +49,6 @@
     <Capability Name="internetClient" />
     <uap:Capability Name="musicLibrary"/>
     <uap3:Capability Name="backgroundMediaPlayback"/>
-    <rescap:Capability Name="broadFileSystemAccess"/>
-    <rescap:Capability Name="confirmAppClose"/>
     <uap:Capability Name="removableStorage"/>
   </Capabilities>
 </Package>

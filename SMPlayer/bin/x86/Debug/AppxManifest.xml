@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" IgnorableNamespaces="uap mp uap3 rescap build" xmlns:build="http://schemas.microsoft.com/developer/appx/2015/build">
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" IgnorableNamespaces="uap mp uap3 build" xmlns:build="http://schemas.microsoft.com/developer/appx/2015/build">
   <!--
   此包清单文件由生成过程生成。
 
@@ -7,11 +7,11 @@
 
   有关程序包清单文件的详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkID=241727
  -->
-  <Identity Name="db271547-6fd4-4a25-989e-edd9c4b8c8fc" Publisher="CN=Seaky" Version="1.0.0.0" ProcessorArchitecture="x86" />
-  <mp:PhoneIdentity PhoneProductId="db271547-6fd4-4a25-989e-edd9c4b8c8fc" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="23778SeakyTheLoner.SMPlayer" Publisher="CN=CFBE922A-0341-4A7E-B15B-A6DEF6C9E3AF" Version="1.0.0.0" ProcessorArchitecture="x86" />
+  <mp:PhoneIdentity PhoneProductId="cc323160-1166-40e8-bb50-eaf5dc6fc12d" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>SMPlayer</DisplayName>
-    <PublisherDisplayName>Seaky</PublisherDisplayName>
+    <PublisherDisplayName>SeakyTheLoner</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
@@ -36,8 +36,6 @@
     <Capability Name="internetClient" />
     <uap:Capability Name="musicLibrary" />
     <uap3:Capability Name="backgroundMediaPlayback" />
-    <rescap:Capability Name="broadFileSystemAccess" />
-    <rescap:Capability Name="confirmAppClose" />
     <uap:Capability Name="removableStorage" />
   </Capabilities>
   <Extensions>

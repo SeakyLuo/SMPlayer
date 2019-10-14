@@ -44,3 +44,5 @@ Sort My Favorites.
 Shuffled Playlist Move To.
 
 Add to my favs Media Control needs update.
+
+Mini Mode title bar.

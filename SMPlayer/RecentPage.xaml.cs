@@ -25,6 +25,7 @@ namespace SMPlayer
         public RecentPage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
             Setup(Models.Settings.settings.Recent);
             Models.Settings.settings.Recent.CollectionChanged += (sender, args) =>
             {

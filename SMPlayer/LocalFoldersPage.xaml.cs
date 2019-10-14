@@ -32,13 +32,22 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            LocalPage.FolderViewModeChangedListener = this as ViewModeChangedListener;
+            LocalPage.FolderViewModeChangedListener = this;
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            //Setup(Tree);
+            //ModeChanged(Settings.settings.LocalFolderGridView);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            Setup((FolderTree)e.Parameter);
+            //base.OnNavigatedTo(e);
+            //Tree = (FolderTree)e.Parameter;
+
             base.OnNavigatedTo(e);
+            Setup((FolderTree)e.Parameter);
             ModeChanged(Settings.settings.LocalFolderGridView);
         }
 

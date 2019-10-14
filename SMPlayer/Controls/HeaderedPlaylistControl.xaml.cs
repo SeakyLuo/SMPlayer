@@ -62,6 +62,7 @@ namespace SMPlayer
             AddToButton.IsEnabled = playlist.Songs.Count != 0;
             RenameButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
             DeleteButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
+            SetPinState(Windows.UI.StartScreen.SecondaryTile.Exists(playlist.Name));
             MusicDisplayItem item;
             if (PlaylistDisplayDict.TryGetValue(playlist.Name, out List<MusicDisplayItem> MusicDisplayItems))
             {
@@ -125,16 +126,22 @@ namespace SMPlayer
         private SymbolIcon UnPinIcon = new SymbolIcon(Symbol.UnPin);
         private async void PinToStart_Click(object sender, RoutedEventArgs e)
         {
-            bool isPinned = await Helper.PinToStartAsync(MusicCollection, IsPlaylist);
+            SetPinState(await Helper.PinToStartAsync(MusicCollection, IsPlaylist));
+        }
+
+        public void SetPinState(bool isPinned)
+        {
             if (isPinned)
             {
-                PinToStartButton.Icon = PinIcon;
-                PinToStartButton.Content = "Pin To Start";
+                PinToStartButton.Icon = UnPinIcon;
+                PinToStartButton.Label = "UnPin";
+                PinToStartButton.SetToolTip("UnPin Playlist");
             }
             else
             {
-                PinToStartButton.Icon = UnPinIcon;
-                PinToStartButton.Content = "UnPin";
+                PinToStartButton.Icon = PinIcon;
+                PinToStartButton.Label = "Pin To Start";
+                PinToStartButton.SetToolTip("Pin Playlist to the Start Menu");
             }
         }
 

@@ -26,8 +26,7 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class LocalPage : Page, LocalSetter, AfterPathSetListener
     {
-        public static ViewModeChangedListener MusicViewModeChangedListener;
-        public static ViewModeChangedListener FolderViewModeChangedListener;
+        public static ViewModeChangedListener MusicViewModeChangedListener, FolderViewModeChangedListener;
         public static Stack<FolderTree> History = new Stack<FolderTree>();
         public LocalPage()
         {
@@ -35,7 +34,7 @@ namespace SMPlayer
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             LocalFoldersPage.setter = this;
             SetPage(Settings.settings.Tree);
-            SettingsPage.AddAfterPathSetListener(this as AfterPathSetListener);
+            SettingsPage.AddAfterPathSetListener(this);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

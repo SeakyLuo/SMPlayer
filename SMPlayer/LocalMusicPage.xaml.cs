@@ -31,14 +31,14 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MediaHelper.SwitchMusicListeners.Add(this as SwitchMusicListener);
-            LocalPage.MusicViewModeChangedListener = this as ViewModeChangedListener;
+            MediaHelper.SwitchMusicListeners.Add(this);
+            LocalPage.MusicViewModeChangedListener = this;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            Setup((FolderTree)e.Parameter);
             base.OnNavigatedTo(e);
+            Setup((FolderTree)e.Parameter);
             ModeChanged(Settings.settings.LocalMusicGridView);
         }
 

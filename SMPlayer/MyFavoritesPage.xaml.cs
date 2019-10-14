@@ -26,6 +26,7 @@ namespace SMPlayer
         public MyFavoritesPage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
