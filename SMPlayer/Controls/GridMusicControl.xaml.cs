@@ -72,7 +72,12 @@ namespace SMPlayer
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(MusicCollection, current, next));
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => 
+            {
+                MediaHelper.FindMusicAndSetPlaying(MusicCollection, current, next);
+                foreach (var item in GridMusicCollection)
+                    item.Source.IsPlaying = item.Source.Equals(next);
+            });
         }
     }
 }

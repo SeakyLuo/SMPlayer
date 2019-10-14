@@ -88,13 +88,17 @@ namespace SMPlayer
             {
                 if (sender.CurrentItemIndex >= CurrentPlaylist.Count) return;
                 Music current = CurrentMusic?.Copy(), next = args.NewItem.GetMusic();
-                if (!next.Equals(current))
-                {
-                    foreach (var listener in SwitchMusicListeners)
-                        listener.MusicSwitching(current, next, args.Reason);
-                    CurrentMusic = next;
-                    settings.LastMusic = next;
-                }
+                //if (!next.Equals(current))
+                //{
+                //    foreach (var listener in SwitchMusicListeners)
+                //        listener.MusicSwitching(current, next, args.Reason);
+                //    CurrentMusic = next;
+                //    settings.LastMusic = next;
+                //}
+                foreach (var listener in SwitchMusicListeners)
+                    listener.MusicSwitching(current, next, args.Reason);
+                CurrentMusic = next;
+                settings.LastMusic = next;
             };
             Player.MediaEnded += (sender, args) =>
             {
