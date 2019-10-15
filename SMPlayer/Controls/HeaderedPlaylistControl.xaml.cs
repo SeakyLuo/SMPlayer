@@ -97,7 +97,7 @@ namespace SMPlayer
             var helper = new MenuFlyoutHelper()
             {
                 Data = MusicCollection.Songs,
-                DefaultPlaylistName = Settings.settings.FindNextPlaylistName(MusicCollection.Name)
+                DefaultPlaylistName = MenuFlyoutHelper.IsBadNewPlaylistName(MusicCollection.Name) ? "" : Settings.settings.FindNextPlaylistName(MusicCollection.Name)
             };
             helper.GetAddToMenuFlyout(MusicCollection.Name).ShowAt(sender as FrameworkElement);
         }

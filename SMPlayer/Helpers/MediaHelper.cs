@@ -194,31 +194,6 @@ namespace SMPlayer
                 if (ShuffleEnabled) await SetPlaylist(ShufflePlaylist(playlist, music));
                 else await SetPlaylist(playlist);
             }
-            //if (ShuffleEnabled)
-            //{
-            //    Clear();
-            //    PendingPlaybackList = new MediaPlaybackList();
-            //    await AddMusic(music);
-            //    MoveToMusic(music);
-            //    Play();
-            //    CurrentPlaylist.Clear();
-            //    await SetPlaylist(ShufflePlaylist(playlist, music));
-            //}
-            //else if (!Helper.SamePlaylist(CurrentPlaylist, playlist))
-            //{
-            //    Clear();
-            //    PendingPlaybackList = new MediaPlaybackList();
-            //    await AddMusic(music);
-            //    MoveToMusic(music);
-            //    Play();
-            //    CurrentPlaylist.Clear();
-            //    await SetPlaylist(playlist);
-            //}
-            //else
-            //{
-            //    MoveToMusic(music);
-            //    Play();
-            //}
         }
 
         public static async void ShuffleAndPlay(ICollection<Music> playlist)
