@@ -250,7 +250,7 @@ namespace SMPlayer
 
         public void MusicModified(Music before, Music after)
         {
-            if (!before.Equals(CurrentMusic)) return;
+            if (before != CurrentMusic) return;
             SetPlayCount(after);
             CurrentMusic.PlayCount = after.PlayCount;
         }
@@ -259,7 +259,7 @@ namespace SMPlayer
         {
             CurrentMusic.PlayCount = 0;
             SetPlayCount(CurrentMusic);
-            MusicLibraryPage.AllSongs.First((m) => m.Equals(CurrentMusic)).PlayCount = 0;
+            MusicLibraryPage.AllSongs.First((m) => m == CurrentMusic).PlayCount = 0;
         }
 
         public void GoBack()

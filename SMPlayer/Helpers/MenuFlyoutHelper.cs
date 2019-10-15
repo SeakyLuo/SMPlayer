@@ -244,7 +244,7 @@ namespace SMPlayer
             };
             removeItem.Click += (sender, args) =>
             {
-                if (music.Equals(MediaHelper.CurrentMusic))
+                if (music == MediaHelper.CurrentMusic)
                 {
                     MediaHelper.NextMusic();
                     MediaHelper.RemoveMusic(music);

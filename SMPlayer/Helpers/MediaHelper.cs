@@ -18,6 +18,7 @@ namespace SMPlayer
     {
         public static bool ShuffleEnabled;
         public static Music CurrentMusic;
+        private static Music TargetMusic;
         public static ObservableCollection<Music> CurrentPlaylist = new ObservableCollection<Music>();
 
         public static double Position
@@ -88,6 +89,7 @@ namespace SMPlayer
             {
                 if (sender.CurrentItemIndex >= CurrentPlaylist.Count) return;
                 Music current = CurrentMusic?.Copy(), next = args.NewItem.GetMusic();
+                if (TargetMusic != null && TargetMusic != next) return;
                 //if (!next.Equals(current))
                 //{
                 //    foreach (var listener in SwitchMusicListeners)
@@ -178,6 +180,7 @@ namespace SMPlayer
 
         public static async void SetMusicAndPlay(ICollection<Music> playlist, Music music)
         {
+            TargetMusic = music;
             if (ShuffleEnabled) await SetPlaylist(ShufflePlaylist(playlist, music));
             else if (!Helper.SamePlaylist(CurrentPlaylist, playlist)) await SetPlaylist(playlist);
             MoveToMusic(music);
@@ -277,7 +280,7 @@ namespace SMPlayer
             if (music == null) return;
             for (int i = 0; i < CurrentPlaylist.Count; i++)
             {
-                if (CurrentPlaylist[i].Equals(music))
+                if (CurrentPlaylist[i] == music)
                 {
                     PlaybackList.MoveTo(Convert.ToUInt32(i));
                     Debug.WriteLine("MediaControl: " + music.Name);
@@ -295,7 +298,7 @@ namespace SMPlayer
         {
             if (index == -1) return;
             Music music = CurrentPlaylist[index];
-            if (music.Equals(CurrentMusic)) CurrentMusic = null;
+            if (music == CurrentMusic) CurrentMusic = null;
             CurrentPlaylist.RemoveAt(index);
             PlaybackList.Items.RemoveAt(index);
             foreach (var listener in RemoveMusicListeners) listener.MusicRemoved(index, music);

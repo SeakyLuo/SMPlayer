@@ -93,7 +93,7 @@ namespace SMPlayer
 
         public void MusicModified(Music before, Music after)
         {
-            var music = AllSongs.First((m) => m.Equals(before));
+            var music = AllSongs.First((m) => m == before);
             music.CopyFrom(after);
         }
 

@@ -178,6 +178,15 @@ namespace SMPlayer.Models
             return string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(other.Name) ? 0 : Name.CompareTo(other.Name);
         }
 
+        public static bool operator == (Music music1, Music music2)
+        {
+            return music1 is null ? music2 is null : music1.Equals(music2);
+        }
+        public static bool operator != (Music music1, Music music2)
+        {
+            return !(music1 == music2);
+        }
+
         public override bool Equals(object obj)
         {
             return obj != null && obj is Music && Path == (obj as Music).Path;
