@@ -14,8 +14,6 @@ Go to Settings and Set the Root Folder of your music files.
 # TO DO
 Localization.
 
-Sort My Favorites.
-
 Handle Music Not Found.
 
 Mini Mode NowPlaying playlist, music info, lyrics...
@@ -26,11 +24,13 @@ Add Album Art to Music.
 
 Multi-Select.
 
-Search Lyrics.
+(Auto) Search Lyrics.
 
 Animations.
 
 Date Added.
+
+Recently added.
 
 # TO FIX
 Bad performance when given many music files.

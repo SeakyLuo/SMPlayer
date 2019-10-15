@@ -67,15 +67,37 @@ namespace SMPlayer.Models
         {
             if (item is Music && !Songs.Contains(item))
                 Songs.Add(item as Music);
-            else if (item is ICollection<Music>)
+            else if (item is ICollection<Music> songs)
             {
                 var set = Songs.ToHashSet();
-                foreach (var music in item as ICollection<Music>)
+                foreach (var music in songs)
                     if (!set.Contains(music))
                         Songs.Add(music);
             }
             else return;
             Sort();
+        }
+
+        public void Remove(object item)
+        {
+            if (item is Music targetMusic)
+                Songs.Remove(targetMusic);
+            else if (item is ICollection<Music> songs)
+            {
+                foreach (var music in songs)
+                    Songs.Remove(music);
+            }
+            else if (item is int index)
+            {
+                Songs.RemoveAt(index);
+            }
+            else return;
+            Sort();
+        }
+
+        public bool Contains(Music music)
+        {
+            return Songs.Contains(music);
         }
 
         public async Task SetDisplayItemAsync()

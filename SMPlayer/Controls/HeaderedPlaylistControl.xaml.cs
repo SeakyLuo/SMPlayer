@@ -29,7 +29,7 @@ namespace SMPlayer
 {
     public sealed partial class HeaderedPlaylistControl : UserControl
     {
-        public Playlist MusicCollection { get; set; }
+        public Playlist Playlist { get; set; }
         public Brush HeaderBackground
         {
             get => headerBackground;
@@ -38,23 +38,22 @@ namespace SMPlayer
         private Brush headerBackground = ColorHelper.HighlightBrush;
         public bool ShowAlbumText
         {
-            get => HeaderedPlaylist.ShowAlbumText;
-            set => HeaderedPlaylist.ShowAlbumText = value;
+            get => HeaderedPlaylistController.ShowAlbumText;
+            set => HeaderedPlaylistController.ShowAlbumText = value;
         }
-
         public bool IsPlaylist { get; set; }
         private static Dictionary<string, List<MusicDisplayItem>> PlaylistDisplayDict = new Dictionary<string, List<MusicDisplayItem>>();
         private static readonly Random random = new Random();
         private static RenameDialog dialog;
-        public PlaylistControl Playlist { get => HeaderedPlaylist; }
+        public PlaylistControl HeaderedPlaylist { get => HeaderedPlaylistController; }
         public HeaderedPlaylistControl()
         {
             this.InitializeComponent();
         }
 
-        public async Task SetMusicCollection(Playlist playlist)
+        public async Task SetPlaylist(Playlist playlist)
         {
-            MusicCollection = playlist;
+            Playlist = playlist;
             HeaderedPlaylist.ItemsSource = playlist.Songs;
             PlaylistNameTextBlock.Text = playlist.Name;
             SetPlaylistInfo(SongCountConverter.ToStr(playlist.Songs));
@@ -90,20 +89,20 @@ namespace SMPlayer
 
         private void Shuffle_Click(object sender, RoutedEventArgs e)
         {
-            MediaHelper.ShuffleAndPlay(MusicCollection.Songs);
+            MediaHelper.ShuffleAndPlay(Playlist.Songs);
         }
         private void AddTo_Click(object sender, RoutedEventArgs e)
         {
             var helper = new MenuFlyoutHelper()
             {
-                Data = MusicCollection.Songs,
-                DefaultPlaylistName = MenuFlyoutHelper.IsBadNewPlaylistName(MusicCollection.Name) ? "" : Settings.settings.FindNextPlaylistName(MusicCollection.Name)
+                Data = Playlist.Songs,
+                DefaultPlaylistName = MenuFlyoutHelper.IsBadNewPlaylistName(Playlist.Name) ? "" : Settings.settings.FindNextPlaylistName(Playlist.Name)
             };
-            helper.GetAddToMenuFlyout(MusicCollection.Name).ShowAt(sender as FrameworkElement);
+            helper.GetAddToMenuFlyout(Playlist.Name).ShowAt(sender as FrameworkElement);
         }
         private async void Rename_Click(object sender, RoutedEventArgs e)
         {
-            dialog = new RenameDialog(Confirm, RenameOption.Rename, MusicCollection.Name);
+            dialog = new RenameDialog(Confirm, RenameOption.Rename, Playlist.Name);
             await dialog.ShowAsync();
         }
 
@@ -119,14 +118,14 @@ namespace SMPlayer
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            PlaylistsPage.DeletePlaylist(MusicCollection);
+            PlaylistsPage.DeletePlaylist(Playlist);
         }
 
         private SymbolIcon PinIcon = new SymbolIcon(Symbol.Pin);
         private SymbolIcon UnPinIcon = new SymbolIcon(Symbol.UnPin);
         private async void PinToStart_Click(object sender, RoutedEventArgs e)
         {
-            SetPinState(await Helper.PinToStartAsync(MusicCollection, IsPlaylist));
+            SetPinState(await Helper.PinToStartAsync(Playlist, IsPlaylist));
         }
 
         public void SetPinState(bool isPinned)
@@ -149,7 +148,7 @@ namespace SMPlayer
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
-                MediaHelper.FindMusicAndSetPlaying(MusicCollection.Songs, current, next);
+                MediaHelper.FindMusicAndSetPlaying(Playlist.Songs, current, next);
             });
         }
 

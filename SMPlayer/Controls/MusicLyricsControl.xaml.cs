@@ -55,9 +55,16 @@ namespace SMPlayer.Controls
             });
         }
 
-        private void SearchLyricsButton_Click(object sender, RoutedEventArgs e)
+        private async void SearchLyricsButton_Click(object sender, RoutedEventArgs e)
         {
-            Helper.GetMediaControlContainer().ShowNotification("Not Implemented");
+            if (await Windows.System.Launcher.LaunchUriAsync(new Uri("https://cn.bing.com/search?q=lryics+" + $"{CurrentMusic.Name}+{CurrentMusic.Artist}")))
+            {
+
+            }
+            else
+            {
+                MainPage.Instance.ShowNotification("Unable to Open a Web Browser");
+            }
         }
         public async void SetLyrics(Music music)
         {

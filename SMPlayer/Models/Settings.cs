@@ -30,7 +30,7 @@ namespace SMPlayer.Models
         public string LastPlaylist { get; set; }
         public bool LocalMusicGridView { get; set; }
         public bool LocalFolderGridView { get; set; }
-        public ObservableCollection<string> FavSongs { get; set; }
+        public Playlist MyFavorites { get; set; }
         public ObservableCollection<string> Recent { get; set; }
 
         public Settings()
@@ -47,7 +47,7 @@ namespace SMPlayer.Models
             LastPlaylist = "";
             LocalMusicGridView = true;
             LocalFolderGridView = true;
-            FavSongs = new ObservableCollection<string>();
+            MyFavorites = new Playlist(MenuFlyoutHelper.MyFavorites);
             Recent = new ObservableCollection<string>();
         }
         public int FindNextPlaylistNameIndex(string Name)
@@ -102,21 +102,21 @@ namespace SMPlayer.Models
 
         public void LikeMusic(Music music)
         {
-            if (FavSongs.Contains(music.Path)) return;
+            if (MyFavorites.Contains(music)) return;
             music.Favorite = true;
-            FavSongs.Add(music.Path);
+            MyFavorites.Add(music);
             foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, true);
         }
 
         public void LikeMusic(ICollection<Music> playlist)
         {
-            var hashset = FavSongs.ToHashSet();
+            var hashset = MyFavorites.Songs.ToHashSet();
             foreach (var music in playlist)
             {
-                if (!hashset.Contains(music.Path))
+                if (!hashset.Contains(music))
                 {
                     music.Favorite = true;
-                    FavSongs.Add(music.Path);
+                    MyFavorites.Add(music);
                     foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, true);
                 }
             }
@@ -124,7 +124,7 @@ namespace SMPlayer.Models
 
         public void DislikeMusic(Music music)
         {
-            FavSongs.Remove(music.Path);
+            MyFavorites.Remove(music);
             music.Favorite = false;
             foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, false);
         }
@@ -134,7 +134,7 @@ namespace SMPlayer.Models
             Tree.RemoveMusic(music);
             foreach (var playlist in Playlists)
                 playlist.Songs.Remove(music);
-            FavSongs.Remove(music.Path);
+            MyFavorites.Remove(music);
         }
 
         public void Played(Music music)

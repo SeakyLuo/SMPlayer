@@ -92,7 +92,7 @@ namespace SMPlayer
                 music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
             SortByButton.Label = "Sort By " + playlist.Criterion.ToStr();
             if (playlistControl != null)
-                await playlistControl.SetMusicCollection(playlist);
+                await playlistControl.SetPlaylist(playlist);
         }
 
         private void DeleteClick(object sender, RoutedEventArgs e)
@@ -219,35 +219,15 @@ namespace SMPlayer
         private void SortByButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var playlist = PlaylistTabView.SelectedItem as Playlist;
-            var flyout = new MenuFlyout();
-            var reverseItem = new MenuFlyoutItem() { Text = "Reverse Playlist" };
-            reverseItem.Click += (send, args) => playlist.Reverse();
-            flyout.Items.Add(reverseItem);
-            flyout.Items.Add(new MenuFlyoutSeparator());
-            foreach (var criterion in Playlist.Criteria)
-            {
-                string sortby = "Sort By " + criterion.ToStr();
-                var radioItem = new ToggleMenuFlyoutItem()
-                {
-                    Text = sortby,
-                    IsChecked = playlist.Criterion == criterion
-                };
-                radioItem.Click += (send, args) =>
-                {
-                    playlist.SetCriterionAndSort(criterion);
-                    (sender as IconTextButton).Label = sortby;
-                };
-                flyout.Items.Add(radioItem);
-            }
-            flyout.ShowAt(sender as FrameworkElement);
+            MenuFlyoutHelper.SetPlaylistSortByMenu(sender, playlist);
         }
 
         private async void HeaderedPlaylistControl_Loaded(object sender, RoutedEventArgs e)
         {
             playlistControl = sender as HeaderedPlaylistControl;
-            playlistControl.Playlist.ScrollListener = this;
-            playlistControl.Playlist.RemoveListeners.Add(this);
-            await playlistControl.SetMusicCollection(PlaylistTabView.SelectedItem as Playlist);
+            playlistControl.HeaderedPlaylist.ScrollListener = this;
+            playlistControl.HeaderedPlaylist.RemoveListeners.Add(this);
+            await playlistControl.SetPlaylist(PlaylistTabView.SelectedItem as Playlist);
         }
 
         private ScrollDirection direction;
@@ -280,7 +260,7 @@ namespace SMPlayer
 
         public void MusicRemoved(int index, Music music)
         {
-            (PlaylistTabView.SelectedItem as Playlist).Songs.RemoveAt(index);
+            (PlaylistTabView.SelectedItem as Playlist).Remove(index);
         }
     }
 }

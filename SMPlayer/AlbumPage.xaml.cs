@@ -49,7 +49,7 @@ namespace SMPlayer
                     playlist = new Playlist(albumName, MusicLibraryPage.AllSongs.Where((m) => m.Album == albumName && m.Artist == albumArtist));
                     AlbumPlaylistControl.SetPlaylistInfo(albumArtist);
                 }
-                await AlbumPlaylistControl.SetMusicCollection(playlist);
+                await AlbumPlaylistControl.SetPlaylist(playlist);
                 MainPage.Instance.TitleBarBackground = AlbumPlaylistControl.HeaderBackground;
                 MainPage.Instance.TitleBarForeground = MainPage.Instance.IsMinimal ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
             }

@@ -134,7 +134,6 @@ namespace SMPlayer
             {
                 MainPage.Instance.ShowNotification("Unable to Open a Web Browser");
             }
-        
         }
     }
 

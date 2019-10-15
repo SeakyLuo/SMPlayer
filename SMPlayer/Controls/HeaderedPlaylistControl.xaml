@@ -10,7 +10,7 @@
     mc:Ignorable="d">
 
     <local:PlaylistControl
-        x:Name="HeaderedPlaylist"
+        x:Name="HeaderedPlaylistController"
         AllowReorder="False"
         AlternatingRowColor="True">
         <local:PlaylistControl.Header>

@@ -253,6 +253,30 @@ namespace SMPlayer
             flyout.Items.Insert(2, removeItem);
             return flyout;
         }
+        public static void SetPlaylistSortByMenu(object sender, Playlist playlist)
+        {
+            var flyout = new MenuFlyout();
+            var reverseItem = new MenuFlyoutItem() { Text = "Reverse Playlist" };
+            reverseItem.Click += (send, args) => playlist.Reverse();
+            flyout.Items.Add(reverseItem);
+            flyout.Items.Add(new MenuFlyoutSeparator());
+            foreach (var criterion in Playlist.Criteria)
+            {
+                string sortby = "Sort By " + criterion.ToStr();
+                var radioItem = new ToggleMenuFlyoutItem()
+                {
+                    Text = sortby,
+                    IsChecked = playlist.Criterion == criterion
+                };
+                radioItem.Click += (send, args) =>
+                {
+                    playlist.SetCriterionAndSort(criterion);
+                    (sender as IconTextButton).Label = sortby;
+                };
+                flyout.Items.Add(radioItem);
+            }
+            flyout.ShowAt(sender as IconTextButton);
+        }
         public static void InsertMusicItem(object sender, int index = 0)
         {
             var flyout = sender as MenuFlyout;

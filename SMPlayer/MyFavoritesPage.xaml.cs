@@ -21,22 +21,66 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MyFavoritesPage : Page
+    public sealed partial class MyFavoritesPage : Page, PlaylistScrollListener, RemoveMusicListener
     {
+        private ScrollDirection direction;
         public MyFavoritesPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            MyFavoritesPlaylistControl.HeaderedPlaylist.ScrollListener = this;
+            MyFavoritesPlaylistControl.HeaderedPlaylist.RemoveListeners.Add(this);
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            SortByButton.Label = "Sort By " + MyFavoritesPlaylistControl.Playlist.Criterion.ToStr();
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
             if (e.NavigationMode != NavigationMode.Back)
-                await MyFavoritesPlaylistControl.SetMusicCollection(new Playlist(MenuFlyoutHelper.MyFavorites, MusicLibraryPage.ConvertMusicPathToCollection(Settings.settings.FavSongs, true)));
+                await MyFavoritesPlaylistControl.SetPlaylist(Settings.settings.MyFavorites);
             TitleBarHelper.SetDarkTitleBar();
             MainPage.Instance.TitleBarBackground = MyFavoritesPlaylistControl.HeaderBackground;
             MainPage.Instance.TitleBarForeground = MainPage.Instance.IsMinimal ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
+        }
+        private void SortByButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var playlist = MyFavoritesPlaylistControl.Playlist;
+            MenuFlyoutHelper.SetPlaylistSortByMenu(sender, playlist);
+        }
+
+        public void Scrolled(double before, double after)
+        {
+            if (after > before + 3)
+            {
+                // scroll down
+                if (direction != ScrollDirection.Down)
+                {
+                    direction = ScrollDirection.Down;
+                    ShowFooterAnimation.Begin();
+                }
+            }
+            else if (after < before - 3)
+            {
+                // scroll up
+                if (direction != ScrollDirection.Up)
+                {
+                    direction = ScrollDirection.Up;
+                    HideFooterAnimation.Begin();
+                }
+            }
+            else
+            {
+                direction = ScrollDirection.None;
+            }
+        }
+
+        public void MusicRemoved(int index, Music music)
+        {
+            MyFavoritesPlaylistControl.Playlist.Remove(index);
         }
     }
 }

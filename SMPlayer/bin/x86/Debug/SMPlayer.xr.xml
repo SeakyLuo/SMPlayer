@@ -119,6 +119,7 @@
       <RootProperty Name="FontSize" />
       <RootProperty Name="BorderThickness" />
       <RootProperty Name="CornerRadius" />
+      <RootProperty Name="FontWeight" />
       <RootProperty Name="HorizontalContentAlignment" />
       <RootProperty Name="Padding" />
       <RootProperty Name="Foreground" />
@@ -127,7 +128,6 @@
       <RootProperty Name="UseSystemFocusVisuals" />
       <RootProperty Name="Template" />
       <RootProperty Name="BackgroundSizing" />
-      <RootProperty Name="FontWeight" />
       <RootProperty Name="IsTabStop" />
       <RootProperty Name="TabNavigation" />
       <RootProperty Name="IsFocusEngagementEnabled" />
@@ -165,6 +165,20 @@
       <RootProperty Name="RenderTransformOrigin" />
       <RootProperty Name="RenderTransform" />
     </RootType>
+    <RootType FullName="SMPlayer.IconTextButton">
+      <RootProperty Name="IconTextMargin" />
+      <RootProperty Name="Label" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="Icon" />
+      <RootProperty Name="Width" />
+      <RootProperty Name="IsHighlightAll" />
+      <RootProperty Name="Visibility" />
+      <RootProperty Name="LabelPosition" />
+      <RootProperty Name="Padding" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="Flyout" />
+      <RootEvent Name="Tapped" />
+    </RootType>
     <RootType FullName="SMPlayer.MusicDurationConverter" />
     <RootType FullName="SMPlayer.MusicFavoriteConverter" />
     <RootType FullName="SMPlayer.IntConverter" />
@@ -185,13 +199,13 @@
       <RootProperty Name="TintOpacity" />
       <RootProperty Name="Opacity" />
     </RootType>
-    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.StaticResourceExtension">
-      <RootProperty Name="ResourceKey" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Setter">
       <RootProperty Name="Property" />
       <RootProperty Name="Value" />
       <RootProperty Name="Target" />
+    </RootType>
+    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.StaticResourceExtension">
+      <RootProperty Name="ResourceKey" />
     </RootType>
     <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.ThemeResourceExtension" />
     <RootType FullName="Windows.UI.Xaml.Controls.Page">
@@ -554,20 +568,6 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.Animation.PointerDownThemeAnimation" />
     <RootType FullName="Windows.UI.Xaml.Media.Animation.PointerUpThemeAnimation" />
-    <RootType FullName="SMPlayer.IconTextButton">
-      <RootProperty Name="IconTextMargin" />
-      <RootProperty Name="Label" />
-      <RootProperty Name="Style" />
-      <RootProperty Name="Icon" />
-      <RootProperty Name="Width" />
-      <RootProperty Name="IsHighlightAll" />
-      <RootProperty Name="Visibility" />
-      <RootProperty Name="LabelPosition" />
-      <RootProperty Name="Padding" />
-      <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="Flyout" />
-      <RootEvent Name="Tapped" />
-    </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.RadialProgressBar">
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Background" />
