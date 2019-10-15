@@ -14,6 +14,8 @@ Go to Settings and Set the Root Folder of your music files.
 # TO DO
 Localization.
 
+Sort My Favorites.
+
 Handle Music Not Found.
 
 Mini Mode NowPlaying playlist, music info, lyrics...
@@ -37,9 +39,9 @@ Bad performance of Loading NowPlayingFull.
 
 Large MainMoreFullScreen.
 
-Repeatedly set shuffle.
+Set lyrics bug.
 
-Sort My Favorites.
+Repeatedly set shuffle.
 
 Shuffled Playlist Move To.
 

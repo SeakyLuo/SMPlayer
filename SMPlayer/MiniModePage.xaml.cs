@@ -20,12 +20,19 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MiniModePage : Page
+    public sealed partial class MiniModePage : Page, MediaControlContainer
     {
         public MiniModePage()
         {
             this.InitializeComponent();
         }
+
+        public void PauseMusic()
+        {
+            MiniMediaControl.PauseMusic();
+        }
+
+        public void ShowNotification(string message, int duration = 1500) { }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {

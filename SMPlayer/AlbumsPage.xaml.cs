@@ -50,7 +50,6 @@ namespace SMPlayer
             }
             SetupStarted = true;
             AlbumPageProgressRing.IsActive = true;
-            AlbumPageProgressRing.Visibility = Visibility.Visible;
             Albums.Clear();
             List<AlbumView> albums = new List<AlbumView>();
             foreach (var group in MusicLibraryPage.AllSongs.GroupBy((m) => m.Album))
@@ -63,7 +62,6 @@ namespace SMPlayer
             }
             foreach (var album in albums.OrderBy((a) => a.Name).ThenBy((a) => a.Artist)) Albums.Add(album);
             if (Notified == NotifiedStatus.Started) Notified = NotifiedStatus.Finished;
-            AlbumPageProgressRing.Visibility = Visibility.Collapsed;
             AlbumPageProgressRing.IsActive = false;
             SetupStarted = false;
         }

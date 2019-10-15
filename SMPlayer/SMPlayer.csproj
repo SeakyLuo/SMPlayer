@@ -147,6 +147,12 @@
     <Compile Include="Controls\IconTextButton.xaml.cs">
       <DependentUpon>IconTextButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MusicInfoControl.xaml.cs">
+      <DependentUpon>MusicInfoControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MusicLyricsControl.xaml.cs">
+      <DependentUpon>MusicLyricsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PlaylistControlItem.xaml.cs">
       <DependentUpon>PlaylistControlItem.xaml</DependentUpon>
     </Compile>
@@ -364,6 +370,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\LoadingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MusicInfoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MusicLyricsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

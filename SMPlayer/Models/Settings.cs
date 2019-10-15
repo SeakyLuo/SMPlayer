@@ -14,6 +14,7 @@ namespace SMPlayer.Models
     {
         public static Settings settings;
         private const string FILENAME = "SMPlayerSettings.json";
+        public static List<LikeMusicListener> LikeMusicListeners = new List<LikeMusicListener>();
 
         public string RootPath { get; set; }
         public FolderTree Tree { get; set; }
@@ -26,9 +27,7 @@ namespace SMPlayer.Models
         public ShowNotification Notification { get; set; }
         public string LastPage { get; set; }
         public List<Playlist> Playlists { get; set; }
-
         public string LastPlaylist { get; set; }
-
         public bool LocalMusicGridView { get; set; }
         public bool LocalFolderGridView { get; set; }
         public ObservableCollection<string> FavSongs { get; set; }
@@ -106,6 +105,7 @@ namespace SMPlayer.Models
             if (FavSongs.Contains(music.Path)) return;
             music.Favorite = true;
             FavSongs.Add(music.Path);
+            foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, true);
         }
 
         public void LikeMusic(ICollection<Music> playlist)
@@ -117,6 +117,7 @@ namespace SMPlayer.Models
                 {
                     music.Favorite = true;
                     FavSongs.Add(music.Path);
+                    foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, true);
                 }
             }
         }
@@ -125,6 +126,7 @@ namespace SMPlayer.Models
         {
             FavSongs.Remove(music.Path);
             music.Favorite = false;
+            foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, false);
         }
 
         public void DeleteMusic(Music music)
@@ -173,6 +175,11 @@ namespace SMPlayer.Models
             }
         }
 
+    }
+
+    public interface LikeMusicListener
+    {
+        void MusicLiked(Music music, bool isFavorite);
     }
 
     public enum NamingError

@@ -24,7 +24,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace SMPlayer
 {
-    public sealed partial class MediaControl : UserControl, SwitchMusicListener, MediaControlListener, AfterPathSetListener, RemoveMusicListener
+    public sealed partial class MediaControl : UserControl, SwitchMusicListener, MediaControlListener, AfterPathSetListener, RemoveMusicListener, LikeMusicListener
     {
         public enum MediaControlMode
         {
@@ -278,6 +278,7 @@ namespace SMPlayer
             MediaHelper.MediaControlListeners.Add(this);
             MediaHelper.RemoveMusicListeners.Add(this);
             SettingsPage.AddAfterPathSetListener(this);
+            Settings.LikeMusicListeners.Add(this);
             MediaHelper.Player.PlaybackSession.PlaybackStateChanged += async (sender, args) =>
             {
                 // For F3 Support
@@ -815,6 +816,15 @@ namespace SMPlayer
             if (MediaHelper.CurrentPlaylist.Count == 0)
                 ClearMusic();
         }
+
+        public void MusicLiked(Music music, bool isFavorite)
+        {
+            if (music == MediaHelper.CurrentMusic)
+            {
+                if (isFavorite) LikeMusic(false);
+                else DislikeMusic(false);
+            }
+        }
     }
 
     public interface MusicControlListener
@@ -832,5 +842,6 @@ namespace SMPlayer
     public interface MediaControlContainer
     {
         void PauseMusic();
+        void ShowNotification(string message, int duration = 1500);
     }
 }

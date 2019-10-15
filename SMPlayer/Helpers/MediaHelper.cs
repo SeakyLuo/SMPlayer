@@ -18,7 +18,6 @@ namespace SMPlayer
     {
         public static bool ShuffleEnabled;
         public static Music CurrentMusic;
-        private static Music TargetMusic;
         public static ObservableCollection<Music> CurrentPlaylist = new ObservableCollection<Music>();
 
         public static double Position
@@ -89,7 +88,6 @@ namespace SMPlayer
             {
                 if (sender.CurrentItemIndex >= CurrentPlaylist.Count) return;
                 Music current = CurrentMusic?.Copy(), next = args.NewItem.GetMusic();
-                if (TargetMusic != null && TargetMusic != next) return;
                 //if (!next.Equals(current))
                 //{
                 //    foreach (var listener in SwitchMusicListeners)
@@ -180,11 +178,47 @@ namespace SMPlayer
 
         public static async void SetMusicAndPlay(ICollection<Music> playlist, Music music)
         {
-            TargetMusic = music;
-            if (ShuffleEnabled) await SetPlaylist(ShufflePlaylist(playlist, music));
-            else if (!Helper.SamePlaylist(CurrentPlaylist, playlist)) await SetPlaylist(playlist);
-            MoveToMusic(music);
-            Play();
+            if (Helper.SamePlaylist(CurrentPlaylist, playlist))
+            {
+                MoveToMusic(music);
+                Play();
+            }
+            else
+            {
+                Clear();
+                PendingPlaybackList = new MediaPlaybackList();
+                await AddMusic(music);
+                MoveToMusic(music);
+                Play();
+                CurrentPlaylist.Clear();
+                if (ShuffleEnabled) await SetPlaylist(ShufflePlaylist(playlist, music));
+                else await SetPlaylist(playlist);
+            }
+            //if (ShuffleEnabled)
+            //{
+            //    Clear();
+            //    PendingPlaybackList = new MediaPlaybackList();
+            //    await AddMusic(music);
+            //    MoveToMusic(music);
+            //    Play();
+            //    CurrentPlaylist.Clear();
+            //    await SetPlaylist(ShufflePlaylist(playlist, music));
+            //}
+            //else if (!Helper.SamePlaylist(CurrentPlaylist, playlist))
+            //{
+            //    Clear();
+            //    PendingPlaybackList = new MediaPlaybackList();
+            //    await AddMusic(music);
+            //    MoveToMusic(music);
+            //    Play();
+            //    CurrentPlaylist.Clear();
+            //    await SetPlaylist(playlist);
+            //}
+            //else
+            //{
+            //    MoveToMusic(music);
+            //    Play();
+            //}
         }
 
         public static async void ShuffleAndPlay(ICollection<Music> playlist)

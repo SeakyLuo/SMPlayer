@@ -63,6 +63,8 @@ Controls\HeaderedPlaylistControl.xbf
 Controls\IconTextButton.xbf
 Controls\LoadingControl.xbf
 Controls\MediaControl.xbf
+Controls\MusicInfoControl.xbf
+Controls\MusicLyricsControl.xbf
 Controls\PlaylistControl.xbf
 Controls\PlaylistControlItem.xbf
 Controls\ScrollingTextBlock.xbf

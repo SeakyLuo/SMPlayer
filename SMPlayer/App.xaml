@@ -56,6 +56,16 @@
                 <Setter Property="Width" Value="50" />
                 <Setter Property="FontSize" Value="24" />
             </Style>
+            <Style
+                x:Key="MusicScrollHeaderButtonStyle"
+                BasedOn="{StaticResource DarkMediaControlButtonStyle}"
+                TargetType="Button">
+                <Setter Property="Width" Value="40" />
+                <Setter Property="Height" Value="40" />
+                <Setter Property="Margin" Value="10" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="CornerRadius" Value="20" />
+            </Style>
             <local:MusicDurationConverter x:Key="MusicDurationConverter" />
             <local:MusicFavoriteConverter x:Key="MusicFavoriteConverter" />
             <local:IntConverter x:Key="IntConverter" />

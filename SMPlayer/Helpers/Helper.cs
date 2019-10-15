@@ -41,6 +41,8 @@ namespace SMPlayer
 
         private static string Lyrics = "";
 
+        public static MediaControlContainer GetMediaControlContainer() { return (Window.Current.Content as Frame).Content as MediaControlContainer; }
+
         public static async Task<bool> CheckIfFileExistsAsync(string path)
         {
             try

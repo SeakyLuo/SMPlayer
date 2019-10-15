@@ -7,6 +7,7 @@
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:media="using:Microsoft.Toolkit.Uwp.UI.Media"
+    xmlns:myControls="using:SMPlayer.Controls"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
@@ -17,42 +18,6 @@
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="IsOpen" Value="True" />
             <Setter Property="TitleBarVisibility" Value="Collapsed" />
-        </Style>
-        <Style
-            x:Key="ScrollHeaderButtonStyle"
-            BasedOn="{StaticResource DarkMediaControlButtonStyle}"
-            TargetType="Button">
-            <Setter Property="Width" Value="40" />
-            <Setter Property="Height" Value="40" />
-            <Setter Property="Margin" Value="10" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="CornerRadius" Value="20" />
-        </Style>
-        <Style
-            x:Key="MusicPropertyTextBoxStyle"
-            BasedOn="{StaticResource BorderlessTextBoxStyle}"
-            TargetType="TextBox">
-            <Setter Property="Height" Value="30" />
-            <Setter Property="Margin" Value="20,5" />
-            <Setter Property="RequestedTheme" Value="Dark" />
-        </Style>
-        <Style x:Key="MusicPropertyBaseTextBlockStyle" TargetType="TextBlock">
-            <Setter Property="Height" Value="30" />
-            <Setter Property="Padding" Value="0,5" />
-        </Style>
-        <Style
-            x:Key="MusicPropertyTextBlockStyle"
-            BasedOn="{StaticResource MusicPropertyBaseTextBlockStyle}"
-            TargetType="TextBlock">
-            <Setter Property="Margin" Value="20,5" />
-            <Setter Property="TextAlignment" Value="Left" />
-        </Style>
-        <Style
-            x:Key="MusicPropertyLabelStyle"
-            BasedOn="{StaticResource MusicPropertyBaseTextBlockStyle}"
-            TargetType="TextBlock">
-            <Setter Property="Margin" Value="0,5" />
-            <Setter Property="TextAlignment" Value="Right" />
         </Style>
     </Page.Resources>
 
@@ -129,178 +94,14 @@
             <controls:BladeItem
                 x:Name="MusicPropertyBladeItem"
                 Loaded="MusicPropertyBladeItem_Loaded"
-                RequestedTheme="Dark"
                 Style="{StaticResource NowPlayingFullBladeItemStyle}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <RelativePanel Margin="40,0,20,20">
-                        <TextBlock
-                            FontWeight="SemiBold"
-                            Foreground="White"
-                            RelativePanel.AlignLeftWithPanel="True"
-                            Style="{StaticResource HeaderTextBlockStyle}"
-                            Text="Properties"
-                            TextAlignment="Left" />
-                        <Button
-                            x:Name="SaveMusicPropertiesButton"
-                            Click="SaveMusicPropertiesButton_Click"
-                            Content="&#xE74E;"
-                            RelativePanel.LeftOf="ResetMusicPropertiesButton"
-                            Style="{StaticResource ScrollHeaderButtonStyle}"
-                            ToolTipService.ToolTip="Save Properties" />
-                        <Button
-                            x:Name="ResetMusicPropertiesButton"
-                            Background="Transparent"
-                            Click="ResetMusicPropertiesButton_Click"
-                            Content="&#xE72C;"
-                            RelativePanel.AlignRightWithPanel="True"
-                            Style="{StaticResource ScrollHeaderButtonStyle}"
-                            ToolTipService.ToolTip="Reset Properties" />
-                    </RelativePanel>
-                    <ScrollViewer Grid.Row="1">
-                        <Grid Padding="20,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel>
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Title" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Subtitle" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Artist" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Album" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Album Artist" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Play Count" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Publisher" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="TrackNumber" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Year" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Bitrate" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Composers" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Conductors" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Date Created" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Date Modified" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Duration" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="File Size" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="File Type" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Genre" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Path" />
-                                <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Producers" />
-                            </StackPanel>
-                            <StackPanel Grid.Column="1">
-                                <TextBox x:Name="TitleTextBox" Style="{StaticResource MusicPropertyTextBoxStyle}" />
-                                <TextBox x:Name="SubtitleTextBox" Style="{StaticResource MusicPropertyTextBoxStyle}" />
-                                <TextBox x:Name="ArtistTextBox" Style="{StaticResource MusicPropertyTextBoxStyle}" />
-                                <TextBox x:Name="AlbumTextBox" Style="{StaticResource MusicPropertyTextBoxStyle}" />
-                                <TextBox x:Name="AlbumArtistTextBox" Style="{StaticResource MusicPropertyTextBoxStyle}" />
-                                <Grid Margin="20,5">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox
-                                        x:Name="PlayCountTextBox"
-                                        Grid.Column="0"
-                                        Margin="0"
-                                        IsReadOnly="True"
-                                        Style="{StaticResource MusicPropertyTextBoxStyle}" />
-                                    <Button
-                                        x:Name="ClearPlayCountButton"
-                                        Grid.Column="1"
-                                        Height="30"
-                                        Margin="10,0,0,0"
-                                        BorderThickness="0"
-                                        Click="ClearPlayCountButton_Click"
-                                        Content="Clear"
-                                        ToolTipService.ToolTip="Clear Play Count" />
-                                </Grid>
-                                <TextBox x:Name="PublisherTextBox" Style="{StaticResource MusicPropertyTextBoxStyle}" />
-                                <TextBox
-                                    x:Name="TrackNumberTextBox"
-                                    BeforeTextChanging="CheckIfDigit"
-                                    Style="{StaticResource MusicPropertyTextBoxStyle}" />
-                                <TextBox
-                                    x:Name="YearTextBox"
-                                    BeforeTextChanging="CheckIfDigit"
-                                    Style="{StaticResource MusicPropertyTextBoxStyle}" />
-                                <TextBlock x:Name="BitRateTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
-                                <TextBlock x:Name="ComposersTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
-                                <TextBlock x:Name="ConductorsTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
-                                <TextBlock x:Name="DateCreatedTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
-                                <TextBlock x:Name="DateModifiedTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
-                                <TextBlock x:Name="DurationTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
-                                <TextBlock x:Name="FileSizeTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
-                                <TextBlock x:Name="FileTypeTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
-                                <TextBlock x:Name="GenreTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
-                                <TextBlock x:Name="PathTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
-                                <TextBlock x:Name="ProducersTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
-                            </StackPanel>
-                        </Grid>
-                    </ScrollViewer>
-                </Grid>
+                <myControls:MusicInfoControl x:Name="MusicInfoController" AllowMusicSwitching="True" />
             </controls:BladeItem>
             <controls:BladeItem
                 x:Name="LyricsBladeItem"
                 Loaded="LyricsBladeItem_Loaded"
                 Style="{StaticResource NowPlayingFullBladeItemStyle}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <RelativePanel Margin="40,10,20,10">
-                        <TextBlock
-                            FontWeight="SemiBold"
-                            Foreground="White"
-                            RelativePanel.AlignLeftWithPanel="True"
-                            Style="{StaticResource HeaderTextBlockStyle}"
-                            Text="Lyrics"
-                            TextAlignment="Left" />
-                        <Button
-                            x:Name="SearchLyricsButton"
-                            Click="SearchLyricsButton_Click"
-                            Content="&#xE721;"
-                            RelativePanel.LeftOf="SaveLyricsButton"
-                            Style="{StaticResource ScrollHeaderButtonStyle}"
-                            ToolTipService.ToolTip="Search Lyrics" />
-                        <Button
-                            x:Name="SaveLyricsButton"
-                            Click="SaveLyricsButton_Click"
-                            Content="&#xE74E;"
-                            RelativePanel.LeftOf="ResetLyricsButton"
-                            Style="{StaticResource ScrollHeaderButtonStyle}"
-                            ToolTipService.ToolTip="Save Lyrics" />
-                        <Button
-                            x:Name="ResetLyricsButton"
-                            Background="Transparent"
-                            Click="ResetLyricsButton_Click"
-                            Content="&#xE72C;"
-                            RelativePanel.AlignRightWithPanel="True"
-                            Style="{StaticResource ScrollHeaderButtonStyle}"
-                            ToolTipService.ToolTip="Reset Lyrics" />
-                    </RelativePanel>
-                    <ProgressBar
-                        x:Name="SavingLyricsProgressRing"
-                        Grid.Row="1"
-                        Margin="10,0"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Top"
-                        Foreground="White"
-                        IsIndeterminate="True"
-                        RelativePanel.AlignBottomWithPanel="True"
-                        Visibility="Collapsed" />
-                    <TextBox
-                        x:Name="LyricsTextBox"
-                        Grid.Row="1"
-                        Margin="20,10"
-                        AcceptsReturn="True"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        IsSpellCheckEnabled="False"
-                        RequestedTheme="Dark"
-                        TextWrapping="Wrap" />
-                </Grid>
+                <myControls:MusicLyricsControl x:Name="MusicLyricsController" AllowMusicSwitching="True" />
             </controls:BladeItem>
         </controls:BladeView>
         <controls:InAppNotification
