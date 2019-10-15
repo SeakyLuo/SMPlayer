@@ -32,8 +32,6 @@ namespace SMPlayer
     public sealed partial class NowPlayingFullPage : Page, MediaControlContainer, MusicRequestListener
     {
         public static NowPlayingFullPage Instance { get => (Window.Current.Content as Frame).Content as NowPlayingFullPage; }
-        private bool MusicInfoRequestedWhenUnloaded = false;
-        private bool LyricsRequestedWhenUnloaded = false;
         public NowPlayingFullPage()
         {
             this.InitializeComponent();
@@ -89,14 +87,12 @@ namespace SMPlayer
         {
             MusicInfoController.SetMusicInfo(music);
             MusicPropertyBladeItem.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true });
-            MusicInfoRequestedWhenUnloaded = !MusicPropertyBladeItem.IsLoaded;
         }
 
         public void LyricsRequested(Music music)
         {
             MusicLyricsController.SetLyrics(music);
             LyricsBladeItem.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true });
-            LyricsRequestedWhenUnloaded = !LyricsBladeItem.IsLoaded;
         }
 
         public void GoBack()
@@ -107,24 +103,6 @@ namespace SMPlayer
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             GoBack();
-        }
-
-        private void MusicPropertyBladeItem_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (MusicInfoRequestedWhenUnloaded)
-            {
-                MusicPropertyBladeItem.StartBringIntoView();
-                MusicInfoRequestedWhenUnloaded = false;
-            }
-        }
-
-        private void LyricsBladeItem_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (LyricsRequestedWhenUnloaded)
-            {
-                LyricsBladeItem.StartBringIntoView();
-                LyricsRequestedWhenUnloaded = false;
-            }
         }
     }
 }

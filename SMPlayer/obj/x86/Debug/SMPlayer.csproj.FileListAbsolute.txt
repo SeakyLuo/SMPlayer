@@ -295,3 +295,8 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\MusicLyrics
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\MusicLyricsControl.g.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\MusicLyricsControl.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\MusicLyricsControl.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Dialogs\MusicDialog.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\MusicDialog.g.i.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\MusicDialog.g.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\MusicDialog.xaml
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\MusicDialog.xbf

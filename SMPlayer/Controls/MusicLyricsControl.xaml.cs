@@ -22,6 +22,7 @@ namespace SMPlayer.Controls
     public sealed partial class MusicLyricsControl : UserControl, SwitchMusicListener
     {
         public bool AllowMusicSwitching { get; set; }
+        public bool ShowHeader { get; set; }
         private string Lyrics = "";
         private Music CurrentMusic;
         public MusicLyricsControl()

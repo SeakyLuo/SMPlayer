@@ -151,7 +151,7 @@
             Background="Transparent">
             <Border
                 x:Name="AppTitleBorder"
-                Width="{x:Bind MainNavigationView.OpenPaneLength}"
+                Width="{x:Bind MainNavigationView.OpenPaneLength, Mode=OneWay}"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Stretch"
                 Background="Transparent" />

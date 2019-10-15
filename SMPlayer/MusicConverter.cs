@@ -247,4 +247,18 @@ namespace SMPlayer
             throw new NotImplementedException();
         }
     }
+
+    class HorizontalAlignmentConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value is bool visible) return visible ? HorizontalAlignment.Right : HorizontalAlignment.Left; 
+            return HorizontalAlignment.Right;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

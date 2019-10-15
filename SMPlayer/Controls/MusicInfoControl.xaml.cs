@@ -23,6 +23,7 @@ namespace SMPlayer.Controls
     public sealed partial class MusicInfoControl : UserControl, SwitchMusicListener, MusicControlListener
     {
         public bool AllowMusicSwitching { get; set; }
+        public bool ShowHeader { get; set; }
         private Music CurrentMusic;
         private MusicProperties Properties;
         public MusicInfoControl()

@@ -13,5 +13,11 @@
 
     <Grid>
         <local:MediaControl x:Name="MiniMediaControl" Mode="Mini" />
+        <Grid
+            x:Name="AppTitleBar"
+            Height="32"
+            VerticalAlignment="Top"
+            Background="Transparent"
+            IsHitTestVisible="True" />
     </Grid>
 </Page>

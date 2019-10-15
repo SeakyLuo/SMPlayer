@@ -1,0 +1,25 @@
+﻿<ContentDialog
+    x:Class="SMPlayer.Dialogs.MusicDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:SMPlayer.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:SMPlayer.Dialogs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Pivot x:Name="MusicDialogPivot">
+        <Pivot.RightHeader>
+            <Button
+                Click="CloseButton_Click"
+                Content="&#xE894;"
+                Style="{StaticResource FontIconButtonStyle}" />
+        </Pivot.RightHeader>
+        <PivotItem x:Name="PropertiesItem" Header="Properties">
+            <controls:MusicInfoControl x:Name="MusicInfoController" ShowHeader="False" />
+        </PivotItem>
+        <PivotItem x:Name="LyricsItem" Header="Lyrics">
+            <controls:MusicLyricsControl x:Name="MusicLyricsController" ShowHeader="False" />
+        </PivotItem>
+    </Pivot>
+</ContentDialog>

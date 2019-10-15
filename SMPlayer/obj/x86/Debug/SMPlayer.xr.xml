@@ -117,10 +117,10 @@
       <RootProperty Name="Background" />
       <RootProperty Name="FontFamily" />
       <RootProperty Name="FontSize" />
+      <RootProperty Name="BorderThickness" />
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="HorizontalContentAlignment" />
       <RootProperty Name="Padding" />
-      <RootProperty Name="BorderThickness" />
       <RootProperty Name="Foreground" />
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="VerticalContentAlignment" />
@@ -141,9 +141,9 @@
       <RootProperty Name="Width" />
       <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="FocusVisualMargin" />
+      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="MinWidth" />
       <RootProperty Name="MinHeight" />
       <RootProperty Name="MaxWidth" />
@@ -177,6 +177,7 @@
     <RootType FullName="SMPlayer.EnabledConverter" />
     <RootType FullName="SMPlayer.CriterionConverter" />
     <RootType FullName="SMPlayer.MusicArtistAlbumConverter" />
+    <RootType FullName="SMPlayer.HorizontalAlignmentConverter" />
     <RootType FullName="Windows.UI.Xaml.Media.AcrylicBrush">
       <RootProperty Name="BackgroundSource" />
       <RootProperty Name="FallbackColor" />
@@ -323,7 +324,6 @@
       <RootProperty Name="Margin" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="Foreground" />
       <RootProperty Name="Style" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.StackPanel">
@@ -405,6 +405,7 @@
       <RootProperty Name="Background" />
       <RootProperty Name="Children" />
       <RootProperty Name="Margin" />
+      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="Style" />
       <RootMethod Name="GetAlignLeftWithPanel" />
       <RootMethod Name="SetAlignLeftWithPanel" />
@@ -464,7 +465,6 @@
     <RootType FullName="Windows.UI.Xaml.Controls.UserControl">
       <RootProperty Name="Content" />
       <RootProperty Name="Resources" />
-      <RootProperty Name="RequestedTheme" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
       <RootEvent Name="Loaded" />
@@ -596,7 +596,6 @@
       <RootProperty Name="Background" />
       <RootProperty Name="BorderThickness" />
       <RootProperty Name="IsSpellCheckEnabled" />
-      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="TextWrapping" />
       <RootProperty Name="SelectionHighlightColor" />
       <RootProperty Name="Width" />
@@ -648,10 +647,14 @@
       <RootMethod Name="SetZoomMode" />
     </RootType>
     <RootType FullName="SMPlayer.Controls.MusicInfoControl">
+      <RootProperty Name="ShowHeader" />
       <RootProperty Name="AllowMusicSwitching" />
+      <RootProperty Name="RequestedTheme" />
     </RootType>
     <RootType FullName="SMPlayer.Controls.MusicLyricsControl">
+      <RootProperty Name="ShowHeader" />
       <RootProperty Name="AllowMusicSwitching" />
+      <RootProperty Name="RequestedTheme" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.HyperlinkButton">
       <RootProperty Name="Margin" />
@@ -669,10 +672,19 @@
       <RootProperty Name="ContextFlyout" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ContentDialog">
+      <RootProperty Name="Content" />
       <RootProperty Name="Title" />
       <RootProperty Name="Resources" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.Pivot">
+      <RootProperty Name="RightHeader" />
+      <RootProperty Name="Items" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.PivotItem">
+      <RootProperty Name="Header" />
       <RootProperty Name="Content" />
     </RootType>
+    <RootType FullName="SMPlayer.Dialogs.MusicDialog" />
     <RootType FullName="Windows.UI.Xaml.Controls.CheckBox">
       <RootProperty Name="Margin" />
       <RootProperty Name="Content" />
@@ -1129,7 +1141,6 @@
       <RootProperty Name="TitleBarVisibility" />
       <RootProperty Name="Style" />
       <RootProperty Name="Content" />
-      <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.ImageBrush">
       <RootProperty Name="ImageSource" />

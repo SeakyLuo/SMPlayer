@@ -45,7 +45,6 @@
             HorizontalAlignment="Stretch"
             Background="Transparent"
             IsHitTestVisible="True" />
-
         <Button
             x:Name="BackButton"
             Grid.Column="1"
@@ -91,17 +90,19 @@
                     </Grid>
                 </UserControl>
             </controls:BladeItem>
-            <controls:BladeItem
-                x:Name="MusicPropertyBladeItem"
-                Loaded="MusicPropertyBladeItem_Loaded"
-                Style="{StaticResource NowPlayingFullBladeItemStyle}">
-                <myControls:MusicInfoControl x:Name="MusicInfoController" AllowMusicSwitching="True" />
+            <controls:BladeItem x:Name="MusicPropertyBladeItem" Style="{StaticResource NowPlayingFullBladeItemStyle}">
+                <myControls:MusicInfoControl
+                    x:Name="MusicInfoController"
+                    AllowMusicSwitching="True"
+                    RequestedTheme="Dark"
+                    ShowHeader="True" />
             </controls:BladeItem>
-            <controls:BladeItem
-                x:Name="LyricsBladeItem"
-                Loaded="LyricsBladeItem_Loaded"
-                Style="{StaticResource NowPlayingFullBladeItemStyle}">
-                <myControls:MusicLyricsControl x:Name="MusicLyricsController" AllowMusicSwitching="True" />
+            <controls:BladeItem x:Name="LyricsBladeItem" Style="{StaticResource NowPlayingFullBladeItemStyle}">
+                <myControls:MusicLyricsControl
+                    x:Name="MusicLyricsController"
+                    AllowMusicSwitching="True"
+                    RequestedTheme="Dark"
+                    ShowHeader="True" />
             </controls:BladeItem>
         </controls:BladeView>
         <controls:InAppNotification

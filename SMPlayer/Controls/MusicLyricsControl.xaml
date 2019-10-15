@@ -12,44 +12,42 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <RelativePanel Margin="40,10,20,10">
+        <Grid Margin="20,10">
             <TextBlock
                 FontWeight="SemiBold"
-                Foreground="White"
                 RelativePanel.AlignLeftWithPanel="True"
                 Style="{StaticResource HeaderTextBlockStyle}"
                 Text="Lyrics"
-                TextAlignment="Left" />
-            <Button
-                x:Name="SearchLyricsButton"
-                Click="SearchLyricsButton_Click"
-                Content="&#xE721;"
-                RelativePanel.LeftOf="SaveLyricsButton"
-                Style="{StaticResource MusicScrollHeaderButtonStyle}"
-                ToolTipService.ToolTip="Search Lyrics" />
-            <Button
-                x:Name="SaveLyricsButton"
-                Click="SaveLyricsButton_Click"
-                Content="&#xE74E;"
-                RelativePanel.LeftOf="ResetLyricsButton"
-                Style="{StaticResource MusicScrollHeaderButtonStyle}"
-                ToolTipService.ToolTip="Save Lyrics" />
-            <Button
-                x:Name="ResetLyricsButton"
-                Background="Transparent"
-                Click="ResetLyricsButton_Click"
-                Content="&#xE72C;"
-                RelativePanel.AlignRightWithPanel="True"
-                Style="{StaticResource MusicScrollHeaderButtonStyle}"
-                ToolTipService.ToolTip="Reset Lyrics" />
-        </RelativePanel>
+                TextAlignment="Left"
+                Visibility="{x:Bind ShowHeader, Converter={StaticResource VisibilityConverter}}" />
+            <StackPanel HorizontalAlignment="{x:Bind ShowHeader, Converter={StaticResource HorizontalAlignmentConverter}}" Orientation="Horizontal">
+                <Button
+                    x:Name="SearchLyricsButton"
+                    Click="SearchLyricsButton_Click"
+                    Content="&#xE721;"
+                    Style="{StaticResource MusicScrollHeaderButtonStyle}"
+                    ToolTipService.ToolTip="Search Lyrics" />
+                <Button
+                    x:Name="SaveLyricsButton"
+                    Click="SaveLyricsButton_Click"
+                    Content="&#xE74E;"
+                    Style="{StaticResource MusicScrollHeaderButtonStyle}"
+                    ToolTipService.ToolTip="Save Lyrics" />
+                <Button
+                    x:Name="ResetLyricsButton"
+                    Background="Transparent"
+                    Click="ResetLyricsButton_Click"
+                    Content="&#xE72C;"
+                    Style="{StaticResource MusicScrollHeaderButtonStyle}"
+                    ToolTipService.ToolTip="Reset Lyrics" />
+            </StackPanel>
+        </Grid>
         <ProgressBar
             x:Name="SavingLyricsProgressRing"
             Grid.Row="1"
             Margin="10,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Top"
-            Foreground="White"
             IsIndeterminate="True"
             RelativePanel.AlignBottomWithPanel="True"
             Visibility="Collapsed" />
@@ -61,7 +59,6 @@
             Background="Transparent"
             BorderThickness="0"
             IsSpellCheckEnabled="False"
-            RequestedTheme="Dark"
             TextWrapping="Wrap" />
     </Grid>
 

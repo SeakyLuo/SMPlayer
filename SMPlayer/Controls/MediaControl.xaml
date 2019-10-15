@@ -450,7 +450,10 @@
                         Foreground="White"
                         RelativePanel.AlignRightWithPanel="True" />
                 </Grid>
-                <RelativePanel Grid.Row="2" Margin="10">
+                <RelativePanel
+                    Grid.Row="2"
+                    Margin="10"
+                    RequestedTheme="Dark">
                     <StackPanel
                         x:Name="FullMediaControlMusicControlButtonPanel"
                         Orientation="Horizontal"

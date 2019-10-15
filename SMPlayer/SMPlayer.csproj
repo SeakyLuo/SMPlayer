@@ -162,6 +162,9 @@
     <Compile Include="Controls\ScrollingTextBlock.xaml.cs">
       <DependentUpon>ScrollingTextBlock.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\MusicDialog.xaml.cs">
+      <DependentUpon>MusicDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\RemoveDialog.xaml.cs">
       <DependentUpon>RemoveDialog.xaml</DependentUpon>
     </Compile>
@@ -386,6 +389,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ScrollingTextBlock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\MusicDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

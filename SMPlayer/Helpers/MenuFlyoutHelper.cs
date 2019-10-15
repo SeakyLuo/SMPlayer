@@ -209,11 +209,10 @@ namespace SMPlayer
                 Icon = new SymbolIcon(Symbol.MusicInfo),
                 Text = "Music Info"
             };
-            musicInfoItem.Click += (s, args) =>
+            musicInfoItem.Click += async (s, args) =>
             {
-                if (MediaHelper.CurrentMusic == null) return;
-                MainPage.Instance.Frame.Navigate(typeof(NowPlayingFullPage));
-                NowPlayingFullPage.Instance.MusicInfoRequested(MediaHelper.CurrentMusic);
+                if (NowPlayingFullPage.Instance == null) await new MusicDialog(MusicDialogOption.Properties, music).ShowAsync();
+                else NowPlayingFullPage.Instance.MusicInfoRequested(music);
             };
             musicInfoItem.SetToolTip("Show Music Info");
             flyout.Items.Add(musicInfoItem);
@@ -222,11 +221,10 @@ namespace SMPlayer
                 Icon = new FontIcon() { Glyph = "\uEC42" },
                 Text = "Show Lyrics"
             };
-            lyricsItem.Click += (s, args) =>
+            lyricsItem.Click += async (s, args) =>
             {
-                if (MediaHelper.CurrentMusic == null) return;
-                MainPage.Instance.Frame.Navigate(typeof(NowPlayingFullPage));
-                NowPlayingFullPage.Instance.LyricsRequested(MediaHelper.CurrentMusic);
+                if (NowPlayingFullPage.Instance == null) await new MusicDialog(MusicDialogOption.Lyrics, music).ShowAsync();
+                else NowPlayingFullPage.Instance.LyricsRequested(music);
             };
             lyricsItem.SetToolTip("Show Music Lyrics");
             flyout.Items.Add(lyricsItem);

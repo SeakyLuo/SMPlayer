@@ -42,9 +42,3 @@ Large MainMoreFullScreen.
 Set lyrics bug.
 
 Repeatedly set shuffle.
-
-Shuffled Playlist Move To.
-
-Add to my favs Media Control needs update.
-
-Mini Mode title bar.

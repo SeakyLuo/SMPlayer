@@ -68,6 +68,7 @@ Controls\MusicLyricsControl.xbf
 Controls\PlaylistControl.xbf
 Controls\PlaylistControlItem.xbf
 Controls\ScrollingTextBlock.xbf
+Dialogs\MusicDialog.xbf
 Dialogs\RemoveDialog.xbf
 Dialogs\RenameDialog.xbf
 Dictionaries\BackButton.xbf
