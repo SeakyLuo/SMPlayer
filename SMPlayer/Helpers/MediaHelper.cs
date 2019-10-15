@@ -140,7 +140,7 @@ namespace SMPlayer
             ShuffleEnabled = mode == PlayMode.Shuffle;
         }
 
-        public static async Task AddMusic(Music music)
+        public static async Task<bool> AddMusic(Music music)
         {
             try
             {
@@ -148,10 +148,11 @@ namespace SMPlayer
                 var item = await music.GetMediaPlaybackItemAsync();
                 PlaybackList.Items.Add(item);
                 CurrentPlaylist.Add(music);
+                return true;
             }
             catch (System.IO.FileNotFoundException)
             {
-                
+                return false;
             }
         }
         public static async void AddMusic(ICollection<Music> playlist)
@@ -169,11 +170,12 @@ namespace SMPlayer
                 CurrentMusic = CurrentPlaylist[0];
         }
 
-        public static async void SetMusicAndPlay(Music music)
+        public static async Task<bool> SetMusicAndPlay(Music music)
         {
             if (CurrentPlaylist.Count > 0) Clear();
-            await AddMusic(music);
-            Play();
+            bool successful = await AddMusic(music);
+            if (successful) Play();
+            return successful;
         }
 
         public static async void SetMusicAndPlay(ICollection<Music> playlist, Music music)
@@ -298,19 +300,20 @@ namespace SMPlayer
             }
         }
 
-        public static void RemoveMusic(Music music)
+        public static bool RemoveMusic(Music music)
         {
-            RemoveMusic(CurrentPlaylist.IndexOf(music));
+            return RemoveMusic(CurrentPlaylist.IndexOf(music));
         }
 
-        public static void RemoveMusic(int index)
+        public static bool RemoveMusic(int index)
         {
-            if (index == -1) return;
+            if (index == -1) return false;
             Music music = CurrentPlaylist[index];
             if (music == CurrentMusic) CurrentMusic = null;
             CurrentPlaylist.RemoveAt(index);
             PlaybackList.Items.RemoveAt(index);
             foreach (var listener in RemoveMusicListeners) listener.MusicRemoved(index, music);
+            return true;
         }
 
         public static void Clear()

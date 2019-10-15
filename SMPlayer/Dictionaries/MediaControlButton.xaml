@@ -5,21 +5,30 @@
     xmlns:local="using:SMPlayer">
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Default">
-            <SolidColorBrush x:Key="ThemeForeground" Color="Black" />
-            <AcrylicBrush
-                x:Key="CleanMediaControlButtonPointerOverBrush"
-                BackgroundSource="Backdrop"
-                FallbackColor="Black"
-                TintColor="Black"
-                TintOpacity="0.4" />
-        </ResourceDictionary>
-        <ResourceDictionary x:Key="Dark">
             <SolidColorBrush x:Key="ThemeForeground" Color="White" />
             <AcrylicBrush
                 x:Key="CleanMediaControlButtonPointerOverBrush"
                 BackgroundSource="Backdrop"
                 FallbackColor="White"
                 TintColor="White"
+                TintOpacity="0.4" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="HighContrast">
+            <SolidColorBrush x:Key="ThemeForeground" Color="White" />
+            <AcrylicBrush
+                x:Key="CleanMediaControlButtonPointerOverBrush"
+                BackgroundSource="Backdrop"
+                FallbackColor="White"
+                TintColor="White"
+                TintOpacity="0.4" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="ThemeForeground" Color="Black" />
+            <AcrylicBrush
+                x:Key="CleanMediaControlButtonPointerOverBrush"
+                BackgroundSource="Backdrop"
+                FallbackColor="Black"
+                TintColor="Black"
                 TintOpacity="0.4" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>

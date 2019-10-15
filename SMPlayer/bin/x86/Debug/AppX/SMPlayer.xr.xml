@@ -108,6 +108,7 @@
       <RootProperty Name="MinHeight" />
       <RootProperty Name="Padding" />
       <RootProperty Name="IsAccessKeyScope" />
+      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="FontFamily" />
       <RootProperty Name="KeyboardAccelerators" />
@@ -352,6 +353,7 @@
       <RootProperty Name="Visibility" />
       <RootProperty Name="XYFocusKeyboardNavigation" />
       <RootProperty Name="IsDoubleTapEnabled" />
+      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="Width" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="Tapped" />

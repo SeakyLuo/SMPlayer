@@ -16,8 +16,6 @@ Localization.
 
 Handle Music Not Found.
 
-Mini Mode NowPlaying playlist, music info, lyrics...
-
 ThemeColor change.
 
 Add Album Art to Music.

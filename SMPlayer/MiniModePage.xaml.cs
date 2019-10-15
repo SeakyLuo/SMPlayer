@@ -54,5 +54,10 @@ namespace SMPlayer
 
         public void ShowNotification(string message, int duration = 1500) { }
 
+        private void Resize()
+        {
+            Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(300, 800));
+        }
+
     }
 }

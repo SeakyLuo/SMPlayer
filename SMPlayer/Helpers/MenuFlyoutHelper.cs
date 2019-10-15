@@ -165,9 +165,9 @@ namespace SMPlayer
                 Name = MusicMenuName
             };
             playItem.SetToolTip($"Play \"{music.Name}\"");
-            playItem.Click += (s, args) =>
+            playItem.Click += async (s, args) =>
             {
-                MediaHelper.SetMusicAndPlay(music);
+                await MediaHelper.SetMusicAndPlay(music);
             };
             flyout.Items.Add(playItem);
             flyout.Items.Add(GetAddToMenuFlyoutSubItem());

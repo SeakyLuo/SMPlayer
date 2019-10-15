@@ -167,8 +167,7 @@
                                         Content="&#xE15D;"
                                         CornerRadius="15"
                                         FontFamily="Segoe MDL2 Assets"
-                                        FontSize="14"
-                                        Foreground="Black" />
+                                        FontSize="14" />
                                     <Slider
                                         x:Name="MainMoreVolumeSlider"
                                         Width="135"
@@ -184,7 +183,7 @@
                                 </StackPanel>
                                 <local:IconTextButton
                                     x:Name="MainMediaControlMoreMusicInfoItem"
-                                    Label="Music Info"
+                                    Label="Show Music Info"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
                                     Tapped="MainMediaControlMoreMusicInfoItem_Tapped">
                                     <local:IconTextButton.Icon>
@@ -655,7 +654,8 @@
                     x:Name="MiniMediaControlMusicControlButtonPanel"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Orientation="Horizontal">
+                    Orientation="Horizontal"
+                    RequestedTheme="Dark">
                     <Button
                         Click="PrevButton_Click"
                         Content="&#xE892;"
@@ -698,17 +698,38 @@
                         HorizontalAlignment="Center"
                         Foreground="White" />
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                        <Button Content="&#xE712;" Style="{StaticResource DarkMediaControlButtonStyle}">
+                        <Button
+                            Content="&#xE712;"
+                            RequestedTheme="Dark"
+                            Style="{StaticResource DarkMediaControlButtonStyle}">
                             <Button.Flyout>
                                 <Flyout>
                                     <StackPanel Width="200" Margin="-12,-4">
                                         <local:IconTextButton
-                                            x:Name="MiniMediaControlMoreMiniModeItem"
-                                            Label="Exit Mini Mode"
+                                            x:Name="MiniMoreShuffleButton"
+                                            Label="Shuffle: Disabled"
                                             Style="{StaticResource MediaControlIconTextButtonStyle}"
-                                            Tapped="MoreMiniModeItem_Tapped">
+                                            Tapped="MoreShuffleButton_Tapped">
                                             <local:IconTextButton.Icon>
-                                                <FontIcon Glyph="&#xE744;" Style="{StaticResource MediaControlIconTextButtonFontIcon}" />
+                                                <FontIcon Glyph="&#xE8B1;" Style="{StaticResource MediaControlIconTextButtonFontIcon}" />
+                                            </local:IconTextButton.Icon>
+                                        </local:IconTextButton>
+                                        <local:IconTextButton
+                                            x:Name="MiniMoreRepeatButton"
+                                            Label="Repeat: Disabled"
+                                            Style="{StaticResource MediaControlIconTextButtonStyle}"
+                                            Tapped="MoreRepeatButton_Tapped">
+                                            <local:IconTextButton.Icon>
+                                                <FontIcon Glyph="&#xE8EE;" Style="{StaticResource MediaControlIconTextButtonFontIcon}" />
+                                            </local:IconTextButton.Icon>
+                                        </local:IconTextButton>
+                                        <local:IconTextButton
+                                            x:Name="MiniMoreRepeatOneButton"
+                                            Label="Repeat One: Disabled"
+                                            Style="{StaticResource MediaControlIconTextButtonStyle}"
+                                            Tapped="MoreRepeatOneButton_Tapped">
+                                            <local:IconTextButton.Icon>
+                                                <FontIcon Glyph="&#xE8ED;" Style="{StaticResource MediaControlIconTextButtonFontIcon}" />
                                             </local:IconTextButton.Icon>
                                         </local:IconTextButton>
                                         <StackPanel
@@ -725,8 +746,7 @@
                                                 Content="&#xE15D;"
                                                 CornerRadius="15"
                                                 FontFamily="Segoe MDL2 Assets"
-                                                FontSize="14"
-                                                Foreground="Black" />
+                                                FontSize="14" />
                                             <Slider
                                                 x:Name="MiniMoreVolumeSlider"
                                                 Width="135"
@@ -740,6 +760,16 @@
                                                 ValueChanged="VolumeSlider_ValueChanged"
                                                 Value="50" />
                                         </StackPanel>
+                                        <local:IconTextButton
+                                            x:Name="MiniMediaControlMoreMiniModeItem"
+                                            Label="Exit Mini Mode"
+                                            Style="{StaticResource MediaControlIconTextButtonStyle}"
+                                            Tapped="MoreMiniModeItem_Tapped">
+                                            <local:IconTextButton.Icon>
+                                                <FontIcon Glyph="&#xE744;" Style="{StaticResource MediaControlIconTextButtonFontIcon}" />
+                                            </local:IconTextButton.Icon>
+                                        </local:IconTextButton>
+
                                     </StackPanel>
                                 </Flyout>
                             </Button.Flyout>

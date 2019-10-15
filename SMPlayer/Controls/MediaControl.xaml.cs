@@ -267,6 +267,52 @@ namespace SMPlayer
             }
         }
 
+        public IconTextButton MoreShuffleButton
+        {
+            get
+            {
+                switch (mode)
+                {
+                    case MediaControlMode.Main:
+                        return MainMoreShuffleButton;
+                    case MediaControlMode.Mini:
+                        return MiniMoreShuffleButton;
+                    default:
+                        return null;
+                }
+            }
+        }
+        public IconTextButton MoreRepeatButton
+        {
+            get
+            {
+                switch (mode)
+                {
+                    case MediaControlMode.Main:
+                        return MainMoreRepeatButton;
+                    case MediaControlMode.Mini:
+                        return MiniMoreRepeatButton;
+                    default:
+                        return null;
+                }
+            }
+        }
+        public IconTextButton MoreRepeatOneButton
+        {
+            get
+            {
+                switch (mode)
+                {
+                    case MediaControlMode.Main:
+                        return MainMoreRepeatOneButton;
+                    case MediaControlMode.Mini:
+                        return MiniMoreRepeatOneButton;
+                    default:
+                        return null;
+                }
+            }
+        }
+
         private bool ShouldUpdate = true, SliderClicked = false;
         private static List<MusicControlListener> MusicControlListeners = new List<MusicControlListener>();
         private static List<MusicRequestListener> MusicRequestListeners = new List<MusicRequestListener>();
@@ -301,8 +347,7 @@ namespace SMPlayer
             double volume = Settings.settings.Volume * 100;
             VolumeButton.Content = Helper.GetVolumeIcon(volume);
             VolumeSlider.Value = volume;
-            if (Mode != MediaControlMode.Mini)
-                SetPlayMode(Settings.settings.Mode);
+            SetPlayMode(Settings.settings.Mode);
         }
 
         public async void SetMusic(Music music)
@@ -370,15 +415,15 @@ namespace SMPlayer
                     SetShuffle(false);
                     break;
                 case PlayMode.Repeat:
-                    RepeatButton.IsChecked = true;
+                    if (RepeatButton != null) RepeatButton.IsChecked = true;
                     SetRepeat(true);
                     break;
                 case PlayMode.RepeatOne:
-                    RepeatOneButton.IsChecked = true;
+                    if (RepeatOneButton != null) RepeatOneButton.IsChecked = true;
                     SetRepeatOne(true);
                     break;
                 case PlayMode.Shuffle:
-                    ShuffleButton.IsChecked = true;
+                    if (ShuffleButton != null) ShuffleButton.IsChecked = true;
                     SetShuffle(true);
                     break;
                 default:
@@ -400,14 +445,14 @@ namespace SMPlayer
 
         public void SetShuffle(bool isChecked)
         {
-            RepeatButton.IsChecked = false;
-            RepeatOneButton.IsChecked = false;
-            ShuffleButton.SetToolTip(MainMoreShuffleButton.Label = $"Shuffle: " + (isChecked ? "Enabled" : "Disabled"));
-            RepeatButton.SetToolTip(MainMoreRepeatButton.Label = "Repeat: Disabled");
-            RepeatOneButton.SetToolTip(MainMoreRepeatOneButton.Label = "Repeat One: Disabled");
-            MainMoreShuffleButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
-            MainMoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
-            MainMoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
+            if (RepeatButton != null) RepeatButton.IsChecked = false;
+            if (RepeatOneButton != null) RepeatOneButton.IsChecked = false;
+            ShuffleButton.SetToolTip(MoreShuffleButton.Label = $"Shuffle: " + (isChecked ? "Enabled" : "Disabled"));
+            RepeatButton.SetToolTip(MoreRepeatButton.Label = "Repeat: Disabled");
+            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = "Repeat One: Disabled");
+            MoreShuffleButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
+            MoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
+            MoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
             var mode = isChecked ? PlayMode.Shuffle : PlayMode.Once;
             if (mode != Settings.settings.Mode) MediaHelper.SetMode(mode);
         }
@@ -422,14 +467,14 @@ namespace SMPlayer
         }
         public void SetRepeat(bool isChecked)
         {
-            ShuffleButton.IsChecked = false;
-            RepeatOneButton.IsChecked = false;
-            ShuffleButton.SetToolTip(MainMoreShuffleButton.Label = "Shuffle: Disabled");
-            RepeatButton.SetToolTip(MainMoreRepeatButton.Label = "Repeat: " + (isChecked ? "Enabled" : "Disabled"));
-            RepeatOneButton.SetToolTip(MainMoreRepeatOneButton.Label = "Repeat One: Disabled");
-            MainMoreShuffleButton.IconBackground = ColorHelper.TransparentBrush;
-            MainMoreRepeatButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
-            MainMoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
+            if (ShuffleButton != null) ShuffleButton.IsChecked = false;
+            if (RepeatOneButton != null) RepeatOneButton.IsChecked = false;
+            ShuffleButton.SetToolTip(MoreShuffleButton.Label = "Shuffle: Disabled");
+            RepeatButton.SetToolTip(MoreRepeatButton.Label = "Repeat: " + (isChecked ? "Enabled" : "Disabled"));
+            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = "Repeat One: Disabled");
+            MoreShuffleButton.IconBackground = ColorHelper.TransparentBrush;
+            MoreRepeatButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
+            MoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
             var mode = isChecked ? PlayMode.Repeat : PlayMode.Once;
             if (mode != Settings.settings.Mode) MediaHelper.SetMode(mode);
         }
@@ -445,14 +490,14 @@ namespace SMPlayer
         }
         public void SetRepeatOne(bool isChecked)
         {
-            ShuffleButton.IsChecked = false;
-            RepeatButton.IsChecked = false;
-            ShuffleButton.SetToolTip(MainMoreShuffleButton.Label = "Shuffle: Disabled");
-            RepeatButton.SetToolTip(MainMoreRepeatButton.Label = "Repeat: Disabled");
-            RepeatOneButton.SetToolTip(MainMoreRepeatOneButton.Label = "Repeat One: " + (isChecked ? "Enabled" : "Disabled"));
-            MainMoreShuffleButton.IconBackground = ColorHelper.TransparentBrush;
-            MainMoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
-            MainMoreRepeatOneButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
+            if (ShuffleButton != null) ShuffleButton.IsChecked = false;
+            if (RepeatButton != null) RepeatButton.IsChecked = false;
+            ShuffleButton.SetToolTip(MoreShuffleButton.Label = "Shuffle: Disabled");
+            RepeatButton.SetToolTip(MoreRepeatButton.Label = "Repeat: Disabled");
+            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = "Repeat One: " + (isChecked ? "Enabled" : "Disabled"));
+            MoreShuffleButton.IconBackground = ColorHelper.TransparentBrush;
+            MoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
+            MoreRepeatOneButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
             var mode = isChecked ? PlayMode.RepeatOne : PlayMode.Once;
             if (mode != Settings.settings.Mode) MediaHelper.SetMode(mode);
         }
