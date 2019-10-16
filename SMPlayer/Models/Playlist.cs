@@ -116,7 +116,7 @@ namespace SMPlayer.Models
             }
         }
 
-        public async Task<List<MusicDisplayItem>> GetMusicDisplayItemsAsync()
+        public async Task<List<MusicDisplayItem>> GetAllDisplayItemsAsync()
         {
             var result = new List<MusicDisplayItem>();
             foreach (var group in Songs.GroupBy((m) => m.Album))

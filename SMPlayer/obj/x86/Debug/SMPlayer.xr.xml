@@ -111,6 +111,9 @@
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="FontFamily" />
       <RootProperty Name="KeyboardAccelerators" />
+      <RootProperty Name="RequestedTheme" />
+      <RootProperty Name="RenderTransformOrigin" />
+      <RootProperty Name="RenderTransform" />
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Control">
@@ -212,8 +215,6 @@
       <RootProperty Name="Background" />
       <RootProperty Name="Content" />
       <RootProperty Name="Resources" />
-      <RootProperty Name="Width" />
-      <RootProperty Name="Height" />
       <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="SMPlayer.HeaderedPlaylistControl">
@@ -609,14 +610,14 @@
       <RootEvent Name="BeforeTextChanging" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ScrollViewer">
-      <RootProperty Name="Content" />
       <RootProperty Name="HorizontalScrollBarVisibility" />
+      <RootProperty Name="HorizontalScrollMode" />
+      <RootProperty Name="Content" />
       <RootProperty Name="VerticalScrollBarVisibility" />
       <RootProperty Name="Style" />
       <RootProperty Name="Margin" />
       <RootProperty Name="Padding" />
       <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="HorizontalScrollMode" />
       <RootProperty Name="IsDeferredScrollingEnabled" />
       <RootProperty Name="IsHorizontalRailEnabled" />
       <RootProperty Name="IsTabStop" />
@@ -648,11 +649,13 @@
     </RootType>
     <RootType FullName="SMPlayer.Controls.MusicInfoControl">
       <RootProperty Name="ShowHeader" />
+      <RootProperty Name="Margin" />
       <RootProperty Name="AllowMusicSwitching" />
       <RootProperty Name="RequestedTheme" />
     </RootType>
     <RootType FullName="SMPlayer.Controls.MusicLyricsControl">
       <RootProperty Name="ShowHeader" />
+      <RootProperty Name="Margin" />
       <RootProperty Name="AllowMusicSwitching" />
       <RootProperty Name="RequestedTheme" />
     </RootType>
@@ -1134,6 +1137,7 @@
     <RootType FullName="SMPlayer.MediaControl">
       <RootProperty Name="Mode" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Media.RotateTransform" />
     <RootType FullName="SMPlayer.MiniModePage" />
     <RootType FullName="SMPlayer.MyFavoritesPage" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.BladeItem">
@@ -1227,7 +1231,6 @@
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGridRow" />
     <RootType FullName="SMPlayer.MusicLibraryPage" />
     <RootType FullName="SMPlayer.NowPlayingPage" />
-    <RootType FullName="Windows.UI.Xaml.Media.RotateTransform" />
     <RootType FullName="SMPlayer.PlaylistsPage" />
     <RootType FullName="SMPlayer.SearchResultPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.ComboBox">

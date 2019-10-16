@@ -27,10 +27,11 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MusicLibraryPage : Page, MusicControlListener, SwitchMusicListener, AfterSongsSetListener
+    public sealed partial class MusicLibraryPage : Page, MusicControlListener, SwitchMusicListener, AfterSongsSetListener, LikeMusicListener
     {
         private const string FILENAME = "MusicLibrary.json";
         public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
+        public static HashSet<Music> AllSongsSet;
         public static bool IsLibraryUnchangedAfterChecking = true;
 
         private bool libraryChecked = false;
@@ -151,7 +152,13 @@ namespace SMPlayer
             if (songs == null) return;
             libraryReset = true;
             AllSongs.Clear();
-            foreach (var item in songs) AllSongs.Add(item);
+            var favSet = Settings.settings.MyFavorites.Songs.ToHashSet();
+            foreach (var item in songs)
+            {
+                item.Favorite = favSet.Contains(item);
+                AllSongs.Add(item);
+            }
+            AllSongsSet = AllSongs.ToHashSet();
             foreach (var listener in listeners) listener.SongsSet(AllSongs);
         }
 
@@ -177,6 +184,12 @@ namespace SMPlayer
         public void SongsSet(ICollection<Music> songs)
         {
             MusicLibraryDataGrid.ItemsSource = songs;
+        }
+
+        public void MusicLiked(Music music, bool isFavorite)
+        {
+            var target = AllSongs.FirstOrDefault((m) => m == music);
+            if (target != null) target.Favorite = isFavorite;
         }
     }
 

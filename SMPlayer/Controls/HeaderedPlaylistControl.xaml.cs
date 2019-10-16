@@ -69,12 +69,12 @@ namespace SMPlayer
             }
             else
             {
-                if (MusicDisplayItem.IsNullOrEmpty(playlist.DisplayItem))
+                if (MusicDisplayItem.IsNullOrEmpty(playlist.DisplayItem) || playlist.DisplayItem.IsDefault)
                     await playlist.SetDisplayItemAsync();
                 item = playlist.DisplayItem;
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                 {
-                    var items = await playlist.GetMusicDisplayItemsAsync();
+                    var items = await playlist.GetAllDisplayItemsAsync();
                     if (items.Count > 0) PlaylistDisplayDict[playlist.Name] = items;
                 });
             }

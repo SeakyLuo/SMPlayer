@@ -30,6 +30,8 @@ Date Added.
 
 Recently added.
 
+Improved algorithm for update.
+
 # TO FIX
 Bad performance when given many music files.
 

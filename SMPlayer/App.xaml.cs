@@ -129,6 +129,7 @@ namespace SMPlayer
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             Helper.ResumeTile();
+            Helper.HideToast();
             Save();
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
@@ -157,7 +158,6 @@ namespace SMPlayer
         protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
         {
             var deferral = args.TaskInstance.GetDeferral();
-
             switch (args.TaskInstance.Task.Name)
             {
                 case Helper.ToastTaskName:
@@ -170,10 +170,7 @@ namespace SMPlayer
                                 MediaHelper.NextMusic();
                                 break;
                             case "Pause":
-                                if ((Window.Current.Content as Frame).Content is MediaControlContainer container)
-                                {
-                                    container.PauseMusic();
-                                }
+                                Helper.GetMediaControlContainer().PauseMusic();
                                 break;
                             default:
                                 break;

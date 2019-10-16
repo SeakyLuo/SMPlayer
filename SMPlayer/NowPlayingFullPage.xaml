@@ -93,6 +93,7 @@
             <controls:BladeItem x:Name="MusicPropertyBladeItem" Style="{StaticResource NowPlayingFullBladeItemStyle}">
                 <myControls:MusicInfoControl
                     x:Name="MusicInfoController"
+                    Margin="20,0"
                     AllowMusicSwitching="True"
                     RequestedTheme="Dark"
                     ShowHeader="True" />
@@ -100,6 +101,7 @@
             <controls:BladeItem x:Name="LyricsBladeItem" Style="{StaticResource NowPlayingFullBladeItemStyle}">
                 <myControls:MusicLyricsControl
                     x:Name="MusicLyricsController"
+                    Margin="20,0"
                     AllowMusicSwitching="True"
                     RequestedTheme="Dark"
                     ShowHeader="True" />

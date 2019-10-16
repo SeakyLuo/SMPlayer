@@ -390,7 +390,7 @@ namespace SMPlayer
                 case MediaControlMode.Mini:
                     break;
             }
-            Helper.UpdateTile(thumbnail, music);
+            await Helper.UpdateTile(thumbnail, music);
             thumbnail.Dispose();
         }
         public void SetMusicAndPlay(Music music)
@@ -702,13 +702,13 @@ namespace SMPlayer
             if (ApplicationView.GetForCurrentView().ViewMode == ApplicationViewMode.Default)
             {
                 (Window.Current.Content as Frame).Navigate(typeof(MiniModePage));
-                var pref = ViewModePreferences.CreateDefault(ApplicationViewMode.CompactOverlay);
-                pref.CustomSize = new Size(300, 300);
-                await ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.CompactOverlay, pref);
+                ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(300, 300));
+                await ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.CompactOverlay, MiniModePage.ViewModePreferences);
             }
             else
             {
                 (Window.Current.Content as Frame).GoBack();
+                ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size());
                 await ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.Default);
             }
         }
@@ -761,7 +761,7 @@ namespace SMPlayer
             {
                 MediaSlider.Value = MediaHelper.Position;
             }
-            if (!Window.Current.Visible) Helper.UpdateToast();
+            Helper.UpdateToast();
         }
 
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
@@ -778,6 +778,7 @@ namespace SMPlayer
                 next.IsPlaying = true;
                 MediaSlider.Value = 0;
                 SetMusic(next);
+                // Use current instead of next to avoid showing toast on app launch
                 if (current != null && !Window.Current.Visible) Helper.ShowToast(next);
             });
         }

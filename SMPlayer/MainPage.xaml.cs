@@ -59,6 +59,7 @@ namespace SMPlayer
         {
             get
             {
+                if (NaviFrame.CurrentSourcePageType == null) return false;
                 var page = NaviFrame.CurrentSourcePageType.Name;
                 return page == "AlbumPage" || page == "MyFavoritesPage";
             }
@@ -103,7 +104,8 @@ namespace SMPlayer
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            TitleBarHelper.SetMainTitleBar();
+            if (IsTitleBarColorful) TitleBarHelper.SetDarkTitleBar();
+            else TitleBarHelper.SetMainTitleBar();
             Window.Current.SetTitleBar(AppTitleBar);
             UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar);
 
@@ -334,7 +336,11 @@ namespace SMPlayer
                     MainNavigationView.SelectedItem = null;
                     break;
             }
-            if (!IsTitleBarColorful)
+            if (IsTitleBarColorful)
+            {
+                TitleBarHelper.SetDarkTitleBar();
+            }
+            else
             {
                 TitleBarHelper.SetMainTitleBar();
                 TitleBarBackground = IsMinimal ? ColorHelper.MinimalTitleBarColor : ColorHelper.TransparentBrush;

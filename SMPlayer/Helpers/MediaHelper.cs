@@ -86,15 +86,18 @@ namespace SMPlayer
             };
             _PlaybackList.CurrentItemChanged += (sender, args) =>
             {
+                if (PendingPlaybackList != null)
+                {
+                    _PlaybackList.Items.Clear();
+                    foreach (var item in PendingPlaybackList.Items)
+                        _PlaybackList.Items.Add(item);
+                    PendingPlaybackList = null;
+                    MoveToMusic(1);
+                    Player.Play();
+                    return;
+                }
                 if (sender.CurrentItemIndex >= CurrentPlaylist.Count) return;
                 Music current = CurrentMusic?.Copy(), next = args.NewItem.GetMusic();
-                //if (!next.Equals(current))
-                //{
-                //    foreach (var listener in SwitchMusicListeners)
-                //        listener.MusicSwitching(current, next, args.Reason);
-                //    CurrentMusic = next;
-                //    settings.LastMusic = next;
-                //}
                 foreach (var listener in SwitchMusicListeners)
                     listener.MusicSwitching(current, next, args.Reason);
                 CurrentMusic = next;

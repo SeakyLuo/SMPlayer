@@ -36,6 +36,7 @@ namespace SMPlayer
         public static StorageFolder CurrentFolder, ThumbnailFolder, SecondaryTileFolder;
         public static BitmapImage DefaultAlbumCover = new BitmapImage(new Uri(DefaultAlbumCoverPath));
         public static BitmapImage ThumbnailNotFoundImage = new BitmapImage(new Uri(ThumbnailNotFoundPath));
+        public static ToastNotification Toast;
         public static ToastNotifier toastNotifier = ToastNotificationManager.CreateToastNotifier();
         public static ToastAudio SlientToast = new ToastAudio() { Silent = true };
         public static TileUpdater tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
@@ -159,18 +160,18 @@ namespace SMPlayer
             };
 
             // Create the toast notification
-            var toast = new ToastNotification(toastContent.GetXml())
+            Toast = new ToastNotification(toastContent.GetXml())
             {
                 ExpirationTime = DateTime.Now.AddSeconds(music.Duration),
                 Tag = ToastTag,
                 Group = ToastGroup,
                 Data = new NotificationData() { SequenceNumber = 0 }
             };
-            toast.Data.Values["MediaControlPosition"] = "0";
-            toast.Data.Values["MediaControlPositionTime"] = "0:00";
-            toast.Data.Values["Lyrics"] = string.IsNullOrEmpty(Lyrics = await music.GetLyricsAsync()) ? NoLyricsAvailable : "" ;
+            Toast.Data.Values["MediaControlPosition"] = "0";
+            Toast.Data.Values["MediaControlPositionTime"] = "0:00";
+            Toast.Data.Values["Lyrics"] = string.IsNullOrEmpty(Lyrics = await music.GetLyricsAsync()) ? NoLyricsAvailable : "" ;
 
-            toastNotifier.Show(toast);
+            toastNotifier.Show(Toast);
         }
         public static void UpdateToast()
         {
@@ -185,10 +186,27 @@ namespace SMPlayer
             toastNotifier.Update(data, ToastTag, ToastGroup);
         }
 
-        public static async void UpdateTile(StorageItemThumbnail itemThumbnail, Music music)
+        public static void HideToast()
+        {
+            if (Toast != null)
+                toastNotifier.Hide(Toast);
+        }
+
+        public static async Task<StorageFolder> GetThumbnailFolder()
+        {
+            if (ThumbnailFolder == null)
+            {
+                ThumbnailFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Thumbnails", CreationCollisionOption.OpenIfExists);
+                foreach (var item in await ThumbnailFolder.GetFilesAsync())
+                    await item.DeleteAsync();
+            }
+            return ThumbnailFolder;
+        }
+
+        public static async Task UpdateTile(StorageItemThumbnail itemThumbnail, Music music)
         {
             if (itemThumbnail == null) return;
-            var thumbnail = await itemThumbnail.SaveAsync(ThumbnailFolder, string.IsNullOrEmpty(music.Album) ? music.Name : music.Album);
+            var thumbnail = await itemThumbnail.SaveAsync(await GetThumbnailFolder(), string.IsNullOrEmpty(music.Album) ? music.Name : music.Album);
             string uri = thumbnail.Path;
             var tileContent = new TileContent()
             {
@@ -321,13 +339,16 @@ namespace SMPlayer
             // And send the notification to the primary tile
             tileUpdater.Update(tileNotification);
         }
-
+        public static async Task<StorageFolder> GetSecondaryTileFolder()
+        {
+            return SecondaryTileFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("SecondaryTiles", CreationCollisionOption.OpenIfExists);
+        }
         public static async Task<bool> PinToStartAsync(Playlist playlist, bool isPlaylist)
         {
             var tilename = playlist.Name;
             var tileid = isPlaylist ? tilename : $"{tilename}+++{playlist.Artist}";
             var path = LogoPath;
-            if (playlist.DisplayItem.Source != null && await SecondaryTileFolder.TryGetItemAsync(tilename) == null)
+            if (playlist.DisplayItem.Source != null && await (await GetSecondaryTileFolder()).TryGetItemAsync(tilename) == null)
             {
                 await (await GetStorageItemThumbnailAsync(playlist.DisplayItem.Source.Path)).SaveAsync(SecondaryTileFolder, tilename);
                 path = $"ms-appdata:///local/SecondaryTiles/{tilename}.png";
@@ -346,9 +367,8 @@ namespace SMPlayer
                 var decoder = await BitmapDecoder.CreateAsync(stream);
                 var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
                 var filename = $"{name}.png";
-                var item = await folder.TryGetItemAsync(filename);
                 var file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
-                if (item == null)
+                if (await folder.TryGetItemAsync(filename) == null)
                 {
                     using (var filestream = await file.OpenAsync(FileAccessMode.ReadWrite))
                     {

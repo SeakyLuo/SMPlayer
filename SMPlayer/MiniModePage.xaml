@@ -5,13 +5,25 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Width="300"
-    Height="300"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <Storyboard x:Name="SpinArrowAnimation">
+            <DoubleAnimation
+                By="180"
+                Storyboard.TargetName="DropdownButton"
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                Duration="0:0:0.25" />
+        </Storyboard>
+    </Page.Resources>
+
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="300" />
+            <RowDefinition Height="600" />
+        </Grid.RowDefinitions>
         <local:MediaControl x:Name="MiniMediaControl" Mode="Mini" />
         <Grid
             x:Name="AppTitleBar"
@@ -19,5 +31,20 @@
             VerticalAlignment="Top"
             Background="Transparent"
             IsHitTestVisible="True" />
+        <Button
+            x:Name="DropdownButton"
+            Margin="0,0,0,15"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            Click="Button_Click"
+            Content="&#xE70D;"
+            RequestedTheme="Dark"
+            RenderTransformOrigin=".5,.5"
+            Style="{StaticResource DarkMediaControlButtonStyle}" >
+            <Button.RenderTransform>
+                <RotateTransform />
+            </Button.RenderTransform>
+        </Button>
+        
     </Grid>
 </Page>

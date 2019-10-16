@@ -1,10 +1,12 @@
-﻿using System;
+﻿using SMPlayer.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -22,6 +24,16 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class MiniModePage : Page, MediaControlContainer
     {
+        public static Size PageSize { get => new Size(300, Settings.settings.MiniModeWithDropdown ? 900 : 300); }
+        public static ViewModePreferences ViewModePreferences
+        {
+            get
+            {
+                var pref = ViewModePreferences.CreateDefault(ApplicationViewMode.CompactOverlay);
+                pref.CustomSize = PageSize;
+                return pref;
+            }
+        }
         public MiniModePage()
         {
             this.InitializeComponent();
@@ -40,6 +52,7 @@ namespace SMPlayer
             UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar);
 
             MiniMediaControl.Update();
+            DropdownButton.Content = Settings.settings.MiniModeWithDropdown ? "\uE70E" : "\uE70D";
         }
         private void UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar coreTitleBar)
         {
@@ -54,10 +67,13 @@ namespace SMPlayer
 
         public void ShowNotification(string message, int duration = 1500) { }
 
-        private void Resize()
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(300, 800));
+            SpinArrowAnimation.Begin();
+            Settings.settings.MiniModeWithDropdown = !Settings.settings.MiniModeWithDropdown;
+            var size = PageSize;
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(size);
+            ApplicationView.GetForCurrentView().TryResizeView(size);
         }
-
     }
 }

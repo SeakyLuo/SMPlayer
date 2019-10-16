@@ -64,7 +64,7 @@ namespace SMPlayer
             MainPage.Instance.Loader.Text = "Loading from your music library...";
             MainPage.Instance.Loader.StartLoading();
             Helper.CurrentFolder = folder;
-            await Settings.settings.Tree.Init(folder, this as TreeInitProgressListener);
+            await Settings.settings.Tree.Init(folder, this);
             Settings.settings.RootPath = folder.Path;
             MainPage.Instance.Loader.Text = "Updating your music library...";
             MusicLibraryPage.SetAllSongs(Settings.settings.Tree.Flatten());

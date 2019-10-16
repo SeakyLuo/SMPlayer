@@ -10,7 +10,7 @@
         FallbackColor="DarkGray"
         TintColor="DarkGray"
         TintOpacity="0.8" />
-    <x:Double x:Key="ThumblessMediaProgressSliderHeight">6</x:Double>
+    <x:Double x:Key="ThumblessMediaProgressSliderHeight">4</x:Double>
     <Style x:Key="MediaSliderProgressBarStyle" TargetType="ProgressBar">
         <Setter Property="Height" Value="1" />
         <Setter Property="Minimum" Value="0" />

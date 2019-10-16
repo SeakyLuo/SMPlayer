@@ -54,10 +54,5 @@ namespace SMPlayer
                 MainPage.Instance.TitleBarForeground = MainPage.Instance.IsMinimal ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
             }
         }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            TitleBarHelper.SetDarkTitleBar();
-        }
     }
 }

@@ -12,10 +12,9 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Margin="20,10">
+        <Grid Margin="0,10">
             <TextBlock
                 FontWeight="SemiBold"
-                RelativePanel.AlignLeftWithPanel="True"
                 Style="{StaticResource HeaderTextBlockStyle}"
                 Text="Lyrics"
                 TextAlignment="Left"
@@ -43,9 +42,8 @@
             </StackPanel>
         </Grid>
         <ProgressBar
-            x:Name="SavingLyricsProgressRing"
+            x:Name="SavingLyricsProgress"
             Grid.Row="1"
-            Margin="10,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Top"
             IsIndeterminate="True"
@@ -54,7 +52,7 @@
         <TextBox
             x:Name="LyricsTextBox"
             Grid.Row="1"
-            Margin="20,10"
+            Margin="0,10"
             AcceptsReturn="True"
             Background="Transparent"
             BorderThickness="0"

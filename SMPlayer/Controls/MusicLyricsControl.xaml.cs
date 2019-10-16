@@ -40,7 +40,7 @@ namespace SMPlayer.Controls
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
             {
-                SavingLyricsProgressRing.Visibility = Visibility.Visible;
+                SavingLyricsProgress.Visibility = Visibility.Visible;
                 LyricsTextBox.IsEnabled = false;
                 var music = await CurrentMusic.GetStorageFileAsync();
                 using (var file = TagLib.File.Create(new MusicFileAbstraction(music), TagLib.ReadStyle.Average))
@@ -49,7 +49,7 @@ namespace SMPlayer.Controls
                     file.Tag.Lyrics = Lyrics;
                     file.Save();
                 }
-                SavingLyricsProgressRing.Visibility = Visibility.Collapsed;
+                SavingLyricsProgress.Visibility = Visibility.Collapsed;
                 LyricsTextBox.IsEnabled = true;
                 Helper.GetMediaControlContainer().ShowNotification("Lyrics Updated!");
             });

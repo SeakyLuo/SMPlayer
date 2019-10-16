@@ -33,6 +33,8 @@ namespace SMPlayer.Models
         public Playlist MyFavorites { get; set; }
         public ObservableCollection<string> Recent { get; set; }
 
+        public bool MiniModeWithDropdown { get; set; }
+
         public Settings()
         {
             RootPath = "";
@@ -49,6 +51,7 @@ namespace SMPlayer.Models
             LocalFolderGridView = true;
             MyFavorites = new Playlist(MenuFlyoutHelper.MyFavorites);
             Recent = new ObservableCollection<string>();
+            MiniModeWithDropdown = false;
         }
         public int FindNextPlaylistNameIndex(string Name)
         {
@@ -87,10 +90,9 @@ namespace SMPlayer.Models
                 {
 
                 }
-                Helper.ThumbnailFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Thumbnails", CreationCollisionOption.OpenIfExists);
-                foreach (var item in await Helper.ThumbnailFolder.GetFilesAsync())
-                    await item.DeleteAsync();
-                Helper.SecondaryTileFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("SecondaryTiles", CreationCollisionOption.OpenIfExists);
+                foreach (var item in await ApplicationData.Current.LocalFolder.GetFilesAsync())
+                    if (item.Name.EndsWith(".TMP"))
+                        await item.DeleteAsync();
             }
 
         }

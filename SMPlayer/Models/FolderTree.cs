@@ -48,7 +48,8 @@ namespace SMPlayer.Models
 
         private async Task Init(StorageFolder folder, TreeInitProgressListener listener, TreeInitProgressIndicator indicator)
         {
-            if (!string.IsNullOrEmpty(Path) && folder.Path != Path && folder.Path.StartsWith(Path))
+            var samePath = folder.Path == Path;
+            if (!string.IsNullOrEmpty(Path) && !samePath && folder.Path.StartsWith(Path))
             {
                 // New folder is a Subfolder of the current folder
                 FolderTree tree;
@@ -59,7 +60,7 @@ namespace SMPlayer.Models
                 CopyFrom(tree);
                 listener.Update(folder.DisplayName, "", 0, 0);
             }
-            else if (Path.StartsWith(folder.Path))
+            else if (!samePath && Path.StartsWith(folder.Path))
             {
                 // Current folder is a Subfolder of the new folder
                 FolderTree newTree = new FolderTree();
@@ -93,6 +94,7 @@ namespace SMPlayer.Models
             else
             {
                 // No hierarchy between folders
+                // or same folder
                 Trees.Clear();
                 foreach (var subFolder in await folder.GetFoldersAsync())
                 {
@@ -106,6 +108,11 @@ namespace SMPlayer.Models
                     if (IsMusicFile(file))
                     {
                         Music music = await Music.GetMusicAsync(file);
+                        if (samePath)
+                        {
+                            var oldItem = MusicLibraryPage.AllSongsSet.FirstOrDefault((m) => m == music);
+                            if (oldItem != null) music.PlayCount = oldItem.PlayCount;
+                        }
                         listener?.Update(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
                         Files.Add(music);
                     }
