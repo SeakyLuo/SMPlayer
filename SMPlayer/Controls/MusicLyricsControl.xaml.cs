@@ -75,10 +75,14 @@ namespace SMPlayer.Controls
             Lyrics = LyricsTextBox.Text;
         }
 
-        public void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
+        public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
         {
-            if (Lyrics != LyricsTextBox.Text) return;
-            SetLyrics(next);
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
+            {
+                if (!AllowMusicSwitching) return;
+                if (Lyrics != LyricsTextBox.Text) return;
+                SetLyrics(next);
+            });
         }
     }
 }

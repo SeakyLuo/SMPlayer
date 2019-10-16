@@ -228,6 +228,7 @@ namespace SMPlayer
                 switch (mode)
                 {
                     case MediaControlMode.Main:
+                    case MediaControlMode.Mini:
                         return MainShuffleButton;
                     case MediaControlMode.Full:
                         return FullShuffleButton;
@@ -243,6 +244,7 @@ namespace SMPlayer
                 switch (mode)
                 {
                     case MediaControlMode.Main:
+                    case MediaControlMode.Mini:
                         return MainRepeatButton;
                     case MediaControlMode.Full:
                         return FullRepeatButton;
@@ -258,6 +260,7 @@ namespace SMPlayer
                 switch (mode)
                 {
                     case MediaControlMode.Main:
+                    case MediaControlMode.Mini:
                         return MainRepeatOneButton;
                     case MediaControlMode.Full:
                         return FullRepeatOneButton;
@@ -274,6 +277,7 @@ namespace SMPlayer
                 switch (mode)
                 {
                     case MediaControlMode.Main:
+                    case MediaControlMode.Full:
                         return MainMoreShuffleButton;
                     case MediaControlMode.Mini:
                         return MiniMoreShuffleButton;
@@ -289,6 +293,7 @@ namespace SMPlayer
                 switch (mode)
                 {
                     case MediaControlMode.Main:
+                    case MediaControlMode.Full:
                         return MainMoreRepeatButton;
                     case MediaControlMode.Mini:
                         return MiniMoreRepeatButton;
@@ -304,6 +309,7 @@ namespace SMPlayer
                 switch (mode)
                 {
                     case MediaControlMode.Main:
+                    case MediaControlMode.Full:
                         return MainMoreRepeatOneButton;
                     case MediaControlMode.Mini:
                         return MiniMoreRepeatOneButton;
@@ -415,15 +421,15 @@ namespace SMPlayer
                     SetShuffle(false);
                     break;
                 case PlayMode.Repeat:
-                    if (RepeatButton != null) RepeatButton.IsChecked = true;
+                    RepeatButton.IsChecked = true;
                     SetRepeat(true);
                     break;
                 case PlayMode.RepeatOne:
-                    if (RepeatOneButton != null) RepeatOneButton.IsChecked = true;
+                    RepeatOneButton.IsChecked = true;
                     SetRepeatOne(true);
                     break;
                 case PlayMode.Shuffle:
-                    if (ShuffleButton != null) ShuffleButton.IsChecked = true;
+                    ShuffleButton.IsChecked = true;
                     SetShuffle(true);
                     break;
                 default:
@@ -445,8 +451,8 @@ namespace SMPlayer
 
         public void SetShuffle(bool isChecked)
         {
-            if (RepeatButton != null) RepeatButton.IsChecked = false;
-            if (RepeatOneButton != null) RepeatOneButton.IsChecked = false;
+            RepeatButton.IsChecked = false;
+            RepeatOneButton.IsChecked = false;
             ShuffleButton.SetToolTip(MoreShuffleButton.Label = $"Shuffle: " + (isChecked ? "Enabled" : "Disabled"));
             RepeatButton.SetToolTip(MoreRepeatButton.Label = "Repeat: Disabled");
             RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = "Repeat One: Disabled");
@@ -467,8 +473,8 @@ namespace SMPlayer
         }
         public void SetRepeat(bool isChecked)
         {
-            if (ShuffleButton != null) ShuffleButton.IsChecked = false;
-            if (RepeatOneButton != null) RepeatOneButton.IsChecked = false;
+            ShuffleButton.IsChecked = false;
+            RepeatOneButton.IsChecked = false;
             ShuffleButton.SetToolTip(MoreShuffleButton.Label = "Shuffle: Disabled");
             RepeatButton.SetToolTip(MoreRepeatButton.Label = "Repeat: " + (isChecked ? "Enabled" : "Disabled"));
             RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = "Repeat One: Disabled");
@@ -490,8 +496,8 @@ namespace SMPlayer
         }
         public void SetRepeatOne(bool isChecked)
         {
-            if (ShuffleButton != null) ShuffleButton.IsChecked = false;
-            if (RepeatButton != null) RepeatButton.IsChecked = false;
+            ShuffleButton.IsChecked = false;
+            RepeatButton.IsChecked = false;
             ShuffleButton.SetToolTip(MoreShuffleButton.Label = "Shuffle: Disabled");
             RepeatButton.SetToolTip(MoreRepeatButton.Label = "Repeat: Disabled");
             RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = "Repeat One: " + (isChecked ? "Enabled" : "Disabled"));
@@ -654,7 +660,7 @@ namespace SMPlayer
             MainMediaControlMoreFullScreenItem.Label = tooltip;
             MainMoreFullScreenItem.Icon = FullScreenIcon;
             MainMoreFullScreenItem.Text = tooltip;
-            FullScreenItem.Icon = FullScreenIcon;
+            FullScreenItem.Icon = new SymbolIcon(Symbol.FullScreen);
             FullScreenItem.Text = tooltip;
             FullScreenButton.Content = "\uE740";
             FullScreenButton.SetToolTip(tooltip);
@@ -667,7 +673,7 @@ namespace SMPlayer
             MainMediaControlMoreFullScreenItem.Label = tooltip;
             MainMoreFullScreenItem.Icon = BackToWindowIcon;
             MainMoreFullScreenItem.Text = tooltip;
-            FullScreenItem.Icon = BackToWindowIcon;
+            FullScreenItem.Icon = new SymbolIcon(Symbol.BackToWindow);
             FullScreenItem.Text = tooltip;
             FullScreenButton.Content = "\uE73F";
             FullScreenButton.SetToolTip(tooltip);
@@ -743,7 +749,11 @@ namespace SMPlayer
 
         private void ClearNowPlayingItem_Click(object sender, RoutedEventArgs e)
         {
-            MediaHelper.Clear();
+            if (NowPlayingFullPage.Instance != null)
+            {
+                NowPlayingFullPage.Instance.GoBack();
+                MediaHelper.Clear();
+            }
         }
         public void Tick()
         {
@@ -839,16 +849,14 @@ namespace SMPlayer
             VisualStateManager.GoToState(this, "Normal", true);
         }
 
-        private void MainMediaControlMoreMusicInfoItem_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void MainMediaControlMoreMusicInfoItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            MainPage.Instance?.Frame.Navigate(typeof(NowPlayingFullPage));
-            NowPlayingFullPage.Instance.MusicInfoRequested(MediaHelper.CurrentMusic);
+            await new MusicDialog(MusicDialogOption.Properties, MediaHelper.CurrentMusic).ShowAsync();
         }
 
-        private void MainMediaControlMoreLyricsItem_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void MainMediaControlMoreLyricsItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            MainPage.Instance?.Frame.Navigate(typeof(NowPlayingFullPage));
-            NowPlayingFullPage.Instance.LyricsRequested(MediaHelper.CurrentMusic);
+            await new MusicDialog(MusicDialogOption.Lyrics, MediaHelper.CurrentMusic).ShowAsync();
         }
 
         public void Pause()

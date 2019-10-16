@@ -33,11 +33,6 @@ namespace SMPlayer.Controls
             MediaHelper.SwitchMusicListeners.Add(this);
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         public void SetMusicProperties(MusicProperties properties)
         {
             TitleTextBox.Text = Properties.Title;

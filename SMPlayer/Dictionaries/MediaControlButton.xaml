@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:SMPlayer">
     <ResourceDictionary.ThemeDictionaries>
-        <ResourceDictionary x:Key="Default">
+        <ResourceDictionary x:Key="HighContrast">
             <SolidColorBrush x:Key="ThemeForeground" Color="White" />
             <AcrylicBrush
                 x:Key="CleanMediaControlButtonPointerOverBrush"
@@ -13,7 +13,7 @@
                 TintColor="White"
                 TintOpacity="0.4" />
         </ResourceDictionary>
-        <ResourceDictionary x:Key="HighContrast">
+        <ResourceDictionary x:Key="Dark">
             <SolidColorBrush x:Key="ThemeForeground" Color="White" />
             <AcrylicBrush
                 x:Key="CleanMediaControlButtonPointerOverBrush"

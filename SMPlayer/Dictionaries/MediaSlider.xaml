@@ -10,6 +10,7 @@
         FallbackColor="DarkGray"
         TintColor="DarkGray"
         TintOpacity="0.8" />
+    <x:Double x:Key="ThumblessMediaProgressSliderHeight">6</x:Double>
     <Style x:Key="MediaSliderProgressBarStyle" TargetType="ProgressBar">
         <Setter Property="Height" Value="1" />
         <Setter Property="Minimum" Value="0" />
@@ -356,7 +357,6 @@
     <Style x:Key="DarkMediaProgressSliderStyle" TargetType="Slider">
         <Setter Property="Background" Value="{ThemeResource SliderTrackFill}" />
         <Setter Property="BorderThickness" Value="{ThemeResource SliderBorderThemeThickness}" />
-        <Setter Property="Foreground" Value="Black" />
         <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
         <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
         <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}" />
@@ -693,6 +693,7 @@
                 <AcrylicBrush
                     BackgroundSource="Backdrop"
                     FallbackColor="White"
+                    TintColor="White"
                     TintOpacity="0.75" />
             </Setter.Value>
         </Setter>
@@ -742,17 +743,17 @@
                                     x:Name="HorizontalTrackRect"
                                     Grid.Row="1"
                                     Grid.ColumnSpan="3"
-                                    Height="{ThemeResource SliderTrackThemeHeight}"
+                                    Height="{StaticResource ThumblessMediaProgressSliderHeight}"
                                     Fill="{StaticResource MediaSliderTrackRectBrush}" />
                                 <Rectangle
                                     x:Name="HorizontalDecreaseRect"
                                     Grid.Row="1"
-                                    Height="2"
+                                    Height="{StaticResource ThumblessMediaProgressSliderHeight}"
                                     Fill="{TemplateBinding Foreground}" />
                                 <TickBar
                                     x:Name="TopTickBar"
                                     Grid.ColumnSpan="3"
-                                    Height="{ThemeResource SliderOutsideTickBarThemeHeight}"
+                                    Height="{StaticResource ThumblessMediaProgressSliderHeight}"
                                     Margin="0,0,0,4"
                                     VerticalAlignment="Bottom"
                                     Fill="{ThemeResource SliderTickBarFill}"
@@ -768,14 +769,14 @@
                                     x:Name="HorizontalInlineTickBar"
                                     Grid.Row="1"
                                     Grid.ColumnSpan="3"
-                                    Height="{ThemeResource SliderTrackThemeHeight}"
+                                    Height="{StaticResource ThumblessMediaProgressSliderHeight}"
                                     Fill="{ThemeResource SliderInlineTickBarFill}"
                                     Visibility="Collapsed" />
                                 <TickBar
                                     x:Name="BottomTickBar"
                                     Grid.Row="2"
                                     Grid.ColumnSpan="3"
-                                    Height="{ThemeResource SliderOutsideTickBarThemeHeight}"
+                                    Height="{StaticResource ThumblessMediaProgressSliderHeight}"
                                     Margin="0,4,0,0"
                                     VerticalAlignment="Top"
                                     Fill="{ThemeResource SliderTickBarFill}"
@@ -799,7 +800,7 @@
                                     x:Name="VerticalTrackRect"
                                     Grid.RowSpan="3"
                                     Grid.Column="1"
-                                    Width="{ThemeResource SliderTrackThemeHeight}"
+                                    Width="{StaticResource ThumblessMediaProgressSliderHeight}"
                                     Fill="{TemplateBinding Background}" />
                                 <Rectangle
                                     x:Name="VerticalDecreaseRect"
@@ -810,7 +811,7 @@
                                 <TickBar
                                     x:Name="LeftTickBar"
                                     Grid.RowSpan="3"
-                                    Width="{ThemeResource SliderOutsideTickBarThemeHeight}"
+                                    Width="{StaticResource ThumblessMediaProgressSliderHeight}"
                                     Margin="0,0,4,0"
                                     HorizontalAlignment="Right"
                                     Fill="{ThemeResource SliderTickBarFill}"
@@ -819,7 +820,7 @@
                                     x:Name="VerticalInlineTickBar"
                                     Grid.RowSpan="3"
                                     Grid.Column="1"
-                                    Width="{ThemeResource SliderTrackThemeHeight}"
+                                    Width="{StaticResource ThumblessMediaProgressSliderHeight}"
                                     Fill="{ThemeResource SliderInlineTickBarFill}"
                                     Visibility="Collapsed" />
                                 <TickBar

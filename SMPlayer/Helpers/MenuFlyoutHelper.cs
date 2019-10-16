@@ -284,8 +284,6 @@ namespace SMPlayer
             var addToItem = helper.GetAddToMenuFlyoutSubItem();
             var propertyItems = helper.GetMusicPropertiesMenuFlyout().Items;
             propertyItems.Insert(0, addToItem);
-            foreach (var item in propertyItems)
-                System.Diagnostics.Debug.WriteLine(item);
             if (flyout.Items[index].Name == AddToSubItemName)
             {
                 for (int i = 0; i < propertyItems.Count; i++)

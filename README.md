@@ -40,3 +40,5 @@ Large MainMoreFullScreen.
 Set lyrics bug.
 
 Repeatedly set shuffle.
+
+CompactOverlay mode cause mini mode more button moved.
