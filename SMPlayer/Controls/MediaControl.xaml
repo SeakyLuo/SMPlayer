@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Loaded="UserControl_Loaded"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -95,6 +96,7 @@
                 HorizontalAlignment="Center"
                 Orientation="Horizontal">
                 <Button
+                    x:Uid="PrevButton"
                     Click="PrevButton_Click"
                     Content="&#xE892;"
                     Style="{StaticResource MediaControlButtonStyle}"
@@ -105,10 +107,12 @@
                 </Button>
                 <Button
                     x:Name="MainPlayButton"
+                    x:Uid="PlayButton"
                     Click="PlayButton_Click"
                     Content="&#xE768;"
                     Style="{StaticResource MediaControlPlayButtonStyle}" />
                 <Button
+                    x:Uid="NextButton"
                     Click="NextButton_Click"
                     Content="&#xE893;"
                     Style="{StaticResource MediaControlButtonStyle}"
@@ -119,6 +123,7 @@
                 </Button>
                 <Button
                     x:Name="MainMediaControlMoreButton"
+                    x:Uid="MoreButton"
                     Content="&#xE712;"
                     Style="{StaticResource MediaControlButtonStyle}"
                     ToolTipService.ToolTip="More"
@@ -159,6 +164,7 @@
                                     Orientation="Horizontal">
                                     <Button
                                         x:Name="MainMoreVolumeButton"
+                                        x:Uid="MuteButton"
                                         Width="36"
                                         Height="36"
                                         Background="Transparent"
@@ -183,6 +189,7 @@
                                 </StackPanel>
                                 <local:IconTextButton
                                     x:Name="MainMediaControlMoreMusicInfoItem"
+                                    x:Uid="MusicInfoItem"
                                     Label="Show Music Info"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
                                     Tapped="MainMediaControlMoreMusicInfoItem_Tapped">
@@ -192,6 +199,7 @@
                                 </local:IconTextButton>
                                 <local:IconTextButton
                                     x:Name="MainMediaControlMoreLyricsItem"
+                                    x:Uid="LyricsItem"
                                     Label="Show Lyrics"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
                                     Tapped="MainMediaControlMoreLyricsItem_Tapped">
@@ -203,16 +211,19 @@
                                     x:Name="MainMediaControlMoreFullScreenItem"
                                     Label="Full Screen"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
-                                    Tapped="MoreFullScreenItem_Tapped">
+                                    Tapped="MoreFullScreenItem_Tapped"
+                                    ToolTipService.ToolTip="Enter Full Screen Mode">
                                     <local:IconTextButton.Icon>
                                         <SymbolIcon Symbol="FullScreen" />
                                     </local:IconTextButton.Icon>
                                 </local:IconTextButton>
                                 <local:IconTextButton
                                     x:Name="MainMediaControlMoreMiniModeItem"
+                                    x:Uid="MiniModeItem"
                                     Label="Mini Mode"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
-                                    Tapped="MoreMiniModeItem_Tapped">
+                                    Tapped="MoreMiniModeItem_Tapped"
+                                    ToolTipService.ToolTip="Enter Mini Mode">
                                     <local:IconTextButton.Icon>
                                         <FontIcon Glyph="&#xE744;" Style="{ThemeResource MediaControlIconTextButtonFontIconStyle}" />
                                     </local:IconTextButton.Icon>
@@ -324,6 +335,7 @@
                     </ToggleButton.KeyboardAccelerators>
                 </ToggleButton>
                 <Button
+                    x:Uid="MoreButton"
                     Width="36"
                     Height="36"
                     Content="&#xE712;"
@@ -339,8 +351,10 @@
                                 Text="Full Screen" />
                             <MenuFlyoutItem
                                 x:Name="MainMiniModeItem"
+                                x:Uid="MiniModeMenuItem"
                                 Click="MiniModeButton_Click"
-                                Text="Mini Mode">
+                                Text="Mini Mode"
+                                ToolTipService.ToolTip="Enter Mini Mode">
                                 <MenuFlyoutItem.Icon>
                                     <FontIcon Glyph="&#xE744;" />
                                 </MenuFlyoutItem.Icon>
@@ -455,6 +469,7 @@
                         Orientation="Horizontal"
                         RelativePanel.AlignLeftWithPanel="True">
                         <Button
+                            x:Uid="PrevButton"
                             Click="PrevButton_Click"
                             Content="&#xE892;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
@@ -465,6 +480,7 @@
                         </Button>
                         <Button
                             x:Name="FullPlayButton"
+                            x:Uid="PlayButton"
                             Width="48"
                             Height="48"
                             HorizontalAlignment="Center"
@@ -474,6 +490,7 @@
                             FontSize="24"
                             Style="{StaticResource DarkMediaControlButtonStyle}" />
                         <Button
+                            x:Uid="NextButton"
                             Click="NextButton_Click"
                             Content="&#xE893;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
@@ -483,6 +500,7 @@
                             </Button.KeyboardAccelerators>
                         </Button>
                         <Button
+                            x:Uid="VolumeButton"
                             Content="&#xE15D;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
                             ToolTipService.ToolTip="Volume">
@@ -494,13 +512,14 @@
                                             Click="VolumeButton_Click"
                                             Content="&#xE15D;"
                                             FontSize="20"
-                                            Foreground="Black"
+                                            Foreground="White"
                                             Style="{StaticResource MediaControlButtonStyle}" />
                                         <Slider
                                             x:Name="FullVolumeSlider"
                                             Width="160"
                                             Margin="10,0,20,0"
                                             VerticalAlignment="Center"
+                                            Background="White"
                                             Maximum="100"
                                             Minimum="0"
                                             ValueChanged="VolumeSlider_ValueChanged"
@@ -543,6 +562,7 @@
                             IsEnabled="False"
                             Style="{StaticResource LikeToggleButtonStyle}" />
                         <Button
+                            x:Uid="MoreButton"
                             Content="&#xE712;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
                             ToolTipService.ToolTip="More">
@@ -550,8 +570,10 @@
                                 <MenuFlyout>
                                     <MenuFlyoutItem
                                         x:Name="PlaylistItem"
+                                        x:Uid="PlaylistMenuItem"
                                         Click="PlaylistButton_Click"
-                                        Text="Now Playing Playlist"
+                                        Text="Now Playing"
+                                        ToolTipService.ToolTip="Show Now Playing Playlist"
                                         Visibility="Collapsed">
                                         <MenuFlyoutItem.Icon>
                                             <FontIcon Glyph="&#xEA37;" />
@@ -559,12 +581,14 @@
                                     </MenuFlyoutItem>
                                     <MenuFlyoutItem
                                         x:Name="MusicInfoItem"
+                                        x:Uid="MusicInfoMenuItem"
                                         Click="MusicInfoButton_Click"
                                         Icon="MusicInfo"
                                         Text="Show Music Info"
                                         Visibility="Collapsed" />
                                     <MenuFlyoutItem
                                         x:Name="LyricsItem"
+                                        x:Uid="LyricsMenuItem"
                                         Click="LyricsButton_Click"
                                         Text="Show Lyrics"
                                         Visibility="Collapsed">
@@ -580,8 +604,10 @@
                                         Visibility="Collapsed" />
                                     <MenuFlyoutItem
                                         x:Name="MiniModeItem"
+                                        x:Uid="MiniModeMenuItem"
                                         Click="MiniModeButton_Click"
                                         Text="Mini Mode"
+                                        ToolTipService.ToolTip="Enter Mini Mode"
                                         Visibility="Collapsed">
                                         <MenuFlyoutItem.Icon>
                                             <FontIcon Glyph="&#xE744;" />
@@ -589,14 +615,18 @@
                                     </MenuFlyoutItem>
                                     <MenuFlyoutItem
                                         x:Name="SavePlaylistItem"
+                                        x:Uid="SavePlaylistMenuItem"
                                         Click="SavePlaylistItem_Click"
                                         Icon="Add"
-                                        Text="Save As New Playlist" />
+                                        Text="Save As Playlist"
+                                        ToolTipService.ToolTip="Save Now Playing Playlist As New Playlist" />
                                     <MenuFlyoutItem
                                         x:Name="ClearNowPlayingItem"
+                                        x:Uid="ClearNowPlayingMenuItem"
                                         Click="ClearNowPlayingItem_Click"
                                         Icon="Clear"
-                                        Text="Clear Now Playing" />
+                                        Text="Clear Now Playing"
+                                        ToolTipService.ToolTip="Clear Now Playing" />
                                 </MenuFlyout>
                             </Button.Flyout>
                         </Button>
@@ -604,6 +634,7 @@
                     <StackPanel Orientation="Horizontal" RelativePanel.AlignRightWithPanel="True">
                         <Button
                             x:Name="PlaylistButton"
+                            x:Uid="PlaylistButton"
                             Click="PlaylistButton_Click"
                             Content="&#xEA37;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
@@ -611,6 +642,7 @@
                             Visibility="Visible" />
                         <Button
                             x:Name="MusicInfoButton"
+                            x:Uid="MusicInfoButton"
                             Click="MusicInfoButton_Click"
                             Content="&#xE90B;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
@@ -618,6 +650,7 @@
                             Visibility="Visible" />
                         <Button
                             x:Name="LyricsButton"
+                            x:Uid="LyricsButton"
                             Click="LyricsButton_Click"
                             Content="&#xEC42;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
@@ -632,10 +665,11 @@
                             Visibility="Visible" />
                         <Button
                             x:Name="MiniModeButton"
+                            x:Uid="MiniModeButton"
                             Click="MiniModeButton_Click"
                             Content="&#xE744;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
-                            ToolTipService.ToolTip="Mini Mode"
+                            ToolTipService.ToolTip="Enter Mini Mode"
                             Visibility="Visible" />
                     </StackPanel>
                 </RelativePanel>
@@ -656,6 +690,7 @@
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
                     <Button
+                        x:Uid="PrevButton"
                         Click="PrevButton_Click"
                         Content="&#xE892;"
                         Style="{StaticResource DarkMediaControlButtonStyle}"
@@ -666,6 +701,7 @@
                     </Button>
                     <Button
                         x:Name="MiniPlayButton"
+                        x:Uid="PlayButton"
                         Width="48"
                         Height="48"
                         HorizontalAlignment="Center"
@@ -675,6 +711,7 @@
                         FontSize="24"
                         Style="{StaticResource DarkMediaControlButtonStyle}" />
                     <Button
+                        x:Uid="NextButton"
                         Click="NextButton_Click"
                         Content="&#xE893;"
                         Style="{StaticResource DarkMediaControlButtonStyle}"
@@ -734,6 +771,7 @@
                                             Orientation="Horizontal">
                                             <Button
                                                 x:Name="MiniMoreVolumeButton"
+                                                x:Uid="MuteButton"
                                                 Width="36"
                                                 Height="36"
                                                 Background="Transparent"
@@ -758,6 +796,7 @@
                                         </StackPanel>
                                         <local:IconTextButton
                                             x:Name="MiniMediaControlMoreMiniModeItem"
+                                            x:Uid="ExitMiniModeItem"
                                             Label="Exit Mini Mode"
                                             Style="{StaticResource MediaControlIconTextButtonStyle}"
                                             Tapped="MoreMiniModeItem_Tapped">

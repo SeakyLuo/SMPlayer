@@ -179,11 +179,10 @@ namespace SMPlayer
                 switch (mode)
                 {
                     case MediaControlMode.Main:
-                        return MainMediaControlMoreButton.Visibility == Visibility.Visible ? MainMoreVolumeButton : MainVolumeButton;
+                    case MediaControlMode.Mini:
+                        return MainVolumeButton;
                     case MediaControlMode.Full:
                         return FullVolumeButton;
-                    case MediaControlMode.Mini:
-                        return MiniMoreVolumeButton;
                     default:
                         return null;
                 }
@@ -270,6 +269,23 @@ namespace SMPlayer
             }
         }
 
+        public Button MuteButton
+        {
+            get
+            {
+                switch (mode)
+                {
+                    case MediaControlMode.Main:
+                    case MediaControlMode.Full:
+                        return MainMoreVolumeButton;
+                    case MediaControlMode.Mini:
+                        return MiniMoreVolumeButton;
+                    default:
+                        return null;
+                }
+            }
+        }
+
         public IconTextButton MoreShuffleButton
         {
             get
@@ -342,7 +358,8 @@ namespace SMPlayer
             };
         }
         private Music CurrentMusic = null;
-        public void Update()
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             SetMusic(MediaHelper.CurrentMusic);
             if (MediaHelper.IsPlaying) PlayMusic();
@@ -352,6 +369,7 @@ namespace SMPlayer
 
             double volume = Settings.settings.Volume * 100;
             VolumeButton.Content = Helper.GetVolumeIcon(volume);
+            SetMuted(Settings.settings.IsMuted);
             VolumeSlider.Value = volume;
             SetPlayMode(Settings.settings.Mode);
         }
@@ -453,9 +471,9 @@ namespace SMPlayer
         {
             RepeatButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            ShuffleButton.SetToolTip(MoreShuffleButton.Label = $"Shuffle: " + (isChecked ? "Enabled" : "Disabled"));
-            RepeatButton.SetToolTip(MoreRepeatButton.Label = "Repeat: Disabled");
-            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = "Repeat One: Disabled");
+            ShuffleButton.SetToolTip(MoreShuffleButton.Label = Helper.Localize($"Shuffle: " + (isChecked ? "Enabled" : "Disabled")));
+            RepeatButton.SetToolTip(MoreRepeatButton.Label = Helper.Localize("Repeat: Disabled"));
+            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = Helper.Localize("Repeat One: Disabled"));
             MoreShuffleButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
             MoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
             MoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
@@ -475,9 +493,9 @@ namespace SMPlayer
         {
             ShuffleButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            ShuffleButton.SetToolTip(MoreShuffleButton.Label = "Shuffle: Disabled");
-            RepeatButton.SetToolTip(MoreRepeatButton.Label = "Repeat: " + (isChecked ? "Enabled" : "Disabled"));
-            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = "Repeat One: Disabled");
+            ShuffleButton.SetToolTip(MoreShuffleButton.Label = Helper.Localize("Shuffle: Disabled"));
+            RepeatButton.SetToolTip(MoreRepeatButton.Label = Helper.Localize("Repeat: " + (isChecked ? "Enabled" : "Disabled")));
+            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = Helper.Localize("Repeat One: Disabled"));
             MoreShuffleButton.IconBackground = ColorHelper.TransparentBrush;
             MoreRepeatButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
             MoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
@@ -498,9 +516,9 @@ namespace SMPlayer
         {
             ShuffleButton.IsChecked = false;
             RepeatButton.IsChecked = false;
-            ShuffleButton.SetToolTip(MoreShuffleButton.Label = "Shuffle: Disabled");
-            RepeatButton.SetToolTip(MoreRepeatButton.Label = "Repeat: Disabled");
-            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = "Repeat One: " + (isChecked ? "Enabled" : "Disabled"));
+            ShuffleButton.SetToolTip(MoreShuffleButton.Label = Helper.Localize("Shuffle: Disabled"));
+            RepeatButton.SetToolTip(MoreRepeatButton.Label = Helper.Localize("Repeat: Disabled"));
+            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = Helper.Localize("Repeat One: " + (isChecked ? "Enabled" : "Disabled")));
             MoreShuffleButton.IconBackground = ColorHelper.TransparentBrush;
             MoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
             MoreRepeatOneButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
@@ -538,21 +556,25 @@ namespace SMPlayer
             }
         }
 
-        private void VolumeButton_Click(object sender, RoutedEventArgs e)
+        public void SetMuted(bool isMuted)
         {
-            var button = (Button)sender;
-            if (button.Content.ToString() == "\uE74F")
+            string tooltip = Helper.Localize(isMuted ? "Undo Mute" : "Mute");
+            if (isMuted)
             {
-                button.SetToolTip("Mute");
-                MediaHelper.Player.IsMuted = false;
-                button.Content = Helper.GetVolumeIcon(VolumeSlider.Value);
+                VolumeButton.Content = "\uE74F";
             }
             else
             {
-                button.SetToolTip("Undo Mute");
-                MediaHelper.Player.IsMuted = true;
-                button.Content = "\uE74F";
+                VolumeButton.Content = Helper.GetVolumeIcon(VolumeSlider.Value);
             }
+            MediaHelper.Player.IsMuted = isMuted;
+            VolumeButton.SetToolTip(tooltip, false);
+            MuteButton.SetToolTip(tooltip, false);
+        }
+
+        private void VolumeButton_Click(object sender, RoutedEventArgs e)
+        {
+            SetMuted(Settings.settings.IsMuted = !Settings.settings.IsMuted);
         }
 
         private void VolumeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
@@ -655,28 +677,34 @@ namespace SMPlayer
         private static SymbolIcon BackToWindowIcon = new SymbolIcon(Symbol.BackToWindow);
         private void SetFullScreen()
         {
-            string tooltip = "Full Screen";
+            string text = Helper.Localize("Full Screen"), tooltip = Helper.Localize("Enter Full Screen Mode");
             MainMediaControlMoreFullScreenItem.Icon = FullScreenIcon;
-            MainMediaControlMoreFullScreenItem.Label = tooltip;
+            MainMediaControlMoreFullScreenItem.Label = text;
+            MainMediaControlMoreFullScreenItem.SetToolTip(tooltip, false);
             MainMoreFullScreenItem.Icon = FullScreenIcon;
-            MainMoreFullScreenItem.Text = tooltip;
+            MainMoreFullScreenItem.Text = text;
+            MainMoreFullScreenItem.SetToolTip(tooltip, false);
             FullScreenItem.Icon = new SymbolIcon(Symbol.FullScreen);
-            FullScreenItem.Text = tooltip;
+            FullScreenItem.Text = text;
+            FullScreenItem.SetToolTip(tooltip, false);
             FullScreenButton.Content = "\uE740";
-            FullScreenButton.SetToolTip(tooltip);
+            FullScreenButton.SetToolTip(tooltip, false);
         }
 
         private void SetExitFullScreen()
         {
-            string tooltip = "Exit Full Screen";
+            string text = Helper.Localize("Exit Full Screen"), tooltip = Helper.Localize("Exit Full Screen Mode");
             MainMediaControlMoreFullScreenItem.Icon = BackToWindowIcon;
-            MainMediaControlMoreFullScreenItem.Label = tooltip;
+            MainMediaControlMoreFullScreenItem.Label = text;
+            MainMediaControlMoreFullScreenItem.SetToolTip(tooltip, false);
             MainMoreFullScreenItem.Icon = BackToWindowIcon;
-            MainMoreFullScreenItem.Text = tooltip;
+            MainMoreFullScreenItem.Text = text;
+            MainMoreFullScreenItem.SetToolTip(tooltip, false);
             FullScreenItem.Icon = new SymbolIcon(Symbol.BackToWindow);
-            FullScreenItem.Text = tooltip;
+            FullScreenItem.Text = text;
+            FullScreenItem.SetToolTip(tooltip, false);
             FullScreenButton.Content = "\uE73F";
-            FullScreenButton.SetToolTip(tooltip);
+            FullScreenButton.SetToolTip(tooltip, false);
         }
 
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
@@ -738,7 +766,7 @@ namespace SMPlayer
                
         private async void SavePlaylistItem_Click(object sender, RoutedEventArgs e)
         {
-            var name = "Now Playing - " + DateTime.Now.ToString("yy/MM/dd");
+            var name = Helper.Localize("Now Playing") + " - " + DateTime.Now.ToString("yy/MM/dd");
             int index = Settings.settings.FindNextPlaylistNameIndex(name);
             var defaultName = index == 0 ? name : $"{name} ({index})";
             var listener = new VirtualRenameActionListener() { Data = MediaHelper.CurrentPlaylist };

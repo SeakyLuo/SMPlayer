@@ -109,7 +109,6 @@ namespace SMPlayer
             Window.Current.SetTitleBar(AppTitleBar);
             UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar);
 
-            MainMediaControl.Update();
             if (PageUnset)
             {
                 SwitchPage(Settings.settings.LastPage);
@@ -253,7 +252,7 @@ namespace SMPlayer
         }
         public void SetHeaderText(string header)
         {
-            MainNavigationViewHeader.Text = header;
+            MainNavigationViewHeader.Text = Helper.Localize(header);
         }
         private void MainNavigationView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {

@@ -51,7 +51,6 @@ namespace SMPlayer
             Window.Current.SetTitleBar(AppTitleBar);
             UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar);
 
-            MiniMediaControl.Update();
             DropdownButton.Content = Settings.settings.MiniModeWithDropdown ? "\uE70E" : "\uE70D";
         }
         private void UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar coreTitleBar)

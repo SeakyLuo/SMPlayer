@@ -32,8 +32,8 @@ namespace SMPlayer.Models
         public bool LocalFolderGridView { get; set; }
         public Playlist MyFavorites { get; set; }
         public ObservableCollection<string> Recent { get; set; }
-
         public bool MiniModeWithDropdown { get; set; }
+        public bool IsMuted { get; set; }
 
         public Settings()
         {
@@ -52,6 +52,7 @@ namespace SMPlayer.Models
             MyFavorites = new Playlist(MenuFlyoutHelper.MyFavorites);
             Recent = new ObservableCollection<string>();
             MiniModeWithDropdown = false;
+            IsMuted = false;
         }
         public int FindNextPlaylistNameIndex(string Name)
         {
@@ -90,7 +91,7 @@ namespace SMPlayer.Models
                 {
 
                 }
-                foreach (var item in await ApplicationData.Current.LocalFolder.GetFilesAsync())
+                foreach (var item in await ApplicationData.Current.LocalFolder.GetItemsAsync())
                     if (item.Name.EndsWith(".TMP"))
                         await item.DeleteAsync();
             }

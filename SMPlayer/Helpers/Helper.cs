@@ -19,7 +19,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Media.Animation;
+using Windows.ApplicationModel.Resources;
 
 namespace SMPlayer
 {
@@ -40,10 +40,18 @@ namespace SMPlayer
         public static ToastNotifier toastNotifier = ToastNotificationManager.CreateToastNotifier();
         public static ToastAudio SlientToast = new ToastAudio() { Silent = true };
         public static TileUpdater tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
+        public static ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
 
         private static string Lyrics = "";
                     
         public static MediaControlContainer GetMediaControlContainer() { return (Window.Current.Content as Frame).Content as MediaControlContainer; }
+
+        public static string Localize(string resource)
+        {
+            if (string.IsNullOrEmpty(resource)) return resource;
+            var str = resourceLoader.GetString(resource);
+            return string.IsNullOrEmpty(str) ? resource : str;
+        }
 
         public static async Task<bool> CheckIfFileExistsAsync(string path)
         {
@@ -58,10 +66,10 @@ namespace SMPlayer
             }
         }
 
-        public static void SetToolTip(this DependencyObject obj, string tooltip)
+        public static void SetToolTip(this DependencyObject obj, string tooltip, bool localize = true)
         {
             if (obj == null) return;
-            ToolTipService.SetToolTip(obj, tooltip);
+            ToolTipService.SetToolTip(obj, localize ? Localize(tooltip) : tooltip);
         }
         public static string GetVolumeIcon(double volume)
         {

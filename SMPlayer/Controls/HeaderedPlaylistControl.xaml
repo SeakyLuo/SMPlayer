@@ -72,6 +72,7 @@
                             Style="{StaticResource PlaylistCommandBarStyle}">
                             <AppBarButton
                                 x:Name="ShuffleButton"
+                                x:Uid="ShuffleButton"
                                 Margin="0"
                                 Click="Shuffle_Click"
                                 Icon="Shuffle"
@@ -80,6 +81,7 @@
                                 ToolTipService.ToolTip="Shuffle Playlist" />
                             <AppBarButton
                                 x:Name="AddToButton"
+                                x:Uid="AddToButton"
                                 Click="AddTo_Click"
                                 Icon="Add"
                                 Label="Add To"
@@ -87,6 +89,7 @@
                                 ToolTipService.ToolTip="Add To Playlist" />
                             <AppBarButton
                                 x:Name="RenameButton"
+                                x:Uid="RenameButton"
                                 Click="Rename_Click"
                                 Icon="Rename"
                                 Label="Rename"
@@ -100,6 +103,7 @@
                                 Style="{StaticResource PlaylistAppBarButtonStyle}" />
                             <AppBarButton
                                 x:Name="DeleteButton"
+                                x:Uid="DeleteButton"
                                 Click="Delete_Click"
                                 Icon="Delete"
                                 Label="Delete"

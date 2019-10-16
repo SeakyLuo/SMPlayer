@@ -55,7 +55,7 @@ namespace SMPlayer
         {
             Playlist = playlist;
             HeaderedPlaylist.ItemsSource = playlist.Songs;
-            PlaylistNameTextBlock.Text = playlist.Name;
+            PlaylistNameTextBlock.Text = Helper.Localize(playlist.Name);
             SetPlaylistInfo(SongCountConverter.ToStr(playlist.Songs));
             ShuffleButton.IsEnabled = playlist.Songs.Count != 0;
             AddToButton.IsEnabled = playlist.Songs.Count != 0;
@@ -133,13 +133,13 @@ namespace SMPlayer
             if (isPinned)
             {
                 PinToStartButton.Icon = UnPinIcon;
-                PinToStartButton.Label = "UnPin";
+                PinToStartButton.Label = Helper.Localize("UnPin");
                 PinToStartButton.SetToolTip("UnPin Playlist");
             }
             else
             {
                 PinToStartButton.Icon = PinIcon;
-                PinToStartButton.Label = "Pin To Start";
+                PinToStartButton.Label = Helper.Localize("Pin To Start");
                 PinToStartButton.SetToolTip("Pin Playlist to the Start Menu");
             }
         }

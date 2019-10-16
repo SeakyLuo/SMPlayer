@@ -42,6 +42,7 @@
                         Visibility="Visible" />
                     <Button
                         x:Name="HeaderSearchButton"
+                        x:Uid="SearchButton"
                         Grid.Column="1"
                         Width="40"
                         Height="40"
@@ -53,6 +54,7 @@
                         Visibility="Collapsed" />
                     <AutoSuggestBox
                         x:Name="HeaderSearchBar"
+                        x:Uid="SearchBar"
                         Grid.ColumnSpan="2"
                         Margin="10,0"
                         VerticalAlignment="Center"
@@ -67,6 +69,7 @@
             <NavigationView.AutoSuggestBox>
                 <AutoSuggestBox
                     x:Name="NaviSearchBar"
+                    x:Uid="SearchBar"
                     PlaceholderText="Search"
                     QueryIcon="Find"
                     QuerySubmitted="SearchBar_QuerySubmitted"
@@ -76,11 +79,13 @@
             <NavigationView.MenuItems>
                 <NavigationViewItem
                     x:Name="MusicLibraryItem"
+                    x:Uid="SongsItem"
                     Content="Songs"
                     Icon="Library"
                     ToolTipService.ToolTip="Music Library" />
                 <NavigationViewItem
                     x:Name="ArtistsItem"
+                    x:Uid="ArtistsItem"
                     Content="Artists"
                     ToolTipService.ToolTip="Group By Artist">
                     <NavigationViewItem.Icon>
@@ -89,6 +94,7 @@
                 </NavigationViewItem>
                 <NavigationViewItem
                     x:Name="AlbumsItem"
+                    x:Uid="AlbumsItem"
                     Content="Albums"
                     ToolTipService.ToolTip="Group By Album">
                     <NavigationViewItem.Icon>
@@ -98,6 +104,7 @@
                 <NavigationViewItemSeparator />
                 <NavigationViewItem
                     x:Name="NowPlayingItem"
+                    x:Uid="NowPlayingItem"
                     Content="Now Playing"
                     ToolTipService.ToolTip="Now Playing">
                     <NavigationViewItem.Icon>
@@ -106,6 +113,7 @@
                 </NavigationViewItem>
                 <NavigationViewItem
                     x:Name="RecentItem"
+                    x:Uid="RecentItem"
                     Content="Recent"
                     Tag="Recent"
                     ToolTipService.ToolTip="Recently Played">
@@ -115,14 +123,16 @@
                 </NavigationViewItem>
                 <NavigationViewItem
                     x:Name="LocalItem"
+                    x:Uid="LocalItem"
                     Content="Local"
-                    ToolTipService.ToolTip="Local Folders and Music Files">
+                    ToolTipService.ToolTip="Manage Local Music Files">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC4E;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem
                     x:Name="PlaylistsItem"
+                    x:Uid="PlaylistsItem"
                     Content="Playlists"
                     ToolTipService.ToolTip="Playlists">
                     <NavigationViewItem.Icon>
@@ -131,6 +141,7 @@
                 </NavigationViewItem>
                 <NavigationViewItem
                     x:Name="MyFavoritesItem"
+                    x:Uid="MyFavoritesItem"
                     Content="My Favorites"
                     ToolTipService.ToolTip="My Favorite Music">
                     <NavigationViewItem.Icon>
@@ -167,6 +178,7 @@
         </Grid>
         <Button
             x:Name="BackButton"
+            x:Uid="BackButton"
             Background="Transparent"
             Click="BackButton_Click"
             Style="{StaticResource BackButtonStyle}"

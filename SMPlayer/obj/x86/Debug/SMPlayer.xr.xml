@@ -1014,6 +1014,7 @@
       <RootProperty Name="Foreground" />
       <RootProperty Name="Maximum" />
       <RootProperty Name="Value" />
+      <RootProperty Name="Background" />
       <RootProperty Name="IsEnabled" />
       <RootProperty Name="IsThumbToolTipEnabled" />
       <RootProperty Name="ManipulationMode" />

@@ -37,10 +37,6 @@ Bad performance when given many music files.
 
 Bad performance of Loading NowPlayingFull.
 
-Large MainMoreFullScreen.
-
 Set lyrics bug.
 
 Repeatedly set shuffle.
-
-CompactOverlay mode cause mini mode more button moved.
