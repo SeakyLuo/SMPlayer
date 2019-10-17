@@ -8,6 +8,7 @@
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="Page_Loaded"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -73,14 +74,17 @@
                         <StackPanel.ContextFlyout>
                             <MenuFlyout>
                                 <MenuFlyoutItem
+                                    x:Uid="RenameItem"
                                     Click="RenameClick"
                                     Icon="Rename"
                                     Text="Rename PlayList" />
                                 <MenuFlyoutItem
+                                    x:Uid="DuplicateItem"
                                     Click="DuplicateClick"
                                     Icon="Copy"
                                     Text="Duplicate PlayList" />
                                 <MenuFlyoutItem
+                                    x:Uid="DeleteItem"
                                     Click="DeleteClick"
                                     Icon="Delete"
                                     Text="Delete PlayList" />
@@ -103,6 +107,7 @@
             <controls:TabView.TabStartHeader>
                 <Button
                     x:Name="NewPlaylistButton"
+                    x:Uid="NewPlaylistButton"
                     Width="{StaticResource HeaderButtonWidth}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
@@ -119,6 +124,7 @@
             <controls:TabView.TabEndHeader>
                 <Button
                     x:Name="EditPlaylistButton"
+                    x:Uid="EditPlaylistButton"
                     Width="{StaticResource HeaderButtonWidth}"
                     VerticalAlignment="Stretch"
                     Background="Transparent"
@@ -127,8 +133,7 @@
                     Content="&#xE70F;"
                     FontFamily="Segoe MDL2 Assets"
                     FontSize="16"
-                    Style="{ThemeResource ButtonRevealStyle}"
-                    ToolTipService.ToolTip="Edit Playlists" />
+                    Style="{ThemeResource ButtonRevealStyle}" />
             </controls:TabView.TabEndHeader>
         </controls:TabView>
         <Grid
@@ -142,6 +147,7 @@
             </Grid.RenderTransform>
             <local:IconTextButton
                 x:Name="ShowAllPlaylistButton"
+                x:Uid="ShowAllPlaylistButton"
                 Padding="10,5"
                 HorizontalAlignment="Left"
                 IconTextMargin="0,0,10,0"
@@ -166,6 +172,7 @@
             </local:IconTextButton>
             <local:IconTextButton
                 x:Name="SortByButton"
+                x:Uid="SortByButton"
                 Padding="10,5"
                 HorizontalAlignment="Right"
                 Icon="Sort"

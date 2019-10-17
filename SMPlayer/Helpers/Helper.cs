@@ -41,6 +41,7 @@ namespace SMPlayer
         public static ToastAudio SlientToast = new ToastAudio() { Silent = true };
         public static TileUpdater tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
         public static ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
+        public static ResourceLoader MessageResourceLoader = ResourceLoader.GetForCurrentView("Messages");
 
         private static string Lyrics = "";
                     
@@ -48,8 +49,18 @@ namespace SMPlayer
 
         public static string Localize(string resource)
         {
+            return LocalizeHelper(resource, resourceLoader);
+        }
+
+        public static string LocalizeMessage(string resource)
+        {
+            return LocalizeHelper(resource, MessageResourceLoader);
+        }
+
+        private static string LocalizeHelper(string resource, ResourceLoader loader)
+        {
             if (string.IsNullOrEmpty(resource)) return resource;
-            var str = resourceLoader.GetString(resource);
+            var str = loader.GetString(resource.Replace(":", "%3A"));
             return string.IsNullOrEmpty(str) ? resource : str;
         }
 

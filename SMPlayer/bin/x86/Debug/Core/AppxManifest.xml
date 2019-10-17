@@ -23,6 +23,7 @@
   </Dependencies>
   <Resources>
     <Resource Language="ZH-CN" />
+    <Resource Language="EN-US" />
   </Resources>
   <Applications>
     <Application Id="App" Executable="SMPlayer.exe" EntryPoint="SMPlayer.App">

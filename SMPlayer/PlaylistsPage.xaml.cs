@@ -63,20 +63,24 @@ namespace SMPlayer
             }
         }
 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            EditPlaylistButton.SetToolTip("Edit Playlists");
+        }
+
         public void SetFooterText()
         {
             if (Playlists.Count == 0)
             {
-                ShowAllPlaylistButton.Label = "No Playlists";
+                ShowAllPlaylistButton.Label = Helper.Localize("No Playlist");
                 SortByButton.Visibility = Visibility.Collapsed;
             }
             else
             {
-                ShowAllPlaylistButton.Label = $"Playlists: {Playlists.Count}";
+                ShowAllPlaylistButton.Label = $"{Helper.Localize("Playlists:")} {Playlists.Count}";
                 SortByButton.Visibility = Visibility.Visible;
             }
         }
-
         private async void PlaylistTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var tabview = sender as TabView;
@@ -90,7 +94,7 @@ namespace SMPlayer
             Settings.settings.LastPlaylist = playlist.Name;
             foreach (var music in playlist.Songs)
                 music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
-            SortByButton.Label = "Sort By " + playlist.Criterion.ToStr();
+            SortByButton.Label = Helper.Localize("Sort By " + playlist.Criterion.ToStr());
             if (playlistControl != null)
                 await playlistControl.SetPlaylist(playlist);
         }
@@ -122,22 +126,24 @@ namespace SMPlayer
 
         private async void NewPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
-            string name = "Playlist";
+            string name = Helper.Localize("Playlist");
             dialog = new RenameDialog(this, RenameOption.New, Settings.settings.FindNextPlaylistName(name));
             await dialog.ShowAsync();
         }
 
         private void EditPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
-            if (EditPlaylistButton.Content.ToString() == "\uE70F")
+            if (PlaylistTabView.CanCloseTabs)
             {
-                EditPlaylistButton.Content = "\uE73E";
-                PlaylistTabView.CanCloseTabs = true;
+                EditPlaylistButton.Content = "\uE70F";
+                EditPlaylistButton.SetToolTip("Edit Playlists");
+                PlaylistTabView.CanCloseTabs = false;
             }
             else
             {
-                EditPlaylistButton.Content = "\uE70F";
-                PlaylistTabView.CanCloseTabs = false;
+                EditPlaylistButton.Content = "\uE73E";
+                EditPlaylistButton.SetToolTip("Finish Editing");
+                PlaylistTabView.CanCloseTabs = true;
             }
         }
 
@@ -168,7 +174,7 @@ namespace SMPlayer
             }
             else
             {
-                DeleteDialog.Message = $"Do you want to remove playlist {playlist.Name}?";
+                DeleteDialog.Message = $"{Helper.Localize("RemovePlaylist")} {playlist.Name}?";
                 await DeleteDialog.ShowAsync();
             }
         }
@@ -179,9 +185,9 @@ namespace SMPlayer
             Settings.settings.Playlists.Remove(playlist);
         }
 
-        public bool Confirm(string OldName, string NewName)
+        public bool Confirm(string oldName, string newName)
         {
-            return ConfirmRenaming(dialog, OldName, NewName);
+            return ConfirmRenaming(dialog, oldName, newName);
         }
         public static bool ConfirmRenaming(RenameDialog dialog, string oldName, string newName)
         {

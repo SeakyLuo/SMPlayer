@@ -204,7 +204,8 @@ namespace SMPlayer.Models
         Artist = 1,
         Album = 2,
         Duration = 3,
-        PlayCount = 4
+        PlayCount = 4,
+        DateAdded = 5
     }
 
     public static class SortByConverter
@@ -223,6 +224,8 @@ namespace SMPlayer.Models
                     return "Duration";
                 case SortBy.PlayCount:
                     return "Play Count";
+                case SortBy.DateAdded:
+                    return "Date Added";
                 default:
                     return "";
             }
@@ -242,6 +245,8 @@ namespace SMPlayer.Models
                     return SortBy.Duration;
                 case "Play Count":
                     return SortBy.PlayCount;
+                case "Date Added":
+                    return SortBy.DateAdded;
                 default:
                     return SortBy.Title;
             }

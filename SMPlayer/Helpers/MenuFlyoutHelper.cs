@@ -29,7 +29,7 @@ namespace SMPlayer
         {
             MenuFlyoutSubItem addToItem = new MenuFlyoutSubItem()
             {
-                Text = "Add To",
+                Text = Helper.Localize("Add To"),
                 Name = AddToSubItemName
             };
             addToItem.SetToolTip("Add To Playlist");
@@ -38,7 +38,7 @@ namespace SMPlayer
                 var nowPlayingItem = new MenuFlyoutItem()
                 {
                     Icon = new FontIcon() { Glyph = "\uEC4F" },
-                    Text = "Now Playing"
+                    Text = Helper.Localize("Now Playing")
                 };
                 nowPlayingItem.Click += async (sender, args) =>
                 {
@@ -54,7 +54,7 @@ namespace SMPlayer
                 var favItem = new MenuFlyoutItem()
                 {
                     Icon = new FontIcon() { Glyph = "\uEB51" },
-                    Text = "My Favorites"
+                    Text = Helper.Localize("My Favorites")
                 };
                 favItem.Click += (sender, args) =>
                 {
@@ -76,7 +76,7 @@ namespace SMPlayer
             var newPlaylistItem = new MenuFlyoutItem()
             {
                 Icon = new SymbolIcon(Symbol.Add),
-                Text = "New Playlist"
+                Text = Helper.Localize("New Playlist")
             };
             newPlaylistItem.Click += async (sender, args) =>
             {
@@ -111,7 +111,7 @@ namespace SMPlayer
             var shuffleItem = new MenuFlyoutItem()
             {
                 Icon = new SymbolIcon(Symbol.Shuffle),
-                Text = "Shuffle",
+                Text = Helper.Localize("Shuffle"),
                 Name = PlaylistMenuName
             };
             shuffleItem.SetToolTip("Shuffle and Play");
@@ -128,7 +128,7 @@ namespace SMPlayer
             var item = new MenuFlyoutItem()
             {
                 Icon = new FontIcon() { Glyph = "\uE838" },
-                Text = "Show In Explorer"
+                Text = Helper.Localize("Show In Explorer")
             };
             item.Click += async (s, args) =>
             {
@@ -158,13 +158,14 @@ namespace SMPlayer
         {
             var music = Data as Music;
             var flyout = new MenuFlyout();
+            var localizedPlay = Helper.Localize("Play");
             var playItem = new MenuFlyoutItem()
             {
                 Icon = new SymbolIcon(Symbol.Play),
-                Text = "Play",
+                Text = localizedPlay,
                 Name = MusicMenuName
             };
-            playItem.SetToolTip($"Play \"{music.Name}\"");
+            playItem.SetToolTip($"{localizedPlay} \"{music.Name}\"");
             playItem.Click += async (s, args) =>
             {
                 await MediaHelper.SetMusicAndPlay(music);
@@ -175,7 +176,7 @@ namespace SMPlayer
             var deleteItem = new MenuFlyoutItem()
             {
                 Icon = new SymbolIcon(Symbol.Delete),
-                Text = "Delete From Disk"
+                Text = Helper.Localize("Delete From Disk")
             };
             deleteItem.Click += async (s, args) =>
             {
@@ -208,26 +209,24 @@ namespace SMPlayer
             var musicInfoItem = new MenuFlyoutItem()
             {
                 Icon = new SymbolIcon(Symbol.MusicInfo),
-                Text = "Music Info"
+                Text = Helper.Localize("Show Music Info")
             };
             musicInfoItem.Click += async (s, args) =>
             {
                 if (NowPlayingFullPage.Instance == null) await new MusicDialog(MusicDialogOption.Properties, music).ShowAsync();
                 else NowPlayingFullPage.Instance.MusicInfoRequested(music);
             };
-            musicInfoItem.SetToolTip("Show Music Info");
             flyout.Items.Add(musicInfoItem);
             var lyricsItem = new MenuFlyoutItem()
             {
                 Icon = new FontIcon() { Glyph = "\uEC42" },
-                Text = "Show Lyrics"
+                Text = Helper.Localize("Show Lyrics")
             };
             lyricsItem.Click += async (s, args) =>
             {
                 if (NowPlayingFullPage.Instance == null) await new MusicDialog(MusicDialogOption.Lyrics, music).ShowAsync();
                 else NowPlayingFullPage.Instance.LyricsRequested(music);
             };
-            lyricsItem.SetToolTip("Show Music Lyrics");
             flyout.Items.Add(lyricsItem);
             return flyout;
         }
@@ -236,33 +235,32 @@ namespace SMPlayer
         {
             var music = Data as Music;
             var flyout = GetMusicMenuFlyout();
+            var localizedRemove = Helper.Localize("Remove From Playlist");
             var removeItem = new MenuFlyoutItem
             {
                 Icon = new SymbolIcon(Symbol.Remove),
-                Text = "Remove From Playlist"
+                Text = localizedRemove
             };
             removeItem.Click += (sender, args) =>
             {
                 if (music == MediaHelper.CurrentMusic)
-                {
                     MediaHelper.NextMusic();
-                    MediaHelper.RemoveMusic(music);
-                }
+                MediaHelper.RemoveMusic(music);
             };
-            removeItem.SetToolTip("Remove From Playlist");
+            removeItem.SetToolTip(localizedRemove, false);
             flyout.Items.Insert(2, removeItem);
             return flyout;
         }
         public static void SetPlaylistSortByMenu(object sender, Playlist playlist)
         {
             var flyout = new MenuFlyout();
-            var reverseItem = new MenuFlyoutItem() { Text = "Reverse Playlist" };
+            var reverseItem = new MenuFlyoutItem() { Text = Helper.Localize("Reverse Playlist") };
             reverseItem.Click += (send, args) => playlist.Reverse();
             flyout.Items.Add(reverseItem);
             flyout.Items.Add(new MenuFlyoutSeparator());
             foreach (var criterion in Playlist.Criteria)
             {
-                string sortby = "Sort By " + criterion.ToStr();
+                string sortby = Helper.Localize("Sort By " + criterion.ToStr());
                 var radioItem = new ToggleMenuFlyoutItem()
                 {
                     Text = sortby,
