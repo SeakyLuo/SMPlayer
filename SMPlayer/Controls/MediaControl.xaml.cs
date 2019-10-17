@@ -730,7 +730,7 @@ namespace SMPlayer
             if (ApplicationView.GetForCurrentView().ViewMode == ApplicationViewMode.Default)
             {
                 (Window.Current.Content as Frame).Navigate(typeof(MiniModePage));
-                ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(300, 300));
+                ApplicationView.GetForCurrentView().SetPreferredMinSize(MiniModePage.PageSize);
                 await ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.CompactOverlay, MiniModePage.ViewModePreferences);
             }
             else

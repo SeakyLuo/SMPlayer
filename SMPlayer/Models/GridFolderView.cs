@@ -20,7 +20,7 @@ namespace SMPlayer.Models
         public FolderTree Tree { get; private set; }
         public List<Music> Songs
         {
-            get => songs == null ? songs = Tree.Flatten() : songs;
+            get => songs ?? (songs = Tree.Flatten());
         }
         private List<Music> songs;
         public GridFolderView() { }
@@ -31,7 +31,7 @@ namespace SMPlayer.Models
             List<BitmapImage> thumbnails = new List<BitmapImage>(4);
             var folder = await StorageFolder.GetFolderFromPathAsync(tree.Path);
             Name = folder.DisplayName;
-            MusicCount = "Songs: " + tree.Files.Count;
+            MusicCount = Helper.Localize("Songs:") + " " + tree.Files.Count;
             BitmapImage thumbnail;
             foreach (var music in tree.Files.OrderBy((m) => m.Name))
             {

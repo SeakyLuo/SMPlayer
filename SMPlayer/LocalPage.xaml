@@ -50,16 +50,19 @@
                 <StackPanel Orientation="Horizontal">
                     <local:IconTextButton
                         x:Name="LocalShuffleItem"
+                        x:Uid="ShuffleItem"
+                        IsHighlightAll="True"
                         Label="Shuffle"
                         Style="{StaticResource TopNavigationViewFooterItemStyle}"
                         Tapped="LocalShuffleItem_Tapped"
-                        ToolTipService.ToolTip="Shuffle And Play">
+                        ToolTipService.ToolTip="Shuffle And Play All">
                         <local:IconTextButton.Icon>
                             <FontIcon Glyph="&#xE8B1;" Style="{StaticResource FontIconSizeSetter}" />
                         </local:IconTextButton.Icon>
                     </local:IconTextButton>
                     <local:IconTextButton
                         x:Name="LocalListViewItem"
+                        x:Uid="ListViewItem"
                         Width="110"
                         IsHighlightAll="True"
                         Label="List View"
@@ -73,6 +76,7 @@
                     </local:IconTextButton>
                     <local:IconTextButton
                         x:Name="LocalGridViewItem"
+                        x:Uid="GridViewItem"
                         Width="110"
                         IsHighlightAll="True"
                         Label="Grid View"

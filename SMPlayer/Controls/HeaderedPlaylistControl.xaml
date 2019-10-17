@@ -81,7 +81,7 @@
                                 ToolTipService.ToolTip="Shuffle Playlist" />
                             <AppBarButton
                                 x:Name="AddToButton"
-                                x:Uid="AddToButton"
+                                x:Uid="AddToAppButton"
                                 Click="AddTo_Click"
                                 Icon="Add"
                                 Label="Add To"

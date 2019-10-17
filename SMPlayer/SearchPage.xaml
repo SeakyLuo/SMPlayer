@@ -145,11 +145,13 @@
             <StackPanel Visibility="{x:Bind Artists.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                 <RelativePanel Style="{StaticResource RelativePanelStyle}">
                     <TextBlock
+                        x:Uid="ArtistsTextBlock"
                         RelativePanel.AlignLeftWithPanel="True"
                         Style="{StaticResource HeaderTextBlockStyle}"
                         Text="Artists" />
                     <local:IconTextButton
                         x:Name="ArtistsViewAllButton"
+                        x:Uid="ViewAllButton"
                         Icon="ViewAll"
                         RelativePanel.AlignRightWithPanel="True"
                         Style="{StaticResource ViewAllButtonStyle}"
@@ -170,11 +172,13 @@
             <StackPanel Margin="0,30" Visibility="{x:Bind Albums.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                 <RelativePanel Style="{StaticResource RelativePanelStyle}">
                     <TextBlock
+                        x:Uid="AlbumsTextBlock"
                         RelativePanel.AlignLeftWithPanel="True"
                         Style="{StaticResource HeaderTextBlockStyle}"
                         Text="Albums" />
                     <local:IconTextButton
                         x:Name="AlbumsViewAllButton"
+                        x:Uid="ViewAllButton"
                         Icon="ViewAll"
                         RelativePanel.AlignRightWithPanel="True"
                         Style="{StaticResource ViewAllButtonStyle}"
@@ -195,11 +199,13 @@
             <StackPanel Margin="0,30" Visibility="{x:Bind Songs.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                 <RelativePanel Style="{StaticResource RelativePanelStyle}">
                     <TextBlock
+                        x:Uid="SongsTextBlock"
                         RelativePanel.AlignLeftWithPanel="True"
                         Style="{StaticResource HeaderTextBlockStyle}"
                         Text="Songs" />
                     <local:IconTextButton
                         x:Name="SongsViewAllButton"
+                        x:Uid="ViewAllButton"
                         Icon="ViewAll"
                         RelativePanel.AlignRightWithPanel="True"
                         Style="{StaticResource ViewAllButtonStyle}"
@@ -214,11 +220,13 @@
             <StackPanel Margin="0,30" Visibility="{x:Bind Playlists.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                 <RelativePanel Style="{StaticResource RelativePanelStyle}">
                     <TextBlock
+                        x:Uid="PlaylistsTextBlock"
                         RelativePanel.AlignLeftWithPanel="True"
                         Style="{StaticResource HeaderTextBlockStyle}"
                         Text="Playlists" />
                     <local:IconTextButton
                         x:Name="PlaylistsViewAllButton"
+                        x:Uid="ViewAllButton"
                         Icon="ViewAll"
                         RelativePanel.AlignRightWithPanel="True"
                         Style="{StaticResource ViewAllButtonStyle}"

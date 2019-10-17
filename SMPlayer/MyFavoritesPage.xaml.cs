@@ -34,7 +34,7 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            SortByButton.Label = "Sort By " + MyFavoritesPlaylistControl.Playlist.Criterion.ToStr();
+            SortByButton.Label = Helper.Localize("Sort By " + MyFavoritesPlaylistControl.Playlist.Criterion.ToStr());
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)

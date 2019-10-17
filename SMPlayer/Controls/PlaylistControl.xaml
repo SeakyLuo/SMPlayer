@@ -29,7 +29,7 @@
         Background="{x:Bind Background}"
         CanDrag="True"
         CanDragItems="True"
-        CanReorderItems="True"
+        CanReorderItems="False"
         ContainerContentChanging="SongsListView_ContainerContentChanging"
         DragItemsCompleted="SongsListView_DragItemsCompleted"
         DragItemsStarting="SongsListView_DragItemsStarting"
@@ -47,6 +47,7 @@
                     <SwipeControl.LeftItems>
                         <SwipeItems Mode="Reveal">
                             <SwipeItem
+                                x:Uid="FavoriteSwipeItem"
                                 Background="Transparent"
                                 Foreground="Red"
                                 Invoked="FavoriteItem_Invoked"
@@ -60,6 +61,7 @@
                     <SwipeControl.RightItems>
                         <SwipeItems Mode="Execute">
                             <SwipeItem
+                                x:Uid="RemoveSwipeItem"
                                 Background="Red"
                                 Foreground="White"
                                 Invoked="RemoveItem_Invoked"

@@ -14,6 +14,7 @@
         </Grid.RowDefinitions>
         <Grid Margin="0,10">
             <TextBlock
+                x:Uid="LyricsTextBlock"
                 FontWeight="SemiBold"
                 Style="{StaticResource HeaderTextBlockStyle}"
                 Text="Lyrics"
@@ -22,18 +23,21 @@
             <StackPanel HorizontalAlignment="{x:Bind ShowHeader, Converter={StaticResource HorizontalAlignmentConverter}}" Orientation="Horizontal">
                 <Button
                     x:Name="SearchLyricsButton"
+                    x:Uid="SearchLyricsButton"
                     Click="SearchLyricsButton_Click"
                     Content="&#xE721;"
                     Style="{StaticResource MusicScrollHeaderButtonStyle}"
                     ToolTipService.ToolTip="Search Lyrics" />
                 <Button
                     x:Name="SaveLyricsButton"
+                    x:Uid="SaveLyricsButton"
                     Click="SaveLyricsButton_Click"
                     Content="&#xE74E;"
                     Style="{StaticResource MusicScrollHeaderButtonStyle}"
                     ToolTipService.ToolTip="Save Lyrics" />
                 <Button
                     x:Name="ResetLyricsButton"
+                    x:Uid="ResetLyricsButton"
                     Background="Transparent"
                     Click="ResetLyricsButton_Click"
                     Content="&#xE72C;"

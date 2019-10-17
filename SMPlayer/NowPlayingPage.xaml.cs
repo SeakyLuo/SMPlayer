@@ -51,11 +51,11 @@ namespace SMPlayer
         }
         private void SaveToButton_Click(object sender, RoutedEventArgs e)
         {
-            var name = "Now Playing - " + DateTime.Now.ToString("yy/MM/dd");
+            var name = Helper.Localize("Now Playing") + " - " + DateTime.Now.ToString("yy/MM/dd");
             int index = Settings.settings.FindNextPlaylistNameIndex(name);
             var defaultName = index == 0 ? name : $"{name} ({index})";
             var helper = new MenuFlyoutHelper() { Data = MediaHelper.CurrentPlaylist, DefaultPlaylistName = defaultName };
-            helper.GetAddToPlaylistsMenuFlyout(MenuFlyoutHelper.NowPlaying).ShowAt(sender as FrameworkElement);
+            helper.GetAddToMenuFlyout(MenuFlyoutHelper.NowPlaying).ShowAt(sender as FrameworkElement);
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)

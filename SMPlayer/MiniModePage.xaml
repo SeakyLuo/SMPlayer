@@ -20,10 +20,10 @@
     </Page.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
+        <!--<Grid.RowDefinitions>
             <RowDefinition Height="300" />
             <RowDefinition Height="600" />
-        </Grid.RowDefinitions>
+        </Grid.RowDefinitions>-->
         <local:MediaControl x:Name="MiniMediaControl" Mode="Mini" />
         <Grid
             x:Name="AppTitleBar"
@@ -31,7 +31,7 @@
             VerticalAlignment="Top"
             Background="Transparent"
             IsHitTestVisible="True" />
-        <Button
+        <!--<Button
             x:Name="DropdownButton"
             Margin="0,0,0,15"
             HorizontalAlignment="Center"
@@ -44,7 +44,6 @@
             <Button.RenderTransform>
                 <RotateTransform />
             </Button.RenderTransform>
-        </Button>
-        
+        </Button>-->
     </Grid>
 </Page>

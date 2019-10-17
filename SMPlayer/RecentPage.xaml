@@ -34,10 +34,11 @@
                     Visibility="Collapsed" />
             </CommandBar.Content>
             <AppBarButton
+                x:Uid="ClearHistoryAppButton"
                 Click="ClearButton_Click"
                 Icon="Clear"
-                Label="Clear All"
-                ToolTipService.ToolTip="Clear History" />
+                Label="Clear History"
+                ToolTipService.ToolTip="Clear Play History" />
         </CommandBar>
         <Rectangle
             x:Name="LoadingPlaceHolder"

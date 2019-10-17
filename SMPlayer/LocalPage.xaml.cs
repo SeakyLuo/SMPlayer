@@ -40,14 +40,17 @@ namespace SMPlayer
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             SetBackButtonVisibility();
-            TreeInfo info = History.Peek().Info;
-            MainPage.Instance.SetHeaderText(string.IsNullOrEmpty(info.Directory) ? "No Music" : info.Directory);
+            SetHeader(History.Peek().Info);
+        }
+
+        private void SetHeader(TreeInfo info)
+        {
+            MainPage.Instance.SetHeaderText(string.IsNullOrEmpty(info.Directory) ? Helper.Localize("No Music") : info.Directory);
         }
 
         private void LocalNavigationView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
-            var item = (NavigationViewItem)LocalNavigationView.SelectedItem;
-            bool isFolders = item.Name == "LocalFoldersItem";
+            bool isFolders = LocalFoldersItem.IsSelected;
             Type page = isFolders ? typeof(LocalFoldersPage) : typeof(LocalMusicPage);
             if (LocalFrame.CurrentSourcePageType != page)
             {
@@ -121,7 +124,7 @@ namespace SMPlayer
 
         public void SetMode(bool isGridView)
         {
-            if (LocalFrame.CurrentSourcePageType.Name == "LocalFoldersPage")
+            if (LocalFoldersItem.IsSelected)
             {
                 Settings.settings.LocalFolderGridView = isGridView;
                 if (FolderViewModeChangedListener != null) FolderViewModeChangedListener.ModeChanged(isGridView);
@@ -141,11 +144,10 @@ namespace SMPlayer
 
         private void SetText(TreeInfo info, bool setHeader = true)
         {
-            if (setHeader)
-                MainPage.Instance.SetHeaderText(string.IsNullOrEmpty(info.Directory) ? "No Music" : info.Directory);
-            LocalFoldersItem.Content = $"Folders ({info.Folders})";
+            if (setHeader) SetHeader(info);
+            LocalFoldersItem.Content = $"{Helper.Localize("Folders")} ({info.Folders})";
             LocalFoldersItem.IsEnabled = info.Folders != 0;
-            LocalSongsItem.Content = $"Songs ({info.Songs})";
+            LocalSongsItem.Content = $"{Helper.Localize("Songs")} ({info.Songs})";
             LocalSongsItem.IsEnabled = info.Songs != 0;
         }
 

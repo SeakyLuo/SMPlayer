@@ -24,7 +24,8 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class MiniModePage : Page, MediaControlContainer
     {
-        public static Size PageSize { get => new Size(300, Settings.settings.MiniModeWithDropdown ? 900 : 300); }
+        public static Size PageSize { get => new Size(300, 300); }
+        //public static Size PageSize { get => new Size(300, Settings.settings.MiniModeWithDropdown ? 900 : 300); }
         public static ViewModePreferences ViewModePreferences
         {
             get
@@ -51,7 +52,7 @@ namespace SMPlayer
             Window.Current.SetTitleBar(AppTitleBar);
             UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar);
 
-            DropdownButton.Content = Settings.settings.MiniModeWithDropdown ? "\uE70E" : "\uE70D";
+            //DropdownButton.Content = Settings.settings.MiniModeWithDropdown ? "\uE70E" : "\uE70D";
         }
         private void UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar coreTitleBar)
         {

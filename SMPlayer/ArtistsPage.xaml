@@ -236,9 +236,10 @@
                         </SymbolIcon.RenderTransform>
                     </SymbolIcon>
                     <TextBlock
+                        x:Uid="SelectArtistTextBlock"
                         Margin="0,24"
                         FontSize="24"
-                        Text="Select an Artist" />
+                        Text="Select an Artist On the Left" />
                 </StackPanel>
             </controls:MasterDetailsView.NoSelectionContent>
         </controls:MasterDetailsView>

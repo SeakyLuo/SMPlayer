@@ -69,6 +69,9 @@ namespace SMPlayer.Dialogs
                 case NamingError.Special:
                     text = "Playlist name cannot have \"+++\"!";
                     break;
+                case NamingError.TooLong:
+                    text = $"Playlist name cannot have more than {Settings.PlaylistNameMaxLength} characters!";
+                    break;
             }
             NamingErrorTextBox.Text = text;
             NamingErrorTextBox.Visibility = Visibility.Visible;

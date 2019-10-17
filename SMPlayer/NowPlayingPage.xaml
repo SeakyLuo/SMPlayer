@@ -26,6 +26,7 @@
             <CommandBar.Content>
                 <TextBlock
                     x:Name="CommandBarHeaderTextBlock"
+                    x:Uid="NowPlayingTextBlock"
                     Padding="50,10,0,10"
                     Style="{StaticResource CompactHeaderStyle}"
                     Text="Now Playing"
@@ -34,13 +35,15 @@
             </CommandBar.Content>
             <AppBarButton
                 x:Name="SaveToButton"
+                x:Uid="AddToAppButton"
                 Click="SaveToButton_Click"
                 Icon="Add"
                 IsEnabled="False"
-                Label="Save To"
-                ToolTipService.ToolTip="Save To New Playlist" />
+                Label="Add To"
+                ToolTipService.ToolTip="Add To Playlist" />
             <AppBarButton
                 x:Name="ClearButton"
+                x:Uid="ClearNowPlayingAppButton"
                 Click="ClearButton_Click"
                 Icon="Clear"
                 IsEnabled="False"
@@ -48,16 +51,18 @@
                 ToolTipService.ToolTip="Clear Now Playing" />
             <AppBarButton
                 x:Name="FullScreenButton"
+                x:Uid="ExpandAppButton"
                 Click="FullScreenButton_Click"
                 Icon="FullScreen"
                 IsEnabled="False"
                 Label="Expand View"
-                ToolTipService.ToolTip="Full Window Display" />
+                ToolTipService.ToolTip="Expand View" />
         </CommandBar>
         <local:PlaylistControl
             x:Name="NowPlayingPlaylistControl"
             Grid.Row="2"
             Margin="10,10,10,0"
+            AllowReorder="True"
             AlternatingRowColor="True"
             IsNowPlaying="True"
             Theme="Light" />

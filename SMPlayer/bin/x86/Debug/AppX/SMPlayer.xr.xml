@@ -111,9 +111,6 @@
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="FontFamily" />
       <RootProperty Name="KeyboardAccelerators" />
-      <RootProperty Name="RequestedTheme" />
-      <RootProperty Name="RenderTransformOrigin" />
-      <RootProperty Name="RenderTransform" />
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Control">
@@ -170,11 +167,11 @@
     </RootType>
     <RootType FullName="SMPlayer.IconTextButton">
       <RootProperty Name="IconTextMargin" />
+      <RootProperty Name="IsHighlightAll" />
       <RootProperty Name="Label" />
       <RootProperty Name="Style" />
       <RootProperty Name="Icon" />
       <RootProperty Name="Width" />
-      <RootProperty Name="IsHighlightAll" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="LabelPosition" />
       <RootProperty Name="Padding" />
@@ -532,6 +529,7 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.AdaptiveTrigger">
       <RootProperty Name="MinWindowWidth" />
+      <RootProperty Name="MinWindowHeight" />
     </RootType>
     <RootType FullName="SMPlayer.GridMusicControl">
       <RootProperty Name="Margin" />
@@ -1138,7 +1136,6 @@
     <RootType FullName="SMPlayer.MediaControl">
       <RootProperty Name="Mode" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Media.RotateTransform" />
     <RootType FullName="SMPlayer.MiniModePage" />
     <RootType FullName="SMPlayer.MyFavoritesPage" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.BladeItem">
@@ -1232,6 +1229,7 @@
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGridRow" />
     <RootType FullName="SMPlayer.MusicLibraryPage" />
     <RootType FullName="SMPlayer.NowPlayingPage" />
+    <RootType FullName="Windows.UI.Xaml.Media.RotateTransform" />
     <RootType FullName="SMPlayer.PlaylistsPage" />
     <RootType FullName="SMPlayer.SearchResultPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.ComboBox">

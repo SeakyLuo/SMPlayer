@@ -63,5 +63,4 @@
             Style="{StaticResource GridViewStyle}"
             Visibility="{x:Bind Playlists.Count, Converter={StaticResource VisibilityConverter}}" />
     </Grid>
-
 </Page>

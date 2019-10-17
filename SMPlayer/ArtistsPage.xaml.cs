@@ -84,7 +84,7 @@ namespace SMPlayer
                 artists.Add(new ArtistView(group.Key));
             foreach (var artist in artists.OrderBy((a) => a.Name))
                 Artists.Add(artist);
-            ArtistsCountTextBlock.Text = "All Artists: " + Artists.Count;
+            ArtistsCountTextBlock.Text = Helper.Localize("All Artists: ") + Artists.Count;
             FindMusicAndSetPlaying(MediaHelper.CurrentMusic);
             if (Notified == NotifiedStatus.Started) Notified = NotifiedStatus.Finished;
             ArtistProgressBar.Visibility = Visibility.Collapsed;

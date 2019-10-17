@@ -32,6 +32,8 @@ Recently added.
 
 Improved algorithm for update.
 
+Improved New Playlist Name.
+
 # TO FIX
 Bad performance when given many music files.
 
@@ -40,3 +42,5 @@ Bad performance of Loading NowPlayingFull.
 Set lyrics bug.
 
 Repeatedly set shuffle.
+
+Vertical Stretch Mini Mode.

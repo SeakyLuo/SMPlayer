@@ -44,12 +44,7 @@ namespace SMPlayer
         public bool AllowReorder
         {
             get => SongsListView.CanReorderItems;
-            set
-            {
-                SongsListView.CanReorderItems = value;
-                SongsListView.AllowDrop = value;
-                SongsListView.CanDrag = value;
-            }
+            set => SongsListView.CanReorderItems = SongsListView.AllowDrop = SongsListView.CanDrag = value;
         }
 
         public object Header
@@ -195,7 +190,7 @@ namespace SMPlayer
                 var flyout = sender as MenuFlyout;
                 var item = new MenuFlyoutItem()
                 {
-                    Text = "Move To Top",
+                    Text = Helper.Localize("Move To Top"),
                     Icon = new SymbolIcon(Symbol.Upload)
                 };
                 item.Click += (s, args) =>

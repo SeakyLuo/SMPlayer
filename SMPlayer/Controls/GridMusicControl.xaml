@@ -47,6 +47,7 @@
                                     Source="{x:Bind Thumbnail}" />
                                 <Button
                                     x:Name="AddToButton"
+                                    x:Uid="AddToButton"
                                     Width="40"
                                     Height="40"
                                     HorizontalAlignment="Center"

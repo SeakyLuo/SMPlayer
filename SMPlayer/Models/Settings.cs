@@ -146,7 +146,7 @@ namespace SMPlayer.Models
             Recent.Remove(music.Path);
             Recent.Insert(0, music.Path);
         }
-
+        public const int PlaylistNameMaxLength = 50;
         public NamingError CheckPlaylistNamingError(string newName)
         {
             if (string.IsNullOrEmpty(newName) || string.IsNullOrWhiteSpace(newName))
@@ -156,6 +156,8 @@ namespace SMPlayer.Models
                 return NamingError.Used;
             if (newName.Contains("+++"))
                 return NamingError.Special;
+            if (newName.Length > PlaylistNameMaxLength)
+                return NamingError.TooLong;
             return NamingError.Good;
         }
 
@@ -190,7 +192,8 @@ namespace SMPlayer.Models
         Good = 0,
         EmptyOrWhiteSpace = 1,
         Used = 2,
-        Special = 3
+        Special = 3,
+        TooLong = 4
     }
 
     public enum RenameOption

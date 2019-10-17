@@ -47,6 +47,7 @@
             IsHitTestVisible="True" />
         <Button
             x:Name="BackButton"
+            x:Uid="BackButton"
             Grid.Column="1"
             Width="48"
             Height="32"
@@ -66,6 +67,7 @@
                         <local:PlaylistControl
                             x:Name="FullPlaylistControl"
                             Margin="10,10,10,0"
+                            AllowReorder="True"
                             AlternatingRowColor="False"
                             Background="Transparent"
                             IsNowPlaying="True"

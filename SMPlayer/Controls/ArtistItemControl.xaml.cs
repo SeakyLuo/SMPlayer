@@ -33,6 +33,11 @@ namespace SMPlayer
             VisualStateManager.GoToState(sender as Control, "Normal", true);
         }
 
+        private void MenuFlyout_Opening(object sender, object e)
+        {
+            MenuFlyoutHelper.SetPlaylistMenu(sender);
+        }
+
         private void PlayAllButton_Click(object sender, RoutedEventArgs e)
         {
             var data = (sender as Button).DataContext as Models.Playlist;

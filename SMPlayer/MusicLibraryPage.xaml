@@ -54,6 +54,7 @@
                     </controls:DataGridTextColumn.CellStyle>
                 </controls:DataGridTextColumn>
                 <controls:DataGridTextColumn
+                    x:Uid="NameHeader"
                     Width="200"
                     MinWidth="100"
                     Binding="{Binding Name}"
@@ -61,24 +62,28 @@
                     Header="Name"
                     Tag="Name" />
                 <controls:DataGridTextColumn
+                    x:Uid="ArtistHeader"
                     Width="160"
                     MinWidth="100"
                     Binding="{Binding Artist}"
                     CanUserSort="True"
                     Header="Artist" />
                 <controls:DataGridTextColumn
+                    x:Uid="AlbumHeader"
                     Width="200"
                     MinWidth="100"
                     Binding="{Binding Album}"
                     CanUserSort="True"
                     Header="Album" />
                 <controls:DataGridTextColumn
+                    x:Uid="DurationHeader"
                     MinWidth="100"
                     MaxWidth="120"
                     Binding="{Binding Duration, Converter={StaticResource MusicDurationConverter}}"
                     CanUserReorder="True"
                     Header="Duration" />
                 <controls:DataGridTextColumn
+                    x:Uid="FavoriteHeader"
                     MinWidth="100"
                     Binding="{Binding Favorite, Converter={StaticResource MusicFavoriteConverter}, Mode=OneWay}"
                     CanUserReorder="False"
@@ -93,6 +98,7 @@
                     </controls:DataGridTextColumn.CellStyle>
                 </controls:DataGridTextColumn>
                 <controls:DataGridTextColumn
+                    x:Uid="PlayCountHeader"
                     MinWidth="100"
                     MaxWidth="120"
                     Binding="{Binding PlayCount, Converter={StaticResource IntConverter}, Mode=OneWay}"

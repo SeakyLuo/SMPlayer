@@ -42,11 +42,13 @@
             Orientation="Horizontal"
             Visibility="Collapsed">
             <Button
+                x:Uid="PlayAllButton"
                 Click="PlayAllButton_Click"
                 Content="&#xE768;"
                 Style="{StaticResource HoverButtonStyle}"
                 ToolTipService.ToolTip="Play All" />
             <Button
+                x:Uid="AddToButton"
                 Click="AddToButton_Click"
                 Content="&#xE710;"
                 Style="{StaticResource HoverButtonStyle}"

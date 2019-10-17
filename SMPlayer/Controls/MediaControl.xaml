@@ -677,9 +677,13 @@
         </Grid>
         <Grid
             x:Name="MiniMediaControlGrid"
+            VerticalAlignment="Stretch"
             RequestedTheme="Dark"
             Visibility="Visible">
-            <Image x:Name="MiniAlbumCover" Source="ms-appx:///Assets/colorful_bg_wide.png" />
+            <Image
+                x:Name="MiniAlbumCover"
+                Source="ms-appx:///Assets/colorful_bg_wide.png"
+                Stretch="UniformToFill" />
             <Grid
                 Background="Black"
                 Opacity="0.75"
@@ -727,14 +731,19 @@
                         HorizontalAlignment="Center"
                         FontSize="16"
                         FontWeight="Bold"
-                        Foreground="White" />
+                        Foreground="White"
+                        Visibility="Visible" />
                     <local:ScrollingTextBlock
                         x:Name="MiniArtistTextBlock"
                         Margin="3"
                         HorizontalAlignment="Center"
-                        Foreground="White" />
+                        Foreground="White"
+                        Visibility="Visible" />
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                        <Button Content="&#xE712;" Style="{StaticResource DarkMediaControlButtonStyle}">
+                        <Button
+                            x:Uid="MoreButton"
+                            Content="&#xE712;"
+                            Style="{StaticResource DarkMediaControlButtonStyle}">
                             <Button.Flyout>
                                 <Flyout>
                                     <StackPanel Width="200" Margin="-12,-4">
@@ -833,6 +842,22 @@
                     <Storyboard>
                         <PointerUpThemeAnimation Storyboard.TargetName="MainMusicInfoGrid" />
                     </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+            <VisualStateGroup x:Name="HeightChange">
+                <VisualState x:Name="NormalHeight">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowHeight="250" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Short">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowHeight="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MiniTitleTextBlock.Visibility" Value="Collapsed" />
+                        <Setter Target="MiniArtistTextBlock.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
             <VisualStateGroup x:Name="WidthChange">
