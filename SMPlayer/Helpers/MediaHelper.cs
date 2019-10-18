@@ -100,7 +100,7 @@ namespace SMPlayer
                     foreach (var item in PendingPlaybackList.Items)
                         _PlaybackList.Items.Add(item);
                     PendingPlaybackList = null;
-                    MoveToMusic(1);
+                    //MoveToMusic(1);
                     Player.Play();
                     return;
                 }
@@ -191,10 +191,11 @@ namespace SMPlayer
 
         public static async void SetMusicAndPlay(ICollection<Music> playlist, Music music)
         {
+            bool wasntPlaying = !IsPlaying;
             if (Helper.SamePlaylist(CurrentPlaylist, playlist))
             {
                 MoveToMusic(music);
-                Play();
+                if (wasntPlaying) Play();
             }
             else
             {
@@ -202,7 +203,7 @@ namespace SMPlayer
                 PendingPlaybackList = new MediaPlaybackList();
                 await AddMusic(music);
                 MoveToMusic(music);
-                Play();
+                if (wasntPlaying) Play();
                 CurrentPlaylist.Clear();
                 if (ShuffleEnabled) await SetPlaylist(ShufflePlaylist(playlist, music));
                 else await SetPlaylist(playlist);

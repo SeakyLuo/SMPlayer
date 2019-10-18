@@ -135,6 +135,9 @@
   <data name="MusicDeleted" xml:space="preserve">
     <value>"{0}" is deleted!</value>
   </data>
+  <data name="MusicName" xml:space="preserve">
+    <value> "{0}"</value>
+  </data>
   <data name="NamingErrorEmptyOrWhiteSpace" xml:space="preserve">
     <value>Playlist name cannot be empty or whitespaces!</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="PropertiesUpdated" xml:space="preserve">
     <value>Properties is updated!</value>
+  </data>
+  <data name="RemoveMusic" xml:space="preserve">
+    <value>Do you want to remove "{0}" from your playlist?</value>
   </data>
   <data name="RemovePlaylist" xml:space="preserve">
     <value>Do you want to remove playlist "{0}"?</value>

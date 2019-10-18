@@ -135,6 +135,9 @@
   <data name="MusicDeleted" xml:space="preserve">
     <value>《{0}》已被删除！</value>
   </data>
+  <data name="MusicName" xml:space="preserve">
+    <value>《{0}》</value>
+  </data>
   <data name="NamingErrorEmptyOrWhiteSpace" xml:space="preserve">
     <value>名称不能为空！</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="PropertiesUpdated" xml:space="preserve">
     <value>歌曲信息已更新！</value>
+  </data>
+  <data name="RemoveMusic" xml:space="preserve">
+    <value>你想要移除《{0}》吗？</value>
   </data>
   <data name="RemovePlaylist" xml:space="preserve">
     <value>你想要移除播放列表“{0}”吗？</value>

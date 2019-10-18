@@ -165,7 +165,7 @@ namespace SMPlayer
                 Text = localizedPlay,
                 Name = MusicMenuName
             };
-            playItem.SetToolTip($"{localizedPlay} \"{music.Name}\"");
+            playItem.SetToolTip(localizedPlay + string.Format(Helper.LocalizeMessage("MusicName"), music.Name));
             playItem.Click += async (s, args) =>
             {
                 await MediaHelper.SetMusicAndPlay(music);
