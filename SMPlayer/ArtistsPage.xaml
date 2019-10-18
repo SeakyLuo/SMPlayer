@@ -161,10 +161,7 @@
                                                 FontSize="18"
                                                 FontWeight="Bold"
                                                 Text="{x:Bind Name, Mode=OneWay}" />
-                                            <TextBlock
-                                                x:Name="SongCountTextBlock"
-                                                Margin="0,10"
-                                                Text="{x:Bind Songs, Converter={StaticResource SongCountConverter}, Mode=OneWay}" />
+                                            <TextBlock Margin="0,10" Text="{x:Bind Songs, Converter={StaticResource SongCountConverter}, Mode=OneWay}" />
                                         </StackPanel>
                                         <Button
                                             x:Name="AlbumMoreButton"

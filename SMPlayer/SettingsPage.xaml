@@ -126,19 +126,18 @@
         </Grid.ColumnDefinitions>
         <StackPanel>
             <TextBlock
-                x:Name="MusicFolderLabel"
+                x:Name="MusicFolderTextBlock"
+                x:Uid="MusicFolderTextBlock"
                 Style="{StaticResource SettingLabelStyle}"
                 Text="Music Folder:" />
             <TextBlock
-                x:Name="LanguageLabel"
-                Style="{StaticResource SettingLabelStyle}"
-                Text="Language:" />
-            <TextBlock
-                x:Name="NotificationLabel"
+                x:Name="NotificationTextBlock"
+                x:Uid="NotificationTextBlock"
                 Style="{StaticResource SettingLabelStyle}"
                 Text="Notification: " />
             <TextBlock
-                x:Name="ThemeLabel"
+                x:Name="ThemeTextBlock"
+                x:Uid="ThemeTextBlock"
                 Style="{StaticResource SettingLabelStyle}"
                 Text="Theme:" />
             <TextBlock Style="{StaticResource SettingLabelStyle}" />
@@ -146,41 +145,39 @@
         <StackPanel Grid.Column="1">
             <AutoSuggestBox
                 x:Name="PathBox"
+                x:Uid="PathBox"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
                 PlaceholderText="The Root Folder of Your Music Library"
                 QuerySubmitted="PathBox_QuerySubmitted"
                 Style="{StaticResource MarginSetter}">
                 <AutoSuggestBox.QueryIcon>
-                    <FontIcon Glyph="&#xE838;" />
+                    <FontIcon
+                        x:Uid="OpenFolderIcon"
+                        Glyph="&#xE838;"
+                        ToolTipService.ToolTip="Select Folder" />
                 </AutoSuggestBox.QueryIcon>
             </AutoSuggestBox>
-            <ComboBox
-                x:Name="LanguageComboBox"
-                VerticalAlignment="Center"
-                SelectionChanged="LanguageComboBox_SelectionChanged"
-                Style="{StaticResource MarginSetter}">
-                <ComboBoxItem Content="Follow System" IsSelected="True" />
-                <ComboBoxItem Content="简体中文" />
-                <ComboBoxItem Content="繁體中文" />
-                <ComboBoxItem Content="English" />
-                <ComboBoxItem Content="日本語" />
-            </ComboBox>
             <ComboBox
                 x:Name="NotificationComboBox"
                 VerticalAlignment="Center"
                 SelectionChanged="NotificationComboBox_SelectionChanged"
                 Style="{StaticResource MarginSetter}">
-                <ComboBoxItem Content="Always Shown" IsSelected="True" />
-                <ComboBoxItem Content="Music Changed" />
-                <ComboBoxItem Content="Never" />
+                <ComboBoxItem
+                    x:Uid="AlwaysShownComboItem"
+                    Content="Always Shown"
+                    IsSelected="True" />
+                <ComboBoxItem x:Uid="MusicChangedComboItem" Content="Music Changed" />
+                <ComboBoxItem x:Uid="NeverItem" Content="Never" />
             </ComboBox>
             <Button
+                x:Uid="ThemeColorButton"
                 Width="30"
                 Height="30"
                 HorizontalAlignment="Left"
                 Background="{ThemeResource SystemColorHotlightColor}"
-                Style="{StaticResource SolidColorButton}">
+                Style="{StaticResource SolidColorButton}"
+                ToolTipService.ToolTip="Chnage Theme Color">
                 <Button.Flyout>
                     <Flyout x:Name="ColorPickerFlyout">
                         <StackPanel>
@@ -192,6 +189,7 @@
                                 </Grid.ColumnDefinitions>
                                 <Button
                                     x:Name="ConfirmColorButton"
+                                    x:Uid="ConfirmButton"
                                     HorizontalAlignment="Center"
                                     Background="{ThemeResource SystemColorHighlightColor}"
                                     BorderThickness="0"
@@ -200,6 +198,7 @@
                                     Foreground="White" />
                                 <Button
                                     x:Name="CancelColorButton"
+                                    x:Uid="CancelButton"
                                     Grid.Column="1"
                                     HorizontalAlignment="Center"
                                     Background="Transparent"
@@ -213,11 +212,13 @@
                 </Button.Flyout>
             </Button>
             <HyperlinkButton
+                x:Uid="UpdateMusicLibraryButton"
                 Margin="9,0"
                 Click="UpdateMusicLibrary_Click"
                 Content="Update Music Library"
                 Style="{ThemeResource TextBlockButtonStyle}" />
             <HyperlinkButton
+                x:Uid="BugReportButton"
                 Margin="9,0"
                 Click="BugReport_Click"
                 Content="Bug Report"
@@ -235,10 +236,9 @@
                         <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="MusicFolderLabel.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
-                        <Setter Target="LanguageLabel.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
-                        <Setter Target="NotificationLabel.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
-                        <Setter Target="ThemeLabel.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
+                        <Setter Target="MusicFolderTextBlock.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
+                        <Setter Target="NotificationTextBlock.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
+                        <Setter Target="ThemeTextBlock.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

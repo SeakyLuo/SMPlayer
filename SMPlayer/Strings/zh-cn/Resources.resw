@@ -132,11 +132,17 @@
   <data name="Album" xml:space="preserve">
     <value>专辑</value>
   </data>
+  <data name="AlbumArtistTextBlock.Text" xml:space="preserve">
+    <value>专辑艺术家</value>
+  </data>
   <data name="AlbumHeader.Header" xml:space="preserve">
     <value>专辑</value>
   </data>
   <data name="Albums" xml:space="preserve">
     <value>所有专辑</value>
+  </data>
+  <data name="Albums:" xml:space="preserve">
+    <value>专辑：</value>
   </data>
   <data name="AlbumsItem.Content" xml:space="preserve">
     <value>专辑</value>
@@ -147,8 +153,14 @@
   <data name="AlbumsTextBlock.Text" xml:space="preserve">
     <value>专辑</value>
   </data>
+  <data name="AlbumTextBlock.Text" xml:space="preserve">
+    <value>专辑</value>
+  </data>
   <data name="All Artists:" xml:space="preserve">
     <value>歌手：</value>
+  </data>
+  <data name="AlwaysShownComboItem.Content" xml:space="preserve">
+    <value>一直显示</value>
   </data>
   <data name="ArtistHeader.Header" xml:space="preserve">
     <value>歌手</value>
@@ -165,8 +177,20 @@
   <data name="ArtistsTextBlock.Text" xml:space="preserve">
     <value>歌手</value>
   </data>
+  <data name="ArtistTextBlock.Text" xml:space="preserve">
+    <value>歌手</value>
+  </data>
   <data name="BackButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>返回</value>
+  </data>
+  <data name="BitrateTextBlock.Text" xml:space="preserve">
+    <value>比特率</value>
+  </data>
+  <data name="BugReportButton.Content" xml:space="preserve">
+    <value>报告问题</value>
+  </data>
+  <data name="CancelButton.Content" xml:space="preserve">
+    <value>取消</value>
   </data>
   <data name="ClearHistoryAppButton.Label" xml:space="preserve">
     <value>清除历史</value>
@@ -192,8 +216,26 @@
   <data name="ClearPlayCountButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>清除播放次数</value>
   </data>
+  <data name="ComposersTextBlock.Text" xml:space="preserve">
+    <value>作曲家</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="ConfirmButton.Content" xml:space="preserve">
+    <value>确认</value>
+  </data>
   <data name="Create a New Playlist" xml:space="preserve">
     <value>创建新的播放列表</value>
+  </data>
+  <data name="Create New Playlist" xml:space="preserve">
+    <value>创建新的播放列表</value>
+  </data>
+  <data name="DateCreatedTextBlock.Text" xml:space="preserve">
+    <value>创建日期</value>
+  </data>
+  <data name="DateModifiedTextBlock.Text" xml:space="preserve">
+    <value>修改日期</value>
   </data>
   <data name="day" xml:space="preserve">
     <value>天</value>
@@ -216,10 +258,16 @@
   <data name="DeleteItem.Text" xml:space="preserve">
     <value>删除播放列表</value>
   </data>
+  <data name="DisplayCheckBox.Content" xml:space="preserve">
+    <value>下次不显示这个</value>
+  </data>
   <data name="DuplicateItem.Text" xml:space="preserve">
     <value>复制播放列表</value>
   </data>
   <data name="DurationHeader.Header" xml:space="preserve">
+    <value>时长</value>
+  </data>
+  <data name="DurationTextBlock.Text" xml:space="preserve">
     <value>时长</value>
   </data>
   <data name="Edit Playlists" xml:space="preserve">
@@ -249,6 +297,12 @@
   <data name="FavoriteSwipeItem.Text" xml:space="preserve">
     <value>喜欢</value>
   </data>
+  <data name="FileSizeTextBlock.Text" xml:space="preserve">
+    <value>文件大小</value>
+  </data>
+  <data name="FileTypeTextBlock.Text" xml:space="preserve">
+    <value>文件类型</value>
+  </data>
   <data name="Finish Editing" xml:space="preserve">
     <value>编辑完成</value>
   </data>
@@ -257,6 +311,9 @@
   </data>
   <data name="Full Screen" xml:space="preserve">
     <value>全屏模式</value>
+  </data>
+  <data name="GenreTextBlock.Text" xml:space="preserve">
+    <value>风格</value>
   </data>
   <data name="GridViewItem.Label" xml:space="preserve">
     <value>网格模式</value>
@@ -294,6 +351,9 @@
   <data name="LyricsMenuItem.Text" xml:space="preserve">
     <value>显示歌词</value>
   </data>
+  <data name="LyricsPivotItem.Header" xml:space="preserve">
+    <value>歌词</value>
+  </data>
   <data name="LyricsTextBlock.Text" xml:space="preserve">
     <value>歌词</value>
   </data>
@@ -327,6 +387,12 @@
   <data name="Music Library" xml:space="preserve">
     <value>音乐库</value>
   </data>
+  <data name="MusicChangedComboItem.Content" xml:space="preserve">
+    <value>音乐更换</value>
+  </data>
+  <data name="MusicFolderTextBlock.Text" xml:space="preserve">
+    <value>音乐文件夹</value>
+  </data>
   <data name="MusicInfoButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>显示歌曲信息</value>
   </data>
@@ -351,11 +417,17 @@
   <data name="NameHeader.Header" xml:space="preserve">
     <value>名称</value>
   </data>
+  <data name="NeverItem.Content" xml:space="preserve">
+    <value>永不显示</value>
+  </data>
   <data name="New Playlist" xml:space="preserve">
     <value>新的播放列表</value>
   </data>
   <data name="NewPlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>新建播放列表</value>
+  </data>
+  <data name="NewPlaylistNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>新的播放列表名</value>
   </data>
   <data name="NextButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>下一首</value>
@@ -365,6 +437,9 @@
   </data>
   <data name="No Playlist" xml:space="preserve">
     <value>无播放列表</value>
+  </data>
+  <data name="NotificationTextBlock.Text" xml:space="preserve">
+    <value>通知</value>
   </data>
   <data name="Now Playing" xml:space="preserve">
     <value>正在播放</value>
@@ -377,6 +452,15 @@
   </data>
   <data name="NowPlayingTextBlock.Text" xml:space="preserve">
     <value>正在播放</value>
+  </data>
+  <data name="OpenFolderIcon.ToolTipService.ToolTip" xml:space="preserve">
+    <value>选择文件夹</value>
+  </data>
+  <data name="PathBox.PlaceholderText" xml:space="preserve">
+    <value>你音乐库的根文件夹</value>
+  </data>
+  <data name="PathTextBlock.Text" xml:space="preserve">
+    <value>路径</value>
   </data>
   <data name="Pause" xml:space="preserve">
     <value>暂停</value>
@@ -394,6 +478,9 @@
     <value>播放全部</value>
   </data>
   <data name="PlayCountHeader.Header" xml:space="preserve">
+    <value>播放次数</value>
+  </data>
+  <data name="PlayCountTextBlock.Text" xml:space="preserve">
     <value>播放次数</value>
   </data>
   <data name="Playlist" xml:space="preserve">
@@ -423,8 +510,14 @@
   <data name="PrevButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>前一首</value>
   </data>
+  <data name="PropertiesPivotItem.Header" xml:space="preserve">
+    <value>歌曲信息</value>
+  </data>
   <data name="PropertiesTextBlock.Text" xml:space="preserve">
     <value>歌曲信息</value>
+  </data>
+  <data name="PublisherTextBlock.Text" xml:space="preserve">
+    <value>发布者</value>
   </data>
   <data name="Recent" xml:space="preserve">
     <value>最近</value>
@@ -440,6 +533,12 @@
   </data>
   <data name="RemoveSwipeItem.Text" xml:space="preserve">
     <value>移除</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>重命名</value>
+  </data>
+  <data name="Rename Playlist" xml:space="preserve">
+    <value>重命名播放列表</value>
   </data>
   <data name="RenameButton.Label" xml:space="preserve">
     <value>重命名</value>
@@ -506,6 +605,9 @@
   </data>
   <data name="Set As Favorite" xml:space="preserve">
     <value>设为喜欢</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>设置</value>
   </data>
   <data name="Show In Explorer" xml:space="preserve">
     <value>在本地中显示</value>
@@ -576,6 +678,21 @@
   <data name="SortByButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>对播放列表进行排序</value>
   </data>
+  <data name="SubtitleTextBlock.Text" xml:space="preserve">
+    <value>副标题</value>
+  </data>
+  <data name="ThemeColorButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>更换主题颜色</value>
+  </data>
+  <data name="ThemeTextBlock.Text" xml:space="preserve">
+    <value>主题</value>
+  </data>
+  <data name="TitleTextBlock.Text" xml:space="preserve">
+    <value>标题</value>
+  </data>
+  <data name="TrackNumberTextBlock.Text" xml:space="preserve">
+    <value>音轨</value>
+  </data>
   <data name="Undo Favorite" xml:space="preserve">
     <value>取消喜欢</value>
   </data>
@@ -588,10 +705,16 @@
   <data name="UnPin Playlist" xml:space="preserve">
     <value>解除固定播放列表</value>
   </data>
+  <data name="UpdateMusicLibraryButton.Content" xml:space="preserve">
+    <value>更新音乐库</value>
+  </data>
   <data name="ViewAllButton.Label" xml:space="preserve">
     <value>查看全部</value>
   </data>
   <data name="VolumeButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>音量</value>
+  </data>
+  <data name="YearTextBlock.Text" xml:space="preserve">
+    <value>年份</value>
   </data>
 </root>

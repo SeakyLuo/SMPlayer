@@ -33,7 +33,7 @@ namespace SMPlayer.Controls
         private void ResetLyricsButton_Click(object sender, RoutedEventArgs e)
         {
             LyricsTextBox.Text = Lyrics;
-            Helper.GetMediaControlContainer().ShowNotification("Lyrics Reset!");
+            Helper.GetMediaControlContainer().ShowNotification(Helper.LocalizeMessage("LyricsReset"));
         }
 
         private async void SaveLyricsButton_Click(object sender, RoutedEventArgs e)
@@ -51,7 +51,7 @@ namespace SMPlayer.Controls
                 }
                 SavingLyricsProgress.Visibility = Visibility.Collapsed;
                 LyricsTextBox.IsEnabled = true;
-                Helper.GetMediaControlContainer().ShowNotification("Lyrics Updated!");
+                Helper.GetMediaControlContainer().ShowNotification(Helper.LocalizeMessage("LyricsUpdated"));
             });
         }
 
@@ -63,7 +63,9 @@ namespace SMPlayer.Controls
             }
             else
             {
-                MainPage.Instance.ShowNotification("Unable to Open a Web Browser");
+                string notification = Helper.LocalizeMessage("FailToOpenBrowser");
+                MainPage.Instance?.ShowNotification(notification);
+                NowPlayingFullPage.Instance?.ShowNotification(notification);
             }
         }
         public async void SetLyrics(Music music)

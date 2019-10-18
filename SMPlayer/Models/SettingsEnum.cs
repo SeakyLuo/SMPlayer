@@ -6,14 +6,6 @@ using System.Threading.Tasks;
 
 namespace SMPlayer.Models
 {
-    public enum AppLanguage
-    {
-        FollowSystem = 0,
-        SimplifiedChinese = 1,
-        TraditionalChinese = 2,
-        English = 3,
-        Japanese = 4
-    }
 
     public enum PlayMode
     {

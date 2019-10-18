@@ -28,7 +28,6 @@ namespace SMPlayer
     public sealed partial class SettingsPage : Page, TreeInitProgressListener
     {
         private static List<AfterPathSetListener> listeners = new List<AfterPathSetListener>();
-        public static AppLanguage[] LanguageOptions = { AppLanguage.FollowSystem, AppLanguage.SimplifiedChinese, AppLanguage.TraditionalChinese, AppLanguage.English, AppLanguage.Japanese };
         public static ShowNotification[] NotificationOptions = { ShowNotification.Always, ShowNotification.MusicChanged, ShowNotification.Never };
         public SettingsPage()
         {
@@ -38,7 +37,6 @@ namespace SMPlayer
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             PathBox.Text = Settings.settings.RootPath;
-            LanguageComboBox.SelectedItem = Settings.settings.Language;
             NotificationComboBox.SelectedItem = Settings.settings.Notification;
             ThemeColorPicker.Color = Settings.settings.ThemeColor;
         }
@@ -97,11 +95,6 @@ namespace SMPlayer
             ColorPickerFlyout.Hide();
         }
 
-        private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Settings.settings.Language = LanguageOptions[(sender as ComboBox).SelectedIndex];
-        }
-
         private void NotificationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Settings.settings.Notification = NotificationOptions[(sender as ComboBox).SelectedIndex];
@@ -132,7 +125,7 @@ namespace SMPlayer
             }
             else
             {
-                MainPage.Instance.ShowNotification("Unable to Open a Web Browser");
+                MainPage.Instance.ShowNotification(Helper.LocalizeMessage("FailToOpenBrowser"));
             }
         }
     }

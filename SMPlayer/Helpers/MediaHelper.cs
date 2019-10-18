@@ -72,7 +72,15 @@ namespace SMPlayer
                     var target = MusicLibraryPage.AllSongs.FirstOrDefault((m) => m.Name == music);
                     if (target == null) continue; // Reset Path Cause This
                     target.IsPlaying = target.Equals(CurrentMusic);
-                    await AddMusic(target);
+                    try
+                    {
+                        // 无效索引
+                        await AddMusic(target);
+                    }
+                    catch (Exception)
+                    {
+                        break;
+                    }
                 }
             }
             Player.Volume = settings.Volume;
@@ -297,7 +305,6 @@ namespace SMPlayer
                 if (CurrentPlaylist[i] == music)
                 {
                     PlaybackList.MoveTo(Convert.ToUInt32(i));
-                    Debug.WriteLine("MediaControl: " + music.Name);
                     break;
                 }
             }

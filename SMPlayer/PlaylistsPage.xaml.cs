@@ -174,7 +174,7 @@ namespace SMPlayer
             }
             else
             {
-                DeleteDialog.Message = $"{Helper.Localize("RemovePlaylist")} {playlist.Name}?";
+                DeleteDialog.Message = string.Format(Helper.LocalizeMessage("RemovePlaylist"), playlist.Name);
                 await DeleteDialog.ShowAsync();
             }
         }

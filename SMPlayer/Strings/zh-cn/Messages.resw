@@ -117,7 +117,49 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DeleteMusic" xml:space="preserve">
+    <value>你将要删除《{0}》。该项操作无法撤销，是否要继续？</value>
+  </data>
+  <data name="FailToOpenBrowser" xml:space="preserve">
+    <value>无法打开浏览器！</value>
+  </data>
+  <data name="HasBeenPlayed" xml:space="preserve">
+    <value>《{0}》已经播放了{1}次。{2}</value>
+  </data>
+  <data name="LyricsReset" xml:space="preserve">
+    <value>歌词已重置！</value>
+  </data>
+  <data name="LyricsUpdated" xml:space="preserve">
+    <value>歌词已更新！</value>
+  </data>
+  <data name="MusicDeleted" xml:space="preserve">
+    <value>《{0}》已被删除！</value>
+  </data>
+  <data name="NamingErrorEmptyOrWhiteSpace" xml:space="preserve">
+    <value>名称不能为空！</value>
+  </data>
+  <data name="NamingErrorSpecial" xml:space="preserve">
+    <value>名称中不能包含“+++”或者“{0}”！</value>
+  </data>
+  <data name="NamingErrorTooLong" xml:space="preserve">
+    <value>名称长度不能超过50！</value>
+  </data>
+  <data name="NamingErrorUsed" xml:space="preserve">
+    <value>该名称已被使用！</value>
+  </data>
+  <data name="NoLyricsAvailable" xml:space="preserve">
+    <value>没有歌词</value>
+  </data>
+  <data name="NotPlayedYet" xml:space="preserve">
+    <value>《{0}》尚未被播放。</value>
+  </data>
+  <data name="PropertiesReset" xml:space="preserve">
+    <value>歌曲信息已重置！</value>
+  </data>
+  <data name="PropertiesUpdated" xml:space="preserve">
+    <value>歌曲信息已更新！</value>
+  </data>
   <data name="RemovePlaylist" xml:space="preserve">
-    <value>你想要移除播放列表</value>
+    <value>你想要移除播放列表“{0}”吗？</value>
   </data>
 </root>

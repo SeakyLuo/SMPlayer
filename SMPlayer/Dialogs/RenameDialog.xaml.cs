@@ -39,41 +39,27 @@ namespace SMPlayer.Dialogs
             Confirm = confirm;
             Option = option;
             DefaultName = defaultName;
-            var dialogTitle = "";
+            string dialogTitle = "", confirmContent = "";
             switch (option)
             {
                 case RenameOption.New:
                     dialogTitle = "Create New Playlist";
+                    confirmContent = "Confirm";
                     break;
                 case RenameOption.Rename:
-                    dialogTitle = "Rename";
+                    dialogTitle = "Rename Playlist";
+                    confirmContent = "Rename";
                     break;
             }
-            TitleTextBlock.Text = dialogTitle;
-            ConfirmButton.Content = dialogTitle;
+            TitleTextBlock.Text = Helper.Localize(dialogTitle);
+            ConfirmButton.Content = Helper.Localize(confirmContent);
             NewPlaylistNameTextBox.Text = defaultName;
             NewPlaylistNameTextBox.SelectAll();
         }
 
         public void ShowError(NamingError error)
         {
-            string text = "";
-            switch (error)
-            {
-                case NamingError.EmptyOrWhiteSpace:
-                    text = "Playlist name cannot be empty or whitespaces!";
-                    break;
-                case NamingError.Used:
-                    text = "This name has been used!";
-                    break;
-                case NamingError.Special:
-                    text = "Playlist name cannot have \"+++\"!";
-                    break;
-                case NamingError.TooLong:
-                    text = $"Playlist name cannot have more than {Settings.PlaylistNameMaxLength} characters!";
-                    break;
-            }
-            NamingErrorTextBox.Text = text;
+            NamingErrorTextBox.Text = Helper.LocalizeMessage(error.ToStr());
             NamingErrorTextBox.Visibility = Visibility.Visible;
         }
 

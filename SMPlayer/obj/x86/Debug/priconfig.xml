@@ -2,7 +2,7 @@
 <resources targetOsVersion="10.0.0" majorVersion="1">
   <index root="\" startIndexAt="obj\x86\Debug\filtered.layout.resfiles">
     <default>
-      <qualifier name="Language" value="zh-cn" />
+      <qualifier name="Language" value="en-US" />
       <qualifier name="Contrast" value="standard" />
       <qualifier name="Scale" value="200" />
       <qualifier name="HomeRegion" value="001" />
@@ -17,7 +17,7 @@
   </index>
   <index root="\" startIndexAt="obj\x86\Debug\resources.resfiles">
     <default>
-      <qualifier name="Language" value="zh-cn" />
+      <qualifier name="Language" value="en-US" />
       <qualifier name="Contrast" value="standard" />
       <qualifier name="Scale" value="200" />
       <qualifier name="HomeRegion" value="001" />
@@ -34,7 +34,7 @@
   </index>
   <index root="\" startIndexAt="obj\x86\Debug\pri.resfiles">
     <default>
-      <qualifier name="Language" value="zh-cn" />
+      <qualifier name="Language" value="en-US" />
       <qualifier name="Contrast" value="standard" />
       <qualifier name="Scale" value="200" />
       <qualifier name="HomeRegion" value="001" />
@@ -50,7 +50,7 @@
   </index>
   <index root="obj\x86\Debug\embed" startIndexAt="embed.resfiles">
     <default>
-      <qualifier name="Language" value="zh-cn" />
+      <qualifier name="Language" value="en-US" />
       <qualifier name="Contrast" value="standard" />
       <qualifier name="Scale" value="200" />
       <qualifier name="HomeRegion" value="001" />
@@ -63,22 +63,5 @@
     </default>
     <indexer-config type="RESFILES" qualifierDelimiter="." />
     <indexer-config type="EMBEDFILES" />
-  </index>
-  <index root="\" startIndexAt="obj\x86\Debug\resources.en-us.resfiles">
-    <default>
-      <qualifier name="Language" value="en-us" />
-      <qualifier name="Contrast" value="standard" />
-      <qualifier name="Scale" value="200" />
-      <qualifier name="HomeRegion" value="001" />
-      <qualifier name="TargetSize" value="256" />
-      <qualifier name="LayoutDirection" value="LTR" />
-      <qualifier name="DXFeatureLevel" value="DX9" />
-      <qualifier name="Configuration" value="" />
-      <qualifier name="AlternateForm" value="" />
-      <qualifier name="Platform" value="UAP" />
-    </default>
-    <indexer-config type="RESW" convertDotsToSlashes="true" />
-    <indexer-config type="RESJSON" />
-    <indexer-config type="RESFILES" qualifierDelimiter="." />
   </index>
 </resources>

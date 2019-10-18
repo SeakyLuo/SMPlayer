@@ -19,7 +19,6 @@ namespace SMPlayer.Models
         public string RootPath { get; set; }
         public FolderTree Tree { get; set; }
         public Music LastMusic { get; set; }
-        public AppLanguage Language { get; set; }
         public PlayMode Mode { get; set; }
         public double Volume { get; set; }
         public bool IsNavigationCollapsed { get; set; }
@@ -39,7 +38,6 @@ namespace SMPlayer.Models
         {
             RootPath = "";
             Tree = new FolderTree();
-            Language = AppLanguage.FollowSystem;
             Mode = PlayMode.Once;
             Volume = 50.0d;
             IsNavigationCollapsed = true;
@@ -154,7 +152,7 @@ namespace SMPlayer.Models
             if (newName == MenuFlyoutHelper.NowPlaying || newName == MenuFlyoutHelper.MyFavorites ||
                 Playlists.FindIndex((p) => p.Name == newName) != -1)
                 return NamingError.Used;
-            if (newName.Contains("+++"))
+            if (newName.Contains("+++") || newName.Contains("{0}"))
                 return NamingError.Special;
             if (newName.Length > PlaylistNameMaxLength)
                 return NamingError.TooLong;
@@ -194,6 +192,26 @@ namespace SMPlayer.Models
         Used = 2,
         Special = 3,
         TooLong = 4
+    }
+
+    public static class NamingErrorConverter
+    {
+        public static string ToStr(this NamingError error)
+        {
+            switch (error)
+            {
+                case NamingError.EmptyOrWhiteSpace:
+                    return "NamingErrorEmptyOrWhiteSpace";
+                case NamingError.Used:
+                    return "NamingErrorUsed";
+                case NamingError.Special:
+                    return "NamingErrorSpecial";
+                case NamingError.TooLong:
+                    return "NamingErrorTooLong";
+                default:
+                    return "";
+            }
+        }
     }
 
     public enum RenameOption

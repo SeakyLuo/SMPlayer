@@ -48,7 +48,6 @@ namespace SMPlayer.Controls
             ComposersTextBox.Text = string.Join(", ", Properties.Composers);
             DurationTextBox.Text = MusicDurationConverter.ToTime(Properties.Duration.TotalSeconds);
             GenreTextBox.Text = string.Join(", ", Properties.Genre);
-            ProducersTextBox.Text = string.Join(", ", Properties.Producers);
         }
         public async void SetMusicInfo(Music music)
         {
@@ -71,21 +70,21 @@ namespace SMPlayer.Controls
             {
                 PlayCountTextBox.Text = "";
                 ClearPlayCountButton.Visibility = Visibility.Collapsed;
-                ToolTipService.SetToolTip(PlayCountTextBox, new ToolTip() { Content = $"{music.Name} has not been played yet." });
+                PlayCountTextBox.SetToolTip(string.Format(Helper.LocalizeMessage("NotPlayedYet"), music.Name));
             }
             else
             {
                 PlayCountTextBox.Text = music.PlayCount.ToString();
                 ClearPlayCountButton.Visibility = Visibility.Visible;
-                string times = MusicDurationConverter.TryPlural("time", music.PlayCount);
-                ToolTipService.SetToolTip(PlayCountTextBox, new ToolTip() { Content = $"{music.Name} has been played {music.PlayCount} {times}." });
+                string times = Helper.CurrentLanguage.Contains("en") ? MusicDurationConverter.TryPlural("time", music.PlayCount) : "";
+                PlayCountTextBox.SetToolTip(string.Format(Helper.LocalizeMessage("HasBeenPlayed"), music.Name, music.PlayCount, times));
             }
         }
 
         private void ResetMusicPropertiesButton_Click(object sender, RoutedEventArgs e)
         {
             SetMusicProperties(Properties);
-            ((Window.Current.Content as Frame).Content as MediaControlContainer).ShowNotification("Properties Reset!");
+            ((Window.Current.Content as Frame).Content as MediaControlContainer).ShowNotification(Helper.LocalizeMessage("PropertiesReset"));
         }
 
         private async void SaveMusicPropertiesButton_Click(object sender, RoutedEventArgs e)
@@ -107,11 +106,12 @@ namespace SMPlayer.Controls
             if (uint.TryParse(YearTextBox.Text, out uint Year))
                 Properties.Year = Year;
             await Properties.SavePropertiesAsync();
-            Helper.GetMediaControlContainer().ShowNotification("Properties Updated!");
+            Helper.GetMediaControlContainer().ShowNotification(Helper.LocalizeMessage("PropertiesUpdated"));
         }
         public async void SetBasicProperties(StorageFile file)
         {
             var basicProperties = await file.GetBasicPropertiesAsync();
+            // TODO: better size presentation?
             FileSizeTextBox.Text = basicProperties.Size.ToString() + " Bytes";
             DateCreatedTextBox.Text = file.DateCreated.ToLocalTime().ToString();
             DateModifiedTextBox.Text = basicProperties.DateModified.ToLocalTime().ToString();

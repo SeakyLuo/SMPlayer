@@ -266,6 +266,7 @@
             Text="Title" />
         <TextBox
             x:Name="NewPlaylistNameTextBox"
+            x:Uid="NewPlaylistNameTextBox"
             Grid.ColumnSpan="2"
             Width="400"
             Height="40"
@@ -283,6 +284,7 @@
         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
             <Button
                 x:Name="ConfirmButton"
+                x:Uid="ConfirmButton"
                 Grid.Row="1"
                 Margin="10,0"
                 Background="{ThemeResource SystemColorHighlightColor}"
@@ -296,6 +298,7 @@
             </Button>
             <Button
                 x:Name="CancelButton"
+                x:Uid="CancelButton"
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="10,0"
@@ -306,5 +309,4 @@
                 Foreground="{ThemeResource SystemColorHighlightColor}" />
         </StackPanel>
     </StackPanel>
-
 </ContentDialog>

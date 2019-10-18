@@ -206,8 +206,6 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\pri.resfiles.interme
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\qualifiers.txt
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\qualifiers.txt.intermediate
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MultipleQualifiersPerDimensionFound.txt
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\resources.en-us.resfiles
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\resources.en-us.resfiles.intermediate
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Microsoft.UI.Xaml.Core.Direct.pri.xml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Robmikh.CompositionSurfaceFactory.pri.xml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\ColorCode.UWP.pri.xml

@@ -9,5 +9,5 @@ TargetSize=16
 TargetSize=24
 TargetSize=32
 TargetSize=48
-Language=ZH-CN
 Language=EN-US
+Language=ZH-CN

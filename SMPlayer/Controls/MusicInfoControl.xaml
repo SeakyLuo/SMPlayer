@@ -76,26 +76,78 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <StackPanel>
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Title" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Subtitle" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Artist" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Album" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Album Artist" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Play Count" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Publisher" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="TrackNumber" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Year" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Bitrate" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Composers" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Conductors" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Date Created" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Date Modified" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Duration" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="File Size" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="File Type" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Genre" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Path" />
-                    <TextBlock Style="{StaticResource MusicPropertyLabelStyle}" Text="Producers" />
+                    <TextBlock
+                        x:Uid="TitleTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="Title" />
+                    <TextBlock
+                        x:Uid="SubtitleTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="Subtitle" />
+                    <TextBlock
+                        x:Uid="ArtistTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="Artist" />
+                    <TextBlock
+                        x:Uid="AlbumTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="Album" />
+                    <TextBlock
+                        x:Uid="AlbumArtistTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="Album Artist" />
+                    <TextBlock
+                        x:Uid="PlayCountTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="Play Count" />
+                    <TextBlock
+                        x:Uid="PublisherTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="Publisher" />
+                    <TextBlock
+                        x:Uid="TrackNumberTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="TrackNumber" />
+                    <TextBlock
+                        x:Uid="YearTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="Year" />
+                    <TextBlock
+                        x:Uid="BitrateTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="Bitrate" />
+                    <TextBlock
+                        x:Uid="ComposersTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="Composers" />
+                    <TextBlock
+                        x:Uid="DateCreatedTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="Date Created" />
+                    <TextBlock
+                        x:Uid="DateModifiedTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="Date Modified" />
+                    <TextBlock
+                        x:Uid="DurationTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="Duration" />
+                    <TextBlock
+                        x:Uid="FileSizeTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="File Size" />
+                    <TextBlock
+                        x:Uid="FileTypeTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="File Type" />
+                    <TextBlock
+                        x:Uid="GenreTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="Genre" />
+                    <TextBlock
+                        x:Uid="PathTextBlock"
+                        Style="{StaticResource MusicPropertyLabelStyle}"
+                        Text="Path" />
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <TextBox x:Name="TitleTextBox" Style="{StaticResource MusicPropertyTextBoxStyle}" />
@@ -136,7 +188,6 @@
                         Style="{StaticResource MusicPropertyTextBoxStyle}" />
                     <TextBlock x:Name="BitRateTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
                     <TextBlock x:Name="ComposersTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
-                    <TextBlock x:Name="ConductorsTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
                     <TextBlock x:Name="DateCreatedTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
                     <TextBlock x:Name="DateModifiedTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
                     <TextBlock x:Name="DurationTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
@@ -144,7 +195,6 @@
                     <TextBlock x:Name="FileTypeTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
                     <TextBlock x:Name="GenreTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
                     <TextBlock x:Name="PathTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
-                    <TextBlock x:Name="ProducersTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
                 </StackPanel>
             </Grid>
         </ScrollViewer>

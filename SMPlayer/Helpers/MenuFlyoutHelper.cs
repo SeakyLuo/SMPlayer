@@ -182,7 +182,7 @@ namespace SMPlayer
             {
                 await new RemoveDialog()
                 {
-                    Message = $"You are deleting {music.Name} from your device.\nThis operation is irrevertible.\nDo you want to continue?",
+                    Message = string.Format(Helper.LocalizeMessage("DeleteMusic"), music.Name),
                     Confirm = async () =>
                     {
                         StorageFile file = await StorageFile.GetFileFromPathAsync(music.Path);
@@ -190,8 +190,9 @@ namespace SMPlayer
                         MusicLibraryPage.AllSongs.Remove(music);
                         Settings.settings.DeleteMusic(music);
                         MediaHelper.RemoveMusic(music);
-                        MainPage.Instance?.ShowNotification($"{music.Name} is deleted!");
-                        NowPlayingFullPage.Instance?.ShowNotification($"{music.Name} is deleted!");
+                        var notification = string.Format(Helper.LocalizeMessage("MusicDeleted"), music.Name);
+                        MainPage.Instance?.ShowNotification(notification);
+                        NowPlayingFullPage.Instance?.ShowNotification(notification);
                     }
                 }.ShowAsync();
             };

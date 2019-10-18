@@ -28,23 +28,19 @@ namespace SMPlayer
 
         public static string ToTime(int seconds)
         {
-            int second = seconds % 60;
-            string zero = second < 10 ? "0" : "";
-            int minute = (seconds - second) / 60;
-            return $"{minute}:{zero}{second}";
+            return TimeSpan.FromSeconds(seconds).ToString(@"m\:ss");
         }
 
         public static string ToTime(ICollection<Music> list)
         {
             int total_seconds = list.Sum((music) => music.Duration);
             if (total_seconds == 0) return "";
-            int seconds = total_seconds % 60,
-                minutes = total_seconds / 60,
-                hours = minutes / 60,
-                days = hours / 24;
-            minutes %= 60;
-            hours %= 60;
-            days %= 24;
+            var time = TimeSpan.FromSeconds(total_seconds);
+            int seconds = time.Seconds,
+                minutes = time.Minutes,
+                hours = time.Hours,
+                days = time.Days;
+            System.Diagnostics.Debug.WriteLine(time.ToString());
             string second = seconds != 0 && (total_seconds < 60 || minutes < 10) && hours == 0 && days == 0 ? $"{seconds} {Helper.Localize(TryPlural("second", seconds))}" : "",
                    minute = minutes == 0 || days > 0 ? "" : $"{minutes} {Helper.Localize(TryPlural("minute", minutes))} ",
                    hour = hours == 0 ? "" : $"{hours} {Helper.Localize(TryPlural("hour", hours))} ",

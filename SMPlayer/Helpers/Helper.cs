@@ -31,7 +31,7 @@ namespace SMPlayer
         public const string ThumbnailNotFoundPath = "ms-appx:///Assets/colorful_bg_wide.png";
         public const string ToastTag = "SMPlayerMediaToastTag";
         public const string ToastGroup = "SMPlayerMediaToastGroup";
-        public const string NoLyricsAvailable = "No Lyrics Available";
+        public static string NoLyricsAvailable { get => LocalizeMessage("NoLyricsAvailable"); }
 
         public static StorageFolder CurrentFolder, ThumbnailFolder, SecondaryTileFolder;
         public static BitmapImage DefaultAlbumCover = new BitmapImage(new Uri(DefaultAlbumCoverPath));
@@ -46,6 +46,11 @@ namespace SMPlayer
         private static string Lyrics = "";
                     
         public static MediaControlContainer GetMediaControlContainer() { return (Window.Current.Content as Frame).Content as MediaControlContainer; }
+
+        public static string CurrentLanguage
+        {
+            get => new Windows.Globalization.Language(Windows.System.UserProfile.GlobalizationPreferences.Languages[0]).DisplayName;
+        }
 
         public static string Localize(string resource)
         {

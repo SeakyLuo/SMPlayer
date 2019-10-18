@@ -12,8 +12,6 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
-Localization.
-
 Handle Music Not Found.
 
 ThemeColor change.
@@ -34,6 +32,8 @@ Improved algorithm for update.
 
 Improved New Playlist Name.
 
+Improved Bytes.
+
 # TO FIX
 Bad performance when given many music files.
 
@@ -42,5 +42,3 @@ Bad performance of Loading NowPlayingFull.
 Set lyrics bug.
 
 Repeatedly set shuffle.
-
-Vertical Stretch Mini Mode.

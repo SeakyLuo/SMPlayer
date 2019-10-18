@@ -22,8 +22,8 @@
     <PackageDependency Name="Microsoft.VCLibs.140.00.Debug" MinVersion="14.0.27323.0" Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US" />
   </Dependencies>
   <Resources>
-    <Resource Language="ZH-CN" />
     <Resource Language="EN-US" />
+    <Resource Language="ZH-CN" />
   </Resources>
   <Applications>
     <Application Id="App" Executable="SMPlayer.exe" EntryPoint="SMPlayer.App">
