@@ -33,7 +33,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MediaHelper.CurrentPlaylist.CollectionChanged += (sender, args) => SetEnabled();
+            //MediaHelper.CurrentPlaylist.CollectionChanged += (sender, args) => SetEnabled();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

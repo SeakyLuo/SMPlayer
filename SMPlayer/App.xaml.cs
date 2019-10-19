@@ -129,7 +129,6 @@ namespace SMPlayer
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             Helper.ResumeTile();
-            Helper.HideToast();
             Save();
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();

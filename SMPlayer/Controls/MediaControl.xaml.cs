@@ -806,6 +806,7 @@ namespace SMPlayer
                 next.IsPlaying = true;
                 MediaSlider.Value = 0;
                 SetMusic(next);
+                Helper.HideToast();
                 // Use current instead of next to avoid showing toast on app launch
                 if (current != null && !Window.Current.Visible) Helper.ShowToast(next);
             });
@@ -819,6 +820,7 @@ namespace SMPlayer
                 if (Settings.settings.Mode == PlayMode.Once)
                     PlayButton.Content = "\uE768";
                 MediaSlider.Value = 0;
+                Helper.HideToast();
             });
         }
 

@@ -29,7 +29,6 @@ namespace SMPlayer
         {
             get => IsNowPlaying ? MediaHelper.CurrentPlaylist : currentPlaylist;
             set => currentPlaylist = value;
-
         }
         private ObservableCollection<Music> currentPlaylist = new ObservableCollection<Music>();
         public ElementTheme Theme

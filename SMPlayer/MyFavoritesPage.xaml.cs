@@ -34,7 +34,7 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            SortByButton.Label = Helper.Localize("Sort By " + MyFavoritesPlaylistControl.Playlist.Criterion.ToStr());
+            SortByButton.Label = Helper.Localize("Sort By " + MyFavoritesPlaylistControl.CurrentPlaylist.Criterion.ToStr());
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -47,7 +47,7 @@ namespace SMPlayer
         }
         private void SortByButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            var playlist = MyFavoritesPlaylistControl.Playlist;
+            var playlist = MyFavoritesPlaylistControl.CurrentPlaylist;
             MenuFlyoutHelper.SetPlaylistSortByMenu(sender, playlist);
         }
 
@@ -79,7 +79,7 @@ namespace SMPlayer
 
         public void MusicRemoved(int index, Music music)
         {
-            MyFavoritesPlaylistControl.Playlist.Remove(index);
+            MyFavoritesPlaylistControl.CurrentPlaylist.Remove(index);
         }
     }
 }

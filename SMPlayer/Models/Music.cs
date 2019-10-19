@@ -173,6 +173,12 @@ namespace SMPlayer.Models
             return new MediaPlaybackItem(source);
         }
 
+        public string GetToastText()
+        {
+            return string.IsNullOrEmpty(Artist) ? string.IsNullOrEmpty(Album) ? Name : string.Format("{0} - {1}", Name, Album) :
+                                                  string.Format("{0} - {1}", Name, string.IsNullOrEmpty(Artist) ? Album : Artist);
+        }
+
         int IComparable<Music>.CompareTo(Music other)
         {
             return string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(other.Name) ? 0 : Name.CompareTo(other.Name);
@@ -189,7 +195,7 @@ namespace SMPlayer.Models
 
         public override bool Equals(object obj)
         {
-            return obj != null && obj is Music && Path == (obj as Music).Path;
+            return obj is Music music && Path == music.Path;
         }
 
         public override int GetHashCode()

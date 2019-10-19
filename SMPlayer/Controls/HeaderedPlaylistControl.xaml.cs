@@ -29,7 +29,7 @@ namespace SMPlayer
 {
     public sealed partial class HeaderedPlaylistControl : UserControl
     {
-        public Playlist Playlist { get; set; }
+        public Playlist CurrentPlaylist { get; set; }
         public Brush HeaderBackground
         {
             get => headerBackground;
@@ -53,7 +53,8 @@ namespace SMPlayer
 
         public async Task SetPlaylist(Playlist playlist)
         {
-            Playlist = playlist;
+            MediaHelper.FindMusicAndSetPlaying(playlist.Songs, null, MediaHelper.CurrentMusic);
+            CurrentPlaylist = playlist;
             HeaderedPlaylist.ItemsSource = playlist.Songs;
             PlaylistNameTextBlock.Text = Helper.Localize(playlist.Name);
             SetPlaylistInfo(SongCountConverter.ToStr(playlist.Songs));
@@ -89,20 +90,20 @@ namespace SMPlayer
 
         private void Shuffle_Click(object sender, RoutedEventArgs e)
         {
-            MediaHelper.ShuffleAndPlay(Playlist.Songs);
+            MediaHelper.ShuffleAndPlay(CurrentPlaylist.Songs);
         }
         private void AddTo_Click(object sender, RoutedEventArgs e)
         {
             var helper = new MenuFlyoutHelper()
             {
-                Data = Playlist.Songs,
-                DefaultPlaylistName = MenuFlyoutHelper.IsBadNewPlaylistName(Playlist.Name) ? "" : Settings.settings.FindNextPlaylistName(Playlist.Name)
+                Data = CurrentPlaylist.Songs,
+                DefaultPlaylistName = MenuFlyoutHelper.IsBadNewPlaylistName(CurrentPlaylist.Name) ? "" : Settings.settings.FindNextPlaylistName(CurrentPlaylist.Name)
             };
-            helper.GetAddToMenuFlyout(Playlist.Name).ShowAt(sender as FrameworkElement);
+            helper.GetAddToMenuFlyout(CurrentPlaylist.Name).ShowAt(sender as FrameworkElement);
         }
         private async void Rename_Click(object sender, RoutedEventArgs e)
         {
-            dialog = new RenameDialog(Confirm, RenameOption.Rename, Playlist.Name);
+            dialog = new RenameDialog(Confirm, RenameOption.Rename, CurrentPlaylist.Name);
             await dialog.ShowAsync();
         }
 
@@ -118,14 +119,14 @@ namespace SMPlayer
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            PlaylistsPage.DeletePlaylist(Playlist);
+            PlaylistsPage.DeletePlaylist(CurrentPlaylist);
         }
 
         private SymbolIcon PinIcon = new SymbolIcon(Symbol.Pin);
         private SymbolIcon UnPinIcon = new SymbolIcon(Symbol.UnPin);
         private async void PinToStart_Click(object sender, RoutedEventArgs e)
         {
-            SetPinState(await Helper.PinToStartAsync(Playlist, IsPlaylist));
+            SetPinState(await Helper.PinToStartAsync(CurrentPlaylist, IsPlaylist));
         }
 
         public void SetPinState(bool isPinned)
@@ -148,7 +149,7 @@ namespace SMPlayer
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
-                MediaHelper.FindMusicAndSetPlaying(Playlist.Songs, current, next);
+                MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist.Songs, current, next);
             });
         }
 

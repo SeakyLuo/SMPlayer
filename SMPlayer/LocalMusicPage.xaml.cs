@@ -52,6 +52,8 @@ namespace SMPlayer
         {
             if (TreePath == tree.Path) return;
             LoadingProgressBar.Visibility = Visibility.Visible;
+            foreach (var music in tree.Files)
+                music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
             try
             {
                 if (GridMusicView.Visibility == Visibility.Visible)

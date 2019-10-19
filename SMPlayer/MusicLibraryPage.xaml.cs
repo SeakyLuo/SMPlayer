@@ -160,6 +160,7 @@ namespace SMPlayer
             }
             AllSongsSet = AllSongs.ToHashSet();
             foreach (var listener in listeners) listener.SongsSet(AllSongs);
+            Save();
         }
 
         public static List<Music> ConvertMusicPathToCollection(ICollection<string> paths, bool isFavorite = false)

@@ -153,12 +153,7 @@ namespace SMPlayer
                     {
                         Children =
                         {
-                            new AdaptiveText()
-                            {
-                                Text = string.IsNullOrEmpty(music.Artist) ?
-                                       string.IsNullOrEmpty(music.Album) ? music.Name : string.Format("{0} - {1}", music.Name, music.Album) :
-                                       string.Format("{0} - {1}", music.Name, string.IsNullOrEmpty(music.Artist) ? music.Album : music.Artist)
-                            },
+                            new AdaptiveText() { Text = music.GetToastText() },
                             new AdaptiveProgressBar()
                             {
                                 Value = new BindableProgressBarValue("MediaControlPosition"),
@@ -194,7 +189,7 @@ namespace SMPlayer
             Toast.Data.Values["MediaControlPosition"] = "0";
             Toast.Data.Values["MediaControlPositionTime"] = "0:00";
             Toast.Data.Values["Lyrics"] = string.IsNullOrEmpty(Lyrics = await music.GetLyricsAsync()) ? NoLyricsAvailable : "" ;
-
+            
             toastNotifier.Show(Toast);
         }
         public static void UpdateToast()
@@ -213,7 +208,16 @@ namespace SMPlayer
         public static void HideToast()
         {
             if (Toast != null)
-                toastNotifier.Hide(Toast);
+            {
+                try
+                {
+                    toastNotifier.Hide(Toast);
+                }
+                catch (Exception)
+                {
+                    // 通知已经隐藏。
+                }
+            }
         }
 
         public static async Task<StorageFolder> GetThumbnailFolder()
@@ -405,8 +409,8 @@ namespace SMPlayer
             }
         }
     }
-    public enum NotifiedStatus
+    public enum ExecutionStatus
     {
-        Started = 0, Finished = 1, Ready = 2
+        Running = 0, Done = 1, Ready = 2
     }
 }

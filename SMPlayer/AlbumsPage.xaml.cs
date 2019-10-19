@@ -27,7 +27,7 @@ namespace SMPlayer
     {
         private ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         private bool SetupStarted = false;
-        private NotifiedStatus Notified = NotifiedStatus.Ready;
+        private ExecutionStatus status = ExecutionStatus.Ready;
         public AlbumsPage()
         {
             this.InitializeComponent();
@@ -43,9 +43,9 @@ namespace SMPlayer
         private void Setup()
         {
             if (SetupStarted) return;
-            if (Notified == NotifiedStatus.Finished)
+            if (status == ExecutionStatus.Done)
             {
-                Notified = NotifiedStatus.Ready;
+                status = ExecutionStatus.Ready;
                 return;
             }
             SetupStarted = true;
@@ -61,14 +61,14 @@ namespace SMPlayer
                 }
             }
             foreach (var album in albums.OrderBy((a) => a.Name).ThenBy((a) => a.Artist)) Albums.Add(album);
-            if (Notified == NotifiedStatus.Started) Notified = NotifiedStatus.Finished;
+            if (status == ExecutionStatus.Running) status = ExecutionStatus.Done;
             AlbumPageProgressRing.IsActive = false;
             SetupStarted = false;
         }
 
         public void SongsSet(ICollection<Music> songs)
         {
-            Notified = NotifiedStatus.Started;
+            status = ExecutionStatus.Running;
             Setup();
         }
 

@@ -42,10 +42,11 @@ namespace SMPlayer
                 };
                 nowPlayingItem.Click += async (sender, args) =>
                 {
-                    if (Data is Music)
-                        await MediaHelper.AddMusic(Data as Music);
-                    else if (Data is ICollection<Music>)
-                        MediaHelper.AddMusic(Data as ICollection<Music>);
+                    if (Data is ICollection<Music> playlist)
+                        foreach (var music in playlist)
+                            await MediaHelper.AddMusic(music);
+                    else if(Data is Music music)
+                        await MediaHelper.AddMusic(music);
                 };
                 addToItem.Items.Add(nowPlayingItem);
             }

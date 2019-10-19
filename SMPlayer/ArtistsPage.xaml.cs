@@ -29,7 +29,7 @@ namespace SMPlayer
     {
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
         private bool SetupStarted = false;
-        private NotifiedStatus Notified = NotifiedStatus.Ready;
+        private ExecutionStatus status = ExecutionStatus.Ready;
         private object targetArtist;
 
         public ArtistsPage()
@@ -70,9 +70,9 @@ namespace SMPlayer
         private void Setup()
         {
             if (SetupStarted) return;
-            if (Notified == NotifiedStatus.Finished)
+            if (status == ExecutionStatus.Done)
             {
-                Notified = NotifiedStatus.Ready;
+                status = ExecutionStatus.Ready;
                 return;
             }
             SetupStarted = true;
@@ -86,14 +86,14 @@ namespace SMPlayer
                 Artists.Add(artist);
             ArtistsCountTextBlock.Text = Helper.Localize("All Artists: ") + Artists.Count;
             FindMusicAndSetPlaying(MediaHelper.CurrentMusic);
-            if (Notified == NotifiedStatus.Started) Notified = NotifiedStatus.Finished;
+            if (status == ExecutionStatus.Running) status = ExecutionStatus.Done;
             ArtistProgressBar.Visibility = Visibility.Collapsed;
             SetupStarted = false;
         }
 
         public void SongsSet(ICollection<Music> songs)
         {
-            Notified = NotifiedStatus.Started;
+            status = ExecutionStatus.Running;
             Setup();
         }
 
