@@ -137,9 +137,8 @@ namespace SMPlayer
 
         public static string GetSearchHeader(string keyword, bool isMinimal)
         {
-            string header = $"\"{keyword}\"";
-            string localized = Helper.Localize("Search Result of");
-            return isMinimal ? header : $"{localized} {header}";
+            string header = string.Format(Helper.LocalizeMessage("Quotations"), keyword);
+            return isMinimal ? header : string.Format(Helper.LocalizeMessage("SearchResult"), header);
         }
 
         private void SearchAlbumView_ItemClick(object sender, ItemClickEventArgs e)

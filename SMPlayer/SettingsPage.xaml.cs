@@ -59,12 +59,12 @@ namespace SMPlayer
         public async void UpdateMusicLibrary(StorageFolder folder)
         {
             if (folder == null) return;
-            MainPage.Instance.Loader.Text = "Loading from your music library...";
+            MainPage.Instance.Loader.Text = Helper.LocalizeMessage("LoadMusicLibrary");
             MainPage.Instance.Loader.StartLoading();
             Helper.CurrentFolder = folder;
             await Settings.settings.Tree.Init(folder, this);
             Settings.settings.RootPath = folder.Path;
-            MainPage.Instance.Loader.Text = "Updating your music library...";
+            MainPage.Instance.Loader.Text = Helper.LocalizeMessage("UpdateMusicLibrary");
             MusicLibraryPage.SetAllSongs(Settings.settings.Tree.Flatten());
             MainPage.Instance.Loader.Max = listeners.Count;
             for (int i = 0; i < listeners.Count; i++)

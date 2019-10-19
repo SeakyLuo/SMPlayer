@@ -552,14 +552,14 @@
   <data name="Repeat One: Disabled" xml:space="preserve">
     <value>单曲循环：关闭</value>
   </data>
+  <data name="Repeat One: Enabled" xml:space="preserve">
+    <value>单曲循环：打开</value>
+  </data>
   <data name="Repeat: Disabled" xml:space="preserve">
     <value>循环播放：关闭</value>
   </data>
   <data name="Repeat: Enabled" xml:space="preserve">
     <value>循环播放：打开</value>
-  </data>
-  <data name="RepeatOne: Enabled" xml:space="preserve">
-    <value>单曲循环：打开</value>
   </data>
   <data name="ResetLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>重设歌词</value>

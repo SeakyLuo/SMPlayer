@@ -126,6 +126,9 @@
   <data name="HasBeenPlayed" xml:space="preserve">
     <value>《{0}》已经播放了{1}次。{2}</value>
   </data>
+  <data name="LoadMusicLibrary" xml:space="preserve">
+    <value>正在加载音乐库……</value>
+  </data>
   <data name="LyricsReset" xml:space="preserve">
     <value>歌词已重置！</value>
   </data>
@@ -162,10 +165,19 @@
   <data name="PropertiesUpdated" xml:space="preserve">
     <value>歌曲信息已更新！</value>
   </data>
+  <data name="Quotations" xml:space="preserve">
+    <value>“{0}”</value>
+  </data>
   <data name="RemoveMusic" xml:space="preserve">
     <value>你想要移除《{0}》吗？</value>
   </data>
   <data name="RemovePlaylist" xml:space="preserve">
     <value>你想要移除播放列表“{0}”吗？</value>
+  </data>
+  <data name="SearchResult" xml:space="preserve">
+    <value>{0}的搜索结果</value>
+  </data>
+  <data name="UpdateMusicLibrary" xml:space="preserve">
+    <value>正在更新音乐库……</value>
   </data>
 </root>
