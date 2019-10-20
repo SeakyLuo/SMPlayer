@@ -688,6 +688,7 @@
       <RootProperty Name="Content" />
     </RootType>
     <RootType FullName="SMPlayer.Dialogs.MusicDialog" />
+    <RootType FullName="SMPlayer.Dialogs.NotFoundDialog" />
     <RootType FullName="Windows.UI.Xaml.Controls.CheckBox">
       <RootProperty Name="Margin" />
       <RootProperty Name="Content" />
