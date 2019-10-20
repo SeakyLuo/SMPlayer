@@ -77,7 +77,7 @@ namespace SMPlayer
             }
         }
 
-        public void MusicRemoved(int index, Music music)
+        public void MusicRemoved(int index, Music music, ICollection<Music> newCollection)
         {
             MyFavoritesPlaylistControl.CurrentPlaylist.Remove(index);
         }

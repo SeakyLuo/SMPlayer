@@ -93,6 +93,13 @@
                                 Icon="Pin"
                                 Style="{StaticResource PlaylistAppBarButtonStyle}" />
                             <AppBarButton
+                                x:Name="ClearButton"
+                                x:Uid="ClearAppButton"
+                                Click="Clear_Click"
+                                Icon="Clear"
+                                Style="{StaticResource PlaylistAppBarButtonStyle}"
+                                Visibility="Collapsed" />
+                            <AppBarButton
                                 x:Name="DeleteButton"
                                 x:Uid="DeleteButton"
                                 Click="Delete_Click"
@@ -107,7 +114,7 @@
                                     <AdaptiveTrigger MinWindowWidth="0" />
                                 </VisualState.StateTriggers>
                                 <VisualState.Setters>
-                                    <!--<Setter Target="PlaylistCover.(Grid.RowSpan)" Value="1" />
+                                    <Setter Target="PlaylistCover.(Grid.RowSpan)" Value="1" />
                                     <Setter Target="PlaylistCover.(Grid.ColumnSpan)" Value="2" />
                                     <Setter Target="PlaylistCover.Margin" Value="10" />
                                     <Setter Target="PlaylistNameTextBlock.FontSize" Value="24" />
@@ -125,7 +132,7 @@
                                     <Setter Target="PlaylistCommandBar.(Grid.Column)" Value="0" />
                                     <Setter Target="PlaylistCommandBar.(Grid.ColumnSpan)" Value="2" />
                                     <Setter Target="PlaylistCommandBar.HorizontalAlignment" Value="Center" />
-                                    <Setter Target="PlaylistCommandBar.Margin" Value="0,5,0,0" />-->
+                                    <Setter Target="PlaylistCommandBar.Margin" Value="0,5,0,0" />
                                 </VisualState.Setters>
                             </VisualState>
                             <VisualState x:Name="WideLayout">

@@ -192,29 +192,35 @@
   <data name="CancelButton.Content" xml:space="preserve">
     <value>取消</value>
   </data>
+  <data name="ClearAppButton.Label" xml:space="preserve">
+    <value>清空</value>
+  </data>
+  <data name="ClearAppButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>清空全部</value>
+  </data>
   <data name="ClearHistoryAppButton.Label" xml:space="preserve">
-    <value>清除历史</value>
+    <value>清空历史</value>
   </data>
   <data name="ClearHistoryAppButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>清除播放历史</value>
+    <value>清空播放历史</value>
   </data>
   <data name="ClearNowPlayingAppButton.Label" xml:space="preserve">
-    <value>清除全部</value>
+    <value>清空全部</value>
   </data>
   <data name="ClearNowPlayingAppButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>清除正在播放列表</value>
+    <value>清空正在播放列表</value>
   </data>
   <data name="ClearNowPlayingMenuItem.Text" xml:space="preserve">
-    <value>清除正在播放</value>
+    <value>清空正在播放</value>
   </data>
   <data name="ClearNowPlayingMenuItem.ToolTipService.ToolTip" xml:space="preserve">
-    <value>清除正在播放</value>
+    <value>清空正在播放</value>
   </data>
   <data name="ClearPlayCountButton.Content" xml:space="preserve">
-    <value>清除</value>
+    <value>清零</value>
   </data>
   <data name="ClearPlayCountButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>清除播放次数</value>
+    <value>将播放次数清零</value>
   </data>
   <data name="ComposersTextBlock.Text" xml:space="preserve">
     <value>作曲家</value>

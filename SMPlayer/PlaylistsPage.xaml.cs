@@ -239,7 +239,7 @@ namespace SMPlayer
             }
         }
 
-        public void MusicRemoved(int index, Music music)
+        public void MusicRemoved(int index, Music music, ICollection<Music> newCollection)
         {
             (PlaylistTabView.SelectedItem as Playlist).Remove(index);
         }

@@ -100,6 +100,11 @@ namespace SMPlayer.Models
             return Songs.Contains(music);
         }
 
+        public void Clear()
+        {
+            Songs.Clear();
+        }
+
         public async Task SetDisplayItemAsync()
         {
             if (Songs.Count == 0)

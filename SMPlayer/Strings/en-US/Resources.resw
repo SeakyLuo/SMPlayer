@@ -192,6 +192,12 @@
   <data name="CancelButton.Content" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="ClearAppButton.Label" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="ClearAppButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Clear All</value>
+  </data>
   <data name="ClearHistoryAppButton.Label" xml:space="preserve">
     <value>Clear History</value>
   </data>

@@ -20,7 +20,7 @@ Add Album Art to Music.
 
 Multi-Select.
 
-(Auto) Search Lyrics.
+Auto Search Lyrics.
 
 Animations.
 
@@ -28,13 +28,13 @@ Date Added.
 
 Recently added.
 
-Improved unknown album/unknown artist.
-
 Improved algorithm for update.
 
 Improved New Playlist Name.
 
 Improved Bytes.
+
+Sort local.
 
 # TO FIX
 Bad performance when given many music files.
@@ -44,3 +44,5 @@ Bad performance of Loading NowPlayingFull.
 Set lyrics bug.
 
 Repeatedly set shuffle.
+
+CommandBar overflow not shown unless size change.

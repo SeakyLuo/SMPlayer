@@ -110,8 +110,11 @@ namespace SMPlayer.Models
                         Music music = await Music.GetMusicAsync(file);
                         if (samePath)
                         {
-                            var oldItem = MusicLibraryPage.AllSongsSet.FirstOrDefault((m) => m == music);
-                            if (oldItem != null) music.PlayCount = oldItem.PlayCount;
+                            if (MusicLibraryPage.AllSongsSet.FirstOrDefault((m) => m == music) is Music oldItem)
+                            {
+                                music.PlayCount = oldItem.PlayCount;
+                                music.Favorite = oldItem.Favorite;
+                            }
                         }
                         listener?.Update(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
                         Files.Add(music);

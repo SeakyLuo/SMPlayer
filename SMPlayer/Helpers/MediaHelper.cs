@@ -367,7 +367,7 @@ namespace SMPlayer
             if (music == CurrentMusic) CurrentMusic = null;
             CurrentPlaylist.RemoveAt(index);
             PlaybackList.Items.RemoveAt(index);
-            foreach (var listener in RemoveMusicListeners) listener.MusicRemoved(index, music);
+            foreach (var listener in RemoveMusicListeners) listener.MusicRemoved(index, music, CurrentPlaylist);
             return true;
         }
 
@@ -376,7 +376,7 @@ namespace SMPlayer
             CurrentMusic = null;
             CurrentPlaylist.Clear();
             PlaybackList.Items.Clear();
-            foreach (var listener in RemoveMusicListeners) listener.MusicRemoved(-1, CurrentMusic);
+            foreach (var listener in RemoveMusicListeners) listener.MusicRemoved(-1, CurrentMusic, CurrentPlaylist);
         }
 
         public static void FindMusicAndSetPlaying(ICollection<Music> playlist, Music current, Music next)
@@ -388,7 +388,7 @@ namespace SMPlayer
 
     public interface RemoveMusicListener
     {
-        void MusicRemoved(int index, Music music);
+        void MusicRemoved(int index, Music music, ICollection<Music> newCollection);
     }
 
     public interface SwitchMusicListener

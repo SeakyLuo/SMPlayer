@@ -895,9 +895,9 @@ namespace SMPlayer
             PauseMusic();
         }
 
-        public void MusicRemoved(int index, Music music)
+        public void MusicRemoved(int index, Music music, ICollection<Music> newCollection)
         {
-            if (MediaHelper.CurrentPlaylist.Count == 0)
+            if (newCollection.Count == 0)
                 ClearMusic();
         }
 

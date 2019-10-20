@@ -82,7 +82,7 @@ namespace SMPlayer
             get => SongsListView.GetFirstDescendantOfType<ScrollViewer>();
         }
         public List<RemoveMusicListener> RemoveListeners = new List<RemoveMusicListener>();
-        public static Dialogs.RemoveDialog DeleteDialog;
+        private Dialogs.RemoveDialog dialog;
 
         public PlaylistControl()
         {
@@ -144,7 +144,7 @@ namespace SMPlayer
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, current, next));
         }
 
-        public async void MusicRemoved(int index, Music music)
+        public async void MusicRemoved(int index, Music music, ICollection<Music> newCollection)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, null, music));
         }
@@ -204,21 +204,16 @@ namespace SMPlayer
         private async void RemoveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
         {
             var music = args.SwipeControl.DataContext as Music;
-            if (DeleteDialog == null)
-            {
-                DeleteDialog = new Dialogs.RemoveDialog()
-                {
-                    Confirm = () => RemoveMusic(music)
-                };
-            }
-            if (DeleteDialog.IsChecked)
+            if (dialog == null) dialog = new Dialogs.RemoveDialog();
+            if (dialog.IsChecked)
             {
                 RemoveMusic(music);
             }
             else
             {
-                DeleteDialog.Message = Helper.LocalizeMessage("RemoveMusic", music.Name);
-                await DeleteDialog.ShowAsync();
+                dialog.Confirm = () => RemoveMusic(music);
+                dialog.Message = Helper.LocalizeMessage("RemoveMusic", music.Name);
+                await dialog.ShowAsync();
             }
         }
 
@@ -231,11 +226,11 @@ namespace SMPlayer
             {
                 for (int i = index; i < CurrentPlaylist.Count; i++)
                 {
-                    var container = SongsListView.ContainerFromIndex(i) as ListViewItem;
-                    container.Background = GetRowBackground(i);
+                    if (SongsListView.ContainerFromIndex(i) is ListViewItem container)
+                        container.Background = GetRowBackground(i);
                 }
             }
-            foreach (var listener in RemoveListeners) listener.MusicRemoved(index, music);
+            foreach (var listener in RemoveListeners) listener.MusicRemoved(index, music, CurrentPlaylist);
         }
 
         private void FavoriteItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)

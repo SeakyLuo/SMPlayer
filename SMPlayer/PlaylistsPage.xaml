@@ -55,13 +55,13 @@
         </Grid.RowDefinitions>
         <controls:TabView
             x:Name="PlaylistTabView"
+            x:DefaultBindMode="TwoWay"
             AllowDrop="True"
             CanCloseTabs="False"
             CanDragItems="True"
             CanReorderItems="True"
             DragItemsCompleted="PlaylistTabView_DragItemsCompleted"
             IsCloseButtonOverlay="False"
-            x:DefaultBindMode="TwoWay"
             SelectionChanged="PlaylistTabView_SelectionChanged"
             SelectionMode="Single"
             Style="{ThemeResource PlaylistTabViewStyle}"
@@ -100,7 +100,10 @@
             </controls:TabView.ItemHeaderTemplate>
             <controls:TabView.ItemTemplate>
                 <DataTemplate x:DataType="data:Playlist">
-                    <local:HeaderedPlaylistControl IsPlaylist="True" Loaded="HeaderedPlaylistControl_Loaded" />
+                    <local:HeaderedPlaylistControl
+                        AllowClear="True"
+                        IsPlaylist="True"
+                        Loaded="HeaderedPlaylistControl_Loaded" />
                 </DataTemplate>
             </controls:TabView.ItemTemplate>
 

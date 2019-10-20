@@ -218,6 +218,7 @@
     <RootType FullName="SMPlayer.HeaderedPlaylistControl">
       <RootProperty Name="IsPlaylist" />
       <RootProperty Name="ShowAlbumText" />
+      <RootProperty Name="AllowClear" />
       <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="SMPlayer.AlbumPage" />
@@ -1091,6 +1092,7 @@
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">
       <RootProperty Name="Icon" />
       <RootProperty Name="Style" />
+      <RootProperty Name="Visibility" />
       <RootProperty Name="Label" />
       <RootProperty Name="IsEnabled" />
       <RootEvent Name="Click" />

@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 
 namespace SMPlayer
 {
-    public sealed partial class HeaderedPlaylistControl : UserControl
+    public sealed partial class HeaderedPlaylistControl : UserControl, RemoveMusicListener
     {
         public PlaylistControl HeaderedPlaylist { get => HeaderedPlaylistController; }
         public Playlist CurrentPlaylist { get; set; }
@@ -43,13 +43,20 @@ namespace SMPlayer
             set => HeaderedPlaylistController.ShowAlbumText = value;
         }
         public bool IsPlaylist { get; set; }
+        public bool AllowClear
+        {
+            get => ClearButton.Visibility == Visibility.Visible;
+            set => ClearButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+        }
+
         private static Dictionary<string, List<MusicDisplayItem>> PlaylistDisplayDict = new Dictionary<string, List<MusicDisplayItem>>();
         private static readonly Random random = new Random();
         private static RenameDialog dialog;
-        private RemoveDialog DeleteDialog;
+        private static RemoveDialog DeleteDialog;
         public HeaderedPlaylistControl()
         {
             this.InitializeComponent();
+            HeaderedPlaylistController.RemoveListeners.Add(this);
         }
 
         public async Task SetPlaylist(Playlist playlist)
@@ -153,8 +160,11 @@ namespace SMPlayer
             Settings.settings.Playlists.Remove(playlist);
         }
 
-        private SymbolIcon PinIcon = new SymbolIcon(Symbol.Pin);
-        private SymbolIcon UnPinIcon = new SymbolIcon(Symbol.UnPin);
+        public void MusicRemoved(int index, Music music, ICollection<Music> newCollection)
+        {
+            if (AllowClear) SetPlaylistInfo(SongCountConverter.ToStr(newCollection));
+        }
+
         private async void PinToStart_Click(object sender, RoutedEventArgs e)
         {
             SetPinState(await Helper.PinToStartAsync(CurrentPlaylist, IsPlaylist));
@@ -164,16 +174,27 @@ namespace SMPlayer
         {
             if (isPinned)
             {
-                PinToStartButton.Icon = UnPinIcon;
+                PinToStartButton.Icon = new SymbolIcon(Symbol.UnPin);
                 PinToStartButton.Label = Helper.Localize("UnPin");
                 PinToStartButton.SetToolTip("UnPin Playlist");
             }
             else
             {
-                PinToStartButton.Icon = PinIcon;
+                PinToStartButton.Icon = new SymbolIcon(Symbol.Pin);
                 PinToStartButton.Label = Helper.Localize("Pin To Start");
                 PinToStartButton.SetToolTip("Pin Playlist to the Start Menu");
             }
+        }
+
+        private async void Clear_Click(object sender, RoutedEventArgs e)
+        {
+            if (DeleteDialog == null) DeleteDialog = new RemoveDialog();
+            DeleteDialog.Confirm = () =>
+            {
+                CurrentPlaylist.Clear();
+                SetPlaylistInfo(SongCountConverter.ToStr(CurrentPlaylist.Songs));
+            };
+            await DeleteDialog.ShowAsync();
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)

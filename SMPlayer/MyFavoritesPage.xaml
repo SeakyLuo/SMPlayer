@@ -43,7 +43,10 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <local:HeaderedPlaylistControl x:Name="MyFavoritesPlaylistControl" IsPlaylist="False" />
+        <local:HeaderedPlaylistControl
+            x:Name="MyFavoritesPlaylistControl"
+            AllowClear="True"
+            IsPlaylist="False" />
         <Grid
             x:Name="PlaylistFooter"
             Grid.Row="1"
