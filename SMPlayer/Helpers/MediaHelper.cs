@@ -149,21 +149,33 @@ namespace SMPlayer
             Settings.settings.Mode = mode;
             ShuffleEnabled = mode == PlayMode.Shuffle;
         }
-
-        public static async Task<bool> AddMusic(Music music)
+        public static async Task<bool> InsertMusic(Music music, int index = -1)
         {
             try
             {
                 var item = await music.GetMediaPlaybackItemAsync();
                 music.IsPlaying = false;
-                PlaybackList.Items.Add(item);
-                CurrentPlaylist.Add(music);
+                if (index < 0)
+                {
+                    PlaybackList.Items.Add(item);
+                    CurrentPlaylist.Add(music);
+                }
+                else
+                {
+                    PlaybackList.Items.Insert(index, item);
+                    CurrentPlaylist.Insert(index, music);
+                }
                 return true;
             }
             catch (System.IO.FileNotFoundException)
             {
                 return false;
             }
+        }
+
+        public static async Task<bool> AddMusic(Music music)
+        {
+            return await InsertMusic(music);
         }
         private static ExecutionStatus status = ExecutionStatus.Ready;
         private static int SetPlaylistCounter = 0;
@@ -225,9 +237,19 @@ namespace SMPlayer
                     if (CurrentPlaylist[0] != music) MoveToMusic(music);
                     if (!IsPlaying) Play();
                     var target = playlist.ToList();
-                    target.Remove(music);
-                    if (ShuffleEnabled) target = ShufflePlaylist(target);
-                    await AddMusic(target);
+                    if (ShuffleEnabled)
+                    {
+                        target.Remove(music);
+                        await AddMusic(ShufflePlaylist(target));
+                    }
+                    else
+                    {
+                        int index = target.IndexOf(music);
+                        foreach (var m in target.GetRange(0, index))
+                            await InsertMusic(m, CurrentPlaylist.Count - 1);
+                        foreach (var m in target.GetRange(index + 1, target.Count - index - 1))
+                            await AddMusic(m);
+                    }
                 };
             }
         }

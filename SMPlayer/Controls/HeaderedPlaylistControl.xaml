@@ -2,7 +2,6 @@
     x:Class="SMPlayer.HeaderedPlaylistControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -73,42 +72,32 @@
                             <AppBarButton
                                 x:Name="ShuffleButton"
                                 x:Uid="ShuffleButton"
-                                Margin="0"
                                 Click="Shuffle_Click"
                                 Icon="Shuffle"
-                                Label="Shuffle"
-                                Style="{StaticResource PlaylistAppBarButtonStyle}"
-                                ToolTipService.ToolTip="Shuffle Playlist" />
+                                Style="{StaticResource PlaylistAppBarButtonStyle}" />
                             <AppBarButton
                                 x:Name="AddToButton"
                                 x:Uid="AddToAppButton"
                                 Click="AddTo_Click"
                                 Icon="Add"
-                                Label="Add To"
-                                Style="{StaticResource PlaylistAppBarButtonStyle}"
-                                ToolTipService.ToolTip="Add To Playlist" />
+                                Style="{StaticResource PlaylistAppBarButtonStyle}" />
                             <AppBarButton
                                 x:Name="RenameButton"
                                 x:Uid="RenameButton"
                                 Click="Rename_Click"
                                 Icon="Rename"
-                                Label="Rename"
-                                Style="{StaticResource PlaylistAppBarButtonStyle}"
-                                ToolTipService.ToolTip="Rename Playlist" />
+                                Style="{StaticResource PlaylistAppBarButtonStyle}" />
                             <AppBarButton
                                 x:Name="PinToStartButton"
                                 Click="PinToStart_Click"
                                 Icon="Pin"
-                                Label="Pin to Start"
                                 Style="{StaticResource PlaylistAppBarButtonStyle}" />
                             <AppBarButton
                                 x:Name="DeleteButton"
                                 x:Uid="DeleteButton"
                                 Click="Delete_Click"
                                 Icon="Delete"
-                                Label="Delete"
-                                Style="{StaticResource PlaylistAppBarButtonStyle}"
-                                ToolTipService.ToolTip="Delete Playlist" />
+                                Style="{StaticResource PlaylistAppBarButtonStyle}" />
                         </CommandBar>
                     </Grid>
                     <VisualStateManager.VisualStateGroups>
@@ -118,7 +107,7 @@
                                     <AdaptiveTrigger MinWindowWidth="0" />
                                 </VisualState.StateTriggers>
                                 <VisualState.Setters>
-                                    <Setter Target="PlaylistCover.(Grid.RowSpan)" Value="1" />
+                                    <!--<Setter Target="PlaylistCover.(Grid.RowSpan)" Value="1" />
                                     <Setter Target="PlaylistCover.(Grid.ColumnSpan)" Value="2" />
                                     <Setter Target="PlaylistCover.Margin" Value="10" />
                                     <Setter Target="PlaylistNameTextBlock.FontSize" Value="24" />
@@ -136,7 +125,7 @@
                                     <Setter Target="PlaylistCommandBar.(Grid.Column)" Value="0" />
                                     <Setter Target="PlaylistCommandBar.(Grid.ColumnSpan)" Value="2" />
                                     <Setter Target="PlaylistCommandBar.HorizontalAlignment" Value="Center" />
-                                    <Setter Target="PlaylistCommandBar.Margin" Value="0,5,0,0" />
+                                    <Setter Target="PlaylistCommandBar.Margin" Value="0,5,0,0" />-->
                                 </VisualState.Setters>
                             </VisualState>
                             <VisualState x:Name="WideLayout">

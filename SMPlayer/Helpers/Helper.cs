@@ -57,9 +57,10 @@ namespace SMPlayer
             return LocalizeHelper(resource, resourceLoader);
         }
 
-        public static string LocalizeMessage(string resource)
+        public static string LocalizeMessage(string resource, params object[] args)
         {
-            return LocalizeHelper(resource, MessageResourceLoader);
+            var str = LocalizeHelper(resource, MessageResourceLoader);
+            return string.Format(str, args);
         }
 
         private static string LocalizeHelper(string resource, ResourceLoader loader)
@@ -126,8 +127,15 @@ namespace SMPlayer
         }
         public static async Task<StorageItemThumbnail> GetStorageItemThumbnailAsync(string path)
         {
-            var file = await StorageFile.GetFileFromPathAsync(path);
-            return await file.GetThumbnailAsync(ThumbnailMode.MusicView, 500);
+            try
+            {
+                var file = await StorageFile.GetFileFromPathAsync(path);
+                return await file.GetThumbnailAsync(ThumbnailMode.MusicView, 500);
+            }
+            catch (FileNotFoundException)
+            {
+                return null;
+            }
         }
         public static BitmapImage GetBitmapImage(this StorageItemThumbnail thumbnail)
         {
@@ -233,33 +241,26 @@ namespace SMPlayer
 
         public static async Task UpdateTile(StorageItemThumbnail itemThumbnail, Music music)
         {
-            if (itemThumbnail == null) return;
-            var thumbnail = await itemThumbnail.SaveAsync(await GetThumbnailFolder(), string.IsNullOrEmpty(music.Album) ? music.Name : music.Album);
-            string uri = thumbnail.Path;
+            if (music == null) return;
+            string uri = itemThumbnail == null ? LogoPath : (await itemThumbnail.SaveAsync(await GetThumbnailFolder(), string.IsNullOrEmpty(music.Album) ? music.Name : music.Album)).Path;
             var tileContent = new TileContent()
             {
                 Visual = new TileVisual()
                 {
-                    //TileSmall = new TileBinding()
-                    //{
-                    //    Branding = TileBranding.None,
-                    //    Content = new TileBindingContentAdaptive()
-                    //    {
-                    //        BackgroundImage = new TileBackgroundImage()
-                    //        {
-                    //            Source = uri
-                    //        }
-                    //    }
-                    //},
+                    TileSmall = new TileBinding()
+                    {
+                        Branding = TileBranding.None,
+                        Content = new TileBindingContentAdaptive()
+                        {
+                            BackgroundImage = new TileBackgroundImage() { Source = uri }
+                        }
+                    },
                     TileMedium = new TileBinding()
                     {
                         Branding = TileBranding.Name,
                         Content = new TileBindingContentAdaptive()
                         {
-                            BackgroundImage = new TileBackgroundImage()
-                            {
-                                Source = uri
-                            },
+                            BackgroundImage = new TileBackgroundImage() { Source = uri },
                             Children =
                             {
                                 new AdaptiveText()
@@ -276,10 +277,7 @@ namespace SMPlayer
                         Branding = TileBranding.Name,
                         Content = new TileBindingContentAdaptive()
                         {
-                            BackgroundImage = new TileBackgroundImage()
-                            {
-                                Source = uri
-                            },
+                            BackgroundImage = new TileBackgroundImage() { Source = uri },
                             Children =
                             {
                                 new AdaptiveText()
@@ -302,10 +300,7 @@ namespace SMPlayer
                         Branding = TileBranding.Name,
                         Content = new TileBindingContentAdaptive()
                         {
-                            BackgroundImage = new TileBackgroundImage()
-                            {
-                                Source = uri
-                            },
+                            BackgroundImage = new TileBackgroundImage() { Source = uri },
                             Children =
                             {
                                 new AdaptiveText()

@@ -86,6 +86,7 @@
             <local:CriterionConverter x:Key="CriterionConverter" />
             <local:MusicArtistAlbumConverter x:Key="MusicArtistAlbumConverter" />
             <local:HorizontalAlignmentConverter x:Key="HorizontalAlignmentConverter" />
+            <local:EmptyStringConverter x:Key="EmptyStringConverter" />
             <AcrylicBrush
                 x:Key="MediaControlPlayButtonBorderBrush"
                 BackgroundSource="Backdrop"

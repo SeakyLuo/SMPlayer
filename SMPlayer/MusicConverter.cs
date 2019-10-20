@@ -257,4 +257,18 @@ namespace SMPlayer
             throw new NotImplementedException();
         }
     }
+
+    class EmptyStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            string content = (string)value, defaultString = Helper.LocalizeMessage((string)parameter);
+            return string.IsNullOrEmpty(content) ? defaultString : content;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

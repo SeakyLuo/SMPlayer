@@ -70,14 +70,14 @@ namespace SMPlayer.Controls
             {
                 PlayCountTextBox.Text = "";
                 ClearPlayCountButton.Visibility = Visibility.Collapsed;
-                PlayCountTextBox.SetToolTip(string.Format(Helper.LocalizeMessage("NotPlayedYet"), music.Name));
+                PlayCountTextBox.SetToolTip(Helper.LocalizeMessage("NotPlayedYet", music.Name));
             }
             else
             {
                 PlayCountTextBox.Text = music.PlayCount.ToString();
                 ClearPlayCountButton.Visibility = Visibility.Visible;
                 string times = Helper.CurrentLanguage.Contains("en") ? MusicDurationConverter.TryPlural("time", music.PlayCount) : "";
-                PlayCountTextBox.SetToolTip(string.Format(Helper.LocalizeMessage("HasBeenPlayed"), music.Name, music.PlayCount, times));
+                PlayCountTextBox.SetToolTip(Helper.LocalizeMessage("HasBeenPlayed", music.Name, music.PlayCount, times));
             }
         }
 

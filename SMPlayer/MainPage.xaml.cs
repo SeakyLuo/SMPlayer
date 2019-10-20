@@ -87,8 +87,8 @@ namespace SMPlayer
         private void Current_SizeChanged(object sender, WindowSizeChangedEventArgs e)
         {
             bool isMinimal = e.Size.Width < 720;
-            var page = NaviFrame.CurrentSourcePageType.Name;
             bool isTitleBarColorful = IsTitleBarColorful;
+            var page = NaviFrame.CurrentSourcePageType.Name;
             bool collapsed = ((page == "NowPlayingPage" || page == "RecentPage") && isMinimal) ||
                              page == "PlaylistsPage" ||
                              (isTitleBarColorful && !isMinimal);
@@ -96,7 +96,8 @@ namespace SMPlayer
             TitleBarForeground = isMinimal && isTitleBarColorful ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
             if (!isTitleBarColorful) TitleBarBackground = isMinimal ? ColorHelper.MinimalTitleBarColor : ColorHelper.TransparentBrush;
             HeaderGrid.Visibility = collapsed ? Visibility.Collapsed : Visibility.Visible;
-            if (page == "SearchPage") SetHeaderText(SearchPage.GetSearchHeader(SearchPage.History.Peek(), IsMinimal));
+            if (!isMinimal) HideHeaderSearchBar(Visibility.Collapsed);
+            if (page == "SearchPage" || page == "SearchResultPage") SetHeaderText(SearchPage.GetSearchHeader(SearchPage.History.Peek(), IsMinimal));
             if (!MainNavigationView.IsPaneOpen)
                 if (isMinimal) PaneCloseMinimal();
                 else PaneCloseNormal();
@@ -360,10 +361,10 @@ namespace SMPlayer
             HeaderSearchBar.Visibility = Visibility.Visible;
         }
 
-        private void HideHeaderSearchBar()
+        private void HideHeaderSearchBar(Visibility searchButtonVisibility = Visibility.Visible)
         {
             MainNavigationViewHeader.Visibility = Visibility.Visible;
-            HeaderSearchButton.Visibility = Visibility.Visible;
+            HeaderSearchButton.Visibility = searchButtonVisibility;
             HeaderSearchBar.Visibility = Visibility.Collapsed;
         }
 

@@ -177,6 +177,12 @@
   <data name="SearchResult" xml:space="preserve">
     <value>{0}的搜索结果</value>
   </data>
+  <data name="UnknownAlbum" xml:space="preserve">
+    <value>未知专辑</value>
+  </data>
+  <data name="UnknownArtist" xml:space="preserve">
+    <value>未知歌手</value>
+  </data>
   <data name="UpdateMusicLibrary" xml:space="preserve">
     <value>正在更新音乐库……</value>
   </data>

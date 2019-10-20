@@ -129,17 +129,17 @@
                 x:Name="MusicFolderTextBlock"
                 x:Uid="MusicFolderTextBlock"
                 Style="{StaticResource SettingLabelStyle}"
-                Text="Music Folder:" />
+                Text="Music Folder" />
             <TextBlock
                 x:Name="NotificationTextBlock"
                 x:Uid="NotificationTextBlock"
                 Style="{StaticResource SettingLabelStyle}"
-                Text="Notification: " />
+                Text="Notification" />
             <TextBlock
                 x:Name="ThemeTextBlock"
                 x:Uid="ThemeTextBlock"
                 Style="{StaticResource SettingLabelStyle}"
-                Text="Theme:" />
+                Text="Theme" />
             <TextBlock Style="{StaticResource SettingLabelStyle}" />
         </StackPanel>
         <StackPanel Grid.Column="1">

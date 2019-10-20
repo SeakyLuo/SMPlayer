@@ -217,7 +217,7 @@ namespace SMPlayer
             }
             else
             {
-                DeleteDialog.Message = string.Format(Helper.LocalizeMessage("RemoveMusic"), music.Name);
+                DeleteDialog.Message = Helper.LocalizeMessage("RemoveMusic", music.Name);
                 await DeleteDialog.ShowAsync();
             }
         }

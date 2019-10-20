@@ -117,7 +117,604 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="String1" xml:space="preserve">
-    <value />
+  <data name="Add To" xml:space="preserve">
+    <value>Add To</value>
+  </data>
+  <data name="AddToAppButton.Label" xml:space="preserve">
+    <value>Add To</value>
+  </data>
+  <data name="AddToAppButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Add To Playlist</value>
+  </data>
+  <data name="AddToButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Add To</value>
+  </data>
+  <data name="Album" xml:space="preserve">
+    <value>Album</value>
+  </data>
+  <data name="AlbumArtistTextBlock.Text" xml:space="preserve">
+    <value>Album Artist</value>
+  </data>
+  <data name="AlbumHeader.Header" xml:space="preserve">
+    <value>Album</value>
+  </data>
+  <data name="Albums" xml:space="preserve">
+    <value>Albums</value>
+  </data>
+  <data name="Albums:" xml:space="preserve">
+    <value>Albums:</value>
+  </data>
+  <data name="AlbumsItem.Content" xml:space="preserve">
+    <value>Albums</value>
+  </data>
+  <data name="AlbumsItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Group By Album</value>
+  </data>
+  <data name="AlbumsTextBlock.Text" xml:space="preserve">
+    <value>Albums</value>
+  </data>
+  <data name="AlbumTextBlock.Text" xml:space="preserve">
+    <value>Album</value>
+  </data>
+  <data name="All Artists:" xml:space="preserve">
+    <value>All Artists: </value>
+  </data>
+  <data name="AlwaysShownComboItem.Content" xml:space="preserve">
+    <value>Always Shown</value>
+  </data>
+  <data name="ArtistHeader.Header" xml:space="preserve">
+    <value>Artist</value>
+  </data>
+  <data name="Artists" xml:space="preserve">
+    <value>Artists</value>
+  </data>
+  <data name="ArtistsItem.Content" xml:space="preserve">
+    <value>Artists</value>
+  </data>
+  <data name="ArtistsItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Group By Artist</value>
+  </data>
+  <data name="ArtistsTextBlock.Text" xml:space="preserve">
+    <value>Artists</value>
+  </data>
+  <data name="ArtistTextBlock.Text" xml:space="preserve">
+    <value>Artist</value>
+  </data>
+  <data name="BackButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="BitrateTextBlock.Text" xml:space="preserve">
+    <value>Bitrate</value>
+  </data>
+  <data name="BugReportButton.Content" xml:space="preserve">
+    <value>Bug Report</value>
+  </data>
+  <data name="CancelButton.Content" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ClearHistoryAppButton.Label" xml:space="preserve">
+    <value>Clear History</value>
+  </data>
+  <data name="ClearHistoryAppButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Clear Play History</value>
+  </data>
+  <data name="ClearNowPlayingAppButton.Label" xml:space="preserve">
+    <value>Clear All</value>
+  </data>
+  <data name="ClearNowPlayingAppButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Clear Now Playing</value>
+  </data>
+  <data name="ClearNowPlayingMenuItem.Text" xml:space="preserve">
+    <value>Clear Now Playing</value>
+  </data>
+  <data name="ClearNowPlayingMenuItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Clear Now Playing</value>
+  </data>
+  <data name="ClearPlayCountButton.Content" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="ClearPlayCountButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Clear Play Count</value>
+  </data>
+  <data name="ComposersTextBlock.Text" xml:space="preserve">
+    <value>Composers</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="ConfirmButton.Content" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Create a New Playlist" xml:space="preserve">
+    <value>Create a New Playlist</value>
+  </data>
+  <data name="Create New Playlist" xml:space="preserve">
+    <value>Create New Playlist</value>
+  </data>
+  <data name="DateCreatedTextBlock.Text" xml:space="preserve">
+    <value>Date Created</value>
+  </data>
+  <data name="DateModifiedTextBlock.Text" xml:space="preserve">
+    <value>Date Modified</value>
+  </data>
+  <data name="day" xml:space="preserve">
+    <value>day</value>
+  </data>
+  <data name="days" xml:space="preserve">
+    <value>days</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Delete From Disk" xml:space="preserve">
+    <value>Delete From Disk</value>
+  </data>
+  <data name="DeleteButton.Label" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Delete Playlist</value>
+  </data>
+  <data name="DeleteItem.Text" xml:space="preserve">
+    <value>Delete Playlist</value>
+  </data>
+  <data name="DisplayCheckBox.Content" xml:space="preserve">
+    <value>Don't show this next time</value>
+  </data>
+  <data name="DuplicateItem.Text" xml:space="preserve">
+    <value>Duplicate Playlist</value>
+  </data>
+  <data name="DurationHeader.Header" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="DurationTextBlock.Text" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="Edit Playlists" xml:space="preserve">
+    <value>Edit Playlists</value>
+  </data>
+  <data name="Enter Full Screen Mode" xml:space="preserve">
+    <value>Enter Full Screen Mode</value>
+  </data>
+  <data name="Exit Full Screen" xml:space="preserve">
+    <value>Exit Full Screen</value>
+  </data>
+  <data name="Exit Full Screen Mode" xml:space="preserve">
+    <value>Exit Full Screen Mode</value>
+  </data>
+  <data name="ExitMiniModeItem.Label" xml:space="preserve">
+    <value>Exit Mini Mode</value>
+  </data>
+  <data name="ExpandAppButton.Label" xml:space="preserve">
+    <value>Expand View</value>
+  </data>
+  <data name="ExpandAppButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Expand View</value>
+  </data>
+  <data name="FavoriteHeader.Header" xml:space="preserve">
+    <value>Favorite</value>
+  </data>
+  <data name="FavoriteSwipeItem.Text" xml:space="preserve">
+    <value>Favorite</value>
+  </data>
+  <data name="FileSizeTextBlock.Text" xml:space="preserve">
+    <value>File Size</value>
+  </data>
+  <data name="FileTypeTextBlock.Text" xml:space="preserve">
+    <value>File Type</value>
+  </data>
+  <data name="Finish Editing" xml:space="preserve">
+    <value>Finish Editing</value>
+  </data>
+  <data name="Folders" xml:space="preserve">
+    <value>Folders</value>
+  </data>
+  <data name="Full Screen" xml:space="preserve">
+    <value>Full Screen</value>
+  </data>
+  <data name="GenreTextBlock.Text" xml:space="preserve">
+    <value>Genre</value>
+  </data>
+  <data name="GridViewItem.Label" xml:space="preserve">
+    <value>Grid View</value>
+  </data>
+  <data name="GridViewItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Change to Grid View</value>
+  </data>
+  <data name="hour" xml:space="preserve">
+    <value>hour</value>
+  </data>
+  <data name="hours" xml:space="preserve">
+    <value>hours</value>
+  </data>
+  <data name="ListViewItem.Label" xml:space="preserve">
+    <value>List View</value>
+  </data>
+  <data name="ListViewItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Change to List View</value>
+  </data>
+  <data name="LocalItem.Content" xml:space="preserve">
+    <value>Local</value>
+  </data>
+  <data name="LocalItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Manage Local Music</value>
+  </data>
+  <data name="LyricsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Show Lyrics</value>
+  </data>
+  <data name="LyricsItem.Label" xml:space="preserve">
+    <value>Show Lyrics</value>
+  </data>
+  <data name="LyricsItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>See Lyrics</value>
+  </data>
+  <data name="LyricsMenuItem.Text" xml:space="preserve">
+    <value>Show Lyrics</value>
+  </data>
+  <data name="LyricsPivotItem.Header" xml:space="preserve">
+    <value>Lyrics</value>
+  </data>
+  <data name="LyricsTextBlock.Text" xml:space="preserve">
+    <value>Lyrics</value>
+  </data>
+  <data name="MiniModeButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Enter Mini Mode</value>
+  </data>
+  <data name="MiniModeItem.Label" xml:space="preserve">
+    <value>Mini Mode</value>
+  </data>
+  <data name="MiniModeItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Enter Mini Mode</value>
+  </data>
+  <data name="MiniModeMenuItem.Text" xml:space="preserve">
+    <value>Mini Mode</value>
+  </data>
+  <data name="MiniModeMenuItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Enter Mini Mode</value>
+  </data>
+  <data name="minute" xml:space="preserve">
+    <value>minute</value>
+  </data>
+  <data name="minutes" xml:space="preserve">
+    <value>minutes</value>
+  </data>
+  <data name="MoreButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>More</value>
+  </data>
+  <data name="Move To Top" xml:space="preserve">
+    <value>Move To Top</value>
+  </data>
+  <data name="Music Library" xml:space="preserve">
+    <value>Music Library</value>
+  </data>
+  <data name="MusicChangedComboItem.Content" xml:space="preserve">
+    <value>Music Changed</value>
+  </data>
+  <data name="MusicFolderTextBlock.Text" xml:space="preserve">
+    <value>Music Folder</value>
+  </data>
+  <data name="MusicInfoButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Show Music Info</value>
+  </data>
+  <data name="MusicInfoItem.Label" xml:space="preserve">
+    <value>Show Music Info</value>
+  </data>
+  <data name="MusicInfoMenuItem.Text" xml:space="preserve">
+    <value>Show Music Info</value>
+  </data>
+  <data name="Mute" xml:space="preserve">
+    <value>Mute</value>
+  </data>
+  <data name="My Favorites" xml:space="preserve">
+    <value>My Favorites</value>
+  </data>
+  <data name="MyFavoritesItem.Content" xml:space="preserve">
+    <value>My Favorites</value>
+  </data>
+  <data name="MyFavoritesItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>My Favorite Songs</value>
+  </data>
+  <data name="NameHeader.Header" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NeverItem.Content" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="New Playlist" xml:space="preserve">
+    <value>New Playlist</value>
+  </data>
+  <data name="NewPlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Create a New Playlist</value>
+  </data>
+  <data name="NewPlaylistNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>New Playlist Name</value>
+  </data>
+  <data name="NextButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="No Music" xml:space="preserve">
+    <value>No Music</value>
+  </data>
+  <data name="No Playlist" xml:space="preserve">
+    <value>No Playlist</value>
+  </data>
+  <data name="NotificationTextBlock.Text" xml:space="preserve">
+    <value>Notification</value>
+  </data>
+  <data name="Now Playing" xml:space="preserve">
+    <value>Now Playing</value>
+  </data>
+  <data name="NowPlayingItem.Content" xml:space="preserve">
+    <value>Now Playing</value>
+  </data>
+  <data name="NowPlayingItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Now Playing</value>
+  </data>
+  <data name="NowPlayingTextBlock.Text" xml:space="preserve">
+    <value>Now Playing</value>
+  </data>
+  <data name="OpenFolderIcon.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Select Folder</value>
+  </data>
+  <data name="PathBox.PlaceholderText" xml:space="preserve">
+    <value>The root folder path of your music library</value>
+  </data>
+  <data name="PathTextBlock.Text" xml:space="preserve">
+    <value>Path</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="Pin Playlist to the Start Menu" xml:space="preserve">
+    <value>Pin Playlist to the Start Menu</value>
+  </data>
+  <data name="Pin To Start" xml:space="preserve">
+    <value>Pin To Start</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="PlayAllButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Play All</value>
+  </data>
+  <data name="PlayCountHeader.Header" xml:space="preserve">
+    <value>Play Count</value>
+  </data>
+  <data name="PlayCountTextBlock.Text" xml:space="preserve">
+    <value>Play Count</value>
+  </data>
+  <data name="Playlist" xml:space="preserve">
+    <value>Playlist</value>
+  </data>
+  <data name="PlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Show Now Playing Playlist</value>
+  </data>
+  <data name="PlaylistMenuItem.Text" xml:space="preserve">
+    <value>Now Playing</value>
+  </data>
+  <data name="PlaylistMenuItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Show Now Playing Playlist</value>
+  </data>
+  <data name="Playlists:" xml:space="preserve">
+    <value>Playlists:</value>
+  </data>
+  <data name="PlaylistsItem.Content" xml:space="preserve">
+    <value>Playlists</value>
+  </data>
+  <data name="PlaylistsItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Show All Playlists</value>
+  </data>
+  <data name="PlaylistsTextBlock.Text" xml:space="preserve">
+    <value>Playlists</value>
+  </data>
+  <data name="PrevButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="PropertiesPivotItem.Header" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="PropertiesTextBlock.Text" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="PublisherTextBlock.Text" xml:space="preserve">
+    <value>Publisher</value>
+  </data>
+  <data name="Recent" xml:space="preserve">
+    <value>Recent</value>
+  </data>
+  <data name="RecentItem.Content" xml:space="preserve">
+    <value>Recent</value>
+  </data>
+  <data name="RecentItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Recent</value>
+  </data>
+  <data name="Remove From Playlist" xml:space="preserve">
+    <value>Remove From Playlist</value>
+  </data>
+  <data name="RemoveSwipeItem.Text" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="Rename Playlist" xml:space="preserve">
+    <value>Rename Playlist</value>
+  </data>
+  <data name="RenameButton.Label" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="RenameButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Rename Playlist</value>
+  </data>
+  <data name="RenameItem.Text" xml:space="preserve">
+    <value>Rename Playlist</value>
+  </data>
+  <data name="Repeat One: Disabled" xml:space="preserve">
+    <value>Repeat One: Disabled</value>
+  </data>
+  <data name="Repeat One: Enabled" xml:space="preserve">
+    <value>Repeat One: Enabled</value>
+  </data>
+  <data name="Repeat: Disabled" xml:space="preserve">
+    <value>Repeat: Disabled</value>
+  </data>
+  <data name="Repeat: Enabled" xml:space="preserve">
+    <value>Repeat: Enabled</value>
+  </data>
+  <data name="ResetLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Reset Lyrics</value>
+  </data>
+  <data name="ResetMusicPropertiesButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Reset Properties</value>
+  </data>
+  <data name="Reverse Playlist" xml:space="preserve">
+    <value>Reverse Playlist</value>
+  </data>
+  <data name="SaveLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Save Lyrics</value>
+  </data>
+  <data name="SaveMusicPropertiesButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Save Properties</value>
+  </data>
+  <data name="SavePlaylistMenuItem.Text" xml:space="preserve">
+    <value>Save as a Playlist</value>
+  </data>
+  <data name="SavePlaylistMenuItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Save Now Playing as a Playlist</value>
+  </data>
+  <data name="SearchBar.PlaceholderText" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchBar.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Search Lyrics</value>
+  </data>
+  <data name="second" xml:space="preserve">
+    <value>second</value>
+  </data>
+  <data name="seconds" xml:space="preserve">
+    <value>seconds</value>
+  </data>
+  <data name="SelectArtistTextBlock.Text" xml:space="preserve">
+    <value>Select an Artist On the Left</value>
+  </data>
+  <data name="Set As Favorite" xml:space="preserve">
+    <value>Set As Favorite</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Show In Explorer" xml:space="preserve">
+    <value>Show In Explorer</value>
+  </data>
+  <data name="Show Lyrics" xml:space="preserve">
+    <value>Show Lyrics</value>
+  </data>
+  <data name="Show Music Info" xml:space="preserve">
+    <value>Show Music Info</value>
+  </data>
+  <data name="ShowAllPlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Show All Playlists</value>
+  </data>
+  <data name="Shuffle" xml:space="preserve">
+    <value>Shuffle</value>
+  </data>
+  <data name="Shuffle: Disabled" xml:space="preserve">
+    <value>Shuffle: Disabled</value>
+  </data>
+  <data name="Shuffle: Enabled" xml:space="preserve">
+    <value>Shuffle: Enabled</value>
+  </data>
+  <data name="ShuffleButton.Label" xml:space="preserve">
+    <value>Shuffle</value>
+  </data>
+  <data name="ShuffleButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Shuffle Playlist</value>
+  </data>
+  <data name="ShuffleItem.Label" xml:space="preserve">
+    <value>Shuffle</value>
+  </data>
+  <data name="ShuffleItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Shuffle and Play All</value>
+  </data>
+  <data name="Songs" xml:space="preserve">
+    <value>Songs</value>
+  </data>
+  <data name="Songs:" xml:space="preserve">
+    <value>Songs:</value>
+  </data>
+  <data name="SongsItem.Content" xml:space="preserve">
+    <value>Songs</value>
+  </data>
+  <data name="SongsItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>All Songs</value>
+  </data>
+  <data name="SongsTextBlock.Text" xml:space="preserve">
+    <value>Songs</value>
+  </data>
+  <data name="Sort By Album" xml:space="preserve">
+    <value>Sort By Album</value>
+  </data>
+  <data name="Sort By Artist" xml:space="preserve">
+    <value>Sort By Artist</value>
+  </data>
+  <data name="Sort By Date Added" xml:space="preserve">
+    <value>Sort By Date Added</value>
+  </data>
+  <data name="Sort By Duration" xml:space="preserve">
+    <value>Sort By Duration</value>
+  </data>
+  <data name="Sort By Play Count" xml:space="preserve">
+    <value>Sort By Play Count</value>
+  </data>
+  <data name="Sort By Title" xml:space="preserve">
+    <value>Sort By Title</value>
+  </data>
+  <data name="SortByButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Sort Playlist</value>
+  </data>
+  <data name="SubtitleTextBlock.Text" xml:space="preserve">
+    <value>Subtitle</value>
+  </data>
+  <data name="ThemeColorButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Change Theme Color</value>
+  </data>
+  <data name="ThemeTextBlock.Text" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="TitleTextBlock.Text" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="TrackNumberTextBlock.Text" xml:space="preserve">
+    <value>Track Number</value>
+  </data>
+  <data name="Undo Favorite" xml:space="preserve">
+    <value>Undo Favorite</value>
+  </data>
+  <data name="Undo Mute" xml:space="preserve">
+    <value>Undo Mute</value>
+  </data>
+  <data name="UnPin" xml:space="preserve">
+    <value>UnPin</value>
+  </data>
+  <data name="UnPin Playlist" xml:space="preserve">
+    <value>UnPin Playlist</value>
+  </data>
+  <data name="UpdateMusicLibraryButton.Content" xml:space="preserve">
+    <value>Update Music Library</value>
+  </data>
+  <data name="ViewAllButton.Label" xml:space="preserve">
+    <value>View All</value>
+  </data>
+  <data name="VolumeButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="YearTextBlock.Text" xml:space="preserve">
+    <value>Year</value>
   </data>
 </root>

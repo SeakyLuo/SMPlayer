@@ -28,6 +28,8 @@ Date Added.
 
 Recently added.
 
+Improved unknown album/unknown artist.
+
 Improved algorithm for update.
 
 Improved New Playlist Name.

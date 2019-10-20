@@ -70,7 +70,7 @@
                             x:Name="ArtistNameTextBlock"
                             Margin="10,0"
                             VerticalAlignment="Center"
-                            Text="{x:Bind Name}" />
+                            Text="{x:Bind Name, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist}" />
                     </StackPanel>
                 </DataTemplate>
             </controls:MasterDetailsView.ItemTemplate>
@@ -160,7 +160,7 @@
                                                 VerticalAlignment="Center"
                                                 FontSize="18"
                                                 FontWeight="Bold"
-                                                Text="{x:Bind Name, Mode=OneWay}" />
+                                                Text="{x:Bind Name, Mode=OneWay, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownAlbum}" />
                                             <TextBlock Margin="0,10" Text="{x:Bind Songs, Converter={StaticResource SongCountConverter}, Mode=OneWay}" />
                                         </StackPanel>
                                         <Button

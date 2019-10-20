@@ -24,36 +24,27 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class SearchResultPage : Page
     {
-        private string keyword;
         public ObservableCollection<Playlist> Artists = new ObservableCollection<Playlist>();
         public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         public ObservableCollection<AlbumView> Playlists = new ObservableCollection<AlbumView>();
+        private NavigationMode navigationMode;
+        private string keyword, displayType;
         public SearchResultPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
-        private void ArtistsGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            Frame.Navigate(typeof(ArtistsPage), e.ClickedItem);
-        }
-
-        private void AlbumsGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
-        }
-
-        private void PlaylistGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            Frame.Navigate(typeof(PlaylistsPage), e.ClickedItem);
-        }
-
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (e.NavigationMode == NavigationMode.Back)
+            navigationMode = e.NavigationMode;
+            displayType = (string)e.Parameter;
+        }
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (navigationMode == NavigationMode.Back)
             {
                 MainPage.Instance.SetHeaderText(SearchPage.GetSearchHeader(SearchPage.History.Peek(), MainPage.Instance.IsMinimal));
                 return;
@@ -64,7 +55,7 @@ namespace SMPlayer
             Albums.Clear();
             Songs.Clear();
             Playlists.Clear();
-            switch ((string)e.Parameter)
+            switch (displayType)
             {
                 case "Artists":
                     foreach (var group in MusicLibraryPage.AllSongs.Where((m) => SearchPage.IsTargetArtist(m, keyword)).GroupBy((m) => m.Artist).OrderBy((g) => g.Key))
@@ -88,5 +79,22 @@ namespace SMPlayer
             }
             LoadingProgress.IsActive = false;
         }
+
+        private void ArtistsGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Frame.Navigate(typeof(ArtistsPage), e.ClickedItem);
+        }
+
+        private void AlbumsGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
+        }
+
+        private void PlaylistGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Frame.Navigate(typeof(PlaylistsPage), e.ClickedItem);
+        }
+
+
     }
 }

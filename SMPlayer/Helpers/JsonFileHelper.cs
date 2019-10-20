@@ -34,6 +34,11 @@ namespace SMPlayer.Models
                 {
                     System.Threading.Thread.Sleep(1000);
                 }
+                catch (Exception)
+                {
+                    // 无法删除要被替换的文件
+                    break;
+                }
             }
         }
 

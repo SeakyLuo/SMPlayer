@@ -30,6 +30,8 @@ namespace SMPlayer
         public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         public ObservableCollection<AlbumView> Playlists = new ObservableCollection<AlbumView>();
         public const int ArtistLimit = 10, AlbumLimit = 10, SongLimit = 5, PlaylistLimit = 10;
+        private NavigationMode navigationMode;
+        private string keyword;
         public SearchPage()
         {
             this.InitializeComponent();
@@ -38,16 +40,8 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            ArtistsViewAllButton.Visibility = SearchArtistView.GetFirstDescendantOfType<ScrollViewer>()?.ScrollableWidth == 0 ? Visibility.Collapsed : Visibility.Visible;
-            AlbumsViewAllButton.Visibility = SearchAlbumView.GetFirstDescendantOfType<ScrollViewer>()?.ScrollableWidth == 0 ? Visibility.Collapsed : Visibility.Visible;
-            PlaylistsViewAllButton.Visibility = SearchPlaylistView.GetFirstDescendantOfType<ScrollViewer>()?.ScrollableWidth == 0 ? Visibility.Collapsed : Visibility.Visible;
-        }
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            string keyword = e.Parameter as string;
             // User Search
-            if (e.NavigationMode == NavigationMode.Back)
+            if (navigationMode == NavigationMode.Back)
             {
                 // Back to Search Page
                 MainPage.Instance.SetHeaderText(GetSearchHeader(History.Peek(), MainPage.Instance.IsMinimal));
@@ -62,6 +56,15 @@ namespace SMPlayer
                 SearchPlaylists(keyword);
                 NoResultPanel.Visibility = Artists.Count == 0 && Albums.Count == 0 && Songs.Count == 0 && Playlists.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
             }
+            ArtistsViewAllButton.Visibility = SearchArtistView.GetFirstDescendantOfType<ScrollViewer>()?.ScrollableWidth == 0 ? Visibility.Collapsed : Visibility.Visible;
+            AlbumsViewAllButton.Visibility = SearchAlbumView.GetFirstDescendantOfType<ScrollViewer>()?.ScrollableWidth == 0 ? Visibility.Collapsed : Visibility.Visible;
+            PlaylistsViewAllButton.Visibility = SearchPlaylistView.GetFirstDescendantOfType<ScrollViewer>()?.ScrollableWidth == 0 ? Visibility.Collapsed : Visibility.Visible;
+        }
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            keyword = e.Parameter as string;
+            navigationMode = e.NavigationMode;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -137,15 +140,17 @@ namespace SMPlayer
 
         public static string GetSearchHeader(string keyword, bool isMinimal)
         {
-            string header = string.Format(Helper.LocalizeMessage("Quotations"), keyword);
-            return isMinimal ? header : string.Format(Helper.LocalizeMessage("SearchResult"), header);
+            string header = Helper.LocalizeMessage("Quotations", keyword);
+            return isMinimal ? header : Helper.LocalizeMessage("SearchResult", header);
         }
-
+        private void SearchArtistView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Frame.Navigate(typeof(ArtistsPage), e.ClickedItem);
+        }
         private void SearchAlbumView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
         }
-
         private void SearchPlaylistView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Frame.Navigate(typeof(PlaylistsPage), e.ClickedItem);
@@ -154,12 +159,6 @@ namespace SMPlayer
         {
             Frame.Navigate(typeof(SearchResultPage), "Artists");
         }
-
-        private void SearchArtistView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            Frame.Navigate(typeof(ArtistsPage), e.ClickedItem);
-        }
-
         private void AlbumsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Frame.Navigate(typeof(SearchResultPage), "Albums");
@@ -168,7 +167,6 @@ namespace SMPlayer
         {
             Frame.Navigate(typeof(SearchResultPage), "Songs");
         }
-
         private void PlaylistsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Frame.Navigate(typeof(SearchResultPage), "Playlists");

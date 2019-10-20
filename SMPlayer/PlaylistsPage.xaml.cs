@@ -32,19 +32,15 @@ namespace SMPlayer
     public sealed partial class PlaylistsPage : Page, RenameActionListener, PlaylistScrollListener, RemoveMusicListener
     {
         public static ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
-        private ObservableCollection<Playlist> playlists
-        {
-            get => Playlists;
-            set => Playlists = value;
-        }
+
+        private HeaderedPlaylistControl PlaylistController;
         private RenameDialog dialog;
-        private static RemoveDialog DeleteDialog;
-        private HeaderedPlaylistControl playlistControl;
         public PlaylistsPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             Playlists = new ObservableCollection<Playlist>(Settings.settings.Playlists);
+            PlaylistTabView.ItemsSource = Playlists;
             SetFooterText();
             Playlists.CollectionChanged += (sender, e) => SetFooterText();
             PlaylistTabView.SelectedIndex = Settings.settings.Playlists.FindIndex((p) => p.Name == Settings.settings.LastPlaylist);
@@ -87,7 +83,7 @@ namespace SMPlayer
             if (tabview.SelectedIndex == -1)
             {
                 // If CurrentTab is deleted
-                if (playlists.Count > 0) tabview.SelectedIndex = playlists.Count - 1;
+                if (Playlists.Count > 0) tabview.SelectedIndex = Playlists.Count - 1;
                 return;
             }
             var playlist = tabview.SelectedItem as Playlist;
@@ -95,14 +91,14 @@ namespace SMPlayer
             foreach (var music in playlist.Songs)
                 music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
             SortByButton.Label = Helper.Localize("Sort By " + playlist.Criterion.ToStr());
-            if (playlistControl != null)
-                await playlistControl.SetPlaylist(playlist);
+            if (PlaylistController != null)
+                await PlaylistController.SetPlaylist(playlist);
         }
 
         private void DeleteClick(object sender, RoutedEventArgs e)
         {
             var playlist = (sender as MenuFlyoutItem).DataContext as Playlist;
-            DeletePlaylist(playlist);
+            RemovePlaylist(playlist);
         }
 
         private async void RenameClick(object sender, RoutedEventArgs e)
@@ -156,33 +152,12 @@ namespace SMPlayer
         {
             var playlist = (Playlist)e.Item;
             e.Cancel = true;
-            DeletePlaylist(playlist);
+            RemovePlaylist(playlist);
         }
 
-        public static async void DeletePlaylist(Playlist playlist)
+        public void RemovePlaylist(Playlist playlist)
         {
-            if (DeleteDialog == null)
-            {
-                DeleteDialog = new RemoveDialog()
-                {
-                    Confirm = () => RemovePlaylist(playlist)
-                };
-            }
-            if (DeleteDialog.IsChecked)
-            {
-                RemovePlaylist(playlist);
-            }
-            else
-            {
-                DeleteDialog.Message = string.Format(Helper.LocalizeMessage("RemovePlaylist"), playlist.Name);
-                await DeleteDialog.ShowAsync();
-            }
-        }
-
-        private static void RemovePlaylist(Playlist playlist)
-        {
-            Playlists.Remove(playlist);
-            Settings.settings.Playlists.Remove(playlist);
+            PlaylistController.DeletePlaylist(playlist);
         }
 
         public bool Confirm(string oldName, string newName)
@@ -230,10 +205,10 @@ namespace SMPlayer
 
         private async void HeaderedPlaylistControl_Loaded(object sender, RoutedEventArgs e)
         {
-            playlistControl = sender as HeaderedPlaylistControl;
-            playlistControl.HeaderedPlaylist.ScrollListener = this;
-            playlistControl.HeaderedPlaylist.RemoveListeners.Add(this);
-            await playlistControl.SetPlaylist(PlaylistTabView.SelectedItem as Playlist);
+            PlaylistController = sender as HeaderedPlaylistControl;
+            PlaylistController.HeaderedPlaylist.ScrollListener = this;
+            PlaylistController.HeaderedPlaylist.RemoveListeners.Add(this);
+            await PlaylistController.SetPlaylist(PlaylistTabView.SelectedItem as Playlist);
         }
 
         private ScrollDirection direction;

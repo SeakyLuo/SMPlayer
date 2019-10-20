@@ -29,6 +29,7 @@ namespace SMPlayer
 {
     public sealed partial class HeaderedPlaylistControl : UserControl
     {
+        public PlaylistControl HeaderedPlaylist { get => HeaderedPlaylistController; }
         public Playlist CurrentPlaylist { get; set; }
         public Brush HeaderBackground
         {
@@ -45,7 +46,7 @@ namespace SMPlayer
         private static Dictionary<string, List<MusicDisplayItem>> PlaylistDisplayDict = new Dictionary<string, List<MusicDisplayItem>>();
         private static readonly Random random = new Random();
         private static RenameDialog dialog;
-        public PlaylistControl HeaderedPlaylist { get => HeaderedPlaylistController; }
+        private RemoveDialog DeleteDialog;
         public HeaderedPlaylistControl()
         {
             this.InitializeComponent();
@@ -67,6 +68,11 @@ namespace SMPlayer
             if (PlaylistDisplayDict.TryGetValue(playlist.Name, out List<MusicDisplayItem> MusicDisplayItems))
             {
                 item = MusicDisplayItems[random.Next(MusicDisplayItems.Count)];
+                await Dispatcher.RunIdleAsync(async (args) =>
+                {
+                    var items = await playlist.GetAllDisplayItemsAsync();
+                    if (items.Count != MusicDisplayItems.Count) PlaylistDisplayDict[playlist.Name] = items;
+                });
             }
             else
             {
@@ -119,7 +125,32 @@ namespace SMPlayer
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            PlaylistsPage.DeletePlaylist(CurrentPlaylist);
+            DeletePlaylist(CurrentPlaylist);
+        }
+
+        public async void DeletePlaylist(Playlist playlist)
+        {
+            if (DeleteDialog == null)
+            {
+                DeleteDialog = new RemoveDialog()
+                {
+                    Confirm = () => ExecutePlaylistDeletion(playlist)
+                };
+            }
+            if (DeleteDialog.IsChecked)
+            {
+                ExecutePlaylistDeletion(playlist);
+            }
+            else
+            {
+                DeleteDialog.Message = Helper.LocalizeMessage("RemovePlaylist", playlist.Name);
+                await DeleteDialog.ShowAsync();
+            }
+        }
+        private void ExecutePlaylistDeletion(Playlist playlist)
+        {
+            PlaylistsPage.Playlists.Remove(playlist);
+            Settings.settings.Playlists.Remove(playlist);
         }
 
         private SymbolIcon PinIcon = new SymbolIcon(Symbol.Pin);

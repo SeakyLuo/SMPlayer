@@ -59,15 +59,14 @@
             Margin="0,5,0,3"
             FontWeight="SemiBold"
             MaxLines="2"
-            Text="{Binding Name}"
+            Text="{Binding Name, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownAlbum}"
             TextAlignment="Left"
-            TextWrapping="Wrap"
-            Visibility="{Binding Name, Converter={StaticResource VisibilityConverter}}" />
+            TextWrapping="Wrap" />
         <TextBlock
             Grid.Row="2"
             FontSize="12"
             Foreground="Gray"
-            Text="{Binding Artist}"
+            Text="{Binding Artist, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist}"
             TextAlignment="Left" />
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="CommonStates">

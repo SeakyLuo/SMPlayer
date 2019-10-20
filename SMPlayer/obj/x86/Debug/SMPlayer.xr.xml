@@ -77,9 +77,9 @@
       <RootProperty Name="Foreground" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="MaxLines" />
-      <RootProperty Name="Visibility" />
       <RootProperty Name="Width" />
       <RootProperty Name="TextTrimming" />
+      <RootProperty Name="Visibility" />
       <RootProperty Name="Style" />
       <RootProperty Name="MinWidth" />
       <RootProperty Name="FontFamily" />
@@ -192,6 +192,7 @@
     <RootType FullName="SMPlayer.CriterionConverter" />
     <RootType FullName="SMPlayer.MusicArtistAlbumConverter" />
     <RootType FullName="SMPlayer.HorizontalAlignmentConverter" />
+    <RootType FullName="SMPlayer.EmptyStringConverter" />
     <RootType FullName="Windows.UI.Xaml.Media.AcrylicBrush">
       <RootProperty Name="BackgroundSource" />
       <RootProperty Name="FallbackColor" />
@@ -774,7 +775,6 @@
       <RootProperty Name="CanDragItems" />
       <RootProperty Name="CanReorderItems" />
       <RootProperty Name="IsCloseButtonOverlay" />
-      <RootProperty Name="ItemsSource" />
       <RootProperty Name="SelectionMode" />
       <RootProperty Name="Style" />
       <RootProperty Name="TabNavigation" />
@@ -939,7 +939,6 @@
       <RootProperty Name="Style" />
       <RootProperty Name="Content" />
       <RootProperty Name="ContextFlyout" />
-      <RootProperty Name="Tag" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.NavigationViewItemPresenter">
       <RootProperty Name="Margin" />
@@ -1090,10 +1089,9 @@
       <RootProperty Name="Style" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">
-      <RootProperty Name="Margin" />
       <RootProperty Name="Icon" />
-      <RootProperty Name="Label" />
       <RootProperty Name="Style" />
+      <RootProperty Name="Label" />
       <RootProperty Name="IsEnabled" />
       <RootEvent Name="Click" />
     </RootType>

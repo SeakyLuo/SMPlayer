@@ -159,13 +159,14 @@ namespace SMPlayer.Models
             return NamingError.Good;
         }
 
-        public void RenamePlaylist(string oldName, string newName, RenameOption option, object data = null)
+        public async void RenamePlaylist(string oldName, string newName, RenameOption option, object data = null)
         {
             switch (option)
             {
                 case RenameOption.New:
                     Playlist playlist = new Playlist(newName);
                     if (data != null) playlist.Add(data);
+                    await playlist.SetDisplayItemAsync();
                     Playlists.Add(playlist);
                     PlaylistsPage.Playlists.Add(playlist);
                     break;

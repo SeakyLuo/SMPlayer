@@ -166,7 +166,7 @@ namespace SMPlayer
                 Text = localizedPlay,
                 Name = MusicMenuName
             };
-            playItem.SetToolTip(localizedPlay + string.Format(Helper.LocalizeMessage("MusicName"), music.Name));
+            playItem.SetToolTip(localizedPlay + Helper.LocalizeMessage("MusicName", music.Name));
             playItem.Click += async (s, args) =>
             {
                 await MediaHelper.SetMusicAndPlay(music);
@@ -183,7 +183,7 @@ namespace SMPlayer
             {
                 await new RemoveDialog()
                 {
-                    Message = string.Format(Helper.LocalizeMessage("DeleteMusic"), music.Name),
+                    Message = Helper.LocalizeMessage("DeleteMusic", music.Name),
                     Confirm = async () =>
                     {
                         StorageFile file = await StorageFile.GetFileFromPathAsync(music.Path);
@@ -191,7 +191,7 @@ namespace SMPlayer
                         MusicLibraryPage.AllSongs.Remove(music);
                         Settings.settings.DeleteMusic(music);
                         MediaHelper.RemoveMusic(music);
-                        var notification = string.Format(Helper.LocalizeMessage("MusicDeleted"), music.Name);
+                        var notification = Helper.LocalizeMessage("MusicDeleted", music.Name);
                         MainPage.Instance?.ShowNotification(notification);
                         NowPlayingFullPage.Instance?.ShowNotification(notification);
                     }
