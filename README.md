@@ -12,8 +12,6 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
-Handle Music Not Found.
-
 ThemeColor change.
 
 Add Album Art to Music.
@@ -36,6 +34,8 @@ Improved Bytes.
 
 Sort local.
 
+Update toast when pause.
+
 # TO FIX
 Bad performance when given many music files.
 
@@ -44,5 +44,3 @@ Bad performance of Loading NowPlayingFull.
 Set lyrics bug.
 
 Repeatedly set shuffle.
-
-CommandBar overflow not shown unless size change.
