@@ -33,7 +33,7 @@ namespace SMPlayer
         private void MusicGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = (GridMusicView)e.ClickedItem;
-            MediaHelper.SetMusicAndPlay(MusicCollection, item.Source);
+            MainPage.Instance.ShowAddMusicResultNotification(MusicCollection, item.Source);
         }
 
         public async System.Threading.Tasks.Task Setup(ICollection<Music> collection)

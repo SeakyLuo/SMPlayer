@@ -62,6 +62,7 @@ namespace SMPlayer
 
         public void PauseMusic()
         {
+            MediaHelper.Pause();
             MiniMediaControl.PauseMusic();
         }
 

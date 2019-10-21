@@ -409,7 +409,7 @@ namespace SMPlayer
                     break;
             }
             await Helper.UpdateTile(thumbnail, music);
-            thumbnail.Dispose();
+            thumbnail?.Dispose();
         }
         public void SetMusicAndPlay(Music music)
         {
@@ -455,11 +455,11 @@ namespace SMPlayer
             }
         }
 
-        private void ShuffleButton_Click(object sender, RoutedEventArgs e)
+        private async void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
             SetShuffle((bool)ShuffleButton.IsChecked);
             if (MediaHelper.ShuffleEnabled)
-                MediaHelper.ShuffleOthers();
+                await MediaHelper.ShuffleOthers();
         }
         private void MoreShuffleButton_Tapped(object sender, TappedRoutedEventArgs e)
         {

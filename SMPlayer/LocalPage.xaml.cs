@@ -139,7 +139,7 @@ namespace SMPlayer
         private void LocalShuffleItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var tree = History.Peek();
-            MediaHelper.ShuffleAndPlay(LocalFrame.SourcePageType == typeof(LocalMusicPage) ? tree.Files : tree.Flatten());
+            MainPage.Instance.ShowAddMusicResultNotification(LocalFrame.SourcePageType == typeof(LocalMusicPage) ? tree.Files : tree.Flatten());
         }
 
         private void SetText(TreeInfo info, bool setHeader = true)

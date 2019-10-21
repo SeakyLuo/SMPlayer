@@ -144,6 +144,12 @@
   <data name="MusicName" xml:space="preserve">
     <value>《{0}》</value>
   </data>
+  <data name="MusicNotFound" xml:space="preserve">
+    <value>找不到《{0}》</value>
+  </data>
+  <data name="MusicsNotFound" xml:space="preserve">
+    <value>{0}首歌曲无法被找到。已跳过。</value>
+  </data>
   <data name="NamingErrorEmptyOrWhiteSpace" xml:space="preserve">
     <value>名称不能为空！</value>
   </data>

@@ -630,6 +630,9 @@
   <data name="Shuffle" xml:space="preserve">
     <value>随机播放</value>
   </data>
+  <data name="Shuffle and Play" xml:space="preserve">
+    <value>随机播放</value>
+  </data>
   <data name="Shuffle: Disabled" xml:space="preserve">
     <value>随机播放：关闭</value>
   </data>

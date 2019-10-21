@@ -103,7 +103,7 @@ namespace SMPlayer
         private void PlayAllButton_Click(object sender, RoutedEventArgs e)
         {
             var data = (sender as Button).DataContext as GridFolderView;
-            MediaHelper.ShuffleAndPlay(data.Songs);
+            MainPage.Instance.ShowAddMusicResultNotification(data.Songs);
         }
         private void AddToButton_Click(object sender, RoutedEventArgs e)
         {
@@ -157,9 +157,9 @@ namespace SMPlayer
             {
                 node.IsExpanded = !node.IsExpanded;
             }
-            else if (node.Content is Music)
+            else if (node.Content is Music music)
             {
-                MediaHelper.SetMusicAndPlay((node.Parent.Content as FolderTree).Files, node.Content as Music);
+                MainPage.Instance.ShowAddMusicResultNotification((node.Parent.Content as FolderTree).Files, music);
             }
         }
 

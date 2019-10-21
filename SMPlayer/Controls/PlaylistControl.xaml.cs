@@ -136,7 +136,7 @@ namespace SMPlayer
         private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Music music = (Music)e.ClickedItem;
-            MediaHelper.SetMusicAndPlay(CurrentPlaylist, music);
+            MainPage.Instance.ShowAddMusicResultNotification(CurrentPlaylist, music);
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)

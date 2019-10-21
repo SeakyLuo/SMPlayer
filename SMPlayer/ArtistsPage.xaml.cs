@@ -111,7 +111,7 @@ namespace SMPlayer
         {
             Music music = (Music)e.ClickedItem;
             ListView listView = (ListView)sender;
-            MediaHelper.SetMusicAndPlay(listView.ItemsSource as ObservableCollection<Music>, music);
+            MainPage.Instance.ShowAddMusicResultNotification(listView.ItemsSource as ObservableCollection<Music>, music);
         }
 
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
@@ -134,6 +134,7 @@ namespace SMPlayer
 
         private void OpenPlaylistMenuFlyout(object sender, object e)
         {
+            (((sender as MenuFlyout).Target as FrameworkElement).DataContext as ArtistView).Load();
             MenuFlyoutHelper.SetPlaylistMenu(sender);
         }
         private void OpenMusicMenuFlyout(object sender, object e)

@@ -144,6 +144,12 @@
   <data name="MusicName" xml:space="preserve">
     <value> "{0}"</value>
   </data>
+  <data name="MusicNotFound" xml:space="preserve">
+    <value>"{0}" cannot be found.</value>
+  </data>
+  <data name="MusicsNotFound" xml:space="preserve">
+    <value>Skipped {0} songs as they cannot be found.</value>
+  </data>
   <data name="NamingErrorEmptyOrWhiteSpace" xml:space="preserve">
     <value>Playlist name cannot be empty or whitespaces!</value>
   </data>

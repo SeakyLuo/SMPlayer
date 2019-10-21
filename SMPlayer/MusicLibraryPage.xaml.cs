@@ -89,7 +89,7 @@ namespace SMPlayer
         {
             var music = (Music)MusicLibraryDataGrid.SelectedItem;
             if (music == null) return;
-            MediaHelper.SetMusicAndPlay(AllSongs, music);
+            MainPage.Instance.ShowAddMusicResultNotification(AllSongs, music);
         }
 
         public void MusicModified(Music before, Music after)

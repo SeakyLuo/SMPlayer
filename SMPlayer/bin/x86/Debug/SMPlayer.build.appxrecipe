@@ -352,9 +352,6 @@
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Dialogs\MusicDialog.xbf">
       <PackagePath>Dialogs\MusicDialog.xbf</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Dialogs\NotFoundDialog.xbf">
-      <PackagePath>Dialogs\NotFoundDialog.xbf</PackagePath>
-    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Dialogs\RemoveDialog.xbf">
       <PackagePath>Dialogs\RemoveDialog.xbf</PackagePath>
     </AppxPackagedFile>

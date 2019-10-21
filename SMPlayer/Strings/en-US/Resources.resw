@@ -630,6 +630,9 @@
   <data name="Shuffle" xml:space="preserve">
     <value>Shuffle</value>
   </data>
+  <data name="Shuffle and Play" xml:space="preserve">
+    <value>Shuffle and Play</value>
+  </data>
   <data name="Shuffle: Disabled" xml:space="preserve">
     <value>Shuffle: Disabled</value>
   </data>

@@ -103,7 +103,7 @@ namespace SMPlayer
 
         private void Shuffle_Click(object sender, RoutedEventArgs e)
         {
-            MediaHelper.ShuffleAndPlay(CurrentPlaylist.Songs);
+            MainPage.Instance.ShowAddMusicResultNotification(CurrentPlaylist.Songs);
         }
         private void AddTo_Click(object sender, RoutedEventArgs e)
         {

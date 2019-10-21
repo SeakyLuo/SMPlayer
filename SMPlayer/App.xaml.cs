@@ -169,7 +169,8 @@ namespace SMPlayer
                                 MediaHelper.NextMusic();
                                 break;
                             case "Pause":
-                                Helper.GetMediaControlContainer().PauseMusic();
+                                MediaHelper.Pause();
+                                //Helper.GetMediaControlContainer().PauseMusic();
                                 break;
                             default:
                                 break;

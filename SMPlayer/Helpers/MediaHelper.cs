@@ -179,39 +179,53 @@ namespace SMPlayer
         }
         private static ExecutionStatus status = ExecutionStatus.Ready;
         private static int SetPlaylistCounter = 0;
-        public static async Task SetPlaylist(ICollection<Music> playlist)
+        public static async Task<AddMusicResult> SetPlaylist(ICollection<Music> playlist)
         {
             SetPlaylistCounter++;
             if (status == ExecutionStatus.Ready) status = ExecutionStatus.Running;
             else if (status == ExecutionStatus.Running) while (SetPlaylistCounter > 1) { }
             if (CurrentPlaylist.Count > 0) Clear();
+            var result = new AddMusicResult();
             foreach (var item in playlist)
+            {
                 if (SetPlaylistCounter > 1)
                 {
                     SetPlaylistCounter--;
-                    return;
+                    return result.Break();
                 }
-                else await AddMusic(item);
+                else
+                {
+                    result.Check(await AddMusic(item), item);
+                }
+            }
             if (!CurrentPlaylist.Contains(CurrentMusic))
                 CurrentMusic = CurrentPlaylist[0];
             SetPlaylistCounter--;
             status = ExecutionStatus.Ready;
+            return result;
         }
-        public static async Task AddMusic(ICollection<Music> playlist)
+        public static async Task<AddMusicResult> AddMusic(ICollection<Music> playlist)
         {
             SetPlaylistCounter++;
             if (status == ExecutionStatus.Ready) status = ExecutionStatus.Running;
             else if (status == ExecutionStatus.Running) while (SetPlaylistCounter > 1) { }
+            var result = new AddMusicResult();
             foreach (var item in playlist)
+            {
                 if (SetPlaylistCounter > 1)
                 {
                     if (CurrentPlaylist.Count > 0) Clear();
                     SetPlaylistCounter--;
-                    return;
+                    return result.Break();
                 }
-                else await AddMusic(item);
+                else
+                {
+                    result.Check(await AddMusic(item), item);
+                }
+            }
             SetPlaylistCounter--;
             status = ExecutionStatus.Ready;
+            return result;
         }
 
         public static async Task<bool> SetMusicAndPlay(Music music)
@@ -222,17 +236,19 @@ namespace SMPlayer
             return successful;
         }
 
-        public static async void SetMusicAndPlay(ICollection<Music> playlist, Music music)
+        public static async Task<AddMusicResult> SetMusicAndPlay(ICollection<Music> playlist, Music music)
         {
+            var result = new AddMusicResult();
             if (Helper.SamePlaylist(CurrentPlaylist, playlist))
             {
                 MoveToMusic(music);
                 if (!IsPlaying) Play();
+                return result;
             }
             else
             {
                 Clear();
-                if (await AddMusic(music))
+                if (result.Check(await AddMusic(music), music))
                 {
                     if (CurrentPlaylist[0] != music) MoveToMusic(music);
                     if (!IsPlaying) Play();
@@ -240,35 +256,39 @@ namespace SMPlayer
                     if (ShuffleEnabled)
                     {
                         target.Remove(music);
-                        await AddMusic(ShufflePlaylist(target));
+                        return await AddMusic(ShufflePlaylist(target));
                     }
                     else
                     {
                         int index = target.IndexOf(music);
                         foreach (var m in target.GetRange(0, index))
-                            await InsertMusic(m, CurrentPlaylist.Count - 1);
+                            result.Check(await InsertMusic(m, CurrentPlaylist.Count - 1), m);
                         foreach (var m in target.GetRange(index + 1, target.Count - index - 1))
-                            await AddMusic(m);
+                            result.Check(await AddMusic(m), m);
                     }
-                };
+                }
+                return result;
             }
         }
 
-        public static async void ShuffleAndPlay(ICollection<Music> playlist)
+        public static async Task<AddMusicResult> ShuffleAndPlay(ICollection<Music> playlist)
         {
             SetMode(PlayMode.Shuffle);
-            await SetPlaylist(ShufflePlaylist(playlist));
+            var result = await SetPlaylist(ShufflePlaylist(playlist));
             Play();
+            return result;
         }
 
-        public static async void ShuffleOthers()
+        public static async Task<AddMusicResult> ShuffleOthers()
         {
             PendingPlaybackList = new MediaPlaybackList();
             var playlist = ShufflePlaylist(CurrentPlaylist, CurrentMusic);
             CurrentPlaylist.Clear();
+            var result = new AddMusicResult();
             foreach (var item in playlist)
-                await AddMusic(item);
+                result.Check(await AddMusic(item), item);
             CurrentPlaylist[0].IsPlaying = true;
+            return result;
         }
 
         public static List<Music> ShufflePlaylist(ICollection<Music> playlist, Music start = null)
@@ -337,22 +357,33 @@ namespace SMPlayer
                 PlaybackList.MoveNext();
         }
 
-        public static void MoveToMusic(int index)
+        public static bool MoveToMusic(int index)
         {
-            PlaybackList.MoveTo(Convert.ToUInt32(index));
+            try
+            {
+                PlaybackList.MoveTo(Convert.ToUInt32(index));
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
-        public static void MoveToMusic(Music music)
+        public static bool MoveToMusic(Music music)
         {
-            if (music == null) return;
-            for (int i = 0; i < CurrentPlaylist.Count; i++)
+            if (music != null)
             {
-                if (CurrentPlaylist[i] == music)
+                for (int i = 0; i < CurrentPlaylist.Count; i++)
                 {
-                    PlaybackList.MoveTo(Convert.ToUInt32(i));
-                    break;
+                    if (CurrentPlaylist[i] == music)
+                    {
+                        PlaybackList.MoveTo(Convert.ToUInt32(i));
+                        return true;
+                    }
                 }
             }
+            return false;
         }
 
         public static bool RemoveMusic(Music music)
@@ -402,5 +433,33 @@ namespace SMPlayer
         void Pause();
         void Tick();
         void MediaEnded();
+    }
+
+    public enum AddMusicStatus
+    {
+        Successful = 0, Failed = 1, Break = 2
+    }
+
+    public class AddMusicResult
+    {
+        public AddMusicStatus Status = AddMusicStatus.Successful;
+        public List<Music> Failed = new List<Music>();
+        public bool IsSuccessful { get => Status == AddMusicStatus.Successful; }
+        public bool IsFailed { get => Status == AddMusicStatus.Failed; }
+        public int FailCount { get => Failed.Count; }
+        public bool Check(bool successful, Music music)
+        {
+            if (!successful)
+            {
+                Failed.Add(music);
+                Status = AddMusicStatus.Failed;
+            }
+            return successful;
+        }
+        public AddMusicResult Break()
+        {
+            Status = AddMusicStatus.Break;
+            return this;
+        }
     }
 }

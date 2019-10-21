@@ -351,6 +351,7 @@ namespace SMPlayer
 
         public void PauseMusic()
         {
+            MediaHelper.Pause();
             MainMediaControl.PauseMusic();
         }
 
@@ -372,6 +373,33 @@ namespace SMPlayer
         {
             ShowResultInAppNotification.Content = message;
             ShowResultInAppNotification.Show(duration);
+        }
+
+        public async void ShowAddMusicResultNotification(ICollection<Music> playlist, Music target)
+        {
+            ShowAddMusicResultNotificationHelper(await MediaHelper.SetMusicAndPlay(playlist, target), target);
+        }
+        public async void ShowAddMusicResultNotification(ICollection<Music> playlist)
+        {
+            ShowAddMusicResultNotificationHelper(await MediaHelper.ShuffleAndPlay(playlist));
+        }
+        private List<Music> NotFoundHistory = new List<Music>();
+        private void ShowAddMusicResultNotificationHelper(AddMusicResult result, Music target = null)
+        {
+            if (result.IsFailed)
+            {
+                int duration = 3000;
+                if (result.FailCount > 1) ShowNotification(Helper.LocalizeMessage("MusicsNotFound", result.FailCount), duration);
+                else
+                {
+                    if (target == null || !result.Failed.Contains(target)) target = result.Failed[0];
+                    if (!NotFoundHistory.Contains(target))
+                    {
+                        NotFoundHistory.Add(target);
+                        ShowNotification(Helper.LocalizeMessage("MusicNotFound", target.Name), duration);
+                    }
+                }
+            }
         }
     }
 }

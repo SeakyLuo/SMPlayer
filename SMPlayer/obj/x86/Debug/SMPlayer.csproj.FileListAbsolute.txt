@@ -298,8 +298,3 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\MusicDialog.
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\MusicDialog.g.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\MusicDialog.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\MusicDialog.xbf
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Dialogs\NotFoundDialog.xbf
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\NotFoundDialog.g.i.cs
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\NotFoundDialog.g.cs
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\NotFoundDialog.xaml
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\NotFoundDialog.xbf
