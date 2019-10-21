@@ -925,7 +925,6 @@ namespace SMPlayer
 
     public interface MediaControlContainer
     {
-        void PauseMusic();
         void ShowNotification(string message, int duration = 1500);
     }
 }

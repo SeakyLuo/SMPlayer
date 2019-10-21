@@ -73,11 +73,6 @@ namespace SMPlayer
             ShowResultInAppNotification.Show(duration);
         }
 
-        public void PauseMusic()
-        {
-            FullMediaControl.PauseMusic();
-        }
-
         public void PlaylistRequested(ICollection<Music> playlist)
         {
             PlaylistBladeItem.StartBringIntoView();

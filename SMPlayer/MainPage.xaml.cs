@@ -349,12 +349,6 @@ namespace SMPlayer
             }
         }
 
-        public void PauseMusic()
-        {
-            MediaHelper.Pause();
-            MainMediaControl.PauseMusic();
-        }
-
         private void HeaderSearchButton_Click(object sender, RoutedEventArgs e)
         {
             MainNavigationViewHeader.Visibility = Visibility.Collapsed;
@@ -388,7 +382,7 @@ namespace SMPlayer
         {
             if (result.IsFailed)
             {
-                int duration = 3000;
+                int duration = 5000;
                 if (result.FailCount > 1) ShowNotification(Helper.LocalizeMessage("MusicsNotFound", result.FailCount), duration);
                 else
                 {

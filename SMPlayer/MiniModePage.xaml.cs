@@ -22,7 +22,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MiniModePage : Page, MediaControlContainer
+    public sealed partial class MiniModePage : Page
     {
         public static Size PageSize { get => new Size(300, 300); }
         //public static Size PageSize { get => new Size(300, Settings.settings.MiniModeWithDropdown ? 900 : 300); }
@@ -59,14 +59,6 @@ namespace SMPlayer
             // Update title bar control size as needed to account for system size changes.
             AppTitleBar.Height = coreTitleBar.Height;
         }
-
-        public void PauseMusic()
-        {
-            MediaHelper.Pause();
-            MiniMediaControl.PauseMusic();
-        }
-
-        public void ShowNotification(string message, int duration = 1500) { }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
