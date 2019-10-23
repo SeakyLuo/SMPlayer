@@ -28,7 +28,7 @@ namespace SMPlayer
     public sealed partial class SettingsPage : Page, TreeInitProgressListener
     {
         private static List<AfterPathSetListener> listeners = new List<AfterPathSetListener>();
-        public static ShowNotification[] NotificationOptions = { ShowNotification.Always, ShowNotification.MusicChanged, ShowNotification.Never };
+        public static ShowToast[] NotificationOptions = { ShowToast.Always, ShowToast.MusicChanged, ShowToast.Never };
         public SettingsPage()
         {
             this.InitializeComponent();
@@ -37,7 +37,7 @@ namespace SMPlayer
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             PathBox.Text = Settings.settings.RootPath;
-            NotificationComboBox.SelectedItem = Settings.settings.Notification;
+            NotificationComboBox.SelectedItem = Settings.settings.Toast;
             ThemeColorPicker.Color = Settings.settings.ThemeColor;
         }
 
@@ -97,7 +97,7 @@ namespace SMPlayer
 
         private void NotificationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Settings.settings.Notification = NotificationOptions[(sender as ComboBox).SelectedIndex];
+            Settings.settings.Toast = NotificationOptions[(sender as ComboBox).SelectedIndex];
         }
 
         public void Update(string folder, string file, int progress, int max)

@@ -21,7 +21,7 @@ namespace SMPlayer.Models
         GridView = 1
     }
 
-    public enum ShowNotification
+    public enum ShowToast
     {
         Always = 0,
         MusicChanged = 1,

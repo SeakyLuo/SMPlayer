@@ -298,3 +298,14 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\MusicDialog.
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\MusicDialog.g.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\MusicDialog.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\MusicDialog.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\e_sqlite3.dll
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\WatsonRegistrationUtility.dll
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Microsoft.AppCenter.dll
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Microsoft.AppCenter.Crashes.dll
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\WatsonRegistrationUtility.winmd
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SQLite-net.dll
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SQLitePCLRaw.batteries_green.dll
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SQLitePCLRaw.batteries_v2.dll
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SQLitePCLRaw.core.dll
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SQLitePCLRaw.provider.e_sqlite3.dll
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\.winmd_cache\$WatsonRegistrationUtility.winmd_636970854560000000.json

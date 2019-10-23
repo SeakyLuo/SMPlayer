@@ -23,7 +23,7 @@ namespace SMPlayer.Models
         public double Volume { get; set; }
         public bool IsNavigationCollapsed { get; set; }
         public Color ThemeColor { get; set; }
-        public ShowNotification Notification { get; set; }
+        public ShowToast Toast { get; set; }
         public string LastPage { get; set; }
         public List<Playlist> Playlists { get; set; }
         public string LastPlaylist { get; set; }

@@ -29,7 +29,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class NowPlayingFullPage : Page, MediaControlContainer, MusicRequestListener
+    public sealed partial class NowPlayingFullPage : Page, NotificationContainer, MusicRequestListener
     {
         public static NowPlayingFullPage Instance { get => (Window.Current.Content as Frame).Content as NowPlayingFullPage; }
         public NowPlayingFullPage()
@@ -71,6 +71,11 @@ namespace SMPlayer
         {
             ShowResultInAppNotification.Content = message;
             ShowResultInAppNotification.Show(duration);
+        }
+
+        public async void ShowAddMusicResultNotification(ICollection<Music> playlist, Music target)
+        {
+            Helper.ShowAddMusicResultNotification(await MediaHelper.SetMusicAndPlay(playlist, target), target);
         }
 
         public void PlaylistRequested(ICollection<Music> playlist)

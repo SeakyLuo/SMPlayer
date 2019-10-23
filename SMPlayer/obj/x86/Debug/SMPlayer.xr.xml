@@ -1041,14 +1041,13 @@
       <RootProperty Name="RenderTransform" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.CommandBar">
-      <RootProperty Name="IsDynamicOverflowEnabled" />
       <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Background" />
       <RootProperty Name="DefaultLabelPosition" />
       <RootProperty Name="Style" />
       <RootProperty Name="PrimaryCommands" />
-      <RootProperty Name="SecondaryCommands" />
+      <RootProperty Name="IsDynamicOverflowEnabled" />
       <RootProperty Name="OverflowButtonVisibility" />
       <RootProperty Name="Content" />
       <RootProperty Name="IsOpen" />

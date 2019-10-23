@@ -34,7 +34,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MainPage : Page, MediaControlContainer
+    public sealed partial class MainPage : Page, NotificationContainer
     {
         public static MainPage Instance
         {
@@ -371,29 +371,11 @@ namespace SMPlayer
 
         public async void ShowAddMusicResultNotification(ICollection<Music> playlist, Music target)
         {
-            ShowAddMusicResultNotificationHelper(await MediaHelper.SetMusicAndPlay(playlist, target), target);
+            Helper.ShowAddMusicResultNotification(await MediaHelper.SetMusicAndPlay(playlist, target), target);
         }
         public async void ShowAddMusicResultNotification(ICollection<Music> playlist)
         {
-            ShowAddMusicResultNotificationHelper(await MediaHelper.ShuffleAndPlay(playlist));
-        }
-        private List<Music> NotFoundHistory = new List<Music>();
-        private void ShowAddMusicResultNotificationHelper(AddMusicResult result, Music target = null)
-        {
-            if (result.IsFailed)
-            {
-                int duration = 5000;
-                if (result.FailCount > 1) ShowNotification(Helper.LocalizeMessage("MusicsNotFound", result.FailCount), duration);
-                else
-                {
-                    if (target == null || !result.Failed.Contains(target)) target = result.Failed[0];
-                    if (!NotFoundHistory.Contains(target))
-                    {
-                        NotFoundHistory.Add(target);
-                        ShowNotification(Helper.LocalizeMessage("MusicNotFound", target.Name), duration);
-                    }
-                }
-            }
+            Helper.ShowAddMusicResultNotification(await MediaHelper.ShuffleAndPlay(playlist));
         }
     }
 }

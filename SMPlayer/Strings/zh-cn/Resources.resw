@@ -394,7 +394,7 @@
     <value>音乐库</value>
   </data>
   <data name="MusicChangedComboItem.Content" xml:space="preserve">
-    <value>音乐更换</value>
+    <value>音乐改变</value>
   </data>
   <data name="MusicFolderTextBlock.Text" xml:space="preserve">
     <value>音乐文件夹</value>

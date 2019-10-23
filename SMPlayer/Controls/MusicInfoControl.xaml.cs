@@ -84,7 +84,7 @@ namespace SMPlayer.Controls
         private void ResetMusicPropertiesButton_Click(object sender, RoutedEventArgs e)
         {
             SetMusicProperties(Properties);
-            ((Window.Current.Content as Frame).Content as MediaControlContainer).ShowNotification(Helper.LocalizeMessage("PropertiesReset"));
+            ((Window.Current.Content as Frame).Content as NotificationContainer).ShowNotification(Helper.LocalizeMessage("PropertiesReset"));
         }
 
         private async void SaveMusicPropertiesButton_Click(object sender, RoutedEventArgs e)
@@ -106,7 +106,7 @@ namespace SMPlayer.Controls
             if (uint.TryParse(YearTextBox.Text, out uint Year))
                 Properties.Year = Year;
             await Properties.SavePropertiesAsync();
-            Helper.GetMediaControlContainer().ShowNotification(Helper.LocalizeMessage("PropertiesUpdated"));
+            Helper.ShowNotification("PropertiesUpdated");
         }
         public async void SetBasicProperties(StorageFile file)
         {

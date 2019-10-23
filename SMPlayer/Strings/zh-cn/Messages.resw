@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BingUri" xml:space="preserve">
+    <value>https://cn.bing.com/</value>
+  </data>
   <data name="ClearPlaylist" xml:space="preserve">
     <value>你希望清空播放列表“{0}”吗？</value>
   </data>
@@ -131,6 +134,9 @@
   </data>
   <data name="LoadMusicLibrary" xml:space="preserve">
     <value>正在加载音乐库……</value>
+  </data>
+  <data name="Lyrics" xml:space="preserve">
+    <value>歌词</value>
   </data>
   <data name="LyricsReset" xml:space="preserve">
     <value>歌词已重置！</value>

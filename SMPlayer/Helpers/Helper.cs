@@ -44,9 +44,31 @@ namespace SMPlayer
         public static ResourceLoader MessageResourceLoader = ResourceLoader.GetForCurrentView("Messages");
 
         private static string Lyrics = "";
-                    
-        public static MediaControlContainer GetMediaControlContainer() { return (Window.Current.Content as Frame).Content as MediaControlContainer; }
+        private static List<Music> NotFoundHistory = new List<Music>();
 
+        public static NotificationContainer GetNotificationContainer() { return (Window.Current.Content as Frame).Content as NotificationContainer; }
+        public static void ShowNotification(string message, int duration = 1500)
+        {
+            GetNotificationContainer().ShowNotification(Localize(message), duration);
+        }
+        public static void ShowAddMusicResultNotification(AddMusicResult result, Music target = null)
+        {
+            if (result.IsFailed)
+            {
+                NotificationContainer container = GetNotificationContainer();
+                int duration = 5000;
+                if (result.FailCount > 1) container.ShowNotification(LocalizeMessage("MusicsNotFound", result.FailCount), duration);
+                else
+                {
+                    if (target == null || !result.Failed.Contains(target)) target = result.Failed[0];
+                    if (!NotFoundHistory.Contains(target))
+                    {
+                        NotFoundHistory.Add(target);
+                        container.ShowNotification(LocalizeMessage("MusicNotFound", target.Name), duration);
+                    }
+                }
+            }
+        }
         public static string CurrentLanguage
         {
             get => new Windows.Globalization.Language(Windows.System.UserProfile.GlobalizationPreferences.Languages[0]).DisplayName;
@@ -151,8 +173,8 @@ namespace SMPlayer
 
         public static async void ShowToast(Music music)
         {
-            ShowNotification status = Settings.settings.Notification;
-            if (status == ShowNotification.Never) return;
+            ShowToast status = Settings.settings.Toast;
+            if (status == Models.ShowToast.Never) return;
             var toastContent = new ToastContent()
             {
                 Visual = new ToastVisual()
@@ -183,7 +205,7 @@ namespace SMPlayer
                 ActivationType = ToastActivationType.Background,
                 Launch = "Launch",
                 Audio = SlientToast,
-                Scenario = status == ShowNotification.Always ? ToastScenario.Reminder : ToastScenario.Default
+                Scenario = status == Models.ShowToast.Always ? ToastScenario.Reminder : ToastScenario.Default
             };
 
             // Create the toast notification
@@ -414,5 +436,11 @@ namespace SMPlayer
     public enum ExecutionStatus
     {
         Running = 0, Done = 1, Ready = 2
+    }
+
+    public interface NotificationContainer
+    {
+        void ShowNotification(string message, int duration = 1500);
+        void ShowAddMusicResultNotification(ICollection<Music> playlist, Music target);
     }
 }

@@ -922,9 +922,4 @@ namespace SMPlayer
         void MusicInfoRequested(Music music);
         void LyricsRequested(Music music);
     }
-
-    public interface MediaControlContainer
-    {
-        void ShowNotification(string message, int duration = 1500);
-    }
 }

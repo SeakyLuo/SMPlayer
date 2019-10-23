@@ -33,7 +33,7 @@ namespace SMPlayer.Controls
         private void ResetLyricsButton_Click(object sender, RoutedEventArgs e)
         {
             LyricsTextBox.Text = Lyrics;
-            Helper.GetMediaControlContainer().ShowNotification(Helper.LocalizeMessage("LyricsReset"));
+            Helper.ShowNotification("LyricsReset");
         }
 
         private async void SaveLyricsButton_Click(object sender, RoutedEventArgs e)
@@ -51,13 +51,14 @@ namespace SMPlayer.Controls
                 }
                 SavingLyricsProgress.Visibility = Visibility.Collapsed;
                 LyricsTextBox.IsEnabled = true;
-                Helper.GetMediaControlContainer().ShowNotification(Helper.LocalizeMessage("LyricsUpdated"));
+                Helper.ShowNotification("LyricsUpdated");
             });
         }
 
         private async void SearchLyricsButton_Click(object sender, RoutedEventArgs e)
         {
-            if (await Windows.System.Launcher.LaunchUriAsync(new Uri("https://cn.bing.com/search?q=lryics+" + $"{CurrentMusic.Name}+{CurrentMusic.Artist}")))
+            string uri = Helper.LocalizeMessage("BingUri") + $"search?q={Helper.LocalizeMessage("Lyrics")}+{CurrentMusic.Name}+{CurrentMusic.Artist}";
+            if (await Windows.System.Launcher.LaunchUriAsync(new Uri(uri)))
             {
 
             }
