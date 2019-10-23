@@ -42,6 +42,7 @@ namespace SMPlayer.Models
             Volume = 50.0d;
             IsNavigationCollapsed = true;
             ThemeColor = (Color)Windows.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(typeof(Color), "#0078D7");
+            Toast = ShowToast.Always;
             LastPage = "";
             Playlists = new List<Playlist>();
             LastPlaylist = "";

@@ -37,7 +37,7 @@ namespace SMPlayer
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             PathBox.Text = Settings.settings.RootPath;
-            NotificationComboBox.SelectedItem = Settings.settings.Toast;
+            NotificationComboBox.SelectedIndex = (int)Settings.settings.Toast;
             ThemeColorPicker.Color = Settings.settings.ThemeColor;
         }
 

@@ -1243,7 +1243,6 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ComboBoxItem">
       <RootProperty Name="Content" />
-      <RootProperty Name="IsSelected" />
     </RootType>
     <RootType FullName="SMPlayer.SettingsPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.NavigationViewItemSeparator" />
