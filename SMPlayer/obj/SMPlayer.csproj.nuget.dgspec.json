@@ -37,6 +37,10 @@
       "frameworks": {
         "uap10.0.17763": {
           "dependencies": {
+            "Microsoft.AppCenter.Crashes": {
+              "target": "Package",
+              "version": "[2.1.1, )"
+            },
             "Microsoft.NETCore.UniversalWindowsPlatform": {
               "target": "Package",
               "version": "[6.2.9, )"
