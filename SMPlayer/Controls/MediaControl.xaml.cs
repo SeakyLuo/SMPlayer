@@ -352,8 +352,16 @@ namespace SMPlayer
                 // For F3 Support
                 await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
                 {
-                    if (sender.PlaybackState == MediaPlaybackState.Playing) PlayMusic();
-                    else if (sender.PlaybackState == MediaPlaybackState.Paused) PauseMusic();
+                    if (sender.PlaybackState == MediaPlaybackState.Playing)
+                    {
+                        PlayMusic();
+                        Helper.ShowPauseToast(MediaHelper.CurrentMusic);
+                    }
+                    else if (sender.PlaybackState == MediaPlaybackState.Paused)
+                    {
+                        PauseMusic();
+                        Helper.ShowPlayToast(MediaHelper.CurrentMusic);
+                    }
                 });
             };
         }
@@ -808,7 +816,7 @@ namespace SMPlayer
                 SetMusic(next);
                 Helper.HideToast();
                 // Use current instead of next to avoid showing toast on app launch
-                if (current != null && !Window.Current.Visible) Helper.ShowToast(next);
+                if (current != null) Helper.ShowPauseToast(next);
             });
         }
 

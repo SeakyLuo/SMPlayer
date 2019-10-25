@@ -25,6 +25,10 @@ namespace SMPlayer
             get => Player.PlaybackSession.Position.TotalSeconds;
             set => Player.PlaybackSession.Position = TimeSpan.FromSeconds(value);
         }
+        public static double Progress
+        {
+            get => CurrentMusic == null ? 0d : Position / CurrentMusic.Duration;
+        }
         public static bool IsPlaying
         {
             get => Player.PlaybackSession.PlaybackState == MediaPlaybackState.Playing;

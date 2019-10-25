@@ -34,8 +34,6 @@ Improved Bytes.
 
 Sort local.
 
-Update toast when pause.
-
 # TO FIX
 Bad performance when given many music files.
 
@@ -43,4 +41,4 @@ Bad performance of Loading NowPlayingFull.
 
 Set lyrics bug.
 
-Repeatedly set shuffle.
+Frequently change playstate.
