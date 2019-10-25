@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace SMPlayer
@@ -18,9 +14,9 @@ namespace SMPlayer
         {
             get
             {
-                #pragma warning disable DF0023 // Disposing of this is handled by the TagLibSharp lib by calling the CloseStream method defined here
+#pragma warning disable DF0023 // Disposing of this is handled by the TagLibSharp lib by calling the CloseStream method defined here
                 return file.OpenStreamForReadAsync().GetAwaiter().GetResult();
-                #pragma warning restore DF0023 // Disposing of this is handled by the TagLibSharp lib by calling the CloseStream method defined here
+#pragma warning restore DF0023 // Disposing of this is handled by the TagLibSharp lib by calling the CloseStream method defined here
             }
         }
 
@@ -29,9 +25,9 @@ namespace SMPlayer
             get
             {
 
-                #pragma warning disable DF0023 // Disposing of this is handled by the TagLibSharp lib by calling the CloseStream method defined here
+#pragma warning disable DF0023 // Disposing of this is handled by the TagLibSharp lib by calling the CloseStream method defined here
                 return file.OpenStreamForWriteAsync().GetAwaiter().GetResult();
-                #pragma warning restore DF0023 // Disposing of this is handled by the TagLibSharp lib by calling the CloseStream method defined here
+#pragma warning restore DF0023 // Disposing of this is handled by the TagLibSharp lib by calling the CloseStream method defined here
             }
         }
 

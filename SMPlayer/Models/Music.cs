@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
 using System.Threading.Tasks;
+using Windows.Media.Core;
+using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
-using SMPlayer.Models;
-using Windows.Media.Core;
-using System.ComponentModel;
-using System.IO;
-using Windows.Media.Playback;
 
 namespace SMPlayer.Models
 {
@@ -184,11 +179,11 @@ namespace SMPlayer.Models
             return string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(other.Name) ? 0 : Name.CompareTo(other.Name);
         }
 
-        public static bool operator == (Music music1, Music music2)
+        public static bool operator ==(Music music1, Music music2)
         {
             return music1 is null ? music2 is null : music1.Equals(music2);
         }
-        public static bool operator != (Music music1, Music music2)
+        public static bool operator !=(Music music1, Music music2)
         {
             return !(music1 == music2);
         }

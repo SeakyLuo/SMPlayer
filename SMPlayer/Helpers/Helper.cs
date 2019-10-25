@@ -2,25 +2,20 @@
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 using Windows.Graphics.Imaging;
+using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
-using Windows.Storage.Streams;
-using Windows.UI;
-using Windows.UI.Core;
 using Windows.UI.Notifications;
 using Windows.UI.StartScreen;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.ApplicationModel.Resources;
-using Windows.Media.Playback;
 
 namespace SMPlayer
 {
@@ -182,11 +177,11 @@ namespace SMPlayer
             switch (state)
             {
                 case MediaPlaybackState.Paused:
-                    controlButton = new ToastButton("Play", "Play") { ActivationType = ToastActivationType.Background };
+                    controlButton = new ToastButton(LocalizeMessage("Play"), "Play") { ActivationType = ToastActivationType.Background };
                     toastTag = ToastTagPlaying;
                     break;
                 case MediaPlaybackState.Playing:
-                    controlButton = new ToastButton("Pause", "Pause") { ActivationType = ToastActivationType.Background };
+                    controlButton = new ToastButton(LocalizeMessage("Pause"), "Pause") { ActivationType = ToastActivationType.Background };
                     toastTag = ToastTagPaused;
                     break;
             }
@@ -213,7 +208,7 @@ namespace SMPlayer
                 {
                     Buttons =
                     {
-                        controlButton, new ToastButton("Next", "Next"){ ActivationType = ToastActivationType.Background }
+                        controlButton, new ToastButton(LocalizeMessage("Next"), "Next"){ ActivationType = ToastActivationType.Background }
                     },
                 },
                 ActivationType = ToastActivationType.Background,
@@ -225,11 +220,12 @@ namespace SMPlayer
             // Create the toast notification
             Toast = new ToastNotification(toastContent.GetXml())
             {
-                ExpirationTime = DateTime.Now.AddSeconds(music.Duration),
                 Tag = toastTag,
                 Group = ToastGroup,
-                Data = new NotificationData() { SequenceNumber = 0 }
+                Data = new NotificationData() { SequenceNumber = 0 },
+                ExpiresOnReboot = true
             };
+            if (status == Models.ShowToast.MusicChanged) Toast.ExpirationTime = DateTime.Now.AddSeconds(5);
             Toast.Data.Values["MediaControlPosition"] = MediaHelper.Progress.ToString();
             Toast.Data.Values["MediaControlPositionTime"] = MusicDurationConverter.ToTime(MediaHelper.Position);
             Lyrics = await music.GetLyricsAsync();
@@ -255,6 +251,7 @@ namespace SMPlayer
         }
         public static void UpdateToast()
         {
+            if (!MediaHelper.IsPlaying) return;
             // Create NotificationData and make sure the sequence number is incremented
             // since last update, or assign 0 for updating regardless of order
             var data = new NotificationData { SequenceNumber = 0 };

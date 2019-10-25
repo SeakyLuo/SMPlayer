@@ -11,7 +11,7 @@ namespace ExpressionBuilder
     public sealed class ColorBrushReferenceNode : ReferenceNode
     {
         internal ColorBrushReferenceNode(string paramName, CompositionColorBrush brush = null) : base(paramName, brush) { }
-        
+
         internal static ColorBrushReferenceNode CreateTargetReference()
         {
             var node = new ColorBrushReferenceNode(null);

@@ -1,24 +1,15 @@
-﻿using System;
+﻿using Microsoft.Toolkit.Uwp.UI.Controls;
+using SMPlayer.Models;
+using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Threading.Tasks;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using System.Collections.ObjectModel;
-using SMPlayer.Models;
-using Windows.Storage;
-using Microsoft.Toolkit.Uwp.UI.Controls;
-using Windows.UI.Core;
-using System.Threading.Tasks;
-using System.Diagnostics;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -112,7 +103,7 @@ namespace SMPlayer
 
         private void MusicLibraryDataGrid_Sorting(object sender, DataGridColumnEventArgs e)
         {
-            string header = e.Column.Header.ToString();
+            string header = e.Column.Tag?.ToString();
             IEnumerable<Music> temp = null;
             switch (header)
             {
@@ -128,14 +119,14 @@ namespace SMPlayer
                 case "Duration":
                     temp = AllSongs.OrderBy((music) => music.Duration);
                     break;
-                case "Play Count":
+                case "PlayCount":
                     temp = AllSongs.OrderBy((music) => music.PlayCount);
                     break;
                 default:
                     return;
             }
             foreach (var column in MusicLibraryDataGrid.Columns)
-                if (column.Header.ToString() != header)
+                if (column.Tag?.ToString() != header)
                     column.SortDirection = null;
             if (e.Column.SortDirection == DataGridSortDirection.Ascending)
             {

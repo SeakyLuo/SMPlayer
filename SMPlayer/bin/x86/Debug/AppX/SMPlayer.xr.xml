@@ -1219,9 +1219,9 @@
       <RootProperty Name="CanUserSort" />
       <RootProperty Name="Foreground" />
       <RootProperty Name="Header" />
-      <RootProperty Name="Tag" />
       <RootProperty Name="CellStyle" />
       <RootProperty Name="MinWidth" />
+      <RootProperty Name="Tag" />
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="CanUserReorder" />
     </RootType>

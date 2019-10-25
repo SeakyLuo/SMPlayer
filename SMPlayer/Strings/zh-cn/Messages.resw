@@ -168,11 +168,20 @@
   <data name="NamingErrorUsed" xml:space="preserve">
     <value>该名称已被使用！</value>
   </data>
+  <data name="Next" xml:space="preserve">
+    <value>下一首</value>
+  </data>
   <data name="NoLyricsAvailable" xml:space="preserve">
     <value>没有歌词</value>
   </data>
   <data name="NotPlayedYet" xml:space="preserve">
     <value>《{0}》尚未被播放。</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>暂停</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>播放</value>
   </data>
   <data name="PropertiesReset" xml:space="preserve">
     <value>歌曲信息已重置！</value>

@@ -168,11 +168,20 @@
   <data name="NamingErrorUsed" xml:space="preserve">
     <value>This name has been used!</value>
   </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
   <data name="NoLyricsAvailable" xml:space="preserve">
     <value>No Lyrics Available</value>
   </data>
   <data name="NotPlayedYet" xml:space="preserve">
     <value>"{0}" has not been played yet.</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>Play</value>
   </data>
   <data name="PropertiesReset" xml:space="preserve">
     <value>Properties is reset!</value>

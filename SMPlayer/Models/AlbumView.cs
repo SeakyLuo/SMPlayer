@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Storage.FileProperties;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMPlayer.Models
@@ -22,7 +17,7 @@ namespace SMPlayer.Models
             {
                 if (value == null) return;
                 thumbnail = value;
-                OnPropertyChanged();;
+                OnPropertyChanged(); ;
             }
         }
         private BitmapImage thumbnail = null;

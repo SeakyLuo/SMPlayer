@@ -45,8 +45,7 @@
                     CanUserResize="False"
                     CanUserSort="False"
                     Foreground="#0078D7"
-                    Header=""
-                    Tag="IsPlaying">
+                    Header="">
                     <controls:DataGridTextColumn.CellStyle>
                         <Style TargetType="controls:DataGridCell">
                             <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
@@ -67,29 +66,28 @@
                     MinWidth="100"
                     Binding="{Binding Artist}"
                     CanUserSort="True"
-                    Header="Artist" />
+                    Tag="Artist" />
                 <controls:DataGridTextColumn
                     x:Uid="AlbumHeader"
                     Width="200"
                     MinWidth="100"
                     Binding="{Binding Album}"
                     CanUserSort="True"
-                    Header="Album" />
+                    Tag="Album" />
                 <controls:DataGridTextColumn
                     x:Uid="DurationHeader"
                     MinWidth="100"
                     MaxWidth="120"
                     Binding="{Binding Duration, Converter={StaticResource MusicDurationConverter}}"
                     CanUserReorder="True"
-                    Header="Duration" />
+                    Tag="Duration" />
                 <controls:DataGridTextColumn
                     x:Uid="FavoriteHeader"
                     MinWidth="100"
                     Binding="{Binding Favorite, Converter={StaticResource MusicFavoriteConverter}, Mode=OneWay}"
                     CanUserReorder="False"
                     CanUserResize="False"
-                    Foreground="Red"
-                    Header="Favorite">
+                    Foreground="Red">
                     <controls:DataGridTextColumn.CellStyle>
                         <Style TargetType="controls:DataGridCell">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -103,7 +101,7 @@
                     MaxWidth="120"
                     Binding="{Binding PlayCount, Converter={StaticResource IntConverter}, Mode=OneWay}"
                     CanUserSort="True"
-                    Header="Play Count" />
+                    Tag="PlayCount" />
             </controls:DataGrid.Columns>
             <controls:DataGrid.RowStyle>
                 <Style TargetType="controls:DataGridRow">

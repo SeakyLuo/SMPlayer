@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMPlayer.Models
 {
@@ -202,7 +200,7 @@ namespace SMPlayer.Models
             OnPropertyChanged();
         }
     }
-    
+
     public enum SortBy
     {
         Title = 0,

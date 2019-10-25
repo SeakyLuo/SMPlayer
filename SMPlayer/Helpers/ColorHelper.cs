@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Graphics.Imaging;
-using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
@@ -63,7 +61,7 @@ namespace SMPlayer
             uint width = decoder.PixelWidth, height = decoder.PixelHeight;
             Size[] TargetPositions = { new Size(width / 8, height / 8), new Size(width * 7 / 8, height / 8),
                                        new Size(width * 7 / 8, height / 8), new Size(width * 7 / 8, height * 7 / 8),
-                                       new Size(width / 4, height / 4), new Size(width * 3 / 4, height / 4), 
+                                       new Size(width / 4, height / 4), new Size(width * 3 / 4, height / 4),
                                        new Size(width / 4, height * 3 / 4), new Size(width * 3 / 4, height * 3 / 4),
                                        new Size(width / 2, height / 2) };
             byte[] bgra = { 0, 0, 0, 255 };

@@ -1,18 +1,8 @@
 ﻿using SMPlayer.Models;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
@@ -28,7 +18,7 @@ namespace SMPlayer
         private FolderTree CurrentTree;
         private string TreePath;
         public static LocalSetter setter;
-        
+
         public LocalFoldersPage()
         {
             this.InitializeComponent();
@@ -60,7 +50,9 @@ namespace SMPlayer
             LocalFolderTreeView.RootNodes.Clear();
             LocalFolderTreeView.RootNodes.Add(FillTreeNode(new TreeViewNode()
             {
-                Content = tree,  IsExpanded = true,  HasUnrealizedChildren = true
+                Content = tree,
+                IsExpanded = true,
+                HasUnrealizedChildren = true
             }));
             LocalLoadingControl.Visibility = Visibility.Visible;
             GridItems.Clear();
@@ -131,7 +123,7 @@ namespace SMPlayer
             var tree = node.Content as FolderTree;
             foreach (var item in tree.Trees)
                 node.Children.Add(FillTreeNode(new TreeViewNode() { Content = item, HasUnrealizedChildren = true }));
-            foreach(var item in tree.Files)
+            foreach (var item in tree.Files)
                 node.Children.Add(new TreeViewNode() { Content = item });
             return node;
         }

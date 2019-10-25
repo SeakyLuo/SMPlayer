@@ -2,14 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Windows.Media;
-using Windows.Media.Core;
 using Windows.Media.Playback;
-using Windows.Storage;
 using Windows.UI.Xaml;
 
 namespace SMPlayer
@@ -57,7 +52,7 @@ namespace SMPlayer
             Source = PlaybackList
         };
         public static List<RemoveMusicListener> RemoveMusicListeners = new List<RemoveMusicListener>();
-        public static DispatcherTimer Timer = new DispatcherTimer {  Interval = TimeSpan.FromSeconds(1) };
+        public static DispatcherTimer Timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         public static List<MediaControlListener> MediaControlListeners = new List<MediaControlListener>();
         public static List<SwitchMusicListener> SwitchMusicListeners = new List<SwitchMusicListener>();
         private const string FILENAME = "NowPlayingPlaylist.json";

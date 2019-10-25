@@ -3,10 +3,7 @@ using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Storage;
-using Windows.Storage.Pickers;
 using Windows.UI.Xaml.Controls;
 
 namespace SMPlayer
@@ -45,7 +42,7 @@ namespace SMPlayer
                     if (Data is ICollection<Music> playlist)
                         foreach (var music in playlist)
                             await MediaHelper.AddMusic(music);
-                    else if(Data is Music music)
+                    else if (Data is Music music)
                         await MediaHelper.AddMusic(music);
                 };
                 addToItem.Items.Add(nowPlayingItem);
