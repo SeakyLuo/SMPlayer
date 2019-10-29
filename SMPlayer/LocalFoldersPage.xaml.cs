@@ -14,8 +14,8 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class LocalFoldersPage : Page, ViewModeChangedListener
     {
+        public static FolderTree CurrentTree;
         private ObservableCollection<GridFolderView> GridItems = new ObservableCollection<GridFolderView>();
-        private FolderTree CurrentTree;
         private string TreePath;
         public static LocalSetter setter;
 
@@ -28,14 +28,13 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Setup(CurrentTree);
             ModeChanged(Settings.settings.LocalFolderGridView);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            CurrentTree = (FolderTree)e.Parameter;
+            Setup(CurrentTree = (FolderTree)e.Parameter);
         }
 
         private void LocalFoldersGridView_ItemClick(object sender, ItemClickEventArgs e)
@@ -80,16 +79,6 @@ namespace SMPlayer
         private void OpenMusicFlyout(object sender, object e)
         {
             MenuFlyoutHelper.SetMusicMenu(sender);
-        }
-
-        private void GridViewItem_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            VisualStateManager.GoToState(sender as Control, "PointerOver", true);
-        }
-
-        private void GridViewItem_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            VisualStateManager.GoToState(sender as Control, "Normal", true);
         }
 
         private void PlayAllButton_Click(object sender, RoutedEventArgs e)
@@ -159,6 +148,16 @@ namespace SMPlayer
         {
             var tree = ((sender as StackPanel).DataContext as TreeViewNode).Content as FolderTree;
             setter.SetPage(tree);
+        }
+
+        private void GridViewItem_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(sender as Control, "PointerOver", true);
+        }
+
+        private void GridViewItem_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(sender as Control, "Normal", true);
         }
     }
 }

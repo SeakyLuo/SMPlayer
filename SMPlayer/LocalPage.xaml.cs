@@ -45,7 +45,7 @@ namespace SMPlayer
             Type page = isFolders ? typeof(LocalFoldersPage) : typeof(LocalMusicPage);
             if (LocalFrame.CurrentSourcePageType != page)
             {
-                if (LocalFrame.CanGoBack && LocalFrame.BackStack.Last().SourcePageType == page)
+                if (LocalFrame.CanGoBack && LocalFrame.BackStack.Last().SourcePageType == page && History.Peek() == (isFolders ? LocalFoldersPage.CurrentTree : LocalMusicPage.CurrentTree))
                     LocalFrame.GoBack();
                 else
                     LocalFrame.Navigate(page, History.Peek());

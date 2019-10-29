@@ -17,8 +17,8 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class LocalMusicPage : Page, SwitchMusicListener, ViewModeChangedListener
     {
+        public static FolderTree CurrentTree;
         private ObservableCollection<Music> Songs = new ObservableCollection<Music>();
-        private FolderTree CurrentTree;
         private string TreePath;
         public static bool ReverseRequested = false, SortByTitleRequested = false, SortByArtistRequested = false, SortByAlbumRequested = false;
         public LocalMusicPage()

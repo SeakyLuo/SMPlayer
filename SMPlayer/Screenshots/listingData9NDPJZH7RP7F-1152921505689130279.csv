@@ -1,6 +1,6 @@
 ﻿Field,ID,Type (类型),default,zh-cn,en-us,,,,,,,
 Description,2,文本,,一个简单的管理本地音乐的音乐播放器，用户界面基于Groove Music。,A Simple Music Player that manages local music files based on the UI of Groove Music.,,,,,,,
-ReleaseNotes,3,文本,,修复问题。,Bug Fixes.,,,,,,,
+ReleaseNotes,3,文本,,多项优化以及问题修复。,Various Improvements and Bug Fixes.,,,,,,,
 Title,4,文本,,SMPlayer,SMPlayer,,,,,,,
 ShortTitle,5,文本,,SMPlayer,SMPlayer,,,,,,,
 SortTitle,6,文本,,SMPlayer,SMPlayer,,,,,,,
