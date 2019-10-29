@@ -5,6 +5,14 @@
     xmlns:local="using:SMPlayer">
     <Application.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="MusicInfoTextBoxBackground" Color="WhiteSmoke" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="MusicInfoTextBoxBackground" Color="Transparent" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Dictionaries/PlaylistAppBarButton.xaml" />
                 <ResourceDictionary Source="Dictionaries/BorderlessAutoSuggestBox.xaml" />

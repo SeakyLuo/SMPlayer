@@ -225,7 +225,7 @@ namespace SMPlayer
                 Data = new NotificationData() { SequenceNumber = 0 },
                 ExpiresOnReboot = true
             };
-            if (status == Models.ShowToast.MusicChanged) Toast.ExpirationTime = DateTime.Now.AddSeconds(5);
+            if (status == Models.ShowToast.MusicChanged) Toast.ExpirationTime = DateTime.Now.AddSeconds(Math.Min(5, music.Duration));
             Toast.Data.Values["MediaControlPosition"] = MediaHelper.Progress.ToString();
             Toast.Data.Values["MediaControlPositionTime"] = MusicDurationConverter.ToTime(MediaHelper.Position);
             Lyrics = await music.GetLyricsAsync();

@@ -70,12 +70,12 @@ namespace SMPlayer.Models
                     FolderTree tree;
                     if (subFolder.Path == Path)
                     {
-                        tree = new FolderTree();
-                        await tree.Init(subFolder, listener, indicator);
+                        tree = new FolderTree(this);
                     }
                     else
                     {
-                        tree = new FolderTree(this);
+                        tree = new FolderTree();
+                        await tree.Init(subFolder, listener, indicator);
                     }
                     newTree.Trees.Add(tree);
                 }

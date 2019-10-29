@@ -309,3 +309,4 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SQLitePCLRaw.batteri
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SQLitePCLRaw.core.dll
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SQLitePCLRaw.provider.e_sqlite3.dll
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\.winmd_cache\$WatsonRegistrationUtility.winmd_636970854560000000.json
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Core\ForBundle\AppxManifest.xml

@@ -6,7 +6,6 @@
     xmlns:local="using:SMPlayer.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-
     <UserControl.Resources>
         <Style
             x:Key="MusicPropertyTextBoxStyle"
@@ -14,6 +13,7 @@
             TargetType="TextBox">
             <Setter Property="Height" Value="30" />
             <Setter Property="Margin" Value="20,5" />
+            <Setter Property="Background" Value="{ThemeResource MusicInfoTextBoxBackground}" />
         </Style>
         <Style x:Key="MusicPropertyBaseTextBlockStyle" TargetType="TextBlock">
             <Setter Property="Height" Value="30" />
@@ -33,6 +33,16 @@
             <Setter Property="Margin" Value="0,5" />
             <Setter Property="TextAlignment" Value="Right" />
         </Style>
+        <ResourceDictionary x:Key="MusicInfoDictionary">
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="MusicInfoTextBoxBackground" Color="WhiteSmoke" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="MusicInfoTextBoxBackground" Color="Transparent" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid>

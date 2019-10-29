@@ -21,25 +21,46 @@ namespace SMPlayer.Models
             }
         }
         private BitmapImage thumbnail = null;
+        public bool NotLoaded { get; set; } = true;
+
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public AlbumView() { }
-
+        public AlbumView(string name, string artist, bool notLoaded = true)
+        {
+            Name = name;
+            Artist = artist;
+            NotLoaded = notLoaded;
+        }
         public AlbumView(string name, string artist, IEnumerable<Music> songs)
         {
             Name = name;
             Artist = artist;
             Songs = new ObservableCollection<Music>(songs);
             FindThumbnail();
+            NotLoaded = false;
         }
         public async void FindThumbnail()
         {
-            foreach (var music in Songs)
-                if ((Cover = await Helper.GetThumbnailAsync(music, false)) != null)
-                    break;
-            if (Cover == null) Cover = Helper.DefaultAlbumCover;
+            Cover = await GetAlbumCoverAsync(Songs);
         }
-
+        public static async System.Threading.Tasks.Task<BitmapImage> GetAlbumCoverAsync(ICollection<Music> songs)
+        {
+            BitmapImage cover;
+            foreach (var music in songs)
+                if ((cover = await Helper.GetThumbnailAsync(music, false)) != null)
+                    return cover;
+            return Helper.DefaultAlbumCover;
+        }
+        public AlbumView Load()
+        {
+            Songs = new ObservableCollection<Music>();
+            foreach (var music in MusicLibraryPage.AllSongs)
+                if (music.Album == Name && music.Artist == Artist)
+                    Songs.Add(music);
+            NotLoaded = false;
+            return this;
+        }
         public Playlist ToPlaylist()
         {
             return new Playlist(Name, Songs)

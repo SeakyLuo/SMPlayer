@@ -24,7 +24,7 @@
             IsItemClickEnabled="True"
             ItemClick="GridView_ItemClick"
             ItemContainerStyle="{StaticResource DropShadowGridViewItemStyle}"
-            ItemsSource="{x:Bind Albums}"
+            ItemsSource="{x:Bind Albums, Mode=OneWay}"
             SelectionMode="None">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:AlbumView">

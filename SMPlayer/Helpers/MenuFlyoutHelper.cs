@@ -275,24 +275,6 @@ namespace SMPlayer
             }
             flyout.ShowAt(sender as IconTextButton);
         }
-        public static void InsertMusicItem(object sender, int index = 0)
-        {
-            var flyout = sender as MenuFlyout;
-            var helper = new MenuFlyoutHelper();
-            var addToItem = helper.GetAddToMenuFlyoutSubItem();
-            var propertyItems = helper.GetMusicPropertiesMenuFlyout().Items;
-            propertyItems.Insert(0, addToItem);
-            if (flyout.Items[index].Name == AddToSubItemName)
-            {
-                for (int i = 0; i < propertyItems.Count; i++)
-                    flyout.Items[i] = propertyItems[i];
-            }
-            else
-            {
-                foreach (var item in propertyItems.Reverse())
-                    flyout.Items.Insert(index, item);
-            }
-        }
         public static MenuFlyout SetAddToMenu(object sender, string playlistName = "")
         {
             return SetMenu((helper) => helper.GetAddToMenuFlyout(playlistName), sender);

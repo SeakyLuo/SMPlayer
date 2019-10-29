@@ -5,6 +5,7 @@ using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using System;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -22,15 +23,15 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MusicLibraryPage.AddAfterSongsSetListener(this as AfterSongsSetListener);
+            MusicLibraryPage.AddAfterSongsSetListener(this);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Albums.Count == 0) Setup(); // Constructor not called
+            if (Albums.Count == 0) Setup(MusicLibraryPage.AllSongs); // Constructor not called
         }
 
-        private void Setup()
+        private void Setup(ICollection<Music> songs)
         {
             if (SetupStarted) return;
             if (status == ExecutionStatus.Done)
@@ -42,16 +43,12 @@ namespace SMPlayer
             AlbumPageProgressRing.IsActive = true;
             Albums.Clear();
             List<AlbumView> albums = new List<AlbumView>();
-            foreach (var group in MusicLibraryPage.AllSongs.GroupBy((m) => m.Album))
+            foreach (var group in songs.GroupBy((m) => m.Album))
             {
-                if (string.IsNullOrEmpty(group.Key))
-                {
-
-                }
                 foreach (var subgroup in group.GroupBy((m) => m.Artist))
                 {
                     Music music = subgroup.ElementAt(0);
-                    albums.Add(new AlbumView(music.Album, music.Artist, subgroup.OrderBy((m) => m.Name).ThenBy((m) => m.Artist)));
+                    albums.Add(new AlbumView(music.Album, music.Artist, subgroup.OrderBy((m) => m.Name)));
                 }
             }
             foreach (var album in albums.OrderBy((a) => a.Name).ThenBy((a) => a.Artist)) Albums.Add(album);
@@ -60,10 +57,13 @@ namespace SMPlayer
             SetupStarted = false;
         }
 
-        public void SongsSet(ICollection<Music> songs)
+        public async void SongsSet(ICollection<Music> songs)
         {
-            status = ExecutionStatus.Running;
-            Setup();
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+             {
+                 status = ExecutionStatus.Running;
+                 Setup(songs);
+             });
         }
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)

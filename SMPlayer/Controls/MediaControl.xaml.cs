@@ -3,6 +3,7 @@ using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Windows.Foundation;
 using Windows.Media.Playback;
 using Windows.UI.Core;
@@ -854,9 +855,9 @@ namespace SMPlayer
 
         private void MainMoreMenuFlyout_Opening(object sender, object e)
         {
+            var flyout = sender as MenuFlyout;
             if (MediaHelper.CurrentMusic == null)
             {
-                var flyout = sender as MenuFlyout;
                 if (flyout.Items[0].Name == MenuFlyoutHelper.AddToSubItemName)
                 {
                     for (int i = 0; i < 3; i++) // HardCoded 3
@@ -864,7 +865,22 @@ namespace SMPlayer
                 }
             }
             else
-                MenuFlyoutHelper.InsertMusicItem(sender);
+            {
+                var helper = new MenuFlyoutHelper() { Data = MediaHelper.CurrentMusic };
+                var addToItem = helper.GetAddToMenuFlyoutSubItem();
+                var propertyItems = helper.GetMusicPropertiesMenuFlyout().Items;
+                propertyItems.Insert(0, addToItem);
+                if (flyout.Items[0].Name == MenuFlyoutHelper.AddToSubItemName)
+                {
+                    for (int i = 0; i < propertyItems.Count; i++)
+                        flyout.Items[i] = propertyItems[i];
+                }
+                else
+                {
+                    foreach (var item in propertyItems.Reverse())
+                        flyout.Items.Insert(0, item);
+                }
+            }
         }
 
         private void MainMusicInfoGrid_PointerEntered(object sender, PointerRoutedEventArgs e)
