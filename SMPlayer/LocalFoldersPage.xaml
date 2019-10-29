@@ -28,13 +28,30 @@
             </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="FileTemplate" x:DataType="TreeViewNode">
-            <StackPanel Background="Transparent" Orientation="Horizontal">
-                <StackPanel.ContextFlyout>
+            <Grid Background="Transparent">
+                <Grid.ContextFlyout>
                     <MenuFlyout Opening="OpenMusicFlyout" />
-                </StackPanel.ContextFlyout>
+                </Grid.ContextFlyout>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Name="ThumbnailColumnDefinition" Width="Auto" />
+                    <ColumnDefinition x:Name="TitleColumnDefinition" Width="6*" />
+                    <ColumnDefinition x:Name="ArtistColumnDefinition" Width="3*" />
+                    <ColumnDefinition x:Name="AlbumColumnDefinition" Width="5*" />
+                </Grid.ColumnDefinitions>
                 <Image Width="{StaticResource IconSize}" Source="Assets/colorful_no_bg.png" />
-                <TextBlock Margin="10,0" Text="{Binding Content.Name, Mode=OneWay}" />
-            </StackPanel>
+                <TextBlock
+                    Grid.Column="1"
+                    Margin="10,0"
+                    Text="{Binding Content.Name, Mode=OneWay}" />
+                <TextBlock
+                    Grid.Column="2"
+                    Margin="10,0"
+                    Text="{Binding Content.Artist, Mode=OneWay}" />
+                <TextBlock
+                    Grid.Column="3"
+                    Margin="10,0"
+                    Text="{Binding Content.Album, Mode=OneWay}" />
+            </Grid>
         </DataTemplate>
         <templateselector:FolderTreeTemplateSelector
             x:Key="FolderTreeTemplateSelector"
@@ -331,6 +348,7 @@
                                 FontSize="16"
                                 FontWeight="SemiBold"
                                 HorizontalTextAlignment="Left"
+                                MaxLines="2"
                                 Text="{x:Bind Name}"
                                 TextWrapping="Wrap" />
                             <TextBlock
@@ -338,7 +356,8 @@
                                 FontSize="12"
                                 Foreground="Gray"
                                 HorizontalTextAlignment="Left"
-                                Text="{x:Bind MusicCount}" />
+                                MaxLines="2"
+                                Text="{x:Bind FolderInfo}" />
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
                                     <VisualState x:Name="Normal" />

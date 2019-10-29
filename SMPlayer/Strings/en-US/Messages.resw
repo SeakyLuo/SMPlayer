@@ -129,6 +129,9 @@
   <data name="FailToOpenBrowser" xml:space="preserve">
     <value>Unable to open a web browser!</value>
   </data>
+  <data name="Folders:" xml:space="preserve">
+    <value>Folders: </value>
+  </data>
   <data name="HasBeenPlayed" xml:space="preserve">
     <value>"{0}" has been played {1} {2}.</value>
   </data>
@@ -200,6 +203,9 @@
   </data>
   <data name="SearchResult" xml:space="preserve">
     <value>Search Result of {0}</value>
+  </data>
+  <data name="Songs:" xml:space="preserve">
+    <value>Songs: </value>
   </data>
   <data name="UnknownAlbum" xml:space="preserve">
     <value>Unknown Album</value>

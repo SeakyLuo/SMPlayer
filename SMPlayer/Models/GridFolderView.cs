@@ -10,7 +10,7 @@ namespace SMPlayer.Models
     class GridFolderView
     {
         public string Name { get; set; }
-        public string MusicCount { get; set; }
+        public string FolderInfo { get; set; }
         public BitmapImage First { get; set; }
         public BitmapImage Second { get; set; }
         public BitmapImage Third { get; set; }
@@ -30,9 +30,11 @@ namespace SMPlayer.Models
             List<BitmapImage> thumbnails = new List<BitmapImage>(4);
             var folder = await StorageFolder.GetFolderFromPathAsync(tree.Path);
             Name = folder.DisplayName;
-            MusicCount = Helper.Localize("Songs:") + " " + tree.Flatten().Count;
+            var songs = tree.Flatten();
+            FolderInfo = Helper.LocalizeMessage("Songs:") + songs.Count;
+            if (tree.Trees.Count > 0) FolderInfo = Helper.LocalizeMessage("Folders:") + tree.Trees.Count + " • " + FolderInfo;
             BitmapImage thumbnail;
-            foreach (var music in tree.Files.OrderBy((m) => m.Name))
+            foreach (var music in songs.OrderBy((m) => m.Name))
             {
                 thumbnail = await Helper.GetThumbnailAsync(music, false);
                 if (thumbnail != null) thumbnails.Add(thumbnail);

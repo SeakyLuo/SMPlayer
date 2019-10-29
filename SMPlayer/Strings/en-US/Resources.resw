@@ -654,9 +654,6 @@
   <data name="Songs" xml:space="preserve">
     <value>Songs</value>
   </data>
-  <data name="Songs:" xml:space="preserve">
-    <value>Songs:</value>
-  </data>
   <data name="SongsItem.Content" xml:space="preserve">
     <value>Songs</value>
   </data>
