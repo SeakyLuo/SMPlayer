@@ -180,6 +180,9 @@
   <data name="NotPlayedYet" xml:space="preserve">
     <value>《{0}》尚未被播放。</value>
   </data>
+  <data name="NowLoading" xml:space="preserve">
+    <value>正在加载，请稍后再试</value>
+  </data>
   <data name="Pause" xml:space="preserve">
     <value>暂停</value>
   </data>

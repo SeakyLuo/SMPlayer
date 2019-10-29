@@ -30,11 +30,9 @@ namespace SMPlayer.Models
             List<BitmapImage> thumbnails = new List<BitmapImage>(4);
             var folder = await StorageFolder.GetFolderFromPathAsync(tree.Path);
             Name = folder.DisplayName;
-            var songs = tree.Flatten();
-            FolderInfo = Helper.LocalizeMessage("Songs:") + songs.Count;
-            if (tree.Trees.Count > 0) FolderInfo = Helper.LocalizeMessage("Folders:") + tree.Trees.Count + " • " + FolderInfo;
+            FolderInfo = tree.Info.Info;
             BitmapImage thumbnail;
-            foreach (var music in songs.OrderBy((m) => m.Name))
+            foreach (var music in tree.Flatten().OrderBy((m) => m.Name))
             {
                 thumbnail = await Helper.GetThumbnailAsync(music, false);
                 if (thumbnail != null) thumbnails.Add(thumbnail);

@@ -15,6 +15,7 @@ namespace SMPlayer
     {
         public ObservableCollection<GridMusicView> GridMusicCollection = new ObservableCollection<GridMusicView>();
         public List<Music> MusicCollection = new List<Music>();
+        private bool SetupInProgress = false;
 
         public GridMusicControl()
         {
@@ -30,6 +31,7 @@ namespace SMPlayer
 
         public async System.Threading.Tasks.Task Setup(ICollection<Music> collection)
         {
+            SetupInProgress = true;
             MusicCollection = collection.ToList();
             GridMusicCollection.Clear();
             foreach (var music in collection)
@@ -39,6 +41,43 @@ namespace SMPlayer
                 GridMusicView gridItem = new GridMusicView();
                 await gridItem.Init(copy);
                 GridMusicCollection.Add(gridItem);
+            }
+            SetupInProgress = false;
+        }
+        public void Reverse()
+        {
+            if (SetupInProgress) Helper.ShowNotification("NowLoading");
+            else
+            {
+                MusicCollection.Reverse();
+                GridMusicCollection.SetTo(GridMusicCollection.Reverse());
+            }
+        }
+        public void SortByTitle()
+        {
+            if (SetupInProgress) Helper.ShowNotification("NowLoading");
+            else
+            {
+                MusicCollection = MusicCollection.OrderBy((m) => m.Name).ToList();
+                GridMusicCollection.SetTo(GridMusicCollection.ToList().OrderBy((m) => m.Name));
+            }
+        }
+        public void SortByArtist()
+        {
+            if (SetupInProgress) Helper.ShowNotification("NowLoading");
+            else
+            {
+                MusicCollection = MusicCollection.OrderBy((m) => m.Artist).ToList();
+                GridMusicCollection.SetTo(GridMusicCollection.ToList().OrderBy((m) => m.Artist));
+            }
+        }
+        public void SortByAlbum()
+        {
+            if (SetupInProgress) Helper.ShowNotification("NowLoading");
+            else
+            {
+                MusicCollection = MusicCollection.OrderBy((m) => m.Album).ToList();
+                GridMusicCollection.SetTo(GridMusicCollection.ToList().OrderBy((m) => m.Source.Album));
             }
         }
 
@@ -54,8 +93,8 @@ namespace SMPlayer
 
         private void AddToButton_Click(object sender, RoutedEventArgs e)
         {
-            var data = (sender as Button).DataContext as GridMusicView;
-            new MenuFlyoutHelper().GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
+            var fe = (FrameworkElement)sender;
+            new MenuFlyoutHelper() { Data = fe.DataContext }.GetAddToMenuFlyout().ShowAt(fe);
         }
         private void MenuFlyout_Opening(object sender, object e)
         {

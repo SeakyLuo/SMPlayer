@@ -249,6 +249,7 @@
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="MaxHeight" />
       <RootProperty Name="Opacity" />
+      <RootProperty Name="IsDoubleTapEnabled" />
       <RootProperty Name="RequestedTheme" />
       <RootProperty Name="IsHitTestVisible" />
       <RootEvent Name="PointerEntered" />
@@ -256,6 +257,7 @@
       <RootEvent Name="PointerPressed" />
       <RootEvent Name="Tapped" />
       <RootEvent Name="Loaded" />
+      <RootEvent Name="DoubleTapped" />
       <RootMethod Name="GetRow" />
       <RootMethod Name="SetRow" />
       <RootMethod Name="GetColumn" />
@@ -352,11 +354,9 @@
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="XYFocusKeyboardNavigation" />
-      <RootProperty Name="IsDoubleTapEnabled" />
       <RootProperty Name="Width" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="Tapped" />
-      <RootEvent Name="DoubleTapped" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyout">
       <RootProperty Name="Items" />

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Windows.Media.Playback;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -19,6 +20,7 @@ namespace SMPlayer
         private ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         private FolderTree CurrentTree;
         private string TreePath;
+        public static bool ReverseRequested = false, SortByTitleRequested = false, SortByArtistRequested = false, SortByAlbumRequested = false;
         public LocalMusicPage()
         {
             this.InitializeComponent();
@@ -31,6 +33,10 @@ namespace SMPlayer
         {
             Setup(CurrentTree);
             ModeChanged(Settings.settings.LocalMusicGridView);
+            if (ReverseRequested) Reverse();
+            if (SortByTitleRequested) SortByTitle();
+            if (SortByArtistRequested) SortByArtist();
+            if (SortByAlbumRequested) SortByAlbum();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -92,6 +98,30 @@ namespace SMPlayer
                 GridMusicView.Visibility = Visibility.Collapsed;
                 LocalPlaylist.Visibility = Visibility.Visible;
             }
+        }
+        public void Reverse()
+        {
+            Songs.SetTo(Songs.Reverse());
+            GridMusicView.Reverse();
+            ReverseRequested = false;
+        }
+        public void SortByTitle()
+        {
+            Songs.SetTo(Songs.ToList().OrderBy((m) => m.Name));
+            GridMusicView.SortByTitle();
+            SortByTitleRequested = false;
+        }
+        public void SortByArtist()
+        {
+            Songs.SetTo(Songs.ToList().OrderBy((m) => m.Artist));
+            GridMusicView.SortByArtist();
+            SortByAlbumRequested = false;
+        }
+        public void SortByAlbum()
+        {
+            Songs.SetTo(Songs.ToList().OrderBy((m) => m.Album));
+            GridMusicView.SortByAlbum();
+            SortByAlbumRequested = false;
         }
     }
 }

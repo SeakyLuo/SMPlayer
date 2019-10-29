@@ -182,15 +182,38 @@ namespace SMPlayer
         {
             if (History.Count == 0) return;
             var tree = History.Peek();
-            var menu = sender as MenuFlyout;
-            menu.Items.Clear();
+            var flyout = sender as MenuFlyout;
+            flyout.Items.Clear();
             var helper = new MenuFlyoutHelper()
             {
                 Data = tree.Files,
                 DefaultPlaylistName = tree.Directory
             };
-            menu.Items.Add(helper.GetAddToMenuFlyoutSubItem());
-            menu.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(tree.Path, StorageItemTypes.Folder));
+            flyout.Items.Add(helper.GetAddToMenuFlyoutSubItem());
+            flyout.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(tree.Path, StorageItemTypes.Folder));
+            flyout.Items.Add(MenuFlyoutHelper.GetSortByMenu(new Dictionary<SortBy, Action>
+            {
+                { SortBy.Title, () =>
+                {
+                    if (LocalFrame.Content is LocalMusicPage page) page.SortByTitle();
+                    else LocalMusicPage.SortByTitleRequested = !LocalMusicPage.SortByTitleRequested;
+                } },
+                { SortBy.Artist, () =>
+                {
+                    if (LocalFrame.Content is LocalMusicPage page) page.SortByArtist();
+                    else LocalMusicPage.SortByArtistRequested = !LocalMusicPage.SortByArtistRequested;
+                } },
+                { SortBy.Album, () =>
+                {
+                    if (LocalFrame.Content is LocalMusicPage page) page.SortByAlbum();
+                    else LocalMusicPage.SortByAlbumRequested = !LocalMusicPage.SortByAlbumRequested;
+                } },
+            },
+            () =>
+            {
+                if (LocalFrame.Content is LocalMusicPage page) page.Reverse();
+                else LocalMusicPage.ReverseRequested = !LocalMusicPage.ReverseRequested;
+            }));
         }
     }
     public interface LocalSetter

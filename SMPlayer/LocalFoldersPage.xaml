@@ -15,17 +15,23 @@
     <Page.Resources>
         <x:Double x:Key="IconSize">20</x:Double>
         <DataTemplate x:Key="FolderTemplate" x:DataType="TreeViewNode">
-            <StackPanel
+            <Grid
                 Background="Transparent"
                 DoubleTapped="FolderTemplate_DoubleTapped"
-                IsDoubleTapEnabled="True"
-                Orientation="Horizontal">
-                <StackPanel.ContextFlyout>
+                IsDoubleTapEnabled="True">
+                <Grid.ContextFlyout>
                     <MenuFlyout Opening="OpenPlaylistFlyout" />
-                </StackPanel.ContextFlyout>
+                </Grid.ContextFlyout>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
                 <Image Width="{StaticResource IconSize}" Source="Assets/folder.png" />
-                <TextBlock Margin="10,0" Text="{Binding Content.Directory, Mode=OneWay}" />
-            </StackPanel>
+                <TextBlock
+                    Grid.Column="1"
+                    Margin="10,0"
+                    Text="{Binding Content.Directory, Mode=OneWay}" />
+            </Grid>
         </DataTemplate>
         <DataTemplate x:Key="FileTemplate" x:DataType="TreeViewNode">
             <Grid Background="Transparent">

@@ -74,7 +74,7 @@ namespace SMPlayer.Controls
         private void ResetMusicPropertiesButton_Click(object sender, RoutedEventArgs e)
         {
             SetMusicProperties(Properties);
-            ((Window.Current.Content as Frame).Content as NotificationContainer).ShowNotification(Helper.LocalizeMessage("PropertiesReset"));
+            Helper.ShowNotification("PropertiesReset");
         }
 
         private async void SaveMusicPropertiesButton_Click(object sender, RoutedEventArgs e)

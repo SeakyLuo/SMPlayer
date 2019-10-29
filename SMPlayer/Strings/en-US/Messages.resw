@@ -180,6 +180,9 @@
   <data name="NotPlayedYet" xml:space="preserve">
     <value>"{0}" has not been played yet.</value>
   </data>
+  <data name="NowLoading" xml:space="preserve">
+    <value>I am still loading. Please try later.</value>
+  </data>
   <data name="Pause" xml:space="preserve">
     <value>Pause</value>
   </data>

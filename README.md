@@ -32,8 +32,6 @@ Improved New Playlist Name.
 
 Improved Bytes.
 
-Sort local.
-
 # TO FIX
 Bad performance when given many music files.
 

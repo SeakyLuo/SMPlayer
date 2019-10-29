@@ -663,6 +663,9 @@
   <data name="SongsTextBlock.Text" xml:space="preserve">
     <value>歌曲</value>
   </data>
+  <data name="Sort" xml:space="preserve">
+    <value>排序</value>
+  </data>
   <data name="Sort By Album" xml:space="preserve">
     <value>根据专辑排序</value>
   </data>

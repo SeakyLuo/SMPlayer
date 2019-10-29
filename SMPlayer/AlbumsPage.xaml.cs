@@ -49,6 +49,10 @@ namespace SMPlayer
                 {
                     Music music = subgroup.ElementAt(0);
                     albums.Add(new AlbumView(music.Album, music.Artist, subgroup.OrderBy((m) => m.Name)));
+                    //albums.Add(new AlbumView(music.Album, music.Artist)
+                    //{
+                    //    Cover = await AlbumView.GetAlbumCoverAsync(subgroup.ToList())
+                    //});
                 }
             }
             foreach (var album in albums.OrderBy((a) => a.Name).ThenBy((a) => a.Artist)) Albums.Add(album);
@@ -68,6 +72,8 @@ namespace SMPlayer
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            //var album = (AlbumView)e.ClickedItem;
+            //Frame.Navigate(typeof(AlbumPage), album.NotLoaded || !MusicLibraryPage.IsLibraryUnchangedAfterChecking ? album.Load() : album);
             Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
         }
     }

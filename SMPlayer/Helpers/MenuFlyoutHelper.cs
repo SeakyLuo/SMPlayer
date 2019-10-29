@@ -251,6 +251,28 @@ namespace SMPlayer
             flyout.Items.Insert(2, removeItem);
             return flyout;
         }
+        public static MenuFlyoutSubItem GetSortByMenu(Dictionary<SortBy, Action> actions, Action reverse = null)
+        {
+            var sortByItem = new MenuFlyoutSubItem() { Text = Helper.Localize("Sort") };
+            var reverseItem = new MenuFlyoutItem() { Text = Helper.Localize("Reverse Playlist") };
+            reverseItem.Click += (send, args) => reverse?.Invoke();
+            sortByItem.Items.Add(reverseItem);
+            sortByItem.Items.Add(new MenuFlyoutSeparator());
+            foreach (var criterion in Playlist.Criteria)
+            {
+                if (actions.TryGetValue(criterion, out Action action))
+                {
+                    string sortby = Helper.Localize("Sort By " + criterion.ToStr());
+                    var item = new MenuFlyoutItem()
+                    {
+                        Text = sortby,
+                    };
+                    item.Click += (send, args) => action.Invoke();
+                    sortByItem.Items.Add(item);
+                }
+            }
+            return sortByItem;
+        }
         public static void SetPlaylistSortByMenu(object sender, Playlist playlist)
         {
             var flyout = new MenuFlyout();
@@ -274,10 +296,6 @@ namespace SMPlayer
                 flyout.Items.Add(radioItem);
             }
             flyout.ShowAt(sender as IconTextButton);
-        }
-        public static MenuFlyout SetAddToMenu(object sender, string playlistName = "")
-        {
-            return SetMenu((helper) => helper.GetAddToMenuFlyout(playlistName), sender);
         }
         public static MenuFlyout SetPlaylistMenu(object sender, MenuFlyoutItemClickListener listener = null)
         {

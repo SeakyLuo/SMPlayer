@@ -2,6 +2,7 @@
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,10 +43,18 @@ namespace SMPlayer
         private static string Lyrics = "";
         private static List<Music> NotFoundHistory = new List<Music>();
 
-        public static NotificationContainer GetNotificationContainer() { return (Window.Current.Content as Frame).Content as NotificationContainer; }
-        public static void ShowNotification(string message, int duration = 1500)
+        public static void SetTo<T>(this ObservableCollection<T> dst, IEnumerable<T> src)
         {
-            GetNotificationContainer().ShowNotification(Localize(message), duration);
+            var temp = src.ToList();
+            if (dst == null) dst = new ObservableCollection<T>();
+            else dst.Clear();
+            foreach (var item in temp) dst.Add(item);
+        }
+
+        public static NotificationContainer GetNotificationContainer() { return (Window.Current.Content as Frame).Content as NotificationContainer; }
+        public static void ShowNotification(string message, int duration = 2000)
+        {
+            GetNotificationContainer()?.ShowNotification(LocalizeMessage(message), duration);
         }
         public static void ShowAddMusicResultNotification(AddMusicResult result, Music target = null)
         {

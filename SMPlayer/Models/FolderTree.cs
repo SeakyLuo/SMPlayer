@@ -32,6 +32,7 @@ namespace SMPlayer.Models
             OnPropertyChanged();
         }
 
+
         public static async Task<int> CountMusicAsync(StorageFolder folder)
         {
             int count = (await folder.GetFilesAsync()).Count((f) => IsMusicFile(f));
@@ -180,6 +181,15 @@ namespace SMPlayer.Models
         public string Directory;
         public int Folders;
         public int Songs;
+        public string Info
+        {
+            get
+            {
+                string info = Helper.LocalizeMessage("Songs:") + Songs;
+                if (Folders > 0) info = Helper.LocalizeMessage("Folders:") + Folders + " • " + info;
+                return info;
+            }
+        }
         public TreeInfo(string Directory, int Folders, int Songs)
         {
             this.Directory = Directory;
