@@ -43,6 +43,7 @@ namespace SMPlayer
             }
             else if (e.Parameter is string playlistName)
             {
+                playlistName = Uri.UnescapeDataString(playlistName);
                 PlaylistTabView.SelectedItem = Playlists.FirstOrDefault((p) => p.Name == playlistName);
             }
         }

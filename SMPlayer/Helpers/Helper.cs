@@ -428,12 +428,13 @@ namespace SMPlayer
         public static async Task<bool> PinToStartAsync(Playlist playlist, bool isPlaylist)
         {
             var tilename = playlist.Name;
-            var tileid = isPlaylist ? tilename : $"{tilename}+++{playlist.Artist}";
+            var tileid = Uri.EscapeDataString(isPlaylist ? tilename : $"{tilename}+++{playlist.Artist}");
+            var filename = Uri.EscapeDataString(tilename);
             var path = LogoPath;
-            if (playlist.DisplayItem.Source != null && await (await GetSecondaryTileFolder()).TryGetItemAsync(tilename) == null)
+            if (playlist.DisplayItem.Source != null && await (await GetSecondaryTileFolder()).TryGetItemAsync(filename) == null)
             {
-                await (await GetStorageItemThumbnailAsync(playlist.DisplayItem.Source.Path)).SaveAsync(SecondaryTileFolder, tilename);
-                path = $"ms-appdata:///local/SecondaryTiles/{tilename}.png";
+                await (await GetStorageItemThumbnailAsync(playlist.DisplayItem.Source.Path)).SaveAsync(SecondaryTileFolder, filename);
+                path = $"ms-appdata:///local/SecondaryTiles/{filename}.png";
             }
             var tile = new SecondaryTile(tileid, tilename, isPlaylist.ToString(), new Uri(path), TileSize.Default);
             tile.VisualElements.ShowNameOnSquare150x150Logo = tile.VisualElements.ShowNameOnSquare310x310Logo = tile.VisualElements.ShowNameOnWide310x150Logo = true;

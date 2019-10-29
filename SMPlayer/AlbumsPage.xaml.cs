@@ -73,7 +73,7 @@ namespace SMPlayer
 
         private void DropShadowControl_Loaded(object sender, RoutedEventArgs e)
         {
-            ((sender as FrameworkElement).DataContext as AlbumView)?.FindThumbnail();
+            //((sender as FrameworkElement).DataContext as AlbumView)?.FindThumbnail();
         }
     }
 }

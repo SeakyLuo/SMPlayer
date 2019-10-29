@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Loaded="UserControl_Loaded"
     PointerEntered="UserControl_PointerEntered"
     PointerExited="UserControl_PointerExited"
     mc:Ignorable="d">

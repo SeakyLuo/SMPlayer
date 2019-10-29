@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Models;
+using System;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -42,6 +43,7 @@ namespace SMPlayer
                 playlist = (Playlist)parameter;
             else if (parameter is string albumText)
             {
+                albumText = Uri.UnescapeDataString(albumText);
                 int index = albumText.IndexOf("+++");
                 string albumName = albumText.Substring(0, index), albumArtist = albumText.Substring(index + 3);
                 playlist = new Playlist(albumName, MusicLibraryPage.AllSongs.Where((m) => m.Album == albumName && m.Artist == albumArtist));
