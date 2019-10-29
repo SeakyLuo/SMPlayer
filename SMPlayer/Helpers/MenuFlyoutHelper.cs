@@ -12,8 +12,8 @@ namespace SMPlayer
     {
         public object Data { get; set; }
         public string DefaultPlaylistName { get; set; }
-        public const string AddToSubItemName = "AddToSubItem", PlaylistMenuName = "ShuffleItem", MusicMenuName = "PlayItem",
-                            NowPlaying = "Now Playing", MyFavorites = "My Favorites";
+        public const string AddToSubItemName = "AddToSubItem", PlaylistMenuName = "ShuffleItem", MusicMenuName = "PlayItem";
+        public static string NowPlaying = Helper.Localize("Now Playing"), MyFavorites = Helper.Localize("My Favorites");
         public static bool IsBadNewPlaylistName(string name) { return name == NowPlaying || name == MyFavorites; }
         public MenuFlyout GetAddToMenuFlyout(string playlistName = "")
         {

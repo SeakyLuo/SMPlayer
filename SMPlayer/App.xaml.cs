@@ -70,7 +70,10 @@ namespace SMPlayer
                     // 参数
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
                     if (e.TileId != "App")
-                        MainPage.Instance.NavigateToPage(bool.Parse(e.Arguments) ? typeof(PlaylistsPage) : typeof(AlbumPage), e.TileId);
+                    {
+                        MainPage.Instance.NavigateToPage(bool.Parse(e.Arguments) ? typeof(PlaylistsPage) :
+                                                         e.TileId.StartsWith(Helper.Localize(MenuFlyoutHelper.MyFavorites)) ? typeof(MyFavoritesPage) : typeof(AlbumPage), e.TileId);
+                    }
                 }
                 // 确保当前窗口处于活动状态
                 Window.Current.Activate();

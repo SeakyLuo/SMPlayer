@@ -39,10 +39,5 @@ namespace SMPlayer
             var helper = new MenuFlyoutHelper() { Data = data.Songs, DefaultPlaylistName = data.Name };
             helper.GetAddToPlaylistsMenuFlyout().ShowAt(sender as FrameworkElement);
         }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            (DataContext as AlbumView)?.FindThumbnail();
-        }
     }
 }

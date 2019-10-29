@@ -298,7 +298,7 @@
     </RootType>
     <RootType FullName="SMPlayer.DropShadowControl">
       <RootProperty Name="DataContext" />
-      <RootEvent Name="Loaded" />
+      <RootEvent Name="DataContextChanged" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Data.Binding">
       <RootProperty Name="Converter" />
@@ -483,8 +483,8 @@
       <RootProperty Name="Resources" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
-      <RootEvent Name="Loaded" />
       <RootEvent Name="SizeChanged" />
+      <RootEvent Name="Loaded" />
       <RootEvent Name="Loading" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.VisualStateManager">

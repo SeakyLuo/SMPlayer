@@ -71,9 +71,9 @@ namespace SMPlayer
             Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
         }
 
-        private void DropShadowControl_Loaded(object sender, RoutedEventArgs e)
+        private void DropShadowControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            //((sender as FrameworkElement).DataContext as AlbumView)?.FindThumbnail();
+            (sender.DataContext as AlbumView)?.SetCover();
         }
     }
 }

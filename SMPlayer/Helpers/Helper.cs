@@ -148,16 +148,16 @@ namespace SMPlayer
             return thumbnail != null && thumbnail.Type == ThumbnailType.Image;
         }
 
-        public static async Task<StorageItemThumbnail> GetStorageItemThumbnailAsync(Music music)
+        public static async Task<StorageItemThumbnail> GetStorageItemThumbnailAsync(Music music, uint size = 300)
         {
-            return await GetStorageItemThumbnailAsync(music.Path);
+            return await GetStorageItemThumbnailAsync(music.Path, size);
         }
-        public static async Task<StorageItemThumbnail> GetStorageItemThumbnailAsync(string path)
+        public static async Task<StorageItemThumbnail> GetStorageItemThumbnailAsync(string path, uint size = 300)
         {
             try
             {
                 var file = await StorageFile.GetFileFromPathAsync(path);
-                return await file.GetThumbnailAsync(ThumbnailMode.MusicView, 500);
+                return await file.GetThumbnailAsync(ThumbnailMode.MusicView, size);
             }
             catch (FileNotFoundException)
             {
@@ -396,7 +396,7 @@ namespace SMPlayer
             var tile = new TileBinding()
             {
                 DisplayName = "SMPlayer",
-                Branding = TileBranding.NameAndLogo,
+                Branding = TileBranding.Name,
                 Content = new TileBindingContentAdaptive()
                 {
                     BackgroundImage = new TileBackgroundImage()
