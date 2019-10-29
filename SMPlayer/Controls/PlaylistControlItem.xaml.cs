@@ -31,7 +31,7 @@ namespace SMPlayer.Controls
             foreach (var music in MusicLibraryPage.AllSongs)
                 if (music.Album == data.Album)
                     playlist.Add(music);
-            MainPage.Instance.NavigateToPage(typeof(AlbumPage), new AlbumView(data.Album, data.Artist, false)
+            MainPage.Instance.NavigateToPage(typeof(AlbumPage), new AlbumView(data.Album, data.Artist)
             {
                 Songs = playlist,
             });

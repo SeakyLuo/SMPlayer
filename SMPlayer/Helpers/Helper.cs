@@ -449,8 +449,9 @@ namespace SMPlayer
                 var decoder = await BitmapDecoder.CreateAsync(stream);
                 var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
                 var filename = $"{name}.png";
+                bool notExists = await folder.TryGetItemAsync(filename) == null;
                 var file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
-                if (await folder.TryGetItemAsync(filename) == null)
+                if (notExists)
                 {
                     using (var filestream = await file.OpenAsync(FileAccessMode.ReadWrite))
                     {

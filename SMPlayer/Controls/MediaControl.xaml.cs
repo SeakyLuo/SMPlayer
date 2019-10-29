@@ -386,9 +386,6 @@ namespace SMPlayer
                 return;
             }
             MediaSlider.IsEnabled = true;
-            var thumbnail = await Helper.GetStorageItemThumbnailAsync(music);
-            var isThumbnail = thumbnail.IsThumbnail();
-            AlbumCover.Source = isThumbnail ? thumbnail.GetBitmapImage() : Helper.DefaultAlbumCover;
             TitleTextBlock.Text = music.Name;
             ArtistTextBlock.Text = music.Artist;
             MediaSlider.Maximum = music.Duration;
@@ -399,19 +396,23 @@ namespace SMPlayer
                 if (music.Favorite) LikeMusic(false);
                 else DislikeMusic(false);
             }
-            switch (Mode)
+            using (var thumbnail = await Helper.GetStorageItemThumbnailAsync(music))
             {
-                case MediaControlMode.Main:
-                    MainMediaControlGrid.Background = isThumbnail ? await thumbnail.GetDisplayColor() : ColorHelper.HighlightBrush;
-                    break;
-                case MediaControlMode.Full:
-                    FullAlbumTextBlock.Text = music.Album;
-                    break;
-                case MediaControlMode.Mini:
-                    break;
+                var isThumbnail = thumbnail.IsThumbnail();
+                AlbumCover.Source = isThumbnail ? thumbnail.GetBitmapImage() : Helper.DefaultAlbumCover;
+                switch (Mode)
+                {
+                    case MediaControlMode.Main:
+                        MainMediaControlGrid.Background = isThumbnail ? await thumbnail.GetDisplayColor() : ColorHelper.HighlightBrush;
+                        break;
+                    case MediaControlMode.Full:
+                        FullAlbumTextBlock.Text = music.Album;
+                        break;
+                    case MediaControlMode.Mini:
+                        break;
+                }
+                await Helper.UpdateTile(thumbnail, music);
             }
-            await Helper.UpdateTile(thumbnail, music);
-            thumbnail?.Dispose();
         }
         public void SetMusicAndPlay(Music music)
         {

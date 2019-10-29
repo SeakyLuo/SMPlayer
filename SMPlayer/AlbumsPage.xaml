@@ -28,7 +28,7 @@
             SelectionMode="None">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:AlbumView">
-                    <local:DropShadowControl DataContext="{Binding}" />
+                    <local:DropShadowControl DataContext="{Binding}" Loaded="DropShadowControl_Loaded" />
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>

@@ -188,7 +188,7 @@ namespace SMPlayer
         }
         public static string GetSongCount(int count)
         {
-            return Helper.Localize("Songs:") + " " + count.ToString();
+            return Helper.LocalizeMessage("Songs:") + count.ToString();
         }
         public object Convert(object value, Type targetType, object parameter, string language)
         {

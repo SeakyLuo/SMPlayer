@@ -17,28 +17,24 @@ namespace SMPlayer.Models
             {
                 if (value == null) return;
                 thumbnail = value;
-                OnPropertyChanged(); ;
+                OnPropertyChanged();
             }
         }
-        private BitmapImage thumbnail = null;
-        public bool NotLoaded { get; set; } = true;
+        private BitmapImage thumbnail = Helper.DefaultAlbumCover;
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public AlbumView() { }
-        public AlbumView(string name, string artist, bool notLoaded = true)
+        public AlbumView(string name, string artist)
         {
             Name = name;
             Artist = artist;
-            NotLoaded = notLoaded;
         }
         public AlbumView(string name, string artist, IEnumerable<Music> songs)
         {
             Name = name;
             Artist = artist;
             Songs = new ObservableCollection<Music>(songs);
-            FindThumbnail();
-            NotLoaded = false;
         }
         public async void FindThumbnail()
         {
@@ -51,15 +47,6 @@ namespace SMPlayer.Models
                 if ((cover = await Helper.GetThumbnailAsync(music, false)) != null)
                     return cover;
             return Helper.DefaultAlbumCover;
-        }
-        public AlbumView Load()
-        {
-            Songs = new ObservableCollection<Music>();
-            foreach (var music in MusicLibraryPage.AllSongs)
-                if (music.Album == Name && music.Artist == Artist)
-                    Songs.Add(music);
-            NotLoaded = false;
-            return this;
         }
         public Playlist ToPlaylist()
         {
