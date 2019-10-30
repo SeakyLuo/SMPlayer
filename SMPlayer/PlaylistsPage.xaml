@@ -70,7 +70,10 @@
             TabWidthBehavior="Actual">
             <controls:TabView.ItemHeaderTemplate>
                 <DataTemplate x:DataType="data:Playlist">
-                    <StackPanel Background="Transparent" Orientation="Horizontal">
+                    <StackPanel
+                        Background="Transparent"
+                        Orientation="Horizontal"
+                        ToolTipService.ToolTip="{x:Bind Name, Mode=OneWay}">
                         <StackPanel.ContextFlyout>
                             <MenuFlyout>
                                 <MenuFlyoutItem

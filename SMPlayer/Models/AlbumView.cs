@@ -32,11 +32,12 @@ namespace SMPlayer.Models
             Name = name;
             Artist = artist;
         }
-        public AlbumView(string name, string artist, IEnumerable<Music> songs)
+        public AlbumView(string name, string artist, IEnumerable<Music> songs, bool setCover = true)
         {
             Name = name;
             Artist = artist;
             Songs = new ObservableCollection<Music>(songs);
+            if (setCover) SetCover();
         }
         public async void SetCover()
         {

@@ -3,6 +3,7 @@ using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -420,19 +421,25 @@ namespace SMPlayer
         public static async Task<bool> PinToStartAsync(Playlist playlist, bool isPlaylist)
         {
             var tilename = playlist.Name;
-            var tileid = WebUtility.UrlEncode(isPlaylist ? tilename : $"{tilename}+++{playlist.Artist}");
-            var filename = WebUtility.UrlEncode(tilename);
-            var path = DefaultAlbumCoverPath;
-            if (playlist.DisplayItem.Source != null && !await (await GetSecondaryTileFolder()).Contains(filename))
+            var tileid = FormatTileId(playlist, isPlaylist);
+            var filename = tileid + ".png";
+            var uri = DefaultAlbumCoverPath;
+            if (playlist.DisplayItem.Source != null)
             {
-                await (await GetStorageItemThumbnailAsync(playlist.DisplayItem.Source.Path)).SaveAsync(SecondaryTileFolder, filename);
-                path = $"ms-appdata:///local/SecondaryTiles/{filename}.png";
+                if (!await (await GetSecondaryTileFolder()).Contains(filename))
+                    await (await GetStorageItemThumbnailAsync(playlist.DisplayItem.Source.Path)).SaveAsync(SecondaryTileFolder, tileid);
+                uri = "ms-appdata:///local/SecondaryTiles/" + WebUtility.UrlEncode(filename);
             }
-            var tile = new SecondaryTile(tileid, tilename, isPlaylist.ToString(), new Uri(path), TileSize.Default);
+            var tile = new SecondaryTile(tileid, tilename, isPlaylist.ToString(), new Uri(uri), TileSize.Default);
             tile.VisualElements.ShowNameOnSquare150x150Logo = tile.VisualElements.ShowNameOnSquare310x310Logo = tile.VisualElements.ShowNameOnWide310x150Logo = true;
-            if (SecondaryTile.Exists(tilename)) await tile.RequestDeleteAsync();
+            if (SecondaryTile.Exists(tileid)) await tile.RequestDeleteAsync();
             else await tile.RequestCreateAsync();
-            return SecondaryTile.Exists(tilename);
+            return SecondaryTile.Exists(tileid);
+        }
+        public static string FormatTileId(Playlist playlist, bool isPlaylist)
+        {
+            var tilename = playlist.Name;
+            return isPlaylist ? tilename : $"{tilename}+++{playlist.Artist}";
         }
 
         public static async Task<StorageFile> SaveAsync(this StorageItemThumbnail thumbnail, StorageFolder folder, string name)
@@ -441,7 +448,7 @@ namespace SMPlayer
             {
                 var decoder = await BitmapDecoder.CreateAsync(stream);
                 var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
-                var filename = $"{name}.png";
+                var filename = name + ".png";
                 bool notExists = !await folder.Contains(filename);
                 var file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
                 if (notExists)

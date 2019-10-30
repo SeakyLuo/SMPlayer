@@ -24,7 +24,7 @@ namespace SMPlayer.Models
                 }
             }
         }
-        public SortBy Criterion { get; set; }
+        public SortBy Criterion { get; set; } = SortBy.Title;
 
         [Newtonsoft.Json.JsonIgnore]
         public MusicDisplayItem DisplayItem { get; set; }

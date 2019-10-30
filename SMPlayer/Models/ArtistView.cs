@@ -17,7 +17,7 @@ namespace SMPlayer.Models
             {
                 notLoaded = value;
                 if (!notLoaded)
-                    ArtistInfo = $"{Helper.Localize("Albums:")} {Albums.Count} • {Helper.Localize("Songs:")} {Songs.Count}";
+                    ArtistInfo = $"{Helper.Localize("Albums:")} {Albums.Count} • {Helper.LocalizeMessage("Songs:")} {Songs.Count}";
                 OnPropertyChanged();
             }
         }

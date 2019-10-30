@@ -48,7 +48,7 @@ namespace SMPlayer
                 foreach (var subgroup in group.GroupBy((m) => m.Artist))
                 {
                     Music music = subgroup.ElementAt(0);
-                    albums.Add(new AlbumView(music.Album, music.Artist, subgroup.OrderBy((m) => m.Name)));
+                    albums.Add(new AlbumView(music.Album, music.Artist, subgroup.OrderBy((m) => m.Name), false));
                 }
             }
             foreach (var album in albums.OrderBy((a) => a.Name).ThenBy((a) => a.Artist)) Albums.Add(album);

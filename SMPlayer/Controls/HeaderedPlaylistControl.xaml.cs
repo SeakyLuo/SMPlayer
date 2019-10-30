@@ -60,7 +60,7 @@ namespace SMPlayer
             AddToButton.IsEnabled = playlist.Songs.Count != 0;
             RenameButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
             DeleteButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
-            SetPinState(Windows.UI.StartScreen.SecondaryTile.Exists(playlist.Name));
+            SetPinState(Windows.UI.StartScreen.SecondaryTile.Exists(Helper.FormatTileId(playlist, IsPlaylist)));
             MusicDisplayItem item;
             if (PlaylistDisplayDict.TryGetValue(playlist.Name, out List<MusicDisplayItem> MusicDisplayItems))
             {

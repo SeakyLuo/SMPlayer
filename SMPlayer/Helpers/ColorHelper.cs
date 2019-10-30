@@ -57,23 +57,21 @@ namespace SMPlayer
 
         public static async Task<Brush> GetThumbnailMainColor(Windows.Storage.Streams.IRandomAccessStream Thumbnail)
         {
+            byte[] bgra = { 0, 0, 0, 255 };
             var decoder = await BitmapDecoder.CreateAsync(Thumbnail);
             uint width = decoder.PixelWidth, height = decoder.PixelHeight;
-            Size[] TargetPositions = { new Size(width / 8, height / 8), new Size(width * 7 / 8, height / 8),
-                                       new Size(width * 7 / 8, height / 8), new Size(width * 7 / 8, height * 7 / 8),
-                                       new Size(width / 4, height / 4), new Size(width * 3 / 4, height / 4),
-                                       new Size(width / 4, height * 3 / 4), new Size(width * 3 / 4, height * 3 / 4),
-                                       new Size(width / 2, height / 2) };
-            byte[] bgra = { 0, 0, 0, 255 };
-            foreach (var size in TargetPositions)
+            uint divs = 8;
+            for (uint i = 1; i < divs; i++)
             {
-                bgra = await GetPixelData(decoder, size.Width, size.Height);
-                if (bgra.SkipLast(1).All((v) => MIN_VALUE <= v && v <= MAX_VALUE)) break;
+                for (uint j = 1; j < divs; j++)
+                {
+                    bgra = await GetPixelData(decoder, width * i / 8, height * j / 8);
+                    if (bgra.SkipLast(1).All((v) => MIN_VALUE <= v && v <= MAX_VALUE)) goto GenerateColor;
+                }
             }
+            GenerateColor:
             Color color = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0]);
-            System.Diagnostics.Debug.WriteLine($"R: {bgra[2]}");
-            System.Diagnostics.Debug.WriteLine($"G: {bgra[1]}");
-            System.Diagnostics.Debug.WriteLine($"B: {bgra[0]}");
+            System.Diagnostics.Debug.WriteLine($"R: {bgra[2]} G: {bgra[1]} B: {bgra[0]}");
             return new AcrylicBrush()
             {
                 BackgroundSource = AcrylicBackgroundSource.Backdrop,

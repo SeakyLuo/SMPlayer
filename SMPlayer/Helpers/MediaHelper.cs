@@ -84,6 +84,7 @@ namespace SMPlayer
             }
             Player.Volume = settings.Volume;
             SetMode(Settings.settings.Mode);
+            Timer.Start();
 
             Timer.Tick += (sender, e) =>
             {
@@ -273,8 +274,8 @@ namespace SMPlayer
         public static async Task<AddMusicResult> ShuffleAndPlay(ICollection<Music> playlist)
         {
             SetMode(PlayMode.Shuffle);
-            var result = await SetPlaylist(ShufflePlaylist(playlist));
             Play();
+            var result = await SetPlaylist(ShufflePlaylist(playlist));
             return result;
         }
 
@@ -329,14 +330,12 @@ namespace SMPlayer
         public static void Play()
         {
             Player.Play();
-            Timer.Start();
             foreach (var listener in MediaControlListeners) listener.Play();
         }
 
         public static void Pause()
         {
             Player.Pause();
-            Timer.Stop();
             foreach (var listener in MediaControlListeners) listener.Pause();
         }
 
