@@ -423,7 +423,7 @@ namespace SMPlayer
             var tileid = WebUtility.UrlEncode(isPlaylist ? tilename : $"{tilename}+++{playlist.Artist}");
             var filename = WebUtility.UrlEncode(tilename);
             var path = DefaultAlbumCoverPath;
-            if (playlist.DisplayItem.Source != null && await (await GetSecondaryTileFolder()).Contains(filename))
+            if (playlist.DisplayItem.Source != null && !await (await GetSecondaryTileFolder()).Contains(filename))
             {
                 await (await GetStorageItemThumbnailAsync(playlist.DisplayItem.Source.Path)).SaveAsync(SecondaryTileFolder, filename);
                 path = $"ms-appdata:///local/SecondaryTiles/{filename}.png";
