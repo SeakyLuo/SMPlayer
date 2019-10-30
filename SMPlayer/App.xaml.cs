@@ -71,8 +71,9 @@ namespace SMPlayer
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
                     if (e.TileId != "App")
                     {
+                        var tileId = System.Net.WebUtility.UrlDecode(e.TileId);
                         MainPage.Instance.NavigateToPage(bool.Parse(e.Arguments) ? typeof(PlaylistsPage) :
-                                                         e.TileId.StartsWith(Helper.Localize(MenuFlyoutHelper.MyFavorites)) ? typeof(MyFavoritesPage) : typeof(AlbumPage), e.TileId);
+                                                         tileId.StartsWith(Helper.Localize(MenuFlyoutHelper.MyFavorites)) ? typeof(MyFavoritesPage) : typeof(AlbumPage), tileId);
                     }
                 }
                 // 确保当前窗口处于活动状态

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.Graphics.Imaging;
@@ -23,11 +24,10 @@ namespace SMPlayer
     public static class Helper
     {
         public const string ToastTaskName = "ToastBackgroundTask";
-        public const string LogoPath = "ms-appx:///Assets/monotone_no_bg.png";
-        public const string DefaultAlbumCoverPath = "ms-appx:///Assets/monotone_bg_wide.png";
-        public const string ThumbnailNotFoundPath = "ms-appx:///Assets/colorful_bg_wide.png";
-        public const string ToastTagPaused = "SMPlayerMediaToastTagPaused", ToastTagPlaying = "SMPlayerMediaToastTagPlaying";
-        public const string ToastGroup = "SMPlayerMediaToastGroup";
+        public const string LogoPath = "ms-appx:///Assets/monotone_no_bg.png",
+                            DefaultAlbumCoverPath = "ms-appx:///Assets/monotone_bg_wide.png",
+                            ThumbnailNotFoundPath = "ms-appx:///Assets/colorful_bg_wide.png";
+        public const string ToastTagPaused = "SMPlayerMediaToastTagPaused", ToastTagPlaying = "SMPlayerMediaToastTagPlaying", ToastGroup = "SMPlayerMediaToastGroup";
         public static string NoLyricsAvailable { get => LocalizeMessage("NoLyricsAvailable"); }
 
         public static StorageFolder CurrentFolder, ThumbnailFolder, SecondaryTileFolder;
@@ -97,17 +97,9 @@ namespace SMPlayer
             return string.IsNullOrEmpty(str) ? resource : str;
         }
 
-        public static async Task<bool> CheckIfFileExistsAsync(string path)
+        public static async Task<bool> Contains(this StorageFolder folder, string name)
         {
-            try
-            {
-                await StorageFile.GetFileFromPathAsync(path);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return await folder.TryGetItemAsync(name) != null;
         }
 
         public static void SetToolTip(this DependencyObject obj, string tooltip, bool localize = true)
@@ -301,7 +293,7 @@ namespace SMPlayer
         public static async Task UpdateTile(StorageItemThumbnail itemThumbnail, Music music)
         {
             if (music == null) return;
-            string uri = itemThumbnail == null ? LogoPath : (await itemThumbnail.SaveAsync(await GetThumbnailFolder(), string.IsNullOrEmpty(music.Album) ? music.Name : music.Album)).Path;
+            string uri = itemThumbnail == null ? DefaultAlbumCoverPath : (await itemThumbnail.SaveAsync(await GetThumbnailFolder(), string.IsNullOrEmpty(music.Album) ? music.Name : music.Album)).Path;
             var tileContent = new TileContent()
             {
                 Visual = new TileVisual()
@@ -401,7 +393,7 @@ namespace SMPlayer
                 {
                     BackgroundImage = new TileBackgroundImage()
                     {
-                        Source = LogoPath
+                        Source = DefaultAlbumCoverPath
                     },
                 }
             };
@@ -428,10 +420,10 @@ namespace SMPlayer
         public static async Task<bool> PinToStartAsync(Playlist playlist, bool isPlaylist)
         {
             var tilename = playlist.Name;
-            var tileid = Uri.EscapeDataString(isPlaylist ? tilename : $"{tilename}+++{playlist.Artist}");
-            var filename = Uri.EscapeDataString(tilename);
-            var path = LogoPath;
-            if (playlist.DisplayItem.Source != null && await (await GetSecondaryTileFolder()).TryGetItemAsync(filename) == null)
+            var tileid = WebUtility.UrlEncode(isPlaylist ? tilename : $"{tilename}+++{playlist.Artist}");
+            var filename = WebUtility.UrlEncode(tilename);
+            var path = DefaultAlbumCoverPath;
+            if (playlist.DisplayItem.Source != null && await (await GetSecondaryTileFolder()).Contains(filename))
             {
                 await (await GetStorageItemThumbnailAsync(playlist.DisplayItem.Source.Path)).SaveAsync(SecondaryTileFolder, filename);
                 path = $"ms-appdata:///local/SecondaryTiles/{filename}.png";
@@ -450,7 +442,7 @@ namespace SMPlayer
                 var decoder = await BitmapDecoder.CreateAsync(stream);
                 var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
                 var filename = $"{name}.png";
-                bool notExists = await folder.TryGetItemAsync(filename) == null;
+                bool notExists = !await folder.Contains(filename);
                 var file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
                 if (notExists)
                 {
