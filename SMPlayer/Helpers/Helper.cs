@@ -100,7 +100,16 @@ namespace SMPlayer
 
         public static async Task<bool> Contains(this StorageFolder folder, string name)
         {
-            return await folder.TryGetItemAsync(name) != null;
+            try
+            {
+                return await folder.TryGetItemAsync(name) != null;
+            }
+            catch (ArgumentException)
+            {
+                // Value does not fall within the expected range.
+                // e.g. ?.png
+                return false;
+            }
         }
 
         public static void SetToolTip(this DependencyObject obj, string tooltip, bool localize = true)
@@ -294,7 +303,7 @@ namespace SMPlayer
         public static async Task UpdateTile(StorageItemThumbnail itemThumbnail, Music music)
         {
             if (music == null) return;
-            string uri = itemThumbnail == null ? DefaultAlbumCoverPath : (await itemThumbnail.SaveAsync(await GetThumbnailFolder(), string.IsNullOrEmpty(music.Album) ? music.Name : music.Album)).Path;
+            string uri = itemThumbnail == null ? DefaultAlbumCoverPath : (await itemThumbnail.SaveAsync(await GetThumbnailFolder(), string.IsNullOrEmpty(music.Album) ? music.Name : music.Album, true)).Path;
             var tileContent = new TileContent()
             {
                 Visual = new TileVisual()
@@ -384,9 +393,9 @@ namespace SMPlayer
                 // And send the notification to the primary tile
                 tileUpdater.Update(tileNotification);
             }
-            catch (ArgumentException)
+            catch (Exception)
             {
-                // Value does not fall within the expected range.
+                // ArgumentException: Value does not fall within the expected range.
                 // 不知道为什么就变成了null
             }
         }
@@ -449,13 +458,14 @@ namespace SMPlayer
             return isPlaylist ? tilename : $"{tilename}+++{playlist.Artist}";
         }
 
-        public static async Task<StorageFile> SaveAsync(this StorageItemThumbnail thumbnail, StorageFolder folder, string name)
+        public static async Task<StorageFile> SaveAsync(this StorageItemThumbnail thumbnail, StorageFolder folder, string name, bool encode = false)
         {
             using (var stream = thumbnail.CloneStream())
             {
                 var decoder = await BitmapDecoder.CreateAsync(stream);
                 var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
                 var filename = name + ".png";
+                if (encode) filename = WebUtility.UrlEncode(filename);
                 bool notExists = !await folder.Contains(filename);
                 var file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
                 if (notExists)
