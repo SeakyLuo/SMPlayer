@@ -376,12 +376,19 @@ namespace SMPlayer
                     }
                 }
             };
+            try
+            {
+                // Create the tile notification
+                var tileNotification = new TileNotification(tileContent.GetXml());
 
-            // Create the tile notification
-            var tileNotification = new TileNotification(tileContent.GetXml());
-
-            // And send the notification to the primary tile
-            tileUpdater.Update(tileNotification);
+                // And send the notification to the primary tile
+                tileUpdater.Update(tileNotification);
+            }
+            catch (ArgumentException)
+            {
+                // Value does not fall within the expected range.
+                // 不知道为什么就变成了null
+            }
         }
 
         public static void ResumeTile()

@@ -162,6 +162,12 @@
   <data name="AlwaysShownComboItem.Content" xml:space="preserve">
     <value>一直显示</value>
   </data>
+  <data name="AppDisplayName" xml:space="preserve">
+    <value>简音播放器</value>
+  </data>
+  <data name="AppTitle.Text" xml:space="preserve">
+    <value>简音播放器</value>
+  </data>
   <data name="ArtistHeader.Header" xml:space="preserve">
     <value>歌手</value>
   </data>

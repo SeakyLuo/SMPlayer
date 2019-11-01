@@ -162,6 +162,12 @@
   <data name="AlwaysShownComboItem.Content" xml:space="preserve">
     <value>Always Shown</value>
   </data>
+  <data name="AppDisplayName" xml:space="preserve">
+    <value>SMPlayer</value>
+  </data>
+  <data name="AppTitle.Text" xml:space="preserve">
+    <value>SMPlayer</value>
+  </data>
   <data name="ArtistHeader.Header" xml:space="preserve">
     <value>Artist</value>
   </data>

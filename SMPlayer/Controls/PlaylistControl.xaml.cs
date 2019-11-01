@@ -135,7 +135,16 @@ namespace SMPlayer
 
         public async void MusicRemoved(int index, Music music, ICollection<Music> newCollection)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, null, music));
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, null, music);
+                if (AlternatingRowColor)
+                {
+                    for (int i = index; i < MediaHelper.CurrentPlaylist.Count; i++)
+                        if (SongsListView.ContainerFromIndex(i) is ListViewItem container)
+                            container.Background = GetRowBackground(i);
+                }
+            });
         }
 
         private List<Music> beforeDragging;
@@ -150,11 +159,8 @@ namespace SMPlayer
             int from = -1, to = -1;
             for (int i = 0; i < sender.Items.Count; i++)
             {
-                if (Theme != ElementTheme.Dark)
-                {
-                    var container = sender.ContainerFromIndex(i) as ListViewItem;
-                    container.Background = i % 2 == 0 ? ColorHelper.WhiteSmokeBrush : ColorHelper.WhiteBrush;
-                }
+                if (AlternatingRowColor && sender.ContainerFromIndex(i) is ListViewItem container)
+                    container.Background = GetRowBackground(i);
                 if (!MediaHelper.CurrentPlaylist[i].Equals(beforeDragging[i]))
                 {
                     if (from < 0) from = i;
@@ -209,17 +215,16 @@ namespace SMPlayer
         private void RemoveMusic(Music music)
         {
             int index = CurrentPlaylist.IndexOf(music);
-            if (IsNowPlaying) MediaHelper.RemoveMusic(index);
-            else CurrentPlaylist.RemoveAt(index);
-            if (Theme != ElementTheme.Dark)
+            if (IsNowPlaying ? MediaHelper.RemoveMusic(index) : CurrentPlaylist.Remove(music))
             {
-                for (int i = index; i < CurrentPlaylist.Count; i++)
+                if (AlternatingRowColor)
                 {
-                    if (SongsListView.ContainerFromIndex(i) is ListViewItem container)
-                        container.Background = GetRowBackground(i);
+                    for (int i = index; i < CurrentPlaylist.Count; i++)
+                        if (SongsListView.ContainerFromIndex(i) is ListViewItem container)
+                            container.Background = GetRowBackground(i);
                 }
+                foreach (var listener in RemoveListeners) listener.MusicRemoved(index, music, CurrentPlaylist);
             }
-            foreach (var listener in RemoveListeners) listener.MusicRemoved(index, music, CurrentPlaylist);
         }
 
         private void FavoriteItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)

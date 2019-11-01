@@ -7,8 +7,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:media="using:Microsoft.UI.Xaml.Media"
-    xmlns:triggers="using:SMPlayer.Triggers"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
@@ -133,12 +131,12 @@
                 Background="Transparent" />
             <TextBlock
                 x:Name="AppTitle"
+                x:Uid="AppTitle"
                 Height="{x:Bind AppTitleBar.Height, Mode=OneWay}"
                 Padding="10,8"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 Style="{StaticResource CaptionTextBlockStyle}"
-                Text="{x:Bind appmodel:Package.Current.DisplayName}"
                 Visibility="Collapsed" />
         </Grid>
         <Button
