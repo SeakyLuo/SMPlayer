@@ -29,7 +29,7 @@ namespace SMPlayer
             MainPage.Instance.ShowAddMusicResultNotification(MusicCollection, item.Source);
         }
 
-        public async System.Threading.Tasks.Task Setup(ICollection<Music> collection)
+        public void Setup(ICollection<Music> collection)
         {
             SetupInProgress = true;
             MusicCollection = collection.ToList();
@@ -38,8 +38,7 @@ namespace SMPlayer
             {
                 var copy = music.Copy();
                 copy.IsPlaying = copy.Equals(MediaHelper.CurrentMusic);
-                GridMusicView gridItem = new GridMusicView();
-                await gridItem.Init(copy);
+                GridMusicView gridItem = new GridMusicView(copy);
                 GridMusicCollection.Add(gridItem);
             }
             SetupInProgress = false;
@@ -109,6 +108,11 @@ namespace SMPlayer
                 foreach (var item in GridMusicCollection)
                     item.Source.IsPlaying = item.Source.Equals(next);
             });
+        }
+
+        private void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        {
+            (sender.DataContext as GridMusicView)?.SetThumbnail();
         }
     }
 }

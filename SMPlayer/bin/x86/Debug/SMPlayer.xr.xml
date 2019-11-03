@@ -484,6 +484,7 @@
       <RootProperty Name="Resources" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
+      <RootEvent Name="DataContextChanged" />
       <RootEvent Name="SizeChanged" />
       <RootEvent Name="Loaded" />
       <RootEvent Name="Loading" />

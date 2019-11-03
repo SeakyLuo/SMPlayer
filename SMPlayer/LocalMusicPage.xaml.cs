@@ -45,7 +45,7 @@ namespace SMPlayer
             CurrentTree = (FolderTree)e.Parameter;
         }
 
-        private async void Setup(FolderTree tree)
+        private void Setup(FolderTree tree)
         {
             if (TreePath == tree.Path) return;
             LoadingProgressBar.Visibility = Visibility.Visible;
@@ -55,13 +55,13 @@ namespace SMPlayer
             {
                 if (GridMusicView.Visibility == Visibility.Visible)
                 {
-                    await GridMusicView.Setup(tree.Files);
+                    GridMusicView.Setup(tree.Files);
                     SetSongs(tree.Files);
                 }
                 else
                 {
                     SetSongs(tree.Files);
-                    await GridMusicView.Setup(tree.Files);
+                    GridMusicView.Setup(tree.Files);
                 }
             }
             catch (InvalidOperationException)

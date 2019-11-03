@@ -17,12 +17,12 @@ namespace SMPlayer.Models
             {
                 if (value == null) return;
                 thumbnail = value;
-                CoverLoaded = true;
+                coverLoaded = true;
                 OnPropertyChanged();
             }
         }
         private BitmapImage thumbnail = Helper.DefaultAlbumCover;
-        private bool CoverLoaded = false;
+        private bool coverLoaded = false;
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -41,7 +41,7 @@ namespace SMPlayer.Models
         }
         public async void SetCover()
         {
-            if (!CoverLoaded) Cover = await GetAlbumCoverAsync(Songs);
+            if (!coverLoaded) Cover = await GetAlbumCoverAsync(Songs);
         }
         public static async System.Threading.Tasks.Task<BitmapImage> GetAlbumCoverAsync(ICollection<Music> songs)
         {

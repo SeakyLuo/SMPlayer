@@ -20,7 +20,10 @@
         SelectionMode="None">
         <GridView.ItemTemplate>
             <DataTemplate x:DataType="data:GridMusicView">
-                <UserControl PointerEntered="GridViewItem_PointerEntered" PointerExited="GridViewItem_PointerExited">
+                <UserControl
+                    DataContextChanged="UserControl_DataContextChanged"
+                    PointerEntered="GridViewItem_PointerEntered"
+                    PointerExited="GridViewItem_PointerExited">
                     <Grid Margin="3" Background="Transparent">
                         <Grid.ContextFlyout>
                             <MenuFlyout Opening="MenuFlyout_Opening" />
@@ -44,7 +47,7 @@
                                 <Image
                                     Width="100"
                                     Height="100"
-                                    Source="{x:Bind Thumbnail}" />
+                                    Source="{x:Bind Thumbnail, Mode=OneWay}" />
                                 <Button
                                     x:Name="AddToButton"
                                     x:Uid="AddToButton"
@@ -78,7 +81,7 @@
                                     HorizontalAlignment="Left"
                                     FontSize="12"
                                     Foreground="{x:Bind Source.IsPlaying, Converter={StaticResource ColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
-                                    Text="{x:Bind Artist}"
+                                    Text="{x:Bind Artist, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist}"
                                     TextTrimming="CharacterEllipsis" />
                                 <TextBlock
                                     x:Name="AlbumTextBlock"

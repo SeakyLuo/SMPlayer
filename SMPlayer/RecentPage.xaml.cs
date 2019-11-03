@@ -29,13 +29,13 @@ namespace SMPlayer
             Setup(Models.Settings.settings.Recent);
         }
 
-        private async void Setup(ICollection<string> paths)
+        private void Setup(ICollection<string> paths)
         {
             if (!Modified) return;
             LoadingProgressBar.Visibility = Visibility.Visible;
             try
             {
-                await GridMusicView.Setup(MusicLibraryPage.ConvertMusicPathToCollection(paths));
+                GridMusicView.Setup(MusicLibraryPage.ConvertMusicPathToCollection(paths));
             }
             catch (InvalidOperationException)
             {
