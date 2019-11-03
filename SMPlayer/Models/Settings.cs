@@ -152,7 +152,7 @@ namespace SMPlayer.Models
             if (newName == MenuFlyoutHelper.NowPlaying || newName == MenuFlyoutHelper.MyFavorites ||
                 Playlists.FindIndex((p) => p.Name == newName) != -1)
                 return NamingError.Used;
-            if (newName.Contains("+++") || newName.Contains("{0}"))
+            if (newName.Contains(Helper.StringConcatenationFlag) || newName.Contains("{0}"))
                 return NamingError.Special;
             if (newName.Length > PlaylistNameMaxLength)
                 return NamingError.TooLong;

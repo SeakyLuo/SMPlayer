@@ -615,6 +615,12 @@
   <data name="seconds" xml:space="preserve">
     <value>seconds</value>
   </data>
+  <data name="See Album" xml:space="preserve">
+    <value>See Album</value>
+  </data>
+  <data name="See Artist" xml:space="preserve">
+    <value>See Artist</value>
+  </data>
   <data name="SelectArtistTextBlock.Text" xml:space="preserve">
     <value>Select an Artist On the Left</value>
   </data>

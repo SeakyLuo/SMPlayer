@@ -127,6 +127,9 @@
     <value>Do you want to clear playlist "{0}"?</value>
   </data>
   <data name="DeleteMusic" xml:space="preserve">
+    <value>Delete "{0}"</value>
+  </data>
+  <data name="DeleteMusicMessage" xml:space="preserve">
     <value>You are deleting "{0}" from your device.\nThis operation is irrevertible.\nDo you want to continue?</value>
   </data>
   <data name="FailToOpenBrowser" xml:space="preserve">
@@ -166,7 +169,7 @@
     <value>Playlist name cannot be empty or whitespaces!</value>
   </data>
   <data name="NamingErrorSpecial" xml:space="preserve">
-    <value>Playlist name cannot contain "+++" or "{0}"!</value>
+    <value>Playlist name cannot contain "+++++" or "{0}"!</value>
   </data>
   <data name="NamingErrorTooLong" xml:space="preserve">
     <value>Playlist name cannot have more than 50 characters!</value>

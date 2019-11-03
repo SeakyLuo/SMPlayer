@@ -4,6 +4,7 @@
     <RootInterface FullName="Windows.UI.Xaml.Data.IValueConverter" />
   </Roots.Interfaces>
   <Roots.PropertyPathNames>
+    <RootPropertyPathName Name="Text" />
     <RootPropertyPathName Name="Name" />
     <RootPropertyPathName Name="Artist" />
     <RootPropertyPathName Name="Cover" />
@@ -11,7 +12,6 @@
     <RootPropertyPathName Name="IsPlaying" />
     <RootPropertyPathName Name="Duration" />
     <RootPropertyPathName Name="Content" />
-    <RootPropertyPathName Name="Text" />
     <RootPropertyPathName Name="PlaceholderForeground" />
     <RootPropertyPathName Name="ScrollableWidth" />
     <RootPropertyPathName Name="IsCloseButtonOverlay" />
@@ -302,11 +302,11 @@
       <RootEvent Name="DataContextChanged" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Data.Binding">
+      <RootProperty Name="ElementName" />
+      <RootProperty Name="Path" />
       <RootProperty Name="Converter" />
       <RootProperty Name="ConverterParameter" />
       <RootProperty Name="Mode" />
-      <RootProperty Name="ElementName" />
-      <RootProperty Name="Path" />
       <RootProperty Name="RelativeSource" />
       <RootProperty Name="TargetNullValue" />
       <RootProperty Name="FallbackValue" />
@@ -359,6 +359,10 @@
       <RootProperty Name="Width" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="Tapped" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ToolTipService">
+      <RootMethod Name="GetToolTip" />
+      <RootMethod Name="SetToolTip" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyout">
       <RootProperty Name="Items" />
@@ -491,10 +495,6 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.VisualStateManager">
       <RootMethod Name="GetVisualStateGroups" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.ToolTipService">
-      <RootMethod Name="GetToolTip" />
-      <RootMethod Name="SetToolTip" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DropShadowPanel">
       <RootProperty Name="BlurRadius" />

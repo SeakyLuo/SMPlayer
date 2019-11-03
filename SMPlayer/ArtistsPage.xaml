@@ -53,6 +53,7 @@
                         Padding="15,5"
                         HorizontalAlignment="Stretch"
                         Background="Transparent"
+                        ToolTipService.ToolTip="{Binding ElementName=ArtistNameTextBlock, Path=Text}"
                         Orientation="Horizontal"
                         PointerEntered="Artist_PointerEntered"
                         Tapped="Artist_Tapped">

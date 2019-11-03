@@ -127,6 +127,9 @@
     <value>你希望清空播放列表“{0}”吗？</value>
   </data>
   <data name="DeleteMusic" xml:space="preserve">
+    <value>删除《{0}》</value>
+  </data>
+  <data name="DeleteMusicMessage" xml:space="preserve">
     <value>你将要删除《{0}》。该项操作无法撤销，是否要继续？</value>
   </data>
   <data name="FailToOpenBrowser" xml:space="preserve">
@@ -166,7 +169,7 @@
     <value>名称不能为空！</value>
   </data>
   <data name="NamingErrorSpecial" xml:space="preserve">
-    <value>名称中不能包含“+++”或者“{0}”！</value>
+    <value>名称中不能包含“+++++”或者“{0}”！</value>
   </data>
   <data name="NamingErrorTooLong" xml:space="preserve">
     <value>名称长度不能超过50！</value>

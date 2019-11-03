@@ -153,7 +153,7 @@ namespace SMPlayer
             item.SetToolTip("Show In Explorer");
             return item;
         }
-        public MenuFlyout GetMusicMenuFlyout(MenuFlyoutItemClickListener listener = null)
+        public MenuFlyout GetMusicMenuFlyout(MenuFlyoutItemClickListener listener = null, bool withNavigation = true)
         {
             var music = Data as Music;
             var flyout = new MenuFlyout();
@@ -181,7 +181,7 @@ namespace SMPlayer
             {
                 await new RemoveDialog()
                 {
-                    Message = Helper.LocalizeMessage("DeleteMusic", music.Name),
+                    Message = Helper.LocalizeMessage("DeleteMusicMessage", music.Name),
                     Confirm = async () =>
                     {
                         StorageFile file = await StorageFile.GetFileFromPathAsync(music.Path);
@@ -195,17 +195,40 @@ namespace SMPlayer
                     }
                 }.ShowAsync();
             };
-            deleteItem.SetToolTip($"Delete {music.Name}");
+            deleteItem.SetToolTip(Helper.LocalizeMessage("DeleteMusic", music.Name), false);
             flyout.Items.Add(deleteItem);
-            foreach (var item in GetMusicPropertiesMenuFlyout().Items)
+            foreach (var item in GetMusicPropertiesMenuFlyout(withNavigation).Items)
                 flyout.Items.Add(item);
             return flyout;
         }
 
-        public MenuFlyout GetMusicPropertiesMenuFlyout()
+        public MenuFlyout GetMusicPropertiesMenuFlyout(bool withNavigation = true)
         {
             var music = Data as Music;
             var flyout = new MenuFlyout();
+            if (withNavigation)
+            {
+                var artistItem = new MenuFlyoutItem()
+                {
+                    Icon = new FontIcon() { Glyph = "\uE8D4" },
+                    Text = Helper.Localize("See Artist")
+                };
+                artistItem.Click += (s, args) =>
+                {
+                    MainPage.Instance.NavigateToPage(typeof(ArtistsPage), music.Artist);
+                };
+                flyout.Items.Add(artistItem);
+                var albumItem = new MenuFlyoutItem()
+                {
+                    Icon = new FontIcon() { Glyph = "\uE93C" },
+                    Text = Helper.Localize("See Album")
+                };
+                albumItem.Click += (s, args) =>
+                {
+                    MainPage.Instance.NavigateToPage(typeof(AlbumPage), music.GetAlbumNavigationString());
+                };
+                flyout.Items.Add(albumItem);
+            }
             var musicInfoItem = new MenuFlyoutItem()
             {
                 Icon = new SymbolIcon(Symbol.MusicInfo),
@@ -234,7 +257,7 @@ namespace SMPlayer
         public MenuFlyout GetRemovableMusicMenuFlyout(MenuFlyoutItemClickListener listener = null)
         {
             var music = Data as Music;
-            var flyout = GetMusicMenuFlyout();
+            var flyout = GetMusicMenuFlyout(listener, false);
             var localizedRemove = Helper.Localize("Remove From Playlist");
             var removeItem = new MenuFlyoutItem
             {

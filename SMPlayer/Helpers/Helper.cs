@@ -24,6 +24,7 @@ namespace SMPlayer
 {
     public static class Helper
     {
+        public const string StringConcatenationFlag = "+++++";
         public const string ToastTaskName = "ToastBackgroundTask";
         public const string LogoPath = "ms-appx:///Assets/monotone_no_bg.png",
                             DefaultAlbumCoverPath = "ms-appx:///Assets/monotone_bg_wide.png",
@@ -455,7 +456,7 @@ namespace SMPlayer
         public static string FormatTileId(Playlist playlist, bool isPlaylist)
         {
             var tilename = playlist.Name;
-            return isPlaylist ? tilename : $"{tilename}+++{playlist.Artist}";
+            return isPlaylist ? tilename : tilename + StringConcatenationFlag + playlist.Artist;
         }
 
         public static async Task<StorageFile> SaveAsync(this StorageItemThumbnail thumbnail, StorageFolder folder, string name, bool encode = false)

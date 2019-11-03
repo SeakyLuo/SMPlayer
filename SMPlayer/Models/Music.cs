@@ -174,7 +174,10 @@ namespace SMPlayer.Models
             return string.IsNullOrEmpty(Artist) ? string.IsNullOrEmpty(Album) ? Name : string.Format("{0} - {1}", Name, Album) :
                                                   string.Format("{0} - {1}", Name, string.IsNullOrEmpty(Artist) ? Album : Artist);
         }
-
+        public string GetAlbumNavigationString()
+        {
+            return Album + Helper.StringConcatenationFlag + Artist;
+        }
         int IComparable<Music>.CompareTo(Music other)
         {
             return string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(other.Name) ? 0 : Name.CompareTo(other.Name);
