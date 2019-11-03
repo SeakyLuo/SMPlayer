@@ -258,11 +258,10 @@ namespace SMPlayer
         {
             var music = Data as Music;
             var flyout = GetMusicMenuFlyout(listener, false);
-            var localizedRemove = Helper.Localize("Remove From Playlist");
             var removeItem = new MenuFlyoutItem
             {
                 Icon = new SymbolIcon(Symbol.Remove),
-                Text = localizedRemove
+                Text = Helper.Localize("Remove From Playlist")
             };
             removeItem.Click += (sender, args) =>
             {
@@ -270,7 +269,7 @@ namespace SMPlayer
                     MediaHelper.NextMusic();
                 MediaHelper.RemoveMusic(music);
             };
-            removeItem.SetToolTip(localizedRemove, false);
+            removeItem.SetToolTip(Helper.LocalizeMessage("RemoveFromPlaylist", music.Name), false);
             flyout.Items.Insert(2, removeItem);
             return flyout;
         }
