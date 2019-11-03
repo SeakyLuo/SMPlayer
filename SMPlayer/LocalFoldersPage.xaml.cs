@@ -43,7 +43,7 @@ namespace SMPlayer
             setter.SetPage(CurrentTree.Trees[GridItems.IndexOf(folderView)]);
         }
 
-        private async void Setup(FolderTree tree)
+        private void Setup(FolderTree tree)
         {
             if (TreePath == tree.Path) return;
             LocalFolderTreeView.RootNodes.Clear();
@@ -57,11 +57,7 @@ namespace SMPlayer
             GridItems.Clear();
             setter.SetPage(tree);
             foreach (var branch in tree.Trees)
-            {
-                GridFolderView gridItem = new GridFolderView();
-                await gridItem.Init(branch);
-                GridItems.Add(gridItem);
-            }
+                GridItems.Add(new GridFolderView(branch));
             TreePath = tree.Path;
             CurrentTree = tree;
             LocalLoadingControl.Visibility = Visibility.Collapsed;
@@ -158,6 +154,11 @@ namespace SMPlayer
         private void GridViewItem_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             VisualStateManager.GoToState(sender as Control, "Normal", true);
+        }
+
+        private void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        {
+            (sender.DataContext as GridFolderView)?.SetThumbnail();
         }
     }
 }

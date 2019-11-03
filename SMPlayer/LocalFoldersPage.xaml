@@ -282,7 +282,10 @@
             SelectionMode="None">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:GridFolderView">
-                    <UserControl PointerEntered="GridViewItem_PointerEntered" PointerExited="GridViewItem_PointerExited">
+                    <UserControl
+                        DataContextChanged="UserControl_DataContextChanged"
+                        PointerEntered="GridViewItem_PointerEntered"
+                        PointerExited="GridViewItem_PointerExited">
                         <StackPanel Margin="10">
                             <StackPanel.ContextFlyout>
                                 <MenuFlyout Opening="OpenPlaylistFlyout" />
@@ -310,23 +313,23 @@
                                     <Image
                                         Grid.Row="0"
                                         Grid.Column="0"
-                                        Source="{x:Bind First}" />
+                                        Source="{x:Bind First, Mode=OneWay}" />
                                     <Image
                                         Grid.Row="0"
                                         Grid.Column="1"
-                                        Source="{x:Bind Second}" />
+                                        Source="{x:Bind Second, Mode=OneWay}" />
                                     <Image
                                         Grid.Row="1"
                                         Grid.Column="0"
-                                        Source="{x:Bind Third}" />
+                                        Source="{x:Bind Third, Mode=OneWay}" />
                                     <Image
                                         Grid.Row="1"
                                         Grid.Column="1"
-                                        Source="{x:Bind Fourth}" />
+                                        Source="{x:Bind Fourth, Mode=OneWay}" />
                                     <Image
                                         Grid.RowSpan="2"
                                         Grid.ColumnSpan="2"
-                                        Source="{x:Bind LargeThumbnail}"
+                                        Source="{x:Bind LargeThumbnail, Mode=OneWay}"
                                         Visibility="{Binding Converter={StaticResource VisibilityConverter}}" />
                                     <StackPanel
                                         x:Name="ButtonStackPanel"

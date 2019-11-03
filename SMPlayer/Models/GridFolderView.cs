@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -7,35 +8,88 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMPlayer.Models
 {
-    class GridFolderView
+    class GridFolderView : INotifyPropertyChanged
     {
         public string Name { get; set; }
         public string FolderInfo { get; set; }
-        public BitmapImage First { get; set; }
-        public BitmapImage Second { get; set; }
-        public BitmapImage Third { get; set; }
-        public BitmapImage Fourth { get; set; }
-        public BitmapImage LargeThumbnail { get; set; }
+        public BitmapImage First
+        {
+            get => first;
+            set
+            {
+                first = value;
+                OnPropertyChanged();
+            }
+        }
+        public BitmapImage Second
+        {
+            get => second;
+            set
+            {
+                second = value;
+                OnPropertyChanged();
+            }
+        }
+        public BitmapImage Third
+        {
+            get => third;
+            set
+            {
+                third = value;
+                OnPropertyChanged();
+            }
+        }
+        public BitmapImage Fourth
+        {
+            get => fourth;
+            set
+            {
+                fourth = value;
+                OnPropertyChanged();
+            }
+        }
+        public BitmapImage LargeThumbnail
+        {
+            get => large;
+            set
+            {
+                large = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private BitmapImage first, second, third, fourth, large;
         public FolderTree Tree { get; private set; }
         public List<Music> Songs
         {
             get => songs ?? (songs = Tree.Flatten());
         }
         private List<Music> songs;
-        public GridFolderView() { }
-
-        public async Task Init(FolderTree tree)
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        private bool thumbnaiLoaded = false;
+        public GridFolderView(FolderTree tree)
         {
             Tree = tree;
-            List<BitmapImage> thumbnails = new List<BitmapImage>(4);
-            var folder = await StorageFolder.GetFolderFromPathAsync(tree.Path);
-            Name = folder.DisplayName;
+            Name = tree.Directory;
             FolderInfo = tree.Info.Info;
+        }
+
+        public async void SetThumbnail()
+        {
+            if (thumbnaiLoaded) return;
+            List<BitmapImage> thumbnails = new List<BitmapImage>(4);
             BitmapImage thumbnail;
-            foreach (var music in tree.Flatten().OrderBy((m) => m.Name))
+            foreach (var group in Tree.Flatten().GroupBy((m) => m.Album))
             {
-                thumbnail = await Helper.GetThumbnailAsync(music, false);
-                if (thumbnail != null) thumbnails.Add(thumbnail);
+                foreach (var music in group)
+                {
+                    thumbnail = await Helper.GetThumbnailAsync(music, false);
+                    if (thumbnail != null)
+                    {
+                        thumbnails.Add(thumbnail);
+                        break;
+                    }
+                }
                 if (thumbnails.Count == 4) break;
             }
             int count = thumbnails.Count;
@@ -50,6 +104,12 @@ namespace SMPlayer.Models
                 Third = thumbnails[2];
                 Fourth = thumbnails[3];
             }
+            thumbnaiLoaded = true;
+        }
+        public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            // Raise the PropertyChanged event, passing the name of the property whose value has changed.
+            this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public override bool Equals(object obj)
