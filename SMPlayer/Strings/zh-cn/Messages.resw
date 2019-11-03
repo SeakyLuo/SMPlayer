@@ -120,6 +120,9 @@
   <data name="BingUri" xml:space="preserve">
     <value>https://cn.bing.com/</value>
   </data>
+  <data name="ChangesSaved" xml:space="preserve">
+    <value>已保存！</value>
+  </data>
   <data name="ClearPlaylist" xml:space="preserve">
     <value>你希望清空播放列表“{0}”吗？</value>
   </data>

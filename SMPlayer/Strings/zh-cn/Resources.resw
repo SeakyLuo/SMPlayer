@@ -582,6 +582,9 @@
   <data name="Reverse Playlist" xml:space="preserve">
     <value>反转播放列表</value>
   </data>
+  <data name="SaveChangesButton.Content" xml:space="preserve">
+    <value>保存改变</value>
+  </data>
   <data name="SaveLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>保存歌词</value>
   </data>

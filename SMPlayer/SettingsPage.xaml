@@ -152,10 +152,7 @@
                 QuerySubmitted="PathBox_QuerySubmitted"
                 Style="{StaticResource MarginSetter}">
                 <AutoSuggestBox.QueryIcon>
-                    <FontIcon
-                        x:Uid="OpenFolderIcon"
-                        Glyph="&#xE838;"
-                        ToolTipService.ToolTip="Select Folder" />
+                    <FontIcon x:Uid="OpenFolderIcon" Glyph="&#xE838;" />
                 </AutoSuggestBox.QueryIcon>
             </AutoSuggestBox>
             <ComboBox
@@ -219,6 +216,12 @@
                 Margin="9,0"
                 Click="BugReport_Click"
                 Content="Bug Report"
+                Style="{ThemeResource TextBlockButtonStyle}" />
+            <HyperlinkButton
+                x:Uid="SaveChangesButton"
+                Margin="9,0"
+                Click="SaveChanges_Click"
+                Content="Save Changes"
                 Style="{ThemeResource TextBlockButtonStyle}" />
         </StackPanel>
         <VisualStateManager.VisualStateGroups>

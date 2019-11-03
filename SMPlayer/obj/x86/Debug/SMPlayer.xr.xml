@@ -10,6 +10,8 @@
     <RootPropertyPathName Name="Album" />
     <RootPropertyPathName Name="IsPlaying" />
     <RootPropertyPathName Name="Duration" />
+    <RootPropertyPathName Name="Content" />
+    <RootPropertyPathName Name="Text" />
     <RootPropertyPathName Name="PlaceholderForeground" />
     <RootPropertyPathName Name="ScrollableWidth" />
     <RootPropertyPathName Name="IsCloseButtonOverlay" />
@@ -44,7 +46,6 @@
     <RootPropertyPathName Name="ExpandedGlyphVisibility" />
     <RootPropertyPathName Name="CollapsedGlyphVisibility" />
     <RootPropertyPathName Name="DragItemsCount" />
-    <RootPropertyPathName Name="Content" />
     <RootPropertyPathName Name="Directory" />
     <RootPropertyPathName Name="ShowAlbumText" />
     <RootPropertyPathName Name="KeyboardAcceleratorTextMinWidth" />
@@ -304,11 +305,11 @@
       <RootProperty Name="Converter" />
       <RootProperty Name="ConverterParameter" />
       <RootProperty Name="Mode" />
+      <RootProperty Name="ElementName" />
+      <RootProperty Name="Path" />
       <RootProperty Name="RelativeSource" />
       <RootProperty Name="TargetNullValue" />
       <RootProperty Name="FallbackValue" />
-      <RootProperty Name="ElementName" />
-      <RootProperty Name="Path" />
     </RootType>
     <RootType FullName="SMPlayer.AlbumsPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.ListViewItem" />

@@ -120,6 +120,9 @@
   <data name="BingUri" xml:space="preserve">
     <value>https://www.bing.com/</value>
   </data>
+  <data name="ChangesSaved" xml:space="preserve">
+    <value>Changes has been saved.</value>
+  </data>
   <data name="ClearPlaylist" xml:space="preserve">
     <value>Do you want to clear playlist "{0}"?</value>
   </data>

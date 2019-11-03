@@ -74,7 +74,7 @@ namespace SMPlayer
 
         private void ConfirmColorButton_Click(object sender, RoutedEventArgs e)
         {
-            Settings.settings.ThemeColor = ThemeColorPicker.Color;
+            //Settings.settings.ThemeColor = ThemeColorPicker.Color;
             ColorPickerFlyout.Hide();
         }
 
@@ -115,6 +115,12 @@ namespace SMPlayer
             {
                 MainPage.Instance.ShowNotification(Helper.LocalizeMessage("FailToOpenBrowser"));
             }
+        }
+
+        private void SaveChanges_Click(object sender, RoutedEventArgs e)
+        {
+            App.Save();
+            Helper.ShowNotification("ChangesSaved");
         }
     }
 

@@ -582,6 +582,9 @@
   <data name="Reverse Playlist" xml:space="preserve">
     <value>Reverse Playlist</value>
   </data>
+  <data name="SaveChangesButton.Content" xml:space="preserve">
+    <value>Save Changes</value>
+  </data>
   <data name="SaveLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Save Lyrics</value>
   </data>

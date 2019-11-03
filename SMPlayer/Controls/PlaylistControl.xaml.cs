@@ -16,7 +16,8 @@ namespace SMPlayer
         public bool IsNowPlaying { get; set; }
         public ObservableCollection<Music> CurrentPlaylist
         {
-            get => IsNowPlaying ? MediaHelper.CurrentPlaylist : currentPlaylist;
+            get => IsNowPlaying ? MediaHelper.CurrentPlaylist :
+                                  currentPlaylist.Count == 0 ? currentPlaylist = ItemsSource as ObservableCollection<Music> : currentPlaylist;
             set => currentPlaylist = value;
         }
         private ObservableCollection<Music> currentPlaylist = new ObservableCollection<Music>();
