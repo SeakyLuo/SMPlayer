@@ -9,7 +9,7 @@ namespace SMPlayer.Models
     {
         public string Name { get; set; }
         public string Artist { get; set; }
-        public ObservableCollection<Music> Songs { get; set; }
+        public ObservableCollection<Music> Songs { get; set; } = new ObservableCollection<Music>();
         public BitmapImage Cover
         {
             get => thumbnail;

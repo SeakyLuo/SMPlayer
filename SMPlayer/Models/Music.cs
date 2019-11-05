@@ -67,13 +67,23 @@ namespace SMPlayer.Models
             if (obj == null) return;
             CopyFrom(obj);
         }
-
         public Music(string path, MusicProperties properties)
         {
             Path = path;
             Name = properties.Title;
             Artist = properties.Artist;
             Album = properties.Album;
+            Duration = (int)properties.Duration.TotalSeconds;
+            Favorite = false;
+            PlayCount = 0;
+            IsPlaying = false;
+        }
+        public Music(string path, MusicProperties properties, TagLib.Tag tag)
+        {
+            Path = path;
+            Name = tag.Title;
+            Artist = tag.JoinedPerformers;
+            Album = tag.Album;
             Duration = (int)properties.Duration.TotalSeconds;
             Favorite = false;
             PlayCount = 0;
@@ -126,17 +136,10 @@ namespace SMPlayer.Models
         public static async Task<Music> GetMusicAsync(StorageFile file)
         {
             return new Music(file.Path, await file.Properties.GetMusicPropertiesAsync());
-        }
-
-        public static async Task<Music> GetMusicAsync(string source)
-        {
-            return await GetMusicAsync(await StorageFile.GetFileFromPathAsync(source));
-        }
-
-        public static async Task<Music> GetMusicAsync(Uri source)
-        {
-            var file = await StorageFile.GetFileFromApplicationUriAsync(source);
-            return new Music(source.AbsolutePath, await file.Properties.GetMusicPropertiesAsync());
+            //using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(file), TagLib.ReadStyle.Average))
+            //{
+            //    return new Music(file.Path, await file.Properties.GetMusicPropertiesAsync(), tagFile.Tag);
+            //}
         }
 
         public async Task<StorageFile> GetStorageFileAsync()
@@ -146,7 +149,7 @@ namespace SMPlayer.Models
 
         public async Task<string> GetLyricsAsync()
         {
-            var file = await StorageFile.GetFileFromPathAsync(Path);
+            var file = await GetStorageFileAsync();
             using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(file), TagLib.ReadStyle.Average))
             {
                 return tagFile.Tag.Lyrics;

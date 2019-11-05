@@ -597,6 +597,7 @@
       <RootProperty Name="Style" />
       <RootProperty Name="Margin" />
       <RootProperty Name="IsReadOnly" />
+      <RootProperty Name="MinHeight" />
       <RootProperty Name="AcceptsReturn" />
       <RootProperty Name="Background" />
       <RootProperty Name="BorderThickness" />

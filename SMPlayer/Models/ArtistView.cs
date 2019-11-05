@@ -8,7 +8,7 @@ namespace SMPlayer.Models
     public class ArtistView : INotifyPropertyChanged
     {
         public string Name { get; set; }
-        public ObservableCollection<AlbumView> Albums { get; set; }
+        public ObservableCollection<AlbumView> Albums { get; set; } = new ObservableCollection<AlbumView>();
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         public bool NotLoaded
         {
@@ -36,37 +36,36 @@ namespace SMPlayer.Models
         public ArtistView(string Name)
         {
             this.Name = Name;
-            this.Albums = new ObservableCollection<AlbumView>();
         }
 
         public ArtistView(string Name, ICollection<Music> Songs)
         {
             this.Name = Name;
-            this.Songs = Songs.ToList();
-            Albums = new ObservableCollection<AlbumView>();
-            foreach (var group in Songs.GroupBy((m) => m.Album).OrderBy((g) => g.Key))
-                Albums.Add(new AlbumView(group.Key, Name, group));
+            CopySongs(Songs);
             NotLoaded = false;
         }
-
+        private bool loading = false;
         public void Load()
         {
+            if (loading) return;
             NotLoaded = true;
-            Songs = MusicLibraryPage.AllSongs.Where((m) => m.Artist == Name).ToList();
-            var groups = Songs.GroupBy((m) => m.Album).OrderBy((g) => g.Key);
-            foreach (var group in groups)
-                Albums.Add(new AlbumView(group.Key, group.Key, group.OrderBy((m) => m.Name)));
+            loading = true;
+            CopySongs(MusicLibraryPage.AllSongs.Where(m => m.Artist == Name));
             NotLoaded = false;
+            loading = false;
+        }
+        public void CopySongs(IEnumerable<Music> songs)
+        {
+            foreach (var group in (Songs = songs.ToList()).GroupBy(m => m.Album).OrderBy(g => g.Key))
+                if (Albums.FirstOrDefault(a => a.Name == group.Key) == null)
+                    Albums.Add(new AlbumView(group.Key, Name, group.OrderBy(m => m.Name)));
         }
 
         public void CopyFrom(Playlist playlist)
         {
             NotLoaded = true;
             Name = playlist.Artist;
-            Songs = playlist.Songs.ToList();
-            Albums = new ObservableCollection<AlbumView>();
-            foreach (var group in Songs.GroupBy((m) => m.Album).OrderBy((g) => g.Key))
-                Albums.Add(new AlbumView(group.Key, Name, group));
+            CopySongs(playlist.Songs.ToList());
             NotLoaded = false;
         }
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
