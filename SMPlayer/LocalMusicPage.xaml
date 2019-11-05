@@ -33,6 +33,7 @@
             Grid.Row="1"
             Margin="10"
             AlternatingRowColor="True"
+            AllowReorder="False"
             ItemsSource="{x:Bind Songs, Mode=OneWay}"
             Visibility="Collapsed" />
         <VisualStateManager.VisualStateGroups>

@@ -37,7 +37,6 @@ namespace SMPlayer
                 minutes = time.Minutes,
                 hours = time.Hours,
                 days = time.Days;
-            System.Diagnostics.Debug.WriteLine(time.ToString());
             string second = seconds != 0 && (total_seconds < 60 || minutes < 10) && hours == 0 && days == 0 ? $"{seconds} {Helper.Localize(TryPlural("second", seconds))}" : "",
                    minute = minutes == 0 || days > 0 ? "" : $"{minutes} {Helper.Localize(TryPlural("minute", minutes))} ",
                    hour = hours == 0 ? "" : $"{hours} {Helper.Localize(TryPlural("hour", hours))} ",

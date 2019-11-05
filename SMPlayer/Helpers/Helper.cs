@@ -237,11 +237,18 @@ namespace SMPlayer
                 Data = new NotificationData() { SequenceNumber = 0 },
                 ExpiresOnReboot = true
             };
-            if (status == Models.ShowToast.MusicChanged) Toast.ExpirationTime = DateTime.Now.AddSeconds(Math.Min(5, music.Duration));
+            if (status == Models.ShowToast.Always)
+            {
+                Lyrics = await music.GetLyricsAsync();
+                Toast.Data.Values["Lyrics"] = GetLyricByTime(MediaHelper.Position);
+            }
+            else
+            {
+                Toast.ExpirationTime = DateTime.Now.AddSeconds(Math.Min(5, music.Duration));
+                Toast.Data.Values["Lyrics"] = "";
+            }
             Toast.Data.Values["MediaControlPosition"] = MediaHelper.Progress.ToString();
             Toast.Data.Values["MediaControlPositionTime"] = MusicDurationConverter.ToTime(MediaHelper.Position);
-            Lyrics = await music.GetLyricsAsync();
-            Toast.Data.Values["Lyrics"] = GetLyricByTime(MediaHelper.Position);
             try
             {
                 toastNotifier.Show(Toast);
@@ -269,7 +276,7 @@ namespace SMPlayer
             var data = new NotificationData { SequenceNumber = 0 };
             data.Values["MediaControlPosition"] = MediaHelper.Progress.ToString();
             data.Values["MediaControlPositionTime"] = MusicDurationConverter.ToTime(MediaHelper.Position);
-            data.Values["Lyrics"] = GetLyricByTime(MediaHelper.Position);
+            data.Values["Lyrics"] = Settings.settings.Toast == Models.ShowToast.Always ? GetLyricByTime(MediaHelper.Position) : "";
 
             // Update the existing notification's data by using tag/group
             toastNotifier.Update(data, ToastTagPaused, ToastGroup);

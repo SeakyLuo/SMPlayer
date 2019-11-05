@@ -830,6 +830,7 @@ namespace SMPlayer
         public void ClearMusic()
         {
             PauseMusic();
+            CurrentMusic = null;
             AlbumCover.Source = Helper.DefaultAlbumCover;
             TitleTextBlock.Text = "";
             ArtistTextBlock.Text = "";

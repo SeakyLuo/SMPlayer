@@ -44,6 +44,9 @@
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="data:Music">
                 <SwipeControl Loaded="SwipeControl_Loaded">
+                    <SwipeControl.ContextFlyout>
+                        <MenuFlyout Opening="OpenMusicMenuFlyout" />
+                    </SwipeControl.ContextFlyout>
                     <SwipeControl.LeftItems>
                         <SwipeItems Mode="Reveal">
                             <SwipeItem
@@ -72,11 +75,7 @@
                             </SwipeItem>
                         </SwipeItems>
                     </SwipeControl.RightItems>
-                    <local:PlaylistControlItem DataContext="{x:Bind}" ShowAlbumText="{Binding ElementName=PlaylistController, Path=ShowAlbumText}">
-                        <local:PlaylistControlItem.ContextFlyout>
-                            <MenuFlyout Opening="OpenMusicMenuFlyout" />
-                        </local:PlaylistControlItem.ContextFlyout>
-                    </local:PlaylistControlItem>
+                    <local:PlaylistControlItem DataContext="{x:Bind}" ShowAlbumText="{Binding ElementName=PlaylistController, Path=ShowAlbumText}" />
                 </SwipeControl>
             </DataTemplate>
         </ListView.ItemTemplate>

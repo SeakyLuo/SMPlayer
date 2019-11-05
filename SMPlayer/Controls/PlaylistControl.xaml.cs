@@ -33,7 +33,7 @@ namespace SMPlayer
         public bool AllowReorder
         {
             get => SongsListView.CanReorderItems;
-            set => SongsListView.CanReorderItems = SongsListView.AllowDrop = SongsListView.CanDrag = value;
+            set => SongsListView.CanReorderItems = SongsListView.AllowDrop = SongsListView.CanDrag = SongsListView.CanDragItems = value;
         }
 
         public object Header
@@ -138,10 +138,9 @@ namespace SMPlayer
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
-                MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, null, music);
                 if (AlternatingRowColor)
                 {
-                    for (int i = index; i < MediaHelper.CurrentPlaylist.Count; i++)
+                    for (int i = index; i < CurrentPlaylist.Count; i++)
                         if (SongsListView.ContainerFromIndex(i) is ListViewItem container)
                             container.Background = GetRowBackground(i);
                 }
@@ -157,19 +156,20 @@ namespace SMPlayer
 
         private void SongsListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
+            if (!AllowReorder) return;
             int from = -1, to = -1;
             for (int i = 0; i < sender.Items.Count; i++)
             {
                 if (AlternatingRowColor && sender.ContainerFromIndex(i) is ListViewItem container)
                     container.Background = GetRowBackground(i);
-                if (!MediaHelper.CurrentPlaylist[i].Equals(beforeDragging[i]))
+                if (!CurrentPlaylist[i].Equals(beforeDragging[i]))
                 {
                     if (from < 0) from = i;
                     else to = i;
                 }
             }
             if (from == -1 || to == -1) return;
-            if (beforeDragging[to].Equals(MediaHelper.CurrentPlaylist[from]))
+            if (beforeDragging[to].Equals(CurrentPlaylist[from]))
             {
                 int temp = from;
                 from = to;

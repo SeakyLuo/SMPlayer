@@ -158,7 +158,6 @@ namespace SMPlayer.Models
 
         public async Task<MusicDisplayItem> GetMusicDisplayItemAsync()
         {
-            System.Diagnostics.Debug.WriteLine(Name);
             var thumbnail = await Helper.GetStorageItemThumbnailAsync(this);
             return thumbnail.IsThumbnail() ? new MusicDisplayItem(thumbnail, await thumbnail.GetDisplayColor(), this) : MusicDisplayItem.DefaultItem;
         }

@@ -677,7 +677,6 @@
     <RootType FullName="SMPlayer.Controls.PlaylistControlItem">
       <RootProperty Name="DataContext" />
       <RootProperty Name="ShowAlbumText" />
-      <RootProperty Name="ContextFlyout" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ContentDialog">
       <RootProperty Name="Content" />
@@ -1165,6 +1164,7 @@
     </RootType>
     <RootType FullName="SMPlayer.NowPlayingFullPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.SwipeControl">
+      <RootProperty Name="ContextFlyout" />
       <RootProperty Name="LeftItems" />
       <RootProperty Name="RightItems" />
       <RootProperty Name="Content" />
