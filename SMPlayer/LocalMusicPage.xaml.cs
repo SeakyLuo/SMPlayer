@@ -56,11 +56,11 @@ namespace SMPlayer
                 if (GridMusicView.Visibility == Visibility.Visible)
                 {
                     GridMusicView.Setup(tree.Files);
-                    SetSongs(tree.Files);
+                    Songs.SetTo(tree.Files);
                 }
                 else
                 {
-                    SetSongs(tree.Files);
+                    Songs.SetTo(tree.Files);
                     GridMusicView.Setup(tree.Files);
                 }
             }
@@ -72,13 +72,6 @@ namespace SMPlayer
             TreePath = tree.Path;
             CurrentTree = tree;
             LoadingProgressBar.Visibility = Visibility.Collapsed;
-        }
-
-        private void SetSongs(ICollection<Music> songs)
-        {
-            Songs.Clear();
-            foreach (var music in songs)
-                Songs.Add(music);
         }
 
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
@@ -107,21 +100,24 @@ namespace SMPlayer
         }
         public void SortByTitle()
         {
-            Songs.SetTo(Songs.ToList().OrderBy((m) => m.Name));
+            Songs.SetTo(Songs.ToList().OrderBy(m => m.Name));
             GridMusicView.SortByTitle();
             SortByTitleRequested = false;
+            CurrentTree.Criteria = SortBy.Title;
         }
         public void SortByArtist()
         {
-            Songs.SetTo(Songs.ToList().OrderBy((m) => m.Artist));
+            Songs.SetTo(Songs.ToList().OrderBy(m => m.Artist));
             GridMusicView.SortByArtist();
             SortByAlbumRequested = false;
+            CurrentTree.Criteria = SortBy.Artist;
         }
         public void SortByAlbum()
         {
-            Songs.SetTo(Songs.ToList().OrderBy((m) => m.Album));
+            Songs.SetTo(Songs.ToList().OrderBy(m => m.Album));
             GridMusicView.SortByAlbum();
             SortByAlbumRequested = false;
+            CurrentTree.Criteria = SortBy.Album;
         }
     }
 }

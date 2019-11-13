@@ -17,6 +17,7 @@ namespace SMPlayer.Models
         public TreeInfo Info { get => new TreeInfo(Directory, Trees.Count, Files.Count); }
         public bool IsEmpty { get => Files.Count == 0 && Trees.All((tree) => tree.IsEmpty); }
         public string Directory { get => Path.Substring(Path.LastIndexOf("\\") + 1); }
+        public SortBy Criteria { get; set; } = SortBy.Title;
 
         public FolderTree() { }
         public FolderTree(FolderTree tree)
