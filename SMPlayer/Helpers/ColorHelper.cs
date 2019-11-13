@@ -71,7 +71,7 @@ namespace SMPlayer
             }
             GenerateColor:
             Color color = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0]);
-            System.Diagnostics.Debug.WriteLine($"R: {bgra[2]} G: {bgra[1]} B: {bgra[0]}");
+            //System.Diagnostics.Debug.WriteLine($"R: {bgra[2]} G: {bgra[1]} B: {bgra[0]}");
             return new AcrylicBrush()
             {
                 BackgroundSource = AcrylicBackgroundSource.Backdrop,

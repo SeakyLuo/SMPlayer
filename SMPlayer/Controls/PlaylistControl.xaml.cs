@@ -157,25 +157,9 @@ namespace SMPlayer
         private void SongsListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
             if (!AllowReorder) return;
-            int from = -1, to = -1;
             for (int i = 0; i < sender.Items.Count; i++)
-            {
                 if (AlternatingRowColor && sender.ContainerFromIndex(i) is ListViewItem container)
                     container.Background = GetRowBackground(i);
-                if (!CurrentPlaylist[i].Equals(beforeDragging[i]))
-                {
-                    if (from < 0) from = i;
-                    else to = i;
-                }
-            }
-            if (from == -1 || to == -1) return;
-            if (beforeDragging[to].Equals(CurrentPlaylist[from]))
-            {
-                int temp = from;
-                from = to;
-                to = temp;
-            }
-            MediaHelper.MoveMusic(from, to);
         }
         private void OpenMusicMenuFlyout(object sender, object e)
         {
@@ -191,7 +175,7 @@ namespace SMPlayer
                 item.Click += (s, args) =>
                 {
                     Music music = (s as MenuFlyoutItem).DataContext as Music;
-                    MediaHelper.MoveMusic(music, 0);
+                    MediaHelper.CurrentPlaylist.Move(music.Index, 0);
                 };
                 flyout.Items.Add(item);
             }
@@ -200,6 +184,7 @@ namespace SMPlayer
         private async void RemoveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
         {
             var music = args.SwipeControl.DataContext as Music;
+            // I should use index to avoid duplicate problem
             if (dialog == null) dialog = new Dialogs.RemoveDialog();
             if (dialog.IsChecked)
             {
@@ -215,8 +200,8 @@ namespace SMPlayer
 
         private void RemoveMusic(Music music)
         {
-            int index = CurrentPlaylist.IndexOf(music);
-            if (IsNowPlaying ? MediaHelper.RemoveMusic(index) : CurrentPlaylist.Remove(music))
+            int index = IsNowPlaying ?  music.Index : currentPlaylist.IndexOf(music);
+            if (IsNowPlaying ? MediaHelper.RemoveMusic(music) : currentPlaylist.Remove(music))
             {
                 if (AlternatingRowColor)
                 {

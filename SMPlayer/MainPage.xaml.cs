@@ -351,13 +351,13 @@ namespace SMPlayer
             ShowResultInAppNotification.Show(duration);
         }
 
-        public async void ShowAddMusicResultNotification(ICollection<Music> playlist, Music target)
+        public void ShowAddMusicResultNotification(ICollection<Music> playlist, Music target)
         {
-            Helper.ShowAddMusicResultNotification(await MediaHelper.SetMusicAndPlay(playlist, target), target);
+            Helper.ShowAddMusicResultNotification(MediaHelper.SetMusicAndPlay(playlist, target), target);
         }
-        public async void ShowAddMusicResultNotification(ICollection<Music> playlist)
+        public void ShowAddMusicResultNotification(ICollection<Music> playlist)
         {
-            Helper.ShowAddMusicResultNotification(await MediaHelper.ShuffleAndPlay(playlist));
+            Helper.ShowAddMusicResultNotification(MediaHelper.ShuffleAndPlay(playlist));
         }
     }
 }

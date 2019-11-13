@@ -125,7 +125,7 @@ namespace SMPlayer
             if (volume < 67) return "\uE994";
             return "\uE995";
         }
-        public static bool SamePlaylist(IEnumerable<Music> list1, IEnumerable<Music> list2)
+        public static bool SameAs(this IEnumerable<Music> list1, IEnumerable<Music> list2)
         {
             return list1.Count() == list2.Count() && list1.Zip(list2, (m1, m2) => m1.Equals(m2)).All((res) => res);
         }

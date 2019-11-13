@@ -58,7 +58,7 @@ namespace SMPlayer
             var tree = new FolderTree();
             await tree.Init(Helper.CurrentFolder);
             var newLibrary = tree.Flatten();
-            if (IsLibraryUnchangedAfterChecking = Helper.SamePlaylist(AllSongs, newLibrary)) return;
+            if (IsLibraryUnchangedAfterChecking = AllSongs.SameAs(newLibrary)) return;
             tree.Update(Settings.settings.Tree);
             Settings.settings.Tree = tree;
             SetAllSongs(newLibrary);
@@ -166,6 +166,11 @@ namespace SMPlayer
                 }
             }
             return collection;
+        }
+
+        public static Music MusicFromPath(string path)
+        {
+            return AllSongs.FirstOrDefault(m => m.Path == path);
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)

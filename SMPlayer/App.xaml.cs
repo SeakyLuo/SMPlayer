@@ -161,7 +161,7 @@ namespace SMPlayer
                         switch (details.Argument)
                         {
                             case "Next":
-                                MediaHelper.NextMusic();
+                                MediaHelper.MoveNext();
                                 break;
                             case "Pause":
                                 MediaHelper.Pause();

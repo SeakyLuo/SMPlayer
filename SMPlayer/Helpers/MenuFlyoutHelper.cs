@@ -37,13 +37,13 @@ namespace SMPlayer
                     Icon = new FontIcon() { Glyph = "\uEC4F" },
                     Text = Helper.Localize("Now Playing")
                 };
-                nowPlayingItem.Click += async (sender, args) =>
+                nowPlayingItem.Click += (sender, args) =>
                 {
                     if (Data is ICollection<Music> playlist)
                         foreach (var music in playlist)
-                            await MediaHelper.AddMusic(music);
+                            MediaHelper.AddMusic(music);
                     else if (Data is Music music)
-                        await MediaHelper.AddMusic(music);
+                        MediaHelper.AddMusic(music);
                 };
                 addToItem.Items.Add(nowPlayingItem);
             }
@@ -165,9 +165,9 @@ namespace SMPlayer
                 Name = MusicMenuName
             };
             playItem.SetToolTip(localizedPlay + Helper.LocalizeMessage("MusicName", music.Name));
-            playItem.Click += async (s, args) =>
+            playItem.Click += (s, args) =>
             {
-                await MediaHelper.SetMusicAndPlay(music);
+                MediaHelper.SetMusicAndPlay(music);
             };
             flyout.Items.Add(playItem);
             flyout.Items.Add(GetAddToMenuFlyoutSubItem());
@@ -188,7 +188,6 @@ namespace SMPlayer
                         await file.DeleteAsync();
                         MusicLibraryPage.AllSongs.Remove(music);
                         Settings.settings.DeleteMusic(music);
-                        MediaHelper.RemoveMusic(music);
                         var notification = Helper.LocalizeMessage("MusicDeleted", music.Name);
                         MainPage.Instance?.ShowNotification(notification);
                         NowPlayingFullPage.Instance?.ShowNotification(notification);
@@ -266,7 +265,7 @@ namespace SMPlayer
             removeItem.Click += (sender, args) =>
             {
                 if (music == MediaHelper.CurrentMusic)
-                    MediaHelper.NextMusic();
+                    MediaHelper.MoveNext();
                 MediaHelper.RemoveMusic(music);
             };
             removeItem.SetToolTip(Helper.LocalizeMessage("RemoveFromPlaylist", music.Name), false);

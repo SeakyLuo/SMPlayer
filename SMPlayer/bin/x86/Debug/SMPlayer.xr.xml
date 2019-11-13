@@ -618,9 +618,9 @@
       <RootProperty Name="HorizontalScrollBarVisibility" />
       <RootProperty Name="HorizontalScrollMode" />
       <RootProperty Name="Content" />
+      <RootProperty Name="Margin" />
       <RootProperty Name="VerticalScrollBarVisibility" />
       <RootProperty Name="Style" />
-      <RootProperty Name="Margin" />
       <RootProperty Name="Padding" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="IsDeferredScrollingEnabled" />

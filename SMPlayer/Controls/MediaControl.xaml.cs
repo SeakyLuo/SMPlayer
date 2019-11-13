@@ -3,6 +3,7 @@ using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Windows.Foundation;
 using Windows.Media.Playback;
@@ -411,13 +412,19 @@ namespace SMPlayer
                     case MediaControlMode.Mini:
                         break;
                 }
-                await Helper.UpdateTile(thumbnail, music);
+                try
+                {
+                    await Helper.UpdateTile(thumbnail, music);
+                }
+                catch (FileLoadException)
+                {
+                    // 正在使用此文件。请先关闭文件，然后再继续操作。
+                }
+                catch (PathTooLongException)
+                {
+                    // The specified file name or path is too long, or a component of the specified path is too long.
+                }
             }
-        }
-        public void SetMusicAndPlay(Music music)
-        {
-            MediaHelper.MoveToMusic(music);
-            PlayMusic();
         }
         public static void AddMusicControlListener(MusicControlListener listener)
         {
@@ -458,11 +465,11 @@ namespace SMPlayer
             }
         }
 
-        private async void ShuffleButton_Click(object sender, RoutedEventArgs e)
+        private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
             SetShuffle((bool)ShuffleButton.IsChecked);
             if (MediaHelper.ShuffleEnabled)
-                await MediaHelper.ShuffleOthers();
+                MediaHelper.ShuffleOthers();
         }
         private void MoreShuffleButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
@@ -546,11 +553,8 @@ namespace SMPlayer
             var button = (Button)sender;
             if (button.Content.ToString() == "\uE768")
             {
-                if (MediaHelper.CurrentMusic == null)
-                {
-                    if (MediaHelper.CurrentPlaylist.Count == 0) return;
-                    MediaHelper.MoveToMusic(0);
-                }
+                if (MediaHelper.CurrentMusic == null || MediaHelper.CurrentPlaylist.Count == 0)
+                    return;
                 MediaHelper.Play();
             }
             else
@@ -632,13 +636,13 @@ namespace SMPlayer
             if (MediaHelper.Position > 5)
                 MediaHelper.Position = 0;
             else
-                MediaHelper.PrevMusic();
+                MediaHelper.MovePrev();
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
             MediaSlider.Value = 0;
-            MediaHelper.NextMusic();
+            MediaHelper.MoveNext();
         }
 
         private void MediaSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
@@ -819,7 +823,6 @@ namespace SMPlayer
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                MediaHelper.CurrentMusic.IsPlaying = false;
                 if (Settings.settings.Mode == PlayMode.Once)
                     PlayButton.Content = "\uE768";
                 MediaSlider.Value = 0;

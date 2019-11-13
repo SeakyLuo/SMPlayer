@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.Media.Core;
 using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
+using Windows.Storage.Streams;
 
 namespace SMPlayer.Models
 {
@@ -58,6 +60,8 @@ namespace SMPlayer.Models
                 }
             }
         }
+        [Newtonsoft.Json.JsonIgnore]
+        public int Index = -1;
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -111,6 +115,7 @@ namespace SMPlayer.Models
             Favorite = obj.Favorite;
             PlayCount = obj.PlayCount;
             IsPlaying = obj.IsPlaying;
+            Index = obj.Index;
         }
 
         public void Played()
@@ -162,11 +167,9 @@ namespace SMPlayer.Models
             return thumbnail.IsThumbnail() ? new MusicDisplayItem(thumbnail, await thumbnail.GetDisplayColor(), this) : MusicDisplayItem.DefaultItem;
         }
 
-
-        public async Task<MediaPlaybackItem> GetMediaPlaybackItemAsync()
+        public MediaPlaybackItem GetMediaPlaybackItem()
         {
-            var file = await GetStorageFileAsync();
-            var source = MediaSource.CreateFromStorageFile(file);
+            var source = MediaSource.CreateFromStreamReference(new MusicStream(Path), "audio/mpeg");
             source.CustomProperties.Add("Source", this);
             return new MediaPlaybackItem(source);
         }
@@ -183,6 +186,11 @@ namespace SMPlayer.Models
         int IComparable<Music>.CompareTo(Music other)
         {
             return string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(other.Name) ? 0 : Name.CompareTo(other.Name);
+        }
+
+        public bool IsDifferent(Music music)
+        {
+            return !Equals(music) || Index != music.Index;
         }
 
         public static bool operator ==(Music music1, Music music2)
@@ -208,5 +216,21 @@ namespace SMPlayer.Models
         {
             return Path;
         }
+    }
+    public class MusicStream : IRandomAccessStreamReference
+    {
+        private string path;
+
+        public MusicStream(string path)
+        {
+            this.path = path;
+        }
+
+        public IAsyncOperation<IRandomAccessStreamWithContentType> OpenReadAsync()
+            => Open().AsAsyncOperation();
+
+        // private async helper task that is necessary if you need to use await.
+        private async Task<IRandomAccessStreamWithContentType> Open()
+            => await (await StorageFile.GetFileFromPathAsync(path)).OpenReadAsync();
     }
 }

@@ -32,11 +32,9 @@ Improved New Playlist Name.
 
 Improved Bytes.
 
+Artist Page AutoSuggestbox for navigation.
+
+Move 5 seconds by pressing left or right.
+
 # TO FIX
-Bad performance when given many music files.
-
-Bad performance of Loading NowPlayingFull.
-
 Set lyrics bug.
-
-Frequently change playstate.

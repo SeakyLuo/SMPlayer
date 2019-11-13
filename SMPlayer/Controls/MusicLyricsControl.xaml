@@ -53,15 +53,15 @@
             IsIndeterminate="True"
             RelativePanel.AlignBottomWithPanel="True"
             Visibility="Collapsed" />
-        <TextBox
-            x:Name="LyricsTextBox"
-            Grid.Row="1"
-            MinHeight="600"
-            Margin="0,10"
-            AcceptsReturn="True"
-            Background="Transparent"
-            BorderThickness="0"
-            IsSpellCheckEnabled="False"
-            TextWrapping="Wrap" />
+        <ScrollViewer Grid.Row="1" Margin="0,10">
+            <TextBox
+                x:Name="LyricsTextBox"
+                MinHeight="600"
+                AcceptsReturn="True"
+                Background="Transparent"
+                BorderThickness="0"
+                IsSpellCheckEnabled="False"
+                TextWrapping="Wrap" />
+        </ScrollViewer>
     </Grid>
 </UserControl>

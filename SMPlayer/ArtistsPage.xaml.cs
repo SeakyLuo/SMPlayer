@@ -56,6 +56,7 @@ namespace SMPlayer
             }
             ArtistMasterDetailsView.SelectedItem = artist;
             targetArtist = null;
+            //(ArtistMasterDetailsView.ContainerFromItem(artist) as UIElement)?.StartBringIntoView();
         }
 
         private void Setup()
