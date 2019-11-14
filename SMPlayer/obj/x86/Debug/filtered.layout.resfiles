@@ -57,6 +57,7 @@ AlbumPage.xbf
 AlbumsPage.xbf
 App.xbf
 ArtistsPage.xbf
+Controls\AlbumArtControl.xbf
 Controls\ArtistItemControl.xbf
 Controls\DropShadowControl.xbf
 Controls\GridMusicControl.xbf

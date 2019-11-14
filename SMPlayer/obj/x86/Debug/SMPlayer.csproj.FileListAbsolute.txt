@@ -309,3 +309,8 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SQLitePCLRaw.core.dl
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SQLitePCLRaw.provider.e_sqlite3.dll
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\.winmd_cache\$WatsonRegistrationUtility.winmd_636970854560000000.json
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Core\ForBundle\AppxManifest.xml
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Controls\AlbumArtControl.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\AlbumArtControl.g.i.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\AlbumArtControl.g.cs
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\AlbumArtControl.xaml
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\AlbumArtControl.xbf

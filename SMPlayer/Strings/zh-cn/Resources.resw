@@ -135,6 +135,9 @@
   <data name="AlbumArtistTextBlock.Text" xml:space="preserve">
     <value>专辑艺术家</value>
   </data>
+  <data name="AlbumArtPivotItem.Header" xml:space="preserve">
+    <value>专辑插图</value>
+  </data>
   <data name="AlbumHeader.Header" xml:space="preserve">
     <value>专辑</value>
   </data>
@@ -197,6 +200,9 @@
   </data>
   <data name="CancelButton.Content" xml:space="preserve">
     <value>取消</value>
+  </data>
+  <data name="ChangeAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>更改插图</value>
   </data>
   <data name="ClearAppButton.Label" xml:space="preserve">
     <value>清空</value>
@@ -446,6 +452,9 @@
   </data>
   <data name="No Playlist" xml:space="preserve">
     <value>无播放列表</value>
+  </data>
+  <data name="NoAlbumArtTextBlock.Text" xml:space="preserve">
+    <value>没有专辑插图</value>
   </data>
   <data name="NotificationTextBlock.Text" xml:space="preserve">
     <value>通知</value>

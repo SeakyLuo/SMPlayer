@@ -38,3 +38,5 @@ Move 5 seconds by pressing left or right.
 
 # TO FIX
 Set lyrics bug.
+
+Too many notifications.

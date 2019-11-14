@@ -493,6 +493,7 @@
       <RootEvent Name="Loaded" />
       <RootEvent Name="Loading" />
     </RootType>
+    <RootType FullName="SMPlayer.Controls.AlbumArtControl" />
     <RootType FullName="Windows.UI.Xaml.VisualStateManager">
       <RootMethod Name="GetVisualStateGroups" />
     </RootType>

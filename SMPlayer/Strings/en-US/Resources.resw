@@ -135,6 +135,9 @@
   <data name="AlbumArtistTextBlock.Text" xml:space="preserve">
     <value>Album Artist</value>
   </data>
+  <data name="AlbumArtPivotItem.Header" xml:space="preserve">
+    <value>Album Art</value>
+  </data>
   <data name="AlbumHeader.Header" xml:space="preserve">
     <value>Album</value>
   </data>
@@ -197,6 +200,9 @@
   </data>
   <data name="CancelButton.Content" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="ChangeAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Change Album Art</value>
   </data>
   <data name="ClearAppButton.Label" xml:space="preserve">
     <value>Clear</value>
@@ -446,6 +452,9 @@
   </data>
   <data name="No Playlist" xml:space="preserve">
     <value>No Playlist</value>
+  </data>
+  <data name="NoAlbumArtTextBlock.Text" xml:space="preserve">
+    <value>No Album Art</value>
   </data>
   <data name="NotificationTextBlock.Text" xml:space="preserve">
     <value>Notification</value>

@@ -27,5 +27,11 @@
             Header="Lyrics">
             <controls:MusicLyricsControl x:Name="MusicLyricsController" ShowHeader="False" />
         </PivotItem>
+        <PivotItem
+            x:Name="AlbumArtItem"
+            x:Uid="AlbumArtPivotItem"
+            Header="Album Art">
+            <controls:AlbumArtControl x:Name="AlbumArtController" />
+        </PivotItem>
     </Pivot>
 </ContentDialog>

@@ -22,6 +22,7 @@ namespace SMPlayer.Dialogs
             }
             MusicInfoController.SetMusicInfo(music);
             MusicLyricsController.SetLyrics(music);
+            AlbumArtController.SetAlbumArt(music);
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

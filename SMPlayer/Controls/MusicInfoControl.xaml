@@ -64,16 +64,13 @@
                     x:Uid="SaveMusicPropertiesButton"
                     Click="SaveMusicPropertiesButton_Click"
                     Content="&#xE74E;"
-                    Style="{StaticResource MusicScrollHeaderButtonStyle}"
-                    ToolTipService.ToolTip="Save Properties" />
+                    Style="{StaticResource MusicScrollHeaderButtonStyle}" />
                 <Button
                     x:Name="ResetMusicPropertiesButton"
                     x:Uid="ResetMusicPropertiesButton"
-                    Background="Transparent"
                     Click="ResetMusicPropertiesButton_Click"
                     Content="&#xE72C;"
-                    Style="{StaticResource MusicScrollHeaderButtonStyle}"
-                    ToolTipService.ToolTip="Reset Properties" />
+                    Style="{StaticResource MusicScrollHeaderButtonStyle}" />
             </StackPanel>
         </Grid>
         <ScrollViewer
