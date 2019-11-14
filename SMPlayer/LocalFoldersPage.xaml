@@ -330,7 +330,7 @@
                                         Grid.RowSpan="2"
                                         Grid.ColumnSpan="2"
                                         Source="{x:Bind LargeThumbnail, Mode=OneWay}"
-                                        Visibility="{Binding Converter={StaticResource VisibilityConverter}}" />
+                                        Visibility="{x:Bind LargeThumbnail, Converter={StaticResource VisibilityConverter}}" />
                                     <StackPanel
                                         x:Name="ButtonStackPanel"
                                         Grid.RowSpan="2"
@@ -342,14 +342,12 @@
                                             x:Uid="PlayAllButton"
                                             Click="PlayAllButton_Click"
                                             Content="&#xE768;"
-                                            Style="{StaticResource HoverButtonStyle}"
-                                            ToolTipService.ToolTip="Play All" />
+                                            Style="{StaticResource HoverButtonStyle}" />
                                         <Button
                                             x:Uid="AddToButton"
                                             Click="AddToButton_Click"
                                             Content="&#xE710;"
-                                            Style="{StaticResource HoverButtonStyle}"
-                                            ToolTipService.ToolTip="Add To Playlist" />
+                                            Style="{StaticResource HoverButtonStyle}" />
                                     </StackPanel>
                                 </Grid>
                             </controls:DropShadowPanel>

@@ -73,6 +73,7 @@ namespace SMPlayer
                     if (target != null) AddMusic(target);
                 }
             }
+            if (CurrentMusic != null) MoveToMusic(CurrentMusic);
             Player.Volume = settings.Volume;
             SetMode(Settings.settings.Mode);
             Timer.Start();
@@ -137,40 +138,32 @@ namespace SMPlayer
             CurrentPlaylist.Add(music);
             PlaybackList.Items.Add(music.GetMediaPlaybackItem());
         }
-        public static AddMusicResult SetPlaylist(ICollection<Music> playlist, Music target = null)
+        public static void SetPlaylist(ICollection<Music> playlist, Music target = null)
         {
             Clear();
             foreach (var music in playlist) AddMusic(music);
-            return new AddMusicResult();
+            if (target != null) MoveToMusic(target);
         }
 
-        public static AddMusicResult SetMusicAndPlay(Music music)
+        public static void SetMusicAndPlay(Music music)
         {
             Clear();
             AddMusic(music);
-            return new AddMusicResult();
         }
 
-        public static AddMusicResult SetMusicAndPlay(ICollection<Music> playlist, Music music)
+        public static void SetMusicAndPlay(ICollection<Music> playlist, Music music)
         {
             if (playlist.SameAs(CurrentPlaylist))
-            {
                 MoveToMusic(music);
-            }
             else
-            {
                 SetPlaylist(ShuffleEnabled ? ShufflePlaylist(playlist, music) : playlist, music);
-            }
             Play();
-            return new AddMusicResult();
         }
 
-        public static AddMusicResult ShuffleAndPlay(ICollection<Music> playlist)
+        public static void ShuffleAndPlay(ICollection<Music> playlist)
         {
-            SetMode(PlayMode.Shuffle);
             SetPlaylist(ShufflePlaylist(playlist));
             Play();
-            return new AddMusicResult();
         }
 
         public static void ShuffleOthers()
@@ -307,18 +300,6 @@ namespace SMPlayer
         public List<Music> Failed = new List<Music>();
         public bool IsFailed { get => Status == AddMusicStatus.Failed; }
         public int FailCount { get => Failed.Count; }
-        public AddMusicStatus TryInsert(Music music, int index = -1)
-        {
-            try
-            {
-                MediaHelper.PlaybackList.Items.Add(music.GetMediaPlaybackItem());
-                return Status = AddMusicStatus.Successful;
-            }
-            catch (System.IO.FileNotFoundException)
-            {
-                Failed.Add(music);
-                return Status = AddMusicStatus.Failed;
-            }
-        }
+
     }
 }

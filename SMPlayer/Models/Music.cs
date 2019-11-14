@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Media.Core;
@@ -127,9 +128,10 @@ namespace SMPlayer.Models
             }
         }
 
-        public string GetShortPath()
+        public static string GetFilename(string Path)
         {
-            return Path.Substring(Settings.settings.RootPath.Length + 1); // Plus one due to "/"
+            //return Path.Substring(Settings.settings.RootPath.Length + 1); // Plus one due to "\"
+            return Path.Substring(Path.LastIndexOf('\\') + 1);
         }
 
         public async Task<MusicProperties> GetMusicPropertiesAsync()
@@ -231,6 +233,17 @@ namespace SMPlayer.Models
 
         // private async helper task that is necessary if you need to use await.
         private async Task<IRandomAccessStreamWithContentType> Open()
-            => await (await StorageFile.GetFileFromPathAsync(path)).OpenReadAsync();
+        {
+            //return await (await StorageFile.GetFileFromPathAsync(path)).OpenReadAsync();
+            try
+            {
+                return await (await StorageFile.GetFileFromPathAsync(path)).OpenReadAsync();
+            }
+            catch (FileNotFoundException)
+            {
+                Helper.ShowAddMusicResultNotification(Music.GetFilename(path));
+                return await (await StorageFile.GetFileFromPathAsync(path)).OpenReadAsync();
+            }
+        }
     }
 }

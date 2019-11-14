@@ -350,14 +350,5 @@ namespace SMPlayer
             ShowResultInAppNotification.Content = message;
             ShowResultInAppNotification.Show(duration);
         }
-
-        public void ShowAddMusicResultNotification(ICollection<Music> playlist, Music target)
-        {
-            Helper.ShowAddMusicResultNotification(MediaHelper.SetMusicAndPlay(playlist, target), target);
-        }
-        public void ShowAddMusicResultNotification(ICollection<Music> playlist)
-        {
-            Helper.ShowAddMusicResultNotification(MediaHelper.ShuffleAndPlay(playlist));
-        }
     }
 }

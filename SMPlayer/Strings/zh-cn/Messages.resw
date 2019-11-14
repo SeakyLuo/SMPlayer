@@ -135,6 +135,9 @@
   <data name="FailToOpenBrowser" xml:space="preserve">
     <value>无法打开浏览器！</value>
   </data>
+  <data name="Folders" xml:space="preserve">
+    <value>文件夹（{0}）</value>
+  </data>
   <data name="Folders:" xml:space="preserve">
     <value>文件夹：</value>
   </data>
@@ -215,6 +218,9 @@
   </data>
   <data name="SearchResult" xml:space="preserve">
     <value>{0}的搜索结果</value>
+  </data>
+  <data name="Songs" xml:space="preserve">
+    <value>歌曲（{0}）</value>
   </data>
   <data name="Songs:" xml:space="preserve">
     <value>歌曲：</value>

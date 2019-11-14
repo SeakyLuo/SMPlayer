@@ -130,15 +130,15 @@ namespace SMPlayer
         private void LocalShuffleItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var tree = History.Peek();
-            MainPage.Instance.ShowAddMusicResultNotification(LocalFrame.SourcePageType == typeof(LocalMusicPage) ? tree.Files : tree.Flatten());
+            MediaHelper.ShuffleAndPlay(LocalFrame.SourcePageType == typeof(LocalMusicPage) ? tree.Files : tree.Flatten());
         }
 
         private void SetText(TreeInfo info, bool setHeader = true)
         {
             if (setHeader) SetHeader(info);
-            LocalFoldersItem.Content = $"{Helper.Localize("Folders")} ({info.Folders})";
+            LocalFoldersItem.Content = Helper.LocalizeMessage("Folders", info.Folders);
             LocalFoldersItem.IsEnabled = info.Folders != 0;
-            LocalSongsItem.Content = $"{Helper.Localize("Songs")} ({info.Songs})";
+            LocalSongsItem.Content = Helper.LocalizeMessage("Songs", info.Songs);
             LocalSongsItem.IsEnabled = info.Songs != 0;
         }
 

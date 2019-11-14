@@ -45,18 +45,23 @@ namespace SMPlayer
         private static string Lyrics = "";
         private static List<Music> NotFoundHistory = new List<Music>();
 
-        public static void SetTo<T>(this ObservableCollection<T> dst, IEnumerable<T> src)
+        public static ObservableCollection<T> SetTo<T>(this ObservableCollection<T> dst, IEnumerable<T> src)
         {
             var temp = src.ToList();
             if (dst == null) dst = new ObservableCollection<T>();
             else dst.Clear();
             foreach (var item in temp) dst.Add(item);
+            return dst;
         }
 
         public static NotificationContainer GetNotificationContainer() { return (Window.Current.Content as Frame).Content as NotificationContainer; }
         public static void ShowNotification(string message, int duration = 2000)
         {
             GetNotificationContainer()?.ShowNotification(LocalizeMessage(message), duration);
+        }
+        public static void ShowAddMusicResultNotification(string music)
+        {
+            GetNotificationContainer().ShowNotification(LocalizeMessage("MusicNotFound", music), 5000);
         }
         public static void ShowAddMusicResultNotification(AddMusicResult result, Music target = null)
         {
@@ -127,7 +132,7 @@ namespace SMPlayer
         }
         public static bool SameAs(this IEnumerable<Music> list1, IEnumerable<Music> list2)
         {
-            return list1.Count() == list2.Count() && list1.Zip(list2, (m1, m2) => m1.Equals(m2)).All((res) => res);
+            return list1.Count() == list2.Count() && list1.Zip(list2, (m1, m2) => m1.Equals(m2)).All(res => res);
         }
 
         public static string GetLyricByTime(double time)
@@ -497,6 +502,5 @@ namespace SMPlayer
     public interface NotificationContainer
     {
         void ShowNotification(string message, int duration = 1500);
-        void ShowAddMusicResultNotification(ICollection<Music> playlist, Music target);
     }
 }

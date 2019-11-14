@@ -103,7 +103,7 @@ namespace SMPlayer
         {
             Music music = (Music)e.ClickedItem;
             ListView listView = (ListView)sender;
-            MainPage.Instance.ShowAddMusicResultNotification(listView.ItemsSource as ObservableCollection<Music>, music);
+            MediaHelper.SetMusicAndPlay(listView.ItemsSource as ObservableCollection<Music>, music);
         }
 
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)

@@ -80,7 +80,7 @@ namespace SMPlayer
         private void PlayAllButton_Click(object sender, RoutedEventArgs e)
         {
             var data = (sender as Button).DataContext as GridFolderView;
-            MainPage.Instance.ShowAddMusicResultNotification(data.Songs);
+            MediaHelper.ShuffleAndPlay(data.Songs);
         }
         private void AddToButton_Click(object sender, RoutedEventArgs e)
         {
@@ -136,7 +136,7 @@ namespace SMPlayer
             }
             else if (node.Content is Music music)
             {
-                MainPage.Instance.ShowAddMusicResultNotification((node.Parent.Content as FolderTree).Files, music);
+                MediaHelper.SetMusicAndPlay((node.Parent.Content as FolderTree).Files, music);
             }
         }
 

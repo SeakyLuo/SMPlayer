@@ -58,7 +58,7 @@ namespace SMPlayer.Models
             }
         }
 
-        private BitmapImage first, second, third, fourth, large;
+        private BitmapImage first, second, third, fourth, large = Helper.ThumbnailNotFoundImage;
         public FolderTree Tree { get; private set; }
         public List<Music> Songs
         {
@@ -103,6 +103,7 @@ namespace SMPlayer.Models
                 Second = thumbnails[1];
                 Third = thumbnails[2];
                 Fourth = thumbnails[3];
+                LargeThumbnail = null;
             }
             thumbnaiLoaded = true;
         }

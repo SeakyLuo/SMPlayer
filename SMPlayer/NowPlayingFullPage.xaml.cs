@@ -54,11 +54,6 @@ namespace SMPlayer
             ShowResultInAppNotification.Show(duration);
         }
 
-        public void ShowAddMusicResultNotification(ICollection<Music> playlist, Music target)
-        {
-            Helper.ShowAddMusicResultNotification(MediaHelper.SetMusicAndPlay(playlist, target), target);
-        }
-
         public void PlaylistRequested(ICollection<Music> playlist)
         {
             PlaylistBladeItem.StartBringIntoView();

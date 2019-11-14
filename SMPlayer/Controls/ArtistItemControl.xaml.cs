@@ -30,7 +30,7 @@ namespace SMPlayer
         private void PlayAllButton_Click(object sender, RoutedEventArgs e)
         {
             var data = (sender as Button).DataContext as Models.Playlist;
-            MainPage.Instance.ShowAddMusicResultNotification(data.Songs);
+            MediaHelper.ShuffleAndPlay(data.Songs);
         }
         private void AddToButton_Click(object sender, RoutedEventArgs e)
         {

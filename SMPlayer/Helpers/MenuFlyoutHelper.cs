@@ -115,8 +115,7 @@ namespace SMPlayer
             shuffleItem.SetToolTip("Shuffle and Play");
             shuffleItem.Click += (s, args) =>
             {
-                //MediaHelper.ShuffleAndPlay(Data as ICollection<Music>);
-                MainPage.Instance.ShowAddMusicResultNotification(Data as ICollection<Music>);
+                MediaHelper.ShuffleAndPlay(Data as ICollection<Music>);
             };
             flyout.Items.Add(shuffleItem);
             flyout.Items.Add(GetAddToMenuFlyoutSubItem());

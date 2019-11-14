@@ -94,30 +94,34 @@ namespace SMPlayer
         }
         public void Reverse()
         {
-            Songs.SetTo(Songs.Reverse());
+            Songs.SetTo(CurrentTree.Reverse());
             GridMusicView.Reverse();
             ReverseRequested = false;
+            Settings.settings.Tree.FindTree(CurrentTree).CopyFrom(CurrentTree);
         }
         public void SortByTitle()
         {
-            Songs.SetTo(Songs.ToList().OrderBy(m => m.Name));
+            Songs.SetTo(CurrentTree.SortByTitle());
             GridMusicView.SortByTitle();
             SortByTitleRequested = false;
             CurrentTree.Criteria = SortBy.Title;
+            Settings.settings.Tree.FindTree(CurrentTree).CopyFrom(CurrentTree);
         }
         public void SortByArtist()
         {
-            Songs.SetTo(Songs.ToList().OrderBy(m => m.Artist));
+            Songs.SetTo(CurrentTree.SortByArtist());
             GridMusicView.SortByArtist();
             SortByAlbumRequested = false;
             CurrentTree.Criteria = SortBy.Artist;
+            Settings.settings.Tree.FindTree(CurrentTree).CopyFrom(CurrentTree);
         }
         public void SortByAlbum()
         {
-            Songs.SetTo(Songs.ToList().OrderBy(m => m.Album));
+            Songs.SetTo(CurrentTree.SortByAlbum());
             GridMusicView.SortByAlbum();
             SortByAlbumRequested = false;
             CurrentTree.Criteria = SortBy.Album;
+            Settings.settings.Tree.FindTree(CurrentTree).CopyFrom(CurrentTree);
         }
     }
 }

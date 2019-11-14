@@ -26,7 +26,7 @@ namespace SMPlayer
         private void MusicGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = (GridMusicView)e.ClickedItem;
-            MainPage.Instance.ShowAddMusicResultNotification(MusicCollection, item.Source);
+            MediaHelper.SetMusicAndPlay(MusicCollection, item.Source);
         }
 
         public void Setup(ICollection<Music> collection)

@@ -30,6 +30,7 @@ namespace SMPlayer.Models
             Trees = tree.Trees.ToList();
             Files = tree.Files.ToList();
             Path = tree.Path;
+            Criteria = tree.Criteria;
             OnPropertyChanged();
         }
 
@@ -139,11 +140,11 @@ namespace SMPlayer.Models
         {
             // Merge to this tree
             foreach (var folder in tree.Trees)
-                Trees.FirstOrDefault((f) => f.Equals(folder))?.Update(folder);
+                Trees.FirstOrDefault(f => f.Equals(folder))?.Update(folder);
             var set = Files.ToHashSet();
             foreach (var file in tree.Files)
                 if (set.Contains(file))
-                    Files.First((f) => f.Equals(file)).CopyFrom(file);
+                    Files.First(f => f.Equals(file)).CopyFrom(file);
             OnPropertyChanged();
         }
 
@@ -154,6 +155,40 @@ namespace SMPlayer.Models
                 list.AddRange(branch.Flatten());
             list.AddRange(Files);
             return list;
+        }
+
+        public List<Music> SortByTitle()
+        {
+            Criteria = SortBy.Title;
+            return Files = Files.OrderBy(m => m.Name).ToList();
+        }
+        public List<Music> SortByArtist()
+        {
+            Criteria = SortBy.Artist;
+            return Files = Files.OrderBy(m => m.Artist).ToList();
+        }
+        public List<Music> SortByAlbum()
+        {
+            Criteria = SortBy.Album;
+            return Files = Files.OrderBy(m => m.Album).ToList();
+        }
+
+        public List<Music> Reverse()
+        {
+            Files.Reverse();
+            return Files;
+        }
+
+        public FolderTree FindTree(FolderTree target)
+        {
+            foreach (var tree in Trees)
+            {
+                if (tree.Equals(target))
+                    return tree;
+                if (tree.Path.StartsWith(target.Path))
+                    return tree.FindTree(target);
+            }
+            return null;
         }
 
         public static bool IsMusicFile(StorageFile file)
