@@ -48,18 +48,18 @@ namespace SMPlayer
             switch (displayType)
             {
                 case "Artists":
-                    foreach (var group in MusicLibraryPage.AllSongs.Where((m) => SearchPage.IsTargetArtist(m, keyword)).GroupBy((m) => m.Artist).OrderBy((g) => g.Key))
+                    foreach (var group in MusicLibraryPage.AllSongs.Where(m => SearchPage.IsTargetArtist(m, keyword)).GroupBy(m => m.Artist).OrderBy(g => g.Key))
                         Artists.Add(new Playlist(group.Key, group) { Artist = group.Key });
                     break;
                 case "Albums":
-                    foreach (var group in MusicLibraryPage.AllSongs.Where((m) => SearchPage.IsTargetAlbum(m, keyword)).GroupBy((m) => m.Album).OrderBy((g) => g.Key))
+                    foreach (var group in MusicLibraryPage.AllSongs.Where(m => SearchPage.IsTargetAlbum(m, keyword)).GroupBy(m => m.Album).OrderBy(g => g.Key))
                     {
                         Music music = group.ElementAt(0);
-                        Albums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy((m) => m.Name).ThenBy((m) => m.Artist)));
+                        Albums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy(m => m.Name).ThenBy(m => m.Artist)));
                     }
                     break;
                 case "Songs":
-                    foreach (var music in MusicLibraryPage.AllSongs.Where((m) => SearchPage.IsTargetMusic(m, keyword)).OrderBy((m) => m.Name).ThenBy((m) => m.Artist))
+                    foreach (var music in MusicLibraryPage.AllSongs.Where(m => SearchPage.IsTargetMusic(m, keyword)).OrderBy(m => m.Name).ThenBy(m => m.Artist))
                         Songs.Add(music);
                     break;
                 case "Playlists":

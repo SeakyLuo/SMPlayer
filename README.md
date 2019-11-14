@@ -14,8 +14,6 @@ Go to Settings and Set the Root Folder of your music files.
 # TO DO
 ThemeColor change.
 
-Add Album Art to Music.
-
 Multi-Select.
 
 Auto Search Lyrics.
@@ -31,8 +29,6 @@ Improved algorithm for update.
 Improved New Playlist Name.
 
 Improved Bytes.
-
-Artist Page AutoSuggestbox for navigation.
 
 Move 5 seconds by pressing left or right.
 

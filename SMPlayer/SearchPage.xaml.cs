@@ -68,7 +68,11 @@ namespace SMPlayer
 
         public static bool IsTargetArtist(Music music, string keyword)
         {
-            return music.Artist.ToLower().Contains(keyword);
+            return IsTargetArtist(music.Artist, keyword);
+        }
+        public static bool IsTargetArtist(string artist, string keyword)
+        {
+            return artist.ToLower().Contains(keyword);
         }
         public void SearchArtists(string keyword)
         {

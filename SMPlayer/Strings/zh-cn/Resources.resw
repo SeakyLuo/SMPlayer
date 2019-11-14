@@ -159,7 +159,7 @@
   <data name="AlbumTextBlock.Text" xml:space="preserve">
     <value>专辑</value>
   </data>
-  <data name="All Artists:" xml:space="preserve">
+  <data name="All Artists" xml:space="preserve">
     <value>歌手：</value>
   </data>
   <data name="AlwaysShownComboItem.Content" xml:space="preserve">

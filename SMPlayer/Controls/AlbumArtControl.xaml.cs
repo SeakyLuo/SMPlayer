@@ -55,11 +55,15 @@ namespace SMPlayer.Controls
                 picker.FileTypeFilter.Add(item);
             var file = await picker.PickSingleFileAsync();
             if (file == null) return;
-            using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(await CurrentMusic.GetStorageFileAsync()), TagLib.ReadStyle.Average))
+            using (var thumbnail = await file.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.MusicView, 300))
             {
-                //tagFile.Tag.Pictures[0] = new ;
-                tagFile.Save();
+
             }
+            //using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(await CurrentMusic.GetStorageFileAsync()), TagLib.ReadStyle.Average))
+            //{
+            //    //tagFile.Tag.Pictures[0] = new ;
+            //    tagFile.Save();
+            //}
         }
     }
 }

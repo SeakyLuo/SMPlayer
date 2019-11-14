@@ -19,6 +19,8 @@ namespace SMPlayer
     public sealed partial class ArtistsPage : Page, AfterSongsSetListener, SwitchMusicListener
     {
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
+        private List<string> SuggestionList = new List<string>();
+        private ObservableCollection<string> Suggestions = new ObservableCollection<string>();
         private bool SetupStarted = false;
         private ExecutionStatus status = ExecutionStatus.Ready;
         private object targetArtist;
@@ -68,15 +70,20 @@ namespace SMPlayer
                 return;
             }
             SetupStarted = true;
-            ArtistsCountTextBlock.Text = "";
+            ArtistSearchBox.PlaceholderText = "";
             ArtistProgressBar.Visibility = Visibility.Visible;
             Artists.Clear();
+            Suggestions.Clear();
             List<ArtistView> artists = new List<ArtistView>();
-            foreach (var group in MusicLibraryPage.AllSongs.GroupBy((m) => m.Artist))
+            foreach (var group in MusicLibraryPage.AllSongs.GroupBy(m => m.Artist))
                 artists.Add(new ArtistView(group.Key));
-            foreach (var artist in artists.OrderBy((a) => a.Name))
+            foreach (var artist in artists.OrderBy(a => a.Name))
+            {
                 Artists.Add(artist);
-            ArtistsCountTextBlock.Text = Helper.Localize("All Artists: ") + Artists.Count;
+                SuggestionList.Add(artist.Name);
+            }
+            Suggestions.SetTo(SuggestionList);
+            ArtistSearchBox.PlaceholderText = Helper.Localize("All Artists") + Artists.Count;
             FindMusicAndSetPlaying(MediaHelper.CurrentMusic);
             if (status == ExecutionStatus.Running) status = ExecutionStatus.Done;
             ArtistProgressBar.Visibility = Visibility.Collapsed;
@@ -137,6 +144,21 @@ namespace SMPlayer
         private void Artist_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             ((sender as StackPanel).Children[1] as ScrollingTextBlock).StartScrolling();
+        }
+
+        private void ArtistSearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            Suggestions.SetTo(SuggestionList.Where(s => SearchPage.IsTargetArtist(s, sender.Text)));
+        }
+
+        private void ArtistSearchBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        {
+            var artistName = (string)args.SelectedItem;
+            var artist = Artists.FirstOrDefault(a => a.Name == artistName);
+            if (artist.NotLoaded || !MusicLibraryPage.IsLibraryUnchangedAfterChecking)
+                artist.Load();
+            ArtistMasterDetailsView.SelectedItem = artist;
+            //(ArtistMasterDetailsView.ContainerFromItem(artist) as UIElement)?.StartBringIntoView();
         }
     }
 }

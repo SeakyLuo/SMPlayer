@@ -35,12 +35,14 @@
             ItemContainerStyle="{StaticResource StretchingListViewItemStyle}"
             ItemsSource="{x:Bind Artists, Mode=OneWay}">
             <controls:MasterDetailsView.MasterHeader>
-                <Grid Margin="10">
-                    <TextBlock
-                        x:Name="ArtistsCountTextBlock"
+                <Grid Margin="5,10">
+                    <AutoSuggestBox
+                        x:Name="ArtistSearchBox"
                         VerticalAlignment="Center"
                         FontSize="16"
-                        TextAlignment="Left" />
+                        ItemsSource="{x:Bind Suggestions, Mode=OneWay}"
+                        SuggestionChosen="ArtistSearchBox_SuggestionChosen"
+                        TextChanged="ArtistSearchBox_TextChanged" />
                     <ProgressBar
                         x:Name="ArtistProgressBar"
                         VerticalAlignment="Center"
@@ -53,10 +55,10 @@
                         Padding="15,5"
                         HorizontalAlignment="Stretch"
                         Background="Transparent"
-                        ToolTipService.ToolTip="{Binding ElementName=ArtistNameTextBlock, Path=Text}"
                         Orientation="Horizontal"
                         PointerEntered="Artist_PointerEntered"
-                        Tapped="Artist_Tapped">
+                        Tapped="Artist_Tapped"
+                        ToolTipService.ToolTip="{Binding ElementName=ArtistNameTextBlock, Path=Text}">
                         <StackPanel.ContextFlyout>
                             <MenuFlyout Opening="OpenPlaylistMenuFlyout" />
                         </StackPanel.ContextFlyout>
