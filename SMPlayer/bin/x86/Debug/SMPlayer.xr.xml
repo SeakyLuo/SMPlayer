@@ -613,7 +613,7 @@
       <RootProperty Name="Style" />
       <RootProperty Name="Margin" />
       <RootProperty Name="IsReadOnly" />
-      <RootProperty Name="MinHeight" />
+      <RootProperty Name="Height" />
       <RootProperty Name="AcceptsReturn" />
       <RootProperty Name="Background" />
       <RootProperty Name="BorderThickness" />
@@ -627,7 +627,6 @@
       <RootProperty Name="PlaceholderText" />
       <RootProperty Name="UseSystemFocusVisuals" />
       <RootProperty Name="SelectionFlyout" />
-      <RootProperty Name="Height" />
       <RootEvent Name="BeforeTextChanging" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ScrollViewer">

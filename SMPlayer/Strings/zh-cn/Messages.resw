@@ -225,6 +225,9 @@
   <data name="Songs:" xml:space="preserve">
     <value>歌曲：</value>
   </data>
+  <data name="UnableToChangeAlbumArt" xml:space="preserve">
+    <value>无法更改专辑插图</value>
+  </data>
   <data name="UnknownAlbum" xml:space="preserve">
     <value>未知专辑</value>
   </data>
