@@ -75,11 +75,12 @@ namespace SMPlayer.Controls
                 }
                 else
                 {
-                    pics[0] = new Picture(new MusicFileAbstraction(await StorageFile.GetFileFromPathAsync(file.Path)))
+                    pics[0] = new Picture(new MusicFileAbstraction(file))
                     {
                         Type = PictureType.BackCover,
                     };
                 }
+                // AlbumArt.Source = pics[0];
                 tagFile.Tag.Pictures = pics;
                 tagFile.Save();
             }
