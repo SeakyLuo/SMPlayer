@@ -621,6 +621,7 @@
       <RootProperty Name="TextWrapping" />
       <RootProperty Name="SelectionHighlightColor" />
       <RootProperty Name="Width" />
+      <RootProperty Name="CornerRadius" />
       <RootProperty Name="Description" />
       <RootProperty Name="DesiredCandidateWindowAlignment" />
       <RootProperty Name="Header" />

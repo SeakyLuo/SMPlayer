@@ -39,8 +39,10 @@
                     <AutoSuggestBox
                         x:Name="ArtistSearchBox"
                         VerticalAlignment="Center"
+                        BorderThickness="1"
                         FontSize="16"
                         ItemsSource="{x:Bind Suggestions, Mode=OneWay}"
+                        Style="{StaticResource BorderlessAutoSuggestBoxStyle}"
                         SuggestionChosen="ArtistSearchBox_SuggestionChosen"
                         TextChanged="ArtistSearchBox_TextChanged" />
                     <ProgressBar

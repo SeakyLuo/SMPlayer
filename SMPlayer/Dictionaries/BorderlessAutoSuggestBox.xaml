@@ -7,6 +7,7 @@
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="TextBoxStyle" Value="{StaticResource MyAutoSuggestBoxTextBoxStyle}" />
         <Setter Property="UseSystemFocusVisuals" Value="{ThemeResource IsApplicationFocusVisualKindReveal}" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="AutoSuggestBox">
@@ -23,7 +24,7 @@
                             x:Name="TextBox"
                             Width="{TemplateBinding Width}"
                             Margin="0"
-                            BorderThickness="0"
+                            BorderThickness="{TemplateBinding BorderThickness}"
                             Canvas.ZIndex="0"
                             Description="{TemplateBinding Description}"
                             DesiredCandidateWindowAlignment="BottomEdge"
