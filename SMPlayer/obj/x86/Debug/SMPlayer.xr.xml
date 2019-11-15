@@ -338,12 +338,13 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AutoSuggestBox">
       <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="BorderThickness" />
       <RootProperty Name="FontSize" />
       <RootProperty Name="ItemsSource" />
+      <RootProperty Name="Style" />
       <RootProperty Name="TextBoxStyle" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="PlaceholderText" />
-      <RootProperty Name="Style" />
       <RootProperty Name="QueryIcon" />
       <RootProperty Name="Margin" />
       <RootProperty Name="Visibility" />
@@ -621,7 +622,6 @@
       <RootProperty Name="TextWrapping" />
       <RootProperty Name="SelectionHighlightColor" />
       <RootProperty Name="Width" />
-      <RootProperty Name="CornerRadius" />
       <RootProperty Name="Description" />
       <RootProperty Name="DesiredCandidateWindowAlignment" />
       <RootProperty Name="Header" />

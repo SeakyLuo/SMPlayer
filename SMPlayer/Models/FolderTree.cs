@@ -193,7 +193,7 @@ namespace SMPlayer.Models
 
         public static bool IsMusicFile(StorageFile file)
         {
-            return file.FileType.Contains("mp3");
+            return file.FileType.EndsWith("mp3");
         }
 
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)

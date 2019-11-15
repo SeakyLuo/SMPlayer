@@ -43,6 +43,11 @@ namespace SMPlayer
             }
             SetupInProgress = false;
         }
+        public void Clear()
+        {
+            MusicCollection.Clear();
+            GridMusicCollection.Clear();
+        }
         public void Reverse()
         {
             if (SetupInProgress) Helper.ShowNotification("NowLoading");

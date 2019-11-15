@@ -20,7 +20,7 @@ namespace SMPlayer
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             Models.Settings.settings.Recent.CollectionChanged += (sender, args) =>
             {
-                Modified = true;
+                Modified = args.NewItems.Count != 0;
             };
         }
 
@@ -49,6 +49,7 @@ namespace SMPlayer
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
             Models.Settings.settings.Recent.Clear();
+            GridMusicView.Clear();
         }
     }
 }
