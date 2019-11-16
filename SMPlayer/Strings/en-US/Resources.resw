@@ -267,6 +267,9 @@
   <data name="Delete From Disk" xml:space="preserve">
     <value>Delete From Disk</value>
   </data>
+  <data name="DeleteAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Remove Album Art</value>
+  </data>
   <data name="DeleteButton.Label" xml:space="preserve">
     <value>Delete</value>
   </data>

@@ -24,9 +24,10 @@ namespace SMPlayer.Dialogs
             set => DisplayCheckBox.Visibility = value;
         }
 
-        public RemoveDialog()
+        public RemoveDialog(string message = "")
         {
             this.InitializeComponent();
+            this.Message = message;
         }
 
         public Action Confirm { get; set; }

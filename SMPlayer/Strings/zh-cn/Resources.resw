@@ -267,6 +267,9 @@
   <data name="Delete From Disk" xml:space="preserve">
     <value>从本地删除</value>
   </data>
+  <data name="DeleteAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>移除专辑插图</value>
+  </data>
   <data name="DeleteButton.Label" xml:space="preserve">
     <value>删除</value>
   </data>

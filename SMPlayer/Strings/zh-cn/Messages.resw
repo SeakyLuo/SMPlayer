@@ -132,6 +132,9 @@
   <data name="DeleteMusicMessage" xml:space="preserve">
     <value>你将要删除《{0}》。该项操作无法撤销，是否要继续？</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>发生了错误</value>
+  </data>
   <data name="FailToOpenBrowser" xml:space="preserve">
     <value>无法打开浏览器！</value>
   </data>
@@ -209,6 +212,9 @@
   </data>
   <data name="Quotations" xml:space="preserve">
     <value>“{0}”</value>
+  </data>
+  <data name="RemoveAlbumArt" xml:space="preserve">
+    <value>你想要移除《{0}》的专辑插图吗？</value>
   </data>
   <data name="RemoveFromPlaylist" xml:space="preserve">
     <value>将《{0}》从播放列表中移除</value>

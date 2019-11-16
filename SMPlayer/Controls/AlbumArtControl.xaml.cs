@@ -35,6 +35,7 @@ namespace SMPlayer.Controls
         public async void SetAlbumArt(Music music)
         {
             CurrentMusic = music;
+            RemoveAlbumArtWarningTextBlock.Text = Helper.LocalizeMessage("RemoveAlbumArt", CurrentMusic.Name);
             var thumbnail = await Helper.GetStorageItemThumbnailAsync(music, 1024);
             if (thumbnail.IsThumbnail())
             {
@@ -49,41 +50,78 @@ namespace SMPlayer.Controls
 
         private async void ChangeAlbumArtButton_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(await CurrentMusic.GetStorageFileAsync()), ReadStyle.Average))
+                {
+                    FileOpenPicker picker = new FileOpenPicker
+                    {
+                        SuggestedStartLocation = PickerLocationId.PicturesLibrary
+                    };
+                    foreach (var item in new string[] { ".jpg", ".png", ".jpeg", ".mp3" })
+                        picker.FileTypeFilter.Add(item);
+                    var file = await picker.PickSingleFileAsync();
+                    if (file == null) return;
+                    if (FolderTree.IsMusicFile(file))
+                    {
+                        using (var source = TagLib.File.Create(new MusicFileAbstraction(file), ReadStyle.Average))
+                        {
+                            if (source.Tag.Pictures.Length == 0)
+                            {
+                                MainPage.Instance.ShowNotification(Helper.LocalizeMessage("MusicNoAlbumArt", file.DisplayName));
+                                return;
+                            }
+                            tagFile.Tag.Pictures = source.Tag.Pictures;
+                        }
+                    }
+                    else
+                    {
+                        tagFile.Tag.Pictures = new Picture[] { new Picture(new MusicFileAbstraction(file)) { Type = PictureType.BackCover } };
+                    }
+                    AlbumArt.Source = await BytesToBitmapImage(tagFile.Tag.Pictures[0].Data.ToArray());
+                    AlbumArt.Visibility = Visibility.Visible;
+                    tagFile.Save();
+                }
+            }
+            catch (Exception exception)
+            {
+                System.Diagnostics.Debug.WriteLine("Error in AlbumArtControl: " + exception);
+                Helper.ShowNotification(Helper.LocalizeMessage("Error"));
+            }
+        }
+        public static async System.Threading.Tasks.Task<BitmapImage> BytesToBitmapImage(byte[] imageData)
+        {
+            var image = new BitmapImage();
+            using (var mem = new MemoryStream(imageData))
+            {
+                await image.SetSourceAsync(mem.AsRandomAccessStream());
+            }
+            return image;
+        }
+
+        private void DeleteAlbumArtButton_Click(object sender, RoutedEventArgs e)
+        {
+            RemoveAlbumArtWarningPanel.Visibility = Visibility.Visible;
+            //await new Dialogs.RemoveDialog()
+            //{
+            //    Confirm = () => ConfirmButton_Click(null, null),
+            //    CheckBoxVisibility = Visibility.Collapsed
+            //}.ShowAsync();
+        }
+
+        private async void ConfirmButton_Click(object sender, RoutedEventArgs e)
+        {
             using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(await CurrentMusic.GetStorageFileAsync()), ReadStyle.Average))
             {
-                FileOpenPicker picker = new FileOpenPicker
-                {
-                    SuggestedStartLocation = PickerLocationId.PicturesLibrary
-                };
-                foreach (var item in new string[] { ".jpg", ".png", ".jpeg", ".mp3" })
-                    picker.FileTypeFilter.Add(item);
-                var file = await picker.PickSingleFileAsync();
-                if (file == null) return;
-                var pics = tagFile.Tag.Pictures;
-                if (pics.Length == 0) Array.Resize(ref pics, 1);
-                if (FolderTree.IsMusicFile(file))
-                {
-                    using (var source = TagLib.File.Create(new MusicFileAbstraction(file), ReadStyle.Average))
-                    {
-                        if (source.Tag.Pictures.Length == 0)
-                        {
-                            MainPage.Instance.ShowNotification(Helper.LocalizeMessage("MusicNoAlbumArt", file.DisplayName));
-                            return;
-                        }
-                        pics[0] = source.Tag.Pictures[0];
-                    }
-                }
-                else
-                {
-                    pics[0] = new Picture(new MusicFileAbstraction(file))
-                    {
-                        Type = PictureType.BackCover,
-                    };
-                }
-                // AlbumArt.Source = pics[0];
-                tagFile.Tag.Pictures = pics;
+                tagFile.Tag.Pictures = null;
                 tagFile.Save();
             }
+            AlbumArt.Visibility = Visibility.Collapsed;
+            RemoveAlbumArtWarningPanel.Visibility = Visibility.Collapsed;
+        }
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            RemoveAlbumArtWarningPanel.Visibility = Visibility.Collapsed;
         }
     }
 }

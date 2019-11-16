@@ -132,6 +132,9 @@
   <data name="DeleteMusicMessage" xml:space="preserve">
     <value>You are deleting "{0}" from your device.\nThis operation is irrevertible.\nDo you want to continue?</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>There is an error.</value>
+  </data>
   <data name="FailToOpenBrowser" xml:space="preserve">
     <value>Unable to open a web browser!</value>
   </data>
@@ -209,6 +212,9 @@
   </data>
   <data name="Quotations" xml:space="preserve">
     <value>"{0}"</value>
+  </data>
+  <data name="RemoveAlbumArt" xml:space="preserve">
+    <value>Do you want to remove the album art of "{0}"?</value>
   </data>
   <data name="RemoveFromPlaylist" xml:space="preserve">
     <value>Remove "{0}" from playlist</value>

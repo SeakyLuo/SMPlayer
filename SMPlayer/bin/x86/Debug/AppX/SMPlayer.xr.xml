@@ -95,6 +95,7 @@
       <RootProperty Name="Foreground" />
       <RootProperty Name="Style" />
       <RootProperty Name="Flyout" />
+      <RootProperty Name="BorderThickness" />
       <RootProperty Name="Content" />
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
@@ -102,7 +103,6 @@
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="FontSize" />
       <RootProperty Name="Visibility" />
-      <RootProperty Name="BorderThickness" />
       <RootProperty Name="MinWidth" />
       <RootProperty Name="IsTabStop" />
       <RootProperty Name="IsEnabled" />
@@ -486,6 +486,9 @@
       <RootProperty Name="Height" />
       <RootProperty Name="Margin" />
       <RootProperty Name="Source" />
+      <RootProperty Name="MaxWidth" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="Stretch" />
     </RootType>

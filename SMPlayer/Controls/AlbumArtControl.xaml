@@ -10,7 +10,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="600" />
+            <RowDefinition Height="500" />
+            <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <Grid Margin="0,10">
             <StackPanel HorizontalAlignment="{x:Bind ShowHeader, Converter={StaticResource HorizontalAlignmentConverter}}" Orientation="Horizontal">
@@ -18,6 +19,11 @@
                     x:Uid="ChangeAlbumArtButton"
                     Click="ChangeAlbumArtButton_Click"
                     Content="&#xE70F;"
+                    Style="{StaticResource MusicScrollHeaderButtonStyle}" />
+                <Button
+                    x:Uid="DeleteAlbumArtButton"
+                    Click="DeleteAlbumArtButton_Click"
+                    Content="&#xE74D;"
                     Style="{StaticResource MusicScrollHeaderButtonStyle}" />
             </StackPanel>
         </Grid>
@@ -31,7 +37,29 @@
         <Image
             x:Name="AlbumArt"
             Grid.Row="1"
-            Margin="10,10,10,40"
+            MaxWidth="500"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Source="ms-appx:///Assets/monotone_bg_wide.png" />
+        <StackPanel
+            x:Name="RemoveAlbumArtWarningPanel"
+            Grid.Row="2"
+            Visibility="Collapsed">
+            <TextBlock x:Name="RemoveAlbumArtWarningTextBlock" Margin="0,0,0,5" />
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    x:Uid="ConfirmButton"
+                    Background="Red"
+                    BorderThickness="0"
+                    Click="ConfirmButton_Click"
+                    Foreground="White" />
+                <Button
+                    x:Uid="CancelButton"
+                    Margin="5,0"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Click="CancelButton_Click" />
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </UserControl>

@@ -30,8 +30,6 @@ Improved New Playlist Name.
 
 Improved Bytes.
 
-Move 5 seconds by pressing left or right.
-
 # TO FIX
 Set lyrics bug.
 
