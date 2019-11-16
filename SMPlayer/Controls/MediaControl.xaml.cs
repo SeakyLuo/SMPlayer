@@ -359,6 +359,12 @@ namespace SMPlayer
                     }
                 });
             };
+            //var left = new KeyboardAccelerator() { Key = Windows.System.VirtualKey.Left };
+            //left.Invoked += (sender, args) => MediaHelper.Position = Math.Max(MediaHelper.Position - 5, 0);
+            //var right = new KeyboardAccelerator() { Key = Windows.System.VirtualKey.Right };
+            //right.Invoked += (sender, args) => MediaHelper.Position = Math.Min(MediaHelper.Position + 5, CurrentMusic.Duration);
+            //this.KeyboardAccelerators.Add(left);
+            //this.KeyboardAccelerators.Add(right);
         }
         private Music CurrentMusic = null;
 

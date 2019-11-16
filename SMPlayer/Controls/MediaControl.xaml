@@ -110,7 +110,11 @@
                     x:Uid="PlayButton"
                     Click="PlayButton_Click"
                     Content="&#xE768;"
-                    Style="{StaticResource MediaControlPlayButtonStyle}" />
+                    Style="{StaticResource MediaControlPlayButtonStyle}" >
+                    <Button.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Space" />
+                    </Button.KeyboardAccelerators>
+                </Button>
                 <Button
                     x:Uid="NextButton"
                     Click="NextButton_Click"
@@ -488,7 +492,11 @@
                             Content="&#xE768;"
                             CornerRadius="25"
                             FontSize="24"
-                            Style="{StaticResource DarkMediaControlButtonStyle}" />
+                            Style="{StaticResource DarkMediaControlButtonStyle}" >
+                            <Button.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="Space" />
+                            </Button.KeyboardAccelerators>
+                        </Button>
                         <Button
                             x:Uid="NextButton"
                             Click="NextButton_Click"
@@ -713,7 +721,11 @@
                         Content="&#xE768;"
                         CornerRadius="25"
                         FontSize="24"
-                        Style="{StaticResource DarkMediaControlButtonStyle}" />
+                        Style="{StaticResource DarkMediaControlButtonStyle}" >
+                        <Button.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="Space" />
+                        </Button.KeyboardAccelerators>
+                    </Button>
                     <Button
                         x:Uid="NextButton"
                         Click="NextButton_Click"
