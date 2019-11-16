@@ -140,7 +140,12 @@
                 x:Uid="ThemeTextBlock"
                 Style="{StaticResource SettingLabelStyle}"
                 Text="Theme" />
-            <TextBlock Style="{StaticResource SettingLabelStyle}" />
+            <TextBlock
+                x:Name="RecentTextBlock"
+                x:Uid="RecentTextBlock"
+                FontSize="24"
+                Style="{StaticResource SettingLabelStyle}"
+                Text="Recent" />
         </StackPanel>
         <StackPanel Grid.Column="1">
             <AutoSuggestBox
@@ -170,8 +175,7 @@
                 Height="30"
                 HorizontalAlignment="Left"
                 Background="{ThemeResource SystemColorHotlightColor}"
-                Style="{StaticResource SolidColorButton}"
-                ToolTipService.ToolTip="Chnage Theme Color">
+                Style="{StaticResource SolidColorButton}">
                 <Button.Flyout>
                     <Flyout x:Name="ColorPickerFlyout">
                         <StackPanel>
@@ -205,6 +209,17 @@
                     </Flyout>
                 </Button.Flyout>
             </Button>
+            <StackPanel
+                Height="30"
+                Margin="10"
+                Orientation="Horizontal">
+                <CheckBox
+                    x:Name="KeepRecentCheckBox"
+                    x:Uid="KeepRecentCheckBox"
+                    Checked="KeepRecentCheckBox_Checked"
+                    Content="Only keep recent 100 items"
+                    Unchecked="KeepRecentCheckBox_Unchecked" />
+            </StackPanel>
             <HyperlinkButton
                 x:Uid="UpdateMusicLibraryButton"
                 Margin="9,0"

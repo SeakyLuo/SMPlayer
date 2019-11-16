@@ -345,6 +345,9 @@
   <data name="hours" xml:space="preserve">
     <value>hours</value>
   </data>
+  <data name="KeepRecentCheckBox.Content" xml:space="preserve">
+    <value>Only keep 100 recently played items instead of all</value>
+  </data>
   <data name="ListViewItem.Label" xml:space="preserve">
     <value>List View</value>
   </data>

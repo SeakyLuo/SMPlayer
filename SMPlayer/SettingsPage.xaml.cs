@@ -27,6 +27,7 @@ namespace SMPlayer
             PathBox.Text = Settings.settings.RootPath;
             NotificationComboBox.SelectedIndex = (int)Settings.settings.Toast;
             ThemeColorPicker.Color = Settings.settings.ThemeColor;
+            KeepRecentCheckBox.IsChecked = Settings.settings.KeepLimitedRecentItems;
         }
 
         private async void PathBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
@@ -121,6 +122,18 @@ namespace SMPlayer
         {
             App.Save();
             Helper.ShowNotification("ChangesSaved");
+        }
+
+        private void KeepRecentCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.KeepLimitedRecentItems = true;
+            while (Settings.settings.Recent.Count > Settings.RecentLimit)
+                Settings.settings.Recent.RemoveAt(Settings.RecentLimit);
+        }
+
+        private void KeepRecentCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.KeepLimitedRecentItems = false;
         }
     }
 

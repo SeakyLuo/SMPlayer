@@ -20,7 +20,7 @@ namespace SMPlayer
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             Models.Settings.settings.Recent.CollectionChanged += (sender, args) =>
             {
-                Modified = args.NewItems.Count != 0;
+                Modified = args.NewItems?.Count != args.OldItems?.Count;
             };
         }
 

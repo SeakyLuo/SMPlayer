@@ -15,43 +15,25 @@ namespace SMPlayer.Models
         private const string FILENAME = "SMPlayerSettings.json";
         public static List<LikeMusicListener> LikeMusicListeners = new List<LikeMusicListener>();
 
-        public string RootPath { get; set; }
-        public FolderTree Tree { get; set; }
-        public Music LastMusic { get; set; }
-        public PlayMode Mode { get; set; }
-        public double Volume { get; set; }
-        public bool IsNavigationCollapsed { get; set; }
-        public Color ThemeColor { get; set; }
-        public ShowToast Toast { get; set; }
-        public string LastPage { get; set; }
-        public List<Playlist> Playlists { get; set; }
-        public string LastPlaylist { get; set; }
-        public bool LocalMusicGridView { get; set; }
-        public bool LocalFolderGridView { get; set; }
-        public Playlist MyFavorites { get; set; }
-        public ObservableCollection<string> Recent { get; set; }
-        public bool MiniModeWithDropdown { get; set; }
-        public bool IsMuted { get; set; }
-
-        public Settings()
-        {
-            RootPath = "";
-            Tree = new FolderTree();
-            Mode = PlayMode.Once;
-            Volume = 50.0d;
-            IsNavigationCollapsed = true;
-            ThemeColor = (Color)Windows.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(typeof(Color), "#0078D7");
-            Toast = ShowToast.Always;
-            LastPage = "";
-            Playlists = new List<Playlist>();
-            LastPlaylist = "";
-            LocalMusicGridView = true;
-            LocalFolderGridView = true;
-            MyFavorites = new Playlist(MenuFlyoutHelper.MyFavorites);
-            Recent = new ObservableCollection<string>();
-            MiniModeWithDropdown = false;
-            IsMuted = false;
-        }
+        public string RootPath { get; set; } = "";
+        public FolderTree Tree { get; set; } = new FolderTree();
+        public Music LastMusic { get; set; } = null;
+        public PlayMode Mode { get; set; } = PlayMode.Once;
+        public double Volume { get; set; } = 50.0d;
+        public bool IsNavigationCollapsed { get; set; } = true;
+        public Color ThemeColor { get; set; } = (Color)Windows.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(typeof(Color), "#0078D7");
+        public ShowToast Toast { get; set; } = ShowToast.Always;
+        public string LastPage { get; set; } = "";
+        public List<Playlist> Playlists { get; set; } = new List<Playlist>();
+        public string LastPlaylist { get; set; } = "";
+        public bool LocalMusicGridView { get; set; } = true;
+        public bool LocalFolderGridView { get; set; } = true;
+        public Playlist MyFavorites { get; set; } = new Playlist(MenuFlyoutHelper.MyFavorites);
+        public ObservableCollection<string> Recent { get; set; } = new ObservableCollection<string>();
+        public bool MiniModeWithDropdown { get; set; } = false;
+        public bool IsMuted { get; set; } = false;
+        public bool KeepLimitedRecentItems { get; set; } = true;
+        public const int RecentLimit = 100;
         public int FindNextPlaylistNameIndex(string Name)
         {
             if (!string.IsNullOrEmpty(Name))
@@ -143,6 +125,9 @@ namespace SMPlayer.Models
             if (music == null) return;
             Recent.Remove(music.Path);
             Recent.Insert(0, music.Path);
+            if (KeepLimitedRecentItems && Recent.Count > RecentLimit)
+                Recent.RemoveAt(RecentLimit);
+
         }
         public const int PlaylistNameMaxLength = 50;
         public NamingError CheckPlaylistNamingError(string newName)

@@ -345,6 +345,9 @@
   <data name="hours" xml:space="preserve">
     <value>小时</value>
   </data>
+  <data name="KeepRecentCheckBox.Content" xml:space="preserve">
+    <value>仅保留最近播放的100项而不是全部</value>
+  </data>
   <data name="ListViewItem.Label" xml:space="preserve">
     <value>列表模式</value>
   </data>
