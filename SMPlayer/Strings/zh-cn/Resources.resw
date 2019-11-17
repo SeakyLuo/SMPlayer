@@ -202,7 +202,7 @@
     <value>取消</value>
   </data>
   <data name="ChangeAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>更改插图</value>
+    <value>更改专辑插图</value>
   </data>
   <data name="ClearAppButton.Label" xml:space="preserve">
     <value>清空</value>
@@ -550,6 +550,9 @@
     <value>最近</value>
   </data>
   <data name="RecentItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>最近</value>
+  </data>
+  <data name="RecentTextBlock.Text" xml:space="preserve">
     <value>最近</value>
   </data>
   <data name="Remove From Playlist" xml:space="preserve">

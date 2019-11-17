@@ -552,6 +552,9 @@
   <data name="RecentItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Recent</value>
   </data>
+  <data name="RecentTextBlock.Text" xml:space="preserve">
+    <value>Recent</value>
+  </data>
   <data name="Remove From Playlist" xml:space="preserve">
     <value>Remove From Playlist</value>
   </data>

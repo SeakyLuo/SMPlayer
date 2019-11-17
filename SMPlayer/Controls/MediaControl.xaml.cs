@@ -361,10 +361,11 @@ namespace SMPlayer
             };
             var left = new KeyboardAccelerator() { Key = Windows.System.VirtualKey.Left };
             left.Invoked += (sender, args) => MediaHelper.Position = Math.Max(MediaHelper.Position - 5, 0);
+            KeyboardAccelerators.Add(left);
             var right = new KeyboardAccelerator() { Key = Windows.System.VirtualKey.Right };
             right.Invoked += (sender, args) => MediaHelper.Position = Math.Min(MediaHelper.Position + 5, CurrentMusic.Duration);
-            this.KeyboardAccelerators.Add(left);
-            this.KeyboardAccelerators.Add(right);
+            KeyboardAccelerators.Add(right);
+            KeyboardAcceleratorPlacementMode = KeyboardAcceleratorPlacementMode.Hidden;
         }
         private Music CurrentMusic = null;
 
@@ -929,6 +930,11 @@ namespace SMPlayer
         {
             if (newCollection.Count == 0)
                 ClearMusic();
+        }
+
+        private void MiniTitleTextBlock_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+
         }
 
         public void MusicLiked(Music music, bool isFavorite)

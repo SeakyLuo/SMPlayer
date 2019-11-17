@@ -110,7 +110,7 @@
                     x:Uid="PlayButton"
                     Click="PlayButton_Click"
                     Content="&#xE768;"
-                    Style="{StaticResource MediaControlPlayButtonStyle}" >
+                    Style="{StaticResource MediaControlPlayButtonStyle}">
                     <Button.KeyboardAccelerators>
                         <KeyboardAccelerator Key="Space" />
                     </Button.KeyboardAccelerators>
@@ -492,7 +492,7 @@
                             Content="&#xE768;"
                             CornerRadius="25"
                             FontSize="24"
-                            Style="{StaticResource DarkMediaControlButtonStyle}" >
+                            Style="{StaticResource DarkMediaControlButtonStyle}">
                             <Button.KeyboardAccelerators>
                                 <KeyboardAccelerator Key="Space" />
                             </Button.KeyboardAccelerators>
@@ -721,7 +721,7 @@
                         Content="&#xE768;"
                         CornerRadius="25"
                         FontSize="24"
-                        Style="{StaticResource DarkMediaControlButtonStyle}" >
+                        Style="{StaticResource DarkMediaControlButtonStyle}">
                         <Button.KeyboardAccelerators>
                             <KeyboardAccelerator Key="Space" />
                         </Button.KeyboardAccelerators>
@@ -737,19 +737,21 @@
                         </Button.KeyboardAccelerators>
                     </Button>
                 </StackPanel>
-                <StackPanel VerticalAlignment="Bottom">
+                <StackPanel Margin="10,0" VerticalAlignment="Bottom">
                     <local:ScrollingTextBlock
                         x:Name="MiniTitleTextBlock"
                         HorizontalAlignment="Center"
                         FontSize="16"
                         FontWeight="Bold"
                         Foreground="White"
+                        ToolTipService.ToolTip="{Binding ElementName=MiniTitleTextBlock, Path=Text, Mode=OneWay}"
                         Visibility="Visible" />
                     <local:ScrollingTextBlock
                         x:Name="MiniArtistTextBlock"
                         Margin="3"
                         HorizontalAlignment="Center"
                         Foreground="White"
+                        ToolTipService.ToolTip="{Binding ElementName=MiniArtistTextBlock, Path=Text, Mode=OneWay}"
                         Visibility="Visible" />
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                         <Button

@@ -34,3 +34,7 @@ Improved Bytes.
 Set lyrics bug.
 
 Too many notifications.
+
+Title ScrollingTextBlock not scrolling.
+
+TooltipService "left"
