@@ -331,7 +331,7 @@ namespace SMPlayer
         }
 
         private bool ShouldUpdate = true, SliderClicked = false;
-        private static List<MusicControlListener> MusicControlListeners = new List<MusicControlListener>();
+        private static List<Action<Music, Music>> MusicModifiedListeners = new List<Action<Music, Music>>();
         private static List<MusicRequestListener> MusicRequestListeners = new List<MusicRequestListener>();
 
         public MediaControl()
@@ -359,12 +359,12 @@ namespace SMPlayer
                     }
                 });
             };
-            //var left = new KeyboardAccelerator() { Key = Windows.System.VirtualKey.Left };
-            //left.Invoked += (sender, args) => MediaHelper.Position = Math.Max(MediaHelper.Position - 5, 0);
-            //var right = new KeyboardAccelerator() { Key = Windows.System.VirtualKey.Right };
-            //right.Invoked += (sender, args) => MediaHelper.Position = Math.Min(MediaHelper.Position + 5, CurrentMusic.Duration);
-            //this.KeyboardAccelerators.Add(left);
-            //this.KeyboardAccelerators.Add(right);
+            var left = new KeyboardAccelerator() { Key = Windows.System.VirtualKey.Left };
+            left.Invoked += (sender, args) => MediaHelper.Position = Math.Max(MediaHelper.Position - 5, 0);
+            var right = new KeyboardAccelerator() { Key = Windows.System.VirtualKey.Right };
+            right.Invoked += (sender, args) => MediaHelper.Position = Math.Min(MediaHelper.Position + 5, CurrentMusic.Duration);
+            this.KeyboardAccelerators.Add(left);
+            this.KeyboardAccelerators.Add(right);
         }
         private Music CurrentMusic = null;
 
@@ -432,9 +432,9 @@ namespace SMPlayer
                 }
             }
         }
-        public static void AddMusicControlListener(MusicControlListener listener)
+        public static void AddMusicControlListener(Action<Music, Music> listener)
         {
-            MusicControlListeners.Add(listener);
+            MusicModifiedListeners.Add(listener);
         }
 
         public static void AddMusicRequestListener(MusicRequestListener listener)
@@ -443,8 +443,8 @@ namespace SMPlayer
         }
         private void NotifyMusicModifiedListeners(Music before, Music after)
         {
-            foreach (var listener in MusicControlListeners)
-                listener.MusicModified(before, after);
+            foreach (var listener in MusicModifiedListeners)
+                listener.Invoke(before, after);
         }
 
         public void SetPlayMode(PlayMode mode)
@@ -819,6 +819,8 @@ namespace SMPlayer
                 next.IsPlaying = true;
                 MediaSlider.Value = 0;
                 SetMusic(next);
+                if (MainTitleTextBlock.IsScrolling) MainTitleTextBlock.StopScrolling();
+                if (MainArtistTextBlock.IsScrolling) MainArtistTextBlock.StopScrolling();
                 Helper.HideToast();
                 // Use current instead of next to avoid showing toast on app launch
                 if (current != null) Helper.ShowPauseToast(next);
@@ -937,11 +939,6 @@ namespace SMPlayer
                 else DislikeMusic(false);
             }
         }
-    }
-
-    public interface MusicControlListener
-    {
-        void MusicModified(Music before, Music after);
     }
 
     public interface MusicRequestListener

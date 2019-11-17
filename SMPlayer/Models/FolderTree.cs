@@ -185,7 +185,7 @@ namespace SMPlayer.Models
             {
                 if (tree.Equals(target))
                     return tree;
-                if (tree.Path.StartsWith(target.Path))
+                if (target.Path.StartsWith(tree.Path))
                     return tree.FindTree(target);
             }
             return null;

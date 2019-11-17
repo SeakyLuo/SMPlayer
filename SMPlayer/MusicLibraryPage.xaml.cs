@@ -18,7 +18,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MusicLibraryPage : Page, MusicControlListener, SwitchMusicListener, AfterSongsSetListener, LikeMusicListener
+    public sealed partial class MusicLibraryPage : Page, SwitchMusicListener, AfterSongsSetListener, LikeMusicListener
     {
         private const string FILENAME = "MusicLibrary.json";
         public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
@@ -33,10 +33,9 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            listeners.Add(this as AfterSongsSetListener);
+            listeners.Add(this);
             SongsSet(AllSongs);
-            MediaControl.AddMusicControlListener(this as MusicControlListener);
-            MediaHelper.SwitchMusicListeners.Add(this as SwitchMusicListener);
+            MediaHelper.SwitchMusicListeners.Add(this);
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -50,6 +49,7 @@ namespace SMPlayer
         public static async Task Init()
         {
             SetAllSongs(JsonFileHelper.Convert<ObservableCollection<Music>>(await JsonFileHelper.ReadAsync(FILENAME)));
+            MediaControl.AddMusicControlListener(MusicModified);
         }
 
         public static async void CheckLibrary()
@@ -83,7 +83,7 @@ namespace SMPlayer
             MediaHelper.SetMusicAndPlay(AllSongs, music);
         }
 
-        public void MusicModified(Music before, Music after)
+        public static void MusicModified(Music before, Music after)
         {
             var music = AllSongs.First((m) => m == before);
             music.CopyFrom(after);

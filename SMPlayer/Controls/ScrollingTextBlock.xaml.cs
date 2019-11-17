@@ -36,32 +36,23 @@ namespace SMPlayer
             {
                 // Calculate the total offset to scroll. It is fixed after your text is set.
                 // Since we need to "scroll to the "start" of the text,
-                // the offset is equal the length of your text plus the length of the space,
+                // the offset is equal to the length of your text plus the length of the space,
                 // which is the difference of the ActualWidth of the two TextBlocks.
                 double offset = ScrollTextBlock.ActualWidth - NormalTextBlock.ActualWidth;
                 // Scroll it horizontally.
-                // Notice the Math.Min here. You cannot scroll more than offset.
+                // Notice the Math.Min here. You cannot scroll more than the offset.
                 // " + 2" is just the distance it advances,
                 // meaning that it also controls the speed of the animation.
                 RealScrollViewer.ChangeView(Math.Min(RealScrollViewer.HorizontalOffset + 2, offset), null, null);
                 // If scroll to the offset
                 if (RealScrollViewer.HorizontalOffset == offset)
-                {
-                    // Re-display the NormalTextBlock first so that the text won't blink because they overlap.
-                    NormalTextBlock.Visibility = Visibility.Visible;
-                    // Hide the ScrollTextBlock.
-                    // Hiding it will also set the HorizontalOffset of RealScrollViewer to 0,
-                    // so that RealScrollViewer will be scrolling from the beginning of ScrollTextBlock next time.
-                    ScrollTextBlock.Visibility = Visibility.Collapsed;
-                    // Stop the animation/ticking.
-                    timer.Stop();
-                }
+                    StopScrolling();
             };
         }
 
         public void StartScrolling()
         {
-            // Checking timer.IsEnabled is for to avoid restarting the animation when the text is already scrolling.
+            // Checking timer.IsEnabled is for avoidance of restarting the animation when the text is already scrolling.
             // IsEnabled is true if timer has started, false if timer is stopped.
             // Checking TextScrollViewer.ScrollableWidth is for making sure the text is scrollable.
             if (timer.IsEnabled || TextScrollViewer.ScrollableWidth == 0) return;
@@ -71,6 +62,18 @@ namespace SMPlayer
             NormalTextBlock.Visibility = Visibility.Collapsed;
             // Start the animation/ticking.
             timer.Start();
+        }
+
+        public void StopScrolling()
+        {
+            // Re-display the NormalTextBlock first so that the text won't blink because they overlap.
+            NormalTextBlock.Visibility = Visibility.Visible;
+            // Hide the ScrollTextBlock.
+            // Hiding it will also set the HorizontalOffset of RealScrollViewer to 0,
+            // so that RealScrollViewer will be scrolling from the beginning of ScrollTextBlock next time.
+            ScrollTextBlock.Visibility = Visibility.Collapsed;
+            // Stop the animation/ticking.
+            timer.Stop();
         }
     }
 }
