@@ -140,7 +140,10 @@
     <ScrollViewer>
         <StackPanel Margin="20,5">
             <StackPanel x:Name="NoResultPanel" Visibility="Collapsed">
-                <TextBlock FontSize="20" Text="No result is found. Please check your spelling." />
+                <TextBlock
+                    x:Uid="NoResultTextBlock"
+                    FontSize="20"
+                    Text="No result is found. Please check your spelling." />
             </StackPanel>
             <StackPanel Visibility="{x:Bind Artists.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                 <RelativePanel Style="{StaticResource RelativePanelStyle}">

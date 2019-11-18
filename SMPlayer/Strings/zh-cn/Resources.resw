@@ -462,6 +462,9 @@
   <data name="NoAlbumArtTextBlock.Text" xml:space="preserve">
     <value>没有专辑插图</value>
   </data>
+  <data name="NoResultTextBlock.Text" xml:space="preserve">
+    <value>找不到结果，请检查您的拼写。</value>
+  </data>
   <data name="NotificationTextBlock.Text" xml:space="preserve">
     <value>通知</value>
   </data>

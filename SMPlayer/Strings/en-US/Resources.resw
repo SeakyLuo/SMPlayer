@@ -462,6 +462,9 @@
   <data name="NoAlbumArtTextBlock.Text" xml:space="preserve">
     <value>No Album Art</value>
   </data>
+  <data name="NoResultTextBlock.Text" xml:space="preserve">
+    <value>No result is found. Please check your spelling.</value>
+  </data>
   <data name="NotificationTextBlock.Text" xml:space="preserve">
     <value>Notification</value>
   </data>

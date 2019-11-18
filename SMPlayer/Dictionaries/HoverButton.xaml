@@ -6,7 +6,7 @@
     <AcrylicBrush
         x:Key="HoverButtonNormalBackground"
         BackgroundSource="Backdrop"
-        FallbackColor="Transparent"
+        FallbackColor="Black"
         TintColor="Transparent"
         TintOpacity="0.8" />
     <Style x:Key="HoverButtonStyle" TargetType="Button">
