@@ -124,6 +124,18 @@ namespace SMPlayer.Models
                 }
             }
             Path = folder.Path;
+            switch (Criteria)
+            {
+                case SortBy.Title:
+                    SortByTitle();
+                    break;
+                case SortBy.Album:
+                    SortByAlbum();
+                    break;
+                case SortBy.Artist:
+                    SortByArtist();
+                    break;
+            }
         }
 
         public bool Contains(Music music)

@@ -431,6 +431,10 @@ namespace SMPlayer
                 {
                     // The specified file name or path is too long, or a component of the specified path is too long.
                 }
+                catch (FileNotFoundException)
+                {
+                    // System.IO.FileNotFoundException:“文件名、目录名或卷标语法不正确。 (Exception from HRESULT: 0x8007007B)”
+                }
             }
         }
         public static void AddMusicControlListener(Action<Music, Music> listener)
