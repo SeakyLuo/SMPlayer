@@ -266,11 +266,13 @@ namespace SMPlayer
 
         public static void ShowPlayToast(Music music)
         {
+            HideToast();
             ShowToast(music, MediaPlaybackState.Paused);
         }
 
         public static void ShowPauseToast(Music music)
         {
+            HideToast();
             ShowToast(music, MediaPlaybackState.Playing);
         }
         public static void UpdateToast()

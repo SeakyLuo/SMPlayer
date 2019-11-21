@@ -43,6 +43,7 @@ namespace SMPlayer
                 // Notice the Math.Min here. You cannot scroll more than the offset.
                 // " + 2" is just the distance it advances,
                 // meaning that it also controls the speed of the animation.
+                //RealScrollViewer.ScrollToHorizontalOffset(Math.Min(RealScrollViewer.HorizontalOffset + 2, offset));
                 RealScrollViewer.ChangeView(Math.Min(RealScrollViewer.HorizontalOffset + 2, offset), null, null);
                 // If scroll to the offset
                 if (RealScrollViewer.HorizontalOffset == offset)
@@ -71,6 +72,8 @@ namespace SMPlayer
             // Hide the ScrollTextBlock.
             // Hiding it will also set the HorizontalOffset of RealScrollViewer to 0,
             // so that RealScrollViewer will be scrolling from the beginning of ScrollTextBlock next time.
+            //RealScrollViewer.ScrollToHorizontalOffset(0);
+            //RealScrollViewer.ChangeView(0, null, null);
             ScrollTextBlock.Visibility = Visibility.Collapsed;
             // Stop the animation/ticking.
             timer.Stop();

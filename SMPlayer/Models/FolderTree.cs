@@ -97,10 +97,20 @@ namespace SMPlayer.Models
             {
                 // No hierarchy between folders
                 // or same folder
+                var trees = new List<FolderTree>();
+                foreach (var tree in Trees)
+                {
+                    tree.Clear();
+                    trees.Add(tree);
+                }
                 Trees.Clear();
                 foreach (var subFolder in await folder.GetFoldersAsync())
                 {
-                    var tree = new FolderTree();
+                    var source = trees.FirstOrDefault(t => t.Path == subFolder.Path);
+                    var tree = new FolderTree()
+                    {
+                        Criteria = source == null ? SortBy.Title : source.Criteria
+                    };
                     await tree.Init(subFolder, listener, indicator);
                     Trees.Add(tree);
                 }
@@ -168,7 +178,6 @@ namespace SMPlayer.Models
             list.AddRange(Files);
             return list;
         }
-
         public List<Music> SortByTitle()
         {
             Criteria = SortBy.Title;
@@ -184,13 +193,16 @@ namespace SMPlayer.Models
             Criteria = SortBy.Album;
             return Files = Files.OrderBy(m => m.Album).ToList();
         }
-
         public List<Music> Reverse()
         {
             Files.Reverse();
             return Files;
         }
-
+        public void Clear()
+        {
+            Trees.Clear();
+            Files.Clear();
+        }
         public FolderTree FindTree(FolderTree target)
         {
             foreach (var tree in Trees)
@@ -216,7 +228,7 @@ namespace SMPlayer.Models
 
         public override bool Equals(object obj)
         {
-            return obj != null && obj is FolderTree && Path == (obj as FolderTree).Path;
+            return obj is FolderTree tree && Path == tree.Path;
         }
 
         public override int GetHashCode()
