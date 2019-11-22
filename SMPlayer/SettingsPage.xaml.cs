@@ -51,9 +51,12 @@ namespace SMPlayer
             MainPage.Instance.Loader.Text = Helper.LocalizeMessage("LoadMusicLibrary");
             MainPage.Instance.Loader.StartLoading();
             Helper.CurrentFolder = folder;
-            await Settings.settings.Tree.Init(folder, this);
-            Settings.settings.RootPath = folder.Path;
+            var tree = new FolderTree();
+            await tree.Init(folder, this);
             MainPage.Instance.Loader.Text = Helper.LocalizeMessage("UpdateMusicLibrary");
+            tree.MergeFrom(Settings.settings.Tree);
+            Settings.settings.Tree = tree;
+            Settings.settings.RootPath = folder.Path;
             MusicLibraryPage.SetAllSongs(Settings.settings.Tree.Flatten());
             MainPage.Instance.Loader.Max = listeners.Count;
             for (int i = 0; i < listeners.Count; i++)

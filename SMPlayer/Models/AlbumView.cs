@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Windows.UI.Xaml.Media.Imaging;
+using System.Linq;
 
 namespace SMPlayer.Models
 {
@@ -27,6 +28,13 @@ namespace SMPlayer.Models
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public AlbumView() { }
+        public AlbumView(Music music, bool setCover = true)
+        {
+            Name = music.Album;
+            Artist = music.Artist;
+            Songs.Add(music);
+            if (setCover) SetCover();
+        }
         public AlbumView(string name, string artist)
         {
             Name = name;
@@ -36,7 +44,7 @@ namespace SMPlayer.Models
         {
             Name = name;
             Artist = artist;
-            Songs = new ObservableCollection<Music>(songs);
+            Songs.SetTo(songs);
             if (setCover) SetCover();
         }
         public async void SetCover()
@@ -50,6 +58,11 @@ namespace SMPlayer.Models
                 if ((cover = await Helper.GetThumbnailAsync(music, false)) != null)
                     return cover;
             return Helper.DefaultAlbumCover;
+        }
+        public void AddMusic(Music music)
+        {
+            Songs.Add(music);
+            Songs.SetTo(Songs.OrderBy(m => m.Name));
         }
         public Playlist ToPlaylist()
         {

@@ -359,6 +359,12 @@ namespace SMPlayer
                     }
                 });
             };
+
+            Controls.MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
+            {
+                if (CurrentMusic == before)
+                    UpdateMusic(after);
+            });
             var left = new KeyboardAccelerator() { Key = Windows.System.VirtualKey.Left };
             left.Invoked += (sender, args) => MediaHelper.Position = Math.Max(MediaHelper.Position - 5, 0);
             KeyboardAccelerators.Add(left);
@@ -384,9 +390,8 @@ namespace SMPlayer
             SetPlayMode(Settings.settings.Mode);
         }
 
-        public async void SetMusic(Music music)
+        public async void UpdateMusic(Music music)
         {
-            if (CurrentMusic == music) return;
             CurrentMusic = music;
             if (music == null)
             {
@@ -436,6 +441,12 @@ namespace SMPlayer
                     // System.IO.FileNotFoundException:“文件名、目录名或卷标语法不正确。 (Exception from HRESULT: 0x8007007B)”
                 }
             }
+        }
+
+        public void SetMusic(Music music)
+        {
+            if (CurrentMusic == music) return;
+            UpdateMusic(music);
         }
         public static void AddMusicControlListener(Action<Music, Music> listener)
         {

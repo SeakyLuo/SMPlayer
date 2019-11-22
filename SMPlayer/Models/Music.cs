@@ -15,9 +15,36 @@ namespace SMPlayer.Models
     public class Music : IComparable<Music>, INotifyPropertyChanged
     {
         public string Path { get; set; }
-        public string Name { get; set; }
-        public string Artist { get; set; }
-        public string Album { get; set; }
+        public string Name
+        {
+            get => name;
+            set
+            {
+                name = value;
+                OnPropertyChanged();
+            }
+        }
+        private string name;
+        public string Artist
+        {
+            get => artist;
+            set
+            {
+                artist = value;
+                OnPropertyChanged();
+            }
+        }
+        private string artist;
+        public string Album
+        {
+            get => album;
+            set 
+            {
+                album = value;
+                OnPropertyChanged();
+            }
+        }
+        private string album;
         public int Duration { get; set; }
 
         private bool isFavorite = false;
@@ -106,17 +133,18 @@ namespace SMPlayer.Models
             return new Music(this);
         }
 
-        public void CopyFrom(Music obj)
+        public Music CopyFrom(Music source)
         {
-            Path = obj.Path;
-            Name = obj.Name;
-            Artist = obj.Artist;
-            Album = obj.Album;
-            Duration = obj.Duration;
-            Favorite = obj.Favorite;
-            PlayCount = obj.PlayCount;
-            IsPlaying = obj.IsPlaying;
-            Index = obj.Index;
+            Path = source.Path;
+            Name = source.Name;
+            Artist = source.Artist;
+            Album = source.Album;
+            Duration = source.Duration;
+            Favorite = source.Favorite;
+            PlayCount = source.PlayCount;
+            IsPlaying = source.IsPlaying;
+            Index = source.Index;
+            return source;
         }
 
         public void Played()

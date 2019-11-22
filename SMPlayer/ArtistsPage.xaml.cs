@@ -31,6 +31,25 @@ namespace SMPlayer
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             MusicLibraryPage.AddAfterSongsSetListener(this);
             MediaHelper.SwitchMusicListeners.Add(this);
+            Controls.MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
+            {
+                var oldArtist = Artists.First(a => a.Name == before.Artist);
+                if (oldArtist.Equals(ArtistMasterDetailsView.SelectedItem) || !oldArtist.NotLoaded) oldArtist.Load();
+                if (SuggestionList.Contains(after.Artist))
+                {
+                    if (before.Artist != after.Artist)
+                    {
+                        var newArtist = Artists.First(a => a.Name == after.Artist);
+                        if (newArtist.Equals(ArtistMasterDetailsView.SelectedItem) || !newArtist.NotLoaded) newArtist.Load();
+                    }
+                }
+                else
+                {
+                    SuggestionList.Add(after.Artist);
+                    Artists.Add(new ArtistView(after));
+                    Artists.SetTo(Artists.OrderBy(a => a.Name));
+                }
+            });
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -46,9 +65,7 @@ namespace SMPlayer
             ArtistView artist = null;
             if (targetArtist is string artistName)
             {
-                artist = Artists.FirstOrDefault((a) => a.Name == artistName);
-                if (artist.NotLoaded || !MusicLibraryPage.IsLibraryUnchangedAfterChecking)
-                    artist.Load();
+                artist = FindAndLoadArtist(artistName);
             }
             else if (targetArtist is Playlist playlist)
             {
@@ -101,8 +118,7 @@ namespace SMPlayer
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 var artist = (sender as FrameworkElement).DataContext as ArtistView;
-                if (artist.NotLoaded || !MusicLibraryPage.IsLibraryUnchangedAfterChecking)
-                    artist.Load();
+                LoadArtist(artist);
             });
         }
 
@@ -154,11 +170,31 @@ namespace SMPlayer
         private void ArtistSearchBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
             var artistName = (string)args.SelectedItem;
-            var artist = Artists.FirstOrDefault(a => a.Name == artistName);
+            ArtistMasterDetailsView.SelectedItem = FindAndLoadArtist(artistName);
+            //(ArtistMasterDetailsView.ContainerFromItem(artist) as UIElement)?.StartBringIntoView();
+        }
+
+        private ArtistView FindAndLoadArtist(string artistName)
+        {
+            var artist = Artists.First(a => a.Name == artistName);
+            LoadArtist(artist);
+            return artist;
+        }
+
+        private void LoadArtist(ArtistView artist)
+        {
             if (artist.NotLoaded || !MusicLibraryPage.IsLibraryUnchangedAfterChecking)
                 artist.Load();
-            ArtistMasterDetailsView.SelectedItem = artist;
-            //(ArtistMasterDetailsView.ContainerFromItem(artist) as UIElement)?.StartBringIntoView();
+        }
+
+        private void ArtistSearchBox_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter && Suggestions.Count > 0)
+            {
+                string artist = Suggestions[0];
+                ArtistSearchBox.Text = artist;
+                ArtistMasterDetailsView.SelectedItem = FindAndLoadArtist(artist);
+            }
         }
     }
 }

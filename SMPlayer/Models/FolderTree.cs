@@ -8,7 +8,7 @@ using Windows.Storage;
 namespace SMPlayer.Models
 {
     [Serializable]
-    public class FolderTree : INotifyPropertyChanged
+    public class FolderTree : INotifyPropertyChanged, IComparable
     {
         public List<FolderTree> Trees = new List<FolderTree>();
         public List<Music> Files = new List<Music>();
@@ -122,7 +122,7 @@ namespace SMPlayer.Models
                         Music music = await Music.GetMusicAsync(file);
                         if (samePath)
                         {
-                            if (MusicLibraryPage.AllSongsSet.FirstOrDefault((m) => m == music) is Music oldItem)
+                            if (MusicLibraryPage.AllSongsSet.FirstOrDefault(m => m == music) is Music oldItem)
                             {
                                 music.PlayCount = oldItem.PlayCount;
                                 music.Favorite = oldItem.Favorite;
@@ -158,18 +158,17 @@ namespace SMPlayer.Models
             return Files.Remove(music) || Trees.Find((tree) => music.Path.StartsWith(tree.Path)).RemoveMusic(music);
         }
 
-        public void Update(FolderTree tree)
+        public void MergeFrom(FolderTree tree)
         {
             // Merge to this tree
             foreach (var folder in tree.Trees)
-                Trees.FirstOrDefault(f => f.Equals(folder))?.Update(folder);
+                Trees.FirstOrDefault(f => f.Equals(folder))?.MergeFrom(folder);
             var set = Files.ToHashSet();
             foreach (var file in tree.Files)
                 if (set.Contains(file))
                     Files.First(f => f.Equals(file)).CopyFrom(file);
             OnPropertyChanged();
         }
-
         public List<Music> Flatten()
         {
             List<Music> list = new List<Music>();
@@ -205,6 +204,7 @@ namespace SMPlayer.Models
         }
         public FolderTree FindTree(FolderTree target)
         {
+            //return Trees.FirstOrDefault(tree => tree.Equals(target)) ?? Trees.FirstOrDefault(tree => target.Path.StartsWith(tree.Path))?.FindTree(target);
             foreach (var tree in Trees)
             {
                 if (tree.Equals(target))
@@ -214,7 +214,10 @@ namespace SMPlayer.Models
             }
             return null;
         }
-
+        public Music FindMusic(Music target)
+        {
+            return Files.FirstOrDefault(m => m == target) ?? Trees.FirstOrDefault(tree => target.Path.StartsWith(tree.Path))?.FindMusic(target);
+        }
         public static bool IsMusicFile(StorageFile file)
         {
             return file.FileType.EndsWith("mp3");
@@ -234,6 +237,15 @@ namespace SMPlayer.Models
         public override int GetHashCode()
         {
             return Path.GetHashCode();
+        }
+        public override string ToString()
+        {
+            return Path;
+        }
+
+        public int CompareTo(object obj)
+        {
+            return ToString().CompareTo(obj.ToString());
         }
     }
     public struct TreeInfo

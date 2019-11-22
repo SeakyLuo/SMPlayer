@@ -59,7 +59,7 @@ namespace SMPlayer
             await tree.Init(Helper.CurrentFolder);
             var newLibrary = tree.Flatten();
             if (IsLibraryUnchangedAfterChecking = AllSongs.SameAs(newLibrary)) return;
-            tree.Update(Settings.settings.Tree);
+            tree.MergeFrom(Settings.settings.Tree);
             Settings.settings.Tree = tree;
             SetAllSongs(newLibrary);
             Save();
@@ -85,7 +85,7 @@ namespace SMPlayer
 
         public static void MusicModified(Music before, Music after)
         {
-            var music = AllSongs.First((m) => m == before);
+            var music = AllSongs.First(m => m == before);
             music.CopyFrom(after);
         }
 

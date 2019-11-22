@@ -21,6 +21,14 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             MediaHelper.SwitchMusicListeners.Add(this);
+            Controls.MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
+            {
+                int index = MusicCollection.IndexOf(before);
+                if (index > -1)
+                {
+                    GridMusicCollection[index].Source.CopyFrom(MusicCollection[index].CopyFrom(after));
+                }
+            });
         }
 
         private void MusicGridView_ItemClick(object sender, ItemClickEventArgs e)

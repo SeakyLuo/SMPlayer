@@ -42,6 +42,7 @@
                         BorderThickness="1"
                         FontSize="16"
                         ItemsSource="{x:Bind Suggestions, Mode=OneWay}"
+                        KeyUp="ArtistSearchBox_KeyUp"
                         Style="{StaticResource BorderlessAutoSuggestBoxStyle}"
                         SuggestionChosen="ArtistSearchBox_SuggestionChosen"
                         TextChanged="ArtistSearchBox_TextChanged" />
@@ -213,7 +214,7 @@
                                                             x:Name="MusicNameTextBlcok"
                                                             Grid.Column="1"
                                                             Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
-                                                            Text="{x:Bind Name}" />
+                                                            Text="{x:Bind Name, Mode=OneWay}" />
                                                     </StackPanel>
                                                     <TextBlock
                                                         Grid.Column="2"

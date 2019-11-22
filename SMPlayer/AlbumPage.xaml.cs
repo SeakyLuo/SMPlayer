@@ -44,8 +44,8 @@ namespace SMPlayer
             else if (parameter is string albumText)
             {
                 int index = albumText.IndexOf(Helper.StringConcatenationFlag);
-                string albumName = albumText.Substring(0, index), albumArtist = albumText.Substring(index + 3);
-                playlist = new Playlist(albumName, MusicLibraryPage.AllSongs.Where((m) => m.Album == albumName && m.Artist == albumArtist));
+                string albumName = albumText.Substring(0, index), albumArtist = albumText.Substring(index + Helper.StringConcatenationFlag.Length);
+                playlist = new Playlist(albumName, MusicLibraryPage.AllSongs.Where(m => m.Album == albumName && m.Artist == albumArtist));
                 AlbumPlaylistControl.SetPlaylistInfo(albumArtist);
             }
             await AlbumPlaylistControl.SetPlaylist(playlist);

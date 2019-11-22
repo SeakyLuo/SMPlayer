@@ -60,10 +60,10 @@ namespace SMPlayer
         public async void SongsSet(ICollection<Music> songs)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-             {
+            {
                  status = ExecutionStatus.Running;
                  Setup(songs);
-             });
+            });
         }
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)

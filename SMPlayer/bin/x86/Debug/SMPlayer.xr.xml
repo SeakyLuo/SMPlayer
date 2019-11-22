@@ -348,6 +348,7 @@
       <RootProperty Name="QueryIcon" />
       <RootProperty Name="Margin" />
       <RootProperty Name="Visibility" />
+      <RootEvent Name="KeyUp" />
       <RootEvent Name="SuggestionChosen" />
       <RootEvent Name="TextChanged" />
       <RootEvent Name="QuerySubmitted" />

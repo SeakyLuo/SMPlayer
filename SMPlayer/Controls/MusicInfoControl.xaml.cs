@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
@@ -16,6 +17,7 @@ namespace SMPlayer.Controls
         public bool ShowHeader { get; set; }
         private Music CurrentMusic;
         private MusicProperties Properties;
+        public static List<Action<Music, Music>> MusicModifiedListeners = new List<Action<Music, Music>>();
         public MusicInfoControl()
         {
             this.InitializeComponent();
@@ -79,23 +81,25 @@ namespace SMPlayer.Controls
 
         private async void SaveMusicPropertiesButton_Click(object sender, RoutedEventArgs e)
         {
-            Properties.Title = TitleTextBox.Text;
+            var newMusic = CurrentMusic.Copy();
+            Properties.Title = newMusic.Name = TitleTextBox.Text;
             Properties.Subtitle = SubtitleTextBox.Text;
-            Properties.Artist = ArtistTextBox.Text;
-            Properties.Album = ArtistTextBox.Text;
+            Properties.Artist = newMusic.Artist = ArtistTextBox.Text;
+            Properties.Album = newMusic.Album = AlbumTextBox.Text;
             Properties.AlbumArtist = AlbumArtistTextBox.Text;
-            AlbumArtistTextBox.Text = Properties.AlbumArtist;
             if (int.TryParse(PlayCountTextBox.Text, out int PlayCount))
-            {
-                MusicLibraryPage.AllSongs[MusicLibraryPage.AllSongs.IndexOf(CurrentMusic)].PlayCount = PlayCount;
-                CurrentMusic.PlayCount = PlayCount;
-            }
+                newMusic.PlayCount = PlayCount;
             Properties.Publisher = PublisherTextBox.Text;
             if (uint.TryParse(TrackNumberTextBox.Text, out uint TrackNumber))
                 Properties.TrackNumber = TrackNumber;
             if (uint.TryParse(YearTextBox.Text, out uint Year))
                 Properties.Year = Year;
             await Properties.SavePropertiesAsync();
+            MusicLibraryPage.MusicModified(CurrentMusic, newMusic);
+            Settings.settings.Tree.FindMusic(CurrentMusic).CopyFrom(newMusic);
+            foreach (var listener in MusicModifiedListeners)
+                listener.Invoke(CurrentMusic, newMusic);
+            CurrentMusic.CopyFrom(newMusic);
             Helper.ShowNotification("PropertiesUpdated");
         }
         public async void SetBasicProperties(StorageFile file)

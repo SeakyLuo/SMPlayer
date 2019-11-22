@@ -32,10 +32,17 @@ namespace SMPlayer.Models
             }
         }
         private string info = "";
-        public List<Music> Songs { get; set; }
+        public List<Music> Songs { get; set; } = new List<Music>();
         public ArtistView(string Name)
         {
             this.Name = Name;
+        }
+        public ArtistView(Music music)
+        {
+            Name = music.Artist;
+            Albums.Add(new AlbumView(music, true));
+            Songs.Add(music);
+            NotLoaded = false;
         }
 
         public ArtistView(string Name, ICollection<Music> Songs)
@@ -56,9 +63,9 @@ namespace SMPlayer.Models
         }
         public void CopySongs(IEnumerable<Music> songs)
         {
+            Albums.Clear();
             foreach (var group in (Songs = songs.ToList()).GroupBy(m => m.Album).OrderBy(g => g.Key))
-                if (Albums.FirstOrDefault(a => a.Name == group.Key) == null)
-                    Albums.Add(new AlbumView(group.Key, Name, group.OrderBy(m => m.Name)));
+                Albums.Add(new AlbumView(group.Key, Name, group.OrderBy(m => m.Name)));
         }
 
         public void CopyFrom(Playlist playlist)
@@ -76,7 +83,7 @@ namespace SMPlayer.Models
 
         public override bool Equals(object obj)
         {
-            return obj != null && obj is ArtistView && Name == (obj as ArtistView).Name;
+            return obj is ArtistView artist && Name == artist.Name;
         }
 
         public override int GetHashCode()
