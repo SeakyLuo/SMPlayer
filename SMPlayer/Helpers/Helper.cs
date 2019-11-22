@@ -498,7 +498,7 @@ namespace SMPlayer
     }
     public enum ExecutionStatus
     {
-        Running = 0, Done = 1, Ready = 2
+        Running = 0, Done = 1, Ready = 2, Break = 3
     }
 
     public interface NotificationContainer

@@ -1,4 +1,6 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using System.Collections.Generic;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 //https://go.microsoft.com/fwlink/?LinkId=234236 上介绍了“用户控件”项模板
@@ -36,6 +38,9 @@ namespace SMPlayer
                                                                                         typeof(double),
                                                                                         typeof(LoadingControl),
                                                                                         new PropertyMetadata(0d));
+
+        public bool AllowBreak { get; set; } = false;
+        public List<Action> BreakLoadingListeners = new List<Action>();
         public LoadingControl()
         {
             this.InitializeComponent();
@@ -49,6 +54,12 @@ namespace SMPlayer
         public void FinishLoading()
         {
             this.Visibility = Visibility.Collapsed;
+        }
+
+        private void StopButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var listener in BreakLoadingListeners) listener.Invoke();
+            FinishLoading();
         }
     }
 }

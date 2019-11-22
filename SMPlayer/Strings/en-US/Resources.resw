@@ -717,6 +717,9 @@
   <data name="SortByButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Sort Playlist</value>
   </data>
+  <data name="StopButton.Content" xml:space="preserve">
+    <value>Stop</value>
+  </data>
   <data name="SubtitleTextBlock.Text" xml:space="preserve">
     <value>Subtitle</value>
   </data>

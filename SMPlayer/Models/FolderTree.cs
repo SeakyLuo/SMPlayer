@@ -19,6 +19,8 @@ namespace SMPlayer.Models
         public string Directory { get => Path.Substring(Path.LastIndexOf("\\") + 1); }
         public SortBy Criteria { get; set; } = SortBy.Title;
 
+        private static ExecutionStatus LoadingStatus = ExecutionStatus.Ready;
+
         public FolderTree() { }
         public FolderTree(FolderTree tree)
         {
@@ -34,13 +36,17 @@ namespace SMPlayer.Models
             OnPropertyChanged();
         }
 
-
         public static async Task<int> CountMusicAsync(StorageFolder folder)
         {
             int count = (await folder.GetFilesAsync()).Count((f) => IsMusicFile(f));
             foreach (var sub in await folder.GetFoldersAsync())
                 count += await CountMusicAsync(sub);
             return count;
+        }
+
+        public void PauseLoading()
+        {
+            LoadingStatus = ExecutionStatus.Break;
         }
 
         public async Task Init(StorageFolder folder, TreeInitProgressListener listener = null)
@@ -50,6 +56,7 @@ namespace SMPlayer.Models
 
         private async Task Init(StorageFolder folder, TreeInitProgressListener listener, TreeInitProgressIndicator indicator)
         {
+            LoadingStatus = ExecutionStatus.Running;
             var samePath = folder.Path == Path;
             if (!string.IsNullOrEmpty(Path) && !samePath && folder.Path.StartsWith(Path))
             {
@@ -69,6 +76,7 @@ namespace SMPlayer.Models
                 var folders = await folder.GetFoldersAsync();
                 for (int i = 0; i < folders.Count; i++)
                 {
+                    if (LoadingStatus == ExecutionStatus.Break) break;
                     var subFolder = folders[i];
                     FolderTree tree;
                     if (subFolder.Path == Path)
@@ -84,6 +92,7 @@ namespace SMPlayer.Models
                 }
                 foreach (var file in await folder.GetFilesAsync())
                 {
+                    if (LoadingStatus == ExecutionStatus.Break) break;
                     if (IsMusicFile(file))
                     {
                         Music music = await Music.GetMusicAsync(file);
@@ -106,6 +115,7 @@ namespace SMPlayer.Models
                 Trees.Clear();
                 foreach (var subFolder in await folder.GetFoldersAsync())
                 {
+                    if (LoadingStatus == ExecutionStatus.Break) break;
                     var source = trees.FirstOrDefault(t => t.Path == subFolder.Path);
                     var tree = new FolderTree()
                     {
@@ -117,6 +127,7 @@ namespace SMPlayer.Models
                 Files.Clear();
                 foreach (var file in await folder.GetFilesAsync())
                 {
+                    if (LoadingStatus == ExecutionStatus.Break) break;
                     if (IsMusicFile(file))
                     {
                         Music music = await Music.GetMusicAsync(file);
@@ -134,18 +145,8 @@ namespace SMPlayer.Models
                 }
             }
             Path = folder.Path;
-            switch (Criteria)
-            {
-                case SortBy.Title:
-                    SortByTitle();
-                    break;
-                case SortBy.Album:
-                    SortByAlbum();
-                    break;
-                case SortBy.Artist:
-                    SortByArtist();
-                    break;
-            }
+            Sort();
+            LoadingStatus = ExecutionStatus.Ready;
         }
 
         public bool Contains(Music music)
@@ -167,6 +168,8 @@ namespace SMPlayer.Models
             foreach (var file in tree.Files)
                 if (set.Contains(file))
                     Files.First(f => f.Equals(file)).CopyFrom(file);
+            Criteria = tree.Criteria;
+            Sort();
             OnPropertyChanged();
         }
         public List<Music> Flatten()
@@ -176,6 +179,21 @@ namespace SMPlayer.Models
                 list.AddRange(branch.Flatten());
             list.AddRange(Files);
             return list;
+        }
+        public void Sort()
+        {
+            switch (Criteria)
+            {
+                case SortBy.Title:
+                    SortByTitle();
+                    break;
+                case SortBy.Album:
+                    SortByAlbum();
+                    break;
+                case SortBy.Artist:
+                    SortByArtist();
+                    break;
+            }
         }
         public List<Music> SortByTitle()
         {

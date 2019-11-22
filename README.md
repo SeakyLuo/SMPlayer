@@ -30,13 +30,5 @@ Improved New Playlist Name.
 
 Improved Bytes.
 
-Try load data in OnNavigatedTo and Test Package.
-
-Cancel loading library.
-
 # TO FIX
-Set lyrics bug.
-
 Too many notifications.
-
-Update property also update library.

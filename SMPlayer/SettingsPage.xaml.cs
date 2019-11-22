@@ -17,9 +17,11 @@ namespace SMPlayer
     {
         private static List<AfterPathSetListener> listeners = new List<AfterPathSetListener>();
         public static ShowToast[] NotificationOptions = { ShowToast.Always, ShowToast.MusicChanged, ShowToast.Never };
+        private FolderTree loadingTree;
         public SettingsPage()
         {
             this.InitializeComponent();
+            MainPage.Instance.Loader.BreakLoadingListeners.Add(() => loadingTree.PauseLoading());
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -51,11 +53,11 @@ namespace SMPlayer
             MainPage.Instance.Loader.Text = Helper.LocalizeMessage("LoadMusicLibrary");
             MainPage.Instance.Loader.StartLoading();
             Helper.CurrentFolder = folder;
-            var tree = new FolderTree();
-            await tree.Init(folder, this);
+            loadingTree = new FolderTree();
+            await loadingTree.Init(folder, this);
             MainPage.Instance.Loader.Text = Helper.LocalizeMessage("UpdateMusicLibrary");
-            tree.MergeFrom(Settings.settings.Tree);
-            Settings.settings.Tree = tree;
+            loadingTree.MergeFrom(Settings.settings.Tree);
+            Settings.settings.Tree = loadingTree;
             Settings.settings.RootPath = folder.Path;
             MusicLibraryPage.SetAllSongs(Settings.settings.Tree.Flatten());
             MainPage.Instance.Loader.Max = listeners.Count;

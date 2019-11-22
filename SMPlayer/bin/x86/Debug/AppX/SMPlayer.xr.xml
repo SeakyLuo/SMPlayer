@@ -596,7 +596,6 @@
     <RootType FullName="Windows.UI.Xaml.Media.Animation.PointerDownThemeAnimation" />
     <RootType FullName="Windows.UI.Xaml.Media.Animation.PointerUpThemeAnimation" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.RadialProgressBar">
-      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Background" />
       <RootProperty Name="Foreground" />
       <RootProperty Name="Maximum" />
@@ -612,6 +611,7 @@
       <RootProperty Name="TargetElement" />
     </RootType>
     <RootType FullName="SMPlayer.LoadingControl">
+      <RootProperty Name="AllowBreak" />
       <RootProperty Name="IsDeterminant" />
       <RootProperty Name="Visibility" />
     </RootType>
