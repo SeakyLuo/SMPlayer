@@ -90,7 +90,7 @@
                     Foreground="Red">
                     <controls:DataGridTextColumn.CellStyle>
                         <Style TargetType="controls:DataGridCell">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
                             <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
                         </Style>
                     </controls:DataGridTextColumn.CellStyle>
