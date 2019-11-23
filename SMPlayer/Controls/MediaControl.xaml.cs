@@ -366,10 +366,18 @@ namespace SMPlayer
                     UpdateMusic(after);
             });
             var left = new KeyboardAccelerator() { Key = Windows.System.VirtualKey.Left };
-            left.Invoked += (sender, args) => MediaHelper.Position = Math.Max(MediaHelper.Position - 5, 0);
+            left.Invoked += (sender, args) =>
+            {
+                if (MediaHelper.CurrentMusic != null)
+                    MediaHelper.Position = Math.Max(MediaHelper.Position - 5, 0);
+            };
             KeyboardAccelerators.Add(left);
             var right = new KeyboardAccelerator() { Key = Windows.System.VirtualKey.Right };
-            right.Invoked += (sender, args) => MediaHelper.Position = Math.Min(MediaHelper.Position + 5, CurrentMusic.Duration);
+            right.Invoked += (sender, args) =>
+            {
+                if (MediaHelper.CurrentMusic != null)
+                    MediaHelper.Position = Math.Min(MediaHelper.Position + 5, MediaHelper.CurrentMusic.Duration);
+            };
             KeyboardAccelerators.Add(right);
             KeyboardAcceleratorPlacementMode = KeyboardAcceleratorPlacementMode.Hidden;
         }

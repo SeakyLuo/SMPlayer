@@ -38,7 +38,7 @@ namespace SMPlayer.Models
 
         public static async Task<int> CountMusicAsync(StorageFolder folder)
         {
-            int count = (await folder.GetFilesAsync()).Count((f) => IsMusicFile(f));
+            int count = (await folder.GetFilesAsync()).Count(f => IsMusicFile(f));
             foreach (var sub in await folder.GetFoldersAsync())
                 count += await CountMusicAsync(sub);
             return count;
