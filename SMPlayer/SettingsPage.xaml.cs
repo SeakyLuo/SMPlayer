@@ -54,7 +54,7 @@ namespace SMPlayer
             MainPage.Instance.Loader.StartLoading();
             Helper.CurrentFolder = folder;
             loadingTree = new FolderTree();
-            await loadingTree.Init(folder, this);
+            if (!await loadingTree.Init(folder, this)) return;
             MainPage.Instance.Loader.Text = Helper.LocalizeMessage("UpdateMusicLibrary");
             loadingTree.MergeFrom(Settings.settings.Tree);
             Settings.settings.Tree = loadingTree;

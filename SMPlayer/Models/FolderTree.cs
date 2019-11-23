@@ -19,7 +19,7 @@ namespace SMPlayer.Models
         public string Directory { get => Path.Substring(Path.LastIndexOf("\\") + 1); }
         public SortBy Criteria { get; set; } = SortBy.Title;
 
-        private static ExecutionStatus LoadingStatus = ExecutionStatus.Ready;
+        public static ExecutionStatus LoadingStatus { get; private set; } = ExecutionStatus.Ready;
 
         public FolderTree() { }
         public FolderTree(FolderTree tree)
@@ -49,23 +49,19 @@ namespace SMPlayer.Models
             LoadingStatus = ExecutionStatus.Break;
         }
 
-        public async Task Init(StorageFolder folder, TreeInitProgressListener listener = null)
+        public async Task<bool> Init(StorageFolder folder, TreeInitProgressListener listener = null)
         {
-            await Init(folder, listener, new TreeInitProgressIndicator() { Max = listener == null ? 0 : await CountMusicAsync(folder) });
+            return await Init(folder, listener, new TreeInitProgressIndicator() { Max = listener == null ? 0 : await CountMusicAsync(folder) });
         }
 
-        private async Task Init(StorageFolder folder, TreeInitProgressListener listener, TreeInitProgressIndicator indicator)
+        private async Task<bool> Init(StorageFolder folder, TreeInitProgressListener listener, TreeInitProgressIndicator indicator)
         {
             LoadingStatus = ExecutionStatus.Running;
             var samePath = folder.Path == Path;
             if (!string.IsNullOrEmpty(Path) && !samePath && folder.Path.StartsWith(Path))
             {
                 // New folder is a Subfolder of the current folder
-                FolderTree tree;
-                do
-                {
-                    tree = Trees.Find((t) => folder.Path.StartsWith(t.Path));
-                } while (tree.Path != folder.Path);
+                FolderTree tree = FindTree(folder.Path);
                 CopyFrom(tree);
                 listener.Update(folder.DisplayName, "", 0, 0);
             }
@@ -76,7 +72,7 @@ namespace SMPlayer.Models
                 var folders = await folder.GetFoldersAsync();
                 foreach (var subFolder in folders)
                 {
-                    if (LoadingStatus == ExecutionStatus.Break) break;
+                    if (LoadingStatus == ExecutionStatus.Break) return false;
                     FolderTree tree;
                     if (subFolder.Path == Path)
                     {
@@ -91,7 +87,7 @@ namespace SMPlayer.Models
                 }
                 foreach (var file in await folder.GetFilesAsync())
                 {
-                    if (LoadingStatus == ExecutionStatus.Break) break;
+                    if (LoadingStatus == ExecutionStatus.Break) return false;
                     if (IsMusicFile(file))
                     {
                         Music music = await Music.GetMusicAsync(file);
@@ -114,7 +110,7 @@ namespace SMPlayer.Models
                 Trees.Clear();
                 foreach (var subFolder in await folder.GetFoldersAsync())
                 {
-                    if (LoadingStatus == ExecutionStatus.Break) break;
+                    if (LoadingStatus == ExecutionStatus.Break) return false;
                     var source = trees.FirstOrDefault(t => t.Path == subFolder.Path);
                     var tree = new FolderTree()
                     {
@@ -126,7 +122,7 @@ namespace SMPlayer.Models
                 Files.Clear();
                 foreach (var file in await folder.GetFilesAsync())
                 {
-                    if (LoadingStatus == ExecutionStatus.Break) break;
+                    if (LoadingStatus == ExecutionStatus.Break) return false;
                     if (IsMusicFile(file))
                     {
                         Music music = await Music.GetMusicAsync(file);
@@ -146,6 +142,7 @@ namespace SMPlayer.Models
             Path = folder.Path;
             Sort();
             LoadingStatus = ExecutionStatus.Ready;
+            return true;
         }
 
         public bool Contains(Music music)
@@ -223,12 +220,17 @@ namespace SMPlayer.Models
         public FolderTree FindTree(FolderTree target)
         {
             //return Trees.FirstOrDefault(tree => tree.Equals(target)) ?? Trees.FirstOrDefault(tree => target.Path.StartsWith(tree.Path))?.FindTree(target);
+            return FindTree(target.Path);
+        }
+        public FolderTree FindTree(string path)
+        {
+            //return Trees.FirstOrDefault(tree => tree.Equals(target)) ?? Trees.FirstOrDefault(tree => target.Path.StartsWith(tree.Path))?.FindTree(target);
             foreach (var tree in Trees)
             {
-                if (tree.Equals(target))
+                if (path.Equals(tree.Path))
                     return tree;
-                if (target.Path.StartsWith(tree.Path))
-                    return tree.FindTree(target);
+                if (path.StartsWith(tree.Path))
+                    return tree.FindTree(path);
             }
             return null;
         }
