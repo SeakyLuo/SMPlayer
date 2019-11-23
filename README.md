@@ -12,9 +12,11 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
-ThemeColor change.
+Export Data.
 
 Multi-Select.
+
+ThemeColor change.
 
 Auto Search Lyrics.
 

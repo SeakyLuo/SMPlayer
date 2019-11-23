@@ -24,6 +24,13 @@ namespace SMPlayer
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             LocalPage.FolderViewModeChangedListener = this;
+            Controls.MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
+            {
+                if (CurrentTree.Contains(before))
+                {
+                    UpdateTree(CurrentTree = Settings.settings.Tree.FindTree(CurrentTree));
+                }
+            });
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -46,6 +53,12 @@ namespace SMPlayer
         private void Setup(FolderTree tree)
         {
             if (TreePath == tree.Path) return;
+            UpdateTree(tree);
+        }
+
+        private void UpdateTree(FolderTree tree)
+        {
+            LocalLoadingControl.Visibility = Visibility.Visible;
             LocalFolderTreeView.RootNodes.Clear();
             LocalFolderTreeView.RootNodes.Add(FillTreeNode(new TreeViewNode()
             {
@@ -53,7 +66,6 @@ namespace SMPlayer
                 IsExpanded = true,
                 HasUnrealizedChildren = true
             }));
-            LocalLoadingControl.Visibility = Visibility.Visible;
             GridItems.Clear();
             setter.SetPage(tree);
             foreach (var branch in tree.Trees)

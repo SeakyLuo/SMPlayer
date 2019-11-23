@@ -123,12 +123,12 @@
       <RootProperty Name="FontWeight" />
       <RootProperty Name="HorizontalContentAlignment" />
       <RootProperty Name="Padding" />
+      <RootProperty Name="BackgroundSizing" />
       <RootProperty Name="Foreground" />
       <RootProperty Name="BorderBrush" />
-      <RootProperty Name="VerticalContentAlignment" />
       <RootProperty Name="UseSystemFocusVisuals" />
       <RootProperty Name="Template" />
-      <RootProperty Name="BackgroundSizing" />
+      <RootProperty Name="VerticalContentAlignment" />
       <RootProperty Name="IsTabStop" />
       <RootProperty Name="TabNavigation" />
       <RootProperty Name="IsFocusEngagementEnabled" />
@@ -571,12 +571,6 @@
     <RootType FullName="Windows.UI.Xaml.Controls.ContentPresenter">
       <RootProperty Name="Content" />
       <RootProperty Name="Foreground" />
-      <RootProperty Name="Margin" />
-      <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="ContentTemplate" />
-      <RootProperty Name="ContentTransitions" />
-      <RootProperty Name="TextWrapping" />
       <RootProperty Name="Padding" />
       <RootProperty Name="HorizontalContentAlignment" />
       <RootProperty Name="VerticalContentAlignment" />
@@ -584,7 +578,13 @@
       <RootProperty Name="BackgroundSizing" />
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="BorderThickness" />
+      <RootProperty Name="ContentTemplate" />
+      <RootProperty Name="ContentTransitions" />
       <RootProperty Name="CornerRadius" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="TextWrapping" />
       <RootProperty Name="FontSize" />
       <RootProperty Name="FontWeight" />
       <RootProperty Name="Visibility" />
@@ -596,6 +596,7 @@
     <RootType FullName="Windows.UI.Xaml.Media.Animation.PointerDownThemeAnimation" />
     <RootType FullName="Windows.UI.Xaml.Media.Animation.PointerUpThemeAnimation" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.RadialProgressBar">
+      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Background" />
       <RootProperty Name="Foreground" />
       <RootProperty Name="Maximum" />
@@ -606,6 +607,11 @@
       <RootProperty Name="Visibility" />
       <RootProperty Name="Value" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ControlTemplate">
+      <RootProperty Name="TargetType" />
+      <RootProperty Name="Template" />
+    </RootType>
+    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.TemplateBindingExtension" />
     <RootType FullName="SMPlayer.Triggers.ControlSizeTrigger">
       <RootProperty Name="MinWidth" />
       <RootProperty Name="TargetElement" />
@@ -725,11 +731,6 @@
       <RootEvent Name="Checked" />
       <RootEvent Name="Unchecked" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.ControlTemplate">
-      <RootProperty Name="TargetType" />
-      <RootProperty Name="Template" />
-    </RootType>
-    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.TemplateBindingExtension" />
     <RootType FullName="Windows.UI.Xaml.Shapes.Rectangle">
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />

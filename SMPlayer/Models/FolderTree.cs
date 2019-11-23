@@ -74,10 +74,9 @@ namespace SMPlayer.Models
                 // Current folder is a Subfolder of the new folder
                 FolderTree newTree = new FolderTree();
                 var folders = await folder.GetFoldersAsync();
-                for (int i = 0; i < folders.Count; i++)
+                foreach (var subFolder in folders)
                 {
                     if (LoadingStatus == ExecutionStatus.Break) break;
-                    var subFolder = folders[i];
                     FolderTree tree;
                     if (subFolder.Path == Path)
                     {
@@ -159,7 +158,7 @@ namespace SMPlayer.Models
             return Files.Remove(music) || Trees.Find((tree) => music.Path.StartsWith(tree.Path)).RemoveMusic(music);
         }
 
-        public void MergeFrom(FolderTree tree)
+        public FolderTree MergeFrom(FolderTree tree)
         {
             // Merge to this tree
             foreach (var folder in tree.Trees)
@@ -171,6 +170,7 @@ namespace SMPlayer.Models
             Criteria = tree.Criteria;
             Sort();
             OnPropertyChanged();
+            return this;
         }
         public List<Music> Flatten()
         {
