@@ -24,7 +24,8 @@ namespace SMPlayer
         public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         public ObservableCollection<AlbumView> Playlists = new ObservableCollection<AlbumView>();
-        public const int ArtistLimit = 10, AlbumLimit = 10, SongLimit = 5, PlaylistLimit = 10;
+        public const int ArtistLimit = 10, AlbumLimit = 5, SongLimit = 5, PlaylistLimit = 5;
+        private string CurrentKeyword;
         public SearchPage()
         {
             this.InitializeComponent();
@@ -35,23 +36,31 @@ namespace SMPlayer
         {
             base.OnNavigatedTo(e);
             string keyword = e.Parameter as string;
+            MainPage.Instance.SetHeaderText(GetSearchHeader(keyword, MainPage.Instance.IsMinimal));
             switch (e.NavigationMode)
             {
                 case NavigationMode.New:
-                    History.Push(keyword);
+                    History.Push(CurrentKeyword = keyword);
                     Search(keyword);
                     break;
                 case NavigationMode.Back:
-                    if (History.Pop() != keyword)
+                    if (CurrentKeyword != keyword)
                         Search(keyword);
                     break;
             }
         }
 
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            if (e.NavigationMode == NavigationMode.Back)
+                History.Pop();
+        }
+
         private async void Search(string keyword)
         {
-            MainPage.Instance.SetHeaderText(GetSearchHeader(keyword, MainPage.Instance.IsMinimal));
             LoadingProgress.Visibility = Visibility.Visible;
+            CurrentKeyword = keyword;
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
                 SearchArtists(keyword);
