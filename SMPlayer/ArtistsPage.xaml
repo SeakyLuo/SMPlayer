@@ -35,9 +35,10 @@
             ItemContainerStyle="{StaticResource StretchingListViewItemStyle}"
             ItemsSource="{x:Bind Artists, Mode=OneWay}">
             <controls:MasterDetailsView.MasterHeader>
-                <Grid Margin="5,10">
+                <StackPanel Margin="5,10">
                     <AutoSuggestBox
                         x:Name="ArtistSearchBox"
+                        Margin="0,0,0,8"
                         VerticalAlignment="Center"
                         BorderThickness="1"
                         FontSize="16"
@@ -47,10 +48,10 @@
                         SuggestionChosen="ArtistSearchBox_SuggestionChosen"
                         TextChanged="ArtistSearchBox_TextChanged" />
                     <ProgressBar
-                        x:Name="ArtistProgressBar"
-                        VerticalAlignment="Center"
-                        IsIndeterminate="True" />
-                </Grid>
+                        x:Name="LoadingProgress"
+                        IsIndeterminate="True"
+                        Visibility="Collapsed" />
+                </StackPanel>
             </controls:MasterDetailsView.MasterHeader>
             <controls:MasterDetailsView.ItemTemplate>
                 <DataTemplate x:DataType="data:ArtistView">

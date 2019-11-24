@@ -17,7 +17,6 @@ namespace SMPlayer
     public sealed partial class AlbumsPage : Page, AfterSongsSetListener
     {
         private ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
-        private bool SetupStarted = false;
         private ExecutionStatus status = ExecutionStatus.Ready;
         public AlbumsPage()
         {
@@ -28,42 +27,42 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Albums.Count == 0) Setup(MusicLibraryPage.AllSongs); // Constructor not called
+            if (Albums.Count == 0) Setup(MusicLibraryPage.AllSongs); // have not listened to changes
         }
 
-        private void Setup(ICollection<Music> songs)
+        private async void Setup(ICollection<Music> songs)
         {
-            if (SetupStarted) return;
-            if (status == ExecutionStatus.Done)
-            {
-                status = ExecutionStatus.Ready;
-                return;
-            }
-            SetupStarted = true;
+            if (status == ExecutionStatus.Running) return;
             AlbumPageProgressRing.IsActive = true;
-            Albums.Clear();
-            List<AlbumView> albums = new List<AlbumView>();
-            foreach (var group in songs.GroupBy((m) => m.Album))
-            {
-                foreach (var subgroup in group.GroupBy((m) => m.Artist))
-                {
-                    Music music = subgroup.ElementAt(0);
-                    albums.Add(new AlbumView(music.Album, music.Artist, subgroup.OrderBy((m) => m.Name), false));
-                }
-            }
-            foreach (var album in albums.OrderBy((a) => a.Name).ThenBy((a) => a.Artist)) Albums.Add(album);
-            if (status == ExecutionStatus.Running) status = ExecutionStatus.Done;
-            AlbumPageProgressRing.IsActive = false;
-            SetupStarted = false;
-        }
-
-        public async void SongsSet(ICollection<Music> songs)
-        {
+            status = ExecutionStatus.Running;
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
-                 status = ExecutionStatus.Running;
-                 Setup(songs);
+                SetData(songs);
+                status = ExecutionStatus.Ready;
+                AlbumPageProgressRing.IsActive = false;
             });
+        }
+
+        private void SetData(ICollection<Music> songs)
+        {
+            List<AlbumView> albums = new List<AlbumView>();
+            foreach (var group in songs.GroupBy(m => m.Album))
+            {
+                foreach (var subgroup in group.GroupBy(m => m.Artist))
+                {
+                    Music music = subgroup.ElementAt(0);
+                    albums.Add(new AlbumView(music.Album, music.Artist, subgroup.OrderBy(m => m.Name), false));
+                }
+            }
+            Albums.SetTo(albums.OrderBy(a => a.Name).ThenBy(a => a.Artist));
+        }
+
+        public void SongsSet(ICollection<Music> songs)
+        {
+            if (MainPage.Instance.CurrentPage == typeof(AlbumsPage))
+                Setup(songs);
+            else
+                SetData(songs);
         }
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)

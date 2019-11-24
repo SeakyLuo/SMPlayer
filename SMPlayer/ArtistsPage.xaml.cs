@@ -21,7 +21,6 @@ namespace SMPlayer
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
         private List<string> SuggestionList = new List<string>();
         private ObservableCollection<string> Suggestions = new ObservableCollection<string>();
-        private bool SetupStarted = false;
         private ExecutionStatus status = ExecutionStatus.Ready;
         private object targetArtist;
 
@@ -40,7 +39,12 @@ namespace SMPlayer
                     if (before.Artist != after.Artist)
                     {
                         var newArtist = Artists.First(a => a.Name == after.Artist);
-                        if (newArtist.Equals(ArtistMasterDetailsView.SelectedItem) || !newArtist.NotLoaded) newArtist.Load();
+                        if (newArtist.Equals(ArtistMasterDetailsView.SelectedItem))
+                        {
+                            newArtist.Load();
+                            FindMusicAndSetPlaying(after);
+                        }
+                        else if (!newArtist.NotLoaded) newArtist.Load();
                     }
                 }
                 else
@@ -55,7 +59,7 @@ namespace SMPlayer
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (Artists.Count == 0) Setup();
+            if (Artists.Count == 0) Setup(MusicLibraryPage.AllSongs);
             targetArtist = e.Parameter;
         }
 
@@ -78,21 +82,25 @@ namespace SMPlayer
             //(ArtistMasterDetailsView.ContainerFromItem(artist) as UIElement)?.StartBringIntoView();
         }
 
-        private void Setup()
+        private async void Setup(ICollection<Music> songs)
         {
-            if (SetupStarted) return;
-            if (status == ExecutionStatus.Done)
+            if (status == ExecutionStatus.Running) return;
+            LoadingProgress.Visibility = Visibility.Visible;
+            status = ExecutionStatus.Running;
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
+                SetData(songs);
                 status = ExecutionStatus.Ready;
-                return;
-            }
-            SetupStarted = true;
-            ArtistSearchBox.PlaceholderText = "";
-            ArtistProgressBar.Visibility = Visibility.Visible;
+                LoadingProgress.Visibility = Visibility.Collapsed;
+            });
+        }
+
+        private void SetData(ICollection<Music> songs)
+        {
             Artists.Clear();
             Suggestions.Clear();
             List<ArtistView> artists = new List<ArtistView>();
-            foreach (var group in MusicLibraryPage.AllSongs.GroupBy(m => m.Artist))
+            foreach (var group in songs.GroupBy(m => m.Artist))
                 artists.Add(new ArtistView(group.Key));
             foreach (var artist in artists.OrderBy(a => a.Name))
             {
@@ -102,15 +110,14 @@ namespace SMPlayer
             Suggestions.SetTo(SuggestionList);
             ArtistSearchBox.PlaceholderText = Helper.Localize("All Artists") + Artists.Count;
             FindMusicAndSetPlaying(MediaHelper.CurrentMusic);
-            if (status == ExecutionStatus.Running) status = ExecutionStatus.Done;
-            ArtistProgressBar.Visibility = Visibility.Collapsed;
-            SetupStarted = false;
         }
 
         public void SongsSet(ICollection<Music> songs)
         {
-            status = ExecutionStatus.Running;
-            Setup();
+            if (MainPage.Instance.CurrentPage == typeof(ArtistsPage))
+                Setup(songs);
+            else
+                SetData(songs);
         }
 
         private async void Artist_Tapped(object sender, TappedRoutedEventArgs e)

@@ -94,5 +94,10 @@ namespace SMPlayer
         {
             Frame.Navigate(typeof(PlaylistsPage), e.ClickedItem);
         }
+
+        private void Album_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        {
+            (args.NewValue as AlbumView)?.SetCover();
+        }
     }
 }

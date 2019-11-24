@@ -138,12 +138,16 @@
 
     <ScrollViewer>
         <StackPanel Margin="20,5">
-            <StackPanel x:Name="NoResultPanel" Visibility="Collapsed">
-                <TextBlock
-                    x:Uid="NoResultTextBlock"
-                    FontSize="20"
-                    Text="No result is found. Please check your spelling." />
-            </StackPanel>
+            <TextBlock
+                x:Name="NoResultTextBlock"
+                x:Uid="NoResultTextBlock"
+                FontSize="20"
+                Text="No result is found. Please check your spelling."
+                Visibility="Collapsed" />
+            <ProgressBar
+                x:Name="LoadingProgress"
+                IsIndeterminate="True"
+                Visibility="Collapsed" />
             <StackPanel Visibility="{x:Bind Artists.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                 <RelativePanel Style="{StaticResource RelativePanelStyle}">
                     <TextBlock
@@ -193,7 +197,7 @@
                     Style="{StaticResource HorizontalListViewStyle}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="data:AlbumView">
-                            <local:DropShadowControl DataContext="{Binding}" />
+                            <local:DropShadowControl DataContext="{Binding}" DataContextChanged="Album_DataContextChanged" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

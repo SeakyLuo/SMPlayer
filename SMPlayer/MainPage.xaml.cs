@@ -47,6 +47,7 @@ namespace SMPlayer
             }
         }
         private static bool PageUnset = true;
+        public Type CurrentPage { get => NaviFrame.CurrentSourcePageType; }
 
         public MainPage()
         {

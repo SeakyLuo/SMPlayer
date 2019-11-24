@@ -51,14 +51,15 @@ namespace SMPlayer
         private async void Search(string keyword)
         {
             MainPage.Instance.SetHeaderText(GetSearchHeader(keyword, MainPage.Instance.IsMinimal));
+            LoadingProgress.Visibility = Visibility.Visible;
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
                 SearchArtists(keyword);
                 SearchAlbums(keyword);
                 SearchSongs(keyword);
                 SearchPlaylists(keyword);
-                NoResultPanel.Visibility = Artists.Count == 0 && Albums.Count == 0 && Songs.Count == 0 && Playlists.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
-
+                NoResultTextBlock.Visibility = Artists.Count == 0 && Albums.Count == 0 && Songs.Count == 0 && Playlists.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+                LoadingProgress.Visibility = Visibility.Collapsed;
             });
         }
 
@@ -93,7 +94,7 @@ namespace SMPlayer
             {
                 if (viewAll = Albums.Count == AlbumLimit) break;
                 Music music = group.ElementAt(0);
-                Albums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy(m => m.Name).ThenBy(m => m.Artist)));
+                Albums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy(m => m.Name).ThenBy(m => m.Artist), false));
             }
             AlbumsViewAllButton.Visibility = viewAll ? Visibility.Visible : Visibility.Collapsed;
         }
@@ -157,6 +158,12 @@ namespace SMPlayer
         {
             Frame.Navigate(typeof(SearchResultPage), SearchType.Artists);
         }
+
+        private void Album_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        {
+            (args.NewValue as AlbumView)?.SetCover();
+        }
+
         private void AlbumsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Frame.Navigate(typeof(SearchResultPage), SearchType.Albums);

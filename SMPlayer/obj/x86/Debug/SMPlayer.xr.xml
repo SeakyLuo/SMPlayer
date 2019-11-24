@@ -336,7 +336,24 @@
       <RootProperty Name="DetailsTemplate" />
       <RootProperty Name="NoSelectionContent" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.StackPanel">
+      <RootProperty Name="Margin" />
+      <RootProperty Name="Children" />
+      <RootProperty Name="Padding" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="Background" />
+      <RootProperty Name="Orientation" />
+      <RootProperty Name="ContextFlyout" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Visibility" />
+      <RootProperty Name="XYFocusKeyboardNavigation" />
+      <RootProperty Name="Width" />
+      <RootProperty Name="Height" />
+      <RootEvent Name="PointerEntered" />
+      <RootEvent Name="Tapped" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AutoSuggestBox">
+      <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="BorderThickness" />
       <RootProperty Name="FontSize" />
@@ -346,7 +363,6 @@
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="PlaceholderText" />
       <RootProperty Name="QueryIcon" />
-      <RootProperty Name="Margin" />
       <RootProperty Name="Visibility" />
       <RootEvent Name="KeyUp" />
       <RootEvent Name="SuggestionChosen" />
@@ -354,29 +370,13 @@
       <RootEvent Name="QuerySubmitted" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ProgressBar">
-      <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="IsIndeterminate" />
+      <RootProperty Name="Visibility" />
       <RootProperty Name="Width" />
       <RootProperty Name="Margin" />
-      <RootProperty Name="Visibility" />
       <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="Style" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.StackPanel">
-      <RootProperty Name="Padding" />
-      <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="Background" />
-      <RootProperty Name="Orientation" />
-      <RootProperty Name="ContextFlyout" />
-      <RootProperty Name="Children" />
-      <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="Visibility" />
-      <RootProperty Name="XYFocusKeyboardNavigation" />
-      <RootProperty Name="Width" />
-      <RootProperty Name="Height" />
-      <RootEvent Name="PointerEntered" />
-      <RootEvent Name="Tapped" />
+      <RootProperty Name="Style" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ToolTipService">
       <RootMethod Name="GetToolTip" />
