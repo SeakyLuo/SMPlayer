@@ -45,6 +45,12 @@ namespace SMPlayer
         private static string Lyrics = "";
         private static List<Music> NotFoundHistory = new List<Music>();
 
+        public static string ConvertBytes(ulong bytes)
+        {
+            ulong kb = bytes >> 10;
+            return kb < 1024 ? kb + " KB" : Math.Round((double)kb / 1024, 2) + " MB";
+        }
+
         public static ObservableCollection<T> SetTo<T>(this ObservableCollection<T> dst, IEnumerable<T> src)
         {
             var temp = src.ToList();

@@ -106,7 +106,7 @@ namespace SMPlayer.Controls
         {
             var basicProperties = await file.GetBasicPropertiesAsync();
             // TODO: better size presentation?
-            FileSizeTextBox.Text = basicProperties.Size.ToString() + " Bytes";
+            FileSizeTextBox.Text = Helper.ConvertBytes(basicProperties.Size); 
             DateCreatedTextBox.Text = file.DateCreated.ToLocalTime().ToString();
             DateModifiedTextBox.Text = basicProperties.DateModified.ToLocalTime().ToString();
             PathTextBox.Text = file.Path;

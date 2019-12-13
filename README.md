@@ -16,6 +16,8 @@ Export Data.
 
 Multi-Select.
 
+Playlist filter.
+
 ThemeColor change.
 
 Auto Search Lyrics.

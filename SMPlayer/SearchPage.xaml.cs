@@ -61,6 +61,10 @@ namespace SMPlayer
         {
             LoadingProgress.Visibility = Visibility.Visible;
             CurrentKeyword = keyword;
+            Artists.Clear();
+            Albums.Clear();
+            Songs.Clear();
+            Playlists.Clear();
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
                 SearchArtists(keyword);
@@ -82,7 +86,6 @@ namespace SMPlayer
         }
         public void SearchArtists(string keyword)
         {
-            Artists.Clear();
             bool viewAll = false;
             foreach (var group in MusicLibraryPage.AllSongs.Where(m => IsTargetArtist(m, keyword)).GroupBy(m => m.Artist))
             {
@@ -97,7 +100,6 @@ namespace SMPlayer
         }
         public void SearchAlbums(string keyword)
         {
-            Albums.Clear();
             bool viewAll = false;
             foreach (var group in MusicLibraryPage.AllSongs.Where(m => IsTargetAlbum(m, keyword)).GroupBy(m => m.Album))
             {
@@ -114,7 +116,6 @@ namespace SMPlayer
 
         public void SearchSongs(string keyword)
         {
-            Songs.Clear();
             bool viewAll = false;
             foreach (var music in MusicLibraryPage.AllSongs)
             {
@@ -133,7 +134,6 @@ namespace SMPlayer
 
         public void SearchPlaylists(string keyword)
         {
-            Playlists.Clear();
             bool viewAll = false;
             foreach (var playlist in Settings.settings.Playlists)
             {
