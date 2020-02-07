@@ -73,6 +73,8 @@ namespace SMPlayer
             MainPage.Instance.Loader.FinishLoading();
         }
 
+        public static void NotifyLibraryChange(string path) { foreach (var listener in listeners) listener.PathSet(path); }
+
         public static void AddAfterPathSetListener(AfterPathSetListener listener)
         {
             listeners.Add(listener);

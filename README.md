@@ -32,7 +32,5 @@ Improved algorithm for update.
 
 Improved New Playlist Name.
 
-Improved Bytes.
-
 # TO FIX
 Too many notifications.

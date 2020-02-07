@@ -54,8 +54,7 @@
                         IsHighlightAll="True"
                         Label="Shuffle"
                         Style="{StaticResource TopNavigationViewFooterItemStyle}"
-                        Tapped="LocalShuffleItem_Tapped"
-                        ToolTipService.ToolTip="Shuffle And Play All">
+                        Tapped="LocalShuffleItem_Tapped">
                         <local:IconTextButton.Icon>
                             <FontIcon Glyph="&#xE8B1;" Style="{StaticResource FontIconSizeSetter}" />
                         </local:IconTextButton.Icon>
@@ -68,7 +67,6 @@
                         Label="List View"
                         Style="{StaticResource TopNavigationViewFooterItemStyle}"
                         Tapped="LocalListViewItem_Tapped"
-                        ToolTipService.ToolTip="Change to List View"
                         Visibility="Visible">
                         <local:IconTextButton.Icon>
                             <FontIcon Glyph="&#xE292;" Style="{StaticResource FontIconSizeSetter}" />
@@ -82,7 +80,6 @@
                         Label="Grid View"
                         Style="{StaticResource TopNavigationViewFooterItemStyle}"
                         Tapped="LocalGridViewItem_Tapped"
-                        ToolTipService.ToolTip="Change to Grid View"
                         Visibility="Collapsed">
                         <local:IconTextButton.Icon>
                             <FontIcon Glyph="&#xF0E2;" Style="{StaticResource FontIconSizeSetter}" />

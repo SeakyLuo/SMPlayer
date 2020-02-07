@@ -615,6 +615,12 @@
   <data name="SavePlaylistMenuItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Save Now Playing as a Playlist</value>
   </data>
+  <data name="ScrollToCurrentButton.Label" xml:space="preserve">
+    <value>Current Music</value>
+  </data>
+  <data name="ScrollToCurrentButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Scroll To Current Music</value>
+  </data>
   <data name="SearchBar.PlaceholderText" xml:space="preserve">
     <value>Search</value>
   </data>

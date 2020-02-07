@@ -35,7 +35,6 @@
                 FontFamily="Segoe MDL2 Assets"
                 Foreground="{StaticResource SystemColorHighlightColor}"
                 Glyph="&#xE767;"
-                RelativePanel.AlignLeftWithPanel="True"
                 Visibility="{Binding IsPlaying, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
             <TextBlock
                 x:Name="TitleTextBlock"

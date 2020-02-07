@@ -57,6 +57,7 @@ namespace SMPlayer
         public void PlaylistRequested(ICollection<Music> playlist)
         {
             PlaylistBladeItem.StartBringIntoView();
+            FullPlaylistControl.ScrollToMusic(MediaHelper.CurrentMusic);
         }
         public void MusicInfoRequested(Music music)
         {

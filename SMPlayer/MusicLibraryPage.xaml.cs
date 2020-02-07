@@ -62,6 +62,7 @@ namespace SMPlayer
             tree.MergeFrom(Settings.settings.Tree);
             Settings.settings.Tree = tree;
             SetAllSongs(newLibrary);
+            SettingsPage.NotifyLibraryChange(tree.Path);
             Save();
         }
 
