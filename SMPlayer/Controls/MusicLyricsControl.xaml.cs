@@ -25,6 +25,11 @@ namespace SMPlayer.Controls
             Helper.ShowNotification("LyricsReset");
         }
 
+        public void ScrollToTop()
+        {
+            TextBlockScroller.ChangeView(0, 0, null);
+        }
+
         private async void SaveLyricsButton_Click(object sender, RoutedEventArgs e)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
@@ -47,11 +52,7 @@ namespace SMPlayer.Controls
         private async void SearchLyricsButton_Click(object sender, RoutedEventArgs e)
         {
             string uri = Helper.LocalizeMessage("BingUri") + $"search?q={Helper.LocalizeMessage("Lyrics")}+{CurrentMusic.Name}+{CurrentMusic.Artist}";
-            if (await Windows.System.Launcher.LaunchUriAsync(new Uri(uri)))
-            {
-
-            }
-            else
+            if (!await Windows.System.Launcher.LaunchUriAsync(new Uri(uri)))
             {
                 string notification = Helper.LocalizeMessage("FailToOpenBrowser");
                 MainPage.Instance?.ShowNotification(notification);
@@ -73,6 +74,7 @@ namespace SMPlayer.Controls
             {
                 if (!AllowMusicSwitching) return;
                 if (Lyrics != LyricsTextBox.Text) return;
+                ScrollToTop();
                 SetLyrics(next);
             });
         }
