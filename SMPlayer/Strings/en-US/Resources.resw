@@ -370,7 +370,7 @@
     <value>See Lyrics</value>
   </data>
   <data name="LyricsMenuItem.Text" xml:space="preserve">
-    <value>Show Lyrics</value>
+    <value>See Lyrics</value>
   </data>
   <data name="LyricsPivotItem.Header" xml:space="preserve">
     <value>Lyrics</value>

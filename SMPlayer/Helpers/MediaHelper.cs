@@ -266,6 +266,7 @@ namespace SMPlayer
 
         public static void FindMusicAndSetPlaying(ICollection<Music> playlist, Music current, Music next)
         {
+            if (playlist == null) return;
             foreach (var music in playlist)
                 music.IsPlaying = music.Equals(next);
         }

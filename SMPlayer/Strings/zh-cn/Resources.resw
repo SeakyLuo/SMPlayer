@@ -370,7 +370,7 @@
     <value>查看歌词</value>
   </data>
   <data name="LyricsMenuItem.Text" xml:space="preserve">
-    <value>显示歌词</value>
+    <value>查看歌词</value>
   </data>
   <data name="LyricsPivotItem.Header" xml:space="preserve">
     <value>歌词</value>

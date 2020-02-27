@@ -67,10 +67,11 @@ namespace SMPlayer
             Playlists.Clear();
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
-                SearchArtists(keyword);
-                SearchAlbums(keyword);
-                SearchSongs(keyword);
-                SearchPlaylists(keyword);
+                string modifiedKeyowrd = keyword.ToLowerInvariant();
+                SearchArtists(modifiedKeyowrd);
+                SearchAlbums(modifiedKeyowrd);
+                SearchSongs(modifiedKeyowrd);
+                SearchPlaylists(modifiedKeyowrd);
                 NoResultTextBlock.Visibility = Artists.Count == 0 && Albums.Count == 0 && Songs.Count == 0 && Playlists.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
                 LoadingProgress.Visibility = Visibility.Collapsed;
             });
@@ -82,7 +83,7 @@ namespace SMPlayer
         }
         public static bool IsTargetArtist(string artist, string keyword)
         {
-            return artist.ToLower().Contains(keyword);
+            return artist.ToLowerInvariant().Contains(keyword);
         }
         public void SearchArtists(string keyword)
         {
@@ -96,7 +97,7 @@ namespace SMPlayer
         }
         public static bool IsTargetAlbum(Music music, string keyword)
         {
-            return music.Album.ToLower().Contains(keyword) || music.Artist.ToLower().Contains(keyword);
+            return music.Album.ToLowerInvariant().Contains(keyword) || music.Artist.ToLower().Contains(keyword);
         }
         public void SearchAlbums(string keyword)
         {
@@ -111,7 +112,9 @@ namespace SMPlayer
         }
         public static bool IsTargetMusic(Music music, string keyword)
         {
-            return music.Name.ToLower().Contains(keyword) || music.Album.ToLower().Contains(keyword) || music.Artist.ToLower().Contains(keyword);
+            return music.Name.ToLowerInvariant().Contains(keyword) ||
+                   music.Album.ToLowerInvariant().Contains(keyword) ||
+                   music.Artist.ToLowerInvariant().Contains(keyword);
         }
 
         public void SearchSongs(string keyword)
@@ -129,7 +132,7 @@ namespace SMPlayer
         }
         public static bool IsTargetPlaylist(Playlist playlist, string keyword)
         {
-            return playlist.Name.Contains(keyword) || playlist.Songs.Any((music) => IsTargetMusic(music, keyword));
+            return playlist.Name.ToLowerInvariant().Contains(keyword) || playlist.Songs.Any((music) => IsTargetMusic(music, keyword));
         }
 
         public void SearchPlaylists(string keyword)
