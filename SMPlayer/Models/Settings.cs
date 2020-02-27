@@ -32,8 +32,10 @@ namespace SMPlayer.Models
         public ObservableCollection<string> Recent { get; set; } = new ObservableCollection<string>();
         public bool MiniModeWithDropdown { get; set; } = false;
         public bool IsMuted { get; set; } = false;
-        public bool KeepLimitedRecentItems { get; set; } = true;
-        public const int RecentLimit = 100;
+        public bool KeepLimitedRecentPlayedItems { get; set; } = true;
+        public const int RecentPlayedLimit = 100;
+        public List<Music> RecentlyAddedMusic { get; set; } = new List<Music>();
+
         public int FindNextPlaylistNameIndex(string Name)
         {
             if (!string.IsNullOrEmpty(Name))
@@ -45,6 +47,7 @@ namespace SMPlayer.Models
             }
             return 0;
         }
+
         public string FindNextPlaylistName(string Name)
         {
             int index = FindNextPlaylistNameIndex(Name);
@@ -125,8 +128,8 @@ namespace SMPlayer.Models
             if (music == null) return;
             Recent.Remove(music.Path);
             Recent.Insert(0, music.Path);
-            if (KeepLimitedRecentItems && Recent.Count > RecentLimit)
-                Recent.RemoveAt(RecentLimit);
+            if (KeepLimitedRecentPlayedItems && Recent.Count > RecentPlayedLimit)
+                Recent.RemoveAt(RecentPlayedLimit);
 
         }
         public const int PlaylistNameMaxLength = 50;

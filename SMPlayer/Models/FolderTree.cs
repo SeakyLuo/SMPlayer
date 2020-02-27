@@ -83,7 +83,7 @@ namespace SMPlayer.Models
                         tree = new FolderTree();
                         await tree.Init(subFolder, listener, indicator);
                     }
-                    newTree.Trees.Add(tree);
+                    if (tree.Files.Count != 0) newTree.Trees.Add(tree);
                 }
                 foreach (var file in await folder.GetFilesAsync())
                 {
@@ -117,7 +117,7 @@ namespace SMPlayer.Models
                         Criteria = source == null ? SortBy.Title : source.Criteria
                     };
                     await tree.Init(subFolder, listener, indicator);
-                    Trees.Add(tree);
+                    if (tree.Files.Count != 0) Trees.Add(tree);
                 }
                 Files.Clear();
                 foreach (var file in await folder.GetFilesAsync())

@@ -209,17 +209,12 @@
                     </Flyout>
                 </Button.Flyout>
             </Button>
-            <StackPanel
-                Height="30"
-                Margin="10"
-                Orientation="Horizontal">
-                <CheckBox
-                    x:Name="KeepRecentCheckBox"
-                    x:Uid="KeepRecentCheckBox"
-                    Checked="KeepRecentCheckBox_Checked"
-                    Content="Only keep recent 100 items"
-                    Unchecked="KeepRecentCheckBox_Unchecked" />
-            </StackPanel>
+            <CheckBox
+                x:Name="KeepRecentCheckBox"
+                x:Uid="KeepRecentCheckBox"
+                Checked="KeepRecentCheckBox_Checked"
+                Content="Only keep recent 100 items"
+                Unchecked="KeepRecentCheckBox_Unchecked" />
             <HyperlinkButton
                 x:Uid="UpdateMusicLibraryButton"
                 Margin="9,0"

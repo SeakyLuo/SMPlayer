@@ -255,7 +255,7 @@ namespace SMPlayer
             }
             else
             {
-                Toast.ExpirationTime = DateTime.Now.AddSeconds(Math.Min(5, music.Duration));
+                Toast.ExpirationTime = DateTime.Now.AddSeconds(Math.Min(10, music.Duration));
                 Toast.Data.Values["Lyrics"] = "";
             }
             Toast.Data.Values["MediaControlPosition"] = MediaHelper.Progress.ToString();
@@ -425,7 +425,7 @@ namespace SMPlayer
         {
             var tile = new TileBinding()
             {
-                DisplayName = "SMPlayer",
+                DisplayName = Windows.ApplicationModel.Package.Current.DisplayName,
                 Branding = TileBranding.Name,
                 Content = new TileBindingContentAdaptive()
                 {
