@@ -35,6 +35,9 @@ namespace SMPlayer.Models
         public bool KeepLimitedRecentPlayedItems { get; set; } = true;
         public const int RecentPlayedLimit = 100;
         public List<Music> RecentlyAddedMusic { get; set; } = new List<Music>();
+        public bool AutoPlay { get; set; } = false;
+        public bool SaveMusicProgress { get; set; } = false;
+        public double MusicProgress { get; set; } = 0;
 
         public int FindNextPlaylistNameIndex(string Name)
         {
@@ -74,6 +77,8 @@ namespace SMPlayer.Models
                 {
 
                 }
+                if (settings.SaveMusicProgress) MediaHelper.Position = settings.MusicProgress;
+                if (settings.AutoPlay) MediaHelper.Play();
                 foreach (var item in await ApplicationData.Current.LocalFolder.GetItemsAsync())
                     if (item.Name.EndsWith(".TMP"))
                         await item.DeleteAsync();
@@ -83,6 +88,7 @@ namespace SMPlayer.Models
 
         public static void Save()
         {
+            settings.MusicProgress = MediaHelper.Position;
             JsonFileHelper.SaveAsync(FILENAME, settings);
         }
 

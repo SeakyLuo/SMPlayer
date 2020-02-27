@@ -348,7 +348,6 @@
       <RootProperty Name="Visibility" />
       <RootProperty Name="XYFocusKeyboardNavigation" />
       <RootProperty Name="Width" />
-      <RootProperty Name="Height" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="Tapped" />
     </RootType>

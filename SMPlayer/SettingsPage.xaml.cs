@@ -30,6 +30,8 @@ namespace SMPlayer
             NotificationComboBox.SelectedIndex = (int)Settings.settings.Toast;
             ThemeColorPicker.Color = Settings.settings.ThemeColor;
             KeepRecentCheckBox.IsChecked = Settings.settings.KeepLimitedRecentPlayedItems;
+            AutoPlayCheckBox.IsChecked = Settings.settings.AutoPlay;
+            SaveProgressCheckBox.IsChecked = Settings.settings.SaveMusicProgress;
         }
 
         private async void PathBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
@@ -140,6 +142,26 @@ namespace SMPlayer
         private void KeepRecentCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             Settings.settings.KeepLimitedRecentPlayedItems = false;
+        }
+
+        private void AutoPlayCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.AutoPlay = true;
+        }
+
+        private void AutoPlayCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.AutoPlay = false;
+        }
+
+        private void SaveProgressCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.SaveMusicProgress = true;
+        }
+
+        private void SaveProgressCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.SaveMusicProgress = false;
         }
     }
 

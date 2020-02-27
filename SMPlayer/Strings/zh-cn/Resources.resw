@@ -189,6 +189,9 @@
   <data name="ArtistTextBlock.Text" xml:space="preserve">
     <value>歌手</value>
   </data>
+  <data name="AutoPlayCheckBox.Content" xml:space="preserve">
+    <value>打开应用后自动播放</value>
+  </data>
   <data name="BackButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>返回</value>
   </data>
@@ -534,6 +537,9 @@
   <data name="PlaylistsTextBlock.Text" xml:space="preserve">
     <value>播放列表</value>
   </data>
+  <data name="PlayTextBlock.Text" xml:space="preserve">
+    <value>播放</value>
+  </data>
   <data name="PrevButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>前一首</value>
   </data>
@@ -620,6 +626,12 @@
   </data>
   <data name="SavePlaylistMenuItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>将正在播放保存为新的播放列表</value>
+  </data>
+  <data name="SaveProgressCheckBox.Content" xml:space="preserve">
+    <value>保存播放进度</value>
+  </data>
+  <data name="SaveTextBlock.Text" xml:space="preserve">
+    <value>保存</value>
   </data>
   <data name="ScrollToCurrentButton.Label" xml:space="preserve">
     <value>当前音乐</value>

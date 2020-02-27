@@ -25,6 +25,10 @@
             <Setter Property="Margin" Value="0,10,10,10" />
             <Setter Property="Height" Value="30" />
         </Style>
+        <Style x:Key="SettingCheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Margin" Value="10" />
+        </Style>
         <Style x:Key="MarginSetter" TargetType="Control">
             <Setter Property="Margin" Value="9" />
         </Style>
@@ -143,9 +147,18 @@
             <TextBlock
                 x:Name="RecentTextBlock"
                 x:Uid="RecentTextBlock"
-                FontSize="24"
                 Style="{StaticResource SettingLabelStyle}"
                 Text="Recent" />
+            <TextBlock
+                x:Name="PlayTextBlock"
+                x:Uid="PlayTextBlock"
+                Style="{StaticResource SettingLabelStyle}"
+                Text="Play" />
+            <TextBlock
+                x:Name="SaveTextBlock"
+                x:Uid="SaveTextBlock"
+                Style="{StaticResource SettingLabelStyle}"
+                Text="Save" />
         </StackPanel>
         <StackPanel Grid.Column="1">
             <AutoSuggestBox
@@ -212,9 +225,24 @@
             <CheckBox
                 x:Name="KeepRecentCheckBox"
                 x:Uid="KeepRecentCheckBox"
+                Style="{StaticResource SettingCheckBoxStyle}"
                 Checked="KeepRecentCheckBox_Checked"
                 Content="Only keep recent 100 items"
                 Unchecked="KeepRecentCheckBox_Unchecked" />
+            <CheckBox
+                x:Name="AutoPlayCheckBox"
+                x:Uid="AutoPlayCheckBox"
+                Style="{StaticResource SettingCheckBoxStyle}"
+                Checked="AutoPlayCheckBox_Checked"
+                Content="Auto Play"
+                Unchecked="AutoPlayCheckBox_Unchecked" />
+            <CheckBox
+                x:Name="SaveProgressCheckBox"
+                x:Uid="SaveProgressCheckBox"
+                Style="{StaticResource SettingCheckBoxStyle}"
+                Checked="SaveProgressCheckBox_Checked"
+                Content="Save Music Progress"
+                Unchecked="SaveProgressCheckBox_Unchecked" />
             <HyperlinkButton
                 x:Uid="UpdateMusicLibraryButton"
                 Margin="9,0"

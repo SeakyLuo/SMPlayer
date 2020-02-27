@@ -189,6 +189,9 @@
   <data name="ArtistTextBlock.Text" xml:space="preserve">
     <value>Artist</value>
   </data>
+  <data name="AutoPlayCheckBox.Content" xml:space="preserve">
+    <value>Play music after App launches</value>
+  </data>
   <data name="BackButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Back</value>
   </data>
@@ -534,6 +537,9 @@
   <data name="PlaylistsTextBlock.Text" xml:space="preserve">
     <value>Playlists</value>
   </data>
+  <data name="PlayTextBlock.Text" xml:space="preserve">
+    <value>Play</value>
+  </data>
   <data name="PrevButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Previous</value>
   </data>
@@ -620,6 +626,12 @@
   </data>
   <data name="SavePlaylistMenuItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Save Now Playing as a Playlist</value>
+  </data>
+  <data name="SaveProgressCheckBox.Content" xml:space="preserve">
+    <value>Save Music Progress</value>
+  </data>
+  <data name="SaveTextBlock.Text" xml:space="preserve">
+    <value>Save</value>
   </data>
   <data name="ScrollToCurrentButton.Label" xml:space="preserve">
     <value>Current Music</value>
