@@ -123,6 +123,9 @@
   <data name="ChangesSaved" xml:space="preserve">
     <value>已保存！</value>
   </data>
+  <data name="CheckNewMusicResult" xml:space="preserve">
+    <value>添加了{0}首歌，移除了{1}首歌。</value>
+  </data>
   <data name="ClearPlaylist" xml:space="preserve">
     <value>你希望清空播放列表“{0}”吗？</value>
   </data>

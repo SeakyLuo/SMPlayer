@@ -270,6 +270,15 @@ namespace SMPlayer
             foreach (var music in playlist)
                 music.IsPlaying = music.Equals(next);
         }
+
+        public static async void RemoveBadMusic()
+        {
+            if (await CurrentMusic.GetStorageFileAsync() == null)
+                CurrentMusic = null;
+            //foreach (var music in CurrentPlaylist)
+            //    if (await music.GetStorageFileAsync() == null)
+            //        RemoveMusic(music);
+        }
     }
 
     public interface RemoveMusicListener

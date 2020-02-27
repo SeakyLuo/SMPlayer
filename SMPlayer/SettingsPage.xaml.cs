@@ -1,6 +1,7 @@
 ﻿using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
@@ -13,10 +14,10 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class SettingsPage : Page, TreeInitProgressListener
+    public sealed partial class SettingsPage : Page, TreeOperationProgressListener
     {
-        private static List<AfterPathSetListener> listeners = new List<AfterPathSetListener>();
         public static ShowToast[] NotificationOptions = { ShowToast.Always, ShowToast.MusicChanged, ShowToast.Never };
+        private static List<AfterLibraryUpdated> listeners = new List<AfterLibraryUpdated>();
         private FolderTree loadingTree;
         public SettingsPage()
         {
@@ -65,18 +66,18 @@ namespace SMPlayer
             for (int i = 0; i < listeners.Count; i++)
             {
                 var listener = listeners[i];
-                listener.PathSet(folder.Path);
+                listener.LibraryUpdated(folder.Path);
                 MainPage.Instance.Loader.Progress = i;
             }
-            MediaHelper.Clear();
+            MediaHelper.RemoveBadMusic();
             Settings.Save();
             PathBox.Text = folder.Path;
             MainPage.Instance.Loader.Hide();
         }
 
-        public static void NotifyLibraryChange(string path) { foreach (var listener in listeners) listener.PathSet(path); }
+        public static void NotifyLibraryChange(string path) { foreach (var listener in listeners) listener.LibraryUpdated(path); }
 
-        public static void AddAfterPathSetListener(AfterPathSetListener listener)
+        public static void AddAfterPathSetListener(AfterLibraryUpdated listener)
         {
             listeners.Add(listener);
         }
@@ -100,13 +101,29 @@ namespace SMPlayer
         public void Update(string folder, string file, int progress, int max)
         {
             bool isDeterminant = max != 0;
-            MainPage.Instance.Loader.Max = max;
-            MainPage.Instance.Loader.Progress = progress;
-            MainPage.Instance.Loader.IsDeterminant = isDeterminant;
+            if (MainPage.Instance.Loader.IsDeterminant != isDeterminant)
+                MainPage.Instance.Loader.IsDeterminant = isDeterminant;
             if (isDeterminant)
             {
+                MainPage.Instance.Loader.Max = max;
+                MainPage.Instance.Loader.Progress = progress;
                 MainPage.Instance.Loader.Text = file;
             }
+        }
+
+        private async void CheckNewMusicButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainPage.Instance.Loader.Show("ProcessRequest", false);
+            var indicator = await Settings.settings.Tree.CheckNewFile(this);
+            if (indicator.Progress != 0 || indicator.Max != 0)
+            {
+                foreach (var listener in listeners)
+                    listener.LibraryUpdated(Settings.settings.RootPath);
+                if (indicator.Max != 0) MediaHelper.RemoveBadMusic();
+                Settings.Save();
+            }
+            MainPage.Instance.Loader.Hide();
+            MainPage.Instance.ShowNotification(Helper.LocalizeMessage("CheckNewMusicResult", indicator.Progress, indicator.Max));
         }
 
         private void UpdateMusicLibrary_Click(object sender, RoutedEventArgs e)
@@ -165,8 +182,8 @@ namespace SMPlayer
         }
     }
 
-    public interface AfterPathSetListener
+    public interface AfterLibraryUpdated
     {
-        void PathSet(string path);
+        void LibraryUpdated(string path);
     }
 }

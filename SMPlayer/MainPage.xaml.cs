@@ -346,7 +346,7 @@ namespace SMPlayer
             HeaderSearchBar.Visibility = Visibility.Collapsed;
         }
 
-        public void ShowNotification(string message, int duration = 1500)
+        public void ShowNotification(string message, int duration = 2000)
         {
             ShowResultInAppNotification.Content = message;
             ShowResultInAppNotification.Show(duration);

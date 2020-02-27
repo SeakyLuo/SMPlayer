@@ -207,6 +207,9 @@
   <data name="ChangeAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Change Album Art</value>
   </data>
+  <data name="CheckNewMusicButton.Content" xml:space="preserve">
+    <value>Check New Music</value>
+  </data>
   <data name="ClearAppButton.Label" xml:space="preserve">
     <value>Clear</value>
   </data>
@@ -781,7 +784,7 @@
     <value>UnPin Playlist</value>
   </data>
   <data name="UpdateMusicLibraryButton.Content" xml:space="preserve">
-    <value>Update Music Library</value>
+    <value>Reload Music Library</value>
   </data>
   <data name="ViewAllButton.Label" xml:space="preserve">
     <value>View All</value>

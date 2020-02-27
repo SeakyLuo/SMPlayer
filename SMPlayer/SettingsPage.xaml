@@ -225,29 +225,35 @@
             <CheckBox
                 x:Name="KeepRecentCheckBox"
                 x:Uid="KeepRecentCheckBox"
-                Style="{StaticResource SettingCheckBoxStyle}"
                 Checked="KeepRecentCheckBox_Checked"
                 Content="Only keep recent 100 items"
+                Style="{StaticResource SettingCheckBoxStyle}"
                 Unchecked="KeepRecentCheckBox_Unchecked" />
             <CheckBox
                 x:Name="AutoPlayCheckBox"
                 x:Uid="AutoPlayCheckBox"
-                Style="{StaticResource SettingCheckBoxStyle}"
                 Checked="AutoPlayCheckBox_Checked"
                 Content="Auto Play"
+                Style="{StaticResource SettingCheckBoxStyle}"
                 Unchecked="AutoPlayCheckBox_Unchecked" />
             <CheckBox
                 x:Name="SaveProgressCheckBox"
                 x:Uid="SaveProgressCheckBox"
-                Style="{StaticResource SettingCheckBoxStyle}"
                 Checked="SaveProgressCheckBox_Checked"
                 Content="Save Music Progress"
+                Style="{StaticResource SettingCheckBoxStyle}"
                 Unchecked="SaveProgressCheckBox_Unchecked" />
             <HyperlinkButton
                 x:Uid="UpdateMusicLibraryButton"
                 Margin="9,0"
                 Click="UpdateMusicLibrary_Click"
                 Content="Update Music Library"
+                Style="{ThemeResource TextBlockButtonStyle}" />
+            <HyperlinkButton
+                x:Uid="CheckNewMusicButton"
+                Margin="9,0"
+                Click="CheckNewMusicButton_Click"
+                Content="Check New Music"
                 Style="{ThemeResource TextBlockButtonStyle}" />
             <HyperlinkButton
                 x:Uid="BugReportButton"

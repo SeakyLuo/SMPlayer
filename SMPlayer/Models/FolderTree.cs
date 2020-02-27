@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -38,7 +39,7 @@ namespace SMPlayer.Models
 
         public static async Task<int> CountMusicAsync(StorageFolder folder)
         {
-            int count = (await folder.GetFilesAsync()).Count(f => IsMusicFile(f));
+            int count = (await folder.GetFilesAsync()).Count(f => f.IsMusicFile());
             foreach (var sub in await folder.GetFoldersAsync())
                 count += await CountMusicAsync(sub);
             return count;
@@ -48,13 +49,51 @@ namespace SMPlayer.Models
         {
             LoadingStatus = ExecutionStatus.Break;
         }
-
-        public async Task<bool> Init(StorageFolder folder, TreeInitProgressListener listener = null)
+        public async Task<TreeOperationProgressIndicator> CheckNewFile(TreeOperationProgressListener listener = null)
         {
-            return await Init(folder, listener, new TreeInitProgressIndicator() { Max = listener == null ? 0 : await CountMusicAsync(folder) });
+            // Use Progress for music added, Max for music removed.
+            var indicator = new TreeOperationProgressIndicator();
+            await checkNewFile(listener, indicator);
+            return indicator;
         }
-
-        private async Task<bool> Init(StorageFolder folder, TreeInitProgressListener listener, TreeInitProgressIndicator indicator)
+        private async Task checkNewFile(TreeOperationProgressListener listener, TreeOperationProgressIndicator indicator)
+        {
+            LoadingStatus = ExecutionStatus.Running;
+            foreach (var tree in Trees)
+                await tree.checkNewFile(listener, indicator);
+            var pathSet = Files.Select(m => m.Path).ToHashSet();
+            var newList = new List<Music>();
+            var newSet = new HashSet<string>();
+            foreach (var file in await (await GetStorageFolder()).GetFilesAsync())
+            {
+                if (!file.IsMusicFile()) continue;
+                newSet.Add(file.Path);
+                if (!pathSet.Contains(file.Path))
+                {
+                    Music music = await Music.GetMusicAsync(file);
+                    indicator.Progress++;
+                    newList.Add(music);
+                    MusicLibraryPage.AllSongs.Add(music); // Temporary
+                    Settings.settings.RecentlyAddedMusic.Add(music);
+                    listener?.Update(Path, music.Name, 0, 0);
+                }
+            }
+            int before = Files.Count;
+            foreach (var music in Files.FindAll(m => !newSet.Contains(m.Path)))
+            {
+                MusicLibraryPage.AllSongs.Remove(music);
+                Files.Remove(music);
+            }
+            indicator.Max += Files.Count - before;
+            Files.AddRange(newList);
+            Sort();
+            LoadingStatus = ExecutionStatus.Ready;
+        }
+        public async Task<bool> Init(StorageFolder folder, TreeOperationProgressListener listener = null)
+        {
+            return await Init(folder, listener, new TreeOperationProgressIndicator() { Max = listener == null ? 0 : await CountMusicAsync(folder) });
+        }
+        private async Task<bool> Init(StorageFolder folder, TreeOperationProgressListener listener, TreeOperationProgressIndicator indicator)
         {
             LoadingStatus = ExecutionStatus.Running;
             var samePath = folder.Path == Path;
@@ -88,7 +127,7 @@ namespace SMPlayer.Models
                 foreach (var file in await folder.GetFilesAsync())
                 {
                     if (LoadingStatus == ExecutionStatus.Break) return false;
-                    if (IsMusicFile(file))
+                    if (file.IsMusicFile())
                     {
                         Music music = await Music.GetMusicAsync(file);
                         listener?.Update(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
@@ -123,7 +162,7 @@ namespace SMPlayer.Models
                 foreach (var file in await folder.GetFilesAsync())
                 {
                     if (LoadingStatus == ExecutionStatus.Break) return false;
-                    if (IsMusicFile(file))
+                    if (file.IsMusicFile())
                     {
                         Music music = await Music.GetMusicAsync(file);
                         if (samePath)
@@ -238,10 +277,7 @@ namespace SMPlayer.Models
         {
             return Files.FirstOrDefault(m => m == target) ?? Trees.FirstOrDefault(tree => target.Path.StartsWith(tree.Path))?.FindMusic(target);
         }
-        public static bool IsMusicFile(StorageFile file)
-        {
-            return file.FileType.EndsWith("mp3");
-        }
+        public async Task<StorageFolder> GetStorageFolder() { return await StorageFolder.GetFolderFromPathAsync(Path);  }
 
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
@@ -270,9 +306,9 @@ namespace SMPlayer.Models
     }
     public struct TreeInfo
     {
-        public string Directory;
-        public int Folders;
-        public int Songs;
+        public string Directory { get; set; }
+        public int Folders { get; set; }
+        public int Songs { get; set; }
         public string Info
         {
             get
@@ -290,14 +326,15 @@ namespace SMPlayer.Models
         }
     }
 
-    class TreeInitProgressIndicator
+    public class TreeOperationProgressIndicator
     {
-        public int Progress = 0;
-        public int Max = 0;
+        public int Progress { get; set; } = 0;
+        public int Max { get; set; } = 0;
+        public object Data { get; set; } // Any Additional Information
         public int Update() { return ++Progress; }
     }
 
-    public interface TreeInitProgressListener
+    public interface TreeOperationProgressListener
     {
         void Update(string folder, string file, int progress, int max);
     }

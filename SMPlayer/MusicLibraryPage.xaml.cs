@@ -160,7 +160,7 @@ namespace SMPlayer
             List<Music> collection = new List<Music>();
             foreach (var path in paths)
             {
-                if (AllSongs.FirstOrDefault((m) => m.Path == path) is Music music)
+                if (MusicFromPath(path) is Music music)
                 {
                     if (isFavorite) music.Favorite = true;
                     collection.Add(music);

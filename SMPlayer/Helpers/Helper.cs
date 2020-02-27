@@ -109,7 +109,10 @@ namespace SMPlayer
             var str = loader.GetString(resource.Replace(":", "%3A"));
             return string.IsNullOrEmpty(str) ? resource : str;
         }
-
+        public static bool IsMusicFile(this StorageFile file)
+        {
+            return file.FileType.EndsWith("mp3");
+        }
         public static async Task<bool> Contains(this StorageFolder folder, string name)
         {
             try

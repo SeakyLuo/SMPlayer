@@ -83,6 +83,7 @@ namespace SMPlayer
             if (flyout.Target.DataContext is GridFolderView gridFolderView) tree = gridFolderView.Tree;
             else if (flyout.Target.DataContext is TreeViewNode node) tree = node.Content as FolderTree;
             flyout.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(tree.Path, Windows.Storage.StorageItemTypes.Folder));
+            // Check New Music
         }
         private void OpenMusicFlyout(object sender, object e)
         {

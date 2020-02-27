@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace SMPlayer
 {
-    public sealed partial class MediaControl : UserControl, SwitchMusicListener, MediaControlListener, AfterPathSetListener, RemoveMusicListener, LikeMusicListener
+    public sealed partial class MediaControl : UserControl, SwitchMusicListener, MediaControlListener, AfterLibraryUpdated, RemoveMusicListener, LikeMusicListener
     {
         public enum MediaControlMode
         {
@@ -880,9 +880,10 @@ namespace SMPlayer
             MediaSlider.IsEnabled = false;
         }
 
-        public void PathSet(string path)
+        public void LibraryUpdated(string path)
         {
-            ClearMusic();
+            //if (await CurrentMusic.GetStorageFileAsync() == null)
+            //    ClearMusic();
         }
 
         public void Play()

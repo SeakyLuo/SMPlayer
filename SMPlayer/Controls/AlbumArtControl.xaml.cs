@@ -62,7 +62,7 @@ namespace SMPlayer.Controls
                         picker.FileTypeFilter.Add(item);
                     var file = await picker.PickSingleFileAsync();
                     if (file == null) return;
-                    if (FolderTree.IsMusicFile(file))
+                    if (file.IsMusicFile())
                     {
                         using (var source = TagLib.File.Create(new MusicFileAbstraction(file), ReadStyle.Average))
                         {
