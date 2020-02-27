@@ -230,7 +230,7 @@ namespace SMPlayer
             var musicInfoItem = new MenuFlyoutItem()
             {
                 Icon = new SymbolIcon(Symbol.MusicInfo),
-                Text = Helper.Localize("Show Music Info")
+                Text = Helper.Localize("See Music Info")
             };
             musicInfoItem.Click += async (s, args) =>
             {
@@ -241,7 +241,7 @@ namespace SMPlayer
             var lyricsItem = new MenuFlyoutItem()
             {
                 Icon = new FontIcon() { Glyph = "\uEC42" },
-                Text = Helper.Localize("Show Lyrics")
+                Text = Helper.Localize("See Lyrics")
             };
             lyricsItem.Click += async (s, args) =>
             {
@@ -249,6 +249,16 @@ namespace SMPlayer
                 else NowPlayingFullPage.Instance.LyricsRequested(music);
             };
             flyout.Items.Add(lyricsItem);
+            var albumArtItem = new MenuFlyoutItem()
+            {
+                Icon = new FontIcon() { Glyph = "\uEC42" },
+                Text = Helper.Localize("See Album Art")
+            };
+            albumArtItem.Click += async (s, args) =>
+            {
+                if (NowPlayingFullPage.Instance == null) await new MusicDialog(MusicDialogOption.AlbumArt, music).ShowAsync();
+            };
+            flyout.Items.Add(albumArtItem);
             return flyout;
         }
 

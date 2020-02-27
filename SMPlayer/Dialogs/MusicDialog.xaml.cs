@@ -19,6 +19,9 @@ namespace SMPlayer.Dialogs
                 case MusicDialogOption.Lyrics:
                     MusicDialogPivot.SelectedItem = LyricsItem;
                     break;
+                case MusicDialogOption.AlbumArt:
+                    MusicDialogPivot.SelectedItem = AlbumArtItem;
+                    break;
             }
             MusicInfoController.SetMusicInfo(music);
             MusicLyricsController.SetLyrics(music);
@@ -34,6 +37,7 @@ namespace SMPlayer.Dialogs
     public enum MusicDialogOption
     {
         Properties = 0,
-        Lyrics = 1
+        Lyrics = 1,
+        AlbumArt = 2
     }
 }

@@ -370,7 +370,7 @@
     <value>See Lyrics</value>
   </data>
   <data name="LyricsMenuItem.Text" xml:space="preserve">
-    <value>See Lyrics</value>
+    <value>Show Lyrics</value>
   </data>
   <data name="LyricsPivotItem.Header" xml:space="preserve">
     <value>Lyrics</value>
@@ -642,8 +642,17 @@
   <data name="See Album" xml:space="preserve">
     <value>See Album</value>
   </data>
+  <data name="See Album Art" xml:space="preserve">
+    <value>See Album Art</value>
+  </data>
   <data name="See Artist" xml:space="preserve">
     <value>See Artist</value>
+  </data>
+  <data name="See Lyrics" xml:space="preserve">
+    <value>See Lyrics</value>
+  </data>
+  <data name="See Music Info" xml:space="preserve">
+    <value>See Music Info</value>
   </data>
   <data name="SelectArtistTextBlock.Text" xml:space="preserve">
     <value>Select an Artist On the Left</value>

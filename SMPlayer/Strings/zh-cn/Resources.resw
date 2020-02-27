@@ -370,7 +370,7 @@
     <value>查看歌词</value>
   </data>
   <data name="LyricsMenuItem.Text" xml:space="preserve">
-    <value>查看歌词</value>
+    <value>显示歌词</value>
   </data>
   <data name="LyricsPivotItem.Header" xml:space="preserve">
     <value>歌词</value>
@@ -642,8 +642,17 @@
   <data name="See Album" xml:space="preserve">
     <value>查看专辑</value>
   </data>
+  <data name="See Album Art" xml:space="preserve">
+    <value>查看专辑插图</value>
+  </data>
   <data name="See Artist" xml:space="preserve">
     <value>查看歌手</value>
+  </data>
+  <data name="See Lyrics" xml:space="preserve">
+    <value>查看歌词</value>
+  </data>
+  <data name="See Music Info" xml:space="preserve">
+    <value>查看歌曲信息</value>
   </data>
   <data name="SelectArtistTextBlock.Text" xml:space="preserve">
     <value>在左侧选择一位歌手</value>
