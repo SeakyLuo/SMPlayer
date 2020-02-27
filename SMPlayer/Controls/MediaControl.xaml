@@ -834,7 +834,7 @@
                     </StackPanel>
                     <Slider
                         x:Name="MiniMediaSlider"
-                        Margin="0,0,0,-15"
+                        Margin="-10,0,-10,-15"
                         Minimum="0"
                         Style="{StaticResource ThumblessMediaProgressSliderStyle}" />
                 </StackPanel>

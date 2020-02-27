@@ -204,6 +204,9 @@
   <data name="Play" xml:space="preserve">
     <value>Play</value>
   </data>
+  <data name="ProcessRequest" xml:space="preserve">
+    <value>Processing your request......</value>
+  </data>
   <data name="PropertiesReset" xml:space="preserve">
     <value>Properties is reset!</value>
   </data>
@@ -244,6 +247,6 @@
     <value>Unknown Artist</value>
   </data>
   <data name="UpdateMusicLibrary" xml:space="preserve">
-    <value>Updating your music library...</value>
+    <value>Updating your music library......</value>
   </data>
 </root>

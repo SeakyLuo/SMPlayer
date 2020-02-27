@@ -23,18 +23,18 @@
     <Grid
         x:Name="ContentGrid"
         HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch">
+        VerticalAlignment="Stretch"
+        IsHitTestVisible="True">
         <Grid.Background>
             <SolidColorBrush Opacity="0.75" Color="Black" />
         </Grid.Background>
-        <ProgressRing
-            x:Name="LoadingProgressRing"
-            VerticalAlignment="Bottom"
-            Foreground="White"
-            IsActive="True"
-            Style="{StaticResource NormalProgressStyle}"
-            Visibility="{x:Bind LoadingProgressBar.Visibility, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
         <StackPanel VerticalAlignment="Center">
+            <ProgressRing
+                x:Name="LoadingProgressRing"
+                Foreground="White"
+                IsActive="True"
+                Style="{StaticResource NormalProgressStyle}"
+                Visibility="{x:Bind LoadingProgressBar.Visibility, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
             <controls:RadialProgressBar
                 x:Name="LoadingProgressBar"
                 VerticalAlignment="Center"
@@ -45,7 +45,7 @@
                 Outline="White"
                 Style="{StaticResource NormalProgressStyle}"
                 Thickness="12"
-                Visibility="{x:Bind IsDeterminant, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
+                Visibility="{x:Bind IsDeterminant, Mode=OneWay}"
                 Value="{x:Bind Progress, Mode=OneWay}" />
             <TextBlock
                 x:Name="LoadingTextBlock"

@@ -236,6 +236,7 @@
       <RootProperty Name="Padding" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="IsHitTestVisible" />
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="BorderThickness" />
       <RootProperty Name="Resources" />
@@ -252,7 +253,6 @@
       <RootProperty Name="Opacity" />
       <RootProperty Name="IsDoubleTapEnabled" />
       <RootProperty Name="RequestedTheme" />
-      <RootProperty Name="IsHitTestVisible" />
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
       <RootEvent Name="PointerPressed" />
@@ -618,7 +618,6 @@
     </RootType>
     <RootType FullName="SMPlayer.LoadingControl">
       <RootProperty Name="AllowBreak" />
-      <RootProperty Name="IsDeterminant" />
       <RootProperty Name="Visibility" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.TextBox">

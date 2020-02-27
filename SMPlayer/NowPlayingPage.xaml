@@ -34,6 +34,12 @@
                     Visibility="Collapsed" />
             </CommandBar.Content>
             <AppBarButton
+                x:Name="RandomPlayButton"
+                x:Uid="RandomPlayButton"
+                Click="RandomPlayButton_Click"
+                Icon="Shuffle"
+                Label="Random Play" />
+            <AppBarButton
                 x:Name="ScrollToCurrentButton"
                 x:Uid="ScrollToCurrentButton"
                 Click="ScrollToCurrentButton_Click"

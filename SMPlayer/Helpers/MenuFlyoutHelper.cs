@@ -249,16 +249,19 @@ namespace SMPlayer
                 else NowPlayingFullPage.Instance.LyricsRequested(music);
             };
             flyout.Items.Add(lyricsItem);
-            var albumArtItem = new MenuFlyoutItem()
+            if (NowPlayingFullPage.Instance == null)
             {
-                Icon = new FontIcon() { Glyph = "\uEC42" },
-                Text = Helper.Localize("See Album Art")
-            };
-            albumArtItem.Click += async (s, args) =>
-            {
-                if (NowPlayingFullPage.Instance == null) await new MusicDialog(MusicDialogOption.AlbumArt, music).ShowAsync();
-            };
-            flyout.Items.Add(albumArtItem);
+                var albumArtItem = new MenuFlyoutItem()
+                {
+                    Icon = new FontIcon() { Glyph = "\uEC42" },
+                    Text = Helper.Localize("See Album Art")
+                };
+                albumArtItem.Click += async (s, args) =>
+                {
+                    await new MusicDialog(MusicDialogOption.AlbumArt, music).ShowAsync();
+                };
+                flyout.Items.Add(albumArtItem);
+            }
             return flyout;
         }
 

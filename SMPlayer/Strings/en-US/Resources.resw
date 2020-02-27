@@ -546,6 +546,12 @@
   <data name="PublisherTextBlock.Text" xml:space="preserve">
     <value>Publisher</value>
   </data>
+  <data name="RandomPlayButton.Label" xml:space="preserve">
+    <value>Shuffle</value>
+  </data>
+  <data name="RandomPlayButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Shuffle and play you music library</value>
+  </data>
   <data name="Recent" xml:space="preserve">
     <value>Recent</value>
   </data>

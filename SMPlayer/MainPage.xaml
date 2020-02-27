@@ -246,7 +246,6 @@
             x:Name="MainLoadingControl"
             Grid.RowSpan="3"
             AllowBreak="True"
-            IsDeterminant="True"
             Visibility="Collapsed" />
         <controls:InAppNotification
             x:Name="ShowResultInAppNotification"

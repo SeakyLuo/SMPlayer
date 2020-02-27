@@ -52,5 +52,15 @@ namespace SMPlayer
         {
             NowPlayingPlaylistControl.ScrollToMusic(MediaHelper.CurrentMusic);
         }
+
+        private async void RandomPlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainPage.Instance.Loader.Show("ProcessRequest", false);
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                MediaHelper.ShuffleAndPlay(MusicLibraryPage.AllSongs);
+                MainPage.Instance.Loader.Hide();
+            });
+        }
     }
 }

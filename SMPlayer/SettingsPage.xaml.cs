@@ -50,12 +50,11 @@ namespace SMPlayer
         public async void UpdateMusicLibrary(StorageFolder folder)
         {
             if (folder == null) return;
-            MainPage.Instance.Loader.Text = Helper.LocalizeMessage("LoadMusicLibrary");
-            MainPage.Instance.Loader.StartLoading();
+            MainPage.Instance.Loader.Show("LoadMusicLibrary", true);
             Helper.CurrentFolder = folder;
             loadingTree = new FolderTree();
             if (!await loadingTree.Init(folder, this)) return;
-            MainPage.Instance.Loader.Text = Helper.LocalizeMessage("UpdateMusicLibrary");
+            MainPage.Instance.Loader.SetLocalizedText("UpdateMusicLibrary");
             loadingTree.MergeFrom(Settings.settings.Tree);
             Settings.settings.Tree = loadingTree;
             Settings.settings.RootPath = folder.Path;
@@ -70,7 +69,7 @@ namespace SMPlayer
             MediaHelper.Clear();
             Settings.Save();
             PathBox.Text = folder.Path;
-            MainPage.Instance.Loader.FinishLoading();
+            MainPage.Instance.Loader.Hide();
         }
 
         public static void NotifyLibraryChange(string path) { foreach (var listener in listeners) listener.PathSet(path); }

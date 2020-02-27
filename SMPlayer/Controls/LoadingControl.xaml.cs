@@ -29,6 +29,10 @@ namespace SMPlayer
                                                                                                  new PropertyMetadata(0d));
 
         public bool IsDeterminant { get; set; }
+        public static readonly DependencyProperty IsDeterminantProperty = DependencyProperty.Register("IsDeterminant",
+                                                                                                    typeof(bool),
+                                                                                                    typeof(LoadingControl),
+                                                                                                    new PropertyMetadata(false));
         public double Max
         {
             get => (double)GetValue(MaxProperty);
@@ -46,12 +50,19 @@ namespace SMPlayer
             this.InitializeComponent();
         }
 
-        public void StartLoading()
+        public void SetLocalizedText(string text, params object[] args)
         {
+            Text = Helper.LocalizeMessage(text, args);
+        }
+
+        public void Show(string text, bool isDeterminant)
+        { 
+            SetLocalizedText(text);
+            IsDeterminant = isDeterminant;
             this.Visibility = Visibility.Visible;
         }
 
-        public void FinishLoading()
+        public void Hide()
         {
             this.Visibility = Visibility.Collapsed;
         }
@@ -59,7 +70,7 @@ namespace SMPlayer
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
             foreach (var listener in BreakLoadingListeners) listener.Invoke();
-            FinishLoading();
+            Hide();
         }
     }
 }
