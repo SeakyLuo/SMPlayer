@@ -47,7 +47,7 @@ namespace SMPlayer
                 };
                 addToItem.Items.Add(nowPlayingItem);
             }
-            if (playlistName != MyFavorites)
+            if (playlistName != MyFavorites && Data is Music m && !Settings.settings.MyFavorites.Contains(m))
             {
                 var favItem = new MenuFlyoutItem()
                 {
