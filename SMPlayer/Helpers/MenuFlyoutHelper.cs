@@ -251,9 +251,10 @@ namespace SMPlayer
             flyout.Items.Add(lyricsItem);
             if (NowPlayingFullPage.Instance == null)
             {
+                
                 var albumArtItem = new MenuFlyoutItem()
                 {
-                    Icon = new FontIcon() { Glyph = "\uEC42" },
+                    Icon = new SymbolIcon(Symbol.Pictures),
                     Text = Helper.Localize("See Album Art")
                 };
                 albumArtItem.Click += async (s, args) =>

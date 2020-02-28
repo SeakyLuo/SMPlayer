@@ -12,6 +12,8 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
+Recently added. (flyout and page)
+
 Export Data.
 
 Multi-Select.
@@ -26,11 +28,13 @@ Animations.
 
 Date Added.
 
-Recently added.
-
 Improved algorithm for update.
 
 Improved New Playlist Name.
 
+Default music player.
+
 # TO FIX
-Too many notifications.
+Buttons become unavailable when come back from Mini mode.
+
+Update LocalPage after checking new music.
