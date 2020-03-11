@@ -18,7 +18,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            Models.Settings.settings.Recent.CollectionChanged += (sender, args) =>
+            Models.Settings.settings.RecentPlayed.CollectionChanged += (sender, args) =>
             {
                 Modified = args.NewItems?.Count != args.OldItems?.Count;
             };
@@ -26,7 +26,7 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Setup(Models.Settings.settings.Recent);
+            Setup(Models.Settings.settings.RecentPlayed);
         }
 
         private void Setup(ICollection<string> paths)
@@ -48,7 +48,7 @@ namespace SMPlayer
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            Models.Settings.settings.Recent.Clear();
+            Models.Settings.settings.RecentPlayed.Clear();
             GridMusicView.Clear();
         }
     }

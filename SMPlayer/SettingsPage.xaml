@@ -250,12 +250,6 @@
                 Content="Update Music Library"
                 Style="{ThemeResource TextBlockButtonStyle}" />
             <HyperlinkButton
-                x:Uid="CheckNewMusicButton"
-                Margin="9,0"
-                Click="CheckNewMusicButton_Click"
-                Content="Check New Music"
-                Style="{ThemeResource TextBlockButtonStyle}" />
-            <HyperlinkButton
                 x:Uid="BugReportButton"
                 Margin="9,0"
                 Click="BugReport_Click"

@@ -27,13 +27,14 @@
         <local:GridMusicControl
             x:Name="GridMusicView"
             Grid.Row="1"
-            Margin="5" />
+            Margin="5"
+            Visibility="Collapsed" />
         <local:PlaylistControl
             x:Name="LocalPlaylist"
             Grid.Row="1"
             Margin="10"
-            AlternatingRowColor="True"
             AllowReorder="False"
+            AlternatingRowColor="True"
             ItemsSource="{x:Bind Songs, Mode=OneWay}"
             Visibility="Collapsed" />
         <VisualStateManager.VisualStateGroups>

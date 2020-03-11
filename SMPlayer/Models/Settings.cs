@@ -29,12 +29,12 @@ namespace SMPlayer.Models
         public bool LocalMusicGridView { get; set; } = true;
         public bool LocalFolderGridView { get; set; } = true;
         public Playlist MyFavorites { get; set; } = new Playlist(MenuFlyoutHelper.MyFavorites);
-        public ObservableCollection<string> Recent { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> RecentPlayed { get; set; } = new ObservableCollection<string>();
         public bool MiniModeWithDropdown { get; set; } = false;
         public bool IsMuted { get; set; } = false;
         public bool KeepLimitedRecentPlayedItems { get; set; } = true;
         public const int RecentPlayedLimit = 100;
-        public List<Music> RecentlyAddedMusic { get; set; } = new List<Music>();
+        public List<string> RecentAdded { get; set; } = new List<string>();
         public bool AutoPlay { get; set; } = false;
         public bool SaveMusicProgress { get; set; } = false;
         public double MusicProgress { get; set; } = 0;
@@ -83,7 +83,6 @@ namespace SMPlayer.Models
                     if (item.Name.EndsWith(".TMP"))
                         await item.DeleteAsync();
             }
-
         }
 
         public static void Save()
@@ -121,22 +120,27 @@ namespace SMPlayer.Models
             foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, false);
         }
 
+        public void AddMusic(Music music)
+        {
+            RecentAdded.AddOrMoveToTheFirst(music.Path);
+        }
+
         public void DeleteMusic(Music music)
         {
             Tree.RemoveMusic(music);
             foreach (var playlist in Playlists)
                 playlist.Songs.Remove(music);
             MyFavorites.Remove(music);
+            RecentPlayed.Remove(music.Path);
+            RecentAdded.Remove(music.Path);
         }
 
         public void Played(Music music)
         {
             if (music == null) return;
-            Recent.Remove(music.Path);
-            Recent.Insert(0, music.Path);
-            if (KeepLimitedRecentPlayedItems && Recent.Count > RecentPlayedLimit)
-                Recent.RemoveAt(RecentPlayedLimit);
-
+            RecentPlayed.AddOrMoveToTheFirst(music.Path);
+            if (KeepLimitedRecentPlayedItems && RecentPlayed.Count > RecentPlayedLimit)
+                RecentPlayed.RemoveAt(RecentPlayedLimit);
         }
         public const int PlaylistNameMaxLength = 50;
         public NamingError CheckPlaylistNamingError(string newName)

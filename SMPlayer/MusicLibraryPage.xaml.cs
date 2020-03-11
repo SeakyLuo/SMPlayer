@@ -25,7 +25,6 @@ namespace SMPlayer
         public static HashSet<Music> AllSongsSet;
         public static bool IsLibraryUnchangedAfterChecking = true;
 
-        private bool libraryChecked = false;
         private static bool libraryReset = false;
         private static List<AfterSongsSetListener> listeners = new List<AfterSongsSetListener>();
 
@@ -38,12 +37,10 @@ namespace SMPlayer
             MediaHelper.SwitchMusicListeners.Add(this);
         }
 
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
             MediaHelper.FindMusicAndSetPlaying(AllSongs, null, MediaHelper.CurrentMusic);
-            if (!libraryChecked)
-                await Dispatcher.RunIdleAsync((args) => { libraryChecked = true; CheckLibrary(); });
         }
 
         public static async Task Init()
@@ -55,14 +52,12 @@ namespace SMPlayer
         public static async void CheckLibrary()
         {
             if (Helper.CurrentFolder == null) return;
-            var tree = new FolderTree();
-            await tree.Init(Helper.CurrentFolder);
-            var newLibrary = tree.Flatten();
-            if (IsLibraryUnchangedAfterChecking = AllSongs.SameAs(newLibrary)) return;
-            tree.MergeFrom(Settings.settings.Tree);
-            Settings.settings.Tree = tree;
+            var data = new TreeUpdateData();
+            await Settings.settings.Tree.CheckNewFile(data);
+            var newLibrary = Settings.settings.Tree.Flatten();
+            if (IsLibraryUnchangedAfterChecking = data.More == 0 && data.Less == 0) return;
             SetAllSongs(newLibrary);
-            SettingsPage.NotifyLibraryChange(tree.Path);
+            SettingsPage.NotifyLibraryChange(Settings.settings.RootPath);
             Save();
         }
 
@@ -108,19 +103,19 @@ namespace SMPlayer
             switch (header)
             {
                 case "Name":
-                    temp = AllSongs.OrderBy((music) => music.Name);
+                    temp = AllSongs.OrderBy(music => music.Name);
                     break;
                 case "Album":
-                    temp = AllSongs.OrderBy((music) => music.Album);
+                    temp = AllSongs.OrderBy(music => music.Album);
                     break;
                 case "Artist":
-                    temp = AllSongs.OrderBy((music) => music.Artist);
+                    temp = AllSongs.OrderBy(music => music.Artist);
                     break;
                 case "Duration":
-                    temp = AllSongs.OrderBy((music) => music.Duration);
+                    temp = AllSongs.OrderBy(music => music.Duration);
                     break;
                 case "PlayCount":
-                    temp = AllSongs.OrderBy((music) => music.PlayCount);
+                    temp = AllSongs.OrderBy(music => music.PlayCount);
                     break;
                 default:
                     return;
@@ -185,7 +180,7 @@ namespace SMPlayer
 
         public void MusicLiked(Music music, bool isFavorite)
         {
-            var target = AllSongs.FirstOrDefault((m) => m == music);
+            var target = AllSongs.FirstOrDefault(m => m == music);
             if (target != null) target.Favorite = isFavorite;
         }
     }

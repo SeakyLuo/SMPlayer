@@ -127,6 +127,11 @@ namespace SMPlayer
             }
         }
 
+        private void LocalRefreshItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            SettingsPage.CheckNewMusic(History.Peek());
+        }
+
         private void LocalShuffleItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var tree = History.Peek();
@@ -178,7 +183,7 @@ namespace SMPlayer
             SetPage(Settings.settings.Tree, false);
         }
 
-        private void MenuFlyout_Opening(object sender, object e)
+        private void OpenLocalMusicFlyout(object sender, object e)
         {
             if (History.Count == 0) return;
             var tree = History.Peek();

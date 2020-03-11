@@ -207,9 +207,6 @@
   <data name="ChangeAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>更改专辑插图</value>
   </data>
-  <data name="CheckNewMusicButton.Content" xml:space="preserve">
-    <value>检查新歌</value>
-  </data>
   <data name="ClearAppButton.Label" xml:space="preserve">
     <value>清空</value>
   </data>
@@ -574,7 +571,13 @@
     <value>最近</value>
   </data>
   <data name="Refresh Directory" xml:space="preserve">
-    <value>刷新目录</value>
+    <value>更新目录</value>
+  </data>
+  <data name="RefreshItem.Label" xml:space="preserve">
+    <value>更新目录</value>
+  </data>
+  <data name="RefreshItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>检查当前目录是否更新</value>
   </data>
   <data name="Remove From Playlist" xml:space="preserve">
     <value>从播放列表中移除</value>
@@ -721,7 +724,7 @@
     <value>随机播放</value>
   </data>
   <data name="ShuffleItem.ToolTipService.ToolTip" xml:space="preserve">
-    <value>随机播放全部</value>
+    <value>随机播放当前目录所有音乐</value>
   </data>
   <data name="SongsItem.Content" xml:space="preserve">
     <value>歌曲</value>

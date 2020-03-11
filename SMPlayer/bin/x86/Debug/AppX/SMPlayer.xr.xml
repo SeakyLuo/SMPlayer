@@ -285,8 +285,8 @@
       <RootProperty Name="ItemsSource" />
       <RootProperty Name="SelectionMode" />
       <RootProperty Name="ItemTemplate" />
-      <RootProperty Name="Style" />
       <RootProperty Name="Visibility" />
+      <RootProperty Name="Style" />
       <RootEvent Name="ItemClick" />
     </RootType>
     <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.BindExtension">
@@ -560,6 +560,7 @@
     </RootType>
     <RootType FullName="SMPlayer.GridMusicControl">
       <RootProperty Name="Margin" />
+      <RootProperty Name="Visibility" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Automation.AutomationProperties">
       <RootMethod Name="GetAccessibilityView" />

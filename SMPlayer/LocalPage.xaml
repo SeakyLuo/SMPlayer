@@ -42,12 +42,23 @@
                     Content="Songs"
                     Icon="MusicInfo">
                     <NavigationViewItem.ContextFlyout>
-                        <MenuFlyout Opening="MenuFlyout_Opening" />
+                        <MenuFlyout Opening="OpenLocalMusicFlyout" />
                     </NavigationViewItem.ContextFlyout>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
             <NavigationView.PaneFooter>
                 <StackPanel Orientation="Horizontal">
+                    <local:IconTextButton
+                        x:Name="LocalRefreshItem"
+                        x:Uid="RefreshItem"
+                        IsHighlightAll="True"
+                        Label="Refresh"
+                        Style="{StaticResource TopNavigationViewFooterItemStyle}"
+                        Tapped="LocalRefreshItem_Tapped">
+                        <local:IconTextButton.Icon>
+                            <FontIcon Glyph="&#xE149;" Style="{StaticResource FontIconSizeSetter}" />
+                        </local:IconTextButton.Icon>
+                    </local:IconTextButton>
                     <local:IconTextButton
                         x:Name="LocalShuffleItem"
                         x:Uid="ShuffleItem"

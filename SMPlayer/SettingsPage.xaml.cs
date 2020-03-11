@@ -111,26 +111,22 @@ namespace SMPlayer
             }
         }
 
-        private void CheckNewMusicButton_Click(object sender, RoutedEventArgs e)
-        {
-            CheckNewMusic(Settings.settings.Tree);
-        }
-
         public static async void CheckNewMusic(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
         {
             MainPage.Instance.Loader.Show("ProcessRequest", false);
-            var indicator = await tree.CheckNewFile();
+            var data = new TreeUpdateData();
+            if (!await tree.CheckNewFile(data)) return;
             Settings.settings.Tree.FindTree(tree).CopyFrom(tree);
-            if (indicator.Progress != 0 || indicator.Max != 0)
+            if (data.More != 0 || data.Less != 0)
             {
                 foreach (var listener in listeners)
                     listener.LibraryUpdated(tree.Path);
-                if (indicator.Max != 0) MediaHelper.RemoveBadMusic();
+                if (data.Less != 0) MediaHelper.RemoveBadMusic();
             }
             Settings.Save();
             afterTreeUpdated.Invoke(tree);
             MainPage.Instance.Loader.Hide();
-            MainPage.Instance.ShowNotification(Helper.LocalizeMessage("CheckNewMusicResult", indicator.Progress, -indicator.Max));
+            MainPage.Instance.ShowNotification(Helper.LocalizeMessage("CheckNewMusicResult", data.More, data.Less));
         }
 
         private void UpdateMusicLibrary_Click(object sender, RoutedEventArgs e)
@@ -159,8 +155,8 @@ namespace SMPlayer
         private void KeepRecentCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             Settings.settings.KeepLimitedRecentPlayedItems = true;
-            while (Settings.settings.Recent.Count > Settings.RecentPlayedLimit)
-                Settings.settings.Recent.RemoveAt(Settings.RecentPlayedLimit);
+            while (Settings.settings.RecentPlayed.Count > Settings.RecentPlayedLimit)
+                Settings.settings.RecentPlayed.RemoveAt(Settings.RecentPlayedLimit);
         }
 
         private void KeepRecentCheckBox_Unchecked(object sender, RoutedEventArgs e)

@@ -140,11 +140,9 @@ namespace SMPlayer
         {
             if (!(WindowVisible = e.Visible))
             {
-                await Window.Current.Content.Dispatcher.RunIdleAsync((args) =>
+                await Window.Current.Content.Dispatcher.RunIdleAsync(args =>
                 {
-                    // 2333
-                    System.Threading.Thread.Sleep(2333);
-                    if (!WindowVisible) MusicLibraryPage.CheckLibrary();
+                    MusicLibraryPage.CheckLibrary();
                 });
             }
         }

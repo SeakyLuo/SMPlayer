@@ -279,7 +279,8 @@
             ItemClick="LocalFoldersGridView_ItemClick"
             ItemContainerStyle="{StaticResource DropShadowGridViewItemStyle}"
             ItemsSource="{x:Bind GridItems, Mode=OneWay}"
-            SelectionMode="None">
+            SelectionMode="None"
+            Visibility="Collapsed">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:GridFolderView">
                     <UserControl

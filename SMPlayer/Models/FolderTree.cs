@@ -49,44 +49,43 @@ namespace SMPlayer.Models
         {
             LoadingStatus = ExecutionStatus.Break;
         }
-        public async Task<TreeOperationProgressIndicator> CheckNewFile()
+        public async Task<bool> CheckNewFile(TreeUpdateData data = null)
         {
             // Use Progress for music added, Max for music removed.
-            var indicator = new TreeOperationProgressIndicator();
-            await checkNewFile(indicator);
-            return indicator;
-        }
-        private async Task checkNewFile(TreeOperationProgressIndicator indicator)
-        {
             LoadingStatus = ExecutionStatus.Running;
             foreach (var tree in Trees)
-                await tree.checkNewFile(indicator);
+                await tree.CheckNewFile(data);
+            if (LoadingStatus == ExecutionStatus.Break) return false;
             var pathSet = Files.Select(m => m.Path).ToHashSet();
             var newList = new List<Music>();
             var newSet = new HashSet<string>();
             foreach (var file in await (await GetStorageFolder()).GetFilesAsync())
             {
+                if (LoadingStatus == ExecutionStatus.Break) return false;
                 if (!file.IsMusicFile()) continue;
                 newSet.Add(file.Path);
                 if (!pathSet.Contains(file.Path))
                 {
                     Music music = await Music.GetMusicAsync(file);
-                    indicator.Progress++;
                     newList.Add(music);
+                    data.More++;
                     MusicLibraryPage.AllSongs.Add(music); // Temporary
-                    Settings.settings.RecentlyAddedMusic.Add(music);
+                    Settings.settings.AddMusic(music);
                 }
             }
             int before = Files.Count;
             foreach (var music in Files.FindAll(m => !newSet.Contains(m.Path)))
             {
+                if (LoadingStatus == ExecutionStatus.Break) return false;
                 MusicLibraryPage.AllSongs.Remove(music);
                 Files.Remove(music);
+                Settings.settings.DeleteMusic(music);
             }
-            indicator.Max += Files.Count - before;
+            data.Less = before - Files.Count;
             Files.AddRange(newList);
             Sort();
             LoadingStatus = ExecutionStatus.Ready;
+            return true;
         }
         public async Task<bool> Init(StorageFolder folder, TreeOperationProgressListener listener = null)
         {
@@ -185,12 +184,12 @@ namespace SMPlayer.Models
 
         public bool Contains(Music music)
         {
-            return Files.Contains(music) || Trees.Any((tree) => tree.Contains(music));
+            return Files.Contains(music) || Trees.Any(tree => tree.Contains(music));
         }
 
         public bool RemoveMusic(Music music)
         {
-            return Files.Remove(music) || Trees.Find((tree) => music.Path.StartsWith(tree.Path)).RemoveMusic(music);
+            return Files.Remove(music) || (Trees.FirstOrDefault(t => music.Path.StartsWith(t.Path)) is FolderTree tree && tree.RemoveMusic(music));
         }
 
         public FolderTree MergeFrom(FolderTree tree)
@@ -263,6 +262,7 @@ namespace SMPlayer.Models
         public FolderTree FindTree(string path)
         {
             //return Trees.FirstOrDefault(tree => tree.Equals(target)) ?? Trees.FirstOrDefault(tree => target.Path.StartsWith(tree.Path))?.FindTree(target);
+            if (Path.Equals(path)) return this;
             foreach (var tree in Trees)
             {
                 if (path.Equals(tree.Path))
@@ -326,8 +326,13 @@ namespace SMPlayer.Models
     {
         public int Progress { get; set; } = 0;
         public int Max { get; set; } = 0;
-        public object Data { get; set; } // Any Additional Information
         public int Update() { return ++Progress; }
+    }
+
+    public class TreeUpdateData
+    {
+        public int More { get; set; } = 0;
+        public int Less { get; set; } = 0;
     }
 
     public interface TreeOperationProgressListener
