@@ -17,7 +17,7 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class LocalPage : Page, LocalSetter, AfterLibraryUpdated
     {
-        public static ViewModeChangedListener MusicViewModeChangedListener, FolderViewModeChangedListener;
+        public static LocalPageButtonListener MusicViewModeChangedListener, FolderViewModeChangedListener;
         public static Stack<FolderTree> History = new Stack<FolderTree>();
         public LocalPage()
         {
@@ -129,7 +129,11 @@ namespace SMPlayer
 
         private void LocalRefreshItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            SettingsPage.CheckNewMusic(History.Peek());
+            SettingsPage.CheckNewMusic(History.Peek(), newTree =>
+            {
+                if (LocalFoldersItem.IsSelected) FolderViewModeChangedListener.UpdatePage(newTree);
+                else MusicViewModeChangedListener.UpdatePage(newTree);
+            });
         }
 
         private void LocalShuffleItem_Tapped(object sender, TappedRoutedEventArgs e)
@@ -226,8 +230,9 @@ namespace SMPlayer
         void SetPage(FolderTree tree, bool setHeader = true);
     }
 
-    public interface ViewModeChangedListener
+    public interface LocalPageButtonListener
     {
         void ModeChanged(bool isGridView);
+        void UpdatePage(FolderTree tree);
     }
 }

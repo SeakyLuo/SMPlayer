@@ -122,9 +122,9 @@ namespace SMPlayer
                 foreach (var listener in listeners)
                     listener.LibraryUpdated(tree.Path);
                 if (data.Less != 0) MediaHelper.RemoveBadMusic();
+                afterTreeUpdated?.Invoke(tree);
             }
             Settings.Save();
-            afterTreeUpdated.Invoke(tree);
             MainPage.Instance.Loader.Hide();
             MainPage.Instance.ShowNotification(Helper.LocalizeMessage("CheckNewMusicResult", data.More, data.Less));
         }

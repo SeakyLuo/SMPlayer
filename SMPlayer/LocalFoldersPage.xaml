@@ -387,16 +387,15 @@
             </GridView.ItemTemplate>
         </GridView>
         <TreeView
-            x:Name="LocalFolderTreeView"
+            x:Name="LocalFoldersTreeView"
             Grid.Row="1"
             Margin="0,5,0,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             HorizontalContentAlignment="Stretch"
-            Collapsed="LocalFolderTreeView_Collapsed"
-            Expanding="LocalFolderTreeView_Expanding"
+            Expanding="LocalFoldersTreeView_Expanding"
             ItemContainerStyle="{StaticResource StretchTreeViewItemStyle}"
-            ItemInvoked="LocalFolderTreeView_ItemInvoked"
+            ItemInvoked="LocalFoldersTreeView_ItemInvoked"
             ItemTemplateSelector="{StaticResource FolderTreeTemplateSelector}"
             Visibility="Collapsed" />
     </Grid>

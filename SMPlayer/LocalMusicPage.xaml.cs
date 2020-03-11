@@ -15,7 +15,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalMusicPage : Page, SwitchMusicListener, ViewModeChangedListener
+    public sealed partial class LocalMusicPage : Page, SwitchMusicListener, LocalPageButtonListener
     {
         public static FolderTree CurrentTree;
         private ObservableCollection<Music> Songs = new ObservableCollection<Music>();
@@ -31,7 +31,7 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Setup(CurrentTree);
+            if (CurrentTree.Path != TreePath) Setup(CurrentTree);
             ModeChanged(Settings.settings.LocalMusicGridView);
             if (ReverseRequested) Reverse();
             if (SortByTitleRequested) SortByTitle();
@@ -45,9 +45,13 @@ namespace SMPlayer
             CurrentTree = (FolderTree)e.Parameter;
         }
 
+        public void UpdatePage(FolderTree tree)
+        {
+            if (tree.Equals(CurrentTree))
+                Setup(tree);
+        }
         private void Setup(FolderTree tree)
         {
-            if (TreePath == tree.Path) return;
             LoadingProgressBar.Visibility = Visibility.Visible;
             foreach (var music in tree.Files)
                 music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);

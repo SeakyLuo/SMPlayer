@@ -1127,7 +1127,6 @@
       <RootProperty Name="ItemContainerStyle" />
       <RootProperty Name="ItemTemplateSelector" />
       <RootProperty Name="Visibility" />
-      <RootEvent Name="Collapsed" />
       <RootEvent Name="Expanding" />
       <RootEvent Name="ItemInvoked" />
     </RootType>

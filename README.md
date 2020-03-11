@@ -14,6 +14,8 @@ Go to Settings and Set the Root Folder of your music files.
 # TO DO
 Recently added. (flyout and page)
 
+Rename directory and update local page.
+
 Export Data.
 
 Multi-Select.

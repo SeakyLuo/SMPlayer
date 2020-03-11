@@ -16,7 +16,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalFoldersPage : Page, ViewModeChangedListener
+    public sealed partial class LocalFoldersPage : Page, LocalPageButtonListener
     {
         public static FolderTree CurrentTree;
         private ObservableCollection<GridFolderView> GridItems = new ObservableCollection<GridFolderView>();
@@ -63,13 +63,7 @@ namespace SMPlayer
         private void UpdateTree(FolderTree tree)
         {
             LocalLoadingControl.Visibility = Visibility.Visible;
-            LocalFolderTreeView.RootNodes.Clear();
-            LocalFolderTreeView.RootNodes.Add(FillTreeNode(new TreeViewNode()
-            {
-                Content = tree,
-                IsExpanded = true,
-                HasUnrealizedChildren = true
-            }));
+            SetupTreeView(tree);
             GridItems.Clear();
             setter.SetPage(tree);
             foreach (var branch in tree.Trees)
@@ -87,16 +81,30 @@ namespace SMPlayer
             if (flyout.Target.DataContext is GridFolderView gridFolderView) tree = gridFolderView.Tree;
             else if (flyout.Target.DataContext is TreeViewNode node) tree = node.Content as FolderTree;
             flyout.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(tree.Path, Windows.Storage.StorageItemTypes.Folder));
-            flyout.Items.Add(MenuFlyoutHelper.GetRefreshDirectoryMenuFlyout(tree, (newTree) =>
+            flyout.Items.Add(MenuFlyoutHelper.GetRefreshDirectoryMenuFlyout(tree, newTree => AfterTreeUpdated(newTree)));
+        }
+        private void AfterTreeUpdated(FolderTree tree)
+        {
+            CurrentTree.FindTree(tree).CopyFrom(tree);
+            int index = GridItems.FindIndex(i => i.Tree.Equals(tree));
+            if (index > -1)
             {
-                CurrentTree.FindTree(tree).CopyFrom(newTree);
-                int index = GridItems.FindIndex(i => i.Tree.Equals(tree));
                 var item = GridItems[index];
-                item.Tree = newTree;
+                item.Tree = tree;
                 GridItems[index] = item;
-                //var node = LocalFolderTreeView.RootNodes.FirstOrDefault(i => i.Content.Equals(tree));
-                //node.Content = newTree;
-            }));
+            }
+            if (tree.Equals(Settings.settings.Tree)) SetupTreeView(tree);
+            else if (FindNode(LocalFoldersTreeView.RootNodes.FirstOrDefault(n => tree.Path.StartsWith((n.Content as FolderTree).Path)), tree) is TreeViewNode node)
+            {
+                node.Content = tree;
+                if (!node.HasUnrealizedChildren)
+                    FillTreeNode(node);
+            }
+        }
+        private TreeViewNode FindNode(TreeViewNode node, FolderTree tree)
+        {
+            if (node == null || tree.Equals(node.Content)) return node;
+            return FindNode(node.Children.FirstOrDefault(sub => tree.Path.StartsWith((sub.Content as FolderTree).Path)), tree);
         }
         private void OpenMusicFlyout(object sender, object e)
         {
@@ -114,24 +122,33 @@ namespace SMPlayer
             var helper = new MenuFlyoutHelper() { Data = data.Songs, DefaultPlaylistName = data.Name };
             helper.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
         }
-
+        public void UpdatePage(FolderTree tree)
+        {
+            AfterTreeUpdated(tree);
+        }
         public void ModeChanged(bool isGridView)
         {
             if (isGridView)
             {
                 LocalFoldersGridView.Visibility = Visibility.Visible;
-                LocalFolderTreeView.Visibility = Visibility.Collapsed;
+                LocalFoldersTreeView.Visibility = Visibility.Collapsed;
             }
             else
             {
                 LocalFoldersGridView.Visibility = Visibility.Collapsed;
-                LocalFolderTreeView.Visibility = Visibility.Visible;
+                LocalFoldersTreeView.Visibility = Visibility.Visible;
             }
         }
-
+        private void SetupTreeView(FolderTree tree)
+        {
+            LocalFoldersTreeView.RootNodes.Clear();
+            foreach (var node in FillTreeNode(new TreeViewNode() { Content = tree, IsExpanded = true, HasUnrealizedChildren = true }).Children)
+                LocalFoldersTreeView.RootNodes.Add(node);
+        }
         private TreeViewNode FillTreeNode(TreeViewNode node)
         {
             node.HasUnrealizedChildren = false;
+            node.Children.Clear();
             var tree = node.Content as FolderTree;
             foreach (var item in tree.Trees)
                 node.Children.Add(new TreeViewNode() { Content = item, HasUnrealizedChildren = true });
@@ -140,7 +157,7 @@ namespace SMPlayer
             return node;
         }
 
-        private void LocalFolderTreeView_Expanding(TreeView sender, TreeViewExpandingEventArgs args)
+        private void LocalFoldersTreeView_Expanding(TreeView sender, TreeViewExpandingEventArgs args)
         {
             if (args.Node.HasUnrealizedChildren)
             {
@@ -148,13 +165,13 @@ namespace SMPlayer
             }
         }
 
-        private void LocalFolderTreeView_Collapsed(TreeView sender, TreeViewCollapsedEventArgs args)
-        {
-            args.Node.Children.Clear();
-            args.Node.HasUnrealizedChildren = true;
-        }
+        //private void LocalFoldersTreeView_Collapsed(TreeView sender, TreeViewCollapsedEventArgs args)
+        //{
+        //    args.Node.Children.Clear();
+        //    args.Node.HasUnrealizedChildren = true;
+        //}
 
-        private void LocalFolderTreeView_ItemInvoked(TreeView sender, TreeViewItemInvokedEventArgs args)
+        private void LocalFoldersTreeView_ItemInvoked(TreeView sender, TreeViewItemInvokedEventArgs args)
         {
             var node = args.InvokedItem as TreeViewNode;
             if (node.Content is FolderTree)
