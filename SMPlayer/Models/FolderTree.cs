@@ -49,18 +49,18 @@ namespace SMPlayer.Models
         {
             LoadingStatus = ExecutionStatus.Break;
         }
-        public async Task<TreeOperationProgressIndicator> CheckNewFile(TreeOperationProgressListener listener = null)
+        public async Task<TreeOperationProgressIndicator> CheckNewFile()
         {
             // Use Progress for music added, Max for music removed.
             var indicator = new TreeOperationProgressIndicator();
-            await checkNewFile(listener, indicator);
+            await checkNewFile(indicator);
             return indicator;
         }
-        private async Task checkNewFile(TreeOperationProgressListener listener, TreeOperationProgressIndicator indicator)
+        private async Task checkNewFile(TreeOperationProgressIndicator indicator)
         {
             LoadingStatus = ExecutionStatus.Running;
             foreach (var tree in Trees)
-                await tree.checkNewFile(listener, indicator);
+                await tree.checkNewFile(indicator);
             var pathSet = Files.Select(m => m.Path).ToHashSet();
             var newList = new List<Music>();
             var newSet = new HashSet<string>();
@@ -75,7 +75,6 @@ namespace SMPlayer.Models
                     newList.Add(music);
                     MusicLibraryPage.AllSongs.Add(music); // Temporary
                     Settings.settings.RecentlyAddedMusic.Add(music);
-                    listener?.Update(Path, music.Name, 0, 0);
                 }
             }
             int before = Files.Count;
@@ -309,20 +308,17 @@ namespace SMPlayer.Models
         public string Directory { get; set; }
         public int Folders { get; set; }
         public int Songs { get; set; }
-        public string Info
-        {
-            get
-            {
-                string info = Helper.LocalizeMessage("Songs:") + Songs;
-                if (Folders > 0) info = Helper.LocalizeMessage("Folders:") + Folders + " • " + info;
-                return info;
-            }
-        }
         public TreeInfo(string Directory, int Folders, int Songs)
         {
             this.Directory = Directory;
             this.Folders = Folders;
             this.Songs = Songs;
+        }
+        public override string ToString()
+        {
+            string info = Helper.LocalizeMessage("Songs:") + Songs;
+            if (Folders > 0) info = Helper.LocalizeMessage("Folders:") + Folders + " • " + info;
+            return info;
         }
     }
 

@@ -159,7 +159,8 @@ namespace SMPlayer.Models
         public static string GetFilename(string Path)
         {
             //return Path.Substring(Settings.settings.RootPath.Length + 1); // Plus one due to "\"
-            return Path.Substring(Path.LastIndexOf('\\') + 1);
+            string fullName = Path.Substring(Path.LastIndexOf('\\') + 1);
+            return fullName.Substring(0, fullName.LastIndexOf("."));
         }
 
         public async Task<MusicProperties> GetMusicPropertiesAsync()

@@ -36,5 +36,3 @@ Default music player.
 
 # TO FIX
 Buttons become unavailable when come back from Mini mode.
-
-Update LocalPage after checking new music.

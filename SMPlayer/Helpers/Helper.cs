@@ -50,7 +50,13 @@ namespace SMPlayer
             ulong kb = bytes >> 10;
             return kb < 1024 ? kb + " KB" : Math.Round((double)kb / 1024, 2) + " MB";
         }
-
+        public static int FindIndex<T>(this ObservableCollection<T> list, Predicate<T> match)
+        {
+            for (int i = 0; i < list.Count; i++)
+                if (match(list[i]))
+                    return i;
+            return -1;
+        }
         public static ObservableCollection<T> SetTo<T>(this ObservableCollection<T> dst, IEnumerable<T> src)
         {
             var temp = src.ToList();

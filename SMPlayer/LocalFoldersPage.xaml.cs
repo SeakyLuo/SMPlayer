@@ -1,5 +1,9 @@
 ﻿using SMPlayer.Models;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -83,7 +87,16 @@ namespace SMPlayer
             if (flyout.Target.DataContext is GridFolderView gridFolderView) tree = gridFolderView.Tree;
             else if (flyout.Target.DataContext is TreeViewNode node) tree = node.Content as FolderTree;
             flyout.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(tree.Path, Windows.Storage.StorageItemTypes.Folder));
-            // Check New Music
+            flyout.Items.Add(MenuFlyoutHelper.GetRefreshDirectoryMenuFlyout(tree, (newTree) =>
+            {
+                CurrentTree.FindTree(tree).CopyFrom(newTree);
+                int index = GridItems.FindIndex(i => i.Tree.Equals(tree));
+                var item = GridItems[index];
+                item.Tree = newTree;
+                GridItems[index] = item;
+                //var node = LocalFolderTreeView.RootNodes.FirstOrDefault(i => i.Content.Equals(tree));
+                //node.Content = newTree;
+            }));
         }
         private void OpenMusicFlyout(object sender, object e)
         {
@@ -118,9 +131,10 @@ namespace SMPlayer
 
         private TreeViewNode FillTreeNode(TreeViewNode node)
         {
+            node.HasUnrealizedChildren = false;
             var tree = node.Content as FolderTree;
             foreach (var item in tree.Trees)
-                node.Children.Add(FillTreeNode(new TreeViewNode() { Content = item, HasUnrealizedChildren = true }));
+                node.Children.Add(new TreeViewNode() { Content = item, HasUnrealizedChildren = true });
             foreach (var item in tree.Files)
                 node.Children.Add(new TreeViewNode() { Content = item });
             return node;

@@ -356,7 +356,7 @@
                                 FontWeight="SemiBold"
                                 HorizontalTextAlignment="Left"
                                 MaxLines="2"
-                                Text="{x:Bind Name}"
+                                Text="{x:Bind Name, Mode=OneWay}"
                                 TextWrapping="Wrap" />
                             <TextBlock
                                 Margin="0,3,0,0"
@@ -364,7 +364,7 @@
                                 Foreground="Gray"
                                 HorizontalTextAlignment="Left"
                                 MaxLines="2"
-                                Text="{x:Bind FolderInfo}" />
+                                Text="{x:Bind FolderInfo, Mode=OneWay}" />
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
                                     <VisualState x:Name="Normal" />

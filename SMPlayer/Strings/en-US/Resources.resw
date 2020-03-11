@@ -573,6 +573,9 @@
   <data name="RecentTextBlock.Text" xml:space="preserve">
     <value>Recent</value>
   </data>
+  <data name="Refresh Directory" xml:space="preserve">
+    <value>Refresh Directory</value>
+  </data>
   <data name="Remove From Playlist" xml:space="preserve">
     <value>Remove From Playlist</value>
   </data>

@@ -10,8 +10,8 @@ namespace SMPlayer.Models
 {
     class GridFolderView : INotifyPropertyChanged
     {
-        public string Name { get; set; }
-        public string FolderInfo { get; set; }
+        public string Name { get => Tree.Directory; }
+        public string FolderInfo { get => Tree.Info.ToString(); }
         public BitmapImage First
         {
             get => first;
@@ -57,21 +57,25 @@ namespace SMPlayer.Models
                 OnPropertyChanged();
             }
         }
-
         private BitmapImage first, second, third, fourth, large = Helper.ThumbnailNotFoundImage;
-        public FolderTree Tree { get; private set; }
-        public List<Music> Songs
+        public FolderTree Tree
         {
-            get => songs ?? (songs = Tree.Flatten());
+            get => folderTree;
+            set
+            {
+                folderTree.CopyFrom(value);
+                songs = value.Flatten();
+                OnPropertyChanged();
+            }
         }
+        private FolderTree folderTree;
+        public List<Music> Songs { get => songs ?? (songs = Tree.Flatten()); }
         private List<Music> songs;
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         private bool thumbnaiLoaded = false;
         public GridFolderView(FolderTree tree)
         {
-            Tree = tree;
-            Name = tree.Directory;
-            FolderInfo = tree.Info.Info;
+            folderTree = tree;
         }
 
         public async void SetThumbnail()
@@ -115,7 +119,7 @@ namespace SMPlayer.Models
 
         public override bool Equals(object obj)
         {
-            return obj != null && obj is GridFolderView && Name == (obj as GridFolderView).Name;
+            return obj is GridFolderView item && Name == item.Name;
         }
 
         public override int GetHashCode()

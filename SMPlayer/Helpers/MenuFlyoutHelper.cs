@@ -152,6 +152,20 @@ namespace SMPlayer
             item.SetToolTip("Show In Explorer");
             return item;
         }
+        public static MenuFlyoutItem GetRefreshDirectoryMenuFlyout(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
+        {
+            var item = new MenuFlyoutItem()
+            {
+                Icon = new SymbolIcon(Symbol.Refresh),
+                Text = Helper.Localize("Refresh Directory")
+            };
+            item.Click += (s, args) =>
+            {
+                SettingsPage.CheckNewMusic(tree, afterTreeUpdated);
+            };
+            item.SetToolTip("Refresh Directory");
+            return item;
+        }
         public MenuFlyout GetMusicMenuFlyout(MenuFlyoutItemClickListener listener = null, bool withNavigation = true)
         {
             var music = Data as Music;

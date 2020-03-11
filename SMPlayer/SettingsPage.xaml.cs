@@ -111,19 +111,26 @@ namespace SMPlayer
             }
         }
 
-        private async void CheckNewMusicButton_Click(object sender, RoutedEventArgs e)
+        private void CheckNewMusicButton_Click(object sender, RoutedEventArgs e)
+        {
+            CheckNewMusic(Settings.settings.Tree);
+        }
+
+        public static async void CheckNewMusic(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
         {
             MainPage.Instance.Loader.Show("ProcessRequest", false);
-            var indicator = await Settings.settings.Tree.CheckNewFile(this);
+            var indicator = await tree.CheckNewFile();
+            Settings.settings.Tree.FindTree(tree).CopyFrom(tree);
             if (indicator.Progress != 0 || indicator.Max != 0)
             {
                 foreach (var listener in listeners)
-                    listener.LibraryUpdated(Settings.settings.RootPath);
+                    listener.LibraryUpdated(tree.Path);
                 if (indicator.Max != 0) MediaHelper.RemoveBadMusic();
-                Settings.Save();
             }
+            Settings.Save();
+            afterTreeUpdated.Invoke(tree);
             MainPage.Instance.Loader.Hide();
-            MainPage.Instance.ShowNotification(Helper.LocalizeMessage("CheckNewMusicResult", indicator.Progress, indicator.Max));
+            MainPage.Instance.ShowNotification(Helper.LocalizeMessage("CheckNewMusicResult", indicator.Progress, -indicator.Max));
         }
 
         private void UpdateMusicLibrary_Click(object sender, RoutedEventArgs e)
