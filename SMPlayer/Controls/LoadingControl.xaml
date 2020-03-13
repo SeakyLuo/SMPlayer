@@ -45,16 +45,18 @@
                 Outline="White"
                 Style="{StaticResource NormalProgressStyle}"
                 Thickness="12"
-                Visibility="{x:Bind IsDeterminant, Mode=OneWay}"
+                Visibility="{x:Bind IsDeterminant, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
                 Value="{x:Bind Progress, Mode=OneWay}" />
             <TextBlock
                 x:Name="LoadingTextBlock"
-                MinHeight="80"
-                Margin="20,45"
+                MinHeight="150"
+                Margin="40,40"
                 HorizontalAlignment="Center"
                 FontSize="36"
                 Foreground="White"
+                MaxLines="3"
                 Text="{x:Bind Text, Mode=OneWay}"
+                TextAlignment="Center"
                 TextWrapping="WrapWholeWords" />
             <Button
                 x:Uid="StopButton"
