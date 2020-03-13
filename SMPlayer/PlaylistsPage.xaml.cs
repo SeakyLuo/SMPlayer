@@ -31,7 +31,7 @@ namespace SMPlayer
             PlaylistTabView.ItemsSource = Playlists;
             SetFooterText();
             Playlists.CollectionChanged += (sender, e) => SetFooterText();
-            PlaylistTabView.SelectedIndex = Settings.settings.Playlists.FindIndex((p) => p.Name == Settings.settings.LastPlaylist);
+            SelectPlaylist(Settings.settings.LastPlaylist);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -39,12 +39,20 @@ namespace SMPlayer
             base.OnNavigatedTo(e);
             if (e.Parameter is Playlist playlist)
             {
-                PlaylistTabView.SelectedItem = playlist;
+                SelectPlaylist(playlist.Name);
             }
             else if (e.Parameter is string playlistName)
             {
-                PlaylistTabView.SelectedItem = Playlists.FirstOrDefault((p) => p.Name == playlistName);
+                SelectPlaylist(playlistName);
             }
+            else if (e.Parameter is AlbumView albumView)
+            {
+                SelectPlaylist(albumView.Name);
+            }
+        }
+        private void SelectPlaylist(string target)
+        {
+            PlaylistTabView.SelectedItem = Playlists.FirstOrDefault(p => p.Name == target);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

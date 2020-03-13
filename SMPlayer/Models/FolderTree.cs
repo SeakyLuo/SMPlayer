@@ -81,7 +81,7 @@ namespace SMPlayer.Models
                 Files.Remove(music);
                 Settings.settings.DeleteMusic(music);
             }
-            data.Less = before - Files.Count;
+            data.Less += before - Files.Count;
             Files.AddRange(newList);
             Sort();
             LoadingStatus = ExecutionStatus.Ready;

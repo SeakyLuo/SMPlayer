@@ -180,7 +180,14 @@ namespace SMPlayer.Models
 
         public async Task<StorageFile> GetStorageFileAsync()
         {
-            return await StorageFile.GetFileFromPathAsync(Path);
+            try
+            {
+                return await StorageFile.GetFileFromPathAsync(Path);
+            }
+            catch (FileNotFoundException)
+            {
+                return null;
+            }
         }
 
         public async Task<string> GetLyricsAsync()
