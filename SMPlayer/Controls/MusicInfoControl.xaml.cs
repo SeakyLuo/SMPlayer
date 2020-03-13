@@ -53,7 +53,12 @@ namespace SMPlayer.Controls
         {
             CurrentMusic.PlayCount = 0;
             SetPlayCount(CurrentMusic);
-            MusicLibraryPage.AllSongs.First((m) => m == CurrentMusic).PlayCount = 0;
+            NotifyListeners(CurrentMusic, CurrentMusic);
+        }
+        private static void NotifyListeners(Music before, Music after)
+        {
+            MediaControl.NotifyMusicModifiedListeners(before, after);
+            foreach (var listener in MusicModifiedListeners) listener.Invoke(before, after);
         }
 
         public void SetPlayCount(Music music)
@@ -95,10 +100,7 @@ namespace SMPlayer.Controls
             if (uint.TryParse(YearTextBox.Text, out uint Year))
                 Properties.Year = Year;
             await Properties.SavePropertiesAsync();
-            MediaControl.NotifyMusicModifiedListeners(CurrentMusic, newMusic);
-            Settings.settings.Tree.FindMusic(CurrentMusic).CopyFrom(newMusic);
-            foreach (var listener in MusicModifiedListeners)
-                listener.Invoke(CurrentMusic, newMusic);
+            NotifyListeners(CurrentMusic, newMusic);
             CurrentMusic.CopyFrom(newMusic);
             Helper.ShowNotification("PropertiesUpdated");
         }

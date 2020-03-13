@@ -20,17 +20,11 @@ Export Data.
 
 Multi-Select.
 
-Playlist filter.
-
 ThemeColor change.
 
 Auto Search Lyrics.
 
 Animations.
-
-Date Added.
-
-Improved algorithm for update.
 
 Improved New Playlist Name.
 

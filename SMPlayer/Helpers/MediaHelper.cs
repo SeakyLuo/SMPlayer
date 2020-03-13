@@ -65,11 +65,11 @@ namespace SMPlayer
             if (playlist != null && playlist.Count != 0)
             {
                 if (settings.LastMusic == null)
-                    settings.LastMusic = MusicLibraryPage.MusicFromPath(playlist[0]);
+                    settings.LastMusic = Settings.FindMusic(playlist[0]);
                 CurrentMusic = settings.LastMusic;
                 foreach (var path in playlist)
                 {
-                    var target = MusicLibraryPage.MusicFromPath(path);
+                    var target = Settings.FindMusic(path);
                     if (target != null) AddMusic(target);
                 }
             }

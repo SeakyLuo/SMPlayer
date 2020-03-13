@@ -80,7 +80,7 @@ namespace SMPlayer.Models
                 }
                 MediaControl.AddMusicModifiedListener((before, after) =>
                 {
-                    settings.Tree.FindMusic(before).CopyFrom(after);
+                    FindMusic(before).CopyFrom(after);
                 });
                 foreach (var item in await ApplicationData.Current.LocalFolder.GetItemsAsync())
                     if (item.Name.EndsWith(".TMP"))
@@ -94,11 +94,15 @@ namespace SMPlayer.Models
             JsonFileHelper.SaveAsync(FILENAME, settings);
         }
 
+        public static Music FindMusic(Music music) { return settings.Tree.FindMusic(music); }
+        public static Music FindMusic(string path) { return settings.Tree.FindMusic(path); }
+
         public void LikeMusic(Music music)
         {
             if (MyFavorites.Contains(music)) return;
             music.Favorite = true;
             MyFavorites.Add(music);
+            Tree.FindMusic(music).Favorite = true;
             foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, true);
         }
 
@@ -111,6 +115,7 @@ namespace SMPlayer.Models
                 {
                     music.Favorite = true;
                     MyFavorites.Add(music);
+                    Tree.FindMusic(music).Favorite = true;
                     foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, true);
                 }
             }
@@ -120,6 +125,7 @@ namespace SMPlayer.Models
         {
             MyFavorites.Remove(music);
             music.Favorite = false;
+            Tree.FindMusic(music).Favorite = false;
             foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, false);
         }
 
@@ -151,7 +157,7 @@ namespace SMPlayer.Models
             if (string.IsNullOrEmpty(newName) || string.IsNullOrWhiteSpace(newName))
                 return NamingError.EmptyOrWhiteSpace;
             if (newName == MenuFlyoutHelper.NowPlaying || newName == MenuFlyoutHelper.MyFavorites ||
-                Playlists.FindIndex((p) => p.Name == newName) != -1)
+                Playlists.FindIndex(p => p.Name == newName) != -1)
                 return NamingError.Used;
             if (newName.Contains(Helper.StringConcatenationFlag) || newName.Contains("{0}"))
                 return NamingError.Special;
@@ -173,13 +179,27 @@ namespace SMPlayer.Models
                     break;
                 case RenameOption.Rename:
                     if (oldName == newName) break;
-                    int index = Playlists.FindIndex((p) => p.Name == oldName);
+                    int index = Playlists.FindIndex(p => p.Name == oldName);
                     Playlists[index].Name = newName;
                     PlaylistsPage.Playlists[index].Name = newName;
                     break;
             }
         }
 
+
+        public static List<Music> PathToCollection(ICollection<string> paths, bool isFavorite = false)
+        {
+            List<Music> collection = new List<Music>();
+            foreach (var path in paths)
+            {
+                if (FindMusic(path) is Music music)
+                {
+                    if (isFavorite) music.Favorite = true;
+                    collection.Add(music);
+                }
+            }
+            return collection;
+        }
     }
 
     public interface LikeMusicListener

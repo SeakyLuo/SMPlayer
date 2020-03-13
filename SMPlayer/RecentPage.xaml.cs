@@ -35,7 +35,7 @@ namespace SMPlayer
             LoadingProgressBar.Visibility = Visibility.Visible;
             try
             {
-                GridMusicView.Setup(MusicLibraryPage.ConvertMusicPathToCollection(paths));
+                GridMusicView.Setup(Models.Settings.PathToCollection(paths));
             }
             catch (InvalidOperationException)
             {

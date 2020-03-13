@@ -81,6 +81,7 @@ namespace SMPlayer
         public static void MusicModified(Music before, Music after)
         {
             AllSongs.FirstOrDefault(m => m.Equals(before))?.CopyFrom(after);
+            Settings.settings.Tree.FindMusic(before)?.CopyFrom(after);
         }
 
         private void MenuFlyout_Opening(object sender, object e)
@@ -166,25 +167,6 @@ namespace SMPlayer
         private static void NotifyListeners()
         {
             foreach (var listener in listeners) listener.SongsSet(AllSongs);
-        }
-
-        public static List<Music> ConvertMusicPathToCollection(ICollection<string> paths, bool isFavorite = false)
-        {
-            List<Music> collection = new List<Music>();
-            foreach (var path in paths)
-            {
-                if (MusicFromPath(path) is Music music)
-                {
-                    if (isFavorite) music.Favorite = true;
-                    collection.Add(music);
-                }
-            }
-            return collection;
-        }
-
-        public static Music MusicFromPath(string path)
-        {
-            return AllSongs.FirstOrDefault(m => m.Path == path);
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)

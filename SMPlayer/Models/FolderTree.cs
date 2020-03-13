@@ -315,9 +315,13 @@ namespace SMPlayer.Models
             }
             return null;
         }
+        public Music FindMusic(string path)
+        {
+            return Files.FirstOrDefault(m => m.Path == path) ?? Trees.FirstOrDefault(tree => path.StartsWith(tree.Path))?.FindMusic(path);
+        }
         public Music FindMusic(Music target)
         {
-            return Files.FirstOrDefault(m => m == target) ?? Trees.FirstOrDefault(tree => target.Path.StartsWith(tree.Path))?.FindMusic(target);
+            return FindMusic(target.Path);
         }
         public async Task<StorageFolder> GetStorageFolder() { return await StorageFolder.GetFolderFromPathAsync(Path);  }
 
