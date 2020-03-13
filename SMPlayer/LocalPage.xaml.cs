@@ -15,9 +15,9 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalPage : Page, LocalSetter, AfterPathSet
+    public sealed partial class LocalPage : Page, LocalSetter, AfterPathSetListener
     {
-        public static LocalPageButtonListener MusicViewModeChangedListener, FolderViewModeChangedListener;
+        public static LocalPageButtonListener MusicListener, FolderListener;
         public static Stack<FolderTree> History = new Stack<FolderTree>();
         public LocalPage()
         {
@@ -118,21 +118,21 @@ namespace SMPlayer
             if (LocalFoldersItem.IsSelected)
             {
                 Settings.settings.LocalFolderGridView = isGridView;
-                if (FolderViewModeChangedListener != null) FolderViewModeChangedListener.ModeChanged(isGridView);
+                FolderListener?.ModeChanged(isGridView);
             }
             else
             {
                 Settings.settings.LocalMusicGridView = isGridView;
-                if (MusicViewModeChangedListener != null) MusicViewModeChangedListener.ModeChanged(isGridView);
+                MusicListener?.ModeChanged(isGridView);
             }
         }
 
         private void LocalRefreshItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            SettingsPage.CheckNewMusic(History.Peek(), newTree =>
+            SettingsPage.CheckNewMusic(History.Peek(), tree =>
             {
-                if (LocalFoldersItem.IsSelected) FolderViewModeChangedListener.UpdatePage(newTree);
-                else MusicViewModeChangedListener.UpdatePage(newTree);
+                if (LocalFoldersItem.IsSelected) FolderListener.UpdatePage(tree);
+                else MusicListener.UpdatePage(tree);
             });
         }
 
@@ -185,6 +185,8 @@ namespace SMPlayer
         {
             History.Clear();
             SetPage(Settings.settings.Tree, false);
+            if (LocalFoldersItem.IsSelected) FolderListener.UpdatePage(Settings.settings.Tree);
+            else MusicListener.UpdatePage(Settings.settings.Tree);
         }
 
         private void OpenLocalMusicFlyout(object sender, object e)

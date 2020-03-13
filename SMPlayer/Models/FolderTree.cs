@@ -14,13 +14,18 @@ namespace SMPlayer.Models
         public List<FolderTree> Trees { get; set; } = new List<FolderTree>();
         public List<Music> Files { get; set; } = new List<Music>();
         public string Path { get; set; } = "";
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
-        public TreeInfo Info { get => new TreeInfo(Directory, Trees.Count, Files.Count); }
-        public bool IsEmpty { get => Files.Count == 0 && Trees.All((tree) => tree.IsEmpty); }
-        public string Directory { get => Path.Substring(Path.LastIndexOf("\\") + 1); }
-        public SortBy Criteria { get; set; } = SortBy.Title;
+        public SortBy Criterion { get; set; } = SortBy.Title;
 
-        public static ExecutionStatus LoadingStatus { get; private set; } = ExecutionStatus.Ready;
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        [Newtonsoft.Json.JsonIgnore]
+        public TreeInfo Info { get => new TreeInfo(Directory, Trees.Count, Files.Count); }
+        [Newtonsoft.Json.JsonIgnore]
+        public bool IsEmpty { get => Files.Count == 0 && Trees.All(tree => tree.IsEmpty); }
+        [Newtonsoft.Json.JsonIgnore]
+        public int FileCount { get => Trees.Sum(t => t.FileCount) + Files.Count; }
+        [Newtonsoft.Json.JsonIgnore]
+        public string Directory { get => Path.Substring(Path.LastIndexOf("\\") + 1); }
+        private static ExecutionStatus LoadingStatus = ExecutionStatus.Ready;
 
         public FolderTree() { }
         public FolderTree(FolderTree tree)
@@ -33,15 +38,15 @@ namespace SMPlayer.Models
             Trees = tree.Trees.ToList();
             Files = tree.Files.ToList();
             Path = tree.Path;
-            Criteria = tree.Criteria;
+            Criterion = tree.Criterion;
             OnPropertyChanged();
         }
 
-        public static async Task<int> CountMusicAsync(StorageFolder folder)
+        public static async Task<int> CountFilesAsync(StorageFolder folder)
         {
             int count = (await folder.GetFilesAsync()).Count(f => f.IsMusicFile());
             foreach (var sub in await folder.GetFoldersAsync())
-                count += await CountMusicAsync(sub);
+                count += await CountFilesAsync(sub);
             return count;
         }
 
@@ -51,15 +56,39 @@ namespace SMPlayer.Models
         }
         public async Task<bool> CheckNewFile(TreeUpdateData data = null)
         {
-            // Use Progress for music added, Max for music removed.
+            return await CheckNewFile(await GetStorageFolder(), data);
+        }
+        private async Task<bool> CheckNewFile(StorageFolder folder, TreeUpdateData data = null)
+        {
             LoadingStatus = ExecutionStatus.Running;
-            foreach (var tree in Trees)
-                await tree.CheckNewFile(data);
-            if (LoadingStatus == ExecutionStatus.Break) return false;
-            var pathSet = Files.Select(m => m.Path).ToHashSet();
+            var pathSet = new HashSet<string>();
+            foreach (var sub in await folder.GetFoldersAsync())
+            {
+                if (LoadingStatus == ExecutionStatus.Break) return false;
+                if (Trees.FirstOrDefault(t => t.Path == sub.Path) is FolderTree tree)
+                    await tree.CheckNewFile(sub, data);
+                else
+                {
+                    tree = new FolderTree();
+                    await tree.Init(sub);
+                    if (!tree.IsEmpty)
+                    {
+                        Trees.Add(tree);
+                        data.More += tree.FileCount;
+                    }
+                }
+                pathSet.Add(sub.Name);
+            }
+            foreach (var tree in Trees.FindAll(t => !pathSet.Contains(t.Directory)))
+            {
+                data.Less += tree.FileCount;
+                Trees.Remove(tree);
+                tree.Clear();
+            }
+            pathSet = Files.Select(m => m.Path).ToHashSet();
             var newList = new List<Music>();
             var newSet = new HashSet<string>();
-            foreach (var file in await (await GetStorageFolder()).GetFilesAsync())
+            foreach (var file in await folder.GetFilesAsync())
             {
                 if (LoadingStatus == ExecutionStatus.Break) return false;
                 if (!file.IsMusicFile()) continue;
@@ -85,20 +114,41 @@ namespace SMPlayer.Models
             LoadingStatus = ExecutionStatus.Ready;
             return true;
         }
-        public async Task<bool> Init(StorageFolder folder, TreeOperationProgressListener listener = null)
+        public async Task<bool> Init(StorageFolder folder, TreeOperationListener listener = null)
         {
-            return await Init(folder, listener, new TreeOperationProgressIndicator() { Max = listener == null ? 0 : await CountMusicAsync(folder) });
+            return await Init(folder, listener, new TreeOperationIndicator() { Max = listener == null ? 0 : await CountFilesAsync(folder) });
         }
-        private async Task<bool> Init(StorageFolder folder, TreeOperationProgressListener listener, TreeOperationProgressIndicator indicator)
+        private async Task<bool> Init(StorageFolder folder, TreeOperationListener listener, TreeOperationIndicator indicator)
         {
             LoadingStatus = ExecutionStatus.Running;
             var samePath = folder.Path == Path;
-            if (!string.IsNullOrEmpty(Path) && !samePath && folder.Path.StartsWith(Path))
+            if (string.IsNullOrEmpty(Path))
+            {
+                // New folder tree
+                foreach (var subFolder in await folder.GetFoldersAsync())
+                {
+                    if (LoadingStatus == ExecutionStatus.Break) return false;
+                    var tree = new FolderTree();
+                    await tree.Init(subFolder, listener, indicator);
+                    if (!tree.IsEmpty) Trees.Add(tree);
+                }
+                foreach (var file in await folder.GetFilesAsync())
+                {
+                    if (LoadingStatus == ExecutionStatus.Break) return false;
+                    if (file.IsMusicFile())
+                    {
+                        Music music = await Music.GetMusicAsync(file);
+                        listener?.Update(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
+                        Files.Add(music);
+                    }
+                }
+            }
+            else if (!samePath && folder.Path.StartsWith(Path))
             {
                 // New folder is a Subfolder of the current folder
                 FolderTree tree = FindTree(folder.Path);
                 CopyFrom(tree);
-                listener.Update(folder.DisplayName, "", 0, 0);
+                listener?.Update(folder.DisplayName, "", 0, 0);
             }
             else if (!samePath && Path.StartsWith(folder.Path))
             {
@@ -135,39 +185,31 @@ namespace SMPlayer.Models
             else
             {
                 // No hierarchy between folders
-                // or same folder
+                // or update folder
                 var trees = new List<FolderTree>();
-                foreach (var tree in Trees)
-                {
-                    tree.Clear();
-                    trees.Add(tree);
-                }
-                Trees.Clear();
                 foreach (var subFolder in await folder.GetFoldersAsync())
                 {
                     if (LoadingStatus == ExecutionStatus.Break) return false;
-                    var source = trees.FirstOrDefault(t => t.Path == subFolder.Path);
+                    var source = Trees.FirstOrDefault(t => t.Path == subFolder.Path);
                     var tree = new FolderTree()
                     {
-                        Criteria = source == null ? SortBy.Title : source.Criteria
+                        Criterion = source?.Criterion ?? SortBy.Title
                     };
                     await tree.Init(subFolder, listener, indicator);
-                    if (tree.Files.Count != 0) Trees.Add(tree);
+                    if (!tree.IsEmpty) trees.Add(tree);
                 }
-                Files.Clear();
+                Clear();
+                Trees = trees;
                 foreach (var file in await folder.GetFilesAsync())
                 {
                     if (LoadingStatus == ExecutionStatus.Break) return false;
                     if (file.IsMusicFile())
                     {
                         Music music = await Music.GetMusicAsync(file);
-                        if (samePath)
+                        if (samePath && MusicLibraryPage.AllSongsSet.FirstOrDefault(m => m == music) is Music oldItem)
                         {
-                            if (MusicLibraryPage.AllSongsSet.FirstOrDefault(m => m == music) is Music oldItem)
-                            {
-                                music.PlayCount = oldItem.PlayCount;
-                                music.Favorite = oldItem.Favorite;
-                            }
+                            music.PlayCount = oldItem.PlayCount;
+                            music.Favorite = oldItem.Favorite;
                         }
                         listener?.Update(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
                         Files.Add(music);
@@ -199,7 +241,7 @@ namespace SMPlayer.Models
             foreach (var file in tree.Files)
                 if (set.Contains(file))
                     Files.First(f => f.Equals(file)).CopyFrom(file);
-            Criteria = tree.Criteria;
+            Criterion = tree.Criterion;
             Sort();
             OnPropertyChanged();
             return this;
@@ -214,7 +256,8 @@ namespace SMPlayer.Models
         }
         public void Sort()
         {
-            switch (Criteria)
+            Trees = Trees.OrderBy(t => t.Directory).ToList();
+            switch (Criterion)
             {
                 case SortBy.Title:
                     SortByTitle();
@@ -229,17 +272,17 @@ namespace SMPlayer.Models
         }
         public List<Music> SortByTitle()
         {
-            Criteria = SortBy.Title;
+            Criterion = SortBy.Title;
             return Files = Files.OrderBy(m => m.Name).ToList();
         }
         public List<Music> SortByArtist()
         {
-            Criteria = SortBy.Artist;
+            Criterion = SortBy.Artist;
             return Files = Files.OrderBy(m => m.Artist).ToList();
         }
         public List<Music> SortByAlbum()
         {
-            Criteria = SortBy.Album;
+            Criterion = SortBy.Album;
             return Files = Files.OrderBy(m => m.Album).ToList();
         }
         public List<Music> Reverse()
@@ -249,6 +292,8 @@ namespace SMPlayer.Models
         }
         public void Clear()
         {
+            foreach (var tree in Trees)
+                tree.Clear();
             Trees.Clear();
             Files.Clear();
         }
@@ -320,7 +365,7 @@ namespace SMPlayer.Models
         }
     }
 
-    public class TreeOperationProgressIndicator
+    public class TreeOperationIndicator
     {
         public int Progress { get; set; } = 0;
         public int Max { get; set; } = 0;
@@ -333,7 +378,7 @@ namespace SMPlayer.Models
         public int Less { get; set; } = 0;
     }
 
-    public interface TreeOperationProgressListener
+    public interface TreeOperationListener
     {
         void Update(string folder, string file, int progress, int max);
     }

@@ -27,7 +27,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            LocalPage.FolderViewModeChangedListener = this;
+            LocalPage.FolderListener = this;
             Controls.MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
             {
                 if (CurrentTree.Contains(before))
@@ -57,12 +57,13 @@ namespace SMPlayer
         private void Setup(FolderTree tree)
         {
             if (TreePath == tree.Path) return;
+            LocalLoadingControl.Visibility = Visibility.Visible;
             UpdateTree(tree);
+            LocalLoadingControl.Visibility = Visibility.Collapsed;
         }
 
         private void UpdateTree(FolderTree tree)
         {
-            LocalLoadingControl.Visibility = Visibility.Visible;
             SetupTreeView(tree);
             GridItems.Clear();
             setter.SetPage(tree);
@@ -70,7 +71,6 @@ namespace SMPlayer
                 GridItems.Add(new GridFolderView(branch));
             TreePath = tree.Path;
             CurrentTree = tree;
-            LocalLoadingControl.Visibility = Visibility.Collapsed;
         }
 
         private void OpenPlaylistFlyout(object sender, object e)
@@ -110,8 +110,8 @@ namespace SMPlayer
         }
         private TreeViewNode FindNode(TreeViewNode node, FolderTree tree)
         {
-            if (node == null || tree.Equals(node.Content)) return node;
-            return FindNode(node.Children.FirstOrDefault(sub => tree.Path.StartsWith((sub.Content as FolderTree).Path)), tree);
+            return node == null || tree.Equals(node.Content) ? node :
+                FindNode(node.Children.FirstOrDefault(sub => tree.Path.StartsWith((sub.Content as FolderTree).Path)), tree);
         }
         private void OpenMusicFlyout(object sender, object e)
         {

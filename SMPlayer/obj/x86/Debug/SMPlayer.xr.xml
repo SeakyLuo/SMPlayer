@@ -81,6 +81,7 @@
       <RootProperty Name="Width" />
       <RootProperty Name="TextTrimming" />
       <RootProperty Name="Visibility" />
+      <RootProperty Name="MinHeight" />
       <RootProperty Name="Style" />
       <RootProperty Name="MinWidth" />
       <RootProperty Name="FontFamily" />

@@ -14,15 +14,15 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class SettingsPage : Page, TreeOperationProgressListener
+    public sealed partial class SettingsPage : Page, TreeOperationListener
     {
         public static ShowToast[] NotificationOptions = { ShowToast.Always, ShowToast.MusicChanged, ShowToast.Never };
-        private static List<AfterPathSet> listeners = new List<AfterPathSet>();
+        private static List<AfterPathSetListener> listeners = new List<AfterPathSetListener>();
         private FolderTree loadingTree;
         public SettingsPage()
         {
             this.InitializeComponent();
-            MainPage.Instance.Loader.BreakLoadingListeners.Add(() => loadingTree.PauseLoading());
+            MainPage.Instance.Loader.BreakLoadingListeners.Add(() => loadingTree?.PauseLoading());
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -55,11 +55,13 @@ namespace SMPlayer
             if (folder == null) return;
             MainPage.Instance.Loader.Show("LoadMusicLibrary", true);
             Helper.CurrentFolder = folder;
-            loadingTree = new FolderTree();
-            if (!await loadingTree.Init(folder, this)) return;
-            MainPage.Instance.Loader.SetLocalizedText("UpdateMusicLibrary");
-            loadingTree.MergeFrom(Settings.settings.Tree);
-            Settings.settings.Tree = loadingTree;
+            //loadingTree = new FolderTree();
+            //if (!await loadingTree.Init(folder, this)) return;
+            //MainPage.Instance.Loader.SetLocalizedText("UpdateMusicLibrary");
+            //loadingTree.MergeFrom(Settings.settings.Tree);
+            //Settings.settings.Tree = loadingTree;
+            loadingTree = Settings.settings.Tree;
+            await Settings.settings.Tree.Init(folder, this);
             Settings.settings.RootPath = folder.Path;
             MusicLibraryPage.SortAndSetAllSongs(Settings.settings.Tree.Flatten());
             MainPage.Instance.Loader.Max = listeners.Count;
@@ -77,7 +79,7 @@ namespace SMPlayer
 
         public static void NotifyLibraryChange(string path) { foreach (var listener in listeners) listener.PathSet(path); }
 
-        public static void AddAfterPathSetListener(AfterPathSet listener)
+        public static void AddAfterPathSetListener(AfterPathSetListener listener)
         {
             listeners.Add(listener);
         }
@@ -186,7 +188,7 @@ namespace SMPlayer
         }
     }
 
-    public interface AfterPathSet
+    public interface AfterPathSetListener
     {
         void PathSet(string path);
     }

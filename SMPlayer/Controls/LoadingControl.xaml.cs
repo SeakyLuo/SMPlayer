@@ -28,7 +28,11 @@ namespace SMPlayer
                                                                                                  typeof(LoadingControl),
                                                                                                  new PropertyMetadata(0d));
 
-        public bool IsDeterminant { get; set; }
+        public bool IsDeterminant
+        {
+            get => (bool)GetValue(IsDeterminantProperty);
+            set => SetValue(IsDeterminantProperty, value);
+        }
         public static readonly DependencyProperty IsDeterminantProperty = DependencyProperty.Register("IsDeterminant",
                                                                                                     typeof(bool),
                                                                                                     typeof(LoadingControl),
@@ -55,10 +59,11 @@ namespace SMPlayer
             Text = Helper.LocalizeMessage(text, args);
         }
 
-        public void Show(string text, bool isDeterminant)
+        public void Show(string text, bool isDeterminant, int progress = 0)
         { 
             SetLocalizedText(text);
             IsDeterminant = isDeterminant;
+            Progress = progress;
             this.Visibility = Visibility.Visible;
         }
 

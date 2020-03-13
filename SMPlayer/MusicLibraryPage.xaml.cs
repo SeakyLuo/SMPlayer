@@ -98,35 +98,10 @@ namespace SMPlayer
         public static IEnumerable<Music> SortPlaylist(IEnumerable<Music> playlist, SortBy criterion)
         {
             return playlist.OrderBy(SortByConverter.GetKeySelector(criterion));
-            //IEnumerable<Music> temp = null;
-            //playlist.OrderBy(SortByConverter.GetKeySelector(criterion));
-            //switch (criterion)
-            //{
-            //    case SortBy.Title:
-            //        temp = playlist.OrderBy(music => music.Name);
-            //        break;
-            //    case SortBy.Album:
-            //        temp = playlist.OrderBy(music => music.Album);
-            //        break;
-            //    case SortBy.Artist:
-            //        temp = playlist.OrderBy(music => music.Artist);
-            //        break;
-            //    case SortBy.Duration:
-            //        temp = playlist.OrderBy(music => music.Duration);
-            //        break;
-            //    case SortBy.PlayCount:
-            //        temp = playlist.OrderBy(music => music.PlayCount);
-            //        break;
-            //    default:
-            //        temp = playlist;
-            //        break;
-            //}
-            //return temp;
         }
         public static void SortAndSetAllSongs(IEnumerable<Music> list)
         {
-            var newLibrary = SortPlaylist(list, Settings.settings.MusicLibraryCriterion);
-            SetAllSongs(newLibrary);
+            SetAllSongs(SortPlaylist(list, Settings.settings.MusicLibraryCriterion));
         }
 
         private void MusicLibraryDataGrid_Sorting(object sender, DataGridColumnEventArgs e)
@@ -163,8 +138,8 @@ namespace SMPlayer
         }
         public static void AddMusic(Music music)
         {
+            if (!AllSongsSet.Add(music)) return;
             libraryReset = true;
-            AllSongsSet.Add(music);
             var keySelector = SortByConverter.GetKeySelector(Settings.settings.MusicLibraryCriterion);
             for (int i = 0; i < AllSongs.Count; i++)
             {
@@ -181,8 +156,8 @@ namespace SMPlayer
         }
         public static void RemoveMusic(Music music)
         {
+            if (!AllSongsSet.Remove(music)) return;
             libraryReset = true;
-            AllSongsSet.Remove(music);
             AllSongs.Remove(music);
             Settings.settings.RemoveMusic(music);
             NotifyListeners();

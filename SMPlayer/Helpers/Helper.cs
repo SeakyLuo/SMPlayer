@@ -50,6 +50,10 @@ namespace SMPlayer
             ulong kb = bytes >> 10;
             return kb < 1024 ? kb + " KB" : Math.Round((double)kb / 1024, 2) + " MB";
         }
+        public static void Print<T>(this IEnumerable<T> list)
+        {
+            Debug.WriteLine($"[{string.Join(", ", list.Select(i => i.ToString()))}]");
+        }
         public static void AddOrMoveToTheFirst<T>(this Collection<T> list, T item)
         {
             list.Remove(item);
