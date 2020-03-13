@@ -46,7 +46,7 @@ namespace SMPlayer
         public static async Task Init()
         {
             SetAllSongs(JsonFileHelper.Convert<ObservableCollection<Music>>(await JsonFileHelper.ReadAsync(FILENAME)));
-            MediaControl.AddMusicControlListener(MusicModified);
+            MediaControl.AddMusicModifiedListener(MusicModified);
         }
 
         public static async void CheckLibrary()
@@ -54,11 +54,10 @@ namespace SMPlayer
             if (Helper.CurrentFolder == null) return;
             var data = new TreeUpdateData();
             await Settings.settings.Tree.CheckNewFile(data);
-            var newLibrary = Settings.settings.Tree.Flatten();
             if (IsLibraryUnchangedAfterChecking = data.More == 0 && data.Less == 0) return;
-            SetAllSongs(newLibrary);
-            SettingsPage.NotifyLibraryChange(Settings.settings.RootPath);
-            Save();
+            SortAndSetAllSongs(Settings.settings.Tree.Flatten());
+            NotifyListeners();
+            App.Save();
         }
 
         public static void Save()
@@ -96,30 +95,44 @@ namespace SMPlayer
             }
         }
 
+        public static IEnumerable<Music> SortPlaylist(IEnumerable<Music> playlist, SortBy criterion)
+        {
+            return playlist.OrderBy(SortByConverter.GetKeySelector(criterion));
+            //IEnumerable<Music> temp = null;
+            //playlist.OrderBy(SortByConverter.GetKeySelector(criterion));
+            //switch (criterion)
+            //{
+            //    case SortBy.Title:
+            //        temp = playlist.OrderBy(music => music.Name);
+            //        break;
+            //    case SortBy.Album:
+            //        temp = playlist.OrderBy(music => music.Album);
+            //        break;
+            //    case SortBy.Artist:
+            //        temp = playlist.OrderBy(music => music.Artist);
+            //        break;
+            //    case SortBy.Duration:
+            //        temp = playlist.OrderBy(music => music.Duration);
+            //        break;
+            //    case SortBy.PlayCount:
+            //        temp = playlist.OrderBy(music => music.PlayCount);
+            //        break;
+            //    default:
+            //        temp = playlist;
+            //        break;
+            //}
+            //return temp;
+        }
+        public static void SortAndSetAllSongs(IEnumerable<Music> list)
+        {
+            var newLibrary = SortPlaylist(list, Settings.settings.MusicLibraryCriterion);
+            SetAllSongs(newLibrary);
+        }
+
         private void MusicLibraryDataGrid_Sorting(object sender, DataGridColumnEventArgs e)
         {
             string header = e.Column.Tag?.ToString();
-            IEnumerable<Music> temp = null;
-            switch (header)
-            {
-                case "Name":
-                    temp = AllSongs.OrderBy(music => music.Name);
-                    break;
-                case "Album":
-                    temp = AllSongs.OrderBy(music => music.Album);
-                    break;
-                case "Artist":
-                    temp = AllSongs.OrderBy(music => music.Artist);
-                    break;
-                case "Duration":
-                    temp = AllSongs.OrderBy(music => music.Duration);
-                    break;
-                case "PlayCount":
-                    temp = AllSongs.OrderBy(music => music.PlayCount);
-                    break;
-                default:
-                    return;
-            }
+            IEnumerable<Music> temp = SortPlaylist(AllSongs, Settings.settings.MusicLibraryCriterion = SortByConverter.FromStr(header));
             foreach (var column in MusicLibraryDataGrid.Columns)
                 if (column.Tag?.ToString() != header)
                     column.SortDirection = null;
@@ -130,10 +143,11 @@ namespace SMPlayer
             }
             else e.Column.SortDirection = DataGridSortDirection.Ascending;
             SetAllSongs(temp.ToList());
+            Save();
             MusicLibraryDataGrid.ItemsSource = AllSongs;
         }
 
-        public static void SetAllSongs(ICollection<Music> songs)
+        public static void SetAllSongs(IEnumerable<Music> songs)
         {
             if (songs == null) return;
             libraryReset = true;
@@ -145,8 +159,38 @@ namespace SMPlayer
                 AllSongs.Add(item);
             }
             AllSongsSet = AllSongs.ToHashSet();
+            NotifyListeners();
+        }
+        public static void AddMusic(Music music)
+        {
+            libraryReset = true;
+            AllSongsSet.Add(music);
+            var keySelector = SortByConverter.GetKeySelector(Settings.settings.MusicLibraryCriterion);
+            for (int i = 0; i < AllSongs.Count; i++)
+            {
+                if (keySelector(music).CompareTo(keySelector(AllSongs[i])) <= 0)
+                {
+                    AllSongs.Insert(i, music);
+                    goto AfterInsertion;
+                }
+            }
+            AllSongs.Add(music);
+            AfterInsertion:
+            Settings.settings.AddMusic(music);
+            NotifyListeners();
+        }
+        public static void RemoveMusic(Music music)
+        {
+            libraryReset = true;
+            AllSongsSet.Remove(music);
+            AllSongs.Remove(music);
+            Settings.settings.RemoveMusic(music);
+            NotifyListeners();
+        }
+
+        private static void NotifyListeners()
+        {
             foreach (var listener in listeners) listener.SongsSet(AllSongs);
-            Save();
         }
 
         public static List<Music> ConvertMusicPathToCollection(ICollection<string> paths, bool isFavorite = false)

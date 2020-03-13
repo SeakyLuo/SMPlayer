@@ -11,9 +11,9 @@ namespace SMPlayer.Models
     [Serializable]
     public class FolderTree : INotifyPropertyChanged, IComparable
     {
-        public List<FolderTree> Trees = new List<FolderTree>();
-        public List<Music> Files = new List<Music>();
-        public string Path = "";
+        public List<FolderTree> Trees { get; set; } = new List<FolderTree>();
+        public List<Music> Files { get; set; } = new List<Music>();
+        public string Path { get; set; } = "";
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         public TreeInfo Info { get => new TreeInfo(Directory, Trees.Count, Files.Count); }
         public bool IsEmpty { get => Files.Count == 0 && Trees.All((tree) => tree.IsEmpty); }
@@ -69,17 +69,15 @@ namespace SMPlayer.Models
                     Music music = await Music.GetMusicAsync(file);
                     newList.Add(music);
                     data.More++;
-                    MusicLibraryPage.AllSongs.Add(music); // Temporary
-                    Settings.settings.AddMusic(music);
+                    MusicLibraryPage.AddMusic(music);
                 }
             }
             int before = Files.Count;
             foreach (var music in Files.FindAll(m => !newSet.Contains(m.Path)))
             {
                 if (LoadingStatus == ExecutionStatus.Break) return false;
-                MusicLibraryPage.AllSongs.Remove(music);
                 Files.Remove(music);
-                Settings.settings.DeleteMusic(music);
+                MusicLibraryPage.RemoveMusic(music);
             }
             data.Less += before - Files.Count;
             Files.AddRange(newList);

@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace SMPlayer
 {
-    public sealed partial class MediaControl : UserControl, SwitchMusicListener, MediaControlListener, AfterLibraryUpdated, RemoveMusicListener, LikeMusicListener
+    public sealed partial class MediaControl : UserControl, SwitchMusicListener, MediaControlListener, AfterPathSet, RemoveMusicListener, LikeMusicListener
     {
         public enum MediaControlMode
         {
@@ -456,7 +456,7 @@ namespace SMPlayer
             if (CurrentMusic == music) return;
             UpdateMusic(music);
         }
-        public static void AddMusicControlListener(Action<Music, Music> listener)
+        public static void AddMusicModifiedListener(Action<Music, Music> listener)
         {
             MusicModifiedListeners.Add(listener);
         }
@@ -465,7 +465,7 @@ namespace SMPlayer
         {
             MusicRequestListeners.Add(listener);
         }
-        private void NotifyMusicModifiedListeners(Music before, Music after)
+        public static void NotifyMusicModifiedListeners(Music before, Music after)
         {
             foreach (var listener in MusicModifiedListeners)
                 listener.Invoke(before, after);
@@ -880,7 +880,7 @@ namespace SMPlayer
             MediaSlider.IsEnabled = false;
         }
 
-        public void LibraryUpdated(string path)
+        public void PathSet(string path)
         {
             //if (await CurrentMusic.GetStorageFileAsync() == null)
             //    ClearMusic();

@@ -15,7 +15,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalPage : Page, LocalSetter, AfterLibraryUpdated
+    public sealed partial class LocalPage : Page, LocalSetter, AfterPathSet
     {
         public static LocalPageButtonListener MusicViewModeChangedListener, FolderViewModeChangedListener;
         public static Stack<FolderTree> History = new Stack<FolderTree>();
@@ -181,7 +181,7 @@ namespace SMPlayer
             return info.Songs > info.Folders;
         }
 
-        public void LibraryUpdated(string path)
+        public void PathSet(string path)
         {
             History.Clear();
             SetPage(Settings.settings.Tree, false);

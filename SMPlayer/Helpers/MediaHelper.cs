@@ -75,8 +75,10 @@ namespace SMPlayer
             }
             if (CurrentMusic != null) MoveToMusic(CurrentMusic);
             Player.Volume = settings.Volume;
+            if (settings.SaveMusicProgress) Position = settings.MusicProgress;
             SetMode(Settings.settings.Mode);
             Timer.Start();
+            if (settings.AutoPlay) Play();
 
             Timer.Tick += (sender, e) =>
             {

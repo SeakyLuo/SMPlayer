@@ -21,7 +21,7 @@ namespace SMPlayer.Controls
         public MusicInfoControl()
         {
             this.InitializeComponent();
-            MediaControl.AddMusicControlListener(MusicModified);
+            MediaControl.AddMusicModifiedListener(MusicModified);
             MediaHelper.SwitchMusicListeners.Add(this);
         }
 
@@ -95,7 +95,7 @@ namespace SMPlayer.Controls
             if (uint.TryParse(YearTextBox.Text, out uint Year))
                 Properties.Year = Year;
             await Properties.SavePropertiesAsync();
-            MusicLibraryPage.MusicModified(CurrentMusic, newMusic);
+            MediaControl.NotifyMusicModifiedListeners(CurrentMusic, newMusic);
             Settings.settings.Tree.FindMusic(CurrentMusic).CopyFrom(newMusic);
             foreach (var listener in MusicModifiedListeners)
                 listener.Invoke(CurrentMusic, newMusic);

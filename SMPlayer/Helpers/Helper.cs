@@ -69,10 +69,12 @@ namespace SMPlayer
         }
         public static ObservableCollection<T> SetTo<T>(this ObservableCollection<T> dst, IEnumerable<T> src)
         {
-            var temp = src.ToList();
-            if (dst == null) dst = new ObservableCollection<T>();
-            else dst.Clear();
-            foreach (var item in temp) dst.Add(item);
+            if (dst == null) dst = new ObservableCollection<T>(src);
+            else
+            {
+                dst.Clear();
+                foreach (var item in src) dst.Add(item);
+            }
             return dst;
         }
 

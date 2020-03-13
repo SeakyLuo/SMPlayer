@@ -38,12 +38,13 @@ namespace SMPlayer.Models
         public bool AutoPlay { get; set; } = false;
         public bool SaveMusicProgress { get; set; } = false;
         public double MusicProgress { get; set; } = 0;
+        public SortBy MusicLibraryCriterion { get; set; } = SortBy.Title;
 
         public int FindNextPlaylistNameIndex(string Name)
         {
             if (!string.IsNullOrEmpty(Name))
             {
-                var siblings = Playlists.FindAll((p) => p.Name.StartsWith(Name)).Select((p) => p.Name).ToHashSet();
+                var siblings = Playlists.FindAll(p => p.Name.StartsWith(Name)).Select(p => p.Name).ToHashSet();
                 for (int i = 1; i <= siblings.Count; i++)
                     if (!siblings.Contains($"{Name} {i}"))
                         return i;
@@ -77,8 +78,10 @@ namespace SMPlayer.Models
                 {
 
                 }
-                if (settings.SaveMusicProgress) MediaHelper.Position = settings.MusicProgress;
-                if (settings.AutoPlay) MediaHelper.Play();
+                MediaControl.AddMusicModifiedListener((before, after) =>
+                {
+                    settings.Tree.FindMusic(before).CopyFrom(after);
+                });
                 foreach (var item in await ApplicationData.Current.LocalFolder.GetItemsAsync())
                     if (item.Name.EndsWith(".TMP"))
                         await item.DeleteAsync();
@@ -125,7 +128,7 @@ namespace SMPlayer.Models
             RecentAdded.AddOrMoveToTheFirst(music.Path);
         }
 
-        public void DeleteMusic(Music music)
+        public void RemoveMusic(Music music)
         {
             Tree.RemoveMusic(music);
             foreach (var playlist in Playlists)

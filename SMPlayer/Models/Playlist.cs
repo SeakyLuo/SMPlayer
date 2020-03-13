@@ -237,6 +237,7 @@ namespace SMPlayer.Models
             switch (criterion)
             {
                 case "Title":
+                case "Name":
                     return SortBy.Title;
                 case "Artist":
                     return SortBy.Artist;
@@ -244,12 +245,32 @@ namespace SMPlayer.Models
                     return SortBy.Album;
                 case "Duration":
                     return SortBy.Duration;
+                case "PlayCount":
                 case "Play Count":
                     return SortBy.PlayCount;
                 case "Date Added":
                     return SortBy.DateAdded;
                 default:
                     return SortBy.Title;
+            }
+        }
+
+        public static Func<Music, IComparable> GetKeySelector(SortBy criterion)
+        {
+            switch (criterion)
+            {
+                case SortBy.Title:
+                    return music => music.Name;
+                case SortBy.Artist:
+                    return music => music.Artist;
+                case SortBy.Album:
+                    return music => music.Album;
+                case SortBy.Duration:
+                    return music => music.Duration;
+                case SortBy.PlayCount:
+                    return music => music.PlayCount;
+                default:
+                    return music => music.Name;
             }
         }
     }

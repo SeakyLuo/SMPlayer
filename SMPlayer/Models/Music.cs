@@ -223,7 +223,11 @@ namespace SMPlayer.Models
         }
         int IComparable<Music>.CompareTo(Music other)
         {
-            return string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(other.Name) ? 0 : Name.CompareTo(other.Name);
+            int result = Name.CompareTo(other.Name);
+            if (result != 0) result = Artist.CompareTo(other.Artist);
+            if (result != 0) result = Album.CompareTo(other.Album);
+            if (result != 0) result = Path.CompareTo(other.Path);
+            return result;
         }
 
         public bool IsDifferent(Music music)

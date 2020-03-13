@@ -17,7 +17,7 @@ namespace SMPlayer
     public sealed partial class SettingsPage : Page, TreeOperationProgressListener
     {
         public static ShowToast[] NotificationOptions = { ShowToast.Always, ShowToast.MusicChanged, ShowToast.Never };
-        private static List<AfterLibraryUpdated> listeners = new List<AfterLibraryUpdated>();
+        private static List<AfterPathSet> listeners = new List<AfterPathSet>();
         private FolderTree loadingTree;
         public SettingsPage()
         {
@@ -61,23 +61,23 @@ namespace SMPlayer
             loadingTree.MergeFrom(Settings.settings.Tree);
             Settings.settings.Tree = loadingTree;
             Settings.settings.RootPath = folder.Path;
-            MusicLibraryPage.SetAllSongs(Settings.settings.Tree.Flatten());
+            MusicLibraryPage.SortAndSetAllSongs(Settings.settings.Tree.Flatten());
             MainPage.Instance.Loader.Max = listeners.Count;
             for (int i = 0; i < listeners.Count; i++)
             {
                 var listener = listeners[i];
-                listener.LibraryUpdated(folder.Path);
+                listener.PathSet(folder.Path);
                 MainPage.Instance.Loader.Progress = i;
             }
             MediaHelper.RemoveBadMusic();
-            Settings.Save();
+            App.Save();
             PathBox.Text = folder.Path;
             MainPage.Instance.Loader.Hide();
         }
 
-        public static void NotifyLibraryChange(string path) { foreach (var listener in listeners) listener.LibraryUpdated(path); }
+        public static void NotifyLibraryChange(string path) { foreach (var listener in listeners) listener.PathSet(path); }
 
-        public static void AddAfterPathSetListener(AfterLibraryUpdated listener)
+        public static void AddAfterPathSetListener(AfterPathSet listener)
         {
             listeners.Add(listener);
         }
@@ -116,15 +116,16 @@ namespace SMPlayer
             MainPage.Instance.Loader.Show("ProcessRequest", false);
             var data = new TreeUpdateData();
             if (!await tree.CheckNewFile(data)) return;
-            Settings.settings.Tree.FindTree(tree).CopyFrom(tree);
             if (data.More != 0 || data.Less != 0)
             {
+                Settings.settings.Tree.FindTree(tree).CopyFrom(tree);
+                MusicLibraryPage.SortAndSetAllSongs(Settings.settings.Tree.Flatten());
                 foreach (var listener in listeners)
-                    listener.LibraryUpdated(tree.Path);
+                    listener.PathSet(tree.Path);
                 if (data.Less != 0) MediaHelper.RemoveBadMusic();
                 afterTreeUpdated?.Invoke(tree);
+                App.Save();
             }
-            Settings.Save();
             MainPage.Instance.Loader.Hide();
             MainPage.Instance.ShowNotification(Helper.LocalizeMessage("CheckNewMusicResult", data.More, data.Less));
         }
@@ -185,8 +186,8 @@ namespace SMPlayer
         }
     }
 
-    public interface AfterLibraryUpdated
+    public interface AfterPathSet
     {
-        void LibraryUpdated(string path);
+        void PathSet(string path);
     }
 }

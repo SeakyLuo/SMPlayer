@@ -200,7 +200,7 @@ namespace SMPlayer
                         StorageFile file = await StorageFile.GetFileFromPathAsync(music.Path);
                         await file.DeleteAsync();
                         MusicLibraryPage.AllSongs.Remove(music);
-                        Settings.settings.DeleteMusic(music);
+                        Settings.settings.RemoveMusic(music);
                         var notification = Helper.LocalizeMessage("MusicDeleted", music.Name);
                         MainPage.Instance?.ShowNotification(notification);
                         NowPlayingFullPage.Instance?.ShowNotification(notification);

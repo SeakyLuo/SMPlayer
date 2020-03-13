@@ -85,20 +85,27 @@ namespace SMPlayer
         }
         private void AfterTreeUpdated(FolderTree tree)
         {
-            CurrentTree.FindTree(tree).CopyFrom(tree);
-            int index = GridItems.FindIndex(i => i.Tree.Equals(tree));
-            if (index > -1)
+            if (CurrentTree.Equals(tree))
             {
-                var item = GridItems[index];
-                item.Tree = tree;
-                GridItems[index] = item;
+                UpdateTree(tree);
             }
-            if (tree.Equals(Settings.settings.Tree)) SetupTreeView(tree);
-            else if (FindNode(LocalFoldersTreeView.RootNodes.FirstOrDefault(n => tree.Path.StartsWith((n.Content as FolderTree).Path)), tree) is TreeViewNode node)
+            else
             {
-                node.Content = tree;
-                if (!node.HasUnrealizedChildren)
-                    FillTreeNode(node);
+                CurrentTree.FindTree(tree).CopyFrom(tree);
+                int index = GridItems.FindIndex(i => i.Tree.Equals(tree));
+                if (index > -1)
+                {
+                    var item = GridItems[index];
+                    item.Tree = tree;
+                    GridItems[index] = item;
+                }
+                if (tree.Equals(Settings.settings.Tree)) SetupTreeView(tree);
+                else if (FindNode(LocalFoldersTreeView.RootNodes.FirstOrDefault(n => tree.Path.StartsWith((n.Content as FolderTree).Path)), tree) is TreeViewNode node)
+                {
+                    node.Content = tree;
+                    if (!node.HasUnrealizedChildren)
+                        FillTreeNode(node);
+                }
             }
         }
         private TreeViewNode FindNode(TreeViewNode node, FolderTree tree)
