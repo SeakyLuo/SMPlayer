@@ -256,16 +256,16 @@
                 Content="Update Music Library"
                 Style="{ThemeResource TextBlockButtonStyle}" />
             <HyperlinkButton
-                x:Uid="BugReportButton"
-                Margin="9,0"
-                Click="BugReport_Click"
-                Content="Bug Report"
-                Style="{ThemeResource TextBlockButtonStyle}" />
-            <HyperlinkButton
                 x:Uid="SaveChangesButton"
                 Margin="9,0"
                 Click="SaveChanges_Click"
                 Content="Save Changes"
+                Style="{ThemeResource TextBlockButtonStyle}" />
+            <HyperlinkButton
+                x:Uid="BugReportButton"
+                Margin="9,0"
+                Click="BugReport_Click"
+                Content="Bug Report"
                 Style="{ThemeResource TextBlockButtonStyle}" />
         </StackPanel>
         <VisualStateManager.VisualStateGroups>
