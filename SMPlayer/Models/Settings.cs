@@ -34,7 +34,7 @@ namespace SMPlayer.Models
         public bool IsMuted { get; set; } = false;
         public bool KeepLimitedRecentPlayedItems { get; set; } = true;
         public const int RecentPlayedLimit = 100;
-        public List<string> RecentAdded { get; set; } = new List<string>();
+        public ObservableCollection<string> RecentAdded { get; set; } = new ObservableCollection<string>();
         public bool AutoPlay { get; set; } = false;
         public bool SaveMusicProgress { get; set; } = false;
         public double MusicProgress { get; set; } = 0;

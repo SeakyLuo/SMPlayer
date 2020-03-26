@@ -12,62 +12,29 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <CommandBar
-            x:Name="RecentCommandBar"
-            Background="Transparent"
-            DefaultLabelPosition="Right"
-            IsDynamicOverflowEnabled="False"
-            OverflowButtonVisibility="Collapsed">
-            <CommandBar.Content>
-                <TextBlock
-                    x:Name="CommandBarHeaderTextBlock"
-                    Padding="50,10,0,10"
-                    Style="{StaticResource CompactHeaderStyle}"
-                    Text="Recent"
-                    TextAlignment="Center"
-                    Visibility="Collapsed" />
-            </CommandBar.Content>
-            <AppBarButton
-                x:Uid="ClearHistoryAppButton"
-                Click="ClearButton_Click"
-                Icon="Clear"
-                Label="Clear History" />
-        </CommandBar>
-        <Rectangle
-            x:Name="LoadingPlaceHolder"
+        <Rectangle x:Name="LoadingPlaceHolder" Height="4" />
+        <ProgressBar x:Name="LoadingProgressBar" IsIndeterminate="True" />
+        <Pivot
+            x:Name="RecentPivot"
             Grid.Row="1"
-            Height="4" />
-        <ProgressBar
-            x:Name="LoadingProgressBar"
-            Grid.Row="1"
-            IsIndeterminate="True" />
-        <local:GridMusicControl
-            x:Name="GridMusicView"
-            Grid.Row="2"
-            Margin="5" />
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="WidthChange">
-                <VisualState x:Name="WideLayout">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="{StaticResource MinimalNavigationViewWindowWidth}" />
-                    </VisualState.StateTriggers>
-                </VisualState>
-                <VisualState x:Name="Minimal">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="CommandBarHeaderTextBlock.Visibility" Value="Visible" />
-                        <Setter Target="RecentCommandBar.Background" Value="{StaticResource MinimalTitleBarColor}" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
+            SelectionChanged="RecentPivot_SelectionChanged">
+            <PivotItem
+                x:Name="RecentAddedItem"
+                x:Uid="RecentAddedItem"
+                Header="Recently Added">
+                <local:GridMusicControl x:Name="AddedMusicView" />
+            </PivotItem>
+            <PivotItem
+                x:Name="RecentPlayedItem"
+                x:Uid="RecentPlayedItem"
+                Header="Recently Played">
+                <local:GridMusicControl x:Name="PlayedMusicView" />
+            </PivotItem>
+        </Pivot>
     </Grid>
 </Page>

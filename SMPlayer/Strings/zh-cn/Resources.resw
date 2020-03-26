@@ -561,11 +561,17 @@
   <data name="Recent" xml:space="preserve">
     <value>最近</value>
   </data>
+  <data name="RecentAddedItem.Header" xml:space="preserve">
+    <value>最近添加</value>
+  </data>
   <data name="RecentItem.Content" xml:space="preserve">
     <value>最近</value>
   </data>
   <data name="RecentItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>最近</value>
+  </data>
+  <data name="RecentPlayedItem.Header" xml:space="preserve">
+    <value>最近播放</value>
   </data>
   <data name="RecentTextBlock.Text" xml:space="preserve">
     <value>最近</value>

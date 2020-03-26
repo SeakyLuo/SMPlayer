@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMPlayer.Models;
+using System;
 using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -13,43 +14,67 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class RecentPage : Page
     {
-        private bool Modified = true;
+        private bool AddedModified = true, PlayedModifed = true;
         public RecentPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            Models.Settings.settings.RecentPlayed.CollectionChanged += (sender, args) =>
+            Settings.settings.RecentAdded.CollectionChanged += (sender, args) =>
             {
-                Modified = args.NewItems?.Count != args.OldItems?.Count;
+                AddedModified = args.NewItems?.Count != args.OldItems?.Count;
+            };
+            Settings.settings.RecentPlayed.CollectionChanged += (sender, args) =>
+            {
+                PlayedModifed = args.NewItems?.Count != args.OldItems?.Count;
             };
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Setup(Models.Settings.settings.RecentPlayed);
+            if (Settings.settings.RecentAdded.Count > 0)
+                RecentPivot.SelectedItem = RecentAddedItem;
+            else
+                RecentPivot.SelectedItem = RecentPlayedItem;
         }
 
-        private void Setup(ICollection<string> paths)
+        private void RecentPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!Modified) return;
             LoadingProgressBar.Visibility = Visibility.Visible;
+            if (RecentPivot.SelectedItem == RecentAddedItem)
+                SetupAdded(Settings.settings.RecentAdded);
+            else
+                SetupPlayed(Settings.settings.RecentPlayed);
+            LoadingProgressBar.Visibility = Visibility.Collapsed;
+        }
+
+        public void SetupAdded(ICollection<string> paths)
+        {
+            if (!AddedModified) return;
             try
             {
-                GridMusicView.Setup(Models.Settings.PathToCollection(paths));
+                AddedMusicView.Setup(Settings.PathToCollection(paths));
             }
             catch (InvalidOperationException)
             {
                 // Loading while Set New Folder will cause this Exception
-                System.Diagnostics.Debug.WriteLine("InvalidOperationException On Local Music Page");
+                System.Diagnostics.Debug.WriteLine("InvalidOperationException On Recent Added");
             }
-            Modified = false;
-            LoadingProgressBar.Visibility = Visibility.Collapsed;
+            AddedModified = false;
         }
 
-        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        public void SetupPlayed(ICollection<string> paths)
         {
-            Models.Settings.settings.RecentPlayed.Clear();
-            GridMusicView.Clear();
+            if (!PlayedModifed) return;
+            try
+            {
+                PlayedMusicView.Setup(Settings.PathToCollection(paths));
+            }
+            catch (InvalidOperationException)
+            {
+                // Loading while Set New Folder will cause this Exception
+                System.Diagnostics.Debug.WriteLine("InvalidOperationException On Recent Played");
+            }
+            PlayedModifed = false;
         }
     }
 }

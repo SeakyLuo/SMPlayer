@@ -712,6 +712,7 @@
     <RootType FullName="Windows.UI.Xaml.Controls.Pivot">
       <RootProperty Name="RightHeader" />
       <RootProperty Name="Items" />
+      <RootEvent Name="SelectionChanged" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.PivotItem">
       <RootProperty Name="Header" />
@@ -1063,10 +1064,9 @@
       <RootProperty Name="DefaultLabelPosition" />
       <RootProperty Name="Style" />
       <RootProperty Name="PrimaryCommands" />
-      <RootProperty Name="IsDynamicOverflowEnabled" />
+      <RootProperty Name="IsOpen" />
       <RootProperty Name="OverflowButtonVisibility" />
       <RootProperty Name="Content" />
-      <RootProperty Name="IsOpen" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBar">
       <RootProperty Name="ClosedDisplayMode" />

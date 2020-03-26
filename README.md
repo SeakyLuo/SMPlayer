@@ -12,13 +12,13 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
-Recently added. (flyout and page)
+Multi-Select.
 
 Able to drag titlebar when loading.
 
 Export Data.
 
-Multi-Select.
+Recent added with timeline.
 
 ThemeColor change.
 
