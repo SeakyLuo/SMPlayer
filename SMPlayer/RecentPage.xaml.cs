@@ -19,22 +19,12 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            Settings.settings.RecentAdded.CollectionChanged += (sender, args) =>
-            {
-                AddedModified = args.NewItems?.Count != args.OldItems?.Count;
-            };
-            Settings.settings.RecentPlayed.CollectionChanged += (sender, args) =>
-            {
-                PlayedModifed = args.NewItems?.Count != args.OldItems?.Count;
-            };
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (Settings.settings.RecentAdded.Count > 0)
-                RecentPivot.SelectedItem = RecentAddedItem;
-            else
+            Settings.settings.RecentAdded.CollectionChanged += (sender, args) => AddedModified = true;
+            Settings.settings.RecentPlayed.CollectionChanged += (sender, args) => PlayedModifed = true;
+            if (Settings.settings.RecentAdded.Count == 0 && Settings.settings.RecentPlayed.Count > 0)
                 RecentPivot.SelectedItem = RecentPlayedItem;
+            else
+                RecentPivot.SelectedItem = RecentAddedItem;
         }
 
         private void RecentPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
