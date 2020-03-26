@@ -126,6 +126,9 @@
   <data name="CheckNewMusicResult" xml:space="preserve">
     <value>Music added: {0}, removed: {1}.</value>
   </data>
+  <data name="ClearHistory" xml:space="preserve">
+    <value>Do you want to clear your play history?</value>
+  </data>
   <data name="ClearPlaylist" xml:space="preserve">
     <value>Do you want to clear playlist "{0}"?</value>
   </data>
@@ -192,6 +195,9 @@
   <data name="Next" xml:space="preserve">
     <value>Next</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
   <data name="NoLyricsAvailable" xml:space="preserve">
     <value>No Lyrics Available</value>
   </data>
@@ -251,5 +257,8 @@
   </data>
   <data name="UpdateMusicLibrary" xml:space="preserve">
     <value>Updating your music library......</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>

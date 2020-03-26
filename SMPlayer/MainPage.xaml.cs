@@ -72,8 +72,9 @@ namespace SMPlayer
             bool isMinimal = e.Size.Width < 720;
             bool isTitleBarColorful = IsTitleBarColorful;
             var page = NaviFrame.CurrentSourcePageType.Name;
-            bool collapsed = ((page == "NowPlayingPage" || page == "RecentPage") && isMinimal) ||
+            bool collapsed = (page == "NowPlayingPage" && isMinimal) ||
                              page == "PlaylistsPage" ||
+                             (page == "RecentPage" && !isMinimal) || 
                              (isTitleBarColorful && !isMinimal);
             AppTitleBorder.Background = isMinimal ? ColorHelper.TransparentBrush : ColorHelper.MainNavigationViewBackground;
             TitleBarForeground = isMinimal && isTitleBarColorful ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
@@ -285,7 +286,7 @@ namespace SMPlayer
                     break;
                 case "RecentPage":
                     SetHeaderText("Recent");
-                    HeaderGrid.Visibility = Visibility.Visible;
+                    HeaderGrid.Visibility = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? Visibility.Visible : Visibility.Collapsed;
                     MainNavigationView.SelectedItem = RecentItem;
                     break;
                 case "LocalPage":

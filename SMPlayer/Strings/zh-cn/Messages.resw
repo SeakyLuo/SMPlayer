@@ -126,6 +126,9 @@
   <data name="CheckNewMusicResult" xml:space="preserve">
     <value>添加了{0}首歌，移除了{1}首歌。</value>
   </data>
+  <data name="ClearHistory" xml:space="preserve">
+    <value>你想清空播放历史吗？</value>
+  </data>
   <data name="ClearPlaylist" xml:space="preserve">
     <value>你希望清空播放列表“{0}”吗？</value>
   </data>
@@ -192,6 +195,9 @@
   <data name="Next" xml:space="preserve">
     <value>下一首</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>否</value>
+  </data>
   <data name="NoLyricsAvailable" xml:space="preserve">
     <value>没有歌词</value>
   </data>
@@ -251,5 +257,8 @@
   </data>
   <data name="UpdateMusicLibrary" xml:space="preserve">
     <value>正在更新音乐库……</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>是</value>
   </data>
 </root>

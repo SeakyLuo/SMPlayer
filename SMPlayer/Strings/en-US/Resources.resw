@@ -213,10 +213,7 @@
   <data name="ClearAppButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Clear All</value>
   </data>
-  <data name="ClearHistoryAppButton.Label" xml:space="preserve">
-    <value>Clear History</value>
-  </data>
-  <data name="ClearHistoryAppButton.ToolTipService.ToolTip" xml:space="preserve">
+  <data name="ClearHistoryButton.Content" xml:space="preserve">
     <value>Clear Play History</value>
   </data>
   <data name="ClearNowPlayingAppButton.Label" xml:space="preserve">
