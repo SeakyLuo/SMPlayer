@@ -120,9 +120,6 @@
   <data name="Albums:" xml:space="preserve">
     <value>Albums: </value>
   </data>
-  <data name="BingUri" xml:space="preserve">
-    <value>https://www.bing.com/</value>
-  </data>
   <data name="ChangesSaved" xml:space="preserve">
     <value>Changes has been saved.</value>
   </data>
@@ -245,6 +242,9 @@
   </data>
   <data name="SearchLyricsSuccessful" xml:space="preserve">
     <value>Matching lyrics were found! You need to save it yourself.</value>
+  </data>
+  <data name="SearchLyricsUrl" xml:space="preserve">
+    <value>https://www.bing.com/search?q={0}+{1}+{2}</value>
   </data>
   <data name="SearchResult" xml:space="preserve">
     <value>Search Result of {0}</value>

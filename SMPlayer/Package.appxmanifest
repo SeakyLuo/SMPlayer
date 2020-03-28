@@ -51,5 +51,6 @@
     <uap:Capability Name="musicLibrary"/>
     <uap3:Capability Name="backgroundMediaPlayback"/>
     <uap:Capability Name="picturesLibrary"/>
+    <Capability Name="internetClientServer"/>
   </Capabilities>
 </Package>

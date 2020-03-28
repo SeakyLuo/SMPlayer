@@ -16,9 +16,7 @@ Multi-Select.
 
 Default music player.
 
-Auto Search Lyrics.
-
-Export Data.
+Export data.
 
 Recent added with timeline.
 

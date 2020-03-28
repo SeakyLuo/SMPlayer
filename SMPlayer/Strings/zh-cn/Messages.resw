@@ -120,9 +120,6 @@
   <data name="Albums:" xml:space="preserve">
     <value>专辑：</value>
   </data>
-  <data name="BingUri" xml:space="preserve">
-    <value>https://cn.bing.com/</value>
-  </data>
   <data name="ChangesSaved" xml:space="preserve">
     <value>已保存！</value>
   </data>
@@ -245,6 +242,9 @@
   </data>
   <data name="SearchLyricsSuccessful" xml:space="preserve">
     <value>已找到匹配歌词，你需要手动保存</value>
+  </data>
+  <data name="SearchLyricsUrl" xml:space="preserve">
+    <value>https://cn.bing.com/search?q={0}+{1}+{2}</value>
   </data>
   <data name="SearchResult" xml:space="preserve">
     <value>{0}的搜索结果</value>
