@@ -14,7 +14,9 @@ Go to Settings and Set the Root Folder of your music files.
 # TO DO
 Multi-Select.
 
-Able to drag titlebar when loading.
+Default music player.
+
+Auto Search Lyrics.
 
 Export Data.
 
@@ -22,13 +24,11 @@ Recent added with timeline.
 
 ThemeColor change.
 
-Auto Search Lyrics.
-
 Animations.
 
 Improved New Playlist Name.
 
-Default music player.
-
 # TO FIX
 Buttons become unavailable when come back from Mini mode.
+
+Able to drag titlebar when loading.

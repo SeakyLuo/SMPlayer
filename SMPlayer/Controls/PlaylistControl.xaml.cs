@@ -249,7 +249,7 @@ namespace SMPlayer
             
         }
 
-        async void MenuFlyoutItemClickListener.Remove(Music music)
+        void MenuFlyoutItemClickListener.Remove(Music music)
         {
             AskRemoveMusic(music);
         }

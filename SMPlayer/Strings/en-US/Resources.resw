@@ -144,9 +144,6 @@
   <data name="Albums" xml:space="preserve">
     <value>Albums</value>
   </data>
-  <data name="Albums:" xml:space="preserve">
-    <value>Albums:</value>
-  </data>
   <data name="AlbumsItem.Content" xml:space="preserve">
     <value>Albums</value>
   </data>

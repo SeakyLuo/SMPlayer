@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Albums:" xml:space="preserve">
+    <value>专辑：</value>
+  </data>
   <data name="BingUri" xml:space="preserve">
     <value>https://cn.bing.com/</value>
   </data>
@@ -140,9 +143,6 @@
   </data>
   <data name="Error" xml:space="preserve">
     <value>发生了错误</value>
-  </data>
-  <data name="FailToOpenBrowser" xml:space="preserve">
-    <value>无法打开浏览器！</value>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>文件夹（{0}）</value>
@@ -207,6 +207,9 @@
   <data name="NowLoading" xml:space="preserve">
     <value>正在加载，请稍后再试</value>
   </data>
+  <data name="OpenBrowserSuccessful" xml:space="preserve">
+    <value>搜不到匹配歌词，已打开浏览器进行搜索</value>
+  </data>
   <data name="Pause" xml:space="preserve">
     <value>暂停</value>
   </data>
@@ -236,6 +239,12 @@
   </data>
   <data name="RemovePlaylist" xml:space="preserve">
     <value>你想要移除播放列表“{0}”吗？</value>
+  </data>
+  <data name="SearchLyricsFailed" xml:space="preserve">
+    <value>无法找到匹配歌词！</value>
+  </data>
+  <data name="SearchLyricsSuccessful" xml:space="preserve">
+    <value>已找到匹配歌词，你需要手动保存</value>
   </data>
   <data name="SearchResult" xml:space="preserve">
     <value>{0}的搜索结果</value>

@@ -26,7 +26,11 @@ namespace SMPlayer.Controls
         }
         private void ResetLyricsButton_Click(object sender, RoutedEventArgs e)
         {
+            SavingLyricsProgress.Visibility = Visibility.Visible;
+            LyricsTextBox.IsEnabled = false;
             LyricsTextBox.Text = Lyrics;
+            SavingLyricsProgress.Visibility = Visibility.Collapsed;
+            LyricsTextBox.IsEnabled = true;
             Helper.ShowNotification("LyricsReset");
         }
 
@@ -56,11 +60,31 @@ namespace SMPlayer.Controls
 
         private async void SearchLyricsButton_Click(object sender, RoutedEventArgs e)
         {
-            //System.Diagnostics.Debug.WriteLine(await SearchLyrics(CurrentMusic.Name));
-            string uri = Helper.LocalizeMessage("BingUri") + $"search?q={Helper.LocalizeMessage("Lyrics")}+{CurrentMusic.Name}+{CurrentMusic.Artist}";
-            if (!await Windows.System.Launcher.LaunchUriAsync(new Uri(uri)))
+            SavingLyricsProgress.Visibility = Visibility.Visible;
+            LyricsTextBox.IsEnabled = false;
+            string notification = "";
+            try
             {
-                string notification = Helper.LocalizeMessage("FailToOpenBrowser");
+                string lyrics = await SearchLyrics(CurrentMusic.Name);
+                LyricsTextBox.Text = lyrics;
+                notification = Helper.LocalizeMessage("SearchLyricsSuccessful");
+            }
+            catch (Exception)
+            {
+                string uri = Helper.LocalizeMessage("BingUri") + $"search?q={Helper.LocalizeMessage("Lyrics")}+{CurrentMusic.Name}+{CurrentMusic.Artist}";
+                if (await Windows.System.Launcher.LaunchUriAsync(new Uri(uri)))
+                {
+                    notification = Helper.LocalizeMessage("OpenBrowserSuccessful");
+                }
+                else
+                {
+                    notification = Helper.LocalizeMessage("SearchLyricsFailed");
+                }
+            }
+            finally
+            {
+                LyricsTextBox.IsEnabled = true;
+                SavingLyricsProgress.Visibility = Visibility.Collapsed;
                 MainPage.Instance?.ShowNotification(notification);
                 NowPlayingFullPage.Instance?.ShowNotification(notification);
             }
@@ -77,41 +101,9 @@ namespace SMPlayer.Controls
                     request.Headers.Add("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:22.0) Gecko/20100101 Firefox/22.0");
                     request.Headers.Add("referer", "https://y.qq.com/portal/search.html");
                     var response = await client.SendAsync(request);
-                    //response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    return await response.Content.ReadAsStringAsync();
-                }
-            }
-            using (var client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Add("ct", "24");
-                client.DefaultRequestHeaders.Add("qqmusic_ver", "1298");
-                client.DefaultRequestHeaders.Add("new_json", "1");
-                client.DefaultRequestHeaders.Add("remoteplace", "sizer.yqq.lyric_next");
-                client.DefaultRequestHeaders.Add("searchid", "63514736641951294");
-                client.DefaultRequestHeaders.Add("aggr", "1");
-                client.DefaultRequestHeaders.Add("catZhida", "1");
-                client.DefaultRequestHeaders.Add("lossless", "0");
-                client.DefaultRequestHeaders.Add("t", "7");
-                client.DefaultRequestHeaders.Add("p", "1");
-                client.DefaultRequestHeaders.Add("n", "1");
-                client.DefaultRequestHeaders.Add("w", keyword);
-                client.DefaultRequestHeaders.Add("g_tk", "1714057807");
-                client.DefaultRequestHeaders.Add("loginUin", "0");
-                client.DefaultRequestHeaders.Add("hostUin", "0");
-                client.DefaultRequestHeaders.Add("format", "json");
-                client.DefaultRequestHeaders.Add("inCharset", "utf8");
-                client.DefaultRequestHeaders.Add("outCharset", "utf-8");
-                client.DefaultRequestHeaders.Add("notice", "0");
-                client.DefaultRequestHeaders.Add("platform", "yqq.json");
-                client.DefaultRequestHeaders.Add("needNewCode", "0");
-                using (var request = new HttpRequestMessage(HttpMethod.Get, "https://c.y.qq.com/soso/fcgi-bin/client_search_cp"))
-                {
-                    request.Headers.Add("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:22.0) Gecko/20100101 Firefox/22.0");
-                    request.Headers.Add("referer", "https://y.qq.com/portal/search.html");
-                    var response = await client.SendAsync(request);
-                    //response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    return await response.Content.ReadAsStringAsync();
+                    var content = await response.Content.ReadAsStringAsync();
+                    Windows.Data.Json.JsonObject json = Windows.Data.Json.JsonObject.Parse(content);
+                    return json.GetNamedObject("data").GetNamedObject("lyric").GetNamedArray("list").GetObjectAt(0).GetNamedString("content");
                 }
             }
         }
