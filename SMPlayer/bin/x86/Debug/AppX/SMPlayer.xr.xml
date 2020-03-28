@@ -434,7 +434,6 @@
       <RootEvent Name="ContainerContentChanging" />
       <RootEvent Name="ItemClick" />
       <RootEvent Name="DragItemsCompleted" />
-      <RootEvent Name="DragItemsStarting" />
       <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.ScrollHeader">

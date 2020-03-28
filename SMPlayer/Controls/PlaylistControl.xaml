@@ -32,7 +32,6 @@
         CanReorderItems="False"
         ContainerContentChanging="SongsListView_ContainerContentChanging"
         DragItemsCompleted="SongsListView_DragItemsCompleted"
-        DragItemsStarting="SongsListView_DragItemsStarting"
         IsItemClickEnabled="True"
         ItemClick="SongsListView_ItemClick"
         ItemContainerStyle="{StaticResource PlaylistListViewItemStyle}"

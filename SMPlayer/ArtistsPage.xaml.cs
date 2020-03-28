@@ -154,9 +154,14 @@ namespace SMPlayer
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () => FindMusicAndSetPlaying(next));
         }
 
-        private void OpenPlaylistMenuFlyout(object sender, object e)
+        private void ArtistMenuFlyout_Opening(object sender, object e)
         {
-            (((sender as MenuFlyout).Target as FrameworkElement).DataContext as ArtistView).Load();
+            var artistView = ((sender as MenuFlyout).Target as FrameworkElement).DataContext as ArtistView;
+            if (artistView.NotLoaded) artistView.Load();
+            MenuFlyoutHelper.SetPlaylistMenu(sender);
+        }
+        private void AlbumMenuFlyout_Opening(object sender, object e)
+        {
             MenuFlyoutHelper.SetPlaylistMenu(sender);
         }
         private void OpenMusicMenuFlyout(object sender, object e)

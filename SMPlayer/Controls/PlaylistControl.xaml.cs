@@ -66,7 +66,12 @@ namespace SMPlayer
             set => SetValue(ShowAlbumTextProperty, value);
         }
         public static readonly DependencyProperty ShowAlbumTextProperty = DependencyProperty.Register("ShowAlbumText", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(true));
-
+        public bool AllowMultipleSection
+        {
+            get => (bool)GetValue(AllowMultipleSectionProperty);
+            set => SetValue(AllowMultipleSectionProperty, value);
+        }
+        public static readonly DependencyProperty AllowMultipleSectionProperty = DependencyProperty.Register("AllowMultipleSection", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(false));
         public ScrollViewer ScrollViewer
         {
             get => SongsListView.GetFirstDescendantOfType<ScrollViewer>();
@@ -149,13 +154,6 @@ namespace SMPlayer
                             container.Background = GetRowBackground(i);
                 }
             });
-        }
-
-        private List<Music> beforeDragging;
-
-        private void SongsListView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
-        {
-            beforeDragging = MediaHelper.CurrentPlaylist.ToList();
         }
 
         private void SongsListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)

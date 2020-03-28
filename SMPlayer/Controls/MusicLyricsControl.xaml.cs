@@ -1,5 +1,10 @@
 ﻿using SMPlayer.Models;
 using System;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Windows.Media.Playback;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -51,12 +56,63 @@ namespace SMPlayer.Controls
 
         private async void SearchLyricsButton_Click(object sender, RoutedEventArgs e)
         {
+            //System.Diagnostics.Debug.WriteLine(await SearchLyrics(CurrentMusic.Name));
             string uri = Helper.LocalizeMessage("BingUri") + $"search?q={Helper.LocalizeMessage("Lyrics")}+{CurrentMusic.Name}+{CurrentMusic.Artist}";
             if (!await Windows.System.Launcher.LaunchUriAsync(new Uri(uri)))
             {
                 string notification = Helper.LocalizeMessage("FailToOpenBrowser");
                 MainPage.Instance?.ShowNotification(notification);
                 NowPlayingFullPage.Instance?.ShowNotification(notification);
+            }
+        }
+        public static async Task<string> SearchLyrics(string keyword)
+        {
+            string uri = $"https://c.y.qq.com/soso/fcgi-bin/client_search_cp?ct=24&qqmusic_ver=1298&new_json=1&remoteplace=sizer.yqq.lyric_next&searchid=63514736641951294&aggr=1&cr=1&catZhida=1&lossless=0&sem=1&t=7&p=1&n=1&w={Uri.EscapeUriString(keyword)}&g_tk=1714057807&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0";
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(uri);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                using (var request = new HttpRequestMessage(HttpMethod.Get, uri))
+                {
+                    request.Headers.Add("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:22.0) Gecko/20100101 Firefox/22.0");
+                    request.Headers.Add("referer", "https://y.qq.com/portal/search.html");
+                    var response = await client.SendAsync(request);
+                    //response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    return await response.Content.ReadAsStringAsync();
+                }
+            }
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("ct", "24");
+                client.DefaultRequestHeaders.Add("qqmusic_ver", "1298");
+                client.DefaultRequestHeaders.Add("new_json", "1");
+                client.DefaultRequestHeaders.Add("remoteplace", "sizer.yqq.lyric_next");
+                client.DefaultRequestHeaders.Add("searchid", "63514736641951294");
+                client.DefaultRequestHeaders.Add("aggr", "1");
+                client.DefaultRequestHeaders.Add("catZhida", "1");
+                client.DefaultRequestHeaders.Add("lossless", "0");
+                client.DefaultRequestHeaders.Add("t", "7");
+                client.DefaultRequestHeaders.Add("p", "1");
+                client.DefaultRequestHeaders.Add("n", "1");
+                client.DefaultRequestHeaders.Add("w", keyword);
+                client.DefaultRequestHeaders.Add("g_tk", "1714057807");
+                client.DefaultRequestHeaders.Add("loginUin", "0");
+                client.DefaultRequestHeaders.Add("hostUin", "0");
+                client.DefaultRequestHeaders.Add("format", "json");
+                client.DefaultRequestHeaders.Add("inCharset", "utf8");
+                client.DefaultRequestHeaders.Add("outCharset", "utf-8");
+                client.DefaultRequestHeaders.Add("notice", "0");
+                client.DefaultRequestHeaders.Add("platform", "yqq.json");
+                client.DefaultRequestHeaders.Add("needNewCode", "0");
+                using (var request = new HttpRequestMessage(HttpMethod.Get, "https://c.y.qq.com/soso/fcgi-bin/client_search_cp"))
+                {
+                    request.Headers.Add("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:22.0) Gecko/20100101 Firefox/22.0");
+                    request.Headers.Add("referer", "https://y.qq.com/portal/search.html");
+                    var response = await client.SendAsync(request);
+                    //response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    return await response.Content.ReadAsStringAsync();
+                }
             }
         }
         public async void SetLyrics(Music music)

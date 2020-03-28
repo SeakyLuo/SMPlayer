@@ -347,15 +347,15 @@ namespace SMPlayer
         }
         public static MenuFlyout SetPlaylistMenu(object sender, MenuFlyoutItemClickListener listener = null)
         {
-            return SetMenu((helper) => helper.GetPlaylistMenuFlyout(listener), sender);
+            return SetMenu(helper => helper.GetPlaylistMenuFlyout(listener), sender);
         }
         public static MenuFlyout SetMusicMenu(object sender, MenuFlyoutItemClickListener listener = null)
         {
-            return SetMenu((helper) => helper.GetMusicMenuFlyout(listener), sender);
+            return SetMenu(helper => helper.GetMusicMenuFlyout(listener), sender);
         }
         public static MenuFlyout SetRemovableMusicMenu(object sender, MenuFlyoutItemClickListener listener = null)
         {
-            return SetMenu((helper) => helper.GetRemovableMusicMenuFlyout(listener), sender);
+            return SetMenu(helper => helper.GetRemovableMusicMenuFlyout(listener), sender);
         }
         private static MenuFlyout SetMenu(Func<MenuFlyoutHelper, MenuFlyout> GetMenu, object sender)
         {

@@ -64,7 +64,7 @@
                         Tapped="Artist_Tapped"
                         ToolTipService.ToolTip="{Binding ElementName=ArtistNameTextBlock, Path=Text}">
                         <StackPanel.ContextFlyout>
-                            <MenuFlyout Opening="OpenPlaylistMenuFlyout" />
+                            <MenuFlyout Opening="ArtistMenuFlyout_Opening" />
                         </StackPanel.ContextFlyout>
                         <Grid>
                             <Ellipse
@@ -117,7 +117,7 @@
                                         RelativePanel.AlignRightWithPanel="True"
                                         Style="{StaticResource MoreButtonStyle}">
                                         <Button.Flyout>
-                                            <MenuFlyout Opening="OpenPlaylistMenuFlyout" />
+                                            <MenuFlyout Opening="ArtistMenuFlyout_Opening" />
                                         </Button.Flyout>
                                     </Button>
                                     <ProgressBar
@@ -178,7 +178,7 @@
                                             RelativePanel.AlignRightWithPanel="True"
                                             Style="{StaticResource MoreButtonStyle}">
                                             <Button.Flyout>
-                                                <MenuFlyout Opening="OpenPlaylistMenuFlyout" />
+                                                <MenuFlyout Opening="AlbumMenuFlyout_Opening" />
                                             </Button.Flyout>
                                         </Button>
                                     </RelativePanel>
