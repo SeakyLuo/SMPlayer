@@ -204,6 +204,7 @@ namespace SMPlayer
                         var notification = Helper.LocalizeMessage("MusicDeleted", music.Name);
                         MainPage.Instance?.ShowNotification(notification);
                         NowPlayingFullPage.Instance?.ShowNotification(notification);
+                        listener?.Delete(music);
                     }
                 }.ShowAsync();
             };
@@ -291,9 +292,7 @@ namespace SMPlayer
             };
             removeItem.Click += (sender, args) =>
             {
-                if (music == MediaHelper.CurrentMusic)
-                    MediaHelper.MoveNext();
-                MediaHelper.RemoveMusic(music);
+                listener?.Remove(music);
             };
             removeItem.SetToolTip(Helper.LocalizeMessage("RemoveFromPlaylist", music.Name), false);
             flyout.Items.Insert(2, removeItem);
@@ -413,8 +412,7 @@ namespace SMPlayer
 
     public interface MenuFlyoutItemClickListener
     {
-        void Play();
-        void Delete();
-
+        void Delete(Music music);
+        void Remove(Music music);
     }
 }

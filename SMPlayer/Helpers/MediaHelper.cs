@@ -246,6 +246,7 @@ namespace SMPlayer
         {
             try
             {
+                if (music.Index == CurrentMusic.Index) MoveNext();
                 CurrentPlaylist.RemoveAt(music.Index);
                 PlaybackList.Items.RemoveAt(music.Index);
                 foreach (var listener in RemoveMusicListeners) listener.MusicRemoved(music.Index, music, CurrentPlaylist);

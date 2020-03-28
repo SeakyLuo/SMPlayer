@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -11,7 +12,7 @@ using Windows.UI.Xaml.Media;
 
 namespace SMPlayer
 {
-    public sealed partial class PlaylistControl : UserControl, SwitchMusicListener, RemoveMusicListener
+    public sealed partial class PlaylistControl : UserControl, SwitchMusicListener, RemoveMusicListener, MenuFlyoutItemClickListener
     {
         public bool IsNowPlaying { get; set; }
         public ObservableCollection<Music> CurrentPlaylist
@@ -165,7 +166,7 @@ namespace SMPlayer
         }
         private void OpenMusicMenuFlyout(object sender, object e)
         {
-            MenuFlyoutHelper.SetRemovableMusicMenu(sender);
+            MenuFlyoutHelper.SetRemovableMusicMenu(sender, this);
             if (AllowReorder)
             {
                 var flyout = sender as MenuFlyout;
@@ -183,10 +184,13 @@ namespace SMPlayer
             }
         }
 
-        private async void RemoveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
+        private void RemoveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
         {
-            var music = args.SwipeControl.DataContext as Music;
-            // I should use index to avoid duplicate problem
+            AskRemoveMusic(args.SwipeControl.DataContext as Music);
+        }
+
+        public async void AskRemoveMusic(Music music)
+        {
             if (dialog == null) dialog = new Dialogs.RemoveDialog();
             if (dialog.IsChecked)
             {
@@ -238,6 +242,16 @@ namespace SMPlayer
                 container.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true });
                 ScrollToMusicRequestedWhenUnloaded = -1;
             }
+        }
+
+        void MenuFlyoutItemClickListener.Delete(Music music)
+        {
+            
+        }
+
+        async void MenuFlyoutItemClickListener.Remove(Music music)
+        {
+            AskRemoveMusic(music);
         }
     }
 
