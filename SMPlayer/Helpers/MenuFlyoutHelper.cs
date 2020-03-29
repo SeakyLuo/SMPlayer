@@ -15,14 +15,14 @@ namespace SMPlayer
         public const string AddToSubItemName = "AddToSubItem", PlaylistMenuName = "ShuffleItem", MusicMenuName = "PlayItem";
         public static string NowPlaying = Helper.Localize("Now Playing"), MyFavorites = Helper.Localize("My Favorites");
         public static bool IsBadNewPlaylistName(string name) { return name == NowPlaying || name == MyFavorites; }
-        public MenuFlyout GetAddToMenuFlyout(string playlistName = "")
+        public MenuFlyout GetAddToMenuFlyout(string playlistName = "", MenuFlyoutItemClickListener listener = null)
         {
             var flyout = new MenuFlyout();
-            foreach (var item in GetAddToMenuFlyoutSubItem(playlistName).Items)
+            foreach (var item in GetAddToMenuFlyoutSubItem(playlistName, listener).Items)
                 flyout.Items.Add(item);
             return flyout;
         }
-        public MenuFlyoutSubItem GetAddToMenuFlyoutSubItem(string playlistName = "")
+        public MenuFlyoutSubItem GetAddToMenuFlyoutSubItem(string playlistName = "", MenuFlyoutItemClickListener listener = null)
         {
             MenuFlyoutSubItem addToItem = new MenuFlyoutSubItem()
             {
@@ -47,7 +47,8 @@ namespace SMPlayer
                 };
                 addToItem.Items.Add(nowPlayingItem);
             }
-            if (playlistName != MyFavorites && Data is Music m && !Settings.settings.MyFavorites.Contains(m))
+            if (playlistName != MyFavorites && ((Data is Music m && !Settings.settings.MyFavorites.Contains(m)) ||
+                                                (Data is ICollection<Music> list && list.Any(music => !Settings.settings.MyFavorites.Contains(music)))))
             {
                 var favItem = new MenuFlyoutItem()
                 {
@@ -56,10 +57,11 @@ namespace SMPlayer
                 };
                 favItem.Click += (sender, args) =>
                 {
-                    if (Data is Music)
-                        Settings.settings.LikeMusic(Data as Music);
+                    if (Data is Music music)
+                        Settings.settings.LikeMusic(music);
                     else if (Data is ICollection<Music>)
                         Settings.settings.LikeMusic(Data as ICollection<Music>);
+                    listener?.Favorite(Data);
                 };
                 addToItem.Items.Add(favItem);
             }
@@ -412,6 +414,7 @@ namespace SMPlayer
 
     public interface MenuFlyoutItemClickListener
     {
+        void Favorite(object data);
         void Delete(Music music);
         void Remove(Music music);
     }

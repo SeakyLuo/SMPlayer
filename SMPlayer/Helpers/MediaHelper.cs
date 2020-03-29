@@ -282,6 +282,17 @@ namespace SMPlayer
             //    if (await music.GetStorageFileAsync() == null)
             //        RemoveMusic(music);
         }
+
+        public static void LikeMusic(Music music)
+        {
+            if (CurrentPlaylist.FirstOrDefault(item => item == music) is Music m)
+                m.Favorite = true;
+        }
+        public static void DislikeMusic(Music music)
+        {
+            if (CurrentPlaylist.FirstOrDefault(item => item == music) is Music m)
+                m.Favorite = false;
+        }
     }
 
     public interface RemoveMusicListener

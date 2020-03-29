@@ -70,8 +70,8 @@ namespace SMPlayer
             if (SetupInProgress) Helper.ShowNotification("NowLoading");
             else
             {
-                MusicCollection = MusicCollection.OrderBy((m) => m.Name).ToList();
-                GridMusicCollection.SetTo(GridMusicCollection.ToList().OrderBy((m) => m.Name));
+                MusicCollection = MusicCollection.OrderBy(m => m.Name).ToList();
+                GridMusicCollection.SetTo(GridMusicCollection.ToList().OrderBy(m => m.Name));
             }
         }
         public void SortByArtist()
@@ -79,8 +79,8 @@ namespace SMPlayer
             if (SetupInProgress) Helper.ShowNotification("NowLoading");
             else
             {
-                MusicCollection = MusicCollection.OrderBy((m) => m.Artist).ToList();
-                GridMusicCollection.SetTo(GridMusicCollection.ToList().OrderBy((m) => m.Artist));
+                MusicCollection = MusicCollection.OrderBy(m => m.Artist).ToList();
+                GridMusicCollection.SetTo(GridMusicCollection.ToList().OrderBy(m => m.Artist));
             }
         }
         public void SortByAlbum()
@@ -88,8 +88,8 @@ namespace SMPlayer
             if (SetupInProgress) Helper.ShowNotification("NowLoading");
             else
             {
-                MusicCollection = MusicCollection.OrderBy((m) => m.Album).ToList();
-                GridMusicCollection.SetTo(GridMusicCollection.ToList().OrderBy((m) => m.Source.Album));
+                MusicCollection = MusicCollection.OrderBy(m => m.Album).ToList();
+                GridMusicCollection.SetTo(GridMusicCollection.ToList().OrderBy(m => m.Source.Album));
             }
         }
 

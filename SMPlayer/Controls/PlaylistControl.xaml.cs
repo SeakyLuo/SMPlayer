@@ -253,6 +253,11 @@ namespace SMPlayer
         {
             AskRemoveMusic(music);
         }
+
+        void MenuFlyoutItemClickListener.Favorite(object data)
+        {
+            
+        }
     }
 
     public interface PlaylistScrollListener

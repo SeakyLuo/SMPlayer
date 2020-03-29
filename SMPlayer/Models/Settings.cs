@@ -103,6 +103,7 @@ namespace SMPlayer.Models
             music.Favorite = true;
             MyFavorites.Add(music);
             Tree.FindMusic(music).Favorite = true;
+            if (MediaHelper.CurrentPlaylist.FirstOrDefault(item => item == music) is Music m) m.Favorite = true;
             foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, true);
         }
 
@@ -116,6 +117,7 @@ namespace SMPlayer.Models
                     music.Favorite = true;
                     MyFavorites.Add(music);
                     Tree.FindMusic(music).Favorite = true;
+                    MediaHelper.LikeMusic(music);
                     foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, true);
                 }
             }
@@ -126,6 +128,7 @@ namespace SMPlayer.Models
             MyFavorites.Remove(music);
             music.Favorite = false;
             Tree.FindMusic(music).Favorite = false;
+            MediaHelper.DislikeMusic(music);
             foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, false);
         }
 
