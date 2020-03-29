@@ -276,7 +276,7 @@ namespace SMPlayer
 
         public static async void RemoveBadMusic()
         {
-            if (await CurrentMusic.GetStorageFileAsync() == null)
+            if (CurrentMusic != null && await CurrentMusic.GetStorageFileAsync() == null)
                 CurrentMusic = null;
             //foreach (var music in CurrentPlaylist)
             //    if (await music.GetStorageFileAsync() == null)

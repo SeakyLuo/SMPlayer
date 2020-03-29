@@ -106,7 +106,7 @@ namespace SMPlayer
         private void AddToButton_Click(object sender, RoutedEventArgs e)
         {
             var fe = (FrameworkElement)sender;
-            new MenuFlyoutHelper() { Data = fe.DataContext }.GetAddToMenuFlyout().ShowAt(fe);
+            new MenuFlyoutHelper() { Data = (fe.DataContext as GridMusicView).Source }.GetAddToMenuFlyout().ShowAt(fe);
         }
         private void MenuFlyout_Opening(object sender, object e)
         {
