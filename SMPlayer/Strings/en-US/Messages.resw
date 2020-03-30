@@ -132,6 +132,9 @@
   <data name="ClearPlaylist" xml:space="preserve">
     <value>Do you want to clear playlist "{0}"?</value>
   </data>
+  <data name="Comma" xml:space="preserve">
+    <value>, </value>
+  </data>
   <data name="DeleteMusic" xml:space="preserve">
     <value>Delete "{0}"</value>
   </data>
@@ -194,6 +197,9 @@
   </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
+  </data>
+  <data name="No Music" xml:space="preserve">
+    <value>No Music</value>
   </data>
   <data name="NoLyricsAvailable" xml:space="preserve">
     <value>No Lyrics Available</value>

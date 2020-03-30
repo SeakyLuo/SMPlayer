@@ -15,18 +15,29 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalMusicPage : Page, SwitchMusicListener, LocalPageButtonListener
+    public sealed partial class LocalMusicPage : Page, SwitchMusicListener, LocalPageButtonListener, RemoveMusicListener
     {
         public static FolderTree CurrentTree;
         private ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         private string TreePath;
         public static bool ReverseRequested = false, SortByTitleRequested = false, SortByArtistRequested = false, SortByAlbumRequested = false;
+        public static LocalSetter setter;
         public LocalMusicPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             MediaHelper.SwitchMusicListeners.Add(this);
             LocalPage.MusicListener = this;
+            LocalPlaylist.RemoveListeners.Add(this);
+            GridMusicView.RemoveListeners.Add(this);
+            Controls.MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
+            {
+                if (CurrentTree.FindMusic(before) is Music music)
+                {
+                    music.CopyFrom(after);
+                    Songs.FirstOrDefault(m => m == before).CopyFrom(after);
+                }
+            });
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -126,6 +137,13 @@ namespace SMPlayer
             SortByAlbumRequested = false;
             CurrentTree.Criterion = SortBy.Album;
             Settings.settings.Tree.FindTree(CurrentTree).CopyFrom(CurrentTree);
+        }
+
+        public void MusicRemoved(int index, Music music, ICollection<Music> newCollection)
+        {
+            // It is actually delete music
+            CurrentTree.Files.Remove(music);
+            setter.SetNavText(CurrentTree.Info);
         }
     }
 }

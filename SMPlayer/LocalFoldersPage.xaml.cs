@@ -32,7 +32,28 @@ namespace SMPlayer
             {
                 if (CurrentTree.Contains(before))
                 {
-                    UpdateTree(CurrentTree = Settings.settings.Tree.FindTree(CurrentTree));
+                    CurrentTree = Settings.settings.Tree.FindTree(CurrentTree);
+                    foreach (var node in LocalFoldersTreeView.RootNodes)
+                    {
+                        if (node.Content is Music music)
+                        {
+                            if (music == before)
+                            {
+                                music.CopyFrom(after);
+                                break;
+                            }
+                        }
+                        else if (node.Content is FolderTree tree)
+                        {
+                            if (tree.FindMusic(before) is Music m)
+                            {
+                                m.CopyFrom(after);
+                                break;
+                            }
+                        }
+                    }
+                    if (GridItems.FirstOrDefault(item => item.Tree.Contains(before)) is GridFolderView gridItem)
+                        gridItem.Tree.FindMusic(before).CopyFrom(after);
                 }
             });
         }

@@ -54,6 +54,7 @@
         <local:PlaylistControl
             AlternatingRowColor="True"
             ItemsSource="{x:Bind Songs, Mode=OneWay}"
+            Removable="False"
             Style="{StaticResource DataHolderStyle}"
             Visibility="{x:Bind Songs.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
         <GridView

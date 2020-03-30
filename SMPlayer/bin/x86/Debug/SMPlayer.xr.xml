@@ -220,6 +220,7 @@
     <RootType FullName="SMPlayer.HeaderedPlaylistControl">
       <RootProperty Name="IsPlaylist" />
       <RootProperty Name="ShowAlbumText" />
+      <RootProperty Name="Removable" />
       <RootProperty Name="AllowClear" />
       <RootEvent Name="Loaded" />
     </RootType>
@@ -1098,6 +1099,7 @@
       <RootProperty Name="Header" />
       <RootProperty Name="Margin" />
       <RootProperty Name="ItemsSource" />
+      <RootProperty Name="Removable" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="Background" />
       <RootProperty Name="IsNowPlaying" />

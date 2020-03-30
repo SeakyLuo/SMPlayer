@@ -38,6 +38,11 @@ namespace SMPlayer
             get => ClearButton.Visibility == Visibility.Visible;
             set => ClearButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
         }
+        public bool Removable
+        {
+            get => HeaderedPlaylistController.Removable;
+            set => HeaderedPlaylistController.Removable = value;
+        }
 
         private static Dictionary<string, List<MusicDisplayItem>> PlaylistDisplayDict = new Dictionary<string, List<MusicDisplayItem>>();
         private static readonly Random random = new Random();

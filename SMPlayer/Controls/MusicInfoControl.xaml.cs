@@ -37,16 +37,15 @@ namespace SMPlayer.Controls
             TrackNumberTextBox.Text = IntConverter.ToStr((int)Properties.TrackNumber);
             YearTextBox.Text = IntConverter.ToStr((int)Properties.Year);
             BitRateTextBox.Text = Properties.Bitrate.ToString();
-            ComposersTextBox.Text = string.Join(", ", Properties.Composers);
+            ComposersTextBox.Text = string.Join(Helper.LocalizeMessage("Comma"), Properties.Composers);
             DurationTextBox.Text = MusicDurationConverter.ToTime(Properties.Duration.TotalSeconds);
-            GenreTextBox.Text = string.Join(", ", Properties.Genre);
+            GenreTextBox.Text = string.Join(Helper.LocalizeMessage("Comma"), Properties.Genre);
         }
         public async void SetMusicInfo(Music music)
         {
             if (music == null) return;
             CurrentMusic = music;
-            var file = await music.GetStorageFileAsync();
-            SetBasicProperties(file);
+            SetBasicProperties(await music.GetStorageFileAsync());
             SetMusicProperties(Properties = await music.GetMusicPropertiesAsync());
         }
         private void ClearPlayCountButton_Click(object sender, RoutedEventArgs e)
@@ -57,6 +56,7 @@ namespace SMPlayer.Controls
         }
         private static void NotifyListeners(Music before, Music after)
         {
+            Settings.settings.Tree.FindMusic(before).CopyFrom(after);
             MediaControl.NotifyMusicModifiedListeners(before, after);
             foreach (var listener in MusicModifiedListeners) listener.Invoke(before, after);
         }

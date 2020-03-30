@@ -67,6 +67,12 @@ namespace SMPlayer
             set => SetValue(ShowAlbumTextProperty, value);
         }
         public static readonly DependencyProperty ShowAlbumTextProperty = DependencyProperty.Register("ShowAlbumText", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(true));
+        public bool Removable
+        {
+            get => (bool)GetValue(RemovableProperty);
+            set => SetValue(RemovableProperty, value);
+        }
+        public static readonly DependencyProperty RemovableProperty = DependencyProperty.Register("AllowMultipleSection", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(true));
         public bool AllowMultipleSection
         {
             get => (bool)GetValue(AllowMultipleSectionProperty);
@@ -166,7 +172,8 @@ namespace SMPlayer
         }
         private void OpenMusicMenuFlyout(object sender, object e)
         {
-            MenuFlyoutHelper.SetRemovableMusicMenu(sender, this);
+            if (Removable) MenuFlyoutHelper.SetRemovableMusicMenu(sender, this);
+            else MenuFlyoutHelper.SetMusicMenu(sender, this);
             if (AllowReorder)
             {
                 var flyout = sender as MenuFlyout;
@@ -246,7 +253,7 @@ namespace SMPlayer
 
         void MenuFlyoutItemClickListener.Delete(Music music)
         {
-            
+            RemoveMusic(music);
         }
 
         void MenuFlyoutItemClickListener.Remove(Music music)

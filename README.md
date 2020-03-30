@@ -16,8 +16,6 @@ Go to Settings and Set the Root Folder of your music files.
 # TO DO
 Multi-Select.
 
-Default music player.
-
 Export data.
 
 Recent added with timeline.
@@ -28,7 +26,11 @@ Animations.
 
 Improved New Playlist Name.
 
+Improved editing album cover by selecting a song.
+
 # TO FIX
 Buttons become unavailable when come back from Mini mode.
 
 Able to drag titlebar when loading.
+
+Delete music should delete all occurrence.

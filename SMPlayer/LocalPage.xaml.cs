@@ -24,6 +24,7 @@ namespace SMPlayer
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             LocalFoldersPage.setter = this;
+            LocalMusicPage.setter = this;
             SetPage(Settings.settings.Tree);
             SettingsPage.AddAfterPathSetListener(this);
         }
@@ -36,7 +37,7 @@ namespace SMPlayer
 
         private void SetHeader(TreeInfo info)
         {
-            MainPage.Instance.SetHeaderText(string.IsNullOrEmpty(info.Directory) ? Helper.Localize("No Music") : info.Directory);
+            MainPage.Instance.SetHeaderText(string.IsNullOrEmpty(info.Directory) ? Helper.LocalizeMessage("No Music") : info.Directory);
         }
 
         private void LocalNavigationView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
@@ -145,6 +146,10 @@ namespace SMPlayer
         private void SetText(TreeInfo info, bool setHeader = true)
         {
             if (setHeader) SetHeader(info);
+            SetNavText(info);
+        }
+        public void SetNavText(TreeInfo info)
+        {
             LocalFoldersItem.Content = Helper.LocalizeMessage("Folders", info.Folders);
             LocalFoldersItem.IsEnabled = info.Folders != 0;
             LocalSongsItem.Content = Helper.LocalizeMessage("Songs", info.Songs);
@@ -230,6 +235,7 @@ namespace SMPlayer
     public interface LocalSetter
     {
         void SetPage(FolderTree tree, bool setHeader = true);
+        void SetNavText(TreeInfo treeInfo);
     }
 
     public interface LocalPageButtonListener

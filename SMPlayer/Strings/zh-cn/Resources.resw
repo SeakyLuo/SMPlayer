@@ -450,9 +450,6 @@
   <data name="NextButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>下一首</value>
   </data>
-  <data name="No Music" xml:space="preserve">
-    <value>没有音乐</value>
-  </data>
   <data name="No Playlist" xml:space="preserve">
     <value>无播放列表</value>
   </data>

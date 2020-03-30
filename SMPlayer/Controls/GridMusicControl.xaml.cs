@@ -11,11 +11,12 @@ using Windows.UI.Xaml.Input;
 
 namespace SMPlayer
 {
-    public sealed partial class GridMusicControl : UserControl, SwitchMusicListener
+    public sealed partial class GridMusicControl : UserControl, SwitchMusicListener, MenuFlyoutItemClickListener
     {
         public ObservableCollection<GridMusicView> GridMusicCollection = new ObservableCollection<GridMusicView>();
         public List<Music> MusicCollection = new List<Music>();
         private bool SetupInProgress = false;
+        public List<RemoveMusicListener> RemoveListeners = new List<RemoveMusicListener>();
 
         public GridMusicControl()
         {
@@ -26,7 +27,7 @@ namespace SMPlayer
                 int index = MusicCollection.IndexOf(before);
                 if (index > -1)
                 {
-                    GridMusicCollection[index].Source.CopyFrom(MusicCollection[index].CopyFrom(after));
+                    GridMusicCollection[index].Source = MusicCollection[index] = after;
                 }
             });
         }
@@ -106,11 +107,11 @@ namespace SMPlayer
         private void AddToButton_Click(object sender, RoutedEventArgs e)
         {
             var fe = (FrameworkElement)sender;
-            new MenuFlyoutHelper() { Data = (fe.DataContext as GridMusicView).Source }.GetAddToMenuFlyout().ShowAt(fe);
+            new MenuFlyoutHelper() { Data = (fe.DataContext as GridMusicView).Source }.GetAddToMenuFlyout("", this).ShowAt(fe);
         }
         private void MenuFlyout_Opening(object sender, object e)
         {
-            MenuFlyoutHelper.SetMusicMenu(sender);
+            MenuFlyoutHelper.SetMusicMenu(sender, this);
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
@@ -126,6 +127,29 @@ namespace SMPlayer
         private void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
             (sender.DataContext as GridMusicView)?.SetThumbnail();
+        }
+
+        void MenuFlyoutItemClickListener.Favorite(object data)
+        {
+            
+        }
+
+        void MenuFlyoutItemClickListener.Delete(Music music)
+        {
+            RemoveMusic(music);
+        }
+
+        void MenuFlyoutItemClickListener.Remove(Music music)
+        {
+            RemoveMusic(music);
+        }
+
+        private void RemoveMusic(Music music)
+        {
+            int index = MusicCollection.IndexOf(music);
+            MusicCollection.RemoveAt(index);
+            GridMusicCollection.RemoveAt(index);
+            foreach (var listener in RemoveListeners) listener.MusicRemoved(index, music, MusicCollection);
         }
     }
 }

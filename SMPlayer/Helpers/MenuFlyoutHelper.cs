@@ -11,7 +11,7 @@ namespace SMPlayer
     class MenuFlyoutHelper
     {
         public object Data { get; set; }
-        public string DefaultPlaylistName { get; set; }
+        public string DefaultPlaylistName { get; set; } = "";
         public const string AddToSubItemName = "AddToSubItem", PlaylistMenuName = "ShuffleItem", MusicMenuName = "PlayItem";
         public static string NowPlaying = Helper.Localize("Now Playing"), MyFavorites = Helper.Localize("My Favorites");
         public static bool IsBadNewPlaylistName(string name) { return name == NowPlaying || name == MyFavorites; }
@@ -120,7 +120,7 @@ namespace SMPlayer
                 MediaHelper.ShuffleAndPlay(Data as ICollection<Music>);
             };
             flyout.Items.Add(shuffleItem);
-            flyout.Items.Add(GetAddToMenuFlyoutSubItem());
+            flyout.Items.Add(GetAddToMenuFlyoutSubItem("", listener));
             return flyout;
         }
         public static MenuFlyoutItem GetShowInExplorerItem(string path, StorageItemTypes type)
@@ -203,6 +203,7 @@ namespace SMPlayer
                         await file.DeleteAsync();
                         MusicLibraryPage.AllSongs.Remove(music);
                         Settings.settings.RemoveMusic(music);
+                        MediaHelper.RemoveMusic(MediaHelper.CurrentPlaylist.FirstOrDefault(m => m == music));
                         var notification = Helper.LocalizeMessage("MusicDeleted", music.Name);
                         MainPage.Instance?.ShowNotification(notification);
                         NowPlayingFullPage.Instance?.ShowNotification(notification);

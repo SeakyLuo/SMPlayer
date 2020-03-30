@@ -36,6 +36,7 @@
             AllowReorder="False"
             AlternatingRowColor="True"
             ItemsSource="{x:Bind Songs, Mode=OneWay}"
+            Removable="False"
             Visibility="Collapsed" />
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">

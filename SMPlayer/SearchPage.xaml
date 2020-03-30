@@ -221,7 +221,8 @@
                     x:Name="SearchMusicView"
                     AlternatingRowColor="True"
                     Background="Transparent"
-                    ItemsSource="{x:Bind Songs, Mode=OneWay}" />
+                    ItemsSource="{x:Bind Songs, Mode=OneWay}"
+                    Removable="False" />
             </StackPanel>
             <StackPanel Margin="0,30" Visibility="{x:Bind Playlists.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                 <RelativePanel Style="{StaticResource RelativePanelStyle}">

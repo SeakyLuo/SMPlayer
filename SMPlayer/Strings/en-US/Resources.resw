@@ -450,9 +450,6 @@
   <data name="NextButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Next</value>
   </data>
-  <data name="No Music" xml:space="preserve">
-    <value>No Music</value>
-  </data>
   <data name="No Playlist" xml:space="preserve">
     <value>No Playlist</value>
   </data>

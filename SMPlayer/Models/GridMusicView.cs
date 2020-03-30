@@ -21,13 +21,22 @@ namespace SMPlayer.Models
         }
         private BitmapImage thumbnail = Helper.DefaultAlbumCover;
         private bool thumbnailLoaded = false;
-        public Music Source { get; private set; }
+        public Music Source
+        {
+            get => source;
+            set
+            {
+                source = value;
+                Name = value.Name;
+                Artist = value.Artist;
+                OnPropertyChanged();
+            }
+        }
+        private Music source;
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public GridMusicView(Music music)
         {
-            Name = music.Name;
-            Artist = music.Artist;
             Source = music;
         }
         public async void SetThumbnail()
