@@ -39,6 +39,8 @@ namespace SMPlayer.Models
         public bool SaveMusicProgress { get; set; } = false;
         public double MusicProgress { get; set; } = 0;
         public SortBy MusicLibraryCriterion { get; set; } = SortBy.Title;
+        [Newtonsoft.Json.JsonIgnore]
+        private List<Music> justRemoved = new List<Music>();
 
         public int FindNextPlaylistNameIndex(string Name)
         {
@@ -134,11 +136,14 @@ namespace SMPlayer.Models
 
         public void AddMusic(Music music)
         {
+            if (justRemoved.Any(m => m.Name == music.Name && m.Artist == music.Artist && m.Album == music.Album && m.Duration == music.Duration))
+                return;
             RecentAdded.AddOrMoveToTheFirst(music.Path);
         }
 
         public void RemoveMusic(Music music)
         {
+            justRemoved.Add(music);
             Tree.RemoveMusic(music);
             foreach (var playlist in Playlists)
                 playlist.Songs.Remove(music);

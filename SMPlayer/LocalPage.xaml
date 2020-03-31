@@ -105,9 +105,30 @@
             <VisualStateGroup x:Name="WidthChange">
                 <VisualState x:Name="Wide">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="{StaticResource MinimalNavigationViewWindowWidth}" />
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource CollapsedNavigationViewWindowWidth}" />
                     </VisualState.StateTriggers>
                 </VisualState>
+                <!--<VisualState x:Name="NavCollapsed">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource CollapsedNavigationViewWindowWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="LocalRefreshItem.Padding" Value="10,0" />
+                        <Setter Target="LocalShuffleItem.Padding" Value="10,0" />
+                        <Setter Target="LocalListViewItem.Padding" Value="10,0" />
+                        <Setter Target="LocalGridViewItem.Padding" Value="10,0" />
+                        <Setter Target="LocalRefreshItem.Label" Value="" />
+                        <Setter Target="LocalShuffleItem.Label" Value="" />
+                        <Setter Target="LocalListViewItem.Label" Value="" />
+                        <Setter Target="LocalGridViewItem.Label" Value="" />
+                        <Setter Target="LocalRefreshItem.IconTextMargin" Value="0" />
+                        <Setter Target="LocalShuffleItem.IconTextMargin" Value="0" />
+                        <Setter Target="LocalListViewItem.IconTextMargin" Value="0" />
+                        <Setter Target="LocalGridViewItem.IconTextMargin" Value="0" />
+                        <Setter Target="LocalListViewItem.Width" Value="Auto" />
+                        <Setter Target="LocalGridViewItem.Width" Value="Auto" />
+                    </VisualState.Setters>
+                </VisualState>-->
                 <VisualState x:Name="Narrow">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="0" />
