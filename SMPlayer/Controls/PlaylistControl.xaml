@@ -42,7 +42,7 @@
         SelectionMode="None">
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="data:Music">
-                <SwipeControl Loaded="SwipeControl_Loaded">
+                <SwipeControl Loaded="SwipeControl_Loaded" >
                     <SwipeControl.ContextFlyout>
                         <MenuFlyout Opening="OpenMusicMenuFlyout" />
                     </SwipeControl.ContextFlyout>
@@ -61,7 +61,7 @@
                         </SwipeItems>
                     </SwipeControl.LeftItems>
                     <SwipeControl.RightItems>
-                        <SwipeItems Mode="Execute">
+                        <SwipeItems Mode="Execute" >
                             <SwipeItem
                                 x:Uid="RemoveSwipeItem"
                                 Background="Red"

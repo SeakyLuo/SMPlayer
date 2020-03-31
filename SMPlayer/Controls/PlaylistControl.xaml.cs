@@ -244,6 +244,7 @@ namespace SMPlayer
 
         private void SwipeControl_Loaded(object sender, RoutedEventArgs e)
         {
+            if (Removable) (sender as SwipeControl).RightItems = null;
             if (ScrollToMusicRequestedWhenUnloaded != -1 && SongsListView.ContainerFromIndex(ScrollToMusicRequestedWhenUnloaded) is ListViewItem container)
             {
                 container.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true });
