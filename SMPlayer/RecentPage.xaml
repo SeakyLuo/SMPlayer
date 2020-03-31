@@ -32,7 +32,11 @@
                 x:Name="RecentPlayedItem"
                 x:Uid="RecentPlayedItem"
                 Header="Recently Played">
-                <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
                     <CommandBar
                         Background="Transparent"
                         DefaultLabelPosition="Right"
@@ -44,8 +48,8 @@
                             Click="ClearHistoryAppButton_Click"
                             Label="Clear History" />
                     </CommandBar>
-                    <local:GridMusicControl x:Name="PlayedMusicView" />
-                </StackPanel>
+                    <local:GridMusicControl Grid.Row="1" x:Name="PlayedMusicView" />
+                </Grid>
             </PivotItem>
         </Pivot>
     </Grid>
