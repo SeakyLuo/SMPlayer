@@ -71,7 +71,8 @@ namespace SMPlayer
         {
             bool isMinimal = e.Size.Width < 720;
             bool isTitleBarColorful = IsTitleBarColorful;
-            var page = NaviFrame.CurrentSourcePageType.Name;
+            var page = NaviFrame.CurrentSourcePageType?.Name;
+            if (page == null) return;
             bool collapsed = (page == "NowPlayingPage" && isMinimal) ||
                              page == "PlaylistsPage" ||
                              (page == "RecentPage" && !isMinimal) || 

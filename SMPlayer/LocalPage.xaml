@@ -29,6 +29,7 @@
             IsBackButtonVisible="Collapsed"
             IsBackEnabled="True"
             IsSettingsVisible="False"
+            OverflowLabelMode="NoLabel"
             ItemInvoked="LocalNavigationView_ItemInvoked"
             PaneDisplayMode="Top">
             <NavigationView.MenuItems>

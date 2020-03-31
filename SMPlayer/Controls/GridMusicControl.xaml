@@ -9,6 +9,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <UserControl.Resources>
+        <Style x:Key="MusicInfoTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Width" Value="160" />
+        </Style>
+    </UserControl.Resources>
+
     <GridView
         x:Name="MusicGridView"
         Grid.Row="1"
@@ -45,8 +53,8 @@
                             Color="Gray">
                             <Grid>
                                 <Image
-                                    Width="100"
-                                    Height="100"
+                                    Width="110"
+                                    Height="110"
                                     Source="{x:Bind Thumbnail, Mode=OneWay}" />
                                 <Button
                                     x:Name="AddToButton"
@@ -67,31 +75,32 @@
                             <StackPanel RelativePanel.AlignTopWithPanel="True">
                                 <TextBlock
                                     x:Name="MusicNameTextBlock"
-                                    Width="160"
                                     HorizontalAlignment="Left"
                                     FontSize="15"
                                     FontWeight="SemiBold"
                                     Foreground="{x:Bind Source.IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
                                     MaxLines="3"
-                                    Text="{x:Bind Name}"
-                                    TextTrimming="CharacterEllipsis"
-                                    TextWrapping="Wrap" />
+                                    Style="{StaticResource MusicInfoTextBlockStyle}"
+                                    Text="{x:Bind Name}" />
                                 <TextBlock
+                                    x:Name="ArtistTextBlock"
                                     Margin="0,3,0,0"
                                     HorizontalAlignment="Left"
                                     FontSize="12"
                                     Foreground="{x:Bind Source.IsPlaying, Converter={StaticResource ColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
-                                    Text="{x:Bind Artist, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist}"
-                                    TextTrimming="CharacterEllipsis" />
+                                    MaxLines="1"
+                                    Style="{StaticResource MusicInfoTextBlockStyle}"
+                                    Text="{x:Bind Artist, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist}" />
                                 <TextBlock
                                     x:Name="AlbumTextBlock"
                                     Margin="0,3,0,0"
                                     HorizontalAlignment="Left"
-                                    VerticalAlignment="center"
+                                    VerticalAlignment="Center"
                                     FontSize="12"
                                     Foreground="{x:Bind Source.IsPlaying, Converter={StaticResource ColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
+                                    MaxLines="1"
+                                    Style="{StaticResource MusicInfoTextBlockStyle}"
                                     Text="{x:Bind Source.Album}"
-                                    TextTrimming="CharacterEllipsis"
                                     Visibility="Collapsed" />
                             </StackPanel>
                             <FontIcon
@@ -114,7 +123,12 @@
                                         <AdaptiveTrigger MinWindowWidth="0" />
                                     </VisualState.StateTriggers>
                                     <VisualState.Setters>
-                                        <Setter Target="MusicNameTextBlock.Width" Value="400" />
+                                        <Setter Target="MusicNameTextBlock.FontSize" Value="18" />
+                                        <Setter Target="ArtistTextBlock.FontSize" Value="14" />
+                                        <Setter Target="AlbumTextBlock.FontSize" Value="14" />
+                                        <Setter Target="MusicNameTextBlock.Width" Value="600" />
+                                        <Setter Target="ArtistTextBlock.Width" Value="600" />
+                                        <Setter Target="AlbumTextBlock.Width" Value="600" />
                                         <Setter Target="AlbumTextBlock.Visibility" Value="Visible" />
                                     </VisualState.Setters>
                                 </VisualState>
