@@ -35,13 +35,14 @@ namespace SMPlayer
             {
                 if (PendingPlaybackList != null)
                 {
+                    // Use this for AddMusic
                     if (PendingPlaybackList.Items.Count < _PlaybackList.Items.Count)
                         return PendingPlaybackList;
                     _PlaybackList.Items.Clear();
                     foreach (var item in PendingPlaybackList.Items)
                         _PlaybackList.Items.Add(item);
                     PendingPlaybackList = null;
-                    _PlaybackList.MoveTo(0);
+                    _PlaybackList.MoveTo(1);
                 }
                 return _PlaybackList;
             }
@@ -87,7 +88,7 @@ namespace SMPlayer
             };
             PlaybackList.CurrentItemChanged += (sender, args) =>
             {
-                if (sender.CurrentItemIndex >= CurrentPlaylist.Count) return;
+                if (PlaybackList.CurrentItemIndex >= CurrentPlaylist.Count) return;
                 Music current = CurrentMusic?.Copy(), next = args.NewItem.GetMusic();
                 foreach (var listener in SwitchMusicListeners)
                     listener.MusicSwitching(current, next, args.Reason);
@@ -170,6 +171,8 @@ namespace SMPlayer
 
         public static void ShuffleOthers()
         {
+            // Creating a new MediaPlaybackList here is because removing old music
+            // somehow restarts the current playing music.
             PendingPlaybackList = new MediaPlaybackList();
             var playlist = ShufflePlaylist(CurrentPlaylist, CurrentMusic);
             CurrentPlaylist.Clear();
