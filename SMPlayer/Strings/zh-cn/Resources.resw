@@ -208,9 +208,9 @@
     <value>清空</value>
   </data>
   <data name="ClearAppButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>清空全部</value>
+    <value>清空播放列表</value>
   </data>
-  <data name="ClearHistoryButton.Content" xml:space="preserve">
+  <data name="ClearHistoryAppButton.Label" xml:space="preserve">
     <value>清空播放历史</value>
   </data>
   <data name="ClearNowPlayingAppButton.Label" xml:space="preserve">

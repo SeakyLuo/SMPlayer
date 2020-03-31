@@ -244,12 +244,6 @@
                 Style="{StaticResource SettingCheckBoxStyle}"
                 Unchecked="SaveProgressCheckBox_Unchecked" />
             <HyperlinkButton
-                x:Uid="ClearHistoryButton"
-                Margin="9,0"
-                Click="ClearHistoryButton_Click"
-                Content="Clear Play History"
-                Style="{ThemeResource TextBlockButtonStyle}" />
-            <HyperlinkButton
                 x:Uid="UpdateMusicLibraryButton"
                 Margin="9,0"
                 Click="UpdateMusicLibrary_Click"

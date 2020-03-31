@@ -1065,8 +1065,9 @@
       <RootProperty Name="DefaultLabelPosition" />
       <RootProperty Name="Style" />
       <RootProperty Name="PrimaryCommands" />
-      <RootProperty Name="IsOpen" />
+      <RootProperty Name="IsDynamicOverflowEnabled" />
       <RootProperty Name="OverflowButtonVisibility" />
+      <RootProperty Name="IsOpen" />
       <RootProperty Name="Content" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBar">

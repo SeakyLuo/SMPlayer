@@ -161,22 +161,6 @@ namespace SMPlayer
                 Settings.settings.RecentPlayed.RemoveAt(Settings.RecentPlayedLimit);
         }
 
-        private async void ClearHistoryButton_Click(object sender, RoutedEventArgs e)
-        {
-            var messageDialog = new MessageDialog(Helper.LocalizeMessage("ClearHistory"));
-            messageDialog.Commands.Add(new UICommand(Helper.LocalizeMessage("Yes"), new UICommandInvokedHandler(command => Settings.settings.RecentPlayed.Clear())));
-            messageDialog.Commands.Add(new UICommand(Helper.LocalizeMessage("No")));
-
-            // Set the command that will be invoked by default
-            messageDialog.DefaultCommandIndex = 1;
-
-            // Set the command to be invoked when escape is pressed
-            messageDialog.CancelCommandIndex = 1;
-
-            // Show the message dialog
-            await messageDialog.ShowAsync();
-        }
-
         private void KeepRecentCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             Settings.settings.KeepLimitedRecentPlayedItems = false;
