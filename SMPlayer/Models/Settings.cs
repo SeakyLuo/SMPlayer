@@ -48,7 +48,7 @@ namespace SMPlayer.Models
             {
                 var siblings = Playlists.FindAll(p => p.Name.StartsWith(Name)).Select(p => p.Name).ToHashSet();
                 for (int i = 1; i <= siblings.Count; i++)
-                    if (!siblings.Contains($"{Name} {i}"))
+                    if (!siblings.Contains(Helper.GetPlaylistName(Name, i)))
                         return i;
             }
             return 0;
@@ -57,7 +57,7 @@ namespace SMPlayer.Models
         public string FindNextPlaylistName(string Name)
         {
             int index = FindNextPlaylistNameIndex(Name);
-            return index == 0 ? Name : $"{Name} {index}";
+            return index == 0 ? Name : Helper.GetPlaylistName(Name, index);
         }
 
         public static async Task Init()
@@ -164,8 +164,7 @@ namespace SMPlayer.Models
         {
             if (string.IsNullOrEmpty(newName) || string.IsNullOrWhiteSpace(newName))
                 return NamingError.EmptyOrWhiteSpace;
-            if (newName == MenuFlyoutHelper.NowPlaying || newName == MenuFlyoutHelper.MyFavorites ||
-                Playlists.FindIndex(p => p.Name == newName) != -1)
+            if (newName == MenuFlyoutHelper.NowPlaying || newName == MenuFlyoutHelper.MyFavorites || Playlists.Any(p => p.Name == newName))
                 return NamingError.Used;
             if (newName.Contains(Helper.StringConcatenationFlag) || newName.Contains("{0}"))
                 return NamingError.Special;

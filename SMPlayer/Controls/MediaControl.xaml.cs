@@ -805,7 +805,7 @@ namespace SMPlayer
         {
             var name = Helper.Localize("Now Playing") + " - " + DateTime.Now.ToString("yy/MM/dd");
             int index = Settings.settings.FindNextPlaylistNameIndex(name);
-            var defaultName = index == 0 ? name : $"{name} ({index})";
+            var defaultName = index == 0 ? name : Helper.GetPlaylistName(name, index);
             var listener = new VirtualRenameActionListener() { Data = MediaHelper.CurrentPlaylist };
             var dialog = new RenameDialog(listener, RenameOption.New, defaultName);
             listener.Dialog = dialog;

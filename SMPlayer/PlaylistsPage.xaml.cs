@@ -109,9 +109,9 @@ namespace SMPlayer
         {
             var target = (sender as MenuFlyoutItem).DataContext as Playlist;
             int next = Settings.settings.FindNextPlaylistNameIndex(target.Name);
-            string name = $"{target.Name} {next}", prev = next == 1 ? target.Name : $"{target.Name} {next - 1}";
+            string name = Helper.GetPlaylistName(target.Name, next), prev = next == 1 ? target.Name : Helper.GetPlaylistName(target.Name, next - 1);
             var duplicate = target.Duplicate(name);
-            int index = Settings.settings.Playlists.FindLastIndex((p) => p.Name.StartsWith(prev)) + 1;
+            int index = Settings.settings.Playlists.FindLastIndex(p => p.Name.StartsWith(prev)) + 1;
             Playlists.Insert(index, duplicate);
             Settings.settings.Playlists.Insert(index, duplicate);
         }

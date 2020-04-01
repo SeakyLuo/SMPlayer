@@ -125,6 +125,11 @@ namespace SMPlayer
             return string.Format(str, args);
         }
 
+        public static string GetPlaylistName(string Name, int index)
+        {
+            return LocalizeMessage("PlaylistName", Name, index);
+        }
+
         private static string LocalizeHelper(string resource, ResourceLoader loader)
         {
             if (string.IsNullOrEmpty(resource)) return resource;

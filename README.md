@@ -29,6 +29,4 @@ Improved New Playlist Name.
 Improved editing album cover by selecting a song.
 
 # TO FIX
-Buttons become unavailable when come back from Mini mode.
-
 Able to drag titlebar when loading.
