@@ -15,7 +15,6 @@ namespace SMPlayer
     /// </summary>
     sealed partial class App : Application
     {
-        private bool WindowVisible = true;
         /// <summary>
         /// 初始化单一实例应用程序对象。这是执行的创作代码的第一行，
         /// 已执行，逻辑上等同于 main() 或 WinMain()。
@@ -80,7 +79,6 @@ namespace SMPlayer
                 Window.Current.Activate();
             }
             Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
-            Window.Current.VisibilityChanged += CheckLibrary;
 
             // If background task is already registered, do nothing
             if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals(Helper.ToastTaskName)))
@@ -134,17 +132,6 @@ namespace SMPlayer
             Settings.Save();
             MusicLibraryPage.Save();
             MediaHelper.Save();
-        }
-
-        private async void CheckLibrary(object sender, Windows.UI.Core.VisibilityChangedEventArgs e)
-        {
-            if (!(WindowVisible = e.Visible))
-            {
-                await Window.Current.Content.Dispatcher.RunIdleAsync(args =>
-                {
-                    MusicLibraryPage.CheckLibrary();
-                });
-            }
         }
 
         protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)

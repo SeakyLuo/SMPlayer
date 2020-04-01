@@ -219,6 +219,9 @@
   <data name="Play" xml:space="preserve">
     <value>Play</value>
   </data>
+  <data name="PlaylistName" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
   <data name="ProcessRequest" xml:space="preserve">
     <value>Processing your request......</value>
   </data>

@@ -219,6 +219,9 @@
   <data name="Play" xml:space="preserve">
     <value>播放</value>
   </data>
+  <data name="PlaylistName" xml:space="preserve">
+    <value>{0}（{1}）</value>
+  </data>
   <data name="ProcessRequest" xml:space="preserve">
     <value>正在处理您的请求……</value>
   </data>

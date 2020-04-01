@@ -32,5 +32,3 @@ Improved editing album cover by selecting a song.
 Buttons become unavailable when come back from Mini mode.
 
 Able to drag titlebar when loading.
-
-Delete music should delete all occurrence.

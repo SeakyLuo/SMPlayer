@@ -65,7 +65,7 @@ namespace SMPlayer
                 };
                 addToItem.Items.Add(favItem);
             }
-            addToItem.Items.Add(new MenuFlyoutSeparator());
+            if (addToItem.Items.Count > 0) addToItem.Items.Add(new MenuFlyoutSeparator());
             foreach (var item in GetAddToPlaylistsMenuFlyout(playlistName).Items)
                 addToItem.Items.Add(item);
             return addToItem;
