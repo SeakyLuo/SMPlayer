@@ -9,7 +9,6 @@
     xmlns:triggers="using:SMPlayer.Triggers"
     x:Name="PlaylistController"
     Loaded="PlaylistController_Loaded"
-    Loading="PlaylistController_Loading"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -42,7 +41,7 @@
         SelectionMode="None">
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="data:Music">
-                <SwipeControl Loaded="SwipeControl_Loaded" >
+                <SwipeControl Loaded="SwipeControl_Loaded">
                     <SwipeControl.ContextFlyout>
                         <MenuFlyout Opening="OpenMusicMenuFlyout" />
                     </SwipeControl.ContextFlyout>
@@ -61,7 +60,7 @@
                         </SwipeItems>
                     </SwipeControl.LeftItems>
                     <SwipeControl.RightItems>
-                        <SwipeItems Mode="Execute" >
+                        <SwipeItems Mode="Execute">
                             <SwipeItem
                                 x:Uid="RemoveSwipeItem"
                                 Background="Red"
@@ -74,7 +73,11 @@
                             </SwipeItem>
                         </SwipeItems>
                     </SwipeControl.RightItems>
-                    <local:PlaylistControlItem DataContext="{x:Bind}" ShowAlbumText="{Binding ElementName=PlaylistController, Path=ShowAlbumText}" />
+                    <local:PlaylistControlItem
+                        Data="{x:Bind}"
+                        DataContext="{x:Bind}"
+                        ShowAlbumText="{Binding ElementName=PlaylistController, Path=ShowAlbumText}"
+                        Theme="{Binding ElementName=PlaylistController, Path=Theme}" />
                 </SwipeControl>
             </DataTemplate>
         </ListView.ItemTemplate>

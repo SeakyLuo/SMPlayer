@@ -123,9 +123,7 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value.Equals(true)) return ColorHelper.HighlightBrush;
-            else if (PlaylistControl.CurrentTheme != ElementTheme.Dark) return ColorHelper.BlackBrush;
-            return ColorConverter.StringToColor((string)parameter);
+            return value.Equals(ElementTheme.Dark) ? ColorConverter.StringToColor((string)parameter) : ColorHelper.BlackBrush;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

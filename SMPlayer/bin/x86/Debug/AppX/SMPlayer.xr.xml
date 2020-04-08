@@ -9,9 +9,9 @@
     <RootPropertyPathName Name="Artist" />
     <RootPropertyPathName Name="Cover" />
     <RootPropertyPathName Name="Album" />
-    <RootPropertyPathName Name="IsPlaying" />
     <RootPropertyPathName Name="Duration" />
     <RootPropertyPathName Name="Content" />
+    <RootPropertyPathName Name="IsPlaying" />
     <RootPropertyPathName Name="PlaceholderForeground" />
     <RootPropertyPathName Name="ScrollableWidth" />
     <RootPropertyPathName Name="IsCloseButtonOverlay" />
@@ -48,6 +48,7 @@
     <RootPropertyPathName Name="DragItemsCount" />
     <RootPropertyPathName Name="Directory" />
     <RootPropertyPathName Name="ShowAlbumText" />
+    <RootPropertyPathName Name="Theme" />
     <RootPropertyPathName Name="KeyboardAcceleratorTextMinWidth" />
     <RootPropertyPathName Name="PlayCount" />
     <RootPropertyPathName Name="Favorite" />
@@ -510,9 +511,8 @@
       <RootEvent Name="PointerEntered" />
       <RootEvent Name="PointerExited" />
       <RootEvent Name="DataContextChanged" />
-      <RootEvent Name="SizeChanged" />
       <RootEvent Name="Loaded" />
-      <RootEvent Name="Loading" />
+      <RootEvent Name="SizeChanged" />
     </RootType>
     <RootType FullName="SMPlayer.Controls.AlbumArtControl" />
     <RootType FullName="Windows.UI.Xaml.VisualStateManager">
@@ -704,8 +704,10 @@
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="SMPlayer.Controls.PlaylistControlItem">
+      <RootProperty Name="Data" />
       <RootProperty Name="DataContext" />
       <RootProperty Name="ShowAlbumText" />
+      <RootProperty Name="Theme" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ContentDialog">
       <RootProperty Name="Content" />

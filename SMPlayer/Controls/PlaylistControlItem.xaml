@@ -6,6 +6,7 @@
     xmlns:local="using:SMPlayer.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:triggers="using:SMPlayer.Triggers"
+    Loaded="UserControl_Loaded"
     mc:Ignorable="d">
 
     <Grid
@@ -38,7 +39,7 @@
                 Visibility="{Binding IsPlaying, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
             <TextBlock
                 x:Name="TitleTextBlock"
-                Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=White, Mode=OneWay}"
+                Foreground="{x:Bind Theme, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=White, Mode=OneWay}"
                 Text="{Binding Name, Mode=OneWay}"
                 ToolTipService.ToolTip="{Binding ElementName=TitleTextBlock, Path=Text}" />
         </StackPanel>
@@ -50,7 +51,7 @@
             VerticalAlignment="Center"
             Click="Artist_Click"
             Content="{Binding Artist, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist}"
-            Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
+            Foreground="{x:Bind Theme, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
             Style="{StaticResource TextBlockButtonStyle}"
             ToolTipService.ToolTip="{Binding ElementName=ArtistTextButton, Path=Content}"
             Visibility="Visible" />
@@ -62,7 +63,7 @@
             VerticalAlignment="Center"
             Click="Album_Click"
             Content="{Binding Album, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownAlbum, Mode=OneWay}"
-            Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
+            Foreground="{x:Bind Theme, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
             Style="{StaticResource TextBlockButtonStyle}"
             ToolTipService.ToolTip="{Binding ElementName=AlbumTextButton, Path=Content}"
             Visibility="{x:Bind ShowAlbumText, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
@@ -73,7 +74,7 @@
             Grid.Column="3"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
+            Foreground="{x:Bind Theme, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
             Text="{Binding Duration, Converter={StaticResource MusicDurationConverter}}" />
         <StackPanel
             x:Name="LongArtistAlbumPanel"
@@ -90,14 +91,14 @@
                 VerticalAlignment="Center"
                 Click="Artist_Click"
                 Content="{Binding Artist, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist, Mode=OneWay}"
-                Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
+                Foreground="{x:Bind Theme, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
                 Style="{StaticResource TextBlockButtonStyle}" />
             <TextBlock
                 x:Name="LongArtistAlbumPanelDot"
                 Margin="5,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
+                Foreground="{x:Bind Theme, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
                 Text="•"
                 Visibility="{x:Bind ShowAlbumText, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
             <HyperlinkButton
@@ -108,7 +109,7 @@
                 VerticalAlignment="Center"
                 Click="Album_Click"
                 Content="{Binding Album, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownAlbum, Mode=OneWay}"
-                Foreground="{Binding IsPlaying, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
+                Foreground="{x:Bind Theme, Converter={StaticResource PlaylistRowColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
                 Style="{StaticResource TextBlockButtonStyle}"
                 Visibility="{x:Bind ShowAlbumText, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
         </StackPanel>

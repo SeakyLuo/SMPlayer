@@ -24,10 +24,11 @@ namespace SMPlayer
         private ObservableCollection<Music> currentPlaylist = new ObservableCollection<Music>();
         public ElementTheme Theme
         {
-            get => SongsListView.RequestedTheme;
-            set => SongsListView.RequestedTheme = value;
+            get => (ElementTheme)GetValue(ThemeProperty);
+            set => SetValue(ThemeProperty, value);
         }
-        public static ElementTheme CurrentTheme;
+        public static readonly DependencyProperty ThemeProperty = DependencyProperty.Register("Theme", typeof(ElementTheme), typeof(PlaylistControl), new PropertyMetadata(ElementTheme.Default));
+
         private static List<MusicRequestListener> MusicRequestListeners = new List<MusicRequestListener>();
         public bool AlternatingRowColor { get; set; }
         public PlaylistScrollListener ScrollListener;
@@ -95,11 +96,6 @@ namespace SMPlayer
             {
                 CurrentPlaylist.FirstOrDefault(m => m == before)?.CopyFrom(after);
             });
-        }
-
-        private void PlaylistController_Loading(FrameworkElement sender, object args)
-        {
-            CurrentTheme = Theme;
         }
 
         private void PlaylistController_Loaded(object sender, RoutedEventArgs e)
