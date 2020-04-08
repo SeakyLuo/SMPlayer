@@ -945,6 +945,10 @@ namespace SMPlayer
             await new MusicDialog(MusicDialogOption.Lyrics, MediaHelper.CurrentMusic).ShowAsync();
         }
 
+        private async void MainMediaControlMoreAlbumArtItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            await new MusicDialog(MusicDialogOption.AlbumArt, MediaHelper.CurrentMusic).ShowAsync();
+        }
         public void Pause()
         {
             PauseMusic();
@@ -954,11 +958,6 @@ namespace SMPlayer
         {
             if (newCollection.Count == 0)
                 ClearMusic();
-        }
-
-        private void MiniTitleTextBlock_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-
         }
 
         public void MusicLiked(Music music, bool isFavorite)

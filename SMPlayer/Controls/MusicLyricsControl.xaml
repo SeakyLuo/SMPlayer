@@ -46,12 +46,11 @@
             </StackPanel>
         </Grid>
         <ProgressBar
-            x:Name="SavingLyricsProgress"
+            x:Name="SaveProgress"
             Grid.Row="1"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Top"
             IsIndeterminate="True"
-            RelativePanel.AlignBottomWithPanel="True"
             Visibility="Collapsed" />
         <ScrollViewer
             x:Name="TextBlockScroller"

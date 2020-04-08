@@ -135,6 +135,9 @@
   <data name="AlbumArtistTextBlock.Text" xml:space="preserve">
     <value>Album Artist</value>
   </data>
+  <data name="AlbumArtItem.Label" xml:space="preserve">
+    <value>See Album Art</value>
+  </data>
   <data name="AlbumArtPivotItem.Header" xml:space="preserve">
     <value>Album Art</value>
   </data>
@@ -362,9 +365,6 @@
   </data>
   <data name="LyricsItem.Label" xml:space="preserve">
     <value>Show Lyrics</value>
-  </data>
-  <data name="LyricsItem.ToolTipService.ToolTip" xml:space="preserve">
-    <value>See Lyrics</value>
   </data>
   <data name="LyricsMenuItem.Text" xml:space="preserve">
     <value>Show Lyrics</value>

@@ -683,12 +683,14 @@
       <RootProperty Name="ShowHeader" />
       <RootProperty Name="Margin" />
       <RootProperty Name="AllowMusicSwitching" />
+      <RootProperty Name="ProgressBarColor" />
       <RootProperty Name="RequestedTheme" />
     </RootType>
     <RootType FullName="SMPlayer.Controls.MusicLyricsControl">
       <RootProperty Name="ShowHeader" />
       <RootProperty Name="Margin" />
       <RootProperty Name="AllowMusicSwitching" />
+      <RootProperty Name="ProgressBarColor" />
       <RootProperty Name="RequestedTheme" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.HyperlinkButton">

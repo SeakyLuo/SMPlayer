@@ -97,6 +97,7 @@
                     x:Name="MusicInfoController"
                     Margin="20,0"
                     AllowMusicSwitching="True"
+                    ProgressBarColor="White"
                     RequestedTheme="Dark"
                     ShowHeader="True" />
             </controls:BladeItem>
@@ -105,6 +106,7 @@
                     x:Name="MusicLyricsController"
                     Margin="20,0"
                     AllowMusicSwitching="True"
+                    ProgressBarColor="White"
                     RequestedTheme="Dark"
                     ShowHeader="True" />
             </controls:BladeItem>

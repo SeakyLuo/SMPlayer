@@ -73,6 +73,13 @@
                     Style="{StaticResource MusicScrollHeaderButtonStyle}" />
             </StackPanel>
         </Grid>
+        <ProgressBar
+            x:Name="SaveProgress"
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top"
+            IsIndeterminate="True"
+            Visibility="Visible" />
         <ScrollViewer
             Grid.Row="1"
             HorizontalScrollBarVisibility="Auto"

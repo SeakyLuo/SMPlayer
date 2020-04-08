@@ -214,7 +214,7 @@ namespace SMPlayer
 
         private void FolderTemplate_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
-            var tree = ((sender as StackPanel).DataContext as TreeViewNode).Content as FolderTree;
+            var tree = ((sender as Grid).DataContext as TreeViewNode).Content as FolderTree;
             setter.SetPage(tree);
         }
 

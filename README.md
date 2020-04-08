@@ -24,8 +24,6 @@ ThemeColor change.
 
 Animations.
 
-Improved New Playlist Name.
-
 Improved editing album cover by selecting a song.
 
 # TO FIX

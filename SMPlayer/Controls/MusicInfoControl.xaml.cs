@@ -15,6 +15,11 @@ namespace SMPlayer.Controls
     {
         public bool AllowMusicSwitching { get; set; }
         public bool ShowHeader { get; set; }
+        public Windows.UI.Xaml.Media.Brush ProgressBarColor
+        {
+            get => SaveProgress.Foreground;
+            set => SaveProgress.Foreground = value;
+        }
         private Music CurrentMusic;
         private MusicProperties Properties;
         public static List<Action<Music, Music>> MusicModifiedListeners = new List<Action<Music, Music>>();
@@ -44,9 +49,11 @@ namespace SMPlayer.Controls
         public async void SetMusicInfo(Music music)
         {
             if (music == null) return;
+            SaveProgress.Visibility = Visibility.Visible;
             CurrentMusic = music;
             SetBasicProperties(await music.GetStorageFileAsync());
             SetMusicProperties(Properties = await music.GetMusicPropertiesAsync());
+            SaveProgress.Visibility = Visibility.Collapsed;
         }
         private void ClearPlayCountButton_Click(object sender, RoutedEventArgs e)
         {
@@ -86,6 +93,7 @@ namespace SMPlayer.Controls
 
         private async void SaveMusicPropertiesButton_Click(object sender, RoutedEventArgs e)
         {
+            SaveProgress.Visibility = Visibility.Visible;
             var newMusic = CurrentMusic.Copy();
             Properties.Title = newMusic.Name = TitleTextBox.Text;
             Properties.Subtitle = SubtitleTextBox.Text;
@@ -103,6 +111,7 @@ namespace SMPlayer.Controls
             NotifyListeners(CurrentMusic, newMusic);
             CurrentMusic.CopyFrom(newMusic);
             Helper.ShowNotification("PropertiesUpdated");
+            SaveProgress.Visibility = Visibility.Collapsed;
         }
         public async void SetBasicProperties(StorageFile file)
         {

@@ -19,6 +19,11 @@ namespace SMPlayer.Controls
     {
         public bool AllowMusicSwitching { get; set; }
         public bool ShowHeader { get; set; }
+        public Windows.UI.Xaml.Media.Brush ProgressBarColor
+        {
+            get => SaveProgress.Foreground;
+            set => SaveProgress.Foreground = value;
+        }
         private string Lyrics = "";
         private Music CurrentMusic;
         public MusicLyricsControl()
@@ -28,10 +33,10 @@ namespace SMPlayer.Controls
         }
         private void ResetLyricsButton_Click(object sender, RoutedEventArgs e)
         {
-            SavingLyricsProgress.Visibility = Visibility.Visible;
+            SaveProgress.Visibility = Visibility.Visible;
             LyricsTextBox.IsEnabled = false;
             LyricsTextBox.Text = Lyrics;
-            SavingLyricsProgress.Visibility = Visibility.Collapsed;
+            SaveProgress.Visibility = Visibility.Collapsed;
             LyricsTextBox.IsEnabled = true;
             Helper.ShowNotification("LyricsReset");
         }
@@ -45,7 +50,7 @@ namespace SMPlayer.Controls
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
             {
-                SavingLyricsProgress.Visibility = Visibility.Visible;
+                SaveProgress.Visibility = Visibility.Visible;
                 LyricsTextBox.IsEnabled = false;
                 var music = await CurrentMusic.GetStorageFileAsync();
                 using (var file = TagLib.File.Create(new MusicFileAbstraction(music), TagLib.ReadStyle.Average))
@@ -54,7 +59,7 @@ namespace SMPlayer.Controls
                     file.Tag.Lyrics = Lyrics;
                     file.Save();
                 }
-                SavingLyricsProgress.Visibility = Visibility.Collapsed;
+                SaveProgress.Visibility = Visibility.Collapsed;
                 LyricsTextBox.IsEnabled = true;
                 Helper.ShowNotification("LyricsUpdated");
             });
@@ -62,7 +67,7 @@ namespace SMPlayer.Controls
 
         private async void SearchLyricsButton_Click(object sender, RoutedEventArgs e)
         {
-            SavingLyricsProgress.Visibility = Visibility.Visible;
+            SaveProgress.Visibility = Visibility.Visible;
             LyricsTextBox.IsEnabled = false;
             string notification = "";
             try
@@ -85,7 +90,7 @@ namespace SMPlayer.Controls
             finally
             {
                 LyricsTextBox.IsEnabled = true;
-                SavingLyricsProgress.Visibility = Visibility.Collapsed;
+                SaveProgress.Visibility = Visibility.Collapsed;
                 MainPage.Instance?.ShowNotification(notification);
                 NowPlayingFullPage.Instance?.ShowNotification(notification);
             }
@@ -104,7 +109,8 @@ namespace SMPlayer.Controls
                 var list = json.GetNamedObject("data").GetNamedObject("lyric").GetNamedArray("list");
                 if (list.Count == 0) return "";
                 var lyrics = list.GetObjectAt(0).GetNamedString("content");
-                lyrics = string.Join("\n", new List<string>(lyrics.Replace("\\n", "\n").Split("\n")).ConvertAll(line => line.Trim()));
+                lyrics = string.Join("\n", new List<string>(lyrics.Replace("\\n", "\n").Replace("<em>", "").Replace("</em>", "")
+                                                                  .Split("\n")).ConvertAll(line => line.Trim()));
                 return lyrics; 
             }
         }

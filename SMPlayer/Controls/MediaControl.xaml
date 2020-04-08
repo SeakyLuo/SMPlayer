@@ -194,7 +194,7 @@
                                 <local:IconTextButton
                                     x:Name="MainMediaControlMoreMusicInfoItem"
                                     x:Uid="MusicInfoItem"
-                                    Label="Show Music Info"
+                                    Label="See Music Info"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
                                     Tapped="MainMediaControlMoreMusicInfoItem_Tapped">
                                     <local:IconTextButton.Icon>
@@ -204,9 +204,19 @@
                                 <local:IconTextButton
                                     x:Name="MainMediaControlMoreLyricsItem"
                                     x:Uid="LyricsItem"
-                                    Label="Show Lyrics"
+                                    Label="See Lyrics"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
                                     Tapped="MainMediaControlMoreLyricsItem_Tapped">
+                                    <local:IconTextButton.Icon>
+                                        <FontIcon Glyph="&#xEC42;" Style="{ThemeResource MediaControlIconTextButtonFontIconStyle}" />
+                                    </local:IconTextButton.Icon>
+                                </local:IconTextButton>
+                                <local:IconTextButton
+                                    x:Name="MainMediaControlMoreAlbumArtItem"
+                                    x:Uid="AlbumArtItem"
+                                    Label="See Album Art"
+                                    Style="{StaticResource MediaControlIconTextButtonStyle}"
+                                    Tapped="MainMediaControlMoreAlbumArtItem_Tapped">
                                     <local:IconTextButton.Icon>
                                         <FontIcon Glyph="&#xEC42;" Style="{ThemeResource MediaControlIconTextButtonFontIconStyle}" />
                                     </local:IconTextButton.Icon>
