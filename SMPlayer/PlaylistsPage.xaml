@@ -106,6 +106,7 @@
                     <local:HeaderedPlaylistControl
                         AllowClear="True"
                         IsPlaylist="True"
+                        Removable="True"
                         Loaded="HeaderedPlaylistControl_Loaded" />
                 </DataTemplate>
             </controls:TabView.ItemTemplate>
