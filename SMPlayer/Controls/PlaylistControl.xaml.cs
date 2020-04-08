@@ -72,7 +72,7 @@ namespace SMPlayer
             get => (bool)GetValue(RemovableProperty);
             set => SetValue(RemovableProperty, value);
         }
-        public static readonly DependencyProperty RemovableProperty = DependencyProperty.Register("AllowMultipleSection", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(true));
+        public static readonly DependencyProperty RemovableProperty = DependencyProperty.Register("Removable", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(true));
         public bool AllowMultipleSection
         {
             get => (bool)GetValue(AllowMultipleSectionProperty);
@@ -244,7 +244,7 @@ namespace SMPlayer
 
         private void SwipeControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Removable) (sender as SwipeControl).RightItems = null;
+            if (!Removable) (sender as SwipeControl).RightItems = null;
             if (ScrollToMusicRequestedWhenUnloaded != -1 && SongsListView.ContainerFromIndex(ScrollToMusicRequestedWhenUnloaded) is ListViewItem container)
             {
                 container.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true });
