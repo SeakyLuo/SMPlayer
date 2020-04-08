@@ -17,7 +17,6 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            //MediaHelper.CurrentPlaylist.CollectionChanged += (sender, args) => SetEnabled();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -46,6 +45,7 @@ namespace SMPlayer
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
             MediaHelper.Clear();
+            SetEnabled();
         }
 
         private void ScrollToCurrentButton_Click(object sender, RoutedEventArgs e)

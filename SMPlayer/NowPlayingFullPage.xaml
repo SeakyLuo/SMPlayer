@@ -71,7 +71,7 @@
                             AlternatingRowColor="False"
                             Background="Transparent"
                             IsNowPlaying="True"
-                            Theme="Dark" />
+                            RequestedTheme="Dark" />
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState x:Name="WideLayout">

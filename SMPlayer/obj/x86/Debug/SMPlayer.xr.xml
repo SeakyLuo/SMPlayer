@@ -47,8 +47,8 @@
     <RootPropertyPathName Name="CollapsedGlyphVisibility" />
     <RootPropertyPathName Name="DragItemsCount" />
     <RootPropertyPathName Name="Directory" />
+    <RootPropertyPathName Name="RequestedTheme" />
     <RootPropertyPathName Name="ShowAlbumText" />
-    <RootPropertyPathName Name="Theme" />
     <RootPropertyPathName Name="KeyboardAcceleratorTextMinWidth" />
     <RootPropertyPathName Name="PlayCount" />
     <RootPropertyPathName Name="Favorite" />
@@ -431,7 +431,6 @@
       <RootProperty Name="CanReorderItems" />
       <RootProperty Name="Opacity" />
       <RootProperty Name="ReorderMode" />
-      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="Style" />
       <RootEvent Name="ContainerContentChanging" />
       <RootEvent Name="ItemClick" />
@@ -512,6 +511,7 @@
       <RootEvent Name="PointerExited" />
       <RootEvent Name="DataContextChanged" />
       <RootEvent Name="Loaded" />
+      <RootEvent Name="Unloaded" />
       <RootEvent Name="SizeChanged" />
     </RootType>
     <RootType FullName="SMPlayer.Controls.AlbumArtControl" />
@@ -706,8 +706,8 @@
     <RootType FullName="SMPlayer.Controls.PlaylistControlItem">
       <RootProperty Name="Data" />
       <RootProperty Name="DataContext" />
+      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="ShowAlbumText" />
-      <RootProperty Name="Theme" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ContentDialog">
       <RootProperty Name="Content" />
@@ -1109,7 +1109,7 @@
       <RootProperty Name="Visibility" />
       <RootProperty Name="Background" />
       <RootProperty Name="IsNowPlaying" />
-      <RootProperty Name="Theme" />
+      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="Style" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">

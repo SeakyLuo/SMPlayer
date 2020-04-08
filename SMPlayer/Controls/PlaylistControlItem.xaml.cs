@@ -19,29 +19,21 @@ namespace SMPlayer.Controls
             }
         }
         public static readonly DependencyProperty ShowAlbumTextProperty = DependencyProperty.Register("ShowAlbumText", typeof(bool), typeof(PlaylistControlItem), new PropertyMetadata(true));
-        public ElementTheme Theme
-        {
-            get => (ElementTheme)GetValue(ThemeProperty);
-            set => SetValue(ThemeProperty, value);
-        }
-        public static readonly DependencyProperty ThemeProperty = DependencyProperty.Register("Theme", typeof(ElementTheme), typeof(PlaylistControlItem), new PropertyMetadata(ElementTheme.Default));
 
         public Music Data { get; set; }
         public PlaylistControlItem()
         {
             this.InitializeComponent();
-            MediaHelper.SwitchMusicListeners.Add(this);
         }
 
         private void Album_Click(object sender, RoutedEventArgs e)
         {
             if (NowPlayingFullPage.Instance != null) NowPlayingFullPage.Instance.GoBack();
-            var data = DataContext as Music;
             var playlist = new System.Collections.ObjectModel.ObservableCollection<Music>();
             foreach (var music in MusicLibraryPage.AllSongs)
-                if (music.Album == data.Album)
+                if (music.Album == Data.Album)
                     playlist.Add(music);
-            MainPage.Instance.NavigateToPage(typeof(AlbumPage), new AlbumView(data.Album, data.Artist)
+            MainPage.Instance.NavigateToPage(typeof(AlbumPage), new AlbumView(Data.Album, Data.Artist)
             {
                 Songs = playlist,
             });
@@ -49,19 +41,21 @@ namespace SMPlayer.Controls
         private void Artist_Click(object sender, RoutedEventArgs e)
         {
             if (NowPlayingFullPage.Instance != null) NowPlayingFullPage.Instance.GoBack();
-            MainPage.Instance.NavigateToPage(typeof(ArtistsPage), (sender as HyperlinkButton).Content);
+            MainPage.Instance.NavigateToPage(typeof(ArtistsPage), Data.Artist);
         }
 
+        private bool TextColorChanged = true;
         public void SetTextColor(Music music)
         {
             if (Data == music)
             {
                 TitleTextBlock.Foreground = ArtistTextButton.Foreground = AlbumTextButton.Foreground = DurationTextBlock.Foreground =
                 LongArtistTextButton.Foreground = LongArtistAlbumPanelDot.Foreground = LongAlbumTextButton.Foreground = ColorHelper.HighlightBrush;
+                TextColorChanged = true;
             }
-            else
+            else if (TextColorChanged)
             {
-                if (Theme == ElementTheme.Dark)
+                if (RequestedTheme == ElementTheme.Dark)
                 {
                     TitleTextBlock.Foreground = ColorHelper.WhiteBrush;
                     ArtistTextButton.Foreground = AlbumTextButton.Foreground = DurationTextBlock.Foreground =
@@ -72,6 +66,7 @@ namespace SMPlayer.Controls
                     TitleTextBlock.Foreground = ArtistTextButton.Foreground = AlbumTextButton.Foreground = DurationTextBlock.Foreground =
                     LongArtistTextButton.Foreground = LongArtistAlbumPanelDot.Foreground = LongAlbumTextButton.Foreground = ColorHelper.BlackBrush;
                 }
+                TextColorChanged = false;
             }
         }
 
@@ -82,7 +77,13 @@ namespace SMPlayer.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            MediaHelper.SwitchMusicListeners.Add(this);
             SetTextColor(MediaHelper.CurrentMusic);
+        }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            MediaHelper.SwitchMusicListeners.Remove(this);
         }
     }
 }

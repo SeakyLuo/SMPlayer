@@ -8,9 +8,13 @@
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
                     <SolidColorBrush x:Key="MusicInfoTextBoxBackground" Color="WhiteSmoke" />
+                    <SolidColorBrush x:Key="PlaylistTitleTextBrush" Color="Black" />
+                    <SolidColorBrush x:Key="PlaylistGeneralTextBrush" Color="Black" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <SolidColorBrush x:Key="MusicInfoTextBoxBackground" Color="Transparent" />
+                    <SolidColorBrush x:Key="PlaylistTitleTextBrush" Color="White" />
+                    <SolidColorBrush x:Key="PlaylistGeneralTextBrush" Color="Gray" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
             <ResourceDictionary.MergedDictionaries>

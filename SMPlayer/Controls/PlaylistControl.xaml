@@ -37,7 +37,6 @@
         Loaded="SongsListView_Loaded"
         Opacity="{x:Bind Opacity}"
         ReorderMode="Enabled"
-        RequestedTheme="{x:Bind Theme}"
         SelectionMode="None">
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="data:Music">
@@ -76,11 +75,10 @@
                     <local:PlaylistControlItem
                         Data="{x:Bind}"
                         DataContext="{x:Bind}"
-                        ShowAlbumText="{Binding ElementName=PlaylistController, Path=ShowAlbumText}"
-                        Theme="{Binding ElementName=PlaylistController, Path=Theme}" />
+                        RequestedTheme="{Binding ElementName=PlaylistController, Path=RequestedTheme}"
+                        ShowAlbumText="{Binding ElementName=PlaylistController, Path=ShowAlbumText}" />
                 </SwipeControl>
             </DataTemplate>
         </ListView.ItemTemplate>
     </ListView>
-
 </UserControl>

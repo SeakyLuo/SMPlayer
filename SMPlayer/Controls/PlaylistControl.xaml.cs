@@ -22,12 +22,6 @@ namespace SMPlayer
             set => currentPlaylist = value;
         }
         private ObservableCollection<Music> currentPlaylist = new ObservableCollection<Music>();
-        public ElementTheme Theme
-        {
-            get => (ElementTheme)GetValue(ThemeProperty);
-            set => SetValue(ThemeProperty, value);
-        }
-        public static readonly DependencyProperty ThemeProperty = DependencyProperty.Register("Theme", typeof(ElementTheme), typeof(PlaylistControl), new PropertyMetadata(ElementTheme.Default));
 
         private static List<MusicRequestListener> MusicRequestListeners = new List<MusicRequestListener>();
         public bool AlternatingRowColor { get; set; }
@@ -37,7 +31,6 @@ namespace SMPlayer
             get => SongsListView.CanReorderItems;
             set => SongsListView.CanReorderItems = SongsListView.AllowDrop = SongsListView.CanDrag = SongsListView.CanDragItems = value;
         }
-
         public object Header
         {
             get => SongsListView.Header;

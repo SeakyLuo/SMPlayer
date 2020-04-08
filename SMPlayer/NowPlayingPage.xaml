@@ -77,8 +77,7 @@
             Margin="10,10,10,0"
             AllowReorder="True"
             AlternatingRowColor="True"
-            IsNowPlaying="True"
-            Theme="Light" />
+            IsNowPlaying="True" />
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">
                 <VisualState x:Name="WideLayout">

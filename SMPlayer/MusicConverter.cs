@@ -119,7 +119,20 @@ namespace SMPlayer
         }
     }
 
-    class PlaylistRowColorConverter : IValueConverter
+    class WhiteColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return value.Equals(ElementTheme.Dark) ? ColorConverter.StringToColor((string)parameter) : ColorHelper.BlackBrush;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
+
+        class PlaylistRowColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {

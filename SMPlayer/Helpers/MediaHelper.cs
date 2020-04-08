@@ -152,6 +152,7 @@ namespace SMPlayer
         {
             Clear();
             AddMusic(music);
+            Play();
         }
 
         public static void SetMusicAndPlay(ICollection<Music> playlist, Music music)
