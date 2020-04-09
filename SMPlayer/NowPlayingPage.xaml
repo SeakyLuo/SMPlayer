@@ -40,9 +40,9 @@
                 Icon="Shuffle"
                 Label="Random Play" />
             <AppBarButton
-                x:Name="ScrollToCurrentButton"
-                x:Uid="ScrollToCurrentButton"
-                Click="ScrollToCurrentButton_Click"
+                x:Name="LocateCurrentButton"
+                x:Uid="LocateCurrentButton"
+                Click="LocateCurrentButton_Click"
                 IsEnabled="False"
                 Label="Current Music">
                 <AppBarButton.Icon>

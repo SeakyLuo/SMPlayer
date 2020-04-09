@@ -26,7 +26,7 @@ namespace SMPlayer
 
         private void SetEnabled()
         {
-            ScrollToCurrentButton.IsEnabled = SaveToButton.IsEnabled = ClearButton.IsEnabled = FullScreenButton.IsEnabled = 
+            LocateCurrentButton.IsEnabled = SaveToButton.IsEnabled = ClearButton.IsEnabled = FullScreenButton.IsEnabled = 
                                             MediaHelper.CurrentPlaylist.Count != 0;
         }
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
@@ -48,7 +48,7 @@ namespace SMPlayer
             SetEnabled();
         }
 
-        private void ScrollToCurrentButton_Click(object sender, RoutedEventArgs e)
+        private void LocateCurrentButton_Click(object sender, RoutedEventArgs e)
         {
             NowPlayingPlaylistControl.ScrollToMusic(MediaHelper.CurrentMusic);
         }

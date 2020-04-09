@@ -360,6 +360,12 @@
   <data name="LocalItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>管理本地音乐</value>
   </data>
+  <data name="LocateCurrentButton.Label" xml:space="preserve">
+    <value>当前音乐</value>
+  </data>
+  <data name="LocateCurrentButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>定位当前播放的音乐</value>
+  </data>
   <data name="LyricsButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>显示歌词</value>
   </data>
@@ -638,12 +644,6 @@
   </data>
   <data name="SaveTextBlock.Text" xml:space="preserve">
     <value>保存</value>
-  </data>
-  <data name="ScrollToCurrentButton.Label" xml:space="preserve">
-    <value>当前音乐</value>
-  </data>
-  <data name="ScrollToCurrentButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>滚动到当前播放的音乐</value>
   </data>
   <data name="SearchBar.PlaceholderText" xml:space="preserve">
     <value>搜索</value>

@@ -360,6 +360,12 @@
   <data name="LocalItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Manage Local Music</value>
   </data>
+  <data name="LocateCurrentButton.Label" xml:space="preserve">
+    <value>Current Music</value>
+  </data>
+  <data name="LocateCurrentButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Locate current music</value>
+  </data>
   <data name="LyricsButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Show Lyrics</value>
   </data>
@@ -638,12 +644,6 @@
   </data>
   <data name="SaveTextBlock.Text" xml:space="preserve">
     <value>Save</value>
-  </data>
-  <data name="ScrollToCurrentButton.Label" xml:space="preserve">
-    <value>Current Music</value>
-  </data>
-  <data name="ScrollToCurrentButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Scroll to current music</value>
   </data>
   <data name="SearchBar.PlaceholderText" xml:space="preserve">
     <value>Search</value>
