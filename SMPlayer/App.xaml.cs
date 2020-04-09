@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -161,6 +162,12 @@ namespace SMPlayer
                     break;
             }
             deferral.Complete();
+        }
+
+        protected override async void OnFileActivated(FileActivatedEventArgs args)
+        {
+            base.OnFileActivated(args);
+            MediaHelper.SetMusicAndPlay(await Music.GetMusicAsync(args.Files[0].Path));
         }
     }
 }
