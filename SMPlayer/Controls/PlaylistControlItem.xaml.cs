@@ -55,7 +55,7 @@ namespace SMPlayer.Controls
             }
             else if (TextColorChanged)
             {
-                if (RequestedTheme == ElementTheme.Dark)
+                if (ActualTheme == ElementTheme.Dark)
                 {
                     TitleTextBlock.Foreground = ColorHelper.WhiteBrush;
                     ArtistTextButton.Foreground = AlbumTextButton.Foreground = DurationTextBlock.Foreground =
