@@ -22,6 +22,7 @@ namespace SMPlayer
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             SetEnabled();
+            NowPlayingPlaylistControl.ScrollToCurrentMusic();
         }
 
         private void SetEnabled()
@@ -50,7 +51,7 @@ namespace SMPlayer
 
         private void LocateCurrentButton_Click(object sender, RoutedEventArgs e)
         {
-            NowPlayingPlaylistControl.ScrollToMusic(MediaHelper.CurrentMusic);
+            NowPlayingPlaylistControl.ScrollToCurrentMusic();
         }
 
         private async void RandomPlayButton_Click(object sender, RoutedEventArgs e)

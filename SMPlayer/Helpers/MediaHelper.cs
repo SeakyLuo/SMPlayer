@@ -246,6 +246,42 @@ namespace SMPlayer
                 PlaybackList.MoveNext();
         }
 
+        public static void MoveMusic(int from, int to)
+        {
+            CurrentPlaylist.Move(from, to);
+            for (int i = Math.Min(from, to); i <= Math.Max(from, to); i++)
+                CurrentPlaylist[i].Index = i;
+            MediaPlaybackItem item;
+            if (CurrentMusic.Index == from)
+            {
+                CurrentMusic.Index = to;
+                if (from < to)
+                {
+                    for (int i = from + 1; i <= to; i++)
+                    {
+                        item = PlaybackList.Items[i];
+                        PlaybackList.Items.RemoveAt(i);
+                        PlaybackList.Items.Insert(i--, item);
+                    }
+                }
+                else
+                {
+                    for (int i = to; i < from; i++)
+                    {
+                        item = PlaybackList.Items[i];
+                        PlaybackList.Items.RemoveAt(i);
+                        PlaybackList.Items.Insert(i++, item);
+                    }
+                }
+                return;
+            }
+            else if (from < CurrentMusic.Index && CurrentMusic.Index <= to) CurrentMusic.Index--;
+            else if (to <= CurrentMusic.Index && CurrentMusic.Index < from) CurrentMusic.Index++;
+            item = PlaybackList.Items[from];
+            PlaybackList.Items.RemoveAt(from);
+            PlaybackList.Items.Insert(to, item);
+        }
+
         public static bool RemoveMusic(Music music)
         {
             try
@@ -254,6 +290,7 @@ namespace SMPlayer
                 if (music.Index == CurrentMusic.Index) MoveNext();
                 CurrentPlaylist.RemoveAt(music.Index);
                 PlaybackList.Items.RemoveAt(music.Index);
+                for (int i = music.Index; i < CurrentPlaylist.Count; i++) CurrentPlaylist[i].Index = i;
                 foreach (var listener in RemoveMusicListeners) listener.MusicRemoved(music.Index, music, CurrentPlaylist);
                 return true;
             }

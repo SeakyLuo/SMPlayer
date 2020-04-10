@@ -30,6 +30,7 @@
         CanDragItems="True"
         CanReorderItems="False"
         ContainerContentChanging="SongsListView_ContainerContentChanging"
+        DragItemsStarting="SongsListView_DragItemsStarting"
         DragItemsCompleted="SongsListView_DragItemsCompleted"
         IsItemClickEnabled="True"
         ItemClick="SongsListView_ItemClick"

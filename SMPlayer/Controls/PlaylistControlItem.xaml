@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:triggers="using:SMPlayer.Triggers"
     Loaded="UserControl_Loaded"
+    DataContextChanged="UserControl_DataContextChanged"
     Unloaded="UserControl_Unloaded"
     mc:Ignorable="d">
 
@@ -37,7 +38,7 @@
                 FontFamily="Segoe MDL2 Assets"
                 Foreground="{StaticResource SystemColorHighlightColor}"
                 Glyph="&#xE767;"
-                Visibility="{Binding IsPlaying, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
+                Visibility="Collapsed" />
             <TextBlock
                 x:Name="TitleTextBlock"
                 Foreground="{ThemeResource PlaylistTitleTextBrush}"

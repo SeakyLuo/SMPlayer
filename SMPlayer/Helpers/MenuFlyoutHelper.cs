@@ -389,11 +389,11 @@ namespace SMPlayer
         private static object FindMusic(object obj)
         {
             if (obj is Music || obj is ICollection<Music>) return obj;
-            else if (obj is ArtistView) return (obj as ArtistView).Songs;
-            else if (obj is AlbumView) return (obj as AlbumView).Songs;
-            else if (obj is Playlist) return (obj as Playlist).Songs;
-            else if (obj is GridFolderView) return (obj as GridFolderView).Songs;
-            else if (obj is GridMusicView) return (obj as GridMusicView).Source;
+            else if (obj is ArtistView artist) return artist.Songs;
+            else if (obj is AlbumView album) return album.Songs;
+            else if (obj is Playlist playlist) return playlist.Songs;
+            else if (obj is GridFolderView folder) return folder.Songs;
+            else if (obj is GridMusicView gridMusic) return gridMusic.Source;
             else if (obj is TreeViewNode node)
             {
                 if (node.Content is FolderTree tree) return tree.Files;
@@ -404,10 +404,10 @@ namespace SMPlayer
 
         private static string FindPlaylistName(object obj)
         {
-            if (obj is ArtistView) return (obj as ArtistView).Name;
-            else if (obj is AlbumView) return (obj as AlbumView).Name;
-            else if (obj is Playlist) return (obj as Playlist).Name;
-            else if (obj is GridFolderView) return (obj as GridFolderView).Name;
+            if (obj is ArtistView artist) return artist.Name;
+            else if (obj is AlbumView album) return album.Name;
+            else if (obj is Playlist playlist) return playlist.Name;
+            else if (obj is GridFolderView folder) return folder.Name;
             else if (obj is TreeViewNode node && node.Content is FolderTree tree) return tree.Directory;
             return "";
         }

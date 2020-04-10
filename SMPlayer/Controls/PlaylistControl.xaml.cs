@@ -79,6 +79,7 @@ namespace SMPlayer
         }
         public List<RemoveMusicListener> RemoveListeners = new List<RemoveMusicListener>();
         private Dialogs.RemoveDialog dialog;
+        private int dragIndex, dropIndex;
 
         public PlaylistControl()
         {
@@ -155,7 +156,12 @@ namespace SMPlayer
         private void SongsListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
             if (!AllowReorder) return;
-            for (int i = 0; i < sender.Items.Count; i++)
+            dropIndex = CurrentPlaylist.IndexOf(args.Items[0] as Music);
+            System.Diagnostics.Debug.WriteLine(dragIndex);
+            System.Diagnostics.Debug.WriteLine(dropIndex);
+            if (dragIndex == dropIndex) return;
+            if (IsNowPlaying) MediaHelper.MoveMusic(dragIndex, dropIndex);
+            for (int i = Math.Min(dragIndex, dropIndex); i <= Math.Max(dragIndex, dropIndex); i++)
                 if (AlternatingRowColor && sender.ContainerFromIndex(i) is ListViewItem container)
                     container.Background = GetRowBackground(i);
         }
@@ -174,7 +180,7 @@ namespace SMPlayer
                 item.Click += (s, args) =>
                 {
                     Music music = (s as MenuFlyoutItem).DataContext as Music;
-                    MediaHelper.CurrentPlaylist.Move(music.Index, 0);
+                    MediaHelper.MoveMusic(music.Index, 0);
                 };
                 flyout.Items.Add(item);
             }
@@ -205,6 +211,11 @@ namespace SMPlayer
             int index = IsNowPlaying ?  music.Index : currentPlaylist.IndexOf(music);
             if (IsNowPlaying ? MediaHelper.RemoveMusic(music) : currentPlaylist.Remove(music))
             {
+                if (IsNowPlaying)
+                {
+                    for (int i = index; i < CurrentPlaylist.Count; i++)
+                        CurrentPlaylist[i].Index = i;
+                }
                 if (AlternatingRowColor)
                 {
                     for (int i = index; i < CurrentPlaylist.Count; i++)
@@ -223,20 +234,35 @@ namespace SMPlayer
         }
 
         private int ScrollToMusicRequestedWhenUnloaded = -1;
+
+        public void ScrollToCurrentMusic()
+        {
+            ScrollToMusic(MediaHelper.CurrentMusic);
+        }
         public void ScrollToMusic(Music music)
         {
+            int index = CurrentPlaylist.IndexOf(music);
             if (SongsListView.IsLoaded)
-                SongsListView.ScrollIntoView(music);
+                ScrollToIndex(index);
             else
-                ScrollToMusicRequestedWhenUnloaded = CurrentPlaylist.IndexOf(music);
+                ScrollToMusicRequestedWhenUnloaded = index;
+        }
+
+        private bool ScrollToIndex(int index)
+        {
+            if (SongsListView.ContainerFromIndex(index) is ListViewItem item)
+            {
+                item.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true, VerticalAlignmentRatio = 0 });
+                return true;
+            }
+            return false;
         }
 
         private void SwipeControl_Loaded(object sender, RoutedEventArgs e)
         {
             if (!Removable) (sender as SwipeControl).RightItems = null;
-            if (ScrollToMusicRequestedWhenUnloaded != -1 && SongsListView.ContainerFromIndex(ScrollToMusicRequestedWhenUnloaded) is ListViewItem container)
+            if (ScrollToMusicRequestedWhenUnloaded != -1 && ScrollToIndex(ScrollToMusicRequestedWhenUnloaded))
             {
-                container.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true });
                 ScrollToMusicRequestedWhenUnloaded = -1;
             }
         }
@@ -254,6 +280,11 @@ namespace SMPlayer
         void MenuFlyoutItemClickListener.Favorite(object data)
         {
             
+        }
+
+        private void SongsListView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
+        {
+            dragIndex = CurrentPlaylist.IndexOf(e.Items[0] as Music);
         }
     }
 

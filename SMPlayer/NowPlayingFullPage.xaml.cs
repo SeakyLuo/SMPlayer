@@ -34,7 +34,7 @@ namespace SMPlayer
             UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar);
 
             SetMusic(MediaHelper.CurrentMusic);
-            FullPlaylistControl.ScrollToMusic(MediaHelper.CurrentMusic);
+            FullPlaylistControl.ScrollToCurrentMusic();
         }
         private void UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar coreTitleBar)
         {
@@ -56,8 +56,8 @@ namespace SMPlayer
 
         public void PlaylistRequested(ICollection<Music> playlist)
         {
-            PlaylistBladeItem.StartBringIntoView();
-            FullPlaylistControl.ScrollToMusic(MediaHelper.CurrentMusic);
+            PlaylistBladeItem.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true });
+            FullPlaylistControl.ScrollToCurrentMusic();
         }
         public void MusicInfoRequested(Music music)
         {

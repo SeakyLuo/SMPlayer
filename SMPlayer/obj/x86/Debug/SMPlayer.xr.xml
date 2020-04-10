@@ -11,7 +11,6 @@
     <RootPropertyPathName Name="Album" />
     <RootPropertyPathName Name="Duration" />
     <RootPropertyPathName Name="Content" />
-    <RootPropertyPathName Name="IsPlaying" />
     <RootPropertyPathName Name="PlaceholderForeground" />
     <RootPropertyPathName Name="ScrollableWidth" />
     <RootPropertyPathName Name="IsCloseButtonOverlay" />
@@ -52,6 +51,7 @@
     <RootPropertyPathName Name="KeyboardAcceleratorTextMinWidth" />
     <RootPropertyPathName Name="PlayCount" />
     <RootPropertyPathName Name="Favorite" />
+    <RootPropertyPathName Name="IsPlaying" />
   </Roots.PropertyPathNames>
   <Roots.RootTypes>
     <RootType FullName="Windows.UI.Xaml.Application">
@@ -434,6 +434,7 @@
       <RootProperty Name="Style" />
       <RootEvent Name="ContainerContentChanging" />
       <RootEvent Name="ItemClick" />
+      <RootEvent Name="DragItemsStarting" />
       <RootEvent Name="DragItemsCompleted" />
       <RootEvent Name="Loaded" />
     </RootType>

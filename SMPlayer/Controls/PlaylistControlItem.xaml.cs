@@ -49,12 +49,14 @@ namespace SMPlayer.Controls
         {
             if (Data == music)
             {
+                PlayingIcon.Visibility = Visibility.Visible;
                 TitleTextBlock.Foreground = ArtistTextButton.Foreground = AlbumTextButton.Foreground = DurationTextBlock.Foreground =
                 LongArtistTextButton.Foreground = LongArtistAlbumPanelDot.Foreground = LongAlbumTextButton.Foreground = ColorHelper.HighlightBrush;
                 TextColorChanged = true;
             }
             else if (TextColorChanged)
             {
+                PlayingIcon.Visibility = Visibility.Collapsed;
                 if (ActualTheme == ElementTheme.Dark)
                 {
                     TitleTextBlock.Foreground = ColorHelper.WhiteBrush;
@@ -78,12 +80,16 @@ namespace SMPlayer.Controls
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             MediaHelper.SwitchMusicListeners.Add(this);
-            SetTextColor(MediaHelper.CurrentMusic);
         }
 
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
             MediaHelper.SwitchMusicListeners.Remove(this);
+        }
+
+        private void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        {
+            SetTextColor(MediaHelper.CurrentMusic);
         }
     }
 }
