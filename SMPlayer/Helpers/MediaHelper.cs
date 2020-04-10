@@ -47,7 +47,7 @@ namespace SMPlayer
                 return _PlaybackList;
             }
         }
-        private static MediaPlaybackList _PlaybackList = new MediaPlaybackList();
+        private static MediaPlaybackList _PlaybackList = new MediaPlaybackList() { MaxPlayedItemsToKeepOpen = 1 };
         private static MediaPlaybackList PendingPlaybackList = null;
         public static MediaPlayer Player = new MediaPlayer()
         {
@@ -72,7 +72,7 @@ namespace SMPlayer
                     var target = Settings.FindMusic(path);
                     if (target != null) AddMusic(target);
                 }
-                CurrentMusic = CurrentPlaylist[0];
+                CurrentMusic = CurrentPlaylist[settings.LastMusicIndex];
             }
             if (settings.LastMusicIndex != -1) PlaybackList.MoveTo(Convert.ToUInt32(settings.LastMusicIndex));
             Player.Volume = settings.Volume;
@@ -93,7 +93,7 @@ namespace SMPlayer
                 foreach (var listener in SwitchMusicListeners)
                     listener.MusicSwitching(current, next, args.Reason);
                 CurrentMusic = next;
-                Settings.settings.LastMusicIndex = CurrentMusic.Index;
+                Settings.settings.LastMusicIndex = (int)PlaybackList.CurrentItemIndex;
             };
             Player.MediaEnded += (sender, args) =>
             {
@@ -246,12 +246,21 @@ namespace SMPlayer
             else
                 PlaybackList.MoveNext();
         }
+        private static void PrintPlaylist(int from, int to)
+        {
+            for (int k = from; k <= to; k++)
+                Debug.Write(CurrentPlaylist[k].Name + " ");
+            Debug.Write("\n");
+        }
+        private static void PrintPlaybackList(int from, int to)
+        {
+            for (int k = from; k <= to; k++)
+                Debug.Write(PlaybackList.Items[k].GetMusic().Name + " ");
+            Debug.Write("\n");
+        }
 
         public static void MoveMusic(int from, int to)
         {
-            CurrentPlaylist.Move(from, to);
-            for (int i = Math.Min(from, to); i <= Math.Max(from, to); i++)
-                CurrentPlaylist[i].Index = i;
             MediaPlaybackItem item;
             if (CurrentMusic.Index == from)
             {
@@ -260,27 +269,34 @@ namespace SMPlayer
                 {
                     for (int i = from + 1; i <= to; i++)
                     {
-                        item = PlaybackList.Items[i];
+                        CurrentPlaylist[i].Index = i - 1;
                         PlaybackList.Items.RemoveAt(i);
-                        PlaybackList.Items.Insert(i--, item);
+                        PlaybackList.Items.Insert(i - 1, CurrentPlaylist[i].GetMediaPlaybackItem());
                     }
                 }
                 else
                 {
-                    for (int i = to; i < from; i++)
+                    for (int i = to + 1; i <= from; i++)
                     {
-                        item = PlaybackList.Items[i];
-                        PlaybackList.Items.RemoveAt(i);
-                        PlaybackList.Items.Insert(i++, item);
+                        CurrentPlaylist[i].Index = i;
+                        PlaybackList.Items.RemoveAt(to);
+                        PlaybackList.Items.Insert(from, CurrentPlaylist[i].GetMediaPlaybackItem());
                     }
                 }
-                return;
             }
-            else if (from < CurrentMusic.Index && CurrentMusic.Index <= to) CurrentMusic.Index--;
-            else if (to <= CurrentMusic.Index && CurrentMusic.Index < from) CurrentMusic.Index++;
-            item = PlaybackList.Items[from];
-            PlaybackList.Items.RemoveAt(from);
-            PlaybackList.Items.Insert(to, item);
+            else
+            {
+                if (from < CurrentMusic.Index && CurrentMusic.Index <= to) CurrentMusic.Index--;
+                else if (to <= CurrentMusic.Index && CurrentMusic.Index < from) CurrentMusic.Index++;
+                item = PlaybackList.Items[from];
+                PlaybackList.Items.RemoveAt(from);
+                PlaybackList.Items.Insert(to, item);
+                for (int i = Math.Min(from, to); i <= Math.Max(from, to); i++)
+                {
+                    CurrentPlaylist[i].Index = i;
+                    if (i != CurrentMusic.Index) PlaybackList.Items[i] = CurrentPlaylist[i].GetMediaPlaybackItem();
+                }
+            }
         }
 
         public static bool RemoveMusic(Music music)

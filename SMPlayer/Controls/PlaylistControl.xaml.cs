@@ -156,9 +156,8 @@ namespace SMPlayer
         private void SongsListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
             if (!AllowReorder) return;
-            dropIndex = CurrentPlaylist.IndexOf(args.Items[0] as Music);
-            System.Diagnostics.Debug.WriteLine(dragIndex);
-            System.Diagnostics.Debug.WriteLine(dropIndex);
+            Music music = args.Items[0] as Music;
+            dropIndex = CurrentPlaylist.FindIndex(m => m == music && m.Index == music.Index);
             if (dragIndex == dropIndex) return;
             if (IsNowPlaying) MediaHelper.MoveMusic(dragIndex, dropIndex);
             for (int i = Math.Min(dragIndex, dropIndex); i <= Math.Max(dragIndex, dropIndex); i++)
@@ -211,11 +210,6 @@ namespace SMPlayer
             int index = IsNowPlaying ?  music.Index : currentPlaylist.IndexOf(music);
             if (IsNowPlaying ? MediaHelper.RemoveMusic(music) : currentPlaylist.Remove(music))
             {
-                if (IsNowPlaying)
-                {
-                    for (int i = index; i < CurrentPlaylist.Count; i++)
-                        CurrentPlaylist[i].Index = i;
-                }
                 if (AlternatingRowColor)
                 {
                     for (int i = index; i < CurrentPlaylist.Count; i++)
@@ -284,7 +278,7 @@ namespace SMPlayer
 
         private void SongsListView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
         {
-            dragIndex = CurrentPlaylist.IndexOf(e.Items[0] as Music);
+            dragIndex = (e.Items[0] as Music).Index;
         }
     }
 
