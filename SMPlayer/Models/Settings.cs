@@ -17,7 +17,7 @@ namespace SMPlayer.Models
 
         public string RootPath { get; set; } = "";
         public FolderTree Tree { get; set; } = new FolderTree();
-        public Music LastMusic { get; set; } = null;
+        public int LastMusicIndex { get; set; } = -1;
         public PlayMode Mode { get; set; } = PlayMode.Once;
         public double Volume { get; set; } = 50.0d;
         public bool IsNavigationCollapsed { get; set; } = true;

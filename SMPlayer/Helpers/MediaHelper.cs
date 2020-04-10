@@ -65,16 +65,16 @@ namespace SMPlayer
             var playlist = JsonFileHelper.Convert<List<string>>(await JsonFileHelper.ReadAsync(FILENAME));
             if (playlist != null && playlist.Count != 0)
             {
-                if (settings.LastMusic == null)
-                    settings.LastMusic = Settings.FindMusic(playlist[0]);
-                CurrentMusic = settings.LastMusic;
+                if (settings.LastMusicIndex == -1)
+                    settings.LastMusicIndex = 0;
                 foreach (var path in playlist)
                 {
                     var target = Settings.FindMusic(path);
                     if (target != null) AddMusic(target);
                 }
+                CurrentMusic = CurrentPlaylist[0];
             }
-            if (CurrentMusic != null) MoveToMusic(CurrentMusic);
+            if (settings.LastMusicIndex != -1) PlaybackList.MoveTo(Convert.ToUInt32(settings.LastMusicIndex));
             Player.Volume = settings.Volume;
             if (settings.SaveMusicProgress) Position = settings.MusicProgress;
             SetMode(Settings.settings.Mode);
@@ -92,7 +92,8 @@ namespace SMPlayer
                 Music current = CurrentMusic?.Copy(), next = args.NewItem.GetMusic();
                 foreach (var listener in SwitchMusicListeners)
                     listener.MusicSwitching(current, next, args.Reason);
-                Settings.settings.LastMusic = CurrentMusic = next;
+                CurrentMusic = next;
+                Settings.settings.LastMusicIndex = CurrentMusic.Index;
             };
             Player.MediaEnded += (sender, args) =>
             {
