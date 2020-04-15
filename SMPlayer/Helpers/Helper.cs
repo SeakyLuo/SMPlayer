@@ -44,7 +44,11 @@ namespace SMPlayer
 
         private static string Lyrics = "";
         private static List<Music> NotFoundHistory = new List<Music>();
-
+        public static string RemoveBraces(this string str, char left, char right)
+        {
+            int start = str.IndexOf(left), end = str.IndexOf(right);
+            return start != -1 && end != -1 ? str.Substring(0, start) + str.Substring(end + 1) : str;
+        }
         public static string ConvertBytes(ulong bytes)
         {
             ulong kb = bytes >> 10;
