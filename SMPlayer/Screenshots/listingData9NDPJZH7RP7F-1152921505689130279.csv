@@ -1,6 +1,6 @@
 ﻿Field,ID,Type (类型),default,zh-cn,en-us,,,,,,,
 Description,2,文本,,一个简单的管理本地音乐的音乐播放器，用户界面基于Groove Music。这个App我只是写着玩给自己用，不过你一定要用我也不勉强哈哈。,"A Simple Music Player that manages local music files based on the UI of Groove Music. And I just write this app for fun and for myself. If you insist on using it, don't blame me on bugs.",,,,,,,
-ReleaseNotes,3,文本,,1、修复了音量无法保存的问题。2、全处理器支持,1. Volume is now saved. 2. All-processor support.,,,,,,,
+ReleaseNotes,3,文本,,修复了音量无法保存的问题,Volume is now saved,,,,,,,
 Title,4,文本,,简音播放器,SMPlayer,,,,,,,
 ShortTitle,5,文本,,简音播放器,SMPlayer,,,,,,,
 SortTitle,6,文本,,简音播放器,SMPlayer,,,,,,,

@@ -74,7 +74,17 @@ namespace SMPlayer
                 }
                 CurrentMusic = CurrentPlaylist[settings.LastMusicIndex];
             }
-            if (settings.LastMusicIndex != -1) PlaybackList.MoveTo(Convert.ToUInt32(settings.LastMusicIndex));
+            if (settings.LastMusicIndex != -1)
+            {
+                try
+                {
+                    PlaybackList.MoveTo(Convert.ToUInt32(settings.LastMusicIndex));
+                }
+                catch (Exception)
+                {
+                    // 无效索引
+                }
+            }
             Player.Volume = settings.Volume;
             if (settings.SaveMusicProgress) Position = settings.MusicProgress;
             SetMode(Settings.settings.Mode);

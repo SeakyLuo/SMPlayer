@@ -409,6 +409,7 @@ namespace SMPlayer
             MediaSlider.IsEnabled = true;
             TitleTextBlock.Text = music.Name;
             ArtistTextBlock.Text = music.Artist;
+            MediaSlider.Value = 0;
             MediaSlider.Maximum = music.Duration;
             if (RightTimeTextBlock != null) RightTimeTextBlock.Text = MusicDurationConverter.ToTime(music.Duration);
             if (LikeToggleButton != null)
