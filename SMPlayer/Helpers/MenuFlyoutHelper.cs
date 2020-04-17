@@ -89,7 +89,8 @@ namespace SMPlayer
             flyout.Items.Add(newPlaylistItem);
             foreach (var playlist in Settings.settings.Playlists)
             {
-                if (playlist.Name == CurrentPlaylistName) continue;
+                if (playlist.Name == CurrentPlaylistName ||
+                    Data is Music music && playlist.Contains(music)) continue;
                 var item = new MenuFlyoutItem()
                 {
                     Icon = new SymbolIcon(Symbol.Audio),
@@ -97,8 +98,7 @@ namespace SMPlayer
                 };
                 item.Click += (sender, args) =>
                 {
-                    var target = Settings.settings.Playlists.Find((p) => p.Name == item.Text);
-                    target.Add(Data);
+                    playlist.Add(Data);
                 };
                 flyout.Items.Add(item);
             }

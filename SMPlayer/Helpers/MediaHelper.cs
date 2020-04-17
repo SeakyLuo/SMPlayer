@@ -72,7 +72,8 @@ namespace SMPlayer
                     var target = Settings.FindMusic(path);
                     if (target != null) AddMusic(target);
                 }
-                CurrentMusic = CurrentPlaylist[settings.LastMusicIndex];
+                if (settings.LastMusicIndex < CurrentPlaylist.Count)
+                    CurrentMusic = CurrentPlaylist[settings.LastMusicIndex];
             }
             if (settings.LastMusicIndex != -1)
             {

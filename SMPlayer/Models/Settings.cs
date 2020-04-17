@@ -60,7 +60,7 @@ namespace SMPlayer.Models
             return index == 0 ? Name : Helper.GetPlaylistName(Name, index);
         }
 
-        public static async Task Init()
+        public static async Task<bool> Init()
         {
             var json = await JsonFileHelper.ReadAsync(FILENAME);
             if (string.IsNullOrEmpty(json))
@@ -71,7 +71,7 @@ namespace SMPlayer.Models
             else
             {
                 settings = JsonFileHelper.Convert<Settings>(json);
-                if (string.IsNullOrEmpty(settings.RootPath)) return;
+                if (string.IsNullOrEmpty(settings.RootPath)) return true;
                 try
                 {
                     Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
@@ -88,6 +88,7 @@ namespace SMPlayer.Models
                     if (item.Name.EndsWith(".TMP"))
                         await item.DeleteAsync();
             }
+            return true;
         }
 
         public static void Save()
