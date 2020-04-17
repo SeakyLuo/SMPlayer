@@ -323,6 +323,15 @@ namespace SMPlayer.Models
         {
             return FindMusic(target.Path);
         }
+        //public static bool operator == (FolderTree tree1, FolderTree tree2)
+        //{
+        //    if (!tree1.Equals(tree2)) return false;
+        //    return tree1.Files.Zip(tree2.Files, (m1, m2) => m1 == m2).All(v => v) && tree1.Trees.Zip(tree2.Trees, (t1, t2) => t1 == t2).All(v => v);
+        //}
+        //public static bool operator !=(FolderTree tree1, FolderTree tree2)
+        //{
+        //    return !(tree1 == tree2);
+        //}
         public async Task<StorageFolder> GetStorageFolder() { return await StorageFolder.GetFolderFromPathAsync(Path);  }
 
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)

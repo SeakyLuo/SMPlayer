@@ -7,7 +7,7 @@
 
   有关程序包清单文件的详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkID=241727
  -->
-  <Identity Name="23778SeakyTheLoner.SMPlayer" Publisher="CN=CFBE922A-0341-4A7E-B15B-A6DEF6C9E3AF" Version="2.1.2.0" ProcessorArchitecture="x86" />
+  <Identity Name="23778SeakyTheLoner.SMPlayer" Publisher="CN=CFBE922A-0341-4A7E-B15B-A6DEF6C9E3AF" Version="2.1.3.0" ProcessorArchitecture="x86" />
   <mp:PhoneIdentity PhoneProductId="cc323160-1166-40e8-bb50-eaf5dc6fc12d" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>SMPlayer</DisplayName>
@@ -190,7 +190,7 @@
     <build:Item Name="TargetFrameworkMoniker" Value=".NETCore,Version=v5.0" />
     <build:Item Name="VisualStudio" Version="16.0" />
     <build:Item Name="VisualStudioEdition" Value="Microsoft Visual Studio Community 2019" />
-    <build:Item Name="OperatingSystem" Version="10.0.18362.718 (WinBuild.160101.0800)" />
+    <build:Item Name="OperatingSystem" Version="10.0.18362.830 (WinBuild.160101.0800)" />
     <build:Item Name="Microsoft.Build.AppxPackage.dll" Version="16.0.29904.37" />
     <build:Item Name="ProjectGUID" Value="{E5DC3F61-4BD9-449B-A835-91F9A94506E0}" />
     <build:Item Name="OptimizingToolset" Value="None" />

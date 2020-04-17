@@ -19,11 +19,11 @@ namespace SMPlayer
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private static class XamlBindingSetters
         {
-            public static void Set_SMPlayer_PlaylistControl_ItemsSource(global::SMPlayer.PlaylistControl obj, global::System.Object value, string targetNullValue)
+            public static void Set_SMPlayer_PlaylistControl_ItemsSource(global::SMPlayer.PlaylistControl obj, global::System.Collections.ObjectModel.ObservableCollection<global::SMPlayer.Models.Music> value, string targetNullValue)
             {
                 if (value == null && targetNullValue != null)
                 {
-                    value = (global::System.Object) global::Windows.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(typeof(global::System.Object), targetNullValue);
+                    value = (global::System.Collections.ObjectModel.ObservableCollection<global::SMPlayer.Models.Music>) global::Windows.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(typeof(global::System.Collections.ObjectModel.ObservableCollection<global::SMPlayer.Models.Music>), targetNullValue);
                 }
                 obj.ItemsSource = value;
             }

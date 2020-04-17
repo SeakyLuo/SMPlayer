@@ -44,14 +44,13 @@ namespace SMPlayer
         {
             bool isFolders = LocalFoldersItem.IsSelected;
             Type page = isFolders ? typeof(LocalFoldersPage) : typeof(LocalMusicPage);
-            if (LocalFrame.CurrentSourcePageType != page)
-            {
-                if (LocalFrame.CanGoBack && LocalFrame.BackStack.Last().SourcePageType == page && History.Peek() == (isFolders ? LocalFoldersPage.CurrentTree : LocalMusicPage.CurrentTree))
-                    LocalFrame.GoBack();
-                else
-                    LocalFrame.Navigate(page, History.Peek());
-                SetLocalGridView(isFolders ? Settings.settings.LocalFolderGridView : Settings.settings.LocalMusicGridView);
-            }
+            if (LocalFrame.CurrentSourcePageType == page) return;
+            PageStackEntry lastPage = LocalFrame.BackStack.Last();
+            if (LocalFrame.CanGoBack && lastPage.SourcePageType == page && lastPage.Parameter == History.Peek())
+                LocalFrame.GoBack();
+            else
+                LocalFrame.Navigate(page, History.Peek());
+            SetLocalGridView(isFolders ? Settings.settings.LocalFolderGridView : Settings.settings.LocalMusicGridView);
         }
 
         private void SetBackButtonVisibility()

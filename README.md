@@ -14,6 +14,8 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
+Cancel music removal in notification.
+
 MediaControl shows progressbar when loading
 
 Multi-Select.
@@ -27,6 +29,8 @@ ThemeColor change.
 Animations.
 
 Improved editing album cover by selecting a song.
+
+Save lyrics on another thread.
 
 # TO FIX
 Able to drag titlebar when loading.

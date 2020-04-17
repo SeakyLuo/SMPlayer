@@ -18,7 +18,7 @@ namespace SMPlayer
         public ObservableCollection<Music> CurrentPlaylist
         {
             get => IsNowPlaying ? MediaHelper.CurrentPlaylist :
-                                  currentPlaylist.Count == 0 ? currentPlaylist = ItemsSource as ObservableCollection<Music> : currentPlaylist;
+                                  currentPlaylist.Count == 0 ? currentPlaylist = ItemsSource : currentPlaylist;
             set => currentPlaylist = value;
         }
         private ObservableCollection<Music> currentPlaylist = new ObservableCollection<Music>();
@@ -45,14 +45,10 @@ namespace SMPlayer
         }
         public static readonly DependencyProperty FooterProperty = DependencyProperty.Register("Footer", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
 
-        public object ItemsSource
+        public ObservableCollection<Music> ItemsSource
         {
-            get => SongsListView.ItemsSource;
-            set
-            {
-                CurrentPlaylist = new ObservableCollection<Music>(value as ICollection<Music>);
-                SongsListView.ItemsSource = value;
-            }
+            get => SongsListView.ItemsSource as ObservableCollection<Music>;
+            set => SongsListView.ItemsSource = CurrentPlaylist = value;
         }
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
         public bool ShowAlbumText
