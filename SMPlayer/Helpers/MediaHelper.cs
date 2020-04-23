@@ -105,6 +105,8 @@ namespace SMPlayer
                     listener.MusicSwitching(current, next, args.Reason);
                 CurrentMusic = next;
                 Settings.settings.LastMusicIndex = (int)PlaybackList.CurrentItemIndex;
+                if (args.Reason == MediaPlaybackItemChangedReason.EndOfStream)
+                    App.Save();
             };
             Player.MediaEnded += (sender, args) =>
             {

@@ -25,7 +25,7 @@ namespace SMPlayer.Models
         public int FileCount { get => Trees.Sum(t => t.FileCount) + Files.Count; }
         [Newtonsoft.Json.JsonIgnore]
         public string Directory { get => Path.Substring(Path.LastIndexOf("\\") + 1); }
-        private static ExecutionStatus LoadingStatus = ExecutionStatus.Ready;
+        private static volatile ExecutionStatus LoadingStatus = ExecutionStatus.Ready;
 
         public FolderTree() { }
         public FolderTree(FolderTree tree)
