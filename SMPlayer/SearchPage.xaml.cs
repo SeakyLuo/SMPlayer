@@ -138,6 +138,11 @@ namespace SMPlayer
         public void SearchPlaylists(string keyword)
         {
             bool viewAll = false;
+            var nowPlaying = MediaHelper.NowPlaying;
+            if (IsTargetPlaylist(nowPlaying, keyword))
+                Playlists.Add(nowPlaying.ToAlbumView());
+            if (IsTargetPlaylist(Settings.settings.MyFavorites, keyword))
+                Playlists.Add(Settings.settings.MyFavorites.ToAlbumView());
             foreach (var playlist in Settings.settings.Playlists)
             {
                 if (IsTargetPlaylist(playlist, keyword))
@@ -164,7 +169,13 @@ namespace SMPlayer
         }
         private void SearchPlaylistView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            Frame.Navigate(typeof(PlaylistsPage), e.ClickedItem);
+            AlbumView playlist = (AlbumView)e.ClickedItem;
+            if (playlist.Name == MenuFlyoutHelper.NowPlaying)
+                Frame.Navigate(typeof(NowPlayingPage));
+            else if (playlist.Name == MenuFlyoutHelper.MyFavorites)
+                Frame.Navigate(typeof(MyFavoritesPage));
+            else
+                Frame.Navigate(typeof(PlaylistsPage), e.ClickedItem);
         }
         private void ArtistsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
         {

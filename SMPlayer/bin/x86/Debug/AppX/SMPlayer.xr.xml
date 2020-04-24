@@ -379,6 +379,8 @@
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Style" />
+      <RootProperty Name="Name" />
+      <RootProperty Name="Foreground" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ToolTipService">
       <RootMethod Name="GetToolTip" />
@@ -1044,6 +1046,7 @@
       <RootProperty Name="IsThumbToolTipEnabled" />
       <RootProperty Name="ManipulationMode" />
       <RootProperty Name="ThumbToolTipValueConverter" />
+      <RootProperty Name="Visibility" />
       <RootEvent Name="ValueChanged" />
       <RootEvent Name="ManipulationCompleted" />
       <RootEvent Name="ManipulationStarted" />

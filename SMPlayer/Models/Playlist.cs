@@ -139,6 +139,7 @@ namespace SMPlayer.Models
 
         public AlbumView ToAlbumView()
         {
+            if (DisplayItem == null) DisplayItem = MusicDisplayItem.DefaultItem;
             return new AlbumView(Name, SongCountConverter.GetSongCount(Songs.Count))
             {
                 Songs = Songs,

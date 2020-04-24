@@ -330,6 +330,7 @@ namespace SMPlayer
             }
         }
 
+        private Music CurrentMusic = null;
         private bool ShouldUpdate = true, SliderClicked = false;
         private static List<Action<Music, Music>> MusicModifiedListeners = new List<Action<Music, Music>>();
         private static List<MusicRequestListener> MusicRequestListeners = new List<MusicRequestListener>();
@@ -340,6 +341,24 @@ namespace SMPlayer
             MediaHelper.SwitchMusicListeners.Add(this);
             MediaHelper.MediaControlListeners.Add(this);
             MediaHelper.RemoveMusicListeners.Add(this);
+            MediaHelper.InitFinishedListeners.Add(() =>
+            {
+                SetMusic(MediaHelper.CurrentMusic);
+                if (MediaHelper.IsPlaying) PlayMusic();
+                else PauseMusic();
+                if (ApplicationView.GetForCurrentView().IsFullScreenMode) SetExitFullScreen();
+                else SetFullScreen();
+
+                double volume = Settings.settings.Volume * 100;
+                VolumeButton.Content = Helper.GetVolumeIcon(volume);
+                SetMuted(Settings.settings.IsMuted);
+                VolumeSlider.Value = volume;
+                SetPlayMode(Settings.settings.Mode);
+
+                MainMediaSlider.Value = MediaHelper.Position;
+                MainSliderProgressBar.Visibility = Visibility.Collapsed;
+                MainMediaSlider.Visibility = Visibility.Visible;
+            });
             SettingsPage.AddAfterPathSetListener(this);
             Settings.LikeMusicListeners.Add(this);
             MediaHelper.Player.PlaybackSession.PlaybackStateChanged += async (sender, args) =>
@@ -381,21 +400,9 @@ namespace SMPlayer
             KeyboardAccelerators.Add(right);
             KeyboardAcceleratorPlacementMode = KeyboardAcceleratorPlacementMode.Hidden;
         }
-        private Music CurrentMusic = null;
-
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            SetMusic(MediaHelper.CurrentMusic);
-            if (MediaHelper.IsPlaying) PlayMusic();
-            else PauseMusic();
-            if (ApplicationView.GetForCurrentView().IsFullScreenMode) SetExitFullScreen();
-            else SetFullScreen();
-
-            double volume = Settings.settings.Volume * 100;
-            VolumeButton.Content = Helper.GetVolumeIcon(volume);
-            SetMuted(Settings.settings.IsMuted);
-            VolumeSlider.Value = volume;
-            SetPlayMode(Settings.settings.Mode);
+            Debug.WriteLine("Loaded");
         }
 
         public async void UpdateMusic(Music music)
@@ -678,7 +685,7 @@ namespace SMPlayer
 
         private void MediaSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            int newValue = (int)MediaSlider.Value, diff = newValue - (int)MediaHelper.Position;
+            int newValue = (int)e.NewValue, oldValue = (int)e.OldValue, diff = newValue - oldValue;
             SliderClicked = diff != 1 && diff != 0;
             //Debug.WriteLine("ValueChanged To " + MusicDurationConverter.ToTime(newValue));
             LeftTimeTextBlock.Text = MusicDurationConverter.ToTime(newValue);
@@ -839,10 +846,10 @@ namespace SMPlayer
                     Music before = current.Copy();
                     current.Played();
                     NotifyMusicModifiedListeners(before, current);
+                    MediaSlider.Value = 0;
                 }
                 Settings.settings.Played(current);
                 next.IsPlaying = true;
-                MediaSlider.Value = 0;
                 SetMusic(next);
                 if (MainTitleTextBlock.IsScrolling) MainTitleTextBlock.StopScrolling();
                 if (MainArtistTextBlock.IsScrolling) MainArtistTextBlock.StopScrolling();

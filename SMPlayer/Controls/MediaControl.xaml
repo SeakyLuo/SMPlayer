@@ -33,7 +33,7 @@
             x:Name="MainMediaControlGrid"
             Grid.Row="1"
             Background="{StaticResource DefaultMediaControlGridBackground}"
-            Visibility="Collapsed">
+            Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -265,6 +265,12 @@
                     FontFamily="Segoe UI"
                     Foreground="White"
                     Text="0:00" />
+                <ProgressBar
+                    Name="MainSliderProgressBar"
+                    Grid.Column="1"
+                    Width="{x:Bind MainMediaSlider.Width}"
+                    Foreground="White"
+                    IsIndeterminate="True" />
                 <Slider
                     x:Name="MainMediaSlider"
                     Grid.Column="1"
@@ -278,7 +284,8 @@
                     Minimum="0"
                     Style="{StaticResource MediaProgressSliderStyle}"
                     ThumbToolTipValueConverter="{StaticResource MusicDurationConverter}"
-                    ValueChanged="MediaSlider_ValueChanged" />
+                    ValueChanged="MediaSlider_ValueChanged"
+                    Visibility="Collapsed" />
                 <TextBlock
                     x:Name="MainRightTimeTextBlock"
                     Grid.Column="2"
@@ -697,7 +704,7 @@
             x:Name="MiniMediaControlGrid"
             VerticalAlignment="Stretch"
             RequestedTheme="Dark"
-            Visibility="Visible">
+            Visibility="Collapsed">
             <Image
                 x:Name="MiniAlbumCover"
                 Source="ms-appx:///Assets/colorful_bg_wide.png"

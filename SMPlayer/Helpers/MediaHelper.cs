@@ -47,6 +47,10 @@ namespace SMPlayer
                 return _PlaybackList;
             }
         }
+        public static Playlist NowPlaying
+        {
+            get => new Playlist(MenuFlyoutHelper.NowPlaying, CurrentPlaylist);
+        }
         private static MediaPlaybackList _PlaybackList = new MediaPlaybackList() { MaxPlayedItemsToKeepOpen = 1 };
         private static MediaPlaybackList PendingPlaybackList = null;
         public static MediaPlayer Player = new MediaPlayer()
@@ -57,6 +61,7 @@ namespace SMPlayer
         public static DispatcherTimer Timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         public static List<MediaControlListener> MediaControlListeners = new List<MediaControlListener>();
         public static List<SwitchMusicListener> SwitchMusicListeners = new List<SwitchMusicListener>();
+        public static List<Action> InitFinishedListeners = new List<Action>();
         private const string FILENAME = "NowPlayingPlaylist.json";
 
         public static async void Init()
@@ -89,8 +94,6 @@ namespace SMPlayer
             Player.Volume = settings.Volume;
             if (settings.SaveMusicProgress) Position = settings.MusicProgress;
             SetMode(Settings.settings.Mode);
-            Timer.Start();
-            if (settings.AutoPlay) Play();
 
             Timer.Tick += (sender, e) =>
             {
@@ -113,6 +116,11 @@ namespace SMPlayer
                 foreach (var listener in MediaControlListeners)
                     listener.MediaEnded();
             };
+
+            foreach (var listener in InitFinishedListeners)
+                listener.Invoke();
+            Timer.Start();
+            if (settings.AutoPlay) Play();
         }
         public static Music GetMusic(this MediaPlaybackItem item)
         {

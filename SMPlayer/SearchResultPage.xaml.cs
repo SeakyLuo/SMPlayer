@@ -82,6 +82,11 @@ namespace SMPlayer
                             Songs.Add(music);
                         break;
                     case SearchType.Playlists:
+                        var nowPlaying = MediaHelper.NowPlaying;
+                        if (SearchPage.IsTargetPlaylist(nowPlaying, keyword))
+                            Playlists.Add(nowPlaying.ToAlbumView());
+                        if (SearchPage.IsTargetPlaylist(Settings.settings.MyFavorites, keyword))
+                            Playlists.Add(Settings.settings.MyFavorites.ToAlbumView());
                         foreach (var playlist in Settings.settings.Playlists.Where(p => SearchPage.IsTargetPlaylist(p, keyword)).OrderBy(p => p.Name))
                             Playlists.Add(playlist.ToAlbumView());
                         break;
@@ -102,7 +107,13 @@ namespace SMPlayer
 
         private void PlaylistGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            Frame.Navigate(typeof(PlaylistsPage), e.ClickedItem);
+            AlbumView album = (AlbumView)e.ClickedItem;
+            if (album.Name == MenuFlyoutHelper.NowPlaying)
+                Frame.Navigate(typeof(NowPlayingPage));
+            else if (album.Name == MenuFlyoutHelper.MyFavorites)
+                Frame.Navigate(typeof(MyFavoritesPage));
+            else
+                Frame.Navigate(typeof(AlbumPage), album);
         }
 
         private void Album_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
