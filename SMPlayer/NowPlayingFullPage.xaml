@@ -119,5 +119,32 @@
             ShowDismissButton="True"
             StackMode="Replace"
             VerticalOffset="100" />
+        <controls:InAppNotification
+            x:Name="UndoInAppNotification"
+            Grid.Row="2"
+            AnimationDuration="00:00:00.1"
+            HorizontalOffset="0"
+            StackMode="Replace"
+            VerticalOffset="100">
+            <controls:InAppNotification.ContentTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Text="{Binding ElementName=UndoInAppNotification, Path=Content}"
+                            TextTrimming="CharacterEllipsis"
+                            TextWrapping="WrapWholeWords" />
+                        <Button
+                            x:Uid="UndoButton"
+                            Grid.Column="1"
+                            Click="UndoButton_Click" />
+                    </Grid>
+                </DataTemplate>
+            </controls:InAppNotification.ContentTemplate>
+        </controls:InAppNotification>
     </Grid>
 </Page>

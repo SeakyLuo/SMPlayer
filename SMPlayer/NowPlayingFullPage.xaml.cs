@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Models;
+using System;
 using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -48,7 +49,7 @@ namespace SMPlayer
             MusicLyricsController.SetLyrics(music);
         }
 
-        public void ShowNotification(string message, int duration = 1500)
+        public void ShowNotification(string message, int duration = 2000)
         {
             ShowResultInAppNotification.Content = message;
             ShowResultInAppNotification.Show(duration);
@@ -79,6 +80,21 @@ namespace SMPlayer
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             GoBack();
+        }
+
+        private Action undo;
+
+        public void ShowUndoNotification(string message, Action undo, int duration = 5000)
+        {
+            UndoInAppNotification.Content = message;
+            this.undo = undo;
+            UndoInAppNotification.Show(duration);
+        }
+
+        private void UndoButton_Click(object sender, RoutedEventArgs e)
+        {
+            undo.Invoke();
+            UndoInAppNotification.Dismiss();
         }
     }
 }

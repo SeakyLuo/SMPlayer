@@ -735,6 +735,9 @@
   <data name="Undo Mute" xml:space="preserve">
     <value>取消静音</value>
   </data>
+  <data name="UndoButton.Content" xml:space="preserve">
+    <value>撤销</value>
+  </data>
   <data name="UnPin" xml:space="preserve">
     <value>解除固定</value>
   </data>

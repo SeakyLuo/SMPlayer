@@ -354,5 +354,20 @@ namespace SMPlayer
             ShowResultInAppNotification.Content = message;
             ShowResultInAppNotification.Show(duration);
         }
+
+        private Action undo;
+
+        public void ShowUndoNotification(string message, Action undo, int duration = 5000)
+        {
+            UndoInAppNotification.Content = message;
+            this.undo = undo;
+            UndoInAppNotification.Show(duration);
+        }
+
+        private void UndoButton_Click(object sender, RoutedEventArgs e)
+        {
+            undo.Invoke();
+            UndoInAppNotification.Dismiss();
+        }
     }
 }

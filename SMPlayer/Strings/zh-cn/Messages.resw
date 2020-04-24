@@ -177,6 +177,9 @@
   <data name="MusicNotFound" xml:space="preserve">
     <value>找不到《{0}》</value>
   </data>
+  <data name="MusicRemoved" xml:space="preserve">
+    <value>《{0}》已被移除</value>
+  </data>
   <data name="MusicsNotFound" xml:space="preserve">
     <value>{0}首歌曲无法被找到。已跳过。</value>
   </data>

@@ -98,8 +98,7 @@ namespace SMPlayer.Controls
             {
                 LyricsTextBox.IsEnabled = true;
                 SaveProgress.Visibility = Visibility.Collapsed;
-                MainPage.Instance?.ShowNotification(notification);
-                NowPlayingFullPage.Instance?.ShowNotification(notification);
+                Helper.ShowNotification(notification);
             }
         }
         public static async Task<string> SearchLyrics(string keyword)

@@ -154,14 +154,17 @@ namespace SMPlayer
             Settings.settings.Mode = mode;
             ShuffleEnabled = mode == PlayMode.Shuffle;
         }
-
-        public static void AddMusic(Music source)
+        public static void AddMusic(Music source, int index)
         {
             Music music = source.Copy();
             music.IsPlaying = music.Equals(CurrentMusic);
-            music.Index = CurrentPlaylist.Count;
-            CurrentPlaylist.Add(music);
-            PlaybackList.Items.Add(music.GetMediaPlaybackItem());
+            music.Index = index;
+            CurrentPlaylist.Insert(index, music);
+            PlaybackList.Items.Insert(index, music.GetMediaPlaybackItem());
+        }
+        public static void AddMusic(Music source)
+        {
+            AddMusic(source, CurrentPlaylist.Count);
         }
         public static void SetPlaylist(ICollection<Music> playlist, Music target = null)
         {

@@ -102,7 +102,7 @@ namespace SMPlayer
                 ScrollViewer.ViewChanged += (s, args) =>
                 {
                     var viewer = s as ScrollViewer;
-                    if (ScrollListener != null) ScrollListener.Scrolled(ScrollPosition, viewer.VerticalOffset);
+                    ScrollListener?.Scrolled(ScrollPosition, viewer.VerticalOffset);
                     ScrollPosition = viewer.VerticalOffset;
                 };
                 ViewChangedUnadded = false;
@@ -145,8 +145,24 @@ namespace SMPlayer
                     for (int i = index; i < CurrentPlaylist.Count; i++)
                         if (SongsListView.ContainerFromIndex(i) is ListViewItem container)
                             container.Background = GetRowBackground(i);
+                    Helper.ShowCancelableNotification(Helper.LocalizeMessage("MusicRemoved", music.Name), () => CancelMusicRemoval(index, music));
                 }
             });
+        }
+
+        public void CancelMusicRemoval(int index, Music music)
+        {
+            if (IsNowPlaying)
+            {
+                MediaHelper.AddMusic(music, index);
+            }
+            else
+            {
+                currentPlaylist.Insert(index, music);
+            }
+            for (int i = index; i < CurrentPlaylist.Count; i++)
+                if (SongsListView.ContainerFromIndex(i) is ListViewItem container)
+                    container.Background = GetRowBackground(i);
         }
 
         private void SongsListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)

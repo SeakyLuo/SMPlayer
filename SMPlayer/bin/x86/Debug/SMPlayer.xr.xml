@@ -1184,6 +1184,7 @@
       <RootProperty Name="ShowDismissButton" />
       <RootProperty Name="StackMode" />
       <RootProperty Name="VerticalOffset" />
+      <RootProperty Name="ContentTemplate" />
     </RootType>
     <RootType FullName="SMPlayer.NowPlayingFullPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.SwipeControl">

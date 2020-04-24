@@ -204,9 +204,7 @@ namespace SMPlayer
                         MusicLibraryPage.AllSongs.Remove(music);
                         Settings.settings.RemoveMusic(music);
                         MediaHelper.RemoveMusic(MediaHelper.CurrentPlaylist.FirstOrDefault(m => m == music));
-                        var notification = Helper.LocalizeMessage("MusicDeleted", music.Name);
-                        MainPage.Instance?.ShowNotification(notification);
-                        NowPlayingFullPage.Instance?.ShowNotification(notification);
+                        Helper.ShowNotification(Helper.LocalizeMessage("MusicDeleted", music.Name));
                         listener?.Delete(music);
                     }
                 }.ShowAsync();
