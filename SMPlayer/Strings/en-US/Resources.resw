@@ -456,9 +456,6 @@
   <data name="NextButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Next</value>
   </data>
-  <data name="No Playlist" xml:space="preserve">
-    <value>No Playlist</value>
-  </data>
   <data name="NoAlbumArtTextBlock.Text" xml:space="preserve">
     <value>No Album Art</value>
   </data>
@@ -521,9 +518,6 @@
   </data>
   <data name="PlaylistMenuItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Show Now Playing Playlist</value>
-  </data>
-  <data name="Playlists:" xml:space="preserve">
-    <value>Playlists:</value>
   </data>
   <data name="PlaylistsItem.Content" xml:space="preserve">
     <value>Playlists</value>
@@ -603,26 +597,11 @@
   <data name="RenameItem.Text" xml:space="preserve">
     <value>Rename Playlist</value>
   </data>
-  <data name="Repeat One: Disabled" xml:space="preserve">
-    <value>Repeat One: Disabled</value>
-  </data>
-  <data name="Repeat One: Enabled" xml:space="preserve">
-    <value>Repeat One: Enabled</value>
-  </data>
-  <data name="Repeat: Disabled" xml:space="preserve">
-    <value>Repeat: Disabled</value>
-  </data>
-  <data name="Repeat: Enabled" xml:space="preserve">
-    <value>Repeat: Enabled</value>
-  </data>
   <data name="ResetLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Reset Lyrics</value>
   </data>
   <data name="ResetMusicPropertiesButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Reset Properties</value>
-  </data>
-  <data name="Reverse Playlist" xml:space="preserve">
-    <value>Reverse Playlist</value>
   </data>
   <data name="SaveChangesButton.Content" xml:space="preserve">
     <value>Save Changes</value>
@@ -705,12 +684,6 @@
   <data name="Shuffle and Play" xml:space="preserve">
     <value>Shuffle and Play</value>
   </data>
-  <data name="Shuffle: Disabled" xml:space="preserve">
-    <value>Shuffle: Disabled</value>
-  </data>
-  <data name="Shuffle: Enabled" xml:space="preserve">
-    <value>Shuffle: Enabled</value>
-  </data>
   <data name="ShuffleButton.Label" xml:space="preserve">
     <value>Shuffle</value>
   </data>
@@ -734,24 +707,6 @@
   </data>
   <data name="Sort" xml:space="preserve">
     <value>Sort</value>
-  </data>
-  <data name="Sort By Album" xml:space="preserve">
-    <value>Sort By Album</value>
-  </data>
-  <data name="Sort By Artist" xml:space="preserve">
-    <value>Sort By Artist</value>
-  </data>
-  <data name="Sort By Date Added" xml:space="preserve">
-    <value>Sort By Date Added</value>
-  </data>
-  <data name="Sort By Duration" xml:space="preserve">
-    <value>Sort By Duration</value>
-  </data>
-  <data name="Sort By Play Count" xml:space="preserve">
-    <value>Sort By Play Count</value>
-  </data>
-  <data name="Sort By Title" xml:space="preserve">
-    <value>Sort By Title</value>
   </data>
   <data name="SortByButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Sort Playlist</value>

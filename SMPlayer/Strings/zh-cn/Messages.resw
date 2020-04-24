@@ -201,6 +201,9 @@
   <data name="No Music" xml:space="preserve">
     <value>没有音乐</value>
   </data>
+  <data name="No Playlist" xml:space="preserve">
+    <value>没有播放列表</value>
+  </data>
   <data name="NoLyricsAvailable" xml:space="preserve">
     <value>没有歌词</value>
   </data>
@@ -221,6 +224,9 @@
   </data>
   <data name="PlaylistName" xml:space="preserve">
     <value>{0}（{1}）</value>
+  </data>
+  <data name="Playlists:" xml:space="preserve">
+    <value>播放列表：</value>
   </data>
   <data name="ProcessRequest" xml:space="preserve">
     <value>正在处理您的请求……</value>
@@ -246,6 +252,21 @@
   <data name="RemovePlaylist" xml:space="preserve">
     <value>你想要移除播放列表“{0}”吗？</value>
   </data>
+  <data name="Repeat One: Disabled" xml:space="preserve">
+    <value>单曲循环：关闭</value>
+  </data>
+  <data name="Repeat One: Enabled" xml:space="preserve">
+    <value>单曲循环：打开</value>
+  </data>
+  <data name="Repeat: Disabled" xml:space="preserve">
+    <value>循环播放：关闭</value>
+  </data>
+  <data name="Repeat: Enabled" xml:space="preserve">
+    <value>循环播放：打开</value>
+  </data>
+  <data name="Reverse Playlist" xml:space="preserve">
+    <value>反转播放列表</value>
+  </data>
   <data name="SearchLyricsFailed" xml:space="preserve">
     <value>无法找到匹配歌词！</value>
   </data>
@@ -258,11 +279,35 @@
   <data name="SearchResult" xml:space="preserve">
     <value>{0}的搜索结果</value>
   </data>
+  <data name="Shuffle: Disabled" xml:space="preserve">
+    <value>随机播放：关闭</value>
+  </data>
+  <data name="Shuffle: Enabled" xml:space="preserve">
+    <value>随机播放：打开</value>
+  </data>
   <data name="Songs" xml:space="preserve">
     <value>歌曲（{0}）</value>
   </data>
   <data name="Songs:" xml:space="preserve">
     <value>歌曲：</value>
+  </data>
+  <data name="Sort By Album" xml:space="preserve">
+    <value>根据专辑排序</value>
+  </data>
+  <data name="Sort By Artist" xml:space="preserve">
+    <value>根据歌手排序</value>
+  </data>
+  <data name="Sort By Date Added" xml:space="preserve">
+    <value>根据添加日期排序</value>
+  </data>
+  <data name="Sort By Duration" xml:space="preserve">
+    <value>根据时长排序</value>
+  </data>
+  <data name="Sort By Play Count" xml:space="preserve">
+    <value>根据播放次数排序</value>
+  </data>
+  <data name="Sort By Title" xml:space="preserve">
+    <value>根据标题排序</value>
   </data>
   <data name="UnableToChangeAlbumArt" xml:space="preserve">
     <value>无法更改专辑插图</value>

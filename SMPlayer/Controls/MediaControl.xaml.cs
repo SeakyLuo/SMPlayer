@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace SMPlayer
 {
-    public sealed partial class MediaControl : UserControl, SwitchMusicListener, MediaControlListener, AfterPathSetListener, RemoveMusicListener, LikeMusicListener
+    public sealed partial class MediaControl : UserControl, SwitchMusicListener, MediaControlListener, RemoveMusicListener, LikeMusicListener
     {
         public enum MediaControlMode
         {
@@ -344,8 +344,6 @@ namespace SMPlayer
             MediaHelper.InitFinishedListeners.Add(() =>
             {
                 SetMusic(MediaHelper.CurrentMusic);
-                if (MediaHelper.IsPlaying) PlayMusic();
-                else PauseMusic();
                 if (ApplicationView.GetForCurrentView().IsFullScreenMode) SetExitFullScreen();
                 else SetFullScreen();
 
@@ -359,7 +357,6 @@ namespace SMPlayer
                 MainSliderProgressBar.Visibility = Visibility.Collapsed;
                 MainMediaSlider.Visibility = Visibility.Visible;
             });
-            SettingsPage.AddAfterPathSetListener(this);
             Settings.LikeMusicListeners.Add(this);
             MediaHelper.Player.PlaybackSession.PlaybackStateChanged += async (sender, args) =>
             {
@@ -402,7 +399,7 @@ namespace SMPlayer
         }
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("Loaded");
+            
         }
 
         public async void UpdateMusic(Music music)
@@ -564,9 +561,9 @@ namespace SMPlayer
         {
             ShuffleButton.IsChecked = false;
             RepeatButton.IsChecked = false;
-            ShuffleButton.SetToolTip(MoreShuffleButton.Label = Helper.Localize("Shuffle: Disabled"));
-            RepeatButton.SetToolTip(MoreRepeatButton.Label = Helper.Localize("Repeat: Disabled"));
-            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = Helper.Localize("Repeat One: " + (isChecked ? "Enabled" : "Disabled")));
+            ShuffleButton.SetToolTip(MoreShuffleButton.Label = Helper.LocalizeMessage("Shuffle: Disabled"));
+            RepeatButton.SetToolTip(MoreRepeatButton.Label = Helper.LocalizeMessage("Repeat: Disabled"));
+            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = Helper.LocalizeMessage("Repeat One: " + (isChecked ? "Enabled" : "Disabled")));
             MoreShuffleButton.IconBackground = ColorHelper.TransparentBrush;
             MoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
             MoreRepeatOneButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
@@ -888,17 +885,6 @@ namespace SMPlayer
             MediaSlider.IsEnabled = false;
         }
 
-        public void PathSet(string path)
-        {
-            //if (await CurrentMusic.GetStorageFileAsync() == null)
-            //    ClearMusic();
-        }
-
-        public void Play()
-        {
-            PlayMusic();
-        }
-
         private void MainMoreMenuFlyout_Opening(object sender, object e)
         {
             var flyout = sender as MenuFlyout;
@@ -956,10 +942,6 @@ namespace SMPlayer
         private async void MainMediaControlMoreAlbumArtItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
             await new MusicDialog(MusicDialogOption.AlbumArt, MediaHelper.CurrentMusic).ShowAsync();
-        }
-        public void Pause()
-        {
-            PauseMusic();
         }
 
         public void MusicRemoved(int index, Music music, ICollection<Music> newCollection)

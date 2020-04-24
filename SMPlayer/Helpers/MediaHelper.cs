@@ -243,13 +243,11 @@ namespace SMPlayer
         public static void Play()
         {
             Player.Play();
-            foreach (var listener in MediaControlListeners) listener.Play();
         }
 
         public static void Pause()
         {
             Player.Pause();
-            foreach (var listener in MediaControlListeners) listener.Pause();
         }
 
         public static void MovePrev()
@@ -387,8 +385,6 @@ namespace SMPlayer
 
     public interface MediaControlListener
     {
-        void Play();
-        void Pause();
         void Tick();
         void MediaEnded();
     }

@@ -326,13 +326,13 @@ namespace SMPlayer
         public static void SetPlaylistSortByMenu(object sender, Playlist playlist)
         {
             var flyout = new MenuFlyout();
-            var reverseItem = new MenuFlyoutItem() { Text = Helper.Localize("Reverse Playlist") };
+            var reverseItem = new MenuFlyoutItem() { Text = Helper.LocalizeMessage("Reverse Playlist") };
             reverseItem.Click += (send, args) => playlist.Reverse();
             flyout.Items.Add(reverseItem);
             flyout.Items.Add(new MenuFlyoutSeparator());
             foreach (var criterion in Playlist.Criteria)
             {
-                string sortby = Helper.Localize("Sort By " + criterion.ToStr());
+                string sortby = Helper.LocalizeMessage("Sort By " + criterion.ToStr());
                 var radioItem = new ToggleMenuFlyoutItem()
                 {
                     Text = sortby,

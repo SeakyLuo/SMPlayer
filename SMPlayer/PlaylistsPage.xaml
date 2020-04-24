@@ -106,8 +106,8 @@
                     <local:HeaderedPlaylistControl
                         AllowClear="True"
                         IsPlaylist="True"
-                        Removable="True"
-                        Loaded="HeaderedPlaylistControl_Loaded" />
+                        Loaded="HeaderedPlaylistControl_Loaded"
+                        Removable="True" />
                 </DataTemplate>
             </controls:TabView.ItemTemplate>
 
@@ -189,8 +189,7 @@
                 Label="Sort By Title"
                 LabelPosition="Right"
                 Style="{StaticResource PlaylistIconTextButtonStyle}"
-                Tapped="SortByButton_Tapped"
-                ToolTipService.ToolTip="Sort Playlists" />
+                Tapped="SortByButton_Tapped" />
         </Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">

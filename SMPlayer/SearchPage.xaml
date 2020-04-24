@@ -246,7 +246,7 @@
                     Style="{StaticResource HorizontalListViewStyle}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="data:AlbumView">
-                            <local:DropShadowControl DataContext="{Binding}" />
+                            <local:DropShadowControl DataContext="{Binding}" DataContextChanged="Album_DataContextChanged" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

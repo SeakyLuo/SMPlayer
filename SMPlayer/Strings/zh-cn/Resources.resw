@@ -456,9 +456,6 @@
   <data name="NextButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>下一首</value>
   </data>
-  <data name="No Playlist" xml:space="preserve">
-    <value>无播放列表</value>
-  </data>
   <data name="NoAlbumArtTextBlock.Text" xml:space="preserve">
     <value>没有专辑插图</value>
   </data>
@@ -521,9 +518,6 @@
   </data>
   <data name="PlaylistMenuItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>显示正在播放列表</value>
-  </data>
-  <data name="Playlists:" xml:space="preserve">
-    <value>播放列表：</value>
   </data>
   <data name="PlaylistsItem.Content" xml:space="preserve">
     <value>播放列表</value>
@@ -603,26 +597,11 @@
   <data name="RenameItem.Text" xml:space="preserve">
     <value>重命名播放列表</value>
   </data>
-  <data name="Repeat One: Disabled" xml:space="preserve">
-    <value>单曲循环：关闭</value>
-  </data>
-  <data name="Repeat One: Enabled" xml:space="preserve">
-    <value>单曲循环：打开</value>
-  </data>
-  <data name="Repeat: Disabled" xml:space="preserve">
-    <value>循环播放：关闭</value>
-  </data>
-  <data name="Repeat: Enabled" xml:space="preserve">
-    <value>循环播放：打开</value>
-  </data>
   <data name="ResetLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>重设歌词</value>
   </data>
   <data name="ResetMusicPropertiesButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>重设歌曲信息</value>
-  </data>
-  <data name="Reverse Playlist" xml:space="preserve">
-    <value>反转播放列表</value>
   </data>
   <data name="SaveChangesButton.Content" xml:space="preserve">
     <value>保存改变</value>
@@ -705,12 +684,6 @@
   <data name="Shuffle and Play" xml:space="preserve">
     <value>随机播放</value>
   </data>
-  <data name="Shuffle: Disabled" xml:space="preserve">
-    <value>随机播放：关闭</value>
-  </data>
-  <data name="Shuffle: Enabled" xml:space="preserve">
-    <value>随机播放：打开</value>
-  </data>
   <data name="ShuffleButton.Label" xml:space="preserve">
     <value>随机播放</value>
   </data>
@@ -734,24 +707,6 @@
   </data>
   <data name="Sort" xml:space="preserve">
     <value>排序</value>
-  </data>
-  <data name="Sort By Album" xml:space="preserve">
-    <value>根据专辑排序</value>
-  </data>
-  <data name="Sort By Artist" xml:space="preserve">
-    <value>根据歌手排序</value>
-  </data>
-  <data name="Sort By Date Added" xml:space="preserve">
-    <value>根据添加日期排序</value>
-  </data>
-  <data name="Sort By Duration" xml:space="preserve">
-    <value>根据时长排序</value>
-  </data>
-  <data name="Sort By Play Count" xml:space="preserve">
-    <value>根据播放次数排序</value>
-  </data>
-  <data name="Sort By Title" xml:space="preserve">
-    <value>根据标题排序</value>
   </data>
   <data name="SortByButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>对播放列表进行排序</value>

@@ -132,7 +132,7 @@ namespace SMPlayer
         }
         public static bool IsTargetPlaylist(Playlist playlist, string keyword)
         {
-            return playlist.Name.ToLowerInvariant().Contains(keyword) || playlist.Songs.Any((music) => IsTargetMusic(music, keyword));
+            return playlist.Name.ToLowerInvariant().Contains(keyword) || playlist.Songs.Any(m => IsTargetMusic(m, keyword));
         }
 
         public void SearchPlaylists(string keyword)

@@ -201,6 +201,9 @@
   <data name="No Music" xml:space="preserve">
     <value>No Music</value>
   </data>
+  <data name="No Playlist" xml:space="preserve">
+    <value>No Playlist</value>
+  </data>
   <data name="NoLyricsAvailable" xml:space="preserve">
     <value>No Lyrics Available</value>
   </data>
@@ -221,6 +224,9 @@
   </data>
   <data name="PlaylistName" xml:space="preserve">
     <value>{0} ({1})</value>
+  </data>
+  <data name="Playlists:" xml:space="preserve">
+    <value>Playlists: </value>
   </data>
   <data name="ProcessRequest" xml:space="preserve">
     <value>Processing your request......</value>
@@ -246,6 +252,21 @@
   <data name="RemovePlaylist" xml:space="preserve">
     <value>Do you want to remove playlist "{0}"?</value>
   </data>
+  <data name="Repeat One: Disabled" xml:space="preserve">
+    <value>Repeat One: Disabled</value>
+  </data>
+  <data name="Repeat One: Enabled" xml:space="preserve">
+    <value>Repeat One: Enabled</value>
+  </data>
+  <data name="Repeat: Disabled" xml:space="preserve">
+    <value>Repeat: Disabled</value>
+  </data>
+  <data name="Repeat: Enabled" xml:space="preserve">
+    <value>Repeat: Enabled</value>
+  </data>
+  <data name="Reverse Playlist" xml:space="preserve">
+    <value>Reverse Playlist</value>
+  </data>
   <data name="SearchLyricsFailed" xml:space="preserve">
     <value>Unable to find matching lyrics!</value>
   </data>
@@ -258,11 +279,35 @@
   <data name="SearchResult" xml:space="preserve">
     <value>Search Result of {0}</value>
   </data>
+  <data name="Shuffle: Disabled" xml:space="preserve">
+    <value>Shuffle: Disabled</value>
+  </data>
+  <data name="Shuffle: Enabled" xml:space="preserve">
+    <value>Shuffle: Enabled</value>
+  </data>
   <data name="Songs" xml:space="preserve">
     <value>Songs ({0})</value>
   </data>
   <data name="Songs:" xml:space="preserve">
     <value>Songs: </value>
+  </data>
+  <data name="Sort By Album" xml:space="preserve">
+    <value>Sort By Album</value>
+  </data>
+  <data name="Sort By Artist" xml:space="preserve">
+    <value>Sort By Artist</value>
+  </data>
+  <data name="Sort By Date Added" xml:space="preserve">
+    <value>Sort By Date Added</value>
+  </data>
+  <data name="Sort By Duration" xml:space="preserve">
+    <value>Sort By Duration</value>
+  </data>
+  <data name="Sort By Play Count" xml:space="preserve">
+    <value>Sort By Play Count</value>
+  </data>
+  <data name="Sort By Title" xml:space="preserve">
+    <value>Sort By Title</value>
   </data>
   <data name="UnableToChangeAlbumArt" xml:space="preserve">
     <value>Unable to change album art!</value>

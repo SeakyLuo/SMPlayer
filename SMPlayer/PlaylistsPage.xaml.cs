@@ -64,12 +64,12 @@ namespace SMPlayer
         {
             if (Playlists.Count == 0)
             {
-                ShowAllPlaylistButton.Label = Helper.Localize("No Playlist");
+                ShowAllPlaylistButton.Label = Helper.LocalizeMessage("No Playlist");
                 SortByButton.Visibility = Visibility.Collapsed;
             }
             else
             {
-                ShowAllPlaylistButton.Label = $"{Helper.Localize("Playlists:")} {Playlists.Count}";
+                ShowAllPlaylistButton.Label = Helper.LocalizeMessage("Playlists:") + Playlists.Count;
                 SortByButton.Visibility = Visibility.Visible;
             }
         }
@@ -86,7 +86,7 @@ namespace SMPlayer
             Settings.settings.LastPlaylist = playlist.Name;
             foreach (var music in playlist.Songs)
                 music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
-            SortByButton.Label = Helper.Localize("Sort By " + playlist.Criterion.ToStr());
+            SortByButton.Label = Helper.LocalizeMessage("Sort By " + playlist.Criterion.ToStr());
             if (PlaylistController != null)
                 await PlaylistController.SetPlaylist(playlist);
         }

@@ -98,6 +98,7 @@ namespace SMPlayer
             if (PageUnset)
             {
                 SwitchPage(Settings.settings.LastPage);
+                await Settings.settings.MyFavorites.SetDisplayItemAsync();
                 foreach (var playlist in Settings.settings.Playlists)
                     await playlist.SetDisplayItemAsync();
                 PageUnset = false;

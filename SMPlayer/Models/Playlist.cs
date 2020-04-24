@@ -122,7 +122,7 @@ namespace SMPlayer.Models
         public async Task<List<MusicDisplayItem>> GetAllDisplayItemsAsync()
         {
             var result = new List<MusicDisplayItem>();
-            foreach (var group in Songs.GroupBy((m) => m.Album))
+            foreach (var group in Songs.GroupBy(m => m.Album))
             {
                 foreach (var music in group)
                 {
@@ -139,11 +139,10 @@ namespace SMPlayer.Models
 
         public AlbumView ToAlbumView()
         {
-            if (DisplayItem == null) DisplayItem = MusicDisplayItem.DefaultItem;
             return new AlbumView(Name, SongCountConverter.GetSongCount(Songs.Count))
             {
                 Songs = Songs,
-                Cover = DisplayItem.Thumbnail,
+                Cover = DisplayItem == null ? Helper.DefaultAlbumCover : DisplayItem.Thumbnail,
             };
         }
 
