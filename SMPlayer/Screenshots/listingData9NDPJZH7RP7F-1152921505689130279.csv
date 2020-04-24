@@ -1,6 +1,6 @@
 ﻿Field,ID,Type (类型),default,zh-cn,en-us,,,,,,,
 Description,2,文本,,一个简单的管理本地音乐的音乐播放器，用户界面基于Groove Music。这个App我只是写着玩给自己用，不过你一定要用我也不勉强哈哈。,"A Simple Music Player that manages local music files based on the UI of Groove Music. And I just write this app for fun and for myself. If you insist on using it, don't blame me on bugs.",,,,,,,
-ReleaseNotes,3,文本,,1. 修复了页面导航的错误 2. 修复了音乐移除的错误 3. 添加了保存和刷新歌曲信息的快捷键 4. 初始化时进度条加载变快了,1. Page navigation bug fix 2. Music removal bug fix 3. Keyboard shortcuts for saving and refreshing are added. 4. The music progress bar now loads faster.,,,,,,,
+ReleaseNotes,3,文本,,1.  添加了保存和刷新歌曲信息的快捷键 2. 可以撤销移除音乐了 3.多项优化更新,1. Keyboard shortcuts for saving and refreshing are added. 2. You may undo music removal now. 3. Various improvements.,,,,,,,
 Title,4,文本,,简音播放器,SMPlayer,,,,,,,
 ShortTitle,5,文本,,简音播放器,SMPlayer,,,,,,,
 SortTitle,6,文本,,简音播放器,SMPlayer,,,,,,,

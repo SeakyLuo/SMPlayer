@@ -14,10 +14,6 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
-Cancel music removal in notification.
-
-MediaControl shows progressbar when loading
-
 Multi-Select.
 
 Export data.
@@ -31,6 +27,8 @@ Animations.
 Improved editing album cover by selecting a song.
 
 Save lyrics on another thread.
+
+Search lyrics for all songs.
 
 # TO FIX
 Able to drag titlebar when loading.
