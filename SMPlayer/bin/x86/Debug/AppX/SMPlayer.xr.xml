@@ -105,6 +105,7 @@
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="FontSize" />
       <RootProperty Name="Visibility" />
+      <RootProperty Name="KeyboardAccelerators" />
       <RootProperty Name="MinWidth" />
       <RootProperty Name="IsTabStop" />
       <RootProperty Name="IsEnabled" />
@@ -113,7 +114,6 @@
       <RootProperty Name="IsAccessKeyScope" />
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="FontFamily" />
-      <RootProperty Name="KeyboardAccelerators" />
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Control">
@@ -680,6 +680,10 @@
       <RootMethod Name="GetZoomMode" />
       <RootMethod Name="SetZoomMode" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Input.KeyboardAccelerator">
+      <RootProperty Name="Key" />
+      <RootProperty Name="Modifiers" />
+    </RootType>
     <RootType FullName="SMPlayer.Controls.MusicInfoControl">
       <RootProperty Name="ShowHeader" />
       <RootProperty Name="Margin" />
@@ -1146,10 +1150,6 @@
       <RootEvent Name="Navigated" />
     </RootType>
     <RootType FullName="SMPlayer.LocalPage" />
-    <RootType FullName="Windows.UI.Xaml.Input.KeyboardAccelerator">
-      <RootProperty Name="Key" />
-      <RootProperty Name="Modifiers" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutItem">
       <RootProperty Name="Text" />
       <RootProperty Name="Visibility" />

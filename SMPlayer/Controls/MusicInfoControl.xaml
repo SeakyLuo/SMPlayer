@@ -64,13 +64,21 @@
                     x:Uid="SaveMusicPropertiesButton"
                     Click="SaveMusicPropertiesButton_Click"
                     Content="&#xE74E;"
-                    Style="{StaticResource MusicScrollHeaderButtonStyle}" />
+                    Style="{StaticResource MusicScrollHeaderButtonStyle}" >
+                    <Button.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="S" Modifiers="Control" />
+                    </Button.KeyboardAccelerators>
+                </Button>
                 <Button
                     x:Name="ResetMusicPropertiesButton"
                     x:Uid="ResetMusicPropertiesButton"
                     Click="ResetMusicPropertiesButton_Click"
                     Content="&#xE72C;"
-                    Style="{StaticResource MusicScrollHeaderButtonStyle}" />
+                    Style="{StaticResource MusicScrollHeaderButtonStyle}">
+                    <Button.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="R" Modifiers="Control" />
+                    </Button.KeyboardAccelerators>
+                </Button>
             </StackPanel>
         </Grid>
         <ProgressBar

@@ -93,25 +93,31 @@ namespace SMPlayer.Controls
 
         private async void SaveMusicPropertiesButton_Click(object sender, RoutedEventArgs e)
         {
-            SaveProgress.Visibility = Visibility.Visible;
-            var newMusic = CurrentMusic.Copy();
-            Properties.Title = newMusic.Name = TitleTextBox.Text;
-            Properties.Subtitle = SubtitleTextBox.Text;
-            Properties.Artist = newMusic.Artist = ArtistTextBox.Text;
-            Properties.Album = newMusic.Album = AlbumTextBox.Text;
-            Properties.AlbumArtist = AlbumArtistTextBox.Text;
-            if (int.TryParse(PlayCountTextBox.Text, out int PlayCount))
-                newMusic.PlayCount = PlayCount;
-            Properties.Publisher = PublisherTextBox.Text;
-            if (uint.TryParse(TrackNumberTextBox.Text, out uint TrackNumber))
-                Properties.TrackNumber = TrackNumber;
-            if (uint.TryParse(YearTextBox.Text, out uint Year))
-                Properties.Year = Year;
-            await Properties.SavePropertiesAsync();
-            NotifyListeners(CurrentMusic, newMusic);
-            CurrentMusic.CopyFrom(newMusic);
-            Helper.ShowNotification("PropertiesUpdated");
-            SaveProgress.Visibility = Visibility.Collapsed;
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            {
+                if (IsPropertiesModified)
+                {
+                    SaveProgress.Visibility = Visibility.Visible;
+                    var newMusic = CurrentMusic.Copy();
+                    Properties.Title = newMusic.Name = TitleTextBox.Text;
+                    Properties.Subtitle = SubtitleTextBox.Text;
+                    Properties.Artist = newMusic.Artist = ArtistTextBox.Text;
+                    Properties.Album = newMusic.Album = AlbumTextBox.Text;
+                    Properties.AlbumArtist = AlbumArtistTextBox.Text;
+                    if (int.TryParse(PlayCountTextBox.Text, out int PlayCount))
+                        newMusic.PlayCount = PlayCount;
+                    Properties.Publisher = PublisherTextBox.Text;
+                    if (uint.TryParse(TrackNumberTextBox.Text, out uint TrackNumber))
+                        Properties.TrackNumber = TrackNumber;
+                    if (uint.TryParse(YearTextBox.Text, out uint Year))
+                        Properties.Year = Year;
+                    await Properties.SavePropertiesAsync();
+                    NotifyListeners(CurrentMusic, newMusic);
+                    CurrentMusic.CopyFrom(newMusic);
+                    SaveProgress.Visibility = Visibility.Collapsed;
+                }
+                Helper.ShowNotification("PropertiesUpdated");
+            });
         }
         public async void SetBasicProperties(StorageFile file)
         {
@@ -138,19 +144,29 @@ namespace SMPlayer.Controls
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
             {
                 if (!AllowMusicSwitching) return;
-                // if being modified and not saved
-                if (Properties.Title != TitleTextBox.Text) return;
-                if (Properties.Subtitle != SubtitleTextBox.Text) return;
-                if (Properties.Artist != ArtistTextBox.Text) return;
-                if (Properties.AlbumArtist != AlbumArtistTextBox.Text) return;
-                if (Properties.Publisher != PublisherTextBox.Text) return;
-                if (int.TryParse(PlayCountTextBox.Text, out int PlayCount) && CurrentMusic.PlayCount != PlayCount) return;
-                if (TrackNumberTextBox.Text == "" && Properties.TrackNumber != 0) return;
-                if (uint.TryParse(TrackNumberTextBox.Text, out uint TrackNumber) && Properties.TrackNumber != TrackNumber) return;
-                if (YearTextBox.Text == "" && Properties.Year != 0) return;
-                if (uint.TryParse(YearTextBox.Text, out uint Year) && Properties.Year != Year) return;
-                SetMusicInfo(next);
+                // if modified but not saved
+                if (!IsPropertiesModified)
+                    SetMusicInfo(next);
             });
+        }
+
+        private bool IsPropertiesModified
+        {
+            get
+            {
+                // Using multiple returns for easier debugging 
+                if (Properties.Title != TitleTextBox.Text) return true;
+                if (Properties.Subtitle != SubtitleTextBox.Text) return true;
+                if (Properties.Artist != ArtistTextBox.Text) return true;
+                if (Properties.AlbumArtist != AlbumArtistTextBox.Text) return true;
+                if (Properties.Publisher != PublisherTextBox.Text) return true;
+                if (int.TryParse(PlayCountTextBox.Text, out int PlayCount) && CurrentMusic.PlayCount != PlayCount) return true;
+                if (TrackNumberTextBox.Text == "" && Properties.TrackNumber != 0) return true;
+                if (uint.TryParse(TrackNumberTextBox.Text, out uint TrackNumber) && Properties.TrackNumber != TrackNumber) return true;
+                if (YearTextBox.Text == "" && Properties.Year != 0) return true;
+                if (uint.TryParse(YearTextBox.Text, out uint Year) && Properties.Year != Year) return true;
+                return false;
+            }
         }
     }
 }

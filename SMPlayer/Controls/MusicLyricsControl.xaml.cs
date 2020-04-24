@@ -52,17 +52,20 @@ namespace SMPlayer.Controls
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
             {
-                SaveProgress.Visibility = Visibility.Visible;
-                LyricsTextBox.IsEnabled = false;
-                var music = await CurrentMusic.GetStorageFileAsync();
-                using (var file = TagLib.File.Create(new MusicFileAbstraction(music), TagLib.ReadStyle.Average))
+                if (Lyrics != LyricsTextBox.Text)
                 {
-                    Lyrics = LyricsTextBox.Text;
-                    file.Tag.Lyrics = Lyrics;
-                    file.Save();
+                    SaveProgress.Visibility = Visibility.Visible;
+                    LyricsTextBox.IsEnabled = false;
+                    var music = await CurrentMusic.GetStorageFileAsync();
+                    using (var file = TagLib.File.Create(new MusicFileAbstraction(music), TagLib.ReadStyle.Average))
+                    {
+                        Lyrics = LyricsTextBox.Text;
+                        file.Tag.Lyrics = Lyrics;
+                        file.Save();
+                    }
+                    SaveProgress.Visibility = Visibility.Collapsed;
+                    LyricsTextBox.IsEnabled = true;
                 }
-                SaveProgress.Visibility = Visibility.Collapsed;
-                LyricsTextBox.IsEnabled = true;
                 Helper.ShowNotification("LyricsUpdated");
             });
         }
