@@ -71,6 +71,7 @@ namespace SMPlayer.Dialogs
     {
         public RenameDialog Dialog;
         public object Data;
+        public Action ConfirmAction;
         public bool Confirm(string oldName, string newName)
         {
             NamingError error = Settings.settings.CheckPlaylistNamingError(newName);
@@ -80,6 +81,7 @@ namespace SMPlayer.Dialogs
                 return false;
             }
             Settings.settings.RenamePlaylist(oldName, newName, Dialog.Option, Data);
+            ConfirmAction?.Invoke();
             return true;
         }
     }

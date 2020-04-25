@@ -14,6 +14,7 @@ namespace SMPlayer.Models
         public static Settings settings;
         private const string FILENAME = "SMPlayerSettings.json";
         public static List<LikeMusicListener> LikeMusicListeners = new List<LikeMusicListener>();
+        public static List<Action<Playlist>> PlaylistAddedListeners = new List<Action<Playlist>>();
 
         public string RootPath { get; set; } = "";
         public FolderTree Tree { get; set; } = new FolderTree();
@@ -184,6 +185,8 @@ namespace SMPlayer.Models
                     await playlist.SetDisplayItemAsync();
                     Playlists.Add(playlist);
                     PlaylistsPage.Playlists.Add(playlist);
+                    foreach (var listener in PlaylistAddedListeners)
+                        listener.Invoke(playlist);
                     break;
                 case RenameOption.Rename:
                     if (oldName == newName) break;

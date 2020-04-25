@@ -32,6 +32,7 @@ namespace SMPlayer
             SetFooterText();
             Playlists.CollectionChanged += (sender, e) => SetFooterText();
             SelectPlaylist(Settings.settings.LastPlaylist);
+            Settings.PlaylistAddedListeners.Add(playlist => PlaylistTabView.SelectedItem = playlist);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -114,6 +115,7 @@ namespace SMPlayer
             int index = Settings.settings.Playlists.FindLastIndex(p => p.Name.StartsWith(prev)) + 1;
             Playlists.Insert(index, duplicate);
             Settings.settings.Playlists.Insert(index, duplicate);
+            PlaylistTabView.SelectedIndex = index;
         }
 
         private async void NewPlaylistButton_Click(object sender, RoutedEventArgs e)

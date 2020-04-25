@@ -160,6 +160,8 @@ namespace SMPlayer
             music.IsPlaying = music.Equals(CurrentMusic);
             music.Index = index;
             CurrentPlaylist.Insert(index, music);
+            for (int i = index + 1; i < CurrentPlaylist.Count; i++)
+                CurrentPlaylist[i].Index = i;
             PlaybackList.Items.Insert(index, music.GetMediaPlaybackItem());
         }
         public static void AddMusic(Music source)

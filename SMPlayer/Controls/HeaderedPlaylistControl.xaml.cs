@@ -152,8 +152,14 @@ namespace SMPlayer
         }
         private void ExecutePlaylistDeletion(Playlist playlist)
         {
-            PlaylistsPage.Playlists.Remove(playlist);
-            Settings.settings.Playlists.Remove(playlist);
+            int index = Settings.settings.Playlists.IndexOf(playlist);
+            PlaylistsPage.Playlists.RemoveAt(index);
+            Settings.settings.Playlists.RemoveAt(index);
+            MainPage.Instance.ShowUndoNotification(Helper.LocalizeMessage("PlaylistRemoved", playlist.Name), () =>
+            {
+                PlaylistsPage.Playlists.Insert(index, playlist);
+                Settings.settings.Playlists.Insert(index, playlist);
+            });
         }
 
         public void MusicRemoved(int index, Music music, ICollection<Music> newCollection)

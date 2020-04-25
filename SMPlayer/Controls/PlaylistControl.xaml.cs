@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Media;
 
 namespace SMPlayer
 {
-    public sealed partial class PlaylistControl : UserControl, SwitchMusicListener, RemoveMusicListener, MenuFlyoutItemClickListener
+    public sealed partial class PlaylistControl : UserControl, SwitchMusicListener, MenuFlyoutItemClickListener
     {
         public bool IsNowPlaying { get; set; }
         public ObservableCollection<Music> CurrentPlaylist
@@ -81,7 +81,6 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             MediaHelper.SwitchMusicListeners.Add(this);
-            MediaHelper.RemoveMusicListeners.Add(this);
             Controls.MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
             {
                 CurrentPlaylist.FirstOrDefault(m => m == before)?.CopyFrom(after);
@@ -134,20 +133,6 @@ namespace SMPlayer
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, current, next));
-        }
-
-        public async void MusicRemoved(int index, Music music, ICollection<Music> newCollection)
-        {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            {
-                if (AlternatingRowColor)
-                {
-                    for (int i = index; i < CurrentPlaylist.Count; i++)
-                        if (SongsListView.ContainerFromIndex(i) is ListViewItem container)
-                            container.Background = GetRowBackground(i);
-                    Helper.ShowCancelableNotification(Helper.LocalizeMessage("MusicRemoved", music.Name), () => CancelMusicRemoval(index, music));
-                }
-            });
         }
 
         public void CancelMusicRemoval(int index, Music music)
@@ -229,6 +214,7 @@ namespace SMPlayer
                             container.Background = GetRowBackground(i);
                 }
                 foreach (var listener in RemoveListeners) listener.MusicRemoved(index, music, CurrentPlaylist);
+                Helper.ShowCancelableNotification(Helper.LocalizeMessage("MusicRemoved", music.Name), () => CancelMusicRemoval(index, music));
             }
         }
 
