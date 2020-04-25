@@ -343,17 +343,7 @@ namespace SMPlayer
             MediaHelper.RemoveMusicListeners.Add(this);
             MediaHelper.InitFinishedListeners.Add(() =>
             {
-                SetMusic(MediaHelper.CurrentMusic);
-                if (ApplicationView.GetForCurrentView().IsFullScreenMode) SetExitFullScreen();
-                else SetFullScreen();
-
-                double volume = Settings.settings.Volume * 100;
-                VolumeButton.Content = Helper.GetVolumeIcon(volume);
-                SetMuted(Settings.settings.IsMuted);
-                VolumeSlider.Value = volume;
-                SetPlayMode(Settings.settings.Mode);
-
-                MainMediaSlider.Value = MediaHelper.Position;
+                AfterLoaded();
                 MainSliderProgressBar.Visibility = Visibility.Collapsed;
                 MainMediaSlider.Visibility = Visibility.Visible;
             });
@@ -397,9 +387,30 @@ namespace SMPlayer
             KeyboardAccelerators.Add(right);
             KeyboardAcceleratorPlacementMode = KeyboardAcceleratorPlacementMode.Hidden;
         }
+
+        private void AfterLoaded()
+        {
+            UpdateMusic(MediaHelper.CurrentMusic);
+            MediaSlider.Value = MediaHelper.Position;
+
+            if (MediaHelper.IsPlaying) PlayMusic();
+            else PauseMusic();
+
+            double volume = Settings.settings.Volume * 100;
+            VolumeButton.Content = Helper.GetVolumeIcon(volume);
+            SetMuted(Settings.settings.IsMuted);
+            VolumeSlider.Value = volume;
+
+            SetPlayMode(Settings.settings.Mode);
+
+            if (ApplicationView.GetForCurrentView().IsFullScreenMode) SetExitFullScreen();
+            else SetFullScreen();
+        }
+
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            
+            if (Mode != MediaControlMode.Main)
+                AfterLoaded();
         }
 
         public async void UpdateMusic(Music music)
@@ -516,9 +527,9 @@ namespace SMPlayer
         {
             RepeatButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            ShuffleButton.SetToolTip(MoreShuffleButton.Label = Helper.Localize($"Shuffle: " + (isChecked ? "Enabled" : "Disabled")));
-            RepeatButton.SetToolTip(MoreRepeatButton.Label = Helper.Localize("Repeat: Disabled"));
-            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = Helper.Localize("Repeat One: Disabled"));
+            ShuffleButton.SetToolTip(MoreShuffleButton.Label = Helper.LocalizeMessage($"Shuffle: " + (isChecked ? "Enabled" : "Disabled")));
+            RepeatButton.SetToolTip(MoreRepeatButton.Label = Helper.LocalizeMessage("Repeat: Disabled"));
+            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = Helper.LocalizeMessage("Repeat One: Disabled"));
             MoreShuffleButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
             MoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
             MoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
@@ -538,9 +549,9 @@ namespace SMPlayer
         {
             ShuffleButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            ShuffleButton.SetToolTip(MoreShuffleButton.Label = Helper.Localize("Shuffle: Disabled"));
-            RepeatButton.SetToolTip(MoreRepeatButton.Label = Helper.Localize("Repeat: " + (isChecked ? "Enabled" : "Disabled")));
-            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = Helper.Localize("Repeat One: Disabled"));
+            ShuffleButton.SetToolTip(MoreShuffleButton.Label = Helper.LocalizeMessage("Shuffle: Disabled"));
+            RepeatButton.SetToolTip(MoreRepeatButton.Label = Helper.LocalizeMessage("Repeat: " + (isChecked ? "Enabled" : "Disabled")));
+            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = Helper.LocalizeMessage("Repeat One: Disabled"));
             MoreShuffleButton.IconBackground = ColorHelper.TransparentBrush;
             MoreRepeatButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
             MoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
@@ -685,7 +696,7 @@ namespace SMPlayer
             int newValue = (int)e.NewValue, oldValue = (int)e.OldValue, diff = newValue - oldValue;
             SliderClicked = diff != 1 && diff != 0;
             //Debug.WriteLine("ValueChanged To " + MusicDurationConverter.ToTime(newValue));
-            LeftTimeTextBlock.Text = MusicDurationConverter.ToTime(newValue);
+            if (LeftTimeTextBlock != null) LeftTimeTextBlock.Text = MusicDurationConverter.ToTime(newValue);
         }
 
         private void MediaSlider_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)

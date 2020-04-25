@@ -852,8 +852,13 @@
                     <Slider
                         x:Name="MiniMediaSlider"
                         Margin="-10,0,-10,-15"
+                        ManipulationCompleted="MediaSlider_ManipulationCompleted"
+                        ManipulationMode="All"
+                        ManipulationStarted="MediaSlider_ManipulationStarted"
+                        ManipulationStarting="MediaSlider_ManipulationStarting"
                         Minimum="0"
-                        Style="{StaticResource ThumblessMediaProgressSliderStyle}" />
+                        Style="{StaticResource ThumblessMediaProgressSliderStyle}"
+                        ValueChanged="MediaSlider_ValueChanged" />
                 </StackPanel>
             </Grid>
 
