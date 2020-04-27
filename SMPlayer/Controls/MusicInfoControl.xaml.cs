@@ -119,6 +119,12 @@ namespace SMPlayer.Controls
                 Helper.ShowNotification("PropertiesUpdated");
             });
         }
+
+        private void ShowInExplorerButton_Click(object sender, RoutedEventArgs e)
+        {
+            MenuFlyoutHelper.ShowInExplorer(CurrentMusic.Path, StorageItemTypes.File);
+        }
+
         public async void SetBasicProperties(StorageFile file)
         {
             var basicProperties = await file.GetBasicPropertiesAsync();

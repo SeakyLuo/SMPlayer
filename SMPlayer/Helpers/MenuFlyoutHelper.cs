@@ -130,29 +130,33 @@ namespace SMPlayer
                 Icon = new FontIcon() { Glyph = "\uE838" },
                 Text = Helper.Localize("Show In Explorer")
             };
-            item.Click += async (s, args) =>
+            item.Click += (s, args) =>
             {
-                var options = new Windows.System.FolderLauncherOptions();
-                StorageFolder folder;
-                switch (type)
-                {
-                    case StorageItemTypes.File:
-                        var file = await StorageFile.GetFileFromPathAsync(path);
-                        options.ItemsToSelect.Add(file);
-                        folder = await file.GetParentAsync();
-                        break;
-                    case StorageItemTypes.Folder:
-                        folder = await StorageFolder.GetFolderFromPathAsync(path);
-                        options.ItemsToSelect.Add(folder);
-                        break;
-                    case StorageItemTypes.None:
-                    default:
-                        return;
-                }
-                await Windows.System.Launcher.LaunchFolderAsync(folder, options);
+                ShowInExplorer(path, type);
             };
             item.SetToolTip("Show In Explorer");
             return item;
+        }
+        public static async void ShowInExplorer(string path, StorageItemTypes type)
+        {
+            var options = new Windows.System.FolderLauncherOptions();
+            StorageFolder folder;
+            switch (type)
+            {
+                case StorageItemTypes.File:
+                    var file = await StorageFile.GetFileFromPathAsync(path);
+                    options.ItemsToSelect.Add(file);
+                    folder = await file.GetParentAsync();
+                    break;
+                case StorageItemTypes.Folder:
+                    folder = await StorageFolder.GetFolderFromPathAsync(path);
+                    options.ItemsToSelect.Add(folder);
+                    break;
+                case StorageItemTypes.None:
+                default:
+                    return;
+            }
+            await Windows.System.Launcher.LaunchFolderAsync(folder, options);
         }
         public static MenuFlyoutItem GetRefreshDirectoryMenuFlyout(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
         {

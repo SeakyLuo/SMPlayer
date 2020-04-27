@@ -678,6 +678,9 @@
   <data name="ShowAllPlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Show All Playlists</value>
   </data>
+  <data name="ShowInExplorerButton.Content" xml:space="preserve">
+    <value>Show In Explorer</value>
+  </data>
   <data name="Shuffle" xml:space="preserve">
     <value>Shuffle</value>
   </data>

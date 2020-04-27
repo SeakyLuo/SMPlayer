@@ -64,7 +64,7 @@
                     x:Uid="SaveMusicPropertiesButton"
                     Click="SaveMusicPropertiesButton_Click"
                     Content="&#xE74E;"
-                    Style="{StaticResource MusicScrollHeaderButtonStyle}" >
+                    Style="{StaticResource MusicScrollHeaderButtonStyle}">
                     <Button.KeyboardAccelerators>
                         <KeyboardAccelerator Key="S" Modifiers="Control" />
                     </Button.KeyboardAccelerators>
@@ -196,8 +196,7 @@
                             Margin="10,0,0,0"
                             BorderThickness="0"
                             Click="ClearPlayCountButton_Click"
-                            Content="Clear"
-                            ToolTipService.ToolTip="Clear Play Count" />
+                            Content="Clear" />
                     </Grid>
                     <TextBox x:Name="PublisherTextBox" Style="{StaticResource MusicPropertyTextBoxStyle}" />
                     <TextBox
@@ -216,7 +215,25 @@
                     <TextBlock x:Name="FileSizeTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
                     <TextBlock x:Name="FileTypeTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
                     <TextBlock x:Name="GenreTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
-                    <TextBlock x:Name="PathTextBox" Style="{StaticResource MusicPropertyTextBlockStyle}" />
+                    <Grid Margin="20,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox
+                            x:Name="PathTextBox"
+                            Margin="0"
+                            TextWrapping="Wrap"
+                            Style="{StaticResource MusicPropertyTextBoxStyle}" />
+                        <Button
+                            x:Uid="ShowInExplorerButton"
+                            Grid.Column="1"
+                            Height="30"
+                            Margin="10,0,0,0"
+                            BorderThickness="0"
+                            Click="ShowInExplorerButton_Click"
+                            Content="Show In Explorer" />
+                    </Grid>
                 </StackPanel>
             </Grid>
         </ScrollViewer>

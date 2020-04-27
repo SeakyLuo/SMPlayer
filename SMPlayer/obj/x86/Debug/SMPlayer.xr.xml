@@ -627,13 +627,13 @@
     <RootType FullName="Windows.UI.Xaml.Controls.TextBox">
       <RootProperty Name="Style" />
       <RootProperty Name="Margin" />
+      <RootProperty Name="TextWrapping" />
       <RootProperty Name="IsReadOnly" />
       <RootProperty Name="Height" />
       <RootProperty Name="AcceptsReturn" />
       <RootProperty Name="Background" />
       <RootProperty Name="BorderThickness" />
       <RootProperty Name="IsSpellCheckEnabled" />
-      <RootProperty Name="TextWrapping" />
       <RootProperty Name="SelectionHighlightColor" />
       <RootProperty Name="Width" />
       <RootProperty Name="Description" />
