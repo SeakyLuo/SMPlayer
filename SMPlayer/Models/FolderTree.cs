@@ -58,6 +58,13 @@ namespace SMPlayer.Models
         {
             return await CheckNewFile(await GetStorageFolder(), data);
         }
+        private void AddToMusicLibrary()
+        {
+            foreach (var music in Files)
+                MusicLibraryPage.AddMusic(music);
+            foreach (var tree in Trees)
+                tree.AddToMusicLibrary();
+        }
         private async Task<bool> CheckNewFile(StorageFolder folder, TreeUpdateData data = null)
         {
             LoadingStatus = ExecutionStatus.Running;
@@ -75,6 +82,7 @@ namespace SMPlayer.Models
                     {
                         Trees.Add(tree);
                         data.More += tree.FileCount;
+                        tree.AddToMusicLibrary();
                     }
                 }
                 pathSet.Add(sub.Name);

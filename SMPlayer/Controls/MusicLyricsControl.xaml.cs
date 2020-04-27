@@ -76,12 +76,16 @@ namespace SMPlayer.Controls
             string notification = "";
             try
             {
-                string musicName = CurrentMusic.Name.RemoveBraces('(', ')').RemoveBraces('（', '）').
-                                                     RemoveBraces('《', '》').RemoveBraces('<', '>').
-                                                     RemoveBraces('[', ']').RemoveBraces('【', '】');
-                string lyrics = await SearchLyrics(musicName + " " + CurrentMusic.Artist);
-                if (lyrics == "") lyrics = await SearchLyrics(musicName);
-                if (lyrics == "") throw new Exception("LyricsNotFound");
+                string lyrics = await SearchLyrics(CurrentMusic.Name + " " + CurrentMusic.Artist);
+                if (lyrics == "")
+                {
+                    string musicName = CurrentMusic.Name.RemoveBraces('(', ')').RemoveBraces('（', '）').
+                                                         RemoveBraces('《', '》').RemoveBraces('<', '>').
+                                                         RemoveBraces('[', ']').RemoveBraces('【', '】');
+                    lyrics = await SearchLyrics(musicName + " " + CurrentMusic.Artist);
+                    if (lyrics == "") lyrics = await SearchLyrics(musicName);
+                    if (lyrics == "") throw new Exception("LyricsNotFound");
+                }
                 LyricsTextBox.Text = lyrics;
                 notification = Helper.LocalizeMessage("SearchLyricsSuccessful");
             }

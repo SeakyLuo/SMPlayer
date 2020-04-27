@@ -612,14 +612,7 @@ namespace SMPlayer
         public void SetMuted(bool isMuted)
         {
             string tooltip = Helper.Localize(isMuted ? "Undo Mute" : "Mute");
-            if (isMuted)
-            {
-                VolumeButton.Content = "\uE74F";
-            }
-            else
-            {
-                VolumeButton.Content = Helper.GetVolumeIcon(VolumeSlider.Value);
-            }
+            VolumeButton.Content = isMuted ? "\uE74F" : Helper.GetVolumeIcon(VolumeSlider.Value);
             MediaHelper.Player.IsMuted = isMuted;
             VolumeButton.SetToolTip(tooltip, false);
             MuteButton.SetToolTip(tooltip, false);

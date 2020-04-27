@@ -81,10 +81,13 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             MediaHelper.SwitchMusicListeners.Add(this);
-            Controls.MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
-            {
-                CurrentPlaylist.FirstOrDefault(m => m == before)?.CopyFrom(after);
-            });
+            MediaControl.AddMusicModifiedListener(CopyMusic);
+            Controls.MusicInfoControl.MusicModifiedListeners.Add(CopyMusic);
+        }
+
+        private void CopyMusic(Music before, Music after)
+        {
+            CurrentPlaylist.FirstOrDefault(m => m == before)?.CopyFrom(after);
         }
 
         private void PlaylistController_Loaded(object sender, RoutedEventArgs e)

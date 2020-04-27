@@ -1033,11 +1033,9 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Slider">
       <RootProperty Name="Margin" />
-      <RootProperty Name="IsThumbToolTipEnabled" />
       <RootProperty Name="ManipulationMode" />
       <RootProperty Name="Minimum" />
       <RootProperty Name="Style" />
-      <RootProperty Name="ThumbToolTipValueConverter" />
       <RootProperty Name="Width" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="VerticalAlignment" />
@@ -1046,6 +1044,8 @@
       <RootProperty Name="Value" />
       <RootProperty Name="Background" />
       <RootProperty Name="IsEnabled" />
+      <RootProperty Name="IsThumbToolTipEnabled" />
+      <RootProperty Name="ThumbToolTipValueConverter" />
       <RootProperty Name="Visibility" />
       <RootEvent Name="ManipulationCompleted" />
       <RootEvent Name="ManipulationStarted" />
