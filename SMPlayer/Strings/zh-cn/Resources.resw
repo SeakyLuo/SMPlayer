@@ -679,6 +679,9 @@
     <value>显示所有播放列表</value>
   </data>
   <data name="ShowInExplorerButton.Content" xml:space="preserve">
+    <value>查看</value>
+  </data>
+  <data name="ShowInExplorerButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>在本地中显示</value>
   </data>
   <data name="Shuffle" xml:space="preserve">
