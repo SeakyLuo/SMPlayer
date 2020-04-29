@@ -212,6 +212,13 @@ namespace SMPlayer
             }
         }
 
+        private void HeaderSearchBar_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        {
+            string text = args.SelectedItem.ToString();
+            SetSearchBarText(text);
+            Search(text);
+        }
+
         public void NavigateToPage(Type page, object parameter = null, NavigationTransitionInfo infoOverride = null)
         {
             if (NaviFrame.CurrentSourcePageType == page) return;

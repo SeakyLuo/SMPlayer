@@ -65,6 +65,7 @@ namespace SMPlayer
             try
             {
                 PlayedMusicView.Setup(Settings.PathToCollection(list));
+                ClearPlayHistoryAppButton.IsEnabled = list.Count != 0;
             }
             catch (InvalidOperationException)
             {
@@ -73,13 +74,19 @@ namespace SMPlayer
             }
             PlayedModifed = false;
         }
-
+        private void ResetColor(int start)
+        {
+            for (int i = start; i < recentSearches.Count; i++)
+                if (SearchHistoryListView.ContainerFromIndex(i) is ListViewItem container)
+                    container.Background = PlaylistControl.GetRowBackground(i);
+        }
         public void SetupSearched(ICollection<string> list)
         {
             if (!SearchedModified) return;
             try
             {
-                
+                ResetColor(0);
+                ClearSearchHistoryAppButton.IsEnabled = list.Count != 0;
             }
             catch (InvalidOperationException)
             {
@@ -91,7 +98,11 @@ namespace SMPlayer
 
         private void ClearPlayHistoryAppButton_Click(object sender, RoutedEventArgs e)
         {
-            ShowYesNoDialog("ClearPlayHistory", Settings.settings.RecentPlayed.Clear);
+            ShowYesNoDialog("ClearPlayHistory", () =>
+            {
+                Settings.settings.RecentPlayed.Clear();
+                SetupPlayed(Settings.settings.RecentPlayed);
+            });
         }
 
         private void SearchHistoryListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -108,7 +119,7 @@ namespace SMPlayer
 
         private async void ItemRemoveButton_Click(object sender, RoutedEventArgs e)
         {
-            string item = e.OriginalSource.ToString();
+            string item = (sender as Button).DataContext.ToString();
             if (dialog == null) dialog = new Dialogs.RemoveDialog();
             if (dialog.IsChecked)
             {
@@ -126,14 +137,21 @@ namespace SMPlayer
         {
             int index = recentSearches.IndexOf(item);
             recentSearches.RemoveAt(index);
-            for (int i = index; i < recentSearches.Count; i++)
-                if (SearchHistoryListView.ContainerFromIndex(i) is ListViewItem container)
-                    container.Background = PlaylistControl.GetRowBackground(i);
+            ResetColor(index);
+        }
+
+        private void SearchHistoryListView_Loaded(object sender, RoutedEventArgs e)
+        {
+            SetupSearched(Settings.settings.RecentSearches);
         }
 
         private void ClearSearchHistoryAppButton_Click(object sender, RoutedEventArgs e)
         {
-            ShowYesNoDialog("ClearSearchHistory", Settings.settings.RecentSearches.Clear);
+            ShowYesNoDialog("ClearSearchHistory", () =>
+            {
+                Settings.settings.RecentSearches.Clear();
+                SetupSearched(Settings.settings.RecentSearches);
+            });
         }
 
         private async void ShowYesNoDialog(string message, Action onYes)

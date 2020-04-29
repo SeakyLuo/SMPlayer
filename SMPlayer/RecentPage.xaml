@@ -43,6 +43,7 @@
                         IsDynamicOverflowEnabled="False"
                         OverflowButtonVisibility="Collapsed">
                         <AppBarButton
+                            x:Name="ClearPlayHistoryAppButton"
                             x:Uid="ClearHistoryAppButton"
                             Click="ClearPlayHistoryAppButton_Click"
                             Icon="Clear"
@@ -66,6 +67,7 @@
                         IsDynamicOverflowEnabled="False"
                         OverflowButtonVisibility="Collapsed">
                         <AppBarButton
+                            x:Name="ClearSearchHistoryAppButton"
                             x:Uid="ClearHistoryAppButton"
                             Click="ClearSearchHistoryAppButton_Click"
                             Icon="Clear"
@@ -74,15 +76,17 @@
                     <ListView
                         x:Name="SearchHistoryListView"
                         Grid.Row="1"
+                        Margin="0,5,0,0"
                         ContainerContentChanging="SearchHistoryListView_ContainerContentChanging"
                         IsItemClickEnabled="True"
                         ItemClick="SearchHistoryListView_ItemClick"
                         ItemContainerStyle="{StaticResource StretchListViewItemStyle}"
                         ItemsSource="{x:Bind recentSearches, Mode=OneWay}"
+                        Loaded="SearchHistoryListView_Loaded"
                         SelectionMode="None">
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="x:String">
-                                <Grid x:Name="ListViewItemContainer">
+                                <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
@@ -90,11 +94,11 @@
                                     <TextBlock VerticalAlignment="Center" Text="{x:Bind}" />
                                     <Button
                                         Grid.Column="1"
-                                        Background="Transparent"
                                         VerticalContentAlignment="Stretch"
-                                        Height="{Binding ElementName=ListViewItemContainer, Path=Height}"
-                                        Click="ItemRemoveButton_Click"
-                                        BorderThickness="0">
+                                        VerticalAlignment="Stretch"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        Click="ItemRemoveButton_Click">
                                         <SymbolIcon Symbol="Remove" />
                                     </Button>
                                 </Grid>

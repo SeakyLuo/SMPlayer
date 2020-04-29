@@ -57,6 +57,7 @@
                         Margin="10,0"
                         VerticalAlignment="Center"
                         ItemsSource="{x:Bind recentSearches, Mode=OneWay}"
+                        SuggestionChosen="HeaderSearchBar_SuggestionChosen"
                         QueryIcon="Find"
                         QuerySubmitted="SearchBar_QuerySubmitted"
                         Style="{StaticResource BorderlessAutoSuggestBoxStyle}"
