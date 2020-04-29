@@ -191,6 +191,15 @@ namespace SMPlayer
             Play();
         }
 
+        public static void SetMusicAndPlay(ICollection<Music> playlist)
+        {
+            if (playlist.SameAs(CurrentPlaylist))
+                PlaybackList.MoveTo(0);
+            else
+                SetPlaylist(ShuffleEnabled ? ShufflePlaylist(playlist) : playlist);
+            Play();
+        }
+
         public static void ShuffleAndPlay(ICollection<Music> playlist)
         {
             SetPlaylist(ShufflePlaylist(playlist));

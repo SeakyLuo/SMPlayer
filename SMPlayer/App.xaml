@@ -46,6 +46,9 @@
             <x:Double x:Key="CollapsedNavigationViewWindowWidth">1200</x:Double>
             <x:Double x:Key="PlaylistFooterHeight">30</x:Double>
             <x:Double x:Key="NavigationViewButtonWidth">40</x:Double>
+            <Style x:Key="StretchListViewItemStyle" TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            </Style>
             <Style x:Key="TitleBarHeaderStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="40" />
                 <Setter Property="FontWeight" Value="Bold" />

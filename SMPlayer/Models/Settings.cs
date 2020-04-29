@@ -40,6 +40,8 @@ namespace SMPlayer.Models
         public bool SaveMusicProgress { get; set; } = false;
         public double MusicProgress { get; set; } = 0;
         public SortBy MusicLibraryCriterion { get; set; } = SortBy.Title;
+
+        public ObservableCollection<string> RecentSearches = new ObservableCollection<string>();
         [Newtonsoft.Json.JsonIgnore]
         private List<Music> justRemoved = new List<Music>();
 
@@ -161,6 +163,12 @@ namespace SMPlayer.Models
             if (KeepLimitedRecentPlayedItems && RecentPlayed.Count > RecentPlayedLimit)
                 RecentPlayed.RemoveAt(RecentPlayedLimit);
         }
+
+        public void Search(string keyword)
+        {
+            RecentSearches.AddOrMoveToTheFirst(keyword);
+        }
+
         public const int PlaylistNameMaxLength = 50;
         public NamingError CheckPlaylistNamingError(string newName)
         {

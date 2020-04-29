@@ -1,6 +1,7 @@
 ﻿using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -15,13 +16,16 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class RecentPage : Page
     {
-        private bool AddedModified = true, PlayedModifed = true;
+        private bool AddedModified = true, PlayedModifed = true, SearchedModified = true;
+        private Dialogs.RemoveDialog dialog;
+        private ObservableCollection<string> recentSearches { get => Settings.settings.RecentSearches; }
         public RecentPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             Settings.settings.RecentAdded.CollectionChanged += (sender, args) => AddedModified = true;
             Settings.settings.RecentPlayed.CollectionChanged += (sender, args) => PlayedModifed = true;
+            Settings.settings.RecentSearches.CollectionChanged += (sender, args) => SearchedModified = true;
             if (Settings.settings.RecentAdded.Count == 0 && Settings.settings.RecentPlayed.Count > 0)
                 RecentPivot.SelectedItem = RecentPlayedItem;
             else
@@ -33,17 +37,19 @@ namespace SMPlayer
             LoadingProgressBar.Visibility = Visibility.Visible;
             if (RecentPivot.SelectedItem == RecentAddedItem)
                 SetupAdded(Settings.settings.RecentAdded);
-            else
+            else if (RecentPivot.SelectedItem == RecentPlayedItem)
                 SetupPlayed(Settings.settings.RecentPlayed);
+            else if (RecentPivot.SelectedItem == RecentSearchesItem)
+                SetupSearched(Settings.settings.RecentSearches);
             LoadingProgressBar.Visibility = Visibility.Collapsed;
         }
 
-        public void SetupAdded(ICollection<string> paths)
+        public void SetupAdded(ICollection<string> list)
         {
             if (!AddedModified) return;
             try
             {
-                AddedMusicView.Setup(Settings.PathToCollection(paths));
+                AddedMusicView.Setup(Settings.PathToCollection(list));
             }
             catch (InvalidOperationException)
             {
@@ -53,12 +59,12 @@ namespace SMPlayer
             AddedModified = false;
         }
 
-        public void SetupPlayed(ICollection<string> paths)
+        public void SetupPlayed(ICollection<string> list)
         {
             if (!PlayedModifed) return;
             try
             {
-                PlayedMusicView.Setup(Settings.PathToCollection(paths));
+                PlayedMusicView.Setup(Settings.PathToCollection(list));
             }
             catch (InvalidOperationException)
             {
@@ -68,10 +74,72 @@ namespace SMPlayer
             PlayedModifed = false;
         }
 
-        private async void ClearHistoryAppButton_Click(object sender, RoutedEventArgs e)
+        public void SetupSearched(ICollection<string> list)
         {
-            var messageDialog = new MessageDialog(Helper.LocalizeMessage("ClearHistory"));
-            messageDialog.Commands.Add(new UICommand(Helper.LocalizeMessage("Yes"), new UICommandInvokedHandler(command => Settings.settings.RecentPlayed.Clear())));
+            if (!SearchedModified) return;
+            try
+            {
+                
+            }
+            catch (InvalidOperationException)
+            {
+                // Loading while Set New Folder will cause this Exception
+                System.Diagnostics.Debug.WriteLine("InvalidOperationException On Recent Searches");
+            }
+            SearchedModified = false;
+        }
+
+        private void ClearPlayHistoryAppButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShowYesNoDialog("ClearPlayHistory", Settings.settings.RecentPlayed.Clear);
+        }
+
+        private void SearchHistoryListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            string keyword = e.ClickedItem.ToString();
+            MainPage.Instance.SetSearchBarText(keyword);
+            MainPage.Instance.Search(keyword);
+        }
+
+        private void SearchHistoryListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        {
+            args.ItemContainer.Background = PlaylistControl.GetRowBackground(args.ItemIndex);
+        }
+
+        private async void ItemRemoveButton_Click(object sender, RoutedEventArgs e)
+        {
+            string item = e.OriginalSource.ToString();
+            if (dialog == null) dialog = new Dialogs.RemoveDialog();
+            if (dialog.IsChecked)
+            {
+                RemoveSearchHistory(item);
+            }
+            else
+            {
+                dialog.Confirm = () => RemoveSearchHistory(item);
+                dialog.Message = Helper.LocalizeMessage("RemoveItem", item);
+                await dialog.ShowAsync();
+            }
+        }
+
+        private void RemoveSearchHistory(string item)
+        {
+            int index = recentSearches.IndexOf(item);
+            recentSearches.RemoveAt(index);
+            for (int i = index; i < recentSearches.Count; i++)
+                if (SearchHistoryListView.ContainerFromIndex(i) is ListViewItem container)
+                    container.Background = PlaylistControl.GetRowBackground(i);
+        }
+
+        private void ClearSearchHistoryAppButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShowYesNoDialog("ClearSearchHistory", Settings.settings.RecentSearches.Clear);
+        }
+
+        private async void ShowYesNoDialog(string message, Action onYes)
+        {
+            var messageDialog = new MessageDialog(Helper.LocalizeMessage(message));
+            messageDialog.Commands.Add(new UICommand(Helper.LocalizeMessage("Yes"), new UICommandInvokedHandler(command => onYes.Invoke())));
             messageDialog.Commands.Add(new UICommand(Helper.LocalizeMessage("No")));
 
             // Set the command that will be invoked by default

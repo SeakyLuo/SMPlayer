@@ -126,11 +126,14 @@
   <data name="CheckNewMusicResult" xml:space="preserve">
     <value>添加了{0}首歌，移除了{1}首歌。</value>
   </data>
-  <data name="ClearHistory" xml:space="preserve">
+  <data name="ClearPlayHistory" xml:space="preserve">
     <value>你想清空播放历史吗？</value>
   </data>
   <data name="ClearPlaylist" xml:space="preserve">
     <value>你希望清空播放列表“{0}”吗？</value>
+  </data>
+  <data name="ClearSearchHistory" xml:space="preserve">
+    <value>你想清空搜索历史吗？</value>
   </data>
   <data name="Comma" xml:space="preserve">
     <value>，</value>
@@ -251,6 +254,9 @@
   </data>
   <data name="RemoveFromPlaylist" xml:space="preserve">
     <value>将《{0}》从播放列表中移除</value>
+  </data>
+  <data name="RemoveItem" xml:space="preserve">
+    <value>你想要移除“{0}”吗？</value>
   </data>
   <data name="RemoveMusic" xml:space="preserve">
     <value>你想要移除《{0}》吗？</value>

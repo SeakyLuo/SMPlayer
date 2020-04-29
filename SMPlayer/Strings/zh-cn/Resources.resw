@@ -498,8 +498,20 @@
   <data name="Play" xml:space="preserve">
     <value>播放</value>
   </data>
+  <data name="PlayAlbumItem.Text" xml:space="preserve">
+    <value>播放专辑</value>
+  </data>
+  <data name="PlayAlbumItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>播放该专辑所有歌曲</value>
+  </data>
   <data name="PlayAllButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>随机播放全部</value>
+  </data>
+  <data name="PlayArtistItem.Text" xml:space="preserve">
+    <value>播放歌手</value>
+  </data>
+  <data name="PlayArtistItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>播放该歌手所有歌曲</value>
   </data>
   <data name="PlayCountHeader.Header" xml:space="preserve">
     <value>播放次数</value>
@@ -563,6 +575,9 @@
   </data>
   <data name="RecentPlayedItem.Header" xml:space="preserve">
     <value>最近播放</value>
+  </data>
+  <data name="RecentSearchesItem.Header" xml:space="preserve">
+    <value>最近搜索</value>
   </data>
   <data name="RecentTextBlock.Text" xml:space="preserve">
     <value>最近</value>

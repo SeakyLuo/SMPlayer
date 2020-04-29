@@ -597,8 +597,6 @@
                                         x:Name="PlaylistItem"
                                         x:Uid="PlaylistMenuItem"
                                         Click="PlaylistButton_Click"
-                                        Text="Now Playing"
-                                        ToolTipService.ToolTip="Show Now Playing Playlist"
                                         Visibility="Collapsed">
                                         <MenuFlyoutItem.Icon>
                                             <FontIcon Glyph="&#xEA37;" />
@@ -609,13 +607,11 @@
                                         x:Uid="MusicInfoMenuItem"
                                         Click="MusicInfoButton_Click"
                                         Icon="MusicInfo"
-                                        Text="Show Music Info"
                                         Visibility="Collapsed" />
                                     <MenuFlyoutItem
                                         x:Name="LyricsItem"
                                         x:Uid="LyricsMenuItem"
                                         Click="LyricsButton_Click"
-                                        Text="Show Lyrics"
                                         Visibility="Collapsed">
                                         <MenuFlyoutItem.Icon>
                                             <FontIcon Glyph="&#xEC42;" />
@@ -625,14 +621,11 @@
                                         x:Name="FullScreenItem"
                                         Click="FullScreenButton_Click"
                                         Icon="Fullscreen"
-                                        Text="Full Screen"
                                         Visibility="Collapsed" />
                                     <MenuFlyoutItem
                                         x:Name="MiniModeItem"
                                         x:Uid="MiniModeMenuItem"
                                         Click="MiniModeButton_Click"
-                                        Text="Mini Mode"
-                                        ToolTipService.ToolTip="Enter Mini Mode"
                                         Visibility="Collapsed">
                                         <MenuFlyoutItem.Icon>
                                             <FontIcon Glyph="&#xE744;" />
@@ -642,16 +635,30 @@
                                         x:Name="SavePlaylistItem"
                                         x:Uid="SavePlaylistMenuItem"
                                         Click="SavePlaylistItem_Click"
-                                        Icon="Add"
-                                        Text="Save As Playlist"
-                                        ToolTipService.ToolTip="Save Now Playing Playlist As New Playlist" />
+                                        Icon="Add" />
                                     <MenuFlyoutItem
                                         x:Name="ClearNowPlayingItem"
                                         x:Uid="ClearNowPlayingMenuItem"
                                         Click="ClearNowPlayingItem_Click"
-                                        Icon="Clear"
-                                        Text="Clear Now Playing"
-                                        ToolTipService.ToolTip="Clear Now Playing" />
+                                        Icon="Clear" />
+                                    <MenuFlyoutItem
+                                        x:Name="PlayArtistItem"
+                                        x:Uid="PlayArtistItem"
+                                        Click="PlayArtistItem_Click">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xE8D4;" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutItem
+                                        x:Name="PlayAlbumItem"
+                                        x:Uid="PlayAlbumItem"
+                                        Click="PlayAlbumItem_Click"
+                                        Text="Play Album">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xE93C;" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+
                                 </MenuFlyout>
                             </Button.Flyout>
                         </Button>

@@ -73,13 +73,13 @@ namespace SMPlayer
             }
             else if (targetArtist is Playlist playlist)
             {
-                artist = Artists.FirstOrDefault((a) => a.Name == playlist.Artist);
+                artist = Artists.FirstOrDefault(a => a.Name == playlist.Artist);
                 if (artist.NotLoaded || !MusicLibraryPage.IsLibraryUnchangedAfterChecking)
                     artist.CopyFrom(playlist);
             }
             ArtistMasterDetailsView.SelectedItem = artist;
             targetArtist = null;
-            //(ArtistMasterDetailsView.ContainerFromItem(artist) as UIElement)?.StartBringIntoView();
+            (ArtistMasterDetailsView.ContainerFromItem(artist) as UIElement)?.Locate();
         }
 
         private async void Setup(ICollection<Music> songs)
@@ -183,7 +183,7 @@ namespace SMPlayer
         {
             var artistName = (string)args.SelectedItem;
             ArtistMasterDetailsView.SelectedItem = FindAndLoadArtist(artistName);
-            //(ArtistMasterDetailsView.ContainerFromItem(artist) as UIElement)?.StartBringIntoView();
+            (ArtistMasterDetailsView.ContainerFromItem(artistName) as UIElement)?.Locate();
         }
 
         private ArtistView FindAndLoadArtist(string artistName)

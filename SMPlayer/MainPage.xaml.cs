@@ -1,6 +1,7 @@
 ﻿using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -48,6 +49,7 @@ namespace SMPlayer
         }
         private static bool PageUnset = true;
         public Type CurrentPage { get => NaviFrame.CurrentSourcePageType; }
+        public ObservableCollection<string> recentSearches { get => Settings.settings.RecentSearches; }
 
         public MainPage()
         {
@@ -185,10 +187,21 @@ namespace SMPlayer
 
         private void SearchBar_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            string text = sender.Text.Trim();
-            if (text.Length > 0)
+            string keyword = sender.Text.Trim();
+            Search(keyword);
+        }
+
+        public void SetSearchBarText(string text)
+        {
+            NaviSearchBar.Text = text;
+        }
+
+        public void Search(string keyword)
+        {
+            if (keyword.Length > 0)
             {
-                NaviFrame.Navigate(typeof(SearchPage), text);
+                Settings.settings.Search(keyword);
+                NaviFrame.Navigate(typeof(SearchPage), keyword);
                 SetBackButtonVisible(true);
                 if (MainNavigationView.DisplayMode != NavigationViewDisplayMode.Expanded)
                     MainNavigationView.IsPaneOpen = false;

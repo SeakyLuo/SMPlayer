@@ -14,6 +14,12 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
+Recent search.
+
+Improved editing album cover by selecting a song.
+
+Search lyrics for all songs.
+
 Multi-Select.
 
 Export data.
@@ -24,11 +30,7 @@ ThemeColor change.
 
 Animations.
 
-Improved editing album cover by selecting a song.
-
 Save lyrics on another thread.
-
-Search lyrics for all songs.
 
 # TO FIX
 Able to drag titlebar when loading.

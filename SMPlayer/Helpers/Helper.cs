@@ -44,6 +44,11 @@ namespace SMPlayer
 
         private static string Lyrics = "";
         private static List<Music> NotFoundHistory = new List<Music>();
+
+        public static void Locate(this UIElement uIElement)
+        {
+            uIElement.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true, VerticalAlignmentRatio = 0 });
+        }
         public static string RemoveBraces(this string str, char left, char right)
         {
             int start = str.IndexOf(left), end = str.IndexOf(right);

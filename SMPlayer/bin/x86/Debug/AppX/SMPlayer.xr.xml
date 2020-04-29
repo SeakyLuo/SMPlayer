@@ -49,6 +49,7 @@
     <RootPropertyPathName Name="RequestedTheme" />
     <RootPropertyPathName Name="ShowAlbumText" />
     <RootPropertyPathName Name="KeyboardAcceleratorTextMinWidth" />
+    <RootPropertyPathName Name="Height" />
     <RootPropertyPathName Name="PlayCount" />
     <RootPropertyPathName Name="Favorite" />
     <RootPropertyPathName Name="IsPlaying" />
@@ -67,6 +68,30 @@
       <RootProperty Name="Opacity" />
     </RootType>
     <RootType FullName="System.Double" />
+    <RootType FullName="Windows.UI.Xaml.Controls.ListViewItem" />
+    <RootType FullName="Windows.UI.Xaml.Controls.Control">
+      <RootProperty Name="HorizontalContentAlignment" />
+      <RootProperty Name="Background" />
+      <RootProperty Name="FontFamily" />
+      <RootProperty Name="FontSize" />
+      <RootProperty Name="BorderThickness" />
+      <RootProperty Name="CornerRadius" />
+      <RootProperty Name="FontWeight" />
+      <RootProperty Name="Padding" />
+      <RootProperty Name="BackgroundSizing" />
+      <RootProperty Name="Foreground" />
+      <RootProperty Name="BorderBrush" />
+      <RootProperty Name="UseSystemFocusVisuals" />
+      <RootProperty Name="Template" />
+      <RootProperty Name="VerticalContentAlignment" />
+      <RootProperty Name="IsTabStop" />
+      <RootProperty Name="TabNavigation" />
+      <RootProperty Name="IsFocusEngagementEnabled" />
+      <RootMethod Name="GetIsTemplateFocusTarget" />
+      <RootMethod Name="SetIsTemplateFocusTarget" />
+      <RootMethod Name="GetIsTemplateKeyTipTarget" />
+      <RootMethod Name="SetIsTemplateKeyTipTarget" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.TextBlock">
       <RootProperty Name="FontSize" />
       <RootProperty Name="FontWeight" />
@@ -115,29 +140,6 @@
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="FontFamily" />
       <RootEvent Name="Click" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.Control">
-      <RootProperty Name="Background" />
-      <RootProperty Name="FontFamily" />
-      <RootProperty Name="FontSize" />
-      <RootProperty Name="BorderThickness" />
-      <RootProperty Name="CornerRadius" />
-      <RootProperty Name="FontWeight" />
-      <RootProperty Name="HorizontalContentAlignment" />
-      <RootProperty Name="Padding" />
-      <RootProperty Name="BackgroundSizing" />
-      <RootProperty Name="Foreground" />
-      <RootProperty Name="BorderBrush" />
-      <RootProperty Name="UseSystemFocusVisuals" />
-      <RootProperty Name="Template" />
-      <RootProperty Name="VerticalContentAlignment" />
-      <RootProperty Name="IsTabStop" />
-      <RootProperty Name="TabNavigation" />
-      <RootProperty Name="IsFocusEngagementEnabled" />
-      <RootMethod Name="GetIsTemplateFocusTarget" />
-      <RootMethod Name="SetIsTemplateFocusTarget" />
-      <RootMethod Name="GetIsTemplateKeyTipTarget" />
-      <RootMethod Name="SetIsTemplateKeyTipTarget" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.FrameworkElement">
       <RootProperty Name="Height" />
@@ -315,7 +317,6 @@
       <RootProperty Name="FallbackValue" />
     </RootType>
     <RootType FullName="SMPlayer.AlbumsPage" />
-    <RootType FullName="Windows.UI.Xaml.Controls.ListViewItem" />
     <RootType FullName="Windows.UI.Xaml.Controls.ContentControl">
       <RootProperty Name="Content" />
       <RootProperty Name="Margin" />
@@ -436,8 +437,8 @@
       <RootProperty Name="Style" />
       <RootEvent Name="ContainerContentChanging" />
       <RootEvent Name="ItemClick" />
-      <RootEvent Name="DragItemsStarting" />
       <RootEvent Name="DragItemsCompleted" />
+      <RootEvent Name="DragItemsStarting" />
       <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.ScrollHeader">
@@ -1154,9 +1155,9 @@
     </RootType>
     <RootType FullName="SMPlayer.LocalPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyoutItem">
-      <RootProperty Name="Text" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="Icon" />
+      <RootProperty Name="Text" />
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="SMPlayer.MediaControl">

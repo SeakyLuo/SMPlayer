@@ -829,6 +829,16 @@ namespace SMPlayer
                 MediaHelper.Clear();
             }
         }
+
+        private void PlayAlbumItem_Click(object sender, RoutedEventArgs e)
+        {
+            MediaHelper.SetMusicAndPlay(MusicLibraryPage.AllSongs.ToList().FindAll(m => m.Album == MediaHelper.CurrentMusic.Album));
+        }
+
+        private void PlayArtistItem_Click(object sender, RoutedEventArgs e)
+        {
+            MediaHelper.SetMusicAndPlay(MusicLibraryPage.AllSongs.ToList().FindAll(m => m.Artist == MediaHelper.CurrentMusic.Artist));
+        }
         public void Tick()
         {
             if (ShouldUpdate)

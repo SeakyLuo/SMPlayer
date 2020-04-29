@@ -11,12 +11,6 @@
     Loaded="PlaylistController_Loaded"
     mc:Ignorable="d">
 
-    <UserControl.Resources>
-        <Style x:Key="PlaylistListViewItemStyle" TargetType="ListViewItem">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        </Style>
-    </UserControl.Resources>
-
     <ListView
         x:Name="SongsListView"
         Grid.Row="1"
@@ -30,11 +24,11 @@
         CanDragItems="True"
         CanReorderItems="False"
         ContainerContentChanging="SongsListView_ContainerContentChanging"
-        DragItemsStarting="SongsListView_DragItemsStarting"
         DragItemsCompleted="SongsListView_DragItemsCompleted"
+        DragItemsStarting="SongsListView_DragItemsStarting"
         IsItemClickEnabled="True"
         ItemClick="SongsListView_ItemClick"
-        ItemContainerStyle="{StaticResource PlaylistListViewItemStyle}"
+        ItemContainerStyle="{StaticResource StretchListViewItemStyle}"
         Loaded="SongsListView_Loaded"
         Opacity="{x:Bind Opacity}"
         ReorderMode="Enabled"

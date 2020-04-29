@@ -247,7 +247,7 @@ namespace SMPlayer
         {
             if (SongsListView.ContainerFromIndex(index) is ListViewItem item)
             {
-                item.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true, VerticalAlignmentRatio = 0 });
+                item.Locate();
                 return true;
             }
             return false;
