@@ -49,7 +49,6 @@ namespace SMPlayer
         }
         private static bool PageUnset = true;
         public Type CurrentPage { get => NaviFrame.CurrentSourcePageType; }
-        public ObservableCollection<string> recentSearches { get => Settings.settings.RecentSearches; }
 
         public MainPage()
         {

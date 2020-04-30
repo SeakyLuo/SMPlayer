@@ -315,8 +315,14 @@
   <data name="Sort By Date Added" xml:space="preserve">
     <value>Sort By Date Added</value>
   </data>
+  <data name="Sort By Default" xml:space="preserve">
+    <value>Sort By Default</value>
+  </data>
   <data name="Sort By Duration" xml:space="preserve">
     <value>Sort By Duration</value>
+  </data>
+  <data name="Sort By Name" xml:space="preserve">
+    <value>Sort By Name</value>
   </data>
   <data name="Sort By Play Count" xml:space="preserve">
     <value>Sort By Play Count</value>

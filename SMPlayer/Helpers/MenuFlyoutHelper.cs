@@ -4,11 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.Storage;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace SMPlayer
 {
-    class MenuFlyoutHelper
+    public class MenuFlyoutHelper
     {
         public object Data { get; set; }
         public string DefaultPlaylistName { get; set; } = "";
@@ -349,6 +350,23 @@ namespace SMPlayer
             }
             flyout.ShowAt(sender as IconTextButton);
         }
+        public static void SetSearchSortByMenu(object sender, SortBy criterion, SortBy[] criteria, Action<SortBy> onSelected)
+        {
+            var flyout = new MenuFlyout();
+            flyout.Items.Clear();
+            foreach (var item in criteria)
+            {
+                string sortby = Helper.LocalizeMessage("Sort By " + item.ToStr());
+                var radioItem = new ToggleMenuFlyoutItem()
+                {
+                    Text = sortby,
+                    IsChecked = item == criterion
+                };
+                radioItem.Click += (send, args) => onSelected.Invoke(item);
+                flyout.Items.Add(radioItem);
+            }
+            flyout.ShowAt(sender as FrameworkElement);
+        }
         public static MenuFlyout SetPlaylistMenu(object sender, MenuFlyoutItemClickListener listener = null)
         {
             return SetMenu(helper => helper.GetPlaylistMenuFlyout(listener), sender);
@@ -383,6 +401,7 @@ namespace SMPlayer
                 DefaultPlaylistName = Settings.settings.FindNextPlaylistName(FindPlaylistName(data))
             };
             var items = GetMenu(helper).Items;
+            flyout.Items.Clear();
             foreach (var item in items)
                 flyout.Items.Add(item);
             return flyout;

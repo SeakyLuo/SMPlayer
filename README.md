@@ -32,3 +32,6 @@ Save lyrics on another thread.
 
 # TO FIX
 Able to drag titlebar when loading.
+
+# MIGHT Do
+Allow MainSearchBar to have a search history dropdown

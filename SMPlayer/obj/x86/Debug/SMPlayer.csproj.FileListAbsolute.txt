@@ -315,3 +315,9 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\.winmd_cache\$Micros
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\.winmd_cache\$Robmikh.CompositionSurfaceFactory.winmd_636421080520000000.json
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\.winmd_cache\$WatsonRegistrationUtility.winmd_636970854560000000.json
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SMPlayer.csprojAssemblyReference.cache
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Dictionaries\SearchAppBarButton.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dictionaries\SearchAppBarButton.xaml
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dictionaries\SearchAppBarButton.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Dictionaries\SearchTextBlockButton.xbf
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dictionaries\SearchTextBlockButton.xaml
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dictionaries\SearchTextBlockButton.xbf

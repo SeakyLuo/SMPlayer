@@ -19,6 +19,10 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class SearchPage : Page
     {
+        public static readonly SortBy[] ArtistsCriteria = new SortBy[] { SortBy.Default, SortBy.Name, SortBy.Album, SortBy.PlayCount, SortBy.Duration },
+                                        AlbumsCriteria = new SortBy[] { SortBy.Default, SortBy.Name, SortBy.PlayCount, SortBy.Duration },
+                                        SongsCriteria = new SortBy[] { SortBy.Default, SortBy.Title, SortBy.Album, SortBy.PlayCount, SortBy.Duration },
+                                        PlaylistsCriteria = new SortBy[] { SortBy.Default, SortBy.Name, SortBy.PlayCount, SortBy.Duration };
         public static Stack<string> History = new Stack<string>();
         public ObservableCollection<Playlist> Artists = new ObservableCollection<Playlist>();
         public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
@@ -30,6 +34,14 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            SetArtistsDropdownContent();
+            SetAlbumsDropdownContent();
+            SetSongsDropdownContent();
+            SetPlaylistsDropdownContent();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -94,6 +106,7 @@ namespace SMPlayer
                 Artists.Add(new Playlist(group.Key, group) { Artist = group.Key });
             }
             ArtistsViewAllButton.Visibility = viewAll ? Visibility.Visible : Visibility.Collapsed;
+            ArtistsDropdown.Visibility = Artists.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
         public static bool IsTargetAlbum(Music music, string keyword)
         {
@@ -109,6 +122,7 @@ namespace SMPlayer
                 Albums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy(m => m.Name).ThenBy(m => m.Artist), false));
             }
             AlbumsViewAllButton.Visibility = viewAll ? Visibility.Visible : Visibility.Collapsed;
+            AlbumsDropdown.Visibility = Albums.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
         public static bool IsTargetMusic(Music music, string keyword)
         {
@@ -129,6 +143,7 @@ namespace SMPlayer
                 }
             }
             SongsViewAllButton.Visibility = viewAll ? Visibility.Visible : Visibility.Collapsed;
+            SongsDropdown.Visibility = Songs.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
         public static bool IsTargetPlaylist(Playlist playlist, string keyword)
         {
@@ -152,6 +167,7 @@ namespace SMPlayer
                 }
             }
             PlaylistsViewAllButton.Visibility = viewAll ? Visibility.Visible : Visibility.Collapsed;
+            PlaylistsDropdown.Visibility = Playlists.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public static string GetSearchHeader(string keyword, bool isMinimal)
@@ -177,29 +193,119 @@ namespace SMPlayer
             else
                 Frame.Navigate(typeof(PlaylistsPage), e.ClickedItem);
         }
-        private void ArtistsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(SearchResultPage), SearchType.Artists);
-        }
 
         private void Album_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
             (args.NewValue as AlbumView)?.SetCover();
         }
+        private void SetArtistsDropdownContent()
+        {
+            ArtistsDropdown.Content = Helper.LocalizeMessage("Sort By " + Settings.settings.SearchArtistsCriterion.ToStr());
+        }
+        private void SetAlbumsDropdownContent()
+        {
+            AlbumsDropdown.Content = Helper.LocalizeMessage("Sort By " + Settings.settings.SearchAlbumsCriterion.ToStr());
+        }
+        private void SetSongsDropdownContent()
+        {
+            SongsDropdown.Content = Helper.LocalizeMessage("Sort By " + Settings.settings.SearchSongsCriterion.ToStr());
+        }
+        private void SetPlaylistsDropdownContent()
+        {
+            PlaylistsDropdown.Content = Helper.LocalizeMessage("Sort By " + Settings.settings.SearchPlaylistsCriterion.ToStr());
+        }
 
-        private void AlbumsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private void ArtistsDropdown_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(SearchResultPage), SearchType.Albums);
+            MenuFlyoutHelper.SetSearchSortByMenu(sender, Settings.settings.SearchArtistsCriterion, ArtistsCriteria,
+                                                item =>
+                                                {
+                                                    Settings.settings.SearchArtistsCriterion = item;
+                                                    SetArtistsDropdownContent();
+                                                });
         }
-        private void SongsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
+
+        private void AlbumsDropdown_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(SearchResultPage), SearchType.Songs);
+            MenuFlyoutHelper.SetSearchSortByMenu(sender, Settings.settings.SearchAlbumsCriterion, AlbumsCriteria,
+                                                item =>
+                                                {
+                                                    Settings.settings.SearchAlbumsCriterion = item;
+                                                    SetAlbumsDropdownContent();
+                                                });
         }
-        private void PlaylistsViewAllButton_Tapped(object sender, TappedRoutedEventArgs e)
+
+        private void SongsDropdown_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(SearchResultPage), SearchType.Playlists);
+            MenuFlyoutHelper.SetSearchSortByMenu(sender, Settings.settings.SearchSongsCriterion, SongsCriteria,
+                                                item =>
+                                                {
+                                                    Settings.settings.SearchSongsCriterion = item;
+                                                    SetSongsDropdownContent();
+                                                });
+        }
+
+        private void AddToButton_Click(object sender, RoutedEventArgs e)
+        {
+            new MenuFlyoutHelper()
+            {
+                Data = Songs,
+                DefaultPlaylistName = Settings.settings.FindNextPlaylistName(CurrentKeyword)
+            }.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
+            
+        }
+
+        private void PlaylistsDropdown_Click(object sender, RoutedEventArgs e)
+        {
+            MenuFlyoutHelper.SetSearchSortByMenu(sender, Settings.settings.SearchPlaylistsCriterion, PlaylistsCriteria,
+                                                item =>
+                                                {
+                                                    Settings.settings.SearchPlaylistsCriterion = item;
+                                                    SetPlaylistsDropdownContent();
+                                                });
+        }
+
+
+        private void ArtistsViewAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SearchResultPage), new SearchArgs()
+            {
+                Type = SearchType.Artists,
+                Criterion = Settings.settings.SearchArtistsCriterion
+            });
+        }
+
+        private void AlbumsViewAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SearchResultPage), new SearchArgs()
+            {
+                Type = SearchType.Albums,
+                Criterion = Settings.settings.SearchAlbumsCriterion
+            });
+        }
+
+        private void SongsViewAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SearchResultPage), new SearchArgs()
+            {
+                Type = SearchType.Songs,
+                Criterion = Settings.settings.SearchSongsCriterion
+            });
+        }
+
+        private void PlaylistsViewAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SearchResultPage), new SearchArgs()
+            {
+                Type = SearchType.Playlists,
+                Criterion = Settings.settings.SearchPlaylistsCriterion
+            });
         }
     }
 
-    public enum SearchType { Artists = 0, Albums = 1, Songs = 2, Playlists = 3 }
+    public struct SearchArgs
+    {
+        public SearchType Type;
+        public SortBy Criterion;
+    }
 }

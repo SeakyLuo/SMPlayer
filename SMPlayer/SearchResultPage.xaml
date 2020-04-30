@@ -27,14 +27,39 @@
     </Page.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <CommandBar Style="{StaticResource SearchCommandBarStyle}">
+            <CommandBar.Content>
+                <DropDownButton
+                    x:Name="SortByDropdown"
+                    Margin="8,8,0,0"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Click="SortByDropdown_Click"
+                    Content="Sort By"
+                    Style="{ThemeResource SearchTextBlockButtonStyle}" />
+            </CommandBar.Content>
+            <AppBarButton
+                x:Name="AddToButton"
+                x:Uid="AddToAppButton"
+                Margin="0,0,4,0"
+                Click="AddToButton_Click"
+                Icon="Add"
+                Style="{StaticResource SearchAppBarButtonStyle}" />
+        </CommandBar>
         <ProgressRing
             x:Name="LoadingProgress"
+            Grid.Row="1"
             Width="100"
             Height="100"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             IsActive="False" />
         <GridView
+            Grid.Row="1"
             ItemClick="ArtistsGridView_ItemClick"
             ItemsSource="{x:Bind Artists, Mode=OneWay}"
             Style="{StaticResource GridViewStyle}"
@@ -46,18 +71,21 @@
             </GridView.ItemTemplate>
         </GridView>
         <GridView
+            Grid.Row="1"
             ItemClick="AlbumsGridView_ItemClick"
             ItemTemplate="{StaticResource DropShadowItemTemplate}"
             ItemsSource="{x:Bind Albums, Mode=OneWay}"
             Style="{StaticResource GridViewStyle}"
             Visibility="{x:Bind Albums.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
         <local:PlaylistControl
+            Grid.Row="1"
             AlternatingRowColor="True"
             ItemsSource="{x:Bind Songs, Mode=OneWay}"
             Removable="False"
             Style="{StaticResource DataHolderStyle}"
             Visibility="{x:Bind Songs.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
         <GridView
+            Grid.Row="1"
             ItemClick="PlaylistGridView_ItemClick"
             ItemTemplate="{StaticResource DropShadowItemTemplate}"
             ItemsSource="{x:Bind Playlists, Mode=OneWay}"

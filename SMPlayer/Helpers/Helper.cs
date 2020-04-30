@@ -65,6 +65,8 @@ namespace SMPlayer
         }
         public static void AddOrMoveToTheFirst<T>(this Collection<T> list, T item)
         {
+            if (item.Equals(list.ElementAtOrDefault(0)))
+                return;
             list.Remove(item);
             list.Insert(0, item);
         }

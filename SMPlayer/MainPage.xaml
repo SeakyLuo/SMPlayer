@@ -56,11 +56,9 @@
                         Grid.ColumnSpan="2"
                         Margin="10,0"
                         VerticalAlignment="Center"
-                        ItemsSource="{x:Bind recentSearches, Mode=OneWay}"
                         QueryIcon="Find"
                         QuerySubmitted="SearchBar_QuerySubmitted"
                         Style="{StaticResource BorderlessAutoSuggestBoxStyle}"
-                        SuggestionChosen="SearchBar_SuggestionChosen"
                         Visibility="Collapsed" />
                 </Grid>
             </NavigationView.Header>
@@ -68,11 +66,9 @@
                 <AutoSuggestBox
                     x:Name="NaviSearchBar"
                     x:Uid="SearchBar"
-                    ItemsSource="{x:Bind recentSearches, Mode=OneWay}"
                     QueryIcon="Find"
                     QuerySubmitted="SearchBar_QuerySubmitted"
-                    Style="{StaticResource BorderlessAutoSuggestBoxStyle}"
-                    SuggestionChosen="SearchBar_SuggestionChosen" />
+                    Style="{StaticResource BorderlessAutoSuggestBoxStyle}" />
             </NavigationView.AutoSuggestBox>
             <NavigationView.MenuItems>
                 <NavigationViewItem

@@ -40,6 +40,7 @@
     <RootPropertyPathName Name="OverflowContentClipRect" />
     <RootPropertyPathName Name="OverflowContentHeight" />
     <RootPropertyPathName Name="MinimalVerticalDelta" />
+    <RootPropertyPathName Name="KeyboardAcceleratorTextMinWidth" />
     <RootPropertyPathName Name="TreeViewItemTemplateSettings" />
     <RootPropertyPathName Name="Indentation" />
     <RootPropertyPathName Name="ExpandedGlyphVisibility" />
@@ -48,7 +49,6 @@
     <RootPropertyPathName Name="Directory" />
     <RootPropertyPathName Name="RequestedTheme" />
     <RootPropertyPathName Name="ShowAlbumText" />
-    <RootPropertyPathName Name="KeyboardAcceleratorTextMinWidth" />
     <RootPropertyPathName Name="PlayCount" />
     <RootPropertyPathName Name="Favorite" />
     <RootPropertyPathName Name="IsPlaying" />
@@ -67,10 +67,37 @@
       <RootProperty Name="Opacity" />
     </RootType>
     <RootType FullName="System.Double" />
-    <RootType FullName="Windows.UI.Xaml.Controls.ListViewItem" />
-    <RootType FullName="Windows.UI.Xaml.Controls.Control">
-      <RootProperty Name="HorizontalContentAlignment" />
+    <RootType FullName="Windows.UI.Xaml.Controls.StackPanel">
+      <RootProperty Name="Orientation" />
+      <RootProperty Name="Padding" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="Children" />
+      <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="Background" />
+      <RootProperty Name="ContextFlyout" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Visibility" />
+      <RootProperty Name="XYFocusKeyboardNavigation" />
+      <RootProperty Name="Width" />
+      <RootProperty Name="Style" />
+      <RootEvent Name="PointerEntered" />
+      <RootEvent Name="Tapped" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.CommandBar">
+      <RootProperty Name="DefaultLabelPosition" />
+      <RootProperty Name="IsDynamicOverflowEnabled" />
+      <RootProperty Name="OverflowButtonVisibility" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Background" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="PrimaryCommands" />
+      <RootProperty Name="Content" />
+      <RootProperty Name="IsOpen" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.Control">
+      <RootProperty Name="Background" />
+      <RootProperty Name="HorizontalContentAlignment" />
       <RootProperty Name="FontFamily" />
       <RootProperty Name="FontSize" />
       <RootProperty Name="BorderThickness" />
@@ -91,6 +118,20 @@
       <RootMethod Name="GetIsTemplateKeyTipTarget" />
       <RootMethod Name="SetIsTemplateKeyTipTarget" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.FrameworkElement">
+      <RootProperty Name="Margin" />
+      <RootProperty Name="Height" />
+      <RootProperty Name="Width" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="FocusVisualMargin" />
+      <RootProperty Name="RequestedTheme" />
+      <RootProperty Name="MinWidth" />
+      <RootProperty Name="MinHeight" />
+      <RootProperty Name="MaxWidth" />
+      <RootProperty Name="AllowFocusOnInteraction" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ListViewItem" />
     <RootType FullName="Windows.UI.Xaml.Controls.TextBlock">
       <RootProperty Name="FontSize" />
       <RootProperty Name="FontWeight" />
@@ -140,19 +181,6 @@
       <RootProperty Name="FontFamily" />
       <RootProperty Name="VerticalContentAlignment" />
       <RootEvent Name="Click" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.FrameworkElement">
-      <RootProperty Name="Height" />
-      <RootProperty Name="Width" />
-      <RootProperty Name="Margin" />
-      <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="FocusVisualMargin" />
-      <RootProperty Name="RequestedTheme" />
-      <RootProperty Name="MinWidth" />
-      <RootProperty Name="MinHeight" />
-      <RootProperty Name="MaxWidth" />
-      <RootProperty Name="AllowFocusOnInteraction" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.FontIcon">
       <RootProperty Name="FontFamily" />
@@ -340,21 +368,6 @@
       <RootProperty Name="DetailsTemplate" />
       <RootProperty Name="NoSelectionContent" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.StackPanel">
-      <RootProperty Name="Margin" />
-      <RootProperty Name="Children" />
-      <RootProperty Name="Padding" />
-      <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="Background" />
-      <RootProperty Name="Orientation" />
-      <RootProperty Name="ContextFlyout" />
-      <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="Visibility" />
-      <RootProperty Name="XYFocusKeyboardNavigation" />
-      <RootProperty Name="Width" />
-      <RootEvent Name="PointerEntered" />
-      <RootEvent Name="Tapped" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AutoSuggestBox">
       <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
@@ -449,7 +462,6 @@
       <RootProperty Name="Background" />
       <RootProperty Name="Children" />
       <RootProperty Name="Margin" />
-      <RootProperty Name="Style" />
       <RootMethod Name="GetAlignLeftWithPanel" />
       <RootMethod Name="SetAlignLeftWithPanel" />
       <RootMethod Name="GetLeftOf" />
@@ -1072,18 +1084,6 @@
       <RootProperty Name="Style" />
       <RootProperty Name="RenderTransform" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.CommandBar">
-      <RootProperty Name="Margin" />
-      <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="Background" />
-      <RootProperty Name="DefaultLabelPosition" />
-      <RootProperty Name="Style" />
-      <RootProperty Name="PrimaryCommands" />
-      <RootProperty Name="IsDynamicOverflowEnabled" />
-      <RootProperty Name="OverflowButtonVisibility" />
-      <RootProperty Name="IsOpen" />
-      <RootProperty Name="Content" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBar">
       <RootProperty Name="ClosedDisplayMode" />
     </RootType>
@@ -1128,8 +1128,10 @@
       <RootProperty Name="Visibility" />
       <RootProperty Name="Label" />
       <RootProperty Name="IsEnabled" />
+      <RootProperty Name="Margin" />
       <RootEvent Name="Click" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.Primitives.ButtonBase" />
     <RootType FullName="SMPlayer.TemplateSelector.FolderTreeTemplateSelector">
       <RootProperty Name="FileTemplate" />
       <RootProperty Name="FolderTemplate" />
@@ -1213,6 +1215,14 @@
       <RootProperty Name="Symbol" />
     </RootType>
     <RootType FullName="SMPlayer.Dialogs.RenameDialog" />
+    <RootType FullName="Windows.UI.Xaml.Controls.DropDownButton">
+      <RootProperty Name="Content" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="VerticalContentAlignment" />
+      <RootEvent Name="Click" />
+    </RootType>
     <RootType FullName="SMPlayer.SearchPage" />
     <RootType FullName="SMPlayer.RecentPage" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.DataGrid">

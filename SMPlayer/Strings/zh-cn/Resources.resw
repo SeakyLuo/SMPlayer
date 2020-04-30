@@ -438,9 +438,6 @@
   <data name="MyFavoritesItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>我喜欢的音乐</value>
   </data>
-  <data name="NameHeader.Header" xml:space="preserve">
-    <value>名称</value>
-  </data>
   <data name="NeverItem.Content" xml:space="preserve">
     <value>永不显示</value>
   </data>
@@ -743,6 +740,9 @@
   </data>
   <data name="ThemeTextBlock.Text" xml:space="preserve">
     <value>主题</value>
+  </data>
+  <data name="TitleHeader.Header" xml:space="preserve">
+    <value>标题</value>
   </data>
   <data name="TitleTextBlock.Text" xml:space="preserve">
     <value>标题</value>

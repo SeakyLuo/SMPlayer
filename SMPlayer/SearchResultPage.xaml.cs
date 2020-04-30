@@ -21,7 +21,46 @@ namespace SMPlayer
         public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         public ObservableCollection<AlbumView> Playlists = new ObservableCollection<AlbumView>();
+        private SortBy[] Criteria;
+        private SearchType searchType;
         private string CurrentKeyword;
+        private SortBy SettingsCriterion
+        {
+            get
+            {
+                switch (searchType)
+                {
+                    case SearchType.Artists:
+                        return Settings.settings.SearchArtistsCriterion;
+                    case SearchType.Albums:
+                        return Settings.settings.SearchAlbumsCriterion;
+                    case SearchType.Songs:
+                        return Settings.settings.SearchSongsCriterion;
+                    case SearchType.Playlists:
+                        return Settings.settings.SearchPlaylistsCriterion;
+                    default:
+                        return Settings.settings.SearchSongsCriterion;
+                }
+            }
+            set
+            {
+                switch (searchType)
+                {
+                    case SearchType.Artists:
+                        Settings.settings.SearchArtistsCriterion = value;
+                        break;
+                    case SearchType.Albums:
+                        Settings.settings.SearchAlbumsCriterion = value;
+                        break;
+                    case SearchType.Songs:
+                        Settings.settings.SearchSongsCriterion = value;
+                        break;
+                    case SearchType.Playlists:
+                        Settings.settings.SearchPlaylistsCriterion = value;
+                        break;
+                }
+            }
+        }
         public SearchResultPage()
         {
             this.InitializeComponent();
@@ -31,8 +70,26 @@ namespace SMPlayer
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            SearchType searchType = (SearchType)e.Parameter;
+            SearchArgs searchArgs = (SearchArgs)e.Parameter;
+            searchType = searchArgs.Type;
+            SortBy criterion = searchArgs.Criterion;
             string keyword = SearchPage.History.Peek();
+            switch (searchType)
+            {
+                case SearchType.Artists:
+                    Criteria = SearchPage.ArtistsCriteria;
+                    break;
+                case SearchType.Albums:
+                    Criteria = SearchPage.AlbumsCriteria;
+                    break;
+                case SearchType.Songs:
+                    Criteria = SearchPage.SongsCriteria;
+                    break;
+                case SearchType.Playlists:
+                    Criteria = SearchPage.PlaylistsCriteria;
+                    break;
+            }
+            SetSortByDropdownContent(criterion);
             MainPage.Instance.SetHeaderText(SearchPage.GetSearchHeader(keyword, MainPage.Instance.IsMinimal));
             switch (e.NavigationMode)
             {
@@ -95,6 +152,11 @@ namespace SMPlayer
             });
         }
 
+        private void SetSortByDropdownContent(SortBy criterion)
+        {
+            SortByDropdown.Content = Helper.LocalizeMessage("Sort By " + criterion.ToStr());
+        }
+
         private void ArtistsGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Frame.Navigate(typeof(ArtistsPage), e.ClickedItem);
@@ -119,6 +181,25 @@ namespace SMPlayer
         private void Album_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
             (args.NewValue as AlbumView)?.SetCover();
+        }
+
+        private void SortByDropdown_Click(object sender, RoutedEventArgs e)
+        {
+            MenuFlyoutHelper.SetSearchSortByMenu(sender, SettingsCriterion, Criteria,
+                                                item =>
+                                                {
+                                                    SettingsCriterion = item;
+                                                    SetSortByDropdownContent(item);
+                                                });
+        }
+
+        private void AddToButton_Click(object sender, RoutedEventArgs e)
+        {
+            new MenuFlyoutHelper()
+            {
+                Data = Songs,
+                DefaultPlaylistName = Settings.settings.FindNextPlaylistName(CurrentKeyword)
+            }.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
         }
     }
 }

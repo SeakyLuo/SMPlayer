@@ -8,20 +8,14 @@
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="Page_Loaded"
     mc:Ignorable="d">
 
     <Page.Resources>
-        <Style x:Key="RelativePanelStyle" TargetType="RelativePanel">
-            <Setter Property="Margin" Value="0,0,0,10" />
-        </Style>
         <Style x:Key="HeaderTextBlockStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="18" />
-            <Setter Property="VerticalAlignment" Value="Stretch" />
-        </Style>
-        <Style x:Key="ViewAllButtonStyle" TargetType="local:IconTextButton">
-            <Setter Property="Label" Value="View All" />
-            <Setter Property="Foreground" Value="{ThemeResource SystemColorHighlightColor}" />
-            <Setter Property="Visibility" Value="Collapsed" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,4,4,0" />
         </Style>
         <Style x:Key="HorizontalListViewStyle" TargetType="ListView">
             <Setter Property="IsItemClickEnabled" Value="True" />
@@ -132,8 +126,17 @@
             </Setter>
         </Style>
         <ItemsPanelTemplate x:Key="HorizontalPanel">
-            <StackPanel Orientation="Horizontal" />
+            <StackPanel Style="{StaticResource CommandBarContentHorizontalStackPanel}" />
         </ItemsPanelTemplate>
+        <Style
+            x:Key="ViewAllButtonStyle"
+            BasedOn="{StaticResource SearchAppBarButtonStyle}"
+            TargetType="AppBarButton">
+            <Setter Property="Visibility" Value="Collapsed" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Label" Value="View All" />
+            <Setter Property="Margin" Value="5,0" />
+        </Style>
     </Page.Resources>
 
     <ScrollViewer>
@@ -149,20 +152,28 @@
                 IsIndeterminate="True"
                 Visibility="Collapsed" />
             <StackPanel Visibility="{x:Bind Artists.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
-                <RelativePanel Style="{StaticResource RelativePanelStyle}">
-                    <TextBlock
-                        x:Uid="ArtistsTextBlock"
-                        RelativePanel.AlignLeftWithPanel="True"
-                        Style="{StaticResource HeaderTextBlockStyle}"
-                        Text="Artists" />
-                    <local:IconTextButton
+                <CommandBar Style="{StaticResource SearchCommandBarStyle}">
+                    <CommandBar.Content>
+                        <StackPanel Style="{StaticResource CommandBarContentHorizontalStackPanel}">
+                            <TextBlock
+                                x:Uid="ArtistsTextBlock"
+                                RelativePanel.AlignLeftWithPanel="True"
+                                Style="{StaticResource HeaderTextBlockStyle}"
+                                Text="Artists" />
+                            <DropDownButton
+                                x:Name="ArtistsDropdown"
+                                Click="ArtistsDropdown_Click"
+                                Content="Sort By"
+                                Style="{ThemeResource SearchTextBlockButtonStyle}" />
+                        </StackPanel>
+                    </CommandBar.Content>
+                    <AppBarButton
                         x:Name="ArtistsViewAllButton"
                         x:Uid="ViewAllButton"
+                        Click="ArtistsViewAllButton_Click"
                         Icon="ViewAll"
-                        RelativePanel.AlignRightWithPanel="True"
-                        Style="{StaticResource ViewAllButtonStyle}"
-                        Tapped="ArtistsViewAllButton_Tapped" />
-                </RelativePanel>
+                        Style="{StaticResource ViewAllButtonStyle}" />
+                </CommandBar>
                 <ListView
                     x:Name="SearchArtistView"
                     ItemClick="SearchArtistView_ItemClick"
@@ -176,20 +187,28 @@
                 </ListView>
             </StackPanel>
             <StackPanel Margin="0,30" Visibility="{x:Bind Albums.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
-                <RelativePanel Style="{StaticResource RelativePanelStyle}">
-                    <TextBlock
-                        x:Uid="AlbumsTextBlock"
-                        RelativePanel.AlignLeftWithPanel="True"
-                        Style="{StaticResource HeaderTextBlockStyle}"
-                        Text="Albums" />
-                    <local:IconTextButton
+                <CommandBar Style="{StaticResource SearchCommandBarStyle}">
+                    <CommandBar.Content>
+                        <StackPanel Style="{StaticResource CommandBarContentHorizontalStackPanel}">
+                            <TextBlock
+                                x:Uid="AlbumsTextBlock"
+                                RelativePanel.AlignLeftWithPanel="True"
+                                Style="{StaticResource HeaderTextBlockStyle}"
+                                Text="Albums" />
+                            <DropDownButton
+                                x:Name="AlbumsDropdown"
+                                Click="AlbumsDropdown_Click"
+                                Content="Sort By"
+                                Style="{ThemeResource SearchTextBlockButtonStyle}" />
+                        </StackPanel>
+                    </CommandBar.Content>
+                    <AppBarButton
                         x:Name="AlbumsViewAllButton"
                         x:Uid="ViewAllButton"
+                        Click="AlbumsViewAllButton_Click"
                         Icon="ViewAll"
-                        RelativePanel.AlignRightWithPanel="True"
-                        Style="{StaticResource ViewAllButtonStyle}"
-                        Tapped="AlbumsViewAllButton_Tapped" />
-                </RelativePanel>
+                        Style="{StaticResource ViewAllButtonStyle}" />
+                </CommandBar>
                 <ListView
                     x:Name="SearchAlbumView"
                     ItemClick="SearchAlbumView_ItemClick"
@@ -203,20 +222,36 @@
                 </ListView>
             </StackPanel>
             <StackPanel Margin="0,30" Visibility="{x:Bind Songs.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
-                <RelativePanel Style="{StaticResource RelativePanelStyle}">
-                    <TextBlock
-                        x:Uid="SongsTextBlock"
-                        RelativePanel.AlignLeftWithPanel="True"
-                        Style="{StaticResource HeaderTextBlockStyle}"
-                        Text="Songs" />
-                    <local:IconTextButton
+                <CommandBar Style="{StaticResource SearchCommandBarStyle}">
+                    <CommandBar.Content>
+                        <StackPanel Style="{StaticResource CommandBarContentHorizontalStackPanel}">
+                            <TextBlock
+                                x:Uid="SongsTextBlock"
+                                VerticalAlignment="Center"
+                                RelativePanel.AlignLeftWithPanel="True"
+                                Style="{StaticResource HeaderTextBlockStyle}"
+                                Text="Songs" />
+                            <DropDownButton
+                                x:Name="SongsDropdown"
+                                VerticalAlignment="Center"
+                                Click="SongsDropdown_Click"
+                                Content="Sort By"
+                                Style="{ThemeResource SearchTextBlockButtonStyle}" />
+                        </StackPanel>
+                    </CommandBar.Content>
+                    <AppBarButton
+                        x:Name="AddToButton"
+                        x:Uid="AddToAppButton"
+                        Click="AddToButton_Click"
+                        Icon="Add"
+                        Style="{StaticResource SearchAppBarButtonStyle}" />
+                    <AppBarButton
                         x:Name="SongsViewAllButton"
                         x:Uid="ViewAllButton"
+                        Click="SongsViewAllButton_Click"
                         Icon="ViewAll"
-                        RelativePanel.AlignRightWithPanel="True"
-                        Style="{StaticResource ViewAllButtonStyle}"
-                        Tapped="SongsViewAllButton_Tapped" />
-                </RelativePanel>
+                        Style="{StaticResource ViewAllButtonStyle}" />
+                </CommandBar>
                 <local:PlaylistControl
                     x:Name="SearchMusicView"
                     AlternatingRowColor="True"
@@ -225,20 +260,28 @@
                     Removable="False" />
             </StackPanel>
             <StackPanel Margin="0,30" Visibility="{x:Bind Playlists.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
-                <RelativePanel Style="{StaticResource RelativePanelStyle}">
-                    <TextBlock
-                        x:Uid="PlaylistsTextBlock"
-                        RelativePanel.AlignLeftWithPanel="True"
-                        Style="{StaticResource HeaderTextBlockStyle}"
-                        Text="Playlists" />
-                    <local:IconTextButton
+                <CommandBar Style="{StaticResource SearchCommandBarStyle}">
+                    <CommandBar.Content>
+                        <StackPanel Style="{StaticResource CommandBarContentHorizontalStackPanel}">
+                            <TextBlock
+                                x:Uid="PlaylistsTextBlock"
+                                RelativePanel.AlignLeftWithPanel="True"
+                                Style="{StaticResource HeaderTextBlockStyle}"
+                                Text="Playlists" />
+                            <DropDownButton
+                                x:Name="PlaylistsDropdown"
+                                Click="PlaylistsDropdown_Click"
+                                Content="Sort By"
+                                Style="{ThemeResource SearchTextBlockButtonStyle}" />
+                        </StackPanel>
+                    </CommandBar.Content>
+                    <AppBarButton
                         x:Name="PlaylistsViewAllButton"
                         x:Uid="ViewAllButton"
+                        Click="PlaylistsViewAllButton_Click"
                         Icon="ViewAll"
-                        RelativePanel.AlignRightWithPanel="True"
-                        Style="{StaticResource ViewAllButtonStyle}"
-                        Tapped="PlaylistsViewAllButton_Tapped" />
-                </RelativePanel>
+                        Style="{StaticResource ViewAllButtonStyle}" />
+                </CommandBar>
                 <ListView
                     x:Name="SearchPlaylistView"
                     ItemClick="SearchPlaylistView_ItemClick"

@@ -438,9 +438,6 @@
   <data name="MyFavoritesItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>My Favorite Songs</value>
   </data>
-  <data name="NameHeader.Header" xml:space="preserve">
-    <value>Name</value>
-  </data>
   <data name="NeverItem.Content" xml:space="preserve">
     <value>Never</value>
   </data>
@@ -743,6 +740,9 @@
   </data>
   <data name="ThemeTextBlock.Text" xml:space="preserve">
     <value>Theme</value>
+  </data>
+  <data name="TitleHeader.Header" xml:space="preserve">
+    <value>Title</value>
   </data>
   <data name="TitleTextBlock.Text" xml:space="preserve">
     <value>Title</value>
