@@ -144,7 +144,7 @@ namespace SMPlayer
             int index = recentSearches.IndexOf(item);
             recentSearches.RemoveAt(index);
             ResetColor(index);
-            MainPage.Instance.ShowUndoNotification(Helper.LocalizeMessage(""), () =>
+            MainPage.Instance.ShowUndoNotification(Helper.LocalizeMessage("ItemRemoved"), () =>
             {
                 recentSearches.Insert(index, item);
                 ResetColor(index);

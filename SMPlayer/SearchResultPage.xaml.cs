@@ -72,7 +72,7 @@ namespace SMPlayer
             base.OnNavigatedTo(e);
             SearchArgs searchArgs = (SearchArgs)e.Parameter;
             searchType = searchArgs.Type;
-            SortBy criterion = searchArgs.Criterion;
+            object list = searchArgs.Collection;
             string keyword = SearchPage.History.Peek();
             switch (searchType)
             {
@@ -89,17 +89,17 @@ namespace SMPlayer
                     Criteria = SearchPage.PlaylistsCriteria;
                     break;
             }
-            SetSortByDropdownContent(criterion);
+            SetSortByDropdownContent(searchArgs.Criterion);
             MainPage.Instance.SetHeaderText(SearchPage.GetSearchHeader(keyword, MainPage.Instance.IsMinimal));
             switch (e.NavigationMode)
             {
                 case NavigationMode.New:
                     History.Push(keyword);
-                    Search(searchType, keyword);
+                    Search(searchType, keyword, list);
                     break;
                 case NavigationMode.Back:
                     if (CurrentKeyword != keyword)
-                        Search(searchType, keyword);
+                        Search(searchType, keyword, list);
                     break;
             }
         }
@@ -111,45 +111,30 @@ namespace SMPlayer
                 History.Pop();
         }
 
-        private async void Search(SearchType searchType, string keyword)
+        private void Search(SearchType searchType, string keyword, object list)
         {
             LoadingProgress.IsActive = true;
             CurrentKeyword = keyword;
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            Artists.Clear();
+            Albums.Clear();
+            Songs.Clear();
+            Playlists.Clear();
+            switch (searchType)
             {
-                Artists.Clear();
-                Albums.Clear();
-                Songs.Clear();
-                Playlists.Clear();
-                switch (searchType)
-                {
-                    case SearchType.Artists:
-                        foreach (var group in MusicLibraryPage.AllSongs.Where(m => SearchPage.IsTargetArtist(m, keyword)).GroupBy(m => m.Artist).OrderBy(g => g.Key))
-                            Artists.Add(new Playlist(group.Key, group) { Artist = group.Key });
-                        break;
-                    case SearchType.Albums:
-                        foreach (var group in MusicLibraryPage.AllSongs.Where(m => SearchPage.IsTargetAlbum(m, keyword)).GroupBy(m => m.Album).OrderBy(g => g.Key))
-                        {
-                            Music music = group.ElementAt(0);
-                            Albums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy(m => m.Name).ThenBy(m => m.Artist)));
-                        }
-                        break;
-                    case SearchType.Songs:
-                        foreach (var music in MusicLibraryPage.AllSongs.Where(m => SearchPage.IsTargetMusic(m, keyword)).OrderBy(m => m.Name).ThenBy(m => m.Artist))
-                            Songs.Add(music);
-                        break;
-                    case SearchType.Playlists:
-                        var nowPlaying = MediaHelper.NowPlaying;
-                        if (SearchPage.IsTargetPlaylist(nowPlaying, keyword))
-                            Playlists.Add(nowPlaying.ToAlbumView());
-                        if (SearchPage.IsTargetPlaylist(Settings.settings.MyFavorites, keyword))
-                            Playlists.Add(Settings.settings.MyFavorites.ToAlbumView());
-                        foreach (var playlist in Settings.settings.Playlists.Where(p => SearchPage.IsTargetPlaylist(p, keyword)).OrderBy(p => p.Name))
-                            Playlists.Add(playlist.ToAlbumView());
-                        break;
-                }
-                LoadingProgress.IsActive = false;
-            });
+                case SearchType.Artists:
+                    Artists.SetTo(list as ObservableCollection<Playlist>);
+                    break;
+                case SearchType.Albums:
+                    Albums.SetTo(list as ObservableCollection<AlbumView>);
+                    break;
+                case SearchType.Songs:
+                    Songs.SetTo(list as ObservableCollection<Music>);
+                    break;
+                case SearchType.Playlists:
+                    Playlists.SetTo(list as ObservableCollection<AlbumView>);
+                    break;
+            }
+            LoadingProgress.IsActive = false;
         }
 
         private void SetSortByDropdownContent(SortBy criterion)

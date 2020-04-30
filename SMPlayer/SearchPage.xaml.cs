@@ -24,10 +24,11 @@ namespace SMPlayer
                                         SongsCriteria = new SortBy[] { SortBy.Default, SortBy.Title, SortBy.Album, SortBy.PlayCount, SortBy.Duration },
                                         PlaylistsCriteria = new SortBy[] { SortBy.Default, SortBy.Name, SortBy.PlayCount, SortBy.Duration };
         public static Stack<string> History = new Stack<string>();
-        public ObservableCollection<Playlist> Artists = new ObservableCollection<Playlist>();
-        public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
-        public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
-        public ObservableCollection<AlbumView> Playlists = new ObservableCollection<AlbumView>();
+
+        public ObservableCollection<Playlist> Artists = new ObservableCollection<Playlist>(), AllArtists = new ObservableCollection<Playlist>();
+        public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>(), AllAlbums = new ObservableCollection<AlbumView>();
+        public ObservableCollection<Music> Songs = new ObservableCollection<Music>(), AllSongs = new ObservableCollection<Music>();
+        public ObservableCollection<AlbumView> Playlists = new ObservableCollection<AlbumView>(), AllPlaylists = new ObservableCollection<AlbumView>();
         public const int ArtistLimit = 10, AlbumLimit = 5, SongLimit = 5, PlaylistLimit = 5;
         private string CurrentKeyword;
         public SearchPage()
@@ -73,10 +74,10 @@ namespace SMPlayer
         {
             LoadingProgress.Visibility = Visibility.Visible;
             CurrentKeyword = keyword;
-            Artists.Clear();
-            Albums.Clear();
-            Songs.Clear();
-            Playlists.Clear();
+            AllArtists.Clear();
+            AllAlbums.Clear();
+            AllSongs.Clear();
+            AllPlaylists.Clear();
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
                 string modifiedKeyowrd = keyword.ToLowerInvariant();
@@ -99,13 +100,12 @@ namespace SMPlayer
         }
         public void SearchArtists(string keyword)
         {
-            bool viewAll = false;
             foreach (var group in MusicLibraryPage.AllSongs.Where(m => IsTargetArtist(m, keyword)).GroupBy(m => m.Artist))
             {
-                if (viewAll = Artists.Count == ArtistLimit) break;
-                Artists.Add(new Playlist(group.Key, group) { Artist = group.Key });
+                AllArtists.Add(new Playlist(group.Key, group) { Artist = group.Key });
             }
-            ArtistsViewAllButton.Visibility = viewAll ? Visibility.Visible : Visibility.Collapsed;
+            Artists.SetTo(AllArtists.Take(ArtistLimit));
+            ArtistsViewAllButton.Visibility = AllArtists.Count > ArtistLimit ? Visibility.Visible : Visibility.Collapsed;
             ArtistsDropdown.Visibility = Artists.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
         public static bool IsTargetAlbum(Music music, string keyword)
@@ -114,14 +114,13 @@ namespace SMPlayer
         }
         public void SearchAlbums(string keyword)
         {
-            bool viewAll = false;
             foreach (var group in MusicLibraryPage.AllSongs.Where(m => IsTargetAlbum(m, keyword)).GroupBy(m => m.Album))
             {
-                if (viewAll = Albums.Count == AlbumLimit) break;
                 Music music = group.ElementAt(0);
-                Albums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy(m => m.Name).ThenBy(m => m.Artist), false));
+                AllAlbums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy(m => m.Name).ThenBy(m => m.Artist), false));
             }
-            AlbumsViewAllButton.Visibility = viewAll ? Visibility.Visible : Visibility.Collapsed;
+            Albums.SetTo(AllAlbums.Take(AlbumLimit));
+            AlbumsViewAllButton.Visibility = AllAlbums.Count > AlbumLimit ? Visibility.Visible : Visibility.Collapsed;
             AlbumsDropdown.Visibility = Albums.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
         public static bool IsTargetMusic(Music music, string keyword)
@@ -133,16 +132,15 @@ namespace SMPlayer
 
         public void SearchSongs(string keyword)
         {
-            bool viewAll = false;
             foreach (var music in MusicLibraryPage.AllSongs)
             {
                 if (IsTargetMusic(music, keyword))
                 {
-                    if (viewAll = Songs.Count == SongLimit) break;
-                    Songs.Add(music);
+                    AllSongs.Add(music);
                 }
             }
-            SongsViewAllButton.Visibility = viewAll ? Visibility.Visible : Visibility.Collapsed;
+            Songs.SetTo(AllSongs.Take(SongLimit));
+            SongsViewAllButton.Visibility = AllSongs.Count > SongLimit ? Visibility.Visible : Visibility.Collapsed;
             SongsDropdown.Visibility = Songs.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
         public static bool IsTargetPlaylist(Playlist playlist, string keyword)
@@ -152,21 +150,20 @@ namespace SMPlayer
 
         public void SearchPlaylists(string keyword)
         {
-            bool viewAll = false;
             var nowPlaying = MediaHelper.NowPlaying;
             if (IsTargetPlaylist(nowPlaying, keyword))
-                Playlists.Add(nowPlaying.ToAlbumView());
+                AllPlaylists.Add(nowPlaying.ToAlbumView());
             if (IsTargetPlaylist(Settings.settings.MyFavorites, keyword))
-                Playlists.Add(Settings.settings.MyFavorites.ToAlbumView());
+                AllPlaylists.Add(Settings.settings.MyFavorites.ToAlbumView());
             foreach (var playlist in Settings.settings.Playlists)
             {
                 if (IsTargetPlaylist(playlist, keyword))
                 {
-                    if (viewAll = Playlists.Count == PlaylistLimit) break;
-                    Playlists.Add(playlist.ToAlbumView());
+                    AllPlaylists.Add(playlist.ToAlbumView());
                 }
             }
-            PlaylistsViewAllButton.Visibility = viewAll ? Visibility.Visible : Visibility.Collapsed;
+            Playlists.SetTo(AllPlaylists.Take(PlaylistLimit));
+            PlaylistsViewAllButton.Visibility = AllPlaylists.Count > PlaylistLimit ? Visibility.Visible : Visibility.Collapsed;
             PlaylistsDropdown.Visibility = Playlists.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
 
@@ -271,7 +268,8 @@ namespace SMPlayer
             Frame.Navigate(typeof(SearchResultPage), new SearchArgs()
             {
                 Type = SearchType.Artists,
-                Criterion = Settings.settings.SearchArtistsCriterion
+                Criterion = Settings.settings.SearchArtistsCriterion,
+                Collection = AllArtists
             });
         }
 
@@ -280,7 +278,8 @@ namespace SMPlayer
             Frame.Navigate(typeof(SearchResultPage), new SearchArgs()
             {
                 Type = SearchType.Albums,
-                Criterion = Settings.settings.SearchAlbumsCriterion
+                Criterion = Settings.settings.SearchAlbumsCriterion,
+                Collection = AllAlbums
             });
         }
 
@@ -289,7 +288,8 @@ namespace SMPlayer
             Frame.Navigate(typeof(SearchResultPage), new SearchArgs()
             {
                 Type = SearchType.Songs,
-                Criterion = Settings.settings.SearchSongsCriterion
+                Criterion = Settings.settings.SearchSongsCriterion,
+                Collection = AllSongs
             });
         }
 
@@ -298,14 +298,16 @@ namespace SMPlayer
             Frame.Navigate(typeof(SearchResultPage), new SearchArgs()
             {
                 Type = SearchType.Playlists,
-                Criterion = Settings.settings.SearchPlaylistsCriterion
+                Criterion = Settings.settings.SearchPlaylistsCriterion,
+                Collection = AllPlaylists
             });
         }
     }
 
-    public struct SearchArgs
+    public class SearchArgs
     {
         public SearchType Type;
         public SortBy Criterion;
+        public object Collection;
     }
 }
