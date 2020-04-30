@@ -49,7 +49,6 @@
     <RootPropertyPathName Name="RequestedTheme" />
     <RootPropertyPathName Name="ShowAlbumText" />
     <RootPropertyPathName Name="KeyboardAcceleratorTextMinWidth" />
-    <RootPropertyPathName Name="Height" />
     <RootPropertyPathName Name="PlayCount" />
     <RootPropertyPathName Name="Favorite" />
     <RootPropertyPathName Name="IsPlaying" />
@@ -629,13 +628,13 @@
     <RootType FullName="Windows.UI.Xaml.Controls.TextBox">
       <RootProperty Name="Style" />
       <RootProperty Name="Margin" />
-      <RootProperty Name="TextWrapping" />
       <RootProperty Name="IsReadOnly" />
       <RootProperty Name="Height" />
       <RootProperty Name="AcceptsReturn" />
       <RootProperty Name="Background" />
       <RootProperty Name="BorderThickness" />
       <RootProperty Name="IsSpellCheckEnabled" />
+      <RootProperty Name="TextWrapping" />
       <RootProperty Name="SelectionHighlightColor" />
       <RootProperty Name="Width" />
       <RootProperty Name="Description" />
@@ -730,6 +729,7 @@
     <RootType FullName="Windows.UI.Xaml.Controls.PivotItem">
       <RootProperty Name="Header" />
       <RootProperty Name="Content" />
+      <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="SMPlayer.Dialogs.MusicDialog" />
     <RootType FullName="Windows.UI.Xaml.Controls.CheckBox">

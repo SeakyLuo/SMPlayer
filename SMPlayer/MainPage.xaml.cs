@@ -212,7 +212,7 @@ namespace SMPlayer
             }
         }
 
-        private void HeaderSearchBar_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        private void SearchBar_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
             string text = args.SelectedItem.ToString();
             SetSearchBarText(text);

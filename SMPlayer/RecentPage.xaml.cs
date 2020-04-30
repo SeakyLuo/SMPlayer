@@ -40,9 +40,11 @@ namespace SMPlayer
             else if (RecentPivot.SelectedItem == RecentPlayedItem)
                 SetupPlayed(Settings.settings.RecentPlayed);
             else if (RecentPivot.SelectedItem == RecentSearchesItem)
-                SetupSearched(Settings.settings.RecentSearches);
+                SetupSearched(recentSearches);
             LoadingProgressBar.Visibility = Visibility.Collapsed;
         }
+
+        
 
         public void SetupAdded(ICollection<string> list)
         {
@@ -117,9 +119,13 @@ namespace SMPlayer
             args.ItemContainer.Background = PlaylistControl.GetRowBackground(args.ItemIndex);
         }
 
-        private async void ItemRemoveButton_Click(object sender, RoutedEventArgs e)
+        private void ItemRemoveButton_Click(object sender, RoutedEventArgs e)
         {
-            string item = (sender as Button).DataContext.ToString();
+            AskRemoveSearchHistory((sender as Button).DataContext.ToString());
+        }
+
+        private async void AskRemoveSearchHistory(string item)
+        {
             if (dialog == null) dialog = new Dialogs.RemoveDialog();
             if (dialog.IsChecked)
             {
@@ -138,26 +144,60 @@ namespace SMPlayer
             int index = recentSearches.IndexOf(item);
             recentSearches.RemoveAt(index);
             ResetColor(index);
+            MainPage.Instance.ShowUndoNotification(Helper.LocalizeMessage(""), () =>
+            {
+                recentSearches.Insert(index, item);
+                ResetColor(index);
+            });
         }
 
         private void SearchHistoryListView_Loaded(object sender, RoutedEventArgs e)
         {
-            SetupSearched(Settings.settings.RecentSearches);
+            SetupSearched(recentSearches);
+        }
+
+        private void RemoveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
+        {
+            AskRemoveSearchHistory(args.SwipeControl.DataContext.ToString());
+        }
+
+        private void RecentAddedItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadingProgressBar.Visibility = Visibility.Visible;
+            SetupAdded(Settings.settings.RecentAdded);
+            LoadingProgressBar.Visibility = Visibility.Collapsed;
+        }
+
+        private void RecentPlayedItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadingProgressBar.Visibility = Visibility.Visible;
+            SetupPlayed(Settings.settings.RecentAdded);
+            LoadingProgressBar.Visibility = Visibility.Collapsed;
+        }
+
+        private void RecentSearchesItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadingProgressBar.Visibility = Visibility.Visible;
+            SetupSearched(recentSearches);
+            LoadingProgressBar.Visibility = Visibility.Collapsed;
         }
 
         private void ClearSearchHistoryAppButton_Click(object sender, RoutedEventArgs e)
         {
             ShowYesNoDialog("ClearSearchHistory", () =>
             {
-                Settings.settings.RecentSearches.Clear();
-                SetupSearched(Settings.settings.RecentSearches);
+                recentSearches.Clear();
+                SetupSearched(recentSearches);
             });
         }
 
         private async void ShowYesNoDialog(string message, Action onYes)
         {
             var messageDialog = new MessageDialog(Helper.LocalizeMessage(message));
-            messageDialog.Commands.Add(new UICommand(Helper.LocalizeMessage("Yes"), new UICommandInvokedHandler(command => onYes.Invoke())));
+            messageDialog.Commands.Add(new UICommand(Helper.LocalizeMessage("Yes"), new UICommandInvokedHandler(command => 
+            {
+                onYes.Invoke();
+            })));
             messageDialog.Commands.Add(new UICommand(Helper.LocalizeMessage("No")));
 
             // Set the command that will be invoked by default

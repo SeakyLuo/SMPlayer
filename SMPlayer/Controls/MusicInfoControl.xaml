@@ -220,11 +220,11 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBox
+                        <TextBlock
                             x:Name="PathTextBox"
                             Margin="0"
                             TextWrapping="Wrap"
-                            Style="{StaticResource MusicPropertyTextBoxStyle}" />
+                            Style="{StaticResource MusicPropertyTextBlockStyle}" />
                         <Button
                             x:Uid="ShowInExplorerButton"
                             Grid.Column="1"

@@ -25,13 +25,15 @@
             <PivotItem
                 x:Name="RecentAddedItem"
                 x:Uid="RecentAddedItem"
-                Header="Recently Added">
-                <local:GridMusicControl x:Name="AddedMusicView" />
+                Header="Recently Added"
+                Loaded="RecentAddedItem_Loaded">
+                <local:GridMusicControl x:Name="AddedMusicView" Margin="0,5,0,0" />
             </PivotItem>
             <PivotItem
                 x:Name="RecentPlayedItem"
                 x:Uid="RecentPlayedItem"
-                Header="Recently Played">
+                Header="Recently Played"
+                Loaded="RecentPlayedItem_Loaded">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -49,13 +51,17 @@
                             Icon="Clear"
                             Label="Clear History" />
                     </CommandBar>
-                    <local:GridMusicControl x:Name="PlayedMusicView" Grid.Row="1" />
+                    <local:GridMusicControl
+                        x:Name="PlayedMusicView"
+                        Grid.Row="1"
+                        Margin="0,5,0,0" />
                 </Grid>
             </PivotItem>
             <PivotItem
                 x:Name="RecentSearchesItem"
                 x:Uid="RecentSearchesItem"
-                Header="Recent Searches">
+                Header="Recent Searches"
+                Loaded="RecentSearchesItem_Loaded">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -86,22 +92,40 @@
                         SelectionMode="None">
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="x:String">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock VerticalAlignment="Center" Text="{x:Bind}" />
-                                    <Button
-                                        Grid.Column="1"
-                                        VerticalContentAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        Click="ItemRemoveButton_Click">
-                                        <SymbolIcon Symbol="Remove" />
-                                    </Button>
-                                </Grid>
+                                <SwipeControl>
+                                    <SwipeControl.RightItems>
+                                        <SwipeItems Mode="Execute">
+                                            <SwipeItem
+                                                x:Uid="RemoveSwipeItem"
+                                                Background="Red"
+                                                Foreground="White"
+                                                Invoked="RemoveItem_Invoked"
+                                                Text="Remove">
+                                                <SwipeItem.IconSource>
+                                                    <SymbolIconSource Symbol="Remove" />
+                                                </SwipeItem.IconSource>
+                                            </SwipeItem>
+                                        </SwipeItems>
+                                    </SwipeControl.RightItems>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock VerticalAlignment="Center" Text="{x:Bind}" />
+                                        <Button
+                                            Grid.Column="1"
+                                            Padding="15"
+                                            VerticalAlignment="Stretch"
+                                            VerticalContentAlignment="Stretch"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Click="ItemRemoveButton_Click"
+                                            Content="&#xE108;"
+                                            FontFamily="Segoe MDL2 Assets"
+                                            FontSize="12" />
+                                    </Grid>
+                                </SwipeControl>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>

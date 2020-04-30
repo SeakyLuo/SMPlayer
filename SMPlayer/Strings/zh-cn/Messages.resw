@@ -156,6 +156,9 @@
   <data name="HasBeenPlayed" xml:space="preserve">
     <value>《{0}》已经播放了{1}次。{2}</value>
   </data>
+  <data name="ItemRemoved" xml:space="preserve">
+    <value>“{0}”已移除</value>
+  </data>
   <data name="LoadMusicLibrary" xml:space="preserve">
     <value>正在加载音乐库……</value>
   </data>
