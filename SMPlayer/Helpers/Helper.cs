@@ -70,15 +70,10 @@ namespace SMPlayer
             list.Remove(item);
             list.Insert(0, item);
         }
-        public static void AddOrMoveToTheFirst<T>(this List<T> list, T item)
+        public static int FindIndex<T>(this IEnumerable<T> list, Predicate<T> match)
         {
-            list.Remove(item);
-            list.Insert(0, item);
-        }
-        public static int FindIndex<T>(this ObservableCollection<T> list, Predicate<T> match)
-        {
-            for (int i = 0; i < list.Count; i++)
-                if (match(list[i]))
+            for (int i = 0; i < list.Count(); i++)
+                if (match(list.ElementAt(i)))
                     return i;
             return -1;
         }

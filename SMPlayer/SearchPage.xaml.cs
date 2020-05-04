@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 using System;
+using SMPlayer.Helpers;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -21,7 +22,7 @@ namespace SMPlayer
     {
         public static readonly SortBy[] ArtistsCriteria = new SortBy[] { SortBy.Default, SortBy.Name, SortBy.Album, SortBy.PlayCount, SortBy.Duration },
                                         AlbumsCriteria = new SortBy[] { SortBy.Default, SortBy.Name, SortBy.PlayCount, SortBy.Duration },
-                                        SongsCriteria = new SortBy[] { SortBy.Default, SortBy.Title, SortBy.Album, SortBy.PlayCount, SortBy.Duration },
+                                        SongsCriteria = new SortBy[] { SortBy.Default, SortBy.Title, SortBy.Artist, SortBy.Album, SortBy.PlayCount, SortBy.Duration },
                                         PlaylistsCriteria = new SortBy[] { SortBy.Default, SortBy.Name, SortBy.PlayCount, SortBy.Duration };
         public static Stack<string> History = new Stack<string>();
 
@@ -81,87 +82,42 @@ namespace SMPlayer
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
                 string modifiedKeyowrd = keyword.ToLowerInvariant();
-                SearchArtists(modifiedKeyowrd);
-                SearchAlbums(modifiedKeyowrd);
-                SearchSongs(modifiedKeyowrd);
-                SearchPlaylists(modifiedKeyowrd);
+                SearchArtists(modifiedKeyowrd, Settings.settings.SearchArtistsCriterion);
+                SearchAlbums(modifiedKeyowrd, Settings.settings.SearchAlbumsCriterion);
+                SearchSongs(modifiedKeyowrd, Settings.settings.SearchSongsCriterion);
+                SearchPlaylists(modifiedKeyowrd, Settings.settings.SearchPlaylistsCriterion);
                 NoResultTextBlock.Visibility = Artists.Count == 0 && Albums.Count == 0 && Songs.Count == 0 && Playlists.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
                 LoadingProgress.Visibility = Visibility.Collapsed;
             });
         }
 
-        public static bool IsTargetArtist(Music music, string keyword)
+        public void SearchArtists(string keyword, SortBy criterion)
         {
-            return IsTargetArtist(music.Artist, keyword);
-        }
-        public static bool IsTargetArtist(string artist, string keyword)
-        {
-            return artist.ToLowerInvariant().Contains(keyword);
-        }
-        public void SearchArtists(string keyword)
-        {
-            foreach (var group in MusicLibraryPage.AllSongs.Where(m => IsTargetArtist(m, keyword)).GroupBy(m => m.Artist))
-            {
-                AllArtists.Add(new Playlist(group.Key, group) { Artist = group.Key });
-            }
+            AllArtists.SetTo(SearchHelper.SearchArtists(keyword, criterion));
             Artists.SetTo(AllArtists.Take(ArtistLimit));
             ArtistsViewAllButton.Visibility = AllArtists.Count > ArtistLimit ? Visibility.Visible : Visibility.Collapsed;
             ArtistsDropdown.Visibility = Artists.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
-        public static bool IsTargetAlbum(Music music, string keyword)
+
+        public void SearchAlbums(string keyword, SortBy criterion)
         {
-            return music.Album.ToLowerInvariant().Contains(keyword) || music.Artist.ToLower().Contains(keyword);
-        }
-        public void SearchAlbums(string keyword)
-        {
-            foreach (var group in MusicLibraryPage.AllSongs.Where(m => IsTargetAlbum(m, keyword)).GroupBy(m => m.Album))
-            {
-                Music music = group.ElementAt(0);
-                AllAlbums.Add(new AlbumView(music.Album, music.Artist, group.OrderBy(m => m.Name).ThenBy(m => m.Artist), false));
-            }
+            AllAlbums.SetTo(SearchHelper.SearchAlbums(keyword, criterion));
             Albums.SetTo(AllAlbums.Take(AlbumLimit));
             AlbumsViewAllButton.Visibility = AllAlbums.Count > AlbumLimit ? Visibility.Visible : Visibility.Collapsed;
             AlbumsDropdown.Visibility = Albums.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
-        public static bool IsTargetMusic(Music music, string keyword)
-        {
-            return music.Name.ToLowerInvariant().Contains(keyword) ||
-                   music.Album.ToLowerInvariant().Contains(keyword) ||
-                   music.Artist.ToLowerInvariant().Contains(keyword);
-        }
 
-        public void SearchSongs(string keyword)
+        public void SearchSongs(string keyword, SortBy criterion)
         {
-            foreach (var music in MusicLibraryPage.AllSongs)
-            {
-                if (IsTargetMusic(music, keyword))
-                {
-                    AllSongs.Add(music);
-                }
-            }
+            AllSongs.SetTo(SearchHelper.SearchSongs(keyword, criterion));
             Songs.SetTo(AllSongs.Take(SongLimit));
             SongsViewAllButton.Visibility = AllSongs.Count > SongLimit ? Visibility.Visible : Visibility.Collapsed;
             SongsDropdown.Visibility = Songs.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
-        public static bool IsTargetPlaylist(Playlist playlist, string keyword)
-        {
-            return playlist.Name.ToLowerInvariant().Contains(keyword) || playlist.Songs.Any(m => IsTargetMusic(m, keyword));
-        }
 
-        public void SearchPlaylists(string keyword)
+        public void SearchPlaylists(string keyword, SortBy criterion)
         {
-            var nowPlaying = MediaHelper.NowPlaying;
-            if (IsTargetPlaylist(nowPlaying, keyword))
-                AllPlaylists.Add(nowPlaying.ToAlbumView());
-            if (IsTargetPlaylist(Settings.settings.MyFavorites, keyword))
-                AllPlaylists.Add(Settings.settings.MyFavorites.ToAlbumView());
-            foreach (var playlist in Settings.settings.Playlists)
-            {
-                if (IsTargetPlaylist(playlist, keyword))
-                {
-                    AllPlaylists.Add(playlist.ToAlbumView());
-                }
-            }
+            AllPlaylists.SetTo(SearchHelper.SearchPlaylists(keyword, criterion));
             Playlists.SetTo(AllPlaylists.Take(PlaylistLimit));
             PlaylistsViewAllButton.Visibility = AllPlaylists.Count > PlaylistLimit ? Visibility.Visible : Visibility.Collapsed;
             PlaylistsDropdown.Visibility = Playlists.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
@@ -215,30 +171,48 @@ namespace SMPlayer
         private void ArtistsDropdown_Click(object sender, RoutedEventArgs e)
         {
             MenuFlyoutHelper.SetSearchSortByMenu(sender, Settings.settings.SearchArtistsCriterion, ArtistsCriteria,
-                                                item =>
+                                                async item =>
                                                 {
                                                     Settings.settings.SearchArtistsCriterion = item;
                                                     SetArtistsDropdownContent();
+                                                    LoadingProgress.Visibility = Visibility.Visible;
+                                                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                                                    {
+                                                        AllArtists.SetTo(SearchHelper.SortArtists(AllArtists, CurrentKeyword, item));
+                                                        LoadingProgress.Visibility = Visibility.Collapsed;
+                                                    });
                                                 });
         }
 
         private void AlbumsDropdown_Click(object sender, RoutedEventArgs e)
         {
             MenuFlyoutHelper.SetSearchSortByMenu(sender, Settings.settings.SearchAlbumsCriterion, AlbumsCriteria,
-                                                item =>
+                                                async item =>
                                                 {
                                                     Settings.settings.SearchAlbumsCriterion = item;
                                                     SetAlbumsDropdownContent();
+                                                    LoadingProgress.Visibility = Visibility.Visible;
+                                                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                                                    {
+                                                        AllAlbums.SetTo(SearchHelper.SortAlbums(AllAlbums, CurrentKeyword, item));
+                                                        LoadingProgress.Visibility = Visibility.Collapsed;
+                                                    });
                                                 });
         }
 
         private void SongsDropdown_Click(object sender, RoutedEventArgs e)
         {
             MenuFlyoutHelper.SetSearchSortByMenu(sender, Settings.settings.SearchSongsCriterion, SongsCriteria,
-                                                item =>
+                                                async item =>
                                                 {
                                                     Settings.settings.SearchSongsCriterion = item;
                                                     SetSongsDropdownContent();
+                                                    LoadingProgress.Visibility = Visibility.Visible;
+                                                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                                                    {
+                                                        AllSongs.SetTo(SearchHelper.SortSongs(AllSongs, CurrentKeyword, item));
+                                                        LoadingProgress.Visibility = Visibility.Collapsed;
+                                                    });
                                                 });
         }
 
@@ -255,10 +229,16 @@ namespace SMPlayer
         private void PlaylistsDropdown_Click(object sender, RoutedEventArgs e)
         {
             MenuFlyoutHelper.SetSearchSortByMenu(sender, Settings.settings.SearchPlaylistsCriterion, PlaylistsCriteria,
-                                                item =>
+                                                async item =>
                                                 {
                                                     Settings.settings.SearchPlaylistsCriterion = item;
                                                     SetPlaylistsDropdownContent();
+                                                    LoadingProgress.Visibility = Visibility.Visible;
+                                                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                                                    {
+                                                        AllPlaylists.SetTo(SearchHelper.SortPlaylists(AllPlaylists, CurrentKeyword, item));
+                                                        LoadingProgress.Visibility = Visibility.Collapsed;
+                                                    });
                                                 });
         }
 
@@ -310,4 +290,5 @@ namespace SMPlayer
         public SortBy Criterion;
         public object Collection;
     }
+
 }

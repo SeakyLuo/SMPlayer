@@ -28,10 +28,12 @@ ThemeColor change.
 
 Animations.
 
-Save lyrics on another thread.
-
 # TO FIX
 Able to drag titlebar when loading.
 
 # MIGHT Do
-Allow MainSearchBar to have a search history dropdown
+Allow MainSearchBar to have a search history dropdown.
+
+SearchPage AddTo button add all songs instead of displayed songs.
+
+SearchPage AddTo button for all search types.

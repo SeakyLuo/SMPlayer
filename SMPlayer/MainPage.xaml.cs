@@ -186,8 +186,7 @@ namespace SMPlayer
 
         private void SearchBar_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            string keyword = sender.Text.Trim();
-            Search(keyword);
+            Search(sender.Text);
         }
 
         public void SetSearchBarText(string text)
@@ -197,14 +196,17 @@ namespace SMPlayer
 
         public void Search(string keyword)
         {
-            if (keyword.Length > 0)
+            if (keyword.Length == 0)
             {
-                Settings.settings.Search(keyword);
-                NaviFrame.Navigate(typeof(SearchPage), keyword);
-                SetBackButtonVisible(true);
-                if (MainNavigationView.DisplayMode != NavigationViewDisplayMode.Expanded)
-                    MainNavigationView.IsPaneOpen = false;
+                ShowNotification(Helper.LocalizeMessage("SearchEmpty"));
+                return;
             }
+            string trimmed = keyword.Trim();
+            Settings.settings.Search(keyword);
+            NaviFrame.Navigate(typeof(SearchPage), trimmed.Length == 0 ? keyword : trimmed);
+            SetBackButtonVisible(true);
+            if (MainNavigationView.DisplayMode != NavigationViewDisplayMode.Expanded)
+                MainNavigationView.IsPaneOpen = false;
             if (HeaderSearchBar.Visibility == Visibility.Visible)
             {
                 HideHeaderSearchBar();

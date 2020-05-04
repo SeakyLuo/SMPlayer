@@ -87,13 +87,9 @@ namespace SMPlayer
         private void MenuFlyout_Opening(object sender, object e)
         {
             if (MusicLibraryDataGrid.SelectedItems.Count > 1)
-            {
                 MenuFlyoutHelper.SetPlaylistMenu(sender);
-            }
             else
-            {
                 MenuFlyoutHelper.SetMusicMenu(sender);
-            }
         }
 
         public static IEnumerable<Music> SortPlaylist(IEnumerable<Music> playlist, SortBy criterion)

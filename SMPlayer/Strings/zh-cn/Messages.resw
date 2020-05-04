@@ -282,6 +282,9 @@
   <data name="Reverse Playlist" xml:space="preserve">
     <value>反转播放列表</value>
   </data>
+  <data name="SearchEmpty" xml:space="preserve">
+    <value>搜索内容不能为空！</value>
+  </data>
   <data name="SearchLyricsFailed" xml:space="preserve">
     <value>无法找到匹配歌词！</value>
   </data>

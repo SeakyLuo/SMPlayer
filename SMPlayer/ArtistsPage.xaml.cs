@@ -1,4 +1,5 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Helpers;
+using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -176,7 +177,7 @@ namespace SMPlayer
 
         private void ArtistSearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
-            Suggestions.SetTo(SuggestionList.Where(s => SearchPage.IsTargetArtist(s, sender.Text)));
+            Suggestions.SetTo(SuggestionList.Where(s => SearchHelper.IsTargetArtist(s, sender.Text)));
         }
 
         private void ArtistSearchBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
