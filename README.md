@@ -14,9 +14,11 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
-Improved editing album cover by selecting a song.
+Backup settings.
 
-Search lyrics for all songs.
+Sort albums.
+
+Improved editing album cover by selecting a song.
 
 Multi-Select.
 
@@ -31,9 +33,11 @@ Animations.
 # TO FIX
 Able to drag titlebar when loading.
 
-# MIGHT Do
+# MIGHT DO
 Allow MainSearchBar to have a search history dropdown.
 
 SearchPage AddTo button add all songs instead of displayed songs.
 
 SearchPage AddTo button for all search types.
+
+Random after one cycle.

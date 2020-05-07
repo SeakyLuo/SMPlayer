@@ -120,6 +120,15 @@
   <data name="Add To" xml:space="preserve">
     <value>添加到</value>
   </data>
+  <data name="AddLyrics" xml:space="preserve">
+    <value>添加歌词</value>
+  </data>
+  <data name="AddLyricsButton.Content" xml:space="preserve">
+    <value>添加歌词</value>
+  </data>
+  <data name="AddLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>为所有歌曲搜索并添加歌词</value>
+  </data>
   <data name="AddToAppButton.Label" xml:space="preserve">
     <value>添加到</value>
   </data>

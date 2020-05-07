@@ -52,16 +52,14 @@ namespace SMPlayer.Controls
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
             {
-                if (Lyrics != LyricsTextBox.Text)
+                string lyrics = LyricsTextBox.Text;
+                if (Lyrics != lyrics)
                 {
                     SaveProgress.Visibility = Visibility.Visible;
                     LyricsTextBox.IsEnabled = false;
-                    var music = await CurrentMusic.GetStorageFileAsync();
-                    using (var file = TagLib.File.Create(new MusicFileAbstraction(music), TagLib.ReadStyle.Average))
+                    if (await CurrentMusic.SaveLyricsAsync(lyrics))
                     {
-                        Lyrics = LyricsTextBox.Text;
-                        file.Tag.Lyrics = Lyrics;
-                        file.Save();
+                        Lyrics = lyrics;
                     }
                     SaveProgress.Visibility = Visibility.Collapsed;
                     LyricsTextBox.IsEnabled = true;
@@ -76,16 +74,8 @@ namespace SMPlayer.Controls
             string notification = "";
             try
             {
-                string lyrics = await SearchLyrics(CurrentMusic.Name + " " + CurrentMusic.Artist);
-                if (lyrics == "")
-                {
-                    string musicName = CurrentMusic.Name.RemoveBraces('(', ')').RemoveBraces('（', '）').
-                                                         RemoveBraces('《', '》').RemoveBraces('<', '>').
-                                                         RemoveBraces('[', ']').RemoveBraces('【', '】');
-                    lyrics = await SearchLyrics(musicName + " " + CurrentMusic.Artist);
-                    if (lyrics == "") lyrics = await SearchLyrics(musicName);
-                    if (lyrics == "") throw new Exception("LyricsNotFound");
-                }
+                string lyrics = await SearchLyrics(CurrentMusic);
+                if (lyrics == "") throw new Exception("LyricsNotFound");
                 LyricsTextBox.Text = lyrics;
                 notification = Helper.LocalizeMessage("SearchLyricsSuccessful");
             }
@@ -105,25 +95,48 @@ namespace SMPlayer.Controls
                 Helper.ShowNotification(notification);
             }
         }
+
+        public static async Task<string> SearchLyrics(Music music)
+        {
+            string lyrics = await SearchLyrics(music.Name + " " + music.Artist);
+            if (string.IsNullOrEmpty(lyrics))
+            {
+                string musicName = music.Name.RemoveBraces('(', ')').RemoveBraces('（', '）').
+                                                RemoveBraces('《', '》').RemoveBraces('<', '>').
+                                                RemoveBraces('[', ']').RemoveBraces('【', '】');
+                lyrics = await SearchLyrics(musicName + " " + music.Artist);
+                if (lyrics == "") lyrics = await SearchLyrics(musicName);
+            }
+            return lyrics;
+        }
+
         public static async Task<string> SearchLyrics(string keyword)
         {
             string uri = $"https://c.y.qq.com/soso/fcgi-bin/client_search_cp?ct=24&qqmusic_ver=1298&new_json=1&remoteplace=sizer.yqq.lyric_next&searchid=63514736641951294&aggr=1&cr=1&catZhida=1&lossless=0&sem=1&t=7&p=1&n=1&w={Uri.EscapeUriString(keyword)}&g_tk=1714057807&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0";
-            using (var client = new HttpClient())
+            try
             {
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.UserAgent.TryParseAdd("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:22.0) Gecko/20100101 Firefox/22.0");
-                var response = await client.GetAsync(uri);
-                response.EnsureSuccessStatusCode();
-                var content = await response.Content.ReadAsStringAsync();
-                Windows.Data.Json.JsonObject json = Windows.Data.Json.JsonObject.Parse(content);
-                var list = json.GetNamedObject("data").GetNamedObject("lyric").GetNamedArray("list");
-                if (list.Count == 0) return "";
-                var lyrics = list.GetObjectAt(0).GetNamedString("content");
-                lyrics = string.Join("\n", new List<string>(lyrics.Replace("\\n", "\n").Replace("<em>", "").Replace("</em>", "")
-                                                                  .Split("\n")).ConvertAll(line => line.Trim()));
-                return lyrics; 
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.UserAgent.TryParseAdd("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:22.0) Gecko/20100101 Firefox/22.0");
+                    var response = await client.GetAsync(uri);
+                    response.EnsureSuccessStatusCode();
+                    var content = await response.Content.ReadAsStringAsync();
+                    Windows.Data.Json.JsonObject json = Windows.Data.Json.JsonObject.Parse(content);
+                    var list = json.GetNamedObject("data").GetNamedObject("lyric").GetNamedArray("list");
+                    if (list.Count == 0) return "";
+                    var lyrics = list.GetObjectAt(0).GetNamedString("content");
+                    lyrics = string.Join("\n", new List<string>(lyrics.Replace("\\n", "\n").Replace("<em>", "").Replace("</em>", "")
+                                                                      .Split("\n")).ConvertAll(line => line.Trim()));
+                    return lyrics;
+                }
+            }
+            catch (Exception)
+            {
+                return "";
             }
         }
+
         public async void SetLyrics(Music music)
         {
             if (music == null) return;

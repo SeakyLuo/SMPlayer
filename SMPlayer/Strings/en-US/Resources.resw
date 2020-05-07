@@ -120,6 +120,15 @@
   <data name="Add To" xml:space="preserve">
     <value>Add To</value>
   </data>
+  <data name="AddLyrics" xml:space="preserve">
+    <value>Add Lyrics</value>
+  </data>
+  <data name="AddLyricsButton.Content" xml:space="preserve">
+    <value>Add Lyrics</value>
+  </data>
+  <data name="AddLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Search and add lyrics for all music</value>
+  </data>
   <data name="AddToAppButton.Label" xml:space="preserve">
     <value>Add To</value>
   </data>

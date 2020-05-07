@@ -132,7 +132,15 @@ namespace SMPlayer
         public static string LocalizeMessage(string resource, params object[] args)
         {
             var str = LocalizeHelper(resource, MessageResourceLoader);
-            return string.Format(str, args);
+            try
+            {
+                return string.Format(str, args);
+            }
+            catch (FormatException)
+            {
+                // No Format Args Provided
+                return str;
+            }
         }
 
         public static string GetPlaylistName(string Name, int index)

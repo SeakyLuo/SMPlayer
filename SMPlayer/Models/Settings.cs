@@ -15,6 +15,7 @@ namespace SMPlayer.Models
         private const string FILENAME = "SMPlayerSettings.json";
         public static List<LikeMusicListener> LikeMusicListeners = new List<LikeMusicListener>();
         public static List<Action<Playlist>> PlaylistAddedListeners = new List<Action<Playlist>>();
+        public static bool Inited { get; private set; } = false;
 
         public string RootPath { get; set; } = "";
         public FolderTree Tree { get; set; } = new FolderTree();
@@ -71,6 +72,7 @@ namespace SMPlayer.Models
 
         public static async Task<bool> Init()
         {
+            Inited = false;
             var json = await JsonFileHelper.ReadAsync(FILENAME);
             if (string.IsNullOrEmpty(json))
             {
@@ -97,6 +99,7 @@ namespace SMPlayer.Models
                     if (item.Name.EndsWith(".TMP"))
                         await item.DeleteAsync();
             }
+            Inited = true;
             return true;
         }
 

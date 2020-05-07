@@ -45,7 +45,11 @@ namespace SMPlayer
 
         public static async Task Init()
         {
-            SetAllSongs(JsonFileHelper.Convert<ObservableCollection<Music>>(await JsonFileHelper.ReadAsync(FILENAME)));
+            var songs = JsonFileHelper.Convert<List<Music>>(await JsonFileHelper.ReadAsync(FILENAME));
+            if (songs.Count == 0 && Settings.Inited && (songs = Settings.settings.Tree.Flatten()).Count > 0)
+                SortAndSetAllSongs(songs);
+            else
+                SetAllSongs(songs);
             MediaControl.AddMusicModifiedListener(MusicModified);
         }
 

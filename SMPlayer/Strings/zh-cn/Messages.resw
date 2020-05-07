@@ -240,6 +240,9 @@
   <data name="Playlists:" xml:space="preserve">
     <value>播放列表：</value>
   </data>
+  <data name="PostParenthesis" xml:space="preserve">
+    <value>{0}（{1}）</value>
+  </data>
   <data name="ProcessRequest" xml:space="preserve">
     <value>正在处理您的请求……</value>
   </data>
@@ -284,6 +287,9 @@
   </data>
   <data name="SearchEmpty" xml:space="preserve">
     <value>搜索内容不能为空！</value>
+  </data>
+  <data name="SearchLyricsDone" xml:space="preserve">
+    <value>已为所有歌曲添加歌词</value>
   </data>
   <data name="SearchLyricsFailed" xml:space="preserve">
     <value>无法找到匹配歌词！</value>

@@ -261,6 +261,12 @@
                 Click="BugReport_Click"
                 Content="Bug Report"
                 Style="{ThemeResource TextBlockButtonStyle}" />
+            <HyperlinkButton
+                x:Uid="AddLyricsButton"
+                Margin="9,0"
+                Click="AddLyrics_Click"
+                Content="Add Lyrics"
+                Style="{ThemeResource TextBlockButtonStyle}" />
         </StackPanel>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">

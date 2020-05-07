@@ -204,6 +204,25 @@ namespace SMPlayer.Models
             }
         }
 
+        public async Task<bool> SaveLyricsAsync(string lyrics)
+        {
+            var music = await GetStorageFileAsync();
+            try
+            {
+                using (var file = TagLib.File.Create(new MusicFileAbstraction(music), TagLib.ReadStyle.Average))
+                {
+                    file.Tag.Lyrics = lyrics;
+                    file.Save();
+                }
+                return true;
+            }
+            catch (Exception exception)
+            {
+                System.Diagnostics.Debug.WriteLine(string.Format("Exception ({0}) when saving lyrics for {1}", exception.Message, Name));
+                return false;
+            }
+        }
+
         public async Task<MusicDisplayItem> GetMusicDisplayItemAsync()
         {
             var thumbnail = await Helper.GetStorageItemThumbnailAsync(this);
