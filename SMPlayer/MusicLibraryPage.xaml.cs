@@ -20,7 +20,7 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class MusicLibraryPage : Page, SwitchMusicListener, AfterSongsSetListener, LikeMusicListener
     {
-        private const string FILENAME = "MusicLibrary.json";
+        public const string JsonFilename = "MusicLibrary";
         public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
         public static HashSet<Music> AllSongsSet;
         public static bool IsLibraryUnchangedAfterChecking = true;
@@ -45,8 +45,8 @@ namespace SMPlayer
 
         public static async Task Init()
         {
-            var songs = JsonFileHelper.Convert<List<Music>>(await JsonFileHelper.ReadAsync(FILENAME));
-            if (songs.Count == 0 && Settings.Inited && (songs = Settings.settings.Tree.Flatten()).Count > 0)
+            var songs = JsonFileHelper.Convert<List<Music>>(await JsonFileHelper.ReadAsync(JsonFilename));
+            if (songs?.Count == 0 && Settings.Inited && (songs = Settings.settings.Tree.Flatten()).Count > 0)
                 SortAndSetAllSongs(songs);
             else
                 SetAllSongs(songs);
@@ -66,7 +66,8 @@ namespace SMPlayer
 
         public static void Save()
         {
-            JsonFileHelper.SaveAsync(FILENAME, AllSongs);
+            JsonFileHelper.SaveAsync(JsonFilename, AllSongs);
+            JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, AllSongs);
         }
 
         public static void AddAfterSongsSetListener(AfterSongsSetListener listener)

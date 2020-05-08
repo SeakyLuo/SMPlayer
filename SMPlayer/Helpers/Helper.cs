@@ -31,8 +31,10 @@ namespace SMPlayer
                             ThumbnailNotFoundPath = "ms-appx:///Assets/colorful_bg_wide.png";
         public const string ToastTagPaused = "SMPlayerMediaToastTagPaused", ToastTagPlaying = "SMPlayerMediaToastTagPlaying", ToastGroup = "SMPlayerMediaToastGroup";
         public static string NoLyricsAvailable { get => LocalizeMessage("NoLyricsAvailable"); }
+        public static string TimeStamp { get => DateTime.Now.ToString("yyyyMMdd_HHmmss"); }
 
-        public static StorageFolder CurrentFolder, ThumbnailFolder, SecondaryTileFolder;
+        public static StorageFolder CurrentFolder, ThumbnailFolder, SecondaryTileFolder, TempFolder;
+        public static StorageFolder LocalFolder { get => ApplicationData.Current.LocalFolder; }
         public static BitmapImage DefaultAlbumCover = new BitmapImage(new Uri(DefaultAlbumCoverPath));
         public static BitmapImage ThumbnailNotFoundImage = new BitmapImage(new Uri(ThumbnailNotFoundPath));
         public static ToastNotification Toast;
@@ -45,6 +47,17 @@ namespace SMPlayer
         private static string Lyrics = "";
         private static List<Music> NotFoundHistory = new List<Music>();
 
+        public static async Task Init()
+        {
+            TempFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Temp", CreationCollisionOption.OpenIfExists);
+            var files = await TempFolder.GetFilesAsync();
+            var settings = files.Where(f => f.Name.StartsWith(Settings.JsonFilename)).OrderBy(f => f.DateCreated);
+            var mediaHelper = files.Where(f => f.Name.StartsWith(MediaHelper.JsonFilename)).OrderBy(f => f.DateCreated);
+            var musicLibrary = files.Where(f => f.Name.StartsWith(MusicLibraryPage.JsonFilename)).OrderBy(f => f.DateCreated);
+            foreach (var file in settings.Take(settings.Count() - 3)) await file.DeleteAsync();
+            foreach (var file in mediaHelper.Take(mediaHelper.Count() - 3)) await file.DeleteAsync();
+            foreach (var file in musicLibrary.Take(musicLibrary.Count() - 3)) await file.DeleteAsync();
+        }
         public static void Locate(this UIElement uIElement)
         {
             uIElement.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true, VerticalAlignmentRatio = 0 });

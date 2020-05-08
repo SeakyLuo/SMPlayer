@@ -8,17 +8,23 @@ namespace SMPlayer.Models
 {
     public class JsonFileHelper
     {
-        private static readonly StorageFolder Folder = ApplicationData.Current.LocalFolder;
-
-        public static async Task<string> ReadAsync(string filename)
+        private const string extension = ".json";
+        public static async Task<string> ReadAsync(StorageFolder folder, string filename)
         {
-            StorageFile file = await Folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
+            if (!filename.EndsWith(extension)) filename += extension;
+            StorageFile file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
             return await FileIO.ReadTextAsync(file);
         }
 
-        public static async void SaveAsync<T>(string filename, T data)
+        public static async Task<string> ReadAsync(string filename)
         {
-            StorageFile file = await Folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
+            return await ReadAsync(Helper.LocalFolder, filename);
+        }
+
+        public static async void SaveAsync<T>(StorageFolder folder, string filename, T data)
+        {
+            if (!filename.EndsWith(extension)) filename += extension;
+            StorageFile file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
             var json = JsonConvert.SerializeObject(data);
             while (true)
             {
@@ -39,6 +45,11 @@ namespace SMPlayer.Models
             }
         }
 
+        public static void SaveAsync<T>(string filename, T data)
+        {
+            SaveAsync(Helper.LocalFolder, filename, data);
+        }
+
         public static T Convert<T>(string json)
         {
             return JsonConvert.DeserializeObject<T>(json);
@@ -46,7 +57,7 @@ namespace SMPlayer.Models
 
         public static async void DeleteFile(string filename)
         {
-            var file = await Folder.GetFileAsync(filename);
+            var file = await Helper.LocalFolder.GetFileAsync(filename);
             await file.DeleteAsync();
         }
     }

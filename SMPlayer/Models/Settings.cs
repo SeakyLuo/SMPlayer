@@ -12,7 +12,7 @@ namespace SMPlayer.Models
     public class Settings
     {
         public static Settings settings;
-        private const string FILENAME = "SMPlayerSettings.json";
+        public const string JsonFilename = "SMPlayerSettings";
         public static List<LikeMusicListener> LikeMusicListeners = new List<LikeMusicListener>();
         public static List<Action<Playlist>> PlaylistAddedListeners = new List<Action<Playlist>>();
         public static bool Inited { get; private set; } = false;
@@ -73,7 +73,7 @@ namespace SMPlayer.Models
         public static async Task<bool> Init()
         {
             Inited = false;
-            var json = await JsonFileHelper.ReadAsync(FILENAME);
+            var json = await JsonFileHelper.ReadAsync(JsonFilename);
             if (string.IsNullOrEmpty(json))
             {
                 settings = new Settings();
@@ -106,7 +106,8 @@ namespace SMPlayer.Models
         public static void Save()
         {
             settings.MusicProgress = MediaHelper.Position;
-            JsonFileHelper.SaveAsync(FILENAME, settings);
+            JsonFileHelper.SaveAsync(JsonFilename, settings);
+            JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, settings);
         }
 
         public static Music FindMusic(Music music) { return settings.Tree.FindMusic(music); }

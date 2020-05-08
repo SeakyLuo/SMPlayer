@@ -62,12 +62,12 @@ namespace SMPlayer
         public static List<MediaControlListener> MediaControlListeners = new List<MediaControlListener>();
         public static List<SwitchMusicListener> SwitchMusicListeners = new List<SwitchMusicListener>();
         public static List<Action> InitFinishedListeners = new List<Action>();
-        private const string FILENAME = "NowPlayingPlaylist.json";
+        public const string JsonFilename = "NowPlayingPlaylist";
 
         public static async void Init()
         {
             var settings = Settings.settings;
-            var playlist = JsonFileHelper.Convert<List<string>>(await JsonFileHelper.ReadAsync(FILENAME));
+            var playlist = JsonFileHelper.Convert<List<string>>(await JsonFileHelper.ReadAsync(JsonFilename));
             if (playlist != null && playlist.Count != 0)
             {
                 if (settings.LastMusicIndex == -1)
@@ -128,7 +128,9 @@ namespace SMPlayer
         }
         public static void Save()
         {
-            JsonFileHelper.SaveAsync(FILENAME, CurrentPlaylist.Select(m => m.Path));
+            var paths = CurrentPlaylist.Select(m => m.Path);
+            JsonFileHelper.SaveAsync(JsonFilename, paths);
+            JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, paths);
         }
         public static void SetMode(PlayMode mode)
         {
