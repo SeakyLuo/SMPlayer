@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.UI.Xaml;
@@ -93,31 +94,31 @@ namespace SMPlayer.Controls
 
         private async void SaveMusicPropertiesButton_Click(object sender, RoutedEventArgs e)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            if (IsPropertiesModified)
             {
-                if (IsPropertiesModified)
+                SaveProgress.Visibility = Visibility.Visible;
+                var newMusic = CurrentMusic.Copy();
+                Properties.Title = newMusic.Name = TitleTextBox.Text;
+                Properties.Subtitle = SubtitleTextBox.Text;
+                Properties.Artist = newMusic.Artist = ArtistTextBox.Text;
+                Properties.Album = newMusic.Album = AlbumTextBox.Text;
+                Properties.AlbumArtist = AlbumArtistTextBox.Text;
+                if (int.TryParse(PlayCountTextBox.Text, out int PlayCount))
+                    newMusic.PlayCount = PlayCount;
+                Properties.Publisher = PublisherTextBox.Text;
+                if (uint.TryParse(TrackNumberTextBox.Text, out uint TrackNumber))
+                    Properties.TrackNumber = TrackNumber;
+                if (uint.TryParse(YearTextBox.Text, out uint Year))
+                    Properties.Year = Year;
+                await Task.Run(async () =>
                 {
-                    SaveProgress.Visibility = Visibility.Visible;
-                    var newMusic = CurrentMusic.Copy();
-                    Properties.Title = newMusic.Name = TitleTextBox.Text;
-                    Properties.Subtitle = SubtitleTextBox.Text;
-                    Properties.Artist = newMusic.Artist = ArtistTextBox.Text;
-                    Properties.Album = newMusic.Album = AlbumTextBox.Text;
-                    Properties.AlbumArtist = AlbumArtistTextBox.Text;
-                    if (int.TryParse(PlayCountTextBox.Text, out int PlayCount))
-                        newMusic.PlayCount = PlayCount;
-                    Properties.Publisher = PublisherTextBox.Text;
-                    if (uint.TryParse(TrackNumberTextBox.Text, out uint TrackNumber))
-                        Properties.TrackNumber = TrackNumber;
-                    if (uint.TryParse(YearTextBox.Text, out uint Year))
-                        Properties.Year = Year;
                     await Properties.SavePropertiesAsync();
                     NotifyListeners(CurrentMusic, newMusic);
                     CurrentMusic.CopyFrom(newMusic);
-                    SaveProgress.Visibility = Visibility.Collapsed;
-                }
-                Helper.ShowNotification("PropertiesUpdated");
-            });
+                });
+                SaveProgress.Visibility = Visibility.Collapsed;
+            }
+            Helper.ShowNotification("PropertiesUpdated");
         }
 
         private void ShowInExplorerButton_Click(object sender, RoutedEventArgs e)

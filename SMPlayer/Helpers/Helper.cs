@@ -89,6 +89,10 @@ namespace SMPlayer
         }
 
         public static NotificationContainer GetNotificationContainer() { return (Window.Current.Content as Frame).Content as NotificationContainer; }
+        public static void ShowNotificationWithoutLocalization(string message, int duration = 2000)
+        {
+            GetNotificationContainer()?.ShowNotification(message, duration);
+        }
         public static void ShowNotification(string message, int duration = 2000)
         {
             GetNotificationContainer()?.ShowNotification(LocalizeMessage(message), duration);
@@ -559,5 +563,6 @@ namespace SMPlayer
     {
         void ShowNotification(string message, int duration = 2000);
         void ShowUndoNotification(string message, Action undo, int duration = 5000);
+        void ShowLocalizedNotification(string message, int duration = 2000);
     }
 }

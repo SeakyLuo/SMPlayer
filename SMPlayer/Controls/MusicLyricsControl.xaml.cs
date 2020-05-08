@@ -50,22 +50,20 @@ namespace SMPlayer.Controls
 
         private async void SaveLyricsButton_Click(object sender, RoutedEventArgs e)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            string lyrics = LyricsTextBox.Text;
+            if (Lyrics != lyrics)
             {
-                string lyrics = LyricsTextBox.Text;
-                if (Lyrics != lyrics)
+                SaveProgress.Visibility = Visibility.Visible;
+                LyricsTextBox.IsEnabled = false;
+                await Task.Run(async () =>
                 {
-                    SaveProgress.Visibility = Visibility.Visible;
-                    LyricsTextBox.IsEnabled = false;
-                    if (await CurrentMusic.SaveLyricsAsync(lyrics))
-                    {
-                        Lyrics = lyrics;
-                    }
-                    SaveProgress.Visibility = Visibility.Collapsed;
-                    LyricsTextBox.IsEnabled = true;
-                }
-                Helper.ShowNotification("LyricsUpdated");
-            });
+                    await CurrentMusic.SaveLyricsAsync(lyrics);
+                    Lyrics = lyrics;
+                });
+                SaveProgress.Visibility = Visibility.Collapsed;
+                LyricsTextBox.IsEnabled = true;
+            }
+            Helper.ShowNotification("LyricsUpdated");
         }
         private async void SearchLyricsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -74,14 +72,15 @@ namespace SMPlayer.Controls
             string notification = "";
             try
             {
-                string lyrics = await SearchLyrics(CurrentMusic);
+                string lyrics = "";
+                await Task.Run(async () => lyrics = await SearchLyrics(CurrentMusic));
                 if (lyrics == "") throw new Exception("LyricsNotFound");
                 LyricsTextBox.Text = lyrics;
                 notification = Helper.LocalizeMessage("SearchLyricsSuccessful");
             }
             catch (Exception exception)
             {
-                System.Diagnostics.Debug.WriteLine(exception);
+                System.Diagnostics.Debug.WriteLine("MusicLyricsControl: " + exception.Message);
                 string uri = Helper.LocalizeMessage("SearchLyricsUrl", Helper.LocalizeMessage("Lyrics"), CurrentMusic.Name, CurrentMusic.Artist);
                 if (await Windows.System.Launcher.LaunchUriAsync(new Uri(uri)))
                     notification = Helper.LocalizeMessage("OpenBrowserSuccessful");

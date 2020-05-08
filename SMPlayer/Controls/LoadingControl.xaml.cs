@@ -47,7 +47,15 @@ namespace SMPlayer
                                                                                         typeof(LoadingControl),
                                                                                         new PropertyMetadata(0d));
 
-        public bool AllowBreak { get; set; } = false;
+        public bool AllowBreak
+        {
+            get => (bool)GetValue(AllowBreakProperty);
+            set => SetValue(AllowBreakProperty, value);
+        }
+        public static readonly DependencyProperty AllowBreakProperty = DependencyProperty.Register("AllowBreak",
+                                                                                        typeof(bool),
+                                                                                        typeof(LoadingControl),
+                                                                                        new PropertyMetadata(false));
         public List<Action> BreakLoadingListeners = new List<Action>();
         public LoadingControl()
         {
@@ -59,11 +67,20 @@ namespace SMPlayer
             Text = Helper.LocalizeMessage(text, args);
         }
 
-        public void Show(string text, bool isDeterminant, int progress = 0)
+        public void ShowDeterminant(string text, bool allowBreak = false, int progress = 0)
         { 
             SetLocalizedText(text);
-            IsDeterminant = isDeterminant;
+            IsDeterminant = true;
             Progress = progress;
+            AllowBreak = allowBreak;
+            this.Visibility = Visibility.Visible;
+        }
+
+        public void ShowIndeterminant(string text, bool allowBreak = false)
+        {
+            SetLocalizedText(text);
+            IsDeterminant = false;
+            AllowBreak = allowBreak;
             this.Visibility = Visibility.Visible;
         }
 

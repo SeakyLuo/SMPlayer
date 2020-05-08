@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.Popups;
@@ -20,12 +21,13 @@ namespace SMPlayer
         public static ShowToast[] NotificationOptions = { ShowToast.Always, ShowToast.MusicChanged, ShowToast.Never };
         private static List<AfterPathSetListener> listeners = new List<AfterPathSetListener>();
         private FolderTree loadingTree;
-        private int searchLyricsCounter = 0;
+        private volatile int addLyricsClickCounter = 0;
         private string addLyricsContent = Helper.Localize("AddLyrics");
 
         public SettingsPage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
             MainPage.Instance.Loader.BreakLoadingListeners.Add(() => loadingTree?.PauseLoading());
         }
 
@@ -57,21 +59,25 @@ namespace SMPlayer
         public async void UpdateMusicLibrary(StorageFolder folder)
         {
             if (folder == null) return;
-            MainPage.Instance.Loader.Show("LoadMusicLibrary", true);
+            MainPage.Instance.Loader.ShowDeterminant("LoadMusicLibrary", true);
             Helper.CurrentFolder = folder;
             loadingTree = new FolderTree();
             if (!await loadingTree.Init(folder, this)) return;
             MainPage.Instance.Loader.SetLocalizedText("UpdateMusicLibrary");
-            loadingTree.MergeFrom(Settings.settings.Tree);
-            Settings.settings.Tree = loadingTree;
-            Settings.settings.RootPath = folder.Path;
-            MusicLibraryPage.SortAndSetAllSongs(Settings.settings.Tree.Flatten());
+            await Task.Run(() =>
+            {
+                loadingTree.MergeFrom(Settings.settings.Tree);
+                Settings.settings.Tree = loadingTree;
+                Settings.settings.RootPath = folder.Path;
+            });
+            MusicLibraryPage.SortAndSetAllSongs(await Task.Run(Settings.settings.Tree.Flatten));
+            MainPage.Instance.Loader.Progress = 0;
             MainPage.Instance.Loader.Max = listeners.Count;
-            for (int i = 0; i < listeners.Count; i++)
+            for (int i = 0; i < listeners.Count;)
             {
                 var listener = listeners[i];
                 listener.PathSet(folder.Path);
-                MainPage.Instance.Loader.Progress = i;
+                MainPage.Instance.Loader.Progress = ++i;
             }
             MediaHelper.RemoveBadMusic();
             App.Save();
@@ -117,7 +123,7 @@ namespace SMPlayer
 
         public static async void CheckNewMusic(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
         {
-            MainPage.Instance.Loader.Show("ProcessRequest", false);
+            MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
             var data = new TreeUpdateData();
             if (!await tree.CheckNewFile(data)) return;
             if (data.More != 0 || data.Less != 0)
@@ -131,7 +137,7 @@ namespace SMPlayer
                 App.Save();
             }
             MainPage.Instance?.Loader.Hide();
-            Helper.ShowNotification(Helper.LocalizeMessage("CheckNewMusicResult", data.More, data.Less));
+            Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("CheckNewMusicResult", data.More, data.Less));
         }
 
         private void UpdateMusicLibrary_Click(object sender, RoutedEventArgs e)
@@ -147,39 +153,82 @@ namespace SMPlayer
             }
             else
             {
-                MainPage.Instance.ShowNotification(Helper.LocalizeMessage("FailToOpenBrowser"));
+                MainPage.Instance.ShowLocalizedNotification("FailToOpenBrowser");
             }
         }
 
         private void SaveChanges_Click(object sender, RoutedEventArgs e)
         {
             App.Save();
-            MainPage.Instance.ShowNotification(Helper.LocalizeMessage("ChangesSaved"));
+            MainPage.Instance.ShowLocalizedNotification("ChangesSaved");
         }
 
         private async void AddLyrics_Click(object sender, RoutedEventArgs e)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            ++addLyricsClickCounter;
+            if (addLyricsClickCounter == 2)
             {
-                string format = Helper.LocalizeMessage("PostParenthesis");
-                HyperlinkButton button = (HyperlinkButton)sender;
-                int count = MusicLibraryPage.AllSongs.Count;
-                for (searchLyricsCounter = 1; searchLyricsCounter < count + 1; searchLyricsCounter++)
+                MainPage.Instance.ShowLocalizedNotification("ClickAgainToStopAddingLyrics");
+                return;
+            }
+            else if (addLyricsClickCounter == 3)
+            {
+                addLyricsClickCounter = 0;
+                MainPage.Instance.Loader.ShowIndeterminant("StopAddingLyrics");
+                return;
+            }
+            string paren = Helper.LocalizeMessage("PostParenthesis");
+            HyperlinkButton button = (HyperlinkButton)sender;
+            List<Music> skipped = new List<Music>();
+            int count = MusicLibraryPage.AllSongs.Count, counter = 0;
+            foreach (Music music in MusicLibraryPage.AllSongs)
+            {
+                if (addLyricsClickCounter == 0)
                 {
-                    Music music = MusicLibraryPage.AllSongs[searchLyricsCounter - 1];
-                    string lyrics = await music.GetLyricsAsync();
-                    //if (string.IsNullOrEmpty(lyrics))
-                    //{
-                    //    lyrics = await Controls.MusicLyricsControl.SearchLyrics(music);
-                    //    await music.SaveLyricsAsync(lyrics);
-                    //}
-                    System.Diagnostics.Debug.WriteLine(searchLyricsCounter);
-                    button.Content = string.Format(format, addLyricsContent, searchLyricsCounter + "/" + count);
+                    Helper.ShowNotification("AddingLyricsStopped");
+                    MainPage.Instance.Loader.Hide();
+                    goto Done;
                 }
-                searchLyricsCounter = 0;
-                button.Content = Helper.Localize("AddLyrics");
-                Helper.ShowNotification("SearchLyricsDone");
-            });
+                string lyrics = await music.GetLyricsAsync();
+                if (string.IsNullOrEmpty(lyrics))
+                {
+                    if (music == MediaHelper.CurrentMusic)
+                    {
+                        skipped.Add(music);
+                        continue;
+                    }
+                    await Task.Run(async () =>
+                    {
+                        lyrics = await Controls.MusicLyricsControl.SearchLyrics(music);
+                        await music.SaveLyricsAsync(lyrics);
+                    });
+                }
+                button.Content = string.Format(paren, addLyricsContent, ++counter + "/" + count);
+            }
+            while (skipped.Count > 0)
+            {
+                foreach (Music music in skipped.ToList())
+                {
+                    if (addLyricsClickCounter == 0)
+                    {
+                        Helper.ShowNotification("AddingLyricsStopped");
+                        MainPage.Instance.Loader.Hide();
+                        goto Done;
+                    }
+                    if (music == MediaHelper.CurrentMusic && skipped.Count > 1) continue;
+                    await Task.Run(async () =>
+                    {
+                        string lyrics = await Controls.MusicLyricsControl.SearchLyrics(music);
+                        await music.SaveLyricsAsync(lyrics);
+                    });
+                    skipped.Remove(music);
+                    button.Content = string.Format(paren, addLyricsContent, ++counter + "/" + count);
+                }
+            }
+            Helper.ShowNotification("SearchLyricsDone");
+            Done:
+            button.Content = addLyricsContent;
+            addLyricsClickCounter = 0;
         }
 
         private void KeepRecentCheckBox_Checked(object sender, RoutedEventArgs e)

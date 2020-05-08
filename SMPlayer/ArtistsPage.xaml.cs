@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -88,12 +89,9 @@ namespace SMPlayer
             if (status == ExecutionStatus.Running) return;
             LoadingProgress.Visibility = Visibility.Visible;
             status = ExecutionStatus.Running;
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                SetData(songs);
-                status = ExecutionStatus.Ready;
-                LoadingProgress.Visibility = Visibility.Collapsed;
-            });
+            await Task.Run(() => SetData(songs));
+            status = ExecutionStatus.Ready;
+            LoadingProgress.Visibility = Visibility.Collapsed;
         }
 
         private void SetData(ICollection<Music> songs)
@@ -123,7 +121,7 @@ namespace SMPlayer
 
         private async void Artist_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await Task.Run(() =>
             {
                 var artist = (sender as FrameworkElement).DataContext as ArtistView;
                 LoadArtist(artist);

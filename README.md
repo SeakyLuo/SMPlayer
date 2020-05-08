@@ -14,8 +14,6 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
-Backup settings.
-
 Sort albums.
 
 Improved editing album cover by selecting a song.

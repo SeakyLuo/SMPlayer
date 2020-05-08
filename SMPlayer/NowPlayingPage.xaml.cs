@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Models;
 using System;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -56,8 +57,8 @@ namespace SMPlayer
 
         private async void RandomPlayButton_Click(object sender, RoutedEventArgs e)
         {
-            MainPage.Instance.Loader.Show("ProcessRequest", false);
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
+            await Task.Run(() =>
             {
                 MediaHelper.ShuffleAndPlay(MusicLibraryPage.AllSongs);
                 MainPage.Instance.Loader.Hide();

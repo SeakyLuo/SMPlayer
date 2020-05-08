@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddingLyricsStopped" xml:space="preserve">
+    <value>Adding lyrics stopped!</value>
+  </data>
+  <data name="AddingLyricsTo" xml:space="preserve">
+    <value>Adding lyrics to "{0}"...</value>
+  </data>
   <data name="Albums:" xml:space="preserve">
     <value>Albums: </value>
   </data>
@@ -134,6 +140,9 @@
   </data>
   <data name="ClearSearchHistory" xml:space="preserve">
     <value>Do you want to clear your search history?</value>
+  </data>
+  <data name="ClickAgainToStopAddingLyrics" xml:space="preserve">
+    <value>Click again to stop adding lyrics</value>
   </data>
   <data name="Comma" xml:space="preserve">
     <value>, </value>
@@ -335,6 +344,9 @@
   </data>
   <data name="Sort By Title" xml:space="preserve">
     <value>Sort By Title</value>
+  </data>
+  <data name="StopAddingLyrics" xml:space="preserve">
+    <value>Trying to stop adding lyrics......</value>
   </data>
   <data name="UnableToChangeAlbumArt" xml:space="preserve">
     <value>Unable to change album art!</value>

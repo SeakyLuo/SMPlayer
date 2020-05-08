@@ -70,7 +70,7 @@ namespace SMPlayer
             if (PlaylistDisplayDict.TryGetValue(playlist.Name, out List<MusicDisplayItem> MusicDisplayItems))
             {
                 item = MusicDisplayItems[random.Next(MusicDisplayItems.Count)];
-                await Dispatcher.RunIdleAsync(async (args) =>
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                 {
                     var items = await playlist.GetAllDisplayItemsAsync();
                     if (items.Count != MusicDisplayItems.Count) PlaylistDisplayDict[playlist.Name] = items;

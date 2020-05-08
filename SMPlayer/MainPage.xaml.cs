@@ -198,7 +198,7 @@ namespace SMPlayer
         {
             if (keyword.Length == 0)
             {
-                ShowNotification(Helper.LocalizeMessage("SearchEmpty"));
+                ShowLocalizedNotification("SearchEmpty");
                 return;
             }
             string trimmed = keyword.Trim();
@@ -383,6 +383,10 @@ namespace SMPlayer
             UndoInAppNotification.Content = message;
             this.undo = undo;
             UndoInAppNotification.Show(duration);
+        }
+        public void ShowLocalizedNotification(string message, int duration = 2000)
+        {
+            ShowNotification(Helper.LocalizeMessage(message), duration);
         }
 
         private void UndoButton_Click(object sender, RoutedEventArgs e)

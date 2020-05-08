@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddingLyricsStopped" xml:space="preserve">
+    <value>已停止添加歌词！</value>
+  </data>
+  <data name="AddingLyricsTo" xml:space="preserve">
+    <value>正在为《{0}》添加歌词……</value>
+  </data>
   <data name="Albums:" xml:space="preserve">
     <value>专辑：</value>
   </data>
@@ -134,6 +140,9 @@
   </data>
   <data name="ClearSearchHistory" xml:space="preserve">
     <value>你想清空搜索历史吗？</value>
+  </data>
+  <data name="ClickAgainToStopAddingLyrics" xml:space="preserve">
+    <value>再次点击来中止添加歌词</value>
   </data>
   <data name="Comma" xml:space="preserve">
     <value>，</value>
@@ -338,6 +347,9 @@
   </data>
   <data name="Sort By Title" xml:space="preserve">
     <value>根据标题排序</value>
+  </data>
+  <data name="StopAddingLyrics" xml:space="preserve">
+    <value>正在尝试中止添加歌词……</value>
   </data>
   <data name="UnableToChangeAlbumArt" xml:space="preserve">
     <value>无法更改专辑插图</value>

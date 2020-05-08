@@ -55,6 +55,20 @@ namespace SMPlayer
             ShowResultInAppNotification.Show(duration);
         }
 
+        private Action undo;
+
+        public void ShowUndoNotification(string message, Action undo, int duration = 5000)
+        {
+            UndoInAppNotification.Content = message;
+            this.undo = undo;
+            UndoInAppNotification.Show(duration);
+        }
+
+        public void ShowLocalizedNotification(string message, int duration = 2000)
+        {
+            ShowNotification(Helper.LocalizeMessage(message), duration);
+        }
+
         public void PlaylistRequested(ICollection<Music> playlist)
         {
             PlaylistBladeItem.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true });
@@ -80,15 +94,6 @@ namespace SMPlayer
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             GoBack();
-        }
-
-        private Action undo;
-
-        public void ShowUndoNotification(string message, Action undo, int duration = 5000)
-        {
-            UndoInAppNotification.Content = message;
-            this.undo = undo;
-            UndoInAppNotification.Show(duration);
         }
 
         private void UndoButton_Click(object sender, RoutedEventArgs e)

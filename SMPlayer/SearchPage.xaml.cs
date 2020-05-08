@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 using System;
 using SMPlayer.Helpers;
+using System.Threading.Tasks;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -79,45 +80,42 @@ namespace SMPlayer
             AllAlbums.Clear();
             AllSongs.Clear();
             AllPlaylists.Clear();
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            {
-                string modifiedKeyowrd = keyword.ToLowerInvariant();
-                SearchArtists(modifiedKeyowrd, Settings.settings.SearchArtistsCriterion);
-                SearchAlbums(modifiedKeyowrd, Settings.settings.SearchAlbumsCriterion);
-                SearchSongs(modifiedKeyowrd, Settings.settings.SearchSongsCriterion);
-                SearchPlaylists(modifiedKeyowrd, Settings.settings.SearchPlaylistsCriterion);
-                NoResultTextBlock.Visibility = Artists.Count == 0 && Albums.Count == 0 && Songs.Count == 0 && Playlists.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
-                LoadingProgress.Visibility = Visibility.Collapsed;
-            });
+            string modifiedKeyowrd = keyword.ToLowerInvariant();
+            await SearchArtists(modifiedKeyowrd, Settings.settings.SearchArtistsCriterion);
+            await SearchAlbums(modifiedKeyowrd, Settings.settings.SearchAlbumsCriterion);
+            await SearchSongs(modifiedKeyowrd, Settings.settings.SearchSongsCriterion);
+            await SearchPlaylists(modifiedKeyowrd, Settings.settings.SearchPlaylistsCriterion);
+            NoResultTextBlock.Visibility = Artists.Count == 0 && Albums.Count == 0 && Songs.Count == 0 && Playlists.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+            LoadingProgress.Visibility = Visibility.Collapsed;
         }
 
-        public void SearchArtists(string keyword, SortBy criterion)
+        public async Task SearchArtists(string keyword, SortBy criterion)
         {
-            AllArtists.SetTo(SearchHelper.SearchArtists(keyword, criterion));
+            AllArtists.SetTo(await Task.Run(() => SearchHelper.SearchArtists(keyword, criterion)));
             Artists.SetTo(AllArtists.Take(ArtistLimit));
             ArtistsViewAllButton.Visibility = AllArtists.Count > ArtistLimit ? Visibility.Visible : Visibility.Collapsed;
             ArtistsDropdown.Visibility = Artists.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
 
-        public void SearchAlbums(string keyword, SortBy criterion)
+        public async Task SearchAlbums(string keyword, SortBy criterion)
         {
-            AllAlbums.SetTo(SearchHelper.SearchAlbums(keyword, criterion));
+            AllAlbums.SetTo(await Task.Run(() => SearchHelper.SearchAlbums(keyword, criterion)));
             Albums.SetTo(AllAlbums.Take(AlbumLimit));
             AlbumsViewAllButton.Visibility = AllAlbums.Count > AlbumLimit ? Visibility.Visible : Visibility.Collapsed;
             AlbumsDropdown.Visibility = Albums.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
 
-        public void SearchSongs(string keyword, SortBy criterion)
+        public async Task SearchSongs(string keyword, SortBy criterion)
         {
-            AllSongs.SetTo(SearchHelper.SearchSongs(keyword, criterion));
+            AllSongs.SetTo(await Task.Run(() => SearchHelper.SearchSongs(keyword, criterion)));
             Songs.SetTo(AllSongs.Take(SongLimit));
             SongsViewAllButton.Visibility = AllSongs.Count > SongLimit ? Visibility.Visible : Visibility.Collapsed;
             SongsDropdown.Visibility = Songs.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
 
-        public void SearchPlaylists(string keyword, SortBy criterion)
+        public async Task SearchPlaylists(string keyword, SortBy criterion)
         {
-            AllPlaylists.SetTo(SearchHelper.SearchPlaylists(keyword, criterion));
+            AllPlaylists.SetTo(await Task.Run(() => SearchHelper.SearchPlaylists(keyword, criterion)));
             Playlists.SetTo(AllPlaylists.Take(PlaylistLimit));
             PlaylistsViewAllButton.Visibility = AllPlaylists.Count > PlaylistLimit ? Visibility.Visible : Visibility.Collapsed;
             PlaylistsDropdown.Visibility = Playlists.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
@@ -176,11 +174,8 @@ namespace SMPlayer
                                                     Settings.settings.SearchArtistsCriterion = item;
                                                     SetArtistsDropdownContent();
                                                     LoadingProgress.Visibility = Visibility.Visible;
-                                                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                                                    {
-                                                        AllArtists.SetTo(SearchHelper.SortArtists(AllArtists, CurrentKeyword, item));
-                                                        LoadingProgress.Visibility = Visibility.Collapsed;
-                                                    });
+                                                    AllArtists.SetTo(await Task.Run(() => SearchHelper.SortArtists(AllArtists, CurrentKeyword, item)));
+                                                    LoadingProgress.Visibility = Visibility.Collapsed;
                                                 });
         }
 
@@ -192,11 +187,8 @@ namespace SMPlayer
                                                     Settings.settings.SearchAlbumsCriterion = item;
                                                     SetAlbumsDropdownContent();
                                                     LoadingProgress.Visibility = Visibility.Visible;
-                                                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                                                    {
-                                                        AllAlbums.SetTo(SearchHelper.SortAlbums(AllAlbums, CurrentKeyword, item));
-                                                        LoadingProgress.Visibility = Visibility.Collapsed;
-                                                    });
+                                                    AllAlbums.SetTo(await Task.Run(() => SearchHelper.SortAlbums(AllAlbums, CurrentKeyword, item)));
+                                                    LoadingProgress.Visibility = Visibility.Collapsed;
                                                 });
         }
 
@@ -208,11 +200,8 @@ namespace SMPlayer
                                                     Settings.settings.SearchSongsCriterion = item;
                                                     SetSongsDropdownContent();
                                                     LoadingProgress.Visibility = Visibility.Visible;
-                                                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                                                    {
-                                                        AllSongs.SetTo(SearchHelper.SortSongs(AllSongs, CurrentKeyword, item));
-                                                        LoadingProgress.Visibility = Visibility.Collapsed;
-                                                    });
+                                                    AllSongs.SetTo(await Task.Run(() => SearchHelper.SortSongs(AllSongs, CurrentKeyword, item)));
+                                                    LoadingProgress.Visibility = Visibility.Collapsed;
                                                 });
         }
 
@@ -234,11 +223,8 @@ namespace SMPlayer
                                                     Settings.settings.SearchPlaylistsCriterion = item;
                                                     SetPlaylistsDropdownContent();
                                                     LoadingProgress.Visibility = Visibility.Visible;
-                                                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                                                    {
-                                                        AllPlaylists.SetTo(SearchHelper.SortPlaylists(AllPlaylists, CurrentKeyword, item));
-                                                        LoadingProgress.Visibility = Visibility.Collapsed;
-                                                    });
+                                                    AllPlaylists.SetTo(await Task.Run(() => SearchHelper.SortPlaylists(AllPlaylists, CurrentKeyword, item)));
+                                                    LoadingProgress.Visibility = Visibility.Collapsed;
                                                 });
         }
 

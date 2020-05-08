@@ -6,6 +6,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using System;
+using System.Threading.Tasks;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -35,12 +36,9 @@ namespace SMPlayer
             if (status == ExecutionStatus.Running) return;
             AlbumPageProgressRing.IsActive = true;
             status = ExecutionStatus.Running;
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            {
-                SetData(songs);
-                status = ExecutionStatus.Ready;
-                AlbumPageProgressRing.IsActive = false;
-            });
+            await Task.Run(() => SetData(songs));
+            status = ExecutionStatus.Ready;
+            AlbumPageProgressRing.IsActive = false;
         }
 
         private void SetData(ICollection<Music> songs)
