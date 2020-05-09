@@ -10,7 +10,7 @@
   <Identity
     Name="23778SeakyTheLoner.SMPlayer"
     Publisher="CN=CFBE922A-0341-4A7E-B15B-A6DEF6C9E3AF"
-    Version="2.2.4.0" />
+    Version="2.2.5.0" />
 
   <mp:PhoneIdentity PhoneProductId="cc323160-1166-40e8-bb50-eaf5dc6fc12d" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

@@ -93,7 +93,7 @@ namespace SMPlayer.Models
                 }
                 MediaControl.AddMusicModifiedListener((before, after) =>
                 {
-                    FindMusic(before).CopyFrom(after);
+                    settings.FindAllMusicAndOperate(before, music => music.CopyFrom(after));
                 });
                 foreach (var item in await ApplicationData.Current.LocalFolder.GetItemsAsync())
                     if (item.Name.EndsWith(".TMP"))
@@ -110,6 +110,15 @@ namespace SMPlayer.Models
             JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, settings);
         }
 
+        private void FindAllMusicAndOperate(Music target, Action<Music> action) {
+            action.Invoke(Tree.FindMusic(target));
+            foreach (var playlist in settings.Playlists)
+                if (playlist.Songs.FirstOrDefault(m => m == target) is Music music)
+                    action.Invoke(music);
+            if (MyFavorites.Songs.FirstOrDefault(m => m == target) is Music fav)
+                action.Invoke(fav);
+        }
+
         public static Music FindMusic(Music music) { return settings.Tree.FindMusic(music); }
         public static Music FindMusic(string path) { return settings.Tree.FindMusic(path); }
 
@@ -118,8 +127,8 @@ namespace SMPlayer.Models
             if (MyFavorites.Contains(music)) return;
             music.Favorite = true;
             MyFavorites.Add(music);
-            Tree.FindMusic(music).Favorite = true;
-            if (MediaHelper.CurrentPlaylist.FirstOrDefault(item => item == music) is Music m) m.Favorite = true;
+            FindAllMusicAndOperate(music, m => m.CopyFrom(music));
+            MediaHelper.LikeMusic(music);
             foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, true);
         }
 
@@ -132,7 +141,7 @@ namespace SMPlayer.Models
                 {
                     music.Favorite = true;
                     MyFavorites.Add(music);
-                    Tree.FindMusic(music).Favorite = true;
+                    FindAllMusicAndOperate(music, m => m.CopyFrom(music));
                     MediaHelper.LikeMusic(music);
                     foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, true);
                 }
@@ -141,9 +150,9 @@ namespace SMPlayer.Models
 
         public void DislikeMusic(Music music)
         {
-            MyFavorites.Remove(music);
             music.Favorite = false;
-            Tree.FindMusic(music).Favorite = false;
+            MyFavorites.Remove(music);
+            FindAllMusicAndOperate(music, m => m.CopyFrom(music));
             MediaHelper.DislikeMusic(music);
             foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, false);
         }

@@ -856,6 +856,7 @@ namespace SMPlayer
                 {
                     Music before = current.Copy();
                     current.Played();
+                    MediaHelper.MusicModified(before, current);
                     NotifyMusicModifiedListeners(before, current);
                     MediaSlider.Value = 0;
                 }

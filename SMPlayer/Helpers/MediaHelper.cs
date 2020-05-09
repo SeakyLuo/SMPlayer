@@ -47,16 +47,10 @@ namespace SMPlayer
                 return _PlaybackList;
             }
         }
-        public static Playlist NowPlaying
-        {
-            get => new Playlist(MenuFlyoutHelper.NowPlaying, CurrentPlaylist);
-        }
+        public static Playlist NowPlaying { get => new Playlist(MenuFlyoutHelper.NowPlaying, CurrentPlaylist); }
         private static MediaPlaybackList _PlaybackList = new MediaPlaybackList() { MaxPlayedItemsToKeepOpen = 1 };
         private static MediaPlaybackList PendingPlaybackList = null;
-        public static MediaPlayer Player = new MediaPlayer()
-        {
-            Source = PlaybackList
-        };
+        public static MediaPlayer Player = new MediaPlayer() { Source = PlaybackList };
         public static List<RemoveMusicListener> RemoveMusicListeners = new List<RemoveMusicListener>();
         public static DispatcherTimer Timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         public static List<MediaControlListener> MediaControlListeners = new List<MediaControlListener>();
@@ -336,13 +330,13 @@ namespace SMPlayer
 
         public static bool RemoveMusic(Music music)
         {
+            if (music == null) return false;
             try
             {
-                if (music == null) return false;
-                if (music.Index == CurrentMusic.Index) MoveNext();
                 CurrentPlaylist.RemoveAt(music.Index);
                 PlaybackList.Items.RemoveAt(music.Index);
                 for (int i = music.Index; i < CurrentPlaylist.Count; i++) CurrentPlaylist[i].Index = i;
+                if (music.Index == CurrentMusic.Index) MoveNext();
                 foreach (var listener in RemoveMusicListeners) listener.MusicRemoved(music.Index, music, CurrentPlaylist);
                 return true;
             }
@@ -350,6 +344,19 @@ namespace SMPlayer
             {
                 return false;
             }
+        }
+
+        public static void DeleteMusic(Music music)
+        {
+            foreach (var m in CurrentPlaylist.ToList())
+                if (m == music)
+                    CurrentPlaylist.Remove(m);
+            foreach (var m in PlaybackList.Items.ToList())
+                if (m.GetMusic() == music)
+                    PlaybackList.Items.Remove(m);
+            for (int i = 0; i < CurrentPlaylist.Count; i++) CurrentPlaylist[i].Index = i;
+            if (music == CurrentMusic) MoveNext();
+            foreach (var listener in RemoveMusicListeners) listener.MusicRemoved(-1, music, CurrentPlaylist);
         }
 
         public static void Clear()
@@ -379,13 +386,25 @@ namespace SMPlayer
 
         public static void LikeMusic(Music music)
         {
-            if (CurrentPlaylist.FirstOrDefault(item => item == music) is Music m)
-                m.Favorite = true;
+            if (CurrentMusic == music) CurrentMusic?.CopyFrom(music);
+            foreach (var m in CurrentPlaylist)
+                if (m == music)
+                    m.Favorite = true;
         }
         public static void DislikeMusic(Music music)
         {
-            if (CurrentPlaylist.FirstOrDefault(item => item == music) is Music m)
-                m.Favorite = false;
+            if (CurrentMusic == music) CurrentMusic?.CopyFrom(music);
+            foreach (var m in CurrentPlaylist)
+                if (m == music)
+                    m.Favorite = false;
+        }
+
+        public static void MusicModified(Music before, Music after)
+        {
+            if (CurrentMusic == before) CurrentMusic?.CopyFrom(after);
+            foreach (var music in CurrentPlaylist)
+                if (music == before)
+                    music.CopyFrom(after);
         }
     }
 

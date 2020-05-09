@@ -204,13 +204,15 @@ namespace SMPlayer
                     Message = Helper.LocalizeMessage("DeleteMusicMessage", music.Name),
                     Confirm = async () =>
                     {
+                        MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
                         StorageFile file = await StorageFile.GetFileFromPathAsync(music.Path);
                         await file.DeleteAsync();
                         MusicLibraryPage.AllSongs.Remove(music);
                         Settings.settings.RemoveMusic(music);
-                        MediaHelper.RemoveMusic(MediaHelper.CurrentPlaylist.FirstOrDefault(m => m == music));
-                        Helper.ShowNotification(Helper.LocalizeMessage("MusicDeleted", music.Name));
+                        MediaHelper.DeleteMusic(music);
                         listener?.Delete(music);
+                        MainPage.Instance?.Loader.Hide();
+                        Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("MusicDeleted", music.Name));
                     }
                 }.ShowAsync();
             };
@@ -223,7 +225,7 @@ namespace SMPlayer
 
         public MenuFlyout GetMusicPropertiesMenuFlyout(bool withNavigation = true)
         {
-            var music = Data as Music;
+            var music = Settings.FindMusic(Data as Music);
             var flyout = new MenuFlyout();
             if (withNavigation)
             {
