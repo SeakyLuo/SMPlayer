@@ -24,6 +24,7 @@ namespace SMPlayer.Controls
         private Music CurrentMusic;
         private MusicProperties Properties;
         public static List<Action<Music, Music>> MusicModifiedListeners = new List<Action<Music, Music>>();
+        public bool IsProcessing { get; private set; } = false;
         public MusicInfoControl()
         {
             this.InitializeComponent();
@@ -88,12 +89,23 @@ namespace SMPlayer.Controls
 
         private void ResetMusicPropertiesButton_Click(object sender, RoutedEventArgs e)
         {
+            if (IsProcessing)
+            {
+                Helper.ShowNotification("ProcessingRequest");
+                return;
+            }
             SetMusicProperties(Properties);
             Helper.ShowNotification("PropertiesReset");
         }
 
         private async void SaveMusicPropertiesButton_Click(object sender, RoutedEventArgs e)
         {
+            if (IsProcessing)
+            {
+                Helper.ShowNotification("ProcessingRequest");
+                return;
+            }
+            IsProcessing = true;
             if (IsPropertiesModified)
             {
                 SaveProgress.Visibility = Visibility.Visible;
@@ -118,6 +130,7 @@ namespace SMPlayer.Controls
                 });
                 SaveProgress.Visibility = Visibility.Collapsed;
             }
+            IsProcessing = false;
             Helper.ShowNotification("PropertiesUpdated");
         }
 

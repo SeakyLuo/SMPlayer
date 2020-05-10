@@ -26,6 +26,7 @@ namespace SMPlayer.Controls
         }
         private string Lyrics = "";
         private Music CurrentMusic;
+        public bool IsProcessing { get; private set; } = false;
         public MusicLyricsControl()
         {
             this.InitializeComponent();
@@ -33,6 +34,11 @@ namespace SMPlayer.Controls
         }
         private void ResetLyricsButton_Click(object sender, RoutedEventArgs e)
         {
+            if (IsProcessing)
+            {
+                Helper.ShowNotification("ProcessingRequest");
+                return;
+            }
             SaveProgress.Visibility = Visibility.Visible;
             LyricsTextBox.IsEnabled = false;
             LyricsTextBox.Text = Lyrics;
@@ -50,6 +56,12 @@ namespace SMPlayer.Controls
 
         private async void SaveLyricsButton_Click(object sender, RoutedEventArgs e)
         {
+            if (IsProcessing)
+            {
+                Helper.ShowNotification("ProcessingRequest");
+                return;
+            }
+            IsProcessing = true;
             string lyrics = LyricsTextBox.Text;
             if (Lyrics != lyrics)
             {
@@ -63,10 +75,16 @@ namespace SMPlayer.Controls
                 SaveProgress.Visibility = Visibility.Collapsed;
                 LyricsTextBox.IsEnabled = true;
             }
+            IsProcessing = false;
             Helper.ShowNotification("LyricsUpdated");
         }
         private async void SearchLyricsButton_Click(object sender, RoutedEventArgs e)
         {
+            if (IsProcessing)
+            {
+                Helper.ShowNotification("ProcessingRequest");
+                return;
+            }
             SaveProgress.Visibility = Visibility.Visible;
             LyricsTextBox.IsEnabled = false;
             string notification = "";

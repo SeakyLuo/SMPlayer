@@ -252,6 +252,9 @@
   <data name="PostParenthesis" xml:space="preserve">
     <value>{0}（{1}）</value>
   </data>
+  <data name="ProcessingRequest" xml:space="preserve">
+    <value>正在处理您的请求，请稍后再试</value>
+  </data>
   <data name="ProcessRequest" xml:space="preserve">
     <value>正在处理您的请求……</value>
   </data>

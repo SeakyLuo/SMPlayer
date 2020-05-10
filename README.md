@@ -18,6 +18,8 @@ Sort albums.
 
 Improved editing album cover by selecting a song.
 
+Grid Mode for PlaylistPage.
+
 Multi-Select.
 
 Export data.
@@ -30,6 +32,8 @@ Animations.
 
 # TO FIX
 Able to drag titlebar when loading.
+
+Disable operations when saving lyrics.
 
 # MIGHT DO
 Allow MainSearchBar to have a search history dropdown.
