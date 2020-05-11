@@ -11,6 +11,7 @@ namespace SMPlayer.Models
         private const string extension = ".json";
         public static async Task<string> ReadAsync(StorageFolder folder, string filename)
         {
+            if (folder == null) return null;
             if (!filename.EndsWith(extension)) filename += extension;
             StorageFile file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
             return await FileIO.ReadTextAsync(file);
@@ -23,6 +24,7 @@ namespace SMPlayer.Models
 
         public static async void SaveAsync<T>(StorageFolder folder, string filename, T data)
         {
+            if (folder == null) return;
             if (!filename.EndsWith(extension)) filename += extension;
             StorageFile file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
             var json = JsonConvert.SerializeObject(data);
@@ -55,9 +57,14 @@ namespace SMPlayer.Models
             return JsonConvert.DeserializeObject<T>(json);
         }
 
-        public static async void DeleteFile(string filename)
+        public static void DeleteFile(string filename)
         {
-            var file = await Helper.LocalFolder.GetFileAsync(filename);
+            DeleteFile(Helper.LocalFolder, filename);
+        }
+
+        public static async void DeleteFile(StorageFolder folder, string filename)
+        {
+            var file = await folder.GetFileAsync(filename);
             await file.DeleteAsync();
         }
     }

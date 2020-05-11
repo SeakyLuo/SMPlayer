@@ -157,10 +157,12 @@ namespace SMPlayer.Controls
         public async void SetLyrics(Music music)
         {
             if (music == null) return;
+            IsProcessing = true;
             CurrentMusic = music;
             var lyrics = await music.GetLyricsAsync();
             LyricsTextBox.Text = string.IsNullOrEmpty(lyrics) ? "" : lyrics;
             Lyrics = LyricsTextBox.Text;
+            IsProcessing = false;
         }
 
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)

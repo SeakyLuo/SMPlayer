@@ -52,9 +52,11 @@ namespace SMPlayer.Controls
         {
             if (music == null) return;
             SaveProgress.Visibility = Visibility.Visible;
+            IsProcessing = true;
             CurrentMusic = music;
             SetBasicProperties(await music.GetStorageFileAsync());
             SetMusicProperties(Properties = await music.GetMusicPropertiesAsync());
+            IsProcessing = false;
             SaveProgress.Visibility = Visibility.Collapsed;
         }
         private void ClearPlayCountButton_Click(object sender, RoutedEventArgs e)

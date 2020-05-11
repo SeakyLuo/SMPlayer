@@ -126,6 +126,9 @@
   <data name="Albums:" xml:space="preserve">
     <value>Albums: </value>
   </data>
+  <data name="AllArtists" xml:space="preserve">
+    <value>All Artists: {0}</value>
+  </data>
   <data name="ChangesSaved" xml:space="preserve">
     <value>Changes has been saved.</value>
   </data>

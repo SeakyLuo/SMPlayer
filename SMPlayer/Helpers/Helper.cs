@@ -47,9 +47,10 @@ namespace SMPlayer
         private static string Lyrics = "";
         private static List<Music> NotFoundHistory = new List<Music>();
 
+
         public static async Task Init()
         {
-            TempFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Temp", CreationCollisionOption.OpenIfExists);
+               TempFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Temp", CreationCollisionOption.OpenIfExists);
             var files = await TempFolder.GetFilesAsync();
             var settings = files.Where(f => f.Name.StartsWith(Settings.JsonFilename)).OrderBy(f => f.DateCreated);
             var mediaHelper = files.Where(f => f.Name.StartsWith(MediaHelper.JsonFilename)).OrderBy(f => f.DateCreated);

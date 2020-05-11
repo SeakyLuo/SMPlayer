@@ -126,6 +126,9 @@
   <data name="Albums:" xml:space="preserve">
     <value>专辑：</value>
   </data>
+  <data name="AllArtists" xml:space="preserve">
+    <value>歌手：{0}</value>
+  </data>
   <data name="ChangesSaved" xml:space="preserve">
     <value>已保存！</value>
   </data>

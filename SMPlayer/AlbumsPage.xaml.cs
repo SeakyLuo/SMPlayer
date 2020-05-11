@@ -7,6 +7,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using System;
 using System.Threading.Tasks;
+using Windows.UI.Core;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -18,7 +19,8 @@ namespace SMPlayer
     public sealed partial class AlbumsPage : Page, AfterSongsSetListener
     {
         private ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
-        private ExecutionStatus status = ExecutionStatus.Ready;
+        private List<AlbumView> albums = new List<AlbumView>();
+        private bool IsProcessing = false;
         public AlbumsPage()
         {
             this.InitializeComponent();
@@ -33,17 +35,17 @@ namespace SMPlayer
 
         private async void Setup(ICollection<Music> songs)
         {
-            if (status == ExecutionStatus.Running) return;
+            if (IsProcessing) return;
             AlbumPageProgressRing.IsActive = true;
-            status = ExecutionStatus.Running;
             await Task.Run(() => SetData(songs));
-            status = ExecutionStatus.Ready;
+            DataSet();
             AlbumPageProgressRing.IsActive = false;
         }
 
         private void SetData(ICollection<Music> songs)
         {
-            List<AlbumView> albums = new List<AlbumView>();
+            IsProcessing = true;
+            albums.Clear();
             foreach (var group in songs.GroupBy(m => m.Album))
             {
                 foreach (var subgroup in group.GroupBy(m => m.Artist))
@@ -52,7 +54,12 @@ namespace SMPlayer
                     albums.Add(new AlbumView(music.Album, music.Artist, subgroup.OrderBy(m => m.Name), false));
                 }
             }
+        }
+
+        private void DataSet()
+        {
             Albums.SetTo(albums.OrderBy(a => a.Name).ThenBy(a => a.Artist));
+            IsProcessing = false;
         }
 
         public void SongsSet(ICollection<Music> songs)
@@ -60,7 +67,10 @@ namespace SMPlayer
             if (MainPage.Instance.CurrentPage == typeof(AlbumsPage))
                 Setup(songs);
             else
+            {
                 SetData(songs);
+                DataSet();
+            }
         }
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)

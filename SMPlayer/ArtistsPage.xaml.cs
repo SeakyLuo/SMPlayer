@@ -23,7 +23,7 @@ namespace SMPlayer
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
         private List<string> SuggestionList = new List<string>();
         private ObservableCollection<string> Suggestions = new ObservableCollection<string>();
-        private ExecutionStatus status = ExecutionStatus.Ready;
+        private bool IsProcessing = false;
         private object targetArtist;
 
         public ArtistsPage()
@@ -86,16 +86,16 @@ namespace SMPlayer
 
         private async void Setup(ICollection<Music> songs)
         {
-            if (status == ExecutionStatus.Running) return;
+            if (IsProcessing) return;
             LoadingProgress.Visibility = Visibility.Visible;
-            status = ExecutionStatus.Running;
             await Task.Run(() => SetData(songs));
-            status = ExecutionStatus.Ready;
+            DataSet();
             LoadingProgress.Visibility = Visibility.Collapsed;
         }
 
         private void SetData(ICollection<Music> songs)
         {
+            IsProcessing = true;
             Artists.Clear();
             Suggestions.Clear();
             List<ArtistView> artists = new List<ArtistView>();
@@ -106,9 +106,14 @@ namespace SMPlayer
                 Artists.Add(artist);
                 SuggestionList.Add(artist.Name);
             }
+        }
+
+        private void DataSet()
+        {
             Suggestions.SetTo(SuggestionList);
-            ArtistSearchBox.PlaceholderText = Helper.Localize("All Artists") + Artists.Count;
             FindMusicAndSetPlaying(MediaHelper.CurrentMusic);
+            ArtistSearchBox.PlaceholderText = Helper.LocalizeMessage("AllArtists", Artists.Count);
+            IsProcessing = false;
         }
 
         public void SongsSet(ICollection<Music> songs)
@@ -116,7 +121,10 @@ namespace SMPlayer
             if (MainPage.Instance.CurrentPage == typeof(ArtistsPage))
                 Setup(songs);
             else
+            {
                 SetData(songs);
+                DataSet();
+            }
         }
 
         private async void Artist_Tapped(object sender, TappedRoutedEventArgs e)
