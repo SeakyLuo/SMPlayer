@@ -132,8 +132,17 @@
   <data name="ChangesSaved" xml:space="preserve">
     <value>已保存！</value>
   </data>
-  <data name="CheckNewMusicResult" xml:space="preserve">
+  <data name="CheckNewMusicResultAdded" xml:space="preserve">
+    <value>添加了{0}首歌。</value>
+  </data>
+  <data name="CheckNewMusicResultChange" xml:space="preserve">
     <value>添加了{0}首歌，移除了{1}首歌。</value>
+  </data>
+  <data name="CheckNewMusicResultNoChange" xml:space="preserve">
+    <value>没有检查到变化。</value>
+  </data>
+  <data name="CheckNewMusicResultRemoved" xml:space="preserve">
+    <value>移除了{1}首歌。</value>
   </data>
   <data name="ClearPlayHistory" xml:space="preserve">
     <value>你想清空播放历史吗？</value>

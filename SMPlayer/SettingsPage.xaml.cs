@@ -137,7 +137,16 @@ namespace SMPlayer
                 App.Save();
             }
             MainPage.Instance?.Loader.Hide();
-            Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("CheckNewMusicResult", data.More, data.Less));
+            string message;
+            if (data.More == 0 && data.Less == 0)
+                message = Helper.LocalizeMessage("CheckNewMusicResultNoChange");
+            else if (data.More == 0)
+                message = Helper.LocalizeMessage("CheckNewMusicResultRemoved", data.Less);
+            else if (data.Less == 0)
+                message = Helper.LocalizeMessage("CheckNewMusicResultAdded", data.More);
+            else
+                message = Helper.LocalizeMessage("CheckNewMusicResultChange", data.More, data.Less);
+            Helper.ShowNotificationWithoutLocalization(message);
         }
 
         private void UpdateMusicLibrary_Click(object sender, RoutedEventArgs e)

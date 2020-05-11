@@ -63,7 +63,7 @@ namespace SMPlayer
 
         public void SetupPlayed(ICollection<string> list)
         {
-            if (!PlayedModifed) return;
+             if (!PlayedModifed) return;
             try
             {
                 PlayedMusicView.Setup(Settings.PathToCollection(list));
@@ -171,7 +171,7 @@ namespace SMPlayer
         private void RecentPlayedItem_Loaded(object sender, RoutedEventArgs e)
         {
             LoadingProgressBar.Visibility = Visibility.Visible;
-            SetupPlayed(Settings.settings.RecentAdded);
+            SetupPlayed(Settings.settings.RecentPlayed);
             LoadingProgressBar.Visibility = Visibility.Collapsed;
         }
 
