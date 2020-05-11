@@ -44,14 +44,13 @@ namespace SMPlayer.Models
             Songs.Add(music);
             NotLoaded = false;
         }
-
         public ArtistView(string Name, ICollection<Music> Songs)
         {
             this.Name = Name;
             CopySongs(Songs);
             NotLoaded = false;
         }
-        private bool loading = false;
+        private volatile bool loading = false;
         public void Load()
         {
             if (loading) return;

@@ -85,8 +85,8 @@ namespace SMPlayer
 
         public static void MusicModified(Music before, Music after)
         {
-            AllSongs.FirstOrDefault(m => m.Equals(before))?.CopyFrom(after);
-            Settings.settings.Tree.FindMusic(before)?.CopyFrom(after);
+            AllSongs.FirstOrDefault(m => m == before)?.CopyFrom(after);
+            Settings.FindMusic(before)?.CopyFrom(after);
         }
 
         private void MenuFlyout_Opening(object sender, object e)

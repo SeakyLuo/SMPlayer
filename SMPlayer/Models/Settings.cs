@@ -96,7 +96,7 @@ namespace SMPlayer.Models
                     settings.FindAllMusicAndOperate(before, music => music.CopyFrom(after));
                 });
                 foreach (var item in await ApplicationData.Current.LocalFolder.GetItemsAsync())
-                    if (item.Name.EndsWith(".TMP"))
+                    if (item.Name.EndsWith(".TMP") || item.Name.EndsWith(".~tmp"))
                         await item.DeleteAsync();
             }
             Inited = true;

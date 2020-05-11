@@ -19,7 +19,6 @@ namespace SMPlayer
     public sealed partial class AlbumsPage : Page, AfterSongsSetListener
     {
         private ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
-        private List<AlbumView> albums = new List<AlbumView>();
         private bool IsProcessing = false;
         public AlbumsPage()
         {
@@ -37,40 +36,36 @@ namespace SMPlayer
         {
             if (IsProcessing) return;
             AlbumPageProgressRing.IsActive = true;
-            await Task.Run(() => SetData(songs));
-            DataSet();
+            await SetData(songs);
             AlbumPageProgressRing.IsActive = false;
         }
 
-        private void SetData(ICollection<Music> songs)
+        private async Task SetData(ICollection<Music> songs)
         {
             IsProcessing = true;
-            albums.Clear();
-            foreach (var group in songs.GroupBy(m => m.Album))
+            List<AlbumView> albums = new List<AlbumView>();
+            await Task.Run(() =>
             {
-                foreach (var subgroup in group.GroupBy(m => m.Artist))
+                foreach (var group in songs.GroupBy(m => m.Album))
                 {
-                    Music music = subgroup.ElementAt(0);
-                    albums.Add(new AlbumView(music.Album, music.Artist, subgroup.OrderBy(m => m.Name), false));
+                    foreach (var subgroup in group.GroupBy(m => m.Artist))
+                    {
+                        Music music = subgroup.ElementAt(0);
+                        albums.Add(new AlbumView(music.Album, music.Artist, subgroup.OrderBy(m => m.Name), false));
+                    }
                 }
-            }
-        }
-
-        private void DataSet()
-        {
-            Albums.SetTo(albums.OrderBy(a => a.Name).ThenBy(a => a.Artist));
+                albums = albums.OrderBy(a => a.Name).ThenBy(a => a.Artist).ToList();
+            });
+            Albums.SetTo(albums);
             IsProcessing = false;
         }
 
-        public void SongsSet(ICollection<Music> songs)
+        public async void SongsSet(ICollection<Music> songs)
         {
             if (MainPage.Instance.CurrentPage == typeof(AlbumsPage))
                 Setup(songs);
             else
-            {
-                SetData(songs);
-                DataSet();
-            }
+                await SetData(songs);
         }
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)

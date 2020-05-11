@@ -88,43 +88,40 @@ namespace SMPlayer
         {
             if (IsProcessing) return;
             LoadingProgress.Visibility = Visibility.Visible;
-            await Task.Run(() => SetData(songs));
-            DataSet();
+            await SetData(songs);
             LoadingProgress.Visibility = Visibility.Collapsed;
         }
 
-        private void SetData(ICollection<Music> songs)
+        private async Task SetData(ICollection<Music> songs)
         {
             IsProcessing = true;
-            Artists.Clear();
-            Suggestions.Clear();
             List<ArtistView> artists = new List<ArtistView>();
-            foreach (var group in songs.GroupBy(m => m.Artist))
-                artists.Add(new ArtistView(group.Key));
-            foreach (var artist in artists.OrderBy(a => a.Name))
+            await Task.Run(() =>
+            {
+                foreach (var group in songs.GroupBy(m => m.Artist))
+                    artists.Add(new ArtistView(group.Key));
+                artists = artists.OrderBy(a => a.Name).ToList();
+            });
+            Artists.Clear();
+            SuggestionList.Clear();
+            Suggestions.Clear();
+            foreach (var artist in artists)
             {
                 Artists.Add(artist);
                 SuggestionList.Add(artist.Name);
+                Suggestions.Add(artist.Name);
             }
-        }
-
-        private void DataSet()
-        {
-            Suggestions.SetTo(SuggestionList);
             FindMusicAndSetPlaying(MediaHelper.CurrentMusic);
             ArtistSearchBox.PlaceholderText = Helper.LocalizeMessage("AllArtists", Artists.Count);
             IsProcessing = false;
         }
 
-        public void SongsSet(ICollection<Music> songs)
+        public async void SongsSet(ICollection<Music> songs)
         {
             if (MainPage.Instance.CurrentPage == typeof(ArtistsPage))
                 Setup(songs);
             else
-            {
-                SetData(songs);
-                DataSet();
-            }
+                await SetData(songs);
         }
 
         private async void Artist_Tapped(object sender, TappedRoutedEventArgs e)
