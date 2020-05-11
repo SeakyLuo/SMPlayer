@@ -14,6 +14,10 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
+Highlight root folder textbox for warning when reloading music library.
+
+Improved loading.
+
 Load from backup.
 
 Sort albums.
@@ -45,3 +49,5 @@ SearchPage AddTo button add all songs instead of displayed songs.
 SearchPage AddTo button for all search types.
 
 Random after one cycle.
+
+SaveChanges button.

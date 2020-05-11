@@ -324,6 +324,9 @@
   <data name="SearchResult" xml:space="preserve">
     <value>Search Result of {0}</value>
   </data>
+  <data name="SetRootFolder" xml:space="preserve">
+    <value>Please set your music library first!</value>
+  </data>
   <data name="Shuffle: Disabled" xml:space="preserve">
     <value>Shuffle: Disabled</value>
   </data>

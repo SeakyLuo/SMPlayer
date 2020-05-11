@@ -225,7 +225,7 @@ namespace SMPlayer
 
         public MenuFlyout GetMusicPropertiesMenuFlyout(bool withNavigation = true)
         {
-            var music = Settings.FindMusic(Data as Music);
+            var music = Settings.FindMusic((Music)Data) ?? (Music)Data;
             var flyout = new MenuFlyout();
             if (withNavigation)
             {

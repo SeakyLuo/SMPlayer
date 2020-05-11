@@ -58,12 +58,11 @@ namespace SMPlayer
 
         public async void UpdateMusicLibrary(StorageFolder folder)
         {
-            if (folder == null) return;
             MainPage.Instance.Loader.ShowDeterminant("LoadMusicLibrary", true);
-            Helper.CurrentFolder = folder;
             loadingTree = new FolderTree();
             if (!await loadingTree.Init(folder, this)) return;
             MainPage.Instance.Loader.SetLocalizedText("UpdateMusicLibrary");
+            Helper.CurrentFolder = folder;
             await Task.Run(() =>
             {
                 loadingTree.MergeFrom(Settings.settings.Tree);
@@ -151,7 +150,15 @@ namespace SMPlayer
 
         private void UpdateMusicLibrary_Click(object sender, RoutedEventArgs e)
         {
-            UpdateMusicLibrary(Helper.CurrentFolder);
+            if (Helper.CurrentFolder == null)
+            {
+                MainPage.Instance.ShowNotification("SetRootFolder");
+            }
+            else
+            {
+                UpdateMusicLibrary(Helper.CurrentFolder);
+            }
+
         }
 
         private async void BugReport_Click(object sender, RoutedEventArgs e)

@@ -327,6 +327,9 @@
   <data name="SearchResult" xml:space="preserve">
     <value>{0}的搜索结果</value>
   </data>
+  <data name="SetRootFolder" xml:space="preserve">
+    <value>请先设置你的音乐文件夹！</value>
+  </data>
   <data name="Shuffle: Disabled" xml:space="preserve">
     <value>随机播放：关闭</value>
   </data>

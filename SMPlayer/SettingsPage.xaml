@@ -244,16 +244,16 @@
                 Style="{StaticResource SettingCheckBoxStyle}"
                 Unchecked="SaveProgressCheckBox_Unchecked" />
             <HyperlinkButton
-                x:Uid="UpdateMusicLibraryButton"
-                Margin="9,0"
-                Click="UpdateMusicLibrary_Click"
-                Content="Update Music Library"
-                Style="{ThemeResource TextBlockButtonStyle}" />
-            <HyperlinkButton
                 x:Uid="SaveChangesButton"
                 Margin="9,0"
                 Click="SaveChanges_Click"
                 Content="Save Changes"
+                Style="{ThemeResource TextBlockButtonStyle}" />
+            <HyperlinkButton
+                x:Uid="UpdateMusicLibraryButton"
+                Margin="9,0"
+                Click="UpdateMusicLibrary_Click"
+                Content="Update Music Library"
                 Style="{ThemeResource TextBlockButtonStyle}" />
             <HyperlinkButton
                 x:Uid="BugReportButton"

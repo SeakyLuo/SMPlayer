@@ -30,7 +30,7 @@ namespace SMPlayer.Models
         public string LastPlaylist { get; set; } = "";
         public bool LocalMusicGridView { get; set; } = true;
         public bool LocalFolderGridView { get; set; } = true;
-        public Playlist MyFavorites { get; set; } = new Playlist(MenuFlyoutHelper.MyFavorites);
+        public Playlist MyFavorites { get; set; }
         public ObservableCollection<string> RecentPlayed { get; set; } = new ObservableCollection<string>();
         public bool MiniModeWithDropdown { get; set; } = false;
         public bool IsMuted { get; set; } = false;
@@ -51,6 +51,11 @@ namespace SMPlayer.Models
 
         [Newtonsoft.Json.JsonIgnore]
         private List<Music> justRemoved = new List<Music>();
+
+        public Settings()
+        {
+            MyFavorites = new Playlist(MenuFlyoutHelper.MyFavorites);
+        }
 
         public int FindNextPlaylistNameIndex(string Name)
         {
@@ -111,12 +116,14 @@ namespace SMPlayer.Models
         }
 
         private void FindAllMusicAndOperate(Music target, Action<Music> action) {
-            action.Invoke(Tree.FindMusic(target));
+            Music music;
+            if ((music = Tree.FindMusic(target)) is Music)
+                action.Invoke(music);
             foreach (var playlist in settings.Playlists)
-                if (playlist.Songs.FirstOrDefault(m => m == target) is Music music)
+                if ((music = playlist.Songs.FirstOrDefault(m => m == target)) is Music)
                     action.Invoke(music);
-            if (MyFavorites.Songs.FirstOrDefault(m => m == target) is Music fav)
-                action.Invoke(fav);
+            if ((music = MyFavorites.Songs.FirstOrDefault(m => m == target)) is Music)
+                action.Invoke(music);
         }
 
         public static Music FindMusic(Music music) { return settings.Tree.FindMusic(music); }
