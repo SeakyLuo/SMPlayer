@@ -160,9 +160,15 @@ namespace SMPlayer
             }
 
         }
-
+        private bool isLaunchingBrowser = false;
         private async void BugReport_Click(object sender, RoutedEventArgs e)
         {
+            if (isLaunchingBrowser)
+            {
+                Helper.ShowNotification("ProcessingRequest");
+                return;
+            }
+            isLaunchingBrowser = true;
             if (await Windows.System.Launcher.LaunchUriAsync(new Uri("https://github.com/SeakyLuo/SMPlayer/issues")))
             {
 
@@ -171,6 +177,7 @@ namespace SMPlayer
             {
                 MainPage.Instance.ShowLocalizedNotification("FailToOpenBrowser");
             }
+            isLaunchingBrowser = false;
         }
 
         private void SaveChanges_Click(object sender, RoutedEventArgs e)

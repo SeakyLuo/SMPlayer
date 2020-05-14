@@ -52,7 +52,7 @@ namespace SMPlayer
 
         private void LocateCurrentButton_Click(object sender, RoutedEventArgs e)
         {
-            NowPlayingPlaylistControl.ScrollToCurrentMusic();
+            NowPlayingPlaylistControl.ScrollToCurrentMusic(true);
         }
 
         private async void RandomPlayButton_Click(object sender, RoutedEventArgs e)
@@ -61,8 +61,8 @@ namespace SMPlayer
             await Task.Run(() =>
             {
                 MediaHelper.ShuffleAndPlay(MusicLibraryPage.AllSongs);
-                MainPage.Instance.Loader.Hide();
             });
+            MainPage.Instance.Loader.Hide();
         }
     }
 }

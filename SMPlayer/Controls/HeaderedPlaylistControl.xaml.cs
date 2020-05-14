@@ -191,6 +191,7 @@ namespace SMPlayer
         private async void Clear_Click(object sender, RoutedEventArgs e)
         {
             if (DeleteDialog == null) DeleteDialog = new RemoveDialog();
+            DeleteDialog.Message = Helper.LocalizeMessage("ClearPlaylist", CurrentPlaylist.Name);
             DeleteDialog.Confirm = () =>
             {
                 CurrentPlaylist.Clear();

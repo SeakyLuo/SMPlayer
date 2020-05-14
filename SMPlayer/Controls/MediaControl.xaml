@@ -374,8 +374,7 @@
                                 x:Name="MainMiniModeItem"
                                 x:Uid="MiniModeMenuItem"
                                 Click="MiniModeButton_Click"
-                                Text="Mini Mode"
-                                ToolTipService.ToolTip="Enter Mini Mode">
+                                Text="Mini Mode">
                                 <MenuFlyoutItem.Icon>
                                     <FontIcon Glyph="&#xE744;" />
                                 </MenuFlyoutItem.Icon>

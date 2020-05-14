@@ -95,6 +95,7 @@ namespace SMPlayer.Controls
                 if (lyrics == "") throw new Exception("LyricsNotFound");
                 LyricsTextBox.Text = lyrics;
                 notification = Helper.LocalizeMessage("SearchLyricsSuccessful");
+                ScrollToTop();
             }
             catch (Exception exception)
             {

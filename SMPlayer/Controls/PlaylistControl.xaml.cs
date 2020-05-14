@@ -230,15 +230,21 @@ namespace SMPlayer
 
         private int ScrollToMusicRequestedWhenUnloaded = -1;
 
-        public void ScrollToCurrentMusic()
+        public void ScrollToCurrentMusic(bool showNotification = false)
         {
-            ScrollToMusic(MediaHelper.CurrentMusic);
+            ScrollToMusic(MediaHelper.CurrentMusic, showNotification);
         }
-        public void ScrollToMusic(Music music)
+        public void ScrollToMusic(Music music, bool showNotification = false)
         {
-            int index = CurrentPlaylist.IndexOf(music);
+            if (music == null) return;
+            int index = IsNowPlaying ? music.Index : CurrentPlaylist.IndexOf(music);
             if (SongsListView.IsLoaded)
-                ScrollToIndex(index);
+            {
+                if (!ScrollToIndex(index) && showNotification)
+                {
+                    Helper.ShowNotification("UnableToLocateMusic");
+                }
+            }
             else
                 ScrollToMusicRequestedWhenUnloaded = index;
         }
@@ -247,6 +253,7 @@ namespace SMPlayer
         {
             if (SongsListView.ContainerFromIndex(index) is ListViewItem item)
             {
+                //SongsListView.ScrollIntoView(item, ScrollIntoViewAlignment.Leading);
                 item.Locate();
                 return true;
             }

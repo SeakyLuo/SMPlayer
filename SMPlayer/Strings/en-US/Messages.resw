@@ -168,6 +168,9 @@
   <data name="Error" xml:space="preserve">
     <value>There is an error.</value>
   </data>
+  <data name="FailToOpenBrowser" xml:space="preserve">
+    <value>Fail to open web browser.</value>
+  </data>
   <data name="Folders" xml:space="preserve">
     <value>Folders ({0})</value>
   </data>
@@ -191,6 +194,9 @@
   </data>
   <data name="LyricsUpdated" xml:space="preserve">
     <value>Lyrics is updated!</value>
+  </data>
+  <data name="MiniModeFailed" xml:space="preserve">
+    <value>Fail to enter mini mode!</value>
   </data>
   <data name="MusicDeleted" xml:space="preserve">
     <value>"{0}" is deleted!</value>
@@ -312,6 +318,9 @@
   <data name="SearchEmpty" xml:space="preserve">
     <value>Search content cannot be empty!</value>
   </data>
+  <data name="SearchLyricsDone" xml:space="preserve">
+    <value>Lyrics have been added to all music.</value>
+  </data>
   <data name="SearchLyricsFailed" xml:space="preserve">
     <value>Unable to find matching lyrics!</value>
   </data>
@@ -368,6 +377,9 @@
   </data>
   <data name="UnableToChangeAlbumArt" xml:space="preserve">
     <value>Unable to change album art!</value>
+  </data>
+  <data name="UnableToLocateMusic" xml:space="preserve">
+    <value>Currently unable to locate music.</value>
   </data>
   <data name="UnknownAlbum" xml:space="preserve">
     <value>Unknown Album</value>

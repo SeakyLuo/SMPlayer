@@ -36,6 +36,8 @@ ThemeColor change.
 
 Animations.
 
+Album art in NowPlayingFull.
+
 # TO FIX
 Able to drag titlebar when loading.
 

@@ -204,6 +204,7 @@ namespace SMPlayer
 
         public static void ShuffleOthers()
         {
+            if (CurrentPlaylist.Count == 0) return;
             // Creating a new MediaPlaybackList here is because removing old music
             // somehow restarts the current playing music.
             PendingPlaybackList = new MediaPlaybackList();

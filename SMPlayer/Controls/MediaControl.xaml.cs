@@ -755,12 +755,13 @@ namespace SMPlayer
 
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ApplicationView.GetForCurrentView().IsFullScreenMode)
+            ApplicationView applicationView = ApplicationView.GetForCurrentView();
+            if (applicationView.IsFullScreenMode)
             {
-                ApplicationView.GetForCurrentView().ExitFullScreenMode();
+                applicationView.ExitFullScreenMode();
                 SetFullScreen();
             }
-            else if (ApplicationView.GetForCurrentView().TryEnterFullScreenMode())
+            else if (applicationView.TryEnterFullScreenMode())
             {
                 SetExitFullScreen();
             }
@@ -772,7 +773,11 @@ namespace SMPlayer
         }
         private async void MiniModeButton_Click(object sender, RoutedEventArgs e)
         {
-            if (MediaHelper.CurrentMusic == null || !ApplicationView.GetForCurrentView().IsViewModeSupported(ApplicationViewMode.CompactOverlay)) return;
+            if (MediaHelper.CurrentMusic == null || !ApplicationView.GetForCurrentView().IsViewModeSupported(ApplicationViewMode.CompactOverlay))
+            {
+                Helper.ShowNotification("MiniModeFailed");
+                return;
+            }
             if (ApplicationView.GetForCurrentView().ViewMode == ApplicationViewMode.Default)
             {
                 (Window.Current.Content as Frame).Navigate(typeof(MiniModePage));
