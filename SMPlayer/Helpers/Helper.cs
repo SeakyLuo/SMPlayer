@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
@@ -59,49 +60,31 @@ namespace SMPlayer
             foreach (var file in mediaHelper.Take(mediaHelper.Count() - 3)) await file.DeleteAsync();
             foreach (var file in musicLibrary.Take(musicLibrary.Count() - 3)) await file.DeleteAsync();
         }
-        public static void Locate(this UIElement uIElement)
-        {
-            uIElement.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true, VerticalAlignmentRatio = 0 });
-        }
-        public static string RemoveBraces(this string str, char left, char right)
-        {
-            int start = str.IndexOf(left), end = str.IndexOf(right);
-            return start != -1 && end != -1 ? str.Substring(0, start) + str.Substring(end + 1) : str;
-        }
         public static string ConvertBytes(ulong bytes)
         {
             ulong kb = bytes >> 10;
             return kb < 1024 ? kb + " KB" : Math.Round((double)kb / 1024, 2) + " MB";
         }
-        public static void Print<T>(this IEnumerable<T> list)
+        public static async Task<bool> FileNotExist(string path)
         {
-            Debug.WriteLine($"[{string.Join(", ", list.Select(i => i.ToString()))}]");
+            return !await FileExists(path);
         }
-        public static void AddOrMoveToTheFirst<T>(this Collection<T> list, T item)
+        public static async Task<bool> FileExists(string path)
         {
-            if (item.Equals(list.ElementAtOrDefault(0)))
-                return;
-            list.Remove(item);
-            list.Insert(0, item);
-        }
-        public static int FindIndex<T>(this IEnumerable<T> list, Predicate<T> match)
-        {
-            for (int i = 0; i < list.Count(); i++)
-                if (match(list.ElementAt(i)))
-                    return i;
-            return -1;
-        }
-        public static ObservableCollection<T> SetTo<T>(this ObservableCollection<T> dst, IEnumerable<T> src)
-        {
-            if (dst == null) dst = new ObservableCollection<T>(src);
-            else
+            try
             {
-                dst.Clear();
-                foreach (var item in src) dst.Add(item);
+                await StorageFile.GetFileFromPathAsync(path);
+                return true;
             }
-            return dst;
+            catch (FileNotFoundException)
+            {
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
-
         public static NotificationContainer GetNotificationContainer() { return (Window.Current.Content as Frame).Content as NotificationContainer; }
         public static void ShowNotificationWithoutLocalization(string message, int duration = 2000)
         {
@@ -115,9 +98,9 @@ namespace SMPlayer
         {
             GetNotificationContainer()?.ShowUndoNotification(LocalizeMessage(message), cancel, duration);
         }
-        public static void ShowAddMusicResultNotification(string music)
+        public static void ShowAddMusicResultNotification(string music, int duration = 5000)
         {
-            GetNotificationContainer().ShowNotification(LocalizeMessage("MusicNotFound", music), 5000);
+            GetNotificationContainer().ShowNotification(LocalizeMessage("MusicNotFound", music), duration);
         }
         public static void ShowAddMusicResultNotification(AddMusicResult result, Music target = null)
         {
@@ -172,29 +155,6 @@ namespace SMPlayer
             var str = loader.GetString(resource.Replace(":", "%3A"));
             return string.IsNullOrEmpty(str) ? resource : str;
         }
-        public static bool IsMusicFile(this StorageFile file)
-        {
-            return file.FileType.EndsWith("mp3");
-        }
-        public static async Task<bool> Contains(this StorageFolder folder, string name)
-        {
-            try
-            {
-                return await folder.TryGetItemAsync(name) != null;
-            }
-            catch (ArgumentException)
-            {
-                // Value does not fall within the expected range.
-                // e.g. ?.png
-                return false;
-            }
-        }
-
-        public static void SetToolTip(this DependencyObject obj, string tooltip, bool localize = true)
-        {
-            if (obj == null) return;
-            ToolTipService.SetToolTip(obj, localize ? Localize(tooltip) : tooltip);
-        }
         public static string GetVolumeIcon(double volume)
         {
             if (volume == 0) return "\uE992";
@@ -202,11 +162,6 @@ namespace SMPlayer
             if (volume < 67) return "\uE994";
             return "\uE995";
         }
-        public static bool SameAs(this IEnumerable<Music> list1, IEnumerable<Music> list2)
-        {
-            return list1.Count() == list2.Count() && list1.Zip(list2, (m1, m2) => m1.Equals(m2)).All(res => res);
-        }
-
         public static string GetLyricByTime(double time)
         {
             if (string.IsNullOrEmpty(Lyrics)) return NoLyricsAvailable;
@@ -222,12 +177,6 @@ namespace SMPlayer
             }
             return withDefault ? DefaultAlbumCover : null;
         }
-
-        public static bool IsThumbnail(this StorageItemThumbnail thumbnail)
-        {
-            return thumbnail != null && thumbnail.Type == ThumbnailType.Image;
-        }
-
         public static async Task<StorageItemThumbnail> GetStorageItemThumbnailAsync(Music music, uint size = 300)
         {
             return await GetStorageItemThumbnailAsync(music.Path, size);
@@ -244,18 +193,6 @@ namespace SMPlayer
                 return null;
             }
         }
-        public static BitmapImage GetBitmapImage(this StorageItemThumbnail thumbnail)
-        {
-            BitmapImage bitmapImage = new BitmapImage();
-            bitmapImage.SetSource(thumbnail);
-            return bitmapImage;
-        }
-
-        public static async Task<Brush> GetDisplayColor(this StorageItemThumbnail thumbnail)
-        {
-            return await ColorHelper.GetThumbnailMainColor(thumbnail.CloneStream());
-        }
-
         private static async void ShowToast(Music music, MediaPlaybackState state)
         {
             if (Window.Current.Visible) return;
@@ -543,29 +480,6 @@ namespace SMPlayer
         {
             var tilename = playlist.Name;
             return isPlaylist ? tilename : tilename + StringConcatenationFlag + playlist.Artist;
-        }
-
-        public static async Task<StorageFile> SaveAsync(this StorageItemThumbnail thumbnail, StorageFolder folder, string name, bool encode = false)
-        {
-            using (var stream = thumbnail.CloneStream())
-            {
-                var decoder = await BitmapDecoder.CreateAsync(stream);
-                var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
-                var filename = name + ".png";
-                if (encode) filename = WebUtility.UrlEncode(filename);
-                bool notExists = !await folder.Contains(filename);
-                var file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
-                if (notExists)
-                {
-                    using (var filestream = await file.OpenAsync(FileAccessMode.ReadWrite))
-                    {
-                        var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, filestream);
-                        encoder.SetSoftwareBitmap(softwareBitmap);
-                        await encoder.FlushAsync();
-                    }
-                }
-                return file;
-            }
         }
     }
     public enum ExecutionStatus

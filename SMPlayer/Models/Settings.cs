@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMPlayer.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -50,7 +51,7 @@ namespace SMPlayer.Models
         public SortBy SearchPlaylistsCriterion { get; set; } = SortBy.Default;
 
         [Newtonsoft.Json.JsonIgnore]
-        private List<Music> justRemoved = new List<Music>();
+        private List<Music> JustRemoved = new List<Music>();
 
         public Settings()
         {
@@ -166,14 +167,14 @@ namespace SMPlayer.Models
 
         public void AddMusic(Music music)
         {
-            if (justRemoved.Any(m => m.Name == music.Name && m.Artist == music.Artist && m.Album == music.Album && m.Duration == music.Duration))
+            if (JustRemoved.Any(m => m.Name == music.Name && m.Artist == music.Artist && m.Album == music.Album && m.Duration == music.Duration))
                 return;
             RecentAdded.AddOrMoveToTheFirst(music.Path);
         }
 
         public void RemoveMusic(Music music)
         {
-            justRemoved.Add(music);
+            JustRemoved.Add(music);
             Tree.RemoveMusic(music);
             foreach (var playlist in Playlists)
                 playlist.Songs.Remove(music);

@@ -131,8 +131,13 @@ namespace SMPlayer
                 Icon = new FontIcon() { Glyph = "\uE838" },
                 Text = Helper.Localize("Show In Explorer")
             };
-            item.Click += (s, args) =>
+            item.Click += async (s, args) =>
             {
+                if (await Helper.FileNotExist(path))
+                {
+                    Helper.ShowAddMusicResultNotification(Music.GetFilename(path));
+                    return;
+                }
                 ShowInExplorer(path, type);
             };
             item.SetToolTip("Show In Explorer");
@@ -199,6 +204,11 @@ namespace SMPlayer
             };
             deleteItem.Click += async (s, args) =>
             {
+                if (await Helper.FileNotExist(music.Path))
+                {
+                    Helper.ShowAddMusicResultNotification(music.Name);
+                    return;
+                }
                 await new RemoveDialog()
                 {
                     Message = Helper.LocalizeMessage("DeleteMusicMessage", music.Name),
@@ -257,6 +267,11 @@ namespace SMPlayer
             };
             musicInfoItem.Click += async (s, args) =>
             {
+                if (await Helper.FileNotExist(music.Path))
+                {
+                    Helper.ShowAddMusicResultNotification(music.Name);
+                    return;
+                }
                 if (NowPlayingFullPage.Instance == null) await new MusicDialog(MusicDialogOption.Properties, music).ShowAsync();
                 else NowPlayingFullPage.Instance.MusicInfoRequested(music);
             };
@@ -268,13 +283,17 @@ namespace SMPlayer
             };
             lyricsItem.Click += async (s, args) =>
             {
+                if (await Helper.FileNotExist(music.Path))
+                {
+                    Helper.ShowAddMusicResultNotification(music.Name);
+                    return;
+                }
                 if (NowPlayingFullPage.Instance == null) await new MusicDialog(MusicDialogOption.Lyrics, music).ShowAsync();
                 else NowPlayingFullPage.Instance.LyricsRequested(music);
             };
             flyout.Items.Add(lyricsItem);
             if (NowPlayingFullPage.Instance == null)
             {
-                
                 var albumArtItem = new MenuFlyoutItem()
                 {
                     Icon = new SymbolIcon(Symbol.Pictures),
@@ -282,6 +301,11 @@ namespace SMPlayer
                 };
                 albumArtItem.Click += async (s, args) =>
                 {
+                    if (await Helper.FileNotExist(music.Path))
+                    {
+                        Helper.ShowAddMusicResultNotification(music.Name);
+                        return;
+                    }
                     await new MusicDialog(MusicDialogOption.AlbumArt, music).ShowAsync();
                 };
                 flyout.Items.Add(albumArtItem);

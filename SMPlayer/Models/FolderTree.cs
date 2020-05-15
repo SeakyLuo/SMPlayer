@@ -68,7 +68,7 @@ namespace SMPlayer.Models
         private async Task<bool> CheckNewFile(StorageFolder folder, TreeUpdateData data = null)
         {
             LoadingStatus = ExecutionStatus.Running;
-            var pathSet = new HashSet<string>();
+            var pathSet = new HashSet<string>(); // folder name set
             foreach (var sub in await folder.GetFoldersAsync())
             {
                 if (LoadingStatus == ExecutionStatus.Break) return false;
@@ -93,7 +93,7 @@ namespace SMPlayer.Models
                 Trees.Remove(tree);
                 tree.Clear();
             }
-            pathSet = Files.Select(m => m.Path).ToHashSet();
+            pathSet = Files.Select(m => m.Path).ToHashSet(); // file path set
             var newList = new List<Music>();
             var newSet = new HashSet<string>();
             foreach (var file in await folder.GetFilesAsync())
@@ -106,7 +106,6 @@ namespace SMPlayer.Models
                     Music music = await Music.GetMusicAsync(file);
                     newList.Add(music);
                     data.More++;
-                    MusicLibraryPage.AddMusic(music);
                 }
             }
             int before = Files.Count;
@@ -117,7 +116,11 @@ namespace SMPlayer.Models
                 MusicLibraryPage.RemoveMusic(music);
             }
             data.Less += before - Files.Count;
-            Files.AddRange(newList);
+            foreach (var music in newList)
+            {
+                Files.Add(music);
+                MusicLibraryPage.AddMusic(music);
+            }
             Sort();
             LoadingStatus = ExecutionStatus.Ready;
             return true;
