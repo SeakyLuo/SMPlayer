@@ -184,6 +184,39 @@ namespace SMPlayer
                 flyout.Items.Add(item);
             }
         }
+        //private async void OpenMusicMenuFlyout(object sender, object e)
+        //{
+        //    var flyout = sender as MenuFlyout;
+        //    Music music = flyout.Target.DataContext as Music;
+        //    if (await Helper.FileNotExist(music.Path))
+        //    {
+        //        if (Removable)
+        //        {
+        //            flyout.Items.Clear();
+        //            flyout.Items.Add(MenuFlyoutHelper.GetRemovableMenuFlyoutItem(music, this));
+        //        }
+        //        else
+        //        {
+        //            Helper.ShowAddMusicResultNotification(music.Name);
+        //        }
+        //        return;
+        //    }
+        //    if (Removable) MenuFlyoutHelper.SetRemovableMusicMenu(sender, this);
+        //    else MenuFlyoutHelper.SetMusicMenu(sender, this);
+        //    if (AllowReorder)
+        //    {
+        //        var item = new MenuFlyoutItem()
+        //        {
+        //            Text = Helper.Localize("Move To Top"),
+        //            Icon = new SymbolIcon(Symbol.Upload)
+        //        };
+        //        item.Click += (s, args) =>
+        //        {
+        //            MediaHelper.MoveMusic(music.Index, 0);
+        //        };
+        //        flyout.Items.Add(item);
+        //    }
+        //}
 
         private void RemoveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
         {

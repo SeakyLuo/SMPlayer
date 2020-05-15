@@ -208,7 +208,7 @@
     <value>《{0}》没有专辑插图！</value>
   </data>
   <data name="MusicNotFound" xml:space="preserve">
-    <value>找不到《{0}》</value>
+    <value>找不到音乐《{0}》</value>
   </data>
   <data name="MusicRemoved" xml:space="preserve">
     <value>《{0}》已移除</value>

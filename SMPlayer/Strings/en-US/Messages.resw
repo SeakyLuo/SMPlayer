@@ -208,7 +208,7 @@
     <value>"{0}" does not have album art!</value>
   </data>
   <data name="MusicNotFound" xml:space="preserve">
-    <value>"{0}" cannot be found.</value>
+    <value>Cannot find music "{0}"</value>
   </data>
   <data name="MusicRemoved" xml:space="preserve">
     <value>"{0}" is removed</value>

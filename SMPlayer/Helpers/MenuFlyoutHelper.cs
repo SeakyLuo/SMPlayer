@@ -131,16 +131,10 @@ namespace SMPlayer
                 Icon = new FontIcon() { Glyph = "\uE838" },
                 Text = Helper.Localize("Show In Explorer")
             };
-            item.Click += async (s, args) =>
+            item.Click += (s, args) =>
             {
-                if (await Helper.FileNotExist(path))
-                {
-                    Helper.ShowAddMusicResultNotification(Music.GetFilename(path));
-                    return;
-                }
                 ShowInExplorer(path, type);
             };
-            item.SetToolTip("Show In Explorer");
             return item;
         }
         public static async void ShowInExplorer(string path, StorageItemTypes type)
@@ -204,11 +198,6 @@ namespace SMPlayer
             };
             deleteItem.Click += async (s, args) =>
             {
-                if (await Helper.FileNotExist(music.Path))
-                {
-                    Helper.ShowAddMusicResultNotification(music.Name);
-                    return;
-                }
                 await new RemoveDialog()
                 {
                     Message = Helper.LocalizeMessage("DeleteMusicMessage", music.Name),
@@ -267,11 +256,6 @@ namespace SMPlayer
             };
             musicInfoItem.Click += async (s, args) =>
             {
-                if (await Helper.FileNotExist(music.Path))
-                {
-                    Helper.ShowAddMusicResultNotification(music.Name);
-                    return;
-                }
                 if (NowPlayingFullPage.Instance == null) await new MusicDialog(MusicDialogOption.Properties, music).ShowAsync();
                 else NowPlayingFullPage.Instance.MusicInfoRequested(music);
             };
@@ -283,11 +267,6 @@ namespace SMPlayer
             };
             lyricsItem.Click += async (s, args) =>
             {
-                if (await Helper.FileNotExist(music.Path))
-                {
-                    Helper.ShowAddMusicResultNotification(music.Name);
-                    return;
-                }
                 if (NowPlayingFullPage.Instance == null) await new MusicDialog(MusicDialogOption.Lyrics, music).ShowAsync();
                 else NowPlayingFullPage.Instance.LyricsRequested(music);
             };
@@ -301,11 +280,6 @@ namespace SMPlayer
                 };
                 albumArtItem.Click += async (s, args) =>
                 {
-                    if (await Helper.FileNotExist(music.Path))
-                    {
-                        Helper.ShowAddMusicResultNotification(music.Name);
-                        return;
-                    }
                     await new MusicDialog(MusicDialogOption.AlbumArt, music).ShowAsync();
                 };
                 flyout.Items.Add(albumArtItem);
@@ -317,6 +291,13 @@ namespace SMPlayer
         {
             var music = Data as Music;
             var flyout = GetMusicMenuFlyout(listener, false);
+            var removeItem = GetRemovableMenuFlyoutItem(music, listener);
+            flyout.Items.Insert(2, removeItem);
+            return flyout;
+        }
+
+        public static MenuFlyoutItem GetRemovableMenuFlyoutItem(Music music, MenuFlyoutItemClickListener listener = null)
+        {
             var removeItem = new MenuFlyoutItem
             {
                 Icon = new SymbolIcon(Symbol.Remove),
@@ -327,9 +308,9 @@ namespace SMPlayer
                 listener?.Remove(music);
             };
             removeItem.SetToolTip(Helper.LocalizeMessage("RemoveFromPlaylist", music.Name), false);
-            flyout.Items.Insert(2, removeItem);
-            return flyout;
+            return removeItem;
         }
+
         public static MenuFlyoutSubItem GetSortByMenu(Dictionary<SortBy, Action> actions, Action reverse = null)
         {
             var sortByItem = new MenuFlyoutSubItem() { Text = Helper.Localize("Sort") };
@@ -413,13 +394,13 @@ namespace SMPlayer
             if (sender is MenuFlyout)
             {
                 flyout = sender as MenuFlyout;
-                data = (flyout.Target as Windows.UI.Xaml.FrameworkElement).DataContext;
+                data = (flyout.Target as FrameworkElement).DataContext;
                 flyout.Items.Clear();
             }
             else
             {
                 flyout = new MenuFlyout();
-                data = (sender as Windows.UI.Xaml.FrameworkElement).DataContext;
+                data = (sender as FrameworkElement).DataContext;
             }
             helper = new MenuFlyoutHelper()
             {

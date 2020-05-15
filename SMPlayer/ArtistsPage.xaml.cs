@@ -124,13 +124,10 @@ namespace SMPlayer
                 await SetData(songs);
         }
 
-        private async void Artist_Tapped(object sender, TappedRoutedEventArgs e)
+        private void Artist_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            await Task.Run(() =>
-            {
-                var artist = (sender as FrameworkElement).DataContext as ArtistView;
-                LoadArtist(artist);
-            });
+            var artist = (sender as FrameworkElement).DataContext as ArtistView;
+            LoadArtist(artist);
         }
 
         private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)

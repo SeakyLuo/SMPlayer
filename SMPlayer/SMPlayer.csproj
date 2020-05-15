@@ -204,6 +204,7 @@
     <Compile Include="ExpressionBuilder\ReferenceNodes\ExpressionBuilder.SpotLightReferenceNode.cs" />
     <Compile Include="ExpressionBuilder\ReferenceNodes\ExpressionBuilder.SurfaceBrushReferenceNode.cs" />
     <Compile Include="ExpressionBuilder\ReferenceNodes\ExpressionBuilder.VisualReferenceNode.cs" />
+    <Compile Include="Helpers\ClassHelper.cs" />
     <Compile Include="Helpers\SearchHelper.cs" />
     <Compile Include="Helpers\VisualTreeHelperExtensions.cs" />
     <Compile Include="Helpers\MusicHelper.cs" />
