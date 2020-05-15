@@ -201,6 +201,7 @@ namespace SMPlayer
         //        }
         //        return;
         //    }
+        //    sender = new MenuFlyout();
         //    if (Removable) MenuFlyoutHelper.SetRemovableMusicMenu(sender, this);
         //    else MenuFlyoutHelper.SetMusicMenu(sender, this);
         //    if (AllowReorder)
