@@ -93,7 +93,7 @@ namespace SMPlayer
         {
             GetNotificationContainer()?.ShowUndoNotification(LocalizeMessage(message), cancel, duration);
         }
-        public static void ShowAddMusicResultNotification(string music, int duration = 5000)
+        public static void ShowMusicNotFoundNotification(string music, int duration = 5000)
         {
             GetNotificationContainer().ShowNotification(LocalizeMessage("MusicNotFound", music), duration);
         }

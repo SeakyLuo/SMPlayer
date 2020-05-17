@@ -123,6 +123,9 @@
   <data name="AddingLyricsTo" xml:space="preserve">
     <value>Adding lyrics to "{0}"...</value>
   </data>
+  <data name="AlbumArtSaved" xml:space="preserve">
+    <value>New album art has been saved!</value>
+  </data>
   <data name="Albums:" xml:space="preserve">
     <value>Albums: </value>
   </data>
@@ -133,16 +136,16 @@
     <value>Changes has been saved.</value>
   </data>
   <data name="CheckNewMusicResultAdded" xml:space="preserve">
-    <value>Music added: {0}.</value>
+    <value>Music added: {0}</value>
   </data>
   <data name="CheckNewMusicResultChange" xml:space="preserve">
-    <value>Music added: {0}, removed: {1}.</value>
+    <value>Music added: {0}, removed: {1}</value>
   </data>
   <data name="CheckNewMusicResultNoChange" xml:space="preserve">
-    <value>No changes are found.</value>
+    <value>No changes have been found.</value>
   </data>
   <data name="CheckNewMusicResultRemoved" xml:space="preserve">
-    <value>Music removed: {0}.</value>
+    <value>Music removed: {0}</value>
   </data>
   <data name="ClearPlayHistory" xml:space="preserve">
     <value>Do you want to clear your play history?</value>

@@ -38,13 +38,20 @@ namespace SMPlayer
                     Icon = new FontIcon() { Glyph = "\uEC4F" },
                     Text = Helper.Localize("Now Playing")
                 };
-                nowPlayingItem.Click += (sender, args) =>
+                nowPlayingItem.Click += async (sender, args) =>
                 {
-                    if (Data is ICollection<Music> playlist)
-                        foreach (var music in playlist)
-                            MediaHelper.AddMusic(music);
-                    else if (Data is Music music)
+                    if (Data is Music music)
+                    {
+                        if (await Helper.FileNotExist(music.Path))
+                        {
+                            Helper.ShowMusicNotFoundNotification(music.Name);
+                            return;
+                        }
                         MediaHelper.AddMusic(music);
+                    }
+                    else if (Data is ICollection<Music> playlist)
+                        foreach (var item in playlist)
+                            MediaHelper.AddMusic(item);
                 };
                 addToItem.Items.Add(nowPlayingItem);
             }
@@ -56,10 +63,17 @@ namespace SMPlayer
                     Icon = new FontIcon() { Glyph = "\uEB51" },
                     Text = Helper.Localize("My Favorites")
                 };
-                favItem.Click += (sender, args) =>
+                favItem.Click += async (sender, args) =>
                 {
                     if (Data is Music music)
+                    {
+                        if (await Helper.FileNotExist(music.Path))
+                        {
+                            Helper.ShowMusicNotFoundNotification(music.Name);
+                            return;
+                        }
                         Settings.settings.LikeMusic(music);
+                    }
                     else if (Data is ICollection<Music>)
                         Settings.settings.LikeMusic(Data as ICollection<Music>);
                     listener?.Favorite(Data);
@@ -81,6 +95,11 @@ namespace SMPlayer
             };
             newPlaylistItem.Click += async (sender, args) =>
             {
+                if (Data is Music music && await Helper.FileNotExist(music.Path))
+                {
+                    Helper.ShowMusicNotFoundNotification(music.Name);
+                    return;
+                }
                 var listener = new VirtualRenameActionListener() { Data = Data };
                 var dialog = new RenameDialog(listener, RenameOption.New, DefaultPlaylistName);
                 listener.Dialog = dialog;
@@ -203,6 +222,11 @@ namespace SMPlayer
                     Message = Helper.LocalizeMessage("DeleteMusicMessage", music.Name),
                     Confirm = async () =>
                     {
+                        if (await Helper.FileNotExist(music.Path))
+                        {
+                            Helper.ShowMusicNotFoundNotification(music.Name);
+                            return;
+                        }
                         MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
                         StorageFile file = await StorageFile.GetFileFromPathAsync(music.Path);
                         await file.DeleteAsync();
@@ -233,8 +257,13 @@ namespace SMPlayer
                     Icon = new FontIcon() { Glyph = "\uE8D4" },
                     Text = Helper.Localize("See Artist")
                 };
-                artistItem.Click += (s, args) =>
+                artistItem.Click += async (s, args) =>
                 {
+                    if (await Helper.FileNotExist(music.Path))
+                    {
+                        Helper.ShowMusicNotFoundNotification(music.Name);
+                        return;
+                    }
                     MainPage.Instance.NavigateToPage(typeof(ArtistsPage), music.Artist);
                 };
                 flyout.Items.Add(artistItem);
@@ -243,8 +272,13 @@ namespace SMPlayer
                     Icon = new FontIcon() { Glyph = "\uE93C" },
                     Text = Helper.Localize("See Album")
                 };
-                albumItem.Click += (s, args) =>
+                albumItem.Click += async (s, args) =>
                 {
+                    if (await Helper.FileNotExist(music.Path))
+                    {
+                        Helper.ShowMusicNotFoundNotification(music.Name);
+                        return;
+                    }
                     MainPage.Instance.NavigateToPage(typeof(AlbumPage), music.GetAlbumNavigationString());
                 };
                 flyout.Items.Add(albumItem);
@@ -256,6 +290,11 @@ namespace SMPlayer
             };
             musicInfoItem.Click += async (s, args) =>
             {
+                if (await Helper.FileNotExist(music.Path))
+                {
+                    Helper.ShowMusicNotFoundNotification(music.Name);
+                    return;
+                }
                 if (NowPlayingFullPage.Instance == null) await new MusicDialog(MusicDialogOption.Properties, music).ShowAsync();
                 else NowPlayingFullPage.Instance.MusicInfoRequested(music);
             };
@@ -267,6 +306,11 @@ namespace SMPlayer
             };
             lyricsItem.Click += async (s, args) =>
             {
+                if (await Helper.FileNotExist(music.Path))
+                {
+                    Helper.ShowMusicNotFoundNotification(music.Name);
+                    return;
+                }
                 if (NowPlayingFullPage.Instance == null) await new MusicDialog(MusicDialogOption.Lyrics, music).ShowAsync();
                 else NowPlayingFullPage.Instance.LyricsRequested(music);
             };
@@ -280,6 +324,11 @@ namespace SMPlayer
                 };
                 albumArtItem.Click += async (s, args) =>
                 {
+                    if (await Helper.FileNotExist(music.Path))
+                    {
+                        Helper.ShowMusicNotFoundNotification(music.Name);
+                        return;
+                    }
                     await new MusicDialog(MusicDialogOption.AlbumArt, music).ShowAsync();
                 };
                 flyout.Items.Add(albumArtItem);
@@ -314,7 +363,7 @@ namespace SMPlayer
         public static MenuFlyoutSubItem GetSortByMenu(Dictionary<SortBy, Action> actions, Action reverse = null)
         {
             var sortByItem = new MenuFlyoutSubItem() { Text = Helper.Localize("Sort") };
-            var reverseItem = new MenuFlyoutItem() { Text = Helper.Localize("Reverse Playlist") };
+            var reverseItem = new MenuFlyoutItem() { Text = Helper.LocalizeMessage("Reverse Playlist") };
             reverseItem.Click += (send, args) => reverse?.Invoke();
             sortByItem.Items.Add(reverseItem);
             sortByItem.Items.Add(new MenuFlyoutSeparator());
@@ -322,11 +371,8 @@ namespace SMPlayer
             {
                 if (actions.TryGetValue(criterion, out Action action))
                 {
-                    string sortby = Helper.Localize("Sort By " + criterion.ToStr());
-                    var item = new MenuFlyoutItem()
-                    {
-                        Text = sortby,
-                    };
+                    string sortby = Helper.LocalizeMessage("Sort By " + criterion.ToStr());
+                    var item = new MenuFlyoutItem() { Text = sortby };
                     item.Click += (send, args) => action.Invoke();
                     sortByItem.Items.Add(item);
                 }

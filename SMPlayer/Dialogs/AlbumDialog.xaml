@@ -1,0 +1,25 @@
+﻿<ContentDialog
+    x:Class="SMPlayer.Dialogs.AlbumDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:SMPlayer.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:SMPlayer.Dialogs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Pivot>
+        <Pivot.RightHeader>
+            <Button
+                Click="CloseButton_Click"
+                Content="&#xE894;"
+                Style="{StaticResource FontIconButtonStyle}" />
+        </Pivot.RightHeader>
+        <PivotItem
+            x:Name="AlbumArtItem"
+            x:Uid="AlbumArtPivotItem"
+            Header="Album Art">
+            <controls:AlbumArtControl x:Name="AlbumArtController" />
+        </PivotItem>
+    </Pivot>
+</ContentDialog>

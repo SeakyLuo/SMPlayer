@@ -10,8 +10,9 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="4" />
             <RowDefinition Height="500" />
-            <RowDefinition Height="60" />
+            <RowDefinition Height="75" />
         </Grid.RowDefinitions>
         <Grid Margin="0,10">
             <StackPanel HorizontalAlignment="{x:Bind ShowHeader, Converter={StaticResource HorizontalAlignmentConverter}}" Orientation="Horizontal">
@@ -21,31 +22,50 @@
                     Content="&#xE70F;"
                     Style="{StaticResource MusicScrollHeaderButtonStyle}" />
                 <Button
+                    x:Uid="SaveAlbumArtButton"
+                    Click="SaveAlbumArtButton_Click"
+                    Content="&#xE74E;"
+                    Style="{StaticResource MusicScrollHeaderButtonStyle}">
+                    <Button.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="S" Modifiers="Control" />
+                    </Button.KeyboardAccelerators>
+                </Button>
+                <Button
                     x:Uid="DeleteAlbumArtButton"
                     Click="DeleteAlbumArtButton_Click"
                     Content="&#xE74D;"
                     Style="{StaticResource MusicScrollHeaderButtonStyle}" />
             </StackPanel>
         </Grid>
+        <ProgressBar
+            x:Name="SaveProgress"
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top"
+            IsIndeterminate="True"
+            Visibility="Collapsed" />
         <TextBlock
             x:Uid="NoAlbumArtTextBlock"
-            Grid.Row="1"
+            Grid.Row="2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="16"
             Text="No Album Art" />
         <Image
             x:Name="AlbumArt"
-            Grid.Row="1"
+            Grid.Row="2"
             MaxWidth="500"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Source="ms-appx:///Assets/monotone_bg_wide.png" />
         <StackPanel
             x:Name="RemoveAlbumArtWarningPanel"
-            Grid.Row="2"
+            Grid.Row="3"
             Visibility="Collapsed">
-            <TextBlock x:Name="RemoveAlbumArtWarningTextBlock" Margin="0,0,0,5" />
+            <TextBlock
+                x:Name="RemoveAlbumArtWarningTextBlock"
+                Margin="0,0,0,5"
+                TextWrapping="WrapWholeWords" />
             <StackPanel Orientation="Horizontal">
                 <Button
                     x:Uid="ConfirmButton"

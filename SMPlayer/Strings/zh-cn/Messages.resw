@@ -123,6 +123,9 @@
   <data name="AddingLyricsTo" xml:space="preserve">
     <value>正在为《{0}》添加歌词……</value>
   </data>
+  <data name="AlbumArtSaved" xml:space="preserve">
+    <value>新的专辑插图已保存！</value>
+  </data>
   <data name="Albums:" xml:space="preserve">
     <value>专辑：</value>
   </data>
@@ -133,16 +136,16 @@
     <value>已保存！</value>
   </data>
   <data name="CheckNewMusicResultAdded" xml:space="preserve">
-    <value>添加了{0}首歌。</value>
+    <value>添加了{0}首歌</value>
   </data>
   <data name="CheckNewMusicResultChange" xml:space="preserve">
-    <value>添加了{0}首歌，移除了{1}首歌。</value>
+    <value>添加了{0}首歌，移除了{1}首歌</value>
   </data>
   <data name="CheckNewMusicResultNoChange" xml:space="preserve">
-    <value>没有检查到变化。</value>
+    <value>没有检查到变化</value>
   </data>
   <data name="CheckNewMusicResultRemoved" xml:space="preserve">
-    <value>移除了{1}首歌。</value>
+    <value>移除了{1}首歌</value>
   </data>
   <data name="ClearPlayHistory" xml:space="preserve">
     <value>你想清空播放历史吗？</value>

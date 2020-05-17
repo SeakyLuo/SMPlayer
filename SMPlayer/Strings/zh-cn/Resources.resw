@@ -300,6 +300,9 @@
   <data name="Edit Playlists" xml:space="preserve">
     <value>编辑所有播放列表</value>
   </data>
+  <data name="EditAlbumArtButton.Label" xml:space="preserve">
+    <value>编辑专辑插图</value>
+  </data>
   <data name="Enter Full Screen Mode" xml:space="preserve">
     <value>进入全屏模式</value>
   </data>
@@ -313,9 +316,6 @@
     <value>退出最小模式</value>
   </data>
   <data name="ExpandAppButton.Label" xml:space="preserve">
-    <value>拓展视图</value>
-  </data>
-  <data name="ExpandAppButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>拓展视图</value>
   </data>
   <data name="FavoriteHeader.Header" xml:space="preserve">
@@ -620,6 +620,9 @@
   </data>
   <data name="ResetMusicPropertiesButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>重设歌曲信息</value>
+  </data>
+  <data name="SaveAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>保存专辑插图</value>
   </data>
   <data name="SaveChangesButton.Content" xml:space="preserve">
     <value>保存改变</value>

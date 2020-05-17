@@ -21,6 +21,14 @@ namespace SMPlayer.Models
             IsDefault = false;
         }
 
+        public MusicDisplayItem(BitmapImage bitmap, Brush color, Music music)
+        {
+            Thumbnail = bitmap;
+            Color = color;
+            Source = music;
+            IsDefault = false;
+        }
+
         private MusicDisplayItem(BitmapImage bitmap, Brush color)
         {
             Thumbnail = bitmap;

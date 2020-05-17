@@ -14,7 +14,11 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
-Album see album art.
+Refresh directory does not refresh page.
+
+Improve column spacing of AlbumPage.
+
+Album properties.
 
 Highlight root folder textbox for warning when reloading music library.
 
@@ -56,4 +60,6 @@ Random after one cycle.
 
 SaveChanges button.
 
-If a playlist contains this music collection, skip it in the MenuFlyout
+If a playlist contains this music collection, skip it in the MenuFlyout.
+
+Disallow dialog closing when processing request.

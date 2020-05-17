@@ -36,8 +36,6 @@ namespace SMPlayer
             if (parameter is AlbumView album)
             {
                 playlist = album.ToPlaylist();
-                if (string.IsNullOrEmpty(playlist.Name)) playlist.Name = Helper.LocalizeMessage("UnknownAlbum");
-                AlbumPlaylistControl.SetPlaylistInfo(album.Artist);
             }
             else if (parameter is Playlist)
                 playlist = (Playlist)parameter;

@@ -26,8 +26,7 @@
                     x:Uid="SearchLyricsButton"
                     Click="SearchLyricsButton_Click"
                     Content="&#xE721;"
-                    Style="{StaticResource MusicScrollHeaderButtonStyle}"
-                    ToolTipService.ToolTip="Search Lyrics" >
+                    Style="{StaticResource MusicScrollHeaderButtonStyle}">
                     <Button.KeyboardAccelerators>
                         <KeyboardAccelerator Key="F" Modifiers="Control" />
                     </Button.KeyboardAccelerators>
@@ -37,8 +36,7 @@
                     x:Uid="SaveLyricsButton"
                     Click="SaveLyricsButton_Click"
                     Content="&#xE74E;"
-                    Style="{StaticResource MusicScrollHeaderButtonStyle}"
-                    ToolTipService.ToolTip="Save Lyrics">
+                    Style="{StaticResource MusicScrollHeaderButtonStyle}">
                     <Button.KeyboardAccelerators>
                         <KeyboardAccelerator Key="S" Modifiers="Control" />
                     </Button.KeyboardAccelerators>
@@ -49,8 +47,7 @@
                     Background="Transparent"
                     Click="ResetLyricsButton_Click"
                     Content="&#xE72C;"
-                    Style="{StaticResource MusicScrollHeaderButtonStyle}"
-                    ToolTipService.ToolTip="Reset Lyrics">
+                    Style="{StaticResource MusicScrollHeaderButtonStyle}">
                     <Button.KeyboardAccelerators>
                         <KeyboardAccelerator Key="R" Modifiers="Control" />
                     </Button.KeyboardAccelerators>

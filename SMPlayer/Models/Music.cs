@@ -195,6 +195,11 @@ namespace SMPlayer.Models
             }
         }
 
+        public async Task<TagLib.File> GetTagFileAsync()
+        {
+            return TagLib.File.Create(new MusicFileAbstraction(await GetStorageFileAsync()), TagLib.ReadStyle.Average);
+        }
+
         public async Task<string> GetLyricsAsync()
         {
             var file = await GetStorageFileAsync();
@@ -305,7 +310,7 @@ namespace SMPlayer.Models
             }
             catch (FileNotFoundException)
             {
-                Helper.ShowAddMusicResultNotification(Music.GetFilename(path));
+                Helper.ShowMusicNotFoundNotification(Music.GetFilename(path));
                 return await (await StorageFile.GetFileFromPathAsync(path)).OpenReadAsync();
             }
         }

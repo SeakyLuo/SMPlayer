@@ -201,7 +201,6 @@ namespace SMPlayer
         //        }
         //        return;
         //    }
-        //    sender = new MenuFlyout();
         //    if (Removable) MenuFlyoutHelper.SetRemovableMusicMenu(sender, this);
         //    else MenuFlyoutHelper.SetMusicMenu(sender, this);
         //    if (AllowReorder)
@@ -264,23 +263,29 @@ namespace SMPlayer
 
         private int ScrollToMusicRequestedWhenUnloaded = -1;
 
-        public void ScrollToCurrentMusic(bool showNotification = false)
+        public async void ScrollToCurrentMusic(bool showNotification = false)
         {
-            ScrollToMusic(MediaHelper.CurrentMusic, showNotification);
+            if (ScrollToMusic(MediaHelper.CurrentMusic, false))
+            {
+                await SongsListView.LoadMoreItemsAsync();
+                ScrollToMusic(MediaHelper.CurrentMusic, showNotification);
+            }
         }
-        public void ScrollToMusic(Music music, bool showNotification = false)
+        public bool ScrollToMusic(Music music, bool showNotification = false)
         {
-            if (music == null) return;
+            if (music == null) return false;
             int index = IsNowPlaying ? music.Index : CurrentPlaylist.IndexOf(music);
             if (SongsListView.IsLoaded)
             {
-                if (!ScrollToIndex(index) && showNotification)
+                if (!ScrollToIndex(index))
                 {
-                    Helper.ShowNotification("UnableToLocateMusic");
+                    if (showNotification) Helper.ShowNotification("UnableToLocateMusic");
+                    return false;
                 }
             }
             else
                 ScrollToMusicRequestedWhenUnloaded = index;
+            return true;
         }
 
         private bool ScrollToIndex(int index)

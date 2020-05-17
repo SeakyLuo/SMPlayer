@@ -185,6 +185,7 @@ namespace SMPlayer
                 item.Click += (s, args) =>
                 {
                     PlaylistTabView.SelectedItem = playlist;
+                    // Tab bring into view
                 };
                 flyout.Items.Add(item);
             }

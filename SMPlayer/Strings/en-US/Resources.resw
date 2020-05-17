@@ -303,6 +303,9 @@
   <data name="Edit Playlists" xml:space="preserve">
     <value>Edit Playlists</value>
   </data>
+  <data name="EditAlbumArtButton.Label" xml:space="preserve">
+    <value>Edit Album Art</value>
+  </data>
   <data name="Enter Full Screen Mode" xml:space="preserve">
     <value>Enter Full Screen Mode</value>
   </data>
@@ -316,9 +319,6 @@
     <value>Exit Mini Mode</value>
   </data>
   <data name="ExpandAppButton.Label" xml:space="preserve">
-    <value>Expand View</value>
-  </data>
-  <data name="ExpandAppButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Expand View</value>
   </data>
   <data name="FavoriteHeader.Header" xml:space="preserve">
@@ -623,6 +623,9 @@
   </data>
   <data name="ResetMusicPropertiesButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Reset Properties</value>
+  </data>
+  <data name="SaveAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Save album art</value>
   </data>
   <data name="SaveChangesButton.Content" xml:space="preserve">
     <value>Save Changes</value>

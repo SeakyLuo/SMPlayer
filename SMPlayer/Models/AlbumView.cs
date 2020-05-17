@@ -16,14 +16,13 @@ namespace SMPlayer.Models
             get => thumbnail;
             set
             {
-                if (value == null) return;
                 thumbnail = value;
-                coverLoaded = true;
+                CoverLoaded = value != null;
                 OnPropertyChanged();
             }
         }
         private BitmapImage thumbnail = Helper.DefaultAlbumCover;
-        private bool coverLoaded = false;
+        public bool CoverLoaded { get; private set; } = false;
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -49,7 +48,7 @@ namespace SMPlayer.Models
         }
         public async void SetCover()
         {
-            if (!coverLoaded) Cover = await GetAlbumCoverAsync(Songs);
+            if (!CoverLoaded) Cover = await GetAlbumCoverAsync(Songs);
         }
         public static async System.Threading.Tasks.Task<BitmapImage> GetAlbumCoverAsync(ICollection<Music> songs)
         {
@@ -79,7 +78,7 @@ namespace SMPlayer.Models
 
         public override bool Equals(object obj)
         {
-            return Name == (obj as AlbumView).Name;
+            return obj is AlbumView album && Name == album.Name && Artist == album.Artist;
         }
 
         public override int GetHashCode()

@@ -1,5 +1,6 @@
 ﻿using ExpressionBuilder;
 using Microsoft.Graphics.Canvas.Effects;
+using SMPlayer.Controls;
 using SMPlayer.Dialogs;
 using SMPlayer.Models;
 using System;
@@ -11,16 +12,17 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using EF = ExpressionBuilder.ExpressionFunctions;
 
 //https://go.microsoft.com/fwlink/?LinkId=234236 上介绍了“用户控件”项模板
 
 namespace SMPlayer
 {
-    public sealed partial class HeaderedPlaylistControl : UserControl, RemoveMusicListener
+    public sealed partial class HeaderedPlaylistControl : UserControl, RemoveMusicListener, ImageSavedListener
     {
         public PlaylistControl HeaderedPlaylist { get => HeaderedPlaylistController; }
-        public Playlist CurrentPlaylist { get; set; }
+        public Playlist CurrentPlaylist { get; private set; }
         public Brush HeaderBackground
         {
             get => headerBackground;
@@ -32,12 +34,26 @@ namespace SMPlayer
             get => HeaderedPlaylistController.ShowAlbumText;
             set => HeaderedPlaylistController.ShowAlbumText = value;
         }
-        public bool IsPlaylist { get; set; }
+        public bool IsPlaylist 
+        {
+            get => isPlaylist;
+            set
+            {
+                isPlaylist = value;
+                EditAlbumArtButton.Visibility = value ? Visibility.Collapsed : Visibility.Visible;
+            }
+        }
+        private bool isPlaylist = true;
         public bool AllowClear
         {
-            get => ClearButton.Visibility == Visibility.Visible;
-            set => ClearButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            get => allowClear;
+            set
+            {
+                allowClear = value;
+                ClearButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
+        private bool allowClear = true;
         public bool Removable
         {
             get => HeaderedPlaylistController.Removable;
@@ -52,6 +68,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             HeaderedPlaylistController.RemoveListeners.Add(this);
+            AlbumArtControl.ImageSavedListeners.Add(this);
         }
 
         public async Task SetPlaylist(Playlist playlist)
@@ -59,7 +76,7 @@ namespace SMPlayer
             MediaHelper.FindMusicAndSetPlaying(playlist.Songs, null, MediaHelper.CurrentMusic);
             CurrentPlaylist = playlist;
             HeaderedPlaylist.ItemsSource = playlist.Songs;
-            PlaylistNameTextBlock.Text = Helper.Localize(playlist.Name);
+            PlaylistNameTextBlock.Text = string.IsNullOrEmpty(playlist.Name) && !IsPlaylist ? Helper.LocalizeMessage("UnknownAlbum") : playlist.Name;
             SetPlaylistInfo(SongCountConverter.ToStr(playlist.Songs));
             ShuffleButton.IsEnabled = playlist.Songs.Count != 0;
             AddToButton.IsEnabled = playlist.Songs.Count != 0;
@@ -87,6 +104,11 @@ namespace SMPlayer
                     if (items.Count > 0) PlaylistDisplayDict[playlist.Name] = items;
                 });
             }
+            SetMusicDisplayItem(item);
+        }
+
+        public void SetMusicDisplayItem(MusicDisplayItem item)
+        {
             PlaylistCover.Source = item.Thumbnail;
             HeaderBackground = item.Color;
         }
@@ -198,6 +220,11 @@ namespace SMPlayer
                 SetPlaylistInfo(SongCountConverter.ToStr(CurrentPlaylist.Songs));
             };
             await DeleteDialog.ShowAsync();
+        }
+
+        private async void EditAlbumArtButton_Click(object sender, RoutedEventArgs e)
+        {
+            await new AlbumDialog(AlbumDialogOption.AlbumArt, CurrentPlaylist.ToAlbumView()).ShowAsync();
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
@@ -337,6 +364,26 @@ namespace SMPlayer
             if (_blurredBackgroundImageVisual != null)
             {
                 _blurredBackgroundImageVisual.Size = new Vector2((float)OverlayRectangle.ActualWidth, (float)OverlayRectangle.ActualHeight);
+            }
+        }
+
+        public async void SaveAlbum(AlbumView album, BitmapImage image)
+        {
+            // IsAlbum
+            if (!IsPlaylist && CurrentPlaylist.Name == album.Name)
+            {
+                MusicDisplayItem item = await album.Songs[0].GetMusicDisplayItemAsync();
+                SetMusicDisplayItem(CurrentPlaylist.DisplayItem = item);
+            }
+        }
+
+        public async void SaveMusic(Music music, BitmapImage image)
+        {
+            // IsAlbum
+            if (!IsPlaylist && CurrentPlaylist.Name == music.Album && CurrentPlaylist.Songs.Count == 1)
+            {
+                MusicDisplayItem item = await music.GetMusicDisplayItemAsync();
+                SetMusicDisplayItem(CurrentPlaylist.DisplayItem = item);
             }
         }
     }

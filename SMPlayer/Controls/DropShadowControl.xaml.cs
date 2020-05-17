@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Models;
+using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -9,6 +10,7 @@ namespace SMPlayer
 {
     public sealed partial class DropShadowControl : UserControl
     {
+        public event EventHandler<object> MenuFlyoutOpeningAction;
         public DropShadowControl()
         {
             this.InitializeComponent();
@@ -27,6 +29,7 @@ namespace SMPlayer
         private void MenuFlyout_Opening(object sender, object e)
         {
             MenuFlyoutHelper.SetPlaylistMenu(sender);
+            MenuFlyoutOpeningAction?.Invoke(sender, e);
         }
         private void PlayAllButton_Click(object sender, RoutedEventArgs e)
         {

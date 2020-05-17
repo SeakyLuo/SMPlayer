@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Graphics.Imaging;
+using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMPlayer
 {
@@ -42,7 +44,7 @@ namespace SMPlayer
         private const int MIN_VALUE = 10;
         private const int MAX_VALUE = 210;
 
-        private static async Task<byte[]> GetPixelData(BitmapDecoder decoder, uint x, uint y)
+        private static async Task<byte[]> GetPixelData(this BitmapDecoder decoder, uint x, uint y)
         {
             var data = await decoder.GetPixelDataAsync(BitmapPixelFormat.Bgra8,
                                            BitmapAlphaMode.Straight,
@@ -55,7 +57,13 @@ namespace SMPlayer
             return data.DetachPixelData();
         }
 
-        public static async Task<Brush> GetThumbnailMainColor(Windows.Storage.Streams.IRandomAccessStream Thumbnail)
+        public static async Task<Brush> GetMainColorAsync(this BitmapImage image)
+        {
+            RandomAccessStreamReference reference = RandomAccessStreamReference.CreateFromUri(image.UriSour‌​ce);
+            return await GetThumbnailMainColorAsync(await reference.OpenReadAsync());
+        }
+
+        public static async Task<Brush> GetThumbnailMainColorAsync(IRandomAccessStream Thumbnail)
         {
             byte[] bgra = { 0, 0, 0, 255 };
             var decoder = await BitmapDecoder.CreateAsync(Thumbnail);
@@ -65,7 +73,7 @@ namespace SMPlayer
             {
                 for (uint j = 1; j < divs; j++)
                 {
-                    bgra = await GetPixelData(decoder, width * i / 8, height * j / 8);
+                    bgra = await decoder.GetPixelData(width * i / 8, height * j / 8);
                     if (bgra.SkipLast(1).All((v) => MIN_VALUE <= v && v <= MAX_VALUE)) goto GenerateColor;
                 }
             }
@@ -80,7 +88,7 @@ namespace SMPlayer
                 TintColor = color
             };
         }
-        public static async Task<Brush> GetThumbnailMainColorCommon(Windows.Storage.Streams.IRandomAccessStream Thumbnail)
+        public static async Task<Brush> GetThumbnailMainColorCommonAsync(IRandomAccessStream Thumbnail)
         {
             var decoder = await BitmapDecoder.CreateAsync(Thumbnail);
             uint width = decoder.PixelWidth, height = decoder.PixelHeight;
@@ -90,7 +98,7 @@ namespace SMPlayer
             {
                 for (uint j = 0; j < height - 1; j++)
                 {
-                    var bytes = await GetPixelData(decoder, i, j);
+                    var bytes = await decoder.GetPixelData(i, j);
                     for (int n = 0; n < 4; n++)
                         dict[n][bytes[n]] = dict[n].GetValueOrDefault(bytes[n], 0) + 1;
                 }
@@ -108,7 +116,7 @@ namespace SMPlayer
             };
         }
 
-        public static async Task<Brush> GetThumbnailMainColorAverage(Windows.Storage.Streams.IRandomAccessStream Thumbnail)
+        public static async Task<Brush> GetThumbnailMainColorAverageAsync(IRandomAccessStream Thumbnail)
         {
             var decoder = await BitmapDecoder.CreateAsync(Thumbnail);
             uint width = decoder.PixelWidth, height = decoder.PixelHeight;
@@ -117,7 +125,7 @@ namespace SMPlayer
             {
                 for (uint j = 0; j < height - 1; j++)
                 {
-                    var bytes = await GetPixelData(decoder, i, j);
+                    var bytes = await decoder.GetPixelData(i, j);
                     for (int n = 0; n < 4; n++)
                         bgra[n] += bytes[n];
                 }

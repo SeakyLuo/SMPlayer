@@ -35,7 +35,7 @@ namespace SMPlayer.Helpers
         }
         public static IEnumerable<AlbumView> SearchPlaylists(string keyword, SortBy criterion)
         {
-            List<AlbumView> list = Settings.settings.Playlists.Where(i => IsTargetPlaylist(i, keyword)).Select(i => i.ToAlbumView()).ToList();
+            List<AlbumView> list = Settings.settings.Playlists.Where(i => IsTargetPlaylist(i, keyword)).Select(i => i.ToSearchAlbumView()).ToList();
             return SortPlaylists(list, keyword, criterion);
         }
         public static bool IsTargetArtist(Music music, string keyword)
@@ -134,14 +134,14 @@ namespace SMPlayer.Helpers
                 Func<AlbumView, string> defaultSelector = i => i.Name;
                 list = DefaultSort(src, keyword, defaultSelector).ToList();
                 int insert = list.Count > 0 && IsExact(list[0], keyword, defaultSelector) ? 1 : 0;
-                if (isNowPlayingTarget) list.Insert(insert, nowPlaying.ToAlbumView());
-                if (isFavoriteTarget) list.Insert(isNowPlayingTarget ? ++insert : insert, Settings.settings.MyFavorites.ToAlbumView());
+                if (isNowPlayingTarget) list.Insert(insert, nowPlaying.ToSearchAlbumView());
+                if (isFavoriteTarget) list.Insert(isNowPlayingTarget ? ++insert : insert, Settings.settings.MyFavorites.ToSearchAlbumView());
             }
             else
             {
                 list = new List<AlbumView>();
-                if (isNowPlayingTarget) list.Add(nowPlaying.ToAlbumView());
-                if (isFavoriteTarget) list.Add(Settings.settings.MyFavorites.ToAlbumView());
+                if (isNowPlayingTarget) list.Add(nowPlaying.ToSearchAlbumView());
+                if (isFavoriteTarget) list.Add(Settings.settings.MyFavorites.ToSearchAlbumView());
                 switch (criterion)
                 {
                     case SortBy.Name:

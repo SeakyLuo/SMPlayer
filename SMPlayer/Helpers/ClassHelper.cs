@@ -97,7 +97,7 @@ namespace SMPlayer
 
         public static async Task<Brush> GetDisplayColor(this StorageItemThumbnail thumbnail)
         {
-            return await ColorHelper.GetThumbnailMainColor(thumbnail.CloneStream());
+            return await ColorHelper.GetThumbnailMainColorAsync(thumbnail.CloneStream());
         }
 
 

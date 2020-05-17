@@ -139,6 +139,15 @@ namespace SMPlayer.Models
 
         public AlbumView ToAlbumView()
         {
+            return new AlbumView(Name, Artist)
+            {
+                Songs = Songs,
+                Cover = DisplayItem == null ? Helper.DefaultAlbumCover : DisplayItem.Thumbnail,
+            };
+        }
+
+        public AlbumView ToSearchAlbumView()
+        {
             return new AlbumView(Name, SongCountConverter.GetSongCount(Songs.Count))
             {
                 Songs = Songs,

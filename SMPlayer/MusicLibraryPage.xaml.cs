@@ -25,7 +25,6 @@ namespace SMPlayer
         public static HashSet<Music> AllSongsSet;
         public static bool IsLibraryUnchangedAfterChecking = true;
 
-        private static bool libraryReset = false;
         private static List<AfterSongsSetListener> listeners = new List<AfterSongsSetListener>();
 
         public MusicLibraryPage()
@@ -73,7 +72,6 @@ namespace SMPlayer
         public static void AddAfterSongsSetListener(AfterSongsSetListener listener)
         {
             listeners.Add(listener);
-            if (libraryReset) listener.SongsSet(AllSongs);
         }
 
         private void MusicLibraryDataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
@@ -127,7 +125,6 @@ namespace SMPlayer
         public static void SetAllSongs(IEnumerable<Music> songs)
         {
             if (songs == null) return;
-            libraryReset = true;
             AllSongs.Clear();
             var favSet = Settings.settings.MyFavorites.Songs.ToHashSet();
             foreach (var item in songs)
@@ -141,7 +138,6 @@ namespace SMPlayer
         public static void AddMusic(Music music)
         {
             if (!AllSongsSet.Add(music)) return;
-            libraryReset = true;
             var keySelector = SortByConverter.GetKeySelector(Settings.settings.MusicLibraryCriterion);
             for (int i = 0; i < AllSongs.Count; i++)
             {
@@ -159,7 +155,6 @@ namespace SMPlayer
         public static void RemoveMusic(Music music)
         {
             if (!AllSongsSet.Remove(music)) return;
-            libraryReset = true;
             AllSongs.Remove(music);
             Settings.settings.RemoveMusic(music);
             NotifyListeners();

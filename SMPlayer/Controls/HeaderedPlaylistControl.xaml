@@ -105,6 +105,13 @@
                                 Click="Delete_Click"
                                 Icon="Delete"
                                 Style="{StaticResource PlaylistAppBarButtonStyle}" />
+                            <AppBarButton
+                                x:Name="EditAlbumArtButton"
+                                x:Uid="EditAlbumArtButton"
+                                Click="EditAlbumArtButton_Click"
+                                Icon="Pictures"
+                                Style="{StaticResource PlaylistAppBarButtonStyle}"
+                                Visibility="Collapsed" />
                         </CommandBar>
                     </Grid>
                     <VisualStateManager.VisualStateGroups>

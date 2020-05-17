@@ -30,6 +30,11 @@ namespace SMPlayer.Dialogs
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            //if (MusicInfoController.IsProcessing || MusicLyricsController.IsProcessing || AlbumArtController.IsProcessing)
+            //{
+            //    Helper.ShowNotification("ProcessingRequest");
+            //    return;
+            //}
             this.Hide();
         }
     }
