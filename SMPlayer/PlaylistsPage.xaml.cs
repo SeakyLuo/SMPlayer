@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -59,6 +60,7 @@ namespace SMPlayer
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             EditPlaylistButton.SetToolTip("Edit Playlists");
+            BringSelectedTabIntoView();
         }
 
         public void SetFooterText()
@@ -185,9 +187,24 @@ namespace SMPlayer
                 item.Click += (s, args) =>
                 {
                     PlaylistTabView.SelectedItem = playlist;
-                    // Tab bring into view
+                    BringSelectedTabIntoView();
                 };
                 flyout.Items.Add(item);
+            }
+        }
+
+        private void BringSelectedTabIntoView()
+        {
+            if (PlaylistTabView.GetFirstDescendantOfType<ScrollViewer>() is ScrollViewer scrollViewer)
+            {
+                double itemWidth = scrollViewer.ActualWidth / PlaylistTabView.Items.Count;
+                if (scrollViewer.IsLoaded)
+                    scrollViewer.ChangeView(itemWidth * PlaylistTabView.SelectedIndex, null, null, false);
+                else
+                    scrollViewer.Loaded += (sender, args) =>
+                    {
+                        scrollViewer.ChangeView(itemWidth * PlaylistTabView.SelectedIndex, null, null, false);
+                    };
             }
         }
 
