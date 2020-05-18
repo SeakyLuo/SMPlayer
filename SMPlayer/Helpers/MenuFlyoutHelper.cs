@@ -230,12 +230,18 @@ namespace SMPlayer
                         MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
                         StorageFile file = await StorageFile.GetFileFromPathAsync(music.Path);
                         await file.DeleteAsync();
-                        MusicLibraryPage.AllSongs.Remove(music);
+                        int musicLibraryIndex = MusicLibraryPage.AllSongs.IndexOf(music);
+                        MusicLibraryPage.AllSongs.RemoveAt(musicLibraryIndex);
                         Settings.settings.RemoveMusic(music);
                         MediaHelper.DeleteMusic(music);
                         listener?.Delete(music);
                         MainPage.Instance?.Loader.Hide();
-                        Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("MusicDeleted", music.Name));
+                        Helper.ShowCancelableNotificationWithoutLocalization(Helper.LocalizeMessage("MusicDeleted", music.Name), () =>
+                        {
+                            MusicLibraryPage.AllSongs.Insert(musicLibraryIndex, music);
+                            Settings.settings.UndoRemoveMusic(music);
+                            listener?.UndoDelete(music);
+                        });
                     }
                 }.ShowAsync();
             };
@@ -491,6 +497,7 @@ namespace SMPlayer
     {
         void Favorite(object data);
         void Delete(Music music);
+        void UndoDelete(Music music);
         void Remove(Music music);
     }
 }

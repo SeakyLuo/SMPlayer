@@ -326,6 +326,11 @@ namespace SMPlayer.Models
             }
             return null;
         }
+        public FolderTree FindTree(Music music)
+        {
+            string path = music.Path.Substring(0, music.Path.LastIndexOf('/'));
+            return FindTree(path);
+        }
         public Music FindMusic(string path)
         {
             return Files.FirstOrDefault(m => m.Path == path) ?? Trees.FirstOrDefault(tree => path.StartsWith(tree.Path))?.FindMusic(path);

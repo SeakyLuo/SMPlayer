@@ -15,8 +15,9 @@ namespace SMPlayer
     {
         public ObservableCollection<GridMusicView> GridMusicCollection = new ObservableCollection<GridMusicView>();
         public List<Music> MusicCollection = new List<Music>();
-        private bool SetupInProgress = false;
+        private volatile bool IsProcessing = false;
         public List<RemoveMusicListener> RemoveListeners = new List<RemoveMusicListener>();
+        private int removedItemIndex = -1;
 
         public GridMusicControl()
         {
@@ -40,7 +41,7 @@ namespace SMPlayer
 
         public void Setup(ICollection<Music> collection)
         {
-            SetupInProgress = true;
+            IsProcessing = true;
             MusicCollection = collection.ToList();
             GridMusicCollection.Clear();
             foreach (var music in collection)
@@ -50,7 +51,7 @@ namespace SMPlayer
                 GridMusicView gridItem = new GridMusicView(copy);
                 GridMusicCollection.Add(gridItem);
             }
-            SetupInProgress = false;
+            IsProcessing = false;
         }
         public void Clear()
         {
@@ -59,7 +60,7 @@ namespace SMPlayer
         }
         public void Reverse()
         {
-            if (SetupInProgress) Helper.ShowNotification("NowLoading");
+            if (IsProcessing) Helper.ShowNotification("NowLoading");
             else
             {
                 MusicCollection.Reverse();
@@ -68,7 +69,7 @@ namespace SMPlayer
         }
         public void SortByTitle()
         {
-            if (SetupInProgress) Helper.ShowNotification("NowLoading");
+            if (IsProcessing) Helper.ShowNotification("NowLoading");
             else
             {
                 MusicCollection = MusicCollection.OrderBy(m => m.Name).ToList();
@@ -77,7 +78,7 @@ namespace SMPlayer
         }
         public void SortByArtist()
         {
-            if (SetupInProgress) Helper.ShowNotification("NowLoading");
+            if (IsProcessing) Helper.ShowNotification("NowLoading");
             else
             {
                 MusicCollection = MusicCollection.OrderBy(m => m.Artist).ToList();
@@ -86,7 +87,7 @@ namespace SMPlayer
         }
         public void SortByAlbum()
         {
-            if (SetupInProgress) Helper.ShowNotification("NowLoading");
+            if (IsProcessing) Helper.ShowNotification("NowLoading");
             else
             {
                 MusicCollection = MusicCollection.OrderBy(m => m.Album).ToList();
@@ -144,12 +145,18 @@ namespace SMPlayer
             RemoveMusic(music);
         }
 
+        void MenuFlyoutItemClickListener.UndoDelete(Music music)
+        {
+            MusicCollection.Insert(removedItemIndex, music);
+            GridMusicCollection.Insert(removedItemIndex, new GridMusicView(music));
+        }
+
         private void RemoveMusic(Music music)
         {
-            int index = MusicCollection.IndexOf(music);
-            MusicCollection.RemoveAt(index);
-            GridMusicCollection.RemoveAt(index);
-            foreach (var listener in RemoveListeners) listener.MusicRemoved(index, music, MusicCollection);
+            removedItemIndex = MusicCollection.IndexOf(music);
+            MusicCollection.RemoveAt(removedItemIndex);
+            GridMusicCollection.RemoveAt(removedItemIndex);
+            foreach (var listener in RemoveListeners) listener.MusicRemoved(removedItemIndex, music, MusicCollection);
         }
     }
 }

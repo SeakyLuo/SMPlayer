@@ -166,7 +166,7 @@
     <value>Delete "{0}"</value>
   </data>
   <data name="DeleteMusicMessage" xml:space="preserve">
-    <value>You are deleting "{0}" from your device.\nThis operation is irrevertible.\nDo you want to continue?</value>
+    <value>You are deleting "{0}" from your device.\nThis operation is not fully revertible.\nDo you want to continue?</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>There is an error.</value>

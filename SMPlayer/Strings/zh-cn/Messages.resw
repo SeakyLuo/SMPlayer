@@ -166,7 +166,7 @@
     <value>删除《{0}》</value>
   </data>
   <data name="DeleteMusicMessage" xml:space="preserve">
-    <value>你将要删除《{0}》。该项操作无法撤销，是否要继续？</value>
+    <value>你将要删除《{0}》。该项操作无法完全撤销，是否要继续？</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>发生了错误</value>

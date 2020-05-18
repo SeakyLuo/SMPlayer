@@ -75,7 +75,7 @@ namespace SMPlayer
         }
         public List<RemoveMusicListener> RemoveListeners = new List<RemoveMusicListener>();
         private Dialogs.RemoveDialog dialog;
-        private int dragIndex, dropIndex;
+        private int dragIndex, dropIndex, removedMusicIndex;
 
         public PlaylistControl()
         {
@@ -184,39 +184,6 @@ namespace SMPlayer
                 flyout.Items.Add(item);
             }
         }
-        //private async void OpenMusicMenuFlyout(object sender, object e)
-        //{
-        //    var flyout = sender as MenuFlyout;
-        //    Music music = flyout.Target.DataContext as Music;
-        //    if (await Helper.FileNotExist(music.Path))
-        //    {
-        //        if (Removable)
-        //        {
-        //            flyout.Items.Clear();
-        //            flyout.Items.Add(MenuFlyoutHelper.GetRemovableMenuFlyoutItem(music, this));
-        //        }
-        //        else
-        //        {
-        //            Helper.ShowAddMusicResultNotification(music.Name);
-        //        }
-        //        return;
-        //    }
-        //    if (Removable) MenuFlyoutHelper.SetRemovableMusicMenu(sender, this);
-        //    else MenuFlyoutHelper.SetMusicMenu(sender, this);
-        //    if (AllowReorder)
-        //    {
-        //        var item = new MenuFlyoutItem()
-        //        {
-        //            Text = Helper.Localize("Move To Top"),
-        //            Icon = new SymbolIcon(Symbol.Upload)
-        //        };
-        //        item.Click += (s, args) =>
-        //        {
-        //            MediaHelper.MoveMusic(music.Index, 0);
-        //        };
-        //        flyout.Items.Add(item);
-        //    }
-        //}
 
         private void RemoveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
         {
@@ -238,19 +205,20 @@ namespace SMPlayer
             }
         }
 
-        private void RemoveMusic(Music music)
+        private void RemoveMusic(Music music, bool showNotification = true)
         {
-            int index = IsNowPlaying ?  music.Index : currentPlaylist.IndexOf(music);
+            removedMusicIndex = IsNowPlaying ?  music.Index : currentPlaylist.IndexOf(music);
             if (IsNowPlaying ? MediaHelper.RemoveMusic(music) : currentPlaylist.Remove(music))
             {
                 if (AlternatingRowColor)
                 {
-                    for (int i = index; i < CurrentPlaylist.Count; i++)
+                    for (int i = removedMusicIndex; i < CurrentPlaylist.Count; i++)
                         if (SongsListView.ContainerFromIndex(i) is ListViewItem container)
                             container.Background = GetRowBackground(i);
                 }
-                foreach (var listener in RemoveListeners) listener.MusicRemoved(index, music, CurrentPlaylist);
-                Helper.ShowCancelableNotification(Helper.LocalizeMessage("MusicRemoved", music.Name), () => CancelMusicRemoval(index, music));
+                foreach (var listener in RemoveListeners) listener.MusicRemoved(removedMusicIndex, music, CurrentPlaylist);
+                if (showNotification)
+                    Helper.ShowCancelableNotification(Helper.LocalizeMessage("MusicRemoved", music.Name), () => CancelMusicRemoval(removedMusicIndex, music));
             }
         }
 
@@ -310,7 +278,7 @@ namespace SMPlayer
 
         void MenuFlyoutItemClickListener.Delete(Music music)
         {
-            RemoveMusic(music);
+            RemoveMusic(music, false);
         }
 
         void MenuFlyoutItemClickListener.Remove(Music music)
@@ -320,7 +288,16 @@ namespace SMPlayer
 
         void MenuFlyoutItemClickListener.Favorite(object data)
         {
-            
+
+        }
+
+        void MenuFlyoutItemClickListener.UndoDelete(Music music)
+        {
+            if (IsNowPlaying) return;
+            currentPlaylist.Insert(removedMusicIndex, music);
+            for (int i = removedMusicIndex; i < CurrentPlaylist.Count; i++)
+                if (SongsListView.ContainerFromIndex(i) is ListViewItem container)
+                    container.Background = GetRowBackground(i);
         }
 
         private void SongsListView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)

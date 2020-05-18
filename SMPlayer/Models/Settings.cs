@@ -172,15 +172,47 @@ namespace SMPlayer.Models
             RecentAdded.AddOrMoveToTheFirst(music.Path);
         }
 
+        private Dictionary<string, int> RemovedPlaylist = new Dictionary<string, int>();
+        private int myFavoratesRemovedIndex = -1, recentPlayedRemovedIndex = -1, recentAddedRemovedIndex = -1;
+
         public void RemoveMusic(Music music)
         {
             JustRemoved.Add(music);
             Tree.RemoveMusic(music);
+            RemovedPlaylist.Clear();
+            int removeIndex;
             foreach (var playlist in Playlists)
-                playlist.Songs.Remove(music);
-            MyFavorites.Remove(music);
+            {
+                if ((removeIndex = playlist.Songs.IndexOf(music)) > -1)
+                {
+                    RemovedPlaylist.Add(playlist.Name, removeIndex);
+                    playlist.Remove(removeIndex);
+                }
+            }
+            if ((myFavoratesRemovedIndex = MyFavorites.Songs.IndexOf(music)) > -1)
+                MyFavorites.Remove(music);
             RecentPlayed.Remove(music.Path);
             RecentAdded.Remove(music.Path);
+        }
+
+        public void UndoRemoveMusic(Music music)
+        {
+            JustRemoved.Remove(music);
+            if (Tree.FindTree(music) is FolderTree tree)
+            {
+                tree.Files.Add(music);
+                tree.Sort();
+            }
+            foreach (var pair in RemovedPlaylist)
+                Playlists.FirstOrDefault(p => p.Name == pair.Key)?.Songs.Insert(pair.Value, music);
+            if (myFavoratesRemovedIndex > -1)
+                MyFavorites.Songs.Insert(myFavoratesRemovedIndex, music);
+            if (recentPlayedRemovedIndex > -1)
+                RecentPlayed.Insert(recentPlayedRemovedIndex, music.Path);
+            if (recentAddedRemovedIndex > -1)
+                RecentAdded.Insert(recentAddedRemovedIndex, music.Path);
+
+
         }
 
         public void Played(Music music)
