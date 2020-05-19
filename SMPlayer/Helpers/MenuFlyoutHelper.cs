@@ -426,6 +426,20 @@ namespace SMPlayer
             }
             flyout.ShowAt(sender as FrameworkElement);
         }
+        public static MenuFlyout GetShuffleMenu()
+        {
+            var flyout = new MenuFlyout();
+            var musicLibrary = new MenuFlyoutItem()
+            {
+                Text = Helper.LocalizeMessage(""),
+                Icon = new SymbolIcon(Symbol.MusicInfo)
+            };
+            musicLibrary.Click += (sender, args) =>
+            {
+
+            };
+            return flyout;
+        }
         public static MenuFlyout SetPlaylistMenu(object sender, MenuFlyoutItemClickListener listener = null)
         {
             return SetMenu(helper => helper.GetPlaylistMenuFlyout(listener), sender);

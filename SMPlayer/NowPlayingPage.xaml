@@ -36,9 +36,12 @@
             <AppBarButton
                 x:Name="RandomPlayButton"
                 x:Uid="RandomPlayButton"
-                Click="RandomPlayButton_Click"
                 Icon="Shuffle"
-                Label="Random Play" />
+                Label="Random Play">
+                <AppBarButton.Flyout>
+                    <MenuFlyout Opening="ShuffleMenuFlyout_Opening" />
+                </AppBarButton.Flyout>
+            </AppBarButton>
             <AppBarButton
                 x:Name="LocateCurrentButton"
                 x:Uid="LocateCurrentButton"

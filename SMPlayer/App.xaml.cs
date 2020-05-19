@@ -129,11 +129,12 @@ namespace SMPlayer
             deferral.Complete();
         }
 
-        public static void Save()
+        public static async void Save()
         {
             Settings.Save();
             MusicLibraryPage.Save();
             MediaHelper.Save();
+            await Helper.ClearBackups(10);
         }
 
         protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)

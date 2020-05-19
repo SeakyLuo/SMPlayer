@@ -168,6 +168,9 @@
   <data name="AlbumTextBlock.Text" xml:space="preserve">
     <value>专辑</value>
   </data>
+  <data name="AllComboItem.Content" xml:space="preserve">
+    <value>全部</value>
+  </data>
   <data name="AlwaysShownComboItem.Content" xml:space="preserve">
     <value>一直显示</value>
   </data>
@@ -578,6 +581,9 @@
   </data>
   <data name="RecentPlayedItem.Header" xml:space="preserve">
     <value>最近播放</value>
+  </data>
+  <data name="RecentPlayedItemTextBlock.Text" xml:space="preserve">
+    <value>保留最近播放的歌曲数：</value>
   </data>
   <data name="RecentSearchesItem.Header" xml:space="preserve">
     <value>最近搜索</value>

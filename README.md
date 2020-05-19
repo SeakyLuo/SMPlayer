@@ -14,7 +14,11 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
-Search local.
+Page shows no music hint.
+
+Search result count. Albums count. Music library count.
+
+SearchPage add local and LocalPage add search directory.
 
 Refresh directory does not refresh page.
 
@@ -24,13 +28,11 @@ Album properties.
 
 Highlight root folder textbox for warning when reloading music library.
 
-Improved loading.
-
 Load from backup.
 
 Sort albums.
 
-Improved editing album cover by selecting a song.
+Improve editing album art by selecting a song in a dropdown with searching.
 
 Grid Mode for PlaylistPage.
 

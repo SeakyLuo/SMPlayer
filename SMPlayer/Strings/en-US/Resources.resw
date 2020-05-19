@@ -171,6 +171,9 @@
   <data name="All Artists" xml:space="preserve">
     <value>All Artists: </value>
   </data>
+  <data name="AllComboItem.Content" xml:space="preserve">
+    <value>All</value>
+  </data>
   <data name="AlwaysShownComboItem.Content" xml:space="preserve">
     <value>Always Shown</value>
   </data>
@@ -581,6 +584,9 @@
   </data>
   <data name="RecentPlayedItem.Header" xml:space="preserve">
     <value>Recently Played</value>
+  </data>
+  <data name="RecentPlayedItemTextBlock.Text" xml:space="preserve">
+    <value>The number of recently played songs to keep: </value>
   </data>
   <data name="RecentSearchesItem.Header" xml:space="preserve">
     <value>Recent Searches</value>

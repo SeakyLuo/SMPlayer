@@ -42,18 +42,18 @@ namespace SMPlayer
         }
 
         private const int MIN_VALUE = 10;
-        private const int MAX_VALUE = 210;
+        private const int MAX_VALUE = 205;
 
         private static async Task<byte[]> GetPixelData(this BitmapDecoder decoder, uint x, uint y)
         {
             var data = await decoder.GetPixelDataAsync(BitmapPixelFormat.Bgra8,
-                                           BitmapAlphaMode.Straight,
-                                           new BitmapTransform()
-                                           {
-                                               Bounds = new BitmapBounds() { Width = 1, Height = 1, X = x, Y = y }
-                                           },
-                                           ExifOrientationMode.IgnoreExifOrientation,
-                                           ColorManagementMode.DoNotColorManage);
+                                                       BitmapAlphaMode.Straight,
+                                                       new BitmapTransform()
+                                                       {
+                                                           Bounds = new BitmapBounds() { Width = 1, Height = 1, X = x, Y = y }
+                                                       },
+                                                       ExifOrientationMode.IgnoreExifOrientation,
+                                                       ColorManagementMode.DoNotColorManage);
             return data.DetachPixelData();
         }
 
@@ -68,18 +68,18 @@ namespace SMPlayer
             byte[] bgra = { 0, 0, 0, 255 };
             var decoder = await BitmapDecoder.CreateAsync(Thumbnail);
             uint width = decoder.PixelWidth, height = decoder.PixelHeight;
-            uint divs = 8;
+            uint divs = 16;
             for (uint i = 1; i < divs; i++)
             {
                 for (uint j = 1; j < divs; j++)
                 {
-                    bgra = await decoder.GetPixelData(width * i / 8, height * j / 8);
-                    if (bgra.SkipLast(1).All((v) => MIN_VALUE <= v && v <= MAX_VALUE)) goto GenerateColor;
+                    bgra = await decoder.GetPixelData(width * i / divs, height * j / divs);
+                    if (bgra.SkipLast(1).All(v => MIN_VALUE <= v && v <= MAX_VALUE)) goto GenerateColor;
                 }
             }
             GenerateColor:
             Color color = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0]);
-            //System.Diagnostics.Debug.WriteLine($"R: {bgra[2]} G: {bgra[1]} B: {bgra[0]}");
+            System.Diagnostics.Debug.WriteLine($"R: {bgra[2]} G: {bgra[1]} B: {bgra[0]}");
             return new AcrylicBrush()
             {
                 BackgroundSource = AcrylicBackgroundSource.Backdrop,

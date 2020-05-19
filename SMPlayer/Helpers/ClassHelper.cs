@@ -46,6 +46,12 @@ namespace SMPlayer
                     return i;
             return -1;
         }
+        public static void SetTo(this MenuFlyout dst, MenuFlyout src)
+        {
+            dst.Items.Clear();
+            foreach (var item in src.Items)
+                dst.Items.Add(item);
+        }
         public static ObservableCollection<T> SetTo<T>(this ObservableCollection<T> dst, IEnumerable<T> src)
         {
             if (dst == null) dst = new ObservableCollection<T>(src);

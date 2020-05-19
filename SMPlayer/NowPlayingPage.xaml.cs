@@ -64,5 +64,10 @@ namespace SMPlayer
             });
             MainPage.Instance.Loader.Hide();
         }
+
+        private void ShuffleMenuFlyout_Opening(object sender, object e)
+        {
+            (sender as MenuFlyout).SetTo(MenuFlyoutHelper.GetShuffleMenu());
+        }
     }
 }

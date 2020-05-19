@@ -46,15 +46,21 @@ namespace SMPlayer
 
         public static async Task Init()
         {
-               TempFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Temp", CreationCollisionOption.OpenIfExists);
+            TempFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Temp", CreationCollisionOption.OpenIfExists);
+            await ClearBackups();
+        }
+
+        public static async Task ClearBackups(int maxBackups = 3)
+        {
             var files = await TempFolder.GetFilesAsync();
             var settings = files.Where(f => f.Name.StartsWith(Settings.JsonFilename)).OrderBy(f => f.DateCreated);
             var mediaHelper = files.Where(f => f.Name.StartsWith(MediaHelper.JsonFilename)).OrderBy(f => f.DateCreated);
             var musicLibrary = files.Where(f => f.Name.StartsWith(MusicLibraryPage.JsonFilename)).OrderBy(f => f.DateCreated);
-            foreach (var file in settings.Take(settings.Count() - 3)) await file.DeleteAsync();
-            foreach (var file in mediaHelper.Take(mediaHelper.Count() - 3)) await file.DeleteAsync();
-            foreach (var file in musicLibrary.Take(musicLibrary.Count() - 3)) await file.DeleteAsync();
+            foreach (var file in settings.Take(settings.Count() - maxBackups)) await file.DeleteAsync();
+            foreach (var file in mediaHelper.Take(mediaHelper.Count() - maxBackups)) await file.DeleteAsync();
+            foreach (var file in musicLibrary.Take(musicLibrary.Count() - maxBackups)) await file.DeleteAsync();
         }
+
         public static string ConvertBytes(ulong bytes)
         {
             ulong kb = bytes >> 10;

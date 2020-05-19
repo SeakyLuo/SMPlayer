@@ -19,6 +19,7 @@ namespace SMPlayer
     public sealed partial class SettingsPage : Page, TreeOperationListener
     {
         public static ShowToast[] NotificationOptions = { ShowToast.Always, ShowToast.MusicChanged, ShowToast.Never };
+        private static int[] LimitedRecentPlayedItems = { -1, 100, 200, 500, 1000 };
         private static List<AfterPathSetListener> listeners = new List<AfterPathSetListener>();
         private FolderTree loadingTree;
         private volatile int addLyricsClickCounter = 0;
@@ -36,7 +37,7 @@ namespace SMPlayer
             PathBox.Text = Settings.settings.RootPath;
             NotificationComboBox.SelectedIndex = (int)Settings.settings.Toast;
             ThemeColorPicker.Color = Settings.settings.ThemeColor;
-            KeepRecentCheckBox.IsChecked = Settings.settings.KeepLimitedRecentPlayedItems;
+            KeepRecentComboBox.SelectedIndex = LimitedRecentPlayedItems.FindIndex(num => num == Settings.settings.LimitedRecentPlayedItems);
             AutoPlayCheckBox.IsChecked = Settings.settings.AutoPlay;
             SaveProgressCheckBox.IsChecked = Settings.settings.SaveMusicProgress;
         }
@@ -254,18 +255,6 @@ namespace SMPlayer
             addLyricsClickCounter = 0;
         }
 
-        private void KeepRecentCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.KeepLimitedRecentPlayedItems = true;
-            while (Settings.settings.RecentPlayed.Count > Settings.RecentPlayedLimit)
-                Settings.settings.RecentPlayed.RemoveAt(Settings.RecentPlayedLimit);
-        }
-
-        private void KeepRecentCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.KeepLimitedRecentPlayedItems = false;
-        }
-
         private void AutoPlayCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             Settings.settings.AutoPlay = true;
@@ -284,6 +273,11 @@ namespace SMPlayer
         private void SaveProgressCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             Settings.settings.SaveMusicProgress = false;
+        }
+
+        private void KeepRecentComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Settings.settings.LimitedRecentPlayedItems = LimitedRecentPlayedItems[(sender as ComboBox).SelectedIndex];
         }
     }
 

@@ -1129,6 +1129,7 @@
       <RootProperty Name="Style" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="Label" />
+      <RootProperty Name="Flyout" />
       <RootProperty Name="IsEnabled" />
       <RootProperty Name="Margin" />
       <RootEvent Name="Click" />
@@ -1280,11 +1281,11 @@
       <RootProperty Name="Items" />
       <RootEvent Name="SelectionChanged" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.ColorPicker">
-      <RootProperty Name="Color" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ComboBoxItem">
       <RootProperty Name="Content" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ColorPicker">
+      <RootProperty Name="Color" />
     </RootType>
     <RootType FullName="SMPlayer.SettingsPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.NavigationViewItemSeparator" />

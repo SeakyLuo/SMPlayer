@@ -35,8 +35,7 @@ namespace SMPlayer.Models
         public ObservableCollection<string> RecentPlayed { get; set; } = new ObservableCollection<string>();
         public bool MiniModeWithDropdown { get; set; } = false;
         public bool IsMuted { get; set; } = false;
-        public bool KeepLimitedRecentPlayedItems { get; set; } = true;
-        public const int RecentPlayedLimit = 100;
+        public int LimitedRecentPlayedItems { get; set; } = -1;
         public ObservableCollection<string> RecentAdded { get; set; } = new ObservableCollection<string>();
         public bool AutoPlay { get; set; } = false;
         public bool SaveMusicProgress { get; set; } = false;
@@ -219,8 +218,8 @@ namespace SMPlayer.Models
         {
             if (music == null) return;
             RecentPlayed.AddOrMoveToTheFirst(music.Path);
-            if (KeepLimitedRecentPlayedItems && RecentPlayed.Count > RecentPlayedLimit)
-                RecentPlayed.RemoveAt(RecentPlayedLimit);
+            if (LimitedRecentPlayedItems > -1 && RecentPlayed.Count > LimitedRecentPlayedItems)
+                RecentPlayed.RemoveAt(LimitedRecentPlayedItems);
         }
 
         public void Search(string keyword)
