@@ -78,8 +78,8 @@ namespace SMPlayer
             HeaderedPlaylist.ItemsSource = playlist.Songs;
             PlaylistNameTextBlock.Text = string.IsNullOrEmpty(playlist.Name) && !IsPlaylist ? Helper.LocalizeMessage("UnknownAlbum") : playlist.Name;
             SetPlaylistInfo(SongCountConverter.ToStr(playlist.Songs));
-            ShuffleButton.IsEnabled = playlist.Songs.Count != 0;
-            AddToButton.IsEnabled = playlist.Songs.Count != 0;
+            ShuffleButton.IsEnabled = playlist.Count != 0;
+            AddToButton.IsEnabled = playlist.Count != 0;
             RenameButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
             DeleteButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
             SetPinState(Windows.UI.StartScreen.SecondaryTile.Exists(Helper.FormatTileId(playlist, IsPlaylist)));
@@ -184,7 +184,7 @@ namespace SMPlayer
             });
         }
 
-        public void MusicRemoved(int index, Music music, ICollection<Music> newCollection)
+        public void MusicRemoved(int index, Music music, IEnumerable<Music> newCollection)
         {
             if (AllowClear) SetPlaylistInfo(SongCountConverter.ToStr(newCollection));
         }
@@ -380,7 +380,7 @@ namespace SMPlayer
         public async void SaveMusic(Music music, BitmapImage image)
         {
             // IsAlbum
-            if (!IsPlaylist && CurrentPlaylist.Name == music.Album && CurrentPlaylist.Songs.Count == 1)
+            if (!IsPlaylist && CurrentPlaylist.Name == music.Album && CurrentPlaylist.Count == 1)
             {
                 MusicDisplayItem item = await music.GetMusicDisplayItemAsync();
                 SetMusicDisplayItem(CurrentPlaylist.DisplayItem = item);

@@ -183,6 +183,9 @@
   <data name="AppTitle.Text" xml:space="preserve">
     <value>SMPlayer</value>
   </data>
+  <data name="Artist" xml:space="preserve">
+    <value>Artist</value>
+  </data>
   <data name="ArtistHeader.Header" xml:space="preserve">
     <value>Artist</value>
   </data>
@@ -360,6 +363,9 @@
   <data name="KeepRecentCheckBox.Content" xml:space="preserve">
     <value>Only keep 100 recently played items instead of all</value>
   </data>
+  <data name="Least Played" xml:space="preserve">
+    <value>Least Played</value>
+  </data>
   <data name="ListViewItem.Label" xml:space="preserve">
     <value>List View</value>
   </data>
@@ -416,6 +422,9 @@
   </data>
   <data name="MoreButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>More</value>
+  </data>
+  <data name="Most Played" xml:space="preserve">
+    <value>Most Played</value>
   </data>
   <data name="Move To Top" xml:space="preserve">
     <value>Move To Top</value>
@@ -564,14 +573,20 @@
   <data name="PublisherTextBlock.Text" xml:space="preserve">
     <value>Publisher</value>
   </data>
+  <data name="RandomPlay" xml:space="preserve">
+    <value>Random Play</value>
+  </data>
   <data name="RandomPlayButton.Label" xml:space="preserve">
     <value>Shuffle</value>
   </data>
-  <data name="RandomPlayButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Shuffle and play your music library</value>
-  </data>
   <data name="Recent" xml:space="preserve">
     <value>Recent</value>
+  </data>
+  <data name="Recent Added" xml:space="preserve">
+    <value>Recent Added</value>
+  </data>
+  <data name="Recent Played" xml:space="preserve">
+    <value>Recent Played</value>
   </data>
   <data name="RecentAddedItem.Header" xml:space="preserve">
     <value>Recently Added</value>

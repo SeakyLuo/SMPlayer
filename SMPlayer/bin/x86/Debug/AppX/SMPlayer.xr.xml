@@ -404,6 +404,7 @@
     <RootType FullName="Windows.UI.Xaml.Controls.MenuFlyout">
       <RootProperty Name="Items" />
       <RootEvent Name="Opening" />
+      <RootEvent Name="Opened" />
       <RootEvent Name="Closed" />
     </RootType>
     <RootType FullName="SMPlayer.ScrollingTextBlock">

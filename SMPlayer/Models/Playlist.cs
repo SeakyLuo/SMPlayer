@@ -34,6 +34,8 @@ namespace SMPlayer.Models
 
         public ObservableCollection<Music> Songs { get; set; }
 
+        public int Count { get => Songs.Count; }
+
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public Playlist() { }
@@ -105,7 +107,7 @@ namespace SMPlayer.Models
 
         public async Task SetDisplayItemAsync()
         {
-            if (Songs.Count == 0)
+            if (Count == 0)
             {
                 DisplayItem = MusicDisplayItem.DefaultItem;
             }
@@ -148,7 +150,7 @@ namespace SMPlayer.Models
 
         public AlbumView ToSearchAlbumView()
         {
-            return new AlbumView(Name, SongCountConverter.GetSongCount(Songs.Count))
+            return new AlbumView(Name, SongCountConverter.GetSongCount(Count))
             {
                 Songs = Songs,
                 Cover = DisplayItem == null ? Helper.DefaultAlbumCover : DisplayItem.Thumbnail,
@@ -179,31 +181,31 @@ namespace SMPlayer.Models
             switch (Criterion)
             {
                 case SortBy.Title:
-                    list = Songs.OrderBy((m) => m.Name).ToList();
+                    list = Songs.OrderBy(m => m.Name).ToList();
                     break;
                 case SortBy.Artist:
-                    list = Songs.OrderBy((m) => m.Artist).ToList();
+                    list = Songs.OrderBy(m => m.Artist).ToList();
                     break;
                 case SortBy.Album:
-                    list = Songs.OrderBy((m) => m.Album).ToList();
+                    list = Songs.OrderBy(m => m.Album).ToList();
                     break;
                 case SortBy.Duration:
-                    list = Songs.OrderBy((m) => m.Duration).ToList();
+                    list = Songs.OrderBy(m => m.Duration).ToList();
                     break;
                 case SortBy.PlayCount:
-                    list = Songs.OrderBy((m) => m.PlayCount).ToList();
+                    list = Songs.OrderBy(m => m.PlayCount).ToList();
                     break;
                 default:
                     return;
             }
-            for (int i = 0; i < Songs.Count; i++) Songs[i] = list[i];
+            for (int i = 0; i < Count; i++) Songs[i] = list[i];
             OnPropertyChanged();
         }
 
         public void Reverse()
         {
             var list = Songs.Reverse().ToList();
-            for (int i = 0; i < Songs.Count; i++) Songs[i] = list[i];
+            for (int i = 0; i < Count; i++) Songs[i] = list[i];
             OnPropertyChanged();
         }
     }

@@ -3,6 +3,7 @@ using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -13,7 +14,7 @@ namespace SMPlayer
     {
         public object Data { get; set; }
         public string DefaultPlaylistName { get; set; } = "";
-        public const string AddToSubItemName = "AddToSubItem", PlaylistMenuName = "ShuffleItem", MusicMenuName = "PlayItem";
+        public const string AddToSubItemName = "AddToSubItem", PlaylistMenuName = "ShuffleAndPlayItem", MusicMenuName = "PlayItem", ShuffleSubItemName = "ShuffleSubItem";
         public static string NowPlaying = Helper.Localize("Now Playing"), MyFavorites = Helper.Localize("My Favorites");
         public static bool IsBadNewPlaylistName(string name) { return name == NowPlaying || name == MyFavorites; }
         public MenuFlyout GetAddToMenuFlyout(string playlistName = "", MenuFlyoutItemClickListener listener = null)
@@ -124,7 +125,14 @@ namespace SMPlayer
             }
             return flyout;
         }
-
+        public static MenuFlyoutSubItem GetShuffleSubItem()
+        {
+            MenuFlyoutSubItem subItem = GetShuffleMenu().ToSubItem();
+            subItem.Name = ShuffleSubItemName;
+            subItem.Text = Helper.Localize("RandomPlay");
+            subItem.Icon = new SymbolIcon(Symbol.Shuffle);
+            return subItem;
+        }
         public MenuFlyout GetPlaylistMenuFlyout(MenuFlyoutItemClickListener listener = null)
         {
             var flyout = new MenuFlyout();
@@ -428,16 +436,116 @@ namespace SMPlayer
         }
         public static MenuFlyout GetShuffleMenu()
         {
+            int limit = 100, max = Math.Min(limit, MusicLibraryPage.SongCount);
             var flyout = new MenuFlyout();
             var musicLibrary = new MenuFlyoutItem()
             {
-                Text = Helper.LocalizeMessage(""),
-                Icon = new SymbolIcon(Symbol.MusicInfo)
+                Text = Helper.Localize("Music Library")
             };
             musicLibrary.Click += (sender, args) =>
             {
-
+                MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.AllSongs.RandItems(limit));
             };
+            flyout.Items.Add(musicLibrary);
+            var artist = new MenuFlyoutItem()
+            {
+                Text = Helper.Localize("Artist")
+            };
+            artist.Click += (sender, args) =>
+            {
+                MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.AllSongs.GroupBy(m => m.Artist).RandItem());
+            };
+            flyout.Items.Add(artist);
+            var album = new MenuFlyoutItem()
+            {
+                Text = Helper.Localize("Album")
+            };
+            album.Click += (sender, args) =>
+            {
+                MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.AllSongs.GroupBy(m => m.Album).RandItem());
+            };
+            flyout.Items.Add(album);
+            if (Settings.settings.Playlists.Count > 0)
+            {
+                var playlist = new MenuFlyoutItem()
+                {
+                    Text = Helper.Localize("Playlist")
+                };
+                playlist.Click += (sender, args) =>
+                {
+                    MediaHelper.SetPlaylistAndPlay(Settings.settings.Playlists.RandItem().Songs);
+                };
+                flyout.Items.Add(playlist);
+            }
+            if (Settings.settings.RecentAdded.Count > 0)
+            {
+                var recentAdded = new MenuFlyoutItem()
+                {
+                    Text = Helper.Localize("Recent Added")
+                };
+                recentAdded.Click += (sender, args) =>
+                {
+                    MediaHelper.SetPlaylistAndPlay(Settings.settings.RecentAdded.RandItems(limit).ToMusicList());
+                };
+                flyout.Items.Add(recentAdded);
+            }
+            if (Settings.settings.RecentPlayed.Count > 0)
+            {
+                var recentPlayed = new MenuFlyoutItem()
+                {
+                    Text = Helper.Localize("Recent Played")
+                };
+                recentPlayed.Click += (sender, args) =>
+                {
+                    MediaHelper.SetMusicAndPlay(Settings.settings.RecentPlayed.ToMusicList());
+                };
+                flyout.Items.Add(recentPlayed);
+            }
+            if (Settings.settings.MyFavorites.Count > 0)
+            {
+                var myFavorites = new MenuFlyoutItem()
+                {
+                    Text = Helper.Localize("My Favorites")
+                };
+                myFavorites.Click += (sender, args) =>
+                {
+                    MediaHelper.SetMusicAndPlay(Settings.settings.MyFavorites.Songs.RandItems(limit));
+                };
+                flyout.Items.Add(myFavorites);
+            }
+            if (MusicLibraryPage.SongCount > limit)
+            {
+                var mostPlayed = new MenuFlyoutItem()
+                {
+                    Text = Helper.Localize("Most Played")
+                };
+                mostPlayed.Click += (sender, args) =>
+                {
+                    List<Music> list = new List<Music>();
+                    foreach (var group in MusicLibraryPage.AllSongs.GroupBy(m => m.PlayCount).OrderByDescending(g => g.Key))
+                    {
+                        if (list.Count > limit) break;
+                        list.AddRange(group);
+                    }
+                    MediaHelper.SetPlaylistAndPlay(list.Shuffle().Take(limit));
+                };
+                flyout.Items.Add(mostPlayed);
+                var leastPlayed = new MenuFlyoutItem()
+                {
+                    Text = Helper.Localize("Least Played")
+                };
+                leastPlayed.Click += (sender, args) =>
+                {
+                    List<Music> list = new List<Music>();
+                    foreach (var group in MusicLibraryPage.AllSongs.GroupBy(m => m.PlayCount).OrderBy(g => g.Key))
+                    {
+                        if (list.Count > limit) break;
+                        list.AddRange(group);
+                    }
+                    MediaHelper.SetPlaylistAndPlay(list.Shuffle().Take(limit));
+                };
+                flyout.Items.Add(leastPlayed);
+            }
             return flyout;
         }
         public static MenuFlyout SetPlaylistMenu(object sender, MenuFlyoutItemClickListener listener = null)

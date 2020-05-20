@@ -42,8 +42,34 @@ namespace SMPlayer
 
         private static string Lyrics = "";
         private static List<Music> NotFoundHistory = new List<Music>();
+        private static Random random = new Random();
 
+        public static int RandRange(int min, int max)
+        {
+            return random.Next(min, max);
+        }
 
+        public static int RandRange(int max)
+        {
+            return random.Next(max);
+        }
+
+        public static T RandItem<T>(this IEnumerable<T> list)
+        {
+            return list.ElementAt(RandRange(list.Count()));
+        }
+
+        public static IEnumerable<T> RandItems<T>(this IEnumerable<T> list, int count)
+        {
+            int listSize = list.Count();
+            if (listSize < count) return list.Shuffle();
+            HashSet<int> indices = new HashSet<int>();
+            while (indices.Count < count)
+            {
+                indices.Add(RandRange(listSize));
+            }
+            return indices.Select(index => list.ElementAt(index));
+        }
         public static async Task Init()
         {
             TempFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Temp", CreationCollisionOption.OpenIfExists);

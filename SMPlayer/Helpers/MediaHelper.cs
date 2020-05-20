@@ -164,11 +164,17 @@ namespace SMPlayer
         {
             AddMusic(source, CurrentPlaylist.Count);
         }
-        public static void SetPlaylist(ICollection<Music> playlist, Music target = null)
+        public static void SetPlaylist(IEnumerable<Music> playlist, Music target = null)
         {
             Clear();
             foreach (var music in playlist) AddMusic(music);
             if (target != null) MoveToMusic(target);
+        }
+
+        public static void SetPlaylistAndPlay(IEnumerable<Music> playlist, Music target = null)
+        {
+            SetPlaylist(playlist, target);
+            Play();
         }
 
         public static void SetMusicAndPlay(Music music)
@@ -178,7 +184,7 @@ namespace SMPlayer
             Play();
         }
 
-        public static void SetMusicAndPlay(ICollection<Music> playlist, Music music)
+        public static void SetMusicAndPlay(IEnumerable<Music> playlist, Music music)
         {
             if (playlist.SameAs(CurrentPlaylist))
                 MoveToMusic(music);
@@ -187,7 +193,7 @@ namespace SMPlayer
             Play();
         }
 
-        public static void SetMusicAndPlay(ICollection<Music> playlist)
+        public static void SetMusicAndPlay(IEnumerable<Music> playlist)
         {
             if (playlist.SameAs(CurrentPlaylist))
                 PlaybackList.MoveTo(0);
@@ -196,7 +202,7 @@ namespace SMPlayer
             Play();
         }
 
-        public static void ShuffleAndPlay(ICollection<Music> playlist)
+        public static void ShuffleAndPlay(IEnumerable<Music> playlist)
         {
             SetPlaylist(ShufflePlaylist(playlist));
             Play();
@@ -215,19 +221,9 @@ namespace SMPlayer
             CurrentPlaylist[0].IsPlaying = true;
         }
 
-        public static List<Music> ShufflePlaylist(ICollection<Music> playlist, Music start = null)
+        public static List<Music> ShufflePlaylist(IEnumerable<Music> playlist, Music start = null)
         {
-            Random random = new Random();
-            var list = playlist.ToList();
-            int n = playlist.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = random.Next(n + 1);
-                Music value = list[k];
-                list[k] = list[n];
-                list[n] = value;  
-            }
+            var list = playlist.Shuffle();
             if (start != null)
             {
                 list.Remove(start);
@@ -363,13 +359,14 @@ namespace SMPlayer
         public static void Clear()
         {
             if (CurrentPlaylist.Count == 0) return;
+            Position = 0;
             CurrentMusic = null;
             CurrentPlaylist.Clear();
             PlaybackList.Items.Clear();
             foreach (var listener in RemoveMusicListeners) listener.MusicRemoved(-1, CurrentMusic, CurrentPlaylist);
         }
 
-        public static void FindMusicAndSetPlaying(ICollection<Music> playlist, Music current, Music next)
+        public static void FindMusicAndSetPlaying(IEnumerable<Music> playlist, Music current, Music next)
         {
             if (playlist == null) return;
             foreach (var music in playlist)
@@ -411,7 +408,7 @@ namespace SMPlayer
 
     public interface RemoveMusicListener
     {
-        void MusicRemoved(int index, Music music, ICollection<Music> newCollection);
+        void MusicRemoved(int index, Music music, IEnumerable<Music> newCollection);
     }
 
     public interface SwitchMusicListener

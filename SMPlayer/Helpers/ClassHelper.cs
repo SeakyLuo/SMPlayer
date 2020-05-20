@@ -19,6 +19,33 @@ namespace SMPlayer
 {
     public static class ClassHelper
     {
+        public static MenuFlyoutSubItem ToSubItem(this MenuFlyout flyout)
+        {
+            MenuFlyoutSubItem subItem = new MenuFlyoutSubItem();
+            foreach (var item in flyout.Items)
+                subItem.Items.Add(item);
+            return subItem;
+        }
+
+        public static List<T> Shuffle<T>(this IEnumerable<T> enumerable)
+        {
+            List<T> list = enumerable.ToList();
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = Helper.RandRange(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+            return list;
+        }
+
+        public static IEnumerable<Music> ToMusicList(this IEnumerable<string> paths)
+        {
+            return paths.Select(path => Settings.FindMusic(path));
+        }
         public static string RemoveBraces(this string str, char left, char right)
         {
             int start = str.IndexOf(left), end = str.IndexOf(right);

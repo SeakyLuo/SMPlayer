@@ -964,10 +964,18 @@ namespace SMPlayer
             await new MusicDialog(MusicDialogOption.AlbumArt, MediaHelper.CurrentMusic).ShowAsync();
         }
 
-        public void MusicRemoved(int index, Music music, ICollection<Music> newCollection)
+        public void MusicRemoved(int index, Music music, IEnumerable<Music> newCollection)
         {
-            if (newCollection.Count == 0)
+            if (newCollection.Count() == 0)
                 ClearMusic();
+        }
+
+        private void FullMoreMenuFlyout_Opened(object sender, object e)
+        {
+            MenuFlyout flyout = sender as MenuFlyout;
+            if (flyout.Items.Last().Name == MenuFlyoutHelper.ShuffleSubItemName)
+                flyout.Items.RemoveAt(flyout.Items.Count - 1);
+            flyout.Items.Add(MenuFlyoutHelper.GetShuffleSubItem());
         }
 
         public void MusicLiked(Music music, bool isFavorite)

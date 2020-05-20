@@ -139,7 +139,7 @@ namespace SMPlayer
             Settings.settings.Tree.FindTree(CurrentTree).CopyFrom(CurrentTree);
         }
 
-        public void MusicRemoved(int index, Music music, ICollection<Music> newCollection)
+        public void MusicRemoved(int index, Music music, IEnumerable<Music> newCollection)
         {
             // It is actually delete music
             CurrentTree.Files.Remove(music);

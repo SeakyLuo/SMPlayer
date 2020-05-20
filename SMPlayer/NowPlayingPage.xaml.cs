@@ -30,6 +30,7 @@ namespace SMPlayer
         {
             LocateCurrentButton.IsEnabled = SaveToButton.IsEnabled = ClearButton.IsEnabled = FullScreenButton.IsEnabled = 
                                             MediaHelper.CurrentPlaylist.Count != 0;
+            RandomPlayButton.IsEnabled = MusicLibraryPage.SongCount != 0;
         }
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
         {

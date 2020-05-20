@@ -15,13 +15,13 @@ namespace SMPlayer
     public sealed partial class PlaylistControl : UserControl, SwitchMusicListener, MenuFlyoutItemClickListener
     {
         public bool IsNowPlaying { get; set; }
+        private ObservableCollection<Music> currentPlaylist = new ObservableCollection<Music>();
         public ObservableCollection<Music> CurrentPlaylist
         {
             get => IsNowPlaying ? MediaHelper.CurrentPlaylist :
                                   currentPlaylist.Count == 0 ? currentPlaylist = ItemsSource : currentPlaylist;
             set => currentPlaylist = value;
         }
-        private ObservableCollection<Music> currentPlaylist = new ObservableCollection<Music>();
 
         private static List<MusicRequestListener> MusicRequestListeners = new List<MusicRequestListener>();
         public bool AlternatingRowColor { get; set; }

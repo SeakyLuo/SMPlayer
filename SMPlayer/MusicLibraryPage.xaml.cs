@@ -22,6 +22,7 @@ namespace SMPlayer
     {
         public const string JsonFilename = "MusicLibrary";
         public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
+        public static int SongCount { get => AllSongs.Count; }
         public static HashSet<Music> AllSongsSet;
         public static bool IsLibraryUnchangedAfterChecking = true;
 
@@ -139,7 +140,7 @@ namespace SMPlayer
         {
             if (!AllSongsSet.Add(music)) return;
             var keySelector = SortByConverter.GetKeySelector(Settings.settings.MusicLibraryCriterion);
-            for (int i = 0; i < AllSongs.Count; i++)
+            for (int i = 0; i < SongCount; i++)
             {
                 if (keySelector(music).CompareTo(keySelector(AllSongs[i])) <= 0)
                 {
