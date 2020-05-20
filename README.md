@@ -14,9 +14,9 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
-Page shows no music hint.
+Mini mode shuffle button.
 
-Search result count. Albums count. Music library count.
+Page shows no music hint.
 
 SearchPage add local and LocalPage add search directory.
 
@@ -54,6 +54,10 @@ Able to drag titlebar when loading.
 Disable operations when saving lyrics.
 
 # MIGHT DO
+Mini mode media control fade in/out.
+
+Search result count. Albums count. Music library count.
+
 Allow MainSearchBar to have a search history dropdown.
 
 SearchPage AddTo button add all songs instead of displayed songs.

@@ -56,16 +56,6 @@ namespace SMPlayer
             NowPlayingPlaylistControl.ScrollToCurrentMusic(true);
         }
 
-        private async void RandomPlayButton_Click(object sender, RoutedEventArgs e)
-        {
-            MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
-            await Task.Run(() =>
-            {
-                MediaHelper.ShuffleAndPlay(MusicLibraryPage.AllSongs);
-            });
-            MainPage.Instance.Loader.Hide();
-        }
-
         private void ShuffleMenuFlyout_Opening(object sender, object e)
         {
             (sender as MenuFlyout).SetTo(MenuFlyoutHelper.GetShuffleMenu());

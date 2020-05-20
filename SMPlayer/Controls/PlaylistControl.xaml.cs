@@ -233,9 +233,9 @@ namespace SMPlayer
 
         public async void ScrollToCurrentMusic(bool showNotification = false)
         {
-            if (ScrollToMusic(MediaHelper.CurrentMusic, false))
+            if (!ScrollToMusic(MediaHelper.CurrentMusic, false))
             {
-                await SongsListView.LoadMoreItemsAsync();
+                Windows.UI.Xaml.Data.LoadMoreItemsResult result = await SongsListView.LoadMoreItemsAsync();
                 ScrollToMusic(MediaHelper.CurrentMusic, showNotification);
             }
         }

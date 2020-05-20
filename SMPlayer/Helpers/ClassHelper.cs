@@ -26,7 +26,13 @@ namespace SMPlayer
                 subItem.Items.Add(item);
             return subItem;
         }
-
+        public static MenuFlyout ToMenuFlyout(this MenuFlyoutSubItem subItem)
+        {
+            MenuFlyout flyout = new MenuFlyout();
+            foreach (var item in subItem.Items)
+                flyout.Items.Add(item);
+            return flyout;
+        }
         public static List<T> Shuffle<T>(this IEnumerable<T> enumerable)
         {
             List<T> list = enumerable.ToList();

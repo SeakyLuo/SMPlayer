@@ -970,7 +970,7 @@ namespace SMPlayer
                 ClearMusic();
         }
 
-        private void FullMoreMenuFlyout_Opened(object sender, object e)
+        private void FullMoreMenuFlyout_Opening(object sender, object e)
         {
             MenuFlyout flyout = sender as MenuFlyout;
             if (flyout.Items.Last().Name == MenuFlyoutHelper.ShuffleSubItemName)

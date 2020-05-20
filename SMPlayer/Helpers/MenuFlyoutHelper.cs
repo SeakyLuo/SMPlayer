@@ -19,10 +19,7 @@ namespace SMPlayer
         public static bool IsBadNewPlaylistName(string name) { return name == NowPlaying || name == MyFavorites; }
         public MenuFlyout GetAddToMenuFlyout(string playlistName = "", MenuFlyoutItemClickListener listener = null)
         {
-            var flyout = new MenuFlyout();
-            foreach (var item in GetAddToMenuFlyoutSubItem(playlistName, listener).Items)
-                flyout.Items.Add(item);
-            return flyout;
+            return GetAddToMenuFlyoutSubItem(playlistName, listener).ToMenuFlyout();
         }
         public MenuFlyoutSubItem GetAddToMenuFlyoutSubItem(string playlistName = "", MenuFlyoutItemClickListener listener = null)
         {
@@ -436,7 +433,7 @@ namespace SMPlayer
         }
         public static MenuFlyout GetShuffleMenu()
         {
-            int limit = 100, max = Math.Min(limit, MusicLibraryPage.SongCount);
+            int limit = 100;
             var flyout = new MenuFlyout();
             var musicLibrary = new MenuFlyoutItem()
             {
@@ -477,6 +474,18 @@ namespace SMPlayer
                 };
                 flyout.Items.Add(playlist);
             }
+            if (Settings.settings.MyFavorites.Count > 0)
+            {
+                var myFavorites = new MenuFlyoutItem()
+                {
+                    Text = Helper.Localize("My Favorites")
+                };
+                myFavorites.Click += (sender, args) =>
+                {
+                    MediaHelper.SetMusicAndPlay(Settings.settings.MyFavorites.Songs.RandItems(limit));
+                };
+                flyout.Items.Add(myFavorites);
+            }
             if (Settings.settings.RecentAdded.Count > 0)
             {
                 var recentAdded = new MenuFlyoutItem()
@@ -501,20 +510,9 @@ namespace SMPlayer
                 };
                 flyout.Items.Add(recentPlayed);
             }
-            if (Settings.settings.MyFavorites.Count > 0)
-            {
-                var myFavorites = new MenuFlyoutItem()
-                {
-                    Text = Helper.Localize("My Favorites")
-                };
-                myFavorites.Click += (sender, args) =>
-                {
-                    MediaHelper.SetMusicAndPlay(Settings.settings.MyFavorites.Songs.RandItems(limit));
-                };
-                flyout.Items.Add(myFavorites);
-            }
             if (MusicLibraryPage.SongCount > limit)
             {
+                flyout.Items.Add(new MenuFlyoutSeparator());
                 var mostPlayed = new MenuFlyoutItem()
                 {
                     Text = Helper.Localize("Most Played")
