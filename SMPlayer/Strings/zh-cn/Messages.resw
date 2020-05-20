@@ -288,12 +288,6 @@
   <data name="Quotations" xml:space="preserve">
     <value>“{0}”</value>
   </data>
-  <data name="RecentAdded" xml:space="preserve">
-    <value>最近添加</value>
-  </data>
-  <data name="RecentPlayed" xml:space="preserve">
-    <value>最近播放</value>
-  </data>
   <data name="RemoveAlbumArt" xml:space="preserve">
     <value>你想要移除《{0}》的专辑插图吗？</value>
   </data>
