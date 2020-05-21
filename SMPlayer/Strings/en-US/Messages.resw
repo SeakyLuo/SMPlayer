@@ -324,6 +324,9 @@
   <data name="SearchDirectoryHint" xml:space="preserve">
     <value>Search under ""</value>
   </data>
+  <data name="SearchDirectoryResult" xml:space="preserve">
+    <value>Search result of "{0}" under "{1}"</value>
+  </data>
   <data name="SearchEmpty" xml:space="preserve">
     <value>Search content cannot be empty!</value>
   </data>
@@ -340,7 +343,7 @@
     <value>https://www.bing.com/search?q={0}+{1}+{2}</value>
   </data>
   <data name="SearchResult" xml:space="preserve">
-    <value>Search Result of {0}</value>
+    <value>Search result of "{0}"</value>
   </data>
   <data name="SetRootFolder" xml:space="preserve">
     <value>Please set your music library first!</value>

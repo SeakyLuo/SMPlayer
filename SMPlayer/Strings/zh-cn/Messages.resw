@@ -322,7 +322,10 @@
     <value>搜索</value>
   </data>
   <data name="SearchDirectoryHint" xml:space="preserve">
-    <value>在目录“{0}”中搜索</value>
+    <value>在“{0}”中搜索</value>
+  </data>
+  <data name="SearchDirectoryResult" xml:space="preserve">
+    <value>"{0}"在“{1}“中的搜索结果</value>
   </data>
   <data name="SearchEmpty" xml:space="preserve">
     <value>搜索内容不能为空！</value>
@@ -340,7 +343,7 @@
     <value>https://cn.bing.com/search?q={0}+{1}+{2}</value>
   </data>
   <data name="SearchResult" xml:space="preserve">
-    <value>{0}的搜索结果</value>
+    <value>”{0}“的搜索结果</value>
   </data>
   <data name="SetRootFolder" xml:space="preserve">
     <value>请先设置你的音乐文件夹！</value>

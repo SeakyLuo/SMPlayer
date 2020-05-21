@@ -40,12 +40,12 @@ namespace SMPlayer.Dialogs
         public InputDialog()
         {
             this.InitializeComponent();
-            TitleTextBlock.Text = Helper.LocalizeMessage("Search");
         }
 
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
             Confirm?.Invoke(InputText);
+            this.Hide();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

@@ -14,6 +14,8 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
+Save SearchKeyword instead of a string.
+
 Mini mode shuffle button.
 
 Page shows no music hint.
