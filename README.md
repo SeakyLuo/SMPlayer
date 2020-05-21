@@ -18,7 +18,7 @@ Mini mode shuffle button.
 
 Page shows no music hint.
 
-SearchPage add local and LocalPage add search directory.
+LocalPage add search directory.
 
 Refresh directory does not refresh page.
 

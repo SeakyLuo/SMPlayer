@@ -82,20 +82,27 @@ namespace SMPlayer.Models
         {
             if (thumbnaiLoaded) return;
             List<BitmapImage> thumbnails = new List<BitmapImage>(4);
-            BitmapImage thumbnail;
-            foreach (var group in Tree.Flatten().GroupBy(m => m.Album))
+            async Task<bool> addThumbnail(List<Music> src)
             {
-                foreach (var music in group)
+                foreach (var group in src.GroupBy(m => m.Album))
                 {
-                    thumbnail = await Helper.GetThumbnailAsync(music, false);
-                    if (thumbnail != null)
+                    foreach (var music in group)
                     {
-                        thumbnails.Add(thumbnail);
-                        break;
+                        if (await Helper.GetThumbnailAsync(music, false) is BitmapImage thumbnail)
+                        {
+                            thumbnails.Add(thumbnail);
+                            break;
+                        }
                     }
+                    if (thumbnails.Count == 4)
+                        return true;
                 }
-                if (thumbnails.Count == 4) break;
+                return false;
             }
+            if (!await addThumbnail(Tree.Files))
+                foreach (var tree in Tree.Trees)
+                    if (await addThumbnail(tree.Flatten()))
+                        break;
             int count = thumbnails.Count;
             if (count == 0) LargeThumbnail = Helper.ThumbnailNotFoundImage;
             else if (count <= 2) LargeThumbnail = thumbnails[0];
