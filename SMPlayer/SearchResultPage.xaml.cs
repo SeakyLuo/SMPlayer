@@ -16,7 +16,7 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class SearchResultPage : Page
     {
-        public static Stack<string> History = new Stack<string>();
+        public static Stack<SearchKeyword> History = new Stack<SearchKeyword>();
         public ObservableCollection<Playlist> Artists = new ObservableCollection<Playlist>();
         public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
@@ -24,7 +24,7 @@ namespace SMPlayer
         public ObservableCollection<GridFolderView> Folders = new ObservableCollection<GridFolderView>();
         private SortBy[] Criteria;
         private SearchType searchType;
-        private string CurrentKeyword;
+        private SearchKeyword CurrentKeyword;
         private SortBy SettingsCriterion
         {
             get
@@ -79,7 +79,7 @@ namespace SMPlayer
             SearchArgs searchArgs = (SearchArgs)e.Parameter;
             searchType = searchArgs.Type;
             object list = searchArgs.Collection;
-            string keyword = SearchPage.History.Peek();
+            SearchKeyword keyword = SearchPage.History.Peek();
             switch (searchType)
             {
                 case SearchType.Artists:
@@ -120,7 +120,7 @@ namespace SMPlayer
                 History.Pop();
         }
 
-        private void Search(SearchType searchType, string keyword, object list)
+        private void Search(SearchType searchType, SearchKeyword keyword, object list)
         {
             LoadingProgress.IsActive = true;
             CurrentKeyword = keyword;
@@ -200,7 +200,7 @@ namespace SMPlayer
             new MenuFlyoutHelper()
             {
                 Data = Songs,
-                DefaultPlaylistName = Settings.settings.FindNextPlaylistName(CurrentKeyword)
+                DefaultPlaylistName = Settings.settings.FindNextPlaylistName(CurrentKeyword.Text)
             }.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
         }
     }

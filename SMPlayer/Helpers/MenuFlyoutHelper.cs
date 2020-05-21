@@ -207,9 +207,22 @@ namespace SMPlayer
                 Icon = new SymbolIcon(Symbol.Find),
                 Text = Helper.Localize("Search Directory")
             };
-            item.Click += (s, args) =>
+            item.Click += async (s, args) =>
             {
-                MainPage.Instance.Search("");
+                await new InputDialog()
+                {
+                    Title = Helper.LocalizeMessage("Search"),
+                    PlaceholderText = Helper.LocalizeMessage("SearchDirectoryHint", tree.Directory),
+                    Confirm = (inputText) =>
+                    {
+                        MainPage.Instance.Search(new SearchKeyword()
+                        {
+                            Text = inputText,
+                            Songs = tree.Flatten(),
+                            Tree = tree
+                        });
+                    }
+                }.ShowAsync();
             };
             return item;
         }

@@ -318,6 +318,12 @@
   <data name="Reverse Playlist" xml:space="preserve">
     <value>反转播放列表</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="SearchDirectoryHint" xml:space="preserve">
+    <value>在目录“{0}”中搜索</value>
+  </data>
   <data name="SearchEmpty" xml:space="preserve">
     <value>搜索内容不能为空！</value>
   </data>

@@ -18,8 +18,6 @@ Mini mode shuffle button.
 
 Page shows no music hint.
 
-LocalPage add search directory.
-
 Refresh directory does not refresh page.
 
 Improve column spacing of AlbumPage.

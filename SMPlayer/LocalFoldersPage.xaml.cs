@@ -103,7 +103,7 @@ namespace SMPlayer
             else if (flyout.Target.DataContext is TreeViewNode node) tree = node.Content as FolderTree;
             flyout.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(tree.Path, Windows.Storage.StorageItemTypes.Folder));
             flyout.Items.Add(MenuFlyoutHelper.GetRefreshDirectoryItem(tree, AfterTreeUpdated));
-            // flyout.Items.Add(MenuFlyoutHelper.GetSearchDirectoryItem(tree));
+            flyout.Items.Add(MenuFlyoutHelper.GetSearchDirectoryItem(tree));
         }
         private void AfterTreeUpdated(FolderTree tree)
         {

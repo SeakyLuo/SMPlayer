@@ -202,8 +202,16 @@ namespace SMPlayer
                 return;
             }
             string trimmed = keyword.Trim();
-            Settings.settings.Search(keyword);
-            NaviFrame.Navigate(typeof(SearchPage), trimmed.Length == 0 ? keyword : trimmed);
+            Search(new SearchKeyword()
+            {
+                Text = trimmed.Length == 0 ? keyword : trimmed,
+            });
+        }
+
+        public void Search(SearchKeyword keyword)
+        {
+            Settings.settings.Search(keyword.Text);
+            NaviFrame.Navigate(typeof(SearchPage), keyword);
             SetBackButtonVisible(true);
             if (MainNavigationView.DisplayMode != NavigationViewDisplayMode.Expanded)
                 MainNavigationView.IsPaneOpen = false;

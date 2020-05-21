@@ -10,37 +10,37 @@ namespace SMPlayer.Helpers
 {
     public static class SearchHelper
     {
-        public static IEnumerable<Playlist> SearchArtists(string keyword, SortBy criterion)
+        public static IEnumerable<Playlist> SearchArtists(IEnumerable<Music> source, string keyword, SortBy criterion)
         {
-            var list = MusicLibraryPage.AllSongs.Where(m => IsTargetArtist(m, keyword))
-                                                .GroupBy(m => m.Artist)
-                                                .Select(group => new Playlist(group.Key, group) { Artist = group.Key });
+            var list = source.Where(m => IsTargetArtist(m, keyword))
+                            .GroupBy(m => m.Artist)
+                            .Select(group => new Playlist(group.Key, group) { Artist = group.Key });
             return SortArtists(list, keyword, criterion);
         }
-        public static IEnumerable<AlbumView> SearchAlbums(string keyword, SortBy criterion)
+        public static IEnumerable<AlbumView> SearchAlbums(IEnumerable<Music> source, string keyword, SortBy criterion)
         {
-            var list = MusicLibraryPage.AllSongs.Where(m => IsTargetAlbum(m, keyword))
-                                                .GroupBy(m => m.Album)
-                                                .Select(group =>
-                                                {
-                                                    Music music = group.ElementAt(0);
-                                                    return new AlbumView(music.Album, music.Artist, group.OrderBy(m => m.Name).ThenBy(m => m.Artist), false);
-                                                });
+            var list = source.Where(m => IsTargetAlbum(m, keyword))
+                            .GroupBy(m => m.Album)
+                            .Select(group =>
+                            {
+                                Music music = group.ElementAt(0);
+                                return new AlbumView(music.Album, music.Artist, group.OrderBy(m => m.Name).ThenBy(m => m.Artist), false);
+                            });
             return SortAlbums(list, keyword, criterion);
         }
-        public static IEnumerable<Music> SearchSongs(string keyword, SortBy criterion)
+        public static IEnumerable<Music> SearchSongs(IEnumerable<Music> source, string keyword, SortBy criterion)
         {
-            var list = MusicLibraryPage.AllSongs.Where(m => IsTargetMusic(m, keyword));
+            var list = source.Where(m => IsTargetMusic(m, keyword));
             return SortSongs(list, keyword, criterion);
         }
-        public static IEnumerable<AlbumView> SearchPlaylists(string keyword, SortBy criterion)
+        public static IEnumerable<AlbumView> SearchPlaylists(IEnumerable<Playlist> source, string keyword, SortBy criterion)
         {
-            List<AlbumView> list = Settings.settings.Playlists.Where(i => IsTargetPlaylist(i, keyword)).Select(i => i.ToSearchAlbumView()).ToList();
+            List<AlbumView> list = source.Where(i => IsTargetPlaylist(i, keyword)).Select(i => i.ToSearchAlbumView()).ToList();
             return SortPlaylists(list, keyword, criterion);
         }
-        public static IEnumerable<GridFolderView> SearchFolders(string keyword, SortBy criterion)
+        public static IEnumerable<GridFolderView> SearchFolders(FolderTree source, string keyword, SortBy criterion)
         {
-            List<GridFolderView> list = Settings.settings.Tree.GetAllTrees().Where(i => IsTargetFolder(i, keyword)).Select(tree => new GridFolderView(tree)).ToList();
+            List<GridFolderView> list = source.GetAllTrees().Where(i => IsTargetFolder(i, keyword)).Select(tree => new GridFolderView(tree)).ToList();
             return SortFolders(list, keyword, criterion);
         }
         public static bool IsTargetArtist(Music music, string keyword)

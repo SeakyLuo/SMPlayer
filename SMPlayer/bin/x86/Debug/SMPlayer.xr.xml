@@ -661,12 +661,12 @@
       <RootProperty Name="BorderThickness" />
       <RootProperty Name="IsSpellCheckEnabled" />
       <RootProperty Name="TextWrapping" />
-      <RootProperty Name="SelectionHighlightColor" />
       <RootProperty Name="Width" />
+      <RootProperty Name="PlaceholderText" />
+      <RootProperty Name="SelectionHighlightColor" />
       <RootProperty Name="Description" />
       <RootProperty Name="DesiredCandidateWindowAlignment" />
       <RootProperty Name="Header" />
-      <RootProperty Name="PlaceholderText" />
       <RootProperty Name="UseSystemFocusVisuals" />
       <RootProperty Name="SelectionFlyout" />
       <RootEvent Name="BeforeTextChanging" />
@@ -790,6 +790,7 @@
       <RootProperty Name="EasingFunction" />
     </RootType>
     <RootType FullName="SMPlayer.Dialogs.RemoveDialog" />
+    <RootType FullName="SMPlayer.Dialogs.InputDialog" />
     <RootType FullName="Windows.UI.Xaml.Visibility" />
     <RootType FullName="Windows.UI.Xaml.Controls.Canvas">
       <RootMethod Name="GetZIndex" />

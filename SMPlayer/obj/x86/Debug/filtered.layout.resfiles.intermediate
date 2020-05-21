@@ -72,6 +72,7 @@ Controls\PlaylistControl.xbf
 Controls\PlaylistControlItem.xbf
 Controls\ScrollingTextBlock.xbf
 Dialogs\AlbumDialog.xbf
+Dialogs\InputDialog.xbf
 Dialogs\MusicDialog.xbf
 Dialogs\RemoveDialog.xbf
 Dialogs\RenameDialog.xbf

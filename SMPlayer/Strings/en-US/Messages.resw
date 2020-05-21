@@ -318,6 +318,12 @@
   <data name="Reverse Playlist" xml:space="preserve">
     <value>Reverse Playlist</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchDirectoryHint" xml:space="preserve">
+    <value>Search under ""</value>
+  </data>
   <data name="SearchEmpty" xml:space="preserve">
     <value>Search content cannot be empty!</value>
   </data>

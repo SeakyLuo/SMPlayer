@@ -82,9 +82,12 @@ namespace SMPlayer
             var settings = files.Where(f => f.Name.StartsWith(Settings.JsonFilename)).OrderBy(f => f.DateCreated);
             var mediaHelper = files.Where(f => f.Name.StartsWith(MediaHelper.JsonFilename)).OrderBy(f => f.DateCreated);
             var musicLibrary = files.Where(f => f.Name.StartsWith(MusicLibraryPage.JsonFilename)).OrderBy(f => f.DateCreated);
-            foreach (var file in settings.Take(settings.Count() - maxBackups)) await file.DeleteAsync();
-            foreach (var file in mediaHelper.Take(mediaHelper.Count() - maxBackups)) await file.DeleteAsync();
-            foreach (var file in musicLibrary.Take(musicLibrary.Count() - maxBackups)) await file.DeleteAsync();
+            foreach (var file in settings.Take(settings.Count() - maxBackups))
+                try { await file.DeleteAsync(); } catch (FileNotFoundException) { }
+            foreach (var file in mediaHelper.Take(mediaHelper.Count() - maxBackups))
+                try { await file.DeleteAsync(); } catch (FileNotFoundException) { }
+            foreach (var file in musicLibrary.Take(musicLibrary.Count() - maxBackups))
+                try { await file.DeleteAsync(); } catch (FileNotFoundException) { }
         }
 
         public static string ConvertBytes(ulong bytes)

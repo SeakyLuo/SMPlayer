@@ -400,6 +400,9 @@
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Dialogs\RemoveDialog.xbf">
       <PackagePath>Dialogs\RemoveDialog.xbf</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Dialogs\InputDialog.xbf">
+      <PackagePath>Dialogs\InputDialog.xbf</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Dictionaries\BackButton.xbf">
       <PackagePath>Dictionaries\BackButton.xbf</PackagePath>
     </AppxPackagedFile>

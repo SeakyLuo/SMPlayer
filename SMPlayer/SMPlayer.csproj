@@ -178,6 +178,9 @@
     <Compile Include="Dialogs\RemoveDialog.xaml.cs">
       <DependentUpon>RemoveDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\InputDialog.xaml.cs">
+      <DependentUpon>InputDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ExpressionBuilder\ExpressionBuilder.CompositionExtensions.cs" />
     <Compile Include="ExpressionBuilder\ExpressionNodes\ExpressionBuilder.BooleanNode.cs" />
     <Compile Include="ExpressionBuilder\ExpressionNodes\ExpressionBuilder.ColorNode.cs" />
@@ -425,6 +428,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\RemoveDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\InputDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
