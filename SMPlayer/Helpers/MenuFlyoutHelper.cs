@@ -155,8 +155,13 @@ namespace SMPlayer
                 Icon = new FontIcon() { Glyph = "\uE838" },
                 Text = Helper.Localize("Show In Explorer")
             };
-            item.Click += (s, args) =>
+            item.Click += async (s, args) =>
             {
+                if (await Helper.FileNotExist(path))
+                {
+                    Helper.ShowMusicNotFoundNotification(Music.GetFilename(path));
+                    return;
+                }
                 ShowInExplorer(path, type);
             };
             return item;
@@ -182,7 +187,7 @@ namespace SMPlayer
             }
             await Windows.System.Launcher.LaunchFolderAsync(folder, options);
         }
-        public static MenuFlyoutItem GetRefreshDirectoryMenuFlyout(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
+        public static MenuFlyoutItem GetRefreshDirectoryItem(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
         {
             var item = new MenuFlyoutItem()
             {
@@ -193,7 +198,19 @@ namespace SMPlayer
             {
                 SettingsPage.CheckNewMusic(tree, afterTreeUpdated);
             };
-            item.SetToolTip("Refresh Directory");
+            return item;
+        }
+        public static MenuFlyoutItem GetSearchDirectoryItem(FolderTree tree)
+        {
+            var item = new MenuFlyoutItem()
+            {
+                Icon = new SymbolIcon(Symbol.Find),
+                Text = Helper.Localize("Search Directory")
+            };
+            item.Click += (s, args) =>
+            {
+                MainPage.Instance.Search("");
+            };
             return item;
         }
         public MenuFlyout GetMusicMenuFlyout(MenuFlyoutItemClickListener listener = null, bool withNavigation = true)

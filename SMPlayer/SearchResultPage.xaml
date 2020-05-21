@@ -6,6 +6,7 @@
     xmlns:data="using:SMPlayer.Models"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:SMPlayer.Controls"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
@@ -91,5 +92,17 @@
             ItemsSource="{x:Bind Playlists, Mode=OneWay}"
             Style="{StaticResource GridViewStyle}"
             Visibility="{x:Bind Playlists.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
+        <GridView
+            Grid.Row="1"
+            ItemClick="FolderGridView_ItemClick"
+            ItemContainerStyle="{StaticResource DropShadowGridViewItemStyle}"
+            ItemsSource="{x:Bind Folders, Mode=OneWay}"
+            Visibility="{x:Bind Folders.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+            <GridView.ItemTemplate>
+                <DataTemplate x:DataType="data:GridFolderView">
+                    <controls:GridFolderControl />
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
     </Grid>
 </Page>

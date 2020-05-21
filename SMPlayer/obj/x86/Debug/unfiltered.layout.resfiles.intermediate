@@ -60,6 +60,7 @@ ArtistsPage.xbf
 Controls\AlbumArtControl.xbf
 Controls\ArtistItemControl.xbf
 Controls\DropShadowControl.xbf
+Controls\GridFolderControl.xbf
 Controls\GridMusicControl.xbf
 Controls\HeaderedPlaylistControl.xbf
 Controls\IconTextButton.xbf

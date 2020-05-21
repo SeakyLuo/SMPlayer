@@ -339,6 +339,9 @@
   <data name="Finish Editing" xml:space="preserve">
     <value>编辑完成</value>
   </data>
+  <data name="FoldersTextBlock.Text" xml:space="preserve">
+    <value>文件夹</value>
+  </data>
   <data name="Full Screen" xml:space="preserve">
     <value>全屏模式</value>
   </data>
@@ -665,6 +668,9 @@
   </data>
   <data name="SaveTextBlock.Text" xml:space="preserve">
     <value>保存</value>
+  </data>
+  <data name="Search Directory" xml:space="preserve">
+    <value>搜索目录</value>
   </data>
   <data name="SearchBar.PlaceholderText" xml:space="preserve">
     <value>搜索</value>

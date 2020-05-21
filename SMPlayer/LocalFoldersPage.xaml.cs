@@ -102,7 +102,8 @@ namespace SMPlayer
             if (flyout.Target.DataContext is GridFolderView gridFolderView) tree = gridFolderView.Tree;
             else if (flyout.Target.DataContext is TreeViewNode node) tree = node.Content as FolderTree;
             flyout.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(tree.Path, Windows.Storage.StorageItemTypes.Folder));
-            flyout.Items.Add(MenuFlyoutHelper.GetRefreshDirectoryMenuFlyout(tree, newTree => AfterTreeUpdated(newTree)));
+            flyout.Items.Add(MenuFlyoutHelper.GetRefreshDirectoryItem(tree, AfterTreeUpdated));
+            // flyout.Items.Add(MenuFlyoutHelper.GetSearchDirectoryItem(tree));
         }
         private void AfterTreeUpdated(FolderTree tree)
         {
@@ -137,18 +138,6 @@ namespace SMPlayer
         private void OpenMusicFlyout(object sender, object e)
         {
             MenuFlyoutHelper.SetMusicMenu(sender);
-        }
-
-        private void PlayAllButton_Click(object sender, RoutedEventArgs e)
-        {
-            var data = (sender as Button).DataContext as GridFolderView;
-            MediaHelper.ShuffleAndPlay(data.Songs);
-        }
-        private void AddToButton_Click(object sender, RoutedEventArgs e)
-        {
-            var data = (sender as Button).DataContext as GridFolderView;
-            var helper = new MenuFlyoutHelper() { Data = data.Songs, DefaultPlaylistName = data.Name };
-            helper.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
         }
         public void UpdatePage(FolderTree tree)
         {
@@ -216,21 +205,6 @@ namespace SMPlayer
         {
             var tree = ((sender as Grid).DataContext as TreeViewNode).Content as FolderTree;
             setter.SetPage(tree);
-        }
-
-        private void GridViewItem_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            VisualStateManager.GoToState(sender as Control, "PointerOver", true);
-        }
-
-        private void GridViewItem_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            VisualStateManager.GoToState(sender as Control, "Normal", true);
-        }
-
-        private void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
-        {
-            (sender.DataContext as GridFolderView)?.SetThumbnail();
         }
     }
 }

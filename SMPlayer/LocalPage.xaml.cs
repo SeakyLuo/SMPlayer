@@ -29,6 +29,15 @@ namespace SMPlayer
             SettingsPage.AddAfterPathSetListener(this);
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            if (e.Parameter is GridFolderView folder)
+            {
+                SetPage(folder.Tree);
+            }
+        }
+
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             SetBackButtonVisibility();

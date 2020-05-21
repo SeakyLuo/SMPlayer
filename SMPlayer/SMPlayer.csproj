@@ -145,6 +145,9 @@
     <Compile Include="Controls\DropShadowControl.xaml.cs">
       <DependentUpon>DropShadowControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\GridFolderControl.xaml.cs">
+      <DependentUpon>GridFolderControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\GridMusicControl.xaml.cs">
       <DependentUpon>GridMusicControl.xaml</DependentUpon>
     </Compile>
@@ -378,6 +381,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\DropShadowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\GridFolderControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

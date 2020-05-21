@@ -265,6 +265,16 @@ namespace SMPlayer.Models
             list.AddRange(Files);
             return list;
         }
+        public List<FolderTree> GetAllTrees()
+        {
+            List<FolderTree> list = new List<FolderTree>
+            {
+                this
+            };
+            foreach (var tree in Trees)
+                list.AddRange(tree.GetAllTrees());
+            return list;
+        }
         public void Sort()
         {
             Trees = Trees.OrderBy(t => t.Directory).ToList();
@@ -328,7 +338,7 @@ namespace SMPlayer.Models
         }
         public FolderTree FindTree(Music music)
         {
-            string path = music.Path.Substring(0, music.Path.LastIndexOf('/'));
+            string path = music.Path.Substring(0, music.Path.LastIndexOf('\\'));
             return FindTree(path);
         }
         public Music FindMusic(string path)

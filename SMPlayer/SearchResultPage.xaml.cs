@@ -21,6 +21,7 @@ namespace SMPlayer
         public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         public ObservableCollection<AlbumView> Playlists = new ObservableCollection<AlbumView>();
+        public ObservableCollection<GridFolderView> Folders = new ObservableCollection<GridFolderView>();
         private SortBy[] Criteria;
         private SearchType searchType;
         private string CurrentKeyword;
@@ -38,6 +39,8 @@ namespace SMPlayer
                         return Settings.settings.SearchSongsCriterion;
                     case SearchType.Playlists:
                         return Settings.settings.SearchPlaylistsCriterion;
+                    case SearchType.Folders:
+                        return Settings.settings.SearchFoldersCriterion;
                     default:
                         return Settings.settings.SearchSongsCriterion;
                 }
@@ -57,6 +60,9 @@ namespace SMPlayer
                         break;
                     case SearchType.Playlists:
                         Settings.settings.SearchPlaylistsCriterion = value;
+                        break;
+                    case SearchType.Folders:
+                        Settings.settings.SearchFoldersCriterion = value;
                         break;
                 }
             }
@@ -87,6 +93,9 @@ namespace SMPlayer
                     break;
                 case SearchType.Playlists:
                     Criteria = SearchPage.PlaylistsCriteria;
+                    break;
+                case SearchType.Folders:
+                    Criteria = SearchPage.FoldersCriteria;
                     break;
             }
             SetSortByDropdownContent(searchArgs.Criterion);
@@ -119,6 +128,7 @@ namespace SMPlayer
             Albums.Clear();
             Songs.Clear();
             Playlists.Clear();
+            Folders.Clear();
             switch (searchType)
             {
                 case SearchType.Artists:
@@ -132,6 +142,9 @@ namespace SMPlayer
                     break;
                 case SearchType.Playlists:
                     Playlists.SetTo(list as ObservableCollection<AlbumView>);
+                    break;
+                case SearchType.Folders:
+                    Folders.SetTo(list as ObservableCollection<GridFolderView>);
                     break;
             }
             LoadingProgress.IsActive = false;
@@ -161,6 +174,10 @@ namespace SMPlayer
                 Frame.Navigate(typeof(MyFavoritesPage));
             else
                 Frame.Navigate(typeof(AlbumPage), album);
+        }
+        private void FolderGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Frame.Navigate(typeof(LocalPage), e.ClickedItem);
         }
 
         private void Album_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)

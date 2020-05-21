@@ -48,6 +48,7 @@ namespace SMPlayer.Models
         public SortBy SearchAlbumsCriterion { get; set; } = SortBy.Default;
         public SortBy SearchSongsCriterion { get; set; } = SortBy.Default;
         public SortBy SearchPlaylistsCriterion { get; set; } = SortBy.Default;
+        public SortBy SearchFoldersCriterion { get; set; } = SortBy.Default;
 
         [Newtonsoft.Json.JsonIgnore]
         private List<Music> JustRemoved = new List<Music>();

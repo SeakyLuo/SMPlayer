@@ -24,14 +24,16 @@ namespace SMPlayer
         public static readonly SortBy[] ArtistsCriteria = new SortBy[] { SortBy.Default, SortBy.Name, SortBy.Album, SortBy.PlayCount, SortBy.Duration },
                                         AlbumsCriteria = new SortBy[] { SortBy.Default, SortBy.Name, SortBy.PlayCount, SortBy.Duration },
                                         SongsCriteria = new SortBy[] { SortBy.Default, SortBy.Title, SortBy.Artist, SortBy.Album, SortBy.PlayCount, SortBy.Duration },
-                                        PlaylistsCriteria = new SortBy[] { SortBy.Default, SortBy.Name, SortBy.PlayCount, SortBy.Duration };
+                                        PlaylistsCriteria = new SortBy[] { SortBy.Default, SortBy.Name, SortBy.PlayCount, SortBy.Duration },
+                                        FoldersCriteria = new SortBy[] { SortBy.Default, SortBy.Name };
         public static Stack<string> History = new Stack<string>();
 
         public ObservableCollection<Playlist> Artists = new ObservableCollection<Playlist>(), AllArtists = new ObservableCollection<Playlist>();
         public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>(), AllAlbums = new ObservableCollection<AlbumView>();
         public ObservableCollection<Music> Songs = new ObservableCollection<Music>(), AllSongs = new ObservableCollection<Music>();
         public ObservableCollection<AlbumView> Playlists = new ObservableCollection<AlbumView>(), AllPlaylists = new ObservableCollection<AlbumView>();
-        public const int ArtistLimit = 10, AlbumLimit = 5, SongLimit = 5, PlaylistLimit = 5;
+        public ObservableCollection<GridFolderView> Folders = new ObservableCollection<GridFolderView>(), AllFolders = new ObservableCollection<GridFolderView>();
+        public const int ArtistLimit = 10, AlbumLimit = 5, SongLimit = 5, PlaylistLimit = 5, FolderLimit = 5;
         private string CurrentKeyword;
         public SearchPage()
         {
@@ -45,6 +47,7 @@ namespace SMPlayer
             SetAlbumsDropdownContent();
             SetSongsDropdownContent();
             SetPlaylistsDropdownContent();
+            SetFoldersDropdownContent();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -80,12 +83,14 @@ namespace SMPlayer
             AllAlbums.Clear();
             AllSongs.Clear();
             AllPlaylists.Clear();
+            AllFolders.Clear();
             string modifiedKeyowrd = keyword.ToLowerInvariant();
             await SearchArtists(modifiedKeyowrd, Settings.settings.SearchArtistsCriterion);
             await SearchAlbums(modifiedKeyowrd, Settings.settings.SearchAlbumsCriterion);
             await SearchSongs(modifiedKeyowrd, Settings.settings.SearchSongsCriterion);
             await SearchPlaylists(modifiedKeyowrd, Settings.settings.SearchPlaylistsCriterion);
-            NoResultTextBlock.Visibility = Artists.Count == 0 && Albums.Count == 0 && Songs.Count == 0 && Playlists.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+            await SearchFolders(modifiedKeyowrd, Settings.settings.SearchFoldersCriterion);
+            NoResultTextBlock.Visibility = Artists.Count == 0 && Albums.Count == 0 && Songs.Count == 0 && Playlists.Count == 0 && Folders.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
             LoadingProgress.Visibility = Visibility.Collapsed;
         }
 
@@ -121,6 +126,14 @@ namespace SMPlayer
             PlaylistsDropdown.Visibility = Playlists.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
 
+        public async Task SearchFolders(string keyword, SortBy criterion)
+        {
+            AllFolders.SetTo(await Task.Run(() => SearchHelper.SearchFolders(keyword, criterion)));
+            Folders.SetTo(AllFolders.Take(FolderLimit));
+            FoldersViewAllButton.Visibility = AllFolders.Count > FolderLimit ? Visibility.Visible : Visibility.Collapsed;
+            FoldersDropdown.Visibility = AllFolders.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
+        }
+
         public static string GetSearchHeader(string keyword, bool isMinimal)
         {
             string header = Helper.LocalizeMessage("Quotations", keyword);
@@ -144,11 +157,16 @@ namespace SMPlayer
             else
                 Frame.Navigate(typeof(PlaylistsPage), e.ClickedItem);
         }
+        private void SearchFolderView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Frame.Navigate(typeof(LocalPage), e.ClickedItem);
+        }
 
         private void Album_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
             (args.NewValue as AlbumView)?.SetCover();
         }
+
         private void SetArtistsDropdownContent()
         {
             ArtistsDropdown.Content = Helper.LocalizeMessage("Sort By " + Settings.settings.SearchArtistsCriterion.ToStr());
@@ -164,6 +182,10 @@ namespace SMPlayer
         private void SetPlaylistsDropdownContent()
         {
             PlaylistsDropdown.Content = Helper.LocalizeMessage("Sort By " + Settings.settings.SearchPlaylistsCriterion.ToStr());
+        }
+        private void SetFoldersDropdownContent()
+        {
+            FoldersDropdown.Content = Helper.LocalizeMessage("Sort By " + Settings.settings.SearchFoldersCriterion.ToStr());
         }
 
         private void ArtistsDropdown_Click(object sender, RoutedEventArgs e)
@@ -228,7 +250,18 @@ namespace SMPlayer
                                                 });
         }
 
-
+        private void FoldersDropdown_Click(object sender, RoutedEventArgs e)
+        {
+            MenuFlyoutHelper.SetSearchSortByMenu(sender, Settings.settings.SearchFoldersCriterion, FoldersCriteria,
+                                                async item =>
+                                                {
+                                                    Settings.settings.SearchFoldersCriterion = item;
+                                                    SetFoldersDropdownContent();
+                                                    LoadingProgress.Visibility = Visibility.Visible;
+                                                    AllFolders.SetTo(await Task.Run(() => SearchHelper.SortFolders(AllFolders, CurrentKeyword, item)));
+                                                    LoadingProgress.Visibility = Visibility.Collapsed;
+                                                });
+        }
         private void ArtistsViewAllButton_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(SearchResultPage), new SearchArgs()
@@ -266,6 +299,16 @@ namespace SMPlayer
                 Type = SearchType.Playlists,
                 Criterion = Settings.settings.SearchPlaylistsCriterion,
                 Collection = AllPlaylists
+            });
+        }
+
+        private void FoldersViewAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SearchResultPage), new SearchArgs()
+            {
+                Type = SearchType.Folders,
+                Criterion = Settings.settings.SearchFoldersCriterion,
+                Collection = AllFolders
             });
         }
     }

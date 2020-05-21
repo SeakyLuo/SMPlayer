@@ -145,7 +145,7 @@
     <value>没有检查到变化</value>
   </data>
   <data name="CheckNewMusicResultRemoved" xml:space="preserve">
-    <value>移除了{1}首歌</value>
+    <value>移除了{0}首歌</value>
   </data>
   <data name="ClearPlayHistory" xml:space="preserve">
     <value>你想清空播放历史吗？</value>

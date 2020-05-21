@@ -38,6 +38,11 @@ namespace SMPlayer.Helpers
             List<AlbumView> list = Settings.settings.Playlists.Where(i => IsTargetPlaylist(i, keyword)).Select(i => i.ToSearchAlbumView()).ToList();
             return SortPlaylists(list, keyword, criterion);
         }
+        public static IEnumerable<GridFolderView> SearchFolders(string keyword, SortBy criterion)
+        {
+            List<GridFolderView> list = Settings.settings.Tree.GetAllTrees().Where(i => IsTargetFolder(i, keyword)).Select(tree => new GridFolderView(tree)).ToList();
+            return SortFolders(list, keyword, criterion);
+        }
         public static bool IsTargetArtist(Music music, string keyword)
         {
             return IsTargetArtist(music.Artist, keyword);
@@ -139,7 +144,7 @@ namespace SMPlayer.Helpers
             }
             else
             {
-                list = new List<AlbumView>();
+                list = src.ToList();
                 if (isNowPlayingTarget) list.Add(nowPlaying.ToSearchAlbumView());
                 if (isFavoriteTarget) list.Add(Settings.settings.MyFavorites.ToSearchAlbumView());
                 switch (criterion)
@@ -156,7 +161,28 @@ namespace SMPlayer.Helpers
             }
             return list;
         }
-
+        public static bool IsTargetFolder(FolderTree tree, string keyword)
+        {
+            return tree.Directory.Contains(keyword) || tree.Files.Any(music => IsTargetMusic(music, keyword));
+        }
+        public static IEnumerable<GridFolderView> SortFolders(IEnumerable<GridFolderView> src, string keyword, SortBy criterion)
+        {
+            List<GridFolderView> list;
+            if (criterion == SortBy.Default)
+            {
+                list = DefaultSort(src, keyword, i => i.Name).ToList();
+            }
+            else
+            {
+                list = src.ToList();
+                switch (criterion)
+                {
+                    case SortBy.Name:
+                        return src.OrderBy(a => a.Name);
+                }
+            }
+            return list;
+        }
         public static ObservableCollection<T> DefaultSort<T>(IEnumerable<T> collection, string keyword, Func<T, string> selector)
         {
             ObservableCollection<T> list = new ObservableCollection<T>(collection);

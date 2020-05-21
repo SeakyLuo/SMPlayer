@@ -8,6 +8,12 @@
     <RootPropertyPathName Name="Name" />
     <RootPropertyPathName Name="Artist" />
     <RootPropertyPathName Name="Cover" />
+    <RootPropertyPathName Name="FolderInfo" />
+    <RootPropertyPathName Name="LargeThumbnail" />
+    <RootPropertyPathName Name="Fourth" />
+    <RootPropertyPathName Name="Third" />
+    <RootPropertyPathName Name="Second" />
+    <RootPropertyPathName Name="First" />
     <RootPropertyPathName Name="Album" />
     <RootPropertyPathName Name="Duration" />
     <RootPropertyPathName Name="Content" />
@@ -144,6 +150,7 @@
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="MaxLines" />
       <RootProperty Name="TextAlignment" />
+      <RootProperty Name="HorizontalTextAlignment" />
       <RootProperty Name="TextTrimming" />
       <RootProperty Name="Style" />
       <RootProperty Name="Visibility" />
@@ -154,7 +161,6 @@
       <RootProperty Name="IsHitTestVisible" />
       <RootProperty Name="Width" />
       <RootProperty Name="Height" />
-      <RootProperty Name="HorizontalTextAlignment" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Button">
       <RootProperty Name="Margin" />
@@ -575,6 +581,9 @@
     </RootType>
     <RootType FullName="SMPlayer.ArtistItemControl">
       <RootProperty Name="DataContext" />
+    </RootType>
+    <RootType FullName="SMPlayer.Controls.GridFolderControl">
+      <RootProperty Name="ContextFlyout" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.AdaptiveTrigger">
       <RootProperty Name="MinWindowWidth" />

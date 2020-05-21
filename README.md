@@ -51,7 +51,7 @@ Album art in NowPlayingFull.
 # TO FIX
 Able to drag titlebar when loading.
 
-Disable operations when saving lyrics.
+Dark thumb in the mini mode.
 
 # MIGHT DO
 Mini mode media control fade in/out.

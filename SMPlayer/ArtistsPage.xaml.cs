@@ -65,9 +65,25 @@ namespace SMPlayer
             targetArtist = e.Parameter;
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (targetArtist == null) return;
+            if (IsProcessing)
+            {
+                await Task.Run(async () =>
+                {
+                    while (IsProcessing) ;
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, LocateArtist);
+                });
+            }
+            else
+            {
+                LocateArtist();
+            }
+        }
+
+        private void LocateArtist()
+        {
             ArtistView artist = null;
             if (targetArtist is string artistName)
             {
@@ -80,8 +96,8 @@ namespace SMPlayer
                     artist.CopyFrom(playlist);
             }
             ArtistMasterDetailsView.SelectedItem = artist;
-            targetArtist = null;
             (ArtistMasterDetailsView.ContainerFromItem(artist) as UIElement)?.Locate();
+            targetArtist = null;
         }
 
         private async void Setup(ICollection<Music> songs)

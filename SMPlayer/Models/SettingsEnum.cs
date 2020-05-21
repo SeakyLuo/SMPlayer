@@ -7,7 +7,8 @@ namespace SMPlayer.Models
         Artists = 0,
         Albums = 1,
         Songs = 2,
-        Playlists = 3
+        Playlists = 3,
+        Folders = 4
     }
 
     public enum PlayMode

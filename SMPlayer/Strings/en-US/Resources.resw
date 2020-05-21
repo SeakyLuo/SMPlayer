@@ -342,6 +342,9 @@
   <data name="Finish Editing" xml:space="preserve">
     <value>Finish Editing</value>
   </data>
+  <data name="FoldersTextBlock.Text" xml:space="preserve">
+    <value>Folders</value>
+  </data>
   <data name="Full Screen" xml:space="preserve">
     <value>Full Screen</value>
   </data>
@@ -668,6 +671,9 @@
   </data>
   <data name="SaveTextBlock.Text" xml:space="preserve">
     <value>Save</value>
+  </data>
+  <data name="Search Directory" xml:space="preserve">
+    <value>Search Directory</value>
   </data>
   <data name="SearchBar.PlaceholderText" xml:space="preserve">
     <value>Search</value>

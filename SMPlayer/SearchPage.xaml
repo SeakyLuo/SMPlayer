@@ -2,7 +2,7 @@
     x:Class="SMPlayer.SearchPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:controls="using:SMPlayer.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:SMPlayer.Models"
     xmlns:local="using:SMPlayer"
@@ -290,6 +290,41 @@
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="data:AlbumView">
                             <local:DropShadowControl DataContext="{Binding}" DataContextChanged="Album_DataContextChanged" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+            <StackPanel Margin="0,30" Visibility="{x:Bind Folders.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                <CommandBar Style="{StaticResource SearchCommandBarStyle}">
+                    <CommandBar.Content>
+                        <StackPanel Style="{StaticResource CommandBarContentHorizontalStackPanel}">
+                            <TextBlock
+                                x:Uid="FoldersTextBlock"
+                                RelativePanel.AlignLeftWithPanel="True"
+                                Style="{StaticResource HeaderTextBlockStyle}"
+                                Text="Folders" />
+                            <DropDownButton
+                                x:Name="FoldersDropdown"
+                                Click="FoldersDropdown_Click"
+                                Content="Sort By"
+                                Style="{ThemeResource SearchTextBlockButtonStyle}" />
+                        </StackPanel>
+                    </CommandBar.Content>
+                    <AppBarButton
+                        x:Name="FoldersViewAllButton"
+                        x:Uid="ViewAllButton"
+                        Click="FoldersViewAllButton_Click"
+                        Icon="ViewAll"
+                        Style="{StaticResource ViewAllButtonStyle}" />
+                </CommandBar>
+                <ListView
+                    x:Name="SearchFolderView"
+                    ItemClick="SearchFolderView_ItemClick"
+                    ItemsSource="{x:Bind Folders, Mode=OneWay}"
+                    Style="{StaticResource HorizontalListViewStyle}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="data:GridFolderView">
+                            <controls:GridFolderControl />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

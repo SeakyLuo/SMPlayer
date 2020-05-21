@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMPlayer.Models
 {
-    class GridFolderView : INotifyPropertyChanged
+    public class GridFolderView : INotifyPropertyChanged
     {
         public string Name { get => Tree.Directory; }
         public string FolderInfo { get => Tree.Info.ToString(); }
@@ -83,7 +83,7 @@ namespace SMPlayer.Models
             if (thumbnaiLoaded) return;
             List<BitmapImage> thumbnails = new List<BitmapImage>(4);
             BitmapImage thumbnail;
-            foreach (var group in Tree.Flatten().GroupBy((m) => m.Album))
+            foreach (var group in Tree.Flatten().GroupBy(m => m.Album))
             {
                 foreach (var music in group)
                 {
@@ -98,7 +98,7 @@ namespace SMPlayer.Models
             }
             int count = thumbnails.Count;
             if (count == 0) LargeThumbnail = Helper.ThumbnailNotFoundImage;
-            else if (count == 1) LargeThumbnail = thumbnails[0];
+            else if (count <= 2) LargeThumbnail = thumbnails[0];
             else
             {
                 for (int i = 0; i < 4 - count; i++)
