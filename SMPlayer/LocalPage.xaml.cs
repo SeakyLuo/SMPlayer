@@ -140,8 +140,16 @@ namespace SMPlayer
         {
             SettingsPage.CheckNewMusic(History.Peek(), tree =>
             {
-                if (LocalFoldersItem.IsSelected) FolderListener.UpdatePage(tree);
-                else MusicListener.UpdatePage(tree);
+                if (LocalFoldersItem.IsSelected)
+                {
+                    FolderListener.UpdatePage(tree);
+                    MusicListener.UpdatePage(tree);
+                }
+                else
+                {
+                    MusicListener.UpdatePage(tree);
+                    FolderListener.UpdatePage(tree);
+                }
             });
         }
 

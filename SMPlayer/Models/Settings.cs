@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -92,6 +93,14 @@ namespace SMPlayer.Models
                 try
                 {
                     Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
+                }
+                catch (FileNotFoundException)
+                {
+                    App.LoadedListeners.Add(() =>
+                    {
+                        MainPage.Instance.ShowLocalizedNotification("RootNotFound");
+                        MainPage.Instance.NavigateToPage(typeof(SettingsPage));
+                    });
                 }
                 catch (Exception)
                 {

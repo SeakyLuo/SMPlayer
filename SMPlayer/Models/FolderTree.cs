@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -56,7 +57,14 @@ namespace SMPlayer.Models
         }
         public async Task<bool> CheckNewFile(TreeUpdateData data = null)
         {
-            return await CheckNewFile(await GetStorageFolder(), data);
+            StorageFolder folder = await GetStorageFolderAsync();
+            if (folder == null)
+            {
+                if (data != null)
+                    data.Message = Helper.LocalizeMessage("FolderNotFound", Path);
+                return false;
+            }
+            return await CheckNewFile(folder, data);
         }
         private void AddToMusicLibrary()
         {
@@ -358,7 +366,17 @@ namespace SMPlayer.Models
         //{
         //    return !(tree1 == tree2);
         //}
-        public async Task<StorageFolder> GetStorageFolder() { return await StorageFolder.GetFolderFromPathAsync(Path);  }
+        public async Task<StorageFolder> GetStorageFolderAsync()
+        {
+            try
+            {
+                return await StorageFolder.GetFolderFromPathAsync(Path);
+            }
+            catch (FileNotFoundException)
+            {
+                return null;
+            }
+        }
 
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
@@ -415,6 +433,7 @@ namespace SMPlayer.Models
     {
         public int More { get; set; } = 0;
         public int Less { get; set; } = 0;
+        public string Message { get; set; }
     }
 
     public interface TreeOperationListener

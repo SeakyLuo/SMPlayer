@@ -126,7 +126,12 @@ namespace SMPlayer
         {
             MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
             var data = new TreeUpdateData();
-            if (!await tree.CheckNewFile(data)) return;
+            if (!await tree.CheckNewFile(data))
+            {
+                if (!string.IsNullOrEmpty(data.Message))
+                    MainPage.Instance.ShowNotification(data.Message);
+                return;
+            }
             if (data.More != 0 || data.Less != 0)
             {
                 Settings.settings.Tree.FindTree(tree).CopyFrom(tree);
