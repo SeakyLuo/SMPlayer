@@ -249,6 +249,9 @@
   <data name="NoLyricsAvailable" xml:space="preserve">
     <value>没有歌词</value>
   </data>
+  <data name="NotImplemented" xml:space="preserve">
+    <value>暂时没有实现该功能！</value>
+  </data>
   <data name="NotPlayedYet" xml:space="preserve">
     <value>《{0}》尚未被播放。</value>
   </data>
@@ -322,7 +325,7 @@
     <value>反转播放列表</value>
   </data>
   <data name="RootNotFound" xml:space="preserve">
-    <value>找不到根文件夹，请重新设置</value>
+    <value>找不到音乐文件夹，请重新设置</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>搜索</value>

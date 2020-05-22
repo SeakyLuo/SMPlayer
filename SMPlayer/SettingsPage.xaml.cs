@@ -96,6 +96,7 @@ namespace SMPlayer
         private void ConfirmColorButton_Click(object sender, RoutedEventArgs e)
         {
             //Settings.settings.ThemeColor = ThemeColorPicker.Color;
+            MainPage.Instance.ShowNotification("NotImplemented");
             ColorPickerFlyout.Hide();
         }
 
