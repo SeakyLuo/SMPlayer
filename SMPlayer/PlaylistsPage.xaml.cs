@@ -197,12 +197,15 @@ namespace SMPlayer
         {
             if (PlaylistTabView.GetFirstDescendantOfType<ScrollViewer>() is ScrollViewer scrollViewer)
             {
-                double itemWidth = scrollViewer.ActualWidth / PlaylistTabView.Items.Count;
                 if (scrollViewer.IsLoaded)
+                {
+                    double itemWidth = scrollViewer.ExtentWidth / PlaylistTabView.Items.Count;
                     scrollViewer.ChangeView(itemWidth * PlaylistTabView.SelectedIndex, null, null, false);
+                }
                 else
                     scrollViewer.Loaded += (sender, args) =>
                     {
+                        double itemWidth = scrollViewer.ExtentWidth / PlaylistTabView.Items.Count;
                         scrollViewer.ChangeView(itemWidth * PlaylistTabView.SelectedIndex, null, null, false);
                     };
             }

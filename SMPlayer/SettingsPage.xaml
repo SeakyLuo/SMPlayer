@@ -222,7 +222,7 @@
                     </Flyout>
                 </Button.Flyout>
             </Button>
-            <StackPanel Margin="9,0,0,0" Orientation="Horizontal">
+            <StackPanel Style="{StaticResource MarginSetter}" Orientation="Horizontal">
                 <TextBlock
                     x:Uid="RecentPlayedItemTextBlock"
                     VerticalAlignment="Center"

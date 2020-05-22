@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SMPlayer.Models
 {
@@ -9,6 +10,7 @@ namespace SMPlayer.Models
     {
         public string Name { get; set; }
         public ObservableCollection<AlbumView> Albums { get; set; } = new ObservableCollection<AlbumView>();
+        public bool IsLoading { get; private set; } = false;
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         public bool NotLoaded
         {
@@ -50,28 +52,43 @@ namespace SMPlayer.Models
             CopySongs(Songs);
             NotLoaded = false;
         }
-        private volatile bool loading = false;
         public void Load()
         {
-            if (loading) return;
+            if (IsLoading) return;
             NotLoaded = true;
-            loading = true;
+            IsLoading = true;
             CopySongs(MusicLibraryPage.AllSongs.Where(m => m.Artist == Name));
             NotLoaded = false;
-            loading = false;
+            IsLoading = false;
+        }
+        public async Task LoadAsync()
+        {
+            if (IsLoading) return;
+            NotLoaded = true;
+            IsLoading = true;
+            List<AlbumView> albums = new List<AlbumView>();
+            await Task.Run(() =>
+            {
+                Songs = MusicLibraryPage.AllSongs.Where(m => m.Artist == Name).ToList();
+                foreach (var group in Songs.GroupBy(m => m.Album).OrderBy(g => g.Key))
+                    albums.Add(new AlbumView(group.Key, Name, group.OrderBy(m => m.Name), false));
+                IsLoading = false;
+            });
+            Albums.SetTo(albums);
+            NotLoaded = false;
         }
         public void CopySongs(IEnumerable<Music> songs)
         {
             Albums.Clear();
             foreach (var group in (Songs = songs.ToList()).GroupBy(m => m.Album).OrderBy(g => g.Key))
-                Albums.Add(new AlbumView(group.Key, Name, group.OrderBy(m => m.Name)));
+                Albums.Add(new AlbumView(group.Key, Name, group.OrderBy(m => m.Name), false));
         }
 
         public void CopyFrom(Playlist playlist)
         {
             NotLoaded = true;
             Name = playlist.Artist;
-            CopySongs(playlist.Songs.ToList());
+            CopySongs(playlist.Songs);
             NotLoaded = false;
         }
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)

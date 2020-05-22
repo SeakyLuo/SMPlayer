@@ -172,7 +172,7 @@
     <value>There is an error.</value>
   </data>
   <data name="FailToOpenBrowser" xml:space="preserve">
-    <value>Fail to open web browser.</value>
+    <value>Fail to open web browser. Link has been copied to the clipboard.</value>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>Folders ({0})</value>

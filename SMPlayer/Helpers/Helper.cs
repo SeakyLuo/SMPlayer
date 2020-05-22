@@ -361,7 +361,19 @@ namespace SMPlayer
         public static async Task UpdateTile(StorageItemThumbnail itemThumbnail, Music music)
         {
             if (music == null) return;
-            string uri = itemThumbnail == null ? DefaultAlbumCoverPath : (await itemThumbnail.SaveAsync(await GetThumbnailFolder(), string.IsNullOrEmpty(music.Album) ? music.Name : music.Album, true)).Path;
+            string uri = DefaultAlbumCoverPath;
+            if (itemThumbnail != null)
+            {
+                try
+                {
+                    var file = await itemThumbnail.SaveAsync(await GetThumbnailFolder(), string.IsNullOrEmpty(music.Album) ? music.Name : music.Album, true);
+                    uri = file.Path;
+                }
+                catch (Exception)
+                {
+                    
+                }
+            }
             var tileContent = new TileContent()
             {
                 Visual = new TileVisual()

@@ -96,8 +96,29 @@ namespace SMPlayer
                     artist.CopyFrom(playlist);
             }
             ArtistMasterDetailsView.SelectedItem = artist;
-            (ArtistMasterDetailsView.ContainerFromItem(artist) as UIElement)?.Locate();
+            ScrollToArtist(artist.Name);
             targetArtist = null;
+        }
+
+        private void ScrollToArtist(string artist)
+        {
+            if (ArtistMasterDetailsView.GetFirstDescendantOfType<ScrollViewer>() is ScrollViewer scrollViewer)
+            {
+                int index = Artists.FindIndex(a => a.Name == artist);
+                if (scrollViewer.IsLoaded)
+                {
+                    double itemHeight = scrollViewer.ExtentHeight / Artists.Count;
+                    scrollViewer.ChangeView(null, itemHeight * index, null, false);
+                }
+                else
+                {
+                    scrollViewer.Loaded += (s, args) =>
+                    {
+                        double itemHeight = scrollViewer.ExtentHeight / Artists.Count;
+                        scrollViewer.ChangeView(null, itemHeight * index, null, false);
+                    };
+                }
+            }
         }
 
         private async void Setup(ICollection<Music> songs)
@@ -173,13 +194,32 @@ namespace SMPlayer
 
         private void ArtistMenuFlyout_Opening(object sender, object e)
         {
-            var artistView = ((sender as MenuFlyout).Target as FrameworkElement).DataContext as ArtistView;
+            MenuFlyout flyout = sender as MenuFlyout;
+            var artistView = flyout.Target.DataContext as ArtistView;
             if (artistView.NotLoaded) artistView.Load();
             MenuFlyoutHelper.SetPlaylistMenu(sender);
+            var refreshArtist = new MenuFlyoutItem()
+            {
+                Text = Helper.Localize("RefreshArtist"),
+                Icon = new SymbolIcon(Symbol.Refresh)
+            };
+            refreshArtist.Click += async (s, args) =>
+            {
+                if (artistView.IsLoading)
+                {
+                    MainPage.Instance.ShowNotification("ProcessingRequest");
+                    return;
+                }
+                await artistView.LoadAsync();
+            };
+            flyout.Items.Add(refreshArtist);
         }
         private void AlbumMenuFlyout_Opening(object sender, object e)
         {
             MenuFlyoutHelper.SetPlaylistMenu(sender);
+            MenuFlyout flyout = sender as MenuFlyout;
+            var album = flyout.Target.DataContext as AlbumView;
+            flyout.Items.Add(MenuFlyoutHelper.GetSeeAlbumFlyout(album.Songs[0]));
         }
         private void OpenMusicMenuFlyout(object sender, object e)
         {
@@ -200,7 +240,7 @@ namespace SMPlayer
         {
             var artistName = (string)args.SelectedItem;
             ArtistMasterDetailsView.SelectedItem = FindAndLoadArtist(artistName);
-            (ArtistMasterDetailsView.ContainerFromItem(artistName) as UIElement)?.Locate();
+            ScrollToArtist(artistName);
         }
 
         private ArtistView FindAndLoadArtist(string artistName)
@@ -210,10 +250,10 @@ namespace SMPlayer
             return artist;
         }
 
-        private void LoadArtist(ArtistView artist)
+        private async void LoadArtist(ArtistView artist)
         {
             if (artist.NotLoaded || !MusicLibraryPage.IsLibraryUnchangedAfterChecking)
-                artist.Load();
+                await artist.LoadAsync();
         }
 
         private void ArtistSearchBox_KeyUp(object sender, KeyRoutedEventArgs e)
@@ -223,7 +263,13 @@ namespace SMPlayer
                 string artist = Suggestions[0];
                 ArtistSearchBox.Text = artist;
                 ArtistMasterDetailsView.SelectedItem = FindAndLoadArtist(artist);
+                ScrollToArtist(artist);
             }
+        }
+
+        private void AlbumCover_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        {
+            (sender.DataContext as AlbumView)?.SetCover();
         }
     }
 }

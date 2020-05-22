@@ -81,7 +81,7 @@
                                     Foreground="{x:Bind Source.IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
                                     MaxLines="3"
                                     Style="{StaticResource MusicInfoTextBlockStyle}"
-                                    Text="{x:Bind Name}" />
+                                    Text="{x:Bind Source.Name, Mode=OneWay}" />
                                 <TextBlock
                                     x:Name="ArtistTextBlock"
                                     Margin="0,3,0,0"
@@ -90,7 +90,7 @@
                                     Foreground="{x:Bind Source.IsPlaying, Converter={StaticResource ColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
                                     MaxLines="1"
                                     Style="{StaticResource MusicInfoTextBlockStyle}"
-                                    Text="{x:Bind Artist, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist}" />
+                                    Text="{x:Bind Source.Artist, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist, Mode=OneWay}" />
                                 <TextBlock
                                     x:Name="AlbumTextBlock"
                                     Margin="0,3,0,0"
@@ -100,7 +100,7 @@
                                     Foreground="{x:Bind Source.IsPlaying, Converter={StaticResource ColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
                                     MaxLines="1"
                                     Style="{StaticResource MusicInfoTextBlockStyle}"
-                                    Text="{x:Bind Source.Album}"
+                                    Text="{x:Bind Source.Album, Mode=OneWay}"
                                     Visibility="Collapsed" />
                             </StackPanel>
                             <FontIcon

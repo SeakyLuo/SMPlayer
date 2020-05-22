@@ -14,25 +14,25 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
-Save SearchKeyword instead of a string.
+Cancel add music.
 
-Mini mode shuffle button.
-
-Page shows no music hint.
+Sort albums.
 
 Refresh directory does not refresh page.
 
 Improve column spacing of AlbumPage.
 
-Album properties.
+Improve editing album art by selecting a song in a dropdown with searching.
 
-Highlight root folder textbox for warning when reloading music library.
+Mini mode shuffle button.
 
 Load from backup.
 
-Sort albums.
+Page shows no music hint.
 
-Improve editing album art by selecting a song in a dropdown with searching.
+Album properties.
+
+Highlight root folder textbox for warning when reloading music library.
 
 Grid Mode for PlaylistPage.
 
@@ -46,14 +46,16 @@ ThemeColor change.
 
 Animations.
 
-Album art in NowPlayingFull.
-
 # TO FIX
 Able to drag titlebar when loading.
 
 Dark thumb in the mini mode.
 
 # MIGHT DO
+Album art in NowPlayingFull.
+
+Save SearchKeyword instead of a string.
+
 Mini mode media control fade in/out.
 
 Search result count. Albums count. Music library count.

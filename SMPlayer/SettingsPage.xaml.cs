@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.Popups;
@@ -161,24 +162,31 @@ namespace SMPlayer
             }
 
         }
-        private bool isLaunchingBrowser = false;
+        private bool IsProcessing = false;
         private async void BugReport_Click(object sender, RoutedEventArgs e)
         {
-            if (isLaunchingBrowser)
+            if (IsProcessing)
             {
                 Helper.ShowNotification("ProcessingRequest");
                 return;
             }
-            isLaunchingBrowser = true;
-            if (await Windows.System.Launcher.LaunchUriAsync(new Uri("https://github.com/SeakyLuo/SMPlayer/issues")))
+            IsProcessing = true;
+            string uri = "https://github.com/SeakyLuo/SMPlayer/issues";
+            if (await Windows.System.Launcher.LaunchUriAsync(new Uri(uri)))
             {
 
             }
             else
             {
-                MainPage.Instance.ShowLocalizedNotification("FailToOpenBrowser");
+                DataPackage dataPackage = new DataPackage()
+                {
+                    RequestedOperation = DataPackageOperation.Copy
+                };
+                dataPackage.SetText(uri);
+                Clipboard.SetContent(dataPackage);
+                MainPage.Instance.ShowNotification(Helper.LocalizeMessage("FailToOpenBrowser"));
             }
-            isLaunchingBrowser = false;
+            IsProcessing = false;
         }
 
         private void SaveChanges_Click(object sender, RoutedEventArgs e)

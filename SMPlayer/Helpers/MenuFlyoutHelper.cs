@@ -14,7 +14,8 @@ namespace SMPlayer
     {
         public object Data { get; set; }
         public string DefaultPlaylistName { get; set; } = "";
-        public const string AddToSubItemName = "AddToSubItem", PlaylistMenuName = "ShuffleAndPlayItem", MusicMenuName = "PlayItem", ShuffleSubItemName = "ShuffleSubItem";
+        public const string AddToSubItemName = "AddToSubItem", PlaylistMenuName = "ShuffleAndPlayItem", MusicMenuName = "PlayItem",
+            ShuffleSubItemName = "ShuffleSubItem", SeeAlbumItemName = "SeeAlbumItemName";
         public static string NowPlaying = Helper.Localize("Now Playing"), MyFavorites = Helper.Localize("My Favorites");
         public static bool IsBadNewPlaylistName(string name) { return name == NowPlaying || name == MyFavorites; }
         public MenuFlyout GetAddToMenuFlyout(string playlistName = "", MenuFlyoutItemClickListener listener = null)
@@ -287,6 +288,26 @@ namespace SMPlayer
             return flyout;
         }
 
+        public static MenuFlyoutItem GetSeeAlbumFlyout(Music music)
+        {
+            var albumItem = new MenuFlyoutItem()
+            {
+                Icon = new FontIcon() { Glyph = "\uE93C" },
+                Text = Helper.Localize("See Album"),
+                Name = SeeAlbumItemName
+            };
+            albumItem.Click += async (s, args) =>
+            {
+                if (await Helper.FileNotExist(music.Path))
+                {
+                    Helper.ShowMusicNotFoundNotification(music.Name);
+                    return;
+                }
+                MainPage.Instance.NavigateToPage(typeof(AlbumPage), music.GetAlbumNavigationString());
+            };
+            return albumItem;
+        }
+
         public MenuFlyout GetMusicPropertiesMenuFlyout(bool withNavigation = true)
         {
             var music = Settings.FindMusic((Music)Data) ?? (Music)Data;
@@ -308,21 +329,7 @@ namespace SMPlayer
                     MainPage.Instance.NavigateToPage(typeof(ArtistsPage), music.Artist);
                 };
                 flyout.Items.Add(artistItem);
-                var albumItem = new MenuFlyoutItem()
-                {
-                    Icon = new FontIcon() { Glyph = "\uE93C" },
-                    Text = Helper.Localize("See Album")
-                };
-                albumItem.Click += async (s, args) =>
-                {
-                    if (await Helper.FileNotExist(music.Path))
-                    {
-                        Helper.ShowMusicNotFoundNotification(music.Name);
-                        return;
-                    }
-                    MainPage.Instance.NavigateToPage(typeof(AlbumPage), music.GetAlbumNavigationString());
-                };
-                flyout.Items.Add(albumItem);
+                flyout.Items.Add(GetSeeAlbumFlyout(music));
             }
             var musicInfoItem = new MenuFlyoutItem()
             {

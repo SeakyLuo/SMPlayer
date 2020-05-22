@@ -615,6 +615,9 @@
   <data name="Refresh Directory" xml:space="preserve">
     <value>Refresh Directory</value>
   </data>
+  <data name="RefreshArtist" xml:space="preserve">
+    <value>Reload</value>
+  </data>
   <data name="RefreshItem.Label" xml:space="preserve">
     <value>Refresh Directory</value>
   </data>

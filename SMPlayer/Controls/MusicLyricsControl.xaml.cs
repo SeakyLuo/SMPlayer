@@ -49,8 +49,7 @@ namespace SMPlayer.Controls
 
         public void ScrollToTop()
         {
-            var scrollViewers = LyricsTextBox.GetDescendantsOfType<ScrollViewer>();
-            if (scrollViewers != null && scrollViewers.Count() > 0) scrollViewers.ElementAt(0).ChangeView(0, 0, null);
+            LyricsTextBox.GetFirstDescendantOfType<ScrollViewer>()?.ChangeView(0, 0, null);
             TextBlockScroller.ChangeView(0, 0, null);
         }
 

@@ -172,7 +172,7 @@
     <value>发生了错误</value>
   </data>
   <data name="FailToOpenBrowser" xml:space="preserve">
-    <value>无法打开浏览器！</value>
+    <value>无法打开浏览器，链接已复制到剪贴板</value>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>文件夹（{0}）</value>
@@ -325,7 +325,7 @@
     <value>在“{0}”中搜索</value>
   </data>
   <data name="SearchDirectoryResult" xml:space="preserve">
-    <value>"{0}"在“{1}“中的搜索结果</value>
+    <value>”{0}“在“{1}“中的搜索结果</value>
   </data>
   <data name="SearchEmpty" xml:space="preserve">
     <value>搜索内容不能为空！</value>

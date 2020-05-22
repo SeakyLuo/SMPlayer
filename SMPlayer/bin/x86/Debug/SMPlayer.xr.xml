@@ -4,7 +4,6 @@
     <RootInterface FullName="Windows.UI.Xaml.Data.IValueConverter" />
   </Roots.Interfaces>
   <Roots.PropertyPathNames>
-    <RootPropertyPathName Name="Text" />
     <RootPropertyPathName Name="Name" />
     <RootPropertyPathName Name="Artist" />
     <RootPropertyPathName Name="Cover" />
@@ -17,6 +16,7 @@
     <RootPropertyPathName Name="Album" />
     <RootPropertyPathName Name="Duration" />
     <RootPropertyPathName Name="Content" />
+    <RootPropertyPathName Name="Text" />
     <RootPropertyPathName Name="PlaceholderForeground" />
     <RootPropertyPathName Name="ScrollableWidth" />
     <RootPropertyPathName Name="IsCloseButtonOverlay" />
@@ -147,8 +147,8 @@
       <RootProperty Name="TextWrapping" />
       <RootProperty Name="Foreground" />
       <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="MaxLines" />
+      <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="TextAlignment" />
       <RootProperty Name="HorizontalTextAlignment" />
       <RootProperty Name="TextTrimming" />
@@ -342,11 +342,11 @@
       <RootEvent Name="MenuFlyoutOpeningAction" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Data.Binding">
-      <RootProperty Name="ElementName" />
-      <RootProperty Name="Path" />
       <RootProperty Name="Converter" />
       <RootProperty Name="ConverterParameter" />
       <RootProperty Name="Mode" />
+      <RootProperty Name="ElementName" />
+      <RootProperty Name="Path" />
       <RootProperty Name="RelativeSource" />
       <RootProperty Name="TargetNullValue" />
       <RootProperty Name="FallbackValue" />
@@ -516,6 +516,7 @@
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="Stretch" />
+      <RootEvent Name="DataContextChanged" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.SymbolIcon">
       <RootProperty Name="RenderTransformOrigin" />
