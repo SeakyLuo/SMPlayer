@@ -174,7 +174,7 @@
   <data name="FailToOpenBrowser" xml:space="preserve">
     <value>无法打开浏览器，链接已复制到剪贴板</value>
   </data>
-  <data name="FolderNoutFound" xml:space="preserve">
+  <data name="FolderNotFound" xml:space="preserve">
     <value>找不到文件夹“{0}”！</value>
   </data>
   <data name="Folders" xml:space="preserve">
@@ -363,11 +363,17 @@
   <data name="Shuffle: Enabled" xml:space="preserve">
     <value>随机播放：打开</value>
   </data>
+  <data name="SongAddedTo" xml:space="preserve">
+    <value>《{0}》已添加到”{1}“</value>
+  </data>
   <data name="Songs" xml:space="preserve">
     <value>歌曲（{0}）</value>
   </data>
   <data name="Songs:" xml:space="preserve">
     <value>歌曲：</value>
+  </data>
+  <data name="SongsAddedTo" xml:space="preserve">
+    <value>{0}首歌已添加到”{1}“</value>
   </data>
   <data name="Sort By Album" xml:space="preserve">
     <value>根据专辑排序</value>

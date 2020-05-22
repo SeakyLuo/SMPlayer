@@ -363,11 +363,17 @@
   <data name="Shuffle: Enabled" xml:space="preserve">
     <value>Shuffle: Enabled</value>
   </data>
+  <data name="SongAddedTo" xml:space="preserve">
+    <value>"{0}" is added to "{1}"</value>
+  </data>
   <data name="Songs" xml:space="preserve">
     <value>Songs ({0})</value>
   </data>
   <data name="Songs:" xml:space="preserve">
     <value>Songs: </value>
+  </data>
+  <data name="SongsAddedTo" xml:space="preserve">
+    <value>{0} songs are added to "{1}"</value>
   </data>
   <data name="Sort By Album" xml:space="preserve">
     <value>Sort By Album</value>

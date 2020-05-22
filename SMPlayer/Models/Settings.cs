@@ -149,7 +149,7 @@ namespace SMPlayer.Models
             foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, true);
         }
 
-        public void LikeMusic(ICollection<Music> playlist)
+        public void LikeMusic(IEnumerable<Music> playlist)
         {
             var hashset = MyFavorites.Songs.ToHashSet();
             foreach (var music in playlist)
