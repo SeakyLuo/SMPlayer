@@ -14,8 +14,9 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class AlbumPage : Page
     {
+        public static AlbumPage Instance { get => MainPage.Instance.NavigationFrame.Content as AlbumPage; }
         private NavigationMode navigationMode;
-        private object parameter;
+        private object targetAlbum;
         public AlbumPage()
         {
             this.InitializeComponent();
@@ -26,20 +27,25 @@ namespace SMPlayer
         {
             base.OnNavigatedTo(e);
             navigationMode = e.NavigationMode;
-            parameter = e.Parameter;
+            targetAlbum = e.Parameter;
         }
 
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (navigationMode == NavigationMode.Back) return;
+            LoadAlbum(targetAlbum);
+        }
+
+        public async void LoadAlbum(object targetAlbum)
+        {
             Playlist playlist = null;
-            if (parameter is AlbumView album)
+            if (targetAlbum is AlbumView album)
             {
                 playlist = album.ToPlaylist();
             }
-            else if (parameter is Playlist)
-                playlist = (Playlist)parameter;
-            else if (parameter is string albumText)
+            else if (targetAlbum is Playlist)
+                playlist = (Playlist)targetAlbum;
+            else if (targetAlbum is string albumText)
             {
                 int index = albumText.IndexOf(Helper.StringConcatenationFlag);
                 string albumName = albumText.Substring(0, index), albumArtist = albumText.Substring(index + Helper.StringConcatenationFlag.Length);

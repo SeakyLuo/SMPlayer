@@ -34,19 +34,19 @@ namespace SMPlayer.Controls
 
         public void SetMusicProperties(MusicProperties properties)
         {
-            TitleTextBox.Text = Properties.Title;
-            SubtitleTextBox.Text = Properties.Subtitle;
-            ArtistTextBox.Text = Properties.Artist;
-            AlbumTextBox.Text = Properties.Album;
-            AlbumArtistTextBox.Text = Properties.AlbumArtist;
+            TitleTextBox.Text = properties.Title;
+            SubtitleTextBox.Text = properties.Subtitle;
+            ArtistTextBox.Text = properties.Artist;
+            AlbumTextBox.Text = properties.Album;
+            AlbumArtistTextBox.Text = properties.AlbumArtist;
             SetPlayCount(CurrentMusic);
-            PublisherTextBox.Text = Properties.Publisher;
-            TrackNumberTextBox.Text = IntConverter.ToStr((int)Properties.TrackNumber);
-            YearTextBox.Text = IntConverter.ToStr((int)Properties.Year);
-            BitRateTextBox.Text = Properties.Bitrate.ToString();
-            ComposersTextBox.Text = string.Join(Helper.LocalizeMessage("Comma"), Properties.Composers);
-            DurationTextBox.Text = MusicDurationConverter.ToTime(Properties.Duration.TotalSeconds);
-            GenreTextBox.Text = string.Join(Helper.LocalizeMessage("Comma"), Properties.Genre);
+            PublisherTextBox.Text = properties.Publisher;
+            TrackNumberTextBox.Text = IntConverter.ToStr((int)properties.TrackNumber);
+            YearTextBox.Text = IntConverter.ToStr((int)properties.Year);
+            BitRateTextBox.Text = properties.Bitrate.ToString();
+            ComposersTextBox.Text = string.Join(Helper.LocalizeMessage("Comma"), properties.Composers);
+            DurationTextBox.Text = MusicDurationConverter.ToTime(properties.Duration.TotalSeconds);
+            GenreTextBox.Text = string.Join(Helper.LocalizeMessage("Comma"), properties.Genre);
         }
         public async void SetMusicInfo(Music music)
         {

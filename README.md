@@ -14,8 +14,6 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
-Cancel add music.
-
 Sort albums.
 
 Refresh directory does not refresh page.

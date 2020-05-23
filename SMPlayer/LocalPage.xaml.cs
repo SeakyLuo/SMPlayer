@@ -143,12 +143,12 @@ namespace SMPlayer
                 if (LocalFoldersItem.IsSelected)
                 {
                     FolderListener.UpdatePage(tree);
-                    MusicListener.UpdatePage(tree);
+                    MusicListener?.UpdatePage(tree);
                 }
                 else
                 {
                     MusicListener.UpdatePage(tree);
-                    FolderListener.UpdatePage(tree);
+                    FolderListener?.UpdatePage(tree);
                 }
             });
         }

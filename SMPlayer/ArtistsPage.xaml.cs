@@ -20,6 +20,7 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class ArtistsPage : Page, AfterSongsSetListener, SwitchMusicListener
     {
+        public static ArtistsPage Instance { get => MainPage.Instance.NavigationFrame.Content as ArtistsPage; }
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
         private List<string> SuggestionList = new List<string>();
         private ObservableCollection<string> Suggestions = new ObservableCollection<string>();
@@ -73,16 +74,16 @@ namespace SMPlayer
                 await Task.Run(async () =>
                 {
                     while (IsProcessing) ;
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, LocateArtist);
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => SelectArtist(targetArtist));
                 });
             }
             else
             {
-                LocateArtist();
+                SelectArtist(targetArtist);
             }
         }
 
-        private void LocateArtist()
+        public void SelectArtist(object targetArtist)
         {
             ArtistView artist = null;
             if (targetArtist is string artistName)

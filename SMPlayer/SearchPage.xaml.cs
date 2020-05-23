@@ -35,6 +35,7 @@ namespace SMPlayer
         public ObservableCollection<GridFolderView> Folders = new ObservableCollection<GridFolderView>(), AllFolders = new ObservableCollection<GridFolderView>();
         public const int ArtistLimit = 10, AlbumLimit = 5, SongLimit = 5, PlaylistLimit = 5, FolderLimit = 5;
         private SearchKeyword CurrentKeyword;
+        private volatile bool IsSearching = false;
         public SearchPage()
         {
             this.InitializeComponent();
@@ -77,14 +78,20 @@ namespace SMPlayer
 
         private async void Search(SearchKeyword keyword)
         {
+            if (IsSearching)
+            {
+                MainPage.Instance.ShowLocalizedNotification("ProcessingRequest");
+                return;
+            }
+            IsSearching = true;
             LoadingProgress.Visibility = Visibility.Visible;
             NoResultTextBlock.Visibility = Visibility.Collapsed;
             CurrentKeyword = keyword;
-            AllArtists.Clear();
-            AllAlbums.Clear();
-            AllSongs.Clear();
-            AllPlaylists.Clear();
-            AllFolders.Clear();
+            Artists.Clear();
+            Albums.Clear();
+            Songs.Clear();
+            Playlists.Clear();
+            Folders.Clear();
             string modifiedKeyowrd = keyword.Text.ToLowerInvariant();
             await SearchArtists(keyword.Songs, modifiedKeyowrd, Settings.settings.SearchArtistsCriterion);
             await SearchAlbums(keyword.Songs, modifiedKeyowrd, Settings.settings.SearchAlbumsCriterion);
@@ -93,6 +100,7 @@ namespace SMPlayer
             await SearchFolders(keyword.Tree, modifiedKeyowrd, Settings.settings.SearchFoldersCriterion);
             NoResultTextBlock.Visibility = Artists.Count == 0 && Albums.Count == 0 && Songs.Count == 0 && Playlists.Count == 0 && Folders.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
             LoadingProgress.Visibility = Visibility.Collapsed;
+            IsSearching = false;
         }
 
         public async Task SearchArtists(IEnumerable<Music> source, string keyword, SortBy criterion)

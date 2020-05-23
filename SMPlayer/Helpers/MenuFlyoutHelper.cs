@@ -353,7 +353,10 @@ namespace SMPlayer
                     Helper.ShowMusicNotFoundNotification(music.Name);
                     return;
                 }
-                MainPage.Instance.NavigateToPage(typeof(AlbumPage), music.GetAlbumNavigationString());
+                if (MainPage.Instance.CurrentPage == typeof(AlbumPage))
+                    AlbumPage.Instance.LoadAlbum(music.GetAlbumNavigationString());
+                else
+                    MainPage.Instance.NavigateToPage(typeof(AlbumPage), music.GetAlbumNavigationString());
             };
             return albumItem;
         }
@@ -376,7 +379,10 @@ namespace SMPlayer
                         Helper.ShowMusicNotFoundNotification(music.Name);
                         return;
                     }
-                    MainPage.Instance.NavigateToPage(typeof(ArtistsPage), music.Artist);
+                    if (MainPage.Instance.CurrentPage == typeof(ArtistsPage))
+                        ArtistsPage.Instance.SelectArtist(music.Artist);
+                    else
+                        MainPage.Instance.NavigateToPage(typeof(ArtistsPage), music.Artist);
                 };
                 flyout.Items.Add(artistItem);
                 flyout.Items.Add(GetSeeAlbumFlyout(music));
