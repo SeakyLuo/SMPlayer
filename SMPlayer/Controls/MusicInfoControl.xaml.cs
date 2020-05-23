@@ -127,9 +127,9 @@ namespace SMPlayer.Controls
                 await Task.Run(async () =>
                 {
                     await Properties.SavePropertiesAsync();
-                    NotifyListeners(CurrentMusic, newMusic);
-                    CurrentMusic.CopyFrom(newMusic);
                 });
+                NotifyListeners(CurrentMusic, newMusic);
+                CurrentMusic.CopyFrom(newMusic);
                 SaveProgress.Visibility = Visibility.Collapsed;
             }
             IsProcessing = false;
@@ -144,7 +144,6 @@ namespace SMPlayer.Controls
         public async void SetBasicProperties(StorageFile file)
         {
             var basicProperties = await file.GetBasicPropertiesAsync();
-            // TODO: better size presentation?
             FileSizeTextBox.Text = Helper.ConvertBytes(basicProperties.Size); 
             DateCreatedTextBox.Text = file.DateCreated.ToLocalTime().ToString();
             DateModifiedTextBox.Text = basicProperties.DateModified.ToLocalTime().ToString();
@@ -180,6 +179,7 @@ namespace SMPlayer.Controls
                 if (Properties.Title != TitleTextBox.Text) return true;
                 if (Properties.Subtitle != SubtitleTextBox.Text) return true;
                 if (Properties.Artist != ArtistTextBox.Text) return true;
+                if (Properties.Album != AlbumTextBox.Text) return true;
                 if (Properties.AlbumArtist != AlbumArtistTextBox.Text) return true;
                 if (Properties.Publisher != PublisherTextBox.Text) return true;
                 if (int.TryParse(PlayCountTextBox.Text, out int PlayCount) && CurrentMusic.PlayCount != PlayCount) return true;

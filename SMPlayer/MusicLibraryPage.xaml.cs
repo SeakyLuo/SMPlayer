@@ -51,6 +51,7 @@ namespace SMPlayer
             else
                 SetAllSongs(songs);
             MediaControl.AddMusicModifiedListener(MusicModified);
+            Controls.MusicInfoControl.MusicModifiedListeners.Add(MusicModified);
         }
 
         public static async void CheckLibrary()
