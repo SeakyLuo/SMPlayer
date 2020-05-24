@@ -12,7 +12,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MyFavoritesPage : Page, PlaylistScrollListener, RemoveMusicListener
+    public sealed partial class MyFavoritesPage : Page, PlaylistScrollListener
     {
         private ScrollDirection direction;
         public MyFavoritesPage()
@@ -20,7 +20,6 @@ namespace SMPlayer
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             MyFavoritesPlaylistControl.HeaderedPlaylist.ScrollListener = this;
-            MyFavoritesPlaylistControl.HeaderedPlaylist.RemoveListeners.Add(this);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -66,11 +65,6 @@ namespace SMPlayer
             {
                 direction = ScrollDirection.None;
             }
-        }
-
-        public void MusicRemoved(int index, Music music, IEnumerable<Music> newCollection)
-        {
-            MyFavoritesPlaylistControl.CurrentPlaylist.Remove(index);
         }
     }
 }

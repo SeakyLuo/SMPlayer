@@ -54,7 +54,6 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\PlaylistsPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SearchResultPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SettingsPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\MainPage.xbf
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Themes\Generic.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SMPlayer.xr.xml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SMPlayer.exe
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SMPlayer.pdb
@@ -237,7 +236,6 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\PlaylistsPage.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SearchResultPage.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SettingsPage.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MainPage.xaml
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Themes\Generic.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\App.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Microsoft.UI.Xaml\DensityStyles\Compact.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\AlbumPage.xbf
@@ -291,7 +289,6 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\PlaylistsPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SearchResultPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SettingsPage.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\MainPage.xbf
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Themes\Generic.xbf
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\XamlSaveStateFile.xml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SMPlayer.csproj.CopyComplete
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\ColorCode.UWP.pri.xml
@@ -336,6 +333,3 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\InputDialog.
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\InputDialog.g.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\InputDialog.xaml
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Dialogs\InputDialog.xbf
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\RotatorTile.xaml
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\Controls\RotatorTile.xbf
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Controls\RotatorTile.xbf

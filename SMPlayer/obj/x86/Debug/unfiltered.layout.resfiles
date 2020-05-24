@@ -70,7 +70,6 @@ Controls\MusicInfoControl.xbf
 Controls\MusicLyricsControl.xbf
 Controls\PlaylistControl.xbf
 Controls\PlaylistControlItem.xbf
-Controls\RotatorTile.xbf
 Controls\ScrollingTextBlock.xbf
 Dialogs\AlbumDialog.xbf
 Dialogs\InputDialog.xbf
@@ -109,5 +108,4 @@ SearchPage.xbf
 SearchResultPage.xbf
 SettingsPage.xbf
 SMPlayer.xr.xml
-Themes\Generic.xbf
 Properties\Default.rd.xml

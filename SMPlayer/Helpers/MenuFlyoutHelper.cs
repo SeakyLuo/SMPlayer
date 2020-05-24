@@ -93,7 +93,7 @@ namespace SMPlayer
                     }
                     else if (Data is IEnumerable<Music> songs)
                     {
-                        Settings.settings.LikeMusic(Data as IEnumerable<Music>);
+                        Settings.settings.LikeMusic(songs);
                         string message = songs.Count() == 1 ? Helper.LocalizeMessage("SongAddedTo", songs.ElementAt(0).Name, MyFavorites) :
                                                                  Helper.LocalizeMessage("SongsAddedTo", songs.Count(), MyFavorites);
                         Helper.ShowCancelableNotificationWithoutLocalization(message, () => 
