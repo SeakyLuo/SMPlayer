@@ -104,6 +104,7 @@ namespace SMPlayer
                     if (items.Count > 0) PlaylistDisplayDict[playlist.Name] = items;
                 });
             }
+            //PlaylistCover.ItemsSource = MusicDisplayItems;
             SetMusicDisplayItem(item);
         }
 

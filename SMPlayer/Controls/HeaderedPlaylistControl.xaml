@@ -2,9 +2,11 @@
     x:Class="SMPlayer.HeaderedPlaylistControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:SMPlayer.Models"
     SizeChanged="UserControl_SizeChanged"
     mc:Ignorable="d">
 
@@ -42,6 +44,23 @@
                             Height="180"
                             Margin="20"
                             Source="ms-appx:///Assets/monotone_bg_wide.png" />
+                        <!--<controls:RotatorTile
+                            x:Name="PlaylistCover"
+                            Grid.RowSpan="3"
+                            Width="180"
+                            Height="180"
+                            Margin="20"
+                            Direction="Left"
+                            RotationDelay="0:0:10">
+                            <controls:RotatorTile.ItemTemplate>
+                                <DataTemplate x:DataType="models:MusicDisplayItem">
+                                    <Image
+                                        Width="180"
+                                        Height="180"
+                                        Source="{x:Bind Thumbnail, Mode=OneWay}" />
+                                </DataTemplate>
+                            </controls:RotatorTile.ItemTemplate>
+                        </controls:RotatorTile>-->
                         <TextBlock
                             x:Name="PlaylistNameTextBlock"
                             Grid.Column="1"

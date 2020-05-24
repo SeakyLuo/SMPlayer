@@ -83,6 +83,7 @@
       <RootProperty Name="ContextFlyout" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Visibility" />
+      <RootProperty Name="RenderTransform" />
       <RootProperty Name="XYFocusKeyboardNavigation" />
       <RootProperty Name="Width" />
       <RootProperty Name="Style" />
@@ -115,8 +116,8 @@
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="UseSystemFocusVisuals" />
       <RootProperty Name="Template" />
-      <RootProperty Name="VerticalContentAlignment" />
       <RootProperty Name="IsTabStop" />
+      <RootProperty Name="VerticalContentAlignment" />
       <RootProperty Name="TabNavigation" />
       <RootProperty Name="IsFocusEngagementEnabled" />
       <RootMethod Name="GetIsTemplateFocusTarget" />
@@ -613,6 +614,7 @@
       <RootProperty Name="ContentTemplate" />
       <RootProperty Name="ContentTransitions" />
       <RootProperty Name="CornerRadius" />
+      <RootProperty Name="DataContext" />
       <RootProperty Name="Margin" />
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="VerticalAlignment" />
@@ -740,6 +742,26 @@
       <RootProperty Name="RequestedTheme" />
       <RootProperty Name="ShowAlbumText" />
     </RootType>
+    <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.RotatorTile">
+      <RootProperty Name="RotationDelay" />
+      <RootProperty Name="ExtraRandomDuration" />
+      <RootProperty Name="Width" />
+      <RootProperty Name="Height" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="Direction" />
+      <RootProperty Name="ItemTemplate" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.Canvas">
+      <RootProperty Name="DataContext" />
+      <RootProperty Name="Children" />
+      <RootMethod Name="GetZIndex" />
+      <RootMethod Name="SetZIndex" />
+    </RootType>
+    <RootType FullName="Microsoft.Xaml.DirectUI.ProxyTypes.NullExtension" />
+    <RootType FullName="Windows.UI.Xaml.Media.TranslateTransform">
+      <RootProperty Name="Y" />
+      <RootProperty Name="X" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ContentDialog">
       <RootProperty Name="Content" />
       <RootProperty Name="Resources" />
@@ -793,10 +815,6 @@
     <RootType FullName="SMPlayer.Dialogs.RemoveDialog" />
     <RootType FullName="SMPlayer.Dialogs.InputDialog" />
     <RootType FullName="Windows.UI.Xaml.Visibility" />
-    <RootType FullName="Windows.UI.Xaml.Controls.Canvas">
-      <RootMethod Name="GetZIndex" />
-      <RootMethod Name="SetZIndex" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.Popup">
       <RootProperty Name="Child" />
       <RootProperty Name="RenderTransform" />
@@ -886,10 +904,6 @@
       <RootMethod Name="SetAncestor" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.ScaleTransform" />
-    <RootType FullName="Windows.UI.Xaml.Media.TranslateTransform">
-      <RootProperty Name="Y" />
-      <RootProperty Name="X" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Viewbox">
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="MaxHeight" />

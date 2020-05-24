@@ -262,7 +262,16 @@ namespace SMPlayer
             if (Player.IsLoopingEnabled)
                 Position = 0;
             else
-                PlaybackList.MovePrevious();
+            {
+                try
+                {
+                    PlaybackList.MovePrevious();
+                }
+                catch (Exception)
+                {
+                    // 无效索引
+                }
+            }
         }
 
         public static void MoveNext()
@@ -270,7 +279,17 @@ namespace SMPlayer
             if (Player.IsLoopingEnabled)
                 Position = 0;
             else
-                PlaybackList.MoveNext();
+            {
+                try
+                {
+                    PlaybackList.MoveNext();
+                }
+                catch (Exception)
+                {
+                    // 无效索引
+                }
+
+            }
         }
         private static void PrintPlaylist(int from, int to)
         {
