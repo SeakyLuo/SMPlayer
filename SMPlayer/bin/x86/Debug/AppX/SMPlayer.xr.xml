@@ -6,7 +6,7 @@
   <Roots.PropertyPathNames>
     <RootPropertyPathName Name="Name" />
     <RootPropertyPathName Name="Artist" />
-    <RootPropertyPathName Name="Cover" />
+    <RootPropertyPathName Name="Thumbnail" />
     <RootPropertyPathName Name="FolderInfo" />
     <RootPropertyPathName Name="LargeThumbnail" />
     <RootPropertyPathName Name="Fourth" />
@@ -654,8 +654,6 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.TextBox">
       <RootProperty Name="Style" />
-      <RootProperty Name="Margin" />
-      <RootProperty Name="IsReadOnly" />
       <RootProperty Name="Height" />
       <RootProperty Name="AcceptsReturn" />
       <RootProperty Name="Background" />
@@ -663,6 +661,7 @@
       <RootProperty Name="IsSpellCheckEnabled" />
       <RootProperty Name="TextWrapping" />
       <RootProperty Name="Width" />
+      <RootProperty Name="Margin" />
       <RootProperty Name="PlaceholderText" />
       <RootProperty Name="SelectionHighlightColor" />
       <RootProperty Name="Description" />

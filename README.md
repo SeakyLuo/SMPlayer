@@ -14,6 +14,10 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
+Improve path header display (like Windows).
+
+Run add music on thread.
+
 Sort albums.
 
 Refresh directory does not refresh page.

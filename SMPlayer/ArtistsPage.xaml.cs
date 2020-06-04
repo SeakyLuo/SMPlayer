@@ -270,7 +270,7 @@ namespace SMPlayer
 
         private void AlbumCover_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            (sender.DataContext as AlbumView)?.SetCover();
+            (sender.DataContext as AlbumView)?.SetThumbnail();
         }
     }
 }

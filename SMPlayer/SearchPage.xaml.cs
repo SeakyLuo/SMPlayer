@@ -174,7 +174,7 @@ namespace SMPlayer
 
         private void Album_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            (args.NewValue as AlbumView)?.SetCover();
+            (args.NewValue as AlbumView)?.SetThumbnail();
         }
 
         private void AddToButton_Click(object sender, RoutedEventArgs e)

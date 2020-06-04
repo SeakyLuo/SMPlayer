@@ -160,7 +160,7 @@
                                             Margin="10"
                                             RelativePanel.AlignLeftWithPanel="True"
                                             DataContextChanged="AlbumCover_DataContextChanged"
-                                            Source="{x:Bind Cover, Mode=OneWay}" />
+                                            Source="{x:Bind Thumbnail, Mode=OneWay}" />
                                         <StackPanel
                                             Margin="0,10"
                                             RelativePanel.LeftOf="AlbumMoreButton"

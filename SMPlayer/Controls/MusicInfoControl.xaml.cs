@@ -76,16 +76,16 @@ namespace SMPlayer.Controls
         {
             if (music.PlayCount == 0)
             {
-                PlayCountTextBox.Text = "";
+                PlayCountTextBlock.Text = "";
                 ClearPlayCountButton.Visibility = Visibility.Collapsed;
-                PlayCountTextBox.SetToolTip(Helper.LocalizeMessage("NotPlayedYet", music.Name));
+                PlayCountTextBlock.SetToolTip(Helper.LocalizeMessage("NotPlayedYet", music.Name));
             }
             else
             {
-                PlayCountTextBox.Text = music.PlayCount.ToString();
+                PlayCountTextBlock.Text = music.PlayCount.ToString();
                 ClearPlayCountButton.Visibility = Visibility.Visible;
                 string times = Helper.CurrentLanguage.Contains("en") ? MusicDurationConverter.TryPlural("time", music.PlayCount) : "";
-                PlayCountTextBox.SetToolTip(Helper.LocalizeMessage("HasBeenPlayed", music.Name, music.PlayCount, times));
+                PlayCountTextBlock.SetToolTip(Helper.LocalizeMessage("HasBeenPlayed", music.Name, music.PlayCount, times));
             }
         }
 
@@ -117,7 +117,7 @@ namespace SMPlayer.Controls
                 Properties.Artist = newMusic.Artist = ArtistTextBox.Text;
                 Properties.Album = newMusic.Album = AlbumTextBox.Text;
                 Properties.AlbumArtist = AlbumArtistTextBox.Text;
-                if (int.TryParse(PlayCountTextBox.Text, out int PlayCount))
+                if (int.TryParse(PlayCountTextBlock.Text, out int PlayCount))
                     newMusic.PlayCount = PlayCount;
                 Properties.Publisher = PublisherTextBox.Text;
                 if (uint.TryParse(TrackNumberTextBox.Text, out uint TrackNumber))
@@ -182,7 +182,7 @@ namespace SMPlayer.Controls
                 if (Properties.Album != AlbumTextBox.Text) return true;
                 if (Properties.AlbumArtist != AlbumArtistTextBox.Text) return true;
                 if (Properties.Publisher != PublisherTextBox.Text) return true;
-                if (int.TryParse(PlayCountTextBox.Text, out int PlayCount) && CurrentMusic.PlayCount != PlayCount) return true;
+                if (int.TryParse(PlayCountTextBlock.Text, out int PlayCount) && CurrentMusic.PlayCount != PlayCount) return true;
                 if (TrackNumberTextBox.Text == "" && Properties.TrackNumber != 0) return true;
                 if (uint.TryParse(TrackNumberTextBox.Text, out uint TrackNumber) && Properties.TrackNumber != TrackNumber) return true;
                 if (YearTextBox.Text == "" && Properties.Year != 0) return true;

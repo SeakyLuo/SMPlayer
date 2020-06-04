@@ -199,7 +199,7 @@
     <value>歌词已重置！</value>
   </data>
   <data name="LyricsUpdated" xml:space="preserve">
-    <value>歌词已更新！</value>
+    <value>《{0}》的歌词已更新！</value>
   </data>
   <data name="MiniModeFailed" xml:space="preserve">
     <value>无法进入迷你模式！</value>

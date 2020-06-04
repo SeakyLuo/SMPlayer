@@ -196,10 +196,10 @@
     <value>lryics</value>
   </data>
   <data name="LyricsReset" xml:space="preserve">
-    <value>Lyrics is reset!</value>
+    <value>Lyrics have been reset!</value>
   </data>
   <data name="LyricsUpdated" xml:space="preserve">
-    <value>Lyrics is updated!</value>
+    <value>Lyrics of "{0}" have been updated!</value>
   </data>
   <data name="MiniModeFailed" xml:space="preserve">
     <value>Fail to enter mini mode!</value>

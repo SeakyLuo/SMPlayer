@@ -144,7 +144,7 @@ namespace SMPlayer.Models
             return new AlbumView(Name, Artist)
             {
                 Songs = Songs,
-                Cover = DisplayItem == null ? Helper.DefaultAlbumCover : DisplayItem.Thumbnail,
+                Thumbnail = DisplayItem == null ? Helper.DefaultAlbumCover : DisplayItem.Thumbnail,
             };
         }
 
@@ -153,7 +153,7 @@ namespace SMPlayer.Models
             return new AlbumView(Name, SongCountConverter.GetSongCount(Count))
             {
                 Songs = Songs,
-                Cover = DisplayItem == null ? Helper.DefaultAlbumCover : DisplayItem.Thumbnail,
+                Thumbnail = DisplayItem == null ? Helper.DefaultAlbumCover : DisplayItem.Thumbnail,
             };
         }
 

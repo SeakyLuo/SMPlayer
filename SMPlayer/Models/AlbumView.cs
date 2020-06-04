@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Linq;
+using System.Threading.Tasks;
+using System;
 
 namespace SMPlayer.Models
 {
@@ -11,28 +13,28 @@ namespace SMPlayer.Models
         public string Name { get; set; }
         public string Artist { get; set; }
         public ObservableCollection<Music> Songs { get; set; } = new ObservableCollection<Music>();
-        public BitmapImage Cover
+        public BitmapImage Thumbnail
         {
             get => thumbnail;
             set
             {
                 thumbnail = value;
-                CoverLoaded = value != null;
+                ThumbnailLoaded = value != null;
                 OnPropertyChanged();
             }
         }
         private BitmapImage thumbnail = Helper.DefaultAlbumCover;
-        public bool CoverLoaded { get; private set; } = false;
+        public bool ThumbnailLoaded { get; private set; } = false;
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public AlbumView() { }
-        public AlbumView(Music music, bool setCover = true)
+        public AlbumView(Music music, bool setThumbnail = true)
         {
             Name = music.Album;
             Artist = music.Artist;
             Songs.Add(music);
-            if (setCover) SetCover();
+            if (setThumbnail) SetThumbnail();
         }
         public AlbumView(string name, string artist)
         {
@@ -44,18 +46,18 @@ namespace SMPlayer.Models
             Name = name;
             Artist = artist;
             Songs.SetTo(songs);
-            if (setCover) SetCover();
+            if (setCover) SetThumbnail();
         }
-        public async void SetCover()
+        public async void SetThumbnail()
         {
-            if (!CoverLoaded) Cover = await GetAlbumCoverAsync(Songs);
+            if (ThumbnailLoaded) return;
+            Thumbnail = await GetAlbumCoverAsync(Songs);
         }
-        public static async System.Threading.Tasks.Task<BitmapImage> GetAlbumCoverAsync(ICollection<Music> songs)
+        public static async Task<BitmapImage> GetAlbumCoverAsync(ICollection<Music> songs)
         {
-            BitmapImage cover;
             foreach (var music in songs)
-                if ((cover = await Helper.GetThumbnailAsync(music, false)) != null)
-                    return cover;
+                if (await Helper.GetThumbnailAsync(music, false) is BitmapImage image)
+                    return image;
             return Helper.DefaultAlbumCover;
         }
         public void AddMusic(Music music)

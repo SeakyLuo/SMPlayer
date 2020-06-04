@@ -79,7 +79,7 @@ namespace SMPlayer
 
         private void DropShadowControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            (sender.DataContext as AlbumView)?.SetCover();
+            (sender.DataContext as AlbumView)?.SetThumbnail();
         }
 
         private void MenuFlyout_Opening(object sender, object e)
@@ -100,13 +100,13 @@ namespace SMPlayer
         public void SaveAlbum(AlbumView album, BitmapImage image)
         {
             if (Albums.FirstOrDefault(a => a.Equals(album)) is AlbumView albumView)
-                albumView.Cover = image ?? Helper.DefaultAlbumCover;
+                albumView.Thumbnail = image ?? Helper.DefaultAlbumCover;
         }
 
         public void SaveMusic(Music music, BitmapImage image)
         {
             if (Albums.FirstOrDefault(a => a.Name.Equals(music.Album)) is AlbumView albumView && albumView.Songs.Count == 1)
-                albumView.Cover = image ?? Helper.DefaultAlbumCover;
+                albumView.Thumbnail = image ?? Helper.DefaultAlbumCover;
 
         }
     }

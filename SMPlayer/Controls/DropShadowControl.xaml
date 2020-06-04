@@ -34,7 +34,7 @@
                 x:Name="Thumbnail"
                 Width="160"
                 Height="160"
-                Source="{Binding Cover, Mode=OneWay}" />
+                Source="{Binding Thumbnail, Mode=OneWay}" />
         </controls:DropShadowPanel>
         <StackPanel
             x:Name="ButtonStackPanel"

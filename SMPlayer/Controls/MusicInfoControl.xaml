@@ -182,18 +182,17 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBox
-                            x:Name="PlayCountTextBox"
+                        <TextBlock
+                            x:Name="PlayCountTextBlock"
                             Grid.Column="0"
-                            Margin="0"
-                            IsReadOnly="True"
-                            Style="{StaticResource MusicPropertyTextBoxStyle}" />
+                            Margin="10,0"
+                            Style="{StaticResource MusicPropertyTextBlockStyle}" />
                         <Button
                             x:Name="ClearPlayCountButton"
                             x:Uid="ClearPlayCountButton"
                             Grid.Column="1"
                             Height="30"
-                            Margin="10,0,0,0"
+                            Margin="5,0"
                             BorderThickness="0"
                             Click="ClearPlayCountButton_Click"
                             Content="Clear" />
@@ -223,8 +222,8 @@
                         <TextBlock
                             x:Name="PathTextBox"
                             Margin="0"
-                            TextWrapping="Wrap"
-                            Style="{StaticResource MusicPropertyTextBlockStyle}" />
+                            Style="{StaticResource MusicPropertyTextBlockStyle}"
+                            TextWrapping="Wrap" />
                         <Button
                             x:Uid="ShowInExplorerButton"
                             Grid.Column="1"

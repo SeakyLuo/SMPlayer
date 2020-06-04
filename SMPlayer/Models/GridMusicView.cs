@@ -41,7 +41,8 @@ namespace SMPlayer.Models
         }
         public async void SetThumbnail()
         {
-            if (!thumbnailLoaded) Thumbnail = await Helper.GetThumbnailAsync(Source);
+            if (thumbnailLoaded) return;
+            Thumbnail = await Helper.GetThumbnailAsync(Source);
         }
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
