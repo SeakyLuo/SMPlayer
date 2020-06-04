@@ -381,6 +381,9 @@
   <data name="LocalItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Manage Local Music</value>
   </data>
+  <data name="LocateArtist" xml:space="preserve">
+    <value>Locate Artist</value>
+  </data>
   <data name="LocateCurrentButton.Label" xml:space="preserve">
     <value>Current Music</value>
   </data>

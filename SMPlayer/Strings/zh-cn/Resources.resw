@@ -378,6 +378,9 @@
   <data name="LocalItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>管理本地音乐</value>
   </data>
+  <data name="LocateArtist" xml:space="preserve">
+    <value>定位歌手</value>
+  </data>
   <data name="LocateCurrentButton.Label" xml:space="preserve">
     <value>当前音乐</value>
   </data>

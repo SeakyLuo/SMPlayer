@@ -214,6 +214,16 @@ namespace SMPlayer
                 await artistView.LoadAsync();
             };
             flyout.Items.Add(refreshArtist);
+            var locateArtist = new MenuFlyoutItem()
+            {
+                Text = Helper.Localize("LocateArtist"),
+                Icon = new SymbolIcon(Symbol.Target)
+            };
+            locateArtist.Click += (s, args) =>
+            {
+                ScrollToArtist(artistView.Name);
+            };
+            flyout.Items.Add(locateArtist);
         }
         private void AlbumMenuFlyout_Opening(object sender, object e)
         {
