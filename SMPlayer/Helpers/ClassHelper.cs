@@ -19,6 +19,23 @@ namespace SMPlayer
 {
     public static class ClassHelper
     {
+        public static int FindSortedListInsertIndex<T>(this IEnumerable<T> list, IComparable comparable)
+        {
+            int count = list.Count();
+            for (int i = 0; i < count - 1; i++)
+                if (0 < comparable.CompareTo(list.ElementAt(i)) && comparable.CompareTo(list.ElementAt(i + 1)) < 0)
+                    return i;
+            return count;
+        }
+        public static int FindSortedListInsertIndex<T>(this IEnumerable<T> list, T target, Func<T, IComparable> selector)
+        {
+            IComparable comparable = selector(target);
+            int count = list.Count();
+            for (int i = 0; i < count - 1; i++)
+                if (0 < comparable.CompareTo(selector(list.ElementAt(i))) && comparable.CompareTo(selector(list.ElementAt(i + 1))) < 0)
+                    return i;
+            return count;
+        }
         public static MenuFlyoutSubItem ToSubItem(this MenuFlyout flyout)
         {
             MenuFlyoutSubItem subItem = new MenuFlyoutSubItem();

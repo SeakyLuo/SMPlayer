@@ -52,9 +52,14 @@ namespace SMPlayer
                 }
                 else
                 {
-                    SuggestionList.Add(after.Artist);
-                    Artists.Add(new ArtistView(after));
-                    Artists.SetTo(Artists.OrderBy(a => a.Name));
+                    int index = SuggestionList.FindSortedListInsertIndex(after.Artist);
+                    SuggestionList.Insert(index, after.Artist);
+                    Artists.Insert(index, new ArtistView(after));
+                }
+                if (before.Artist != after.Artist && oldArtist.Songs.Count == 1)
+                {
+                    SuggestionList.Remove(oldArtist.Name);
+                    Artists.Remove(oldArtist);
                 }
             });
         }
