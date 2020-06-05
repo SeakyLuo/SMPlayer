@@ -396,11 +396,6 @@ namespace SMPlayer
             if (MediaHelper.IsPlaying) PlayMusic();
             else PauseMusic();
 
-            double volume = Settings.settings.Volume * 100;
-            VolumeButton.Content = Helper.GetVolumeIcon(volume);
-            SetMuted(Settings.settings.IsMuted);
-            VolumeSlider.Value = volume;
-
             SetPlayMode(Settings.settings.Mode);
 
             if (ApplicationView.GetForCurrentView().IsFullScreenMode) SetExitFullScreen();
@@ -409,8 +404,17 @@ namespace SMPlayer
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            SetVolume();
             if (Mode != MediaControlMode.Main)
                 AfterLoaded();
+        }
+
+        private void SetVolume()
+        {
+            double volume = Settings.settings.Volume * 100;
+            VolumeButton.Content = Helper.GetVolumeIcon(volume);
+            SetMuted(Settings.settings.IsMuted);
+            VolumeSlider.Value = volume;
         }
 
         public async void UpdateMusic(Music music)
