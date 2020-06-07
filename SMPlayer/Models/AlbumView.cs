@@ -41,14 +41,18 @@ namespace SMPlayer.Models
             Name = name;
             Artist = artist;
         }
-        public AlbumView(string name, string artist, IEnumerable<Music> songs, bool setCover = true)
+        public AlbumView(string name, string artist, IEnumerable<Music> songs, bool setThumbnail = true)
         {
             Name = name;
             Artist = artist;
             Songs.SetTo(songs);
-            if (setCover) SetThumbnail();
+            if (setThumbnail) SetThumbnail();
         }
-        public async void SetThumbnail()
+        private async void SetThumbnail()
+        {
+            await SetThumbnailAsync();
+        }
+        public async Task SetThumbnailAsync()
         {
             if (ThumbnailLoaded) return;
             Thumbnail = await GetAlbumCoverAsync(Songs);

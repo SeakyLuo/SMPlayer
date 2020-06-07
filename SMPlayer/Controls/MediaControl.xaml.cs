@@ -334,6 +334,7 @@ namespace SMPlayer
         private bool ShouldUpdate = true, SliderClicked = false;
         private static List<Action<Music, Music>> MusicModifiedListeners = new List<Action<Music, Music>>();
         private static List<MusicRequestListener> MusicRequestListeners = new List<MusicRequestListener>();
+        private static bool inited = false;
 
         public MediaControl()
         {
@@ -344,6 +345,7 @@ namespace SMPlayer
             MediaHelper.InitFinishedListeners.Add(() =>
             {
                 AfterLoaded();
+                inited = true;
                 MainSliderProgressBar.Visibility = Visibility.Collapsed;
                 MainMediaSlider.Visibility = Visibility.Visible;
             });
@@ -396,6 +398,10 @@ namespace SMPlayer
             if (MediaHelper.IsPlaying) PlayMusic();
             else PauseMusic();
 
+            double volume = Settings.settings.Volume * 100;
+            VolumeButton.Content = Helper.GetVolumeIcon(volume);
+            SetMuted(Settings.settings.IsMuted);
+            VolumeSlider.Value = volume;
             SetPlayMode(Settings.settings.Mode);
 
             if (ApplicationView.GetForCurrentView().IsFullScreenMode) SetExitFullScreen();
@@ -404,20 +410,13 @@ namespace SMPlayer
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            SetVolume();
-            if (Mode != MediaControlMode.Main)
+            if (inited)
+            {
                 AfterLoaded();
+            }
         }
 
-        private void SetVolume()
-        {
-            double volume = Settings.settings.Volume * 100;
-            VolumeButton.Content = Helper.GetVolumeIcon(volume);
-            SetMuted(Settings.settings.IsMuted);
-            VolumeSlider.Value = volume;
-        }
-
-        public async void UpdateMusic(Music music)
+        public void UpdateMusic(Music music)
         {
             CurrentMusic = music;
             if (music == null)
@@ -437,6 +436,11 @@ namespace SMPlayer
                 if (music.Favorite) LikeMusic(false);
                 else DislikeMusic(false);
             }
+            SetThumbnail(music);
+        }
+
+        public async void SetThumbnail(Music music)
+        {
             using (var thumbnail = await Helper.GetStorageItemThumbnailAsync(music))
             {
                 var isThumbnail = thumbnail.IsThumbnail();

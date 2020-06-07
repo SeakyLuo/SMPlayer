@@ -283,9 +283,10 @@ namespace SMPlayer
             }
         }
 
-        private void AlbumCover_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        private async void AlbumCover_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            (sender.DataContext as AlbumView)?.SetThumbnail();
+            if (sender.DataContext is AlbumView album)
+                await album.SetThumbnailAsync();
         }
     }
 }

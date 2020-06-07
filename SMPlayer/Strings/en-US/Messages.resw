@@ -171,6 +171,9 @@
   <data name="Error" xml:space="preserve">
     <value>There is an error.</value>
   </data>
+  <data name="FailToGetThumbnail" xml:space="preserve">
+    <value>Fail to get album art!</value>
+  </data>
   <data name="FailToOpenBrowser" xml:space="preserve">
     <value>Fail to open web browser. Link has been copied to the clipboard.</value>
   </data>
@@ -407,6 +410,9 @@
   </data>
   <data name="UnableToLocateMusic" xml:space="preserve">
     <value>Currently unable to locate music.</value>
+  </data>
+  <data name="UnauthorizedAccessException" xml:space="preserve">
+    <value>Authorization is needed to access {0}!</value>
   </data>
   <data name="UnknownAlbum" xml:space="preserve">
     <value>Unknown Album</value>

@@ -172,9 +172,10 @@ namespace SMPlayer
             Frame.Navigate(typeof(LocalPage), e.ClickedItem);
         }
 
-        private void Album_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        private async void Album_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            (args.NewValue as AlbumView)?.SetThumbnail();
+            if (args.NewValue is AlbumView album)
+                await album.SetThumbnailAsync();
         }
 
         private void AddToButton_Click(object sender, RoutedEventArgs e)

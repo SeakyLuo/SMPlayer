@@ -72,15 +72,15 @@ namespace SMPlayer.Models
         public List<Music> Songs { get => songs ?? (songs = Tree.Flatten()); }
         private List<Music> songs;
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
-        private bool thumbnaiLoaded = false;
+        public bool ThumbnailLoaded { get; private set; } = false;
         public GridFolderView(FolderTree tree)
         {
             folderTree = tree;
         }
 
-        public async void SetThumbnail()
+        public async Task SetThumbnailAsync()
         {
-            if (thumbnaiLoaded) return;
+            if (ThumbnailLoaded) return;
             List<BitmapImage> thumbnails = new List<BitmapImage>(4);
             async Task<bool> addThumbnail(List<Music> src)
             {
@@ -103,6 +103,13 @@ namespace SMPlayer.Models
                 foreach (var tree in Tree.Trees)
                     if (await addThumbnail(tree.Flatten()))
                         break;
+            //await Task.Run(async () =>
+            //{
+            //    if (!await addThumbnail(Tree.Files))
+            //        foreach (var tree in Tree.Trees)
+            //            if (await addThumbnail(tree.Flatten()))
+            //                break;
+            //});
             int count = thumbnails.Count;
             if (count == 0) LargeThumbnail = Helper.ThumbnailNotFoundImage;
             else if (count <= 2) LargeThumbnail = thumbnails[0];
@@ -116,7 +123,7 @@ namespace SMPlayer.Models
                 Fourth = thumbnails[3];
                 LargeThumbnail = null;
             }
-            thumbnaiLoaded = true;
+            ThumbnailLoaded = true;
         }
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {

@@ -125,12 +125,13 @@ namespace SMPlayer
 
         public static async void CheckNewMusic(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
         {
-            MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
+            MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
             var data = new TreeUpdateData();
             if (!await tree.CheckNewFile(data))
             {
                 if (!string.IsNullOrEmpty(data.Message))
                     MainPage.Instance.ShowNotification(data.Message);
+                MainPage.Instance?.Loader.Hide();
                 return;
             }
             if (data.More != 0 || data.Less != 0)

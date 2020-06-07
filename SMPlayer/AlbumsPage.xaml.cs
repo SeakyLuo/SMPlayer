@@ -77,9 +77,10 @@ namespace SMPlayer
             Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
         }
 
-        private void DropShadowControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        private async void DropShadowControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            (sender.DataContext as AlbumView)?.SetThumbnail();
+            if (sender.DataContext is AlbumView album)
+                await album.SetThumbnailAsync();
         }
 
         private void MenuFlyout_Opening(object sender, object e)

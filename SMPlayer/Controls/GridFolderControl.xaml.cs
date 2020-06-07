@@ -46,9 +46,10 @@ namespace SMPlayer.Controls
             VisualStateManager.GoToState(sender as Control, "Normal", true);
         }
 
-        private void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        private async void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            (sender.DataContext as GridFolderView)?.SetThumbnail();
+            if (sender.DataContext is GridFolderView folderView)
+                await folderView.SetThumbnailAsync();
         }
     }
 }

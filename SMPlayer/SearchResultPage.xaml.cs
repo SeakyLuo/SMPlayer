@@ -182,7 +182,7 @@ namespace SMPlayer
 
         private void Album_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            (args.NewValue as AlbumView)?.SetThumbnail();
+            (args.NewValue as AlbumView)?.SetThumbnailAsync();
         }
 
         private void SortByDropdown_Click(object sender, RoutedEventArgs e)

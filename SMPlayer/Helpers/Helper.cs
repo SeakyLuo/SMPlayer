@@ -226,6 +226,11 @@ namespace SMPlayer
             {
                 return null;
             }
+            catch (Exception)
+            {
+                // 拒绝访问
+                return null;
+            }
         }
         private static async void ShowToast(Music music, MediaPlaybackState state)
         {
@@ -512,9 +517,23 @@ namespace SMPlayer
             var uri = DefaultAlbumCoverPath;
             if (playlist.DisplayItem.Source != null)
             {
-                if (!await (await GetSecondaryTileFolder()).Contains(filename))
-                    await (await GetStorageItemThumbnailAsync(playlist.DisplayItem.Source.Path)).SaveAsync(SecondaryTileFolder, tileid);
-                uri = "ms-appdata:///local/SecondaryTiles/" + WebUtility.UrlEncode(filename);
+                if (await (await GetSecondaryTileFolder()).Contains(filename))
+                {
+                    uri = "ms-appdata:///local/SecondaryTiles/" + WebUtility.UrlEncode(filename);
+                }
+                else
+                {
+                    var thumbnail = await GetStorageItemThumbnailAsync(playlist.DisplayItem.Source.Path);
+                    if (thumbnail.IsThumbnail())
+                    {
+                        await thumbnail.SaveAsync(SecondaryTileFolder, tileid);
+                        uri = "ms-appdata:///local/SecondaryTiles/" + WebUtility.UrlEncode(filename);
+                    }
+                    else
+                    {
+                        uri = LogoPath;
+                    }
+                }
             }
             var tile = new SecondaryTile(tileid, tilename, isPlaylist.ToString(), new Uri(uri), TileSize.Default);
             tile.VisualElements.ShowNameOnSquare150x150Logo = tile.VisualElements.ShowNameOnSquare310x310Logo = tile.VisualElements.ShowNameOnWide310x150Logo = true;

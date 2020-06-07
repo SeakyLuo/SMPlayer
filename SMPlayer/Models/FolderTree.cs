@@ -57,7 +57,17 @@ namespace SMPlayer.Models
         }
         public async Task<bool> CheckNewFile(TreeUpdateData data = null)
         {
-            StorageFolder folder = await GetStorageFolderAsync();
+            StorageFolder folder;
+            try
+            {
+                folder = await GetStorageFolderAsync();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                if (data != null)
+                    data.Message = Helper.LocalizeMessage("UnauthorizedAccessException", Path);
+                return false;
+            }
             if (folder == null)
             {
                 if (data != null)
