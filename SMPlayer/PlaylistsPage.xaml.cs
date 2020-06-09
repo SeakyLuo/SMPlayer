@@ -195,6 +195,7 @@ namespace SMPlayer
 
         private void BringSelectedTabIntoView()
         {
+            if (PlaylistTabView.SelectedIndex < 0) return;
             if (PlaylistTabView.GetFirstDescendantOfType<ScrollViewer>() is ScrollViewer scrollViewer)
             {
                 if (scrollViewer.IsLoaded)

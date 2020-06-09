@@ -4,7 +4,7 @@ A Simple Music Player that manages local music files based on the UI of Groove M
 # Privacy Policy
 This app will not collect any personal information. It only reads and manages music files on your computer.
 
-This app also requires Internet to search lyrics upon users' request.
+This app also requires connection to the Internet to search lyrics upon users' request.
 
 # TO RUN
 Download it and open it using Visual Studio.
