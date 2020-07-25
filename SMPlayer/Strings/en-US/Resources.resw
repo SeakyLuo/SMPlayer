@@ -375,6 +375,9 @@
   <data name="ListViewItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Change to List View</value>
   </data>
+  <data name="Local Folder" xml:space="preserve">
+    <value>Local Folder</value>
+  </data>
   <data name="LocalItem.Content" xml:space="preserve">
     <value>Local</value>
   </data>
@@ -584,6 +587,12 @@
   </data>
   <data name="RandomPlayButton.Label" xml:space="preserve">
     <value>Shuffle</value>
+  </data>
+  <data name="ReauthorizeButton.Content" xml:space="preserve">
+    <value>Reauthorize</value>
+  </data>
+  <data name="ReauthorizeButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>If you still keep the data of app after system reset, you need to reauthorize this app to access the original music folder.</value>
   </data>
   <data name="Recent" xml:space="preserve">
     <value>Recent</value>

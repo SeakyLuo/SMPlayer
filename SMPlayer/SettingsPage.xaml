@@ -277,6 +277,12 @@
                 Click="AddLyrics_Click"
                 Content="Add Lyrics"
                 Style="{ThemeResource TextBlockButtonStyle}" />
+            <HyperlinkButton
+                x:Uid="ReauthorizeButton"
+                Margin="9,0"
+                Click="Reauthorize_Click"
+                Content="Reauthorize"
+                Style="{ThemeResource TextBlockButtonStyle}" />
         </StackPanel>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">

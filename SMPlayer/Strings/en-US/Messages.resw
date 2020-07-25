@@ -132,6 +132,12 @@
   <data name="AllArtists" xml:space="preserve">
     <value>All Artists: {0}</value>
   </data>
+  <data name="AuthorizeFolderFailed" xml:space="preserve">
+    <value>Picked folder must be the same as your music folder!</value>
+  </data>
+  <data name="AuthorizeSuccessful" xml:space="preserve">
+    <value>Authorzation is successful!</value>
+  </data>
   <data name="ChangesSaved" xml:space="preserve">
     <value>Changes has been saved.</value>
   </data>
@@ -278,6 +284,18 @@
   </data>
   <data name="Playlists:" xml:space="preserve">
     <value>Playlists: </value>
+  </data>
+  <data name="PlayRandomAlbum" xml:space="preserve">
+    <value>Now playing music from album "{0}".</value>
+  </data>
+  <data name="PlayRandomArtist" xml:space="preserve">
+    <value>Now playing music from artist "{0}".</value>
+  </data>
+  <data name="PlayRandomLocalFolder" xml:space="preserve">
+    <value>Now playing music from folder "{0}".</value>
+  </data>
+  <data name="PlayRandomPlaylist" xml:space="preserve">
+    <value>Now playing music from playlist "{0}".</value>
   </data>
   <data name="PostParenthesis" xml:space="preserve">
     <value>{0} ({1})</value>

@@ -132,6 +132,12 @@
   <data name="AllArtists" xml:space="preserve">
     <value>歌手：{0}</value>
   </data>
+  <data name="AuthorizeFolderFailed" xml:space="preserve">
+    <value>你选择的文件夹必须和你的音乐文件夹一致！</value>
+  </data>
+  <data name="AuthorizeSuccessful" xml:space="preserve">
+    <value>授权成功！</value>
+  </data>
   <data name="ChangesSaved" xml:space="preserve">
     <value>已保存！</value>
   </data>
@@ -278,6 +284,18 @@
   </data>
   <data name="Playlists:" xml:space="preserve">
     <value>播放列表：</value>
+  </data>
+  <data name="PlayRandomAlbum" xml:space="preserve">
+    <value>正在播放专辑《{0}》的歌曲</value>
+  </data>
+  <data name="PlayRandomArtist" xml:space="preserve">
+    <value>正在播放歌手“{0}”的歌曲</value>
+  </data>
+  <data name="PlayRandomLocalFolder" xml:space="preserve">
+    <value>正在播放文件夹“{0}”的歌曲</value>
+  </data>
+  <data name="PlayRandomPlaylist" xml:space="preserve">
+    <value>正在播放播放列表“{0}”的歌曲</value>
   </data>
   <data name="PostParenthesis" xml:space="preserve">
     <value>{0}（{1}）</value>

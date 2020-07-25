@@ -270,6 +270,26 @@ namespace SMPlayer
             addLyricsClickCounter = 0;
         }
 
+        private async void Reauthorize_Click(object sender, RoutedEventArgs e)
+        {
+            FolderPicker picker = new FolderPicker
+            {
+                SuggestedStartLocation = PickerLocationId.MusicLibrary
+            };
+            picker.FileTypeFilter.Add("*");
+            StorageFolder folder = await picker.PickSingleFolderAsync();
+            if (folder == null) return;
+            if (folder.Path == Settings.settings.RootPath)
+            {
+                MainPage.Instance.ShowLocalizedNotification("AuthorizeSuccessful");
+            }
+            else
+            {
+                MainPage.Instance.ShowLocalizedNotification("AuthorizeFolderFailed");
+            }
+        }
+
+
         private void AutoPlayCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             Settings.settings.AutoPlay = true;

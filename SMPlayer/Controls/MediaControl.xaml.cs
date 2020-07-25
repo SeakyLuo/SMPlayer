@@ -448,6 +448,7 @@ namespace SMPlayer
                 switch (Mode)
                 {
                     case MediaControlMode.Main:
+                        Debug.WriteLine($"Main MediaControl:");
                         MainMediaControlGrid.Background = isThumbnail ? await thumbnail.GetDisplayColor() : ColorHelper.HighlightBrush;
                         break;
                     case MediaControlMode.Full:

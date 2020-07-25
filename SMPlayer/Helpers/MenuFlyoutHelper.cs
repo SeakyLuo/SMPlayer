@@ -543,7 +543,9 @@ namespace SMPlayer
             };
             artist.Click += (sender, args) =>
             {
-                MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.AllSongs.GroupBy(m => m.Artist).RandItem());
+                var rArtist = MusicLibraryPage.AllSongs.GroupBy(m => m.Artist).RandItem();
+                MediaHelper.SetPlaylistAndPlay(rArtist.Shuffle());
+                Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("PlayRandomArtist", rArtist.Key));
             };
             flyout.Items.Add(artist);
             var album = new MenuFlyoutItem()
@@ -552,7 +554,9 @@ namespace SMPlayer
             };
             album.Click += (sender, args) =>
             {
-                MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.AllSongs.GroupBy(m => m.Album).RandItem());
+                var rAlbum = MusicLibraryPage.AllSongs.GroupBy(m => m.Album).RandItem();
+                MediaHelper.SetPlaylistAndPlay(rAlbum.Shuffle());
+                Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("PlayRandomAlbum", rAlbum.Key));
             };
             flyout.Items.Add(album);
             if (Settings.settings.Playlists.Count > 0)
@@ -563,21 +567,25 @@ namespace SMPlayer
                 };
                 playlist.Click += (sender, args) =>
                 {
-                    MediaHelper.SetPlaylistAndPlay(Settings.settings.Playlists.RandItem().Songs);
+                    var rPlaylist = Settings.settings.Playlists.RandItem();
+                    MediaHelper.SetPlaylistAndPlay(rPlaylist.Songs.RandItems(limit));
+                    Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("PlayRandomPlaylist", rPlaylist.Name));
                 };
                 flyout.Items.Add(playlist);
             }
-            if (Settings.settings.MyFavorites.Count > 0)
+            if (!string.IsNullOrEmpty(Settings.settings.RootPath))
             {
-                var myFavorites = new MenuFlyoutItem()
+                var localFolder = new MenuFlyoutItem()
                 {
-                    Text = Helper.Localize("My Favorites")
+                    Text = Helper.Localize("Local Folder")
                 };
-                myFavorites.Click += (sender, args) =>
+                localFolder.Click += (sender, args) =>
                 {
-                    MediaHelper.SetMusicAndPlay(Settings.settings.MyFavorites.Songs.RandItems(limit));
+                    var rLocalFolder = Settings.settings.Tree.GetAllTrees().Where(tree => tree.Files.Count > 0).RandItem();
+                    MediaHelper.SetMusicAndPlay(rLocalFolder.Files.RandItems(limit));
+                    Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("PlayRandomLocalFolder", rLocalFolder.Directory));
                 };
-                flyout.Items.Add(myFavorites);
+                flyout.Items.Add(localFolder);
             }
             if (Settings.settings.RecentAdded.Count > 0)
             {

@@ -14,6 +14,8 @@ Build it with local computer.
 Go to Settings and Set the Root Folder of your music files.
 
 # TO DO
+Move music from folder to folder.
+
 Improve path header display (like Windows).
 
 Run add music on thread.
@@ -54,6 +56,8 @@ Able to drag titlebar when loading.
 Dark thumb in the mini mode.
 
 # MIGHT DO
+Real-time update Playlist Info when new music added
+
 Album art in NowPlayingFull.
 
 Save SearchKeyword instead of a string.

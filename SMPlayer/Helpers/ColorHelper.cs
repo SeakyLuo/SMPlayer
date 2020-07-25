@@ -65,19 +65,21 @@ namespace SMPlayer
 
         public static async Task<Brush> GetThumbnailMainColorAsync(IRandomAccessStream Thumbnail)
         {
-            byte[] bgra = { 0, 0, 0, 255 };
             var decoder = await BitmapDecoder.CreateAsync(Thumbnail);
             uint width = decoder.PixelWidth, height = decoder.PixelHeight;
             uint divs = 16;
+            byte[] bgra = new byte[] { 0, 0, 0, 255 };
+            double distance = -1;
             for (uint i = 1; i < divs; i++)
             {
                 for (uint j = 1; j < divs; j++)
                 {
-                    bgra = await decoder.GetPixelData(width * i / divs, height * j / divs);
-                    if (bgra.SkipLast(1).All(v => MIN_VALUE <= v && v <= MAX_VALUE)) goto GenerateColor;
+                    byte[] pixel = (await decoder.GetPixelData(width * i / divs, height * j / divs));
+                    var bgr = pixel.SkipLast(1);
+                    if (bgr.All(p => MIN_VALUE <= p && p <= MAX_VALUE) && bgr.Sum(p => Math.Pow(p - MIN_VALUE, 2)) > distance)
+                        bgra = pixel;
                 }
             }
-            GenerateColor:
             Color color = Color.FromArgb(bgra[3], bgra[2], bgra[1], bgra[0]);
             System.Diagnostics.Debug.WriteLine($"R: {bgra[2]} G: {bgra[1]} B: {bgra[0]}");
             return new AcrylicBrush()

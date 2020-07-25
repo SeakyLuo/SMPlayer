@@ -285,10 +285,7 @@ namespace SMPlayer.Models
         }
         public List<FolderTree> GetAllTrees()
         {
-            List<FolderTree> list = new List<FolderTree>
-            {
-                this
-            };
+            List<FolderTree> list = new List<FolderTree> { this };
             foreach (var tree in Trees)
                 list.AddRange(tree.GetAllTrees());
             return list;

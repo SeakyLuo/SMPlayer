@@ -372,6 +372,9 @@
   <data name="ListViewItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>转为列表模式</value>
   </data>
+  <data name="Local Folder" xml:space="preserve">
+    <value>本地文件夹</value>
+  </data>
   <data name="LocalItem.Content" xml:space="preserve">
     <value>本地</value>
   </data>
@@ -581,6 +584,12 @@
   </data>
   <data name="RandomPlayButton.Label" xml:space="preserve">
     <value>随机播放</value>
+  </data>
+  <data name="ReauthorizeButton.Content" xml:space="preserve">
+    <value>重新授权</value>
+  </data>
+  <data name="ReauthorizeButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>如果你在重装系统后仍然保留了该应用的数据，你需要重新授权该应用以访问你的音乐文件夹</value>
   </data>
   <data name="Recent" xml:space="preserve">
     <value>最近</value>
