@@ -17,11 +17,11 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class SettingsPage : Page, TreeOperationListener
+    public sealed partial class SettingsPage : Page, ITreeOperationListener
     {
         public static ShowToast[] NotificationOptions = { ShowToast.Always, ShowToast.MusicChanged, ShowToast.Never };
         private static int[] LimitedRecentPlayedItems = { -1, 100, 200, 500, 1000 };
-        private static List<AfterPathSetListener> listeners = new List<AfterPathSetListener>();
+        private static List<IAfterPathSetListener> listeners = new List<IAfterPathSetListener>();
         private FolderTree loadingTree;
         private volatile int addLyricsClickCounter = 0;
         private string addLyricsContent = Helper.Localize("AddLyrics");
@@ -40,6 +40,7 @@ namespace SMPlayer
             ThemeColorPicker.Color = Settings.settings.ThemeColor;
             KeepRecentComboBox.SelectedIndex = LimitedRecentPlayedItems.FindIndex(num => num == Settings.settings.LimitedRecentPlayedItems);
             AutoPlayCheckBox.IsChecked = Settings.settings.AutoPlay;
+            AutoLyricsCheckBox.IsChecked = Settings.settings.AutoLyrics;
             SaveProgressCheckBox.IsChecked = Settings.settings.SaveMusicProgress;
         }
 
@@ -74,11 +75,11 @@ namespace SMPlayer
             MusicLibraryPage.SortAndSetAllSongs(await Task.Run(Settings.settings.Tree.Flatten));
             MainPage.Instance.Loader.Progress = 0;
             MainPage.Instance.Loader.Max = listeners.Count;
-            for (int i = 0; i < listeners.Count;)
+            for (int i = 1; i <= listeners.Count; i++)
             {
                 var listener = listeners[i];
                 listener.PathSet(folder.Path);
-                MainPage.Instance.Loader.Progress = ++i;
+                MainPage.Instance.Loader.Progress = i;
             }
             MediaHelper.RemoveBadMusic();
             App.Save();
@@ -88,7 +89,7 @@ namespace SMPlayer
 
         public static void NotifyLibraryChange(string path) { foreach (var listener in listeners) listener.PathSet(path); }
 
-        public static void AddAfterPathSetListener(AfterPathSetListener listener)
+        public static void AddAfterPathSetListener(IAfterPathSetListener listener)
         {
             listeners.Add(listener);
         }
@@ -96,7 +97,7 @@ namespace SMPlayer
         private void ConfirmColorButton_Click(object sender, RoutedEventArgs e)
         {
             //Settings.settings.ThemeColor = ThemeColorPicker.Color;
-            MainPage.Instance.ShowNotification("NotImplemented");
+            MainPage.Instance.ShowLocalizedNotification("NotImplemented");
             ColorPickerFlyout.Hide();
         }
 
@@ -314,9 +315,19 @@ namespace SMPlayer
         {
             Settings.settings.LimitedRecentPlayedItems = LimitedRecentPlayedItems[(sender as ComboBox).SelectedIndex];
         }
+
+        private void AutoLyricsCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.AutoLyrics = true;
+        }
+
+        private void AutoLyricsCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.AutoLyrics = false;
+        }
     }
 
-    public interface AfterPathSetListener
+    public interface IAfterPathSetListener
     {
         void PathSet(string path);
     }

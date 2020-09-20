@@ -192,6 +192,9 @@
   <data name="Folders:" xml:space="preserve">
     <value>Folders: </value>
   </data>
+  <data name="GetLyricsFailed" xml:space="preserve">
+    <value>Error getting lyrics, please try later</value>
+  </data>
   <data name="HasBeenPlayed" xml:space="preserve">
     <value>"{0}" has been played {1} {2}.</value>
   </data>

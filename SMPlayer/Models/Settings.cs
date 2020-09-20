@@ -39,6 +39,7 @@ namespace SMPlayer.Models
         public int LimitedRecentPlayedItems { get; set; } = -1;
         public ObservableCollection<string> RecentAdded { get; set; } = new ObservableCollection<string>();
         public bool AutoPlay { get; set; } = false;
+        public bool AutoLyrics { get; set; } = false;
         public bool SaveMusicProgress { get; set; } = false;
         public double MusicProgress { get; set; } = 0;
         public SortBy MusicLibraryCriterion { get; set; } = SortBy.Title;
@@ -174,11 +175,22 @@ namespace SMPlayer.Models
             foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, false);
         }
 
-        public void AddMusic(Music music)
+        public async void AddMusic(Music music)
         {
             if (JustRemoved.Any(m => m.Name == music.Name && m.Artist == music.Artist && m.Album == music.Album && m.Duration == music.Duration))
                 return;
             RecentAdded.AddOrMoveToTheFirst(music.Path);
+            if (AutoLyrics)
+            {
+                await Task.Run(async() =>
+                {
+                    string lyrics = await music.GetLyricsAsync();
+                    if (string.IsNullOrEmpty(lyrics))
+                    {
+                        await music.SaveLyricsAsync(await Controls.MusicLyricsControl.SearchLyrics(music));
+                    }
+                });
+            }
         }
 
         private Dictionary<string, int> RemovedPlaylist = new Dictionary<string, int>();

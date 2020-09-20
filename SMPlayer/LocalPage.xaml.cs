@@ -15,9 +15,9 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalPage : Page, LocalSetter, AfterPathSetListener
+    public sealed partial class LocalPage : Page, ILocalSetter, IAfterPathSetListener
     {
-        public static LocalPageButtonListener MusicListener, FolderListener;
+        public static ILocalPageButtonListener MusicListener, FolderListener;
         public static Stack<FolderTree> History = new Stack<FolderTree>();
         public LocalPage()
         {
@@ -248,13 +248,13 @@ namespace SMPlayer
             }));
         }
     }
-    public interface LocalSetter
+    public interface ILocalSetter
     {
         void SetPage(FolderTree tree, bool setHeader = true);
         void SetNavText(TreeInfo treeInfo);
     }
 
-    public interface LocalPageButtonListener
+    public interface ILocalPageButtonListener
     {
         void ModeChanged(bool isGridView);
         void UpdatePage(FolderTree tree);

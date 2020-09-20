@@ -57,7 +57,7 @@ namespace SMPlayer.Models
                 OnPropertyChanged();
             }
         }
-        private BitmapImage first, second, third, fourth, large = Helper.ThumbnailNotFoundImage;
+        private BitmapImage first, second, third, fourth, large = MusicImage.NotFound;
         public FolderTree Tree
         {
             get => folderTree;
@@ -111,12 +111,12 @@ namespace SMPlayer.Models
             //                break;
             //});
             int count = thumbnails.Count;
-            if (count == 0) LargeThumbnail = Helper.ThumbnailNotFoundImage;
+            if (count == 0) LargeThumbnail = MusicImage.NotFound;
             else if (count <= 2) LargeThumbnail = thumbnails[0];
             else
             {
                 for (int i = 0; i < 4 - count; i++)
-                    thumbnails.Add(Helper.ThumbnailNotFoundImage);
+                    thumbnails.Add(MusicImage.NotFound);
                 First = thumbnails[0];
                 Second = thumbnails[1];
                 Third = thumbnails[2];

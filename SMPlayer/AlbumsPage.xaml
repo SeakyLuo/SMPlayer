@@ -12,14 +12,18 @@
     mc:Ignorable="d">
 
     <Grid>
-        <ProgressRing
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ProgressBar
             x:Name="AlbumPageProgressRing"
-            Width="100"
-            Height="100"
+            Width="1000"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            IsActive="False" />
+            IsIndeterminate="True" />
         <GridView
+            Grid.Row="1"
             Margin="10"
             IsItemClickEnabled="True"
             ItemClick="GridView_ItemClick"

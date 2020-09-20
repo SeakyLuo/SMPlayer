@@ -204,6 +204,9 @@
   <data name="ArtistTextBlock.Text" xml:space="preserve">
     <value>Artist</value>
   </data>
+  <data name="AutoLyricsCheckBox.Content" xml:space="preserve">
+    <value>Add lyrics for recently added music</value>
+  </data>
   <data name="AutoPlayCheckBox.Content" xml:space="preserve">
     <value>Play music after App launches</value>
   </data>
@@ -456,6 +459,9 @@
   <data name="MusicInfoMenuItem.Text" xml:space="preserve">
     <value>Show Music Info</value>
   </data>
+  <data name="MusicLibraryTextBlock.Text" xml:space="preserve">
+    <value>Music Library</value>
+  </data>
   <data name="Mute" xml:space="preserve">
     <value>Mute</value>
   </data>
@@ -506,6 +512,9 @@
   </data>
   <data name="OpenFolderIcon.ToolTipService.ToolTip" xml:space="preserve">
     <value>Select Folder</value>
+  </data>
+  <data name="OthersTextBlock.Text" xml:space="preserve">
+    <value>Others</value>
   </data>
   <data name="PathBox.PlaceholderText" xml:space="preserve">
     <value>The root folder path of your music library</value>

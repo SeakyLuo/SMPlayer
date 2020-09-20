@@ -143,11 +143,11 @@ namespace SMPlayer.Models
             LoadingStatus = ExecutionStatus.Ready;
             return true;
         }
-        public async Task<bool> Init(StorageFolder folder, TreeOperationListener listener = null)
+        public async Task<bool> Init(StorageFolder folder, ITreeOperationListener listener = null)
         {
             return await Init(folder, listener, new TreeOperationIndicator() { Max = listener == null ? 0 : await CountFilesAsync(folder) });
         }
-        private async Task<bool> Init(StorageFolder folder, TreeOperationListener listener, TreeOperationIndicator indicator)
+        private async Task<bool> Init(StorageFolder folder, ITreeOperationListener listener, TreeOperationIndicator indicator)
         {
             LoadingStatus = ExecutionStatus.Running;
             var samePath = folder.Path == Path;
@@ -443,7 +443,7 @@ namespace SMPlayer.Models
         public string Message { get; set; }
     }
 
-    public interface TreeOperationListener
+    public interface ITreeOperationListener
     {
         void Update(string folder, string file, int progress, int max);
     }

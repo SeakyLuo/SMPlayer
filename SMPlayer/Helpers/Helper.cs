@@ -22,17 +22,13 @@ namespace SMPlayer
     {
         public const string StringConcatenationFlag = "+++++";
         public const string ToastTaskName = "ToastBackgroundTask";
-        public const string LogoPath = "ms-appx:///Assets/monotone_no_bg.png",
-                            DefaultAlbumCoverPath = "ms-appx:///Assets/monotone_bg_wide.png",
-                            ThumbnailNotFoundPath = "ms-appx:///Assets/colorful_bg_wide.png";
+        public const string LogoPath = "ms-appx:///Assets/monotone_no_bg.png";
         public const string ToastTagPaused = "SMPlayerMediaToastTagPaused", ToastTagPlaying = "SMPlayerMediaToastTagPlaying", ToastGroup = "SMPlayerMediaToastGroup";
         public static string NoLyricsAvailable { get => LocalizeMessage("NoLyricsAvailable"); }
         public static string TimeStamp { get => DateTime.Now.ToString("yyyyMMdd_HHmmss"); }
 
         public static StorageFolder CurrentFolder, ThumbnailFolder, SecondaryTileFolder, TempFolder;
         public static StorageFolder LocalFolder { get => ApplicationData.Current.LocalFolder; }
-        public static BitmapImage DefaultAlbumCover = new BitmapImage(new Uri(DefaultAlbumCoverPath));
-        public static BitmapImage ThumbnailNotFoundImage = new BitmapImage(new Uri(ThumbnailNotFoundPath));
         public static ToastNotification Toast;
         public static ToastNotifier toastNotifier = ToastNotificationManager.CreateToastNotifier();
         public static ToastAudio SlientToast = new ToastAudio() { Silent = true };
@@ -72,6 +68,7 @@ namespace SMPlayer
         }
         public static async Task Init()
         {
+            var initDefaultImage = MusicImage.DefaultImage;
             TempFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Temp", CreationCollisionOption.OpenIfExists);
             await ClearBackups();
         }
@@ -82,11 +79,14 @@ namespace SMPlayer
             var settings = files.Where(f => f.Name.StartsWith(Settings.JsonFilename)).OrderBy(f => f.DateCreated);
             var mediaHelper = files.Where(f => f.Name.StartsWith(MediaHelper.JsonFilename)).OrderBy(f => f.DateCreated);
             var musicLibrary = files.Where(f => f.Name.StartsWith(MusicLibraryPage.JsonFilename)).OrderBy(f => f.DateCreated);
+            var albums = files.Where(f => f.Name.StartsWith(AlbumsPage.JsonFilename)).OrderBy(f => f.DateCreated);
             foreach (var file in settings.Take(settings.Count() - maxBackups))
                 try { await file.DeleteAsync(); } catch (FileNotFoundException) { }
             foreach (var file in mediaHelper.Take(mediaHelper.Count() - maxBackups))
                 try { await file.DeleteAsync(); } catch (FileNotFoundException) { }
             foreach (var file in musicLibrary.Take(musicLibrary.Count() - maxBackups))
+                try { await file.DeleteAsync(); } catch (FileNotFoundException) { }
+            foreach (var file in albums.Take(albums.Count() - maxBackups))
                 try { await file.DeleteAsync(); } catch (FileNotFoundException) { }
         }
 
@@ -204,12 +204,16 @@ namespace SMPlayer
 
         public static async Task<BitmapImage> GetThumbnailAsync(Music music, bool withDefault = true)
         {
-            using (var thumbnail = await GetStorageItemThumbnailAsync(music))
+            return await GetThumbnailAsync(music.Path, withDefault);
+        }
+        public static async Task<BitmapImage> GetThumbnailAsync(string path, bool withDefault = true)
+        {
+            using (var thumbnail = await GetStorageItemThumbnailAsync(path))
             {
                 if (thumbnail.IsThumbnail())
                     return thumbnail.GetBitmapImage();
             }
-            return withDefault ? DefaultAlbumCover : null;
+            return withDefault ? MusicImage.DefaultImage : null;
         }
         public static async Task<StorageItemThumbnail> GetStorageItemThumbnailAsync(Music music, uint size = 300)
         {
@@ -366,7 +370,7 @@ namespace SMPlayer
         public static async Task UpdateTile(StorageItemThumbnail itemThumbnail, Music music)
         {
             if (music == null) return;
-            string uri = DefaultAlbumCoverPath;
+            string uri = MusicImage.DefaultImagePath;
             if (itemThumbnail != null)
             {
                 try
@@ -485,7 +489,7 @@ namespace SMPlayer
                 {
                     BackgroundImage = new TileBackgroundImage()
                     {
-                        Source = DefaultAlbumCoverPath
+                        Source = MusicImage.DefaultImagePath
                     },
                 }
             };
@@ -514,7 +518,7 @@ namespace SMPlayer
             var tilename = playlist.Name;
             var tileid = FormatTileId(playlist, isPlaylist);
             var filename = tileid + ".png";
-            var uri = DefaultAlbumCoverPath;
+            var uri = MusicImage.DefaultImagePath;
             if (playlist.DisplayItem.Source != null)
             {
                 if (await (await GetSecondaryTileFolder()).Contains(filename))

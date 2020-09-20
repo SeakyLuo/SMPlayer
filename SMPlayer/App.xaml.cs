@@ -36,6 +36,8 @@ namespace SMPlayer
         {
             await Settings.Init();
             await MusicLibraryPage.Init();
+            if (Settings.settings.LastPage == "Albums")
+                await AlbumsPage.Init();
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -83,6 +85,7 @@ namespace SMPlayer
 
             MediaHelper.Init();
             await Helper.Init();
+            await AlbumsPage.Init();
             foreach (var listener in LoadedListeners) listener.Invoke();
             // If background task is already registered, do nothing
             if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals(Helper.ToastTaskName)))
@@ -136,6 +139,7 @@ namespace SMPlayer
             Settings.Save();
             MusicLibraryPage.Save();
             MediaHelper.Save();
+            AlbumsPage.Save();
             await Helper.ClearBackups(10);
         }
 

@@ -42,7 +42,6 @@ namespace SMPlayer
             if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
             MediaHelper.FindMusicAndSetPlaying(AllSongs, null, MediaHelper.CurrentMusic);
         }
-
         public static async Task Init()
         {
             var songs = JsonFileHelper.Convert<List<Music>>(await JsonFileHelper.ReadAsync(JsonFilename));
@@ -52,6 +51,12 @@ namespace SMPlayer
                 SetAllSongs(songs);
             MediaControl.AddMusicModifiedListener(MusicModified);
             Controls.MusicInfoControl.MusicModifiedListeners.Add(MusicModified);
+        }
+
+        public static void Save()
+        {
+            JsonFileHelper.SaveAsync(JsonFilename, AllSongs);
+            JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, AllSongs);
         }
 
         public static async void CheckLibrary()
@@ -65,11 +70,6 @@ namespace SMPlayer
             App.Save();
         }
 
-        public static void Save()
-        {
-            JsonFileHelper.SaveAsync(JsonFilename, AllSongs);
-            JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, AllSongs);
-        }
 
         public static void AddAfterSongsSetListener(AfterSongsSetListener listener)
         {

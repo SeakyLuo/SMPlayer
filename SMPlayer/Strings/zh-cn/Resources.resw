@@ -201,6 +201,9 @@
   <data name="ArtistTextBlock.Text" xml:space="preserve">
     <value>歌手</value>
   </data>
+  <data name="AutoLyricsCheckBox.Content" xml:space="preserve">
+    <value>自动为最近添加的歌曲添加歌词</value>
+  </data>
   <data name="AutoPlayCheckBox.Content" xml:space="preserve">
     <value>打开应用后自动播放</value>
   </data>
@@ -439,7 +442,7 @@
     <value>音乐库</value>
   </data>
   <data name="MusicChangedComboItem.Content" xml:space="preserve">
-    <value>音乐改变</value>
+    <value>音乐变更</value>
   </data>
   <data name="MusicFolderTextBlock.Text" xml:space="preserve">
     <value>音乐文件夹</value>
@@ -452,6 +455,9 @@
   </data>
   <data name="MusicInfoMenuItem.Text" xml:space="preserve">
     <value>显示歌曲信息</value>
+  </data>
+  <data name="MusicLibraryTextBlock.Text" xml:space="preserve">
+    <value>音乐库</value>
   </data>
   <data name="Mute" xml:space="preserve">
     <value>静音</value>
@@ -503,6 +509,9 @@
   </data>
   <data name="OpenFolderIcon.ToolTipService.ToolTip" xml:space="preserve">
     <value>选择文件夹</value>
+  </data>
+  <data name="OthersTextBlock.Text" xml:space="preserve">
+    <value>其他</value>
   </data>
   <data name="PathBox.PlaceholderText" xml:space="preserve">
     <value>你音乐库的根文件夹</value>
@@ -664,7 +673,7 @@
     <value>保存专辑插图</value>
   </data>
   <data name="SaveChangesButton.Content" xml:space="preserve">
-    <value>保存改变</value>
+    <value>保存变更</value>
   </data>
   <data name="SaveLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>保存歌词</value>

@@ -444,7 +444,7 @@ namespace SMPlayer
             using (var thumbnail = await Helper.GetStorageItemThumbnailAsync(music))
             {
                 var isThumbnail = thumbnail.IsThumbnail();
-                AlbumCover.Source = isThumbnail ? thumbnail.GetBitmapImage() : Helper.DefaultAlbumCover;
+                AlbumCover.Source = isThumbnail ? thumbnail.GetBitmapImage() : MusicImage.DefaultImage;
                 switch (Mode)
                 {
                     case MediaControlMode.Main:
@@ -900,7 +900,7 @@ namespace SMPlayer
         {
             PauseMusic();
             CurrentMusic = null;
-            AlbumCover.Source = Helper.DefaultAlbumCover;
+            AlbumCover.Source = MusicImage.DefaultImage;
             TitleTextBlock.Text = "";
             ArtistTextBlock.Text = "";
             FullAlbumTextBlock.Text = "";

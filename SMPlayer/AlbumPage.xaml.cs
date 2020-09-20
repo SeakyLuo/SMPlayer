@@ -1,5 +1,8 @@
-﻿using SMPlayer.Models;
+﻿using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarSymbols;
+using SMPlayer.Models;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -49,12 +52,17 @@ namespace SMPlayer
             {
                 int index = albumText.IndexOf(Helper.StringConcatenationFlag);
                 string albumName = albumText.Substring(0, index), albumArtist = albumText.Substring(index + Helper.StringConcatenationFlag.Length);
-                playlist = new Playlist(albumName, MusicLibraryPage.AllSongs.Where(m => m.Album == albumName && m.Artist == albumArtist));
+                playlist = new Playlist(albumName, SearchAlbumSongs(albumName, albumArtist));
                 AlbumPlaylistControl.SetPlaylistInfo(albumArtist);
             }
             await AlbumPlaylistControl.SetPlaylist(playlist);
             MainPage.Instance.TitleBarBackground = AlbumPlaylistControl.HeaderBackground;
             MainPage.Instance.TitleBarForeground = MainPage.Instance.IsMinimal ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
+        }
+
+        public static IEnumerable<Music> SearchAlbumSongs(string albumName, string albumArtist)
+        {
+            return MusicLibraryPage.AllSongs.Where(m => m.Album == albumName && m.Artist == albumArtist);
         }
     }
 }

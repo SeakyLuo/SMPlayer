@@ -19,7 +19,7 @@ namespace SMPlayer.Models
                 OnPropertyChanged();
             }
         }
-        private BitmapImage thumbnail = Helper.DefaultAlbumCover;
+        private BitmapImage thumbnail = MusicImage.DefaultImage;
         private bool thumbnailLoaded = false;
         public Music Source
         {

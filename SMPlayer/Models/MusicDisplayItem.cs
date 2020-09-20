@@ -11,7 +11,7 @@ namespace SMPlayer.Models
         public bool IsDefault { get; private set; }
         public Music Source { get; private set; }
 
-        public static MusicDisplayItem DefaultItem = new MusicDisplayItem(Helper.DefaultAlbumCover, ColorHelper.HighlightBrush);
+        public static MusicDisplayItem DefaultItem = new MusicDisplayItem(MusicImage.DefaultImage, ColorHelper.HighlightBrush);
 
         public MusicDisplayItem(StorageItemThumbnail thumbnail, Brush color, Music music)
         {

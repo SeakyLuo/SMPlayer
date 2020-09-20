@@ -15,13 +15,13 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalMusicPage : Page, SwitchMusicListener, LocalPageButtonListener, RemoveMusicListener
+    public sealed partial class LocalMusicPage : Page, SwitchMusicListener, ILocalPageButtonListener, RemoveMusicListener
     {
         public static FolderTree CurrentTree;
         private ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         private string TreePath;
         public static bool ReverseRequested = false, SortByTitleRequested = false, SortByArtistRequested = false, SortByAlbumRequested = false;
-        public static LocalSetter setter;
+        public static ILocalSetter setter;
         public LocalMusicPage()
         {
             this.InitializeComponent();

@@ -192,6 +192,9 @@
   <data name="Folders:" xml:space="preserve">
     <value>文件夹：</value>
   </data>
+  <data name="GetLyricsFailed" xml:space="preserve">
+    <value>获取歌词失败，请稍后再试</value>
+  </data>
   <data name="HasBeenPlayed" xml:space="preserve">
     <value>《{0}》已经播放了{1}次。{2}</value>
   </data>

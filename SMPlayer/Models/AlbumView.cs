@@ -12,7 +12,7 @@ namespace SMPlayer.Models
     {
         public string Name { get; set; }
         public string Artist { get; set; }
-        public ObservableCollection<Music> Songs { get; set; } = new ObservableCollection<Music>();
+        public ObservableCollection<Music> Songs { get; set; }
         public BitmapImage Thumbnail
         {
             get => thumbnail;
@@ -23,7 +23,8 @@ namespace SMPlayer.Models
                 OnPropertyChanged();
             }
         }
-        private BitmapImage thumbnail = Helper.DefaultAlbumCover;
+        private BitmapImage thumbnail = MusicImage.DefaultImage;
+        public string ThumbnailSource { get; private set; }
         public bool ThumbnailLoaded { get; private set; } = false;
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -33,42 +34,68 @@ namespace SMPlayer.Models
         {
             Name = music.Album;
             Artist = music.Artist;
-            Songs.Add(music);
+            Songs = new ObservableCollection<Music>() { music };
             if (setThumbnail) SetThumbnail();
         }
         public AlbumView(string name, string artist)
         {
             Name = name;
             Artist = artist;
+            Songs = new ObservableCollection<Music>();
+        }
+        public AlbumView(string name, string artist, string thumbnail)
+        {
+            Name = name;
+            Artist = artist;
+            ThumbnailSource = thumbnail;
         }
         public AlbumView(string name, string artist, IEnumerable<Music> songs, bool setThumbnail = true)
         {
             Name = name;
             Artist = artist;
-            Songs.SetTo(songs);
+            Songs = new ObservableCollection<Music>(songs);
             if (setThumbnail) SetThumbnail();
         }
         private async void SetThumbnail()
         {
-            await SetThumbnailAsync();
+            if (ThumbnailSource == null)
+                await SetThumbnailAsync();
+            else if (ThumbnailSource == "")
+                Thumbnail = MusicImage.DefaultImage;
+            else
+                Thumbnail = await Helper.GetThumbnailAsync(ThumbnailSource);
         }
         public async Task SetThumbnailAsync()
         {
             if (ThumbnailLoaded) return;
-            Thumbnail = await GetAlbumCoverAsync(Songs);
+            if (string.IsNullOrEmpty(ThumbnailSource) || !(await Helper.GetThumbnailAsync(ThumbnailSource) is BitmapImage thumbnail))
+            {
+                MusicImage image = await GetAlbumCoverAsync(Songs);
+                Thumbnail = image.Image;
+                ThumbnailSource = image.Path;
+            }
+            else
+            {
+                Thumbnail = thumbnail;
+            }
         }
-        public static async Task<BitmapImage> GetAlbumCoverAsync(ICollection<Music> songs)
+        public static async Task<MusicImage> GetAlbumCoverAsync(ICollection<Music> songs)
         {
             foreach (var music in songs)
                 if (await Helper.GetThumbnailAsync(music, false) is BitmapImage image)
-                    return image;
-            return Helper.DefaultAlbumCover;
+                    return new MusicImage(music.Path, image);
+            return MusicImage.Default;
         }
         public void AddMusic(Music music)
         {
             Songs.Add(music);
             Songs.SetTo(Songs.OrderBy(m => m.Name));
         }
+        public void SetSongs(IEnumerable<Music> music)
+        {
+            Songs = new ObservableCollection<Music>(music);
+        }
+
         public Playlist ToPlaylist()
         {
             return new Playlist(Name, Songs)
@@ -76,6 +103,11 @@ namespace SMPlayer.Models
                 Artist = Artist
             };
         }
+        public AlbumInfo ToAlbumInfo()
+        {
+            return new AlbumInfo(Name, Artist, ThumbnailSource);
+        }
+
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
             // Raise the PropertyChanged event, passing the name of the property whose value has changed.
@@ -84,12 +116,13 @@ namespace SMPlayer.Models
 
         public override bool Equals(object obj)
         {
-            return obj is AlbumView album && Name == album.Name && Artist == album.Artist;
+            return (obj is AlbumView album && Name == album.Name && Artist == album.Artist) ||
+                   (obj is AlbumInfo info && Name == info.Name && Artist == info.Artist);
         }
 
         public override int GetHashCode()
         {
-            return Name.GetHashCode();
+            return (Name + "%" + Artist).GetHashCode();
         }
     }
 }

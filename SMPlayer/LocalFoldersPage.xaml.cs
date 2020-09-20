@@ -16,12 +16,12 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalFoldersPage : Page, LocalPageButtonListener
+    public sealed partial class LocalFoldersPage : Page, ILocalPageButtonListener
     {
         public static FolderTree CurrentTree;
         private ObservableCollection<GridFolderView> GridItems = new ObservableCollection<GridFolderView>();
         private string TreePath;
-        public static LocalSetter setter;
+        public static ILocalSetter setter;
 
         public LocalFoldersPage()
         {

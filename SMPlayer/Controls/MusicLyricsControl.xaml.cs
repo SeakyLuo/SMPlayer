@@ -119,8 +119,8 @@ namespace SMPlayer.Controls
             if (string.IsNullOrEmpty(lyrics))
             {
                 string musicName = music.Name.RemoveBraces('(', ')').RemoveBraces('（', '）').
-                                                RemoveBraces('《', '》').RemoveBraces('<', '>').
-                                                RemoveBraces('[', ']').RemoveBraces('【', '】');
+                                              RemoveBraces('《', '》').RemoveBraces('<', '>').
+                                              RemoveBraces('[', ']').RemoveBraces('【', '】');
                 lyrics = await SearchLyrics(musicName + " " + music.Artist);
                 if (lyrics == "") lyrics = await SearchLyrics(musicName);
             }
@@ -159,8 +159,15 @@ namespace SMPlayer.Controls
             if (music == null) return;
             IsProcessing = true;
             CurrentMusic = music;
-            var lyrics = await music.GetLyricsAsync();
-            LyricsTextBox.Text = string.IsNullOrEmpty(lyrics) ? "" : lyrics;
+            try
+            {
+                var lyrics = await music.GetLyricsAsync();
+                LyricsTextBox.Text = string.IsNullOrEmpty(lyrics) ? "" : lyrics;
+            }
+            catch (IOException)
+            {
+                Helper.ShowNotification("GetLyricsFailed");
+            }
             Lyrics = LyricsTextBox.Text;
             IsProcessing = false;
         }

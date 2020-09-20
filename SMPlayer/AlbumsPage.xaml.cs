@@ -11,6 +11,7 @@ using Windows.UI.Core;
 using SMPlayer.Dialogs;
 using SMPlayer.Controls;
 using Windows.UI.Xaml.Media.Imaging;
+using System.Collections.Specialized;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -21,14 +22,32 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class AlbumsPage : Page, AfterSongsSetListener, ImageSavedListener
     {
+        public const string JsonFilename = "Albums";
         private ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         private bool IsProcessing = false;
+        private static volatile List<AlbumInfo> albumInfoList;
+
         public AlbumsPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             MusicLibraryPage.AddAfterSongsSetListener(this);
             AlbumArtControl.ImageSavedListeners.Add(this);
+        }
+
+        public static async Task Init()
+        {
+            if (albumInfoList != null) return;
+            var albums = JsonFileHelper.Convert<List<AlbumInfo>>(await JsonFileHelper.ReadAsync(JsonFilename));
+            if (albums == null) albumInfoList = new List<AlbumInfo>();
+            else albumInfoList = albums;
+        }
+
+        public static void Save()
+        {
+            if (albumInfoList.Count == 0) return;
+            JsonFileHelper.SaveAsync(JsonFilename, albumInfoList);
+            JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, albumInfoList);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -39,9 +58,12 @@ namespace SMPlayer
         private async void Setup(ICollection<Music> songs)
         {
             if (IsProcessing) return;
-            AlbumPageProgressRing.IsActive = true;
-            await SetData(songs);
-            AlbumPageProgressRing.IsActive = false;
+            AlbumPageProgressRing.Visibility = Visibility.Visible;
+            if (albumInfoList.Count > 0)
+                SetData(albumInfoList);
+            else
+                await SetData(songs);
+            AlbumPageProgressRing.Visibility = Visibility.Collapsed;
         }
 
         private async Task SetData(ICollection<Music> songs)
@@ -59,9 +81,16 @@ namespace SMPlayer
                     }
                 }
                 albums = albums.OrderBy(a => a.Name).ThenBy(a => a.Artist).ToList();
+                albumInfoList = albums.Select(a => a.ToAlbumInfo()).ToList();
+                Save();
             });
             Albums.SetTo(albums);
             IsProcessing = false;
+        }
+
+        private void SetData(List<AlbumInfo> albums)
+        {
+            Albums.SetTo(albums.Select(a => a.ToAlbumView()));
         }
 
         public async void SongsSet(ICollection<Music> songs)
@@ -74,13 +103,26 @@ namespace SMPlayer
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            AlbumView album = (AlbumView)e.ClickedItem;
+            if (album.Songs == null)
+                album.SetSongs(AlbumPage.SearchAlbumSongs(album.Name, album.Artist));
             Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
         }
 
         private async void DropShadowControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
             if (sender.DataContext is AlbumView album)
-                await album.SetThumbnailAsync();
+            {
+                if (!album.ThumbnailLoaded)
+                {
+                    string before = album.ThumbnailSource;
+                    if (album.Songs == null)
+                        album.SetSongs(AlbumPage.SearchAlbumSongs(album.Name, album.Artist));
+                    await album.SetThumbnailAsync();
+                    if (album.ThumbnailSource != before && albumInfoList.FirstOrDefault(a => a.Equals(album)) is AlbumInfo albumInfo)
+                        albumInfo.Thumbnail = album.ThumbnailSource;
+                }
+            }
         }
 
         private void MenuFlyout_Opening(object sender, object e)
@@ -101,13 +143,13 @@ namespace SMPlayer
         public void SaveAlbum(AlbumView album, BitmapImage image)
         {
             if (Albums.FirstOrDefault(a => a.Equals(album)) is AlbumView albumView)
-                albumView.Thumbnail = image ?? Helper.DefaultAlbumCover;
+                albumView.Thumbnail = image ?? MusicImage.DefaultImage;
         }
 
         public void SaveMusic(Music music, BitmapImage image)
         {
             if (Albums.FirstOrDefault(a => a.Name.Equals(music.Album)) is AlbumView albumView && albumView.Songs.Count == 1)
-                albumView.Thumbnail = image ?? Helper.DefaultAlbumCover;
+                albumView.Thumbnail = image ?? MusicImage.DefaultImage;
 
         }
     }
