@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace SMPlayer
 {
-    public sealed partial class MediaControl : UserControl, SwitchMusicListener, MediaControlListener, RemoveMusicListener, LikeMusicListener
+    public sealed partial class MediaControl : UserControl, ISwitchMusicListener, MediaControlListener, RemoveMusicListener, ILikeMusicListener
     {
         public enum MediaControlMode
         {
@@ -174,8 +174,9 @@ namespace SMPlayer
                 switch (mode)
                 {
                     case MediaControlMode.Main:
-                    case MediaControlMode.Mini:
                         return MainVolumeButton;
+                    case MediaControlMode.Mini:
+                        return MiniMoreVolumeButton;
                     case MediaControlMode.Full:
                         return FullVolumeButton;
                     default:
@@ -333,7 +334,7 @@ namespace SMPlayer
         private Music CurrentMusic = null;
         private bool ShouldUpdate = true, SliderClicked = false;
         private static List<Action<Music, Music>> MusicModifiedListeners = new List<Action<Music, Music>>();
-        private static List<MusicRequestListener> MusicRequestListeners = new List<MusicRequestListener>();
+        private static List<IMusicRequestListener> MusicRequestListeners = new List<IMusicRequestListener>();
         private static bool inited = false;
 
         public MediaControl()
@@ -486,7 +487,7 @@ namespace SMPlayer
             MusicModifiedListeners.Add(listener);
         }
 
-        public static void AddMusicRequestListener(MusicRequestListener listener)
+        public static void AddMusicRequestListener(IMusicRequestListener listener)
         {
             MusicRequestListeners.Add(listener);
         }
@@ -782,7 +783,7 @@ namespace SMPlayer
         }
         private async void MiniModeButton_Click(object sender, RoutedEventArgs e)
         {
-            if (MediaHelper.CurrentMusic == null || !ApplicationView.GetForCurrentView().IsViewModeSupported(ApplicationViewMode.CompactOverlay))
+            if (!ApplicationView.GetForCurrentView().IsViewModeSupported(ApplicationViewMode.CompactOverlay))
             {
                 Helper.ShowNotification("MiniModeFailed");
                 return;
@@ -987,6 +988,12 @@ namespace SMPlayer
             flyout.Items.Add(MenuFlyoutHelper.GetShuffleSubItem());
         }
 
+        private void MiniMoreShufflePlayButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.AllSongs.RandItems(100));
+            MiniMoreFlyout.Hide();
+        }
+
         public void MusicLiked(Music music, bool isFavorite)
         {
             if (music == MediaHelper.CurrentMusic)
@@ -997,7 +1004,7 @@ namespace SMPlayer
         }
     }
 
-    public interface MusicRequestListener
+    public interface IMusicRequestListener
     {
         void PlaylistRequested(ICollection<Music> playlist);
         void MusicInfoRequested(Music music);

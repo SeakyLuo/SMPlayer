@@ -154,6 +154,9 @@
     <Compile Include="Controls\IconTextButton.xaml.cs">
       <DependentUpon>IconTextButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MultiSelectCommandBar.xaml.cs">
+      <DependentUpon>MultiSelectCommandBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MusicInfoControl.xaml.cs">
       <DependentUpon>MusicInfoControl.xaml</DependentUpon>
     </Compile>
@@ -221,6 +224,8 @@
       <DependentUpon>MiniModePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\AlbumInfo.cs" />
+    <Compile Include="Models\MenuFlyoutOption.cs" />
+    <Compile Include="Models\MultiSelectCommandBarOption.cs" />
     <Compile Include="Models\MusicDisplayItem.cs" />
     <Compile Include="Models\MusicImage.cs" />
     <Compile Include="SearchResultPage.xaml.cs">
@@ -402,6 +407,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\LoadingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MultiSelectCommandBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

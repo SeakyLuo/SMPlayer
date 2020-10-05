@@ -216,6 +216,9 @@
   <data name="BugReportButton.Content" xml:space="preserve">
     <value>报告问题</value>
   </data>
+  <data name="CancelAppButton.Label" xml:space="preserve">
+    <value>取消</value>
+  </data>
   <data name="CancelButton.Content" xml:space="preserve">
     <value>取消</value>
   </data>
@@ -248,6 +251,9 @@
   </data>
   <data name="ClearPlayCountButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>将播放次数清零</value>
+  </data>
+  <data name="ClearSelectionAppButton.Label" xml:space="preserve">
+    <value>清除选择</value>
   </data>
   <data name="ComposersTextBlock.Text" xml:space="preserve">
     <value>作曲家</value>
@@ -295,7 +301,7 @@
     <value>删除播放列表</value>
   </data>
   <data name="DisplayCheckBox.Content" xml:space="preserve">
-    <value>下次不显示这个</value>
+    <value>不再显示</value>
   </data>
   <data name="DuplicateItem.Text" xml:space="preserve">
     <value>复制播放列表</value>
@@ -438,6 +444,9 @@
   <data name="Move To Top" xml:space="preserve">
     <value>移到最前</value>
   </data>
+  <data name="MultiSelectAppButton.Label" xml:space="preserve">
+    <value>多选</value>
+  </data>
   <data name="Music Library" xml:space="preserve">
     <value>音乐库</value>
   </data>
@@ -540,6 +549,9 @@
   <data name="PlayAllButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>随机播放全部</value>
   </data>
+  <data name="PlayAppButton.Label" xml:space="preserve">
+    <value>播放</value>
+  </data>
   <data name="PlayArtistItem.Text" xml:space="preserve">
     <value>播放歌手</value>
   </data>
@@ -557,6 +569,9 @@
   </data>
   <data name="PlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>显示正在播放列表</value>
+  </data>
+  <data name="PlaylistDropdownButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>查看所有播放列表</value>
   </data>
   <data name="PlaylistMenuItem.Text" xml:space="preserve">
     <value>正在播放</value>
@@ -645,6 +660,9 @@
   <data name="Remove From Playlist" xml:space="preserve">
     <value>从播放列表中移除</value>
   </data>
+  <data name="RemoveAppButton.Label" xml:space="preserve">
+    <value>从播放列表中移除</value>
+  </data>
   <data name="RemoveSwipeItem.Text" xml:space="preserve">
     <value>移除</value>
   </data>
@@ -662,6 +680,9 @@
   </data>
   <data name="RenameItem.Text" xml:space="preserve">
     <value>重命名播放列表</value>
+  </data>
+  <data name="ResetButton.Content" xml:space="preserve">
+    <value>重置</value>
   </data>
   <data name="ResetLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>重设歌词</value>
@@ -729,6 +750,12 @@
   <data name="See Music Info" xml:space="preserve">
     <value>查看歌曲信息</value>
   </data>
+  <data name="Select" xml:space="preserve">
+    <value>选择</value>
+  </data>
+  <data name="SelectAllAppButton.Label" xml:space="preserve">
+    <value>全选</value>
+  </data>
   <data name="SelectArtistTextBlock.Text" xml:space="preserve">
     <value>在左侧选择一位歌手</value>
   </data>
@@ -786,8 +813,8 @@
   <data name="Sort" xml:space="preserve">
     <value>排序</value>
   </data>
-  <data name="SortByButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>对播放列表进行排序</value>
+  <data name="SortAppButton.Label" xml:space="preserve">
+    <value>排序</value>
   </data>
   <data name="StopButton.Content" xml:space="preserve">
     <value>中止</value>

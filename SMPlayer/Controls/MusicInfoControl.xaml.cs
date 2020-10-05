@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace SMPlayer.Controls
 {
-    public sealed partial class MusicInfoControl : UserControl, SwitchMusicListener
+    public sealed partial class MusicInfoControl : UserControl, ISwitchMusicListener
     {
         public bool AllowMusicSwitching { get; set; }
         public bool ShowHeader { get; set; }

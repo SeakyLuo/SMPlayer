@@ -9,6 +9,7 @@ using Windows.Storage.Pickers;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -97,8 +98,14 @@ namespace SMPlayer
         private void ConfirmColorButton_Click(object sender, RoutedEventArgs e)
         {
             //Settings.settings.ThemeColor = ThemeColorPicker.Color;
+            //ThemeColorButton.Background = new SolidColorBrush(ThemeColorPicker.Color);
             MainPage.Instance.ShowLocalizedNotification("NotImplemented");
             ColorPickerFlyout.Hide();
+        }
+
+        private void ResetColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            ThemeColorPicker.Color = ColorHelper.SystemColorHighlightColor;
         }
 
         private void CancelColorButton_Click(object sender, RoutedEventArgs e)

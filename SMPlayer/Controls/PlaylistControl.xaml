@@ -6,7 +6,6 @@
     xmlns:data="using:SMPlayer.Models"
     xmlns:local="using:SMPlayer.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:triggers="using:SMPlayer.Triggers"
     x:Name="PlaylistController"
     Loaded="PlaylistController_Loaded"
     mc:Ignorable="d">

@@ -7,7 +7,7 @@ using System;
 
 namespace SMPlayer.Controls
 {
-    public sealed partial class PlaylistControlItem : UserControl, SwitchMusicListener
+    public sealed partial class PlaylistControlItem : UserControl, ISwitchMusicListener
     {
         public bool ShowAlbumText
         {

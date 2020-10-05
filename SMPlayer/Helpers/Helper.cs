@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
+using SMPlayer.Controls;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
@@ -115,32 +116,32 @@ namespace SMPlayer
                 return false;
             }
         }
-        public static NotificationContainer GetNotificationContainer() { return (Window.Current.Content as Frame).Content as NotificationContainer; }
+        public static IMainPageContainer GetMainPageContainer() { return (Window.Current.Content as Frame).Content as IMainPageContainer; }
         public static void ShowNotificationWithoutLocalization(string message, int duration = 2000)
         {
-            GetNotificationContainer()?.ShowNotification(message, duration);
+            GetMainPageContainer()?.ShowNotification(message, duration);
         }
         public static void ShowNotification(string message, int duration = 2000)
         {
-            GetNotificationContainer()?.ShowNotification(LocalizeMessage(message), duration);
+            GetMainPageContainer()?.ShowNotification(LocalizeMessage(message), duration);
         }
         public static void ShowCancelableNotification(string message, Action cancel, int duration = 5000)
         {
-            GetNotificationContainer()?.ShowUndoNotification(LocalizeMessage(message), cancel, duration);
+            GetMainPageContainer()?.ShowUndoNotification(LocalizeMessage(message), cancel, duration);
         }
         public static void ShowCancelableNotificationWithoutLocalization(string message, Action cancel, int duration = 5000)
         {
-            GetNotificationContainer()?.ShowUndoNotification(message, cancel, duration);
+            GetMainPageContainer()?.ShowUndoNotification(message, cancel, duration);
         }
         public static void ShowMusicNotFoundNotification(string music, int duration = 5000)
         {
-            GetNotificationContainer().ShowNotification(LocalizeMessage("MusicNotFound", music), duration);
+            GetMainPageContainer().ShowNotification(LocalizeMessage("MusicNotFound", music), duration);
         }
         public static void ShowAddMusicResultNotification(AddMusicResult result, Music target = null)
         {
             if (result.IsFailed)
             {
-                NotificationContainer container = GetNotificationContainer();
+                IMainPageContainer container = GetMainPageContainer();
                 int duration = 5000;
                 if (result.FailCount > 1) container.ShowNotification(LocalizeMessage("MusicsNotFound", result.FailCount), duration);
                 else
@@ -153,6 +154,10 @@ namespace SMPlayer
                     }
                 }
             }
+        }
+        public static void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option)
+        {
+            GetMainPageContainer()?.ShowMultiSelectCommandBar(option);
         }
         public static string CurrentLanguage
         {
@@ -556,10 +561,12 @@ namespace SMPlayer
         Running = 0, Done = 1, Ready = 2, Break = 3
     }
 
-    public interface NotificationContainer
+    public interface IMainPageContainer
     {
         void ShowNotification(string message, int duration = 2000);
         void ShowUndoNotification(string message, Action undo, int duration = 5000);
         void ShowLocalizedNotification(string message, int duration = 2000);
+        void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option = null);
+        MultiSelectCommandBar GetMultiSelectCommandBar();
     }
 }

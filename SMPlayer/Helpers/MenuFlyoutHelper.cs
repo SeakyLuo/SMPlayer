@@ -18,11 +18,11 @@ namespace SMPlayer
             ShuffleSubItemName = "ShuffleSubItem", SeeAlbumItemName = "SeeAlbumItemName";
         public static string NowPlaying = Helper.Localize("Now Playing"), MyFavorites = Helper.Localize("My Favorites");
         public static bool IsBadNewPlaylistName(string name) { return name == NowPlaying || name == MyFavorites; }
-        public MenuFlyout GetAddToMenuFlyout(string playlistName = "", MenuFlyoutItemClickListener listener = null)
+        public MenuFlyout GetAddToMenuFlyout(string playlistName = "", IMenuFlyoutItemClickListener listener = null)
         {
             return GetAddToMenuFlyoutSubItem(playlistName, listener).ToMenuFlyout();
         }
-        public MenuFlyoutSubItem GetAddToMenuFlyoutSubItem(string playlistName = "", MenuFlyoutItemClickListener listener = null)
+        public MenuFlyoutSubItem GetAddToMenuFlyoutSubItem(string playlistName = "", IMenuFlyoutItemClickListener listener = null)
         {
             MenuFlyoutSubItem addToItem = new MenuFlyoutSubItem()
             {
@@ -58,7 +58,7 @@ namespace SMPlayer
                             MediaHelper.AddMusic(song);
                         if (songs.Count() == 0) return;
                         string message = songs.Count() == 1 ? Helper.LocalizeMessage("SongAddedTo", songs.ElementAt(0).Name, NowPlaying) :
-                                                                 Helper.LocalizeMessage("SongsAddedTo", songs.Count(), NowPlaying);
+                                                              Helper.LocalizeMessage("SongsAddedTo", songs.Count(), NowPlaying);
                         Helper.ShowCancelableNotificationWithoutLocalization(message, () =>
                         {
                             foreach (var song in songs)
@@ -181,7 +181,7 @@ namespace SMPlayer
             subItem.Icon = new SymbolIcon(Symbol.Shuffle);
             return subItem;
         }
-        public MenuFlyout GetPlaylistMenuFlyout(MenuFlyoutItemClickListener listener = null)
+        public MenuFlyout GetPlaylistMenuFlyout(IMenuFlyoutItemClickListener listener = null)
         {
             var flyout = new MenuFlyout();
             var shuffleItem = new MenuFlyoutItem()
@@ -214,6 +214,20 @@ namespace SMPlayer
                     return;
                 }
                 ShowInExplorer(path, type);
+            };
+            return item;
+        }
+        public static MenuFlyoutItem GetSelectItem(IMenuFlyoutItemClickListener listener = null, MultiSelectCommandBarOption option = null)
+        {
+            var item = new MenuFlyoutItem()
+            {
+                Icon = new FontIcon() { Glyph = "\uE762" },
+                Text = Helper.Localize("Select")
+            };
+            item.Click += (s, args) =>
+            {
+                listener?.Select((s as FrameworkElement).DataContext as Music);
+                Helper.ShowMultiSelectCommandBar(option);
             };
             return item;
         }
@@ -277,8 +291,9 @@ namespace SMPlayer
             };
             return item;
         }
-        public MenuFlyout GetMusicMenuFlyout(MenuFlyoutItemClickListener listener = null, bool withNavigation = true)
+        public MenuFlyout GetMusicMenuFlyout(IMenuFlyoutItemClickListener listener = null, MenuFlyoutOption option = null)
         {
+            if (option == null) option = new MenuFlyoutOption();
             var music = Data as Music;
             var flyout = new MenuFlyout();
             var localizedPlay = Helper.Localize("Play");
@@ -295,6 +310,7 @@ namespace SMPlayer
             };
             flyout.Items.Add(playItem);
             flyout.Items.Add(GetAddToMenuFlyoutSubItem());
+            if (option.WithSelect) flyout.Items.Add(GetSelectItem(listener, option.MultiSelectOption));
             flyout.Items.Add(GetShowInExplorerItem(music.Path, StorageItemTypes.File));
             var deleteItem = new MenuFlyoutItem()
             {
@@ -333,7 +349,7 @@ namespace SMPlayer
             };
             deleteItem.SetToolTip(Helper.LocalizeMessage("DeleteMusic", music.Name), false);
             flyout.Items.Add(deleteItem);
-            foreach (var item in GetMusicPropertiesMenuFlyout(withNavigation).Items)
+            foreach (var item in GetMusicPropertiesMenuFlyout(option.WithNavigation).Items)
                 flyout.Items.Add(item);
             return flyout;
         }
@@ -440,16 +456,18 @@ namespace SMPlayer
             return flyout;
         }
 
-        public MenuFlyout GetRemovableMusicMenuFlyout(MenuFlyoutItemClickListener listener = null)
+        public MenuFlyout GetRemovableMusicMenuFlyout(IMenuFlyoutItemClickListener listener = null, MenuFlyoutOption option = null)
         {
+            if (option == null) option = new MenuFlyoutOption();
+            option.WithNavigation = false;
             var music = Data as Music;
-            var flyout = GetMusicMenuFlyout(listener, false);
+            var flyout = GetMusicMenuFlyout(listener, option);
             var removeItem = GetRemovableMenuFlyoutItem(music, listener);
             flyout.Items.Insert(2, removeItem);
             return flyout;
         }
 
-        public static MenuFlyoutItem GetRemovableMenuFlyoutItem(Music music, MenuFlyoutItemClickListener listener = null)
+        public static MenuFlyoutItem GetRemovableMenuFlyoutItem(Music music, IMenuFlyoutItemClickListener listener = null)
         {
             var removeItem = new MenuFlyoutItem
             {
@@ -501,11 +519,10 @@ namespace SMPlayer
                 radioItem.Click += (send, args) =>
                 {
                     playlist.SetCriterionAndSort(criterion);
-                    (sender as IconTextButton).Label = sortby;
                 };
                 flyout.Items.Add(radioItem);
             }
-            flyout.ShowAt(sender as IconTextButton);
+            flyout.ShowAt(sender as FrameworkElement);
         }
         public static void SetSearchSortByMenu(object sender, SortBy criterion, SortBy[] criteria, Action<SortBy> onSelected)
         {
@@ -647,19 +664,19 @@ namespace SMPlayer
             }
             return flyout;
         }
-        public static MenuFlyout SetPlaylistMenu(object sender, MenuFlyoutItemClickListener listener = null)
+        public static MenuFlyout SetPlaylistMenu(object sender, IMenuFlyoutItemClickListener clickListener = null, IMenuFlyoutHelperBuildListener buildListener = null)
         {
-            return SetMenu(helper => helper.GetPlaylistMenuFlyout(listener), sender);
+            return SetMenu(helper => helper.GetPlaylistMenuFlyout(clickListener), sender, buildListener);
         }
-        public static MenuFlyout SetMusicMenu(object sender, MenuFlyoutItemClickListener listener = null)
+        public static MenuFlyout SetMusicMenu(object sender, IMenuFlyoutItemClickListener clickListener = null, IMenuFlyoutHelperBuildListener buildListener = null, MenuFlyoutOption option = null)
         {
-            return SetMenu(helper => helper.GetMusicMenuFlyout(listener), sender);
+            return SetMenu(helper => helper.GetMusicMenuFlyout(clickListener, option), sender, buildListener);
         }
-        public static MenuFlyout SetRemovableMusicMenu(object sender, MenuFlyoutItemClickListener listener = null)
+        public static MenuFlyout SetRemovableMusicMenu(object sender, IMenuFlyoutItemClickListener listener = null, IMenuFlyoutHelperBuildListener buildListener = null, MenuFlyoutOption option = null)
         {
-            return SetMenu(helper => helper.GetRemovableMusicMenuFlyout(listener), sender);
+            return SetMenu(helper => helper.GetRemovableMusicMenuFlyout(listener, option), sender, buildListener);
         }
-        private static MenuFlyout SetMenu(Func<MenuFlyoutHelper, MenuFlyout> GetMenu, object sender)
+        private static MenuFlyout SetMenu(Func<MenuFlyoutHelper, MenuFlyout> GetMenu, object sender, IMenuFlyoutHelperBuildListener buildListener = null)
         {
             MenuFlyout flyout;
             MenuFlyoutHelper helper;
@@ -667,7 +684,7 @@ namespace SMPlayer
             if (sender is MenuFlyout)
             {
                 flyout = sender as MenuFlyout;
-                data = (flyout.Target as FrameworkElement).DataContext;
+                data = flyout.Target.DataContext;
                 flyout.Items.Clear();
             }
             else
@@ -680,6 +697,7 @@ namespace SMPlayer
                 Data = FindMusic(data),
                 DefaultPlaylistName = Settings.settings.FindNextPlaylistName(FindPlaylistName(data))
             };
+            buildListener?.OnBuild(helper);
             var items = GetMenu(helper).Items;
             flyout.Items.Clear();
             foreach (var item in items)
@@ -714,11 +732,17 @@ namespace SMPlayer
         }
     }
 
-    public interface MenuFlyoutItemClickListener
+    public interface IMenuFlyoutItemClickListener
     {
         void Favorite(object data);
         void Delete(Music music);
         void UndoDelete(Music music);
         void Remove(Music music);
+        void Select(Music music);
+    }
+
+    public interface IMenuFlyoutHelperBuildListener
+    {
+        void OnBuild(MenuFlyoutHelper helper);
     }
 }

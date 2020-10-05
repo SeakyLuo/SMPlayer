@@ -11,7 +11,7 @@ using Windows.UI.Xaml.Input;
 
 namespace SMPlayer
 {
-    public sealed partial class GridMusicControl : UserControl, SwitchMusicListener, MenuFlyoutItemClickListener
+    public sealed partial class GridMusicControl : UserControl, ISwitchMusicListener, IMenuFlyoutItemClickListener
     {
         public ObservableCollection<GridMusicView> GridMusicCollection = new ObservableCollection<GridMusicView>();
         public List<Music> MusicCollection = new List<Music>();
@@ -112,7 +112,7 @@ namespace SMPlayer
         }
         private void MenuFlyout_Opening(object sender, object e)
         {
-            MenuFlyoutHelper.SetMusicMenu(sender, this);
+            MenuFlyoutHelper.SetMusicMenu(sender, this, null, new MenuFlyoutOption() { WithSelect = false });
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
@@ -130,25 +130,30 @@ namespace SMPlayer
             (sender.DataContext as GridMusicView)?.SetThumbnail();
         }
 
-        void MenuFlyoutItemClickListener.Favorite(object data)
+        void IMenuFlyoutItemClickListener.Favorite(object data)
         {
             
         }
 
-        void MenuFlyoutItemClickListener.Delete(Music music)
+        void IMenuFlyoutItemClickListener.Delete(Music music)
         {
             RemoveMusic(music);
         }
 
-        void MenuFlyoutItemClickListener.Remove(Music music)
+        void IMenuFlyoutItemClickListener.Remove(Music music)
         {
             RemoveMusic(music);
         }
 
-        void MenuFlyoutItemClickListener.UndoDelete(Music music)
+        void IMenuFlyoutItemClickListener.UndoDelete(Music music)
         {
             MusicCollection.Insert(removedItemIndex, music);
             GridMusicCollection.Insert(removedItemIndex, new GridMusicView(music));
+        }
+
+        void IMenuFlyoutItemClickListener.Select(Music music)
+        {
+            
         }
 
         private void RemoveMusic(Music music)

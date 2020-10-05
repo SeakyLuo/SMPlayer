@@ -18,7 +18,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class ArtistsPage : Page, AfterSongsSetListener, SwitchMusicListener
+    public sealed partial class ArtistsPage : Page, IAfterSongsSetListener, ISwitchMusicListener
     {
         public static ArtistsPage Instance { get => MainPage.Instance.NavigationFrame.Content as ArtistsPage; }
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
@@ -229,6 +229,7 @@ namespace SMPlayer
                 ScrollToArtist(artistView.Name);
             };
             flyout.Items.Add(locateArtist);
+            flyout.Items.Add(MenuFlyoutHelper.GetSelectItem(null, new MultiSelectCommandBarOption() { ShowRemove = false }));
         }
         private void AlbumMenuFlyout_Opening(object sender, object e)
         {

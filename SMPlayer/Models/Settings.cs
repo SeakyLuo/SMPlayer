@@ -15,7 +15,7 @@ namespace SMPlayer.Models
     {
         public static Settings settings;
         public const string JsonFilename = "SMPlayerSettings";
-        public static List<LikeMusicListener> LikeMusicListeners = new List<LikeMusicListener>();
+        public static List<ILikeMusicListener> LikeMusicListeners = new List<ILikeMusicListener>();
         public static List<Action<Playlist>> PlaylistAddedListeners = new List<Action<Playlist>>();
         public static bool Inited { get; private set; } = false;
 
@@ -301,7 +301,7 @@ namespace SMPlayer.Models
         }
     }
 
-    public interface LikeMusicListener
+    public interface ILikeMusicListener
     {
         void MusicLiked(Music music, bool isFavorite);
     }

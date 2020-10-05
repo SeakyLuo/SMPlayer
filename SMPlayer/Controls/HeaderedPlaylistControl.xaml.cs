@@ -63,7 +63,7 @@ namespace SMPlayer
         private static Dictionary<string, List<MusicDisplayItem>> PlaylistDisplayDict = new Dictionary<string, List<MusicDisplayItem>>();
         private static readonly Random random = new Random();
         private static RenameDialog dialog;
-        private static RemoveDialog DeleteDialog;
+        private static RemoveDialog removeDialog;
         public HeaderedPlaylistControl()
         {
             this.InitializeComponent();
@@ -127,7 +127,7 @@ namespace SMPlayer
         {
             var helper = new MenuFlyoutHelper()
             {
-                Data = CurrentPlaylist.Songs,
+                Data = CurrentPlaylist,
                 DefaultPlaylistName = MenuFlyoutHelper.IsBadNewPlaylistName(CurrentPlaylist.Name) ? "" : Settings.settings.FindNextPlaylistName(CurrentPlaylist.Name)
             };
             helper.GetAddToMenuFlyout(CurrentPlaylist.Name).ShowAt(sender as FrameworkElement);
@@ -155,22 +155,22 @@ namespace SMPlayer
 
         public async void DeletePlaylist(Playlist playlist)
         {
-            if (DeleteDialog == null)
+            if (removeDialog == null)
             {
-                DeleteDialog = new RemoveDialog()
+                removeDialog = new RemoveDialog()
                 {
                     Confirm = () => ExecutePlaylistDeletion(playlist)
                 };
             }
-            if (DeleteDialog.IsChecked)
+            if (removeDialog.IsChecked)
             {
                 ExecutePlaylistDeletion(playlist);
             }
             else
             {
-                DeleteDialog.Confirm = () => ExecutePlaylistDeletion(playlist);
-                DeleteDialog.Message = Helper.LocalizeMessage("RemovePlaylist", playlist.Name);
-                await DeleteDialog.ShowAsync();
+                removeDialog.Confirm = () => ExecutePlaylistDeletion(playlist);
+                removeDialog.Message = Helper.LocalizeMessage("RemovePlaylist", playlist.Name);
+                await removeDialog.ShowAsync();
             }
         }
         private void ExecutePlaylistDeletion(Playlist playlist)
@@ -213,19 +213,25 @@ namespace SMPlayer
 
         private async void Clear_Click(object sender, RoutedEventArgs e)
         {
-            if (DeleteDialog == null) DeleteDialog = new RemoveDialog();
-            DeleteDialog.Message = Helper.LocalizeMessage("ClearPlaylist", CurrentPlaylist.Name);
-            DeleteDialog.Confirm = () =>
+            if (removeDialog == null) removeDialog = new RemoveDialog();
+            removeDialog.Message = Helper.LocalizeMessage("ClearPlaylist", CurrentPlaylist.Name);
+            removeDialog.Confirm = () =>
             {
                 CurrentPlaylist.Clear();
                 SetPlaylistInfo(SongCountConverter.ToStr(CurrentPlaylist.Songs));
             };
-            await DeleteDialog.ShowAsync();
+            await removeDialog.ShowAsync();
         }
 
         private async void EditAlbumArtButton_Click(object sender, RoutedEventArgs e)
         {
             await new AlbumDialog(AlbumDialogOption.AlbumArt, CurrentPlaylist.ToAlbumView()).ShowAsync();
+        }
+
+        private void MultiSelectButton_Click(object sender, RoutedEventArgs e)
+        {
+            HeaderedPlaylistController.SelectionMode = ListViewSelectionMode.Multiple;
+            MainPage.Instance.ShowMultiSelectCommandBar();
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
@@ -386,6 +392,11 @@ namespace SMPlayer
                 MusicDisplayItem item = await music.GetMusicDisplayItemAsync();
                 SetMusicDisplayItem(CurrentPlaylist.DisplayItem = item);
             }
+        }
+
+        private void SortButton_Click(object sender, RoutedEventArgs e)
+        {
+            MenuFlyoutHelper.SetPlaylistSortByMenu(sender, CurrentPlaylist);
         }
     }
 }

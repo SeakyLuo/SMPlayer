@@ -11,42 +11,26 @@ Download it and open it using Visual Studio.
 
 Build it with local computer.
 
-Go to Settings and Set the Root Folder of your music files.
+Go to Settings and set the Root Folder of your music files.
 
 # TO DO
 Move music from folder to folder.
 
 Improve path header display (like Windows).
 
-Run add music on thread.
-
 Sort albums.
-
-Refresh directory does not refresh page.
 
 Improve column spacing of AlbumPage.
 
 Improve editing album art by selecting a song in a dropdown with searching.
 
-Mini mode shuffle button.
-
-Load from backup.
+Export data. Load from backup.
 
 Page shows no music hint.
 
 Album properties.
 
-Highlight root folder textbox for warning when reloading music library.
-
-Grid Mode for PlaylistPage.
-
-Multi-Select.
-
-Export data.
-
 Recent added with timeline.
-
-ThemeColor change.
 
 Animations.
 
@@ -56,7 +40,7 @@ Able to drag titlebar when loading.
 Dark thumb in the mini mode.
 
 # MIGHT DO
-Real-time update Playlist Info when new music added
+Real-time update Playlist Info when new music added.
 
 Album art in NowPlayingFull.
 
@@ -72,10 +56,16 @@ SearchPage AddTo button add all songs instead of displayed songs.
 
 SearchPage AddTo button for all search types.
 
-Random after one cycle.
+Shuffle after one round of playing.
 
 SaveChanges button.
 
 If a playlist contains this music collection, skip it in the MenuFlyout.
 
 Disallow dialog closing when processing request.
+
+Mini mode shuffle button like NowPlayingPage.
+
+Grid Mode for PlaylistPage.
+
+Refresh directory does not refresh page.

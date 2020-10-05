@@ -18,7 +18,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MusicLibraryPage : Page, SwitchMusicListener, AfterSongsSetListener, LikeMusicListener
+    public sealed partial class MusicLibraryPage : Page, ISwitchMusicListener, IAfterSongsSetListener, ILikeMusicListener, IMenuFlyoutHelperBuildListener
     {
         public const string JsonFilename = "MusicLibrary";
         public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
@@ -26,7 +26,7 @@ namespace SMPlayer
         public static HashSet<Music> AllSongsSet;
         public static bool IsLibraryUnchangedAfterChecking = true;
 
-        private static List<AfterSongsSetListener> listeners = new List<AfterSongsSetListener>();
+        private static List<IAfterSongsSetListener> listeners = new List<IAfterSongsSetListener>();
 
         public MusicLibraryPage()
         {
@@ -71,7 +71,7 @@ namespace SMPlayer
         }
 
 
-        public static void AddAfterSongsSetListener(AfterSongsSetListener listener)
+        public static void AddAfterSongsSetListener(IAfterSongsSetListener listener)
         {
             listeners.Add(listener);
         }
@@ -92,9 +92,9 @@ namespace SMPlayer
         private void MenuFlyout_Opening(object sender, object e)
         {
             if (MusicLibraryDataGrid.SelectedItems.Count > 1)
-                MenuFlyoutHelper.SetPlaylistMenu(sender);
+                MenuFlyoutHelper.SetPlaylistMenu(sender, null, this);
             else
-                MenuFlyoutHelper.SetMusicMenu(sender);
+                MenuFlyoutHelper.SetMusicMenu(sender, null, null, new MenuFlyoutOption() { WithSelect = false });
         }
 
         public static IEnumerable<Music> SortPlaylist(IEnumerable<Music> playlist, SortBy criterion)
@@ -182,9 +182,19 @@ namespace SMPlayer
             var target = AllSongs.FirstOrDefault(m => m == music);
             if (target != null) target.Favorite = isFavorite;
         }
+
+        public void OnBuild(MenuFlyoutHelper helper)
+        {
+            var list = new List<Music>();
+            foreach (Music item in MusicLibraryDataGrid.SelectedItems)
+            {
+                list.Add(item);
+            }
+            helper.Data = list;
+        }
     }
 
-    public interface AfterSongsSetListener
+    public interface IAfterSongsSetListener
     {
         void SongsSet(ICollection<Music> songs);
     }

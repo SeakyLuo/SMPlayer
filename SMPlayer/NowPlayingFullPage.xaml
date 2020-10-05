@@ -29,6 +29,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid Grid.RowSpan="3">
             <Grid.Background>
@@ -146,5 +147,6 @@
                 </DataTemplate>
             </controls:InAppNotification.ContentTemplate>
         </controls:InAppNotification>
+        <myControls:MultiSelectCommandBar x:Name="BottomMultiSelectCommandBar" Grid.Row="3" />
     </Grid>
 </Page>

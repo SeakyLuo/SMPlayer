@@ -1,4 +1,5 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Controls;
+using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using Windows.UI.Xaml;
@@ -11,7 +12,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class NowPlayingFullPage : Page, NotificationContainer, MusicRequestListener
+    public sealed partial class NowPlayingFullPage : Page, IMainPageContainer, IMusicRequestListener
     {
         public static NowPlayingFullPage Instance { get => (Window.Current.Content as Frame).Content as NowPlayingFullPage; }
         public NowPlayingFullPage()
@@ -100,6 +101,16 @@ namespace SMPlayer
         {
             undo.Invoke();
             UndoInAppNotification.Dismiss();
+        }
+
+        public void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option = null)
+        {
+            BottomMultiSelectCommandBar.Show(option);
+        }
+
+        public MultiSelectCommandBar GetMultiSelectCommandBar()
+        {
+            return BottomMultiSelectCommandBar;
         }
     }
 }

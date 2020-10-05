@@ -73,7 +73,6 @@
                                     Grid.Column="1"
                                     MinHeight="{ThemeResource AppBarThemeCompactHeight}"
                                     HorizontalAlignment="Left"
-                                    RequestedTheme="Dark"
                                     IsTabStop="False">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
@@ -82,7 +81,7 @@
                                     </ItemsControl.ItemsPanel>
                                 </ItemsControl>
                             </Grid>
-                            <Border Grid.Column="1" CornerRadius="20" RequestedTheme="Dark">
+                            <Border Grid.Column="1" CornerRadius="20">
                                 <Button
                                     x:Name="MoreButton"
                                     MinHeight="{ThemeResource AppBarThemeCompactHeight}"

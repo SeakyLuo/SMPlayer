@@ -1,0 +1,57 @@
+﻿<UserControl
+    x:Class="SMPlayer.Controls.MultiSelectCommandBar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SMPlayer.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <CommandBar
+        x:Name="CommandBarContainer"
+        Grid.Row="1"
+        IsOpen="False"
+        IsSticky="True"
+        ClosedDisplayMode="Hidden"
+        OverflowButtonVisibility="Collapsed"
+        DefaultLabelPosition="Bottom">
+        <AppBarButton
+            x:Name="CancelAppButton"
+            x:Uid="CancelAppButton"
+            Icon="Cancel"
+            Label="Cancel"
+            Click="CancelAppButton_Click"/>
+        <AppBarSeparator />
+        <AppBarButton
+            x:Name="PlayAppButton"
+            x:Uid="PlayAppButton"
+            Icon="Play"
+            Label="Play"
+            Click="PlayAppButton_Click" />
+        <AppBarSeparator />
+        <AppBarButton
+            x:Name="AddToAppButton"
+            x:Uid="AddToAppButton"
+            Icon="Add"
+            Label="Add To"
+            Click="AddToAppButton_Click"/>
+        <AppBarButton
+            x:Name="RemoveAppButton"
+            x:Uid="RemoveAppButton"
+            Icon="Remove"
+            Label="Remove"
+            Click="RemoveAppButton_Click" />
+        <AppBarButton
+            x:Name="SelectAllAppButton"
+            x:Uid="SelectAllAppButton"
+            Icon="SelectAll"
+            Label="Select All"
+            Click="SelectAllAppButton_Click"/>
+        <AppBarButton
+            x:Name="ClearSelectionAppButton"
+            x:Uid="ClearSelectionAppButton"
+            Icon="ClearSelection"
+            Label="Clear Selection"
+            Click="ClearSelectionAppButton_Click"/>
+    </CommandBar>
+</UserControl>

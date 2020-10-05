@@ -780,8 +780,18 @@
                             Content="&#xE712;"
                             Style="{StaticResource DarkMediaControlButtonStyle}">
                             <Button.Flyout>
-                                <Flyout>
+                                <Flyout x:Name="MiniMoreFlyout">
                                     <StackPanel Width="200" Margin="-12,-4">
+                                        <local:IconTextButton
+                                            x:Name="MiniMoreShufflePlayButton"
+                                            x:Uid="ShuffleButton"
+                                            Label="Shuffle"
+                                            Style="{StaticResource MediaControlIconTextButtonStyle}"
+                                            Tapped="MiniMoreShufflePlayButton_Tapped">
+                                            <local:IconTextButton.Icon>
+                                                <FontIcon Glyph="&#xE8B1;" Style="{ThemeResource MediaControlIconTextButtonFontIconStyle}" />
+                                            </local:IconTextButton.Icon>
+                                        </local:IconTextButton>
                                         <local:IconTextButton
                                             x:Name="MiniMoreShuffleButton"
                                             Label="Shuffle: Disabled"

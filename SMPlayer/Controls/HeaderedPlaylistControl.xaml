@@ -67,7 +67,7 @@
                             FontSize="36"
                             Foreground="White"
                             MaxLines="2"
-                            Style="{StaticResource HeaderTextBlockStyle}"
+                            Style="{ThemeResource HeaderTextBlockStyle}"
                             TextTrimming="CharacterEllipsis"
                             ToolTipService.ToolTip="{x:Bind PlaylistNameTextBlock.Text, Mode=OneWay}" />
                         <TextBlock
@@ -84,50 +84,67 @@
                             Margin="-10,0,0,10"
                             VerticalAlignment="Bottom"
                             Background="Transparent"
+                            RequestedTheme="Dark"
                             DefaultLabelPosition="Right"
-                            Style="{StaticResource PlaylistCommandBarStyle}">
+                            IsDynamicOverflowEnabled="True"
+                            Style="{ThemeResource PlaylistCommandBarStyle}">
                             <AppBarButton
                                 x:Name="ShuffleButton"
                                 x:Uid="ShuffleButton"
                                 Click="Shuffle_Click"
                                 Icon="Shuffle"
-                                Style="{StaticResource PlaylistAppBarButtonStyle}" />
+                                Style="{ThemeResource PlaylistAppBarButtonStyle}" />
                             <AppBarButton
                                 x:Name="AddToButton"
                                 x:Uid="AddToAppButton"
                                 Click="AddTo_Click"
                                 Icon="Add"
-                                Style="{StaticResource PlaylistAppBarButtonStyle}" />
+                                Style="{ThemeResource PlaylistAppBarButtonStyle}" />
+                            <AppBarButton
+                                x:Name="MultiSelectButton"
+                                x:Uid="MultiSelectAppButton"
+                                Click="MultiSelectButton_Click"
+                                Style="{ThemeResource PlaylistAppBarButtonStyle}">
+                                <AppBarButton.Icon>
+                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE762;" />
+                                </AppBarButton.Icon>
+                            </AppBarButton>
+                            <AppBarButton
+                                x:Name="SortButton"
+                                x:Uid="SortAppButton"
+                                Click="SortButton_Click"
+                                Icon="Sort"
+                                Style="{ThemeResource PlaylistAppBarButtonStyle}" />
                             <AppBarButton
                                 x:Name="RenameButton"
                                 x:Uid="RenameButton"
                                 Click="Rename_Click"
                                 Icon="Rename"
-                                Style="{StaticResource PlaylistAppBarButtonStyle}" />
+                                Style="{ThemeResource PlaylistAppBarButtonStyle}" />
                             <AppBarButton
                                 x:Name="PinToStartButton"
                                 Click="PinToStart_Click"
                                 Icon="Pin"
-                                Style="{StaticResource PlaylistAppBarButtonStyle}" />
+                                Style="{ThemeResource PlaylistAppBarButtonStyle}" />
                             <AppBarButton
                                 x:Name="ClearButton"
                                 x:Uid="ClearAppButton"
                                 Click="Clear_Click"
                                 Icon="Clear"
-                                Style="{StaticResource PlaylistAppBarButtonStyle}"
+                                Style="{ThemeResource PlaylistAppBarButtonStyle}"
                                 Visibility="Collapsed" />
                             <AppBarButton
                                 x:Name="DeleteButton"
                                 x:Uid="DeleteButton"
                                 Click="Delete_Click"
                                 Icon="Delete"
-                                Style="{StaticResource PlaylistAppBarButtonStyle}" />
+                                Style="{ThemeResource PlaylistAppBarButtonStyle}" />
                             <AppBarButton
                                 x:Name="EditAlbumArtButton"
                                 x:Uid="EditAlbumArtButton"
                                 Click="EditAlbumArtButton_Click"
                                 Icon="Pictures"
-                                Style="{StaticResource PlaylistAppBarButtonStyle}"
+                                Style="{ThemeResource PlaylistAppBarButtonStyle}"
                                 Visibility="Collapsed" />
                         </CommandBar>
                     </Grid>

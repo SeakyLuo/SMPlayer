@@ -134,94 +134,95 @@
             </Grid.ColumnDefinitions>
             <StackPanel>
                 <TextBlock
-                x:Name="MusicFolderTextBlock"
-                x:Uid="MusicFolderTextBlock"
-                Style="{StaticResource SettingLabelStyle}"
-                Text="Music Folder" />
+                    x:Name="MusicFolderTextBlock"
+                    x:Uid="MusicFolderTextBlock"
+                    Style="{StaticResource SettingLabelStyle}"
+                    Text="Music Folder" />
                 <TextBlock Style="{StaticResource SettingLabelStyle}" />
                 <TextBlock
-                x:Name="MusicLibraryTextBlock"
-                x:Uid="MusicLibraryTextBlock"
-                Style="{StaticResource SettingLabelStyle}"
-                Text="Music Library" />
+                    x:Name="MusicLibraryTextBlock"
+                    x:Uid="MusicLibraryTextBlock"
+                    Style="{StaticResource SettingLabelStyle}"
+                    Text="Music Library" />
                 <TextBlock Style="{StaticResource SettingLabelStyle}" />
                 <TextBlock
-                x:Name="NotificationTextBlock"
-                x:Uid="NotificationTextBlock"
-                Style="{StaticResource SettingLabelStyle}"
-                Text="Notification" />
+                    x:Name="NotificationTextBlock"
+                    x:Uid="NotificationTextBlock"
+                    Style="{StaticResource SettingLabelStyle}"
+                    Text="Notification" />
                 <TextBlock
-                x:Name="ThemeTextBlock"
-                x:Uid="ThemeTextBlock"
-                Style="{StaticResource SettingLabelStyle}"
-                Text="Theme" />
+                    x:Name="ThemeTextBlock"
+                    x:Uid="ThemeTextBlock"
+                    Style="{StaticResource SettingLabelStyle}"
+                    Text="Theme" />
                 <TextBlock
-                x:Name="RecentTextBlock"
-                x:Uid="RecentTextBlock"
-                Style="{StaticResource SettingLabelStyle}"
-                Text="Recent" />
+                    x:Name="RecentTextBlock"
+                    x:Uid="RecentTextBlock"
+                    Style="{StaticResource SettingLabelStyle}"
+                    Text="Recent" />
                 <TextBlock Style="{StaticResource SettingLabelStyle}" />
                 <TextBlock
-                x:Name="PlayTextBlock"
-                x:Uid="PlayTextBlock"
-                Style="{StaticResource SettingLabelStyle}"
-                Text="Play" />
+                    x:Name="PlayTextBlock"
+                    x:Uid="PlayTextBlock"
+                    Style="{StaticResource SettingLabelStyle}"
+                    Text="Play" />
                 <TextBlock
-                x:Name="SaveTextBlock"
-                x:Uid="SaveTextBlock"
-                Style="{StaticResource SettingLabelStyle}"
+                    x:Name="SaveTextBlock"
+                    x:Uid="SaveTextBlock"
+                    Style="{StaticResource SettingLabelStyle}"
                 Text="Save" />
                 <TextBlock Style="{StaticResource SettingLabelStyle}" />
                 <TextBlock
-                x:Name="OthersTextBlock"
-                x:Uid="OthersTextBlock"
-                Style="{StaticResource SettingLabelStyle}"
+                    x:Name="OthersTextBlock"
+                    x:Uid="OthersTextBlock"
+                    Style="{StaticResource SettingLabelStyle}"
                 Text="Others" />
             </StackPanel>
             <StackPanel Grid.Column="1">
                 <AutoSuggestBox
-                x:Name="PathBox"
-                x:Uid="PathBox"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
-                PlaceholderText="The Root Folder of Your Music Library"
-                QuerySubmitted="PathBox_QuerySubmitted"
-                Style="{StaticResource MarginSetter}">
-                    <AutoSuggestBox.QueryIcon>
-                        <FontIcon x:Uid="OpenFolderIcon" Glyph="&#xE838;" />
-                    </AutoSuggestBox.QueryIcon>
+                    x:Name="PathBox"
+                    x:Uid="PathBox"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    PlaceholderText="The Root Folder of Your Music Library"
+                    QuerySubmitted="PathBox_QuerySubmitted"
+                    Style="{StaticResource MarginSetter}">
+                        <AutoSuggestBox.QueryIcon>
+                            <FontIcon x:Uid="OpenFolderIcon" Glyph="&#xE838;" />
+                        </AutoSuggestBox.QueryIcon>
                 </AutoSuggestBox>
                 <HyperlinkButton
-                x:Uid="ReauthorizeButton"
-                Click="Reauthorize_Click"
-                Content="Reauthorize"
-                Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                    x:Uid="ReauthorizeButton"
+                    Click="Reauthorize_Click"
+                    Content="Reauthorize"
+                    Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 <HyperlinkButton
-                x:Uid="UpdateMusicLibraryButton"
-                Click="UpdateMusicLibrary_Click"
-                Content="Update Music Library"
-                Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                    x:Uid="UpdateMusicLibraryButton"
+                    Click="UpdateMusicLibrary_Click"
+                    Content="Update Music Library"
+                    Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 <HyperlinkButton
-                x:Uid="AddLyricsButton"
-                Click="AddLyrics_Click"
-                Content="Add Lyrics"
-                Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                    x:Uid="AddLyricsButton"
+                    Click="AddLyrics_Click"
+                    Content="Add Lyrics"
+                    Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 <ComboBox
-                x:Name="NotificationComboBox"
-                VerticalAlignment="Center"
-                SelectionChanged="NotificationComboBox_SelectionChanged"
-                Style="{StaticResource MarginSetter}">
-                    <ComboBoxItem x:Uid="AlwaysShownComboItem" Content="Always Shown" />
-                    <ComboBoxItem x:Uid="MusicChangedComboItem" Content="Music Changed" />
-                    <ComboBoxItem x:Uid="NeverItem" Content="Never" />
+                    x:Name="NotificationComboBox"
+                    VerticalAlignment="Center"
+                    SelectionChanged="NotificationComboBox_SelectionChanged"
+                    Style="{StaticResource MarginSetter}">
+                        <ComboBoxItem x:Uid="AlwaysShownComboItem" Content="Always Shown" />
+                        <ComboBoxItem x:Uid="MusicChangedComboItem" Content="Music Changed" />
+                        <ComboBoxItem x:Uid="NeverItem" Content="Never" />
                 </ComboBox>
                 <Button
-                x:Uid="ThemeColorButton"
-                Width="30"
-                Height="30"
-                HorizontalAlignment="Left"
-                Background="{ThemeResource SystemColorHotlightColor}"
-                Style="{ThemeResource SolidColorButton}">
+                    x:Name="ThemeColorButton"
+                    x:Uid="ThemeColorButton"
+                    Width="30"
+                    Height="30"
+                    HorizontalAlignment="Left"
+                    Background="{ThemeResource SystemColorHighlightColor}"
+                    Style="{ThemeResource SolidColorButton}">
                     <Button.Flyout>
                         <Flyout x:Name="ColorPickerFlyout">
                             <StackPanel>
@@ -230,26 +231,37 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <Button
-                                    x:Name="ConfirmColorButton"
-                                    x:Uid="ConfirmButton"
-                                    HorizontalAlignment="Center"
-                                    Background="{ThemeResource SystemColorHighlightColor}"
-                                    BorderThickness="0"
-                                    Click="ConfirmColorButton_Click"
-                                    Content="Confirm"
-                                    Foreground="White" />
+                                        x:Name="ConfirmColorButton"
+                                        x:Uid="ConfirmButton"
+                                        HorizontalAlignment="Center"
+                                        Background="{ThemeResource SystemColorHighlightColor}"
+                                        BorderThickness="0"
+                                        Click="ConfirmColorButton_Click"
+                                        Content="Confirm"
+                                        Foreground="White" />
                                     <Button
-                                    x:Name="CancelColorButton"
-                                    x:Uid="CancelButton"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Center"
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    Click="CancelColorButton_Click"
-                                    Content="Cancel"
-                                    Foreground="{ThemeResource SystemColorHighlightColor}" />
+                                        x:Name="CancelColorButton"
+                                        x:Uid="CancelButton"
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Center"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        Click="CancelColorButton_Click"
+                                        Content="Cancel"
+                                        Foreground="{ThemeResource SystemColorHighlightColor}" />
+                                    <Button
+                                        x:Name="ResetColorButton"
+                                        x:Uid="ResetButton"
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Center"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        Click="ResetColorButton_Click"
+                                        Content="Reset"
+                                        Foreground="{ThemeResource SystemColorHighlightColor}" />
                                 </Grid>
                             </StackPanel>
                         </Flyout>
@@ -257,14 +269,14 @@
                 </Button>
                 <StackPanel Style="{ThemeResource MarginSetter}" Orientation="Horizontal">
                     <TextBlock
-                    x:Uid="RecentPlayedItemTextBlock"
-                    VerticalAlignment="Center"
-                    FontSize="15"
-                    Text="Recent Played" />
+                        x:Uid="RecentPlayedItemTextBlock"
+                        VerticalAlignment="Center"
+                        FontSize="15"
+                        Text="Recent Played" />
                     <ComboBox
-                    x:Name="KeepRecentComboBox"
-                    VerticalAlignment="Center"
-                    SelectionChanged="KeepRecentComboBox_SelectionChanged">
+                        x:Name="KeepRecentComboBox"
+                        VerticalAlignment="Center"
+                        SelectionChanged="KeepRecentComboBox_SelectionChanged">
                         <ComboBoxItem x:Uid="AllComboItem" Content="All" />
                         <ComboBoxItem x:Uid="100ComboItem" Content="100" />
                         <ComboBoxItem x:Uid="200ComboItem" Content="200" />
@@ -273,36 +285,36 @@
                     </ComboBox>
                 </StackPanel>
                 <CheckBox
-                x:Name="AutoLyricsCheckBox"
-                x:Uid="AutoLyricsCheckBox"
-                Checked="AutoLyricsCheckBox_Checked"
-                Content="Auto Lyrics"
-                Style="{ThemeResource SettingCheckBoxStyle}"
-                Unchecked="AutoLyricsCheckBox_Unchecked" />
+                    x:Name="AutoLyricsCheckBox"
+                    x:Uid="AutoLyricsCheckBox"
+                    Checked="AutoLyricsCheckBox_Checked"
+                    Content="Auto Lyrics"
+                    Style="{ThemeResource SettingCheckBoxStyle}"
+                    Unchecked="AutoLyricsCheckBox_Unchecked" />
                 <CheckBox
-                x:Name="AutoPlayCheckBox"
-                x:Uid="AutoPlayCheckBox"
-                Checked="AutoPlayCheckBox_Checked"
-                Content="Auto Play"
-                Style="{ThemeResource SettingCheckBoxStyle}"
-                Unchecked="AutoPlayCheckBox_Unchecked" />
+                    x:Name="AutoPlayCheckBox"
+                    x:Uid="AutoPlayCheckBox"
+                    Checked="AutoPlayCheckBox_Checked"
+                    Content="Auto Play"
+                    Style="{ThemeResource SettingCheckBoxStyle}"
+                    Unchecked="AutoPlayCheckBox_Unchecked" />
                 <CheckBox
-                x:Name="SaveProgressCheckBox"
-                x:Uid="SaveProgressCheckBox"
-                Checked="SaveProgressCheckBox_Checked"
-                Content="Save Music Progress"
-                Style="{ThemeResource SettingCheckBoxStyle}"
-                Unchecked="SaveProgressCheckBox_Unchecked" />
+                    x:Name="SaveProgressCheckBox"
+                    x:Uid="SaveProgressCheckBox"
+                    Checked="SaveProgressCheckBox_Checked"
+                    Content="Save Music Progress"
+                    Style="{ThemeResource SettingCheckBoxStyle}"
+                    Unchecked="SaveProgressCheckBox_Unchecked" />
                 <HyperlinkButton
-                x:Uid="SaveChangesButton"
-                Click="SaveChanges_Click"
-                Content="Save Changes"
-                Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                    x:Uid="SaveChangesButton"
+                    Click="SaveChanges_Click"
+                    Content="Save Changes"
+                    Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 <HyperlinkButton
-                x:Uid="BugReportButton"
-                Click="BugReport_Click"
-                Content="Bug Report"
-                Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                    x:Uid="BugReportButton"
+                    Click="BugReport_Click"
+                    Content="Bug Report"
+                    Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
             </StackPanel>
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroup x:Name="WidthChange">

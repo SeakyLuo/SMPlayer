@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:appmodel="using:Windows.ApplicationModel"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:localControls="using:SMPlayer.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -112,10 +113,17 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
-            <Frame
-                x:Name="NaviFrame"
-                IsNavigationStackEnabled="True"
-                Navigated="NaviFrame_Navigated" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Frame
+                    x:Name="NaviFrame"
+                    IsNavigationStackEnabled="True"
+                    Navigated="NaviFrame_Navigated" />
+                <localControls:MultiSelectCommandBar x:Name="BottomMultiSelectCommandBar" Grid.Row="1" />
+            </Grid>
         </NavigationView>
         <Grid
             x:Name="AppTitleBar"

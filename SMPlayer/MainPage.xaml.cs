@@ -1,4 +1,5 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Controls;
+using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,7 +18,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MainPage : Page, NotificationContainer
+    public sealed partial class MainPage : Page, IMainPageContainer
     {
         public static MainPage Instance
         {
@@ -273,10 +274,12 @@ namespace SMPlayer
         }
         private void MainNavigationView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
+            BottomMultiSelectCommandBar.Hide();
             if (args.IsSettingsInvoked)
             {
-                if (NaviFrame.SourcePageType.Name != "SettingsPage")
-                    NaviFrame.Navigate(typeof(SettingsPage));
+                Type settingsPageType = typeof(SettingsPage);
+                if (NaviFrame.SourcePageType != settingsPageType)
+                    NaviFrame.Navigate(settingsPageType);
             }
             else
             {
@@ -402,6 +405,16 @@ namespace SMPlayer
         {
             undo.Invoke();
             UndoInAppNotification.Dismiss();
+        }
+
+        public void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option = null)
+        {
+            BottomMultiSelectCommandBar.Show(option);
+        }
+
+        public MultiSelectCommandBar GetMultiSelectCommandBar()
+        {
+            return BottomMultiSelectCommandBar;
         }
     }
 }

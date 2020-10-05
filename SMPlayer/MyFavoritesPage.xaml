@@ -6,7 +6,6 @@
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    Loaded="Page_Loaded"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -38,35 +37,8 @@
         </Storyboard>
     </Page.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <local:HeaderedPlaylistControl
-            x:Name="MyFavoritesPlaylistControl"
-            AllowClear="True"
-            IsPlaylist="False" />
-        <Grid
-            x:Name="PlaylistFooter"
-            Grid.Row="1"
-            Height="{StaticResource PlaylistFooterHeight}"
-            Background="Transparent"
-            RenderTransformOrigin="0,0">
-            <Grid.RenderTransform>
-                <TranslateTransform />
-            </Grid.RenderTransform>
-            <local:IconTextButton
-                x:Name="SortByButton"
-                Padding="10,5"
-                HorizontalAlignment="Right"
-                Icon="Sort"
-                IconTextMargin="10,0,0,0"
-                Label="Sort By Title"
-                LabelPosition="Right"
-                Style="{StaticResource PlaylistIconTextButtonStyle}"
-                Tapped="SortByButton_Tapped"
-                ToolTipService.ToolTip="Sort Playlists" />
-        </Grid>
-    </Grid>
+    <local:HeaderedPlaylistControl
+        x:Name="MyFavoritesPlaylistControl"
+        AllowClear="True"
+        IsPlaylist="False" />
 </Page>

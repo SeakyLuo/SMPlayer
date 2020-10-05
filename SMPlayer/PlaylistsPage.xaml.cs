@@ -18,7 +18,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class PlaylistsPage : Page, RenameActionListener, PlaylistScrollListener
+    public sealed partial class PlaylistsPage : Page, RenameActionListener
     {
         public static ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
 
@@ -30,8 +30,6 @@ namespace SMPlayer
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             Playlists = new ObservableCollection<Playlist>(Settings.settings.Playlists);
             PlaylistTabView.ItemsSource = Playlists;
-            SetFooterText();
-            Playlists.CollectionChanged += (sender, e) => SetFooterText();
             SelectPlaylist(Settings.settings.LastPlaylist);
             Settings.PlaylistAddedListeners.Add(playlist => PlaylistTabView.SelectedItem = playlist);
         }
@@ -59,23 +57,9 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            EditPlaylistButton.SetToolTip("Edit Playlists");
             BringSelectedTabIntoView();
         }
 
-        public void SetFooterText()
-        {
-            if (Playlists.Count == 0)
-            {
-                ShowAllPlaylistButton.Label = Helper.LocalizeMessage("No Playlist");
-                SortByButton.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                ShowAllPlaylistButton.Label = Helper.LocalizeMessage("Playlists:") + Playlists.Count;
-                SortByButton.Visibility = Visibility.Visible;
-            }
-        }
         private async void PlaylistTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var tabview = sender as TabView;
@@ -89,7 +73,6 @@ namespace SMPlayer
             Settings.settings.LastPlaylist = playlist.Name;
             foreach (var music in playlist.Songs)
                 music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
-            SortByButton.Label = Helper.LocalizeMessage("Sort By " + playlist.Criterion.ToStr());
             if (PlaylistController != null)
                 await PlaylistController.SetPlaylist(playlist);
         }
@@ -125,22 +108,6 @@ namespace SMPlayer
             string name = Helper.Localize("Playlist");
             dialog = new RenameDialog(this, RenameOption.New, Settings.settings.FindNextPlaylistName(name));
             await dialog.ShowAsync();
-        }
-
-        private void EditPlaylistButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (PlaylistTabView.CanCloseTabs)
-            {
-                EditPlaylistButton.Content = "\uE70F";
-                EditPlaylistButton.SetToolTip("Edit Playlists");
-                PlaylistTabView.CanCloseTabs = false;
-            }
-            else
-            {
-                EditPlaylistButton.Content = "\uE73E";
-                EditPlaylistButton.SetToolTip("Finish Editing");
-                PlaylistTabView.CanCloseTabs = true;
-            }
         }
 
         private void PlaylistTabView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
@@ -217,45 +184,10 @@ namespace SMPlayer
             SpinArrowAnimation.Begin();
         }
 
-        private void SortByButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            var playlist = PlaylistTabView.SelectedItem as Playlist;
-            MenuFlyoutHelper.SetPlaylistSortByMenu(sender, playlist);
-        }
-
         private async void HeaderedPlaylistControl_Loaded(object sender, RoutedEventArgs e)
         {
             PlaylistController = sender as HeaderedPlaylistControl;
-            PlaylistController.HeaderedPlaylist.ScrollListener = this;
             await PlaylistController.SetPlaylist(PlaylistTabView.SelectedItem as Playlist);
-        }
-
-        private ScrollDirection direction;
-
-        public void Scrolled(double before, double after)
-        {
-            if (after > before + 3)
-            {
-                // scroll down
-                if (direction != ScrollDirection.Down)
-                {
-                    direction = ScrollDirection.Down;
-                    ShowFooterAnimation.Begin();
-                }
-            }
-            else if (after < before - 3)
-            {
-                // scroll up
-                if (direction != ScrollDirection.Up)
-                {
-                    direction = ScrollDirection.Up;
-                    HideFooterAnimation.Begin();
-                }
-            }
-            else
-            {
-                direction = ScrollDirection.None;
-            }
         }
     }
 }

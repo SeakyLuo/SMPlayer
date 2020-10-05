@@ -15,7 +15,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalMusicPage : Page, SwitchMusicListener, ILocalPageButtonListener, RemoveMusicListener
+    public sealed partial class LocalMusicPage : Page, ISwitchMusicListener, ILocalPageButtonListener, RemoveMusicListener
     {
         public static FolderTree CurrentTree;
         private ObservableCollection<Music> Songs = new ObservableCollection<Music>();
@@ -29,6 +29,7 @@ namespace SMPlayer
             MediaHelper.SwitchMusicListeners.Add(this);
             LocalPage.MusicListener = this;
             LocalPlaylist.RemoveListeners.Add(this);
+            LocalPlaylist.MultiSelectOption = new MultiSelectCommandBarOption() { ShowRemove = false };
             GridMusicView.RemoveListeners.Add(this);
             Controls.MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
             {

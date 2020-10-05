@@ -16,35 +16,9 @@
         <Storyboard x:Name="SpinArrowAnimation">
             <DoubleAnimation
                 By="180"
-                Storyboard.TargetName="UpArrowIcon"
+                Storyboard.TargetName="PlaylistDropdownButton"
                 Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
                 Duration="0:0:0.25" />
-        </Storyboard>
-        <Storyboard x:Name="HideFooterAnimation">
-            <DoubleAnimation
-                Storyboard.TargetName="PlaylistFooter"
-                Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
-                To="0"
-                Duration="0:0:0.1" />
-            <ObjectAnimationUsingKeyFrames
-                Storyboard.TargetName="PlaylistFooter"
-                Storyboard.TargetProperty="Height"
-                Duration="0:0:0.1">
-                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PlaylistFooterHeight}" />
-            </ObjectAnimationUsingKeyFrames>
-        </Storyboard>
-        <Storyboard x:Name="ShowFooterAnimation">
-            <DoubleAnimation
-                Storyboard.TargetName="PlaylistFooter"
-                Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
-                To="{StaticResource PlaylistFooterHeight}"
-                Duration="0" />
-            <ObjectAnimationUsingKeyFrames
-                Storyboard.TargetName="PlaylistFooter"
-                Storyboard.TargetProperty="Height"
-                Duration="0">
-                <DiscreteObjectKeyFrame KeyTime="0" Value="0" />
-            </ObjectAnimationUsingKeyFrames>
         </Storyboard>
     </Page.Resources>
 
@@ -112,85 +86,45 @@
             </controls:TabView.ItemTemplate>
 
             <controls:TabView.TabStartHeader>
-                <Button
-                    x:Name="NewPlaylistButton"
-                    x:Uid="NewPlaylistButton"
-                    Width="{StaticResource HeaderButtonWidth}"
-                    Height="{StaticResource NavigationViewButtonWidth}"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Click="NewPlaylistButton_Click"
-                    Content="&#xE710;"
-                    FontFamily="Segoe MDL2 Assets"
-                    FontSize="16"
-                    Style="{ThemeResource ButtonRevealStyle}"
-                    ToolTipService.ToolTip="Create New Playlist" />
-            </controls:TabView.TabStartHeader>
-
-            <controls:TabView.TabEndHeader>
-                <Button
-                    x:Name="EditPlaylistButton"
-                    x:Uid="EditPlaylistButton"
-                    Width="{StaticResource HeaderButtonWidth}"
-                    Height="{StaticResource NavigationViewButtonWidth}"
-                    VerticalAlignment="Stretch"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Click="EditPlaylistButton_Click"
-                    Content="&#xE70F;"
-                    FontFamily="Segoe MDL2 Assets"
-                    FontSize="16"
-                    Style="{ThemeResource ButtonRevealStyle}" />
-            </controls:TabView.TabEndHeader>
-        </controls:TabView>
-        <Grid
-            x:Name="PlaylistFooter"
-            Grid.Row="1"
-            Height="{StaticResource PlaylistFooterHeight}"
-            Background="Transparent"
-            RenderTransformOrigin="0,0">
-            <Grid.RenderTransform>
-                <TranslateTransform />
-            </Grid.RenderTransform>
-            <local:IconTextButton
-                x:Name="ShowAllPlaylistButton"
-                x:Uid="ShowAllPlaylistButton"
-                Padding="10,5"
-                HorizontalAlignment="Left"
-                IconTextMargin="0,0,10,0"
-                LabelPosition="Left"
-                Style="{StaticResource PlaylistIconTextButtonStyle}"
-                ToolTipService.ToolTip="Show All Playlists">
-                <local:IconTextButton.Icon>
-                    <FontIcon
-                        x:Name="UpArrowIcon"
+                <StackPanel Orientation="Horizontal">
+                    <Button
+                        x:Name="PlaylistDropdownButton"
+                        x:Uid="PlaylistDropdownButton"
+                        Width="{StaticResource HeaderButtonWidth}"
+                        Height="{StaticResource NavigationViewButtonWidth}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Content="&#xE70D;"
                         FontFamily="Segoe MDL2 Assets"
-                        FontWeight="{x:Bind ShowAllPlaylistButton.FontWeight}"
-                        Glyph="&#xE70E;"
-                        RenderTransformOrigin=".5,.5">
-                        <FontIcon.RenderTransform>
+                        FontSize="16"
+                        RenderTransformOrigin=".5,.5"
+                        Style="{ThemeResource ButtonRevealStyle}" >
+                        <Button.Flyout>
+                            <MenuFlyout Closed="ClosePlaylistsFlyout" Opening="OpenPlaylistsFlyout" />
+                        </Button.Flyout>
+                        <Button.RenderTransform>
                             <RotateTransform />
-                        </FontIcon.RenderTransform>
-                    </FontIcon>
-                </local:IconTextButton.Icon>
-                <local:IconTextButton.Flyout>
-                    <MenuFlyout Closed="ClosePlaylistsFlyout" Opening="OpenPlaylistsFlyout" />
-                </local:IconTextButton.Flyout>
-            </local:IconTextButton>
-            <local:IconTextButton
-                x:Name="SortByButton"
-                x:Uid="SortByButton"
-                Padding="10,5"
-                HorizontalAlignment="Right"
-                Icon="Sort"
-                IconTextMargin="10,0,0,0"
-                Label="Sort By Title"
-                LabelPosition="Right"
-                Style="{StaticResource PlaylistIconTextButtonStyle}"
-                Tapped="SortByButton_Tapped" />
-        </Grid>
+                        </Button.RenderTransform>
+                    </Button>
+                    <Button
+                        x:Name="NewPlaylistButton"
+                        x:Uid="NewPlaylistButton"
+                        Width="{StaticResource HeaderButtonWidth}"
+                        Height="{StaticResource NavigationViewButtonWidth}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Click="NewPlaylistButton_Click"
+                        Content="&#xE710;"
+                        FontFamily="Segoe MDL2 Assets"
+                        FontSize="16"
+                        Style="{ThemeResource ButtonRevealStyle}" />
+                </StackPanel>
+            </controls:TabView.TabStartHeader>
+        </controls:TabView>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">
                 <VisualState x:Name="Normal">
@@ -203,7 +137,7 @@
                         <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="NewPlaylistButton.Margin" Value="40,0,0,0" />
+                        <Setter Target="PlaylistDropdownButton.Margin" Value="40,0,0,0" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

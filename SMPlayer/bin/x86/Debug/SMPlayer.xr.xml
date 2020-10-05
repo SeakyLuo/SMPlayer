@@ -93,13 +93,16 @@
       <RootProperty Name="DefaultLabelPosition" />
       <RootProperty Name="IsDynamicOverflowEnabled" />
       <RootProperty Name="OverflowButtonVisibility" />
+      <RootProperty Name="IsOpen" />
+      <RootProperty Name="IsSticky" />
+      <RootProperty Name="ClosedDisplayMode" />
+      <RootProperty Name="PrimaryCommands" />
       <RootProperty Name="Margin" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Background" />
+      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="Style" />
-      <RootProperty Name="PrimaryCommands" />
       <RootProperty Name="Content" />
-      <RootProperty Name="IsOpen" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Control">
       <RootProperty Name="Background" />
@@ -186,6 +189,8 @@
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="FontFamily" />
       <RootProperty Name="VerticalContentAlignment" />
+      <RootProperty Name="RenderTransformOrigin" />
+      <RootProperty Name="RenderTransform" />
       <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.FontIcon">
@@ -200,9 +205,6 @@
       <RootProperty Name="Height" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Style" />
-      <RootProperty Name="FontWeight" />
-      <RootProperty Name="RenderTransformOrigin" />
-      <RootProperty Name="RenderTransform" />
     </RootType>
     <RootType FullName="SMPlayer.IconTextButton">
       <RootProperty Name="IconTextMargin" />
@@ -213,9 +215,6 @@
       <RootProperty Name="Width" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="LabelPosition" />
-      <RootProperty Name="Padding" />
-      <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="Flyout" />
       <RootEvent Name="Tapped" />
     </RootType>
     <RootType FullName="SMPlayer.MusicDurationConverter" />
@@ -488,7 +487,6 @@
       <RootProperty Name="MinHeight" />
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="Visibility" />
-      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="IsHitTestVisible" />
     </RootType>
@@ -652,6 +650,18 @@
       <RootProperty Name="AllowBreak" />
       <RootProperty Name="Visibility" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">
+      <RootProperty Name="Icon" />
+      <RootProperty Name="Label" />
+      <RootProperty Name="Style" />
+      <RootProperty Name="Visibility" />
+      <RootProperty Name="Flyout" />
+      <RootProperty Name="IsEnabled" />
+      <RootProperty Name="Margin" />
+      <RootEvent Name="Click" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.AppBarSeparator" />
+    <RootType FullName="SMPlayer.Controls.MultiSelectCommandBar" />
     <RootType FullName="Windows.UI.Xaml.Controls.TextBox">
       <RootProperty Name="Style" />
       <RootProperty Name="Height" />
@@ -837,7 +847,6 @@
       <RootProperty Name="ItemHeaderTemplate" />
       <RootProperty Name="ItemTemplate" />
       <RootProperty Name="TabStartHeader" />
-      <RootProperty Name="TabEndHeader" />
       <RootEvent Name="DragItemsCompleted" />
       <RootEvent Name="SelectionChanged" />
       <RootEvent Name="TabClosing" />
@@ -856,7 +865,6 @@
       <RootProperty Name="ItemsPanel" />
       <RootProperty Name="MinHeight" />
       <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="RequestedTheme" />
       <RootProperty Name="IsTabStop" />
       <RootProperty Name="ItemContainerStyle" />
     </RootType>
@@ -1133,16 +1141,6 @@
       <RootProperty Name="IsNowPlaying" />
       <RootProperty Name="RequestedTheme" />
       <RootProperty Name="Style" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">
-      <RootProperty Name="Icon" />
-      <RootProperty Name="Style" />
-      <RootProperty Name="Visibility" />
-      <RootProperty Name="Label" />
-      <RootProperty Name="Flyout" />
-      <RootProperty Name="IsEnabled" />
-      <RootProperty Name="Margin" />
-      <RootEvent Name="Click" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Primitives.ButtonBase" />
     <RootType FullName="SMPlayer.TemplateSelector.FolderTreeTemplateSelector">

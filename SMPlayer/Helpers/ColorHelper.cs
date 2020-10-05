@@ -31,6 +31,10 @@ namespace SMPlayer
         {
             get => Application.Current.Resources["MainNavigationViewBackground"] as Brush;
         }
+        public static Color SystemColorHighlightColor
+        {
+            get => (Color) Application.Current.Resources["SystemColorHighlightColor"];
+        }
         private struct Size
         {
             public uint Width, Height;

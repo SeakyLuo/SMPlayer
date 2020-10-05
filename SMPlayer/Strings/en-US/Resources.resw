@@ -219,6 +219,9 @@
   <data name="BugReportButton.Content" xml:space="preserve">
     <value>Bug Report</value>
   </data>
+  <data name="CancelAppButton.Label" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="CancelButton.Content" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -251,6 +254,9 @@
   </data>
   <data name="ClearPlayCountButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Clear Play Count</value>
+  </data>
+  <data name="ClearSelectionAppButton.Label" xml:space="preserve">
+    <value>Clear Selection</value>
   </data>
   <data name="ComposersTextBlock.Text" xml:space="preserve">
     <value>Composers</value>
@@ -441,6 +447,9 @@
   <data name="Move To Top" xml:space="preserve">
     <value>Move To Top</value>
   </data>
+  <data name="MultiSelectAppButton.Label" xml:space="preserve">
+    <value>Multi Select</value>
+  </data>
   <data name="Music Library" xml:space="preserve">
     <value>Music Library</value>
   </data>
@@ -543,6 +552,9 @@
   <data name="PlayAllButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Shuffle and play all</value>
   </data>
+  <data name="PlayAppButton.Label" xml:space="preserve">
+    <value>Play</value>
+  </data>
   <data name="PlayArtistItem.Text" xml:space="preserve">
     <value>Play Artist</value>
   </data>
@@ -560,6 +572,9 @@
   </data>
   <data name="PlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Show Now Playing Playlist</value>
+  </data>
+  <data name="PlaylistDropdownButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>See all playlists</value>
   </data>
   <data name="PlaylistMenuItem.Text" xml:space="preserve">
     <value>Now Playing</value>
@@ -648,6 +663,9 @@
   <data name="Remove From Playlist" xml:space="preserve">
     <value>Remove From Playlist</value>
   </data>
+  <data name="RemoveAppButton.Label" xml:space="preserve">
+    <value>Remove From Playlist</value>
+  </data>
   <data name="RemoveSwipeItem.Text" xml:space="preserve">
     <value>Remove</value>
   </data>
@@ -665,6 +683,9 @@
   </data>
   <data name="RenameItem.Text" xml:space="preserve">
     <value>Rename Playlist</value>
+  </data>
+  <data name="ResetButton.Content" xml:space="preserve">
+    <value>Reset</value>
   </data>
   <data name="ResetLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Reset Lyrics</value>
@@ -732,6 +753,12 @@
   <data name="See Music Info" xml:space="preserve">
     <value>See Music Info</value>
   </data>
+  <data name="Select" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="SelectAllAppButton.Label" xml:space="preserve">
+    <value>Select All</value>
+  </data>
   <data name="SelectArtistTextBlock.Text" xml:space="preserve">
     <value>Select an artist on the left</value>
   </data>
@@ -789,8 +816,8 @@
   <data name="Sort" xml:space="preserve">
     <value>Sort</value>
   </data>
-  <data name="SortByButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Sort Playlist</value>
+  <data name="SortAppButton.Label" xml:space="preserve">
+    <value>Sort</value>
   </data>
   <data name="StopButton.Content" xml:space="preserve">
     <value>Stop</value>
