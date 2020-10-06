@@ -1,4 +1,5 @@
-﻿using SMPlayer.Helpers;
+﻿using SMPlayer.Controls;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class ArtistsPage : Page, IAfterSongsSetListener, ISwitchMusicListener
+    public sealed partial class ArtistsPage : Page, IAfterSongsSetListener, ISwitchMusicListener, IMenuFlyoutItemClickListener, IMultiSelectListener
     {
         public static ArtistsPage Instance { get => MainPage.Instance.NavigationFrame.Content as ArtistsPage; }
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
@@ -26,6 +27,23 @@ namespace SMPlayer
         private ObservableCollection<string> Suggestions = new ObservableCollection<string>();
         private bool IsProcessing = false;
         private object targetArtist;
+        private List<ListView> listViews = new List<ListView>();
+
+        private List<Music> SelectedItems
+        {
+            get
+            {
+                List<Music> playlist = new List<Music>();
+                foreach (ListView listView in listViews)
+                {
+                    foreach (Music music in listView.SelectedItems)
+                    {
+                        playlist.Add(music);
+                    }
+                }
+                return playlist;
+            }
+        }
 
         public ArtistsPage()
         {
@@ -33,7 +51,7 @@ namespace SMPlayer
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             MusicLibraryPage.AddAfterSongsSetListener(this);
             MediaHelper.SwitchMusicListeners.Add(this);
-            Controls.MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
+            MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
             {
                 var oldArtist = Artists.First(a => a.Name == before.Artist);
                 if (oldArtist.Equals(ArtistMasterDetailsView.SelectedItem) || !oldArtist.NotLoaded) oldArtist.Load();
@@ -73,6 +91,7 @@ namespace SMPlayer
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            MainPage.Instance.GetMultiSelectCommandBar().MultiSelectListener = this;
             if (targetArtist == null) return;
             if (IsProcessing)
             {
@@ -169,15 +188,24 @@ namespace SMPlayer
 
         private void Artist_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            listViews.Clear();
+            MainPage.Instance.HideMultiSelectCommandBar();
             var artist = (sender as FrameworkElement).DataContext as ArtistView;
             LoadArtist(artist);
         }
 
         private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            Music music = (Music)e.ClickedItem;
             ListView listView = (ListView)sender;
-            MediaHelper.SetMusicAndPlay(listView.ItemsSource as ObservableCollection<Music>, music);
+            if (listView.SelectionMode == ListViewSelectionMode.Multiple)
+            {
+
+            }
+            else
+            {
+                Music music = (Music)e.ClickedItem;
+                MediaHelper.SetMusicAndPlay(listView.ItemsSource as ObservableCollection<Music>, music);
+            }
         }
 
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
@@ -203,7 +231,7 @@ namespace SMPlayer
             MenuFlyout flyout = sender as MenuFlyout;
             var artistView = flyout.Target.DataContext as ArtistView;
             if (artistView.NotLoaded) artistView.Load();
-            MenuFlyoutHelper.SetPlaylistMenu(sender);
+            MenuFlyoutHelper.SetPlaylistMenu(sender, this, null, new MenuFlyoutOption() { ShowMultiSelect = true, MultiSelectOption = new MultiSelectCommandBarOption() { ShowRemove = false } });
             var refreshArtist = new MenuFlyoutItem()
             {
                 Text = Helper.Localize("RefreshArtist"),
@@ -229,11 +257,10 @@ namespace SMPlayer
                 ScrollToArtist(artistView.Name);
             };
             flyout.Items.Add(locateArtist);
-            flyout.Items.Add(MenuFlyoutHelper.GetSelectItem(null, new MultiSelectCommandBarOption() { ShowRemove = false }));
         }
         private void AlbumMenuFlyout_Opening(object sender, object e)
         {
-            MenuFlyoutHelper.SetPlaylistMenu(sender);
+            MenuFlyoutHelper.SetPlaylistMenu(sender, this, null, new MenuFlyoutOption() { ShowSelect = true, MultiSelectOption = new MultiSelectCommandBarOption() { ShowRemove = false } });
             MenuFlyout flyout = sender as MenuFlyout;
             var album = flyout.Target.DataContext as AlbumView;
             flyout.Items.Add(MenuFlyoutHelper.GetSeeAlbumFlyout(album.Songs[0]));
@@ -255,9 +282,16 @@ namespace SMPlayer
 
         private void ArtistSearchBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
-            var artistName = (string)args.SelectedItem;
-            ArtistMasterDetailsView.SelectedItem = FindAndLoadArtist(artistName);
-            ScrollToArtist(artistName);
+            ChooseSuggestion((string)args.SelectedItem);
+        }
+
+        private void ChooseSuggestion(string artist)
+        {
+            listViews.Clear();
+            MainPage.Instance.HideMultiSelectCommandBar();
+            ArtistSearchBox.Text = artist;
+            ArtistMasterDetailsView.SelectedItem = FindAndLoadArtist(artist);
+            ScrollToArtist(artist);
         }
 
         private ArtistView FindAndLoadArtist(string artistName)
@@ -277,10 +311,7 @@ namespace SMPlayer
         {
             if (e.Key == Windows.System.VirtualKey.Enter && Suggestions.Count > 0)
             {
-                string artist = Suggestions[0];
-                ArtistSearchBox.Text = artist;
-                ArtistMasterDetailsView.SelectedItem = FindAndLoadArtist(artist);
-                ScrollToArtist(artist);
+                ChooseSuggestion(Suggestions[0]);
             }
         }
 
@@ -288,6 +319,79 @@ namespace SMPlayer
         {
             if (sender.DataContext is AlbumView album)
                 await album.SetThumbnailAsync();
+        }
+
+        void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar)
+        {
+            foreach (var listView in listViews)
+            {
+                listView.SelectionMode = ListViewSelectionMode.None;
+            }
+        }
+
+        void IMultiSelectListener.AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper)
+        {
+            helper.Data = SelectedItems;
+        }
+
+        void IMultiSelectListener.Play(MultiSelectCommandBar commandBar)
+        {
+            MediaHelper.SetPlaylistAndPlay(SelectedItems);
+        }
+
+        void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar) { }
+
+        void IMultiSelectListener.SelectAll(MultiSelectCommandBar commandBar)
+        {
+            foreach (var listView in listViews)
+            {
+                try
+                {
+                    listView.SelectAll();
+                }
+                catch (Exception)
+                {
+                    // NotSupportException 没有加载完成导致部分ListView.SelectionMode还是None
+                }
+            }
+        }
+
+        void IMultiSelectListener.ClearSelection(MultiSelectCommandBar commandBar)
+        {
+            foreach (var listView in listViews)
+            {
+                try
+                {
+                    listView.SelectedItems.Clear();
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+        }
+
+        void IMenuFlyoutItemClickListener.Favorite(object data) { }
+        void IMenuFlyoutItemClickListener.Delete(Music music) { }
+        void IMenuFlyoutItemClickListener.UndoDelete(Music music) { }
+        void IMenuFlyoutItemClickListener.Remove(Music music) { }
+        void IMenuFlyoutItemClickListener.Select(object data)
+        {
+            foreach (var listView in listViews)
+            {
+                listView.SelectionMode = ListViewSelectionMode.Multiple;
+                if (listView.DataContext.Equals(data))
+                {
+                    listView.SelectAll();
+                }
+            }
+        }
+
+        private void SongsListView_Loaded(object sender, RoutedEventArgs e)
+        {
+            ListView listView = sender as ListView;
+            listView.SelectionMode = MainPage.Instance.GetMultiSelectCommandBar().IsOpen ? ListViewSelectionMode.Multiple : ListViewSelectionMode.None;
+            listViews.Add(listView);
         }
     }
 }

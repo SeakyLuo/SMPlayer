@@ -449,9 +449,9 @@
       <RootProperty Name="Style" />
       <RootEvent Name="ContainerContentChanging" />
       <RootEvent Name="ItemClick" />
+      <RootEvent Name="Loaded" />
       <RootEvent Name="DragItemsCompleted" />
       <RootEvent Name="DragItemsStarting" />
-      <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.ScrollHeader">
       <RootProperty Name="Mode" />

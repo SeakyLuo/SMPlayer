@@ -447,6 +447,9 @@
   <data name="Move To Top" xml:space="preserve">
     <value>Move To Top</value>
   </data>
+  <data name="MultiSelect" xml:space="preserve">
+    <value>Multi Select</value>
+  </data>
   <data name="MultiSelectAppButton.Label" xml:space="preserve">
     <value>Multi Select</value>
   </data>

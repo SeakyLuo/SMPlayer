@@ -195,6 +195,7 @@
                                         ItemClick="SongsListView_ItemClick"
                                         ItemContainerStyle="{StaticResource StretchingListViewItemStyle}"
                                         ItemsSource="{x:Bind Songs, Mode=OneWay}"
+                                        Loaded="SongsListView_Loaded"
                                         SelectionMode="None">
                                         <ListView.ItemTemplate>
                                             <DataTemplate x:DataType="data:Music">

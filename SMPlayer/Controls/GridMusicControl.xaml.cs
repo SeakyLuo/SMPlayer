@@ -112,7 +112,7 @@ namespace SMPlayer
         }
         private void MenuFlyout_Opening(object sender, object e)
         {
-            MenuFlyoutHelper.SetMusicMenu(sender, this, null, new MenuFlyoutOption() { WithSelect = false });
+            MenuFlyoutHelper.SetMusicMenu(sender, this, null, new MenuFlyoutOption() { ShowSelect = false });
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
@@ -130,10 +130,7 @@ namespace SMPlayer
             (sender.DataContext as GridMusicView)?.SetThumbnail();
         }
 
-        void IMenuFlyoutItemClickListener.Favorite(object data)
-        {
-            
-        }
+        void IMenuFlyoutItemClickListener.Favorite(object data) { }
 
         void IMenuFlyoutItemClickListener.Delete(Music music)
         {
@@ -151,10 +148,7 @@ namespace SMPlayer
             GridMusicCollection.Insert(removedItemIndex, new GridMusicView(music));
         }
 
-        void IMenuFlyoutItemClickListener.Select(Music music)
-        {
-            
-        }
+        void IMenuFlyoutItemClickListener.Select(object data) { }
 
         private void RemoveMusic(Music music)
         {

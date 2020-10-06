@@ -21,6 +21,7 @@ namespace SMPlayer.Controls
     public sealed partial class MultiSelectCommandBar : UserControl
     {
         public IMultiSelectListener MultiSelectListener { get; set; }
+        public bool IsOpen { get => CommandBarContainer.IsOpen; }
         private bool shouldOpen = true;
 
         public MultiSelectCommandBar()

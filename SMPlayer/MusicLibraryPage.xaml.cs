@@ -94,7 +94,7 @@ namespace SMPlayer
             if (MusicLibraryDataGrid.SelectedItems.Count > 1)
                 MenuFlyoutHelper.SetPlaylistMenu(sender, null, this);
             else
-                MenuFlyoutHelper.SetMusicMenu(sender, null, null, new MenuFlyoutOption() { WithSelect = false });
+                MenuFlyoutHelper.SetMusicMenu(sender, null, null, new MenuFlyoutOption() { ShowSelect = false });
         }
 
         public static IEnumerable<Music> SortPlaylist(IEnumerable<Music> playlist, SortBy criterion)

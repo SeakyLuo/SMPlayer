@@ -319,13 +319,13 @@ namespace SMPlayer
 
         }
 
-        void IMenuFlyoutItemClickListener.Select(Music music)
+        void IMenuFlyoutItemClickListener.Select(object data)
         {
             if (SelectionMode != ListViewSelectionMode.Multiple)
             {
                 SelectionMode = ListViewSelectionMode.Multiple;
             }
-            SongsListView.SelectedItems.Add(music);
+            SongsListView.SelectedItems.Add(data as Music);
         }
 
         void IMenuFlyoutItemClickListener.UndoDelete(Music music)

@@ -444,6 +444,9 @@
   <data name="Move To Top" xml:space="preserve">
     <value>移到最前</value>
   </data>
+  <data name="MultiSelect" xml:space="preserve">
+    <value>多选</value>
+  </data>
   <data name="MultiSelectAppButton.Label" xml:space="preserve">
     <value>多选</value>
   </data>
