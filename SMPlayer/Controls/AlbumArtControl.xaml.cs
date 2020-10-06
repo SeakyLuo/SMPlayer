@@ -21,7 +21,7 @@ namespace SMPlayer.Controls
         public bool AllowMusicSwitching { get; set; } = false;
         public bool ShowHeader { get; set; } = false;
         public volatile bool IsProcessing = false;
-        public static List<ImageSavedListener> ImageSavedListeners = new List<ImageSavedListener>();
+        public static List<IImageSavedListener> ImageSavedListeners = new List<IImageSavedListener>();
         private Music CurrentMusic;
         private AlbumView CurrentAlbum;
         private IPicture[] sourcePics = null;
@@ -208,7 +208,7 @@ namespace SMPlayer.Controls
         }
     }
 
-    public interface ImageSavedListener
+    public interface IImageSavedListener
     {
         void SaveAlbum(AlbumView album, BitmapImage image);
         void SaveMusic(Music music, BitmapImage image);

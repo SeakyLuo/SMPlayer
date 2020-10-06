@@ -32,7 +32,9 @@ Album properties.
 
 Recent added with timeline.
 
-Animations.
+Improve shy header.
+
+Reverse selection.
 
 # TO FIX
 Able to drag titlebar when loading.

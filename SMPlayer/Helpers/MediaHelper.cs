@@ -51,7 +51,7 @@ namespace SMPlayer
         private static MediaPlaybackList _PlaybackList = new MediaPlaybackList() { MaxPlayedItemsToKeepOpen = 1 };
         private static MediaPlaybackList PendingPlaybackList = null;
         public static MediaPlayer Player = new MediaPlayer() { Source = PlaybackList };
-        public static List<RemoveMusicListener> RemoveMusicListeners = new List<RemoveMusicListener>();
+        public static List<IRemoveMusicListener> RemoveMusicListeners = new List<IRemoveMusicListener>();
         public static DispatcherTimer Timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         public static List<MediaControlListener> MediaControlListeners = new List<MediaControlListener>();
         public static List<ISwitchMusicListener> SwitchMusicListeners = new List<ISwitchMusicListener>();
@@ -425,7 +425,7 @@ namespace SMPlayer
         }
     }
 
-    public interface RemoveMusicListener
+    public interface IRemoveMusicListener
     {
         void MusicRemoved(int index, Music music, IEnumerable<Music> newCollection);
     }

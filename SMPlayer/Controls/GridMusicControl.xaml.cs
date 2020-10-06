@@ -16,7 +16,7 @@ namespace SMPlayer
         public ObservableCollection<GridMusicView> GridMusicCollection = new ObservableCollection<GridMusicView>();
         public List<Music> MusicCollection = new List<Music>();
         private volatile bool IsProcessing = false;
-        public List<RemoveMusicListener> RemoveListeners = new List<RemoveMusicListener>();
+        public List<IRemoveMusicListener> RemoveListeners = new List<IRemoveMusicListener>();
         private int removedItemIndex = -1;
 
         public GridMusicControl()
@@ -108,7 +108,7 @@ namespace SMPlayer
         private void AddToButton_Click(object sender, RoutedEventArgs e)
         {
             var fe = (FrameworkElement)sender;
-            new MenuFlyoutHelper() { Data = (fe.DataContext as GridMusicView).Source }.GetAddToMenuFlyout("", this).ShowAt(fe);
+            new MenuFlyoutHelper() { Data = (fe.DataContext as GridMusicView).Source }.GetAddToMenuFlyout(this).ShowAt(fe);
         }
         private void MenuFlyout_Opening(object sender, object e)
         {

@@ -219,6 +219,9 @@
   <data name="MusicDeleted" xml:space="preserve">
     <value>"{0}" is deleted!</value>
   </data>
+  <data name="MusicListRemoved" xml:space="preserve">
+    <value>Selected songs have been removed!</value>
+  </data>
   <data name="MusicName" xml:space="preserve">
     <value> "{0}"</value>
   </data>
@@ -329,6 +332,9 @@
   </data>
   <data name="RemoveMusic" xml:space="preserve">
     <value>Do you want to remove "{0}" from your playlist?</value>
+  </data>
+  <data name="RemoveMusicList" xml:space="preserve">
+    <value>You are about to remove {0} songs from the playlist. This operation cannot be undone. Do you want to continue?</value>
   </data>
   <data name="RemovePlaylist" xml:space="preserve">
     <value>Do you want to remove playlist "{0}"?</value>

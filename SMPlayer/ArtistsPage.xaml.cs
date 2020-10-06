@@ -29,6 +29,10 @@ namespace SMPlayer
         private object targetArtist;
         private List<ListView> listViews = new List<ListView>();
 
+        private ArtistView SelectedArtist
+        {
+            get => ArtistMasterDetailsView.SelectedItem as ArtistView;
+        }
         private List<Music> SelectedItems
         {
             get
@@ -332,11 +336,15 @@ namespace SMPlayer
         void IMultiSelectListener.AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper)
         {
             helper.Data = SelectedItems;
+            helper.DefaultPlaylistName = SelectedArtist.Name;
         }
 
         void IMultiSelectListener.Play(MultiSelectCommandBar commandBar)
         {
+            List<Music> selectedItems = SelectedItems;
+            if (selectedItems.Count == 0) return;
             MediaHelper.SetPlaylistAndPlay(SelectedItems);
+            commandBar.Hide();
         }
 
         void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar) { }

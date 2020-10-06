@@ -12,17 +12,18 @@ namespace SMPlayer
 {
     public class MenuFlyoutHelper
     {
+        public const string AddToSubItemName = "AddToSubItem", PlaylistMenuName = "ShuffleAndPlayItem", MusicMenuName = "PlayItem",
+                            ShuffleSubItemName = "ShuffleSubItem", SeeAlbumItemName = "SeeAlbumItemName";
         public object Data { get; set; }
         public string DefaultPlaylistName { get; set; } = "";
-        public const string AddToSubItemName = "AddToSubItem", PlaylistMenuName = "ShuffleAndPlayItem", MusicMenuName = "PlayItem",
-            ShuffleSubItemName = "ShuffleSubItem", SeeAlbumItemName = "SeeAlbumItemName";
+        public string CurrentPlaylistName { get; set; } = "";
         public static string NowPlaying = Helper.Localize("Now Playing"), MyFavorites = Helper.Localize("My Favorites");
         public static bool IsBadNewPlaylistName(string name) { return name == NowPlaying || name == MyFavorites; }
-        public MenuFlyout GetAddToMenuFlyout(string playlistName = "", IMenuFlyoutItemClickListener listener = null)
+        public MenuFlyout GetAddToMenuFlyout(IMenuFlyoutItemClickListener listener = null)
         {
-            return GetAddToMenuFlyoutSubItem(playlistName, listener).ToMenuFlyout();
+            return GetAddToMenuFlyoutSubItem(listener).ToMenuFlyout();
         }
-        public MenuFlyoutSubItem GetAddToMenuFlyoutSubItem(string playlistName = "", IMenuFlyoutItemClickListener listener = null)
+        public MenuFlyoutSubItem GetAddToMenuFlyoutSubItem(IMenuFlyoutItemClickListener listener = null)
         {
             MenuFlyoutSubItem addToItem = new MenuFlyoutSubItem()
             {
@@ -30,7 +31,7 @@ namespace SMPlayer
                 Name = AddToSubItemName
             };
             addToItem.SetToolTip("Add To Playlist");
-            if (playlistName != NowPlaying)
+            if (CurrentPlaylistName != NowPlaying)
             {
                 var nowPlayingItem = new MenuFlyoutItem()
                 {
@@ -68,7 +69,7 @@ namespace SMPlayer
                 };
                 addToItem.Items.Add(nowPlayingItem);
             }
-            if (playlistName != MyFavorites && ((Data is Music m && !Settings.settings.MyFavorites.Contains(m)) ||
+            if (CurrentPlaylistName != MyFavorites && ((Data is Music m && !Settings.settings.MyFavorites.Contains(m)) ||
                                                 (Data is IEnumerable<Music> list && list.Any(music => !Settings.settings.MyFavorites.Contains(music)))))
             {
                 var favItem = new MenuFlyoutItem()
@@ -107,11 +108,11 @@ namespace SMPlayer
                 addToItem.Items.Add(favItem);
             }
             if (addToItem.Items.Count > 0) addToItem.Items.Add(new MenuFlyoutSeparator());
-            foreach (var item in GetAddToPlaylistsMenuFlyout(playlistName).Items)
+            foreach (var item in GetAddToPlaylistsMenuFlyout().Items)
                 addToItem.Items.Add(item);
             return addToItem;
         }
-        public MenuFlyout GetAddToPlaylistsMenuFlyout(string CurrentPlaylistName = "")
+        public MenuFlyout GetAddToPlaylistsMenuFlyout()
         {
             var flyout = new MenuFlyout();
             var newPlaylistItem = new MenuFlyoutItem()
@@ -161,7 +162,7 @@ namespace SMPlayer
                     {
                         playlist.Add(Data);
                         string message = songs.Count() == 1 ? Helper.LocalizeMessage("SongAddedTo", songs.ElementAt(0).Name, playlist.Name) :
-                                                                 Helper.LocalizeMessage("SongsAddedTo", songs.Count(), playlist.Name);
+                                                              Helper.LocalizeMessage("SongsAddedTo", songs.Count(), playlist.Name);
                         Helper.ShowCancelableNotificationWithoutLocalization(message, () => 
                         {
                             foreach (var song in songs)
@@ -197,7 +198,7 @@ namespace SMPlayer
                 MediaHelper.ShuffleAndPlay(Data as IEnumerable<Music>);
             };
             flyout.Items.Add(shuffleItem);
-            flyout.Items.Add(GetAddToMenuFlyoutSubItem("", listener));
+            flyout.Items.Add(GetAddToMenuFlyoutSubItem(listener));
             if (option.ShowMultiSelect) flyout.Items.Add(GetMultiSelectItem(listener, option.MultiSelectOption));
             else if (option.ShowSelect) flyout.Items.Add(GetSelectItem(listener, option.MultiSelectOption));
             return flyout;

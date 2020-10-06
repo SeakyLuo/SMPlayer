@@ -19,7 +19,7 @@ using EF = ExpressionBuilder.ExpressionFunctions;
 
 namespace SMPlayer
 {
-    public sealed partial class HeaderedPlaylistControl : UserControl, RemoveMusicListener, ImageSavedListener
+    public sealed partial class HeaderedPlaylistControl : UserControl, IRemoveMusicListener, IImageSavedListener, IMultiSelectListener
     {
         public PlaylistControl HeaderedPlaylist { get => HeaderedPlaylistController; }
         public Playlist CurrentPlaylist { get; private set; }
@@ -68,6 +68,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             HeaderedPlaylistController.RemoveListeners.Add(this);
+            HeaderedPlaylistController.MultiSelectListener = this;
             AlbumArtControl.ImageSavedListeners.Add(this);
         }
 
@@ -128,9 +129,14 @@ namespace SMPlayer
             var helper = new MenuFlyoutHelper()
             {
                 Data = CurrentPlaylist,
-                DefaultPlaylistName = MenuFlyoutHelper.IsBadNewPlaylistName(CurrentPlaylist.Name) ? "" : Settings.settings.FindNextPlaylistName(CurrentPlaylist.Name)
+                DefaultPlaylistName = getDefaultPlaylistNameForAddToMenu(),
+                CurrentPlaylistName = CurrentPlaylist.Name
             };
-            helper.GetAddToMenuFlyout(CurrentPlaylist.Name).ShowAt(sender as FrameworkElement);
+            helper.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
+        }
+        private string getDefaultPlaylistNameForAddToMenu()
+        {
+            return MenuFlyoutHelper.IsBadNewPlaylistName(CurrentPlaylist.Name) ? "" : Settings.settings.FindNextPlaylistName(CurrentPlaylist.Name);
         }
         private async void Rename_Click(object sender, RoutedEventArgs e)
         {
@@ -398,5 +404,17 @@ namespace SMPlayer
         {
             MenuFlyoutHelper.SetPlaylistSortByMenu(sender, CurrentPlaylist);
         }
+
+        void IMultiSelectListener.AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper)
+        {
+            helper.DefaultPlaylistName = getDefaultPlaylistNameForAddToMenu();
+            helper.CurrentPlaylistName = CurrentPlaylist.Name;
+        }
+
+        void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar) { }
+        void IMultiSelectListener.Play(MultiSelectCommandBar commandBar) { }
+        void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar) { }
+        void IMultiSelectListener.SelectAll(MultiSelectCommandBar commandBar) { }
+        void IMultiSelectListener.ClearSelection(MultiSelectCommandBar commandBar) { }
     }
 }

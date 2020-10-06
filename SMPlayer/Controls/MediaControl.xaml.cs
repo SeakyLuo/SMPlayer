@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace SMPlayer
 {
-    public sealed partial class MediaControl : UserControl, ISwitchMusicListener, MediaControlListener, RemoveMusicListener, ILikeMusicListener
+    public sealed partial class MediaControl : UserControl, ISwitchMusicListener, MediaControlListener, IRemoveMusicListener, ILikeMusicListener
     {
         public enum MediaControlMode
         {
