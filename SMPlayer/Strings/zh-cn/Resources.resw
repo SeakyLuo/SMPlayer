@@ -328,7 +328,7 @@
     <value>退出全屏模式</value>
   </data>
   <data name="ExitMiniModeItem.Label" xml:space="preserve">
-    <value>退出最小模式</value>
+    <value>退出迷你模式</value>
   </data>
   <data name="ExpandAppButton.Label" xml:space="preserve">
     <value>拓展视图</value>
@@ -415,19 +415,19 @@
     <value>歌词</value>
   </data>
   <data name="MiniModeButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>进入最小模式</value>
+    <value>进入迷你模式</value>
   </data>
   <data name="MiniModeItem.Label" xml:space="preserve">
-    <value>最小模式</value>
+    <value>迷你模式</value>
   </data>
   <data name="MiniModeItem.ToolTipService.ToolTip" xml:space="preserve">
-    <value>进入最小模式</value>
+    <value>进入迷你模式</value>
   </data>
   <data name="MiniModeMenuItem.Text" xml:space="preserve">
-    <value>最小模式</value>
+    <value>迷你模式</value>
   </data>
   <data name="MiniModeMenuItem.ToolTipService.ToolTip" xml:space="preserve">
-    <value>进入最小模式</value>
+    <value>进入迷你模式</value>
   </data>
   <data name="minute" xml:space="preserve">
     <value>分钟</value>

@@ -118,11 +118,11 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+                <localControls:MultiSelectCommandBar x:Name="BottomMultiSelectCommandBar" Grid.Row="1" />
                 <Frame
                     x:Name="NaviFrame"
                     IsNavigationStackEnabled="True"
                     Navigated="NaviFrame_Navigated" />
-                <localControls:MultiSelectCommandBar x:Name="BottomMultiSelectCommandBar" Grid.Row="1" />
             </Grid>
         </NavigationView>
         <Grid
