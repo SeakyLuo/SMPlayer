@@ -398,7 +398,7 @@ namespace SMPlayer
         private void SongsListView_Loaded(object sender, RoutedEventArgs e)
         {
             ListView listView = sender as ListView;
-            listView.SelectionMode = MainPage.Instance.GetMultiSelectCommandBar().IsOpen ? ListViewSelectionMode.Multiple : ListViewSelectionMode.None;
+            listView.SelectionMode = MainPage.Instance.GetMultiSelectCommandBar().IsVisible ? ListViewSelectionMode.Multiple : ListViewSelectionMode.None;
             listViews.Add(listView);
         }
     }

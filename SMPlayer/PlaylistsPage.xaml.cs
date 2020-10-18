@@ -18,7 +18,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class PlaylistsPage : Page, RenameActionListener
+    public sealed partial class PlaylistsPage : Page, IRenameActionListener
     {
         public static ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
 

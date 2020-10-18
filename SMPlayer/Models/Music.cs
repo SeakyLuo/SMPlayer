@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMPlayer.Helpers;
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
@@ -230,8 +231,8 @@ namespace SMPlayer.Models
 
         public async Task<MusicDisplayItem> GetMusicDisplayItemAsync()
         {
-            var thumbnail = await Helper.GetStorageItemThumbnailAsync(this);
-            return thumbnail.IsThumbnail() ? new MusicDisplayItem(thumbnail, await thumbnail.GetDisplayColor(), this) : MusicDisplayItem.DefaultItem;
+            var thumbnail = await ImageHelper.LoadThumbnail(Path);
+            return thumbnail.IsThumbnail() ? new MusicDisplayItem(await thumbnail.GetDisplayColor(), this) : MusicDisplayItem.DefaultItem;
         }
 
         public MediaPlaybackItem GetMediaPlaybackItem()

@@ -1,4 +1,6 @@
-﻿using Windows.Storage.FileProperties;
+﻿using SMPlayer.Helpers;
+using System.Threading.Tasks;
+using Windows.Storage.FileProperties;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -6,39 +8,34 @@ namespace SMPlayer.Models
 {
     public class MusicDisplayItem
     {
-        public BitmapImage Thumbnail { get; private set; }
+        public Music Source { get; private set; }
+        public string Path { get => Source.Path; }
         public Brush Color { get; private set; }
         public bool IsDefault { get; private set; }
-        public Music Source { get; private set; }
 
-        public static MusicDisplayItem DefaultItem = new MusicDisplayItem(MusicImage.DefaultImage, ColorHelper.HighlightBrush);
+        public static MusicDisplayItem DefaultItem = new MusicDisplayItem(ColorHelper.HighlightBrush);
 
-        public MusicDisplayItem(StorageItemThumbnail thumbnail, Brush color, Music music)
+        public MusicDisplayItem(Brush color, Music music)
         {
-            Thumbnail = thumbnail.GetBitmapImage();
             Color = color;
             Source = music;
             IsDefault = false;
         }
 
-        public MusicDisplayItem(BitmapImage bitmap, Brush color, Music music)
+        private MusicDisplayItem(Brush color)
         {
-            Thumbnail = bitmap;
-            Color = color;
-            Source = music;
-            IsDefault = false;
-        }
-
-        private MusicDisplayItem(BitmapImage bitmap, Brush color)
-        {
-            Thumbnail = bitmap;
             Color = color;
             IsDefault = true;
         }
 
         public static bool IsNullOrEmpty(MusicDisplayItem item)
         {
-            return item == null || item.Thumbnail == null || item.Color == null;
+            return item == null || item.Color == null;
+        }
+
+        public async Task<BitmapImage> GetThumbnailAsync()
+        {
+            return Source == null ? MusicImage.DefaultImage : await ImageHelper.LoadImage(Source);
         }
     }
 }

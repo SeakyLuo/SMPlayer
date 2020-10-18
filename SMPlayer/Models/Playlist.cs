@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMPlayer.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -107,28 +108,25 @@ namespace SMPlayer.Models
 
         public async Task SetDisplayItemAsync()
         {
-            if (Count == 0)
+            foreach (var song in Songs)
             {
-                DisplayItem = MusicDisplayItem.DefaultItem;
-            }
-            else
-            {
-                foreach (var song in Songs)
+                DisplayItem = await song.GetMusicDisplayItemAsync();
+                if (!DisplayItem.IsDefault)
                 {
-                    DisplayItem = await song.GetMusicDisplayItemAsync();
-                    if (!DisplayItem.IsDefault) break;
+                    return;
                 }
             }
-        }
+            DisplayItem = MusicDisplayItem.DefaultItem;
+            }
 
         public async Task<List<MusicDisplayItem>> GetAllDisplayItemsAsync()
         {
             var result = new List<MusicDisplayItem>();
             foreach (var group in Songs.GroupBy(m => m.Album))
             {
-                foreach (var music in group)
+                foreach (var song in group)
                 {
-                    var item = await music.GetMusicDisplayItemAsync();
+                    var item = await song.GetMusicDisplayItemAsync();
                     if (!item.IsDefault)
                     {
                         result.Add(item);
@@ -144,7 +142,7 @@ namespace SMPlayer.Models
             return new AlbumView(Name, Artist)
             {
                 Songs = Songs,
-                Thumbnail = DisplayItem == null ? MusicImage.DefaultImage : DisplayItem.Thumbnail,
+                ThumbnailSource = DisplayItem?.Source.Path,
             };
         }
 
@@ -153,7 +151,7 @@ namespace SMPlayer.Models
             return new AlbumView(Name, SongCountConverter.GetSongCount(Count))
             {
                 Songs = Songs,
-                Thumbnail = DisplayItem == null ? MusicImage.DefaultImage : DisplayItem.Thumbnail,
+                ThumbnailSource = DisplayItem?.Source.Path,
             };
         }
 

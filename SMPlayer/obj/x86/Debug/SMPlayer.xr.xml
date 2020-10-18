@@ -13,6 +13,27 @@
     <RootPropertyPathName Name="Third" />
     <RootPropertyPathName Name="Second" />
     <RootPropertyPathName Name="First" />
+    <RootPropertyPathName Name="CommandBarTemplateSettings" />
+    <RootPropertyPathName Name="NegativeOverflowContentHeight" />
+    <RootPropertyPathName Name="ContentHeight" />
+    <RootPropertyPathName Name="TemplateSettings" />
+    <RootPropertyPathName Name="HiddenVerticalDelta" />
+    <RootPropertyPathName Name="OverflowContentHeight" />
+    <RootPropertyPathName Name="NegativeHiddenVerticalDelta" />
+    <RootPropertyPathName Name="OverflowContentHiddenYTranslation" />
+    <RootPropertyPathName Name="MinimalVerticalDelta" />
+    <RootPropertyPathName Name="NegativeMinimalVerticalDelta" />
+    <RootPropertyPathName Name="OverflowContentMinimalYTranslation" />
+    <RootPropertyPathName Name="CompactVerticalDelta" />
+    <RootPropertyPathName Name="NegativeCompactVerticalDelta" />
+    <RootPropertyPathName Name="OverflowContentCompactYTranslation" />
+    <RootPropertyPathName Name="ClipRect" />
+    <RootPropertyPathName Name="OverflowContentHorizontalOffset" />
+    <RootPropertyPathName Name="OverflowContentMinWidth" />
+    <RootPropertyPathName Name="OverflowContentMaxWidth" />
+    <RootPropertyPathName Name="OverflowContentMaxHeight" />
+    <RootPropertyPathName Name="OverflowContentClipRect" />
+    <RootPropertyPathName Name="EffectiveOverflowButtonVisibility" />
     <RootPropertyPathName Name="Album" />
     <RootPropertyPathName Name="Duration" />
     <RootPropertyPathName Name="Content" />
@@ -23,7 +44,6 @@
     <RootPropertyPathName Name="IsClosable" />
     <RootPropertyPathName Name="Icon" />
     <RootPropertyPathName Name="IsPaneOpen" />
-    <RootPropertyPathName Name="TemplateSettings" />
     <RootPropertyPathName Name="LeftPaneVisibility" />
     <RootPropertyPathName Name="SingleSelectionFollowsFocus" />
     <RootPropertyPathName Name="TopPadding" />
@@ -32,20 +52,6 @@
     <RootPropertyPathName Name="PaneToggleButtonVisibility" />
     <RootPropertyPathName Name="BackButtonVisibility" />
     <RootPropertyPathName Name="CompactPaneLength" />
-    <RootPropertyPathName Name="ClipRect" />
-    <RootPropertyPathName Name="CompactVerticalDelta" />
-    <RootPropertyPathName Name="CommandBarTemplateSettings" />
-    <RootPropertyPathName Name="OverflowContentMinWidth" />
-    <RootPropertyPathName Name="OverflowContentMaxWidth" />
-    <RootPropertyPathName Name="OverflowContentMaxHeight" />
-    <RootPropertyPathName Name="OverflowContentHorizontalOffset" />
-    <RootPropertyPathName Name="EffectiveOverflowButtonVisibility" />
-    <RootPropertyPathName Name="NegativeOverflowContentHeight" />
-    <RootPropertyPathName Name="ContentHeight" />
-    <RootPropertyPathName Name="HiddenVerticalDelta" />
-    <RootPropertyPathName Name="OverflowContentClipRect" />
-    <RootPropertyPathName Name="OverflowContentHeight" />
-    <RootPropertyPathName Name="MinimalVerticalDelta" />
     <RootPropertyPathName Name="KeyboardAcceleratorTextMinWidth" />
     <RootPropertyPathName Name="TreeViewItemTemplateSettings" />
     <RootPropertyPathName Name="Indentation" />
@@ -93,6 +99,7 @@
       <RootProperty Name="DefaultLabelPosition" />
       <RootProperty Name="IsDynamicOverflowEnabled" />
       <RootProperty Name="OverflowButtonVisibility" />
+      <RootProperty Name="Style" />
       <RootProperty Name="IsOpen" />
       <RootProperty Name="IsSticky" />
       <RootProperty Name="ClosedDisplayMode" />
@@ -101,7 +108,6 @@
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Background" />
       <RootProperty Name="RequestedTheme" />
-      <RootProperty Name="Style" />
       <RootProperty Name="Content" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Control">
@@ -118,14 +124,14 @@
       <RootProperty Name="BorderBrush" />
       <RootProperty Name="UseSystemFocusVisuals" />
       <RootProperty Name="Template" />
-      <RootProperty Name="VerticalContentAlignment" />
       <RootProperty Name="IsTabStop" />
+      <RootProperty Name="VerticalContentAlignment" />
       <RootProperty Name="TabNavigation" />
       <RootProperty Name="IsFocusEngagementEnabled" />
-      <RootMethod Name="GetIsTemplateFocusTarget" />
-      <RootMethod Name="SetIsTemplateFocusTarget" />
       <RootMethod Name="GetIsTemplateKeyTipTarget" />
       <RootMethod Name="SetIsTemplateKeyTipTarget" />
+      <RootMethod Name="GetIsTemplateFocusTarget" />
+      <RootMethod Name="SetIsTemplateFocusTarget" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.FrameworkElement">
       <RootProperty Name="Margin" />
@@ -180,12 +186,12 @@
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="FontSize" />
       <RootProperty Name="Visibility" />
+      <RootProperty Name="Padding" />
+      <RootProperty Name="MinHeight" />
+      <RootProperty Name="IsAccessKeyScope" />
       <RootProperty Name="MinWidth" />
       <RootProperty Name="IsTabStop" />
       <RootProperty Name="IsEnabled" />
-      <RootProperty Name="MinHeight" />
-      <RootProperty Name="Padding" />
-      <RootProperty Name="IsAccessKeyScope" />
       <RootProperty Name="CornerRadius" />
       <RootProperty Name="FontFamily" />
       <RootProperty Name="VerticalContentAlignment" />
@@ -201,9 +207,9 @@
       <RootProperty Name="Margin" />
       <RootProperty Name="Visibility" />
       <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="Opacity" />
-      <RootProperty Name="Height" />
       <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Height" />
+      <RootProperty Name="Opacity" />
       <RootProperty Name="Style" />
     </RootType>
     <RootType FullName="SMPlayer.IconTextButton">
@@ -251,6 +257,7 @@
       <RootProperty Name="Background" />
       <RootProperty Name="Content" />
       <RootProperty Name="Resources" />
+      <RootProperty Name="BottomAppBar" />
       <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="SMPlayer.HeaderedPlaylistControl">
@@ -275,20 +282,20 @@
       <RootProperty Name="HorizontalAlignment" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="IsHitTestVisible" />
-      <RootProperty Name="BorderBrush" />
-      <RootProperty Name="BorderThickness" />
       <RootProperty Name="Resources" />
-      <RootProperty Name="FocusVisualMargin" />
-      <RootProperty Name="RenderTransformOrigin" />
-      <RootProperty Name="RenderTransform" />
-      <RootProperty Name="Visibility" />
-      <RootProperty Name="MinHeight" />
-      <RootProperty Name="MinWidth" />
       <RootProperty Name="Clip" />
+      <RootProperty Name="MinHeight" />
       <RootProperty Name="XYFocusKeyboardNavigation" />
+      <RootProperty Name="RenderTransform" />
+      <RootProperty Name="Opacity" />
+      <RootProperty Name="MinWidth" />
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="MaxHeight" />
-      <RootProperty Name="Opacity" />
+      <RootProperty Name="BorderBrush" />
+      <RootProperty Name="BorderThickness" />
+      <RootProperty Name="FocusVisualMargin" />
+      <RootProperty Name="RenderTransformOrigin" />
+      <RootProperty Name="Visibility" />
       <RootProperty Name="IsDoubleTapEnabled" />
       <RootProperty Name="RequestedTheme" />
       <RootEvent Name="PointerEntered" />
@@ -348,24 +355,26 @@
       <RootProperty Name="Converter" />
       <RootProperty Name="ConverterParameter" />
       <RootProperty Name="Mode" />
-      <RootProperty Name="ElementName" />
-      <RootProperty Name="Path" />
       <RootProperty Name="RelativeSource" />
+      <RootProperty Name="Path" />
+      <RootProperty Name="ElementName" />
       <RootProperty Name="TargetNullValue" />
       <RootProperty Name="FallbackValue" />
     </RootType>
     <RootType FullName="SMPlayer.AlbumsPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.ContentControl">
       <RootProperty Name="Content" />
+      <RootProperty Name="ContentTemplate" />
+      <RootProperty Name="ContentTransitions" />
+      <RootProperty Name="Foreground" />
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="HorizontalContentAlignment" />
+      <RootProperty Name="VerticalContentAlignment" />
+      <RootProperty Name="IsTabStop" />
       <RootProperty Name="Margin" />
       <RootProperty Name="Padding" />
-      <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="VerticalContentAlignment" />
-      <RootProperty Name="Foreground" />
       <RootProperty Name="IsHitTestVisible" />
-      <RootProperty Name="IsTabStop" />
-      <RootProperty Name="HorizontalContentAlignment" />
-      <RootProperty Name="ContentTemplate" />
       <RootProperty Name="MinWidth" />
     </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.MasterDetailsView">
@@ -650,6 +659,17 @@
       <RootProperty Name="AllowBreak" />
       <RootProperty Name="Visibility" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.AppBar">
+      <RootProperty Name="ClosedDisplayMode" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.UIElement">
+      <RootProperty Name="ExitDisplayModeOnAccessKeyInvoked" />
+      <RootProperty Name="ContextFlyout" />
+      <RootProperty Name="UseLayoutRounding" />
+      <RootProperty Name="IsHoldingEnabled" />
+      <RootProperty Name="AllowDrop" />
+      <RootProperty Name="Visibility" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarButton">
       <RootProperty Name="Icon" />
       <RootProperty Name="Label" />
@@ -659,6 +679,73 @@
       <RootProperty Name="IsEnabled" />
       <RootProperty Name="Margin" />
       <RootEvent Name="Click" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.AppBarToggleButton" />
+    <RootType FullName="Windows.UI.Xaml.Media.Animation.DoubleAnimationUsingKeyFrames">
+      <RootProperty Name="KeyFrames" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Media.Animation.DiscreteDoubleKeyFrame">
+      <RootProperty Name="KeyTime" />
+      <RootProperty Name="Value" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Media.Animation.SplineDoubleKeyFrame">
+      <RootProperty Name="KeyTime" />
+      <RootProperty Name="KeySpline" />
+      <RootProperty Name="Value" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.VisualTransition">
+      <RootProperty Name="From" />
+      <RootProperty Name="To" />
+      <RootProperty Name="GeneratedDuration" />
+      <RootProperty Name="Storyboard" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Data.RelativeSource">
+      <RootProperty Name="Mode" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Media.RectangleGeometry">
+      <RootProperty Name="Rect" />
+      <RootProperty Name="Transform" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Media.TranslateTransform">
+      <RootProperty Name="Y" />
+      <RootProperty Name="X" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.Primitives.Popup">
+      <RootProperty Name="RenderTransform" />
+      <RootProperty Name="Child" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Media.TransformGroup">
+      <RootProperty Name="Children" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.CommandBarOverflowPresenter">
+      <RootProperty Name="Style" />
+      <RootProperty Name="IsTabStop" />
+      <RootProperty Name="RenderTransform" />
+      <RootProperty Name="ItemContainerStyle" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Shapes.Rectangle">
+      <RootProperty Name="Height" />
+      <RootProperty Name="Visibility" />
+      <RootProperty Name="VerticalAlignment" />
+      <RootProperty Name="Stroke" />
+      <RootProperty Name="StrokeThickness" />
+      <RootProperty Name="Width" />
+      <RootProperty Name="Fill" />
+      <RootProperty Name="UseLayoutRounding" />
+      <RootProperty Name="Margin" />
+      <RootProperty Name="Opacity" />
+      <RootProperty Name="HorizontalAlignment" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ItemsControl">
+      <RootProperty Name="HorizontalAlignment" />
+      <RootProperty Name="MinHeight" />
+      <RootProperty Name="IsTabStop" />
+      <RootProperty Name="ItemsPanel" />
+      <RootProperty Name="ItemContainerTransitions" />
+      <RootProperty Name="ItemContainerStyle" />
+    </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.ItemsPanelTemplate">
+      <RootProperty Name="Template" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.AppBarSeparator" />
     <RootType FullName="SMPlayer.Controls.MultiSelectCommandBar" />
@@ -778,19 +865,6 @@
       <RootEvent Name="Checked" />
       <RootEvent Name="Unchecked" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Shapes.Rectangle">
-      <RootProperty Name="Width" />
-      <RootProperty Name="Height" />
-      <RootProperty Name="Fill" />
-      <RootProperty Name="Stroke" />
-      <RootProperty Name="StrokeThickness" />
-      <RootProperty Name="UseLayoutRounding" />
-      <RootProperty Name="Margin" />
-      <RootProperty Name="VerticalAlignment" />
-      <RootProperty Name="Opacity" />
-      <RootProperty Name="Visibility" />
-      <RootProperty Name="HorizontalAlignment" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.Animation.DoubleAnimation">
       <RootProperty Name="To" />
       <RootProperty Name="Duration" />
@@ -805,21 +879,6 @@
     <RootType FullName="Windows.UI.Xaml.Controls.Canvas">
       <RootMethod Name="GetZIndex" />
       <RootMethod Name="SetZIndex" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.Primitives.Popup">
-      <RootProperty Name="Child" />
-      <RootProperty Name="RenderTransform" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.UIElement">
-      <RootProperty Name="ContextFlyout" />
-      <RootProperty Name="UseLayoutRounding" />
-      <RootProperty Name="IsHoldingEnabled" />
-      <RootProperty Name="AllowDrop" />
-      <RootProperty Name="ExitDisplayModeOnAccessKeyInvoked" />
-      <RootProperty Name="Visibility" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Data.RelativeSource">
-      <RootProperty Name="Mode" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Thickness" />
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Converters.EmptyObjectToObjectConverter">
@@ -860,14 +919,6 @@
       <RootProperty Name="IsItemClickEnabled" />
       <RootProperty Name="SelectionMode" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.ItemsControl">
-      <RootProperty Name="ItemContainerTransitions" />
-      <RootProperty Name="ItemsPanel" />
-      <RootProperty Name="MinHeight" />
-      <RootProperty Name="HorizontalAlignment" />
-      <RootProperty Name="IsTabStop" />
-      <RootProperty Name="ItemContainerStyle" />
-    </RootType>
     <RootType FullName="Microsoft.Toolkit.Uwp.UI.Controls.TabViewItem">
       <RootProperty Name="IsClosable" />
     </RootType>
@@ -893,10 +944,6 @@
       <RootMethod Name="SetAncestor" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.ScaleTransform" />
-    <RootType FullName="Windows.UI.Xaml.Media.TranslateTransform">
-      <RootProperty Name="Y" />
-      <RootProperty Name="X" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.Viewbox">
       <RootProperty Name="MaxWidth" />
       <RootProperty Name="MaxHeight" />
@@ -917,12 +964,6 @@
     <RootType FullName="Windows.UI.Xaml.Media.Animation.DragItemThemeAnimation">
       <RootProperty Name="TargetName" />
     </RootType>
-    <RootType FullName="Windows.UI.Xaml.VisualTransition">
-      <RootProperty Name="GeneratedDuration" />
-      <RootProperty Name="To" />
-      <RootProperty Name="From" />
-      <RootProperty Name="Storyboard" />
-    </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.Animation.DragOverThemeAnimation">
       <RootProperty Name="Direction" />
       <RootProperty Name="ToOffset" />
@@ -930,9 +971,6 @@
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ItemsPresenter">
       <RootProperty Name="Padding" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.ItemsPanelTemplate">
-      <RootProperty Name="Template" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.Animation.TransitionCollection" />
     <RootType FullName="Windows.UI.Xaml.Media.Animation.AddDeleteThemeTransition" />
@@ -1103,31 +1141,6 @@
       <RootProperty Name="RenderTransformOrigin" />
       <RootProperty Name="Style" />
       <RootProperty Name="RenderTransform" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.AppBar">
-      <RootProperty Name="ClosedDisplayMode" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Media.Animation.DoubleAnimationUsingKeyFrames">
-      <RootProperty Name="KeyFrames" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Media.Animation.DiscreteDoubleKeyFrame">
-      <RootProperty Name="KeyTime" />
-      <RootProperty Name="Value" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Media.Animation.SplineDoubleKeyFrame">
-      <RootProperty Name="KeySpline" />
-      <RootProperty Name="KeyTime" />
-      <RootProperty Name="Value" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Media.RectangleGeometry">
-      <RootProperty Name="Rect" />
-      <RootProperty Name="Transform" />
-    </RootType>
-    <RootType FullName="Windows.UI.Xaml.Controls.CommandBarOverflowPresenter">
-      <RootProperty Name="IsTabStop" />
-      <RootProperty Name="Style" />
-      <RootProperty Name="RenderTransform" />
-      <RootProperty Name="ItemContainerStyle" />
     </RootType>
     <RootType FullName="SMPlayer.PlaylistControl">
       <RootProperty Name="AllowReorder" />

@@ -88,7 +88,7 @@ namespace SMPlayer.Models
                 {
                     foreach (var music in group)
                     {
-                        if (await Helper.GetThumbnailAsync(music, false) is BitmapImage thumbnail)
+                        if (await ImageHelper.LoadImage(music) is BitmapImage thumbnail)
                         {
                             thumbnails.Add(thumbnail);
                             break;

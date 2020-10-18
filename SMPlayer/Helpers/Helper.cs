@@ -1,5 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using SMPlayer.Controls;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
@@ -216,7 +217,7 @@ namespace SMPlayer
             using (var thumbnail = await GetStorageItemThumbnailAsync(path))
             {
                 if (thumbnail.IsThumbnail())
-                    return thumbnail.GetBitmapImage();
+                    return thumbnail.ToBitmapImage();
             }
             return withDefault ? MusicImage.DefaultImage : null;
         }
@@ -532,7 +533,7 @@ namespace SMPlayer
                 }
                 else
                 {
-                    var thumbnail = await GetStorageItemThumbnailAsync(playlist.DisplayItem.Source.Path);
+                    var thumbnail = await ImageHelper.LoadThumbnail(playlist.DisplayItem.Source.Path);
                     if (thumbnail.IsThumbnail())
                     {
                         await thumbnail.SaveAsync(SecondaryTileFolder, tileid);

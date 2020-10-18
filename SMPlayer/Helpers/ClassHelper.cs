@@ -144,7 +144,7 @@ namespace SMPlayer
             return thumbnail != null && thumbnail.Type == ThumbnailType.Image;
         }
 
-        public static BitmapImage GetBitmapImage(this StorageItemThumbnail thumbnail)
+        public static BitmapImage ToBitmapImage(this StorageItemThumbnail thumbnail)
         {
             BitmapImage bitmapImage = new BitmapImage();
             bitmapImage.SetSource(thumbnail);

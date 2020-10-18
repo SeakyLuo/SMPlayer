@@ -17,7 +17,7 @@ namespace SMPlayer.Dialogs
         {
             Constructor(confirm, option, defaultName);
         }
-        public RenameDialog(RenameActionListener listener, RenameOption option, string defaultName)
+        public RenameDialog(IRenameActionListener listener, RenameOption option, string defaultName)
         {
             Constructor(listener.Confirm, option, defaultName);
         }
@@ -67,7 +67,7 @@ namespace SMPlayer.Dialogs
         }
     }
 
-    public class VirtualRenameActionListener : RenameActionListener
+    public class VirtualRenameActionListener : IRenameActionListener
     {
         public RenameDialog Dialog;
         public object Data;
@@ -86,7 +86,7 @@ namespace SMPlayer.Dialogs
         }
     }
 
-    public interface RenameActionListener
+    public interface IRenameActionListener
     {
         bool Confirm(string oldName, string newName);
     }

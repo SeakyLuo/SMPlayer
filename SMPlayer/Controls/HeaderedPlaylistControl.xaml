@@ -35,30 +35,19 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Image
-                            x:Name="PlaylistCover"
+                        <Grid 
                             Grid.RowSpan="3"
                             Width="180"
                             Height="180"
-                            Margin="20"
-                            Source="ms-appx:///Assets/monotone_bg_wide.png" />
-                        <!--<controls:RotatorTile
-                            x:Name="PlaylistCover"
-                            Grid.RowSpan="3"
-                            Width="180"
-                            Height="180"
-                            Margin="20"
-                            Direction="Left"
-                            RotationDelay="0:0:10">
-                            <controls:RotatorTile.ItemTemplate>
-                                <DataTemplate x:DataType="models:MusicDisplayItem">
-                                    <Image
-                                        Width="180"
-                                        Height="180"
-                                        Source="{x:Bind Thumbnail, Mode=OneWay}" />
-                                </DataTemplate>
-                            </controls:RotatorTile.ItemTemplate>
-                        </controls:RotatorTile>-->
+                            Margin="20">
+                            <Image x:Name="PlaylistCover" Source="ms-appx:///Assets/monotone_bg_wide.png" />
+                            <ProgressRing
+                                x:Name="PlaylistCoverProgressRing"
+                                IsActive="False" 
+                                Foreground="White"
+                                Width="120" 
+                                Height="120"/>
+                        </Grid>
                         <TextBlock
                             x:Name="PlaylistNameTextBlock"
                             Grid.Column="1"

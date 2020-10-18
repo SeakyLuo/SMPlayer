@@ -16,8 +16,6 @@ Go to Settings and set the Root Folder of your music files.
 # TO DO
 Move music from folder to folder.
 
-Improve path header display (like Windows).
-
 Sort albums.
 
 Improve column spacing of AlbumPage.
@@ -30,8 +28,6 @@ Page shows no music hint.
 
 Album properties.
 
-Recent added with timeline.
-
 Improve shy header.
 
 Reverse selection.
@@ -41,7 +37,11 @@ Able to drag titlebar when loading.
 
 Dark thumb in the mini mode.
 
+MultiSelectCommandBar is too high.
+
 # MIGHT DO
+Improve path header display (like Windows).
+
 Real-time update Playlist Info when new music added.
 
 Album art in NowPlayingFull.

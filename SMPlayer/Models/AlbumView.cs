@@ -5,6 +5,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using SMPlayer.Helpers;
 
 namespace SMPlayer.Models
 {
@@ -24,7 +25,7 @@ namespace SMPlayer.Models
             }
         }
         private BitmapImage thumbnail = MusicImage.DefaultImage;
-        public string ThumbnailSource { get; private set; }
+        public string ThumbnailSource { get; set; }
         public bool ThumbnailLoaded { get; private set; } = false;
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -63,12 +64,12 @@ namespace SMPlayer.Models
             else if (ThumbnailSource == "")
                 Thumbnail = MusicImage.DefaultImage;
             else
-                Thumbnail = await Helper.GetThumbnailAsync(ThumbnailSource);
+                Thumbnail = await ImageHelper.LoadImage(ThumbnailSource);
         }
         public async Task SetThumbnailAsync()
         {
             if (ThumbnailLoaded) return;
-            if (string.IsNullOrEmpty(ThumbnailSource) || !(await Helper.GetThumbnailAsync(ThumbnailSource) is BitmapImage thumbnail))
+            if (string.IsNullOrEmpty(ThumbnailSource) || !(await ImageHelper.LoadImage(ThumbnailSource) is BitmapImage thumbnail))
             {
                 MusicImage image = await GetAlbumCoverAsync(Songs);
                 Thumbnail = image.Image;
@@ -82,7 +83,7 @@ namespace SMPlayer.Models
         public static async Task<MusicImage> GetAlbumCoverAsync(ICollection<Music> songs)
         {
             foreach (var music in songs)
-                if (await Helper.GetThumbnailAsync(music, false) is BitmapImage image)
+                if (await ImageHelper.LoadImage(music) is BitmapImage image)
                     return new MusicImage(music.Path, image);
             return MusicImage.Default;
         }

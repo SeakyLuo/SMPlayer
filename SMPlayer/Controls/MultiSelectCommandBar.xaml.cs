@@ -1,6 +1,7 @@
 ﻿using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -21,7 +22,7 @@ namespace SMPlayer.Controls
     public sealed partial class MultiSelectCommandBar : UserControl
     {
         public IMultiSelectListener MultiSelectListener { get; set; }
-        public bool IsOpen { get => CommandBarContainer.IsOpen; }
+        public bool IsVisible { get => CommandBarContainer.IsOpen; }
         private bool shouldOpen = true;
 
         public MultiSelectCommandBar()

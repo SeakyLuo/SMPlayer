@@ -442,10 +442,10 @@ namespace SMPlayer
 
         public async void SetThumbnail(Music music)
         {
-            using (var thumbnail = await Helper.GetStorageItemThumbnailAsync(music))
+            using (var thumbnail = await ImageHelper.LoadThumbnail(music))
             {
                 var isThumbnail = thumbnail.IsThumbnail();
-                AlbumCover.Source = isThumbnail ? thumbnail.GetBitmapImage() : MusicImage.DefaultImage;
+                AlbumCover.Source = isThumbnail ? thumbnail.ToBitmapImage() : MusicImage.DefaultImage;
                 switch (Mode)
                 {
                     case MediaControlMode.Main:

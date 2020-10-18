@@ -40,7 +40,7 @@ namespace SMPlayer.Controls
                 var thumbnail = await Helper.GetStorageItemThumbnailAsync(music, 1024);
                 if (thumbnail.IsThumbnail())
                 {
-                    AlbumArt.Source = thumbnail.GetBitmapImage();
+                    AlbumArt.Source = thumbnail.ToBitmapImage();
                     AlbumArt.Visibility = Visibility.Visible;
                     return;
                 }
@@ -56,7 +56,7 @@ namespace SMPlayer.Controls
             var thumbnail = await Helper.GetStorageItemThumbnailAsync(music, 1024);
             if (thumbnail.IsThumbnail())
             {
-                AlbumArt.Source = thumbnail.GetBitmapImage();
+                AlbumArt.Source = thumbnail.ToBitmapImage();
                 AlbumArt.Visibility = Visibility.Visible;
             }
             else

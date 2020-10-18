@@ -48,8 +48,7 @@ namespace SMPlayer
             {
                 var copy = music.Copy();
                 copy.IsPlaying = copy.Equals(MediaHelper.CurrentMusic);
-                GridMusicView gridItem = new GridMusicView(copy);
-                GridMusicCollection.Add(gridItem);
+                GridMusicCollection.Add(new GridMusicView(copy));
             }
             IsProcessing = false;
         }

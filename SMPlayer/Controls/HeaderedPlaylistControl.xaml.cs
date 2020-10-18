@@ -2,6 +2,7 @@
 using Microsoft.Graphics.Canvas.Effects;
 using SMPlayer.Controls;
 using SMPlayer.Dialogs;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
@@ -60,8 +61,6 @@ namespace SMPlayer
             set => HeaderedPlaylistController.Removable = value;
         }
 
-        private static Dictionary<string, List<MusicDisplayItem>> PlaylistDisplayDict = new Dictionary<string, List<MusicDisplayItem>>();
-        private static readonly Random random = new Random();
         private static RenameDialog dialog;
         private static RemoveDialog removeDialog;
         public HeaderedPlaylistControl()
@@ -74,6 +73,7 @@ namespace SMPlayer
 
         public async Task SetPlaylist(Playlist playlist)
         {
+            HidePlaylistCover();
             MediaHelper.FindMusicAndSetPlaying(playlist.Songs, null, MediaHelper.CurrentMusic);
             CurrentPlaylist = playlist;
             HeaderedPlaylist.ItemsSource = playlist.Songs;
@@ -84,34 +84,29 @@ namespace SMPlayer
             RenameButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
             DeleteButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
             SetPinState(Windows.UI.StartScreen.SecondaryTile.Exists(Helper.FormatTileId(playlist, IsPlaylist)));
-            MusicDisplayItem item;
-            if (PlaylistDisplayDict.TryGetValue(playlist.Name, out List<MusicDisplayItem> MusicDisplayItems))
+            if (playlist.DisplayItem == null)
             {
-                item = MusicDisplayItems[random.Next(MusicDisplayItems.Count)];
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
-                {
-                    var items = await playlist.GetAllDisplayItemsAsync();
-                    if (items.Count != MusicDisplayItems.Count) PlaylistDisplayDict[playlist.Name] = items;
-                });
+                await playlist.SetDisplayItemAsync();
             }
-            else
-            {
-                if (MusicDisplayItem.IsNullOrEmpty(playlist.DisplayItem) || playlist.DisplayItem.IsDefault)
-                    await playlist.SetDisplayItemAsync();
-                item = playlist.DisplayItem;
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
-                {
-                    var items = await playlist.GetAllDisplayItemsAsync();
-                    if (items.Count > 0) PlaylistDisplayDict[playlist.Name] = items;
-                });
-            }
-            //PlaylistCover.ItemsSource = MusicDisplayItems;
-            SetMusicDisplayItem(item);
+            await SetMusicDisplayItem(playlist.DisplayItem);
+            ShowPlaylistCover();
         }
 
-        public void SetMusicDisplayItem(MusicDisplayItem item)
+        public void HidePlaylistCover()
         {
-            PlaylistCover.Source = item.Thumbnail;
+            PlaylistCover.Visibility = Visibility.Collapsed;
+            PlaylistCoverProgressRing.IsActive = true;
+        }
+
+        public void ShowPlaylistCover()
+        {
+            PlaylistCover.Visibility = Visibility.Visible;
+            PlaylistCoverProgressRing.IsActive = false;
+        }
+
+        public async Task SetMusicDisplayItem(MusicDisplayItem item)
+        {
+            PlaylistCover.Source = await item.GetThumbnailAsync();
             HeaderBackground = item.Color;
         }
 
@@ -386,7 +381,7 @@ namespace SMPlayer
             if (!IsPlaylist && CurrentPlaylist.Name == album.Name)
             {
                 MusicDisplayItem item = await album.Songs[0].GetMusicDisplayItemAsync();
-                SetMusicDisplayItem(CurrentPlaylist.DisplayItem = item);
+                await SetMusicDisplayItem(CurrentPlaylist.DisplayItem = item);
             }
         }
 
@@ -396,7 +391,7 @@ namespace SMPlayer
             if (!IsPlaylist && CurrentPlaylist.Name == music.Album && CurrentPlaylist.Count == 1)
             {
                 MusicDisplayItem item = await music.GetMusicDisplayItemAsync();
-                SetMusicDisplayItem(CurrentPlaylist.DisplayItem = item);
+                await SetMusicDisplayItem(CurrentPlaylist.DisplayItem = item);
             }
         }
 
