@@ -16,9 +16,9 @@ namespace SMPlayer
         {
             MaxSize = 200
         };
-        private static readonly LoadingCache<string, StorageItemThumbnail> thumbnailCache = new LoadingCache<string, StorageItemThumbnail>(600)
+        private static readonly LoadingCache<string, StorageItemThumbnail> thumbnailCache = new LoadingCache<string, StorageItemThumbnail>(6000)
         {
-            MaxSize = 20
+            MaxSize = 50
         };
 
         public static async Task<BitmapImage> LoadImage(string path)
@@ -26,7 +26,7 @@ namespace SMPlayer
             BitmapImage image = imageCache.Get(path);
             if (image == null)
             {
-                image = await Helper.GetThumbnailAsync(path, false);
+                image = await Helper.GetThumbnailAsync(path);
                 imageCache.PutIfNonNull(path, image);
             }
             if (image == null)
@@ -50,6 +50,11 @@ namespace SMPlayer
                 thumbnailCache.PutIfNonNull(path, thumbnail);
             }
             return thumbnail;
+        }
+
+        public static async Task<StorageItemThumbnail> LoadThumbnail(Music music)
+        {
+            return await LoadThumbnail(music.Path);
         }
 
         public static void CacheImage(string path, BitmapImage item)

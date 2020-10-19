@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.Storage.FileProperties;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMPlayer.Models
@@ -88,9 +89,10 @@ namespace SMPlayer.Models
                 {
                     foreach (var music in group)
                     {
-                        if (await ImageHelper.LoadImage(music) is BitmapImage thumbnail)
+                        StorageItemThumbnail thumbnail = await ImageHelper.LoadThumbnail(music);
+                        if (thumbnail.IsThumbnail())
                         {
-                            thumbnails.Add(thumbnail);
+                            thumbnails.Add(thumbnail.ToBitmapImage());
                             break;
                         }
                     }

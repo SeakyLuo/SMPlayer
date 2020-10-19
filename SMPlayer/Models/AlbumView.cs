@@ -80,7 +80,7 @@ namespace SMPlayer.Models
                 Thumbnail = thumbnail;
             }
         }
-        public static async Task<MusicImage> GetAlbumCoverAsync(ICollection<Music> songs)
+        public static async Task<MusicImage> GetAlbumCoverAsync(IEnumerable<Music> songs)
         {
             foreach (var music in songs)
                 if (await ImageHelper.LoadImage(music) is BitmapImage image)

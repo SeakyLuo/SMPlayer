@@ -478,7 +478,7 @@
     <value>正在更新音乐库……</value>
   </data>
   <data name="Updating" xml:space="preserve">
-    <value>正在更新你的数据，请稍等。\n如果你意外退出了，请到“设置-&gt;更新音乐库”重新执行该操作。</value>
+    <value>正在更新你的数据，请稍等。如果你意外退出了，请到“设置-&gt;更新音乐库”重新执行该操作。</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>是</value>

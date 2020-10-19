@@ -478,7 +478,7 @@
     <value>Updating your music library......</value>
   </data>
   <data name="Updating" xml:space="preserve">
-    <value>We are updating your data, please wait patiently.\nIf you exit unexpectedly, please go to "Settings" and try "Update Music Library".</value>
+    <value>We are updating your data, please wait patiently. If you exit unexpectedly, please go to "Settings" and try "Update Music Library".</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
