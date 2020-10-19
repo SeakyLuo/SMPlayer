@@ -18,20 +18,21 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class SettingsPage : Page, ITreeOperationListener
+    public sealed partial class SettingsPage : Page, IAfterPathSetListener
     {
         public static ShowToast[] NotificationOptions = { ShowToast.Always, ShowToast.MusicChanged, ShowToast.Never };
-        private static int[] LimitedRecentPlayedItems = { -1, 100, 200, 500, 1000 };
-        private static List<IAfterPathSetListener> listeners = new List<IAfterPathSetListener>();
-        private FolderTree loadingTree;
+        private static readonly int[] LimitedRecentPlayedItems = { -1, 100, 200, 500, 1000 };
+        private static readonly List<IAfterPathSetListener> listeners = new List<IAfterPathSetListener>();
+        private static FolderTree loadingTree;
         private volatile int addLyricsClickCounter = 0;
-        private string addLyricsContent = Helper.Localize("AddLyrics");
+        private readonly string addLyricsContent = Helper.Localize("AddLyrics");
 
         public SettingsPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
             MainPage.Instance.Loader.BreakLoadingListeners.Add(() => loadingTree?.PauseLoading());
+            listeners.Add(this);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -56,16 +57,35 @@ namespace SMPlayer
             if (folder != null)
             {
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-                UpdateMusicLibrary(folder);
+                await UpdateMusicLibrary(folder);
             }
         }
 
-        public async void UpdateMusicLibrary(StorageFolder folder)
+        public static async Task<bool> UpdateMusicLibrary(string message = null)
         {
-            MainPage.Instance.Loader.ShowDeterminant("LoadMusicLibrary", true);
+            return await UpdateMusicLibrary(Helper.CurrentFolder, message);
+        }
+
+        public static async Task<bool> UpdateMusicLibrary(StorageFolder folder, string message = null)
+        {
+            MainPage.Instance.Loader.ShowDeterminant(message ?? "LoadMusicLibrary", true);
             loadingTree = new FolderTree();
-            if (!await loadingTree.Init(folder, this)) return;
-            MainPage.Instance.Loader.SetLocalizedText("UpdateMusicLibrary");
+            if (!await loadingTree.Init(folder, (treeFolder, file, progress, max) =>
+            {
+                bool isDeterminant = max != 0;
+                if (MainPage.Instance.Loader.IsDeterminant != isDeterminant)
+                    MainPage.Instance.Loader.IsDeterminant = isDeterminant;
+                if (isDeterminant)
+                {
+                    MainPage.Instance.Loader.Max = max;
+                    MainPage.Instance.Loader.Progress = progress;
+                    MainPage.Instance.Loader.Text = message ?? file;
+                }
+            }))
+            {
+                return false;
+            }
+            MainPage.Instance.Loader.SetLocalizedText(message ?? "UpdateMusicLibrary");
             Helper.CurrentFolder = folder;
             await Task.Run(() =>
             {
@@ -84,8 +104,8 @@ namespace SMPlayer
             }
             MediaHelper.RemoveBadMusic();
             App.Save();
-            PathBox.Text = folder.Path;
             MainPage.Instance.Loader.Hide();
+            return true;
         }
 
         public static void NotifyLibraryChange(string path) { foreach (var listener in listeners) listener.PathSet(path); }
@@ -116,19 +136,6 @@ namespace SMPlayer
         private void NotificationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Settings.settings.Toast = NotificationOptions[(sender as ComboBox).SelectedIndex];
-        }
-
-        public void Update(string folder, string file, int progress, int max)
-        {
-            bool isDeterminant = max != 0;
-            if (MainPage.Instance.Loader.IsDeterminant != isDeterminant)
-                MainPage.Instance.Loader.IsDeterminant = isDeterminant;
-            if (isDeterminant)
-            {
-                MainPage.Instance.Loader.Max = max;
-                MainPage.Instance.Loader.Progress = progress;
-                MainPage.Instance.Loader.Text = file;
-            }
         }
 
         public static async void CheckNewMusic(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
@@ -165,7 +172,7 @@ namespace SMPlayer
             Helper.ShowNotificationWithoutLocalization(message);
         }
 
-        private void UpdateMusicLibrary_Click(object sender, RoutedEventArgs e)
+        private async void UpdateMusicLibrary_Click(object sender, RoutedEventArgs e)
         {
             if (Helper.CurrentFolder == null)
             {
@@ -173,7 +180,7 @@ namespace SMPlayer
             }
             else
             {
-                UpdateMusicLibrary(Helper.CurrentFolder);
+                await UpdateMusicLibrary();
             }
 
         }
@@ -331,6 +338,56 @@ namespace SMPlayer
         private void AutoLyricsCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             Settings.settings.AutoLyrics = false;
+        }
+
+        private async void ExportData_Click(object sender, RoutedEventArgs e)
+        {
+            FolderPicker picker = new FolderPicker
+            {
+                SuggestedStartLocation = PickerLocationId.MusicLibrary
+            };
+            picker.FileTypeFilter.Add("*");
+            StorageFolder folder = await picker.PickSingleFolderAsync();
+            if (folder != null)
+            {
+                MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
+                Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
+                JsonFileHelper.SaveAsync(folder, Settings.JsonFilename, Settings.settings);
+                MainPage.Instance.Loader.Hide();
+                MainPage.Instance.ShowLocalizedNotification("DataExported");
+            }
+        }
+
+        private async void ImportData_Click(object sender, RoutedEventArgs e)
+        {
+            FileOpenPicker picker = new FileOpenPicker
+            {
+                SuggestedStartLocation = PickerLocationId.MusicLibrary
+            };
+            picker.FileTypeFilter.Add(".json");
+            StorageFile file = await picker.PickSingleFileAsync();
+            if (file != null)
+            {
+                MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
+                try
+                {
+                    string json = await FileIO.ReadTextAsync(file);
+                    Settings settings = JsonFileHelper.Convert<Settings>(json);
+                    bool successful = await UpdateMusicLibrary();
+                    MainPage.Instance.Loader.Hide();
+                    MainPage.Instance.ShowLocalizedNotification(successful ? "DataImported" : "ImportDataCancelled");
+                }
+                catch (Exception ex)
+                {
+                    MainPage.Instance.Loader.Hide();
+                    MainPage.Instance.ShowLocalizedNotification("ImportDataFailed" + ex.Message);
+                }
+            }
+        }
+
+        void IAfterPathSetListener.PathSet(string path)
+        {
+            PathBox.Text = path;
         }
     }
 

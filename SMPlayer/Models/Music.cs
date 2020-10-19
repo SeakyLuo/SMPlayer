@@ -1,6 +1,7 @@
 ﻿using SMPlayer.Helpers;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -9,6 +10,7 @@ using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media;
 
 namespace SMPlayer.Models
 {
@@ -74,8 +76,9 @@ namespace SMPlayer.Models
             }
         }
 
-        private bool isPlaying = false;
+        public DateTimeOffset DateAdded { get; set; }
 
+        private bool isPlaying = false;
         [Newtonsoft.Json.JsonIgnore]
         public bool IsPlaying
         {
@@ -100,9 +103,9 @@ namespace SMPlayer.Models
             if (obj == null) return;
             CopyFrom(obj);
         }
-        public Music(string path, MusicProperties properties)
+        public Music(StorageFile file, MusicProperties properties)
         {
-            Path = path;
+            Path = file.Path;
             Name = properties.Title;
             Artist = properties.Artist;
             Album = properties.Album;
@@ -110,18 +113,19 @@ namespace SMPlayer.Models
             Favorite = false;
             PlayCount = 0;
             IsPlaying = false;
+            DateAdded = file.DateCreated;
         }
-        public Music(string path, MusicProperties properties, TagLib.Tag tag)
-        {
-            Path = path;
-            Name = tag.Title;
-            Artist = tag.JoinedPerformers;
-            Album = tag.Album;
-            Duration = (int)properties.Duration.TotalSeconds;
-            Favorite = false;
-            PlayCount = 0;
-            IsPlaying = false;
-        }
+        //public Music(string path, MusicProperties properties, TagLib.Tag tag)
+        //{
+        //    Path = path;
+        //    Name = tag.Title;
+        //    Artist = tag.JoinedPerformers;
+        //    Album = tag.Album;
+        //    Duration = (int)properties.Duration.TotalSeconds;
+        //    Favorite = false;
+        //    PlayCount = 0;
+        //    IsPlaying = false;
+        //}
 
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
@@ -143,6 +147,7 @@ namespace SMPlayer.Models
             Duration = source.Duration;
             Favorite = source.Favorite;
             PlayCount = source.PlayCount;
+            DateAdded = source.DateAdded;
             IsPlaying = source.IsPlaying;
             Index = source.Index;
             return source;
@@ -177,7 +182,7 @@ namespace SMPlayer.Models
 
         public static async Task<Music> GetMusicAsync(StorageFile file)
         {
-            return new Music(file.Path, await file.Properties.GetMusicPropertiesAsync());
+            return new Music(file, await file.Properties.GetMusicPropertiesAsync());
             //using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(file), TagLib.ReadStyle.Average))
             //{
             //    return new Music(file.Path, await file.Properties.GetMusicPropertiesAsync(), tagFile.Tag);
@@ -232,7 +237,13 @@ namespace SMPlayer.Models
         public async Task<MusicDisplayItem> GetMusicDisplayItemAsync()
         {
             var thumbnail = await ImageHelper.LoadThumbnail(Path);
-            return thumbnail.IsThumbnail() ? new MusicDisplayItem(await thumbnail.GetDisplayColor(), this) : MusicDisplayItem.DefaultItem;
+            if (thumbnail.IsThumbnail())
+            {
+                ImageHelper.CacheImage(Path, thumbnail);
+                Brush color = await thumbnail.GetDisplayColor();
+                return new MusicDisplayItem(color, this);
+            }
+            return MusicDisplayItem.DefaultItem;
         }
 
         public MediaPlaybackItem GetMediaPlaybackItem()

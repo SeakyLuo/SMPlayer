@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -45,6 +46,7 @@ namespace SMPlayer
         public static async Task Init()
         {
             var songs = JsonFileHelper.Convert<List<Music>>(await JsonFileHelper.ReadAsync(JsonFilename));
+            // 如果初始化了设置但是音乐库没有音乐
             if (songs?.Count == 0 && Settings.Inited && (songs = Settings.settings.Tree.Flatten()).Count > 0)
                 SortAndSetAllSongs(songs);
             else

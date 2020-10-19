@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -108,16 +109,14 @@ namespace SMPlayer.Models
 
         public async Task SetDisplayItemAsync()
         {
+            if (DisplayItem != null && !DisplayItem.IsDefault) return;
             foreach (var song in Songs)
             {
                 DisplayItem = await song.GetMusicDisplayItemAsync();
-                if (!DisplayItem.IsDefault)
-                {
-                    return;
-                }
+                if (!DisplayItem.IsDefault) return;
             }
             DisplayItem = MusicDisplayItem.DefaultItem;
-            }
+        }
 
         public async Task<List<MusicDisplayItem>> GetAllDisplayItemsAsync()
         {

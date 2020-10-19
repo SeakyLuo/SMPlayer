@@ -311,6 +311,16 @@
                     Content="Save Changes"
                     Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 <HyperlinkButton
+                    x:Uid="ImportDataButton"
+                    Click="ImportData_Click"
+                    Content="Import Data"
+                    Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                <HyperlinkButton
+                    x:Uid="ExportDataButton"
+                    Click="ExportData_Click"
+                    Content="Export Data"
+                    Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                <HyperlinkButton
                     x:Uid="BugReportButton"
                     Click="BugReport_Click"
                     Content="Bug Report"

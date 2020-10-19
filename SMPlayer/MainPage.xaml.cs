@@ -1,9 +1,11 @@
 ﻿using SMPlayer.Controls;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -91,7 +93,7 @@ namespace SMPlayer
                 else PaneCloseNormal();
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (IsTitleBarColorful) TitleBarHelper.SetDarkTitleBar();
             else TitleBarHelper.SetMainTitleBar();
@@ -101,7 +103,35 @@ namespace SMPlayer
             if (PageUnset)
             {
                 SwitchPage(Settings.settings.LastPage);
+                // 加快加载速度
+                if ("MyFavoritesPage" != Settings.settings.LastPage)
+                {
+                    await Settings.settings.MyFavorites.SetDisplayItemAsync();
+                }
+                if (Settings.settings.LastPage == "MyFavoritesPage")
+                {
+                    foreach (var playlist in Settings.settings.Playlists)
+                    {
+                        await playlist.SetDisplayItemAsync();
+                    }
+                }
+                else
+                {
+                    foreach (var playlist in Settings.settings.Playlists)
+                    {
+                        if (playlist.Name != Settings.settings.LastPlaylist)
+                        {
+                            await playlist.SetDisplayItemAsync();
+                        }
+                    }
+                }
                 PageUnset = false;
+            }
+            if (!UpdateHelper.Log.DateAdded)
+            {
+                await UpdateHelper.Update();
+                Loader.Hide();
+                ShowLocalizedNotification("UpdateFinished");
             }
         }
 

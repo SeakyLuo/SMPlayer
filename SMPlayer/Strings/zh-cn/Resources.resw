@@ -333,6 +333,9 @@
   <data name="ExpandAppButton.Label" xml:space="preserve">
     <value>拓展视图</value>
   </data>
+  <data name="ExportDataButton.Content" xml:space="preserve">
+    <value>导出数据</value>
+  </data>
   <data name="FavoriteHeader.Header" xml:space="preserve">
     <value>喜欢</value>
   </data>
@@ -368,6 +371,9 @@
   </data>
   <data name="hours" xml:space="preserve">
     <value>小时</value>
+  </data>
+  <data name="ImportDataButton.Content" xml:space="preserve">
+    <value>导入数据</value>
   </data>
   <data name="KeepRecentCheckBox.Content" xml:space="preserve">
     <value>仅保留最近播放的100项而不是全部</value>

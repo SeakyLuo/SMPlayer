@@ -168,6 +168,12 @@
   <data name="Comma" xml:space="preserve">
     <value>, </value>
   </data>
+  <data name="DataExported" xml:space="preserve">
+    <value>Data exported</value>
+  </data>
+  <data name="DataImported" xml:space="preserve">
+    <value>Data imported!</value>
+  </data>
   <data name="DeleteMusic" xml:space="preserve">
     <value>Delete "{0}"</value>
   </data>
@@ -197,6 +203,12 @@
   </data>
   <data name="HasBeenPlayed" xml:space="preserve">
     <value>"{0}" has been played {1} {2}.</value>
+  </data>
+  <data name="ImportDataCancelled" xml:space="preserve">
+    <value>You have cancelled data import.</value>
+  </data>
+  <data name="ImportDataFailed" xml:space="preserve">
+    <value>Import data failed: </value>
   </data>
   <data name="ItemRemoved" xml:space="preserve">
     <value>"{0}" is removed</value>
@@ -432,6 +444,18 @@
   <data name="StopAddingLyrics" xml:space="preserve">
     <value>Trying to stop adding lyrics......</value>
   </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>This Month</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>This Week</value>
+  </data>
+  <data name="ThisYear" xml:space="preserve">
+    <value>This Year</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
   <data name="UnableToChangeAlbumArt" xml:space="preserve">
     <value>Unable to change album art!</value>
   </data>
@@ -447,8 +471,14 @@
   <data name="UnknownArtist" xml:space="preserve">
     <value>Unknown Artist</value>
   </data>
+  <data name="UpdateFinished" xml:space="preserve">
+    <value>Your data has been updated!</value>
+  </data>
   <data name="UpdateMusicLibrary" xml:space="preserve">
     <value>Updating your music library......</value>
+  </data>
+  <data name="Updating" xml:space="preserve">
+    <value>We are updating your data, please wait patiently.\nIf you exit unexpectedly, please go to "Settings" and try "Update Music Library".</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>

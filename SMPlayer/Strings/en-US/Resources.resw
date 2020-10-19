@@ -336,6 +336,9 @@
   <data name="ExpandAppButton.Label" xml:space="preserve">
     <value>Expand View</value>
   </data>
+  <data name="ExportDataButton.Content" xml:space="preserve">
+    <value>Export Data</value>
+  </data>
   <data name="FavoriteHeader.Header" xml:space="preserve">
     <value>Favorite</value>
   </data>
@@ -371,6 +374,9 @@
   </data>
   <data name="hours" xml:space="preserve">
     <value>hours</value>
+  </data>
+  <data name="ImportDataButton.Content" xml:space="preserve">
+    <value>Import Data</value>
   </data>
   <data name="KeepRecentCheckBox.Content" xml:space="preserve">
     <value>Only keep 100 recently played items instead of all</value>

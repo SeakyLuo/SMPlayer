@@ -168,6 +168,12 @@
   <data name="Comma" xml:space="preserve">
     <value>，</value>
   </data>
+  <data name="DataExported" xml:space="preserve">
+    <value>数据已导出！</value>
+  </data>
+  <data name="DataImported" xml:space="preserve">
+    <value>数据已导入！</value>
+  </data>
   <data name="DeleteMusic" xml:space="preserve">
     <value>删除《{0}》</value>
   </data>
@@ -197,6 +203,12 @@
   </data>
   <data name="HasBeenPlayed" xml:space="preserve">
     <value>《{0}》已经播放了{1}次。{2}</value>
+  </data>
+  <data name="ImportDataCancelled" xml:space="preserve">
+    <value>你已取消数据导入</value>
+  </data>
+  <data name="ImportDataFailed" xml:space="preserve">
+    <value>导入数据失败：</value>
   </data>
   <data name="ItemRemoved" xml:space="preserve">
     <value>“{0}”已移除</value>
@@ -432,6 +444,18 @@
   <data name="StopAddingLyrics" xml:space="preserve">
     <value>正在尝试中止添加歌词……</value>
   </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>本月</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>本周</value>
+  </data>
+  <data name="ThisYear" xml:space="preserve">
+    <value>今年</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>今日</value>
+  </data>
   <data name="UnableToChangeAlbumArt" xml:space="preserve">
     <value>无法更改专辑插图</value>
   </data>
@@ -447,8 +471,14 @@
   <data name="UnknownArtist" xml:space="preserve">
     <value>未知歌手</value>
   </data>
+  <data name="UpdateFinished" xml:space="preserve">
+    <value>数据更新完成！</value>
+  </data>
   <data name="UpdateMusicLibrary" xml:space="preserve">
     <value>正在更新音乐库……</value>
+  </data>
+  <data name="Updating" xml:space="preserve">
+    <value>正在更新你的数据，请稍等。\n如果你意外退出了，请到“设置-&gt;更新音乐库”重新执行该操作。</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>是</value>

@@ -45,7 +45,7 @@ namespace SMPlayer
 
         public static void Save()
         {
-            if (albumInfoList.Count == 0) return;
+            if (albumInfoList?.Count == 0) return;
             JsonFileHelper.SaveAsync(JsonFilename, albumInfoList);
             JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, albumInfoList);
         }

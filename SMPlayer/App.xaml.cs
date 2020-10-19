@@ -1,4 +1,5 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Helpers;
+using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,7 @@ namespace SMPlayer
             await MusicLibraryPage.Init();
             if (Settings.settings.LastPage == "Albums")
                 await AlbumsPage.Init();
+            await UpdateHelper.Init();
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -141,6 +143,7 @@ namespace SMPlayer
             MediaHelper.Save();
             AlbumsPage.Save();
             await Helper.ClearBackups(10);
+            UpdateHelper.Save();
         }
 
         protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)

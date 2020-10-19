@@ -590,6 +590,7 @@
     <RootType FullName="SMPlayer.GridMusicControl">
       <RootProperty Name="Margin" />
       <RootProperty Name="Visibility" />
+      <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Automation.AutomationProperties">
       <RootMethod Name="GetAccessibilityView" />
@@ -848,7 +849,6 @@
     <RootType FullName="Windows.UI.Xaml.Controls.PivotItem">
       <RootProperty Name="Header" />
       <RootProperty Name="Content" />
-      <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="SMPlayer.Dialogs.AlbumDialog" />
     <RootType FullName="SMPlayer.Dialogs.MusicDialog" />

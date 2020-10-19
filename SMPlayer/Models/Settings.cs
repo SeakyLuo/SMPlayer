@@ -78,7 +78,7 @@ namespace SMPlayer.Models
             return index == 0 ? Name : Helper.GetPlaylistName(Name, index);
         }
 
-        public static async Task<bool> Init()
+        public static async Task Init()
         {
             Inited = false;
             var json = await JsonFileHelper.ReadAsync(JsonFilename);
@@ -90,33 +90,37 @@ namespace SMPlayer.Models
             else
             {
                 settings = JsonFileHelper.Convert<Settings>(json);
-                if (string.IsNullOrEmpty(settings.RootPath)) return true;
-                try
-                {
-                    Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
-                }
-                catch (FileNotFoundException)
-                {
-                    App.LoadedListeners.Add(() =>
-                    {
-                        MainPage.Instance.ShowLocalizedNotification("RootNotFound");
-                        MainPage.Instance.NavigateToPage(typeof(SettingsPage));
-                    });
-                }
-                catch (Exception)
-                {
-
-                }
-                MediaControl.AddMusicModifiedListener((before, after) =>
-                {
-                    settings.FindAllMusicAndOperate(before, music => music.CopyFrom(after));
-                });
-                foreach (var item in await ApplicationData.Current.LocalFolder.GetItemsAsync())
-                    if (item.Name.EndsWith(".TMP") || item.Name.EndsWith(".~tmp"))
-                        await item.DeleteAsync();
+                await Init(settings);
             }
             Inited = true;
-            return true;
+        }
+
+        public static async Task Init(Settings settings)
+        {
+            if (string.IsNullOrEmpty(settings.RootPath)) return;
+            try
+            {
+                Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
+            }
+            catch (FileNotFoundException)
+            {
+                App.LoadedListeners.Add(() =>
+                {
+                    MainPage.Instance.ShowLocalizedNotification("RootNotFound");
+                    MainPage.Instance.NavigateToPage(typeof(SettingsPage));
+                });
+            }
+            catch (Exception)
+            {
+
+            }
+            MediaControl.AddMusicModifiedListener((before, after) =>
+            {
+                settings.FindAllMusicAndOperate(before, music => music.CopyFrom(after));
+            });
+            foreach (var item in await ApplicationData.Current.LocalFolder.GetItemsAsync())
+                if (item.Name.EndsWith(".TMP") || item.Name.EndsWith(".~tmp"))
+                    await item.DeleteAsync();
         }
 
         public static void Save()
@@ -286,7 +290,7 @@ namespace SMPlayer.Models
         }
 
 
-        public static List<Music> PathToCollection(ICollection<string> paths, bool isFavorite = false)
+        public static List<Music> PathToCollection(IEnumerable<string> paths, bool isFavorite = false)
         {
             List<Music> collection = new List<Music>();
             foreach (var path in paths)
@@ -298,6 +302,11 @@ namespace SMPlayer.Models
                 }
             }
             return collection;
+        }
+
+        public static async Task<StorageFolder> GetRootFolder()
+        {
+            return await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
         }
     }
 

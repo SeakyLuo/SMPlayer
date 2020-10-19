@@ -143,11 +143,11 @@ namespace SMPlayer.Models
             LoadingStatus = ExecutionStatus.Ready;
             return true;
         }
-        public async Task<bool> Init(StorageFolder folder, ITreeOperationListener listener = null)
+        public async Task<bool> Init(StorageFolder folder, Action<string, string, int, int> listener = null)
         {
             return await Init(folder, listener, new TreeOperationIndicator() { Max = listener == null ? 0 : await CountFilesAsync(folder) });
         }
-        private async Task<bool> Init(StorageFolder folder, ITreeOperationListener listener, TreeOperationIndicator indicator)
+        private async Task<bool> Init(StorageFolder folder, Action<string, string, int, int> updater, TreeOperationIndicator indicator)
         {
             LoadingStatus = ExecutionStatus.Running;
             var samePath = folder.Path == Path;
@@ -158,7 +158,7 @@ namespace SMPlayer.Models
                 {
                     if (LoadingStatus == ExecutionStatus.Break) return false;
                     var tree = new FolderTree();
-                    await tree.Init(subFolder, listener, indicator);
+                    await tree.Init(subFolder, updater, indicator);
                     if (!tree.IsEmpty) Trees.Add(tree);
                 }
                 foreach (var file in await folder.GetFilesAsync())
@@ -167,7 +167,7 @@ namespace SMPlayer.Models
                     if (file.IsMusicFile())
                     {
                         Music music = await Music.GetMusicAsync(file);
-                        listener?.Update(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
+                        updater?.Invoke(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
                         Files.Add(music);
                     }
                 }
@@ -177,7 +177,7 @@ namespace SMPlayer.Models
                 // New folder is a Subfolder of the current folder
                 FolderTree tree = FindTree(folder.Path);
                 CopyFrom(tree);
-                listener?.Update(folder.DisplayName, "", 0, 0);
+                updater?.Invoke(folder.DisplayName, "", 0, 0);
             }
             else if (!samePath && Path.StartsWith(folder.Path))
             {
@@ -195,7 +195,7 @@ namespace SMPlayer.Models
                     else
                     {
                         tree = new FolderTree();
-                        await tree.Init(subFolder, listener, indicator);
+                        await tree.Init(subFolder, updater, indicator);
                     }
                     if (tree.Files.Count != 0) newTree.Trees.Add(tree);
                 }
@@ -205,7 +205,7 @@ namespace SMPlayer.Models
                     if (file.IsMusicFile())
                     {
                         Music music = await Music.GetMusicAsync(file);
-                        listener?.Update(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
+                        updater?.Invoke(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
                         newTree.Files.Add(music);
                     }
                 }
@@ -224,7 +224,7 @@ namespace SMPlayer.Models
                     {
                         Criterion = source?.Criterion ?? SortBy.Title
                     };
-                    await tree.Init(subFolder, listener, indicator);
+                    await tree.Init(subFolder, updater, indicator);
                     if (!tree.IsEmpty) trees.Add(tree);
                 }
                 Clear();
@@ -240,7 +240,7 @@ namespace SMPlayer.Models
                             music.PlayCount = oldItem.PlayCount;
                             music.Favorite = oldItem.Favorite;
                         }
-                        listener?.Update(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
+                        updater?.Invoke(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
                         Files.Add(music);
                     }
                 }
@@ -441,10 +441,5 @@ namespace SMPlayer.Models
         public int More { get; set; } = 0;
         public int Less { get; set; } = 0;
         public string Message { get; set; }
-    }
-
-    public interface ITreeOperationListener
-    {
-        void Update(string folder, string file, int progress, int max);
     }
 }

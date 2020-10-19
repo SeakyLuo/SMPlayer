@@ -112,7 +112,6 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\taglib-sharp.dll
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Microsoft.Graphics.Canvas.dll
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Microsoft.Graphics.Canvas.winmd
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Microsoft.UI.Xaml.Markup.winmd
-C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SMPlayer.csprojAssemblyReference.cache
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\App.g.i.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\App.g.cs
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\AlbumPage.g.i.cs
@@ -339,3 +338,4 @@ C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\.winmd_cache\$Micros
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\.winmd_cache\$Microsoft.UI.Xaml.Markup.winmd_636885022160000000.json
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\.winmd_cache\$Robmikh.CompositionSurfaceFactory.winmd_636421080520000000.json
 C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\.winmd_cache\$WatsonRegistrationUtility.winmd_636970854560000000.json
+C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\SMPlayer.csprojAssemblyReference.cache

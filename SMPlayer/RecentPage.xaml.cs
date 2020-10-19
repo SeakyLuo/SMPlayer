@@ -2,6 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -19,6 +22,7 @@ namespace SMPlayer
         private bool AddedModified = true, PlayedModifed = true, SearchedModified = true;
         private Dialogs.RemoveDialog dialog;
         private ObservableCollection<string> recentSearches { get => Settings.settings.RecentSearches; }
+        private readonly ObservableCollection<MusicTimeLine> RecentAddedTimeLineList = new ObservableCollection<MusicTimeLine>();
         public RecentPage()
         {
             this.InitializeComponent();
@@ -32,78 +36,125 @@ namespace SMPlayer
                 RecentPivot.SelectedItem = RecentAddedItem;
         }
 
-        private void RecentPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            LoadingProgressBar.Visibility = Visibility.Visible;
-            if (RecentPivot.SelectedItem == RecentAddedItem)
-                SetupAdded(Settings.settings.RecentAdded);
-            else if (RecentPivot.SelectedItem == RecentPlayedItem)
-                SetupPlayed(Settings.settings.RecentPlayed);
-            else if (RecentPivot.SelectedItem == RecentSearchesItem)
-                SetupSearched(recentSearches);
-            LoadingProgressBar.Visibility = Visibility.Collapsed;
-        }
-
-        
-
-        public void SetupAdded(ICollection<string> list)
+        public async Task SetupAdded(IEnumerable<string> list)
         {
             if (!AddedModified) return;
+            RecentAddedProgressRing.IsActive = true;
             try
             {
-                AddedMusicView.Setup(Settings.PathToCollection(list));
+                RecentAddedTimeLineList.SetTo(await Task.Run(() =>
+                {
+                    List<Music> songs = Settings.PathToCollection(list);
+                    return GenerateTimeLine(songs);
+                }));
             }
             catch (InvalidOperationException)
             {
                 // Loading while Set New Folder will cause this Exception
-                System.Diagnostics.Debug.WriteLine("InvalidOperationException On Recent Added");
+                Debug.WriteLine("InvalidOperationException On Recent Added");
             }
-            AddedModified = false;
+            RecentAddedProgressRing.IsActive = AddedModified = false;
         }
 
-        public void SetupPlayed(ICollection<string> list)
+        private static List<MusicTimeLine> GenerateTimeLine(List<Music> songs)
         {
-             if (!PlayedModifed) return;
+            List<MusicTimeLine> ret = new List<MusicTimeLine>();
+            MusicTimeLine today = new MusicTimeLine("Today");
+            MusicTimeLine thisWeek = new MusicTimeLine("ThisWeek");
+            MusicTimeLine thisMonth = new MusicTimeLine("ThisMonth");
+            MusicTimeLine thisYear = new MusicTimeLine("ThisYear");
+            Dictionary<int, MusicTimeLine> yearDict = new Dictionary<int, MusicTimeLine>();
+            
+            foreach (var music in songs)
+            {
+                if (music.DateAdded.Year == DateTime.Now.Year)
+                {
+                    if (music.DateAdded.Month == DateTime.Now.Month)
+                    {
+                        if (music.DateAdded.Day == DateTime.Now.Day)
+                        {
+                            today.AddItem(music);
+                        }
+                        else if (music.DateAdded.DayOfWeek <= DateTime.Now.DayOfWeek)
+                        {
+                            thisWeek.AddItem(music);
+                        }
+                        else
+                        {
+                            thisMonth.AddItem(music);
+                        }
+                    }
+                    else
+                    {
+                        thisYear.AddItem(music);
+                    }
+                }
+                else
+                {
+                    MusicTimeLine yearTimeLine = yearDict.GetValueOrDefault(music.DateAdded.Year, new MusicTimeLine(music.DateAdded.Year));
+                    yearTimeLine.AddItem(music);
+                    yearDict[music.DateAdded.Year] = yearTimeLine;
+                }
+            }
+            ret.JoinTimeLine(today, thisWeek, thisMonth, thisYear);
+            if (yearDict.Count > 0)
+            {
+                List<int> years = new List<int>(yearDict.Keys);
+                years.Sort((i1, i2) => i2 - i1);
+                foreach (var year in years)
+                {
+                    ret.Add(yearDict[year]);
+                }
+            }
+            return ret;
+        }
+
+        public async Task SetupPlayed(IEnumerable<string> list)
+        {
+            if (!PlayedModifed) return;
+            RecentPlayedProgressRing.IsActive = true;
             try
             {
-                PlayedMusicView.Setup(Settings.PathToCollection(list));
-                ClearPlayHistoryAppButton.IsEnabled = list.Count != 0;
+                PlayedMusicView.Setup(await Task.Run(() => Settings.PathToCollection(list)));
+                ClearPlayHistoryAppButton.IsEnabled = list.Count() != 0;
             }
             catch (InvalidOperationException)
             {
                 // Loading while Set New Folder will cause this Exception
-                System.Diagnostics.Debug.WriteLine("InvalidOperationException On Recent Played");
+                Debug.WriteLine("InvalidOperationException On Recent Played");
             }
-            PlayedModifed = false;
+            RecentPlayedProgressRing.IsActive = PlayedModifed = false;
         }
+
         private void ResetColor(int start)
         {
             for (int i = start; i < recentSearches.Count; i++)
                 if (SearchHistoryListView.ContainerFromIndex(i) is ListViewItem container)
                     container.Background = PlaylistControl.GetRowBackground(i);
         }
-        public void SetupSearched(ICollection<string> list)
+
+        public void SetupSearched(IEnumerable<string> list)
         {
             if (!SearchedModified) return;
             try
             {
                 ResetColor(0);
-                ClearSearchHistoryAppButton.IsEnabled = list.Count != 0;
+                ClearSearchHistoryAppButton.IsEnabled = list.Count() != 0;
             }
             catch (InvalidOperationException)
             {
                 // Loading while Set New Folder will cause this Exception
-                System.Diagnostics.Debug.WriteLine("InvalidOperationException On Recent Searches");
+                Debug.WriteLine("InvalidOperationException On Recent Searches");
             }
             SearchedModified = false;
         }
 
         private void ClearPlayHistoryAppButton_Click(object sender, RoutedEventArgs e)
         {
-            ShowYesNoDialog("ClearPlayHistory", () =>
+            ShowYesNoDialog("ClearPlayHistory", async () =>
             {
                 Settings.settings.RecentPlayed.Clear();
-                SetupPlayed(Settings.settings.RecentPlayed);
+                await SetupPlayed(Settings.settings.RecentPlayed);
             });
         }
 
@@ -161,25 +212,31 @@ namespace SMPlayer
             AskRemoveSearchHistory(args.SwipeControl.DataContext.ToString());
         }
 
-        private void RecentAddedItem_Loaded(object sender, RoutedEventArgs e)
+        private void AddedMusicView_Loaded(object sender, RoutedEventArgs e)
         {
-            LoadingProgressBar.Visibility = Visibility.Visible;
-            SetupAdded(Settings.settings.RecentAdded);
-            LoadingProgressBar.Visibility = Visibility.Collapsed;
+            GridMusicControl control = sender as GridMusicControl;
+            control.Setup((control.DataContext as MusicTimeLine).Data);
         }
 
-        private void RecentPlayedItem_Loaded(object sender, RoutedEventArgs e)
+        private async void RecentPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            LoadingProgressBar.Visibility = Visibility.Visible;
-            SetupPlayed(Settings.settings.RecentPlayed);
-            LoadingProgressBar.Visibility = Visibility.Collapsed;
+            if (!IsLoaded) return;
+            if (RecentPivot.SelectedItem == RecentAddedItem)
+                await SetupAdded(Settings.settings.RecentAdded);
+            else if (RecentPivot.SelectedItem == RecentPlayedItem)
+                await SetupPlayed(Settings.settings.RecentPlayed);
+            else if (RecentPivot.SelectedItem == RecentSearchesItem)
+                SetupSearched(recentSearches);
         }
 
-        private void RecentSearchesItem_Loaded(object sender, RoutedEventArgs e)
+        private async void RecentAddedGrid_Loaded(object sender, RoutedEventArgs e)
         {
-            LoadingProgressBar.Visibility = Visibility.Visible;
-            SetupSearched(recentSearches);
-            LoadingProgressBar.Visibility = Visibility.Collapsed;
+            await SetupAdded(Settings.settings.RecentAdded);
+        }
+
+        private async void RecentPlayed_Loaded(object sender, RoutedEventArgs e)
+        {
+            await SetupPlayed(Settings.settings.RecentPlayed);
         }
 
         private void ClearSearchHistoryAppButton_Click(object sender, RoutedEventArgs e)

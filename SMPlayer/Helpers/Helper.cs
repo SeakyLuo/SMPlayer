@@ -4,6 +4,7 @@ using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -70,7 +71,7 @@ namespace SMPlayer
         }
         public static async Task Init()
         {
-            var initDefaultImage = MusicImage.DefaultImage;
+            var initDefaultImage = MusicImage.DefaultImage; // 静态资源只有在用到的时候才会被加载，所以做一个无用的声明
             TempFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Temp", CreationCollisionOption.OpenIfExists);
             await ClearBackups();
         }

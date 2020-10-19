@@ -98,8 +98,15 @@ namespace SMPlayer
             {
                 if (PlaybackList.CurrentItemIndex >= CurrentPlaylist.Count) return;
                 Music current = CurrentMusic?.Copy(), next = args.NewItem.GetMusic();
-                foreach (var listener in SwitchMusicListeners)
-                    listener.MusicSwitching(current, next, args.Reason);
+                try
+                {
+                    foreach (var listener in SwitchMusicListeners)
+                        listener.MusicSwitching(current, next, args.Reason);
+                }
+                catch (InvalidOperationException)
+                {
+                    // Collection was modified; enumeration operation may not execute.
+                }
                 CurrentMusic = next;
                 Settings.settings.LastMusicIndex = (int)PlaybackList.CurrentItemIndex;
                 if (args.Reason == MediaPlaybackItemChangedReason.EndOfStream)

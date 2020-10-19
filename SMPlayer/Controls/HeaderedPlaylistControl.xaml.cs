@@ -6,6 +6,7 @@ using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Numerics;
 using System.Threading.Tasks;
 using Windows.UI.Composition;
@@ -74,6 +75,7 @@ namespace SMPlayer
         public async Task SetPlaylist(Playlist playlist)
         {
             HidePlaylistCover();
+            long startOfEverything = DateTime.Now.Millisecond;
             MediaHelper.FindMusicAndSetPlaying(playlist.Songs, null, MediaHelper.CurrentMusic);
             CurrentPlaylist = playlist;
             HeaderedPlaylist.ItemsSource = playlist.Songs;

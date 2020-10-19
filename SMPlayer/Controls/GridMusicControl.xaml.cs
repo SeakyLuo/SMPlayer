@@ -39,7 +39,7 @@ namespace SMPlayer
             MediaHelper.SetMusicAndPlay(MusicCollection, item.Source);
         }
 
-        public void Setup(ICollection<Music> collection)
+        public void Setup(IEnumerable<Music> collection)
         {
             IsProcessing = true;
             MusicCollection = collection.ToList();

@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:SMPlayer.Models"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
@@ -13,28 +14,43 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Rectangle x:Name="LoadingPlaceHolder" Height="4" />
-        <ProgressBar x:Name="LoadingProgressBar" IsIndeterminate="True" />
-        <Pivot
-            x:Name="RecentPivot"
-            Grid.Row="1"
-            SelectionChanged="RecentPivot_SelectionChanged">
+        <Pivot x:Name="RecentPivot" Grid.Row="1" SelectionChanged="RecentPivot_SelectionChanged">
             <PivotItem
                 x:Name="RecentAddedItem"
                 x:Uid="RecentAddedItem"
-                Header="Recently Added"
-                Loaded="RecentAddedItem_Loaded">
-                <local:GridMusicControl x:Name="AddedMusicView" Margin="0,5,0,0" />
+                Header="Recently Added">
+                <Grid Loaded="RecentAddedGrid_Loaded">
+                    <ProgressRing 
+                        x:Name="RecentAddedProgressRing" 
+                        IsActive="False"
+                        Width="100"
+                        Height="100"/>
+                    <ListView
+                        x:Name="RecentAddedTimeLine"
+                        ItemsSource="{x:Bind RecentAddedTimeLineList}"
+                        ItemContainerStyle="{StaticResource StretchListViewItemStyle}"
+                        Margin="0,5,0,0"
+                        SelectionMode="None">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="data:MusicTimeLine">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock
+                                    x:Name="RecentAddedListViewHeaderTextBlock"
+                                    FontSize="24"
+                                    FontWeight="SemiBold"
+                                    Text="{x:Bind Title}" />
+                                    <local:GridMusicControl Loaded="AddedMusicView_Loaded" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
             </PivotItem>
             <PivotItem
                 x:Name="RecentPlayedItem"
                 x:Uid="RecentPlayedItem"
-                Header="Recently Played"
-                Loaded="RecentPlayedItem_Loaded">
-                <Grid>
+                Header="Recently Played">
+                <Grid Loaded="RecentPlayed_Loaded">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
@@ -51,6 +67,12 @@
                             Icon="Clear"
                             Label="Clear History" />
                     </CommandBar>
+                    <ProgressRing 
+                        x:Name="RecentPlayedProgressRing" 
+                        Grid.Row="1"
+                        IsActive="False"
+                        Width="100"
+                        Height="100"/>
                     <local:GridMusicControl
                         x:Name="PlayedMusicView"
                         Grid.Row="1"
@@ -60,8 +82,7 @@
             <PivotItem
                 x:Name="RecentSearchesItem"
                 x:Uid="RecentSearchesItem"
-                Header="Recent Searches"
-                Loaded="RecentSearchesItem_Loaded">
+                Header="Recent Searches">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />

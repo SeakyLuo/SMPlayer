@@ -12,13 +12,13 @@ namespace SMPlayer
 {
     public static class ImageHelper
     {
-        private static readonly LoadingCache<string, BitmapImage> imageCache = new LoadingCache<string, BitmapImage>(600)
+        private static readonly LoadingCache<string, BitmapImage> imageCache = new LoadingCache<string, BitmapImage>(6000)
         {
-            MaxSize = 100
+            MaxSize = 200
         };
         private static readonly LoadingCache<string, StorageItemThumbnail> thumbnailCache = new LoadingCache<string, StorageItemThumbnail>(600)
         {
-            MaxSize = 10
+            MaxSize = 20
         };
 
         public static async Task<BitmapImage> LoadImage(string path)
@@ -27,7 +27,7 @@ namespace SMPlayer
             if (image == null)
             {
                 image = await Helper.GetThumbnailAsync(path, false);
-                imageCache.PutIfPresent(path, image);
+                imageCache.PutIfNonNull(path, image);
             }
             if (image == null)
             {
@@ -41,18 +41,13 @@ namespace SMPlayer
             return await LoadImage(music.Path);
         }
 
-        public static async Task<StorageItemThumbnail> LoadThumbnail(Music music)
-        {
-            return await LoadThumbnail(music.Path);
-        }
-
         public static async Task<StorageItemThumbnail> LoadThumbnail(string path)
         {
             StorageItemThumbnail thumbnail = thumbnailCache.Get(path);
             if (thumbnail == null)
             {
                 thumbnail = await Helper.GetStorageItemThumbnailAsync(path);
-                thumbnailCache.PutIfPresent(path, thumbnail);
+                thumbnailCache.PutIfNonNull(path, thumbnail);
             }
             return thumbnail;
         }
@@ -60,6 +55,11 @@ namespace SMPlayer
         public static void CacheImage(string path, BitmapImage item)
         {
             imageCache.Put(path, item);
+        }
+
+        public static void CacheImage(string path, StorageItemThumbnail item)
+        {
+            imageCache.Put(path, item.ToBitmapImage());
         }
 
         public static void CacheThumbnail(string path, StorageItemThumbnail item)
@@ -70,6 +70,7 @@ namespace SMPlayer
 
     public class LoadingCache<K, V> where V : class
     {
+        private static long CurrentTimeInSeconds { get => DateTime.Now.Second; }
         public int MaxSize { get; set; } = int.MaxValue;
         public long TimeOfExpiration { get; set; }
         public Func<K, V> Load { private get ; set; }
@@ -84,7 +85,8 @@ namespace SMPlayer
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            long time = DateTime.Now.Second;
+            if (dict.Count == 0) return;
+            long time = CurrentTimeInSeconds;
             List<K> keys = new List<K>();
             foreach (KeyValuePair<K, CacheValue<V>> pair in dict)
             {
@@ -99,7 +101,7 @@ namespace SMPlayer
             }
         }
 
-        public void PutIfPresent(K key, V value)
+        public void PutIfNonNull(K key, V value)
         {
             if (value != null)
             {
@@ -108,7 +110,7 @@ namespace SMPlayer
         }
         public void Put(K key, V value)
         {
-            if (dict.Count > MaxSize)
+            if (dict.Count >= MaxSize)
             {
                 RemoveLRU();
             }
@@ -149,18 +151,19 @@ namespace SMPlayer
             }
             else
             {
-                cachedValue.TimeOfLastAccessed = DateTime.Now.Second;
+                cachedValue.TimeOfLastAccessed = CurrentTimeInSeconds;
             }
             return cachedValue.Value;
         }
 
-        class CacheValue<T> {
+        class CacheValue<T>
+        {
             public T Value { get; set; }
             public long TimeOfLastAccessed { get; set; } = 0;
             public CacheValue(T value)
             {
                 this.Value = value;
-                this.TimeOfLastAccessed = DateTime.Now.Second;
+                this.TimeOfLastAccessed = CurrentTimeInSeconds;
             }
         }
     }
