@@ -12,12 +12,6 @@
     Loaded="Page_Loaded"
     mc:Ignorable="d">
 
-    <Page.BottomAppBar>
-        <CommandBar >
-            <AppBarButton Icon="Accept" />
-        </CommandBar>
-    </Page.BottomAppBar>
-
     <Page.Resources>
         <Style x:Key="NowPlayingFullBladeItemStyle" TargetType="controls:BladeItem">
             <Setter Property="Background" Value="Transparent" />

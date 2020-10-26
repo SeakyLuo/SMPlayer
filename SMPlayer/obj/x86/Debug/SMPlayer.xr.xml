@@ -257,7 +257,6 @@
       <RootProperty Name="Background" />
       <RootProperty Name="Content" />
       <RootProperty Name="Resources" />
-      <RootProperty Name="BottomAppBar" />
       <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="SMPlayer.HeaderedPlaylistControl">

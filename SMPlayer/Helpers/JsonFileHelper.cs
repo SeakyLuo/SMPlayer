@@ -52,9 +52,9 @@ namespace SMPlayer.Models
             SaveAsync(Helper.LocalFolder, filename, data);
         }
 
-        public static T Convert<T>(string json)
+        public static T Convert<T>(string json) where T : class
         {
-            return JsonConvert.DeserializeObject<T>(json);
+            return json == null ? null : JsonConvert.DeserializeObject<T>(json);
         }
 
         public static void DeleteFile(string filename)

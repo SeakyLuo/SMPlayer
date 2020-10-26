@@ -88,6 +88,7 @@ namespace SMPlayer
             MediaHelper.Init();
             await Helper.Init();
             await AlbumsPage.Init();
+            await RecentPage.Init();
             foreach (var listener in LoadedListeners) listener.Invoke();
             // If background task is already registered, do nothing
             if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals(Helper.ToastTaskName)))
@@ -142,6 +143,7 @@ namespace SMPlayer
             MusicLibraryPage.Save();
             MediaHelper.Save();
             AlbumsPage.Save();
+            RecentPage.Save();
             await Helper.ClearBackups(10);
             UpdateHelper.Save();
         }

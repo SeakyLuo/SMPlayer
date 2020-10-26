@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -110,13 +111,7 @@ namespace SMPlayer
                 }
                 if (Settings.settings.LastPage == "MyFavoritesPage")
                 {
-                    foreach (var playlist in Settings.settings.Playlists)
-                    {
-                        await playlist.SetDisplayItemAsync();
-                    }
-                }
-                else
-                {
+                    // 不需要加载展示的播放列表
                     foreach (var playlist in Settings.settings.Playlists)
                     {
                         if (playlist.Name != Settings.settings.LastPlaylist)
@@ -125,13 +120,28 @@ namespace SMPlayer
                         }
                     }
                 }
+                else
+                {
+                    // 优先加载最后选中的
+                    if (Settings.settings.Playlists.FirstOrDefault(p => p.Name == Settings.settings.LastPlaylist) is Playlist lastPlaylist)
+                    {
+                        await lastPlaylist.SetDisplayItemAsync();
+                    }
+                    foreach (var playlist in Settings.settings.Playlists)
+                    {
+                        await playlist.SetDisplayItemAsync();
+                    }
+                }
                 PageUnset = false;
             }
             if (!UpdateHelper.Log.DateAdded)
             {
                 await UpdateHelper.Update();
                 Loader.Hide();
-                ShowLocalizedNotification("UpdateFinished");
+                if (Helper.CurrentFolder != null)
+                {
+                    ShowLocalizedNotification("UpdateFinished");
+                }
             }
         }
 

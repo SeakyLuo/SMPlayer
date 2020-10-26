@@ -42,15 +42,20 @@ namespace SMPlayer
         public void Setup(IEnumerable<Music> collection)
         {
             IsProcessing = true;
-            MusicCollection = collection.ToList();
+            MusicCollection.Clear();
             GridMusicCollection.Clear();
             foreach (var music in collection)
             {
-                var copy = music.Copy();
-                copy.IsPlaying = copy.Equals(MediaHelper.CurrentMusic);
-                GridMusicCollection.Add(new GridMusicView(copy));
+                AddMusic(music);
             }
             IsProcessing = false;
+        }
+        public void AddMusic(Music music)
+        {
+            var copy = music.Copy();
+            copy.IsPlaying = copy.Equals(MediaHelper.CurrentMusic);
+            MusicCollection.Add(copy);
+            GridMusicCollection.Add(new GridMusicView(copy));
         }
         public void Clear()
         {
@@ -149,12 +154,13 @@ namespace SMPlayer
 
         void IMenuFlyoutItemClickListener.Select(object data) { }
 
-        private void RemoveMusic(Music music)
+        public bool RemoveMusic(Music music)
         {
             removedItemIndex = MusicCollection.IndexOf(music);
             MusicCollection.RemoveAt(removedItemIndex);
             GridMusicCollection.RemoveAt(removedItemIndex);
             foreach (var listener in RemoveListeners) listener.MusicRemoved(removedItemIndex, music, MusicCollection);
+            return removedItemIndex > -1;
         }
     }
 }

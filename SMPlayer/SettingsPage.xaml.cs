@@ -63,7 +63,7 @@ namespace SMPlayer
 
         public static async Task<bool> UpdateMusicLibrary(string message = null)
         {
-            return await UpdateMusicLibrary(Helper.CurrentFolder, message);
+            return Helper.CurrentFolder == null || await UpdateMusicLibrary(Helper.CurrentFolder, message);
         }
 
         public static async Task<bool> UpdateMusicLibrary(StorageFolder folder, string message = null)

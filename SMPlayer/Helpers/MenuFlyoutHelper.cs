@@ -217,7 +217,7 @@ namespace SMPlayer
                     Helper.ShowMusicNotFoundNotification(Music.GetFilename(path));
                     return;
                 }
-                ShowInExplorer(path, type);
+                ShowInExplorerWithLoader(path, type);
             };
             return item;
         }
@@ -243,7 +243,14 @@ namespace SMPlayer
             };
             return item;
         }
-        public static async void ShowInExplorer(string path, StorageItemTypes type)
+        public static void ShowInExplorerWithLoader(string path, StorageItemTypes type)
+        {
+            if (MainPage.Instance == null)
+                ShowInExplorer(path, type);
+            else 
+                MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest", false, () => ShowInExplorer(path, type));
+        }
+        private static async void ShowInExplorer(string path, StorageItemTypes type)
         {
             var options = new Windows.System.FolderLauncherOptions();
             StorageFolder folder;
@@ -264,6 +271,7 @@ namespace SMPlayer
             }
             await Windows.System.Launcher.LaunchFolderAsync(folder, options);
         }
+
         public static MenuFlyoutItem GetRefreshDirectoryItem(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
         {
             var item = new MenuFlyoutItem()
@@ -336,26 +344,18 @@ namespace SMPlayer
                     Message = Helper.LocalizeMessage("DeleteMusicMessage", music.Name),
                     Confirm = async () =>
                     {
-                        if (await Helper.FileNotExist(music.Path))
-                        {
-                            Helper.ShowMusicNotFoundNotification(music.Name);
-                            return;
-                        }
                         MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
-                        StorageFile file = await StorageFile.GetFileFromPathAsync(music.Path);
-                        await file.DeleteAsync();
-                        int musicLibraryIndex = MusicLibraryPage.AllSongs.IndexOf(music);
-                        MusicLibraryPage.AllSongs.RemoveAt(musicLibraryIndex);
+                        MusicLibraryPage.AllSongs.Remove(music);
                         Settings.settings.RemoveMusic(music);
                         MediaHelper.DeleteMusic(music);
                         listener?.Delete(music);
-                        MainPage.Instance?.Loader.Hide();
-                        Helper.ShowCancelableNotificationWithoutLocalization(Helper.LocalizeMessage("MusicDeleted", music.Name), () =>
+                        if (!await Helper.FileNotExist(music.Path))
                         {
-                            MusicLibraryPage.AllSongs.Insert(musicLibraryIndex, music);
-                            Settings.settings.UndoRemoveMusic(music);
-                            listener?.UndoDelete(music);
-                        });
+                            StorageFile file = await StorageFile.GetFileFromPathAsync(music.Path);
+                            await file.DeleteAsync();
+                        }
+                        MainPage.Instance?.Loader.Hide();
+                        Helper.ShowNotification(Helper.LocalizeMessage("MusicDeleted", music.Name));
                     }
                 }.ShowAsync();
             };
@@ -553,9 +553,8 @@ namespace SMPlayer
             }
             flyout.ShowAt(sender as FrameworkElement);
         }
-        public static MenuFlyout GetShuffleMenu()
+        public static MenuFlyout GetShuffleMenu(int limit = 100)
         {
-            int limit = 100;
             var flyout = new MenuFlyout();
             var musicLibrary = new MenuFlyoutItem()
             {
@@ -616,16 +615,22 @@ namespace SMPlayer
                 };
                 flyout.Items.Add(localFolder);
             }
-            if (Settings.settings.RecentAdded.Count > 0)
+            if (RecentPage.Inited && RecentPage.AddedTimeLine?.Count > 0)
             {
-                var recentAdded = new MenuFlyoutItem()
+                var recentAdded = new MenuFlyoutSubItem()
                 {
                     Text = Helper.Localize("Recent Added")
                 };
-                recentAdded.Click += (sender, args) =>
+                AppendRecentAddedItem(recentAdded, "Today", RecentPage.AddedTimeLine.Today, limit);
+                AppendRecentAddedItem(recentAdded, "ThisWeek", RecentPage.AddedTimeLine.ThisWeek, limit);
+                AppendRecentAddedItem(recentAdded, "ThisMonth", RecentPage.AddedTimeLine.ThisMonth, limit);
+                AppendRecentAddedItem(recentAdded, "Recent3Months", RecentPage.AddedTimeLine.Recent3Months, limit);
+                AppendRecentAddedItem(recentAdded, "Recent6Months", RecentPage.AddedTimeLine.Recent6Months, limit);
+                AppendRecentAddedItem(recentAdded, "ThisYear", RecentPage.AddedTimeLine.ThisYear, limit);
+                foreach (var pair in RecentPage.AddedTimeLine.Years)
                 {
-                    MediaHelper.SetPlaylistAndPlay(Settings.settings.RecentAdded.RandItems(limit).ToMusicList());
-                };
+                    AppendRecentAddedItem(recentAdded, pair.Key, pair.Value, limit);
+                }
                 flyout.Items.Add(recentAdded);
             }
             if (Settings.settings.RecentPlayed.Count > 0)
@@ -675,6 +680,22 @@ namespace SMPlayer
                 flyout.Items.Add(leastPlayed);
             }
             return flyout;
+        }
+        public static MenuFlyoutSubItem AppendRecentAddedItem(MenuFlyoutSubItem parent, object title, List<TimeLineMusic> songs, int limit)
+        {
+            if (songs.Count > 0)
+            {
+                var recenItem = new MenuFlyoutItem()
+                {
+                    Text = title is string stringTitle ? Helper.LocalizeMessage(stringTitle) : title.ToString()
+                };
+                recenItem.Click += (sender, args) =>
+                {
+                    MediaHelper.SetPlaylistAndPlay(songs.RandItems(limit).ToMusicList());
+                };
+                parent.Items.Add(recenItem);
+            }
+            return parent;
         }
         public static MenuFlyout SetPlaylistMenu(object sender, IMenuFlyoutItemClickListener clickListener = null, IMenuFlyoutHelperBuildListener buildListener = null, MenuFlyoutOption option = null)
         {

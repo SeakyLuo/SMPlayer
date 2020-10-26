@@ -146,6 +146,10 @@ namespace SMPlayer
 
         public static BitmapImage ToBitmapImage(this StorageItemThumbnail thumbnail)
         {
+            if (thumbnail == null)
+            {
+                return null;
+            }
             BitmapImage bitmapImage = new BitmapImage();
             bitmapImage.SetSource(thumbnail);
             return bitmapImage;
@@ -153,7 +157,7 @@ namespace SMPlayer
 
         public static async Task<Brush> GetDisplayColor(this StorageItemThumbnail thumbnail)
         {
-            return await ColorHelper.GetThumbnailMainColorAsync(thumbnail.CloneStream());
+            return thumbnail == null ? null : await ColorHelper.GetThumbnailMainColorAsync(thumbnail.CloneStream());
         }
 
 

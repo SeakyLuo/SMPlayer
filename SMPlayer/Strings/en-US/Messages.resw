@@ -333,6 +333,12 @@
   <data name="Quotations" xml:space="preserve">
     <value>"{0}"</value>
   </data>
+  <data name="Recent3Months" xml:space="preserve">
+    <value>Recent 3 Months</value>
+  </data>
+  <data name="Recent6Months" xml:space="preserve">
+    <value>Recent 6 Months</value>
+  </data>
   <data name="RemoveAlbumArt" xml:space="preserve">
     <value>Do you want to remove the album art of "{0}"?</value>
   </data>

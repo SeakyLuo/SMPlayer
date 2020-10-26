@@ -218,6 +218,8 @@
     <Compile Include="ExpressionBuilder\ReferenceNodes\ExpressionBuilder.VisualReferenceNode.cs" />
     <Compile Include="Helpers\ClassHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
+    <Compile Include="Models\FullyObservableCollection.cs" />
+    <Compile Include="Models\LoadingCache.cs" />
     <Compile Include="Helpers\SearchHelper.cs" />
     <Compile Include="Helpers\UpdateHelper.cs" />
     <Compile Include="Helpers\VisualTreeHelperExtensions.cs" />
@@ -230,7 +232,9 @@
     <Compile Include="Models\MultiSelectCommandBarOption.cs" />
     <Compile Include="Models\MusicDisplayItem.cs" />
     <Compile Include="Models\MusicImage.cs" />
+    <Compile Include="Models\RecentTimeLine.cs" />
     <Compile Include="Models\TimeLine.cs" />
+    <Compile Include="Models\TimeLineMusic.cs" />
     <Compile Include="SearchResultPage.xaml.cs">
       <DependentUpon>SearchResultPage.xaml</DependentUpon>
     </Compile>

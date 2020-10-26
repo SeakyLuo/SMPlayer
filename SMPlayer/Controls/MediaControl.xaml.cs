@@ -444,13 +444,11 @@ namespace SMPlayer
         {
             using (var thumbnail = await ImageHelper.LoadThumbnail(music))
             {
-                var isThumbnail = thumbnail.IsThumbnail();
-                AlbumCover.Source = isThumbnail ? thumbnail.ToBitmapImage() : MusicImage.DefaultImage;
+                AlbumCover.Source = thumbnail.ToBitmapImage() ?? MusicImage.DefaultImage;
                 switch (Mode)
                 {
                     case MediaControlMode.Main:
-                        Debug.WriteLine($"Main MediaControl:");
-                        MainMediaControlGrid.Background = isThumbnail ? await thumbnail.GetDisplayColor() : ColorHelper.HighlightBrush;
+                        MainMediaControlGrid.Background = thumbnail == null ? ColorHelper.HighlightBrush : await thumbnail.GetDisplayColor();
                         break;
                     case MediaControlMode.Full:
                         FullAlbumTextBlock.Text = music.Album;

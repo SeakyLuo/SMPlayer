@@ -19,7 +19,7 @@
                 x:Name="RecentAddedItem"
                 x:Uid="RecentAddedItem"
                 Header="Recently Added">
-                <Grid Loaded="RecentAddedGrid_Loaded">
+                <Grid>
                     <ProgressRing 
                         x:Name="RecentAddedProgressRing" 
                         IsActive="False"
@@ -50,7 +50,7 @@
                 x:Name="RecentPlayedItem"
                 x:Uid="RecentPlayedItem"
                 Header="Recently Played">
-                <Grid Loaded="RecentPlayed_Loaded">
+                <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />

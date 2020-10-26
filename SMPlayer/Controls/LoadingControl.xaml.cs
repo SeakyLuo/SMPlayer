@@ -67,21 +67,31 @@ namespace SMPlayer
             Text = Helper.LocalizeMessage(text, args);
         }
 
-        public void ShowDeterminant(string text, bool allowBreak = false, int progress = 0)
+        public void ShowDeterminant(string text, bool allowBreak = false, int progress = 0, Action action = null)
         { 
             SetLocalizedText(text);
             IsDeterminant = true;
             Progress = progress;
             AllowBreak = allowBreak;
             this.Visibility = Visibility.Visible;
+            if (action != null)
+            {
+                action.Invoke();
+                Hide();
+            }
         }
 
-        public void ShowIndeterminant(string text, bool allowBreak = false)
+        public void ShowIndeterminant(string text, bool allowBreak = false, Action action = null)
         {
             SetLocalizedText(text);
             IsDeterminant = false;
             AllowBreak = allowBreak;
             this.Visibility = Visibility.Visible;
+            if (action != null)
+            {
+                action.Invoke();
+                Hide();
+            }
         }
 
         public void Hide()

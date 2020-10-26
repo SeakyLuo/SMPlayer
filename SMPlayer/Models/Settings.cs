@@ -37,7 +37,6 @@ namespace SMPlayer.Models
         public bool MiniModeWithDropdown { get; set; } = false;
         public bool IsMuted { get; set; } = false;
         public int LimitedRecentPlayedItems { get; set; } = -1;
-        public ObservableCollection<string> RecentAdded { get; set; } = new ObservableCollection<string>();
         public bool AutoPlay { get; set; } = false;
         public bool AutoLyrics { get; set; } = false;
         public bool SaveMusicProgress { get; set; } = false;
@@ -183,7 +182,7 @@ namespace SMPlayer.Models
         {
             if (JustRemoved.Any(m => m.Name == music.Name && m.Artist == music.Artist && m.Album == music.Album && m.Duration == music.Duration))
                 return;
-            RecentAdded.AddOrMoveToTheFirst(music.Path);
+            RecentPage.AddedTimeLine.Add(music);
             if (AutoLyrics)
             {
                 await Task.Run(async() =>
@@ -198,7 +197,7 @@ namespace SMPlayer.Models
         }
 
         private Dictionary<string, int> RemovedPlaylist = new Dictionary<string, int>();
-        private int myFavoratesRemovedIndex = -1, recentPlayedRemovedIndex = -1, recentAddedRemovedIndex = -1;
+        private int myFavoratesRemovedIndex = -1, recentPlayedRemovedIndex = -1;
 
         public void RemoveMusic(Music music)
         {
@@ -217,7 +216,7 @@ namespace SMPlayer.Models
             if ((myFavoratesRemovedIndex = MyFavorites.Songs.IndexOf(music)) > -1)
                 MyFavorites.Remove(music);
             RecentPlayed.Remove(music.Path);
-            RecentAdded.Remove(music.Path);
+            RecentPage.AddedTimeLine.Remove(music.Path);
         }
 
         public void UndoRemoveMusic(Music music)
@@ -234,10 +233,7 @@ namespace SMPlayer.Models
                 MyFavorites.Songs.Insert(myFavoratesRemovedIndex, music);
             if (recentPlayedRemovedIndex > -1)
                 RecentPlayed.Insert(recentPlayedRemovedIndex, music.Path);
-            if (recentAddedRemovedIndex > -1)
-                RecentAdded.Insert(recentAddedRemovedIndex, music.Path);
-
-
+            RecentPage.AddedTimeLine.Add(music);
         }
 
         public void Played(Music music)

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +12,7 @@ namespace SMPlayer.Models
     {
         public object Title { get; set; }
         public List<TimeLineItem<T>> Items { get; set; }
-        public List<T> Data { get => Items.ConvertAll(i => i.Data); }
+        public IEnumerable<T> Data { get => Items.Select(i => i.Data); }
         public int Count { get => Items.Count; }
 
         public TimeLine()
@@ -36,38 +38,38 @@ namespace SMPlayer.Models
         }
     }
 
-    public class MusicTimeLine : TimeLine<Music>
-    {
-        public MusicTimeLine(string title)
-        {
-            Title = Helper.LocalizeMessage(title);
-            Items = new List<TimeLineItem<Music>>();
-        }
-
-        public MusicTimeLine(int title)
-        {
-            Title = title;
-            Items = new List<TimeLineItem<Music>>();
-        }
-
-        public void AddItem(Music music)
-        {
-            Items.Add(new TimeLineItem<Music>(music, music.DateAdded));
-        }
-    }
-
     public static class TimeLineHelper
     {
-        public static ICollection<MusicTimeLine> JoinTimeLine(this ICollection<MusicTimeLine> timeLine, params MusicTimeLine[] musicTimeLines)
+        public static void Add(this List<TimeLineMusic> timeLine, ITimeLineMusic music)
         {
-            foreach (var musicTimeLine in musicTimeLines)
+            TimeLineMusic timeLineMusic = music.ToTimeLineMusic();
+            int index = timeLine.FindIndex(m => m.Time <= timeLineMusic.Time);
+            if (index == -1)
             {
-                if (musicTimeLine.Count > 0)
-                {
-                    timeLine.Add(musicTimeLine);
-                }
+                timeLine.Add(timeLineMusic);
             }
-            return timeLine;
+            else
+            {
+                timeLine.Insert(index, timeLineMusic);
+            }
+        }
+
+        public static List<TimeLineItem<Music>> ToTimeLineList(this List<TimeLineItem<string>> recentTimeLine)
+        {
+            var list = new List<TimeLineItem<Music>>();
+            foreach (var item in recentTimeLine)
+                list.Add(new TimeLineItem<Music>(Settings.FindMusic(item.Data), item.Time));
+            return list;
+        }
+
+        public static IEnumerable<Music> ToMusicList(this IEnumerable<TimeLineMusic> list)
+        {
+            return list.Select(i => Settings.FindMusic(i.Data));
+        }
+
+        public static bool RemoveMusic(this List<TimeLineMusic> list, string path)
+        {
+            return list.RemoveAll(i => i.Data == path) > 0;
         }
     }
 }
