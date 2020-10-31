@@ -9,7 +9,7 @@
     <SolutionConfiguration>Debug|x86</SolutionConfiguration>
     <PackageArchitecture>x86</PackageArchitecture>
     <PackageIdentityName>cc323160-1166-40e8-bb50-eaf5dc6fc12d</PackageIdentityName>
-    <PackageIdentityPublisher>CN=Seaky</PackageIdentityPublisher>
+    <PackageIdentityPublisher>CN=CFBE922A-0341-4A7E-B15B-A6DEF6C9E3AF</PackageIdentityPublisher>
     <IntermediateOutputPath>C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\obj\x86\Debug\</IntermediateOutputPath>
     <RemoteDeploymentType>
     </RemoteDeploymentType>
@@ -19,24 +19,24 @@
     <DeployOptionalPackages>false</DeployOptionalPackages>
     <WindowsSdkPath>C:\Program Files %28x86%29\Windows Kits\10\</WindowsSdkPath>
     <LayoutDir>C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\AppX</LayoutDir>
-    <RegisteredManifestChecksum>C707CEC85CA6CA963FF515C31F21342EDD729468DA6777A1ED9B33C520825573</RegisteredManifestChecksum>
-    <RegisteredPackageMoniker>23778SeakyTheLoner.SMPlayer_2.4.1.0_x86__jr81xyqy8yr5w</RegisteredPackageMoniker>
-    <RegisteredUserModeAppID>23778SeakyTheLoner.SMPlayer_jr81xyqy8yr5w!App</RegisteredUserModeAppID>
+    <RegisteredManifestChecksum>1B8C36A6AF71F89A22DC1755FFBB7EACC052EE98E75464EA347111925B97AB60</RegisteredManifestChecksum>
+    <RegisteredPackageMoniker>23778SeakyTheLoner.SMPlayer_2.4.1.0_x86__gn05p9xsngvjy</RegisteredPackageMoniker>
+    <RegisteredUserModeAppID>23778SeakyTheLoner.SMPlayer_gn05p9xsngvjy!App</RegisteredUserModeAppID>
     <RegisteredPackageID>23778SeakyTheLoner.SMPlayer</RegisteredPackageID>
-    <RegisteredPackagePublisher>CN=Seaky</RegisteredPackagePublisher>
+    <RegisteredPackagePublisher>CN=CFBE922A-0341-4A7E-B15B-A6DEF6C9E3AF</RegisteredPackagePublisher>
     <RegisteredVersion>2.4.1.0</RegisteredVersion>
   </PropertyGroup>
   <ItemGroup>
     <AppXManifest Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Core\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2020-10-31T01:58:26.819</Modified>
+      <Modified>2020-10-31T13:02:05.273</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\SMPlayer.exe">
       <PackagePath>entrypoint\SMPlayer.exe</PackagePath>
-      <Modified>2020-10-31T01:58:23.710</Modified>
+      <Modified>2020-10-31T13:02:00.245</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\.nuget\packages\microsoft.appcenter.crashes\2.1.1\build\uap10.0\..\..\runtimes\win10-x86\native\WatsonRegistrationUtility.dll">
       <PackagePath>WatsonRegistrationUtility.dll</PackagePath>
@@ -677,11 +677,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2020-10-27T05:56:25.695</Modified>
+      <Modified>2020-10-31T13:02:03.216</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Seaky\source\repos\SMPlayer\SMPlayer\bin\x86\Debug\Core\SMPlayer.exe">
       <PackagePath>SMPlayer.exe</PackagePath>
-      <Modified>2020-10-31T01:58:26.788</Modified>
+      <Modified>2020-10-31T13:02:05.239</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>
