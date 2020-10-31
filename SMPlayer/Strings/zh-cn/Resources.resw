@@ -867,6 +867,9 @@
   <data name="ViewAllButton.Label" xml:space="preserve">
     <value>查看全部</value>
   </data>
+  <data name="VoiceAssistantButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>唤醒语音助手</value>
+  </data>
   <data name="VolumeButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>音量</value>
   </data>

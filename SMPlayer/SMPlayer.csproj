@@ -219,6 +219,7 @@
     <Compile Include="ExpressionBuilder\ReferenceNodes\ExpressionBuilder.VisualReferenceNode.cs" />
     <Compile Include="Helpers\ClassHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
+    <Compile Include="Helpers\VoiceAssistantHelper.cs" />
     <Compile Include="Models\FullyObservableCollection.cs" />
     <Compile Include="Models\LoadingCache.cs" />
     <Compile Include="Helpers\SearchHelper.cs" />
@@ -360,6 +361,7 @@
     <Content Include="Assets\Wide310x150Logo.scale-125.png" />
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
+    <Content Include="VoiceAssistantCommandSet.xml" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />

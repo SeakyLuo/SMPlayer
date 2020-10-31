@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
+using Windows.Globalization;
 using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
@@ -38,6 +39,7 @@ namespace SMPlayer
         public static TileUpdater tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
         public static ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
         public static ResourceLoader MessageResourceLoader = ResourceLoader.GetForCurrentView("Messages");
+        public static Language CurrentLanguage = new Language(Windows.System.UserProfile.GlobalizationPreferences.Languages[0]);
 
         private static string Lyrics = "";
         private static List<Music> NotFoundHistory = new List<Music>();
@@ -160,10 +162,6 @@ namespace SMPlayer
         public static void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option)
         {
             GetMainPageContainer()?.ShowMultiSelectCommandBar(option);
-        }
-        public static string CurrentLanguage
-        {
-            get => new Windows.Globalization.Language(Windows.System.UserProfile.GlobalizationPreferences.Languages[0]).DisplayName;
         }
 
         public static string Localize(string resource)
