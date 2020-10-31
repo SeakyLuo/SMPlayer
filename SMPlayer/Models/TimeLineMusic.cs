@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace SMPlayer.Models
 {
-    public class TimeLineMusic : TimeLineItem<string>, ITimeLineMusic, IComparable<TimeLineMusic>
+    public class TimeLineMusic : TimeLineItem<string>, ITimeLineMusic, IComparable<TimeLineMusic>, IMusicable
     {
         public TimeLineMusic(string data, DateTimeOffset time) : base(data, time)
         {
@@ -19,6 +19,11 @@ namespace SMPlayer.Models
         DateTimeOffset ITimeLineMusic.GetDateAdded()
         {
             return Time;
+        }
+
+        Music IMusicable.ToMusic()
+        {
+            return Settings.FindMusic(Data);
         }
 
         TimeLineMusic ITimeLineMusic.ToTimeLineMusic()

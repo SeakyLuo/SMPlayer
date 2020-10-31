@@ -56,7 +56,10 @@ namespace SMPlayer
 
         public static void Save()
         {
-            JsonFileHelper.SaveAsync(JsonFileName, AddedTimeLine.All);
+            if (AddedTimeLine.Count > 0)
+            {
+                JsonFileHelper.SaveAsync(JsonFileName, AddedTimeLine.All);
+            }
         }
 
         void IInitListener.BeforeInit()
@@ -64,7 +67,7 @@ namespace SMPlayer
             RecentAddedProgressRing.IsActive = true;
         }
 
-        async void IInitListener.Inited()
+        void IInitListener.Inited()
         {
             AddedTimeLine.CollectionChanged += AddedTimeLineChanged;
             if (IsLoaded)
@@ -72,7 +75,7 @@ namespace SMPlayer
                 if (RecentPivot.SelectedItem == RecentAddedItem)
                     SetupAdded();
                 else if (RecentPivot.SelectedItem == RecentPlayedItem)
-                    await SetupPlayed(Settings.settings.RecentPlayed);
+                    SetupPlayed(Settings.settings.RecentPlayed);
             }
         }
 
@@ -115,7 +118,6 @@ namespace SMPlayer
 
         public void SetupAdded()
         {
-            return;
             if (!AddedModified) return;
             RecentAddedProgressRing.IsActive = true;
             try
@@ -140,14 +142,14 @@ namespace SMPlayer
             RecentAddedProgressRing.IsActive = AddedModified = false;
         }
 
-        public async Task SetupPlayed(IEnumerable<string> list)
+        public void SetupPlayed(IEnumerable<string> list)
         {
             if (PlayedModifed)
             {
                 RecentPlayedProgressRing.IsActive = true;
                 try
                 {
-                    PlayedMusicView.Setup(await Task.Run(() => Settings.PathToCollection(list)));
+                    PlayedMusicView.Setup(list);
                     ClearPlayHistoryAppButton.IsEnabled = list.Count() != 0;
                 }
                 catch (InvalidOperationException)
@@ -184,10 +186,10 @@ namespace SMPlayer
 
         private void ClearPlayHistoryAppButton_Click(object sender, RoutedEventArgs e)
         {
-            ShowYesNoDialog("ClearPlayHistory", async () =>
+            ShowYesNoDialog("ClearPlayHistory", () =>
             {
                 Settings.settings.RecentPlayed.Clear();
-                await SetupPlayed(Settings.settings.RecentPlayed);
+                SetupPlayed(Settings.settings.RecentPlayed);
             });
         }
 
@@ -249,37 +251,41 @@ namespace SMPlayer
         {
             GridMusicControl control = (GridMusicControl)sender;
             MusicTimeLine data = (MusicTimeLine)control.DataContext;
-            if (data != null && control.GridMusicCollection.Count == 0)
+            if (control.GridMusicCollection.Count == 0)
             {
+                control.GridItemClickedListener += (s, a) =>
+                {
+                    MediaHelper.SetPlaylistAndPlay(AddedTimeLine.All, (s as GridMusicView).Source);
+                };
                 GridMusicControlDict[data.Title] = control;
                 switch (data.Category)
                 {
                     case RecentTimeLineCategory.Today:
-                        control.Setup(AddedTimeLine.Today.ToMusicList());
+                        control.Setup(AddedTimeLine.Today);
                         break;
                     case RecentTimeLineCategory.ThisWeek:
-                        control.Setup(AddedTimeLine.ThisWeek.ToMusicList());
+                        control.Setup(AddedTimeLine.ThisWeek);
                         break;
                     case RecentTimeLineCategory.ThisMonth:
-                        control.Setup(AddedTimeLine.ThisMonth.ToMusicList());
+                        control.Setup(AddedTimeLine.ThisMonth);
                         break;
                     case RecentTimeLineCategory.Recent3Months:
-                        control.Setup(AddedTimeLine.Recent3Months.ToMusicList());
+                        control.Setup(AddedTimeLine.Recent3Months);
                         break;
                     case RecentTimeLineCategory.Recent6Months:
-                        control.Setup(AddedTimeLine.Recent6Months.ToMusicList());
+                        control.Setup(AddedTimeLine.Recent6Months);
                         break;
                     case RecentTimeLineCategory.ThisYear:
-                        control.Setup(AddedTimeLine.ThisYear.ToMusicList());
+                        control.Setup(AddedTimeLine.ThisYear);
                         break;
                     case RecentTimeLineCategory.Year:
-                        control.Setup(AddedTimeLine.GetYear((int)data.Title).ToMusicList());
+                        control.Setup(AddedTimeLine.GetYear((int)data.Title));
                         break;
                 }
             }
         }
 
-        private async void RecentPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void RecentPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!Inited) return;
             if (RecentPivot.SelectedItem == RecentAddedItem)
@@ -288,7 +294,7 @@ namespace SMPlayer
             }
             else if (RecentPivot.SelectedItem == RecentPlayedItem)
             {
-                await SetupPlayed(Settings.settings.RecentPlayed);
+                SetupPlayed(Settings.settings.RecentPlayed);
             }
             else
             {

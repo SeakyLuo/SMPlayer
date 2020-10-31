@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Media;
 namespace SMPlayer.Models
 {
     [Serializable]
-    public class Music : IComparable<Music>, INotifyPropertyChanged, ITimeLineMusic
+    public class Music : IComparable<Music>, INotifyPropertyChanged, ITimeLineMusic, IMusicable
     {
         public string Path { get; set; }
         public string Name
@@ -309,7 +309,13 @@ namespace SMPlayer.Models
         {
             return new TimeLineMusic(Path, DateAdded);
         }
+
+        Music IMusicable.ToMusic()
+        {
+            return this;
+        }
     }
+
     public class MusicStream : IRandomAccessStreamReference
     {
         private string path;
@@ -336,5 +342,10 @@ namespace SMPlayer.Models
                 return await (await StorageFile.GetFileFromPathAsync(path)).OpenReadAsync();
             }
         }
+    }
+
+    public interface IMusicable
+    {
+        Music ToMusic();
     }
 }

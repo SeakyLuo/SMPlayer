@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -16,6 +17,7 @@ namespace SMPlayer
         public ObservableCollection<GridMusicView> GridMusicCollection = new ObservableCollection<GridMusicView>();
         public List<Music> MusicCollection = new List<Music>();
         private volatile bool IsProcessing = false;
+        public event ItemClickEventHandler GridItemClickedListener;
         public List<IRemoveMusicListener> RemoveListeners = new List<IRemoveMusicListener>();
         private int removedItemIndex = -1;
 
@@ -36,18 +38,35 @@ namespace SMPlayer
         private void MusicGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = (GridMusicView)e.ClickedItem;
-            MediaHelper.SetMusicAndPlay(MusicCollection, item.Source);
+            if (GridItemClickedListener == null)
+            {
+                MediaHelper.SetMusicAndPlay(MusicCollection, item.Source);
+            }
+            else
+            {
+                GridItemClickedListener.Invoke(item, e);
+            }
         }
 
-        public void Setup(IEnumerable<Music> collection)
+        public void Setup(IEnumerable<string> collection)
         {
             IsProcessing = true;
-            MusicCollection.Clear();
-            GridMusicCollection.Clear();
-            foreach (var music in collection)
+            Setup(collection.Select(i => new MusicPath(i)));
+            IsProcessing = false;
+        }
+
+        public async void Setup(IEnumerable<IMusicable> collection)
+        {
+            IsProcessing = true;
+            Clear();
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
-                AddMusic(music);
-            }
+                foreach (var item in collection)
+                {
+                    Music music = item.ToMusic();
+                    AddMusic(music);
+                }
+            });
             IsProcessing = false;
         }
         public void AddMusic(Music music)
@@ -161,6 +180,20 @@ namespace SMPlayer
             GridMusicCollection.RemoveAt(removedItemIndex);
             foreach (var listener in RemoveListeners) listener.MusicRemoved(removedItemIndex, music, MusicCollection);
             return removedItemIndex > -1;
+        }
+    }
+
+    public class MusicPath : IMusicable
+    {
+        public string Path { get; set; }
+        public MusicPath(string path)
+        {
+            Path = path;
+        }
+
+        Music IMusicable.ToMusic()
+        {
+            return Settings.FindMusic(Path);
         }
     }
 }

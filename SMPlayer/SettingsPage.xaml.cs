@@ -96,11 +96,11 @@ namespace SMPlayer
             MusicLibraryPage.SortAndSetAllSongs(await Task.Run(Settings.settings.Tree.Flatten));
             MainPage.Instance.Loader.Progress = 0;
             MainPage.Instance.Loader.Max = listeners.Count;
-            for (int i = 1; i <= listeners.Count; i++)
+            for (int i = 0; i < listeners.Count;)
             {
                 var listener = listeners[i];
                 listener.PathSet(folder.Path);
-                MainPage.Instance.Loader.Progress = i;
+                MainPage.Instance.Loader.Progress = ++i;
             }
             MediaHelper.RemoveBadMusic();
             App.Save();

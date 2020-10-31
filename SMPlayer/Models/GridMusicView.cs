@@ -1,10 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMPlayer.Models
 {
-    public class GridMusicView : INotifyPropertyChanged
+    public class GridMusicView : INotifyPropertyChanged, IMusicable
     {
         public string Name { get; set; }
         public string Artist { get; set; }
@@ -58,6 +59,11 @@ namespace SMPlayer.Models
         public override int GetHashCode()
         {
             return Source.Path.GetHashCode();
+        }
+
+        Music IMusicable.ToMusic()
+        {
+            return source;
         }
     }
 }

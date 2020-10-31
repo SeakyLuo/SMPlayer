@@ -22,10 +22,11 @@
     <GenerateTestArtifacts>False</GenerateTestArtifacts>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>D93D0C2D5FE2B05C1451672D3E10433539D46C3B</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>E160BD8C13D6DD7463FE52E91A46126BC3D0D732</PackageCertificateThumbprint>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+    <PackageCertificateKeyFile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -367,6 +368,7 @@
     <Content Include="Assets\Square44x44Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <None Include="SMPlayer_TemporaryKey.pfx" />
     <PRIResource Include="Strings\zh-cn\Messages.resw" />
     <PRIResource Include="Strings\en-us\Messages.resw" />
     <PRIResource Include="Strings\zh-cn\Resources.resw" />

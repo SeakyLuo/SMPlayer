@@ -134,9 +134,9 @@ namespace SMPlayer
             if (obj == null) return;
             ToolTipService.SetToolTip(obj, localize ? Helper.Localize(tooltip) : tooltip);
         }
-        public static bool SameAs(this IEnumerable<Music> list1, IEnumerable<Music> list2)
+        public static bool SameAs(this IEnumerable<IMusicable> list1, IEnumerable<IMusicable> list2)
         {
-            return list1.Count() == list2.Count() && list1.Zip(list2, (m1, m2) => m1.Equals(m2)).All(res => res);
+            return list1.Count() == list2.Count() && list1.Zip(list2, (m1, m2) => m1.ToMusic().Equals(m2.ToMusic())).All(res => res);
         }
 
         public static bool IsThumbnail(this StorageItemThumbnail thumbnail)
