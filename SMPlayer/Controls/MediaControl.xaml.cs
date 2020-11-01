@@ -193,7 +193,7 @@ namespace SMPlayer
                 switch (mode)
                 {
                     case MediaControlMode.Main:
-                        return MainMediaControlMoreButton.Visibility == Visibility.Visible ? MainMoreVolumeSlider : MainVolumeSlider;
+                        return IsMinimalMain ? MainMoreVolumeSlider : MainVolumeSlider;
                     case MediaControlMode.Full:
                         return FullVolumeSlider;
                     case MediaControlMode.Mini:
@@ -273,7 +273,7 @@ namespace SMPlayer
                 switch (mode)
                 {
                     case MediaControlMode.Main:
-                        return MainMediaControlMoreButton.Visibility == Visibility.Visible ? MainMediaControlVoiceAssistantButton : MainVoiceAssistantButton;
+                        return IsMinimalMain ? MainMediaControlVoiceAssistantButton : MainVoiceAssistantButton;
                     case MediaControlMode.Full:
                         return FullVoiceAssistantButton;
                     case MediaControlMode.Mini:
@@ -355,6 +355,9 @@ namespace SMPlayer
         private static List<Action<Music, Music>> MusicModifiedListeners = new List<Action<Music, Music>>();
         private static List<IMusicRequestListener> MusicRequestListeners = new List<IMusicRequestListener>();
         private static bool inited = false;
+        private SpeechRecognizer speechRecognizer = new SpeechRecognizer(Helper.CurrentLanguage);
+        private volatile bool IsSpeeching = false;
+        private bool IsMinimalMain { get => MainMediaControlMoreButton.Visibility == Visibility.Visible; }
 
         public MediaControl()
         {
@@ -1013,12 +1016,20 @@ namespace SMPlayer
 
         private async void VoiceAssistantButton_Click(object sender, RoutedEventArgs e)
         {
-            SpeechRecognizer speechRecognizer = new SpeechRecognizer(Helper.CurrentLanguage);
+            if (IsSpeeching)
+            {
+                await speechRecognizer.StopRecognitionAsync();
+                goto VoiceEnds;
+            }
+            IsSpeeching = true;
             await speechRecognizer.CompileConstraintsAsync();
             try
             {
                 SpeechRecognitionResult speechRecognitionResult = await speechRecognizer.RecognizeWithUIAsync();
-                VoiceAssistantHelper.HandleCommand(speechRecognitionResult.Text);
+                if (!IsSpeeching)
+                {
+                    VoiceAssistantHelper.HandleCommand(speechRecognitionResult.Text);
+                }
             }
             catch (Exception)
             {
@@ -1033,20 +1044,30 @@ namespace SMPlayer
                 };
                 if (await Dialog.ShowAsync() == ContentDialogResult.Secondary)
                 {
-                    const string uriToLaunch = "ms-settings:privacy-speechtyping";
-                    //"http://stackoverflow.com/questions/42391526/exception-the-speech-privacy-policy-" + 
-                    //"was-not-accepted-prior-to-attempting-a-spee/43083877#43083877";
-                    var uri = new Uri(uriToLaunch);
-
-                    var success = await Windows.System.Launcher.LaunchUriAsync(uri);
-
-                    if (!success) await new ContentDialog
+                    // https://stackoverflow.com/questions/42391526/exception-the-speech-privacy-policy-was-not-accepted-prior-to-attempting-a-spee
+                    if (!await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-speechtyping")))
                     {
-                        Title = "Oops! Something went wrong...",
-                        Content = "The settings app could not be opened.",
-                        PrimaryButtonText = "Shut your mouth up!"
-                    }.ShowAsync();
+                        await new ContentDialog()
+                        {
+                            Title = "Oops! Something went wrong...",
+                            Content = "The settings app could not be opened.",
+                            PrimaryButtonText = "Shut your mouth up!"
+                        }.ShowAsync();
+                    }
                 }
+            }
+        VoiceEnds:
+            IsSpeeching = false;
+            switch (mode)
+            {
+                case MediaControlMode.Main:
+                    (IsMinimalMain ? MainMediaControlVoiceAssistantButtonFlyout : MainVoiceAssistantButtonFlyout).Hide();
+                    break;
+                case MediaControlMode.Full:
+                    FullVoiceAssistantButtonFlyout.Hide();
+                    break;
+                case MediaControlMode.Mini:
+                    break;
             }
         }
 

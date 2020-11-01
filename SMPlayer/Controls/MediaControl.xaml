@@ -131,7 +131,13 @@
                     Click="VoiceAssistantButton_Click"  
                     Content="&#xE1D6;"
                     Style="{StaticResource MediaControlButtonStyle}"
-                    Visibility="Collapsed"/>
+                    Visibility="Collapsed" >
+                    <Button.Flyout>
+                        <Flyout x:Name="MainMediaControlVoiceAssistantButtonFlyout">
+                            <ProgressBar IsIndeterminate="True" />
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
                 <Button
                     x:Name="MainMediaControlMoreButton"
                     x:Uid="MoreButton"
@@ -367,7 +373,13 @@
                     x:Uid="VoiceAssistantButton"
                     Click="VoiceAssistantButton_Click"  
                     Content="&#xE1D6;"
-                    Style="{StaticResource MediaControlButtonStyle}" />
+                    Style="{StaticResource MediaControlButtonStyle}" >
+                    <Button.Flyout>
+                        <Flyout x:Name="MainVoiceAssistantButtonFlyout">
+                            <ProgressBar IsIndeterminate="True" />
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
                 <Button
                     x:Uid="MoreButton"
                     Width="36"
@@ -595,9 +607,15 @@
                         <Button
                             x:Name="FullVoiceAssistantButton"
                             x:Uid="VoiceAssistantButton"
-                            Click="VoiceAssistantButton_Click"  
+                            Click="VoiceAssistantButton_Click"
                             Content="&#xE1D6;"
-                            Style="{StaticResource DarkMediaControlButtonStyle}" />
+                            Style="{StaticResource DarkMediaControlButtonStyle}">
+                            <Button.Flyout>
+                                <Flyout x:Name="FullVoiceAssistantButtonFlyout">
+                                    <ProgressBar IsIndeterminate="True" />
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
                         <ToggleButton
                             x:Name="FullLikeToggleButton"
                             Click="LikeButton_Click"
