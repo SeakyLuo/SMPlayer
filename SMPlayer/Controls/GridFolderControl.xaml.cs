@@ -48,7 +48,7 @@ namespace SMPlayer.Controls
 
         private async void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            if (sender.DataContext is GridFolderView folderView)
+            if (sender.IsLoaded && sender.DataContext is GridFolderView folderView)
                 await folderView.SetThumbnailAsync();
         }
     }

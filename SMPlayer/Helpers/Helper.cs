@@ -24,13 +24,13 @@ namespace SMPlayer
     public static class Helper
     {
         public const string StringConcatenationFlag = "+++++";
-        public const string ToastTaskName = "ToastBackgroundTask";
         public const string LogoPath = "ms-appx:///Assets/monotone_no_bg.png";
-        public const string ToastTagPaused = "SMPlayerMediaToastTagPaused", ToastTagPlaying = "SMPlayerMediaToastTagPlaying", ToastGroup = "SMPlayerMediaToastGroup";
+        public const string ToastTaskName = "ToastBackgroundTask", ToastTagPaused = "SMPlayerMediaToastTagPaused", ToastTagPlaying = "SMPlayerMediaToastTagPlaying", ToastGroup = "SMPlayerMediaToastGroup";
         public static string NoLyricsAvailable { get => LocalizeMessage("NoLyricsAvailable"); }
         public static string TimeStamp { get => DateTime.Now.ToString("yyyyMMdd_HHmmss"); }
+        public static string TimeStampInMills { get => DateTime.Now.ToString("yyyyMMdd_HHmmss.fff"); }
 
-        public static StorageFolder CurrentFolder, ThumbnailFolder, SecondaryTileFolder, TempFolder;
+        public static StorageFolder CurrentFolder, ThumbnailFolder, SecondaryTileFolder, TempFolder, LogFolder;
         public static StorageFolder LocalFolder { get => ApplicationData.Current.LocalFolder; }
         public static ToastNotification Toast;
         public static ToastNotifier toastNotifier = ToastNotificationManager.CreateToastNotifier();
@@ -39,9 +39,52 @@ namespace SMPlayer
         public static ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
         public static ResourceLoader MessageResourceLoader = ResourceLoader.GetForCurrentView("Messages");
 
+        private const string ExceptionLogFileNamePrefix = "ExceptionLog", LogFileNamePrefix = "Log";
+
         private static string Lyrics = "";
         private static List<Music> NotFoundHistory = new List<Music>();
         private static Random random = new Random();
+
+        public static void Log(string text)
+        {
+            Logger(LogFileNamePrefix, text);
+        }
+
+        public static void LogException(Exception e)
+        {
+            string text = "Exception: " + e.ToString() + "\nSource: " + e.Source + "\nStackTrace: " + e.StackTrace +
+                          "\nTargetSite: " + e.TargetSite + "\nHelpLink: " + e.HelpLink + "\nHResult" + e.HResult;
+            Logger(ExceptionLogFileNamePrefix, text);
+        }
+
+        private static async void Logger(string prefix, string text)
+        {
+            if (LogFolder == null) LogFolder = await CreateFolder("Logs");
+            StorageFile log;
+            string name = prefix + TimeStampInMills;
+            int index = 0;
+            while (true)
+            {
+                try
+                {
+                    log = await LogFolder.CreateFileAsync(name + ".txt");
+                    break;
+                }
+                catch (Exception)
+                {
+                    // 当文件已存在时，无法创建该文件
+                    name += "_" + index++;
+                }
+            }
+            await FileIO.WriteTextAsync(log, text);
+        }
+
+        public static void Timer(Action action, string funcName = null)
+        {
+            DateTime start = DateTime.Now;
+            action.Invoke(); ;
+            Debug.WriteLine("Time of " + (funcName ?? action.Method.Name) + ": " + (DateTime.Now - start).TotalMilliseconds);
+        }
 
         public static int RandRange(int min, int max)
         {
@@ -72,24 +115,32 @@ namespace SMPlayer
         public static async Task Init()
         {
             var initDefaultImage = MusicImage.DefaultImage; // 静态资源只有在用到的时候才会被加载，所以做一个无用的声明
-            TempFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Temp", CreationCollisionOption.OpenIfExists);
+            TempFolder = await CreateFolder("Temp");
+            if (LogFolder == null) LogFolder = await CreateFolder("Logs");
             await ClearBackups();
+        }
+
+        private static async Task<StorageFolder> CreateFolder(string folderName)
+        {
+            return await ApplicationData.Current.LocalFolder.CreateFolderAsync(folderName, CreationCollisionOption.OpenIfExists);
         }
 
         public static async Task ClearBackups(int maxBackups = 3)
         {
             var files = await TempFolder.GetFilesAsync();
-            var settings = files.Where(f => f.Name.StartsWith(Settings.JsonFilename)).OrderBy(f => f.DateCreated);
-            var mediaHelper = files.Where(f => f.Name.StartsWith(MediaHelper.JsonFilename)).OrderBy(f => f.DateCreated);
-            var musicLibrary = files.Where(f => f.Name.StartsWith(MusicLibraryPage.JsonFilename)).OrderBy(f => f.DateCreated);
-            var albums = files.Where(f => f.Name.StartsWith(AlbumsPage.JsonFilename)).OrderBy(f => f.DateCreated);
-            foreach (var file in settings.Take(settings.Count() - maxBackups))
-                try { await file.DeleteAsync(); } catch (FileNotFoundException) { }
-            foreach (var file in mediaHelper.Take(mediaHelper.Count() - maxBackups))
-                try { await file.DeleteAsync(); } catch (FileNotFoundException) { }
-            foreach (var file in musicLibrary.Take(musicLibrary.Count() - maxBackups))
-                try { await file.DeleteAsync(); } catch (FileNotFoundException) { }
-            foreach (var file in albums.Take(albums.Count() - maxBackups))
+            await ClearBackup(files, Settings.JsonFilename, maxBackups);
+            await ClearBackup(files, MediaHelper.JsonFilename, maxBackups);
+            await ClearBackup(files, MusicLibraryPage.JsonFilename, maxBackups);
+            await ClearBackup(files, AlbumsPage.JsonFilename, maxBackups);
+            files = await LogFolder.GetFilesAsync();
+            await ClearBackup(files, LogFileNamePrefix, maxBackups);
+            await ClearBackup(files, ExceptionLogFileNamePrefix, maxBackups);
+        }
+
+        private static async Task ClearBackup(IEnumerable<StorageFile> files, string prefix, int maxBackups)
+        {
+            var targets = files.Where(f => f.Name.StartsWith(prefix)).OrderBy(f => f.DateCreated);
+            foreach (var file in targets.Take(targets.Count() - maxBackups))
                 try { await file.DeleteAsync(); } catch (FileNotFoundException) { }
         }
 

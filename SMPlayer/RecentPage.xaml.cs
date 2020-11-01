@@ -21,7 +21,7 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class RecentPage : Page, IInitListener
     {
-        private const string JsonFileName = "RecentTimeLine";
+        private const string JsonFileName = "RecentAddedTimeLine";
         public static bool Inited { get; private set; } = false;
         public static RecentTimeLine AddedTimeLine;
         private static bool AddedModified = true, PlayedModifed = true, SearchedModified = true;
@@ -48,8 +48,8 @@ namespace SMPlayer
         {
             foreach (var listener in InitListeners) listener.BeforeInit();
             string json = await JsonFileHelper.ReadAsync(JsonFileName);
-            AddedTimeLine = await Task.Run(() => RecentTimeLine.FromMusicList(JsonFileHelper.Convert<List<TimeLineMusic>>(json)) ??
-                                                 RecentTimeLine.FromMusicList(MusicLibraryPage.AllSongs));
+            AddedTimeLine = RecentTimeLine.FromMusicList(JsonFileHelper.Convert<List<Music>>(json)) ??
+                            RecentTimeLine.FromMusicList(MusicLibraryPage.AllSongs);
             Inited = true;
             foreach (var listener in InitListeners) listener.Inited();
         }
@@ -73,7 +73,7 @@ namespace SMPlayer
             if (IsLoaded)
             {
                 if (RecentPivot.SelectedItem == RecentAddedItem)
-                    SetupAdded();
+                    SetupAdded(AddedTimeLine);
                 else if (RecentPivot.SelectedItem == RecentPlayedItem)
                     SetupPlayed(Settings.settings.RecentPlayed);
             }
@@ -110,13 +110,13 @@ namespace SMPlayer
             }
         }
 
-        private static void AddTimeLine(ICollection<MusicTimeLine> timeLine, object title, List<TimeLineMusic> list)
+        private static void AddTimeLine(ICollection<MusicTimeLine> timeLine, object title, List<Music> list)
         {
             if (list.Count == 0) return;
-            timeLine.Add(new MusicTimeLine(title));
+            timeLine.Add(new MusicTimeLine(title, list));
         }
 
-        public void SetupAdded()
+        public void SetupAdded(RecentTimeLine AddedTimeLine)
         {
             if (!AddedModified) return;
             RecentAddedProgressRing.IsActive = true;
@@ -257,31 +257,8 @@ namespace SMPlayer
                 {
                     MediaHelper.SetPlaylistAndPlay(AddedTimeLine.All, (s as GridMusicView).Source);
                 };
+                control.Setup(data.Items);
                 GridMusicControlDict[data.Title] = control;
-                switch (data.Category)
-                {
-                    case RecentTimeLineCategory.Today:
-                        control.Setup(AddedTimeLine.Today);
-                        break;
-                    case RecentTimeLineCategory.ThisWeek:
-                        control.Setup(AddedTimeLine.ThisWeek);
-                        break;
-                    case RecentTimeLineCategory.ThisMonth:
-                        control.Setup(AddedTimeLine.ThisMonth);
-                        break;
-                    case RecentTimeLineCategory.Recent3Months:
-                        control.Setup(AddedTimeLine.Recent3Months);
-                        break;
-                    case RecentTimeLineCategory.Recent6Months:
-                        control.Setup(AddedTimeLine.Recent6Months);
-                        break;
-                    case RecentTimeLineCategory.ThisYear:
-                        control.Setup(AddedTimeLine.ThisYear);
-                        break;
-                    case RecentTimeLineCategory.Year:
-                        control.Setup(AddedTimeLine.GetYear((int)data.Title));
-                        break;
-                }
             }
         }
 
@@ -290,7 +267,7 @@ namespace SMPlayer
             if (!Inited) return;
             if (RecentPivot.SelectedItem == RecentAddedItem)
             {
-                SetupAdded();
+                SetupAdded(AddedTimeLine);
             }
             else if (RecentPivot.SelectedItem == RecentPlayedItem)
             {

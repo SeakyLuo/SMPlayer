@@ -104,13 +104,6 @@ namespace SMPlayer.Models
                 foreach (var tree in Tree.Trees)
                     if (await addThumbnail(tree.Flatten()))
                         break;
-            //await Task.Run(async () =>
-            //{
-            //    if (!await addThumbnail(Tree.Files))
-            //        foreach (var tree in Tree.Trees)
-            //            if (await addThumbnail(tree.Flatten()))
-            //                break;
-            //});
             int count = thumbnails.Count;
             if (count == 0) LargeThumbnail = MusicImage.NotFound;
             else if (count <= 2) LargeThumbnail = thumbnails[0];

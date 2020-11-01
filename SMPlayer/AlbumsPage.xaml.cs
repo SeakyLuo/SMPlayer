@@ -111,17 +111,14 @@ namespace SMPlayer
 
         private async void DropShadowControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            if (sender.DataContext is AlbumView album)
+            if (sender.IsLoaded && sender.DataContext is AlbumView album && !album.ThumbnailLoaded)
             {
-                if (!album.ThumbnailLoaded)
-                {
-                    string before = album.ThumbnailSource;
-                    if (album.Songs == null)
-                        album.SetSongs(AlbumPage.SearchAlbumSongs(album.Name, album.Artist));
-                    await album.SetThumbnailAsync();
-                    if (album.ThumbnailSource != before && albumInfoList.FirstOrDefault(a => a.Equals(album)) is AlbumInfo albumInfo)
-                        albumInfo.Thumbnail = album.ThumbnailSource;
-                }
+                string before = album.ThumbnailSource;
+                if (album.Songs == null)
+                    album.SetSongs(AlbumPage.SearchAlbumSongs(album.Name, album.Artist));
+                await album.SetThumbnailAsync();
+                if (album.ThumbnailSource != before && albumInfoList.FirstOrDefault(a => a.Equals(album)) is AlbumInfo albumInfo)
+                    albumInfo.Thumbnail = album.ThumbnailSource;
             }
         }
 

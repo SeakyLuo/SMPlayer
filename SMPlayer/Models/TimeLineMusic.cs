@@ -5,38 +5,13 @@ using System.ComponentModel;
 
 namespace SMPlayer.Models
 {
-    public class TimeLineMusic : TimeLineItem<string>, ITimeLineMusic, IComparable<TimeLineMusic>, IMusicable
+    public class MusicTimeLine : INotifyPropertyChanged
     {
-        public TimeLineMusic(string data, DateTimeOffset time) : base(data, time)
-        {
-        }
-
-        int IComparable<TimeLineMusic>.CompareTo(TimeLineMusic other)
-        {
-            return other.Time.CompareTo(Time);
-        }
-
-        DateTimeOffset ITimeLineMusic.GetDateAdded()
-        {
-            return Time;
-        }
-
-        Music IMusicable.ToMusic()
-        {
-            return Settings.FindMusic(Data);
-        }
-
-        TimeLineMusic ITimeLineMusic.ToTimeLineMusic()
-        {
-            return this;
-        }
-    }
-
-    public class MusicTimeLine : TimeLine<Music>, INotifyPropertyChanged
-    {
+        public object Title { get; set; }
+        public List<Music> Items { get; set; }
         public RecentTimeLineCategory Category { get; set; }
 
-        public MusicTimeLine(object title)
+        public MusicTimeLine(object title, List<Music> items)
         {
             if (title is RecentTimeLineCategory category)
             {
@@ -47,32 +22,25 @@ namespace SMPlayer.Models
             {
                 Title = title;
             }
-            Items = new List<TimeLineItem<Music>>();
-        }
-
-        public MusicTimeLine(object title, List<TimeLineItem<Music>> items)
-        {
-            Title = title;
             Items = items;
         }
 
         public void AddItem(Music music)
         {
-            Items.Add(new TimeLineItem<Music>(music, music.DateAdded));
+            Items.Add(music);
             OnPropertyChanged();
         }
 
         public void AddMusic(Music music)
         {
-            TimeLineItem<Music> timeLineItem = new TimeLineItem<Music>(music, music.DateAdded);
-            int index = Items.FindIndex(m => m.Time <= music.DateAdded);
+            int index = Items.FindIndex(m => m.DateAdded <= music.DateAdded);
             if (index == -1)
             {
-                Items.Add(timeLineItem);
+                Items.Add(music);
             }
             else
             {
-                Items.Insert(index, timeLineItem);
+                Items.Insert(index, music);
             }
             OnPropertyChanged();
         }
@@ -83,11 +51,5 @@ namespace SMPlayer.Models
             // Raise the PropertyChanged event, passing the name of the property whose value has changed.
             this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
-    }
-
-    public interface ITimeLineMusic
-    {
-        DateTimeOffset GetDateAdded();
-        TimeLineMusic ToTimeLineMusic();
     }
 }

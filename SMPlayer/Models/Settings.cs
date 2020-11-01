@@ -216,7 +216,7 @@ namespace SMPlayer.Models
             if ((myFavoratesRemovedIndex = MyFavorites.Songs.IndexOf(music)) > -1)
                 MyFavorites.Remove(music);
             RecentPlayed.Remove(music.Path);
-            RecentPage.AddedTimeLine.Remove(music.Path);
+            RecentPage.AddedTimeLine.Remove(music);
         }
 
         public void UndoRemoveMusic(Music music)

@@ -33,9 +33,9 @@ namespace SMPlayer.Helpers
         {
             foreach (var music in tree.Files)
             {
-                if (music.DateAdded == DateTimeOffset.MinValue)
+                if (music.DateAdded == null || music.DateAdded == DateTimeOffset.MinValue)
                 {
-                    Windows.Storage.StorageFile file = await music.GetStorageFileAsync();
+                    StorageFile file = await music.GetStorageFileAsync();
                     if (file == null)
                     {
                         //Settings.settings.RemoveMusic(music);

@@ -58,23 +58,30 @@ namespace SMPlayer
         public static List<Action> InitFinishedListeners = new List<Action>();
         public const string JsonFilename = "NowPlayingPlaylist";
 
-        public static async void Init()
+        public static async void Init(Music music = null)
         {
             var settings = Settings.settings;
-            var playlist = JsonFileHelper.Convert<List<string>>(await JsonFileHelper.ReadAsync(JsonFilename));
-            if (playlist != null && playlist.Count != 0)
+            if (music == null)
             {
-                if (settings.LastMusicIndex == -1)
-                    settings.LastMusicIndex = 0;
-                foreach (var path in playlist)
+                var playlist = JsonFileHelper.Convert<List<string>>(await JsonFileHelper.ReadAsync(JsonFilename));
+                if (playlist != null && playlist.Count != 0)
                 {
-                    var target = Settings.FindMusic(path);
-                    if (target != null) AddMusic(target);
+                    if (settings.LastMusicIndex == -1)
+                        settings.LastMusicIndex = 0;
+                    foreach (var path in playlist)
+                    {
+                        var target = Settings.FindMusic(path);
+                        if (target != null) AddMusic(target);
+                    }
+                    if (settings.LastMusicIndex < CurrentPlaylist.Count)
+                        CurrentMusic = CurrentPlaylist[settings.LastMusicIndex];
                 }
-                if (settings.LastMusicIndex < CurrentPlaylist.Count)
-                    CurrentMusic = CurrentPlaylist[settings.LastMusicIndex];
             }
-            if (settings.LastMusicIndex != -1)
+            if (music != null)
+            {
+                AddMusic(music);
+            }
+            else if (settings.LastMusicIndex != -1)
             {
                 try
                 {
@@ -86,7 +93,8 @@ namespace SMPlayer
                 }
             }
             Player.Volume = settings.Volume;
-            if (settings.SaveMusicProgress && CurrentMusic != null) Position = settings.MusicProgress;
+            // 如果非文件启动，并保存播放进度且有音乐
+            if (music == null && settings.SaveMusicProgress && CurrentMusic != null) Position = settings.MusicProgress;
             SetMode(Settings.settings.Mode);
 
             Timer.Tick += (sender, e) =>
@@ -121,7 +129,7 @@ namespace SMPlayer
             foreach (var listener in InitFinishedListeners)
                 listener.Invoke();
             Timer.Start();
-            if (settings.AutoPlay) Play();
+            if (settings.AutoPlay || music != null) Play();
         }
         public static Music GetMusic(this MediaPlaybackItem item)
         {

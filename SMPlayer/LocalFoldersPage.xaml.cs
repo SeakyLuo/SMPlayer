@@ -182,12 +182,6 @@ namespace SMPlayer
             }
         }
 
-        //private void LocalFoldersTreeView_Collapsed(TreeView sender, TreeViewCollapsedEventArgs args)
-        //{
-        //    args.Node.Children.Clear();
-        //    args.Node.HasUnrealizedChildren = true;
-        //}
-
         private void LocalFoldersTreeView_ItemInvoked(TreeView sender, TreeViewItemInvokedEventArgs args)
         {
             var node = args.InvokedItem as TreeViewNode;

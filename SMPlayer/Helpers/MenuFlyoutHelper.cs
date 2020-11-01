@@ -681,7 +681,7 @@ namespace SMPlayer
             }
             return flyout;
         }
-        public static MenuFlyoutSubItem AppendRecentAddedItem(MenuFlyoutSubItem parent, object title, List<TimeLineMusic> songs, int limit)
+        public static MenuFlyoutSubItem AppendRecentAddedItem(MenuFlyoutSubItem parent, object title, List<Music> songs, int limit)
         {
             if (songs.Count > 0)
             {
@@ -691,7 +691,7 @@ namespace SMPlayer
                 };
                 recenItem.Click += (sender, args) =>
                 {
-                    MediaHelper.SetPlaylistAndPlay(songs.RandItems(limit).ToMusicList());
+                    MediaHelper.SetPlaylistAndPlay(songs.RandItems(limit));
                 };
                 parent.Items.Add(recenItem);
             }

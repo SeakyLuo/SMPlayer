@@ -50,23 +50,18 @@ namespace SMPlayer
 
         public void Setup(IEnumerable<string> collection)
         {
-            IsProcessing = true;
             Setup(collection.Select(i => new MusicPath(i)));
-            IsProcessing = false;
         }
 
-        public async void Setup(IEnumerable<IMusicable> collection)
+        public void Setup(IEnumerable<IMusicable> collection)
         {
             IsProcessing = true;
             Clear();
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            foreach (var item in collection)
             {
-                foreach (var item in collection)
-                {
-                    Music music = item.ToMusic();
-                    AddMusic(music);
-                }
-            });
+                Music music = item.ToMusic();
+                AddMusic(music);
+            }      
             IsProcessing = false;
         }
         public void AddMusic(Music music)
@@ -148,9 +143,12 @@ namespace SMPlayer
             });
         }
 
-        private void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        private async void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            (sender.DataContext as GridMusicView)?.SetThumbnail();
+            if (sender.IsLoaded && sender.DataContext is GridMusicView music)
+            {
+                await music.SetThumbnail();
+            }
         }
 
         void IMenuFlyoutItemClickListener.Favorite(object data) { }
