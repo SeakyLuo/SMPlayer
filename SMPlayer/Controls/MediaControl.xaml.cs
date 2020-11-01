@@ -732,12 +732,11 @@ namespace SMPlayer
             string text = Helper.Localize("Full Screen"), tooltip = Helper.Localize("Enter Full Screen Mode");
             MainMediaControlMoreFullScreenItem.Visibility = Visibility.Visible;
             MainMediaControlMoreExitFullScreenItem.Visibility = Visibility.Collapsed;
+            FullScreenItem.Visibility = Visibility.Visible;
+            ExitFullScreenItem.Visibility = Visibility.Collapsed;
             MainMoreFullScreenItem.Icon = FullScreenIcon;
             MainMoreFullScreenItem.Text = text;
             MainMoreFullScreenItem.SetToolTip(tooltip, false);
-            FullScreenItem.Visibility = Visibility.Visible;
-            ExitFullScreenItem.Visibility = Visibility.Collapsed;
-            FullScreenItem.SetToolTip(tooltip, false);
             FullScreenButton.Content = "\uE740";
             FullScreenButton.SetToolTip(tooltip, false);
         }
@@ -747,12 +746,11 @@ namespace SMPlayer
             string text = Helper.Localize("Exit Full Screen"), tooltip = Helper.Localize("Exit Full Screen Mode");
             MainMediaControlMoreFullScreenItem.Visibility = Visibility.Collapsed;
             MainMediaControlMoreExitFullScreenItem.Visibility = Visibility.Visible;
-            MainMoreFullScreenItem.Icon = BackToWindowIcon;
-            MainMoreFullScreenItem.Text = text;
-            MainMoreFullScreenItem.SetToolTip(tooltip, false); 
             FullScreenItem.Visibility = Visibility.Collapsed;
             ExitFullScreenItem.Visibility = Visibility.Visible;
-            FullScreenItem.SetToolTip(tooltip, false);
+            MainMoreFullScreenItem.Icon = BackToWindowIcon;
+            MainMoreFullScreenItem.Text = text;
+            MainMoreFullScreenItem.SetToolTip(tooltip, false);
             FullScreenButton.Content = "\uE73F";
             FullScreenButton.SetToolTip(tooltip, false);
         }
