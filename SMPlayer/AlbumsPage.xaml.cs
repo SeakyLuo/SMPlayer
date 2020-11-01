@@ -109,19 +109,6 @@ namespace SMPlayer
             Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
         }
 
-        private async void DropShadowControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
-        {
-            if (sender.IsLoaded && sender.DataContext is AlbumView album && !album.ThumbnailLoaded)
-            {
-                string before = album.ThumbnailSource;
-                if (album.Songs == null)
-                    album.SetSongs(AlbumPage.SearchAlbumSongs(album.Name, album.Artist));
-                await album.SetThumbnailAsync();
-                if (album.ThumbnailSource != before && albumInfoList.FirstOrDefault(a => a.Equals(album)) is AlbumInfo albumInfo)
-                    albumInfo.Thumbnail = album.ThumbnailSource;
-            }
-        }
-
         private void MenuFlyout_Opening(object sender, object e)
         {
             MenuFlyout flyout = sender as MenuFlyout;
@@ -148,6 +135,18 @@ namespace SMPlayer
             if (Albums.FirstOrDefault(a => a.Name.Equals(music.Album)) is AlbumView albumView && albumView.Songs.Count == 1)
                 albumView.Thumbnail = image ?? MusicImage.DefaultImage;
 
+        }
+
+        private async void DropShadowControl_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
+        {
+            AlbumView album = sender.DataContext as AlbumView;
+            if (album == null || album.ThumbnailLoaded || args.BringIntoViewDistanceY >= sender.ActualHeight) return;
+            string before = album.ThumbnailSource;
+            if (album.Songs == null)
+                album.SetSongs(AlbumPage.SearchAlbumSongs(album.Name, album.Artist));
+            await album.SetThumbnailAsync();
+            if (album.ThumbnailSource != before && albumInfoList.FirstOrDefault(a => a.Equals(album)) is AlbumInfo albumInfo)
+                albumInfo.Thumbnail = album.ThumbnailSource;
         }
     }
 }

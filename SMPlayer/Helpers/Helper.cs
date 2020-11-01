@@ -82,7 +82,7 @@ namespace SMPlayer
         public static void Timer(Action action, string funcName = null)
         {
             DateTime start = DateTime.Now;
-            action.Invoke(); ;
+            action.Invoke();
             Debug.WriteLine("Time of " + (funcName ?? action.Method.Name) + ": " + (DateTime.Now - start).TotalMilliseconds);
         }
 

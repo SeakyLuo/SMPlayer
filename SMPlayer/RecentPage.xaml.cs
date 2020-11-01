@@ -38,10 +38,6 @@ namespace SMPlayer
             Settings.settings.RecentPlayed.CollectionChanged += (sender, args) => PlayedModifed = true;
             Settings.settings.RecentSearches.CollectionChanged += (sender, args) => SearchedModified = true;
             InitListeners.Add(this);
-            if (AddedTimeLine != null && AddedTimeLine.Count == 0 && Settings.settings.RecentPlayed.Count > 0)
-                RecentPivot.SelectedItem = RecentPlayedItem;
-            else
-                RecentPivot.SelectedItem = RecentAddedItem;
         }
 
         public static async Task Init()
@@ -70,12 +66,9 @@ namespace SMPlayer
         void IInitListener.Inited()
         {
             AddedTimeLine.CollectionChanged += AddedTimeLineChanged;
-            if (IsLoaded)
+            if (true)
             {
-                if (RecentPivot.SelectedItem == RecentAddedItem)
-                    SetupAdded(AddedTimeLine);
-                else if (RecentPivot.SelectedItem == RecentPlayedItem)
-                    SetupPlayed(Settings.settings.RecentPlayed);
+                SetupAdded(AddedTimeLine);
             }
         }
 
@@ -277,6 +270,11 @@ namespace SMPlayer
             {
                 SetupSearched(recentSearches);
             }
+        }
+
+        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+            //SetupAdded(AddedTimeLine);
         }
 
         private void ClearSearchHistoryAppButton_Click(object sender, RoutedEventArgs e)

@@ -319,10 +319,12 @@ namespace SMPlayer
             }
         }
 
-        private async void AlbumCover_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        private async void AlbumCover_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
         {
-            if (sender.DataContext is AlbumView album)
-                await album.SetThumbnailAsync();
+            if (args.BringIntoViewDistanceY < sender.ActualHeight)
+            {
+                await (sender.DataContext as AlbumView).SetThumbnailAsync();
+            }
         }
 
         void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar)

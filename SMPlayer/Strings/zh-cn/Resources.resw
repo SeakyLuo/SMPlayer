@@ -327,6 +327,18 @@
   <data name="Exit Full Screen Mode" xml:space="preserve">
     <value>退出全屏模式</value>
   </data>
+  <data name="ExitFullScreenconTextButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>退出全屏模式</value>
+  </data>
+  <data name="ExitFullScreenIconTextButton.Label" xml:space="preserve">
+    <value>退出全屏</value>
+  </data>
+  <data name="ExitFullScreenItem.Text" xml:space="preserve">
+    <value>退出全屏</value>
+  </data>
+  <data name="ExitFullScreenItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>退出全屏模式</value>
+  </data>
   <data name="ExitMiniModeItem.Label" xml:space="preserve">
     <value>退出迷你模式</value>
   </data>
@@ -356,6 +368,18 @@
   </data>
   <data name="Full Screen" xml:space="preserve">
     <value>全屏模式</value>
+  </data>
+  <data name="FullScreenconTextButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>进入全屏模式</value>
+  </data>
+  <data name="FullScreenIconTextButton.Label" xml:space="preserve">
+    <value>全屏模式</value>
+  </data>
+  <data name="FullScreenItem.Text" xml:space="preserve">
+    <value>全屏模式</value>
+  </data>
+  <data name="FullScreenItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>进入全屏模式</value>
   </data>
   <data name="GenreTextBlock.Text" xml:space="preserve">
     <value>风格</value>

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
@@ -143,14 +144,6 @@ namespace SMPlayer
             });
         }
 
-        private async void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
-        {
-            if (sender.IsLoaded && sender.DataContext is GridMusicView music)
-            {
-                await music.SetThumbnail();
-            }
-        }
-
         void IMenuFlyoutItemClickListener.Favorite(object data) { }
 
         void IMenuFlyoutItemClickListener.Delete(Music music)
@@ -178,6 +171,14 @@ namespace SMPlayer
             GridMusicCollection.RemoveAt(removedItemIndex);
             foreach (var listener in RemoveListeners) listener.MusicRemoved(removedItemIndex, music, MusicCollection);
             return removedItemIndex > -1;
+        }
+
+        private async void UserControl_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
+        {
+            if (args.BringIntoViewDistanceY < sender.ActualHeight)
+            {
+                await (sender.DataContext as GridMusicView).SetThumbnailAsync();
+            }
         }
     }
 

@@ -4,6 +4,7 @@ using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
@@ -21,7 +22,7 @@ namespace SMPlayer
     public sealed partial class PlaylistsPage : Page, IRenameActionListener
     {
         public static ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
-
+        public Playlist CurrentPlaylist { get => PlaylistTabView.SelectedItem as Playlist; }
         private HeaderedPlaylistControl PlaylistController;
         private RenameDialog dialog;
         public PlaylistsPage()
@@ -55,9 +56,16 @@ namespace SMPlayer
             PlaylistTabView.SelectedItem = Playlists.FirstOrDefault(p => p.Name == target);
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             BringSelectedTabIntoView();
+            foreach (var playlist in Playlists)
+            {
+                if (IsLoaded && playlist.Name != Settings.settings.LastPlaylist)
+                {
+                    await playlist.SetDisplayItemAsync();
+                }
+            }
         }
 
         private async void PlaylistTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)

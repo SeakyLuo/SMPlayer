@@ -159,7 +159,7 @@
                                             Height="80"
                                             Margin="10"
                                             RelativePanel.AlignLeftWithPanel="True"
-                                            DataContextChanged="AlbumCover_DataContextChanged"
+                                            EffectiveViewportChanged="AlbumCover_EffectiveViewportChanged"
                                             Source="{x:Bind Thumbnail, Mode=OneWay}" />
                                         <StackPanel
                                             Margin="0,10"

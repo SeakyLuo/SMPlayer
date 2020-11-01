@@ -31,9 +31,7 @@
     <Grid>
         <Grid
             x:Name="MainMediaControlGrid"
-            Grid.Row="1"
-            Background="{StaticResource DefaultMediaControlGridBackground}"
-            Visibility="Visible">
+            Background="{StaticResource DefaultMediaControlGridBackground}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -223,12 +221,22 @@
                                 </local:IconTextButton>
                                 <local:IconTextButton
                                     x:Name="MainMediaControlMoreFullScreenItem"
+                                    x:Uid="FullScreenIconTextButton"
                                     Label="Full Screen"
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
-                                    Tapped="MoreFullScreenItem_Tapped"
-                                    ToolTipService.ToolTip="Enter Full Screen Mode">
+                                    Tapped="MoreFullScreenItem_Tapped">
                                     <local:IconTextButton.Icon>
                                         <SymbolIcon Symbol="FullScreen" />
+                                    </local:IconTextButton.Icon>
+                                </local:IconTextButton>
+                                <local:IconTextButton
+                                    x:Name="MainMediaControlMoreExitFullScreenItem"
+                                    x:Uid="ExitFullScreenIconTextButton"
+                                    Label="Exit Full Screen"
+                                    Style="{StaticResource MediaControlIconTextButtonStyle}"
+                                    Tapped="MoreFullScreenItem_Tapped">
+                                    <local:IconTextButton.Icon>
+                                        <SymbolIcon Symbol="BackToWindow" />
                                     </local:IconTextButton.Icon>
                                 </local:IconTextButton>
                                 <local:IconTextButton
@@ -618,8 +626,15 @@
                                     </MenuFlyoutItem>
                                     <MenuFlyoutItem
                                         x:Name="FullScreenItem"
+                                        x:Uid="FullScreenItem"
                                         Click="FullScreenButton_Click"
                                         Icon="Fullscreen"
+                                        Visibility="Collapsed" />
+                                    <MenuFlyoutItem
+                                        x:Name="ExitFullScreenItem"
+                                        x:Uid="ExitFullScreenItem"
+                                        Click="ExitFullScreenItem_Click"
+                                        Icon="BackToWindow"
                                         Visibility="Collapsed" />
                                     <MenuFlyoutItem
                                         x:Name="MiniModeItem"

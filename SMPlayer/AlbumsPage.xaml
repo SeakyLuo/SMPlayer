@@ -34,7 +34,7 @@
                 <DataTemplate x:DataType="data:AlbumView">
                     <local:DropShadowControl
                         DataContext="{Binding}"
-                        DataContextChanged="DropShadowControl_DataContextChanged"
+                        EffectiveViewportChanged="DropShadowControl_EffectiveViewportChanged"
                         MenuFlyoutOpeningAction="MenuFlyout_Opening" />
                 </DataTemplate>
             </GridView.ItemTemplate>

@@ -35,8 +35,6 @@ namespace SMPlayer
                 {
                     case MediaControlMode.Main:
                         MainMediaControlGrid.Visibility = Visibility.Visible;
-                        FullMediaControlGrid.Visibility = Visibility.Collapsed;
-                        MiniMediaControlGrid.Visibility = Visibility.Collapsed;
                         break;
                     case MediaControlMode.Full:
                         MainMediaControlGrid.Visibility = Visibility.Collapsed;
@@ -732,14 +730,13 @@ namespace SMPlayer
         private void SetFullScreen()
         {
             string text = Helper.Localize("Full Screen"), tooltip = Helper.Localize("Enter Full Screen Mode");
-            MainMediaControlMoreFullScreenItem.Icon = FullScreenIcon;
-            MainMediaControlMoreFullScreenItem.Label = text;
-            MainMediaControlMoreFullScreenItem.SetToolTip(tooltip, false);
+            MainMediaControlMoreFullScreenItem.Visibility = Visibility.Visible;
+            MainMediaControlMoreExitFullScreenItem.Visibility = Visibility.Collapsed;
             MainMoreFullScreenItem.Icon = FullScreenIcon;
             MainMoreFullScreenItem.Text = text;
             MainMoreFullScreenItem.SetToolTip(tooltip, false);
-            FullScreenItem.Icon = new SymbolIcon(Symbol.FullScreen);
-            FullScreenItem.Text = text;
+            FullScreenItem.Visibility = Visibility.Visible;
+            ExitFullScreenItem.Visibility = Visibility.Collapsed;
             FullScreenItem.SetToolTip(tooltip, false);
             FullScreenButton.Content = "\uE740";
             FullScreenButton.SetToolTip(tooltip, false);
@@ -748,14 +745,13 @@ namespace SMPlayer
         private void SetExitFullScreen()
         {
             string text = Helper.Localize("Exit Full Screen"), tooltip = Helper.Localize("Exit Full Screen Mode");
-            MainMediaControlMoreFullScreenItem.Icon = BackToWindowIcon;
-            MainMediaControlMoreFullScreenItem.Label = text;
-            MainMediaControlMoreFullScreenItem.SetToolTip(tooltip, false);
+            MainMediaControlMoreFullScreenItem.Visibility = Visibility.Collapsed;
+            MainMediaControlMoreExitFullScreenItem.Visibility = Visibility.Visible;
             MainMoreFullScreenItem.Icon = BackToWindowIcon;
             MainMoreFullScreenItem.Text = text;
-            MainMoreFullScreenItem.SetToolTip(tooltip, false);
-            FullScreenItem.Icon = new SymbolIcon(Symbol.BackToWindow);
-            FullScreenItem.Text = text;
+            MainMoreFullScreenItem.SetToolTip(tooltip, false); 
+            FullScreenItem.Visibility = Visibility.Collapsed;
+            ExitFullScreenItem.Visibility = Visibility.Visible;
             FullScreenItem.SetToolTip(tooltip, false);
             FullScreenButton.Content = "\uE73F";
             FullScreenButton.SetToolTip(tooltip, false);
@@ -990,6 +986,11 @@ namespace SMPlayer
         {
             MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.AllSongs.RandItems(100));
             MiniMoreFlyout.Hide();
+        }
+
+        private void ExitFullScreenItem_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         public void MusicLiked(Music music, bool isFavorite)

@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    DataContextChanged="UserControl_DataContextChanged"
+    EffectiveViewportChanged="UserControl_EffectiveViewportChanged"
     PointerEntered="GridViewItem_PointerEntered"
     PointerExited="GridViewItem_PointerExited"
     mc:Ignorable="d">

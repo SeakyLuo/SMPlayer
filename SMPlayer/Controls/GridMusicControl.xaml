@@ -29,7 +29,7 @@
         <GridView.ItemTemplate>
             <DataTemplate x:DataType="data:GridMusicView">
                 <UserControl
-                    DataContextChanged="UserControl_DataContextChanged"
+                    EffectiveViewportChanged="UserControl_EffectiveViewportChanged"
                     PointerEntered="GridViewItem_PointerEntered"
                     PointerExited="GridViewItem_PointerExited">
                     <Grid Margin="3" Background="Transparent">
