@@ -12,15 +12,20 @@ namespace SMPlayer.Helpers
     {
         private const string JsonFileName = "UpdateLogger";
         public static UpdateLog Log;
+        private static UpdateLog OriginalLog;
 
         public static async Task Init()
         {
-            Log = JsonFileHelper.Convert<UpdateLog>(await JsonFileHelper.ReadAsync(JsonFileName)) ?? new UpdateLog();
+            OriginalLog = JsonFileHelper.Convert<UpdateLog>(await JsonFileHelper.ReadAsync(JsonFileName)) ?? new UpdateLog();
+            Log = OriginalLog.Copy();
         }
 
         public static void Save()
         {
-            JsonFileHelper.SaveAsync(JsonFileName, Log);
+            if (!OriginalLog.AllUpdated)
+            {
+                JsonFileHelper.SaveAsync(JsonFileName, Log);
+            }
         }
 
         public static async Task Update()
@@ -55,6 +60,15 @@ namespace SMPlayer.Helpers
 
     public class UpdateLog
     {
+        public bool AllUpdated { get => DateAdded; }
         public bool DateAdded { get; set; } = false;
+
+        public UpdateLog Copy()
+        {
+            return new UpdateLog
+            {
+                DateAdded = this.DateAdded
+            };
+        }
     }
 }

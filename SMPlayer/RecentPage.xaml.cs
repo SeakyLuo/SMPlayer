@@ -27,7 +27,7 @@ namespace SMPlayer
         private static bool AddedModified = true, PlayedModifed = true, SearchedModified = true;
         private Dialogs.RemoveDialog dialog;
         private ObservableCollection<string> recentSearches { get => Settings.settings.RecentSearches; }
-        private readonly FullyObservableCollection<MusicTimeLine> RecentAddedTimeLineList = new FullyObservableCollection<MusicTimeLine>();
+        private readonly ObservableCollection<MusicTimeLine> RecentAddedTimeLineList = new ObservableCollection<MusicTimeLine>();
         private static readonly List<IInitListener> InitListeners = new List<IInitListener>();
         private Dictionary<object, GridMusicControl> GridMusicControlDict = new Dictionary<object, GridMusicControl>();
 
