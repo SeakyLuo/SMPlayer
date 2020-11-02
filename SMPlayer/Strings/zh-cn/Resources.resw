@@ -327,6 +327,9 @@
   <data name="Exit Full Screen Mode" xml:space="preserve">
     <value>退出全屏模式</value>
   </data>
+  <data name="ExitFullScreenButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>退出全屏模式</value>
+  </data>
   <data name="ExitFullScreenIconTextButton.Label" xml:space="preserve">
     <value>退出全屏</value>
   </data>
@@ -368,6 +371,9 @@
   </data>
   <data name="Full Screen" xml:space="preserve">
     <value>全屏模式</value>
+  </data>
+  <data name="FullScreenButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>进入全屏模式</value>
   </data>
   <data name="FullScreenIconTextButton.Label" xml:space="preserve">
     <value>全屏模式</value>
@@ -538,6 +544,9 @@
     <value>通知</value>
   </data>
   <data name="Now Playing" xml:space="preserve">
+    <value>正在播放</value>
+  </data>
+  <data name="NowPlaying" xml:space="preserve">
     <value>正在播放</value>
   </data>
   <data name="NowPlayingItem.Content" xml:space="preserve">

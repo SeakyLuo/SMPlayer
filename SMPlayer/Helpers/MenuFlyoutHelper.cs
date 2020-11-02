@@ -556,6 +556,16 @@ namespace SMPlayer
         public static MenuFlyout GetShuffleMenu(int limit = 100)
         {
             var flyout = new MenuFlyout();
+            var nowPlaying = new MenuFlyoutItem()
+            {
+                Text = Helper.Localize("NowPlaying")
+            };
+            nowPlaying.Click += (sender, args) =>
+            {
+                MediaHelper.ShuffleAndPlay();
+            };
+            flyout.Items.Add(nowPlaying);
+            flyout.Items.Add(new MenuFlyoutSeparator());
             var musicLibrary = new MenuFlyoutItem()
             {
                 Text = Helper.Localize("Music Library")

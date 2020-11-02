@@ -330,6 +330,9 @@
   <data name="Exit Full Screen Mode" xml:space="preserve">
     <value>Exit Full Screen Mode</value>
   </data>
+  <data name="ExitFullScreenButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Exit Full Screen Mode</value>
+  </data>
   <data name="ExitFullScreenIconTextButton.Label" xml:space="preserve">
     <value>Exit Full Screen</value>
   </data>
@@ -371,6 +374,9 @@
   </data>
   <data name="Full Screen" xml:space="preserve">
     <value>Full Screen</value>
+  </data>
+  <data name="FullScreenButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Enter Full Screen Mode</value>
   </data>
   <data name="FullScreenIconTextButton.Label" xml:space="preserve">
     <value>Full Screen</value>
@@ -541,6 +547,9 @@
     <value>Notification</value>
   </data>
   <data name="Now Playing" xml:space="preserve">
+    <value>Now Playing</value>
+  </data>
+  <data name="NowPlaying" xml:space="preserve">
     <value>Now Playing</value>
   </data>
   <data name="NowPlayingItem.Content" xml:space="preserve">

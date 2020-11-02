@@ -223,6 +223,11 @@ namespace SMPlayer
             Play();
         }
 
+        public static void ShuffleAndPlay()
+        {
+            ShuffleAndPlay(CurrentPlaylist);
+        }
+
         public static void ShuffleOthers()
         {
             if (CurrentPlaylist.Count == 0) return;

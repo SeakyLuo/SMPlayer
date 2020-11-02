@@ -66,7 +66,7 @@ namespace SMPlayer
         void IInitListener.Inited()
         {
             AddedTimeLine.CollectionChanged += AddedTimeLineChanged;
-            if (true)
+            if (IsLoaded)
             {
                 SetupAdded(AddedTimeLine);
             }
@@ -257,7 +257,7 @@ namespace SMPlayer
 
         private void RecentPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!Inited) return;
+            if (!Inited || !IsLoaded) return;
             if (RecentPivot.SelectedItem == RecentAddedItem)
             {
                 SetupAdded(AddedTimeLine);
@@ -272,9 +272,9 @@ namespace SMPlayer
             }
         }
 
-        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        private void RecentAddedItem_Loaded(object sender, RoutedEventArgs e)
         {
-            //SetupAdded(AddedTimeLine);
+            SetupAdded(AddedTimeLine);
         }
 
         private void ClearSearchHistoryAppButton_Click(object sender, RoutedEventArgs e)

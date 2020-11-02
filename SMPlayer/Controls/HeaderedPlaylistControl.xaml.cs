@@ -125,7 +125,7 @@ namespace SMPlayer
         {
             var helper = new MenuFlyoutHelper()
             {
-                Data = CurrentPlaylist,
+                Data = CurrentPlaylist.Songs,
                 DefaultPlaylistName = getDefaultPlaylistNameForAddToMenu(),
                 CurrentPlaylistName = CurrentPlaylist.Name
             };

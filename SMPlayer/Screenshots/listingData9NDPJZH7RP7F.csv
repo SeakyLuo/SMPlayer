@@ -1,6 +1,6 @@
 Field,ID,Type (类型),default,zh-cn,en,en-us
 Description,2,文本,,一个简单的管理本地音乐的音乐播放器，用户界面基于Groove Music。这个App我只是写着玩给自己用，不过你一定要用我也不勉强哈哈。,A Simple Music Player that manages local music files based on the UI of Groove Music.,"A Simple Music Player that manages local music files based on the UI of Groove Music. And I just write this app for fun and for myself. If you insist on using it, don't blame me on bugs."
-ReleaseNotes,3,文本,,0. 由于“简音播放器”会导致上传失败，暂时更名为SMPlayer   1. 支持多选   2. 迷你模式支持随机播放   3. 优化了最近添加,1. Multi-select support   2. Mini mode supports random play.,1. Multi-select support   2. Mini mode supports random play.   3. Improved Recent Played
+ReleaseNotes,3,文本,,1. 支持多选   2. 迷你模式支持随机播放   3. 优化了最近添加   4. 支持MP3文件用简音播放器打开,1. Multi-select support   2. Mini mode supports random play.   3. Improved Recent Played   4. Supports open mp3 files with SMPlayer,1. Multi-select support   2. Mini mode supports random play.   3. Improved Recent Played   4. Supports open mp3 files with SMPlayer
 Title,4,文本,,简音播放器,SMPlayer,SMPlayer
 ShortTitle,5,文本,,简音播放器,SMPlayer,SMPlayer
 SortTitle,6,文本,,简音播放器,SMPlayer,SMPlayer
@@ -104,9 +104,9 @@ OptionalPromo358x358,611,相对路径(或指向合作伙伴中心文件的 URL),,,,
 OptionalPromo1000x800,612,相对路径(或指向合作伙伴中心文件的 URL),,,,
 OptionalPromo414x180,613,相对路径(或指向合作伙伴中心文件的 URL),,,,
 Feature1,700,文本,,使用简单，仅需在设置页面中选择音乐文件夹即可使用！,Simple to Use. Just set path in the Settings page then you are all set!,Simple to use. Just set path in the settings page then you are all set!
-Feature2,701,文本,,轻松管理本地音乐,Adaptive to different resolutions.,Easy to manage local music files.
-Feature3,702,文本,,适配不同屏幕分辨率,Full of bugs!,Adaptive to different screen resolutions.
-Feature4,703,文本,,充满bug！,,Full of bugs!
+Feature2,701,文本,,轻松管理本地音乐,Easy to manage local music files.,Easy to manage local music files.
+Feature3,702,文本,,适配不同屏幕分辨率,Adaptive to different screen resolutions.,Adaptive to different screen resolutions.
+Feature4,703,文本,,充满bug！,Full of bugs!,Full of bugs!
 Feature5,704,文本,,,,
 Feature6,705,文本,,,,
 Feature7,706,文本,,,,
@@ -148,7 +148,7 @@ RecommendedHardwareReq11,860,文本,,,,
 SearchTerm1,900,文本,,音乐,Music,Music
 SearchTerm2,901,文本,,播放器,Player,Player
 SearchTerm3,902,文本,,简音,SM,SM
-SearchTerm4,903,文本,,,,
+SearchTerm4,903,文本,,简音播放器,SMPLayer,SMplayer
 SearchTerm5,904,文本,,,,
 SearchTerm6,905,文本,,,,
 SearchTerm7,906,文本,,,,

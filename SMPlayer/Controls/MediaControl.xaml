@@ -9,6 +9,7 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
+        <x:Double x:Key="MinimalLayoutWidth">640</x:Double>
         <AcrylicBrush
             x:Key="DefaultMediaControlGridBackground"
             BackgroundSource="Backdrop"
@@ -375,9 +376,17 @@
                         <MenuFlyout Opening="MainMoreMenuFlyout_Opening">
                             <MenuFlyoutItem
                                 x:Name="MainMoreFullScreenItem"
+                                x:Uid="FullScreenItem"
                                 Click="FullScreenButton_Click"
                                 Icon="Fullscreen"
                                 Text="Full Screen" />
+                            <MenuFlyoutItem
+                                x:Name="MainMoreExitFullScreenItem"
+                                x:Uid="ExitFullScreenItem"
+                                Click="ExitFullScreenButton_Click"
+                                Icon="BackToWindow"
+                                Text="Exit Full Screen"
+                                Visibility="Collapsed"/>
                             <MenuFlyoutItem
                                 x:Name="MainMiniModeItem"
                                 x:Uid="MiniModeMenuItem"
@@ -500,8 +509,7 @@
                             x:Uid="PrevButton"
                             Click="PrevButton_Click"
                             Content="&#xE892;"
-                            Style="{StaticResource DarkMediaControlButtonStyle}"
-                            ToolTipService.ToolTip="Previous">
+                            Style="{StaticResource DarkMediaControlButtonStyle}">
                             <Button.KeyboardAccelerators>
                                 <KeyboardAccelerator Key="Left" Modifiers="Control" />
                             </Button.KeyboardAccelerators>
@@ -525,8 +533,7 @@
                             x:Uid="NextButton"
                             Click="NextButton_Click"
                             Content="&#xE893;"
-                            Style="{StaticResource DarkMediaControlButtonStyle}"
-                            ToolTipService.ToolTip="Next">
+                            Style="{StaticResource DarkMediaControlButtonStyle}">
                             <Button.KeyboardAccelerators>
                                 <KeyboardAccelerator Key="Right" Modifiers="Control" />
                             </Button.KeyboardAccelerators>
@@ -633,7 +640,7 @@
                                     <MenuFlyoutItem
                                         x:Name="ExitFullScreenItem"
                                         x:Uid="ExitFullScreenItem"
-                                        Click="ExitFullScreenItem_Click"
+                                        Click="ExitFullScreenButton_Click"
                                         Icon="BackToWindow"
                                         Visibility="Collapsed" />
                                     <MenuFlyoutItem
@@ -682,7 +689,6 @@
                             Click="PlaylistButton_Click"
                             Content="&#xEA37;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
-                            ToolTipService.ToolTip="Now Playing Playlist"
                             Visibility="Visible" />
                         <Button
                             x:Name="MusicInfoButton"
@@ -690,7 +696,6 @@
                             Click="MusicInfoButton_Click"
                             Content="&#xE90B;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
-                            ToolTipService.ToolTip="Show Music Info"
                             Visibility="Visible" />
                         <Button
                             x:Name="LyricsButton"
@@ -698,22 +703,27 @@
                             Click="LyricsButton_Click"
                             Content="&#xEC42;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
-                            ToolTipService.ToolTip="Show Lyrics"
                             Visibility="Visible" />
                         <Button
                             x:Name="FullScreenButton"
+                            x:Uid="FullScreenButton"
                             Click="FullScreenButton_Click"
                             Content="&#xE740;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
-                            ToolTipService.ToolTip="Full Screen"
                             Visibility="Visible" />
+                        <Button
+                            x:Name="ExitFullScreenButton"
+                            x:Uid="ExitFullScreenButton"
+                            Click="ExitFullScreenButton_Click"
+                            Content="&#xE73F;"
+                            Style="{StaticResource DarkMediaControlButtonStyle}"
+                            Visibility="Collapsed" />
                         <Button
                             x:Name="MiniModeButton"
                             x:Uid="MiniModeButton"
                             Click="MiniModeButton_Click"
                             Content="&#xE744;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
-                            ToolTipService.ToolTip="Enter Mini Mode"
                             Visibility="Visible" />
                     </StackPanel>
                 </RelativePanel>
@@ -966,7 +976,7 @@
                 </VisualState>
                 <VisualState x:Name="Width640">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="640" />
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource MinimalLayoutWidth}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <!--  Main  -->
