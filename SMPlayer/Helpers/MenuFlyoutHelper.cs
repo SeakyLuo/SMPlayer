@@ -626,22 +626,16 @@ namespace SMPlayer
                 };
                 flyout.Items.Add(localFolder);
             }
-            if (RecentPage.Inited && RecentPage.AddedTimeLine?.Count > 0)
+            if (RecentPage.RecentAdded?.Count > 0)
             {
-                var recentAdded = new MenuFlyoutSubItem()
+                var recentAdded = new MenuFlyoutItem()
                 {
                     Text = Helper.Localize("Recent Added")
                 };
-                AppendRecentAddedItem(recentAdded, "Today", RecentPage.AddedTimeLine.Today, limit);
-                AppendRecentAddedItem(recentAdded, "ThisWeek", RecentPage.AddedTimeLine.ThisWeek, limit);
-                AppendRecentAddedItem(recentAdded, "ThisMonth", RecentPage.AddedTimeLine.ThisMonth, limit);
-                AppendRecentAddedItem(recentAdded, "Recent3Months", RecentPage.AddedTimeLine.Recent3Months, limit);
-                AppendRecentAddedItem(recentAdded, "Recent6Months", RecentPage.AddedTimeLine.Recent6Months, limit);
-                AppendRecentAddedItem(recentAdded, "ThisYear", RecentPage.AddedTimeLine.ThisYear, limit);
-                foreach (var pair in RecentPage.AddedTimeLine.Years)
+                recentAdded.Click += (sender, args) =>
                 {
-                    AppendRecentAddedItem(recentAdded, pair.Key, pair.Value, limit);
-                }
+                    MediaHelper.SetMusicAndPlay(RecentPage.RecentAdded.TimeLine.RandItems(limit));
+                };
                 flyout.Items.Add(recentAdded);
             }
             if (Settings.settings.RecentPlayed.Count > 0)

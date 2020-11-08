@@ -21,34 +21,42 @@
                 x:Uid="RecentAddedItem"
                 Header="Recently Added">
                 <Grid Loaded="RecentAddedItem_Loaded">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <CommandBar
+                        Background="Transparent"
+                        DefaultLabelPosition="Right"
+                        IsDynamicOverflowEnabled="False"
+                        OverflowButtonVisibility="Collapsed">
+                        <CommandBar.Content>
+                            <TextBlock 
+                                x:Name="RecentAddedHeader"
+                                FontSize="26"
+                                FontWeight="SemiBold" 
+                                VerticalAlignment="Center" />
+                        </CommandBar.Content>
+                        <AppBarButton
+                            x:Name="RecentAddedMultiSelectAppButton"
+                            x:Uid="MultiSelectAppButton"
+                            Click="RecentAddedMultiSelectAppButton_Click"
+                            Label="Multi Select">
+                            <AppBarButton.Icon>
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE762;" />
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+                    </CommandBar>
                     <ProgressRing 
                         x:Name="RecentAddedProgressRing" 
                         IsActive="False"
+                        Grid.Row="1"
                         Width="100"
                         Height="100"/>
-                    <ListView
-                        x:Name="RecentAddedTimeLine"
-                        ItemsSource="{x:Bind RecentAddedTimeLineList}"
-                        ItemContainerStyle="{StaticResource StretchListViewItemStyle}"
-                        Margin="0,5,0,0"
-                        SelectionMode="None">
-                        <ListView.ItemTemplate>
-                            <DataTemplate x:DataType="data:MusicTimeLine">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock
-                                        x:Name="RecentAddedListViewHeaderTextBlock"
-                                        FontSize="24"
-                                        FontWeight="SemiBold"
-                                        Text="{x:Bind Title}" />
-                                    <local:GridMusicControl
-                                        x:Name="AddedMusicView"
-                                        Loaded="AddedMusicView_Loaded"
-                                        Grid.Row="1"
-                                        Margin="0,5,0,0" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                    <local:GridMusicControl
+                        x:Name="AddedMusicView"
+                        Grid.Row="1"
+                        Margin="0,5,0,0" />
                 </Grid>
             </PivotItem>
             <PivotItem

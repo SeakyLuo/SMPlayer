@@ -23,10 +23,6 @@ namespace SMPlayer.Helpers
         public static void Save()
         {
             JsonFileHelper.SaveAsync(JsonFileName, Log);
-            //if (!OriginalLog.AllUpdated)
-            //{
-            //    JsonFileHelper.SaveAsync(JsonFileName, Log);
-            //}
         }
 
         public static async Task Update()

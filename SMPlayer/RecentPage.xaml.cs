@@ -23,98 +23,61 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class RecentPage : Page, IInitListener, IMultiSelectListener, IMenuFlyoutItemClickListener, IMenuFlyoutHelperBuildListener
     {
+        public static RecentTimeLine RecentAdded;
         private const string JsonFileName = "RecentAddedTimeLine";
-        public static bool Inited { get; private set; } = false;
-        public static RecentTimeLine AddedTimeLine;
         private static bool AddedModified = true, PlayedModifed = true, SearchedModified = true;
         private ObservableCollection<string> recentSearches { get => Settings.settings.RecentSearches; }
-        private readonly ObservableCollection<MusicTimeLine> RecentAddedTimeLineList = new ObservableCollection<MusicTimeLine>();
-        private static readonly List<IInitListener> InitListeners = new List<IInitListener>();
-        private Dictionary<object, GridMusicControl> GridMusicControlDict = new Dictionary<object, GridMusicControl>();
         private RemoveDialog recentPlayedRemoveDialog, recentSearchesRemoveDialog;
+        private object CurrentCategory;
+        private static List<IInitListener> InitListeners = new List<IInitListener>();
 
         public RecentPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            if (RecentAdded == null)
+            {
+                InitListeners.Add(this);
+            }
+            else
+            {
+                Inited();
+            }
             Settings.settings.RecentPlayed.CollectionChanged += (sender, args) => PlayedModifed = true;
             Settings.settings.RecentSearches.CollectionChanged += (sender, args) => SearchedModified = true;
+            AddedMusicView.TopItemEffectiveViewportChanged += (sender, args) =>
+            {
+                if (sender.DataContext is GridMusicView music)
+                {
+                    object category = RecentTimeLine.Categorize(music.Source.DateAdded);
+                    if (category != CurrentCategory)
+                    {
+                        RecentAddedHeader.Text = Helper.LocalizeMessage(category.ToString());
+                    }
+                }
+            };
             PlayedMusicView.MultiSelectListener = this;
             PlayedMusicView.MenuFlyoutHelperBuildListener = this;
             PlayedMusicView.MenuFlyoutOpeningOption = new MenuFlyoutOption()
             {
                 ShowRemove = true
             };
-            InitListeners.Add(this);
+        }
+
+        public void Inited()
+        {
+            RecentAdded.CollectionChanged += () => AddedModified = true;
         }
 
         public static async Task Init()
         {
-            foreach (var listener in InitListeners) listener.BeforeInit();
             string json = await JsonFileHelper.ReadAsync(JsonFileName);
-            AddedTimeLine = RecentTimeLine.FromMusicList(JsonFileHelper.Convert<List<Music>>(json)) ??
-                            RecentTimeLine.FromMusicList(MusicLibraryPage.AllSongs);
-            Inited = true;
-            foreach (var listener in InitListeners) listener.Inited();
+            RecentAdded = RecentTimeLine.FromMusicList(JsonFileHelper.Convert<ObservableCollection<Music>>(json) ?? MusicLibraryPage.AllSongs);
         }
 
         public static void Save()
         {
-            if (AddedTimeLine.Count > 0)
-            {
-                JsonFileHelper.SaveAsync(JsonFileName, AddedTimeLine.All);
-            }
-        }
-
-        void IInitListener.BeforeInit()
-        {
-            RecentAddedProgressRing.IsActive = true;
-        }
-
-        void IInitListener.Inited()
-        {
-            AddedTimeLine.CollectionChanged += AddedTimeLineChanged;
-            if (IsLoaded)
-            {
-                SetupAdded(AddedTimeLine);
-            }
-        }
-
-        private void AddedTimeLineChanged(RecentTimeLineCategory category, Music music)
-        {
-            if (category == RecentTimeLineCategory.Today)
-            {
-                if (RecentAddedTimeLineList.Count == 0 || RecentAddedTimeLineList[0].Category != RecentTimeLineCategory.Today)
-                {
-                    AddTimeLine(RecentAddedTimeLineList, RecentTimeLineCategory.Today, AddedTimeLine.Today);
-                }
-                else
-                {
-                    GridMusicControlDict[RecentTimeLineCategory.Today].AddMusic(music);
-                }
-            }
-            if (category == RecentTimeLineCategory.Remove)
-            {
-                foreach (var control in GridMusicControlDict.Values)
-                {
-                    if (control.RemoveMusic(music))
-                    {
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                GridMusicControl control = category == RecentTimeLineCategory.Year ? GridMusicControlDict[music.DateAdded.Year] :
-                                                                                     GridMusicControlDict[category.ToString()];
-                control.AddMusic(music);
-            }
-        }
-
-        private static void AddTimeLine(ICollection<MusicTimeLine> timeLine, object title, List<Music> list)
-        {
-            if (list.Count == 0) return;
-            timeLine.Add(new MusicTimeLine(title, list));
+            JsonFileHelper.SaveAsync(JsonFileName, RecentAdded.TimeLine);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -126,7 +89,7 @@ namespace SMPlayer
         {
             if (RecentPivot.SelectedItem == RecentAddedItem)
             {
-                MainPage.Instance.SetMultiSelectListener(null);
+                MainPage.Instance.SetMultiSelectListener(AddedMusicView);
             }
             else if (RecentPivot.SelectedItem == RecentPlayedItem)
             {
@@ -138,23 +101,13 @@ namespace SMPlayer
             }
         }
 
-        public void SetupAdded(RecentTimeLine AddedTimeLine)
+        public void SetupAdded(IEnumerable<Music> list)
         {
             if (!AddedModified) return;
             RecentAddedProgressRing.IsActive = true;
             try
             {
-                //RecentAddedTimeLineList.Clear();
-                //AddTimeLine(RecentAddedTimeLineList, RecentTimeLineCategory.Today, AddedTimeLine.Today);
-                //AddTimeLine(RecentAddedTimeLineList, RecentTimeLineCategory.ThisWeek, AddedTimeLine.ThisWeek);
-                //AddTimeLine(RecentAddedTimeLineList, RecentTimeLineCategory.ThisMonth, AddedTimeLine.ThisMonth);
-                //AddTimeLine(RecentAddedTimeLineList, RecentTimeLineCategory.Recent3Months, AddedTimeLine.Recent3Months);
-                //AddTimeLine(RecentAddedTimeLineList, RecentTimeLineCategory.Recent6Months, AddedTimeLine.Recent6Months);
-                //AddTimeLine(RecentAddedTimeLineList, RecentTimeLineCategory.ThisYear, AddedTimeLine.ThisYear);
-                //foreach (var item in AddedTimeLine.Years)
-                //{
-                //    AddTimeLine(RecentAddedTimeLineList, item.Key, item.Value);
-                //}
+                AddedMusicView.Setup(list);
             }
             catch (InvalidOperationException)
             {
@@ -338,27 +291,12 @@ namespace SMPlayer
             AskRemoveSearchHistory(args.SwipeControl.DataContext.ToString());
         }
 
-        private void AddedMusicView_Loaded(object sender, RoutedEventArgs e)
-        {
-            GridMusicControl control = (GridMusicControl)sender;
-            MusicTimeLine data = (MusicTimeLine)control.DataContext;
-            if (control.GridMusicCollection.Count == 0)
-            {
-                control.GridItemClickedListener += (s, a) =>
-                {
-                    MediaHelper.SetPlaylistAndPlay(AddedTimeLine.All, (s as GridMusicView).Source);
-                };
-                control.Setup(data.Items);
-                GridMusicControlDict[data.Title] = control;
-            }
-        }
-
         private void RecentPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!Inited || !IsLoaded) return;
+            if (!IsLoaded) return;
             if (RecentPivot.SelectedItem == RecentAddedItem)
             {
-                SetupAdded(AddedTimeLine);
+                SetupAdded(RecentAdded.TimeLine);
             }
             else if (RecentPivot.SelectedItem == RecentPlayedItem)
             {
@@ -373,7 +311,16 @@ namespace SMPlayer
 
         private void RecentAddedItem_Loaded(object sender, RoutedEventArgs e)
         {
-            SetupAdded(AddedTimeLine);
+            SetupAdded(RecentAdded.TimeLine);
+        }
+
+        private void RecentAddedMultiSelectAppButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddedMusicView.SelectionMode = ListViewSelectionMode.Multiple;
+            MainPage.Instance.ShowMultiSelectCommandBar(new MultiSelectCommandBarOption()
+            {
+                ShowRemove = false
+            });
         }
 
         private void RecentSearchesMultiSelectAppButton_Click(object sender, RoutedEventArgs e)
@@ -522,7 +469,6 @@ namespace SMPlayer
 
     public interface IInitListener
     {
-        void BeforeInit();
         void Inited();
     }
 }

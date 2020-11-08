@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -26,6 +27,7 @@ namespace SMPlayer
         public IMenuFlyoutHelperBuildListener MenuFlyoutHelperBuildListener { get; set; }
         public List<IRemoveMusicListener> RemoveListeners = new List<IRemoveMusicListener>();
         public MenuFlyoutOption MenuFlyoutOpeningOption { get; set; }
+        public event TypedEventHandler<FrameworkElement, EffectiveViewportChangedEventArgs> TopItemEffectiveViewportChanged;
 
         public IList<object> SelectedItems { get => MusicGridView.SelectedItems; }
         public int SelectedItemsCount { get => SelectedItems.Count; }
@@ -192,9 +194,17 @@ namespace SMPlayer
 
         private async void UserControl_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
         {
-            if (args.BringIntoViewDistanceY < sender.ActualHeight)
+            if (ImageHelper.NeedsLoading(sender, args))
             {
                 await (sender.DataContext as GridMusicView).SetThumbnailAsync();
+            }
+            // args.EffectiveViewport.X == 0 保证最左
+            // args.EffectiveViewport.Top == args.BringIntoViewDistanceY 保证最上
+            // sender.ActualHeight > args.BringIntoViewDistanceY 保证在视图内
+            if (args.EffectiveViewport.X == 0 && args.EffectiveViewport.Top == args.BringIntoViewDistanceY
+                && sender.ActualHeight > args.BringIntoViewDistanceY)
+            {
+                TopItemEffectiveViewportChanged?.Invoke(sender, args);
             }
         }
 

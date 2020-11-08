@@ -184,7 +184,7 @@ namespace SMPlayer.Models
         {
             if (JustRemoved.Any(m => m.Name == music.Name && m.Artist == music.Artist && m.Album == music.Album && m.Duration == music.Duration))
                 return;
-            RecentPage.AddedTimeLine.Add(music);
+            RecentPage.RecentAdded.Add(music);
             if (AutoLyrics)
             {
                 await Task.Run(async() =>
@@ -218,7 +218,7 @@ namespace SMPlayer.Models
             if ((myFavoratesRemovedIndex = MyFavorites.Songs.IndexOf(music)) > -1)
                 MyFavorites.Remove(music);
             RecentPlayed.Remove(music.Path);
-            RecentPage.AddedTimeLine.Remove(music);
+            RecentPage.RecentAdded.Remove(music);
         }
 
         public void UndoRemoveMusic(Music music)
@@ -235,7 +235,7 @@ namespace SMPlayer.Models
                 MyFavorites.Songs.Insert(myFavoratesRemovedIndex, music);
             if (recentPlayedRemovedIndex > -1)
                 RecentPlayed.Insert(recentPlayedRemovedIndex, music.Path);
-            RecentPage.AddedTimeLine.Add(music);
+            RecentPage.RecentAdded.Add(music);
         }
 
         public void Played(Music music)
