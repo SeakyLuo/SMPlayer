@@ -84,12 +84,6 @@
                                 Icon="Shuffle"
                                 Style="{ThemeResource PlaylistAppBarButtonStyle}" />
                             <AppBarButton
-                                x:Name="AddToButton"
-                                x:Uid="AddToAppButton"
-                                Click="AddTo_Click"
-                                Icon="Add"
-                                Style="{ThemeResource PlaylistAppBarButtonStyle}" />
-                            <AppBarButton
                                 x:Name="MultiSelectButton"
                                 x:Uid="MultiSelectAppButton"
                                 Click="MultiSelectButton_Click"

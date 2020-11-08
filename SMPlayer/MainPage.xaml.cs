@@ -209,7 +209,14 @@ namespace SMPlayer
         {
             if (keyword.Length == 0)
             {
-                ShowLocalizedNotification("SearchEmpty");
+                if (HeaderSearchBar.Visibility == Visibility.Visible)
+                {
+                    HideHeaderSearchBar();
+                }
+                else
+                {
+                    ShowLocalizedNotification("SearchEmpty");
+                }
                 return;
             }
             string trimmed = keyword.Trim();
@@ -429,6 +436,11 @@ namespace SMPlayer
         public void HideMultiSelectCommandBar()
         {
             BottomMultiSelectCommandBar.Hide();
+        }
+
+        public void SetMultiSelectListener(IMultiSelectListener listener)
+        {
+            BottomMultiSelectCommandBar.MultiSelectListener = listener;
         }
     }
 }

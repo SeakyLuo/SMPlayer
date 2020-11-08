@@ -28,14 +28,11 @@ namespace SMPlayer
 
         private void SetEnabled()
         {
-            LocateCurrentButton.IsEnabled = SaveToButton.IsEnabled = ClearButton.IsEnabled = FullScreenButton.IsEnabled = 
+            LocateCurrentButton.IsEnabled = SaveToButton.IsEnabled = ClearButton.IsEnabled = PlayModeButton.IsEnabled = 
                                             MediaHelper.CurrentPlaylist.Count != 0;
             RandomPlayButton.IsEnabled = MusicLibraryPage.SongCount != 0;
         }
-        private void FullScreenButton_Click(object sender, RoutedEventArgs e)
-        {
-            MainPage.Instance?.Frame.Navigate(typeof(NowPlayingFullPage));
-        }
+
         private void SaveToButton_Click(object sender, RoutedEventArgs e)
         {
             var name = Helper.Localize("Now Playing") + " - " + DateTime.Now.ToString("yy/MM/dd");
@@ -63,6 +60,11 @@ namespace SMPlayer
         private void ShuffleMenuFlyout_Opening(object sender, object e)
         {
             (sender as MenuFlyout).SetTo(MenuFlyoutHelper.GetShuffleMenu());
+        }
+
+        private void PlayModeButton_Click(object sender, RoutedEventArgs e)
+        {
+            (Window.Current.Content as Frame).Navigate(typeof(NowPlayingFullPage));
         }
     }
 }

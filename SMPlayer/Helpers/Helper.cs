@@ -617,6 +617,7 @@ namespace SMPlayer
         void ShowLocalizedNotification(string message, int duration = 2000);
         void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option = null);
         void HideMultiSelectCommandBar();
+        void SetMultiSelectListener(IMultiSelectListener listener = null);
         MultiSelectCommandBar GetMultiSelectCommandBar();
     }
 }

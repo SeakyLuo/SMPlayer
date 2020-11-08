@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Windows.Globalization.DateTimeFormatting;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
@@ -89,7 +90,21 @@ namespace SMPlayer
         }
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value is int ? ToStr((int)value) : "";
+            return value is int i ? ToStr(i) : "";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    class DateTimeConverter : IValueConverter
+    {
+
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return DateTimeFormatter.ShortDate.Format((DateTimeOffset)value) + " " + DateTimeFormatter.ShortTime.Format((DateTimeOffset)value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

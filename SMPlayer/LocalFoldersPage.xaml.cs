@@ -1,4 +1,5 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Controls;
+using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,7 +17,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalFoldersPage : Page, ILocalPageButtonListener
+    public sealed partial class LocalFoldersPage : Page, ILocalPageButtonListener, IMenuFlyoutItemClickListener, IMultiSelectListener
     {
         public static FolderTree CurrentTree;
         private ObservableCollection<GridFolderView> GridItems = new ObservableCollection<GridFolderView>();
@@ -28,7 +29,7 @@ namespace SMPlayer
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             LocalPage.FolderListener = this;
-            Controls.MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
+            MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
             {
                 if (CurrentTree.Contains(before))
                 {
@@ -60,6 +61,7 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            MainPage.Instance.SetMultiSelectListener(this);
             ModeChanged(Settings.settings.LocalFolderGridView);
         }
 
@@ -97,7 +99,14 @@ namespace SMPlayer
         private void OpenPlaylistFlyout(object sender, object e)
         {
             var flyout = sender as MenuFlyout;
-            MenuFlyoutHelper.SetPlaylistMenu(sender);
+            MenuFlyoutHelper.SetPlaylistMenu(sender, this, null, new MenuFlyoutOption
+            { 
+                MultiSelectOption = new MultiSelectCommandBarOption
+                {
+                    ShowRemove = false,
+                    ShowReverseSelection = false
+                } 
+            });
             FolderTree tree = null;
             if (flyout.Target.DataContext is GridFolderView gridFolderView) tree = gridFolderView.Tree;
             else if (flyout.Target.DataContext is TreeViewNode node) tree = node.Content as FolderTree;
@@ -130,14 +139,28 @@ namespace SMPlayer
                 }
             }
         }
+
+        private TreeViewNode FindNode(FolderTree tree)
+        {
+            return LocalFoldersTreeView.RootNodes.FirstOrDefault(node => FindNode(node, tree) is TreeViewNode);
+        }
+
         private TreeViewNode FindNode(TreeViewNode node, FolderTree tree)
         {
             return node == null || tree.Equals(node.Content) ? node :
-                FindNode(node.Children.FirstOrDefault(sub => tree.Path.StartsWith((sub.Content as FolderTree).Path)), tree);
+                   FindNode(node.Children.FirstOrDefault(sub => tree.Path.StartsWith((sub.Content as FolderTree).Path)), tree);
         }
+
         private void OpenMusicFlyout(object sender, object e)
         {
-            MenuFlyoutHelper.SetMusicMenu(sender);
+            MenuFlyoutHelper.SetMusicMenu(sender, this, null, new MenuFlyoutOption
+            {
+                MultiSelectOption = new MultiSelectCommandBarOption
+                {
+                    ShowRemove = false,
+                    ShowReverseSelection = false
+                }
+            });
         }
         public void UpdatePage(FolderTree tree)
         {
@@ -199,6 +222,69 @@ namespace SMPlayer
         {
             var tree = ((sender as Grid).DataContext as TreeViewNode).Content as FolderTree;
             setter.SetPage(tree);
+        }
+
+        void IMenuFlyoutItemClickListener.Favorite(object data) { }
+
+        void IMenuFlyoutItemClickListener.Delete(Music music) { }
+
+        void IMenuFlyoutItemClickListener.UndoDelete(Music music) { }
+
+        void IMenuFlyoutItemClickListener.Remove(Music music) { }
+
+        void IMenuFlyoutItemClickListener.Select(object data)
+        {
+            LocalFoldersTreeView.SelectionMode = TreeViewSelectionMode.Multiple;
+            LocalFoldersTreeView.SelectedNodes.Add((TreeViewNode)data);
+            MainPage.Instance.ShowMultiSelectCommandBar();
+        }
+
+        void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar)
+        {
+            LocalFoldersTreeView.SelectionMode = TreeViewSelectionMode.None;
+        }
+
+        void IMultiSelectListener.AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper)
+        {
+            helper.Data = GetSelectedSongs();
+        }
+
+        void IMultiSelectListener.Play(MultiSelectCommandBar commandBar)
+        {
+            MediaHelper.SetMusicAndPlay(GetSelectedSongs());
+        }
+
+        void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar)
+        {
+        }
+
+        void IMultiSelectListener.SelectAll(MultiSelectCommandBar commandBar)
+        {
+            LocalFoldersTreeView.SelectAll();
+        }
+
+        void IMultiSelectListener.ReverseSelections(MultiSelectCommandBar commandBar) { }
+
+        void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar)
+        {
+            LocalFoldersTreeView.SelectedNodes.Clear();
+        }
+
+        public List<Music> GetSelectedSongs()
+        {
+            List<Music> list = new List<Music>();
+            foreach (var node in LocalFoldersTreeView.SelectedNodes)
+            {
+                if (node.Content is FolderTree tree)
+                {
+                    list.AddRange(tree.Flatten());
+                }
+                else if (node.Content is Music music)
+                {
+                    list.Add(music);
+                }
+            }
+            return list;
         }
     }
 }

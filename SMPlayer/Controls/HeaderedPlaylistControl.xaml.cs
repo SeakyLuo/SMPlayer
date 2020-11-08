@@ -75,14 +75,12 @@ namespace SMPlayer
         public async Task SetPlaylist(Playlist playlist)
         {
             HidePlaylistCover();
-            long startOfEverything = DateTime.Now.Millisecond;
             MediaHelper.FindMusicAndSetPlaying(playlist.Songs, null, MediaHelper.CurrentMusic);
             CurrentPlaylist = playlist;
             HeaderedPlaylist.ItemsSource = playlist.Songs;
             PlaylistNameTextBlock.Text = string.IsNullOrEmpty(playlist.Name) && !IsPlaylist ? Helper.LocalizeMessage("UnknownAlbum") : playlist.Name;
             SetPlaylistInfo(SongCountConverter.ToStr(playlist.Songs));
             ShuffleButton.IsEnabled = playlist.Count != 0;
-            AddToButton.IsEnabled = playlist.Count != 0;
             RenameButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
             DeleteButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
             SetPinState(Windows.UI.StartScreen.SecondaryTile.Exists(Helper.FormatTileId(playlist, IsPlaylist)));
@@ -121,20 +119,7 @@ namespace SMPlayer
         {
             MediaHelper.ShuffleAndPlay(CurrentPlaylist.Songs);
         }
-        private void AddTo_Click(object sender, RoutedEventArgs e)
-        {
-            var helper = new MenuFlyoutHelper()
-            {
-                Data = CurrentPlaylist.Songs,
-                DefaultPlaylistName = getDefaultPlaylistNameForAddToMenu(),
-                CurrentPlaylistName = CurrentPlaylist.Name
-            };
-            helper.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
-        }
-        private string getDefaultPlaylistNameForAddToMenu()
-        {
-            return MenuFlyoutHelper.IsBadNewPlaylistName(CurrentPlaylist.Name) ? "" : Settings.settings.FindNextPlaylistName(CurrentPlaylist.Name);
-        }
+
         private async void Rename_Click(object sender, RoutedEventArgs e)
         {
             dialog = new RenameDialog(Confirm, RenameOption.Rename, CurrentPlaylist.Name);
@@ -404,7 +389,7 @@ namespace SMPlayer
 
         void IMultiSelectListener.AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper)
         {
-            helper.DefaultPlaylistName = getDefaultPlaylistNameForAddToMenu();
+            helper.DefaultPlaylistName = MenuFlyoutHelper.IsBadNewPlaylistName(CurrentPlaylist.Name) ? "" : Settings.settings.FindNextPlaylistName(CurrentPlaylist.Name);
             helper.CurrentPlaylistName = CurrentPlaylist.Name;
         }
 
@@ -412,6 +397,7 @@ namespace SMPlayer
         void IMultiSelectListener.Play(MultiSelectCommandBar commandBar) { }
         void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar) { }
         void IMultiSelectListener.SelectAll(MultiSelectCommandBar commandBar) { }
-        void IMultiSelectListener.ClearSelection(MultiSelectCommandBar commandBar) { }
+        void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar) { }
+        void IMultiSelectListener.ReverseSelections(MultiSelectCommandBar commandBar) { }
     }
 }

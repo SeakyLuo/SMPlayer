@@ -37,7 +37,11 @@ namespace SMPlayer.Controls
         public void Show(MultiSelectCommandBarOption option = null)
         {
             if (option == null) option = new MultiSelectCommandBarOption();
+            PlayAppButton.Visibility = option.ShowPlay ? Visibility.Visible : Visibility.Collapsed;
+            AddToAppButton.Visibility = option.ShowAdd ? Visibility.Visible : Visibility.Collapsed;
             RemoveAppButton.Visibility = option.ShowRemove ? Visibility.Visible : Visibility.Collapsed;
+            DeleteAppButton.Visibility = option.ShowDelete ? Visibility.Visible : Visibility.Collapsed;
+            ReverseSelectionAppButton.Visibility = option.ShowReverseSelection ? Visibility.Visible : Visibility.Collapsed;
             CommandBarContainer.IsOpen = true;
         }
 
@@ -76,9 +80,19 @@ namespace SMPlayer.Controls
             MultiSelectListener?.SelectAll(this);
         }
 
+        private void ReverseSelectionAppButton_Click(object sender, RoutedEventArgs e)
+        {
+            MultiSelectListener?.ReverseSelections(this);
+        }
+
         private void ClearSelectionAppButton_Click(object sender, RoutedEventArgs e)
         {
-            MultiSelectListener?.ClearSelection(this);
+            MultiSelectListener?.ClearSelections(this);
+        }
+
+        private void DeleteAppButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 
@@ -89,6 +103,7 @@ namespace SMPlayer.Controls
         void Play(MultiSelectCommandBar commandBar);
         void Remove(MultiSelectCommandBar commandBar);
         void SelectAll(MultiSelectCommandBar commandBar);
-        void ClearSelection(MultiSelectCommandBar commandBar);
+        void ReverseSelections(MultiSelectCommandBar commandBar);
+        void ClearSelections(MultiSelectCommandBar commandBar);
     }
 }

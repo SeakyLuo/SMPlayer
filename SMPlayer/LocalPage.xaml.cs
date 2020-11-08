@@ -86,9 +86,11 @@ namespace SMPlayer
             {
                 case "LocalFoldersPage":
                     LocalFoldersItem.IsSelected = true;
+                    SetLocalGridView(Settings.settings.LocalFolderGridView);
                     break;
                 case "LocalMusicPage":
                     LocalSongsItem.IsSelected = true;
+                    SetLocalGridView(Settings.settings.LocalMusicGridView);
                     break;
             }
             SetBackButtonVisibility();

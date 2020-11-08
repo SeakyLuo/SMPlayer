@@ -60,6 +60,7 @@ namespace SMPlayer.Helpers
 
     public class UpdateLog
     {
+        public bool ShowReleaseNotesDialog { get; set; } = true;
         public bool AllUpdated { get => DateAdded; }
         public bool DateAdded { get; set; } = false;
 

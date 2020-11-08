@@ -123,6 +123,7 @@ namespace SMPlayer
         {
             AllSongs.SetTo(await Task.Run(() => SearchHelper.SearchSongs(source, keyword, criterion)));
             Songs.SetTo(AllSongs.Take(SongLimit));
+            AddAllButton.Visibility = AllSongs.Count > SongLimit ? Visibility.Visible : Visibility.Collapsed;
             SongsViewAllButton.Visibility = AllSongs.Count > SongLimit ? Visibility.Visible : Visibility.Collapsed;
             SongsDropdown.Visibility = Songs.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
@@ -180,12 +181,21 @@ namespace SMPlayer
 
         private void AddToButton_Click(object sender, RoutedEventArgs e)
         {
+            ShowAddToMenuFlyout(Songs, sender);
+        }
+
+        private void AddAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShowAddToMenuFlyout(AllSongs, sender);
+        }
+
+        private void ShowAddToMenuFlyout(IEnumerable<Music> songs, object sender)
+        {
             new MenuFlyoutHelper()
             {
-                Data = Songs,
+                Data = songs,
                 DefaultPlaylistName = Settings.settings.FindNextPlaylistName(CurrentKeyword.Text)
             }.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
-
         }
 
         private void SetArtistsDropdownContent()
@@ -196,6 +206,8 @@ namespace SMPlayer
         {
             AlbumsDropdown.Content = Helper.LocalizeMessage("Sort By " + Settings.settings.SearchAlbumsCriterion.ToStr());
         }
+
+
         private void SetSongsDropdownContent()
         {
             SongsDropdown.Content = Helper.LocalizeMessage("Sort By " + Settings.settings.SearchSongsCriterion.ToStr());

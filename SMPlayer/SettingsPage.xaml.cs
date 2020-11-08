@@ -1,4 +1,5 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Dialogs;
+using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -388,6 +389,17 @@ namespace SMPlayer
         void IAfterPathSetListener.PathSet(string path)
         {
             PathBox.Text = path;
+        }
+
+        private void ReleaseNotesButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShowReleaseNotes();
+        }
+
+        public static async void ShowReleaseNotes()
+        {
+            var dialog = new ReleaseNotesDialog();
+            await dialog.ShowAsync();
         }
     }
 

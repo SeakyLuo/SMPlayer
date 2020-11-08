@@ -14,15 +14,19 @@ Build it with local computer.
 Go to Settings and set the Root Folder of your music files.
 
 # TO DO
-Move music from folder to folder.
-
 Sort albums.
+
+Scrolling lyrics.
+
+Search result count. Albums count. Music library count.
+
+Batch delete.
+
+Move music from folder to folder.
 
 Improve column spacing of AlbumPage.
 
 Improve editing album art by selecting a song in a dropdown with searching.
-
-Export data. Load from backup.
 
 Page shows no music hint.
 
@@ -30,7 +34,7 @@ Album properties.
 
 Improve shy header.
 
-Reverse selection.
+Album art in NowPlayingFull.
 
 # TO FIX
 Able to drag titlebar when loading.
@@ -39,28 +43,22 @@ Dark thumb in the mini mode.
 
 MultiSelectCommandBar is too high.
 
+RecentPivot loses header after switching back.
+
 # MIGHT DO
 Improve path header display (like Windows).
 
 Real-time update Playlist Info when new music added.
 
-Album art in NowPlayingFull.
-
 Save SearchKeyword instead of a string.
 
 Mini mode media control fade in/out.
 
-Search result count. Albums count. Music library count.
-
 Allow MainSearchBar to have a search history dropdown.
-
-SearchPage AddTo button add all songs instead of displayed songs.
 
 SearchPage AddTo button for all search types.
 
 Shuffle after one round of playing.
-
-SaveChanges button.
 
 If a playlist contains this music collection, skip it in the MenuFlyout.
 

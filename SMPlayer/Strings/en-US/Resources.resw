@@ -120,6 +120,9 @@
   <data name="Add To" xml:space="preserve">
     <value>Add To</value>
   </data>
+  <data name="AddAllAppButton.Label" xml:space="preserve">
+    <value>Add All To</value>
+  </data>
   <data name="AddLyrics" xml:space="preserve">
     <value>Add Lyrics</value>
   </data>
@@ -273,6 +276,9 @@
   <data name="Create New Playlist" xml:space="preserve">
     <value>Create New Playlist</value>
   </data>
+  <data name="DateAddedHeader.Header" xml:space="preserve">
+    <value>Date Added</value>
+  </data>
   <data name="DateCreatedTextBlock.Text" xml:space="preserve">
     <value>Date Created</value>
   </data>
@@ -293,6 +299,9 @@
   </data>
   <data name="DeleteAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Remove Album Art</value>
+  </data>
+  <data name="DeleteAppButton.Label" xml:space="preserve">
+    <value>Delete From Disk</value>
   </data>
   <data name="DeleteButton.Label" xml:space="preserve">
     <value>Delete</value>
@@ -347,9 +356,6 @@
   </data>
   <data name="ExitMiniModeItem.Label" xml:space="preserve">
     <value>Exit Mini Mode</value>
-  </data>
-  <data name="ExpandAppButton.Label" xml:space="preserve">
-    <value>Expand View</value>
   </data>
   <data name="ExportDataButton.Content" xml:space="preserve">
     <value>Export Data</value>
@@ -633,6 +639,9 @@
   <data name="PlaylistsTextBlock.Text" xml:space="preserve">
     <value>Playlists</value>
   </data>
+  <data name="PlayModeAppButton.Label" xml:space="preserve">
+    <value>Play Mode</value>
+  </data>
   <data name="PlayTextBlock.Text" xml:space="preserve">
     <value>Play</value>
   </data>
@@ -702,11 +711,20 @@
   <data name="RefreshItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Update current directory</value>
   </data>
+  <data name="ReleaseNotesButton.Content" xml:space="preserve">
+    <value>Release Notes</value>
+  </data>
+  <data name="ReleaseNotesTextBlock.Text" xml:space="preserve">
+    <value>Release Notes</value>
+  </data>
+  <data name="Remove From List" xml:space="preserve">
+    <value>Remove From List</value>
+  </data>
   <data name="Remove From Playlist" xml:space="preserve">
     <value>Remove From Playlist</value>
   </data>
   <data name="RemoveAppButton.Label" xml:space="preserve">
-    <value>Remove From Playlist</value>
+    <value>Remove From List</value>
   </data>
   <data name="RemoveSwipeItem.Text" xml:space="preserve">
     <value>Remove</value>
@@ -734,6 +752,9 @@
   </data>
   <data name="ResetMusicPropertiesButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Reset Properties</value>
+  </data>
+  <data name="ReverseSelectionAppButton.Label" xml:space="preserve">
+    <value>Reverse Selection</value>
   </data>
   <data name="SaveAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Save album art</value>

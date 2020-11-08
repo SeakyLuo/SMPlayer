@@ -140,8 +140,9 @@ namespace SMPlayer.Models
                 action.Invoke(music);
         }
 
-        public static Music FindMusic(Music music) { return settings.Tree.FindMusic(music); }
-        public static Music FindMusic(string path) { return settings.Tree.FindMusic(path); }
+        public static Music FindMusic(IMusicable target) { return settings.Tree.FindMusic(target.ToMusic()); }
+        public static Music FindMusic(Music target) { return settings.Tree.FindMusic(target); }
+        public static Music FindMusic(string target) { return settings.Tree.FindMusic(target); }
 
         public void LikeMusic(Music music)
         {
@@ -153,11 +154,12 @@ namespace SMPlayer.Models
             foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, true);
         }
 
-        public void LikeMusic(IEnumerable<Music> playlist)
+        public void LikeMusic(IEnumerable<IMusicable> playlist)
         {
             var hashset = MyFavorites.Songs.ToHashSet();
-            foreach (var music in playlist)
+            foreach (var item in playlist)
             {
+                var music = item.ToMusic();
                 if (!hashset.Contains(music))
                 {
                     music.Favorite = true;

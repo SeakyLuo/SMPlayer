@@ -140,7 +140,7 @@ namespace SMPlayer
         private async void DropShadowControl_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
         {
             AlbumView album = sender.DataContext as AlbumView;
-            if (album == null || album.ThumbnailLoaded || args.BringIntoViewDistanceY >= sender.ActualHeight) return;
+            if (album == null || album.ThumbnailLoaded || !ImageHelper.NeedsLoading(sender, args)) return;
             string before = album.ThumbnailSource;
             if (album.Songs == null)
                 album.SetSongs(AlbumPage.SearchAlbumSongs(album.Name, album.Artist));

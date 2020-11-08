@@ -48,9 +48,9 @@ namespace SMPlayer.Controls
 
         private async void UserControl_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
         {
-            if (args.BringIntoViewDistanceY < sender.ActualHeight)
+            if (ImageHelper.NeedsLoading(sender, args))
             {
-                await (sender.DataContext as GridFolderView).SetThumbnailAsync();
+                await (sender.DataContext as GridFolderView)?.SetThumbnailAsync();
             }
         }
     }

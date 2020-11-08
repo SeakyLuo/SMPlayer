@@ -213,6 +213,9 @@
   <data name="ItemRemoved" xml:space="preserve">
     <value>"{0}" is removed</value>
   </data>
+  <data name="ItemsRemoved" xml:space="preserve">
+    <value>{0} items have been removed!</value>
+  </data>
   <data name="LoadMusicLibrary" xml:space="preserve">
     <value>Loading music library...</value>
   </data>
@@ -342,11 +345,17 @@
   <data name="RemoveAlbumArt" xml:space="preserve">
     <value>Do you want to remove the album art of "{0}"?</value>
   </data>
+  <data name="RemoveFromList" xml:space="preserve">
+    <value>Remove "{0}" from the list</value>
+  </data>
   <data name="RemoveFromPlaylist" xml:space="preserve">
     <value>Remove "{0}" from playlist</value>
   </data>
   <data name="RemoveItem" xml:space="preserve">
     <value>Do you want to remove "{0}"?</value>
+  </data>
+  <data name="RemoveItems" xml:space="preserve">
+    <value>You are going to remove {0} items. Continue?</value>
   </data>
   <data name="RemoveMusic" xml:space="preserve">
     <value>Do you want to remove "{0}" from your playlist?</value>

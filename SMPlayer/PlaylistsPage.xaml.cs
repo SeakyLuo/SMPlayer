@@ -21,6 +21,7 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class PlaylistsPage : Page, IRenameActionListener
     {
+        public static PlaylistsPage Instance { get => MainPage.Instance.NavigationFrame.Content as PlaylistsPage; }
         public static ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
         public Playlist CurrentPlaylist { get => PlaylistTabView.SelectedItem as Playlist; }
         private HeaderedPlaylistControl PlaylistController;
@@ -32,7 +33,11 @@ namespace SMPlayer
             Playlists = new ObservableCollection<Playlist>(Settings.settings.Playlists);
             PlaylistTabView.ItemsSource = Playlists;
             SelectPlaylist(Settings.settings.LastPlaylist);
-            Settings.PlaylistAddedListeners.Add(playlist => PlaylistTabView.SelectedItem = playlist);
+            Settings.PlaylistAddedListeners.Add(playlist =>
+            {
+                PlaylistTabView.SelectedItem = playlist;
+                BringSelectedTabIntoView();
+            });
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -59,12 +64,20 @@ namespace SMPlayer
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             BringSelectedTabIntoView();
-            foreach (var playlist in Playlists)
+            try
             {
-                if (IsLoaded && playlist.Name != Settings.settings.LastPlaylist)
+                foreach (var playlist in Playlists)
                 {
-                    await playlist.SetDisplayItemAsync();
+                    if (IsLoaded && playlist.Name != Settings.settings.LastPlaylist)
+                    {
+                        await playlist.SetDisplayItemAsync();
+                    }
                 }
+            }
+            catch (InvalidOperationException)
+            {
+                // Collection was modified; enumeration operation may not execute.
+                // 发生在加载的过程中用户添加了新的播放列表
             }
         }
 
@@ -111,13 +124,6 @@ namespace SMPlayer
             PlaylistTabView.SelectedIndex = index;
         }
 
-        private async void NewPlaylistButton_Click(object sender, RoutedEventArgs e)
-        {
-            string name = Helper.Localize("Playlist");
-            dialog = new RenameDialog(this, RenameOption.New, Settings.settings.FindNextPlaylistName(name));
-            await dialog.ShowAsync();
-        }
-
         private void PlaylistTabView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
             Settings.settings.Playlists = (PlaylistTabView.ItemsSource as ObservableCollection<Playlist>).ToList();
@@ -152,6 +158,18 @@ namespace SMPlayer
             SpinArrowAnimation.Begin();
             var flyout = sender as MenuFlyout;
             flyout.Items.Clear();
+            var createNewPlaylist = new MenuFlyoutItem()
+            {
+                Text = Helper.Localize("Create New Playlist")
+            };
+            createNewPlaylist.Click += async (s, args) =>
+            {
+                string name = Helper.Localize("Playlist");
+                dialog = new RenameDialog(this, RenameOption.New, Settings.settings.FindNextPlaylistName(name));
+                await dialog.ShowAsync();
+            };
+            flyout.Items.Add(createNewPlaylist);
+            flyout.Items.Add(new MenuFlyoutSeparator());
             foreach (var playlist in Playlists)
             {
                 var item = new ToggleMenuFlyoutItem()

@@ -246,6 +246,13 @@
                         Icon="Add"
                         Style="{StaticResource SearchAppBarButtonStyle}" />
                     <AppBarButton
+                        x:Name="AddAllButton"
+                        x:Uid="AddAllAppButton"
+                        Click="AddAllButton_Click"
+                        Icon="Add"
+                        Style="{StaticResource SearchAppBarButtonStyle}"
+                        Visibility="Collapsed"/>
+                    <AppBarButton
                         x:Name="SongsViewAllButton"
                         x:Uid="ViewAllButton"
                         Click="SongsViewAllButton_Click"

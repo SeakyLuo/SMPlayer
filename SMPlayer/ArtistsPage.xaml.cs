@@ -95,7 +95,7 @@ namespace SMPlayer
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            MainPage.Instance.GetMultiSelectCommandBar().MultiSelectListener = this;
+            MainPage.Instance.SetMultiSelectListener(this);
             if (targetArtist == null) return;
             if (IsProcessing)
             {
@@ -264,14 +264,22 @@ namespace SMPlayer
         }
         private void AlbumMenuFlyout_Opening(object sender, object e)
         {
-            MenuFlyoutHelper.SetPlaylistMenu(sender, this, null, new MenuFlyoutOption() { ShowSelect = true, MultiSelectOption = new MultiSelectCommandBarOption() { ShowRemove = false } });
+            MenuFlyoutHelper.SetPlaylistMenu(sender, this, null, new MenuFlyoutOption
+            { 
+                ShowSelect = true,
+                MultiSelectOption = new MultiSelectCommandBarOption() { ShowRemove = false } 
+            });
             MenuFlyout flyout = sender as MenuFlyout;
             var album = flyout.Target.DataContext as AlbumView;
             flyout.Items.Add(MenuFlyoutHelper.GetSeeAlbumFlyout(album.Songs[0]));
         }
         private void OpenMusicMenuFlyout(object sender, object e)
         {
-            MenuFlyoutHelper.SetMusicMenu(sender);
+            MenuFlyoutHelper.SetMusicMenu(sender, this, null, new MenuFlyoutOption
+            {
+                ShowSelect = true,
+                MultiSelectOption = new MultiSelectCommandBarOption() { ShowRemove = false }
+            });
         }
 
         private void Artist_PointerEntered(object sender, PointerRoutedEventArgs e)
@@ -321,9 +329,9 @@ namespace SMPlayer
 
         private async void AlbumCover_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
         {
-            if (args.BringIntoViewDistanceY < sender.ActualHeight)
+            if (ImageHelper.NeedsLoading(sender, args))
             {
-                await (sender.DataContext as AlbumView).SetThumbnailAsync();
+                await (sender.DataContext as AlbumView)?.SetThumbnailAsync();
             }
         }
 
@@ -366,13 +374,28 @@ namespace SMPlayer
             }
         }
 
-        void IMultiSelectListener.ClearSelection(MultiSelectCommandBar commandBar)
+        void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar)
         {
             foreach (var listView in listViews)
             {
                 try
                 {
-                    listView.SelectedItems.Clear();
+                    listView.ClearSelections();
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+        }
+
+        void IMultiSelectListener.ReverseSelections(MultiSelectCommandBar commandBar)
+        {
+            foreach (var listView in listViews)
+            {
+                try
+                {
+                    listView.ReverseSelections();
                 }
                 catch (Exception)
                 {
@@ -387,12 +410,26 @@ namespace SMPlayer
         void IMenuFlyoutItemClickListener.Remove(Music music) { }
         void IMenuFlyoutItemClickListener.Select(object data)
         {
-            foreach (var listView in listViews)
+            if (data is Music music)
             {
-                listView.SelectionMode = ListViewSelectionMode.Multiple;
-                if (listView.DataContext.Equals(data))
+                foreach (var listView in listViews)
                 {
-                    listView.SelectAll();
+                    listView.SelectionMode = ListViewSelectionMode.Multiple;
+                    if (listView.DataContext is AlbumView album && album.Contains(music))
+                    {
+                        listView.SelectedItems.Add(data);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var listView in listViews)
+                {
+                    listView.SelectionMode = ListViewSelectionMode.Multiple;
+                    if (listView.DataContext.Equals(data))
+                    {
+                        listView.SelectAll();
+                    }
                 }
             }
         }

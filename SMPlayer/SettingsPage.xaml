@@ -311,6 +311,11 @@
                     Content="Save Changes"
                     Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 <HyperlinkButton
+                    x:Uid="ReleaseNotesButton"
+                    Click="ReleaseNotesButton_Click"
+                    Content="Release Notes"
+                    Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                <HyperlinkButton
                     x:Uid="ImportDataButton"
                     Click="ImportData_Click"
                     Content="Import Data"

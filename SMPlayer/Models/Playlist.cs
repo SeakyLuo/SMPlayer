@@ -12,7 +12,7 @@ namespace SMPlayer.Models
     [Serializable]
     public class Playlist : INotifyPropertyChanged
     {
-        public static SortBy[] Criteria = new SortBy[] { SortBy.Title, SortBy.Artist, SortBy.Album, SortBy.Duration, SortBy.PlayCount };
+        public static SortBy[] Criteria = new SortBy[] { SortBy.Title, SortBy.Artist, SortBy.Album, SortBy.Duration, SortBy.PlayCount, SortBy.DateAdded };
         private string name;
         public string Name
         {
@@ -67,27 +67,60 @@ namespace SMPlayer.Models
 
         public void Add(object item)
         {
-            if (item is Music && !Songs.Contains(item))
-                Songs.Add(item as Music);
-            else if (item is ICollection<Music> songs)
+            if (item is IMusicable musicable)
             {
-                var set = Songs.ToHashSet();
-                foreach (var music in songs)
-                    if (!set.Contains(music))
-                        Songs.Add(music);
+                Music music = musicable.ToMusic();
+                if (Songs.Contains(music))
+                {
+                    return;
+                }
+                else
+                {
+
+                    Songs.Add(music);
+                }
             }
-            else return;
+            else if (item is IEnumerable<IMusicable> songs)
+            {
+                var set = Songs.Select(m => m.Path).ToHashSet();
+                bool neverAdded = true;
+                foreach (var song in songs)
+                {
+                    Music music = song.ToMusic();
+                    if (!set.Contains(music.Path))
+                    {
+                        Songs.Add(music);
+                        neverAdded = false;
+                    }
+                }
+                if (neverAdded) return;
+            }
+            else
+            {
+                return;
+            }
             Sort();
         }
 
         public void Remove(object item)
         {
             if (item is Music targetMusic)
+            {
                 Songs.Remove(targetMusic);
-            else if (item is ICollection<Music> songs)
+            }
+            else if (item is IMusicable musicable)
+            {
+                Songs.Remove(musicable.ToMusic());
+            }
+            else if (item is IEnumerable<Music> songs)
             {
                 foreach (var music in songs)
                     Songs.Remove(music);
+            }
+            else if (item is IEnumerable<IMusicable> musicables)
+            {
+                foreach (var music in musicables)
+                    Songs.Remove(music.ToMusic());
             }
             else if (item is int index)
             {
@@ -191,6 +224,9 @@ namespace SMPlayer.Models
                     break;
                 case SortBy.PlayCount:
                     list = Songs.OrderBy(m => m.PlayCount).ToList();
+                    break;
+                case SortBy.DateAdded:
+                    list = Songs.OrderBy(m => m.DateAdded).ToList();
                     break;
                 default:
                     return;
