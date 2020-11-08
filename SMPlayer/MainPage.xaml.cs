@@ -115,6 +115,10 @@ namespace SMPlayer
                     ShowLocalizedNotification("UpdateFinished");
                 }
             }
+            if (UpdateHelper.Log.ShowReleaseNotesDialog)
+            {
+                SettingsPage.ShowReleaseNotes();
+            }
         }
 
         private void UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar coreTitleBar)
@@ -442,5 +446,6 @@ namespace SMPlayer
         {
             BottomMultiSelectCommandBar.MultiSelectListener = listener;
         }
+
     }
 }

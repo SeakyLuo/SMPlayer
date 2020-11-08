@@ -22,10 +22,11 @@ namespace SMPlayer.Helpers
 
         public static void Save()
         {
-            if (!OriginalLog.AllUpdated)
-            {
-                JsonFileHelper.SaveAsync(JsonFileName, Log);
-            }
+            JsonFileHelper.SaveAsync(JsonFileName, Log);
+            //if (!OriginalLog.AllUpdated)
+            //{
+            //    JsonFileHelper.SaveAsync(JsonFileName, Log);
+            //}
         }
 
         public static async Task Update()
@@ -61,13 +62,15 @@ namespace SMPlayer.Helpers
     public class UpdateLog
     {
         public bool ShowReleaseNotesDialog { get; set; } = true;
-        public bool AllUpdated { get => DateAdded; }
         public bool DateAdded { get; set; } = false;
+
+        public bool AllUpdated { get => DateAdded && !ShowReleaseNotesDialog; }
 
         public UpdateLog Copy()
         {
             return new UpdateLog
             {
+                ShowReleaseNotesDialog = this.ShowReleaseNotesDialog,
                 DateAdded = this.DateAdded
             };
         }

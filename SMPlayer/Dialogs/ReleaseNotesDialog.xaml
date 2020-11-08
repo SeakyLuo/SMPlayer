@@ -12,28 +12,28 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <RelativePanel Margin="5">
+        <RelativePanel Margin="0,8">
             <TextBlock 
                 x:Uid="ReleaseNotesTextBlock"
-                Text="Release Notes"
                 FontSize="36"
-                FontWeight="Bold"/>
+                FontWeight="Bold"
+                Text="ReleaseNotes">
+            </TextBlock>
             <Button
                 RelativePanel.AlignRightWithPanel="True"
                 Click="CloseButton_Click"
                 Content="&#xE894;"
                 Style="{StaticResource FontIconButtonStyle}" />
         </RelativePanel>
-        <TextBlock Grid.Row="1">
-            <Run FontWeight="SemiBold" FontSize="24">Version 2.4.3:</Run>
+        <TextBlock Grid.Row="1" TextWrapping="WrapWholeWords">
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion">Version:</Run>
+            <Run FontWeight="SemiBold" FontSize="24">2.4.3</Run>
             <LineBreak />
-            <Run>1. Multi-select support for Recent Page.</Run>
-            <LineBreak />
-            <Run>2. In Playlist Page, the Create New Playlist button is moved to the dropdown list.</Run>
-            <LineBreak />
-            <Run>3. Search Page has an AddAllTo button.</Run>
-            <LineBreak />
-            <Run>4. Show music count.</Run>
+            1. <Run x:Uid="ReleaseNotesIntroduceReleaseNotes"/><LineBreak />
+            2. <Run x:Uid="ReleaseNotesImproveMultiSelect"></Run><LineBreak />
+            3. <Run x:Uid="ReleaseNotesCreateNewPlaylistButtonMoved"></Run><LineBreak />
+            4. <Run x:Uid="ReleaseNotesSearchPageAddAllToButton"/><LineBreak />
+            5. <Run x:Uid="ReleaseNotesReleaseNotesSortByDateAdded"/><LineBreak />
         </TextBlock>
     </Grid>
 </ContentDialog>
