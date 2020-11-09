@@ -65,12 +65,12 @@ namespace SMPlayer
             set => SetValue(RemovableProperty, value);
         }
         public static readonly DependencyProperty RemovableProperty = DependencyProperty.Register("Removable", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(true));
-        public bool AllowMultipleSection
+        public bool AllowMultipleSelection
         {
-            get => (bool)GetValue(AllowMultipleSectionProperty);
-            set => SetValue(AllowMultipleSectionProperty, value);
+            get => (bool)GetValue(AllowMultipleSelectionProperty);
+            set => SetValue(AllowMultipleSelectionProperty, value);
         }
-        public static readonly DependencyProperty AllowMultipleSectionProperty = DependencyProperty.Register("AllowMultipleSection", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(false));
+        public static readonly DependencyProperty AllowMultipleSelectionProperty = DependencyProperty.Register("AllowMultipleSelection", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(false));
         public ScrollViewer ScrollViewer
         {
             get => SongsListView.GetFirstDescendantOfType<ScrollViewer>();
@@ -190,6 +190,8 @@ namespace SMPlayer
         }
         private void OpenMusicMenuFlyout(object sender, object e)
         {
+            var flyout = sender as MenuFlyout;
+            Music music = flyout.Target.DataContext as Music;
             MenuFlyoutOption option = new MenuFlyoutOption
             {
                 ShowRemove = Removable,
@@ -198,18 +200,19 @@ namespace SMPlayer
             MenuFlyoutHelper.SetMusicMenu(sender, this, null, option);
             if (AllowReorder)
             {
-                var flyout = sender as MenuFlyout;
-                var item = new MenuFlyoutItem()
+                if (music.Index > 0)
                 {
-                    Text = Helper.Localize("Move To Top"),
-                    Icon = new SymbolIcon(Symbol.Upload)
-                };
-                item.Click += (s, args) =>
-                {
-                    Music music = (s as MenuFlyoutItem).DataContext as Music;
-                    MediaHelper.MoveMusic(music.Index, 0);
-                };
-                flyout.Items.Add(item);
+                    var item = new MenuFlyoutItem()
+                    {
+                        Text = Helper.Localize("Move To Top"),
+                        Icon = new SymbolIcon(Symbol.Upload)
+                    };
+                    item.Click += (s, args) =>
+                    {
+                        MediaHelper.MoveMusic(music.Index, 0);
+                    };
+                    flyout.Items.Add(item);
+                }
             }
         }
 

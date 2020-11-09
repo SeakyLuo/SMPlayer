@@ -79,6 +79,7 @@
             Style="{StaticResource GridViewStyle}"
             Visibility="{x:Bind Albums.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
         <local:PlaylistControl
+            x:Name="SearchMusicView"
             Grid.Row="1"
             AlternatingRowColor="True"
             ItemsSource="{x:Bind Songs, Mode=OneWay}"

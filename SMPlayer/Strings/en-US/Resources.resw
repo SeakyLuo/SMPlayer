@@ -711,6 +711,9 @@
   <data name="RefreshItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Update current directory</value>
   </data>
+  <data name="ReleaseNotesBugFixes.Text" xml:space="preserve">
+    <value>Bug fixes and various improvements.</value>
+  </data>
   <data name="ReleaseNotesButton.Content" xml:space="preserve">
     <value>Release Notes</value>
   </data>
@@ -723,11 +726,11 @@
   <data name="ReleaseNotesIntroduceReleaseNotes.Text" xml:space="preserve">
     <value>Release Notes dialog is introduced. You can find it in the Settings page.</value>
   </data>
-  <data name="ReleaseNotesReleaseNotesSortByDateAdded.Text" xml:space="preserve">
-    <value>Sort by date added.</value>
-  </data>
   <data name="ReleaseNotesSearchPageAddAllToButton.Text" xml:space="preserve">
     <value>Search page now has an AddAllTo button.</value>
+  </data>
+  <data name="ReleaseNotesSortByDateAdded.Text" xml:space="preserve">
+    <value>Sort by date added.</value>
   </data>
   <data name="ReleaseNotesTextBlock.Text" xml:space="preserve">
     <value>Release Notes</value>

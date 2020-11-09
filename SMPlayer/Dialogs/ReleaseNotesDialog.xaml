@@ -26,14 +26,14 @@
                 Style="{StaticResource FontIconButtonStyle}" />
         </RelativePanel>
         <TextBlock Grid.Row="1" TextWrapping="WrapWholeWords">
-            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion">Version:</Run>
-            <Run FontWeight="SemiBold" FontSize="24">2.4.3</Run>
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.4.3</Run>
             <LineBreak />
             1. <Run x:Uid="ReleaseNotesIntroduceReleaseNotes"/><LineBreak />
             2. <Run x:Uid="ReleaseNotesImproveMultiSelect"></Run><LineBreak />
             3. <Run x:Uid="ReleaseNotesCreateNewPlaylistButtonMoved"></Run><LineBreak />
             4. <Run x:Uid="ReleaseNotesSearchPageAddAllToButton"/><LineBreak />
-            5. <Run x:Uid="ReleaseNotesReleaseNotesSortByDateAdded"/><LineBreak />
+            5. <Run x:Uid="ReleaseNotesSortByDateAdded"/><LineBreak />
+            6. <Run x:Uid="ReleaseNotesBugFixes"/><LineBreak />
         </TextBlock>
     </Grid>
 </ContentDialog>

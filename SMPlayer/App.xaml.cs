@@ -149,8 +149,8 @@ namespace SMPlayer
             MediaHelper.Save();
             AlbumsPage.Save();
             RecentPage.Save();
-            await Helper.ClearBackups(10);
             UpdateHelper.Save();
+            await Helper.ClearBackups(10);
         }
 
         protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)

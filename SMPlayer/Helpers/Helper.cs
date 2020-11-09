@@ -127,14 +127,25 @@ namespace SMPlayer
 
         public static async Task ClearBackups(int maxBackups = 3)
         {
+            await ClearTempFiles(maxBackups);
+            await ClearLogFiles(maxBackups);
+        }
+
+        private static async Task ClearTempFiles(int maxBackups = 3)
+        {
             var files = await TempFolder.GetFilesAsync();
             await ClearBackup(files, Settings.JsonFilename, maxBackups);
             await ClearBackup(files, MediaHelper.JsonFilename, maxBackups);
             await ClearBackup(files, MusicLibraryPage.JsonFilename, maxBackups);
             await ClearBackup(files, AlbumsPage.JsonFilename, maxBackups);
-            files = await LogFolder.GetFilesAsync();
-            await ClearBackup(files, LogFileNamePrefix, maxBackups);
-            await ClearBackup(files, ExceptionLogFileNamePrefix, maxBackups);
+        }
+
+        private static async Task ClearLogFiles(int maxBackups = 3)
+        {
+            Debug.WriteLine("ok5");
+            var files = await LogFolder.GetFilesAsync(); Debug.WriteLine("ok6");
+            await ClearBackup(files, LogFileNamePrefix, maxBackups); Debug.WriteLine("ok7");
+            await ClearBackup(files, ExceptionLogFileNamePrefix, maxBackups); Debug.WriteLine("ok8");
         }
 
         private static async Task ClearBackup(IEnumerable<StorageFile> files, string prefix, int maxBackups)

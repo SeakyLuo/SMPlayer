@@ -708,6 +708,9 @@
   <data name="RefreshItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>更新当前目录</value>
   </data>
+  <data name="ReleaseNotesBugFixes.Text" xml:space="preserve">
+    <value>问题修复和优化</value>
+  </data>
   <data name="ReleaseNotesButton.Content" xml:space="preserve">
     <value>更新日志</value>
   </data>
@@ -718,7 +721,7 @@
     <value>优化了多选。</value>
   </data>
   <data name="ReleaseNotesIntroduceReleaseNotes.Text" xml:space="preserve">
-    <value>添加了更新日志，你可以在设置页面找到他。</value>
+    <value>添加了更新日志，你可以在设置页面再次查看。</value>
   </data>
   <data name="ReleaseNotesReleaseNotesSortByDateAdded.Text" xml:space="preserve">
     <value>通过添加日期搜索。</value>
