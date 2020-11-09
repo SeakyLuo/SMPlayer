@@ -20,6 +20,8 @@ Scrolling lyrics.
 
 Search result count. Albums count. Music library count.
 
+Move up, move down.
+
 Batch delete.
 
 Move music from folder to folder.
