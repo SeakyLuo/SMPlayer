@@ -38,6 +38,8 @@
             4. <Run x:Uid="ReleaseNotesSearchPageAddAllToButton"/><LineBreak />
             5. <Run x:Uid="ReleaseNotesSortByDateAdded"/><LineBreak />
             6. <Run x:Uid="ReleaseNotesBugFixes"/><LineBreak />
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesHistoryUpdates" /><LineBreak />
+            1. <Run x:Uid="ReleaseNotesOpenWithSMPlayer"/><LineBreak />
         </TextBlock>
     </Grid>
 </ContentDialog>

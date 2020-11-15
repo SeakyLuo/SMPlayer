@@ -735,6 +735,9 @@
   <data name="ReleaseNotesCreateNewPlaylistButtonMoved.Text" xml:space="preserve">
     <value>In the Playlist page, the Create New Playlist button is moved to the dropdown list, and the Add To button is removed.</value>
   </data>
+  <data name="ReleaseNotesHistoryUpdates.Text" xml:space="preserve">
+    <value>History Updates</value>
+  </data>
   <data name="ReleaseNotesImproveMultiSelect.Text" xml:space="preserve">
     <value>Improved multi-select.</value>
   </data>
@@ -743,6 +746,9 @@
   </data>
   <data name="ReleaseNotesIntroduceReleaseNotes.Text" xml:space="preserve">
     <value>Release Notes dialog is introduced. You can find it in the Settings page.</value>
+  </data>
+  <data name="ReleaseNotesOpenWithSMPlayer.Text" xml:space="preserve">
+    <value>Now supports open music with SMPlayer.</value>
   </data>
   <data name="ReleaseNotesSearchPageAddAllToButton.Text" xml:space="preserve">
     <value>Search page now has an AddAllTo button.</value>
