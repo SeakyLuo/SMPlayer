@@ -381,6 +381,9 @@
   <data name="Reverse Playlist" xml:space="preserve">
     <value>Reverse Playlist</value>
   </data>
+  <data name="ReverseList" xml:space="preserve">
+    <value>Reverse List</value>
+  </data>
   <data name="RootNotFound" xml:space="preserve">
     <value>Cannot find music folder. Please reset it.</value>
   </data>

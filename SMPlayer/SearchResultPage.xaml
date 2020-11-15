@@ -7,6 +7,7 @@
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:SMPlayer.Controls"
+    Loaded="Page_Loaded"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
@@ -25,6 +26,10 @@
         <DataTemplate x:Key="DropShadowItemTemplate" x:DataType="data:AlbumView">
             <local:DropShadowControl DataContext="{Binding}" DataContextChanged="Album_DataContextChanged" />
         </DataTemplate>
+        <Style x:Key="SearchHeaderTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Margin" Value="0,4,4,0" />
+        </Style>
     </Page.Resources>
 
     <Grid>
@@ -32,24 +37,27 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <CommandBar Style="{StaticResource SearchCommandBarStyle}">
+        <CommandBar Style="{StaticResource SearchCommandBarStyle}" Margin="12,0">
             <CommandBar.Content>
-                <DropDownButton
-                    x:Name="SortByDropdown"
-                    Margin="8,8,0,0"
-                    VerticalAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Click="SortByDropdown_Click"
-                    Content="Sort By"
-                    Style="{ThemeResource SearchTextBlockButtonStyle}" />
+                <TextBlock
+                    x:Name="ResultTextBlock"
+                    Style="{StaticResource SearchHeaderTextBlockStyle}"
+                    Text="Result" />
             </CommandBar.Content>
             <AppBarButton
-                x:Name="AddToButton"
-                x:Uid="AddToAppButton"
-                Margin="0,0,4,0"
-                Click="AddToButton_Click"
-                Icon="Add"
-                Style="{StaticResource SearchAppBarButtonStyle}" />
+                x:Name="MultiSelectAppButton"
+                x:Uid="MultiSelectAppButton"
+                Click="MultiSelectAppButton_Click"
+                Style="{StaticResource SearchAppBarButtonStyle}" >
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE762;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton
+                x:Name="SortButton"
+                x:Uid="SortAppButton"
+                Click="SortButton_Click"
+                Icon="Sort" />
         </CommandBar>
         <ProgressRing
             x:Name="LoadingProgress"
@@ -60,6 +68,7 @@
             VerticalAlignment="Center"
             IsActive="False" />
         <GridView
+            x:Name="ArtistsGridView"
             Grid.Row="1"
             ItemClick="ArtistsGridView_ItemClick"
             ItemsSource="{x:Bind Artists, Mode=OneWay}"
@@ -72,6 +81,7 @@
             </GridView.ItemTemplate>
         </GridView>
         <GridView
+            x:Name="AlbumsGridView"
             Grid.Row="1"
             ItemClick="AlbumsGridView_ItemClick"
             ItemTemplate="{StaticResource DropShadowItemTemplate}"
@@ -87,6 +97,7 @@
             Style="{StaticResource DataHolderStyle}"
             Visibility="{x:Bind Songs.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
         <GridView
+            x:Name="PlaylistsGridView"
             Grid.Row="1"
             ItemClick="PlaylistGridView_ItemClick"
             ItemTemplate="{StaticResource DropShadowItemTemplate}"
@@ -94,6 +105,7 @@
             Style="{StaticResource GridViewStyle}"
             Visibility="{x:Bind Playlists.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
         <GridView
+            x:Name="FoldersGridView"
             Grid.Row="1"
             ItemClick="FolderGridView_ItemClick"
             ItemContainerStyle="{StaticResource DropShadowGridViewItemStyle}"

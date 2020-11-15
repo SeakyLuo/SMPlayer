@@ -14,16 +14,37 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <CommandBar
+            x:Name="AlbumsCommandBar"
+            Background="Transparent"
+            DefaultLabelPosition="Right">
+            <AppBarButton
+                x:Name="MultiSelectButton"
+                x:Uid="MultiSelectAppButton"
+                Click="MultiSelectButton_Click">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE762;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton
+                x:Name="SortButton"
+                x:Uid="SortAppButton"
+                Click="SortButton_Click"
+                Icon="Sort" />
+        </CommandBar>
         <ProgressBar
+            Grid.Row="1"
             x:Name="AlbumPageProgressRing"
             Width="1000"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             IsIndeterminate="True" />
         <GridView
-            Grid.Row="1"
+            x:Name="AlbumsGridView"
+            Grid.Row="2"
             Margin="10"
             IsItemClickEnabled="True"
             ItemClick="GridView_ItemClick"

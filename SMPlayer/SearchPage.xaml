@@ -14,7 +14,6 @@
     <Page.Resources>
         <Style x:Key="HeaderTextBlockStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="18" />
-            <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Margin" Value="0,4,4,0" />
         </Style>
         <Style x:Key="HorizontalListViewStyle" TargetType="ListView">
@@ -140,7 +139,7 @@
     </Page.Resources>
 
     <ScrollViewer>
-        <StackPanel Margin="20,5">
+        <StackPanel Margin="12,4">
             <TextBlock
                 x:Name="NoResultTextBlock"
                 x:Uid="NoResultTextBlock"
@@ -154,19 +153,16 @@
             <StackPanel Visibility="{x:Bind Artists.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                 <CommandBar Style="{StaticResource SearchCommandBarStyle}">
                     <CommandBar.Content>
-                        <StackPanel Style="{StaticResource CommandBarContentHorizontalStackPanel}">
-                            <TextBlock
-                                x:Uid="ArtistsTextBlock"
-                                RelativePanel.AlignLeftWithPanel="True"
-                                Style="{StaticResource HeaderTextBlockStyle}"
-                                Text="Artists" />
-                            <DropDownButton
-                                x:Name="ArtistsDropdown"
-                                Click="ArtistsDropdown_Click"
-                                Content="Sort By"
-                                Style="{ThemeResource SearchTextBlockButtonStyle}" />
-                        </StackPanel>
+                        <TextBlock
+                            x:Name="ArtistsTextBlock"
+                            Style="{StaticResource HeaderTextBlockStyle}"
+                            Text="Artists" />
                     </CommandBar.Content>
+                    <AppBarButton
+                        x:Name="SortArtistsButton"
+                        x:Uid="SortAppButton"
+                        Click="SortArtistsButton_Click"
+                        Icon="Sort" />
                     <AppBarButton
                         x:Name="ArtistsViewAllButton"
                         x:Uid="ViewAllButton"
@@ -189,19 +185,16 @@
             <StackPanel Margin="0,30" Visibility="{x:Bind Albums.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                 <CommandBar Style="{StaticResource SearchCommandBarStyle}">
                     <CommandBar.Content>
-                        <StackPanel Style="{StaticResource CommandBarContentHorizontalStackPanel}">
-                            <TextBlock
-                                x:Uid="AlbumsTextBlock"
-                                RelativePanel.AlignLeftWithPanel="True"
-                                Style="{StaticResource HeaderTextBlockStyle}"
-                                Text="Albums" />
-                            <DropDownButton
-                                x:Name="AlbumsDropdown"
-                                Click="AlbumsDropdown_Click"
-                                Content="Sort By"
-                                Style="{ThemeResource SearchTextBlockButtonStyle}" />
-                        </StackPanel>
+                        <TextBlock
+                            x:Name="AlbumsTextBlock"
+                            Style="{StaticResource HeaderTextBlockStyle}"
+                            Text="Albums" />
                     </CommandBar.Content>
+                    <AppBarButton
+                        x:Name="SortAlbumsButton"
+                        x:Uid="SortAppButton"
+                        Click="SortAlbumsButton_Click"
+                        Icon="Sort" />
                     <AppBarButton
                         x:Name="AlbumsViewAllButton"
                         x:Uid="ViewAllButton"
@@ -224,34 +217,16 @@
             <StackPanel Margin="0,30" Visibility="{x:Bind Songs.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                 <CommandBar Style="{StaticResource SearchCommandBarStyle}">
                     <CommandBar.Content>
-                        <StackPanel Style="{StaticResource CommandBarContentHorizontalStackPanel}">
-                            <TextBlock
-                                x:Uid="SongsTextBlock"
-                                VerticalAlignment="Center"
-                                RelativePanel.AlignLeftWithPanel="True"
-                                Style="{StaticResource HeaderTextBlockStyle}"
-                                Text="Songs" />
-                            <DropDownButton
-                                x:Name="SongsDropdown"
-                                VerticalAlignment="Center"
-                                Click="SongsDropdown_Click"
-                                Content="Sort By"
-                                Style="{ThemeResource SearchTextBlockButtonStyle}" />
-                        </StackPanel>
+                        <TextBlock
+                            x:Name="SongsTextBlock"
+                            Style="{StaticResource HeaderTextBlockStyle}"
+                            Text="Songs" />
                     </CommandBar.Content>
                     <AppBarButton
-                        x:Name="AddToButton"
-                        x:Uid="AddToAppButton"
-                        Click="AddToButton_Click"
-                        Icon="Add"
-                        Style="{StaticResource SearchAppBarButtonStyle}" />
-                    <AppBarButton
-                        x:Name="AddAllButton"
-                        x:Uid="AddAllAppButton"
-                        Click="AddAllButton_Click"
-                        Icon="Add"
-                        Style="{StaticResource SearchAppBarButtonStyle}"
-                        Visibility="Collapsed"/>
+                        x:Name="SortSongsButton"
+                        x:Uid="SortAppButton"
+                        Click="SortSongsButton_Click"
+                        Icon="Sort" />
                     <AppBarButton
                         x:Name="SongsViewAllButton"
                         x:Uid="ViewAllButton"
@@ -269,19 +244,16 @@
             <StackPanel Margin="0,30" Visibility="{x:Bind Playlists.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                 <CommandBar Style="{StaticResource SearchCommandBarStyle}">
                     <CommandBar.Content>
-                        <StackPanel Style="{StaticResource CommandBarContentHorizontalStackPanel}">
-                            <TextBlock
-                                x:Uid="PlaylistsTextBlock"
-                                RelativePanel.AlignLeftWithPanel="True"
-                                Style="{StaticResource HeaderTextBlockStyle}"
-                                Text="Playlists" />
-                            <DropDownButton
-                                x:Name="PlaylistsDropdown"
-                                Click="PlaylistsDropdown_Click"
-                                Content="Sort By"
-                                Style="{ThemeResource SearchTextBlockButtonStyle}" />
-                        </StackPanel>
+                        <TextBlock
+                            x:Name="PlaylistsTextBlock"
+                            Style="{StaticResource HeaderTextBlockStyle}"
+                            Text="Playlists" />
                     </CommandBar.Content>
+                    <AppBarButton
+                        x:Name="SortPlaylistsButton"
+                        x:Uid="SortAppButton"
+                        Click="SortPlaylistsButton_Click"
+                        Icon="Sort" />
                     <AppBarButton
                         x:Name="PlaylistsViewAllButton"
                         x:Uid="ViewAllButton"
@@ -304,19 +276,16 @@
             <StackPanel Margin="0,30" Visibility="{x:Bind Folders.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                 <CommandBar Style="{StaticResource SearchCommandBarStyle}">
                     <CommandBar.Content>
-                        <StackPanel Style="{StaticResource CommandBarContentHorizontalStackPanel}">
-                            <TextBlock
-                                x:Uid="FoldersTextBlock"
-                                RelativePanel.AlignLeftWithPanel="True"
-                                Style="{StaticResource HeaderTextBlockStyle}"
-                                Text="Folders" />
-                            <DropDownButton
-                                x:Name="FoldersDropdown"
-                                Click="FoldersDropdown_Click"
-                                Content="Sort By"
-                                Style="{ThemeResource SearchTextBlockButtonStyle}" />
-                        </StackPanel>
+                        <TextBlock
+                            x:Name="FoldersTextBlock"
+                            Style="{StaticResource HeaderTextBlockStyle}"
+                            Text="Folders" />
                     </CommandBar.Content>
+                    <AppBarButton
+                        x:Name="SortFoldersButton"
+                        x:Uid="SortAppButton"
+                        Click="SortFoldersButton_Click"
+                        Icon="Sort" />
                     <AppBarButton
                         x:Name="FoldersViewAllButton"
                         x:Uid="ViewAllButton"

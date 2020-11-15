@@ -12,12 +12,10 @@ namespace SMPlayer.Helpers
     {
         private const string JsonFileName = "UpdateLogger";
         public static UpdateLog Log;
-        private static UpdateLog OriginalLog;
 
         public static async Task Init()
         {
-            OriginalLog = JsonFileHelper.Convert<UpdateLog>(await JsonFileHelper.ReadAsync(JsonFileName)) ?? new UpdateLog();
-            Log = OriginalLog.Copy();
+            Log = JsonFileHelper.Convert<UpdateLog>(await JsonFileHelper.ReadAsync(JsonFileName)) ?? new UpdateLog();
         }
 
         public static void Save()
@@ -57,18 +55,10 @@ namespace SMPlayer.Helpers
 
     public class UpdateLog
     {
-        public bool ShowReleaseNotesDialog { get; set; } = true;
+        public string LastReleaseNotesVersion { get; set; }
+        public bool ShowReleaseNotesDialog { get => LastReleaseNotesVersion != Helper.AppVersion; }
         public bool DateAdded { get; set; } = false;
 
-        public bool AllUpdated { get => DateAdded && !ShowReleaseNotesDialog; }
-
-        public UpdateLog Copy()
-        {
-            return new UpdateLog
-            {
-                ShowReleaseNotesDialog = this.ShowReleaseNotesDialog,
-                DateAdded = this.DateAdded
-            };
-        }
+        public bool AllUpdated { get => DateAdded; }
     }
 }

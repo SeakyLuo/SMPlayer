@@ -192,6 +192,9 @@
   <data name="Artists" xml:space="preserve">
     <value>所有歌手</value>
   </data>
+  <data name="ArtistSearchBox.PlaceholderText" xml:space="preserve">
+    <value>搜索歌手</value>
+  </data>
   <data name="ArtistsItem.Content" xml:space="preserve">
     <value>歌手</value>
   </data>
@@ -312,6 +315,9 @@
   <data name="DisplayCheckBox.Content" xml:space="preserve">
     <value>不再显示</value>
   </data>
+  <data name="DisplayTextBlock.Text" xml:space="preserve">
+    <value>展示</value>
+  </data>
   <data name="DuplicateItem.Text" xml:space="preserve">
     <value>复制播放列表</value>
   </data>
@@ -401,6 +407,9 @@
   </data>
   <data name="GridViewItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>转为网格模式</value>
+  </data>
+  <data name="HideMultiSelectCommandBarCheckBox.Content" xml:space="preserve">
+    <value>在操作后隐藏多选命令条</value>
   </data>
   <data name="hour" xml:space="preserve">
     <value>小时</value>
@@ -509,6 +518,12 @@
   </data>
   <data name="MusicInfoMenuItem.Text" xml:space="preserve">
     <value>显示歌曲信息</value>
+  </data>
+  <data name="MusicLibraryItem.Content" xml:space="preserve">
+    <value>音乐库</value>
+  </data>
+  <data name="MusicLibraryItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>所有歌曲</value>
   </data>
   <data name="MusicLibraryTextBlock.Text" xml:space="preserve">
     <value>音乐库</value>
@@ -709,7 +724,7 @@
     <value>更新当前目录</value>
   </data>
   <data name="ReleaseNotesBugFixes.Text" xml:space="preserve">
-    <value>问题修复和优化</value>
+    <value>问题修复和优化。</value>
   </data>
   <data name="ReleaseNotesButton.Content" xml:space="preserve">
     <value>更新日志</value>
@@ -720,14 +735,20 @@
   <data name="ReleaseNotesImproveMultiSelect.Text" xml:space="preserve">
     <value>优化了多选。</value>
   </data>
+  <data name="ReleaseNotesImproveSearchPage.Text" xml:space="preserve">
+    <value>优化了搜索页面。</value>
+  </data>
   <data name="ReleaseNotesIntroduceReleaseNotes.Text" xml:space="preserve">
     <value>添加了更新日志，你可以在设置页面再次查看。</value>
   </data>
-  <data name="ReleaseNotesReleaseNotesSortByDateAdded.Text" xml:space="preserve">
-    <value>通过添加日期搜索。</value>
-  </data>
   <data name="ReleaseNotesSearchPageAddAllToButton.Text" xml:space="preserve">
     <value>搜索页面有了“添加全部到”按钮。</value>
+  </data>
+  <data name="ReleaseNotesShowCount.Text" xml:space="preserve">
+    <value>现在有多个页面会显示列表项总数了。</value>
+  </data>
+  <data name="ReleaseNotesSortByDateAdded.Text" xml:space="preserve">
+    <value>通过添加日期搜索。</value>
   </data>
   <data name="ReleaseNotesTextBlock.Text" xml:space="preserve">
     <value>更新日志</value>
@@ -864,6 +885,9 @@
   <data name="ShowAllPlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>显示所有播放列表</value>
   </data>
+  <data name="ShowCounterCheckBox.Content" xml:space="preserve">
+    <value>展示计数</value>
+  </data>
   <data name="ShowInExplorerButton.Content" xml:space="preserve">
     <value>查看</value>
   </data>
@@ -887,12 +911,6 @@
   </data>
   <data name="ShuffleItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>随机播放当前目录所有音乐</value>
-  </data>
-  <data name="SongsItem.Content" xml:space="preserve">
-    <value>歌曲</value>
-  </data>
-  <data name="SongsItem.ToolTipService.ToolTip" xml:space="preserve">
-    <value>所有歌曲</value>
   </data>
   <data name="SongsTextBlock.Text" xml:space="preserve">
     <value>歌曲</value>

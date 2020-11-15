@@ -26,7 +26,7 @@ namespace SMPlayer
         public static MainPage Instance
         {
             // This will return null when your current page is not a MainPage instance!
-            get => (Window.Current.Content as Frame).Content as MainPage;
+            get => (Window.Current.Content as Frame)?.Content as MainPage;
         }
         public bool IsMinimal { get => MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal; }
         public Brush TitleBarBackground
@@ -88,7 +88,7 @@ namespace SMPlayer
             if (!isTitleBarColorful) TitleBarBackground = isMinimal ? ColorHelper.MinimalTitleBarColor : ColorHelper.TransparentBrush;
             HeaderGrid.Visibility = collapsed ? Visibility.Collapsed : Visibility.Visible;
             if (!isMinimal) HideHeaderSearchBar(Visibility.Collapsed);
-            if (page == "SearchPage" || page == "SearchResultPage") SetHeaderText(SearchPage.GetSearchHeader(SearchPage.History.Peek(), IsMinimal));
+            if (page == "SearchPage" || page == "SearchResultPage") SetHeaderTextWithoutLocalization(SearchPage.GetSearchHeader(SearchPage.History.Peek(), IsMinimal));
             if (!MainNavigationView.IsPaneOpen)
                 if (isMinimal) PaneCloseMinimal();
                 else PaneCloseNormal();
@@ -288,9 +288,13 @@ namespace SMPlayer
             }
             Settings.settings.LastPage = name;
         }
-        public void SetHeaderText(string header)
+        public void SetHeaderText(string header, params object[] args)
         {
-            MainNavigationViewHeader.Text = Helper.Localize(header);
+            MainNavigationViewHeader.Text = Helper.LocalizeText(header, args);
+        }
+        public void SetHeaderTextWithoutLocalization(string header)
+        {
+            MainNavigationViewHeader.Text = header;
         }
         private void MainNavigationView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
@@ -315,12 +319,10 @@ namespace SMPlayer
             switch (page)
             {
                 case "MusicLibraryPage":
-                    SetHeaderText("Music Library");
                     HeaderGrid.Visibility = Visibility.Visible;
                     MainNavigationView.SelectedItem = MusicLibraryItem;
                     break;
                 case "ArtistsPage":
-                    SetHeaderText("Artists");
                     HeaderGrid.Visibility = Visibility.Visible;
                     MainNavigationView.SelectedItem = ArtistsItem;
                     break;
@@ -330,12 +332,11 @@ namespace SMPlayer
                     MainNavigationView.SelectedItem = null;
                     break;
                 case "AlbumsPage":
-                    SetHeaderText("Albums");
                     HeaderGrid.Visibility = Visibility.Visible;
                     MainNavigationView.SelectedItem = AlbumsItem;
                     break;
                 case "NowPlayingPage":
-                    SetHeaderText("Now Playing");
+                    SetHeaderText("NowPlaying");
                     HeaderGrid.Visibility = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? Visibility.Collapsed : Visibility.Visible;
                     MainNavigationView.SelectedItem = NowPlayingItem;
                     break;

@@ -146,15 +146,9 @@ namespace SMPlayer
 
         private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (SelectionMode == ListViewSelectionMode.Multiple)
-            {
-
-            }
-            else
-            {
-                Music music = (Music)e.ClickedItem;
-                MediaHelper.SetMusicAndPlay(CurrentPlaylist, music);
-            }
+            if (SelectionMode != ListViewSelectionMode.None) return;
+            Music music = (Music)e.ClickedItem;
+            MediaHelper.SetMusicAndPlay(CurrentPlaylist, music);
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
@@ -195,25 +189,10 @@ namespace SMPlayer
             MenuFlyoutOption option = new MenuFlyoutOption
             {
                 ShowRemove = Removable,
-                MultiSelectOption = MultiSelectOption
+                MultiSelectOption = MultiSelectOption,
+                ShowMoveToTop = AllowReorder && music.Index > 0
             };
             MenuFlyoutHelper.SetMusicMenu(sender, this, null, option);
-            if (AllowReorder)
-            {
-                if (music.Index > 0)
-                {
-                    var item = new MenuFlyoutItem()
-                    {
-                        Text = Helper.Localize("Move To Top"),
-                        Icon = new SymbolIcon(Symbol.Upload)
-                    };
-                    item.Click += (s, args) =>
-                    {
-                        MediaHelper.MoveMusic(music.Index, 0);
-                    };
-                    flyout.Items.Add(item);
-                }
-            }
         }
 
         private void RemoveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
@@ -372,6 +351,21 @@ namespace SMPlayer
             dragIndex = (e.Items[0] as Music).Index;
         }
 
+        public void SelectAll()
+        {
+            SongsListView.SelectAll();
+        }
+
+        public void ReverseSelections()
+        {
+            SongsListView.ReverseSelections();
+        }
+
+        public void ClearSelections()
+        {
+            SongsListView.ClearSelections();
+        }
+
         void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar)
         {
             SelectionMode = ListViewSelectionMode.None;
@@ -386,11 +380,9 @@ namespace SMPlayer
 
         void IMultiSelectListener.Play(MultiSelectCommandBar commandBar)
         {
-            if (SongsListView.SelectedItems.Count == 0) return;
+            if (SelectedItemsCount == 0) return;
             MediaHelper.SetPlaylistAndPlay(SelectedItems);
-            SelectionMode = ListViewSelectionMode.None;
             MultiSelectListener?.Play(commandBar);
-            commandBar.Hide();
         }
 
         async void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar)

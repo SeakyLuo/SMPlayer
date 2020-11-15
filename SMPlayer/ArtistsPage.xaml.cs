@@ -19,7 +19,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class ArtistsPage : Page, IAfterSongsSetListener, ISwitchMusicListener, IMenuFlyoutItemClickListener, IMultiSelectListener
+    public sealed partial class ArtistsPage : Page, IAfterSongsSetListener, ISwitchMusicListener, IMenuFlyoutItemClickListener, IMultiSelectListener, IInitListener
     {
         public static ArtistsPage Instance { get => MainPage.Instance.NavigationFrame.Content as ArtistsPage; }
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
@@ -28,6 +28,7 @@ namespace SMPlayer
         private bool IsProcessing = false;
         private object targetArtist;
         private List<ListView> listViews = new List<ListView>();
+        private IInitListener initListener;
 
         private ArtistView SelectedArtist
         {
@@ -93,17 +94,14 @@ namespace SMPlayer
             targetArtist = e.Parameter;
         }
 
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            SetHeader();
             MainPage.Instance.SetMultiSelectListener(this);
             if (targetArtist == null) return;
             if (IsProcessing)
             {
-                await Task.Run(async () =>
-                {
-                    while (IsProcessing) ;
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => SelectArtist(targetArtist));
-                });
+                initListener = this;
             }
             else
             {
@@ -178,8 +176,21 @@ namespace SMPlayer
                 Suggestions.Add(artist.Name);
             }
             FindMusicAndSetPlaying(MediaHelper.CurrentMusic);
-            ArtistSearchBox.PlaceholderText = Helper.LocalizeMessage("AllArtists", Artists.Count);
+            SetHeader();
+            initListener?.Inited();
             IsProcessing = false;
+        }
+
+        public void SetHeader()
+        {
+            if (Settings.settings.ShowCount)
+            {
+                MainPage.Instance?.SetHeaderText("AllArtistsWithCount", Artists.Count);
+            }
+            else
+            {
+                MainPage.Instance?.SetHeaderText("AllArtists");
+            }
         }
 
         public async void SongsSet(ICollection<Music> songs)
@@ -201,15 +212,9 @@ namespace SMPlayer
         private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             ListView listView = (ListView)sender;
-            if (listView.SelectionMode == ListViewSelectionMode.Multiple)
-            {
-
-            }
-            else
-            {
-                Music music = (Music)e.ClickedItem;
-                MediaHelper.SetMusicAndPlay(listView.ItemsSource as ObservableCollection<Music>, music);
-            }
+            if (listView.SelectionMode != ListViewSelectionMode.None) return;
+            Music music = (Music)e.ClickedItem;
+            MediaHelper.SetMusicAndPlay(listView.ItemsSource as ObservableCollection<Music>, music);
         }
 
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
@@ -439,6 +444,11 @@ namespace SMPlayer
             ListView listView = sender as ListView;
             listView.SelectionMode = MainPage.Instance.GetMultiSelectCommandBar().IsVisible ? ListViewSelectionMode.Multiple : ListViewSelectionMode.None;
             listViews.Add(listView);
+        }
+
+        void IInitListener.Inited()
+        {
+            SelectArtist(targetArtist);
         }
     }
 }

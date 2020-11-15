@@ -195,6 +195,9 @@
   <data name="Artists" xml:space="preserve">
     <value>Artists</value>
   </data>
+  <data name="ArtistSearchBox.PlaceholderText" xml:space="preserve">
+    <value>Search Artists</value>
+  </data>
   <data name="ArtistsItem.Content" xml:space="preserve">
     <value>Artists</value>
   </data>
@@ -315,6 +318,9 @@
   <data name="DisplayCheckBox.Content" xml:space="preserve">
     <value>Don't show this next time</value>
   </data>
+  <data name="DisplayTextBlock.Text" xml:space="preserve">
+    <value>Display</value>
+  </data>
   <data name="DuplicateItem.Text" xml:space="preserve">
     <value>Duplicate Playlist</value>
   </data>
@@ -404,6 +410,9 @@
   </data>
   <data name="GridViewItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Change to Grid View</value>
+  </data>
+  <data name="HideMultiSelectCommandBarCheckBox.Content" xml:space="preserve">
+    <value>Hide multi-select commandbar after operation</value>
   </data>
   <data name="hour" xml:space="preserve">
     <value>hour</value>
@@ -512,6 +521,12 @@
   </data>
   <data name="MusicInfoMenuItem.Text" xml:space="preserve">
     <value>Show Music Info</value>
+  </data>
+  <data name="MusicLibraryItem.Content" xml:space="preserve">
+    <value>Music Library</value>
+  </data>
+  <data name="MusicLibraryItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>All Songs</value>
   </data>
   <data name="MusicLibraryTextBlock.Text" xml:space="preserve">
     <value>Music Library</value>
@@ -723,11 +738,17 @@
   <data name="ReleaseNotesImproveMultiSelect.Text" xml:space="preserve">
     <value>Improved multi-select.</value>
   </data>
+  <data name="ReleaseNotesImproveSearchPage.Text" xml:space="preserve">
+    <value>Search page is improved.</value>
+  </data>
   <data name="ReleaseNotesIntroduceReleaseNotes.Text" xml:space="preserve">
     <value>Release Notes dialog is introduced. You can find it in the Settings page.</value>
   </data>
   <data name="ReleaseNotesSearchPageAddAllToButton.Text" xml:space="preserve">
     <value>Search page now has an AddAllTo button.</value>
+  </data>
+  <data name="ReleaseNotesShowCount.Text" xml:space="preserve">
+    <value>Multiple pages now can show the number of items in a collection.</value>
   </data>
   <data name="ReleaseNotesSortByDateAdded.Text" xml:space="preserve">
     <value>Sort by date added.</value>
@@ -864,6 +885,9 @@
   <data name="ShowAllPlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Show All Playlists</value>
   </data>
+  <data name="ShowCounterCheckBox.Content" xml:space="preserve">
+    <value>Show Counter</value>
+  </data>
   <data name="ShowInExplorerButton.Content" xml:space="preserve">
     <value>Check out</value>
   </data>
@@ -887,12 +911,6 @@
   </data>
   <data name="ShuffleItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Shuffle and play all music under current directory</value>
-  </data>
-  <data name="SongsItem.Content" xml:space="preserve">
-    <value>Songs</value>
-  </data>
-  <data name="SongsItem.ToolTipService.ToolTip" xml:space="preserve">
-    <value>All Songs</value>
   </data>
   <data name="SongsTextBlock.Text" xml:space="preserve">
     <value>Songs</value>

@@ -225,7 +225,7 @@ namespace SMPlayer
             };
             flyout.Items.Add(helper.GetAddToMenuFlyoutSubItem());
             flyout.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(tree.Path, StorageItemTypes.Folder));
-            flyout.Items.Add(MenuFlyoutHelper.GetSortByMenu(new Dictionary<SortBy, Action>
+            flyout.Items.Add(MenuFlyoutHelper.GetSortByMenuSubItem(new Dictionary<SortBy, Action>
             {
                 { SortBy.Title, () =>
                 {

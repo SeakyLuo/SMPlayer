@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources;
 using Windows.Media.Playback;
 using Windows.Storage;
@@ -38,6 +39,17 @@ namespace SMPlayer
         public static TileUpdater tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
         public static ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
         public static ResourceLoader MessageResourceLoader = ResourceLoader.GetForCurrentView("Messages");
+        public static ResourceLoader TextResourceLoader = ResourceLoader.GetForCurrentView("Texts");
+        public static string AppVersion
+        {
+            get
+            {
+                Package package = Package.Current;
+                PackageId packageId = package.Id;
+                PackageVersion version = packageId.Version;
+                return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+            }
+        }
 
         private const string ExceptionLogFileNamePrefix = "ExceptionLog", LogFileNamePrefix = "Log";
 
@@ -234,7 +246,17 @@ namespace SMPlayer
 
         public static string LocalizeMessage(string resource, params object[] args)
         {
-            var str = LocalizeHelper(resource, MessageResourceLoader);
+            return LocalizeWithLoader(MessageResourceLoader, resource, args);
+        }
+
+        public static string LocalizeText(string resource, params object[] args)
+        {
+            return LocalizeWithLoader(TextResourceLoader, resource, args);
+        }
+
+        private static string LocalizeWithLoader(ResourceLoader loader, string resource, params object[] args)
+        {
+            var str = LocalizeHelper(resource, loader);
             try
             {
                 return string.Format(str, args);
@@ -246,17 +268,18 @@ namespace SMPlayer
             }
         }
 
-        public static string GetPlaylistName(string Name, int index)
-        {
-            return LocalizeMessage("PlaylistName", Name, index);
-        }
-
         private static string LocalizeHelper(string resource, ResourceLoader loader)
         {
             if (string.IsNullOrEmpty(resource)) return resource;
             var str = loader.GetString(resource.Replace(":", "%3A"));
             return string.IsNullOrEmpty(str) ? resource : str;
         }
+
+        public static string GetPlaylistName(string Name, int index)
+        {
+            return LocalizeMessage("PlaylistName", Name, index);
+        }
+
         public static string GetVolumeIcon(double volume)
         {
             if (volume == 0) return "\uE992";

@@ -41,7 +41,8 @@ namespace SMPlayer.Models
         Duration = 3,
         PlayCount = 4,
         DateAdded = 5,
-        Name = 6
+        Name = 6,
+        Reverse = 7
     }
     public static class SortByConverter
     {

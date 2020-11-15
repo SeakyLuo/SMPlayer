@@ -14,21 +14,19 @@ Build it with local computer.
 Go to Settings and set the Root Folder of your music files.
 
 # TO DO
-Sort albums.
+Improve search algorithm.
+
+Report bugs via email.
 
 Scrolling lyrics.
 
-Search result count. Albums count. Music library count.
-
-Move up, move down.
-
-Batch delete.
-
 Move music from folder to folder.
 
-Improve column spacing of AlbumPage.
+SearchPage AddTo button for all search types.
 
 Improve editing album art by selecting a song in a dropdown with searching.
+
+Batch delete.
 
 Page shows no music hint.
 
@@ -58,8 +56,6 @@ Mini mode media control fade in/out.
 
 Allow MainSearchBar to have a search history dropdown.
 
-SearchPage AddTo button for all search types.
-
 Shuffle after one round of playing.
 
 If a playlist contains this music collection, skip it in the MenuFlyout.
@@ -71,3 +67,5 @@ Mini mode shuffle button like NowPlayingPage.
 Grid Mode for PlaylistPage.
 
 Refresh directory does not refresh page.
+
+Search albums.

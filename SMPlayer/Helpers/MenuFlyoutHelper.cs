@@ -375,6 +375,16 @@ namespace SMPlayer
             flyout.Items.Add(deleteItem);
             foreach (var item in GetMusicPropertiesMenuFlyout(option.ShowNavigation).Items)
                 flyout.Items.Add(item);
+            var moveToTopItem = new MenuFlyoutItem()
+            {
+                Text = Helper.Localize("Move To Top"),
+                Icon = new SymbolIcon(Symbol.Upload)
+            };
+            moveToTopItem.Click += (s, args) =>
+            {
+                MediaHelper.MoveMusic(music.Index, 0);
+            };
+            flyout.Items.Add(moveToTopItem);
             return flyout;
         }
 
@@ -495,22 +505,22 @@ namespace SMPlayer
             return removeItem;
         }
 
-        public static MenuFlyoutSubItem GetSortByMenu(Dictionary<SortBy, Action> actions, Action reverse = null)
+        public static MenuFlyoutSubItem GetSortByMenuSubItem(Dictionary<SortBy, Action> actions, Action reverse = null)
         {
             var sortByItem = new MenuFlyoutSubItem() { Text = Helper.Localize("Sort") };
-            var reverseItem = new MenuFlyoutItem() { Text = Helper.LocalizeMessage("Reverse Playlist") };
-            reverseItem.Click += (send, args) => reverse?.Invoke();
-            sortByItem.Items.Add(reverseItem);
-            sortByItem.Items.Add(new MenuFlyoutSeparator());
-            foreach (var criterion in Playlist.Criteria)
+            if (reverse != null)
             {
-                if (actions.TryGetValue(criterion, out Action action))
-                {
-                    string sortby = Helper.LocalizeMessage("Sort By " + criterion.ToStr());
-                    var item = new MenuFlyoutItem() { Text = sortby };
-                    item.Click += (send, args) => action.Invoke();
-                    sortByItem.Items.Add(item);
-                }
+                var reverseItem = new MenuFlyoutItem() { Text = Helper.LocalizeMessage("Reverse Playlist") };
+                reverseItem.Click += (sender, args) => reverse.Invoke();
+                sortByItem.Items.Add(reverseItem);
+                sortByItem.Items.Add(new MenuFlyoutSeparator());
+            }
+            foreach (var pair in actions)
+            {
+                string sortby = Helper.LocalizeMessage("Sort By " + pair.Key.ToStr());
+                var item = new MenuFlyoutItem() { Text = sortby };
+                item.Click += (sender, args) => pair.Value?.Invoke();
+                sortByItem.Items.Add(item);
             }
             return sortByItem;
         }
@@ -537,10 +547,17 @@ namespace SMPlayer
             }
             flyout.ShowAt(sender as FrameworkElement);
         }
-        public static void SetSearchSortByMenu(object sender, SortBy criterion, SortBy[] criteria, Action<SortBy> onSelected)
+        public static void SetSortByMenu(object sender, SortBy criterion, SortBy[] criteria, Action<SortBy> onSelected, Action reverse = null)
         {
             var flyout = new MenuFlyout();
             flyout.Items.Clear();
+            if (reverse != null)
+            {
+                var reverseItem = new MenuFlyoutItem() { Text = Helper.LocalizeMessage("ReverseList") };
+                reverseItem.Click += (send, args) => reverse.Invoke();
+                flyout.Items.Add(reverseItem);
+                flyout.Items.Add(new MenuFlyoutSeparator());
+            }
             foreach (var item in criteria)
             {
                 string sortby = Helper.LocalizeMessage("Sort By " + item.ToStr());

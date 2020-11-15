@@ -372,6 +372,8 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <None Include="SMPlayer_TemporaryKey.pfx" />
+    <PRIResource Include="Strings\zh-cn\Texts.resw" />
+    <PRIResource Include="Strings\en-us\Texts.resw" />
     <PRIResource Include="Strings\zh-cn\Messages.resw" />
     <PRIResource Include="Strings\en-us\Messages.resw" />
     <PRIResource Include="Strings\zh-cn\Resources.resw" />

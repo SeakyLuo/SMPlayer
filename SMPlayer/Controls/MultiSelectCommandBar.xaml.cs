@@ -52,10 +52,20 @@ namespace SMPlayer.Controls
             shouldOpen = true;
         }
 
-        private void CancelAppButton_Click(object sender, RoutedEventArgs e)
+        public void HideAfterOperation()
+        {
+            if (Settings.settings.HideMultiSelectCommandBarAfterOperation) Cancel();
+        }
+
+        private void Cancel()
         {
             Hide();
             MultiSelectListener?.Cancel(this);
+        }
+
+        private void CancelAppButton_Click(object sender, RoutedEventArgs e)
+        {
+            Cancel();
         }
 
         private void AddToAppButton_Click(object sender, RoutedEventArgs e)
@@ -63,16 +73,19 @@ namespace SMPlayer.Controls
             MenuFlyoutHelper helper = new MenuFlyoutHelper();
             MultiSelectListener?.AddTo(this, helper);
             helper.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
+            HideAfterOperation();
         }
 
         private void PlayAppButton_Click(object sender, RoutedEventArgs e)
         {
             MultiSelectListener?.Play(this);
+            HideAfterOperation();
         }
 
         private void RemoveAppButton_Click(object sender, RoutedEventArgs e)
         {
             MultiSelectListener?.Remove(this);
+            HideAfterOperation();
         }
 
         private void SelectAllAppButton_Click(object sender, RoutedEventArgs e)
@@ -92,7 +105,7 @@ namespace SMPlayer.Controls
 
         private void DeleteAppButton_Click(object sender, RoutedEventArgs e)
         {
-
+            HideAfterOperation();
         }
     }
 

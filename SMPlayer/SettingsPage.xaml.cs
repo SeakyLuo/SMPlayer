@@ -41,10 +41,12 @@ namespace SMPlayer
             PathBox.Text = Settings.settings.RootPath;
             NotificationComboBox.SelectedIndex = (int)Settings.settings.Toast;
             ThemeColorPicker.Color = Settings.settings.ThemeColor;
+            ShowCounterCheckBox.IsChecked = Settings.settings.ShowCount;
             KeepRecentComboBox.SelectedIndex = LimitedRecentPlayedItems.FindIndex(num => num == Settings.settings.LimitedRecentPlayedItems);
             AutoPlayCheckBox.IsChecked = Settings.settings.AutoPlay;
             AutoLyricsCheckBox.IsChecked = Settings.settings.AutoLyrics;
             SaveProgressCheckBox.IsChecked = Settings.settings.SaveMusicProgress;
+            HideMultiSelectCommandBarCheckBox.IsChecked = Settings.settings.HideMultiSelectCommandBarAfterOperation;
         }
 
         private async void PathBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
@@ -118,8 +120,8 @@ namespace SMPlayer
 
         private void ConfirmColorButton_Click(object sender, RoutedEventArgs e)
         {
-            //Settings.settings.ThemeColor = ThemeColorPicker.Color;
-            //ThemeColorButton.Background = new SolidColorBrush(ThemeColorPicker.Color);
+            Settings.settings.ThemeColor = ThemeColorPicker.Color;
+            ThemeColorButton.Background = new SolidColorBrush(ThemeColorPicker.Color);
             MainPage.Instance.ShowLocalizedNotification("NotImplemented");
             ColorPickerFlyout.Hide();
         }
@@ -400,6 +402,26 @@ namespace SMPlayer
         {
             var dialog = new ReleaseNotesDialog();
             await dialog.ShowAsync();
+        }
+
+        private void HideMultiSelectCommandBarCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.HideMultiSelectCommandBarAfterOperation = true;
+        }
+
+        private void HideMultiSelectCommandBarCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.HideMultiSelectCommandBarAfterOperation = false;
+        }
+
+        private void ShowCounterCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.ShowCount = true;
+        }
+
+        private void ShowCounterCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.ShowCount = false;
         }
     }
 

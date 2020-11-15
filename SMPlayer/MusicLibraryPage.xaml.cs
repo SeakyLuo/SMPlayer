@@ -41,6 +41,7 @@ namespace SMPlayer
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
+            SetHeader();
             MediaHelper.FindMusicAndSetPlaying(AllSongs, null, MediaHelper.CurrentMusic);
         }
         public static async Task Init()
@@ -137,6 +138,7 @@ namespace SMPlayer
                 AllSongs.Add(item);
             }
             AllSongsSet = AllSongs.ToHashSet();
+            SetHeader();
             NotifyListeners();
         }
         public static void AddMusic(Music music)
@@ -153,6 +155,7 @@ namespace SMPlayer
             }
             AllSongs.Add(music);
             AfterInsertion:
+            SetHeader();
             Settings.settings.AddMusic(music);
             NotifyListeners();
         }
@@ -160,6 +163,7 @@ namespace SMPlayer
         {
             if (!AllSongsSet.Remove(music)) return;
             AllSongs.Remove(music);
+            SetHeader();
             Settings.settings.RemoveMusic(music);
             NotifyListeners();
         }
@@ -193,6 +197,18 @@ namespace SMPlayer
                 list.Add(item);
             }
             helper.Data = list;
+        }
+
+        public static void SetHeader()
+        {
+            if (Settings.settings.ShowCount)
+            {
+                MainPage.Instance?.SetHeaderText("AllSongsWithCount", AllSongs.Count);
+            }
+            else
+            {
+                MainPage.Instance?.SetHeaderText("AllSongs");
+            }
         }
     }
 

@@ -6,6 +6,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using System;
+using SMPlayer.Controls;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -14,7 +15,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class SearchResultPage : Page
+    public sealed partial class SearchResultPage : Page, IMultiSelectListener
     {
         public static Stack<SearchKeyword> History = new Stack<SearchKeyword>();
         public ObservableCollection<Playlist> Artists = new ObservableCollection<Playlist>();
@@ -83,6 +84,7 @@ namespace SMPlayer
             SearchArgs searchArgs = (SearchArgs)e.Parameter;
             searchType = searchArgs.Type;
             object list = searchArgs.Collection;
+            ResultTextBlock.Text = searchArgs.Summary;
             SearchKeyword keyword = SearchPage.History.Peek();
             switch (searchType)
             {
@@ -102,8 +104,7 @@ namespace SMPlayer
                     Criteria = SearchPage.FoldersCriteria;
                     break;
             }
-            SetSortByDropdownContent(searchArgs.Criterion);
-            MainPage.Instance.SetHeaderText(SearchPage.GetSearchHeader(keyword, MainPage.Instance.IsMinimal));
+            MainPage.Instance.SetHeaderTextWithoutLocalization(SearchPage.GetSearchHeader(keyword, MainPage.Instance.IsMinimal));
             switch (e.NavigationMode)
             {
                 case NavigationMode.New:
@@ -154,23 +155,21 @@ namespace SMPlayer
             LoadingProgress.IsActive = false;
         }
 
-        private void SetSortByDropdownContent(SortBy criterion)
-        {
-            SortByDropdown.Content = Helper.LocalizeMessage("Sort By " + criterion.ToStr());
-        }
-
         private void ArtistsGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (ArtistsGridView.SelectionMode != ListViewSelectionMode.None) return;
             Frame.Navigate(typeof(ArtistsPage), e.ClickedItem);
         }
 
         private void AlbumsGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (AlbumsGridView.SelectionMode != ListViewSelectionMode.None) return;
             Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
         }
 
         private void PlaylistGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (PlaylistsGridView.SelectionMode != ListViewSelectionMode.None) return;
             AlbumView album = (AlbumView)e.ClickedItem;
             if (album.Name == MenuFlyoutHelper.NowPlaying)
                 Frame.Navigate(typeof(NowPlayingPage));
@@ -181,6 +180,7 @@ namespace SMPlayer
         }
         private void FolderGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (FoldersGridView.SelectionMode != ListViewSelectionMode.None) return;
             Frame.Navigate(typeof(LocalPage), e.ClickedItem);
         }
 
@@ -189,23 +189,99 @@ namespace SMPlayer
             (args.NewValue as AlbumView)?.SetThumbnailAsync();
         }
 
-        private void SortByDropdown_Click(object sender, RoutedEventArgs e)
+        private void MultiSelectAppButton_Click(object sender, RoutedEventArgs e)
         {
-            MenuFlyoutHelper.SetSearchSortByMenu(sender, SettingsCriterion, Criteria,
-                                                item =>
-                                                {
-                                                    SettingsCriterion = item;
-                                                    SetSortByDropdownContent(item);
-                                                });
+            AlbumsGridView.SelectionMode = ListViewSelectionMode.Multiple;
+            ArtistsGridView.SelectionMode = ListViewSelectionMode.Multiple;
+            SearchMusicView.SelectionMode = ListViewSelectionMode.Multiple;
+            PlaylistsGridView.SelectionMode = ListViewSelectionMode.Multiple;
+            FoldersGridView.SelectionMode = ListViewSelectionMode.Multiple;
+            MainPage.Instance.ShowMultiSelectCommandBar(new MultiSelectCommandBarOption
+            {
+                ShowRemove = false
+            });
         }
 
-        private void AddToButton_Click(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            new MenuFlyoutHelper()
+            if (searchType == SearchType.Songs)
             {
-                Data = Songs,
-                DefaultPlaylistName = Settings.settings.FindNextPlaylistName(CurrentKeyword.Text)
-            }.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
+                MainPage.Instance.SetMultiSelectListener(SearchMusicView);
+            }
+            else
+            {
+                MainPage.Instance.SetMultiSelectListener(this);
+            }
+        }
+
+        void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar)
+        {
+            AlbumsGridView.SelectionMode = ListViewSelectionMode.None;
+            ArtistsGridView.SelectionMode = ListViewSelectionMode.None;
+            SearchMusicView.SelectionMode = ListViewSelectionMode.None;
+            PlaylistsGridView.SelectionMode = ListViewSelectionMode.None;
+            FoldersGridView.SelectionMode = ListViewSelectionMode.None;
+        }
+
+        void IMultiSelectListener.AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper)
+        {
+            helper.DefaultPlaylistName = Settings.settings.FindNextPlaylistName(CurrentKeyword.Text);
+            helper.Data = GetSelectItems();
+        }
+
+        void IMultiSelectListener.Play(MultiSelectCommandBar commandBar)
+        {
+            MediaHelper.SetMusicAndPlay(GetSelectItems());
+        }
+
+        private List<Music> GetSelectItems()
+        {
+            List<Music> list = new List<Music>();
+            foreach (AlbumView item in AlbumsGridView.SelectedItems)
+                list.AddRange(item.Songs);
+            foreach (Music item in SearchMusicView.SelectedItems)
+                list.Add(item);
+            foreach (AlbumView item in PlaylistsGridView.SelectedItems)
+                list.AddRange(item.Songs);
+            foreach (GridFolderView item in FoldersGridView.SelectedItems)
+                list.AddRange(item.Songs);
+            foreach (Playlist item in ArtistsGridView.SelectedItems)
+                list.AddRange(item.Songs);
+            return list;
+        }
+
+        void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar) { }
+
+        void IMultiSelectListener.SelectAll(MultiSelectCommandBar commandBar)
+        {
+            AlbumsGridView.SelectAll();
+            SearchMusicView.SelectAll();
+            PlaylistsGridView.SelectAll();
+            FoldersGridView.SelectAll();
+            ArtistsGridView.SelectAll();
+        }
+
+        void IMultiSelectListener.ReverseSelections(MultiSelectCommandBar commandBar)
+        {
+            AlbumsGridView.ReverseSelections();
+            SearchMusicView.ReverseSelections();
+            PlaylistsGridView.ReverseSelections();
+            FoldersGridView.ReverseSelections();
+            ArtistsGridView.ReverseSelections();
+        }
+
+        void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar)
+        {
+            AlbumsGridView.ClearSelections();
+            SearchMusicView.ClearSelections();
+            PlaylistsGridView.ClearSelections();
+            FoldersGridView.ClearSelections();
+            ArtistsGridView.ClearSelections();
+        }
+
+        private void SortButton_Click(object sender, RoutedEventArgs e)
+        {
+            MenuFlyoutHelper.SetSortByMenu(sender, SettingsCriterion, Criteria, item => SettingsCriterion = item);
         }
     }
 }

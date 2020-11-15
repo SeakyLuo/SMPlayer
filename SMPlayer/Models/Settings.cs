@@ -42,7 +42,9 @@ namespace SMPlayer.Models
         public bool SaveMusicProgress { get; set; } = false;
         public double MusicProgress { get; set; } = 0;
         public SortBy MusicLibraryCriterion { get; set; } = SortBy.Title;
-
+        public SortBy AlbumsCriterion { get; set; } = SortBy.Default;
+        public bool HideMultiSelectCommandBarAfterOperation { get; set; } = true;
+        public bool ShowCount { get; set; } = true;
         public ObservableCollection<string> RecentSearches = new ObservableCollection<string>();
 
         public SortBy SearchArtistsCriterion { get; set; } = SortBy.Default;

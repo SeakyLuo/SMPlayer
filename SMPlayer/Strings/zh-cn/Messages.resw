@@ -381,6 +381,9 @@
   <data name="Reverse Playlist" xml:space="preserve">
     <value>使播放列表倒序</value>
   </data>
+  <data name="ReverseList" xml:space="preserve">
+    <value>倒序排列</value>
+  </data>
   <data name="RootNotFound" xml:space="preserve">
     <value>找不到音乐文件夹，请重新设置</value>
   </data>

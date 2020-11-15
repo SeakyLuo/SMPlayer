@@ -27,7 +27,7 @@ namespace SMPlayer.Dialogs
 
         private void CloseButton_Click(object sender, RoutedEventArgs args)
         {
-            UpdateHelper.Log.ShowReleaseNotesDialog = false;
+            UpdateHelper.Log.LastReleaseNotesVersion = Helper.AppVersion;
             this.Hide();
         }
     }

@@ -112,6 +112,10 @@ namespace SMPlayer
             }
             return dst;
         }
+        public static ObservableCollection<T> CopyAndSetTo<T>(this ObservableCollection<T> dst, IEnumerable<T> src)
+        {
+            return dst.SetTo(src.ToList());
+        }
         public static bool IsMusicFile(this StorageFile file)
         {
             return file.FileType.EndsWith("mp3");
