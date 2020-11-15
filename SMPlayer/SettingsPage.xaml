@@ -154,6 +154,7 @@
                     x:Uid="DisplayTextBlock"
                     Style="{StaticResource SettingLabelStyle}"
                     Text="Display" />
+                <TextBlock Style="{StaticResource SettingLabelStyle}" />
                 <TextBlock
                     x:Name="RecentTextBlock"
                     x:Uid="RecentTextBlock"
@@ -169,7 +170,7 @@
                     x:Name="SaveTextBlock"
                     x:Uid="SaveTextBlock"
                     Style="{StaticResource SettingLabelStyle}"
-                Text="Save" />
+                    Text="Save" />
                 <TextBlock Style="{StaticResource SettingLabelStyle}" />
                 <TextBlock
                     x:Name="OthersTextBlock"
@@ -221,6 +222,13 @@
                     Content="Show Count"
                     Style="{ThemeResource SettingCheckBoxStyle}"
                     Unchecked="ShowCounterCheckBox_Unchecked" />
+                <CheckBox
+                    x:Name="HideMultiSelectCommandBarCheckBox"
+                    x:Uid="HideMultiSelectCommandBarCheckBox"
+                    Checked="HideMultiSelectCommandBarCheckBox_Checked"
+                    Content="Hide multi-select commandbar after operation"
+                    Style="{ThemeResource SettingCheckBoxStyle}"
+                    Unchecked="HideMultiSelectCommandBarCheckBox_Unchecked" />
                 <Button
                     x:Name="ThemeColorButton"
                     x:Uid="ThemeColorButton"
@@ -317,13 +325,6 @@
                     Click="SaveChanges_Click"
                     Content="Save Changes"
                     Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
-                <CheckBox
-                    x:Name="HideMultiSelectCommandBarCheckBox"
-                    x:Uid="HideMultiSelectCommandBarCheckBox"
-                    Checked="HideMultiSelectCommandBarCheckBox_Checked"
-                    Content="Hide multi-select commandbar after operation"
-                    Style="{ThemeResource SettingCheckBoxStyle}"
-                    Unchecked="HideMultiSelectCommandBarCheckBox_Unchecked" />
                 <HyperlinkButton
                     x:Uid="ReleaseNotesButton"
                     Click="ReleaseNotesButton_Click"

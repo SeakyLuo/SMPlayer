@@ -237,6 +237,7 @@
                 <local:PlaylistControl
                     x:Name="SearchMusicView"
                     AlternatingRowColor="True"
+                    Selectable="False"
                     Background="Transparent"
                     ItemsSource="{x:Bind Songs, Mode=OneWay}"
                     Removable="False" />

@@ -75,6 +75,13 @@ namespace SMPlayer
         {
             get => SongsListView.GetFirstDescendantOfType<ScrollViewer>();
         }
+        public bool Selectable
+        {
+            get => (bool)GetValue(SelectableProperty);
+            set => SetValue(SelectableProperty, value);
+        }
+        public static readonly DependencyProperty SelectableProperty = DependencyProperty.Register("SelectableProperty", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(true));
+
         public ListViewSelectionMode SelectionMode
         {
             get => SongsListView.SelectionMode;
@@ -188,6 +195,7 @@ namespace SMPlayer
             Music music = flyout.Target.DataContext as Music;
             MenuFlyoutOption option = new MenuFlyoutOption
             {
+                ShowSelect = Selectable,
                 ShowRemove = Removable,
                 MultiSelectOption = MultiSelectOption,
                 ShowMoveToTop = AllowReorder && music.Index > 0
@@ -330,10 +338,7 @@ namespace SMPlayer
 
         void IMenuFlyoutItemClickListener.Select(object data)
         {
-            if (SelectionMode != ListViewSelectionMode.Multiple)
-            {
-                SelectionMode = ListViewSelectionMode.Multiple;
-            }
+            SelectionMode = ListViewSelectionMode.Multiple;
             SongsListView.SelectedItems.Add(data as Music);
         }
 

@@ -373,7 +373,7 @@ namespace SMPlayer
             };
             deleteItem.SetToolTip(Helper.LocalizeMessage("DeleteMusic", music.Name), false);
             flyout.Items.Add(deleteItem);
-            foreach (var item in GetMusicPropertiesMenuFlyout(option.ShowNavigation).Items)
+            foreach (var item in GetMusicPropertiesMenuFlyout(option.ShowSeeArtistsAndSeeAlbum).Items)
                 flyout.Items.Add(item);
             var moveToTopItem = new MenuFlyoutItem()
             {
@@ -411,11 +411,11 @@ namespace SMPlayer
             return albumItem;
         }
 
-        public MenuFlyout GetMusicPropertiesMenuFlyout(bool withNavigation = true)
+        public MenuFlyout GetMusicPropertiesMenuFlyout(bool ShowSeeArtistsAndSeeAlbum = true)
         {
             var music = (Data as IMusicable).ToMusic();
             var flyout = new MenuFlyout();
-            if (withNavigation)
+            if (ShowSeeArtistsAndSeeAlbum)
             {
                 var artistItem = new MenuFlyoutItem()
                 {

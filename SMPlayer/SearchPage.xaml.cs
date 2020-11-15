@@ -40,15 +40,10 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
-            SearchMusicView.MultiSelectOption = new MultiSelectCommandBarOption
-            {
-                ShowRemove = false
-            };
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            MainPage.Instance.SetMultiSelectListener(SearchMusicView);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
