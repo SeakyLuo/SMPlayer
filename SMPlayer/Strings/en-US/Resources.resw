@@ -759,11 +759,14 @@
   <data name="ReleaseNotesPlayNext.Text" xml:space="preserve">
     <value>"Play Next" has been added to the right-click menu, while "Move to top" is removed.</value>
   </data>
+  <data name="ReleaseNotesPlayWithSMPlayer.Text" xml:space="preserve">
+    <value>Now supports play music with SMPlayer.</value>
+  </data>
   <data name="ReleaseNotesSearchPageAddAllToButton.Text" xml:space="preserve">
     <value>Search page now has an AddAllTo button.</value>
   </data>
   <data name="ReleaseNotesShowCount.Text" xml:space="preserve">
-    <value>Multiple pages now can show the number of items in a collection.</value>
+    <value>Some pages now shows the number of items in a collection.</value>
   </data>
   <data name="ReleaseNotesSortByDateAdded.Text" xml:space="preserve">
     <value>Sort by date added.</value>

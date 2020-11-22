@@ -414,6 +414,9 @@
   <data name="SearchResult" xml:space="preserve">
     <value>Search result of "{0}"</value>
   </data>
+  <data name="SetPlayNext" xml:space="preserve">
+    <value>“{0}” will be played next</value>
+  </data>
   <data name="SetRootFolder" xml:space="preserve">
     <value>Please set your music library first!</value>
   </data>

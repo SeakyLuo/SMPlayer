@@ -392,6 +392,7 @@ namespace SMPlayer
                         foreach (var clickListener in ClickListeners)
                             clickListener.AddTo(music, MediaHelper.CurrentPlaylist, index, AddToCollectionType.NowPlaying);
                     }
+                    Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("SetPlayNext", music.Name));
                 };
                 flyout.Items.Add(playNextItem);
             }

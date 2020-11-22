@@ -30,6 +30,7 @@
             1. <Run x:Uid="ReleaseNotesPlayNext"/><LineBreak />
             2. <Run x:Uid="ReleaseNotesFeedbackViaEmail"/><LineBreak />
             3. <Run x:Uid="ReleaseNotesBugFixesDragAndDrop"/><LineBreak />
+            4. <Run x:Uid="ReleaseNotesPlayWithSMPlayer"/><LineBreak />
             <LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.4.4</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesImproveSearchPage"/><LineBreak />

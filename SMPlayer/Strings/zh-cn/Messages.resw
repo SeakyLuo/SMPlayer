@@ -414,6 +414,9 @@
   <data name="SearchResult" xml:space="preserve">
     <value>”{0}“的搜索结果</value>
   </data>
+  <data name="SetPlayNext" xml:space="preserve">
+    <value>《{0}》已被设为下一首播放的歌曲</value>
+  </data>
   <data name="SetRootFolder" xml:space="preserve">
     <value>请先设置你的音乐文件夹！</value>
   </data>

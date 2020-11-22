@@ -186,7 +186,14 @@ namespace SMPlayer
         {
             base.OnFileActivated(args);
             Music music = await Music.GetMusicAsync(args.Files[0].Path);
-            OnLaunched(null, music);
+            if (args.PreviousExecutionState == ApplicationExecutionState.Running)
+            {
+                MediaHelper.SetMusicAndPlay(music);
+            }
+            else
+            {
+                OnLaunched(null, music);
+            }
         }
 
         private void App_UnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)

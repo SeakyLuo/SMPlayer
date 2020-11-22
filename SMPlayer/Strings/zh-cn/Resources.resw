@@ -751,16 +751,19 @@
     <value>添加了更新日志，你可以在设置页面再次查看。</value>
   </data>
   <data name="ReleaseNotesOpenWithSMPlayer.Text" xml:space="preserve">
-    <value>支持用简音播放器播放。</value>
+    <value>支持用简音播放器打开音乐文件。</value>
   </data>
   <data name="ReleaseNotesPlayNext.Text" xml:space="preserve">
     <value>右键菜单添加了“下一首播放”，移除了“移到最前”。</value>
+  </data>
+  <data name="ReleaseNotesPlayWithSMPlayer.Text" xml:space="preserve">
+    <value>支持用简音播放器播放音乐文件。</value>
   </data>
   <data name="ReleaseNotesSearchPageAddAllToButton.Text" xml:space="preserve">
     <value>搜索页面有了“添加全部到”按钮。</value>
   </data>
   <data name="ReleaseNotesShowCount.Text" xml:space="preserve">
-    <value>现在有多个页面会显示列表项总数了。</value>
+    <value>部分页面会显示列表项总数了。</value>
   </data>
   <data name="ReleaseNotesSortByDateAdded.Text" xml:space="preserve">
     <value>通过添加日期搜索。</value>
@@ -781,9 +784,6 @@
     <value>从播放列表中移除</value>
   </data>
   <data name="RemoveAppButton.Label" xml:space="preserve">
-    <value>从列表中移除</value>
-  </data>
-  <data name="RemoveFromlist" xml:space="preserve">
     <value>从列表中移除</value>
   </data>
   <data name="RemoveSwipeItem.Text" xml:space="preserve">
