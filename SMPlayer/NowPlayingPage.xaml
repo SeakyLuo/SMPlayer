@@ -67,12 +67,12 @@
                 IsEnabled="False"
                 Label="Clear All" />
             <AppBarButton
-                x:Name="FullScreenButton"
-                x:Uid="ExpandAppButton"
-                Click="FullScreenButton_Click"
-                Icon="FullScreen"
+                x:Name="PlayModeButton"
+                x:Uid="PlayModeAppButton"
+                Click="PlayModeButton_Click"
+                Icon="PreviewLink"
                 IsEnabled="False"
-                Label="Expand View" />
+                Label="Play Mode" />
         </CommandBar>
         <local:PlaylistControl
             x:Name="NowPlayingPlaylistControl"

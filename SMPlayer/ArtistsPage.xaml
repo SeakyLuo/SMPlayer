@@ -38,6 +38,7 @@
                 <StackPanel Margin="5,10">
                     <AutoSuggestBox
                         x:Name="ArtistSearchBox"
+                        x:Uid="ArtistSearchBox"
                         Margin="0,0,0,8"
                         VerticalAlignment="Center"
                         BorderThickness="1"
@@ -159,7 +160,7 @@
                                             Height="80"
                                             Margin="10"
                                             RelativePanel.AlignLeftWithPanel="True"
-                                            DataContextChanged="AlbumCover_DataContextChanged"
+                                            EffectiveViewportChanged="AlbumCover_EffectiveViewportChanged"
                                             Source="{x:Bind Thumbnail, Mode=OneWay}" />
                                         <StackPanel
                                             Margin="0,10"

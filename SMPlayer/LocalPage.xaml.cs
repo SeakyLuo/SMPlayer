@@ -86,9 +86,11 @@ namespace SMPlayer
             {
                 case "LocalFoldersPage":
                     LocalFoldersItem.IsSelected = true;
+                    SetLocalGridView(Settings.settings.LocalFolderGridView);
                     break;
                 case "LocalMusicPage":
                     LocalSongsItem.IsSelected = true;
+                    SetLocalGridView(Settings.settings.LocalMusicGridView);
                     break;
             }
             SetBackButtonVisibility();
@@ -223,7 +225,7 @@ namespace SMPlayer
             };
             flyout.Items.Add(helper.GetAddToMenuFlyoutSubItem());
             flyout.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(tree.Path, StorageItemTypes.Folder));
-            flyout.Items.Add(MenuFlyoutHelper.GetSortByMenu(new Dictionary<SortBy, Action>
+            flyout.Items.Add(MenuFlyoutHelper.GetSortByMenuSubItem(new Dictionary<SortBy, Action>
             {
                 { SortBy.Title, () =>
                 {

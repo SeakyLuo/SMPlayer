@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace SMPlayer.Controls
 {
-    public sealed partial class MultiSelectCommandBar : UserControl
+    public sealed partial class MultiSelectCommandBar : UserControl, IMenuFlyoutItemClickListener
     {
         public IMultiSelectListener MultiSelectListener { get; set; }
         public bool IsVisible { get => CommandBarContainer.IsOpen; }
@@ -37,7 +37,11 @@ namespace SMPlayer.Controls
         public void Show(MultiSelectCommandBarOption option = null)
         {
             if (option == null) option = new MultiSelectCommandBarOption();
+            PlayAppButton.Visibility = option.ShowPlay ? Visibility.Visible : Visibility.Collapsed;
+            AddToAppButton.Visibility = option.ShowAdd ? Visibility.Visible : Visibility.Collapsed;
             RemoveAppButton.Visibility = option.ShowRemove ? Visibility.Visible : Visibility.Collapsed;
+            DeleteAppButton.Visibility = option.ShowDelete ? Visibility.Visible : Visibility.Collapsed;
+            ReverseSelectionAppButton.Visibility = option.ShowReverseSelection ? Visibility.Visible : Visibility.Collapsed;
             CommandBarContainer.IsOpen = true;
         }
 
@@ -48,27 +52,39 @@ namespace SMPlayer.Controls
             shouldOpen = true;
         }
 
-        private void CancelAppButton_Click(object sender, RoutedEventArgs e)
+        public void HideAfterOperation()
+        {
+            if (Settings.settings.HideMultiSelectCommandBarAfterOperation) Cancel();
+        }
+
+        private void Cancel()
         {
             Hide();
             MultiSelectListener?.Cancel(this);
+        }
+
+        private void CancelAppButton_Click(object sender, RoutedEventArgs e)
+        {
+            Cancel();
         }
 
         private void AddToAppButton_Click(object sender, RoutedEventArgs e)
         {
             MenuFlyoutHelper helper = new MenuFlyoutHelper();
             MultiSelectListener?.AddTo(this, helper);
-            helper.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
+            helper.GetAddToMenuFlyout(this).ShowAt(sender as FrameworkElement);
         }
 
         private void PlayAppButton_Click(object sender, RoutedEventArgs e)
         {
             MultiSelectListener?.Play(this);
+            HideAfterOperation();
         }
 
         private void RemoveAppButton_Click(object sender, RoutedEventArgs e)
         {
             MultiSelectListener?.Remove(this);
+            HideAfterOperation();
         }
 
         private void SelectAllAppButton_Click(object sender, RoutedEventArgs e)
@@ -76,9 +92,45 @@ namespace SMPlayer.Controls
             MultiSelectListener?.SelectAll(this);
         }
 
+        private void ReverseSelectionAppButton_Click(object sender, RoutedEventArgs e)
+        {
+            MultiSelectListener?.ReverseSelections(this);
+        }
+
         private void ClearSelectionAppButton_Click(object sender, RoutedEventArgs e)
         {
-            MultiSelectListener?.ClearSelection(this);
+            MultiSelectListener?.ClearSelections(this);
+        }
+
+        private void DeleteAppButton_Click(object sender, RoutedEventArgs e)
+        {
+            HideAfterOperation();
+        }
+
+        void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type)
+        {
+            HideAfterOperation();
+        }
+
+        void IMenuFlyoutItemClickListener.Favorite(object data)
+        {
+            HideAfterOperation();
+        }
+
+        void IMenuFlyoutItemClickListener.Delete(Music music)
+        {
+        }
+
+        void IMenuFlyoutItemClickListener.UndoDelete(Music music)
+        {
+        }
+
+        void IMenuFlyoutItemClickListener.Remove(Music music)
+        {
+        }
+
+        void IMenuFlyoutItemClickListener.Select(object data)
+        {
         }
     }
 
@@ -89,6 +141,7 @@ namespace SMPlayer.Controls
         void Play(MultiSelectCommandBar commandBar);
         void Remove(MultiSelectCommandBar commandBar);
         void SelectAll(MultiSelectCommandBar commandBar);
-        void ClearSelection(MultiSelectCommandBar commandBar);
+        void ReverseSelections(MultiSelectCommandBar commandBar);
+        void ClearSelections(MultiSelectCommandBar commandBar);
     }
 }

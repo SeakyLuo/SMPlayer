@@ -104,6 +104,7 @@
             <local:MusicDurationConverter x:Key="MusicDurationConverter" />
             <local:MusicFavoriteConverter x:Key="MusicFavoriteConverter" />
             <local:IntConverter x:Key="IntConverter" />
+            <local:DateTimeConverter x:Key="DateTimeConverter" />
             <local:VisibilityConverter x:Key="VisibilityConverter" />
             <local:MusicIsPlayingConverter x:Key="MusicIsPlayingConverter" />
             <local:PlaylistRowColorConverter x:Key="PlaylistRowColorConverter" />

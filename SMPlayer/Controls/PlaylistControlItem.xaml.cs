@@ -25,6 +25,10 @@ namespace SMPlayer.Controls
         {
             this.InitializeComponent();
             MediaHelper.SwitchMusicListeners.Add(this);
+            if (ShowAlbumText)
+            {
+                TitleColumnDefinition.Width = new GridLength(10, GridUnitType.Star);
+            }
         }
 
         private void Album_Click(object sender, RoutedEventArgs e)
@@ -76,15 +80,6 @@ namespace SMPlayer.Controls
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => SetTextColor(next));
-        }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
-        {
-            //MediaHelper.SwitchMusicListeners.Remove(this);
         }
 
         private void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)

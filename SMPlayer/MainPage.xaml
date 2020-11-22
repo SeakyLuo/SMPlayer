@@ -73,7 +73,7 @@
             <NavigationView.MenuItems>
                 <NavigationViewItem
                     x:Name="MusicLibraryItem"
-                    x:Uid="SongsItem"
+                    x:Uid="MusicLibraryItem"
                     Icon="Library" />
                 <NavigationViewItem x:Name="ArtistsItem" x:Uid="ArtistsItem">
                     <NavigationViewItem.Icon>

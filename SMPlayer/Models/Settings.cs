@@ -42,7 +42,9 @@ namespace SMPlayer.Models
         public bool SaveMusicProgress { get; set; } = false;
         public double MusicProgress { get; set; } = 0;
         public SortBy MusicLibraryCriterion { get; set; } = SortBy.Title;
-
+        public SortBy AlbumsCriterion { get; set; } = SortBy.Default;
+        public bool HideMultiSelectCommandBarAfterOperation { get; set; } = true;
+        public bool ShowCount { get; set; } = true;
         public ObservableCollection<string> RecentSearches = new ObservableCollection<string>();
 
         public SortBy SearchArtistsCriterion { get; set; } = SortBy.Default;
@@ -124,6 +126,7 @@ namespace SMPlayer.Models
 
         public static void Save()
         {
+            if (settings == null) return;
             settings.MusicProgress = MediaHelper.Position;
             JsonFileHelper.SaveAsync(JsonFilename, settings);
             JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, settings);
@@ -140,8 +143,9 @@ namespace SMPlayer.Models
                 action.Invoke(music);
         }
 
-        public static Music FindMusic(Music music) { return settings.Tree.FindMusic(music); }
-        public static Music FindMusic(string path) { return settings.Tree.FindMusic(path); }
+        public static Music FindMusic(IMusicable target) { return settings.Tree.FindMusic(target.ToMusic()); }
+        public static Music FindMusic(Music target) { return settings.Tree.FindMusic(target); }
+        public static Music FindMusic(string target) { return settings.Tree.FindMusic(target); }
 
         public void LikeMusic(Music music)
         {
@@ -153,11 +157,12 @@ namespace SMPlayer.Models
             foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, true);
         }
 
-        public void LikeMusic(IEnumerable<Music> playlist)
+        public void LikeMusic(IEnumerable<IMusicable> playlist)
         {
             var hashset = MyFavorites.Songs.ToHashSet();
-            foreach (var music in playlist)
+            foreach (var item in playlist)
             {
+                var music = item.ToMusic();
                 if (!hashset.Contains(music))
                 {
                     music.Favorite = true;
@@ -182,7 +187,7 @@ namespace SMPlayer.Models
         {
             if (JustRemoved.Any(m => m.Name == music.Name && m.Artist == music.Artist && m.Album == music.Album && m.Duration == music.Duration))
                 return;
-            RecentPage.AddedTimeLine.Add(music);
+            RecentPage.RecentAdded.Add(music);
             if (AutoLyrics)
             {
                 await Task.Run(async() =>
@@ -216,7 +221,7 @@ namespace SMPlayer.Models
             if ((myFavoratesRemovedIndex = MyFavorites.Songs.IndexOf(music)) > -1)
                 MyFavorites.Remove(music);
             RecentPlayed.Remove(music.Path);
-            RecentPage.AddedTimeLine.Remove(music.Path);
+            RecentPage.RecentAdded.Remove(music);
         }
 
         public void UndoRemoveMusic(Music music)
@@ -233,7 +238,7 @@ namespace SMPlayer.Models
                 MyFavorites.Songs.Insert(myFavoratesRemovedIndex, music);
             if (recentPlayedRemovedIndex > -1)
                 RecentPlayed.Insert(recentPlayedRemovedIndex, music.Path);
-            RecentPage.AddedTimeLine.Add(music);
+            RecentPage.RecentAdded.Add(music);
         }
 
         public void Played(Music music)

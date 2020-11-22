@@ -36,6 +36,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Grid 
+                            x:Name="PlaylistCoverGrid"
                             Grid.RowSpan="3"
                             Width="180"
                             Height="180"
@@ -82,12 +83,6 @@
                                 x:Uid="ShuffleButton"
                                 Click="Shuffle_Click"
                                 Icon="Shuffle"
-                                Style="{ThemeResource PlaylistAppBarButtonStyle}" />
-                            <AppBarButton
-                                x:Name="AddToButton"
-                                x:Uid="AddToAppButton"
-                                Click="AddTo_Click"
-                                Icon="Add"
                                 Style="{ThemeResource PlaylistAppBarButtonStyle}" />
                             <AppBarButton
                                 x:Name="MultiSelectButton"
@@ -144,9 +139,9 @@
                                     <AdaptiveTrigger MinWindowWidth="0" />
                                 </VisualState.StateTriggers>
                                 <VisualState.Setters>
-                                    <Setter Target="PlaylistCover.(Grid.RowSpan)" Value="1" />
-                                    <Setter Target="PlaylistCover.(Grid.ColumnSpan)" Value="2" />
-                                    <Setter Target="PlaylistCover.Margin" Value="10" />
+                                    <Setter Target="PlaylistCoverGrid.(Grid.RowSpan)" Value="1" />
+                                    <Setter Target="PlaylistCoverGrid.(Grid.ColumnSpan)" Value="2" />
+                                    <Setter Target="PlaylistCoverGrid.Margin" Value="10" />
                                     <Setter Target="PlaylistNameTextBlock.FontSize" Value="24" />
                                     <Setter Target="PlaylistNameTextBlock.FontWeight" Value="SemiBold" />
                                     <Setter Target="PlaylistNameTextBlock.(Grid.Column)" Value="0" />

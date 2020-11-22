@@ -102,6 +102,12 @@
                     Binding="{Binding PlayCount, Converter={StaticResource IntConverter}, Mode=OneWay}"
                     CanUserSort="True"
                     Tag="PlayCount" />
+                <controls:DataGridTextColumn
+                    x:Uid="DateAddedHeader"
+                    MinWidth="120"
+                    Binding="{Binding DateAdded, Converter={StaticResource DateTimeConverter}, Mode=OneWay}"
+                    CanUserSort="True"
+                    Tag="DateAdded" />
             </controls:DataGrid.Columns>
             <controls:DataGrid.RowStyle>
                 <Style TargetType="controls:DataGridRow">

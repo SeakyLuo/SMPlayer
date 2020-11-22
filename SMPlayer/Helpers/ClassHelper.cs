@@ -112,6 +112,10 @@ namespace SMPlayer
             }
             return dst;
         }
+        public static ObservableCollection<T> CopyAndSetTo<T>(this ObservableCollection<T> dst, IEnumerable<T> src)
+        {
+            return dst.SetTo(src.ToList());
+        }
         public static bool IsMusicFile(this StorageFile file)
         {
             return file.FileType.EndsWith("mp3");
@@ -136,7 +140,7 @@ namespace SMPlayer
         }
         public static bool SameAs(this IEnumerable<IMusicable> list1, IEnumerable<IMusicable> list2)
         {
-            return list1.Count() == list2.Count() && list1.Zip(list2, (m1, m2) => m1.ToMusic().Equals(m2.ToMusic())).All(res => res);
+            return list1?.Count() == list2?.Count() && list1.Zip(list2, (m1, m2) => m1.ToMusic().Equals(m2.ToMusic())).All(res => res);
         }
 
         public static bool IsThumbnail(this StorageItemThumbnail thumbnail)
@@ -160,7 +164,6 @@ namespace SMPlayer
             return thumbnail == null ? null : await ColorHelper.GetThumbnailMainColorAsync(thumbnail.CloneStream());
         }
 
-
         public static async Task<StorageFile> SaveAsync(this StorageItemThumbnail thumbnail, StorageFolder folder, string name, bool encode = false)
         {
             using (var stream = thumbnail.CloneStream())
@@ -181,6 +184,34 @@ namespace SMPlayer
                     }
                 }
                 return file;
+            }
+        }
+
+        public static void ClearSelections(this ListViewBase listView)
+        {
+            listView.SelectedItems.Clear();
+        }
+
+        public static void ReverseSelections(this ListViewBase listView)
+        {
+            if (listView.SelectedItems.Count == 0)
+            {
+                listView.SelectAll();
+                return;
+            }
+            if (listView.SelectedItems.Count == listView.Items.Count)
+            {
+                listView.ClearSelections();
+                return;
+            }
+            var selected = listView.SelectedItems.ToHashSet();
+            listView.SelectedItems.Clear();
+            foreach (var item in selected)
+            {
+                if (!selected.Contains(item))
+                {
+                    listView.SelectedItems.Add(item);
+                }
             }
         }
     }

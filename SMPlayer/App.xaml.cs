@@ -28,6 +28,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            this.UnhandledException += App_UnhandledException;
         }
 
         /// <summary>
@@ -35,12 +36,18 @@ namespace SMPlayer
         /// 将在启动应用程序以打开特定文件等情况下使用。
         /// </summary>
         /// <param name="e">有关启动请求和过程的详细信息。</param>
-        protected override async void OnLaunched(LaunchActivatedEventArgs e)
+        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        {
+            OnLaunched(e, null);
+        }
+
+        private async void OnLaunched(LaunchActivatedEventArgs e, Music music)
         {
             await Settings.Init();
             await MusicLibraryPage.Init();
             if (Settings.settings.LastPage == "Albums")
                 await AlbumsPage.Init();
+            await Helper.Init();
             await UpdateHelper.Init();
 
             Frame rootFrame = Window.Current.Content as Frame;
@@ -54,7 +61,7 @@ namespace SMPlayer
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
+                if (e?.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     //TODO: 从之前挂起的应用程序加载状态
                 }
@@ -63,7 +70,7 @@ namespace SMPlayer
                 Window.Current.Content = rootFrame;
             }
 
-            if (e.PrelaunchActivated == false)
+            if (e == null || e.PrelaunchActivated == false)
             {
                 if (Windows.Foundation.Metadata.ApiInformation.IsMethodPresent("Windows.ApplicationModel.Core.CoreApplication", "EnablePrelaunch"))
                 {
@@ -74,8 +81,8 @@ namespace SMPlayer
                     // 当导航堆栈尚未还原时，导航到第一页，
                     // 并通过将所需信息作为导航参数传入来配置
                     // 参数
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
-                    if (e.TileId != "App")
+                    rootFrame.Navigate(typeof(MainPage), e?.Arguments);
+                    if (e != null && e.TileId != "App")
                     {
                         var tileId = System.Net.WebUtility.UrlDecode(e.TileId);
                         MainPage.Instance.NavigateToPage(bool.Parse(e.Arguments) ? typeof(PlaylistsPage) :
@@ -86,9 +93,7 @@ namespace SMPlayer
                 Window.Current.Activate();
             }
             Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
-
-            MediaHelper.Init();
-            await Helper.Init();
+            MediaHelper.Init(music);
             await AlbumsPage.Init();
             await RecentPage.Init();
             //LaunchVoiceAssistant();
@@ -96,7 +101,6 @@ namespace SMPlayer
             // If background task is already registered, do nothing
             if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals(Helper.ToastTaskName)))
                 return;
-
             // Otherwise request access
             BackgroundAccessStatus status = await BackgroundExecutionManager.RequestAccessAsync();
 
@@ -120,6 +124,7 @@ namespace SMPlayer
         ///<param name="e">有关导航失败的详细信息</param>
         void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
+            Helper.LogException(e.Exception);
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
 
@@ -147,8 +152,8 @@ namespace SMPlayer
             MediaHelper.Save();
             AlbumsPage.Save();
             RecentPage.Save();
-            await Helper.ClearBackups(10);
             UpdateHelper.Save();
+            await Helper.ClearBackups(10);
         }
 
         protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
@@ -183,7 +188,13 @@ namespace SMPlayer
         protected override async void OnFileActivated(FileActivatedEventArgs args)
         {
             base.OnFileActivated(args);
-            MediaHelper.SetMusicAndPlay(await Music.GetMusicAsync(args.Files[0].Path));
+            Music music = await Music.GetMusicAsync(args.Files[0].Path);
+            OnLaunched(null, music);
+        }
+
+        private void App_UnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
+        {
+            Helper.LogException(e.Exception);
         }
 
         protected override void OnActivated(IActivatedEventArgs args)

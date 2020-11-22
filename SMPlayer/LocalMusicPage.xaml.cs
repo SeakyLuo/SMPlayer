@@ -1,4 +1,5 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Controls;
+using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -31,7 +32,11 @@ namespace SMPlayer
             LocalPlaylist.RemoveListeners.Add(this);
             LocalPlaylist.MultiSelectOption = new MultiSelectCommandBarOption() { ShowRemove = false };
             GridMusicView.RemoveListeners.Add(this);
-            Controls.MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
+            GridMusicView.MenuFlyoutOpeningOption = new MenuFlyoutOption()
+            {
+                MultiSelectOption = new MultiSelectCommandBarOption() { ShowRemove = false }
+            };
+            MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
             {
                 if (CurrentTree.FindMusic(before) is Music music)
                 {
@@ -101,11 +106,13 @@ namespace SMPlayer
             {
                 GridMusicView.Visibility = Visibility.Visible;
                 LocalPlaylist.Visibility = Visibility.Collapsed;
+                MainPage.Instance.SetMultiSelectListener(GridMusicView);
             }
             else
             {
                 GridMusicView.Visibility = Visibility.Collapsed;
                 LocalPlaylist.Visibility = Visibility.Visible;
+                MainPage.Instance.SetMultiSelectListener(LocalPlaylist);
             }
         }
         public void Reverse()

@@ -20,12 +20,25 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class AlbumsPage : Page, IAfterSongsSetListener, IImageSavedListener
+    public sealed partial class AlbumsPage : Page, IAfterSongsSetListener, IImageSavedListener, IMultiSelectListener
     {
         public const string JsonFilename = "Albums";
         private ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         private bool IsProcessing = false;
-        private static volatile List<AlbumInfo> albumInfoList;
+        private static volatile List<AlbumInfo> AlbumInfoList;
+        private static readonly SortBy[] SortByCriteria = { SortBy.Default, SortBy.Name, SortBy.Artist };
+        public List<Music> SelectedSongs
+        {
+            get
+            {
+                List<Music> list = new List<Music>();
+                foreach (AlbumView album in AlbumsGridView.SelectedItems)
+                {
+                    list.AddRange(album.Songs);
+                }
+                return list;
+            }
+        }
 
         public AlbumsPage()
         {
@@ -37,36 +50,43 @@ namespace SMPlayer
 
         public static async Task Init()
         {
-            if (albumInfoList != null) return;
+            if (AlbumInfoList != null) return;
             var albums = JsonFileHelper.Convert<List<AlbumInfo>>(await JsonFileHelper.ReadAsync(JsonFilename));
-            if (albums == null) albumInfoList = new List<AlbumInfo>();
-            else albumInfoList = albums;
+            if (albums == null) AlbumInfoList = new List<AlbumInfo>();
+            else AlbumInfoList = albums;
         }
 
         public static void Save()
         {
-            if (albumInfoList?.Count == 0) return;
-            JsonFileHelper.SaveAsync(JsonFilename, albumInfoList);
-            JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, albumInfoList);
+            if (AlbumInfoList?.Count == 0) return;
+            JsonFileHelper.SaveAsync(JsonFilename, AlbumInfoList);
+            JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, AlbumInfoList);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            MainPage.Instance.SetMultiSelectListener(this);
+            SetHeader();
             if (Albums.Count == 0) Setup(MusicLibraryPage.AllSongs); // have not listened to changes
         }
 
-        private async void Setup(ICollection<Music> songs)
+        private async void Setup(IEnumerable<Music> songs)
         {
             if (IsProcessing) return;
             AlbumPageProgressRing.Visibility = Visibility.Visible;
-            if (albumInfoList.Count > 0)
-                SetData(albumInfoList);
+            if (AlbumInfoList.Count > 0)
+            {
+                Albums.SetTo(AlbumInfoList.Select(a => a.ToAlbumView()));
+                SetHeader();
+            }
             else
+            {
                 await SetData(songs);
+            }
             AlbumPageProgressRing.Visibility = Visibility.Collapsed;
         }
 
-        private async Task SetData(ICollection<Music> songs)
+        private async Task SetData(IEnumerable<Music> songs)
         {
             IsProcessing = true;
             List<AlbumView> albums = new List<AlbumView>();
@@ -80,17 +100,24 @@ namespace SMPlayer
                         albums.Add(new AlbumView(music.Album, music.Artist, subgroup.OrderBy(m => m.Name), false));
                     }
                 }
-                albums = albums.OrderBy(a => a.Name).ThenBy(a => a.Artist).ToList();
-                albumInfoList = albums.Select(a => a.ToAlbumInfo()).ToList();
+                albums = Sort(Settings.settings.AlbumsCriterion, albums);
                 Save();
             });
             Albums.SetTo(albums);
+            SetHeader();
             IsProcessing = false;
         }
 
-        private void SetData(List<AlbumInfo> albums)
+        public void SetHeader()
         {
-            Albums.SetTo(albums.Select(a => a.ToAlbumView()));
+            if (Settings.settings.ShowCount)
+            {
+                MainPage.Instance?.SetHeaderText("AllAbumsWithCount", Albums.Count);
+            }
+            else
+            {
+                MainPage.Instance?.SetHeaderText("AllAbums");
+            }
         }
 
         public async void SongsSet(ICollection<Music> songs)
@@ -103,26 +130,11 @@ namespace SMPlayer
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (AlbumsGridView.SelectionMode != ListViewSelectionMode.None) return;
             AlbumView album = (AlbumView)e.ClickedItem;
             if (album.Songs == null)
                 album.SetSongs(AlbumPage.SearchAlbumSongs(album.Name, album.Artist));
             Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
-        }
-
-        private async void DropShadowControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
-        {
-            if (sender.DataContext is AlbumView album)
-            {
-                if (!album.ThumbnailLoaded)
-                {
-                    string before = album.ThumbnailSource;
-                    if (album.Songs == null)
-                        album.SetSongs(AlbumPage.SearchAlbumSongs(album.Name, album.Artist));
-                    await album.SetThumbnailAsync();
-                    if (album.ThumbnailSource != before && albumInfoList.FirstOrDefault(a => a.Equals(album)) is AlbumInfo albumInfo)
-                        albumInfo.Thumbnail = album.ThumbnailSource;
-                }
-            }
         }
 
         private void MenuFlyout_Opening(object sender, object e)
@@ -150,7 +162,107 @@ namespace SMPlayer
         {
             if (Albums.FirstOrDefault(a => a.Name.Equals(music.Album)) is AlbumView albumView && albumView.Songs.Count == 1)
                 albumView.Thumbnail = image ?? MusicImage.DefaultImage;
+        }
 
+        private async void DropShadowControl_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
+        {
+            AlbumView album = sender.DataContext as AlbumView;
+            if (album == null || album.ThumbnailLoaded || !ImageHelper.NeedsLoading(sender, args)) return;
+            string before = album.ThumbnailSource;
+            if (album.Songs == null)
+                album.SetSongs(AlbumPage.SearchAlbumSongs(album.Name, album.Artist));
+            await album.SetThumbnailAsync();
+            if (album.ThumbnailSource != before && AlbumInfoList.FirstOrDefault(a => a.Equals(album)) is AlbumInfo albumInfo)
+                albumInfo.Thumbnail = album.ThumbnailSource;
+        }
+
+        private void MultiSelectButton_Click(object sender, RoutedEventArgs e)
+        {
+            AlbumsGridView.SelectionMode = ListViewSelectionMode.Multiple;
+            MainPage.Instance.ShowMultiSelectCommandBar(new MultiSelectCommandBarOption
+            {
+                ShowRemove = false
+            });
+        }
+
+        private void SortButton_Click(object sender, RoutedEventArgs e)
+        {
+            MenuFlyoutHelper.SetSortByMenu(sender, Settings.settings.AlbumsCriterion, SortByCriteria,
+                                           async criterion => 
+                                           {
+                                               AlbumPageProgressRing.Visibility = Visibility.Visible;
+                                               Albums.SetTo(await Task.Run(() => Sort(criterion, Albums)));
+                                               AlbumPageProgressRing.Visibility = Visibility.Collapsed;
+                                           },
+                                           async () =>
+                                           {
+                                               AlbumPageProgressRing.Visibility = Visibility.Visible;
+                                               Albums.CopyAndSetTo(await Task.Run(() =>
+                                               {
+                                                   var albums = Albums.Reverse();
+                                                   BuildAlbumInfoList(albums);
+                                                   return albums;
+                                               })); 
+                                               AlbumPageProgressRing.Visibility = Visibility.Collapsed;
+                                           });
+        }
+
+        private List<AlbumView> Sort(SortBy criterion, IEnumerable<AlbumView> albums)
+        {
+            Settings.settings.AlbumsCriterion = criterion;
+            List<AlbumView> list;
+            switch (criterion)
+            {
+                case SortBy.Name:
+                    list = albums.OrderBy(a => a.Name).ToList();
+                    break;
+                case SortBy.Artist:
+                    list = albums.OrderBy(a => a.Artist).ToList();
+                    break;
+                case SortBy.Default:
+                default:
+                    list = albums.OrderBy(a => a.Name).ThenBy(a => a.Artist).ToList();
+                    break;
+            }
+            BuildAlbumInfoList(list);
+            return list;
+        }
+
+        private void BuildAlbumInfoList(IEnumerable<AlbumView> albums)
+        {
+            AlbumInfoList = albums.Select(a => a.ToAlbumInfo()).ToList();
+        }
+
+        void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar)
+        {
+            AlbumsGridView.SelectionMode = ListViewSelectionMode.None;
+        }
+
+        void IMultiSelectListener.AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper)
+        {
+            helper.Data = SelectedSongs;
+        }
+
+        void IMultiSelectListener.Play(MultiSelectCommandBar commandBar)
+        {
+            MediaHelper.SetMusicAndPlay(SelectedSongs);
+        }
+
+        void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar) { }
+
+        void IMultiSelectListener.SelectAll(MultiSelectCommandBar commandBar)
+        {
+            AlbumsGridView.SelectAll();
+        }
+
+        void IMultiSelectListener.ReverseSelections(MultiSelectCommandBar commandBar)
+        {
+            AlbumsGridView.ReverseSelections();
+        }
+
+        void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar)
+        {
+            AlbumsGridView.SelectedItems.Clear();
         }
     }
 }

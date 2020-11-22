@@ -41,7 +41,8 @@ namespace SMPlayer.Models
         Duration = 3,
         PlayCount = 4,
         DateAdded = 5,
-        Name = 6
+        Name = 6,
+        Reverse = 7
     }
     public static class SortByConverter
     {
@@ -88,6 +89,7 @@ namespace SMPlayer.Models
                 case "PlayCount":
                 case "Play Count":
                     return SortBy.PlayCount;
+                case "DateAdded":
                 case "Date Added":
                     return SortBy.DateAdded;
                 default:
@@ -109,6 +111,8 @@ namespace SMPlayer.Models
                     return music => music.Duration;
                 case SortBy.PlayCount:
                     return music => music.PlayCount;
+                case SortBy.DateAdded:
+                    return music => music.DateAdded;
                 case SortBy.Default:
                 default:
                     return music => music.Name;

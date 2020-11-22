@@ -40,7 +40,7 @@ namespace SMPlayer.Models
         {
             Source = music;
         }
-        public async void SetThumbnail()
+        public async Task SetThumbnailAsync()
         {
             if (thumbnailLoaded) return;
             Thumbnail = await ImageHelper.LoadImage(Source);

@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Foundation.Collections;
 using Windows.Media.Playback;
 using Windows.UI.Xaml;
 
@@ -53,28 +54,35 @@ namespace SMPlayer
         public static MediaPlayer Player = new MediaPlayer() { Source = PlaybackList };
         public static List<IRemoveMusicListener> RemoveMusicListeners = new List<IRemoveMusicListener>();
         public static DispatcherTimer Timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
-        public static List<MediaControlListener> MediaControlListeners = new List<MediaControlListener>();
+        public static List<IMediaControlListener> MediaControlListeners = new List<IMediaControlListener>();
         public static List<ISwitchMusicListener> SwitchMusicListeners = new List<ISwitchMusicListener>();
         public static List<Action> InitFinishedListeners = new List<Action>();
         public const string JsonFilename = "NowPlayingPlaylist";
 
-        public static async void Init()
+        public static async void Init(Music music = null)
         {
             var settings = Settings.settings;
-            var playlist = JsonFileHelper.Convert<List<string>>(await JsonFileHelper.ReadAsync(JsonFilename));
-            if (playlist != null && playlist.Count != 0)
+            if (music == null)
             {
-                if (settings.LastMusicIndex == -1)
-                    settings.LastMusicIndex = 0;
-                foreach (var path in playlist)
+                var playlist = JsonFileHelper.Convert<List<string>>(await JsonFileHelper.ReadAsync(JsonFilename));
+                if (playlist != null && playlist.Count != 0)
                 {
-                    var target = Settings.FindMusic(path);
-                    if (target != null) AddMusic(target);
+                    if (settings.LastMusicIndex == -1)
+                        settings.LastMusicIndex = 0;
+                    foreach (var path in playlist)
+                    {
+                        var target = Settings.FindMusic(path);
+                        if (target != null) AddMusic(target);
+                    }
+                    if (settings.LastMusicIndex < CurrentPlaylist.Count)
+                        CurrentMusic = CurrentPlaylist[settings.LastMusicIndex];
                 }
-                if (settings.LastMusicIndex < CurrentPlaylist.Count)
-                    CurrentMusic = CurrentPlaylist[settings.LastMusicIndex];
             }
-            if (settings.LastMusicIndex != -1)
+            if (music != null)
+            {
+                AddMusic(music);
+            }
+            else if (settings.LastMusicIndex != -1)
             {
                 try
                 {
@@ -86,7 +94,8 @@ namespace SMPlayer
                 }
             }
             Player.Volume = settings.Volume;
-            if (settings.SaveMusicProgress && CurrentMusic != null) Position = settings.MusicProgress;
+            // 如果非文件启动，并保存播放进度且有音乐
+            if (music == null && settings.SaveMusicProgress && CurrentMusic != null) Position = settings.MusicProgress;
             SetMode(Settings.settings.Mode);
 
             Timer.Tick += (sender, e) =>
@@ -121,7 +130,7 @@ namespace SMPlayer
             foreach (var listener in InitFinishedListeners)
                 listener.Invoke();
             Timer.Start();
-            if (settings.AutoPlay) Play();
+            if (settings.AutoPlay || music != null) Play();
         }
         public static Music GetMusic(this MediaPlaybackItem item)
         {
@@ -160,13 +169,22 @@ namespace SMPlayer
         public static void AddMusic(IMusicable source, int index)
         {
             Music music = source.ToMusic().Copy();
-            music.IsPlaying = music.Equals(CurrentMusic);
+            music.IsPlaying = IsMusicPlaying(music);
             music.Index = index;
             CurrentPlaylist.Insert(index, music);
-            for (int i = index + 1; i < CurrentPlaylist.Count; i++)
-                CurrentPlaylist[i].Index = i;
             PlaybackList.Items.Insert(index, music.GetMediaPlaybackItem());
+            for (int i = index + 1; i < CurrentPlaylist.Count; i++)
+            {
+                CurrentPlaylist[i].Index = i;
+                PlaybackList.Items[i].GetMusic().Index = i;
+            }
         }
+
+        public static bool IsMusicPlaying(Music music)
+        {
+            return CurrentMusic != null && music == CurrentMusic && music.Index == CurrentMusic.Index;
+        }
+
         public static void AddMusic(IMusicable source)
         {
             AddMusic(source, CurrentPlaylist.Count);
@@ -213,6 +231,11 @@ namespace SMPlayer
         {
             SetPlaylist(ShufflePlaylist(playlist));
             Play();
+        }
+
+        public static void ShuffleAndPlay()
+        {
+            ShuffleAndPlay(CurrentPlaylist);
         }
 
         public static void ShuffleOthers()
@@ -311,9 +334,10 @@ namespace SMPlayer
             Debug.Write("\n");
         }
 
-        public static void MoveMusic(int from, int to)
+        public static void MoveMusic(int from, int to, bool moveCurrentPlaylist = true)
         {
-            MediaPlaybackItem item;
+            if (from == to) return;
+            if (moveCurrentPlaylist) CurrentPlaylist.Move(from, to);
             if (CurrentMusic.Index == from)
             {
                 CurrentMusic.Index = to;
@@ -322,33 +346,34 @@ namespace SMPlayer
                     for (int i = from + 1; i <= to; i++)
                     {
                         CurrentPlaylist[i].Index = i - 1;
-                        PlaybackList.Items.RemoveAt(i);
-                        PlaybackList.Items.Insert(i - 1, CurrentPlaylist[i].GetMediaPlaybackItem());
+                        MovePlaybackItem(i, i - 1);
                     }
                 }
                 else
                 {
-                    for (int i = to + 1; i <= from; i++)
+                    for (int i = to; i < from; i++)
                     {
-                        CurrentPlaylist[i].Index = i;
-                        PlaybackList.Items.RemoveAt(to);
-                        PlaybackList.Items.Insert(from, CurrentPlaylist[i].GetMediaPlaybackItem());
+                        CurrentPlaylist[i].Index = i + 1;
+                        MovePlaybackItem(to, from);
                     }
                 }
+                CurrentPlaylist[to].Index = to;
             }
             else
             {
-                if (from < CurrentMusic.Index && CurrentMusic.Index <= to) CurrentMusic.Index--;
-                else if (to <= CurrentMusic.Index && CurrentMusic.Index < from) CurrentMusic.Index++;
-                item = PlaybackList.Items[from];
-                PlaybackList.Items.RemoveAt(from);
-                PlaybackList.Items.Insert(to, item);
+                MovePlaybackItem(from, to);
                 for (int i = Math.Min(from, to); i <= Math.Max(from, to); i++)
                 {
                     CurrentPlaylist[i].Index = i;
-                    if (i != CurrentMusic.Index) PlaybackList.Items[i] = CurrentPlaylist[i].GetMediaPlaybackItem();
                 }
             }
+        }
+
+        private static void MovePlaybackItem(int from, int to)
+        {
+            var item = PlaybackList.Items[from];
+            PlaybackList.Items.RemoveAt(from);
+            PlaybackList.Items.Insert(to, item);
         }
 
         public static bool RemoveMusic(Music music)
@@ -396,7 +421,7 @@ namespace SMPlayer
         {
             if (playlist == null) return;
             foreach (var music in playlist)
-                music.IsPlaying = music.Equals(next);
+                music.IsPlaying = music.Index >= 0 ? IsMusicPlaying(music) : music.Equals(next);
         }
 
         public static async void RemoveBadMusic()
@@ -442,7 +467,7 @@ namespace SMPlayer
         void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason);
     }
 
-    public interface MediaControlListener
+    public interface IMediaControlListener
     {
         void Tick();
         void MediaEnded();

@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Media;
 namespace SMPlayer.Models
 {
     [Serializable]
-    public class Music : IComparable<Music>, INotifyPropertyChanged, ITimeLineMusic, IMusicable
+    public class Music : IComparable<Music>, INotifyPropertyChanged, IMusicable
     {
         public string Path { get; set; }
         public string Name
@@ -298,16 +298,6 @@ namespace SMPlayer.Models
         public override string ToString()
         {
             return Path;
-        }
-
-        DateTimeOffset ITimeLineMusic.GetDateAdded()
-        {
-            return DateAdded;
-        }
-
-        TimeLineMusic ITimeLineMusic.ToTimeLineMusic()
-        {
-            return new TimeLineMusic(Path, DateAdded);
         }
 
         Music IMusicable.ToMusic()

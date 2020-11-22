@@ -15,7 +15,24 @@ namespace SMPlayer
 {
     public sealed partial class PlaylistControl : UserControl, ISwitchMusicListener, IMenuFlyoutItemClickListener, IMultiSelectListener
     {
-        public bool IsNowPlaying { get; set; }
+        public bool IsNowPlaying
+        {
+            get => (bool)GetValue(IsNowPlayingProperty);
+            set
+            {
+                SetValue(IsNowPlayingProperty, value);
+                if (value)
+                {
+                    MenuFlyoutHelper.ClickListeners.Add(this);
+                }
+                else
+                {
+                    MenuFlyoutHelper.ClickListeners.Remove(this);
+                }
+            }
+        }
+        public static readonly DependencyProperty IsNowPlayingProperty = DependencyProperty.Register("SelectableProperty", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(false));
+        
         private ObservableCollection<Music> currentPlaylist = new ObservableCollection<Music>();
         public ObservableCollection<Music> CurrentPlaylist
         {
@@ -26,8 +43,8 @@ namespace SMPlayer
 
         private static List<IMusicRequestListener> MusicRequestListeners = new List<IMusicRequestListener>();
         public bool AlternatingRowColor { get; set; }
-        public IPlaylistScrollListener ScrollListener;
-        public IMultiSelectListener MultiSelectListener;
+        public IPlaylistScrollListener ScrollListener { get; set; }
+        public IMultiSelectListener MultiSelectListener { get; set; }
         public bool AllowReorder
         {
             get => SongsListView.CanReorderItems;
@@ -65,16 +82,23 @@ namespace SMPlayer
             set => SetValue(RemovableProperty, value);
         }
         public static readonly DependencyProperty RemovableProperty = DependencyProperty.Register("Removable", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(true));
-        public bool AllowMultipleSection
+        public bool AllowMultipleSelection
         {
-            get => (bool)GetValue(AllowMultipleSectionProperty);
-            set => SetValue(AllowMultipleSectionProperty, value);
+            get => (bool)GetValue(AllowMultipleSelectionProperty);
+            set => SetValue(AllowMultipleSelectionProperty, value);
         }
-        public static readonly DependencyProperty AllowMultipleSectionProperty = DependencyProperty.Register("AllowMultipleSection", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(false));
+        public static readonly DependencyProperty AllowMultipleSelectionProperty = DependencyProperty.Register("AllowMultipleSelection", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(false));
         public ScrollViewer ScrollViewer
         {
             get => SongsListView.GetFirstDescendantOfType<ScrollViewer>();
         }
+        public bool Selectable
+        {
+            get => (bool)GetValue(SelectableProperty);
+            set => SetValue(SelectableProperty, value);
+        }
+        public static readonly DependencyProperty SelectableProperty = DependencyProperty.Register("SelectableProperty", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(true));
+
         public ListViewSelectionMode SelectionMode
         {
             get => SongsListView.SelectionMode;
@@ -82,15 +106,11 @@ namespace SMPlayer
         }
         public List<Music> SelectedItems
         {
-            get
-            {
-                var list = new List<Music>();
-                foreach (Music music in SongsListView.SelectedItems)
-                {
-                    list.Add(music);
-                }
-                return list;
-            }
+            get => SongsListView.SelectedItems.Select(m => (Music)m).ToList();
+        }
+        public int SelectedItemsCount
+        {
+            get => SongsListView.SelectedItems.Count;
         }
         public MultiSelectCommandBarOption MultiSelectOption { get; set; }
         public List<IRemoveMusicListener> RemoveListeners = new List<IRemoveMusicListener>();
@@ -113,7 +133,7 @@ namespace SMPlayer
         private void PlaylistController_Loaded(object sender, RoutedEventArgs e)
         {
             if (ItemsSource == null) ItemsSource = MediaHelper.CurrentPlaylist;
-            Helper.GetMainPageContainer().GetMultiSelectCommandBar().MultiSelectListener = this;
+            Helper.GetMainPageContainer().SetMultiSelectListener(this);
         }
 
         private bool ViewChangedUnadded = true;
@@ -137,6 +157,22 @@ namespace SMPlayer
             MusicRequestListeners.Add(listener);
         }
 
+        private void AlternateRowBackgroud(int start)
+        {
+            if (!AlternatingRowColor) return;
+            for (int i = start; i < CurrentPlaylist.Count; i++)
+                if (SongsListView.ContainerFromIndex(i) is ListViewItem container)
+                    container.Background = GetRowBackground(i);
+        }
+
+        private void AlternateRowBackgroud(int start, int end)
+        {
+            if (!AlternatingRowColor) return;
+            for (int i = start; i < end; i++)
+                if (SongsListView.ContainerFromIndex(i) is ListViewItem container)
+                    container.Background = GetRowBackground(i);
+        }
+
         public static Brush GetRowBackground(int index)
         {
             return index % 2 == 0 ? ColorHelper.WhiteSmokeBrush : ColorHelper.WhiteBrush;
@@ -150,15 +186,9 @@ namespace SMPlayer
 
         private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (SelectionMode == ListViewSelectionMode.Multiple)
-            {
-
-            }
-            else
-            {
-                Music music = (Music)e.ClickedItem;
-                MediaHelper.SetMusicAndPlay(CurrentPlaylist, music);
-            }
+            if (SelectionMode != ListViewSelectionMode.None) return;
+            Music music = (Music)e.ClickedItem;
+            MediaHelper.SetMusicAndPlay(CurrentPlaylist, music);
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
@@ -176,9 +206,7 @@ namespace SMPlayer
             {
                 currentPlaylist.Insert(index, music);
             }
-            for (int i = index; i < CurrentPlaylist.Count; i++)
-                if (SongsListView.ContainerFromIndex(i) is ListViewItem container)
-                    container.Background = GetRowBackground(i);
+            AlternateRowBackgroud(index);
         }
 
         private void SongsListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
@@ -187,31 +215,20 @@ namespace SMPlayer
             Music music = args.Items[0] as Music;
             dropIndex = CurrentPlaylist.FindIndex(m => m == music && m.Index == music.Index);
             if (dragIndex == dropIndex) return;
-            if (IsNowPlaying) MediaHelper.MoveMusic(dragIndex, dropIndex);
-            for (int i = Math.Min(dragIndex, dropIndex); i <= Math.Max(dragIndex, dropIndex); i++)
-                if (AlternatingRowColor && sender.ContainerFromIndex(i) is ListViewItem container)
-                    container.Background = GetRowBackground(i);
+            if (IsNowPlaying) MediaHelper.MoveMusic(dragIndex, dropIndex, false);
+            AlternateRowBackgroud(Math.Min(dragIndex, dropIndex), Math.Max(dragIndex, dropIndex) + 1);
         }
         private void OpenMusicMenuFlyout(object sender, object e)
         {
-            MenuFlyoutOption option = new MenuFlyoutOption() { MultiSelectOption = MultiSelectOption };
-            if (Removable) MenuFlyoutHelper.SetRemovableMusicMenu(sender, this, null, option);
-            else MenuFlyoutHelper.SetMusicMenu(sender, this, null, option);
-            if (AllowReorder)
+            var flyout = sender as MenuFlyout;
+            Music music = flyout.Target.DataContext as Music;
+            MenuFlyoutHelper.SetMusicMenu(sender, this, null, new MenuFlyoutOption
             {
-                var flyout = sender as MenuFlyout;
-                var item = new MenuFlyoutItem()
-                {
-                    Text = Helper.Localize("Move To Top"),
-                    Icon = new SymbolIcon(Symbol.Upload)
-                };
-                item.Click += (s, args) =>
-                {
-                    Music music = (s as MenuFlyoutItem).DataContext as Music;
-                    MediaHelper.MoveMusic(music.Index, 0);
-                };
-                flyout.Items.Add(item);
-            }
+                ShowSelect = Selectable,
+                ShowRemove = Removable,
+                MultiSelectOption = MultiSelectOption,
+                ShowMoveToTop = AllowReorder && music.Index > 0
+            });
         }
 
         private void RemoveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
@@ -239,12 +256,7 @@ namespace SMPlayer
             removedMusicIndex = IsNowPlaying ?  music.Index : currentPlaylist.IndexOf(music);
             if (IsNowPlaying ? MediaHelper.RemoveMusic(music) : currentPlaylist.Remove(music))
             {
-                if (AlternatingRowColor)
-                {
-                    for (int i = removedMusicIndex; i < CurrentPlaylist.Count; i++)
-                        if (SongsListView.ContainerFromIndex(i) is ListViewItem container)
-                            container.Background = GetRowBackground(i);
-                }
+                AlternateRowBackgroud(removedMusicIndex);
                 foreach (var listener in RemoveListeners) listener.MusicRemoved(removedMusicIndex, music, CurrentPlaylist);
                 if (showNotification)
                     Helper.ShowCancelableNotification(Helper.LocalizeMessage("MusicRemoved", music.Name), () => CancelMusicRemoval(removedMusicIndex, music));
@@ -260,7 +272,8 @@ namespace SMPlayer
                     removedMusicIndex = MediaHelper.CurrentPlaylist.IndexOf(music);
                     if (MediaHelper.RemoveMusic(music))
                     {
-                        foreach (var listener in RemoveListeners) listener.MusicRemoved(removedMusicIndex, music, MediaHelper.CurrentPlaylist);
+                        foreach (var listener in RemoveListeners)
+                            listener.MusicRemoved(removedMusicIndex, music, MediaHelper.CurrentPlaylist);
                     }
                 }
             }
@@ -335,6 +348,14 @@ namespace SMPlayer
             }
         }
 
+        void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type)
+        {
+            if (type == AddToCollectionType.NowPlaying && IsNowPlaying)
+            {
+                AlternateRowBackgroud(index);
+            }
+        }
+
         void IMenuFlyoutItemClickListener.Delete(Music music)
         {
             RemoveMusic(music, false);
@@ -349,10 +370,7 @@ namespace SMPlayer
 
         void IMenuFlyoutItemClickListener.Select(object data)
         {
-            if (SelectionMode != ListViewSelectionMode.Multiple)
-            {
-                SelectionMode = ListViewSelectionMode.Multiple;
-            }
+            SelectionMode = ListViewSelectionMode.Multiple;
             SongsListView.SelectedItems.Add(data as Music);
         }
 
@@ -360,14 +378,27 @@ namespace SMPlayer
         {
             if (IsNowPlaying) return;
             currentPlaylist.Insert(removedMusicIndex, music);
-            for (int i = removedMusicIndex; i < CurrentPlaylist.Count; i++)
-                if (SongsListView.ContainerFromIndex(i) is ListViewItem container)
-                    container.Background = GetRowBackground(i);
+            AlternateRowBackgroud(removedMusicIndex);
         }
 
         private void SongsListView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
         {
             dragIndex = (e.Items[0] as Music).Index;
+        }
+
+        public void SelectAll()
+        {
+            SongsListView.SelectAll();
+        }
+
+        public void ReverseSelections()
+        {
+            SongsListView.ReverseSelections();
+        }
+
+        public void ClearSelections()
+        {
+            SongsListView.ClearSelections();
         }
 
         void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar)
@@ -384,11 +415,9 @@ namespace SMPlayer
 
         void IMultiSelectListener.Play(MultiSelectCommandBar commandBar)
         {
-            if (SongsListView.SelectedItems.Count == 0) return;
+            if (SelectedItemsCount == 0) return;
             MediaHelper.SetPlaylistAndPlay(SelectedItems);
-            SelectionMode = ListViewSelectionMode.None;
             MultiSelectListener?.Play(commandBar);
-            commandBar.Hide();
         }
 
         async void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar)
@@ -424,10 +453,16 @@ namespace SMPlayer
             MultiSelectListener?.SelectAll(commandBar);
         }
 
-        void IMultiSelectListener.ClearSelection(MultiSelectCommandBar commandBar)
+        void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar)
         {
-            SongsListView.SelectedItems.Clear();
-            MultiSelectListener?.ClearSelection(commandBar);
+            SongsListView.ClearSelections();
+            MultiSelectListener?.ClearSelections(commandBar);
+        }
+
+        void IMultiSelectListener.ReverseSelections(MultiSelectCommandBar commandBar)
+        {
+            SongsListView.ReverseSelections();
+            MultiSelectListener?.ReverseSelections(commandBar);
         }
     }
 

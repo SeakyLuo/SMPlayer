@@ -120,6 +120,9 @@
   <data name="Add To" xml:space="preserve">
     <value>Add To</value>
   </data>
+  <data name="AddAllAppButton.Label" xml:space="preserve">
+    <value>Add All To</value>
+  </data>
   <data name="AddLyrics" xml:space="preserve">
     <value>Add Lyrics</value>
   </data>
@@ -191,6 +194,9 @@
   </data>
   <data name="Artists" xml:space="preserve">
     <value>Artists</value>
+  </data>
+  <data name="ArtistSearchBox.PlaceholderText" xml:space="preserve">
+    <value>Search Artists</value>
   </data>
   <data name="ArtistsItem.Content" xml:space="preserve">
     <value>Artists</value>
@@ -273,6 +279,9 @@
   <data name="Create New Playlist" xml:space="preserve">
     <value>Create New Playlist</value>
   </data>
+  <data name="DateAddedHeader.Header" xml:space="preserve">
+    <value>Date Added</value>
+  </data>
   <data name="DateCreatedTextBlock.Text" xml:space="preserve">
     <value>Date Created</value>
   </data>
@@ -294,6 +303,9 @@
   <data name="DeleteAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Remove Album Art</value>
   </data>
+  <data name="DeleteAppButton.Label" xml:space="preserve">
+    <value>Delete From Disk</value>
+  </data>
   <data name="DeleteButton.Label" xml:space="preserve">
     <value>Delete</value>
   </data>
@@ -305,6 +317,9 @@
   </data>
   <data name="DisplayCheckBox.Content" xml:space="preserve">
     <value>Don't show this next time</value>
+  </data>
+  <data name="DisplayTextBlock.Text" xml:space="preserve">
+    <value>Display</value>
   </data>
   <data name="DuplicateItem.Text" xml:space="preserve">
     <value>Duplicate Playlist</value>
@@ -330,11 +345,23 @@
   <data name="Exit Full Screen Mode" xml:space="preserve">
     <value>Exit Full Screen Mode</value>
   </data>
+  <data name="ExitFullScreenButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Exit Full Screen Mode</value>
+  </data>
+  <data name="ExitFullScreenIconTextButton.Label" xml:space="preserve">
+    <value>Exit Full Screen</value>
+  </data>
+  <data name="ExitFullScreenIconTextButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Exit Full Screen Mode</value>
+  </data>
+  <data name="ExitFullScreenItem.Text" xml:space="preserve">
+    <value>Exit Full Screen</value>
+  </data>
+  <data name="ExitFullScreenItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Exit Full Screen Mode</value>
+  </data>
   <data name="ExitMiniModeItem.Label" xml:space="preserve">
     <value>Exit Mini Mode</value>
-  </data>
-  <data name="ExpandAppButton.Label" xml:space="preserve">
-    <value>Expand View</value>
   </data>
   <data name="ExportDataButton.Content" xml:space="preserve">
     <value>Export Data</value>
@@ -344,6 +371,9 @@
   </data>
   <data name="FavoriteSwipeItem.Text" xml:space="preserve">
     <value>Favorite</value>
+  </data>
+  <data name="FeedBackButton.Content" xml:space="preserve">
+    <value>Share Feedbacks</value>
   </data>
   <data name="FileSizeTextBlock.Text" xml:space="preserve">
     <value>File Size</value>
@@ -360,6 +390,21 @@
   <data name="Full Screen" xml:space="preserve">
     <value>Full Screen</value>
   </data>
+  <data name="FullScreenButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Enter Full Screen Mode</value>
+  </data>
+  <data name="FullScreenIconTextButton.Label" xml:space="preserve">
+    <value>Full Screen</value>
+  </data>
+  <data name="FullScreenIconTextButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Enter Full Screen Mode</value>
+  </data>
+  <data name="FullScreenItem.Text" xml:space="preserve">
+    <value>Full Screen</value>
+  </data>
+  <data name="FullScreenItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Enter Full Screen Mode</value>
+  </data>
   <data name="GenreTextBlock.Text" xml:space="preserve">
     <value>Genre</value>
   </data>
@@ -368,6 +413,9 @@
   </data>
   <data name="GridViewItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Change to Grid View</value>
+  </data>
+  <data name="HideMultiSelectCommandBarCheckBox.Content" xml:space="preserve">
+    <value>Hide multi-select commandbar after operation</value>
   </data>
   <data name="hour" xml:space="preserve">
     <value>hour</value>
@@ -450,9 +498,6 @@
   <data name="Most Played" xml:space="preserve">
     <value>Most Played</value>
   </data>
-  <data name="Move To Top" xml:space="preserve">
-    <value>Move To Top</value>
-  </data>
   <data name="MultiSelect" xml:space="preserve">
     <value>Multi Select</value>
   </data>
@@ -476,6 +521,12 @@
   </data>
   <data name="MusicInfoMenuItem.Text" xml:space="preserve">
     <value>Show Music Info</value>
+  </data>
+  <data name="MusicLibraryItem.Content" xml:space="preserve">
+    <value>Music Library</value>
+  </data>
+  <data name="MusicLibraryItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>All Songs</value>
   </data>
   <data name="MusicLibraryTextBlock.Text" xml:space="preserve">
     <value>Music Library</value>
@@ -517,6 +568,9 @@
     <value>Notification</value>
   </data>
   <data name="Now Playing" xml:space="preserve">
+    <value>Now Playing</value>
+  </data>
+  <data name="NowPlaying" xml:space="preserve">
     <value>Now Playing</value>
   </data>
   <data name="NowPlayingItem.Content" xml:space="preserve">
@@ -600,6 +654,9 @@
   <data name="PlaylistsTextBlock.Text" xml:space="preserve">
     <value>Playlists</value>
   </data>
+  <data name="PlayModeAppButton.Label" xml:space="preserve">
+    <value>Play Mode</value>
+  </data>
   <data name="PlayTextBlock.Text" xml:space="preserve">
     <value>Play</value>
   </data>
@@ -669,11 +726,65 @@
   <data name="RefreshItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Update current directory</value>
   </data>
+  <data name="ReleaseNotesBugFixes.Text" xml:space="preserve">
+    <value>Bug fixes and various improvements.</value>
+  </data>
+  <data name="ReleaseNotesBugFixesDragAndDrop.Text" xml:space="preserve">
+    <value>Drag-and-drop seems to work perfectly.</value>
+  </data>
+  <data name="ReleaseNotesButton.Content" xml:space="preserve">
+    <value>Release Notes</value>
+  </data>
+  <data name="ReleaseNotesCreateNewPlaylistButtonMoved.Text" xml:space="preserve">
+    <value>In the Playlist page, the Create New Playlist button is moved to the dropdown list, and the Add To button is removed.</value>
+  </data>
+  <data name="ReleaseNotesFeedbackViaEmail.Text" xml:space="preserve">
+    <value>Now you can share you feedbacks via email!</value>
+  </data>
+  <data name="ReleaseNotesHistoryUpdates.Text" xml:space="preserve">
+    <value>History Updates</value>
+  </data>
+  <data name="ReleaseNotesImproveMultiSelect.Text" xml:space="preserve">
+    <value>Improved multi-select.</value>
+  </data>
+  <data name="ReleaseNotesImproveSearchPage.Text" xml:space="preserve">
+    <value>Search page is improved.</value>
+  </data>
+  <data name="ReleaseNotesIntroduceReleaseNotes.Text" xml:space="preserve">
+    <value>Release Notes dialog is introduced. You can find it in the Settings page.</value>
+  </data>
+  <data name="ReleaseNotesOpenWithSMPlayer.Text" xml:space="preserve">
+    <value>Now supports open music with SMPlayer.</value>
+  </data>
+  <data name="ReleaseNotesPlayNext.Text" xml:space="preserve">
+    <value>"Play Next" has been added to the right-click menu, while "Move to top" is removed.</value>
+  </data>
+  <data name="ReleaseNotesSearchPageAddAllToButton.Text" xml:space="preserve">
+    <value>Search page now has an AddAllTo button.</value>
+  </data>
+  <data name="ReleaseNotesShowCount.Text" xml:space="preserve">
+    <value>Multiple pages now can show the number of items in a collection.</value>
+  </data>
+  <data name="ReleaseNotesSortByDateAdded.Text" xml:space="preserve">
+    <value>Sort by date added.</value>
+  </data>
+  <data name="ReleaseNotesSupportsMultiSelect.Text" xml:space="preserve">
+    <value>Now supports multi-select.</value>
+  </data>
+  <data name="ReleaseNotesTextBlock.Text" xml:space="preserve">
+    <value>Release Notes</value>
+  </data>
+  <data name="ReleaseNotesVersion.Text" xml:space="preserve">
+    <value>Version: </value>
+  </data>
+  <data name="Remove From List" xml:space="preserve">
+    <value>Remove From List</value>
+  </data>
   <data name="Remove From Playlist" xml:space="preserve">
     <value>Remove From Playlist</value>
   </data>
   <data name="RemoveAppButton.Label" xml:space="preserve">
-    <value>Remove From Playlist</value>
+    <value>Remove From List</value>
   </data>
   <data name="RemoveSwipeItem.Text" xml:space="preserve">
     <value>Remove</value>
@@ -701,6 +812,9 @@
   </data>
   <data name="ResetMusicPropertiesButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Reset Properties</value>
+  </data>
+  <data name="ReverseSelectionAppButton.Label" xml:space="preserve">
+    <value>Reverse Selection</value>
   </data>
   <data name="SaveAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Save album art</value>
@@ -789,6 +903,9 @@
   <data name="ShowAllPlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Show All Playlists</value>
   </data>
+  <data name="ShowCounterCheckBox.Content" xml:space="preserve">
+    <value>Show Counter</value>
+  </data>
   <data name="ShowInExplorerButton.Content" xml:space="preserve">
     <value>Check out</value>
   </data>
@@ -812,12 +929,6 @@
   </data>
   <data name="ShuffleItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Shuffle and play all music under current directory</value>
-  </data>
-  <data name="SongsItem.Content" xml:space="preserve">
-    <value>Songs</value>
-  </data>
-  <data name="SongsItem.ToolTipService.ToolTip" xml:space="preserve">
-    <value>All Songs</value>
   </data>
   <data name="SongsTextBlock.Text" xml:space="preserve">
     <value>Songs</value>
@@ -866,6 +977,12 @@
   </data>
   <data name="UpdateMusicLibraryButton.Content" xml:space="preserve">
     <value>Reload Music Library</value>
+  </data>
+  <data name="ViaEmailMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Via Email</value>
+  </data>
+  <data name="ViaWebBrowserMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Via Web Browser</value>
   </data>
   <data name="ViewAllButton.Label" xml:space="preserve">
     <value>View All</value>

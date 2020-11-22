@@ -6,15 +6,10 @@
     xmlns:local="using:SMPlayer.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:triggers="using:SMPlayer.Triggers"
-    Loaded="UserControl_Loaded"
     DataContextChanged="UserControl_DataContextChanged"
-    Unloaded="UserControl_Unloaded"
     mc:Ignorable="d">
 
-    <Grid
-        x:Name="ContentGrid"
-        Height="30"
-        Background="Transparent">
+    <Grid x:Name="ContentGrid" Height="30">
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="TitleColumnDefinition" Width="6*" />
             <ColumnDefinition x:Name="ArtistColumnDefinition" Width="3*" />
@@ -94,6 +89,7 @@
                 Click="Artist_Click"
                 Content="{Binding Artist, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist, Mode=OneWay}"
                 Foreground="{ThemeResource PlaylistGeneralTextBrush}"
+                ToolTipService.ToolTip="{Binding Artist, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist, Mode=OneWay}"
                 Style="{StaticResource TextBlockButtonStyle}" />
             <TextBlock
                 x:Name="LongArtistAlbumPanelDot"
@@ -112,6 +108,7 @@
                 Click="Album_Click"
                 Content="{Binding Album, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownAlbum, Mode=OneWay}"
                 Foreground="{ThemeResource PlaylistGeneralTextBrush}"
+                ToolTipService.ToolTip="{Binding Album, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownAlbum, Mode=OneWay}"
                 Style="{StaticResource TextBlockButtonStyle}"
                 Visibility="{x:Bind ShowAlbumText, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
         </StackPanel>

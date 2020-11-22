@@ -19,7 +19,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class ArtistsPage : Page, IAfterSongsSetListener, ISwitchMusicListener, IMenuFlyoutItemClickListener, IMultiSelectListener
+    public sealed partial class ArtistsPage : Page, IAfterSongsSetListener, ISwitchMusicListener, IMenuFlyoutItemClickListener, IMultiSelectListener, IInitListener
     {
         public static ArtistsPage Instance { get => MainPage.Instance.NavigationFrame.Content as ArtistsPage; }
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
@@ -28,6 +28,7 @@ namespace SMPlayer
         private bool IsProcessing = false;
         private object targetArtist;
         private List<ListView> listViews = new List<ListView>();
+        private IInitListener initListener;
 
         private ArtistView SelectedArtist
         {
@@ -93,17 +94,14 @@ namespace SMPlayer
             targetArtist = e.Parameter;
         }
 
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            MainPage.Instance.GetMultiSelectCommandBar().MultiSelectListener = this;
+            SetHeader();
+            MainPage.Instance.SetMultiSelectListener(this);
             if (targetArtist == null) return;
             if (IsProcessing)
             {
-                await Task.Run(async () =>
-                {
-                    while (IsProcessing) ;
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => SelectArtist(targetArtist));
-                });
+                initListener = this;
             }
             else
             {
@@ -178,8 +176,21 @@ namespace SMPlayer
                 Suggestions.Add(artist.Name);
             }
             FindMusicAndSetPlaying(MediaHelper.CurrentMusic);
-            ArtistSearchBox.PlaceholderText = Helper.LocalizeMessage("AllArtists", Artists.Count);
+            SetHeader();
+            initListener?.Inited();
             IsProcessing = false;
+        }
+
+        public void SetHeader()
+        {
+            if (Settings.settings.ShowCount)
+            {
+                MainPage.Instance?.SetHeaderText("AllArtistsWithCount", Artists.Count);
+            }
+            else
+            {
+                MainPage.Instance?.SetHeaderText("AllArtists");
+            }
         }
 
         public async void SongsSet(ICollection<Music> songs)
@@ -201,15 +212,9 @@ namespace SMPlayer
         private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             ListView listView = (ListView)sender;
-            if (listView.SelectionMode == ListViewSelectionMode.Multiple)
-            {
-
-            }
-            else
-            {
-                Music music = (Music)e.ClickedItem;
-                MediaHelper.SetMusicAndPlay(listView.ItemsSource as ObservableCollection<Music>, music);
-            }
+            if (listView.SelectionMode != ListViewSelectionMode.None) return;
+            Music music = (Music)e.ClickedItem;
+            MediaHelper.SetMusicAndPlay(listView.ItemsSource as ObservableCollection<Music>, music);
         }
 
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
@@ -264,14 +269,22 @@ namespace SMPlayer
         }
         private void AlbumMenuFlyout_Opening(object sender, object e)
         {
-            MenuFlyoutHelper.SetPlaylistMenu(sender, this, null, new MenuFlyoutOption() { ShowSelect = true, MultiSelectOption = new MultiSelectCommandBarOption() { ShowRemove = false } });
+            MenuFlyoutHelper.SetPlaylistMenu(sender, this, null, new MenuFlyoutOption
+            { 
+                ShowSelect = true,
+                MultiSelectOption = new MultiSelectCommandBarOption() { ShowRemove = false } 
+            });
             MenuFlyout flyout = sender as MenuFlyout;
             var album = flyout.Target.DataContext as AlbumView;
             flyout.Items.Add(MenuFlyoutHelper.GetSeeAlbumFlyout(album.Songs[0]));
         }
         private void OpenMusicMenuFlyout(object sender, object e)
         {
-            MenuFlyoutHelper.SetMusicMenu(sender);
+            MenuFlyoutHelper.SetMusicMenu(sender, this, null, new MenuFlyoutOption
+            {
+                ShowSelect = true,
+                MultiSelectOption = new MultiSelectCommandBarOption() { ShowRemove = false }
+            });
         }
 
         private void Artist_PointerEntered(object sender, PointerRoutedEventArgs e)
@@ -319,10 +332,12 @@ namespace SMPlayer
             }
         }
 
-        private async void AlbumCover_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        private async void AlbumCover_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
         {
-            if (sender.DataContext is AlbumView album)
-                await album.SetThumbnailAsync();
+            if (ImageHelper.NeedsLoading(sender, args))
+            {
+                await (sender.DataContext as AlbumView)?.SetThumbnailAsync();
+            }
         }
 
         void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar)
@@ -364,13 +379,13 @@ namespace SMPlayer
             }
         }
 
-        void IMultiSelectListener.ClearSelection(MultiSelectCommandBar commandBar)
+        void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar)
         {
             foreach (var listView in listViews)
             {
                 try
                 {
-                    listView.SelectedItems.Clear();
+                    listView.ClearSelections();
                 }
                 catch (Exception)
                 {
@@ -379,18 +394,48 @@ namespace SMPlayer
             }
         }
 
+        void IMultiSelectListener.ReverseSelections(MultiSelectCommandBar commandBar)
+        {
+            foreach (var listView in listViews)
+            {
+                try
+                {
+                    listView.ReverseSelections();
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+        }
+
+        void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type) { }
         void IMenuFlyoutItemClickListener.Favorite(object data) { }
         void IMenuFlyoutItemClickListener.Delete(Music music) { }
         void IMenuFlyoutItemClickListener.UndoDelete(Music music) { }
         void IMenuFlyoutItemClickListener.Remove(Music music) { }
         void IMenuFlyoutItemClickListener.Select(object data)
         {
-            foreach (var listView in listViews)
+            if (data is Music music)
             {
-                listView.SelectionMode = ListViewSelectionMode.Multiple;
-                if (listView.DataContext.Equals(data))
+                foreach (var listView in listViews)
                 {
-                    listView.SelectAll();
+                    listView.SelectionMode = ListViewSelectionMode.Multiple;
+                    if (listView.DataContext is AlbumView album && album.Contains(music))
+                    {
+                        listView.SelectedItems.Add(data);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var listView in listViews)
+                {
+                    listView.SelectionMode = ListViewSelectionMode.Multiple;
+                    if (listView.DataContext.Equals(data))
+                    {
+                        listView.SelectAll();
+                    }
                 }
             }
         }
@@ -400,6 +445,11 @@ namespace SMPlayer
             ListView listView = sender as ListView;
             listView.SelectionMode = MainPage.Instance.GetMultiSelectCommandBar().IsVisible ? ListViewSelectionMode.Multiple : ListViewSelectionMode.None;
             listViews.Add(listView);
+        }
+
+        void IInitListener.Inited()
+        {
+            SelectArtist(targetArtist);
         }
     }
 }

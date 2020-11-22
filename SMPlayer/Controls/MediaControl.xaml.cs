@@ -21,7 +21,7 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace SMPlayer
 {
-    public sealed partial class MediaControl : UserControl, ISwitchMusicListener, MediaControlListener, IRemoveMusicListener, ILikeMusicListener
+    public sealed partial class MediaControl : UserControl, ISwitchMusicListener, IMediaControlListener, IRemoveMusicListener, ILikeMusicListener
     {
         public enum MediaControlMode
         {
@@ -358,6 +358,7 @@ namespace SMPlayer
         private SpeechRecognizer speechRecognizer = new SpeechRecognizer(Helper.CurrentLanguage);
         private volatile bool IsSpeeching = false;
         private bool IsMinimalMain { get => MainMediaControlMoreButton.Visibility == Visibility.Visible; }
+        private double MinimalLayoutWidth { get => (double) Resources["MinimalLayoutWidth"]; }
 
         public MediaControl()
         {
@@ -557,7 +558,7 @@ namespace SMPlayer
         {
             RepeatButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            ShuffleButton.SetToolTip(MoreShuffleButton.Label = Helper.LocalizeMessage($"Shuffle: " + (isChecked ? "Enabled" : "Disabled")));
+            ShuffleButton.SetToolTip(MoreShuffleButton.Label = Helper.LocalizeMessage("Shuffle: " + (isChecked ? "Enabled" : "Disabled")));
             RepeatButton.SetToolTip(MoreRepeatButton.Label = Helper.LocalizeMessage("Repeat: Disabled"));
             RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = Helper.LocalizeMessage("Repeat One: Disabled"));
             MoreShuffleButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
@@ -749,51 +750,60 @@ namespace SMPlayer
             MainPage.Instance.Frame.Navigate(typeof(NowPlayingFullPage), null, new DrillInNavigationTransitionInfo());
         }
 
-        private static SymbolIcon FullScreenIcon = new SymbolIcon(Symbol.FullScreen);
-        private static SymbolIcon BackToWindowIcon = new SymbolIcon(Symbol.BackToWindow);
         private void SetFullScreen()
         {
-            string text = Helper.Localize("Full Screen"), tooltip = Helper.Localize("Enter Full Screen Mode");
-            MainMediaControlMoreFullScreenItem.Icon = FullScreenIcon;
-            MainMediaControlMoreFullScreenItem.Label = text;
-            MainMediaControlMoreFullScreenItem.SetToolTip(tooltip, false);
-            MainMoreFullScreenItem.Icon = FullScreenIcon;
-            MainMoreFullScreenItem.Text = text;
-            MainMoreFullScreenItem.SetToolTip(tooltip, false);
-            FullScreenItem.Icon = new SymbolIcon(Symbol.FullScreen);
-            FullScreenItem.Text = text;
-            FullScreenItem.SetToolTip(tooltip, false);
-            FullScreenButton.Content = "\uE740";
-            FullScreenButton.SetToolTip(tooltip, false);
+            switch (mode)
+            {
+                case MediaControlMode.Main:
+                    MainMoreFullScreenItem.Visibility = Visibility.Visible;
+                    MainMoreExitFullScreenItem.Visibility = Visibility.Collapsed;
+                    MainMediaControlMoreFullScreenItem.Visibility = Visibility.Visible;
+                    MainMediaControlMoreExitFullScreenItem.Visibility = Visibility.Collapsed;
+                    break;
+                case MediaControlMode.Full:
+                    FullScreenButton.Visibility = Visibility.Visible;
+                    ExitFullScreenButton.Visibility = Visibility.Collapsed;
+                    FullScreenItem.Visibility = Window.Current.Bounds.Width < MinimalLayoutWidth ? Visibility.Visible : Visibility.Collapsed;
+                    ExitFullScreenItem.Visibility = Visibility.Collapsed;
+                    break;
+            }
         }
 
         private void SetExitFullScreen()
         {
-            string text = Helper.Localize("Exit Full Screen"), tooltip = Helper.Localize("Exit Full Screen Mode");
-            MainMediaControlMoreFullScreenItem.Icon = BackToWindowIcon;
-            MainMediaControlMoreFullScreenItem.Label = text;
-            MainMediaControlMoreFullScreenItem.SetToolTip(tooltip, false);
-            MainMoreFullScreenItem.Icon = BackToWindowIcon;
-            MainMoreFullScreenItem.Text = text;
-            MainMoreFullScreenItem.SetToolTip(tooltip, false);
-            FullScreenItem.Icon = new SymbolIcon(Symbol.BackToWindow);
-            FullScreenItem.Text = text;
-            FullScreenItem.SetToolTip(tooltip, false);
-            FullScreenButton.Content = "\uE73F";
-            FullScreenButton.SetToolTip(tooltip, false);
+            switch (mode)
+            {
+                case MediaControlMode.Main:
+                    MainMoreFullScreenItem.Visibility = Visibility.Collapsed;
+                    MainMoreExitFullScreenItem.Visibility = Visibility.Visible;
+                    MainMediaControlMoreFullScreenItem.Visibility = Visibility.Collapsed;
+                    MainMediaControlMoreExitFullScreenItem.Visibility = Visibility.Visible;
+                    break;
+                case MediaControlMode.Full:
+                    FullScreenButton.Visibility = Visibility.Collapsed;
+                    ExitFullScreenButton.Visibility = Visibility.Visible;
+                    FullScreenItem.Visibility = Visibility.Collapsed;
+                    ExitFullScreenItem.Visibility = Window.Current.Bounds.Width < MinimalLayoutWidth ? Visibility.Visible : Visibility.Collapsed;
+                    break;
+            }
         }
 
         private void FullScreenButton_Click(object sender, RoutedEventArgs e)
+        {
+            ApplicationView applicationView = ApplicationView.GetForCurrentView();
+            if (applicationView.TryEnterFullScreenMode())
+            {
+                SetExitFullScreen();
+            }
+        }
+
+        private void ExitFullScreenButton_Click(object sender, RoutedEventArgs e)
         {
             ApplicationView applicationView = ApplicationView.GetForCurrentView();
             if (applicationView.IsFullScreenMode)
             {
                 applicationView.ExitFullScreenMode();
                 SetFullScreen();
-            }
-            else if (applicationView.TryEnterFullScreenMode())
-            {
-                SetExitFullScreen();
             }
         }
 

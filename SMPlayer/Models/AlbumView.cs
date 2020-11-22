@@ -109,6 +109,11 @@ namespace SMPlayer.Models
             return new AlbumInfo(Name, Artist, ThumbnailSource);
         }
 
+        public bool Contains(Music music)
+        {
+            return Songs.Contains(music);
+        }
+
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
             // Raise the PropertyChanged event, passing the name of the property whose value has changed.

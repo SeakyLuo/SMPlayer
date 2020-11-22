@@ -3,15 +3,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage.FileProperties;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMPlayer
 {
     public static class ImageHelper
     {
+        public static bool NeedsLoading(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
+        {
+            return args.BringIntoViewDistanceY < sender.ActualHeight * 1.5 && sender.DataContext != null;
+        }
+
         private static readonly LoadingCache<string, BitmapImage> imageCache = new LoadingCache<string, BitmapImage>(30, TimeUnit.Minute)
         {
-            MaxSize = 200
+            MaxSize = 300
         };
 
         public static async Task<BitmapImage> LoadImage(string path)

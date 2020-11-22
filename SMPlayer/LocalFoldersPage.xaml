@@ -298,6 +298,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             HorizontalContentAlignment="Stretch"
+            SelectionMode="None"
             Expanding="LocalFoldersTreeView_Expanding"
             ItemContainerStyle="{StaticResource StretchTreeViewItemStyle}"
             ItemInvoked="LocalFoldersTreeView_ItemInvoked"
