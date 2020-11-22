@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace SMPlayer.Controls
 {
-    public sealed partial class MultiSelectCommandBar : UserControl
+    public sealed partial class MultiSelectCommandBar : UserControl, IMenuFlyoutItemClickListener
     {
         public IMultiSelectListener MultiSelectListener { get; set; }
         public bool IsVisible { get => CommandBarContainer.IsOpen; }
@@ -72,8 +72,7 @@ namespace SMPlayer.Controls
         {
             MenuFlyoutHelper helper = new MenuFlyoutHelper();
             MultiSelectListener?.AddTo(this, helper);
-            helper.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
-            HideAfterOperation();
+            helper.GetAddToMenuFlyout(this).ShowAt(sender as FrameworkElement);
         }
 
         private void PlayAppButton_Click(object sender, RoutedEventArgs e)
@@ -106,6 +105,32 @@ namespace SMPlayer.Controls
         private void DeleteAppButton_Click(object sender, RoutedEventArgs e)
         {
             HideAfterOperation();
+        }
+
+        void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type)
+        {
+            HideAfterOperation();
+        }
+
+        void IMenuFlyoutItemClickListener.Favorite(object data)
+        {
+            HideAfterOperation();
+        }
+
+        void IMenuFlyoutItemClickListener.Delete(Music music)
+        {
+        }
+
+        void IMenuFlyoutItemClickListener.UndoDelete(Music music)
+        {
+        }
+
+        void IMenuFlyoutItemClickListener.Remove(Music music)
+        {
+        }
+
+        void IMenuFlyoutItemClickListener.Select(object data)
+        {
         }
     }
 

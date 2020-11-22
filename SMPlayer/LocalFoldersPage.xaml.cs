@@ -224,12 +224,10 @@ namespace SMPlayer
             setter.SetPage(tree);
         }
 
+        void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type) { }
         void IMenuFlyoutItemClickListener.Favorite(object data) { }
-
         void IMenuFlyoutItemClickListener.Delete(Music music) { }
-
         void IMenuFlyoutItemClickListener.UndoDelete(Music music) { }
-
         void IMenuFlyoutItemClickListener.Remove(Music music) { }
 
         void IMenuFlyoutItemClickListener.Select(object data)

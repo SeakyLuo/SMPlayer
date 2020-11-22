@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Contacts;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.ApplicationModel.Email;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.Popups;
@@ -186,32 +188,6 @@ namespace SMPlayer
                 await UpdateMusicLibrary();
             }
 
-        }
-        private bool IsProcessing = false;
-        private async void BugReport_Click(object sender, RoutedEventArgs e)
-        {
-            if (IsProcessing)
-            {
-                Helper.ShowNotification("ProcessingRequest");
-                return;
-            }
-            IsProcessing = true;
-            string uri = "https://github.com/SeakyLuo/SMPlayer/issues";
-            if (await Windows.System.Launcher.LaunchUriAsync(new Uri(uri)))
-            {
-
-            }
-            else
-            {
-                DataPackage dataPackage = new DataPackage()
-                {
-                    RequestedOperation = DataPackageOperation.Copy
-                };
-                dataPackage.SetText(uri);
-                Clipboard.SetContent(dataPackage);
-                MainPage.Instance.ShowNotification(Helper.LocalizeMessage("FailToOpenBrowser"));
-            }
-            IsProcessing = false;
         }
 
         private void SaveChanges_Click(object sender, RoutedEventArgs e)
@@ -422,6 +398,68 @@ namespace SMPlayer
         private void ShowCounterCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             Settings.settings.ShowCount = false;
+        }
+
+        private static async Task ComposeEmail(string receiver, string subject, string messageBody)
+        {
+            var emailMessage = new EmailMessage
+            {
+                Subject = subject,
+                Body = messageBody
+            };
+
+            emailMessage.To.Add(new EmailRecipient(receiver));
+            await EmailManager.ShowComposeNewEmailAsync(emailMessage);
+        }
+
+        private void FeedbackButton_Click(object sender, RoutedEventArgs e)
+        {
+            MenuFlyout flyout = new MenuFlyout();
+            var emailItem = new MenuFlyoutItem()
+            {
+                Text = Helper.LocalizeText("ViaEmail"),
+            };
+            emailItem.Click += ViaEmailMenuFlyoutItem_Click;
+            flyout.Items.Add(emailItem);
+            var webBrowserItem = new MenuFlyoutItem()
+            {
+                Text = Helper.LocalizeText("ViaWebBrowser"),
+            };
+            webBrowserItem.Click += ViaWebBrowserMenuFlyoutItem_Click;
+            flyout.Items.Add(webBrowserItem);
+            flyout.ShowAt(sender as FrameworkElement);
+        }
+
+        private async void ViaEmailMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            await ComposeEmail("luokiss9@qq.com", Helper.LocalizeText("ShareFeedBacks"), "");
+        }
+
+        private bool IsProcessing = false;
+        private async void ViaWebBrowserMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsProcessing)
+            {
+                Helper.ShowNotification("ProcessingRequest");
+                return;
+            }
+            IsProcessing = true;
+            string uri = "https://github.com/SeakyLuo/SMPlayer/issues";
+            if (await Windows.System.Launcher.LaunchUriAsync(new Uri(uri)))
+            {
+
+            }
+            else
+            {
+                DataPackage dataPackage = new DataPackage()
+                {
+                    RequestedOperation = DataPackageOperation.Copy
+                };
+                dataPackage.SetText(uri);
+                Clipboard.SetContent(dataPackage);
+                MainPage.Instance.ShowNotification(Helper.LocalizeMessage("FailToOpenBrowser"));
+            }
+            IsProcessing = false;
         }
     }
 

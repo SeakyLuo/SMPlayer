@@ -409,6 +409,7 @@ namespace SMPlayer
             }
         }
 
+        void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type) { }
         void IMenuFlyoutItemClickListener.Favorite(object data) { }
         void IMenuFlyoutItemClickListener.Delete(Music music) { }
         void IMenuFlyoutItemClickListener.UndoDelete(Music music) { }

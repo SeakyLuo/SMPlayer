@@ -77,6 +77,7 @@ namespace SMPlayer
 
         public static void Save()
         {
+            if (RecentAdded == null) return;
             JsonFileHelper.SaveAsync(JsonFileName, RecentAdded.TimeLine);
         }
 
@@ -455,9 +456,7 @@ namespace SMPlayer
         }
 
         void IMenuFlyoutItemClickListener.Favorite(object data) { }
-
         void IMenuFlyoutItemClickListener.Delete(Music music) { }
-
         void IMenuFlyoutItemClickListener.UndoDelete(Music music) { }
 
         void IMenuFlyoutItemClickListener.Remove(Music music)
@@ -465,6 +464,7 @@ namespace SMPlayer
         }
 
         void IMenuFlyoutItemClickListener.Select(object data) { }
+        void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type) { }
     }
 
     public interface IInitListener

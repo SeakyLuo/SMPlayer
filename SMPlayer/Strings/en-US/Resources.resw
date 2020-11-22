@@ -372,6 +372,9 @@
   <data name="FavoriteSwipeItem.Text" xml:space="preserve">
     <value>Favorite</value>
   </data>
+  <data name="FeedBackButton.Content" xml:space="preserve">
+    <value>Share Feedbacks</value>
+  </data>
   <data name="FileSizeTextBlock.Text" xml:space="preserve">
     <value>File Size</value>
   </data>
@@ -494,9 +497,6 @@
   </data>
   <data name="Most Played" xml:space="preserve">
     <value>Most Played</value>
-  </data>
-  <data name="Move To Top" xml:space="preserve">
-    <value>Move To Top</value>
   </data>
   <data name="MultiSelect" xml:space="preserve">
     <value>Multi Select</value>
@@ -729,11 +729,17 @@
   <data name="ReleaseNotesBugFixes.Text" xml:space="preserve">
     <value>Bug fixes and various improvements.</value>
   </data>
+  <data name="ReleaseNotesBugFixesDragAndDrop.Text" xml:space="preserve">
+    <value>Drag-and-drop seems to work perfectly.</value>
+  </data>
   <data name="ReleaseNotesButton.Content" xml:space="preserve">
     <value>Release Notes</value>
   </data>
   <data name="ReleaseNotesCreateNewPlaylistButtonMoved.Text" xml:space="preserve">
     <value>In the Playlist page, the Create New Playlist button is moved to the dropdown list, and the Add To button is removed.</value>
+  </data>
+  <data name="ReleaseNotesFeedbackViaEmail.Text" xml:space="preserve">
+    <value>Now you can share you feedbacks via email!</value>
   </data>
   <data name="ReleaseNotesHistoryUpdates.Text" xml:space="preserve">
     <value>History Updates</value>
@@ -750,6 +756,9 @@
   <data name="ReleaseNotesOpenWithSMPlayer.Text" xml:space="preserve">
     <value>Now supports open music with SMPlayer.</value>
   </data>
+  <data name="ReleaseNotesPlayNext.Text" xml:space="preserve">
+    <value>"Play Next" has been added to the right-click menu, while "Move to top" is removed.</value>
+  </data>
   <data name="ReleaseNotesSearchPageAddAllToButton.Text" xml:space="preserve">
     <value>Search page now has an AddAllTo button.</value>
   </data>
@@ -758,6 +767,9 @@
   </data>
   <data name="ReleaseNotesSortByDateAdded.Text" xml:space="preserve">
     <value>Sort by date added.</value>
+  </data>
+  <data name="ReleaseNotesSupportsMultiSelect.Text" xml:space="preserve">
+    <value>Now supports multi-select.</value>
   </data>
   <data name="ReleaseNotesTextBlock.Text" xml:space="preserve">
     <value>Release Notes</value>
@@ -965,6 +977,12 @@
   </data>
   <data name="UpdateMusicLibraryButton.Content" xml:space="preserve">
     <value>Reload Music Library</value>
+  </data>
+  <data name="ViaEmailMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Via Email</value>
+  </data>
+  <data name="ViaWebBrowserMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Via Web Browser</value>
   </data>
   <data name="ViewAllButton.Label" xml:space="preserve">
     <value>View All</value>

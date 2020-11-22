@@ -126,6 +126,7 @@ namespace SMPlayer.Models
 
         public static void Save()
         {
+            if (settings == null) return;
             settings.MusicProgress = MediaHelper.Position;
             JsonFileHelper.SaveAsync(JsonFilename, settings);
             JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, settings);

@@ -70,7 +70,7 @@ namespace SMPlayer
             if (Albums.Count == 0) Setup(MusicLibraryPage.AllSongs); // have not listened to changes
         }
 
-        private async void Setup(ICollection<Music> songs)
+        private async void Setup(IEnumerable<Music> songs)
         {
             if (IsProcessing) return;
             AlbumPageProgressRing.Visibility = Visibility.Visible;
@@ -86,7 +86,7 @@ namespace SMPlayer
             AlbumPageProgressRing.Visibility = Visibility.Collapsed;
         }
 
-        private async Task SetData(ICollection<Music> songs)
+        private async Task SetData(IEnumerable<Music> songs)
         {
             IsProcessing = true;
             List<AlbumView> albums = new List<AlbumView>();

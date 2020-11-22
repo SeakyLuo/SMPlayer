@@ -12,28 +12,25 @@
     <Page.Resources>
         <x:Double x:Key="SmallLabelFontSize">20</x:Double>
         <Style x:Key="SettingLabelStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="24" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="TextAlignment" Value="Start" />
-            <Setter Property="Margin" Value="0,9,20,9" />
-            <Setter Property="Height" Value="32" />
+            <Setter Property="FontSize" Value="22" />
+            <Setter Property="Width" Value="128" />
+            <Setter Property="Margin" Value="8,0" />
+            <Setter Property="Height" Value="30" />
         </Style>
         <Style x:Key="MinimalSettingLabelStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="18" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="TextAlignment" Value="Start" />
-            <Setter Property="Margin" Value="0,10,10,10" />
+            <Setter Property="Margin" Value="8,0" />
             <Setter Property="Height" Value="30" />
         </Style>
         <Style x:Key="SettingCheckBoxStyle" TargetType="CheckBox">
             <Setter Property="Height" Value="30" />
-            <Setter Property="Margin" Value="10" />
+            <Setter Property="Margin" Value="8" />
         </Style>
         <Style x:Key="MarginSetter" TargetType="FrameworkElement">
-            <Setter Property="Margin" Value="9" />
+            <Setter Property="Margin" Value="8" />
         </Style>
         <Style x:Key="SettingsHyperLinkButtonStyle" TargetType="HyperlinkButton" BasedOn="{StaticResource TextBlockButtonStyle}">
-            <Setter Property="Margin" Value="9" />
+            <Setter Property="Margin" Value="8" />
         </Style>
         <Style
             x:Key="SolidColorButton"
@@ -127,185 +124,202 @@
     </Page.Resources>
 
     <ScrollViewer>
-        <Grid Padding="20,10,20,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <StackPanel Padding="4,0">
             <StackPanel>
-                <TextBlock
-                    x:Name="MusicFolderTextBlock"
-                    x:Uid="MusicFolderTextBlock"
-                    Style="{StaticResource SettingLabelStyle}"
-                    Text="Music Folder" />
-                <TextBlock Style="{StaticResource SettingLabelStyle}" />
-                <TextBlock
-                    x:Name="MusicLibraryTextBlock"
-                    x:Uid="MusicLibraryTextBlock"
-                    Style="{StaticResource SettingLabelStyle}"
-                    Text="Music Library" />
-                <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        x:Name="MusicFolderTextBlock"
+                        x:Uid="MusicFolderTextBlock"
+                        Style="{StaticResource SettingLabelStyle}"
+                        Text="Music Folder" />
+                    <AutoSuggestBox
+                        x:Name="PathBox"
+                        x:Uid="PathBox"
+                        Grid.Column="1"
+                        HorizontalAlignment="Stretch"
+                        PlaceholderText="The Root Folder of Your Music Library"
+                        QuerySubmitted="PathBox_QuerySubmitted"
+                        Style="{StaticResource MarginSetter}">
+                        <AutoSuggestBox.QueryIcon>
+                            <FontIcon x:Uid="OpenFolderIcon" Glyph="&#xE838;" />
+                        </AutoSuggestBox.QueryIcon>
+                    </AutoSuggestBox>
+                </Grid>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <HyperlinkButton
+                        x:Uid="ReauthorizeButton"
+                        Click="Reauthorize_Click"
+                        Content="Reauthorize"
+                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        x:Name="MusicLibraryTextBlock"
+                        x:Uid="MusicLibraryTextBlock"
+                        Style="{StaticResource SettingLabelStyle}"
+                        Text="Music Library" />
+                    <HyperlinkButton
+                        x:Uid="UpdateMusicLibraryButton"
+                        Click="UpdateMusicLibrary_Click"
+                        Content="Update Music Library"
+                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <HyperlinkButton
+                        x:Uid="AddLyricsButton"
+                        Click="AddLyrics_Click"
+                        Content="Add Lyrics"
+                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
                 <TextBlock
                     x:Name="NotificationTextBlock"
                     x:Uid="NotificationTextBlock"
                     Style="{StaticResource SettingLabelStyle}"
                     Text="Notification" />
-                <TextBlock
-                    x:Uid="DisplayTextBlock"
-                    Style="{StaticResource SettingLabelStyle}"
-                    Text="Display" />
-                <TextBlock Style="{StaticResource SettingLabelStyle}" />
-                <TextBlock
-                    x:Name="RecentTextBlock"
-                    x:Uid="RecentTextBlock"
-                    Style="{StaticResource SettingLabelStyle}"
-                    Text="Recent" />
-                <TextBlock Style="{StaticResource SettingLabelStyle}" />
-                <TextBlock
-                    x:Name="PlayTextBlock"
-                    x:Uid="PlayTextBlock"
-                    Style="{StaticResource SettingLabelStyle}"
-                    Text="Play" />
-                <TextBlock
-                    x:Name="SaveTextBlock"
-                    x:Uid="SaveTextBlock"
-                    Style="{StaticResource SettingLabelStyle}"
-                    Text="Save" />
-                <TextBlock Style="{StaticResource SettingLabelStyle}" />
-                <TextBlock
-                    x:Name="OthersTextBlock"
-                    x:Uid="OthersTextBlock"
-                    Style="{StaticResource SettingLabelStyle}"
-                Text="Others" />
-            </StackPanel>
-            <StackPanel Grid.Column="1">
-                <AutoSuggestBox
-                    x:Name="PathBox"
-                    x:Uid="PathBox"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    PlaceholderText="The Root Folder of Your Music Library"
-                    QuerySubmitted="PathBox_QuerySubmitted"
-                    Style="{StaticResource MarginSetter}">
-                        <AutoSuggestBox.QueryIcon>
-                            <FontIcon x:Uid="OpenFolderIcon" Glyph="&#xE838;" />
-                        </AutoSuggestBox.QueryIcon>
-                </AutoSuggestBox>
-                <HyperlinkButton
-                    x:Uid="ReauthorizeButton"
-                    Click="Reauthorize_Click"
-                    Content="Reauthorize"
-                    Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
-                <HyperlinkButton
-                    x:Uid="UpdateMusicLibraryButton"
-                    Click="UpdateMusicLibrary_Click"
-                    Content="Update Music Library"
-                    Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
-                <HyperlinkButton
-                    x:Uid="AddLyricsButton"
-                    Click="AddLyrics_Click"
-                    Content="Add Lyrics"
-                    Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 <ComboBox
                     x:Name="NotificationComboBox"
                     VerticalAlignment="Center"
                     SelectionChanged="NotificationComboBox_SelectionChanged"
                     Style="{StaticResource MarginSetter}">
-                        <ComboBoxItem x:Uid="AlwaysShownComboItem" Content="Always Shown" />
-                        <ComboBoxItem x:Uid="MusicChangedComboItem" Content="Music Changed" />
-                        <ComboBoxItem x:Uid="NeverItem" Content="Never" />
+                    <ComboBoxItem x:Uid="AlwaysShownComboItem" Content="Always Shown" />
+                    <ComboBoxItem x:Uid="MusicChangedComboItem" Content="Music Changed" />
+                    <ComboBoxItem x:Uid="NeverItem" Content="Never" />
                 </ComboBox>
-                <CheckBox
-                    x:Name="ShowCounterCheckBox"
-                    x:Uid="ShowCounterCheckBox"
-                    Checked="ShowCounterCheckBox_Checked"
-                    Content="Show Count"
-                    Style="{ThemeResource SettingCheckBoxStyle}"
-                    Unchecked="ShowCounterCheckBox_Unchecked" />
-                <CheckBox
-                    x:Name="HideMultiSelectCommandBarCheckBox"
-                    x:Uid="HideMultiSelectCommandBarCheckBox"
-                    Checked="HideMultiSelectCommandBarCheckBox_Checked"
-                    Content="Hide multi-select commandbar after operation"
-                    Style="{ThemeResource SettingCheckBoxStyle}"
-                    Unchecked="HideMultiSelectCommandBarCheckBox_Unchecked" />
-                <Button
-                    x:Name="ThemeColorButton"
-                    x:Uid="ThemeColorButton"
-                    Width="30"
-                    Height="30"
-                    HorizontalAlignment="Left"
-                    Background="{ThemeResource SystemColorHighlightColor}"
-                    Style="{ThemeResource SolidColorButton}"
-                    Visibility="Collapsed">
-                    <Button.Flyout>
-                        <Flyout x:Name="ColorPickerFlyout">
-                            <StackPanel>
-                                <ColorPicker x:Name="ThemeColorPicker" Color="{ThemeResource SystemColorHighlightColor}" />
-                                <Grid Margin="0,20,0,10">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Button
-                                        x:Name="ConfirmColorButton"
-                                        x:Uid="ConfirmButton"
-                                        HorizontalAlignment="Center"
-                                        Background="{ThemeResource SystemColorHighlightColor}"
-                                        BorderThickness="0"
-                                        Click="ConfirmColorButton_Click"
-                                        Content="Confirm"
-                                        Foreground="White" />
-                                    <Button
-                                        x:Name="CancelColorButton"
-                                        x:Uid="CancelButton"
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Center"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        Click="CancelColorButton_Click"
-                                        Content="Cancel"
-                                        Foreground="{ThemeResource SystemColorHighlightColor}" />
-                                    <Button
-                                        x:Name="ResetColorButton"
-                                        x:Uid="ResetButton"
-                                        Grid.Column="2"
-                                        HorizontalAlignment="Center"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        Click="ResetColorButton_Click"
-                                        Content="Reset"
-                                        Foreground="{ThemeResource SystemColorHighlightColor}" />
-                                </Grid>
-                            </StackPanel>
-                        </Flyout>
-                    </Button.Flyout>
-                </Button>
-                <StackPanel Style="{ThemeResource MarginSetter}" Orientation="Horizontal">
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
                     <TextBlock
+                        x:Name="DisplayTextBlock"
+                        x:Uid="DisplayTextBlock"
+                        Style="{StaticResource SettingLabelStyle}"
+                        Text="Display" />
+                    <CheckBox
+                        x:Name="ShowCounterCheckBox"
+                        x:Uid="ShowCounterCheckBox"
+                        Checked="ShowCounterCheckBox_Checked"
+                        Content="Show Count"
+                        Style="{ThemeResource SettingCheckBoxStyle}"
+                        Unchecked="ShowCounterCheckBox_Unchecked" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <CheckBox
+                        x:Name="HideMultiSelectCommandBarCheckBox"
+                        x:Uid="HideMultiSelectCommandBarCheckBox"
+                        Checked="HideMultiSelectCommandBarCheckBox_Checked"
+                        Content="Hide multi-select commandbar after operation"
+                        Style="{ThemeResource SettingCheckBoxStyle}"
+                        Unchecked="HideMultiSelectCommandBarCheckBox_Unchecked" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Visibility="Collapsed">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <Button
+                        x:Name="ThemeColorButton"
+                        x:Uid="ThemeColorButton"
+                        Width="30"
+                        Height="30"
+                        HorizontalAlignment="Left"
+                        Background="{ThemeResource SystemColorHighlightColor}"
+                        Style="{ThemeResource SolidColorButton}"
+                        Visibility="Collapsed">
+                        <Button.Flyout>
+                            <Flyout x:Name="ColorPickerFlyout">
+                                <StackPanel>
+                                    <ColorPicker x:Name="ThemeColorPicker" Color="{ThemeResource SystemColorHighlightColor}" />
+                                    <Grid Margin="0,20,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button
+                                            x:Name="ConfirmColorButton"
+                                            x:Uid="ConfirmButton"
+                                            HorizontalAlignment="Center"
+                                            Background="{ThemeResource SystemColorHighlightColor}"
+                                            BorderThickness="0"
+                                            Click="ConfirmColorButton_Click"
+                                            Content="Confirm"
+                                            Foreground="White" />
+                                        <Button
+                                            x:Name="CancelColorButton"
+                                            x:Uid="CancelButton"
+                                            Grid.Column="1"
+                                            HorizontalAlignment="Center"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Click="CancelColorButton_Click"
+                                            Content="Cancel"
+                                            Foreground="{ThemeResource SystemColorHighlightColor}" />
+                                        <Button
+                                            x:Name="ResetColorButton"
+                                            x:Uid="ResetButton"
+                                            Grid.Column="2"
+                                            HorizontalAlignment="Center"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Click="ResetColorButton_Click"
+                                            Content="Reset"
+                                            Foreground="{ThemeResource SystemColorHighlightColor}" />
+                                    </Grid>
+                                </StackPanel>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        x:Name="RecentTextBlock"
+                        x:Uid="RecentTextBlock"
+                        Style="{StaticResource SettingLabelStyle}"
+                        Text="Recent" />
+                    <StackPanel Style="{ThemeResource MarginSetter}" Orientation="Horizontal">
+                        <TextBlock
                         x:Uid="RecentPlayedItemTextBlock"
                         VerticalAlignment="Center"
                         FontSize="15"
                         Text="Recent Played" />
-                    <ComboBox
-                        x:Name="KeepRecentComboBox"
-                        VerticalAlignment="Center"
-                        SelectionChanged="KeepRecentComboBox_SelectionChanged">
-                        <ComboBoxItem x:Uid="AllComboItem" Content="All" />
-                        <ComboBoxItem x:Uid="100ComboItem" Content="100" />
-                        <ComboBoxItem x:Uid="200ComboItem" Content="200" />
-                        <ComboBoxItem x:Uid="500ComboItem" Content="500" />
-                        <ComboBoxItem x:Uid="1000ComboItem" Content="1000" />
-                    </ComboBox>
+                        <ComboBox
+                            x:Name="KeepRecentComboBox"
+                            VerticalAlignment="Center"
+                            SelectionChanged="KeepRecentComboBox_SelectionChanged">
+                            <ComboBoxItem x:Uid="AllComboItem" Content="All" />
+                            <ComboBoxItem x:Uid="100ComboItem" Content="100" />
+                            <ComboBoxItem x:Uid="200ComboItem" Content="200" />
+                            <ComboBoxItem x:Uid="500ComboItem" Content="500" />
+                            <ComboBoxItem x:Uid="1000ComboItem" Content="1000" />
+                        </ComboBox>
+                    </StackPanel>
                 </StackPanel>
-                <CheckBox
-                    x:Name="AutoLyricsCheckBox"
-                    x:Uid="AutoLyricsCheckBox"
-                    Checked="AutoLyricsCheckBox_Checked"
-                    Content="Auto Lyrics"
-                    Style="{ThemeResource SettingCheckBoxStyle}"
-                    Unchecked="AutoLyricsCheckBox_Unchecked" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <CheckBox
+                        x:Name="AutoLyricsCheckBox"
+                        x:Uid="AutoLyricsCheckBox"
+                        Checked="AutoLyricsCheckBox_Checked"
+                        Content="Auto Lyrics"
+                        Style="{ThemeResource SettingCheckBoxStyle}"
+                        Unchecked="AutoLyricsCheckBox_Unchecked" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    x:Name="PlayTextBlock"
+                    x:Uid="PlayTextBlock"
+                    Style="{StaticResource SettingLabelStyle}"
+                    Text="Play" />
                 <CheckBox
                     x:Name="AutoPlayCheckBox"
                     x:Uid="AutoPlayCheckBox"
@@ -313,44 +327,74 @@
                     Content="Auto Play"
                     Style="{ThemeResource SettingCheckBoxStyle}"
                     Unchecked="AutoPlayCheckBox_Unchecked" />
-                <CheckBox
-                    x:Name="SaveProgressCheckBox"
-                    x:Uid="SaveProgressCheckBox"
-                    Checked="SaveProgressCheckBox_Checked"
-                    Content="Save Music Progress"
-                    Style="{ThemeResource SettingCheckBoxStyle}"
-                    Unchecked="SaveProgressCheckBox_Unchecked" />
-                <HyperlinkButton
-                    x:Uid="SaveChangesButton"
-                    Click="SaveChanges_Click"
-                    Content="Save Changes"
-                    Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
-                <HyperlinkButton
-                    x:Uid="ReleaseNotesButton"
-                    Click="ReleaseNotesButton_Click"
-                    Content="Release Notes"
-                    Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
-                <HyperlinkButton
-                    x:Uid="ImportDataButton"
-                    Click="ImportData_Click"
-                    Content="Import Data"
-                    Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
-                <HyperlinkButton
-                    x:Uid="ExportDataButton"
-                    Click="ExportData_Click"
-                    Content="Export Data"
-                    Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
-                <HyperlinkButton
-                    x:Uid="BugReportButton"
-                    Click="BugReport_Click"
-                    Content="Feedback"
-                    Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        x:Name="SaveTextBlock"
+                        x:Uid="SaveTextBlock"
+                        Style="{StaticResource SettingLabelStyle}"
+                        Text="Save" />
+                    <CheckBox
+                        x:Name="SaveProgressCheckBox"
+                        x:Uid="SaveProgressCheckBox"
+                        Checked="SaveProgressCheckBox_Checked"
+                        Content="Save Music Progress"
+                        Style="{ThemeResource SettingCheckBoxStyle}"
+                        Unchecked="SaveProgressCheckBox_Unchecked" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <HyperlinkButton
+                        x:Uid="SaveChangesButton"
+                        Click="SaveChanges_Click"
+                        Content="Save Changes"
+                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        x:Name="OthersTextBlock"
+                        x:Uid="OthersTextBlock"
+                        Style="{StaticResource SettingLabelStyle}"
+                        Text="Others" />
+                    <HyperlinkButton
+                        x:Uid="ReleaseNotesButton"
+                        Click="ReleaseNotesButton_Click"
+                        Content="Release Notes"
+                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <HyperlinkButton
+                        x:Uid="ImportDataButton"
+                        Click="ImportData_Click"
+                        Content="Import Data"
+                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <HyperlinkButton
+                        x:Uid="ExportDataButton"
+                        Click="ExportData_Click"
+                        Content="Export Data"
+                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <HyperlinkButton
+                        x:Uid="FeedbackButton"
+                        Content="Feedback"
+                        Click="FeedbackButton_Click"
+                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                </StackPanel>
             </StackPanel>
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroup x:Name="WidthChange">
                     <VisualState x:Name="Wide">
                         <VisualState.StateTriggers>
-                            <AdaptiveTrigger MinWindowWidth="{StaticResource MinimalNavigationViewWindowWidth}" />
+                            <AdaptiveTrigger MinWindowWidth="720" />
                         </VisualState.StateTriggers>
                     </VisualState>
                     <VisualState x:Name="Narrow">
@@ -359,12 +403,17 @@
                         </VisualState.StateTriggers>
                         <VisualState.Setters>
                             <Setter Target="MusicFolderTextBlock.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
+                            <Setter Target="MusicLibraryTextBlock.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
                             <Setter Target="NotificationTextBlock.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
-                            <Setter Target="ThemeTextBlock.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
+                            <Setter Target="DisplayTextBlock.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
+                            <Setter Target="RecentTextBlock.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
+                            <Setter Target="PlayTextBlock.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
+                            <Setter Target="SaveTextBlock.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
+                            <Setter Target="OthersTextBlock.Style" Value="{StaticResource MinimalSettingLabelStyle}" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
-        </Grid>
+        </StackPanel>
     </ScrollViewer>
 </Page>

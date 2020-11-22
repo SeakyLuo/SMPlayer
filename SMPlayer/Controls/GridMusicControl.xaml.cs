@@ -49,7 +49,7 @@ namespace SMPlayer
 
         private void MusicGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (MusicGridView.SelectionMode != ListViewSelectionMode.Single)
+            if (MusicGridView.SelectionMode != ListViewSelectionMode.None)
             {
                 return;
             }
@@ -250,6 +250,9 @@ namespace SMPlayer
             MusicGridView.ClearSelections();
             MultiSelectListener?.ClearSelections(commandBar);
         }
+
+        void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type) { }
+        void IMenuFlyoutItemClickListener.UndoDelete(Music music) { }
     }
 
     public class MusicPath : IMusicable

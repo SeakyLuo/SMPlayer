@@ -162,16 +162,28 @@
   <data name="PlaylistsWithCount" xml:space="preserve">
     <value>播放列表（{0}）</value>
   </data>
+  <data name="PlayNext" xml:space="preserve">
+    <value>下一首播放</value>
+  </data>
   <data name="Recent" xml:space="preserve">
     <value>最近</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>设置</value>
   </data>
+  <data name="ShareFeedbacks" xml:space="preserve">
+    <value>对简音播放器的反馈</value>
+  </data>
   <data name="Songs" xml:space="preserve">
     <value>歌曲</value>
   </data>
   <data name="SongsWithCount" xml:space="preserve">
     <value>歌曲（{0}）</value>
+  </data>
+  <data name="ViaEmail" xml:space="preserve">
+    <value>通过邮件</value>
+  </data>
+  <data name="ViaWebBrowser" xml:space="preserve">
+    <value>通过浏览器</value>
   </data>
 </root>

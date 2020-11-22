@@ -110,6 +110,7 @@ namespace SMPlayer
         public async Task SearchAlbums(IEnumerable<Music> source, string keyword, SortBy criterion)
         {
             AllAlbums.SetTo(await Task.Run(() => SearchHelper.SearchAlbums(source, keyword, criterion)));
+            Albums.SetTo(AllAlbums.Take(AlbumLimit));
             AlbumsTextBlock.Text = Settings.settings.ShowCount ? Helper.LocalizeText("AlbumsWithCount", AllAlbums.Count) : Helper.LocalizeText("Albums");
             AlbumsViewAllButton.Visibility = AllAlbums.Count > AlbumLimit ? Visibility.Visible : Visibility.Collapsed;
             SortAlbumsButton.Visibility = Albums.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
