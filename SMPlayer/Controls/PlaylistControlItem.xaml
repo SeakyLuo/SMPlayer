@@ -11,7 +11,7 @@
 
     <Grid x:Name="ContentGrid" Height="30">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="TitleColumnDefinition" Width="6*" />
+            <ColumnDefinition x:Name="TitleColumnDefinition" Width="{x:Bind ShowAlbumText, Converter={StaticResource ShowAlbumTextConverter}, Mode=OneWay}" />
             <ColumnDefinition x:Name="ArtistColumnDefinition" Width="3*" />
             <ColumnDefinition x:Name="AlbumColumnDefinition" Width="5*" />
             <ColumnDefinition x:Name="DurationColumnDefinition" Width="1*" />

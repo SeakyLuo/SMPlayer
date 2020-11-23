@@ -293,4 +293,17 @@ namespace SMPlayer
             throw new NotImplementedException();
         }
     }
+
+    class ShowAlbumTextConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return new GridLength((bool)value ? 6 : 10, GridUnitType.Star);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

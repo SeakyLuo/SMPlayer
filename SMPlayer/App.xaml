@@ -106,6 +106,7 @@
             <local:IntConverter x:Key="IntConverter" />
             <local:DateTimeConverter x:Key="DateTimeConverter" />
             <local:VisibilityConverter x:Key="VisibilityConverter" />
+            <local:ShowAlbumTextConverter x:Key="ShowAlbumTextConverter" />
             <local:MusicIsPlayingConverter x:Key="MusicIsPlayingConverter" />
             <local:PlaylistRowColorConverter x:Key="PlaylistRowColorConverter" />
             <local:ColorConverter x:Key="ColorConverter" />
