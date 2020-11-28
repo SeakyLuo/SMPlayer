@@ -753,6 +753,9 @@
   <data name="ReleaseNotesIntroduceReleaseNotes.Text" xml:space="preserve">
     <value>Release Notes dialog is introduced. You can find it in the Settings page.</value>
   </data>
+  <data name="ReleaseNotesNowPlayingHighlight.Text" xml:space="preserve">
+    <value>Fix a highlighting problem when Now Playing playlist has duplicate songs.</value>
+  </data>
   <data name="ReleaseNotesOpenWithSMPlayer.Text" xml:space="preserve">
     <value>Now supports open music with SMPlayer.</value>
   </data>
@@ -761,6 +764,9 @@
   </data>
   <data name="ReleaseNotesPlayWithSMPlayer.Text" xml:space="preserve">
     <value>Now supports play music with SMPlayer.</value>
+  </data>
+  <data name="ReleaseNotesScrollingLyrics.Text" xml:space="preserve">
+    <value>Now lyrics can scroll automatically and can be displayed in notifications.</value>
   </data>
   <data name="ReleaseNotesSearchPageAddAllToButton.Text" xml:space="preserve">
     <value>Search page now has an AddAllTo button.</value>
