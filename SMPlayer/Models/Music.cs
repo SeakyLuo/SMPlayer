@@ -290,6 +290,11 @@ namespace SMPlayer.Models
             return obj is Music music && Path == music.Path;
         }
 
+        public bool IndexedEquals(Music music)
+        {
+            return this == music && Index == music.Index;
+        }
+
         public override int GetHashCode()
         {
             return Path.GetHashCode();

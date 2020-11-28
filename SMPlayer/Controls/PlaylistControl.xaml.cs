@@ -287,9 +287,7 @@ namespace SMPlayer
                     foreach (var listener in RemoveListeners) listener.MusicRemoved(removedMusicIndex, music, currentPlaylist);
                 }
             }
-            for (int i = 0; i < CurrentPlaylist.Count; i++)
-                if (SongsListView.ContainerFromIndex(i) is ListViewItem container)
-                    container.Background = GetRowBackground(i);
+            AlternateRowBackgroud(0);
             if (showNotification)
                 Helper.ShowNotification("MusicListRemoved");
         }

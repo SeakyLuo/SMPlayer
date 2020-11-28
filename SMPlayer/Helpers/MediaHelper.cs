@@ -182,7 +182,7 @@ namespace SMPlayer
 
         public static bool IsMusicPlaying(Music music)
         {
-            return CurrentMusic != null && music == CurrentMusic && music.Index == CurrentMusic.Index;
+            return music.IndexedEquals(CurrentMusic);
         }
 
         public static void AddMusic(IMusicable source)
@@ -267,7 +267,7 @@ namespace SMPlayer
             {
                 for (int i = 0; i < CurrentPlaylist.Count; i++)
                 {
-                    if (CurrentPlaylist[i] == music)
+                    if (music.Index > -1 ? music.IndexedEquals(CurrentPlaylist[i]) : music == CurrentPlaylist[i])
                     {
                         PlaybackList.MoveTo(Convert.ToUInt32(i));
                         return true;
@@ -290,7 +290,9 @@ namespace SMPlayer
         public static void MovePrev()
         {
             if (Player.IsLoopingEnabled)
+            {
                 Position = 0;
+            }
             else
             {
                 try
@@ -307,7 +309,9 @@ namespace SMPlayer
         public static void MoveNext()
         {
             if (Player.IsLoopingEnabled)
+            {
                 Position = 0;
+            }
             else
             {
                 try
