@@ -8,6 +8,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <ContentDialog.Resources>
+        <x:Double x:Key="MusicDialogPivotItemMinHeight">480</x:Double>
+    </ContentDialog.Resources>
+
     <Pivot x:Name="MusicDialogPivot">
         <Pivot.RightHeader>
             <Button
@@ -19,13 +23,19 @@
             x:Name="PropertiesItem"
             x:Uid="PropertiesPivotItem"
             Header="Properties">
-            <controls:MusicInfoControl x:Name="MusicInfoController" ShowHeader="False" />
+            <controls:MusicInfoControl
+                x:Name="MusicInfoController" 
+                ShowHeader="False"
+                MinHeight="{StaticResource MusicDialogPivotItemMinHeight}"/>
         </PivotItem>
         <PivotItem
             x:Name="LyricsItem"
             x:Uid="LyricsPivotItem"
             Header="Lyrics">
-            <controls:MusicLyricsControl x:Name="MusicLyricsController" ShowHeader="False" />
+            <controls:MusicLyricsControl 
+                x:Name="MusicLyricsController"
+                ShowHeader="False"
+                MinHeight="{StaticResource MusicDialogPivotItemMinHeight}"/>
         </PivotItem>
         <PivotItem
             x:Name="AlbumArtItem"

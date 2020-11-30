@@ -50,11 +50,11 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Margin="0,10">
+        <Grid>
             <TextBlock
                 x:Uid="PropertiesTextBlock"
                 FontWeight="SemiBold"
-                Style="{StaticResource HeaderTextBlockStyle}"
+                Style="{StaticResource MusicControlHeaderTextBlockStyle}"
                 Text="Properties"
                 TextAlignment="Left"
                 Visibility="{x:Bind ShowHeader, Converter={StaticResource VisibilityConverter}}" />

@@ -49,6 +49,8 @@ namespace SMPlayer
             AutoLyricsCheckBox.IsChecked = Settings.settings.AutoLyrics;
             SaveProgressCheckBox.IsChecked = Settings.settings.SaveMusicProgress;
             HideMultiSelectCommandBarCheckBox.IsChecked = Settings.settings.HideMultiSelectCommandBarAfterOperation;
+            AutoScrollLyricsCheckBox.IsChecked = Settings.settings.AutoScrollLyrics;
+            ShowLyricsInNotificationCheckBox.IsChecked = Settings.settings.ShowLyricsInNotification;
         }
 
         private async void PathBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
@@ -460,6 +462,26 @@ namespace SMPlayer
                 MainPage.Instance.ShowNotification(Helper.LocalizeMessage("FailToOpenBrowser"));
             }
             IsProcessing = false;
+        }
+
+        private void AutoScrollLyricsCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            AutoScrollLyricsCheckBox.IsChecked = true;
+        }
+
+        private void AutoScrollLyricsCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            AutoScrollLyricsCheckBox.IsChecked = false;
+        }
+
+        private void ShowLyricsInNotificationCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            ShowLyricsInNotificationCheckBox.IsChecked = true;
+        }
+
+        private void ShowLyricsInNotificationCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ShowLyricsInNotificationCheckBox.IsChecked = false;
         }
     }
 

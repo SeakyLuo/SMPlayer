@@ -222,6 +222,7 @@
     <Compile Include="ExpressionBuilder\ReferenceNodes\ExpressionBuilder.VisualReferenceNode.cs" />
     <Compile Include="Helpers\ClassHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
+    <Compile Include="Helpers\LyricsHelper.cs" />
     <Compile Include="Models\FullyObservableCollection.cs" />
     <Compile Include="Models\LoadingCache.cs" />
     <Compile Include="Helpers\SearchHelper.cs" />

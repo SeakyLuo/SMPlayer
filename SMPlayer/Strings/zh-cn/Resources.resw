@@ -213,6 +213,9 @@
   <data name="AutoPlayCheckBox.Content" xml:space="preserve">
     <value>打开应用后自动播放</value>
   </data>
+  <data name="AutoScrollLyricsCheckBox.Content" xml:space="preserve">
+    <value>歌曲播放时自动滚动歌词</value>
+  </data>
   <data name="BackButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>返回</value>
   </data>
@@ -412,7 +415,7 @@
     <value>转为网格模式</value>
   </data>
   <data name="HideMultiSelectCommandBarCheckBox.Content" xml:space="preserve">
-    <value>在操作后隐藏多选命令条</value>
+    <value>在操作后隐藏多选命令栏</value>
   </data>
   <data name="hour" xml:space="preserve">
     <value>小时</value>
@@ -917,6 +920,9 @@
   </data>
   <data name="ShowInExplorerButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>在本地中显示</value>
+  </data>
+  <data name="ShowLyricsInNotificationCheckBox.Content" xml:space="preserve">
+    <value>在通知中显示歌词</value>
   </data>
   <data name="Shuffle" xml:space="preserve">
     <value>随机播放</value>

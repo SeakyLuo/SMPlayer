@@ -216,6 +216,9 @@
   <data name="AutoPlayCheckBox.Content" xml:space="preserve">
     <value>Play music after App launches</value>
   </data>
+  <data name="AutoScrollLyricsCheckBox.Content" xml:space="preserve">
+    <value>Scroll lyrics automatically when playing music.</value>
+  </data>
   <data name="BackButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Back</value>
   </data>
@@ -920,6 +923,9 @@
   </data>
   <data name="ShowInExplorerButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Show In Explorer</value>
+  </data>
+  <data name="ShowLyricsInNotificationCheckBox.Content" xml:space="preserve">
+    <value>Show lyrics in notification</value>
   </data>
   <data name="Shuffle" xml:space="preserve">
     <value>Shuffle</value>

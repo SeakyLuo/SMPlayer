@@ -158,43 +158,45 @@
                         Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
                         x:Name="MusicLibraryTextBlock"
                         x:Uid="MusicLibraryTextBlock"
                         Style="{StaticResource SettingLabelStyle}"
                         Text="Music Library" />
-                    <HyperlinkButton
+                <HyperlinkButton
                         x:Uid="UpdateMusicLibraryButton"
                         Click="UpdateMusicLibrary_Click"
                         Content="Update Music Library"
                         Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        x:Name="NotificationTextBlock"
+                        x:Uid="NotificationTextBlock"
+                        Style="{StaticResource SettingLabelStyle}"
+                        Text="Notification" />
+                    <ComboBox
+                        x:Name="NotificationComboBox"
+                        VerticalAlignment="Center"
+                        SelectionChanged="NotificationComboBox_SelectionChanged"
+                        Style="{StaticResource MarginSetter}">
+                        <ComboBoxItem x:Uid="AlwaysShownComboItem" Content="Always Shown" />
+                        <ComboBoxItem x:Uid="MusicChangedComboItem" Content="Music Changed" />
+                        <ComboBoxItem x:Uid="NeverItem" Content="Never" />
+                    </ComboBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource SettingLabelStyle}" />
-                    <HyperlinkButton
-                        x:Uid="AddLyricsButton"
-                        Click="AddLyrics_Click"
-                        Content="Add Lyrics"
-                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                    <CheckBox
+                        x:Name="ShowLyricsInNotificationCheckBox"
+                        x:Uid="ShowLyricsInNotificationCheckBox"
+                        Checked="ShowLyricsInNotificationCheckBox_Checked"
+                        Content="Show Lyrics In Notification"
+                        Style="{ThemeResource SettingCheckBoxStyle}"
+                        Unchecked="ShowLyricsInNotificationCheckBox_Unchecked" />
                 </StackPanel>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    x:Name="NotificationTextBlock"
-                    x:Uid="NotificationTextBlock"
-                    Style="{StaticResource SettingLabelStyle}"
-                    Text="Notification" />
-                <ComboBox
-                    x:Name="NotificationComboBox"
-                    VerticalAlignment="Center"
-                    SelectionChanged="NotificationComboBox_SelectionChanged"
-                    Style="{StaticResource MarginSetter}">
-                    <ComboBoxItem x:Uid="AlwaysShownComboItem" Content="Always Shown" />
-                    <ComboBoxItem x:Uid="MusicChangedComboItem" Content="Music Changed" />
-                    <ComboBoxItem x:Uid="NeverItem" Content="Never" />
-                </ComboBox>
             </StackPanel>
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
@@ -349,6 +351,29 @@
                         x:Uid="SaveChangesButton"
                         Click="SaveChanges_Click"
                         Content="Save Changes"
+                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        x:Uid="LyricsTextBlock"
+                        Style="{StaticResource SettingLabelStyle}"
+                        Text="Save" />
+                    <CheckBox
+                        x:Name="AutoScrollLyricsCheckBox"
+                        x:Uid="AutoScrollLyricsCheckBox"
+                        Checked="AutoScrollLyricsCheckBox_Checked"
+                        Content="Auto Scroll Lyrics"
+                        Style="{ThemeResource SettingCheckBoxStyle}"
+                        Unchecked="AutoScrollLyricsCheckBox_Unchecked" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <HyperlinkButton
+                        x:Uid="AddLyricsButton"
+                        Click="AddLyrics_Click"
+                        Content="Add Lyrics"
                         Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 </StackPanel>
             </StackPanel>

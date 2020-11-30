@@ -157,12 +157,14 @@ namespace SMPlayer
             MusicRequestListeners.Add(listener);
         }
 
+        private void AlternateRowBackgroud()
+        {
+            AlternateRowBackgroud(0, CurrentPlaylist.Count);
+        }
+
         private void AlternateRowBackgroud(int start)
         {
-            if (!AlternatingRowColor) return;
-            for (int i = start; i < CurrentPlaylist.Count; i++)
-                if (SongsListView.ContainerFromIndex(i) is ListViewItem container)
-                    container.Background = GetRowBackground(i);
+            AlternateRowBackgroud(start, CurrentPlaylist.Count);
         }
 
         private void AlternateRowBackgroud(int start, int end)
@@ -287,9 +289,9 @@ namespace SMPlayer
                     foreach (var listener in RemoveListeners) listener.MusicRemoved(removedMusicIndex, music, currentPlaylist);
                 }
             }
-            AlternateRowBackgroud(0);
+            AlternateRowBackgroud();
             if (showNotification)
-                Helper.ShowNotification("MusicListRemoved");
+                Helper.ShowNotification("SelectedItemsRemoved");
         }
 
         private void FavoriteItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
@@ -322,7 +324,9 @@ namespace SMPlayer
                 }
             }
             else
+            {
                 ScrollToMusicRequestedWhenUnloaded = index;
+            }
             return true;
         }
 

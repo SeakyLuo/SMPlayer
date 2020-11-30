@@ -50,7 +50,6 @@ namespace SMPlayer.Controls
         public void ScrollToTop()
         {
             LyricsTextBox.GetFirstDescendantOfType<ScrollViewer>()?.ChangeView(0, 0, null);
-            TextBlockScroller.ChangeView(0, 0, null);
         }
 
         private async void SaveLyricsButton_Click(object sender, RoutedEventArgs e)

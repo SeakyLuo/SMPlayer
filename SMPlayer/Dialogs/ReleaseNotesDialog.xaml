@@ -29,6 +29,7 @@
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.4.6</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesScrollingLyrics"/><LineBreak />
             2. <Run x:Uid="ReleaseNotesNowPlayingHighlight"/><LineBreak />
+            <LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.4.5</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesPlayNext"/><LineBreak />
             2. <Run x:Uid="ReleaseNotesFeedbackViaEmail"/><LineBreak />

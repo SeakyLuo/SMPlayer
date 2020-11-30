@@ -12,11 +12,11 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Margin="0,10">
+        <Grid>
             <TextBlock
                 x:Uid="LyricsTextBlock"
                 FontWeight="SemiBold"
-                Style="{StaticResource HeaderTextBlockStyle}"
+                Style="{StaticResource MusicControlHeaderTextBlockStyle}"
                 Text="Lyrics"
                 TextAlignment="Left"
                 Visibility="{x:Bind ShowHeader, Converter={StaticResource VisibilityConverter}}" />
@@ -61,18 +61,14 @@
             VerticalAlignment="Top"
             IsIndeterminate="True"
             Visibility="Collapsed" />
-        <ScrollViewer
-            x:Name="TextBlockScroller"
+        <TextBox
+            x:Name="LyricsTextBox"
             Grid.Row="1"
-            Margin="0,10">
-            <TextBox
-                x:Name="LyricsTextBox"
-                Height="600"
-                AcceptsReturn="True"
-                Background="Transparent"
-                BorderThickness="0"
-                IsSpellCheckEnabled="False"
-                TextWrapping="Wrap" />
-        </ScrollViewer>
+            AcceptsReturn="True"
+            Background="Transparent"
+            BorderThickness="0"
+            IsSpellCheckEnabled="False"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            TextWrapping="Wrap" />
     </Grid>
 </UserControl>

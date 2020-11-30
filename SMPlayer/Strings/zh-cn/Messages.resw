@@ -234,9 +234,6 @@
   <data name="MusicDeleted" xml:space="preserve">
     <value>《{0}》已被删除！</value>
   </data>
-  <data name="MusicListRemoved" xml:space="preserve">
-    <value>歌曲已移除！</value>
-  </data>
   <data name="MusicName" xml:space="preserve">
     <value>《{0}》</value>
   </data>
@@ -244,10 +241,10 @@
     <value>《{0}》没有专辑插图！</value>
   </data>
   <data name="MusicNotFound" xml:space="preserve">
-    <value>找不到音乐《{0}》</value>
+    <value>找不到音乐《{0}》！</value>
   </data>
   <data name="MusicRemoved" xml:space="preserve">
-    <value>《{0}》已移除</value>
+    <value>《{0}》已被移除！</value>
   </data>
   <data name="MusicsNotFound" xml:space="preserve">
     <value>{0}首歌曲无法被找到。已跳过。</value>
@@ -413,6 +410,9 @@
   </data>
   <data name="SearchResult" xml:space="preserve">
     <value>”{0}“的搜索结果</value>
+  </data>
+  <data name="SelectedItemsRemoved" xml:space="preserve">
+    <value>选中项已被移除！</value>
   </data>
   <data name="SetPlayNext" xml:space="preserve">
     <value>《{0}》已被设为下一首播放的歌曲</value>

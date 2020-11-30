@@ -234,9 +234,6 @@
   <data name="MusicDeleted" xml:space="preserve">
     <value>"{0}" is deleted!</value>
   </data>
-  <data name="MusicListRemoved" xml:space="preserve">
-    <value>Selected songs have been removed!</value>
-  </data>
   <data name="MusicName" xml:space="preserve">
     <value> "{0}"</value>
   </data>
@@ -413,6 +410,9 @@
   </data>
   <data name="SearchResult" xml:space="preserve">
     <value>Search result of "{0}"</value>
+  </data>
+  <data name="SelectedItemsRemoved" xml:space="preserve">
+    <value>Selected items have been removed!</value>
   </data>
   <data name="SetPlayNext" xml:space="preserve">
     <value>“{0}” will be played next</value>

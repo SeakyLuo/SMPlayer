@@ -45,6 +45,8 @@ namespace SMPlayer.Models
         public SortBy AlbumsCriterion { get; set; } = SortBy.Default;
         public bool HideMultiSelectCommandBarAfterOperation { get; set; } = true;
         public bool ShowCount { get; set; } = true;
+        public bool AutoScrollLyrics { get; set; } = false;
+        public bool ShowLyricsInNotification { get; set; } = false;
         public ObservableCollection<string> RecentSearches = new ObservableCollection<string>();
 
         public SortBy SearchArtistsCriterion { get; set; } = SortBy.Default;
