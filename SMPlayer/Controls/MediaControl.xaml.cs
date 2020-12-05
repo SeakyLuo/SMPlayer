@@ -869,7 +869,6 @@ namespace SMPlayer
             {
                 MediaSlider.Value = MediaHelper.Position;
             }
-            ToastHelper.UpdateToast();
         }
 
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
@@ -891,7 +890,7 @@ namespace SMPlayer
                 if (MainArtistTextBlock.IsScrolling) MainArtistTextBlock.StopScrolling();
                 ToastHelper.HideToast();
                 // Use current instead of next to avoid showing toast on app launch
-                if (current != null) ToastHelper.ShowPauseToast(next);
+                if (current != null) ToastHelper.ShowToast(next);
             });
         }
 

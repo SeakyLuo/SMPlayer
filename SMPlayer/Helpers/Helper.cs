@@ -150,6 +150,7 @@ namespace SMPlayer
 
         private static async Task ClearLogFiles(int maxBackups = 3)
         {
+            if (LogFolder == null) return;
             var files = await LogFolder.GetFilesAsync();
             await ClearBackup(files, LogFileNamePrefix, maxBackups);
             await ClearBackup(files, ExceptionLogFileNamePrefix, maxBackups);

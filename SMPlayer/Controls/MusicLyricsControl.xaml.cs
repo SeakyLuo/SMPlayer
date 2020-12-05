@@ -8,6 +8,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Windows.Media.Playback;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -182,9 +184,32 @@ namespace SMPlayer.Controls
             });
         }
 
-        private void ImportLyricsButton_Click(object sender, RoutedEventArgs e)
+        private async void ImportLyricsButton_Click(object sender, RoutedEventArgs e)
         {
-
+            FileOpenPicker picker = new FileOpenPicker
+            {
+                SuggestedStartLocation = PickerLocationId.Desktop
+            };
+            picker.FileTypeFilter.Add(".lrc");
+            picker.FileTypeFilter.Add(".txt");
+            picker.FileTypeFilter.Add(".mp3");
+            StorageFile file = await picker.PickSingleFileAsync();
+            if (file == null) return;
+            IsProcessing = true;
+            SaveProgress.Visibility = Visibility.Visible;
+            string lyrics;
+            try
+            {
+                lyrics = file.IsMusicFile() ? file.GetLyrics() : await FileIO.ReadTextAsync(file);
+                LyricsTextBox.Text = string.IsNullOrEmpty(lyrics) ? "" : lyrics;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                // 在多字节的目标代码页中，没有此 Unicode 字符可以映射到的字符。
+                Helper.ShowNotification("ImportLyricsFailed");
+            }
+            SaveProgress.Visibility = Visibility.Collapsed;
+            IsProcessing = false;
         }
     }
 }

@@ -91,9 +91,28 @@ namespace SMPlayer
         }
         public static int FindIndex<T>(this IEnumerable<T> list, Predicate<T> match)
         {
+            if (match == null) return -1;
             for (int i = 0; i < list.Count(); i++)
                 if (match(list.ElementAt(i)))
                     return i;
+            return -1;
+        }
+        public static int FindIndex<T>(this IEnumerable<T> list, T target)
+        {
+            for (int i = 0; i < list.Count(); i++)
+            {
+                T element = list.ElementAt(i);
+                if (element == null)
+                {
+                    if (target == null)
+                        return i;
+                }
+                else
+                {
+                    if (element.Equals(target))
+                        return i;
+                }
+            }
             return -1;
         }
         public static void SetTo(this MenuFlyout dst, MenuFlyout src)
@@ -118,7 +137,14 @@ namespace SMPlayer
         }
         public static bool IsMusicFile(this StorageFile file)
         {
-            return file.FileType.EndsWith("mp3");
+            return file.FileType.EndsWith(".mp3");
+        }
+        public static string GetLyrics(this StorageFile file)
+        {
+            using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(file), TagLib.ReadStyle.Average))
+            {
+                return tagFile.Tag.Lyrics;
+            }
         }
         public static async Task<bool> Contains(this StorageFolder folder, string name)
         {

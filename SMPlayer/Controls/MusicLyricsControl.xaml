@@ -32,6 +32,12 @@
                     </Button.KeyboardAccelerators>
                 </Button>
                 <Button
+                    x:Name="ImportLyricsButton"
+                    x:Uid="ImportLyricsButton"
+                    Click="ImportLyricsButton_Click"
+                    Content="&#xE8E5;"
+                    Style="{StaticResource MusicScrollHeaderButtonStyle}" />
+                <Button
                     x:Name="SaveLyricsButton"
                     x:Uid="SaveLyricsButton"
                     Click="SaveLyricsButton_Click"

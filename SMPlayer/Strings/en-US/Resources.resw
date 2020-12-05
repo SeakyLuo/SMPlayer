@@ -423,6 +423,9 @@
   <data name="ImportDataButton.Content" xml:space="preserve">
     <value>Import Data</value>
   </data>
+  <data name="ImportLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Import lyrics</value>
+  </data>
   <data name="KeepRecentCheckBox.Content" xml:space="preserve">
     <value>Only keep 100 recently played items instead of all</value>
   </data>

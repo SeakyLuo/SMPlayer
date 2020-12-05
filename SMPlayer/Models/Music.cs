@@ -209,10 +209,7 @@ namespace SMPlayer.Models
         public async Task<string> GetLyricsAsync()
         {
             var file = await GetStorageFileAsync();
-            using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(file), TagLib.ReadStyle.Average))
-            {
-                return tagFile.Tag.Lyrics;
-            }
+            return file.GetLyrics();
         }
 
         public async Task<bool> SaveLyricsAsync(string lyrics)

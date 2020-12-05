@@ -95,6 +95,7 @@ namespace SMPlayer
             MediaHelper.Init(music);
             await AlbumsPage.Init();
             await RecentPage.Init();
+            ToastHelper.Init();
             foreach (var listener in LoadedListeners) listener.Invoke();
             Inited = true;
             // If background task is already registered, do nothing

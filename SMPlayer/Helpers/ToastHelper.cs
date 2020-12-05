@@ -18,8 +18,23 @@ namespace SMPlayer.Helpers
         public static ToastNotification Toast;
         public static ToastNotifier toastNotifier = ToastNotificationManager.CreateToastNotifier();
         public static ToastAudio SlientToast = new ToastAudio() { Silent = true };
+        private static DispatcherTimer Timer = new DispatcherTimer()
+        {
+            Interval = TimeSpan.FromMilliseconds(10)
+        };
         private static Music ToastMusic;
         private static MediaPlaybackState ToastState;
+
+        public static void Init()
+        {
+            Timer.Tick += Tick;
+            Timer.Start();
+        }
+
+        private static void Tick(object sender, object e)
+        {
+            UpdateToast();
+        }
 
         private static ToastButton BuildToastButton(string text)
         {
@@ -114,17 +129,22 @@ namespace SMPlayer.Helpers
             }
         }
 
-        public static void ShowToast()
+        public static void ShowToast(Music music)
         {
             MediaPlaybackState playbackState = MediaHelper.Player.PlaybackSession.PlaybackState;
             if (playbackState == MediaPlaybackState.Playing)
             {
-                ShowPauseToast(MediaHelper.CurrentMusic);
+                ShowPauseToast(music);
             }
             else if (playbackState == MediaPlaybackState.Paused)
             {
-                ShowPlayToast(MediaHelper.CurrentMusic);
+                ShowPlayToast(music);
             }
+        }
+
+        public static void ShowToast()
+        {
+            ShowToast(MediaHelper.CurrentMusic);
         }
 
         public static void ShowPlayToast(Music music)
@@ -146,7 +166,7 @@ namespace SMPlayer.Helpers
 
         public static void UpdateToast()
         {
-            if (!MediaHelper.IsPlaying) return;
+            if (Toast == null || !MediaHelper.IsPlaying) return;
             // Create NotificationData and make sure the sequence number is incremented
             // since last update, or assign 0 for updating regardless of order
             var data = new NotificationData { SequenceNumber = 0 };
@@ -160,16 +180,14 @@ namespace SMPlayer.Helpers
 
         public static void HideToast()
         {
-            if (Toast != null)
+            if (Toast == null) return;
+            try
             {
-                try
-                {
-                    toastNotifier.Hide(Toast);
-                }
-                catch (Exception)
-                {
-                    // 通知已经隐藏。
-                }
+                toastNotifier.Hide(Toast);
+            }
+            catch (Exception)
+            {
+                // 通知已经隐藏。
             }
         }
     }

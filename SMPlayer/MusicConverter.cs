@@ -13,20 +13,20 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is string && int.TryParse((string)value, out int seconds)) return ToTime(seconds);
-            if (value is int) return ToTime((int)value);
-            if (value is double) return ToTime((double)value);
+            if (value is string s && int.TryParse(s, out int seconds)) return ToTime(seconds);
+            if (value is int i) return ToTime(i);
+            if (value is double d) return ToTime(d);
             return "0:00";
         }
 
         public static string ToTime(double seconds)
         {
-            return ToTime((int)seconds);
+            return TimeSpan.FromSeconds(seconds).ToString(@"m\:ss");
         }
 
         public static string ToTime(int seconds)
         {
-            return TimeSpan.FromSeconds(seconds).ToString(@"m\:ss");
+            return ToTime((double)seconds);
         }
 
         public static string ToTime(ICollection<Music> list)

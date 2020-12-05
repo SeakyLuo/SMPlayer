@@ -423,6 +423,9 @@
   <data name="ImportDataButton.Content" xml:space="preserve">
     <value>导入数据</value>
   </data>
+  <data name="ImportLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>导入歌词</value>
+  </data>
   <data name="KeepRecentCheckBox.Content" xml:space="preserve">
     <value>仅保留最近播放的100项而不是全部</value>
   </data>

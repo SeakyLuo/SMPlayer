@@ -210,6 +210,9 @@
   <data name="ImportDataFailed" xml:space="preserve">
     <value>导入数据失败：</value>
   </data>
+  <data name="ImportLyricsFailed" xml:space="preserve">
+    <value>导入歌词失败</value>
+  </data>
   <data name="ItemRemoved" xml:space="preserve">
     <value>“{0}”已移除</value>
   </data>
