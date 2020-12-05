@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Dialogs;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class SettingsPage : Page, IAfterPathSetListener
     {
-        public static ShowToast[] NotificationOptions = { ShowToast.Always, ShowToast.MusicChanged, ShowToast.Never };
+        public static NotificationSendMode[] NotificationOptions = { NotificationSendMode.MusicChanged, NotificationSendMode.Never };
         private static readonly int[] LimitedRecentPlayedItems = { -1, 100, 200, 500, 1000 };
         private static readonly List<IAfterPathSetListener> listeners = new List<IAfterPathSetListener>();
         private static FolderTree loadingTree;
@@ -41,15 +42,17 @@ namespace SMPlayer
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             PathBox.Text = Settings.settings.RootPath;
-            NotificationComboBox.SelectedIndex = (int)Settings.settings.Toast;
+            int notificationSend = (int)Settings.settings.NotificationSend;
+            int notificationDisplay = (int)Settings.settings.NotificationDisplay;
+            NotificationSendComboBox.SelectedIndex = (int)Settings.settings.NotificationSend;
+            NotificationModeComboBox.SelectedIndex = (int)Settings.settings.NotificationDisplay;
             ThemeColorPicker.Color = Settings.settings.ThemeColor;
             ShowCounterCheckBox.IsChecked = Settings.settings.ShowCount;
-            KeepRecentComboBox.SelectedIndex = LimitedRecentPlayedItems.FindIndex(num => num == Settings.settings.LimitedRecentPlayedItems);
+            KeepRecentComboBox.SelectedIndex = LimitedRecentPlayedItems.FindIndex(i => i == Settings.settings.LimitedRecentPlayedItems);
             AutoPlayCheckBox.IsChecked = Settings.settings.AutoPlay;
             AutoLyricsCheckBox.IsChecked = Settings.settings.AutoLyrics;
             SaveProgressCheckBox.IsChecked = Settings.settings.SaveMusicProgress;
             HideMultiSelectCommandBarCheckBox.IsChecked = Settings.settings.HideMultiSelectCommandBarAfterOperation;
-            AutoScrollLyricsCheckBox.IsChecked = Settings.settings.AutoScrollLyrics;
             ShowLyricsInNotificationCheckBox.IsChecked = Settings.settings.ShowLyricsInNotification;
         }
 
@@ -138,11 +141,6 @@ namespace SMPlayer
         private void CancelColorButton_Click(object sender, RoutedEventArgs e)
         {
             ColorPickerFlyout.Hide();
-        }
-
-        private void NotificationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Settings.settings.Toast = NotificationOptions[(sender as ComboBox).SelectedIndex];
         }
 
         public static async void CheckNewMusic(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
@@ -464,24 +462,32 @@ namespace SMPlayer
             IsProcessing = false;
         }
 
-        private void AutoScrollLyricsCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            AutoScrollLyricsCheckBox.IsChecked = true;
-        }
-
-        private void AutoScrollLyricsCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            AutoScrollLyricsCheckBox.IsChecked = false;
-        }
-
         private void ShowLyricsInNotificationCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            ShowLyricsInNotificationCheckBox.IsChecked = true;
+            Settings.settings.ShowLyricsInNotification = true;
+            LyricsHelper.SetLyrics();
         }
 
         private void ShowLyricsInNotificationCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            ShowLyricsInNotificationCheckBox.IsChecked = false;
+            Settings.settings.ShowLyricsInNotification = false;
+            LyricsHelper.ClearLyrics();
+        }
+
+        private void NotificationModeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (NotificationModeComboBox.SelectedIndex < 0) return;
+            Settings.settings.NotificationDisplay = SettingsEnum.NotificationDisplayModes[NotificationModeComboBox.SelectedIndex];
+            if (Settings.settings.NotificationDisplay == NotificationDisplayMode.Reminder)
+            {
+                ToastHelper.ShowToast();
+            }
+        }
+
+        private void NotificationSendComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (NotificationModeComboBox.SelectedIndex < 0) return;
+            Settings.settings.NotificationSend = SettingsEnum.NotificationSendModes[NotificationSendComboBox.SelectedIndex];
         }
     }
 

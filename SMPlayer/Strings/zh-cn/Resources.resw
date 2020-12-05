@@ -174,9 +174,6 @@
   <data name="AllComboItem.Content" xml:space="preserve">
     <value>全部</value>
   </data>
-  <data name="AlwaysShownComboItem.Content" xml:space="preserve">
-    <value>一直显示</value>
-  </data>
   <data name="AppDisplayName" xml:space="preserve">
     <value>简音播放器</value>
   </data>
@@ -465,6 +462,9 @@
   <data name="LyricsMenuItem.Text" xml:space="preserve">
     <value>显示歌词</value>
   </data>
+  <data name="LyricsModeComboItem.Content" xml:space="preserve">
+    <value>歌词模式</value>
+  </data>
   <data name="LyricsPivotItem.Header" xml:space="preserve">
     <value>歌词</value>
   </data>
@@ -543,7 +543,7 @@
   <data name="MyFavoritesItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>我喜欢的音乐</value>
   </data>
-  <data name="NeverItem.Content" xml:space="preserve">
+  <data name="NeverComboBoxItem.Content" xml:space="preserve">
     <value>永不显示</value>
   </data>
   <data name="New Playlist" xml:space="preserve">
@@ -563,6 +563,30 @@
   </data>
   <data name="NoResultTextBlock.Text" xml:space="preserve">
     <value>找不到结果，请检查您的拼写。</value>
+  </data>
+  <data name="NotificationModeComboBoxTextBlock.Text" xml:space="preserve">
+    <value>通知模式：</value>
+  </data>
+  <data name="NotificationModeNormalComboItem.Content" xml:space="preserve">
+    <value>标准</value>
+  </data>
+  <data name="NotificationModeNormalComboItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>窗口不可见时会发送通知</value>
+  </data>
+  <data name="NotificationModeQuickComboItem.Content" xml:space="preserve">
+    <value>快速</value>
+  </data>
+  <data name="NotificationModeQuickComboItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>窗口不可见时会发送通知，通知会在几秒后消失</value>
+  </data>
+  <data name="NotificationModeReminderComboItem.Content" xml:space="preserve">
+    <value>提醒</value>
+  </data>
+  <data name="NotificationModeReminderComboItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>通知将一直可见</value>
+  </data>
+  <data name="NotificationSendComboBoxTextBlock.Text" xml:space="preserve">
+    <value>发送通知：</value>
   </data>
   <data name="NotificationTextBlock.Text" xml:space="preserve">
     <value>通知</value>
@@ -765,14 +789,14 @@
   <data name="ReleaseNotesPlayWithSMPlayer.Text" xml:space="preserve">
     <value>支持用简音播放器播放音乐文件。</value>
   </data>
-  <data name="ReleaseNotesScrollingLyrics.Text" xml:space="preserve">
-    <value>歌词支持自动滚动，支持在通知中显示歌词。</value>
-  </data>
   <data name="ReleaseNotesSearchPageAddAllToButton.Text" xml:space="preserve">
     <value>搜索页面有了“添加全部到”按钮。</value>
   </data>
   <data name="ReleaseNotesShowCount.Text" xml:space="preserve">
     <value>部分页面会显示列表项总数了。</value>
+  </data>
+  <data name="ReleaseNotesShowLyricsInNotifications.Text" xml:space="preserve">
+    <value>现已支持在通知中显示歌词。</value>
   </data>
   <data name="ReleaseNotesSortByDateAdded.Text" xml:space="preserve">
     <value>通过添加日期搜索。</value>
@@ -893,6 +917,9 @@
   </data>
   <data name="SelectArtistTextBlock.Text" xml:space="preserve">
     <value>在左侧选择一位歌手</value>
+  </data>
+  <data name="SendNotificationComboBox.Content" xml:space="preserve">
+    <value>发送通知：</value>
   </data>
   <data name="Set As Favorite" xml:space="preserve">
     <value>设为喜欢</value>

@@ -181,5 +181,10 @@ namespace SMPlayer.Controls
                 SetLyrics(next);
             });
         }
+
+        private void ImportLyricsButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

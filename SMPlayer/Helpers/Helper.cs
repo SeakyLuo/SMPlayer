@@ -26,16 +26,12 @@ namespace SMPlayer
     {
         public const string StringConcatenationFlag = "+++++";
         public const string LogoPath = "ms-appx:///Assets/monotone_no_bg.png";
-        public const string ToastTaskName = "ToastBackgroundTask", ToastTagPaused = "SMPlayerMediaToastTagPaused", ToastTagPlaying = "SMPlayerMediaToastTagPlaying", ToastGroup = "SMPlayerMediaToastGroup";
-        public static string NoLyricsAvailable { get => LocalizeMessage("NoLyricsAvailable"); }
         public static string TimeStamp { get => DateTime.Now.ToString("yyyyMMdd_HHmmss"); }
         public static string TimeStampInMills { get => DateTime.Now.ToString("yyyyMMdd_HHmmss.fff"); }
 
         public static StorageFolder CurrentFolder, ThumbnailFolder, SecondaryTileFolder, TempFolder, LogFolder;
         public static StorageFolder LocalFolder { get => ApplicationData.Current.LocalFolder; }
-        public static ToastNotification Toast;
-        public static ToastNotifier toastNotifier = ToastNotificationManager.CreateToastNotifier();
-        public static ToastAudio SlientToast = new ToastAudio() { Silent = true };
+
         public static TileUpdater tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
         public static ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
         public static ResourceLoader MessageResourceLoader = ResourceLoader.GetForCurrentView("Messages");
@@ -53,7 +49,6 @@ namespace SMPlayer
 
         private const string ExceptionLogFileNamePrefix = "ExceptionLog", LogFileNamePrefix = "Log";
 
-        private static string Lyrics = "";
         private static List<Music> NotFoundHistory = new List<Music>();
         private static Random random = new Random();
 
@@ -145,6 +140,7 @@ namespace SMPlayer
 
         private static async Task ClearTempFiles(int maxBackups = 3)
         {
+            if (TempFolder == null) return;
             var files = await TempFolder.GetFilesAsync();
             await ClearBackup(files, Settings.JsonFilename, maxBackups);
             await ClearBackup(files, MediaHelper.JsonFilename, maxBackups);
@@ -287,11 +283,6 @@ namespace SMPlayer
             if (volume < 67) return "\uE994";
             return "\uE995";
         }
-        public static string GetLyricByTime(double time)
-        {
-            if (string.IsNullOrEmpty(Lyrics)) return NoLyricsAvailable;
-            return "";
-        }
 
         public static async Task<BitmapImage> GetThumbnailAsync(string path)
         {
@@ -321,125 +312,6 @@ namespace SMPlayer
             {
                 // 拒绝访问
                 return null;
-            }
-        }
-        private static async void ShowToast(Music music, MediaPlaybackState state)
-        {
-            if (Window.Current.Visible) return;
-            ShowToast status = Settings.settings.Toast;
-            if (status == Models.ShowToast.Never) return;
-            ToastButton controlButton = null;
-            string toastTag = "";
-            switch (state)
-            {
-                case MediaPlaybackState.Paused:
-                    controlButton = new ToastButton(LocalizeMessage("Play"), "Play") { ActivationType = ToastActivationType.Background };
-                    toastTag = ToastTagPlaying;
-                    break;
-                case MediaPlaybackState.Playing:
-                    controlButton = new ToastButton(LocalizeMessage("Pause"), "Pause") { ActivationType = ToastActivationType.Background };
-                    toastTag = ToastTagPaused;
-                    break;
-            }
-            var toastContent = new ToastContent()
-            {
-                Visual = new ToastVisual()
-                {
-                    BindingGeneric = new ToastBindingGeneric()
-                    {
-                        Children =
-                        {
-                            new AdaptiveText() { Text = music.GetToastText() },
-                            new AdaptiveProgressBar()
-                            {
-                                Value = new BindableProgressBarValue("MediaControlPosition"),
-                                ValueStringOverride = MusicDurationConverter.ToTime(music.Duration),
-                                Title = new BindableString("Lyrics"),
-                                Status = new BindableString("MediaControlPositionTime")
-                            }
-                        }
-                    }
-                },
-                Actions = new ToastActionsCustom()
-                {
-                    Buttons =
-                    {
-                        controlButton, new ToastButton(LocalizeMessage("Next"), "Next"){ ActivationType = ToastActivationType.Background }
-                    },
-                },
-                ActivationType = ToastActivationType.Background,
-                Launch = "Launch",
-                Audio = SlientToast,
-                Scenario = status == Models.ShowToast.Always || state == MediaPlaybackState.Paused ? ToastScenario.Reminder : ToastScenario.Default
-            };
-
-            // Create the toast notification
-            Toast = new ToastNotification(toastContent.GetXml())
-            {
-                Tag = toastTag,
-                Group = ToastGroup,
-                Data = new NotificationData() { SequenceNumber = 0 },
-                ExpiresOnReboot = true
-            };
-            if (status == Models.ShowToast.Always)
-            {
-                Lyrics = await music.GetLyricsAsync();
-                Toast.Data.Values["Lyrics"] = GetLyricByTime(MediaHelper.Position);
-            }
-            else
-            {
-                Toast.ExpirationTime = DateTime.Now.AddSeconds(Math.Min(10, music.Duration));
-                Toast.Data.Values["Lyrics"] = "";
-            }
-            Toast.Data.Values["MediaControlPosition"] = MediaHelper.Progress.ToString();
-            Toast.Data.Values["MediaControlPositionTime"] = MusicDurationConverter.ToTime(MediaHelper.Position);
-            try
-            {
-                toastNotifier.Show(Toast);
-            }
-            catch (Exception)
-            {
-                // 通知已发布
-            }
-        }
-
-        public static void ShowPlayToast(Music music)
-        {
-            HideToast();
-            ShowToast(music, MediaPlaybackState.Paused);
-        }
-
-        public static void ShowPauseToast(Music music)
-        {
-            HideToast();
-            ShowToast(music, MediaPlaybackState.Playing);
-        }
-        public static void UpdateToast()
-        {
-            if (!MediaHelper.IsPlaying) return;
-            // Create NotificationData and make sure the sequence number is incremented
-            // since last update, or assign 0 for updating regardless of order
-            var data = new NotificationData { SequenceNumber = 0 };
-            data.Values["MediaControlPosition"] = MediaHelper.Progress.ToString();
-            data.Values["MediaControlPositionTime"] = MusicDurationConverter.ToTime(MediaHelper.Position);
-            data.Values["Lyrics"] = Settings.settings.Toast == Models.ShowToast.Always ? GetLyricByTime(MediaHelper.Position) : "";
-
-            // Update the existing notification's data by using tag/group
-            toastNotifier.Update(data, ToastTagPaused, ToastGroup);
-        }
-
-        public static void HideToast()
-        {
-            if (Toast != null)
-            {
-                try
-                {
-                    toastNotifier.Hide(Toast);
-                }
-                catch (Exception)
-                {
-                    // 通知已经隐藏。
-                }
             }
         }
 

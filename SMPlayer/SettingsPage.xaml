@@ -17,6 +17,10 @@
             <Setter Property="Margin" Value="8,0" />
             <Setter Property="Height" Value="30" />
         </Style>
+        <Style x:Key="ComboBoxLabelStyle" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="15" />
+        </Style>
         <Style x:Key="MinimalSettingLabelStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="18" />
             <Setter Property="Margin" Value="8,0" />
@@ -158,17 +162,27 @@
                         Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
                         x:Name="MusicLibraryTextBlock"
                         x:Uid="MusicLibraryTextBlock"
                         Style="{StaticResource SettingLabelStyle}"
                         Text="Music Library" />
-                <HyperlinkButton
+                    <HyperlinkButton
                         x:Uid="UpdateMusicLibraryButton"
                         Click="UpdateMusicLibrary_Click"
                         Content="Update Music Library"
                         Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <HyperlinkButton
+                        x:Uid="AddLyricsButton"
+                        Click="AddLyrics_Click"
+                        Content="Add Lyrics"
+                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
@@ -177,15 +191,30 @@
                         x:Uid="NotificationTextBlock"
                         Style="{StaticResource SettingLabelStyle}"
                         Text="Notification" />
-                    <ComboBox
-                        x:Name="NotificationComboBox"
-                        VerticalAlignment="Center"
-                        SelectionChanged="NotificationComboBox_SelectionChanged"
-                        Style="{StaticResource MarginSetter}">
-                        <ComboBoxItem x:Uid="AlwaysShownComboItem" Content="Always Shown" />
-                        <ComboBoxItem x:Uid="MusicChangedComboItem" Content="Music Changed" />
-                        <ComboBoxItem x:Uid="NeverItem" Content="Never" />
-                    </ComboBox>
+                    <StackPanel Orientation="Horizontal" Style="{ThemeResource MarginSetter}">
+                        <TextBlock x:Uid="NotificationSendComboBoxTextBlock" Style="{StaticResource ComboBoxLabelStyle}"/>
+                        <ComboBox
+                            x:Name="NotificationSendComboBox"
+                            SelectionChanged="NotificationSendComboBox_SelectionChanged"
+                            Style="{StaticResource MarginSetter}">
+                            <ComboBoxItem x:Uid="MusicChangedComboItem" Content="Music Changed" />
+                            <ComboBoxItem x:Uid="NeverComboBoxItem" Content="Never" />
+                        </ComboBox>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <StackPanel Orientation="Horizontal" Style="{ThemeResource MarginSetter}">
+                        <TextBlock x:Uid="NotificationModeComboBoxTextBlock" Style="{StaticResource ComboBoxLabelStyle}"/>
+                        <ComboBox
+                            x:Name="NotificationModeComboBox"
+                            SelectionChanged="NotificationModeComboBox_SelectionChanged"
+                            Style="{StaticResource MarginSetter}">
+                            <ComboBoxItem x:Uid="NotificationModeReminderComboItem" Content="Reminder" />
+                            <ComboBoxItem x:Uid="NotificationModeNormalComboItem" Content="Normal" />
+                            <ComboBoxItem x:Uid="NotificationModeQuickComboItem" Content="Quick" />
+                        </ComboBox>
+                    </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource SettingLabelStyle}" />
@@ -289,14 +318,10 @@
                         Text="Recent" />
                     <StackPanel Style="{ThemeResource MarginSetter}" Orientation="Horizontal">
                         <TextBlock
-                        x:Uid="RecentPlayedItemTextBlock"
-                        VerticalAlignment="Center"
-                        FontSize="15"
-                        Text="Recent Played" />
-                        <ComboBox
-                            x:Name="KeepRecentComboBox"
-                            VerticalAlignment="Center"
-                            SelectionChanged="KeepRecentComboBox_SelectionChanged">
+                            x:Uid="RecentPlayedItemTextBlock"
+                            Style="{StaticResource ComboBoxLabelStyle}"
+                            Text="Recent Played" />
+                        <ComboBox x:Name="KeepRecentComboBox" SelectionChanged="KeepRecentComboBox_SelectionChanged">
                             <ComboBoxItem x:Uid="AllComboItem" Content="All" />
                             <ComboBoxItem x:Uid="100ComboItem" Content="100" />
                             <ComboBoxItem x:Uid="200ComboItem" Content="200" />
@@ -351,29 +376,6 @@
                         x:Uid="SaveChangesButton"
                         Click="SaveChanges_Click"
                         Content="Save Changes"
-                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
-                </StackPanel>
-            </StackPanel>
-            <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock
-                        x:Uid="LyricsTextBlock"
-                        Style="{StaticResource SettingLabelStyle}"
-                        Text="Save" />
-                    <CheckBox
-                        x:Name="AutoScrollLyricsCheckBox"
-                        x:Uid="AutoScrollLyricsCheckBox"
-                        Checked="AutoScrollLyricsCheckBox_Checked"
-                        Content="Auto Scroll Lyrics"
-                        Style="{ThemeResource SettingCheckBoxStyle}"
-                        Unchecked="AutoScrollLyricsCheckBox_Unchecked" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
-                    <HyperlinkButton
-                        x:Uid="AddLyricsButton"
-                        Click="AddLyrics_Click"
-                        Content="Add Lyrics"
                         Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 </StackPanel>
             </StackPanel>

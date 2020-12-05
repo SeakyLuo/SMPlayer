@@ -171,14 +171,8 @@
   <data name="AlbumTextBlock.Text" xml:space="preserve">
     <value>Album</value>
   </data>
-  <data name="All Artists" xml:space="preserve">
-    <value>All Artists: </value>
-  </data>
   <data name="AllComboItem.Content" xml:space="preserve">
     <value>All</value>
-  </data>
-  <data name="AlwaysShownComboItem.Content" xml:space="preserve">
-    <value>Always Shown</value>
   </data>
   <data name="AppDisplayName" xml:space="preserve">
     <value>SMPlayer</value>
@@ -468,6 +462,9 @@
   <data name="LyricsMenuItem.Text" xml:space="preserve">
     <value>Show Lyrics</value>
   </data>
+  <data name="LyricsModeComboItem.Content" xml:space="preserve">
+    <value>Lyrics Mode</value>
+  </data>
   <data name="LyricsPivotItem.Header" xml:space="preserve">
     <value>Lyrics</value>
   </data>
@@ -546,7 +543,7 @@
   <data name="MyFavoritesItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>My Favorite Songs</value>
   </data>
-  <data name="NeverItem.Content" xml:space="preserve">
+  <data name="NeverComboBoxItem.Content" xml:space="preserve">
     <value>Never</value>
   </data>
   <data name="New Playlist" xml:space="preserve">
@@ -566,6 +563,30 @@
   </data>
   <data name="NoResultTextBlock.Text" xml:space="preserve">
     <value>No result is found. Please check your spelling.</value>
+  </data>
+  <data name="NotificationModeComboBoxTextBlock.Text" xml:space="preserve">
+    <value>Notification Mode: </value>
+  </data>
+  <data name="NotificationModeNormalComboItem.Content" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="NotificationModeNormalComboItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Notifications are sent when window is not visible.</value>
+  </data>
+  <data name="NotificationModeQuickComboItem.Content" xml:space="preserve">
+    <value>Quick</value>
+  </data>
+  <data name="NotificationModeQuickComboItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Notifications are sent when window is not visible, and will disappear after a few seconds.</value>
+  </data>
+  <data name="NotificationModeReminderComboItem.Content" xml:space="preserve">
+    <value>Reminder</value>
+  </data>
+  <data name="NotificationModeReminderComboItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Always show notifications.</value>
+  </data>
+  <data name="NotificationSendComboBoxTextBlock.Text" xml:space="preserve">
+    <value>Send Notification: </value>
   </data>
   <data name="NotificationTextBlock.Text" xml:space="preserve">
     <value>Notification</value>
@@ -768,14 +789,14 @@
   <data name="ReleaseNotesPlayWithSMPlayer.Text" xml:space="preserve">
     <value>Now supports play music with SMPlayer.</value>
   </data>
-  <data name="ReleaseNotesScrollingLyrics.Text" xml:space="preserve">
-    <value>Now lyrics can scroll automatically and can be displayed in notifications.</value>
-  </data>
   <data name="ReleaseNotesSearchPageAddAllToButton.Text" xml:space="preserve">
     <value>Search page now has an AddAllTo button.</value>
   </data>
   <data name="ReleaseNotesShowCount.Text" xml:space="preserve">
     <value>Some pages now shows the number of items in a collection.</value>
+  </data>
+  <data name="ReleaseNotesShowLyricsInNotifications.Text" xml:space="preserve">
+    <value>Now lyrics can be displayed in notifications.</value>
   </data>
   <data name="ReleaseNotesSortByDateAdded.Text" xml:space="preserve">
     <value>Sort by date added.</value>
@@ -788,6 +809,9 @@
   </data>
   <data name="ReleaseNotesVersion.Text" xml:space="preserve">
     <value>Version: </value>
+  </data>
+  <data name="ReminderComboItem.Content" xml:space="preserve">
+    <value>Reminder</value>
   </data>
   <data name="Remove From List" xml:space="preserve">
     <value>Remove From List</value>
@@ -896,6 +920,9 @@
   </data>
   <data name="SelectArtistTextBlock.Text" xml:space="preserve">
     <value>Select an artist on the left</value>
+  </data>
+  <data name="SendNotificationComboBox.Content" xml:space="preserve">
+    <value>Send notifications: </value>
   </data>
   <data name="Set As Favorite" xml:space="preserve">
     <value>Set As Favorite</value>

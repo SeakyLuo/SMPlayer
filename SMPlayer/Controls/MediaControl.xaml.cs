@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Dialogs;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
@@ -360,12 +361,12 @@ namespace SMPlayer
                     if (sender.PlaybackState == MediaPlaybackState.Playing)
                     {
                         PlayMusic();
-                        Helper.ShowPauseToast(MediaHelper.CurrentMusic);
+                        ToastHelper.ShowPauseToast(MediaHelper.CurrentMusic);
                     }
                     else if (sender.PlaybackState == MediaPlaybackState.Paused)
                     {
                         PauseMusic();
-                        Helper.ShowPlayToast(MediaHelper.CurrentMusic);
+                        ToastHelper.ShowPlayToast(MediaHelper.CurrentMusic);
                     }
                 });
             };
@@ -868,7 +869,7 @@ namespace SMPlayer
             {
                 MediaSlider.Value = MediaHelper.Position;
             }
-            Helper.UpdateToast();
+            ToastHelper.UpdateToast();
         }
 
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
@@ -888,9 +889,9 @@ namespace SMPlayer
                 SetMusic(next);
                 if (MainTitleTextBlock.IsScrolling) MainTitleTextBlock.StopScrolling();
                 if (MainArtistTextBlock.IsScrolling) MainArtistTextBlock.StopScrolling();
-                Helper.HideToast();
+                ToastHelper.HideToast();
                 // Use current instead of next to avoid showing toast on app launch
-                if (current != null) Helper.ShowPauseToast(next);
+                if (current != null) ToastHelper.ShowPauseToast(next);
             });
         }
 
@@ -901,7 +902,7 @@ namespace SMPlayer
                 if (Settings.settings.Mode == PlayMode.Once)
                     PlayButton.Content = "\uE768";
                 MediaSlider.Value = 0;
-                Helper.HideToast();
+                ToastHelper.HideToast();
             });
         }
 

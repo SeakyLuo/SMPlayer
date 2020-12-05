@@ -17,6 +17,7 @@ namespace SMPlayer
     /// </summary>
     sealed partial class App : Application
     {
+        public static bool Inited { get; private set; } = false;
         public static List<Action> LoadedListeners = new List<Action>();
         /// <summary>
         /// 初始化单一实例应用程序对象。这是执行的创作代码的第一行，
@@ -95,8 +96,9 @@ namespace SMPlayer
             await AlbumsPage.Init();
             await RecentPage.Init();
             foreach (var listener in LoadedListeners) listener.Invoke();
+            Inited = true;
             // If background task is already registered, do nothing
-            if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals(Helper.ToastTaskName)))
+            if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals(ToastHelper.ToastTaskName)))
                 return;
             // Otherwise request access
             BackgroundAccessStatus status = await BackgroundExecutionManager.RequestAccessAsync();
@@ -104,7 +106,7 @@ namespace SMPlayer
             // Create the background task
             BackgroundTaskBuilder builder = new BackgroundTaskBuilder()
             {
-                Name = Helper.ToastTaskName
+                Name = ToastHelper.ToastTaskName
             };
 
             // Assign the toast action trigger
@@ -136,7 +138,7 @@ namespace SMPlayer
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             Helper.ResumeTile();
-            Helper.HideToast();
+            ToastHelper.HideToast();
             Save();
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
@@ -158,7 +160,7 @@ namespace SMPlayer
             var deferral = args.TaskInstance.GetDeferral();
             switch (args.TaskInstance.Task.Name)
             {
-                case Helper.ToastTaskName:
+                case ToastHelper.ToastTaskName:
                     if (args.TaskInstance.TriggerDetails is Windows.UI.Notifications.ToastNotificationActionTriggerDetail details)
                     {
                         // Perform tasks

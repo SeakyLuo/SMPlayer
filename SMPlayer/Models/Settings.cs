@@ -26,7 +26,8 @@ namespace SMPlayer.Models
         public double Volume { get; set; } = 50.0d;
         public bool IsNavigationCollapsed { get; set; } = true;
         public Color ThemeColor { get; set; } = (Color)Windows.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(typeof(Color), "#0078D7");
-        public ShowToast Toast { get; set; } = ShowToast.Always;
+        public NotificationSendMode NotificationSend { get; set; } = NotificationSendMode.MusicChanged;
+        public NotificationDisplayMode NotificationDisplay { get; set; } = NotificationDisplayMode.Normal;
         public string LastPage { get; set; } = "";
         public List<Playlist> Playlists { get; set; } = new List<Playlist>();
         public string LastPlaylist { get; set; } = "";
@@ -45,7 +46,6 @@ namespace SMPlayer.Models
         public SortBy AlbumsCriterion { get; set; } = SortBy.Default;
         public bool HideMultiSelectCommandBarAfterOperation { get; set; } = true;
         public bool ShowCount { get; set; } = true;
-        public bool AutoScrollLyrics { get; set; } = false;
         public bool ShowLyricsInNotification { get; set; } = false;
         public ObservableCollection<string> RecentSearches = new ObservableCollection<string>();
 
