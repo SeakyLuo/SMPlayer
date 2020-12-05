@@ -771,6 +771,9 @@
   <data name="ReleaseNotesHistoryUpdates.Text" xml:space="preserve">
     <value>History Updates</value>
   </data>
+  <data name="ReleaseNotesImportLyrics.Text" xml:space="preserve">
+    <value>Supports importing lyrics from a txt/lrc/mp3 file.</value>
+  </data>
   <data name="ReleaseNotesImproveMultiSelect.Text" xml:space="preserve">
     <value>Improved multi-select.</value>
   </data>
@@ -956,6 +959,9 @@
   </data>
   <data name="ShowLyricsInNotificationCheckBox.Content" xml:space="preserve">
     <value>Show lyrics in notification</value>
+  </data>
+  <data name="ShowLyricsInNotificationInfo.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Supports lrc-format lyrics with hundred-millisecond precision.</value>
   </data>
   <data name="Shuffle" xml:space="preserve">
     <value>Shuffle</value>

@@ -53,7 +53,7 @@ namespace SMPlayer
         private static MediaPlaybackList PendingPlaybackList = null;
         public static MediaPlayer Player = new MediaPlayer() { Source = PlaybackList };
         public static List<IRemoveMusicListener> RemoveMusicListeners = new List<IRemoveMusicListener>();
-        public static DispatcherTimer Timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+        public static DispatcherTimer Timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
         public static List<IMediaControlListener> MediaControlListeners = new List<IMediaControlListener>();
         public static List<ISwitchMusicListener> SwitchMusicListeners = new List<ISwitchMusicListener>();
         public static List<Action> InitFinishedListeners = new List<Action>();

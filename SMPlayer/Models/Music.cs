@@ -212,6 +212,19 @@ namespace SMPlayer.Models
             return file.GetLyrics();
         }
 
+        public async Task<string> GetLrcLyricsAsync()
+        {
+            try
+            {
+                var file = await StorageFile.GetFileFromPathAsync(Path.Substring(Path.LastIndexOf(".")) + "lrc");
+                return await FileIO.ReadTextAsync(file);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public async Task<bool> SaveLyricsAsync(string lyrics)
         {
             var music = await GetStorageFileAsync();
@@ -226,7 +239,7 @@ namespace SMPlayer.Models
             }
             catch (Exception exception)
             {
-                System.Diagnostics.Debug.WriteLine(string.Format("Exception ({0}) when saving lyrics for {1}", exception.Message, Name));
+                Debug.WriteLine(string.Format("Exception ({0}) when saving lyrics for {1}", exception.Message, Name));
                 return false;
             }
         }

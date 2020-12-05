@@ -22,6 +22,8 @@ namespace SMPlayer.Helpers
 
         private static string[] LyricsList;
 
+        private static bool IsLrc = false;
+
         public static void ClearLyrics()
         {
             CurrentMusic = null;
@@ -29,6 +31,7 @@ namespace SMPlayer.Helpers
             CurrentLine = "";
             CurrentIndex = -1;
             LyricsList = null;
+            IsLrc = false;
         }
 
         public static void SetLyrics()
@@ -40,7 +43,24 @@ namespace SMPlayer.Helpers
         {
             if (CurrentMusic == music && !string.IsNullOrEmpty(Lyrics))
                 return;
-            SetLyrics(music, await music?.GetLyricsAsync());
+            if (music == null)
+            {
+                ClearLyrics();
+            }
+            else
+            {
+                string lyrics = await music.GetLrcLyricsAsync();
+                if (lyrics == null)
+                {
+                    SetLyrics(music, await music.GetLyricsAsync());
+                    IsLrc = (bool)(LyricsList?.Take(4).All(l => l.StartsWith("[")));
+                }
+                else
+                {
+                    SetLyrics(music, lyrics);
+                    IsLrc = true;
+                }
+            }
         }
 
         public static void SetLyrics(Music music, string lyrics)
@@ -56,8 +76,7 @@ namespace SMPlayer.Helpers
         public static string GetLyrics()
         {
             if (string.IsNullOrEmpty(Lyrics)) return "";
-            string lyric = GetLrcLyrics();
-            //Debug.WriteLine(lyric);
+            string lyric = IsLrc ? GetLrcLyrics() : null;
             if (lyric == null)
             {
                 CurrentIndex = (int)(LyricsList.Length * MediaHelper.Progress);

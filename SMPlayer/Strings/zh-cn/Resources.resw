@@ -771,6 +771,9 @@
   <data name="ReleaseNotesHistoryUpdates.Text" xml:space="preserve">
     <value>历史更新</value>
   </data>
+  <data name="ReleaseNotesImportLyrics.Text" xml:space="preserve">
+    <value>支持从txt、lrc、mp3文件中导入歌词。</value>
+  </data>
   <data name="ReleaseNotesImproveMultiSelect.Text" xml:space="preserve">
     <value>优化了多选。</value>
   </data>
@@ -953,6 +956,9 @@
   </data>
   <data name="ShowLyricsInNotificationCheckBox.Content" xml:space="preserve">
     <value>在通知中显示歌词</value>
+  </data>
+  <data name="ShowLyricsInNotificationInfo.ToolTipService.ToolTip" xml:space="preserve">
+    <value>支持lrc格式歌词以百毫秒精度展示。</value>
   </data>
   <data name="Shuffle" xml:space="preserve">
     <value>随机播放</value>

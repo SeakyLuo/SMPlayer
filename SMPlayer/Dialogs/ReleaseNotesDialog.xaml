@@ -28,7 +28,8 @@
         <TextBlock Grid.Row="1" TextWrapping="WrapWholeWords">
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.4.6</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesShowLyricsInNotifications"/><LineBreak />
-            2. <Run x:Uid="ReleaseNotesNowPlayingHighlight"/><LineBreak />
+            2. <Run x:Uid="ReleaseNotesImportLyrics"/><LineBreak />
+            3. <Run x:Uid="ReleaseNotesNowPlayingHighlight"/><LineBreak />
             <LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.4.5</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesPlayNext"/><LineBreak />
