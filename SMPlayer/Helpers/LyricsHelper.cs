@@ -76,15 +76,22 @@ namespace SMPlayer.Helpers
         public static string GetLyrics()
         {
             if (string.IsNullOrEmpty(Lyrics)) return "";
-            string lyric = IsLrc ? GetLrcLyrics() : null;
-            if (lyric == null)
+            try
             {
-                CurrentIndex = (int)(LyricsList.Length * MediaHelper.Progress);
-                lyric = CurrentLine = LyricsList[CurrentIndex];
+                string lyric = IsLrc ? GetLrcLyrics() : null;
+                if (lyric == null)
+                {
+                    CurrentIndex = Math.Min(LyricsList.Length - 1, (int)(LyricsList.Length * MediaHelper.Progress));
+                    lyric = CurrentLine = LyricsList[CurrentIndex];
+                }
+                if (!string.IsNullOrWhiteSpace(lyric))
+                {
+                    DisplayLine = lyric;
+                }
             }
-            if (!string.IsNullOrWhiteSpace(lyric))
+            catch (Exception e)
             {
-                DisplayLine = lyric;
+                Helper.LogException(e);
             }
             return DisplayLine;
         }
