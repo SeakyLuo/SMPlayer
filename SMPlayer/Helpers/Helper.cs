@@ -24,15 +24,13 @@ namespace SMPlayer
 {
     public static class Helper
     {
-        public const string StringConcatenationFlag = "+++++";
         public const string LogoPath = "ms-appx:///Assets/monotone_no_bg.png";
         public static string TimeStamp { get => DateTime.Now.ToString("yyyyMMdd_HHmmss"); }
         public static string TimeStampInMills { get => DateTime.Now.ToString("yyyyMMdd_HHmmss.fff"); }
 
-        public static StorageFolder CurrentFolder, ThumbnailFolder, SecondaryTileFolder, TempFolder, LogFolder;
+        public static StorageFolder CurrentFolder, ThumbnailFolder, TempFolder, LogFolder;
         public static StorageFolder LocalFolder { get => ApplicationData.Current.LocalFolder; }
 
-        public static TileUpdater tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
         public static ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
         public static ResourceLoader MessageResourceLoader = ResourceLoader.GetForCurrentView("Messages");
         public static ResourceLoader TextResourceLoader = ResourceLoader.GetForCurrentView("Texts");
@@ -327,188 +325,9 @@ namespace SMPlayer
             return ThumbnailFolder;
         }
 
-        public static async Task UpdateTile(StorageItemThumbnail itemThumbnail, Music music)
+        public static bool IsVisible()
         {
-            if (music == null) return;
-            string uri = MusicImage.DefaultImagePath;
-            if (itemThumbnail != null)
-            {
-                try
-                {
-                    var file = await itemThumbnail.SaveAsync(await GetThumbnailFolder(), string.IsNullOrEmpty(music.Album) ? music.Name : music.Album, true);
-                    uri = file.Path;
-                }
-                catch (Exception)
-                {
-                    
-                }
-            }
-            var tileContent = new TileContent()
-            {
-                Visual = new TileVisual()
-                {
-                    TileSmall = new TileBinding()
-                    {
-                        Branding = TileBranding.None,
-                        Content = new TileBindingContentAdaptive()
-                        {
-                            BackgroundImage = new TileBackgroundImage() { Source = uri }
-                        }
-                    },
-                    TileMedium = new TileBinding()
-                    {
-                        Branding = TileBranding.Name,
-                        Content = new TileBindingContentAdaptive()
-                        {
-                            BackgroundImage = new TileBackgroundImage() { Source = uri },
-                            Children =
-                            {
-                                new AdaptiveText()
-                                {
-                                    Text = music.Name,
-                                    HintStyle = AdaptiveTextStyle.Body,
-                                    HintWrap = true
-                                }
-                            }
-                        }
-                    },
-                    TileWide = new TileBinding()
-                    {
-                        Branding = TileBranding.Name,
-                        Content = new TileBindingContentAdaptive()
-                        {
-                            BackgroundImage = new TileBackgroundImage() { Source = uri },
-                            Children =
-                            {
-                                new AdaptiveText()
-                                {
-                                    Text = music.Name,
-                                    HintStyle = AdaptiveTextStyle.Base,
-                                    HintWrap = true
-                                },
-                                new AdaptiveText()
-                                {
-                                    Text = music.Artist,
-                                    HintStyle = AdaptiveTextStyle.Caption,
-                                    HintWrap = true
-                                }
-                            }
-                        }
-                    },
-                    TileLarge = new TileBinding()
-                    {
-                        Branding = TileBranding.Name,
-                        Content = new TileBindingContentAdaptive()
-                        {
-                            BackgroundImage = new TileBackgroundImage() { Source = uri },
-                            Children =
-                            {
-                                new AdaptiveText()
-                                {
-                                    Text = music.Album,
-                                    HintStyle = AdaptiveTextStyle.Caption
-                                },
-                                new AdaptiveText()
-                                {
-                                    Text = music.Name,
-                                    HintStyle = AdaptiveTextStyle.Subtitle,
-                                    HintWrap = true
-                                },
-                                new AdaptiveText()
-                                {
-                                    Text = music.Artist,
-                                    HintStyle = AdaptiveTextStyle.Base
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-            try
-            {
-                // Create the tile notification
-                var tileNotification = new TileNotification(tileContent.GetXml());
-
-                // And send the notification to the primary tile
-                tileUpdater.Update(tileNotification);
-            }
-            catch (Exception)
-            {
-                // ArgumentException: Value does not fall within the expected range.
-                // 不知道为什么就变成了null
-            }
-        }
-
-        public static void ResumeTile()
-        {
-            var tile = new TileBinding()
-            {
-                DisplayName = Windows.ApplicationModel.Package.Current.DisplayName,
-                Branding = TileBranding.Name,
-                Content = new TileBindingContentAdaptive()
-                {
-                    BackgroundImage = new TileBackgroundImage()
-                    {
-                        Source = MusicImage.DefaultImagePath
-                    },
-                }
-            };
-            var tileContent = new TileContent()
-            {
-                Visual = new TileVisual()
-                {
-                    TileMedium = tile,
-                    TileWide = tile,
-                    TileLarge = tile
-                }
-            };
-
-            // Create the tile notification
-            var tileNotification = new TileNotification(tileContent.GetXml());
-
-            // And send the notification to the primary tile
-            tileUpdater.Update(tileNotification);
-        }
-        public static async Task<StorageFolder> GetSecondaryTileFolder()
-        {
-            return SecondaryTileFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("SecondaryTiles", CreationCollisionOption.OpenIfExists);
-        }
-        public static async Task<bool> PinToStartAsync(Playlist playlist, bool isPlaylist)
-        {
-            var tilename = playlist.Name;
-            var tileid = FormatTileId(playlist, isPlaylist);
-            var filename = tileid + ".png";
-            var uri = MusicImage.DefaultImagePath;
-            if (playlist.DisplayItem.Source != null)
-            {
-                if (await (await GetSecondaryTileFolder()).Contains(filename))
-                {
-                    uri = "ms-appdata:///local/SecondaryTiles/" + WebUtility.UrlEncode(filename);
-                }
-                else
-                {
-                    var thumbnail = await ImageHelper.LoadThumbnail(playlist.DisplayItem.Source);
-                    if (thumbnail.IsThumbnail())
-                    {
-                        await thumbnail.SaveAsync(SecondaryTileFolder, tileid);
-                        uri = "ms-appdata:///local/SecondaryTiles/" + WebUtility.UrlEncode(filename);
-                    }
-                    else
-                    {
-                        uri = LogoPath;
-                    }
-                }
-            }
-            var tile = new SecondaryTile(tileid, tilename, isPlaylist.ToString(), new Uri(uri), TileSize.Default);
-            tile.VisualElements.ShowNameOnSquare150x150Logo = tile.VisualElements.ShowNameOnSquare310x310Logo = tile.VisualElements.ShowNameOnWide310x150Logo = true;
-            if (SecondaryTile.Exists(tileid)) await tile.RequestDeleteAsync();
-            else await tile.RequestCreateAsync();
-            return SecondaryTile.Exists(tileid);
-        }
-        public static string FormatTileId(Playlist playlist, bool isPlaylist)
-        {
-            var tilename = playlist.Name;
-            return isPlaylist ? tilename : tilename + StringConcatenationFlag + playlist.Artist;
+            return false;
         }
     }
     public enum ExecutionStatus

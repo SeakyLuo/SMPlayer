@@ -21,8 +21,6 @@ namespace SMPlayer.Helpers
 
         private static string DisplayLine = "";
 
-        private static int CurrentIndex = -1;
-
         private static string[] LyricsList;
 
         private static bool IsLrc = false;
@@ -32,7 +30,6 @@ namespace SMPlayer.Helpers
             CurrentMusic = null;
             Lyrics = "";
             CurrentLine = null;
-            CurrentIndex = -1;
             LyricsList = null;
             IsLrc = false;
         }
@@ -70,7 +67,6 @@ namespace SMPlayer.Helpers
         {
             CurrentMusic = music;
             Lyrics = lyrics;
-            CurrentIndex = 0;
             CurrentLine = null;
             DisplayLine = "";
             LyricsList = lyrics?.Split('\n', '\r');
@@ -84,8 +80,8 @@ namespace SMPlayer.Helpers
                 string lyric = IsLrc ? GetLrcLyrics() : null;
                 if (lyric == null)
                 {
-                    CurrentIndex = Math.Min(LyricsList.Length - 1, (int)(LyricsList.Length * MediaHelper.Progress));
-                    lyric = CurrentLine = LyricsList[CurrentIndex];
+                    int index = Math.Min(LyricsList.Length - 1, (int)(LyricsList.Length * MediaHelper.Progress));
+                    lyric = CurrentLine = LyricsList[index];
                 }
                 if (!string.IsNullOrWhiteSpace(lyric))
                 {
@@ -101,30 +97,20 @@ namespace SMPlayer.Helpers
 
         private static string GetLrcLyrics()
         {
-            if (CurrentLine == null) return FindFirstLrcLyrics();
-            string time = ToTime(MediaHelper.Position);
-            if (CurrentLine.Contains(time)) return DisplayLine;
-            int index = LyricsList.FindIndex(l => l.Contains(time));
-            if (index == -1) return CurrentLine.StartsWith("[") ? DisplayLine : null;
-            CurrentIndex = index;
-            CurrentLine = LyricsList[CurrentIndex];
-            return TrimTag(CurrentLine);
-        }
-
-        private static string FindFirstLrcLyrics()
-        {
             double position = MediaHelper.Position;
+            string time = ToTime(position);
+            if (CurrentLine != null && CurrentLine.Contains(time)) return DisplayLine;
             while (position >= 0)
             {
-                position -= 0.1;
-                string time = ToTime(position);
                 if (LyricsList.FirstOrDefault(l => l.Contains(time)) is string lyric)
                 {
                     CurrentLine = lyric;
                     return TrimTag(CurrentLine);
                 }
+                position -= 0.1;
+                time = ToTime(position);
             }
-            return null;
+            return CurrentLine.StartsWith("[") ? DisplayLine : null;
         }
 
         private static string ToTime(double position)
@@ -150,9 +136,8 @@ namespace SMPlayer.Helpers
                 JsonObject json = await GetQQMusicResponse(uri);
                 var list = json.GetNamedObject("data").GetNamedObject("lyric").GetNamedArray("list");
                 if (list.Count == 0) return "";
-                var lyrics = list.GetObjectAt(0).GetNamedString("content");
-                lyrics = string.Join("\n", new List<string>(lyrics.Replace("\\n", "\n").Replace("<em>", "").Replace("</em>", "")
-                                                                  .Split("\n")).ConvertAll(line => line.Trim()));
+                var lyrics = list.GetObjectAt(0).GetNamedString("content"); 
+                lyrics = string.Join("\n", new List<string>(System.Web.HttpUtility.HtmlDecode(lyrics.Replace("\\n", "\n")).Split("\n")).ConvertAll(line => line.Trim()));
                 return lyrics;
             }
             catch (Exception)
@@ -161,8 +146,6 @@ namespace SMPlayer.Helpers
             }
         }
 
-        private static Uri QQMusicLyricsReferer = new Uri("https://y.qq.com/portal/player.html");
-
         public static async Task<string> SearchLrcLyrics(Music music)
         {
             string songmid = await GetSongMid(music);
@@ -170,9 +153,9 @@ namespace SMPlayer.Helpers
             string uri = $"https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?songmid={songmid}&format=json&nobase64=1";
             try
             {
-                JsonObject json = await GetQQMusicResponse(uri, client => client.DefaultRequestHeaders.Referrer = QQMusicLyricsReferer);
+                JsonObject json = await GetQQMusicResponse(uri);
                 var lyrics = json.GetNamedString("lyric");
-                return string.IsNullOrEmpty(lyrics) ? "" : lyrics.Replace("\\n", "\n");
+                return string.IsNullOrEmpty(lyrics) ? "" : System.Web.HttpUtility.HtmlDecode(lyrics);
             }
             catch (Exception)
             {
@@ -187,7 +170,7 @@ namespace SMPlayer.Helpers
 
         private static async Task<string> GetSongMid(string keyword)
         {
-            string uri = $"https://c.y.qq.com/soso/fcgi-bin/client_search_cp?p=1&n=1&w={keyword}&format=json";
+            string uri = $"https://c.y.qq.com/soso/fcgi-bin/client_search_cp?p=1&n=1&w={Uri.EscapeUriString(keyword)}&format=json";
             try
             {
                 JsonObject json = await GetQQMusicResponse(uri);
@@ -214,13 +197,15 @@ namespace SMPlayer.Helpers
             return ret;
         }
 
-        private static async Task<JsonObject> GetQQMusicResponse(string uri, Action<HttpClient> httpClientBuilder = null)
+        private static Uri QQMusicLyricsReferer = new Uri("https://y.qq.com/portal/player.html");
+
+        private static async Task<JsonObject> GetQQMusicResponse(string uri)
         {
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.UserAgent.TryParseAdd("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:22.0) Gecko/20100101 Firefox/22.0");
-                httpClientBuilder?.Invoke(client);
+                client.DefaultRequestHeaders.Referrer = QQMusicLyricsReferer;
                 var response = await client.GetAsync(new Uri(uri));
                 response.EnsureSuccessStatusCode();
                 string content = await response.Content.ReadAsStringAsync();

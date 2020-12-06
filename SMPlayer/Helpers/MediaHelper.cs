@@ -26,9 +26,13 @@ namespace SMPlayer
         {
             get => CurrentMusic == null ? 0d : Position / CurrentMusic.Duration;
         }
+        public static MediaPlaybackState PlaybackState
+        {
+            get => Player.PlaybackSession.PlaybackState;
+        }
         public static bool IsPlaying
         {
-            get => Player.PlaybackSession.PlaybackState == MediaPlaybackState.Playing;
+            get => PlaybackState == MediaPlaybackState.Playing;
         }
         public static MediaPlaybackList PlaybackList
         {

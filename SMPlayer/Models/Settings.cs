@@ -263,7 +263,7 @@ namespace SMPlayer.Models
                 return NamingError.EmptyOrWhiteSpace;
             if (newName == MenuFlyoutHelper.NowPlaying || newName == MenuFlyoutHelper.MyFavorites || Playlists.Any(p => p.Name == newName))
                 return NamingError.Used;
-            if (newName.Contains(Helper.StringConcatenationFlag) || newName.Contains("{0}"))
+            if (newName.Contains(TileHelper.StringConcatenationFlag) || newName.Contains("{0}"))
                 return NamingError.Special;
             if (newName.Length > PlaylistNameMaxLength)
                 return NamingError.TooLong;

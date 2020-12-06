@@ -223,6 +223,7 @@
     <Compile Include="Helpers\ClassHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\LyricsHelper.cs" />
+    <Compile Include="Helpers\TileHelper.cs" />
     <Compile Include="Helpers\ToastHelper.cs" />
     <Compile Include="Models\FullyObservableCollection.cs" />
     <Compile Include="Models\LoadingCache.cs" />

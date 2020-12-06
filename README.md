@@ -16,10 +16,6 @@ Go to Settings and set the Root Folder of your music files.
 # TO DO
 Improve search algorithm.
 
-Report bugs via email.
-
-Scrolling lyrics.
-
 Move music from folder to folder.
 
 SearchPage AddTo button for all search types.
@@ -35,6 +31,8 @@ Album properties.
 Improve shy header.
 
 Album art in NowPlayingFull.
+
+Search multiple lyrics choose one.
 
 # TO FIX
 Able to drag titlebar when loading.

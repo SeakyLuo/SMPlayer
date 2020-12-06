@@ -356,7 +356,7 @@ namespace SMPlayer
             MediaHelper.Player.PlaybackSession.PlaybackStateChanged += async (sender, args) =>
             {
                 // For F3 Support
-                await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     if (sender.PlaybackState == MediaPlaybackState.Playing)
                     {
@@ -460,7 +460,7 @@ namespace SMPlayer
                 }
                 try
                 {
-                    await Helper.UpdateTile(thumbnail, music);
+                    await TileHelper.UpdateTile(thumbnail, music);
                 }
                 catch (FileLoadException)
                 {
@@ -888,9 +888,12 @@ namespace SMPlayer
                 SetMusic(next);
                 if (MainTitleTextBlock.IsScrolling) MainTitleTextBlock.StopScrolling();
                 if (MainArtistTextBlock.IsScrolling) MainArtistTextBlock.StopScrolling();
-                ToastHelper.HideToast();
                 // Use current instead of next to avoid showing toast on app launch
-                if (current != null) ToastHelper.ShowToast(next);
+                if (current != null && (ToastHelper.ToastMusic != next || ToastHelper.ToastState != MediaHelper.PlaybackState))
+                {
+                    ToastHelper.HideToast();
+                    ToastHelper.ShowToast(next);
+                }
             });
         }
 

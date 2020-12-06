@@ -270,7 +270,7 @@ namespace SMPlayer.Models
         }
         public string GetAlbumNavigationString()
         {
-            return Album + Helper.StringConcatenationFlag + Artist;
+            return Album + TileHelper.StringConcatenationFlag + Artist;
         }
         int IComparable<Music>.CompareTo(Music other)
         {

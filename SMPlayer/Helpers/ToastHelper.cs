@@ -22,8 +22,8 @@ namespace SMPlayer.Helpers
         {
             Interval = TimeSpan.FromMilliseconds(10)
         };
-        private static Music ToastMusic;
-        private static MediaPlaybackState ToastState;
+        public static Music ToastMusic;
+        public static MediaPlaybackState ToastState;
 
         public static void Init()
         {
@@ -101,7 +101,7 @@ namespace SMPlayer.Helpers
             };
 
             // Create the toast notification
-            Toast = new ToastNotification(toastContent.GetXml())
+            ToastNotification Toast = new ToastNotification(toastContent.GetXml())
             {
                 Tag = toastTag,
                 Group = ToastGroup,
@@ -119,9 +119,11 @@ namespace SMPlayer.Helpers
             Toast.Data.Values["Lyrics"] = LyricsHelper.GetLyrics();
             Toast.Data.Values["MediaControlPosition"] = MediaHelper.Progress.ToString();
             Toast.Data.Values["MediaControlPositionTime"] = MusicDurationConverter.ToTime(MediaHelper.Position);
+            Toast.Dismissed += Toast_Dismissed;
             try
             {
                 toastNotifier.Show(Toast);
+                ToastHelper.Toast = Toast;
             }
             catch (Exception)
             {
@@ -131,7 +133,7 @@ namespace SMPlayer.Helpers
 
         public static void ShowToast(Music music)
         {
-            MediaPlaybackState playbackState = MediaHelper.Player.PlaybackSession.PlaybackState;
+            MediaPlaybackState playbackState = MediaHelper.PlaybackState;
             if (playbackState == MediaPlaybackState.Playing)
             {
                 ShowPauseToast(music);
@@ -184,11 +186,24 @@ namespace SMPlayer.Helpers
             try
             {
                 toastNotifier.Hide(Toast);
+                ClearCurrentToast();
             }
             catch (Exception)
             {
                 // 通知已经隐藏。
             }
+        }
+
+        private static void Toast_Dismissed(ToastNotification sender, ToastDismissedEventArgs args)
+        {
+            ClearCurrentToast();
+        }
+
+        private static void ClearCurrentToast()
+        {
+            Toast = null;
+            ToastMusic = null;
+            ToastState = MediaPlaybackState.None;
         }
     }
 }

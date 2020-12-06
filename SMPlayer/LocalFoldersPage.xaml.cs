@@ -252,9 +252,7 @@ namespace SMPlayer
             MediaHelper.SetMusicAndPlay(GetSelectedSongs());
         }
 
-        void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar)
-        {
-        }
+        void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar) { }
 
         void IMultiSelectListener.SelectAll(MultiSelectCommandBar commandBar)
         {

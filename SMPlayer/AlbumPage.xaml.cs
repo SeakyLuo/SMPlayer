@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarSymbols;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
@@ -50,8 +51,8 @@ namespace SMPlayer
                 playlist = (Playlist)targetAlbum;
             else if (targetAlbum is string albumText)
             {
-                int index = albumText.IndexOf(Helper.StringConcatenationFlag);
-                string albumName = albumText.Substring(0, index), albumArtist = albumText.Substring(index + Helper.StringConcatenationFlag.Length);
+                int index = albumText.IndexOf(TileHelper.StringConcatenationFlag);
+                string albumName = albumText.Substring(0, index), albumArtist = albumText.Substring(index + TileHelper.StringConcatenationFlag.Length);
                 playlist = new Playlist(albumName, SearchAlbumSongs(albumName, albumArtist));
                 AlbumPlaylistControl.SetPlaylistInfo(albumArtist);
             }
