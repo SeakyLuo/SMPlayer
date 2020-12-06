@@ -197,7 +197,7 @@ namespace SMPlayer.Models
                     string lyrics = await music.GetLyricsAsync();
                     if (string.IsNullOrEmpty(lyrics))
                     {
-                        await music.SaveLyricsAsync(await Controls.MusicLyricsControl.SearchLyrics(music));
+                        await music.SaveLyricsAsync(await LyricsHelper.SearchLyrics(music));
                     }
                 });
             }

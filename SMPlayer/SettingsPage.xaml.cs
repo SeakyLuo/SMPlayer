@@ -232,7 +232,7 @@ namespace SMPlayer
                     }
                     await Task.Run(async () =>
                     {
-                        lyrics = await Controls.MusicLyricsControl.SearchLyrics(music);
+                        lyrics = await LyricsHelper.SearchLyrics(music);
                         await music.SaveLyricsAsync(lyrics);
                     });
                 }
@@ -251,7 +251,7 @@ namespace SMPlayer
                     if (music == MediaHelper.CurrentMusic && skipped.Count > 1) continue;
                     await Task.Run(async () =>
                     {
-                        string lyrics = await Controls.MusicLyricsControl.SearchLyrics(music);
+                        string lyrics = await LyricsHelper.SearchLyrics(music);
                         await music.SaveLyricsAsync(lyrics);
                     });
                     skipped.Remove(music);

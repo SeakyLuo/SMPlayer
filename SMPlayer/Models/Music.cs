@@ -221,7 +221,7 @@ namespace SMPlayer.Models
             }
             catch (Exception)
             {
-                return null;
+                return await LyricsHelper.SearchLrcLyrics(this);
             }
         }
 
