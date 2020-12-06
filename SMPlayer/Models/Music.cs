@@ -216,7 +216,7 @@ namespace SMPlayer.Models
         {
             try
             {
-                var file = await StorageFile.GetFileFromPathAsync(Path.Substring(Path.LastIndexOf(".")) + "lrc");
+                var file = await StorageFile.GetFileFromPathAsync(Path.Substring(0, Path.LastIndexOf(".")) + ".lrc");
                 return await FileIO.ReadTextAsync(file);
             }
             catch (Exception)

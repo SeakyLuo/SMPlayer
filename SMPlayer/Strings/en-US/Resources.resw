@@ -961,7 +961,7 @@
     <value>Show lyrics in notification</value>
   </data>
   <data name="ShowLyricsInNotificationInfo.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Supports lrc-format lyrics with hundred-millisecond precision.</value>
+    <value>Supports reading lrc-format lyrics from file or music, and display with hundred-millisecond precision.</value>
   </data>
   <data name="Shuffle" xml:space="preserve">
     <value>Shuffle</value>

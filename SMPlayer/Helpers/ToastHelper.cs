@@ -116,7 +116,7 @@ namespace SMPlayer.Helpers
             {
                 Toast.ExpirationTime = DateTime.Now.AddSeconds(Math.Min(10, music.Duration));
             }
-            Toast.Data.Values["Lyrics"] = "";
+            Toast.Data.Values["Lyrics"] = LyricsHelper.GetLyrics();
             Toast.Data.Values["MediaControlPosition"] = MediaHelper.Progress.ToString();
             Toast.Data.Values["MediaControlPositionTime"] = MusicDurationConverter.ToTime(MediaHelper.Position);
             try

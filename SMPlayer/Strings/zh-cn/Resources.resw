@@ -958,7 +958,7 @@
     <value>在通知中显示歌词</value>
   </data>
   <data name="ShowLyricsInNotificationInfo.ToolTipService.ToolTip" xml:space="preserve">
-    <value>支持lrc格式歌词以百毫秒精度展示。</value>
+    <value>支持读取歌曲同名lrc文件歌词或歌曲内嵌lrc格式歌词，并以百毫秒精度展示。</value>
   </data>
   <data name="Shuffle" xml:space="preserve">
     <value>随机播放</value>

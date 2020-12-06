@@ -14,7 +14,7 @@ namespace SMPlayer.Helpers
 
         private static string Lyrics = "";
 
-        private static string CurrentLine = "";
+        private static string CurrentLine;
 
         private static string DisplayLine = "";
 
@@ -28,7 +28,7 @@ namespace SMPlayer.Helpers
         {
             CurrentMusic = null;
             Lyrics = "";
-            CurrentLine = "";
+            CurrentLine = null;
             CurrentIndex = -1;
             LyricsList = null;
             IsLrc = false;
@@ -50,7 +50,7 @@ namespace SMPlayer.Helpers
             else
             {
                 string lyrics = await music.GetLrcLyricsAsync();
-                if (lyrics == null)
+                if (string.IsNullOrEmpty(lyrics))
                 {
                     SetLyrics(music, await music.GetLyricsAsync());
                     IsLrc = (bool)(LyricsList?.Take(4).All(l => l.StartsWith("[")));
@@ -68,7 +68,7 @@ namespace SMPlayer.Helpers
             CurrentMusic = music;
             Lyrics = lyrics;
             CurrentIndex = 0;
-            CurrentLine = "";
+            CurrentLine = null;
             DisplayLine = "";
             LyricsList = lyrics?.Split('\n', '\r');
         }
@@ -91,13 +91,40 @@ namespace SMPlayer.Helpers
 
         private static string GetLrcLyrics()
         {
-            string time = TimeSpan.FromSeconds(MediaHelper.Position).ToString(@"\[mm\:ss\.f");
-            if (CurrentLine.StartsWith(time)) return DisplayLine;
-            int index = LyricsList.TakeLast(LyricsList.Length - CurrentIndex).FindIndex(l => l.StartsWith(time));
+            if (CurrentLine == null) return FindFirstLrcLyrics();
+            string time = ToTime(MediaHelper.Position);
+            if (CurrentLine.Contains(time)) return DisplayLine;
+            int index = LyricsList.FindIndex(l => l.Contains(time));
             if (index == -1) return CurrentLine.StartsWith("[") ? DisplayLine : null;
-            CurrentIndex += index;
+            CurrentIndex = index;
             CurrentLine = LyricsList[CurrentIndex];
-            return CurrentLine.Substring(CurrentLine.IndexOf("]") + 1);
+            return TrimTag(CurrentLine);
+        }
+
+        private static string FindFirstLrcLyrics()
+        {
+            double position = MediaHelper.Position;
+            while (position >= 0)
+            {
+                position -= 0.1;
+                string time = ToTime(position);
+                if (LyricsList.FirstOrDefault(l => l.Contains(time)) is string lyric)
+                {
+                    CurrentLine = lyric;
+                    return TrimTag(CurrentLine);
+                }
+            }
+            return null;
+        }
+
+        private static string ToTime(double position)
+        {
+            return TimeSpan.FromSeconds(position).ToString(@"\[mm\:ss\.f");
+        }
+
+        private static string TrimTag(string lyric)
+        {
+            return lyric.Substring(lyric.LastIndexOf("]") + 1);
         }
     }
 }
