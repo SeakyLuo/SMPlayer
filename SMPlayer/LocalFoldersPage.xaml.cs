@@ -282,5 +282,14 @@ namespace SMPlayer
             }
             return list;
         }
+
+        private async void GridFolderControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        {
+            if (sender.DataContext is GridFolderView data && !data.ThumbnailLoaded
+                && sender.IsPartiallyVisible(LocalFoldersGridView))
+            {
+                await data.SetThumbnailAsync();
+            }
+        }
     }
 }

@@ -21,8 +21,6 @@ namespace SMPlayer.Controls
 {
     public sealed partial class GridFolderControl : UserControl
     {
-        private bool ThumbanilNeedsLoading = false;
-
         public GridFolderControl()
         {
             this.InitializeComponent();
@@ -51,22 +49,10 @@ namespace SMPlayer.Controls
 
         private async void UserControl_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
         {
-            if (ThumbanilNeedsLoading = ImageHelper.NeedsLoading(sender, args))
+            if (sender.DataContext is GridFolderView data && !data.ThumbnailLoaded
+                && ImageHelper.NeedsLoading(sender, args))
             {
-                await (sender.DataContext as GridFolderView)?.SetThumbnailAsync();
-            }
-        }
-
-        private async void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
-        {
-            FrameworkElement parent = sender.Parent as FrameworkElement;
-            Rect elementBounds = parent.TransformToVisual(sender).TransformBounds(new Rect(0.0, 0.0, parent.ActualWidth, parent.ActualHeight));
-            Rect senderRect = new Rect(0.0, 0.0, sender.ActualWidth, sender.ActualHeight);
-            bool isPartiallyVisible = senderRect.Contains(new Point(elementBounds.Left, elementBounds.Top)) || senderRect.Contains(new Point(elementBounds.Right, elementBounds.Bottom));
-            bool isFullyVisible = senderRect.Contains(new Point(elementBounds.Left, elementBounds.Top)) && senderRect.Contains(new Point(elementBounds.Right, elementBounds.Bottom));
-            if (ThumbanilNeedsLoading)
-            {
-                await (sender.DataContext as GridFolderView)?.SetThumbnailAsync();
+                await data.SetThumbnailAsync();
             }
         }
     }

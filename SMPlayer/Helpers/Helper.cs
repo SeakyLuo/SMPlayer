@@ -11,6 +11,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources;
+using Windows.Foundation;
 using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
@@ -325,9 +326,26 @@ namespace SMPlayer
             return ThumbnailFolder;
         }
 
-        public static bool IsVisible()
+        public static bool IsFullyVisible(this FrameworkElement sender, FrameworkElement parent)
+        {
+            Rect rect = new Rect(0.0, 0.0, sender.ActualWidth, sender.ActualHeight);
+            Rect bounds = parent.TransformToVisual(sender).TransformBounds(new Rect(0.0, 0.0, parent.ActualWidth, parent.ActualHeight));
+            return rect.Contains(new Point(bounds.Left, bounds.Top)) && rect.Contains(new Point(bounds.Right, bounds.Bottom));
+        }
+
+        public static bool IsPartiallyVisible(this FrameworkElement sender, FrameworkElement parent)
+        {
+            Rect rect = new Rect(0.0, 0.0, sender.ActualWidth, sender.ActualHeight);
+            Rect bounds = parent.TransformToVisual(sender).TransformBounds(new Rect(0.0, 0.0, parent.ActualWidth, parent.ActualHeight));
+            return rect.Contains(new Point(bounds.Left, bounds.Top)) || rect.Contains(new Point(bounds.Right, bounds.Bottom));
+        }
+
+        public static bool ToBeVisible(this FrameworkElement sender, FrameworkElement parent)
         {
             return false;
+            //Rect rect = new Rect(0.0, 0.0, sender.ActualWidth, sender.ActualHeight);
+            //Rect bounds = parent.TransformToVisual(sender).TransformBounds(new Rect(0.0, 0.0, parent.ActualWidth, parent.ActualHeight));
+            //return rect.Contains(new Point(bounds.Left, bounds.Top)) || rect.Contains(new Point(bounds.Right, bounds.Bottom));
         }
     }
     public enum ExecutionStatus

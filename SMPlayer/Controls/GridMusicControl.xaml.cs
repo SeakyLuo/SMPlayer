@@ -192,9 +192,17 @@ namespace SMPlayer
             return removedItemIndex > -1;
         }
 
+        private async void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        {
+            if (sender.DataContext is GridMusicView data && !data.ThumbnailLoaded && sender.IsPartiallyVisible(MusicGridView))
+            {
+                await data.SetThumbnailAsync();
+            }
+        }
+
         private async void UserControl_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
         {
-            if (ImageHelper.NeedsLoading(sender, args))
+            if (sender.DataContext is GridMusicView data && !data.ThumbnailLoaded && ImageHelper.NeedsLoading(sender, args))
             {
                 await (sender.DataContext as GridMusicView).SetThumbnailAsync();
             }

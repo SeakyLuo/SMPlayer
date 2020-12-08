@@ -16,12 +16,13 @@ namespace SMPlayer.Models
             {
                 if (value == null) return;
                 thumbnail = value;
-                thumbnailLoaded = true;
+                ThumbnailLoaded = true;
                 OnPropertyChanged();
             }
         }
         private BitmapImage thumbnail = MusicImage.DefaultImage;
-        private bool thumbnailLoaded = false;
+        public bool ThumbnailLoaded { get; private set; } = false;
+        public bool IsThumbanilLoading { get; private set; } = false;
         public Music Source
         {
             get => source;
@@ -42,8 +43,11 @@ namespace SMPlayer.Models
         }
         public async Task SetThumbnailAsync()
         {
-            if (thumbnailLoaded) return;
+            if (IsThumbanilLoading) return;
+            IsThumbanilLoading = true;
             Thumbnail = await ImageHelper.LoadImage(Source);
+            IsThumbanilLoading = false;
+            ThumbnailLoaded = true;
         }
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {

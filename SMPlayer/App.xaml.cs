@@ -138,7 +138,7 @@ namespace SMPlayer
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            Helper.ResumeTile();
+            TileHelper.ResumeTile();
             ToastHelper.HideToast();
             Save();
             //TODO: 保存应用程序状态并停止任何后台活动

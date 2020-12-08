@@ -100,6 +100,11 @@ namespace SMPlayer.Helpers
             double position = MediaHelper.Position;
             string time = ToTime(position);
             if (CurrentLine != null && CurrentLine.Contains(time)) return DisplayLine;
+            if (LyricsList.Length == 1)
+            {
+                CurrentLine = LyricsList[0];
+                return TrimTag(CurrentLine);
+            }
             while (position >= 0)
             {
                 if (LyricsList.FirstOrDefault(l => l.Contains(time)) is string lyric)
@@ -110,7 +115,7 @@ namespace SMPlayer.Helpers
                 position -= 0.1;
                 time = ToTime(position);
             }
-            return CurrentLine.StartsWith("[") ? DisplayLine : null;
+            return CurrentLine != null && CurrentLine.StartsWith("[") ? DisplayLine : null;
         }
 
         private static string ToTime(double position)
