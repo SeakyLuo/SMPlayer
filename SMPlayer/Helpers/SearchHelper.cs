@@ -17,6 +17,7 @@ namespace SMPlayer.Helpers
                              .Select(group => new Playlist(group.Key, group) { Artist = group.Key });
             return SortArtists(list, keyword, criterion);
         }
+
         public static IEnumerable<AlbumView> SearchAlbums(IEnumerable<Music> source, string keyword, SortBy criterion)
         {
             var list = source.Where(m => IsTargetAlbum(m, keyword))
@@ -203,6 +204,78 @@ namespace SMPlayer.Helpers
         public static bool IsExact<T>(T item, string keyword, Func<T, string> selector)
         {
             return selector(item) == keyword;
+        }
+
+        public static async Task<SearchResult> Search(string keyword)
+        {
+            List<SearchResult> results = new List<SearchResult>();
+
+            Playlist artist = (await Task.Run(() => SearchArtists(MusicLibraryPage.AllSongs, keyword, SortBy.Artist)))?.FirstOrDefault();
+            results.Add(new SearchResult(SearchType.Artists, artist, EvaluateArtist(artist, keyword)));
+            Music music = (await Task.Run(() => SearchSongs(MusicLibraryPage.AllSongs, keyword, SortBy.Artist)))?.FirstOrDefault();
+            results.Add(new SearchResult(SearchType.Artists, artist, EvaluateMusic(music, keyword)));
+            AlbumView album = (await Task.Run(() => SearchAlbums(MusicLibraryPage.AllSongs, keyword, SortBy.Artist)))?.FirstOrDefault();
+            results.Add(new SearchResult(SearchType.Artists, album, EvaluateAlbum(album, keyword)));
+            GridFolderView folder = (await Task.Run(() => SearchFolders(Settings.settings.Tree, keyword, SortBy.Artist)))?.FirstOrDefault();
+            results.Add(new SearchResult(SearchType.Folders, folder, EvaluateFolder(folder, keyword)));
+            AlbumView playlist = (await Task.Run(() => SearchPlaylists(Settings.settings.Playlists, keyword, SortBy.Artist)))?.FirstOrDefault();
+            results.Add(new SearchResult(SearchType.Playlists, playlist, EvaluatePlaylist(playlist, keyword)));
+
+            results.Sort((r1, r2) => r2.Score - r1.Score);
+            return results[0];
+        }
+
+        public static int EvaluateArtist(Playlist item, string keyword)
+        {
+            if (item == null) return 0;
+            if (item.Name == keyword) return 98;
+            if (item.Name.Contains(keyword)) return 88;
+            return 0;
+        }
+        public static int EvaluateMusic(Music item, string keyword)
+        {
+            if (item == null) return 0;
+            if (item.Name == keyword) return 95;
+            if (item.Name.Contains(keyword)) return 85;
+            return 0;
+        }
+        public static int EvaluateAlbum(AlbumView item, string keyword)
+        {
+            if (item == null) return 0;
+            if (item.Name == keyword) return 99;
+            if (item.Name.Contains(keyword)) return 89;
+
+            return 0;
+        }
+        public static int EvaluateFolder(GridFolderView item, string keyword)
+        {
+            if (item == null) return 0;
+            if (item.Name == keyword) return 97;
+            if (item.Name.Contains(keyword)) return 87;
+
+            return 0;
+        }
+        public static int EvaluatePlaylist(AlbumView item, string keyword)
+        {
+            if (item == null) return 0;
+            if (item.Name == keyword) return 96;
+            if (item.Name.Contains(keyword)) return 86;
+
+            return 0;
+        }
+    }
+
+    public class SearchResult
+    {
+        public SearchType SearchType { get; set; }
+        public object Result { get; set; }
+        public int Score { get; set; }
+
+        public SearchResult(SearchType type, object result, int score)
+        {
+            SearchType = type;
+            Result = result;
+            Score = score;
         }
     }
 }

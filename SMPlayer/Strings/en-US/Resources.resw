@@ -816,6 +816,9 @@
   <data name="ReleaseNotesVersion.Text" xml:space="preserve">
     <value>Version: </value>
   </data>
+  <data name="ReleaseNotesVoiceAssistant.Text" xml:space="preserve">
+    <value>You can now play music via voice assistant. Notice: you can only say "play music/artist/album/folder/playlist".</value>
+  </data>
   <data name="ReminderComboItem.Content" xml:space="preserve">
     <value>Reminder</value>
   </data>
