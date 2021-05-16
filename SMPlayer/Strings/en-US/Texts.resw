@@ -153,8 +153,14 @@
   <data name="FoldersWithCount" xml:space="preserve">
     <value>Folders ({0})</value>
   </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
   <data name="NowPlaying" xml:space="preserve">
     <value>Now Playing</value>
+  </data>
+  <data name="Play/Pause" xml:space="preserve">
+    <value>Play/Pause</value>
   </data>
   <data name="Playlists" xml:space="preserve">
     <value>Playlists</value>

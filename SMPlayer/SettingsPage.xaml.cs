@@ -474,13 +474,13 @@ namespace SMPlayer
             LyricsHelper.ClearLyrics();
         }
 
-        private void NotificationModeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void NotificationModeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (NotificationModeComboBox.SelectedIndex < 0) return;
             Settings.settings.NotificationDisplay = SettingsEnum.NotificationDisplayModes[NotificationModeComboBox.SelectedIndex];
             if (Settings.settings.NotificationDisplay == NotificationDisplayMode.Reminder)
             {
-                ToastHelper.ShowToast();
+                await ToastHelper.ShowToast(MediaHelper.CurrentMusic, MediaHelper.PlaybackState);
             }
         }
 

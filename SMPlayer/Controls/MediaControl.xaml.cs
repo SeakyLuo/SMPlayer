@@ -356,19 +356,18 @@ namespace SMPlayer
             MediaHelper.Player.PlaybackSession.PlaybackStateChanged += async (sender, args) =>
             {
                 // For F3 Support
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
                     switch (sender.PlaybackState)
                     {
                         case MediaPlaybackState.Playing:
                             PlayMusic();
-                            ToastHelper.ShowPauseToast(MediaHelper.CurrentMusic);
                             break;
                         case MediaPlaybackState.Paused:
                             PauseMusic();
-                            ToastHelper.ShowPlayToast(MediaHelper.CurrentMusic);
                             break;
                     }
+                    await ToastHelper.ShowToast(MediaHelper.CurrentMusic, sender.PlaybackState);
                 });
             };
 
@@ -874,7 +873,7 @@ namespace SMPlayer
 
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+            await Dispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
             {
                 if (reason == MediaPlaybackItemChangedReason.EndOfStream)
                 {
@@ -890,9 +889,9 @@ namespace SMPlayer
                 if (MainTitleTextBlock.IsScrolling) MainTitleTextBlock.StopScrolling();
                 if (MainArtistTextBlock.IsScrolling) MainArtistTextBlock.StopScrolling();
                 // avoid showing toast on app launch
-                if (current != null)
+                if (reason != MediaPlaybackItemChangedReason.InitialItem)
                 {
-                    ToastHelper.ShowStateToast(next, MediaHelper.PlaybackState);
+                    await ToastHelper.ShowToast(next, MediaHelper.PlaybackState);
                 }
             });
         }
@@ -902,7 +901,7 @@ namespace SMPlayer
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 if (Settings.settings.Mode == PlayMode.Once)
-                    PlayButton.Content = "\uE768";
+                    PauseMusic();
                 MediaSlider.Value = 0;
                 ToastHelper.HideToast();
             });
