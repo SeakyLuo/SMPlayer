@@ -959,7 +959,7 @@
   </data>
   <data name="ShowLyricsInNotificationInfo.ToolTipService.ToolTip" xml:space="preserve">
     <value>支持lrc格式歌词，并以百毫秒精度展示。
-会以以下顺序读lrc歌词：本地音乐同名lrc文件、互联网、音乐内置歌词。</value>
+会以以下顺序读取lrc歌词：本地音乐同名lrc文件、互联网、音乐内置歌词。</value>
   </data>
   <data name="Shuffle" xml:space="preserve">
     <value>随机播放</value>

@@ -225,7 +225,7 @@
                         Content="Show Lyrics In Notification"
                         Style="{ThemeResource SettingCheckBoxStyle}"
                         Unchecked="ShowLyricsInNotificationCheckBox_Unchecked" />
-                    <FontIcon x:Uid="ShowLyricsInNotificationInfo" FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;" ToolTipService.ToolTip="hello" />
+                    <FontIcon x:Uid="ShowLyricsInNotificationInfo" FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;" />
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical">
