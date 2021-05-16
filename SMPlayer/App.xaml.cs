@@ -170,17 +170,11 @@ namespace SMPlayer
                             case "Next":
                                 MediaHelper.MoveNext();
                                 break;
-                            case "Play/Pause":
-                                if (MediaHelper.IsPlaying)
-                                {
-                                    MediaHelper.Pause();
-                                }
-                                else
-                                {
-                                    MediaHelper.Play();
-                                }
+                            case "Pause":
+                                MediaHelper.Pause();
                                 break;
-                            default:
+                            case "Play":
+                                MediaHelper.Play();
                                 break;
                         }
                     }
