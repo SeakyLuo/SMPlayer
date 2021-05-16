@@ -165,6 +165,9 @@
   <data name="ClickAgainToStopAddingLyrics" xml:space="preserve">
     <value>Click again to stop adding lyrics</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
   <data name="Comma" xml:space="preserve">
     <value>, </value>
   </data>
@@ -181,7 +184,7 @@
     <value>You are deleting "{0}" from your device.\nThis operation is not fully revertible.\nDo you want to continue?</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>There is an error.</value>
+    <value>Error occurs</value>
   </data>
   <data name="FailToGetThumbnail" xml:space="preserve">
     <value>Fail to get album art!</value>
@@ -200,6 +203,9 @@
   </data>
   <data name="GetLyricsFailed" xml:space="preserve">
     <value>Error getting lyrics, please try later</value>
+  </data>
+  <data name="GoToSettings" xml:space="preserve">
+    <value>Go to Settings</value>
   </data>
   <data name="HasBeenPlayed" xml:space="preserve">
     <value>"{0}" has been played {1} {2}.</value>
@@ -264,6 +270,9 @@
   <data name="NamingErrorUsed" xml:space="preserve">
     <value>This name has been used!</value>
   </data>
+  <data name="NeverMind" xml:space="preserve">
+    <value>Never Mind</value>
+  </data>
   <data name="Next" xml:space="preserve">
     <value>Next</value>
   </data>
@@ -279,6 +288,9 @@
   <data name="NoLyricsAvailable" xml:space="preserve">
     <value>No Lyrics Available</value>
   </data>
+  <data name="NoResult" xml:space="preserve">
+    <value>No result can be found!</value>
+  </data>
   <data name="NotImplemented" xml:space="preserve">
     <value>This feature is not implemented yet!</value>
   </data>
@@ -290,6 +302,12 @@
   </data>
   <data name="OpenBrowserSuccessful" xml:space="preserve">
     <value>Fail to find matching lyrics. Open a web browser instead.</value>
+  </data>
+  <data name="OpenSettingsAndTurnOnSpeechInput" xml:space="preserve">
+    <value>You need to open the system settings, and then turn on a switch under 'Get to know me'.</value>
+  </data>
+  <data name="OpenSettingsFailed" xml:space="preserve">
+    <value>Unable to open system settings!</value>
   </data>
   <data name="Pause" xml:space="preserve">
     <value>Pause</value>
@@ -414,6 +432,21 @@
   <data name="SearchResult" xml:space="preserve">
     <value>Search result of "{0}"</value>
   </data>
+  <data name="SearchResultAlbum" xml:space="preserve">
+    <value>Your request matches album “{0}”</value>
+  </data>
+  <data name="SearchResultArtist" xml:space="preserve">
+    <value>Your request matches artist “{0}”</value>
+  </data>
+  <data name="SearchResultFolder" xml:space="preserve">
+    <value>Your request matches folder “{0}”</value>
+  </data>
+  <data name="SearchResultMusic" xml:space="preserve">
+    <value>Your request matches music “{0}”</value>
+  </data>
+  <data name="SearchResultPlaylist" xml:space="preserve">
+    <value>Your request matches playlist “{0}”</value>
+  </data>
   <data name="SelectedItemsRemoved" xml:space="preserve">
     <value>Selected items have been removed!</value>
   </data>
@@ -485,6 +518,9 @@
   </data>
   <data name="UnableToLocateMusic" xml:space="preserve">
     <value>Currently unable to locate music.</value>
+  </data>
+  <data name="UnacceptedSpeechPrivacyPolicy" xml:space="preserve">
+    <value>The speech privacy policy was not accepted</value>
   </data>
   <data name="UnauthorizedAccessException" xml:space="preserve">
     <value>Authorization is needed to access {0}!</value>

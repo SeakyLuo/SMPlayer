@@ -816,6 +816,9 @@
   <data name="ReleaseNotesVersion.Text" xml:space="preserve">
     <value>版本：</value>
   </data>
+  <data name="ReleaseNotesVoiceAssistant.Text" xml:space="preserve">
+    <value>现在可以通过语音助手来播放歌曲。注意：目前仅支持说“播放歌曲/歌手/专辑/文件夹/播放列表”。</value>
+  </data>
   <data name="Remove From List" xml:space="preserve">
     <value>从列表中移除</value>
   </data>

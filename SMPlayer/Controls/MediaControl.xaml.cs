@@ -1033,25 +1033,20 @@ namespace SMPlayer
                 goto VoiceEnds;
             }
             IsSpeeching = true;
-            await speechRecognizer.CompileConstraintsAsync();
+            await speechRecognizer.CompileConstraintsAsync(); 
+            SpeechRecognitionResult speechRecognitionResult = null;
             try
             {
-                SpeechRecognitionResult speechRecognitionResult = await speechRecognizer.RecognizeWithUIAsync();
-                if (!IsSpeeching)
-                {
-                    VoiceAssistantHelper.HandleCommand(speechRecognitionResult.Text);
-                }
+                speechRecognitionResult = await speechRecognizer.RecognizeWithUIAsync();
             }
             catch (Exception)
             {
-                //privacyPolicyHResult
-                //The speech privacy policy was not accepted prior to attempting a speech recognition.
                 ContentDialog Dialog = new ContentDialog()
                 {
-                    Title = "The speech privacy policy was not accepted",
-                    Content = "You need to turn on a button called 'Get to know me'...",
-                    PrimaryButtonText = "Shut up",
-                    SecondaryButtonText = "Shut up and show me the setting"
+                    Title = Helper.LocalizeMessage("UnacceptedSpeechPrivacyPolicy"),
+                    Content = Helper.LocalizeMessage("OpenSettingsAndTurnOnSpeechInput"),
+                    PrimaryButtonText = Helper.LocalizeMessage("NeverMind"),
+                    SecondaryButtonText = Helper.LocalizeMessage("GoToSettings")
                 };
                 if (await Dialog.ShowAsync() == ContentDialogResult.Secondary)
                 {
@@ -1060,12 +1055,23 @@ namespace SMPlayer
                     {
                         await new ContentDialog()
                         {
-                            Title = "Oops! Something went wrong...",
-                            Content = "The settings app could not be opened.",
-                            PrimaryButtonText = "Shut your mouth up!"
+                            Title = Helper.LocalizeMessage("ErrorOccurs"),
+                            Content = Helper.LocalizeMessage("OpenSettingsFailed"),
+                            PrimaryButtonText = Helper.LocalizeMessage("Close"),
                         }.ShowAsync();
                     }
                 }
+            }
+            try
+            {
+                if (speechRecognitionResult != null)
+                {
+                    VoiceAssistantHelper.HandleCommand(speechRecognitionResult.Text);
+                }
+            }
+            catch (Exception)
+            {
+                Helper.ShowNotification("Error");
             }
         VoiceEnds:
             IsSpeeching = false;

@@ -165,6 +165,9 @@
   <data name="ClickAgainToStopAddingLyrics" xml:space="preserve">
     <value>再次点击来中止添加歌词</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
   <data name="Comma" xml:space="preserve">
     <value>，</value>
   </data>
@@ -200,6 +203,9 @@
   </data>
   <data name="GetLyricsFailed" xml:space="preserve">
     <value>获取歌词失败，请稍后再试</value>
+  </data>
+  <data name="GoToSettings" xml:space="preserve">
+    <value>前往设置</value>
   </data>
   <data name="HasBeenPlayed" xml:space="preserve">
     <value>《{0}》已经播放了{1}次。{2}</value>
@@ -264,6 +270,9 @@
   <data name="NamingErrorUsed" xml:space="preserve">
     <value>该名称已被使用！</value>
   </data>
+  <data name="NeverMind" xml:space="preserve">
+    <value>算了</value>
+  </data>
   <data name="Next" xml:space="preserve">
     <value>下一首</value>
   </data>
@@ -279,6 +288,9 @@
   <data name="NoLyricsAvailable" xml:space="preserve">
     <value>没有歌词</value>
   </data>
+  <data name="NoResult" xml:space="preserve">
+    <value>找不到结果</value>
+  </data>
   <data name="NotImplemented" xml:space="preserve">
     <value>暂时没有实现该功能！</value>
   </data>
@@ -290,6 +302,12 @@
   </data>
   <data name="OpenBrowserSuccessful" xml:space="preserve">
     <value>搜不到匹配歌词，已打开浏览器进行搜索</value>
+  </data>
+  <data name="OpenSettingsAndTurnOnSpeechInput" xml:space="preserve">
+    <value>你需要打开设置，并且打开“开始了解你”下的开关</value>
+  </data>
+  <data name="OpenSettingsFailed" xml:space="preserve">
+    <value>无法打开系统设置</value>
   </data>
   <data name="Pause" xml:space="preserve">
     <value>暂停</value>
@@ -414,6 +432,21 @@
   <data name="SearchResult" xml:space="preserve">
     <value>”{0}“的搜索结果</value>
   </data>
+  <data name="SearchResultAlbum" xml:space="preserve">
+    <value>找到匹配的专辑《{0}》</value>
+  </data>
+  <data name="SearchResultArtist" xml:space="preserve">
+    <value>找到匹配的歌手“{0}”</value>
+  </data>
+  <data name="SearchResultFolder" xml:space="preserve">
+    <value>找到匹配的文件夹“{0}”</value>
+  </data>
+  <data name="SearchResultMusic" xml:space="preserve">
+    <value>找到匹配的歌曲“{0}”</value>
+  </data>
+  <data name="SearchResultPlaylist" xml:space="preserve">
+    <value>找到匹配的播放列表“{0}”</value>
+  </data>
   <data name="SelectedItemsRemoved" xml:space="preserve">
     <value>选中项已被移除！</value>
   </data>
@@ -485,6 +518,9 @@
   </data>
   <data name="UnableToLocateMusic" xml:space="preserve">
     <value>暂时无法定位歌曲</value>
+  </data>
+  <data name="UnacceptedSpeechPrivacyPolicy" xml:space="preserve">
+    <value>尚未接受语音隐私政策</value>
   </data>
   <data name="UnauthorizedAccessException" xml:space="preserve">
     <value>没有权限访问路径{0}！</value>
