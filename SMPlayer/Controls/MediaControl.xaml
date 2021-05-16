@@ -125,6 +125,19 @@
                     </Button.KeyboardAccelerators>
                 </Button>
                 <Button
+                    x:Name="MainMediaControlVoiceAssistantButton"
+                    x:Uid="VoiceAssistantButton"
+                    Click="VoiceAssistantButton_Click"  
+                    Content="&#xE1D6;"
+                    Style="{StaticResource MediaControlButtonStyle}"
+                    Visibility="Collapsed" >
+                    <Button.Flyout>
+                        <Flyout x:Name="MainMediaControlVoiceAssistantButtonFlyout">
+                            <ProgressBar IsIndeterminate="True" />
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+                <Button
                     x:Name="MainMediaControlMoreButton"
                     x:Uid="MoreButton"
                     Content="&#xE712;"
@@ -365,6 +378,18 @@
                     </ToggleButton.KeyboardAccelerators>
                 </ToggleButton>
                 <Button
+                    x:Name="MainVoiceAssistantButton"
+                    x:Uid="VoiceAssistantButton"
+                    Click="VoiceAssistantButton_Click"  
+                    Content="&#xE1D6;"
+                    Style="{StaticResource MediaControlButtonStyle}" >
+                    <Button.Flyout>
+                        <Flyout x:Name="MainVoiceAssistantButtonFlyout">
+                            <ProgressBar IsIndeterminate="True" />
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+                <Button
                     x:Uid="MoreButton"
                     Width="36"
                     Height="36"
@@ -594,6 +619,18 @@
                                 <KeyboardAccelerator Key="1" Modifiers="Menu" />
                             </ToggleButton.KeyboardAccelerators>
                         </ToggleButton>
+                        <Button
+                            x:Name="FullVoiceAssistantButton"
+                            x:Uid="VoiceAssistantButton"
+                            Click="VoiceAssistantButton_Click"
+                            Content="&#xE1D6;"
+                            Style="{StaticResource DarkMediaControlButtonStyle}">
+                            <Button.Flyout>
+                                <Flyout x:Name="FullVoiceAssistantButtonFlyout">
+                                    <ProgressBar IsIndeterminate="True" />
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
                         <ToggleButton
                             x:Name="FullLikeToggleButton"
                             Click="LikeButton_Click"
@@ -603,8 +640,7 @@
                         <Button
                             x:Uid="MoreButton"
                             Content="&#xE712;"
-                            Style="{StaticResource DarkMediaControlButtonStyle}"
-                            ToolTipService.ToolTip="More">
+                            Style="{StaticResource DarkMediaControlButtonStyle}">
                             <Button.Flyout>
                                 <MenuFlyout Opening="FullMoreMenuFlyout_Opening">
                                     <MenuFlyoutItem
@@ -801,6 +837,12 @@
                         Visibility="Visible" />
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                         <Button
+                            x:Name="MiniVoiceAssistantButton"
+                            x:Uid="VoiceAssistantButton"
+                            Click="VoiceAssistantButton_Click"  
+                            Content="&#xE1D6;"
+                            Style="{StaticResource DarkMediaControlButtonStyle}" />
+                        <Button
                             x:Uid="MoreButton"
                             Content="&#xE712;"
                             Style="{StaticResource DarkMediaControlButtonStyle}">
@@ -954,6 +996,7 @@
                         <Setter Target="MainMediaSliderGrid.(Grid.ColumnSpan)" Value="3" />
                         <Setter Target="MainMediaSliderGrid.HorizontalAlignment" Value="Stretch" />
                         <Setter Target="MainMediaControlPanel.(Grid.Column)" Value="2" />
+                        <Setter Target="MainMediaControlVoiceAssistantButton.Visibility" Value="Visible" />
                         <Setter Target="MainMediaControlMoreButton.Visibility" Value="Visible" />
                         <Setter Target="MainTitleTextBlock.Margin" Value="10,5,5,0" />
                         <Setter Target="MainTitleTextBlock.FontSize" Value="20" />

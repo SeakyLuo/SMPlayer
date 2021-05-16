@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using Windows.Foundation;
 using Windows.Media.Playback;
+using Windows.Media.SpeechRecognition;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -192,7 +193,7 @@ namespace SMPlayer
                 switch (mode)
                 {
                     case MediaControlMode.Main:
-                        return MainMediaControlMoreButton.Visibility == Visibility.Visible ? MainMoreVolumeSlider : MainVolumeSlider;
+                        return IsMinimalMain ? MainMoreVolumeSlider : MainVolumeSlider;
                     case MediaControlMode.Full:
                         return FullVolumeSlider;
                     case MediaControlMode.Mini:
@@ -260,6 +261,23 @@ namespace SMPlayer
                         return MainRepeatOneButton;
                     case MediaControlMode.Full:
                         return FullRepeatOneButton;
+                    default:
+                        return null;
+                }
+            }
+        }
+        public Button VoiceAssistantButton
+        {
+            get
+            {
+                switch (mode)
+                {
+                    case MediaControlMode.Main:
+                        return IsMinimalMain ? MainMediaControlVoiceAssistantButton : MainVoiceAssistantButton;
+                    case MediaControlMode.Full:
+                        return FullVoiceAssistantButton;
+                    case MediaControlMode.Mini:
+                        return MainVoiceAssistantButton;
                     default:
                         return null;
                 }
@@ -337,6 +355,9 @@ namespace SMPlayer
         private static List<Action<Music, Music>> MusicModifiedListeners = new List<Action<Music, Music>>();
         private static List<IMusicRequestListener> MusicRequestListeners = new List<IMusicRequestListener>();
         private static bool inited = false;
+        private SpeechRecognizer speechRecognizer = new SpeechRecognizer(Helper.CurrentLanguage);
+        private volatile bool IsSpeeching = false;
+        private bool IsMinimalMain { get => MainMediaControlMoreButton.Visibility == Visibility.Visible; }
         private double MinimalLayoutWidth { get => (double) Resources["MinimalLayoutWidth"]; }
 
         public MediaControl()
@@ -1002,6 +1023,63 @@ namespace SMPlayer
         {
             MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.AllSongs.RandItems(100));
             MiniMoreFlyout.Hide();
+        }
+
+        private async void VoiceAssistantButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsSpeeching)
+            {
+                await speechRecognizer.StopRecognitionAsync();
+                goto VoiceEnds;
+            }
+            IsSpeeching = true;
+            await speechRecognizer.CompileConstraintsAsync();
+            try
+            {
+                SpeechRecognitionResult speechRecognitionResult = await speechRecognizer.RecognizeWithUIAsync();
+                if (!IsSpeeching)
+                {
+                    VoiceAssistantHelper.HandleCommand(speechRecognitionResult.Text);
+                }
+            }
+            catch (Exception)
+            {
+                //privacyPolicyHResult
+                //The speech privacy policy was not accepted prior to attempting a speech recognition.
+                ContentDialog Dialog = new ContentDialog()
+                {
+                    Title = "The speech privacy policy was not accepted",
+                    Content = "You need to turn on a button called 'Get to know me'...",
+                    PrimaryButtonText = "Shut up",
+                    SecondaryButtonText = "Shut up and show me the setting"
+                };
+                if (await Dialog.ShowAsync() == ContentDialogResult.Secondary)
+                {
+                    // https://stackoverflow.com/questions/42391526/exception-the-speech-privacy-policy-was-not-accepted-prior-to-attempting-a-spee
+                    if (!await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-speechtyping")))
+                    {
+                        await new ContentDialog()
+                        {
+                            Title = "Oops! Something went wrong...",
+                            Content = "The settings app could not be opened.",
+                            PrimaryButtonText = "Shut your mouth up!"
+                        }.ShowAsync();
+                    }
+                }
+            }
+        VoiceEnds:
+            IsSpeeching = false;
+            switch (mode)
+            {
+                case MediaControlMode.Main:
+                    (IsMinimalMain ? MainMediaControlVoiceAssistantButtonFlyout : MainVoiceAssistantButtonFlyout).Hide();
+                    break;
+                case MediaControlMode.Full:
+                    FullVoiceAssistantButtonFlyout.Hide();
+                    break;
+                case MediaControlMode.Mini:
+                    break;
+            }
         }
 
         public void MusicLiked(Music music, bool isFavorite)

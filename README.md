@@ -18,8 +18,6 @@ Improve search algorithm.
 
 Move music from folder to folder.
 
-SearchPage AddTo button for all search types.
-
 Improve editing album art by selecting a song in a dropdown with searching.
 
 Batch delete.

@@ -6,6 +6,8 @@ using System.Linq;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
+using Windows.ApplicationModel.VoiceCommands;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -96,6 +98,8 @@ namespace SMPlayer
             await AlbumsPage.Init();
             await RecentPage.Init();
             ToastHelper.Init();
+            //LaunchVoiceAssistant();
+
             foreach (var listener in LoadedListeners) listener.Invoke();
             Inited = true;
             // If background task is already registered, do nothing
@@ -200,6 +204,23 @@ namespace SMPlayer
         private void App_UnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
         {
             Helper.LogException(e.Exception);
+        }
+
+        protected override void OnActivated(IActivatedEventArgs args)
+        {
+            base.OnActivated(args);
+            if (args.Kind != ActivationKind.VoiceCommand)
+            {
+                return;
+            }
+            var commands = args as VoiceCommandActivatedEventArgs;
+            string command = commands.Result.RulePath[0];
+        }
+
+        private async void LaunchVoiceAssistant()
+        {
+            StorageFile commandSet = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx://VoiceAssistantCommandSet.xml"));
+            await VoiceCommandDefinitionManager.InstallCommandDefinitionsFromStorageFileAsync(commandSet);
         }
     }
 }

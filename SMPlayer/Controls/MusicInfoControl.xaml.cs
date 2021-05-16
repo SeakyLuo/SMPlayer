@@ -84,7 +84,7 @@ namespace SMPlayer.Controls
             {
                 PlayCountTextBlock.Text = music.PlayCount.ToString();
                 ClearPlayCountButton.Visibility = Visibility.Visible;
-                string times = Helper.CurrentLanguage.Contains("en") ? MusicDurationConverter.TryPlural("time", music.PlayCount) : "";
+                string times = Helper.CurrentLanguage.DisplayName.Contains("en") ? MusicDurationConverter.TryPlural("time", music.PlayCount) : "";
                 PlayCountTextBlock.SetToolTip(Helper.LocalizeMessage("HasBeenPlayed", music.Name, music.PlayCount, times));
             }
         }

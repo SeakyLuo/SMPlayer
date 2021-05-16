@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
+using Windows.Globalization;
 using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
@@ -34,6 +35,7 @@ namespace SMPlayer
 
         public static ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
         public static ResourceLoader MessageResourceLoader = ResourceLoader.GetForCurrentView("Messages");
+        public static Language CurrentLanguage = new Language(Windows.System.UserProfile.GlobalizationPreferences.Languages[0]);
         public static ResourceLoader TextResourceLoader = ResourceLoader.GetForCurrentView("Texts");
         public static string AppVersion
         {
@@ -234,10 +236,6 @@ namespace SMPlayer
         public static void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option)
         {
             GetMainPageContainer()?.ShowMultiSelectCommandBar(option);
-        }
-        public static string CurrentLanguage
-        {
-            get => new Windows.Globalization.Language(Windows.System.UserProfile.GlobalizationPreferences.Languages[0]).DisplayName;
         }
 
         public static string Localize(string resource)

@@ -1039,6 +1039,9 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="ViewAllButton.Label" xml:space="preserve">
     <value>View All</value>
   </data>
+  <data name="VoiceAssistantButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Awake Voice Assistant</value>
+  </data>
   <data name="VolumeButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Volume</value>
   </data>
