@@ -9,7 +9,7 @@
     mc:Ignorable="d">
 
     <ContentDialog.Resources>
-        <x:Double x:Key="MusicDialogPivotItemMinHeight">480</x:Double>
+        <x:Double x:Key="MusicDialogPivotItemMinHeight">600</x:Double>
     </ContentDialog.Resources>
 
     <Pivot x:Name="MusicDialogPivot">
@@ -41,7 +41,7 @@
             x:Name="AlbumArtItem"
             x:Uid="AlbumArtPivotItem"
             Header="Album Art">
-            <controls:AlbumArtControl x:Name="AlbumArtController" />
+            <controls:AlbumArtControl x:Name="AlbumArtController" MinHeight="{StaticResource MusicDialogPivotItemMinHeight}"/>
         </PivotItem>
     </Pivot>
 </ContentDialog>

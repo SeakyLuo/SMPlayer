@@ -26,6 +26,7 @@
                 Style="{StaticResource FontIconButtonStyle}" />
         </RelativePanel>
         <TextBlock Grid.Row="1" TextWrapping="WrapWholeWords">
+            <LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.4.6</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesShowLyricsInNotifications"/><LineBreak />
             2. <Run x:Uid="ReleaseNotesImportLyrics"/><LineBreak />

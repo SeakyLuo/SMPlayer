@@ -301,6 +301,11 @@ namespace SMPlayer
             else Settings.settings.LikeMusic(music);
         }
 
+        public void ScrollToTop()
+        {
+            ScrollToIndex(0);
+        }
+
         private int ScrollToMusicRequestedWhenUnloaded = -1;
 
         public async void ScrollToCurrentMusic(bool showNotification = false)

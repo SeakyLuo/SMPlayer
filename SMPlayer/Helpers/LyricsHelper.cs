@@ -11,11 +11,11 @@ using Windows.Data.Json;
 
 namespace SMPlayer.Helpers
 {
-    public class LyricsHelper
+    public static class LyricsHelper
     {
         private static Music CurrentMusic;
 
-        private static string Lyrics = "";
+        private static string CurrentLyrics = "";
 
         private static string CurrentLine;
 
@@ -28,20 +28,20 @@ namespace SMPlayer.Helpers
         public static void ClearLyrics()
         {
             CurrentMusic = null;
-            Lyrics = "";
+            CurrentLyrics = "";
             CurrentLine = null;
             LyricsList = null;
             IsLrc = false;
         }
 
-        public static void SetLyrics()
+        public static async Task SetLyrics()
         {
-            SetLyrics(MediaHelper.CurrentMusic);
+            await SetLyrics(MediaHelper.CurrentMusic);
         }
 
-        public static async void SetLyrics(Music music)
+        public static async Task SetLyrics(Music music)
         {
-            if (CurrentMusic == music && !string.IsNullOrEmpty(Lyrics))
+            if (CurrentMusic == music && !string.IsNullOrEmpty(CurrentLyrics))
                 return;
             if (music == null)
             {
@@ -52,21 +52,28 @@ namespace SMPlayer.Helpers
                 string lyrics = await music.GetLrcLyricsAsync();
                 if (string.IsNullOrEmpty(lyrics))
                 {
-                    SetLyrics(music, await music.GetLyricsAsync());
-                    IsLrc = (bool)(LyricsList?.Take(4).All(l => l.StartsWith("[")));
+                    lyrics = await music.GetLyricsAsync();
+                    lock (CurrentLyrics)
+                    {
+                        SetLyrics(music, lyrics);
+                        IsLrc = LyricsList != null && LyricsList.Take(4).All(l => l.StartsWith("["));
+                    }
                 }
                 else
                 {
-                    SetLyrics(music, lyrics);
-                    IsLrc = true;
+                    lock (CurrentLyrics)
+                    {
+                        SetLyrics(music, lyrics);
+                        IsLrc = true;
+                    }
                 }
             }
         }
 
-        public static void SetLyrics(Music music, string lyrics)
+        private static void SetLyrics(Music music, string lyrics)
         {
             CurrentMusic = music;
-            Lyrics = lyrics;
+            CurrentLyrics = lyrics;
             CurrentLine = null;
             DisplayLine = "";
             LyricsList = lyrics?.Split('\n', '\r');
@@ -74,7 +81,7 @@ namespace SMPlayer.Helpers
 
         public static string GetLyrics()
         {
-            if (string.IsNullOrEmpty(Lyrics)) return "";
+            if (string.IsNullOrEmpty(CurrentLyrics)) return "";
             try
             {
                 string lyric = IsLrc ? GetLrcLyrics() : null;
@@ -85,7 +92,7 @@ namespace SMPlayer.Helpers
                 }
                 if (!string.IsNullOrWhiteSpace(lyric))
                 {
-                    DisplayLine = lyric;
+                    DisplayLine = TrimTag(lyric);
                 }
             }
             catch (Exception e)

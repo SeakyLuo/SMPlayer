@@ -49,7 +49,12 @@ namespace SMPlayer
         private const string ExceptionLogFileNamePrefix = "ExceptionLog", LogFileNamePrefix = "Log";
 
         private static List<Music> NotFoundHistory = new List<Music>();
-        private static Random random = new Random();
+        private static readonly Random random = new Random();
+
+        public static void Print(string message, params object[] args)
+        {
+            Debug.WriteLine(message, args);
+        }
 
         public static void Log(string text)
         {

@@ -34,6 +34,8 @@ Album art in NowPlayingFull.
 
 Search multiple lyrics choose one.
 
+Improve recent music month.
+
 # TO FIX
 Able to drag titlebar when loading.
 

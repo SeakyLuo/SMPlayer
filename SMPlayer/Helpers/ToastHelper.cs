@@ -15,25 +15,21 @@ namespace SMPlayer.Helpers
     {
         public const string ToastTaskName = "ToastBackgroundTask", ToastTagPaused = "SMPlayerMediaToastTagPaused", ToastTagPlaying = "SMPlayerMediaToastTagPlaying", ToastGroup = "SMPlayerMediaToastGroup";
 
-        public static ToastNotification Toast;
-        public static ToastNotifier Notifier = ToastNotificationManager.CreateToastNotifier();
-        public static ToastAudio SlientToast = new ToastAudio() { Silent = true };
+        private static ToastAudio SlientToast = new ToastAudio() { Silent = true };
         private static DispatcherTimer Timer = new DispatcherTimer()
         {
             Interval = TimeSpan.FromMilliseconds(10)
         };
-        public static Music ToastMusic;
-        public static MediaPlaybackState ToastState;
+        private static Dictionary<ToastKey, ToastNotification> CurrentToastMap = new Dictionary<ToastKey, ToastNotification>();
+        private static ToastNotifier Notifier = ToastNotificationManager.CreateToastNotifier();
 
         public static void Init()
         {
-            Timer.Tick += Tick;
+            Timer.Tick += (sender, e) =>
+            {
+                UpdateToast();
+            };
             Timer.Start();
-        }
-
-        private static void Tick(object sender, object e)
-        {
-            UpdateToast();
         }
 
         private static ToastButton BuildToastButton(string text)
@@ -44,28 +40,44 @@ namespace SMPlayer.Helpers
             };
         }
 
-        private static void ShowToast(Music music, MediaPlaybackState state)
+        private static async void ShowToast(Music music, MediaPlaybackState state)
         {
+            Helper.Print("show toast, music: {0}, state: {1}", music.Name, state);
             if (!App.Inited) return;
-            if (music == null || Settings.settings.NotificationSend == NotificationSendMode.Never) return;
+            if (music == null || Settings.settings.NotificationSend == NotificationSendMode.Never
+                              || GetToast(music, state) != null) return;
             NotificationDisplayMode display = Settings.settings.NotificationDisplay;
             if (Window.Current.Visible && (display == NotificationDisplayMode.Normal || display == NotificationDisplayMode.Quick))
                 return;
+            ToastNotification toast = await BuildToast(music, state, display);
+            if (toast == null) return;
+            lock (CurrentToastMap)
+            {
+                if (!AddToast(music, state, toast))
+                {
+                    return;
+                }
+                try
+                {
+                    Notifier.Show(toast);
+                }
+                catch (Exception)
+                {
+                    // 通知已发布
+                }
+            }
+        }
 
-            ToastMusic = music;
-            ToastState = state;
-
+        private static ToastContent BuildToastContent(Music music, MediaPlaybackState state, NotificationDisplayMode display)
+        {
             ToastButton controlButton = null;
-            string toastTag = "";
             switch (state)
             {
                 case MediaPlaybackState.Paused:
                     controlButton = BuildToastButton("Play");
-                    toastTag = ToastTagPlaying;
                     break;
                 case MediaPlaybackState.Playing:
                     controlButton = BuildToastButton("Pause");
-                    toastTag = ToastTagPaused;
                     break;
             }
             var toastContent = new ToastContent()
@@ -99,9 +111,27 @@ namespace SMPlayer.Helpers
                 Audio = SlientToast,
                 Scenario = display == NotificationDisplayMode.Reminder || state == MediaPlaybackState.Paused ? ToastScenario.Reminder : ToastScenario.Default
             };
+            return toastContent;
+        }
 
+        private static async Task<ToastNotification> BuildToast(Music music, MediaPlaybackState state, NotificationDisplayMode display)
+        {
+            string toastTag;
+            switch (state)
+            {
+                case MediaPlaybackState.Paused:
+                    toastTag = ToastTagPlaying;
+                    break;
+                case MediaPlaybackState.Playing:
+                    toastTag = ToastTagPaused;
+                    break;
+                default:
+                    return null;
+            }
+
+            var toastContent = BuildToastContent(music, state, display);
             // Create the toast notification
-            ToastNotification Toast = new ToastNotification(toastContent.GetXml())
+            ToastNotification toast = new ToastNotification(toastContent.GetXml())
             {
                 Tag = toastTag,
                 Group = ToastGroup,
@@ -110,36 +140,29 @@ namespace SMPlayer.Helpers
             };
             if (Settings.settings.ShowLyricsInNotification)
             {
-                LyricsHelper.SetLyrics();
+                await LyricsHelper.SetLyrics();
+                toast.Data.Values["Lyrics"] = LyricsHelper.GetLyrics();
             }
             if (display == NotificationDisplayMode.Quick)
             {
-                Toast.ExpirationTime = DateTime.Now.AddSeconds(Math.Min(10, music.Duration));
+                toast.ExpirationTime = DateTime.Now.AddSeconds(Math.Min(10, music.Duration));
             }
-            Toast.Data.Values["Lyrics"] = LyricsHelper.GetLyrics();
-            Toast.Data.Values["MediaControlPosition"] = MediaHelper.Progress.ToString();
-            Toast.Data.Values["MediaControlPositionTime"] = MusicDurationConverter.ToTime(MediaHelper.Position);
-            try
-            {
-                Notifier.Show(Toast);
-                ToastHelper.Toast = Toast;
-            }
-            catch (Exception)
-            {
-                // 通知已发布
-            }
+            toast.Dismissed += (sender, args) => HideToast();
+            toast.Data.Values["MediaControlPosition"] = MediaHelper.Progress.ToString();
+            toast.Data.Values["MediaControlPositionTime"] = MusicDurationConverter.ToTime(MediaHelper.Position);
+            return toast;
         }
 
         public static void ShowToast(Music music)
         {
-            MediaPlaybackState playbackState = MediaHelper.PlaybackState;
-            if (playbackState == MediaPlaybackState.Playing)
+            switch (MediaHelper.PlaybackState)
             {
-                ShowPauseToast(music);
-            }
-            else if (playbackState == MediaPlaybackState.Paused)
-            {
-                ShowPlayToast(music);
+                case MediaPlaybackState.Playing:
+                    ShowPauseToast(music);
+                    break;
+                case MediaPlaybackState.Paused:
+                    ShowPlayToast(music);
+                    break;
             }
         }
 
@@ -158,16 +181,18 @@ namespace SMPlayer.Helpers
             ShowStateToast(music, MediaPlaybackState.Playing);
         }
 
-        private static void ShowStateToast(Music music, MediaPlaybackState state)
+        public static void ShowStateToast(Music music, MediaPlaybackState state)
         {
-            if (ToastMusic == music && ToastState == state) return;
+            if (GetToast(music, state) != null) return;
             HideToast();
             ShowToast(music, state);
         }
 
-        public static void UpdateToast()
+        private static void UpdateToast()
         {
-            if (Toast == null || !MediaHelper.IsPlaying) return;
+            if (!MediaHelper.IsPlaying || CurrentToastMap.Count == 0) return;
+            ToastNotification toast = GetToast(MediaHelper.CurrentMusic, MediaPlaybackState.Playing);
+            if (toast == null) return;
             // Create NotificationData and make sure the sequence number is incremented
             // since last update, or assign 0 for updating regardless of order
             var data = new NotificationData { SequenceNumber = 0 };
@@ -179,24 +204,59 @@ namespace SMPlayer.Helpers
             Notifier.Update(data, ToastTagPaused, ToastGroup);
         }
 
-        public static void HideToast()
+        private static bool AddToast(Music music, MediaPlaybackState state, ToastNotification toast)
         {
-            if (Toast == null) return;
-            try
-            {
-                Notifier.Hide(Toast);
-                //ClearCurrentToast();
-            }
-            catch (Exception)
-            {
-                // 通知已经隐藏。
-            }
+            return CurrentToastMap.TryAdd(new ToastKey { Music = music, State = state }, toast);
         }
 
-        private static void ClearCurrentToast()
+        private static ToastNotification GetToast(Music music, MediaPlaybackState state)
         {
-            ToastMusic = null;
-            ToastState = MediaPlaybackState.None;
+            return CurrentToastMap.GetValueOrDefault(new ToastKey { Music = music, State = state });
+        }
+
+        public static void HideToast()
+        {
+            lock (CurrentToastMap)
+            {
+                foreach (var e in CurrentToastMap)
+                {
+                    try
+                    {
+                        Notifier.Hide(e.Value);
+                        Helper.Print("hide toast, music: {0}, state: {1}", e.Key.Music.Name, e.Key.State);
+                    }
+                    catch (Exception)
+                    {
+                        // 通知已经隐藏。
+                    }
+                }
+                CurrentToastMap.Clear();
+            }
+        }
+    }
+
+    class ToastKey
+    {
+        public Music Music { get; set; }
+        public MediaPlaybackState State { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            ToastKey key = (ToastKey)obj;
+            return key != null && Music.Equals(key.Music) && State == key.State;
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = 1763106858;
+            hashCode = hashCode * -1521134295 + EqualityComparer<Music>.Default.GetHashCode(Music);
+            hashCode = hashCode * -1521134295 + State.GetHashCode();
+            return hashCode;
+        }
+
+        public override string ToString()
+        {
+            return $"ToastKey[Music={Music?.Name},State={State}]";
         }
     }
 }

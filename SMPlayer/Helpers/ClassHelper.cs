@@ -80,7 +80,11 @@ namespace SMPlayer
         }
         public static void Print<T>(this IEnumerable<T> list)
         {
-            Debug.WriteLine($"[{string.Join(", ", list.Select(i => i.ToString()))}]");
+            Debug.WriteLine(JoinIntoString(list));
+        }
+        public static string JoinIntoString<T>(this IEnumerable<T> list)
+        {
+            return $"[{string.Join(", ", list.Select(i => i.ToString()))}]";
         }
         public static void AddOrMoveToTheFirst<T>(this Collection<T> list, T item)
         {

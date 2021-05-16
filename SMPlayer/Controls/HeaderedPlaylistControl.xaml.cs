@@ -222,6 +222,11 @@ namespace SMPlayer
             MainPage.Instance.ShowMultiSelectCommandBar();
         }
 
+        public void ScrollToTop()
+        {
+            HeaderedPlaylistController.ScrollToTop();
+        }
+
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>

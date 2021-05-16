@@ -462,10 +462,10 @@ namespace SMPlayer
             IsProcessing = false;
         }
 
-        private void ShowLyricsInNotificationCheckBox_Checked(object sender, RoutedEventArgs e)
+        private async void ShowLyricsInNotificationCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             Settings.settings.ShowLyricsInNotification = true;
-            LyricsHelper.SetLyrics();
+            await LyricsHelper.SetLyrics();
         }
 
         private void ShowLyricsInNotificationCheckBox_Unchecked(object sender, RoutedEventArgs e)
