@@ -47,6 +47,7 @@
                     <StackPanel
                         Background="Transparent"
                         Orientation="Horizontal"
+                        Tapped="TabHeader_Tapped"
                         ToolTipService.ToolTip="{x:Bind Name, Mode=OneWay}">
                         <StackPanel.ContextFlyout>
                             <MenuFlyout>

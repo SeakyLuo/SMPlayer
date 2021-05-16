@@ -1,6 +1,7 @@
 ﻿using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -48,9 +49,10 @@ namespace SMPlayer.Controls
 
         private async void UserControl_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
         {
-            if (ImageHelper.NeedsLoading(sender, args))
+            if (sender.DataContext is GridFolderView data && !data.ThumbnailLoaded
+                && ImageHelper.NeedsLoading(sender, args))
             {
-                await (sender.DataContext as GridFolderView)?.SetThumbnailAsync();
+                await data.SetThumbnailAsync();
             }
         }
     }

@@ -83,7 +83,7 @@ namespace SMPlayer
             ShuffleButton.IsEnabled = playlist.Count != 0;
             RenameButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
             DeleteButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
-            SetPinState(Windows.UI.StartScreen.SecondaryTile.Exists(Helper.FormatTileId(playlist, IsPlaylist)));
+            SetPinState(Windows.UI.StartScreen.SecondaryTile.Exists(TileHelper.FormatTileId(playlist, IsPlaylist)));
             if (playlist.DisplayItem == null)
             {
                 await playlist.SetDisplayItemAsync();
@@ -180,7 +180,7 @@ namespace SMPlayer
 
         private async void PinToStart_Click(object sender, RoutedEventArgs e)
         {
-            SetPinState(await Helper.PinToStartAsync(CurrentPlaylist, IsPlaylist));
+            SetPinState(await TileHelper.PinToStartAsync(CurrentPlaylist, IsPlaylist));
         }
 
         public void SetPinState(bool isPinned)
@@ -220,6 +220,11 @@ namespace SMPlayer
         {
             HeaderedPlaylistController.SelectionMode = ListViewSelectionMode.Multiple;
             MainPage.Instance.ShowMultiSelectCommandBar();
+        }
+
+        public void ScrollToTop()
+        {
+            HeaderedPlaylistController.ScrollToTop();
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)

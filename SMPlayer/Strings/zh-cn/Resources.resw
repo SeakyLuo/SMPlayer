@@ -174,9 +174,6 @@
   <data name="AllComboItem.Content" xml:space="preserve">
     <value>全部</value>
   </data>
-  <data name="AlwaysShownComboItem.Content" xml:space="preserve">
-    <value>一直显示</value>
-  </data>
   <data name="AppDisplayName" xml:space="preserve">
     <value>简音播放器</value>
   </data>
@@ -212,6 +209,9 @@
   </data>
   <data name="AutoPlayCheckBox.Content" xml:space="preserve">
     <value>打开应用后自动播放</value>
+  </data>
+  <data name="AutoScrollLyricsCheckBox.Content" xml:space="preserve">
+    <value>歌曲播放时自动滚动歌词</value>
   </data>
   <data name="BackButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>返回</value>
@@ -412,7 +412,7 @@
     <value>转为网格模式</value>
   </data>
   <data name="HideMultiSelectCommandBarCheckBox.Content" xml:space="preserve">
-    <value>在操作后隐藏多选命令条</value>
+    <value>在操作后隐藏多选命令栏</value>
   </data>
   <data name="hour" xml:space="preserve">
     <value>小时</value>
@@ -422,6 +422,9 @@
   </data>
   <data name="ImportDataButton.Content" xml:space="preserve">
     <value>导入数据</value>
+  </data>
+  <data name="ImportLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>导入歌词</value>
   </data>
   <data name="KeepRecentCheckBox.Content" xml:space="preserve">
     <value>仅保留最近播放的100项而不是全部</value>
@@ -461,6 +464,9 @@
   </data>
   <data name="LyricsMenuItem.Text" xml:space="preserve">
     <value>显示歌词</value>
+  </data>
+  <data name="LyricsModeComboItem.Content" xml:space="preserve">
+    <value>歌词模式</value>
   </data>
   <data name="LyricsPivotItem.Header" xml:space="preserve">
     <value>歌词</value>
@@ -540,7 +546,7 @@
   <data name="MyFavoritesItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>我喜欢的音乐</value>
   </data>
-  <data name="NeverItem.Content" xml:space="preserve">
+  <data name="NeverComboBoxItem.Content" xml:space="preserve">
     <value>永不显示</value>
   </data>
   <data name="New Playlist" xml:space="preserve">
@@ -560,6 +566,30 @@
   </data>
   <data name="NoResultTextBlock.Text" xml:space="preserve">
     <value>找不到结果，请检查您的拼写。</value>
+  </data>
+  <data name="NotificationModeComboBoxTextBlock.Text" xml:space="preserve">
+    <value>通知模式：</value>
+  </data>
+  <data name="NotificationModeNormalComboItem.Content" xml:space="preserve">
+    <value>标准</value>
+  </data>
+  <data name="NotificationModeNormalComboItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>窗口不可见时会发送通知</value>
+  </data>
+  <data name="NotificationModeQuickComboItem.Content" xml:space="preserve">
+    <value>快速</value>
+  </data>
+  <data name="NotificationModeQuickComboItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>窗口不可见时会发送通知，通知会在几秒后消失</value>
+  </data>
+  <data name="NotificationModeReminderComboItem.Content" xml:space="preserve">
+    <value>提醒</value>
+  </data>
+  <data name="NotificationModeReminderComboItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>通知将一直可见</value>
+  </data>
+  <data name="NotificationSendComboBoxTextBlock.Text" xml:space="preserve">
+    <value>发送通知：</value>
   </data>
   <data name="NotificationTextBlock.Text" xml:space="preserve">
     <value>通知</value>
@@ -741,6 +771,9 @@
   <data name="ReleaseNotesHistoryUpdates.Text" xml:space="preserve">
     <value>历史更新</value>
   </data>
+  <data name="ReleaseNotesImportLyrics.Text" xml:space="preserve">
+    <value>支持从txt、lrc、mp3文件中导入歌词。</value>
+  </data>
   <data name="ReleaseNotesImproveMultiSelect.Text" xml:space="preserve">
     <value>优化了多选。</value>
   </data>
@@ -750,17 +783,26 @@
   <data name="ReleaseNotesIntroduceReleaseNotes.Text" xml:space="preserve">
     <value>添加了更新日志，你可以在设置页面再次查看。</value>
   </data>
+  <data name="ReleaseNotesNowPlayingHighlight.Text" xml:space="preserve">
+    <value>修复了正在播放重名歌曲的高亮问题。</value>
+  </data>
   <data name="ReleaseNotesOpenWithSMPlayer.Text" xml:space="preserve">
-    <value>支持用简音播放器播放。</value>
+    <value>支持用简音播放器打开音乐文件。</value>
   </data>
   <data name="ReleaseNotesPlayNext.Text" xml:space="preserve">
     <value>右键菜单添加了“下一首播放”，移除了“移到最前”。</value>
+  </data>
+  <data name="ReleaseNotesPlayWithSMPlayer.Text" xml:space="preserve">
+    <value>支持用简音播放器播放音乐文件。</value>
   </data>
   <data name="ReleaseNotesSearchPageAddAllToButton.Text" xml:space="preserve">
     <value>搜索页面有了“添加全部到”按钮。</value>
   </data>
   <data name="ReleaseNotesShowCount.Text" xml:space="preserve">
-    <value>现在有多个页面会显示列表项总数了。</value>
+    <value>部分页面会显示列表项总数了。</value>
+  </data>
+  <data name="ReleaseNotesShowLyricsInNotifications.Text" xml:space="preserve">
+    <value>现已支持在通知中显示歌词。</value>
   </data>
   <data name="ReleaseNotesSortByDateAdded.Text" xml:space="preserve">
     <value>通过添加日期搜索。</value>
@@ -781,9 +823,6 @@
     <value>从播放列表中移除</value>
   </data>
   <data name="RemoveAppButton.Label" xml:space="preserve">
-    <value>从列表中移除</value>
-  </data>
-  <data name="RemoveFromlist" xml:space="preserve">
     <value>从列表中移除</value>
   </data>
   <data name="RemoveSwipeItem.Text" xml:space="preserve">
@@ -885,6 +924,9 @@
   <data name="SelectArtistTextBlock.Text" xml:space="preserve">
     <value>在左侧选择一位歌手</value>
   </data>
+  <data name="SendNotificationComboBox.Content" xml:space="preserve">
+    <value>发送通知：</value>
+  </data>
   <data name="Set As Favorite" xml:space="preserve">
     <value>设为喜欢</value>
   </data>
@@ -911,6 +953,13 @@
   </data>
   <data name="ShowInExplorerButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>在本地中显示</value>
+  </data>
+  <data name="ShowLyricsInNotificationCheckBox.Content" xml:space="preserve">
+    <value>在通知中显示歌词</value>
+  </data>
+  <data name="ShowLyricsInNotificationInfo.ToolTipService.ToolTip" xml:space="preserve">
+    <value>支持lrc格式歌词，并以百毫秒精度展示。
+会以以下顺序读取lrc歌词：本地音乐同名lrc文件、互联网、音乐内置歌词。</value>
   </data>
   <data name="Shuffle" xml:space="preserve">
     <value>随机播放</value>

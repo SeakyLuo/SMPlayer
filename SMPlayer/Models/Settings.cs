@@ -26,7 +26,8 @@ namespace SMPlayer.Models
         public double Volume { get; set; } = 50.0d;
         public bool IsNavigationCollapsed { get; set; } = true;
         public Color ThemeColor { get; set; } = (Color)Windows.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(typeof(Color), "#0078D7");
-        public ShowToast Toast { get; set; } = ShowToast.Always;
+        public NotificationSendMode NotificationSend { get; set; } = NotificationSendMode.MusicChanged;
+        public NotificationDisplayMode NotificationDisplay { get; set; } = NotificationDisplayMode.Normal;
         public string LastPage { get; set; } = "";
         public List<Playlist> Playlists { get; set; } = new List<Playlist>();
         public string LastPlaylist { get; set; } = "";
@@ -45,6 +46,7 @@ namespace SMPlayer.Models
         public SortBy AlbumsCriterion { get; set; } = SortBy.Default;
         public bool HideMultiSelectCommandBarAfterOperation { get; set; } = true;
         public bool ShowCount { get; set; } = true;
+        public bool ShowLyricsInNotification { get; set; } = false;
         public ObservableCollection<string> RecentSearches = new ObservableCollection<string>();
 
         public SortBy SearchArtistsCriterion { get; set; } = SortBy.Default;
@@ -195,7 +197,7 @@ namespace SMPlayer.Models
                     string lyrics = await music.GetLyricsAsync();
                     if (string.IsNullOrEmpty(lyrics))
                     {
-                        await music.SaveLyricsAsync(await Controls.MusicLyricsControl.SearchLyrics(music));
+                        await music.SaveLyricsAsync(await LyricsHelper.SearchLyrics(music));
                     }
                 });
             }
@@ -261,7 +263,7 @@ namespace SMPlayer.Models
                 return NamingError.EmptyOrWhiteSpace;
             if (newName == MenuFlyoutHelper.NowPlaying || newName == MenuFlyoutHelper.MyFavorites || Playlists.Any(p => p.Name == newName))
                 return NamingError.Used;
-            if (newName.Contains(Helper.StringConcatenationFlag) || newName.Contains("{0}"))
+            if (newName.Contains(TileHelper.StringConcatenationFlag) || newName.Contains("{0}"))
                 return NamingError.Special;
             if (newName.Length > PlaylistNameMaxLength)
                 return NamingError.TooLong;

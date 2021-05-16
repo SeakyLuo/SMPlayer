@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Timers;
 
 namespace SMPlayer
@@ -12,6 +13,7 @@ namespace SMPlayer
         public Func<K, V> Load { private get ; set; }
         private readonly Dictionary<K, CacheValue<V>> dict = new Dictionary<K, CacheValue<V>>();
         private readonly Timer timer = new Timer();
+
         public LoadingCache(long timeOfExpiration, TimeUnit unit)
         {
             this.TimeOfExpiration = timeOfExpiration;
@@ -73,16 +75,14 @@ namespace SMPlayer
         }
         private void RemoveLRU()
         {
+            MaxHeap<long> maxHeap = new MaxHeap<long>(dict.Values.Select(v => v.TimeOfLastAccessed))
+            {
+                MaxItems = 50
+            };
             List<K> keys = new List<K>();
-            long time = long.MaxValue;
             foreach (KeyValuePair<K, CacheValue<V>> pair in dict)
             {
-                if (pair.Value.TimeOfLastAccessed < time)
-                {
-                    keys.Clear();
-                    keys.Add(pair.Key);
-                }
-                else if (pair.Value.TimeOfLastAccessed == time)
+                if (maxHeap.Contains(pair.Value.TimeOfLastAccessed))
                 {
                     keys.Add(pair.Key);
                 }
@@ -136,5 +136,46 @@ namespace SMPlayer
     public enum TimeUnit
     {
         Day, Hour, Minute, Second, Millisecond
+    }
+
+    public class MaxHeap<T> where T : IComparable
+    {
+        public int MaxItems { get; set; } = 1;
+        private List<T> list = new List<T>();
+
+        public MaxHeap(params T[] input)
+        {
+            foreach (T item in input)
+            {
+                Add(item);
+            }
+        }
+
+        public MaxHeap(IEnumerable<T> input)
+        {
+            foreach (T item in input)
+            {
+                Add(item);
+            }
+        }
+
+        public void Add(T item)
+        {
+            if (list.Count > 0 && item.CompareTo(list[0]) <= 0)
+            {
+                return;
+            }
+            if (list.Count == MaxItems)
+            {
+                list.RemoveAt(0);
+            }
+            int index = list.FindSortedListInsertIndex(item);
+            list.Insert(index, item);
+        }
+
+        public bool Contains(T item)
+        {
+            return list.Contains(item);
+        }
     }
 }

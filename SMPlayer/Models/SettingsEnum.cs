@@ -2,6 +2,12 @@
 
 namespace SMPlayer.Models
 {
+    public static class SettingsEnum
+    {
+        public static NotificationDisplayMode[] NotificationDisplayModes = { NotificationDisplayMode.Reminder, NotificationDisplayMode.Normal, NotificationDisplayMode.Quick };
+        public static NotificationSendMode[] NotificationSendModes = { NotificationSendMode.MusicChanged, NotificationSendMode.Never };
+    }
+
     public enum SearchType 
     {
         Artists = 0,
@@ -25,11 +31,17 @@ namespace SMPlayer.Models
         GridView = 1
     }
 
-    public enum ShowToast
+    public enum NotificationSendMode
     {
-        Always = 0,
-        MusicChanged = 1,
-        Never = 2
+        MusicChanged = 0,
+        Never = 1
+    }
+
+    public enum NotificationDisplayMode
+    {
+        Reminder = 0,
+        Normal = 1,
+        Quick = 2
     }
 
     public enum SortBy

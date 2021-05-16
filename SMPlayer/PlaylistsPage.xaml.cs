@@ -24,6 +24,7 @@ namespace SMPlayer
         public static PlaylistsPage Instance { get => MainPage.Instance.NavigationFrame.Content as PlaylistsPage; }
         public static ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
         public Playlist CurrentPlaylist { get => PlaylistTabView.SelectedItem as Playlist; }
+        private Playlist PreviousPlaylist;
         private HeaderedPlaylistControl PlaylistController;
         private RenameDialog dialog;
         public PlaylistsPage()
@@ -216,6 +217,15 @@ namespace SMPlayer
         {
             PlaylistController = sender as HeaderedPlaylistControl;
             await PlaylistController.SetPlaylist(PlaylistTabView.SelectedItem as Playlist);
+        }
+
+        private void TabHeader_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (CurrentPlaylist.Equals(PreviousPlaylist))
+            {
+                PlaylistController.ScrollToTop();
+            }
+            PreviousPlaylist = CurrentPlaylist;
         }
     }
 }

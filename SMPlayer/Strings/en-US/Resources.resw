@@ -171,14 +171,8 @@
   <data name="AlbumTextBlock.Text" xml:space="preserve">
     <value>Album</value>
   </data>
-  <data name="All Artists" xml:space="preserve">
-    <value>All Artists: </value>
-  </data>
   <data name="AllComboItem.Content" xml:space="preserve">
     <value>All</value>
-  </data>
-  <data name="AlwaysShownComboItem.Content" xml:space="preserve">
-    <value>Always Shown</value>
   </data>
   <data name="AppDisplayName" xml:space="preserve">
     <value>SMPlayer</value>
@@ -215,6 +209,9 @@
   </data>
   <data name="AutoPlayCheckBox.Content" xml:space="preserve">
     <value>Play music after App launches</value>
+  </data>
+  <data name="AutoScrollLyricsCheckBox.Content" xml:space="preserve">
+    <value>Scroll lyrics automatically when playing music.</value>
   </data>
   <data name="BackButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Back</value>
@@ -426,6 +423,9 @@
   <data name="ImportDataButton.Content" xml:space="preserve">
     <value>Import Data</value>
   </data>
+  <data name="ImportLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Import lyrics</value>
+  </data>
   <data name="KeepRecentCheckBox.Content" xml:space="preserve">
     <value>Only keep 100 recently played items instead of all</value>
   </data>
@@ -464,6 +464,9 @@
   </data>
   <data name="LyricsMenuItem.Text" xml:space="preserve">
     <value>Show Lyrics</value>
+  </data>
+  <data name="LyricsModeComboItem.Content" xml:space="preserve">
+    <value>Lyrics Mode</value>
   </data>
   <data name="LyricsPivotItem.Header" xml:space="preserve">
     <value>Lyrics</value>
@@ -543,7 +546,7 @@
   <data name="MyFavoritesItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>My Favorite Songs</value>
   </data>
-  <data name="NeverItem.Content" xml:space="preserve">
+  <data name="NeverComboBoxItem.Content" xml:space="preserve">
     <value>Never</value>
   </data>
   <data name="New Playlist" xml:space="preserve">
@@ -563,6 +566,30 @@
   </data>
   <data name="NoResultTextBlock.Text" xml:space="preserve">
     <value>No result is found. Please check your spelling.</value>
+  </data>
+  <data name="NotificationModeComboBoxTextBlock.Text" xml:space="preserve">
+    <value>Notification Mode: </value>
+  </data>
+  <data name="NotificationModeNormalComboItem.Content" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="NotificationModeNormalComboItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Notifications are sent when window is not visible.</value>
+  </data>
+  <data name="NotificationModeQuickComboItem.Content" xml:space="preserve">
+    <value>Quick</value>
+  </data>
+  <data name="NotificationModeQuickComboItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Notifications are sent when window is not visible, and will disappear after a few seconds.</value>
+  </data>
+  <data name="NotificationModeReminderComboItem.Content" xml:space="preserve">
+    <value>Reminder</value>
+  </data>
+  <data name="NotificationModeReminderComboItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Always show notifications.</value>
+  </data>
+  <data name="NotificationSendComboBoxTextBlock.Text" xml:space="preserve">
+    <value>Send Notification: </value>
   </data>
   <data name="NotificationTextBlock.Text" xml:space="preserve">
     <value>Notification</value>
@@ -744,6 +771,9 @@
   <data name="ReleaseNotesHistoryUpdates.Text" xml:space="preserve">
     <value>History Updates</value>
   </data>
+  <data name="ReleaseNotesImportLyrics.Text" xml:space="preserve">
+    <value>Supports importing lyrics from a txt/lrc/mp3 file.</value>
+  </data>
   <data name="ReleaseNotesImproveMultiSelect.Text" xml:space="preserve">
     <value>Improved multi-select.</value>
   </data>
@@ -753,17 +783,26 @@
   <data name="ReleaseNotesIntroduceReleaseNotes.Text" xml:space="preserve">
     <value>Release Notes dialog is introduced. You can find it in the Settings page.</value>
   </data>
+  <data name="ReleaseNotesNowPlayingHighlight.Text" xml:space="preserve">
+    <value>Fix a highlighting problem when Now Playing playlist has duplicate songs.</value>
+  </data>
   <data name="ReleaseNotesOpenWithSMPlayer.Text" xml:space="preserve">
     <value>Now supports open music with SMPlayer.</value>
   </data>
   <data name="ReleaseNotesPlayNext.Text" xml:space="preserve">
     <value>"Play Next" has been added to the right-click menu, while "Move to top" is removed.</value>
   </data>
+  <data name="ReleaseNotesPlayWithSMPlayer.Text" xml:space="preserve">
+    <value>Now supports play music with SMPlayer.</value>
+  </data>
   <data name="ReleaseNotesSearchPageAddAllToButton.Text" xml:space="preserve">
     <value>Search page now has an AddAllTo button.</value>
   </data>
   <data name="ReleaseNotesShowCount.Text" xml:space="preserve">
-    <value>Multiple pages now can show the number of items in a collection.</value>
+    <value>Some pages now shows the number of items in a collection.</value>
+  </data>
+  <data name="ReleaseNotesShowLyricsInNotifications.Text" xml:space="preserve">
+    <value>Now lyrics can be displayed in notifications.</value>
   </data>
   <data name="ReleaseNotesSortByDateAdded.Text" xml:space="preserve">
     <value>Sort by date added.</value>
@@ -776,6 +815,9 @@
   </data>
   <data name="ReleaseNotesVersion.Text" xml:space="preserve">
     <value>Version: </value>
+  </data>
+  <data name="ReminderComboItem.Content" xml:space="preserve">
+    <value>Reminder</value>
   </data>
   <data name="Remove From List" xml:space="preserve">
     <value>Remove From List</value>
@@ -885,6 +927,9 @@
   <data name="SelectArtistTextBlock.Text" xml:space="preserve">
     <value>Select an artist on the left</value>
   </data>
+  <data name="SendNotificationComboBox.Content" xml:space="preserve">
+    <value>Send notifications: </value>
+  </data>
   <data name="Set As Favorite" xml:space="preserve">
     <value>Set As Favorite</value>
   </data>
@@ -911,6 +956,13 @@
   </data>
   <data name="ShowInExplorerButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Show In Explorer</value>
+  </data>
+  <data name="ShowLyricsInNotificationCheckBox.Content" xml:space="preserve">
+    <value>Show lyrics in notification</value>
+  </data>
+  <data name="ShowLyricsInNotificationInfo.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Supports showing lrc-format lyrics with hundred-millisecond precision.
+Lrc lyrics will be read in this order: local lrc files, Internet sources, music built-in lyrics.</value>
   </data>
   <data name="Shuffle" xml:space="preserve">
     <value>Shuffle</value>

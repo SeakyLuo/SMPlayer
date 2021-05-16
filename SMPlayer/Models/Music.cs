@@ -209,9 +209,19 @@ namespace SMPlayer.Models
         public async Task<string> GetLyricsAsync()
         {
             var file = await GetStorageFileAsync();
-            using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(file), TagLib.ReadStyle.Average))
+            return file.GetLyrics();
+        }
+
+        public async Task<string> GetLrcLyricsAsync()
+        {
+            try
             {
-                return tagFile.Tag.Lyrics;
+                var file = await StorageFile.GetFileFromPathAsync(Path.Substring(0, Path.LastIndexOf(".")) + ".lrc");
+                return await FileIO.ReadTextAsync(file);
+            }
+            catch (Exception)
+            {
+                return await LyricsHelper.SearchLrcLyrics(this);
             }
         }
 
@@ -229,7 +239,7 @@ namespace SMPlayer.Models
             }
             catch (Exception exception)
             {
-                System.Diagnostics.Debug.WriteLine(string.Format("Exception ({0}) when saving lyrics for {1}", exception.Message, Name));
+                Debug.WriteLine(string.Format("Exception ({0}) when saving lyrics for {1}", exception.Message, Name));
                 return false;
             }
         }
@@ -260,7 +270,7 @@ namespace SMPlayer.Models
         }
         public string GetAlbumNavigationString()
         {
-            return Album + Helper.StringConcatenationFlag + Artist;
+            return Album + TileHelper.StringConcatenationFlag + Artist;
         }
         int IComparable<Music>.CompareTo(Music other)
         {
@@ -288,6 +298,11 @@ namespace SMPlayer.Models
         public override bool Equals(object obj)
         {
             return obj is Music music && Path == music.Path;
+        }
+
+        public bool IndexedEquals(Music music)
+        {
+            return this == music && Index == music.Index;
         }
 
         public override int GetHashCode()

@@ -164,10 +164,22 @@ namespace SMPlayer
                 albumView.Thumbnail = image ?? MusicImage.DefaultImage;
         }
 
-        private async void DropShadowControl_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
+        private void DropShadowControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
             AlbumView album = sender.DataContext as AlbumView;
-            if (album == null || album.ThumbnailLoaded || !ImageHelper.NeedsLoading(sender, args)) return;
+            if (album == null || album.DontLoad || !sender.IsPartiallyVisible(AlbumsGridView)) return;
+            LoadThumbnail(album);
+        }
+
+        private void DropShadowControl_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
+        {
+            AlbumView album = sender.DataContext as AlbumView;
+            if (album == null || album.DontLoad || !ImageHelper.NeedsLoading(sender, args)) return;
+            LoadThumbnail(album);
+        }
+
+        private async void LoadThumbnail(AlbumView album)
+        {
             string before = album.ThumbnailSource;
             if (album.Songs == null)
                 album.SetSongs(AlbumPage.SearchAlbumSongs(album.Name, album.Artist));

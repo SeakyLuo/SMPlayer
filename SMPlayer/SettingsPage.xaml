@@ -17,6 +17,10 @@
             <Setter Property="Margin" Value="8,0" />
             <Setter Property="Height" Value="30" />
         </Style>
+        <Style x:Key="ComboBoxLabelStyle" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="15" />
+        </Style>
         <Style x:Key="MinimalSettingLabelStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="18" />
             <Setter Property="Margin" Value="8,0" />
@@ -180,21 +184,49 @@
                         Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    x:Name="NotificationTextBlock"
-                    x:Uid="NotificationTextBlock"
-                    Style="{StaticResource SettingLabelStyle}"
-                    Text="Notification" />
-                <ComboBox
-                    x:Name="NotificationComboBox"
-                    VerticalAlignment="Center"
-                    SelectionChanged="NotificationComboBox_SelectionChanged"
-                    Style="{StaticResource MarginSetter}">
-                    <ComboBoxItem x:Uid="AlwaysShownComboItem" Content="Always Shown" />
-                    <ComboBoxItem x:Uid="MusicChangedComboItem" Content="Music Changed" />
-                    <ComboBoxItem x:Uid="NeverItem" Content="Never" />
-                </ComboBox>
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        x:Name="NotificationTextBlock"
+                        x:Uid="NotificationTextBlock"
+                        Style="{StaticResource SettingLabelStyle}"
+                        Text="Notification" />
+                    <StackPanel Orientation="Horizontal" Style="{ThemeResource MarginSetter}">
+                        <TextBlock x:Uid="NotificationSendComboBoxTextBlock" Style="{StaticResource ComboBoxLabelStyle}"/>
+                        <ComboBox
+                            x:Name="NotificationSendComboBox"
+                            SelectionChanged="NotificationSendComboBox_SelectionChanged"
+                            Style="{StaticResource MarginSetter}">
+                            <ComboBoxItem x:Uid="MusicChangedComboItem" Content="Music Changed" />
+                            <ComboBoxItem x:Uid="NeverComboBoxItem" Content="Never" />
+                        </ComboBox>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <StackPanel Orientation="Horizontal" Style="{ThemeResource MarginSetter}">
+                        <TextBlock x:Uid="NotificationModeComboBoxTextBlock" Style="{StaticResource ComboBoxLabelStyle}"/>
+                        <ComboBox
+                            x:Name="NotificationModeComboBox"
+                            SelectionChanged="NotificationModeComboBox_SelectionChanged"
+                            Style="{StaticResource MarginSetter}">
+                            <ComboBoxItem x:Uid="NotificationModeReminderComboItem" Content="Reminder" />
+                            <ComboBoxItem x:Uid="NotificationModeNormalComboItem" Content="Normal" />
+                            <ComboBoxItem x:Uid="NotificationModeQuickComboItem" Content="Quick" />
+                        </ComboBox>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <CheckBox
+                        x:Name="ShowLyricsInNotificationCheckBox"
+                        x:Uid="ShowLyricsInNotificationCheckBox"
+                        Checked="ShowLyricsInNotificationCheckBox_Checked"
+                        Content="Show Lyrics In Notification"
+                        Style="{ThemeResource SettingCheckBoxStyle}"
+                        Unchecked="ShowLyricsInNotificationCheckBox_Unchecked" />
+                    <FontIcon x:Uid="ShowLyricsInNotificationInfo" FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;" />
+                </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
@@ -287,14 +319,10 @@
                         Text="Recent" />
                     <StackPanel Style="{ThemeResource MarginSetter}" Orientation="Horizontal">
                         <TextBlock
-                        x:Uid="RecentPlayedItemTextBlock"
-                        VerticalAlignment="Center"
-                        FontSize="15"
-                        Text="Recent Played" />
-                        <ComboBox
-                            x:Name="KeepRecentComboBox"
-                            VerticalAlignment="Center"
-                            SelectionChanged="KeepRecentComboBox_SelectionChanged">
+                            x:Uid="RecentPlayedItemTextBlock"
+                            Style="{StaticResource ComboBoxLabelStyle}"
+                            Text="Recent Played" />
+                        <ComboBox x:Name="KeepRecentComboBox" SelectionChanged="KeepRecentComboBox_SelectionChanged">
                             <ComboBoxItem x:Uid="AllComboItem" Content="All" />
                             <ComboBoxItem x:Uid="100ComboItem" Content="100" />
                             <ComboBoxItem x:Uid="200ComboItem" Content="200" />

@@ -52,6 +52,7 @@ namespace SMPlayer
                     object category = RecentTimeLine.Categorize(music.Source.DateAdded);
                     if (category != CurrentCategory)
                     {
+                        CurrentCategory = category;
                         RecentAddedHeader.Text = Helper.LocalizeMessage(category.ToString());
                     }
                 }

@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Dialogs;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class SettingsPage : Page, IAfterPathSetListener
     {
-        public static ShowToast[] NotificationOptions = { ShowToast.Always, ShowToast.MusicChanged, ShowToast.Never };
+        public static NotificationSendMode[] NotificationOptions = { NotificationSendMode.MusicChanged, NotificationSendMode.Never };
         private static readonly int[] LimitedRecentPlayedItems = { -1, 100, 200, 500, 1000 };
         private static readonly List<IAfterPathSetListener> listeners = new List<IAfterPathSetListener>();
         private static FolderTree loadingTree;
@@ -41,14 +42,18 @@ namespace SMPlayer
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             PathBox.Text = Settings.settings.RootPath;
-            NotificationComboBox.SelectedIndex = (int)Settings.settings.Toast;
+            int notificationSend = (int)Settings.settings.NotificationSend;
+            int notificationDisplay = (int)Settings.settings.NotificationDisplay;
+            NotificationSendComboBox.SelectedIndex = (int)Settings.settings.NotificationSend;
+            NotificationModeComboBox.SelectedIndex = (int)Settings.settings.NotificationDisplay;
             ThemeColorPicker.Color = Settings.settings.ThemeColor;
             ShowCounterCheckBox.IsChecked = Settings.settings.ShowCount;
-            KeepRecentComboBox.SelectedIndex = LimitedRecentPlayedItems.FindIndex(num => num == Settings.settings.LimitedRecentPlayedItems);
+            KeepRecentComboBox.SelectedIndex = LimitedRecentPlayedItems.FindIndex(i => i == Settings.settings.LimitedRecentPlayedItems);
             AutoPlayCheckBox.IsChecked = Settings.settings.AutoPlay;
             AutoLyricsCheckBox.IsChecked = Settings.settings.AutoLyrics;
             SaveProgressCheckBox.IsChecked = Settings.settings.SaveMusicProgress;
             HideMultiSelectCommandBarCheckBox.IsChecked = Settings.settings.HideMultiSelectCommandBarAfterOperation;
+            ShowLyricsInNotificationCheckBox.IsChecked = Settings.settings.ShowLyricsInNotification;
         }
 
         private async void PathBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
@@ -136,11 +141,6 @@ namespace SMPlayer
         private void CancelColorButton_Click(object sender, RoutedEventArgs e)
         {
             ColorPickerFlyout.Hide();
-        }
-
-        private void NotificationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Settings.settings.Toast = NotificationOptions[(sender as ComboBox).SelectedIndex];
         }
 
         public static async void CheckNewMusic(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
@@ -232,7 +232,7 @@ namespace SMPlayer
                     }
                     await Task.Run(async () =>
                     {
-                        lyrics = await Controls.MusicLyricsControl.SearchLyrics(music);
+                        lyrics = await LyricsHelper.SearchLyrics(music);
                         await music.SaveLyricsAsync(lyrics);
                     });
                 }
@@ -251,7 +251,7 @@ namespace SMPlayer
                     if (music == MediaHelper.CurrentMusic && skipped.Count > 1) continue;
                     await Task.Run(async () =>
                     {
-                        string lyrics = await Controls.MusicLyricsControl.SearchLyrics(music);
+                        string lyrics = await LyricsHelper.SearchLyrics(music);
                         await music.SaveLyricsAsync(lyrics);
                     });
                     skipped.Remove(music);
@@ -460,6 +460,34 @@ namespace SMPlayer
                 MainPage.Instance.ShowNotification(Helper.LocalizeMessage("FailToOpenBrowser"));
             }
             IsProcessing = false;
+        }
+
+        private async void ShowLyricsInNotificationCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.ShowLyricsInNotification = true;
+            await LyricsHelper.SetLyrics();
+        }
+
+        private void ShowLyricsInNotificationCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.ShowLyricsInNotification = false;
+            LyricsHelper.ClearLyrics();
+        }
+
+        private async void NotificationModeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (NotificationModeComboBox.SelectedIndex < 0) return;
+            Settings.settings.NotificationDisplay = SettingsEnum.NotificationDisplayModes[NotificationModeComboBox.SelectedIndex];
+            if (Settings.settings.NotificationDisplay == NotificationDisplayMode.Reminder)
+            {
+                await ToastHelper.ShowToast(MediaHelper.CurrentMusic, MediaHelper.PlaybackState);
+            }
+        }
+
+        private void NotificationSendComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (NotificationModeComboBox.SelectedIndex < 0) return;
+            Settings.settings.NotificationSend = SettingsEnum.NotificationSendModes[NotificationSendComboBox.SelectedIndex];
         }
     }
 

@@ -26,9 +26,13 @@ namespace SMPlayer
         {
             get => CurrentMusic == null ? 0d : Position / CurrentMusic.Duration;
         }
+        public static MediaPlaybackState PlaybackState
+        {
+            get => Player.PlaybackSession.PlaybackState;
+        }
         public static bool IsPlaying
         {
-            get => Player.PlaybackSession.PlaybackState == MediaPlaybackState.Playing;
+            get => PlaybackState == MediaPlaybackState.Playing;
         }
         public static MediaPlaybackList PlaybackList
         {
@@ -53,7 +57,7 @@ namespace SMPlayer
         private static MediaPlaybackList PendingPlaybackList = null;
         public static MediaPlayer Player = new MediaPlayer() { Source = PlaybackList };
         public static List<IRemoveMusicListener> RemoveMusicListeners = new List<IRemoveMusicListener>();
-        public static DispatcherTimer Timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+        public static DispatcherTimer Timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
         public static List<IMediaControlListener> MediaControlListeners = new List<IMediaControlListener>();
         public static List<ISwitchMusicListener> SwitchMusicListeners = new List<ISwitchMusicListener>();
         public static List<Action> InitFinishedListeners = new List<Action>();
@@ -182,7 +186,7 @@ namespace SMPlayer
 
         public static bool IsMusicPlaying(Music music)
         {
-            return CurrentMusic != null && music == CurrentMusic && music.Index == CurrentMusic.Index;
+            return music.IndexedEquals(CurrentMusic);
         }
 
         public static void AddMusic(IMusicable source)
@@ -267,7 +271,7 @@ namespace SMPlayer
             {
                 for (int i = 0; i < CurrentPlaylist.Count; i++)
                 {
-                    if (CurrentPlaylist[i] == music)
+                    if (music.Index > -1 ? music.IndexedEquals(CurrentPlaylist[i]) : music == CurrentPlaylist[i])
                     {
                         PlaybackList.MoveTo(Convert.ToUInt32(i));
                         return true;
@@ -290,7 +294,9 @@ namespace SMPlayer
         public static void MovePrev()
         {
             if (Player.IsLoopingEnabled)
+            {
                 Position = 0;
+            }
             else
             {
                 try
@@ -307,7 +313,9 @@ namespace SMPlayer
         public static void MoveNext()
         {
             if (Player.IsLoopingEnabled)
+            {
                 Position = 0;
+            }
             else
             {
                 try

@@ -153,8 +153,14 @@
   <data name="FoldersWithCount" xml:space="preserve">
     <value>文件夹（{0}）</value>
   </data>
+  <data name="Next" xml:space="preserve">
+    <value>下一首</value>
+  </data>
   <data name="NowPlaying" xml:space="preserve">
     <value>正在播放</value>
+  </data>
+  <data name="Play/Pause" xml:space="preserve">
+    <value>播放/暂停</value>
   </data>
   <data name="Playlists" xml:space="preserve">
     <value>播放列表</value>

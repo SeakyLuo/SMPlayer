@@ -283,7 +283,7 @@
             Visibility="Collapsed">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:GridFolderView">
-                    <controls:GridFolderControl >
+                    <controls:GridFolderControl DataContextChanged="GridFolderControl_DataContextChanged">
                         <controls:GridFolderControl.ContextFlyout>
                             <MenuFlyout Opening="OpenPlaylistFlyout" />
                         </controls:GridFolderControl.ContextFlyout>

@@ -15,6 +15,11 @@ namespace SMPlayer.Controls
             set
             {
                 SetValue(ShowAlbumTextProperty, value);
+                TitleColumnDefinition.Width = new GridLength(10, GridUnitType.Star);
+                if (!value)
+                {
+                    TitleColumnDefinition.Width = new GridLength(10, GridUnitType.Star);
+                }
                 AlbumTextButton.Visibility = LongArtistAlbumPanelDot.Visibility = LongArtistTextButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
             }
         }
@@ -25,10 +30,6 @@ namespace SMPlayer.Controls
         {
             this.InitializeComponent();
             MediaHelper.SwitchMusicListeners.Add(this);
-            if (ShowAlbumText)
-            {
-                TitleColumnDefinition.Width = new GridLength(10, GridUnitType.Star);
-            }
         }
 
         private void Album_Click(object sender, RoutedEventArgs e)
@@ -52,7 +53,8 @@ namespace SMPlayer.Controls
         private bool TextColorChanged = true;
         public void SetTextColor(Music music)
         {
-            if (Data == music)
+            if (Data == null) return;
+            if (Data.Index == -1 ? Data == music : MediaHelper.IsMusicPlaying(Data))
             {
                 PlayingIcon.Visibility = Visibility.Visible;
                 TitleTextBlock.Foreground = ArtistTextButton.Foreground = AlbumTextButton.Foreground = DurationTextBlock.Foreground =

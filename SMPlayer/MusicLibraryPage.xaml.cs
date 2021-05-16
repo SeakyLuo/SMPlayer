@@ -201,6 +201,10 @@ namespace SMPlayer
 
         public static void SetHeader()
         {
+            if (MainPage.Instance?.CurrentPage != typeof(MusicLibraryPage))
+            {
+                return;
+            }
             if (Settings.settings.ShowCount)
             {
                 MainPage.Instance?.SetHeaderText("AllSongsWithCount", AllSongs.Count);
