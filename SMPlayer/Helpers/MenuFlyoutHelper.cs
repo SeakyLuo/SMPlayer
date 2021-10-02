@@ -404,6 +404,7 @@ namespace SMPlayer
             flyout.Items.Add(GetAddToMenuFlyoutSubItem(listener));
             if (option.ShowRemove) flyout.Items.Add(GetRemovableMenuFlyoutItem(music, listener));
             if (option.ShowSelect || option.MultiSelectOption != null) flyout.Items.Add(GetSelectItem(listener, option.MultiSelectOption));
+            flyout.Items.Add(GetPreferItem(music));
             flyout.Items.Add(GetShowInExplorerItem(music.Path, StorageItemTypes.File));
             var deleteItem = new MenuFlyoutItem()
             {
@@ -791,6 +792,27 @@ namespace SMPlayer
                 parent.Items.Add(recenItem);
             }
             return parent;
+        }
+        public static MenuFlyoutItem GetPreferItem(IPreferable data)
+        {
+            bool isPreferred = Settings.settings.Preference.IsPreferred(data);
+            MenuFlyoutItem item = new MenuFlyoutItem()
+            {
+                Icon = new SymbolIcon(isPreferred ? Symbol.UnFavorite : Symbol.Favorite),
+                Text = Helper.LocalizeText(isPreferred ? "UndoPrefer" : "SetAsPreferred")
+            };
+            item.Click += (sender, args) =>
+            {
+                if (isPreferred)
+                {
+                    Settings.settings.Preference.UndoPrefer(data);
+                }
+                else
+                {
+                    Settings.settings.Preference.Prefer(data);
+                }
+            };
+            return item;
         }
         public static MenuFlyout SetPlaylistMenu(object sender, IMenuFlyoutItemClickListener clickListener = null, IMenuFlyoutHelperBuildListener buildListener = null, MenuFlyoutOption option = null)
         {

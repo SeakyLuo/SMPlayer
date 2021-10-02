@@ -34,10 +34,16 @@ Search multiple lyrics choose one.
 
 Improve recent music month.
 
-Shuffle preference, lyrics preference
+Lyrics preference.
+
+Improve voice assitant command set.
+
+Rename folder.
+
+Right-click menu with current item.
 
 # TO FIX
-Able to drag titlebar when loading.
+Able to drag titlebar when loading, multi-select.
 
 Dark thumb in the mini mode.
 

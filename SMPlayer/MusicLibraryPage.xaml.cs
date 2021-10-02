@@ -44,6 +44,7 @@ namespace SMPlayer
             SetHeader();
             MediaHelper.FindMusicAndSetPlaying(AllSongs, null, MediaHelper.CurrentMusic);
         }
+
         public static async Task Init()
         {
             var songs = JsonFileHelper.Convert<List<Music>>(await JsonFileHelper.ReadAsync(JsonFilename));
@@ -72,7 +73,6 @@ namespace SMPlayer
             NotifyListeners();
             App.Save();
         }
-
 
         public static void AddAfterSongsSetListener(IAfterSongsSetListener listener)
         {

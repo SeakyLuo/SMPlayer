@@ -241,6 +241,7 @@ namespace SMPlayer
             var artistView = flyout.Target.DataContext as ArtistView;
             if (artistView.NotLoaded) artistView.Load();
             MenuFlyoutHelper.SetPlaylistMenu(sender, this, null, new MenuFlyoutOption() { ShowMultiSelect = true, MultiSelectOption = new MultiSelectCommandBarOption() { ShowRemove = false } });
+            flyout.Items.Add(MenuFlyoutHelper.GetPreferItem(artistView));
             var refreshArtist = new MenuFlyoutItem()
             {
                 Text = Helper.Localize("RefreshArtist"),
@@ -276,6 +277,7 @@ namespace SMPlayer
             });
             MenuFlyout flyout = sender as MenuFlyout;
             var album = flyout.Target.DataContext as AlbumView;
+            flyout.Items.Add(MenuFlyoutHelper.GetPreferItem(album));
             flyout.Items.Add(MenuFlyoutHelper.GetSeeAlbumFlyout(album.Songs[0]));
         }
         private void OpenMusicMenuFlyout(object sender, object e)

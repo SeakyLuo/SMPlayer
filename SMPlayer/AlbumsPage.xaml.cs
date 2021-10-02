@@ -140,6 +140,8 @@ namespace SMPlayer
         private void MenuFlyout_Opening(object sender, object e)
         {
             MenuFlyout flyout = sender as MenuFlyout;
+            AlbumView album = flyout.Target.DataContext as AlbumView;
+            flyout.Items.Add(MenuFlyoutHelper.GetPreferItem(album));
             MenuFlyoutItem albumArtItem = new MenuFlyoutItem()
             {
                 Icon = new SymbolIcon(Symbol.Pictures),
@@ -147,7 +149,7 @@ namespace SMPlayer
             };
             albumArtItem.Click += async (s, args) =>
             {
-                await new AlbumDialog(AlbumDialogOption.AlbumArt, flyout.Target.DataContext as AlbumView).ShowAsync();
+                await new AlbumDialog(AlbumDialogOption.AlbumArt, album).ShowAsync();
             };
             flyout.Items.Add(albumArtItem);
         }

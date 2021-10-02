@@ -73,6 +73,10 @@ namespace SMPlayer
 
         private void LocalFoldersGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (LocalFoldersGridView.SelectionMode == ListViewSelectionMode.Multiple)
+            {
+                return;
+            }
             var folderView = (GridFolderView)e.ClickedItem;
             setter.SetPage(CurrentTree.Trees[GridItems.IndexOf(folderView)]);
         }
@@ -110,6 +114,7 @@ namespace SMPlayer
             FolderTree tree = null;
             if (flyout.Target.DataContext is GridFolderView gridFolderView) tree = gridFolderView.Tree;
             else if (flyout.Target.DataContext is TreeViewNode node) tree = node.Content as FolderTree;
+            flyout.Items.Add(MenuFlyoutHelper.GetPreferItem(tree));
             flyout.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(tree.Path, Windows.Storage.StorageItemTypes.Folder));
             flyout.Items.Add(MenuFlyoutHelper.GetRefreshDirectoryItem(tree, AfterTreeUpdated));
             flyout.Items.Add(MenuFlyoutHelper.GetSearchDirectoryItem(tree));
@@ -232,13 +237,22 @@ namespace SMPlayer
 
         void IMenuFlyoutItemClickListener.Select(object data)
         {
-            LocalFoldersTreeView.SelectionMode = TreeViewSelectionMode.Multiple;
-            LocalFoldersTreeView.SelectedNodes.Add((TreeViewNode)data);
+            if (Settings.settings.LocalFolderGridView)
+            {
+                LocalFoldersGridView.SelectionMode = ListViewSelectionMode.Multiple;
+                LocalFoldersGridView.SelectedValue = data;
+            }
+            else
+            {
+                LocalFoldersTreeView.SelectionMode = TreeViewSelectionMode.Multiple;
+                LocalFoldersTreeView.SelectedNodes.Add((TreeViewNode)data);
+            }
             MainPage.Instance.ShowMultiSelectCommandBar();
         }
 
         void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar)
         {
+            LocalFoldersGridView.SelectionMode = ListViewSelectionMode.None;
             LocalFoldersTreeView.SelectionMode = TreeViewSelectionMode.None;
         }
 
@@ -256,28 +270,52 @@ namespace SMPlayer
 
         void IMultiSelectListener.SelectAll(MultiSelectCommandBar commandBar)
         {
-            LocalFoldersTreeView.SelectAll();
+            if (Settings.settings.LocalFolderGridView)
+            {
+                LocalFoldersGridView.SelectAll();
+            } 
+            else
+            {
+                LocalFoldersTreeView.SelectAll();
+            }
         }
 
         void IMultiSelectListener.ReverseSelections(MultiSelectCommandBar commandBar) { }
 
         void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar)
         {
-            LocalFoldersTreeView.SelectedNodes.Clear();
+            if (Settings.settings.LocalFolderGridView)
+            {
+                LocalFoldersGridView.SelectedItems.Clear();
+            }
+            else
+            {
+                LocalFoldersTreeView.SelectedNodes.Clear();
+            }
         }
 
         public List<Music> GetSelectedSongs()
         {
             List<Music> list = new List<Music>();
-            foreach (var node in LocalFoldersTreeView.SelectedNodes)
+            if (Settings.settings.LocalFolderGridView)
             {
-                if (node.Content is FolderTree tree)
+                foreach (GridFolderView item in LocalFoldersGridView.SelectedItems)
                 {
-                    list.AddRange(tree.Flatten());
+                    list.AddRange(item.Songs);
                 }
-                else if (node.Content is Music music)
+            }
+            else
+            {
+                foreach (var node in LocalFoldersTreeView.SelectedNodes)
                 {
-                    list.Add(music);
+                    if (node.Content is FolderTree tree)
+                    {
+                        list.AddRange(tree.Flatten());
+                    }
+                    else if (node.Content is Music music)
+                    {
+                        list.Add(music);
+                    }
                 }
             }
             return list;

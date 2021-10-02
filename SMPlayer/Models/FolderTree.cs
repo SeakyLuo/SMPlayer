@@ -10,7 +10,7 @@ using Windows.Storage;
 namespace SMPlayer.Models
 {
     [Serializable]
-    public class FolderTree : INotifyPropertyChanged, IComparable
+    public class FolderTree : INotifyPropertyChanged, IComparable, IPreferable
     {
         public List<FolderTree> Trees { get; set; } = new List<FolderTree>();
         public List<Music> Files { get; set; } = new List<Music>();
@@ -408,6 +408,16 @@ namespace SMPlayer.Models
         public int CompareTo(object obj)
         {
             return ToString().CompareTo(obj.ToString());
+        }
+
+        PreferenceItem IPreferable.AsPreferenceItem()
+        {
+            return new PreferenceItem(Path, Directory);
+        }
+
+        PreferType IPreferable.GetPreferType()
+        {
+            return PreferType.Folder;
         }
     }
     public struct TreeInfo

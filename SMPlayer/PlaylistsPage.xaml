@@ -55,17 +55,17 @@
                                     x:Uid="RenameItem"
                                     Click="RenameClick"
                                     Icon="Rename"
-                                    Text="Rename PlayList" />
+                                    Text="Rename" />
                                 <MenuFlyoutItem
                                     x:Uid="DuplicateItem"
                                     Click="DuplicateClick"
                                     Icon="Copy"
-                                    Text="Duplicate PlayList" />
+                                    Text="Duplicate" />
                                 <MenuFlyoutItem
                                     x:Uid="DeleteItem"
                                     Click="DeleteClick"
                                     Icon="Delete"
-                                    Text="Delete PlayList" />
+                                    Text="Delete" />
                             </MenuFlyout>
                         </StackPanel.ContextFlyout>
                         <SymbolIcon Symbol="Audio" />

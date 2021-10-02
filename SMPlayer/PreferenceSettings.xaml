@@ -8,200 +8,255 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.Resources>
+        <Style TargetType="CommandBar" x:Name="PreferenceCommandBarStyle">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="DefaultLabelPosition" Value="Right" />
+            <Setter Property="IsOpen" Value="False" />
+            <Setter Property="OverflowButtonVisibility" Value="Collapsed" />
+            <Setter Property="Margin" Value="0,4" />
+        </Style>
+
+        <Style TargetType="AppBarButton" x:Name="PreferenceAppBarButtonStyle">
+            <Setter Property="Margin" Value="4,0" />
+        </Style>
+
+        <Style TargetType="AppBarButton" x:Name="GoToAddAppBarButtonStyle" BasedOn="{StaticResource PreferenceAppBarButtonStyle}">
+            <Setter Property="Label" Value="Go To Add" />
+        </Style>
+
+        <Style TargetType="AppBarButton" x:Name="ClearAllButtonStyle" BasedOn="{StaticResource PreferenceAppBarButtonStyle}">
+            <Setter Property="Label" Value="Clear All" />
+        </Style>
+
+        <Style TargetType="AppBarButton" x:Name="DisableAllButtonStyle" BasedOn="{StaticResource PreferenceAppBarButtonStyle}">
+            <Setter Property="Label" Value="Disable All" />
+        </Style>
+
+        <Style TargetType="Border" x:Name="NoItemBackground">
+            <Setter Property="Background" Value="WhiteSmoke" />
+        </Style>
+
+        <Style TargetType="TextBlock" x:Name="NoItemTextBlockStyle">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Padding" Value="16" />
+            <Setter Property="Text" Value="No Item." />
+        </Style>
+    </Page.Resources>
+
     <ScrollViewer>
         <StackPanel Padding="4,0">
             <StackPanel Orientation="Horizontal" Margin="16">
                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;"/>
-                <TextBlock x:Uid="PreferenceSettingsInfoTextBlock" Margin="16,0" Text="如果你在随机播放中选择了快速播放，偏好的项目会有更高的概率出现在播放列表。" />
+                <TextBlock x:Uid="PreferenceSettingsInfoTextBlock" Margin="16,0" Text="Preference Settings" />
             </StackPanel>
             <StackPanel>
-                <CommandBar
-                    Background="Transparent"
-                    DefaultLabelPosition="Right"
-                    IsOpen="False"
-                    OverflowButtonVisibility="Collapsed" >
+                <CommandBar Style="{StaticResource PreferenceCommandBarStyle}">
                     <CommandBar.Content>
-                        <TextBlock
-                            x:Uid="PreferredSongsTextBlock"
-                            Padding="15,10,0,10"
-                            Style="{StaticResource CompactHeaderStyle}"
-                            Text="Preferred Songs"
-                            TextAlignment="Center" />
+                        <CheckBox
+                            x:Name="PreferredSongsCheckBox"
+                            x:Uid="PreferredSongsCheckBox"
+                            Checked="PreferredSongsCheckBox_Checked"
+                            Content="Preferred Songs"
+                            Style="{ThemeResource SettingCheckBoxStyle}"
+                            Unchecked="PreferredSongsCheckBox_Unchecked" />
                     </CommandBar.Content>
-                    <AppBarToggleButton
-                        x:Name="PreferredSongsIsEnabledButton"
-                        x:Uid="IsEnabledAppBarToggleButton"
-                        Icon="Switch"
-                        Label="IsEnabled"
-                        Margin="4,0"
-                        Click="PreferredSongsIsEnabledButton_Click" />
                     <AppBarButton 
                         x:Name="GoToAddPreferredSongsButton" 
-                        x:Uid="GoToAddPreferredSongsButton"
+                        x:Uid="GoToAddAppBarButton"
                         Icon="Add"
-                        Label="Go To Add"
-                        Margin="4,0"
+                        Style="{StaticResource GoToAddAppBarButtonStyle}"
                         Click="GoToAddPreferredSongsButton_Click"/>
+                    <AppBarButton 
+                        x:Name="DisableAllPreferredSongsButton" 
+                        x:Uid="DisableAllAppBarButton"
+                        Icon="SelectAll"
+                        Style="{StaticResource DisableAllButtonStyle}"
+                        Click="DisableAllPreferredSongsButton_Click"/>
+                    <AppBarButton 
+                        x:Name="ClearAllPreferredSongsButton" 
+                        x:Uid="ClearAllAppBarButton"
+                        Icon="Clear"
+                        Style="{StaticResource ClearAllButtonStyle}"
+                        Click="ClearAllPreferredSongsButton_Click"/>
                 </CommandBar>
-                <Border Background="LightGray">
-                    <TextBlock
-                        x:Uid="NoItemsTextBlock"
-                        FontWeight="Bold"
-                        FontSize="16"
-                        Padding="16"
-                        Text="No item." />
+                <Border Style="{StaticResource NoItemBackground}">
+                    <TextBlock x:Uid="NoItemsTextBlock" Style="{StaticResource NoItemTextBlockStyle}" />
                 </Border>
             </StackPanel>
             <StackPanel>
-                <CommandBar
-                    Background="Transparent"
-                    DefaultLabelPosition="Right"
-                    IsOpen="False"
-                    OverflowButtonVisibility="Collapsed" >
+                <CommandBar Style="{StaticResource PreferenceCommandBarStyle}">
                     <CommandBar.Content>
-                        <TextBlock
-                            x:Uid="PreferredArtistsTextBlock"
-                            Padding="15,10,0,10"
-                            Style="{StaticResource CompactHeaderStyle}"
-                            Text="Preferred Artists"
-                            TextAlignment="Center" />
+                        <CheckBox
+                            x:Name="PreferredArtistsCheckBox"
+                            x:Uid="PreferredArtistsCheckBox"
+                            Checked="PreferredArtistsCheckBox_Checked"  
+                            Content="Preferred Artists"
+                            Style="{ThemeResource SettingCheckBoxStyle}"
+                            Unchecked="PreferredArtistsCheckBox_Unchecked" />
                     </CommandBar.Content>
-                    <AppBarToggleButton
-                        x:Name="PreferredArtistsIsEnabledButton"
-                        x:Uid="IsEnabledAppBarToggleButton"
-                        Icon="Switch"
-                        Label="IsEnabled"
-                        Margin="4,0"
-                        Click="PreferredArtistsIsEnabledButton_Click" />
                     <AppBarButton 
                         x:Name="GoToAddPreferredArtistsButton" 
-                        x:Uid="GoToAddPreferredArtistsButton"
+                        x:Uid="GoToAddAppBarButton"
                         Icon="Add"
-                        Label="Go To Add"
-                        Margin="4,0"
+                        Style="{StaticResource GoToAddAppBarButtonStyle}"
                         Click="GoToAddPreferredArtistsButton_Click"/>
+                    <AppBarButton 
+                        x:Name="DisableAllPreferredArtistsButton" 
+                        x:Uid="DisableAllAppBarButton"
+                        Icon="SelectAll"
+                        Style="{StaticResource DisableAllButtonStyle}"
+                        Click="DisableAllPreferredArtistsButton_Click"/>
+                    <AppBarButton 
+                        x:Name="ClearAllPreferredArtistsButton" 
+                        x:Uid="ClearAllAppBarButton"
+                        Icon="Clear"
+                        Style="{StaticResource ClearAllButtonStyle}"
+                        Click="ClearAllPreferredArtistsButton_Click"/>
                 </CommandBar>
-                <Border Background="LightGray">
+                <Border Style="{StaticResource NoItemBackground}">
                     <TextBlock
                         x:Uid="NoItemsTextBlock"
-                        FontWeight="Bold"
-                        FontSize="16"
-                        Padding="16"
-                        Text="No item." />
+                        Style="{StaticResource NoItemTextBlockStyle}" />
                 </Border>
             </StackPanel>
             <StackPanel>
-                <CommandBar
-                    Background="Transparent"
-                    DefaultLabelPosition="Right"
-                    IsOpen="False"
-                    OverflowButtonVisibility="Collapsed" >
+                <CommandBar Style="{StaticResource PreferenceCommandBarStyle}">
                     <CommandBar.Content>
-                        <TextBlock
-                            x:Uid="PreferredAlbumsTextBlock"
-                            Padding="15,10,0,10"
-                            Style="{StaticResource CompactHeaderStyle}"
-                            Text="Preferred Albums"
-                            TextAlignment="Center" />
+                        <CheckBox
+                            x:Name="PreferredAlbumsCheckBox"
+                            x:Uid="PreferredAlbumsCheckBox"
+                            Checked="PreferredAlbumsCheckBox_Checked"  
+                            Content="Preferred Albums"
+                            Style="{ThemeResource SettingCheckBoxStyle}"
+                            Unchecked="PreferredAlbumsCheckBox_Unchecked" />
                     </CommandBar.Content>
-                    <AppBarToggleButton
-                        x:Name="PreferredAlbumsIsEnabledButton"
-                        x:Uid="IsEnabledAppBarToggleButton"
-                        Icon="Switch"
-                        Label="IsEnabled"
-                        Margin="4,0"
-                        Click="PreferredAlbumsIsEnabledButton_Click" />
                     <AppBarButton 
                         x:Name="GoToAddPreferredAlbumsButton" 
-                        x:Uid="GoToAddPreferredAlbumsButton"
+                        x:Uid="GoToAddAppBarButton"
                         Icon="Add"
-                        Label="Go To Add"
-                        Margin="4,0"
+                        Style="{StaticResource GoToAddAppBarButtonStyle}"
                         Click="GoToAddPreferredAlbumsButton_Click"/>
+                    <AppBarButton 
+                        x:Name="DisableAllPreferredAlbumsButton" 
+                        x:Uid="DisableAllAppBarButton"
+                        Icon="SelectAll"
+                        Style="{StaticResource DisableAllButtonStyle}"
+                        Click="DisableAllPreferredAlbumsButton_Click"/>
+                    <AppBarButton 
+                        x:Name="ClearAllPreferredAlbumsButton" 
+                        x:Uid="ClearAllAppBarButton"
+                        Icon="Clear"
+                        Style="{StaticResource ClearAllButtonStyle}"
+                        Click="ClearAllPreferredAlbumsButton_Click"/>
                 </CommandBar>
-                <Border Background="LightGray">
+                <Border Style="{StaticResource NoItemBackground}">
                     <TextBlock
                         x:Uid="NoItemsTextBlock"
-                        FontWeight="Bold"
-                        FontSize="16"
-                        Padding="16"
-                        Text="No item." />
+                        Style="{StaticResource NoItemTextBlockStyle}" />
                 </Border>
             </StackPanel>
             <StackPanel>
-                <CommandBar
-                    Background="Transparent"
-                    DefaultLabelPosition="Right"
-                    IsOpen="False"
-                    OverflowButtonVisibility="Collapsed" >
+                <CommandBar Style="{StaticResource PreferenceCommandBarStyle}">
                     <CommandBar.Content>
-                        <TextBlock
-                            x:Uid="PreferredPlaylistsTextBlock"
-                            Padding="15,10,0,10"
-                            Style="{StaticResource CompactHeaderStyle}"
-                            Text="Preferred Playlists"
-                            TextAlignment="Center" />
+                        <CheckBox
+                            x:Name="PreferredPlaylistsCheckBox"
+                            x:Uid="PreferredPlaylistsCheckBox"
+                            Checked="PreferredPlaylistsCheckBox_Checked"  
+                            Content="Preferred Playlists"
+                            Style="{ThemeResource SettingCheckBoxStyle}"
+                            Unchecked="PreferredPlaylistsCheckBox_Unchecked" />
                     </CommandBar.Content>
-                    <AppBarToggleButton
-                        x:Name="PreferredPlaylistsIsEnabledButton"
-                        x:Uid="IsEnabledAppBarToggleButton"
-                        Icon="Switch"
-                        Label="IsEnabled"
-                        Margin="4,0"
-                        Click="PreferredPlaylistsIsEnabledButton_Click" />
                     <AppBarButton 
                         x:Name="GoToAddPreferredPlaylistsButton" 
-                        x:Uid="GoToAddPreferredPlaylistsButton"
+                        x:Uid="GoToAddAppBarButton"
                         Icon="Add"
-                        Label="Go To Add"
-                        Margin="4,0"
+                        Style="{StaticResource GoToAddAppBarButtonStyle}"
                         Click="GoToAddPreferredPlaylistsButton_Click"/>
+                    <AppBarButton 
+                        x:Name="DisableAllPreferredPlaylistsButton" 
+                        x:Uid="DisableAllAppBarButton"
+                        Icon="SelectAll"
+                        Style="{StaticResource DisableAllButtonStyle}"
+                        Click="DisableAllPreferredPlaylistsButton_Click"/>
+                    <AppBarButton 
+                        x:Name="ClearAllPreferredPlaylistsButton" 
+                        x:Uid="ClearAllAppBarButton"
+                        Icon="Clear"
+                        Style="{StaticResource ClearAllButtonStyle}"
+                        Click="ClearAllPreferredPlaylistsButton_Click"/>
                 </CommandBar>
-                <Border Background="LightGray">
+                <Border Style="{StaticResource NoItemBackground}">
                     <TextBlock
                         x:Uid="NoItemsTextBlock"
-                        FontWeight="Bold"
-                        FontSize="16"
-                        Padding="16"
-                        Text="No item." />
+                        Style="{StaticResource NoItemTextBlockStyle}" />
                 </Border>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <CheckBox
-                    x:Name="RecentPlayedPreferenceCheckBox"
-                    x:Uid="RecentPlayedPreferenceCheckBox"
-                    Checked="RecentPlayedPreferenceCheckBox_Checked"
-                    Content="Prefer Recent Played"
-                    Style="{ThemeResource SettingCheckBoxStyle}"
-                    Unchecked="RecentPlayedPreferenceCheckBox_Unchecked" />
+            <StackPanel>
+                <CommandBar Style="{StaticResource PreferenceCommandBarStyle}">
+                    <CommandBar.Content>
+                        <CheckBox
+                            x:Name="PreferredFoldersCheckBox"
+                            x:Uid="PreferredFoldersCheckBox"
+                            Checked="PreferredFoldersCheckBox_Checked"  
+                            Content="Preferred Folders"
+                            Style="{ThemeResource SettingCheckBoxStyle}"
+                            Unchecked="PreferredFoldersCheckBox_Unchecked" />
+                    </CommandBar.Content>
+                    <AppBarButton 
+                        x:Name="GoToAddPreferredFoldersButton" 
+                        x:Uid="GoToAddAppBarButton"
+                        Icon="Add"
+                        Style="{StaticResource GoToAddAppBarButtonStyle}"
+                        Click="GoToAddPreferredFoldersButton_Click"/>
+                    <AppBarButton 
+                        x:Name="DisableAllPreferredFoldersButton" 
+                        x:Uid="DisableAllAppBarButton"
+                        Icon="SelectAll"
+                        Style="{StaticResource DisableAllButtonStyle}"
+                        Click="DisableAllPreferredFoldersButton_Click"/>
+                    <AppBarButton 
+                        x:Name="ClearAllPreferredFoldersButton" 
+                        x:Uid="ClearAllAppBarButton"
+                        Icon="Clear"
+                        Style="{StaticResource ClearAllButtonStyle}"
+                        Click="ClearAllPreferredFoldersButton_Click"/>
+                </CommandBar>
+                <Border Style="{StaticResource NoItemBackground}">
+                    <TextBlock
+                        x:Uid="NoItemsTextBlock"
+                        Style="{StaticResource NoItemTextBlockStyle}" />
+                </Border>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <CheckBox
-                    x:Name="MyFavoritePreferenceCheckBox"
-                    x:Uid="MyFavoritePreferenceCheckBox"
-                    Checked="MyFavoritePreferenceCheckBox_Checked"
-                    Content="Prefer My Favorites"
-                    Style="{ThemeResource SettingCheckBoxStyle}"
-                    Unchecked="MyFavoritePreferenceCheckBox_Unchecked" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <CheckBox
-                    x:Name="MostPlayedPreferenceCheckBox"
-                    x:Uid="MostPlayedPreferenceCheckBox"
-                    Checked="MostPlayedPreferenceCheckBox_Checked"
-                    Content="Prefer Most Played"
-                    Style="{ThemeResource SettingCheckBoxStyle}"
-                    Unchecked="MostPlayedPreferenceCheckBox_Unchecked" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <CheckBox
-                    x:Name="LeastPlayedPreferenceCheckBox"
-                    x:Uid="LeastPlayedPreferenceCheckBox"
-                    Checked="LeastPlayedPreferenceCheckBox_Checked"
-                    Content="Prefer Least Played"
-                    Style="{ThemeResource SettingCheckBoxStyle}"
-                    Unchecked="LeastPlayedPreferenceCheckBox_Unchecked" />
-            </StackPanel>
+            <CheckBox
+                x:Name="RecentAddedPreferenceCheckBox"
+                x:Uid="RecentAddedPreferenceCheckBox"
+                Checked="RecentAddedPreferenceCheckBox_Checked"
+                Content="Recent Added"
+                Style="{ThemeResource SettingCheckBoxStyle}"
+                Unchecked="RecentAddedPreferenceCheckBox_Unchecked" />
+            <CheckBox
+                x:Name="MyFavoritePreferenceCheckBox"
+                x:Uid="MyFavoritePreferenceCheckBox"
+                Checked="MyFavoritePreferenceCheckBox_Checked"
+                Content="My Favorites"
+                Style="{ThemeResource SettingCheckBoxStyle}"
+                Unchecked="MyFavoritePreferenceCheckBox_Unchecked" />
+            <CheckBox
+                x:Name="MostPlayedPreferenceCheckBox"
+                x:Uid="MostPlayedPreferenceCheckBox"
+                Checked="MostPlayedPreferenceCheckBox_Checked"
+                Content="Most Played"
+                Style="{ThemeResource SettingCheckBoxStyle}"
+                Unchecked="MostPlayedPreferenceCheckBox_Unchecked" />
+            <CheckBox
+                x:Name="LeastPlayedPreferenceCheckBox"
+                x:Uid="LeastPlayedPreferenceCheckBox"
+                Checked="LeastPlayedPreferenceCheckBox_Checked"
+                Content="Least Played"
+                Style="{ThemeResource SettingCheckBoxStyle}"
+                Unchecked="LeastPlayedPreferenceCheckBox_Unchecked" />
         </StackPanel>
     </ScrollViewer>
 </Page>

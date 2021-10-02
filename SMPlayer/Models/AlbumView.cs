@@ -9,7 +9,7 @@ using SMPlayer.Helpers;
 
 namespace SMPlayer.Models
 {
-    public class AlbumView : INotifyPropertyChanged
+    public class AlbumView : INotifyPropertyChanged, IPreferable
     {
         public string Name { get; set; }
         public string Artist { get; set; }
@@ -133,6 +133,16 @@ namespace SMPlayer.Models
         public override int GetHashCode()
         {
             return (Name + "%" + Artist).GetHashCode();
+        }
+
+        PreferenceItem IPreferable.AsPreferenceItem()
+        {
+            return new PreferenceItem(GetHashCode().ToString(), Name);
+        }
+
+        PreferType IPreferable.GetPreferType()
+        {
+            return PreferType.Album;
         }
     }
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace SMPlayer.Models
 {
     [Serializable]
-    public class Playlist : INotifyPropertyChanged
+    public class Playlist : INotifyPropertyChanged, IPreferable
     {
         public static SortBy[] Criteria = new SortBy[] { SortBy.Title, SortBy.Artist, SortBy.Album, SortBy.Duration, SortBy.PlayCount, SortBy.DateAdded };
         private string name;
@@ -240,6 +240,16 @@ namespace SMPlayer.Models
             var list = Songs.Reverse().ToList();
             for (int i = 0; i < Count; i++) Songs[i] = list[i];
             OnPropertyChanged();
+        }
+
+        PreferenceItem IPreferable.AsPreferenceItem()
+        {
+            return new PreferenceItem(Name);
+        }
+
+        PreferType IPreferable.GetPreferType()
+        {
+            return PreferType.Playlist;
         }
     }
 }

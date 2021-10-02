@@ -241,6 +241,8 @@
     <Compile Include="Models\MultiSelectCommandBarOption.cs" />
     <Compile Include="Models\MusicDisplayItem.cs" />
     <Compile Include="Models\MusicImage.cs" />
+    <Compile Include="Models\PreferenceItem.cs" />
+    <Compile Include="Models\PreferenceSetting.cs" />
     <Compile Include="Models\RecentTimeLine.cs" />
     <Compile Include="Models\TimeLine.cs" />
     <Compile Include="Models\TimeLineMusic.cs" />

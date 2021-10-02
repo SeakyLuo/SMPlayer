@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Media;
 namespace SMPlayer.Models
 {
     [Serializable]
-    public class Music : IComparable<Music>, INotifyPropertyChanged, IMusicable
+    public class Music : IComparable<Music>, INotifyPropertyChanged, IMusicable, IPreferable
     {
         public string Path { get; set; }
         public string Name
@@ -323,6 +323,16 @@ namespace SMPlayer.Models
         Music IMusicable.ToMusic()
         {
             return this;
+        }
+
+        PreferenceItem IPreferable.AsPreferenceItem()
+        {
+            return new PreferenceItem(Path, Name);
+        }
+
+        PreferType IPreferable.GetPreferType()
+        {
+            return PreferType.Song;
         }
     }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SMPlayer.Models
 {
-    public class ArtistView : INotifyPropertyChanged
+    public class ArtistView : INotifyPropertyChanged, IPreferable
     {
         public string Name { get; set; }
         public ObservableCollection<AlbumView> Albums { get; set; } = new ObservableCollection<AlbumView>();
@@ -105,6 +105,16 @@ namespace SMPlayer.Models
         public override int GetHashCode()
         {
             return Name.GetHashCode();
+        }
+
+        PreferenceItem IPreferable.AsPreferenceItem()
+        {
+            return new PreferenceItem(Name);
+        }
+
+        PreferType IPreferable.GetPreferType()
+        {
+            return PreferType.Artist;
         }
     }
 

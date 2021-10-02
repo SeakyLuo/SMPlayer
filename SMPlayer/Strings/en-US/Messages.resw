@@ -123,6 +123,21 @@
   <data name="AddingLyricsTo" xml:space="preserve">
     <value>Adding lyrics to "{0}"...</value>
   </data>
+  <data name="AddPreferredAlbumsToolTip" xml:space="preserve">
+    <value>Right click on any album and then click "Set As Preferred" on the pop-up menu.</value>
+  </data>
+  <data name="AddPreferredArtistsToolTip" xml:space="preserve">
+    <value>Right click on any artist and then click "Set As Preferred" on the pop-up menu.</value>
+  </data>
+  <data name="AddPreferredFoldersToolTip" xml:space="preserve">
+    <value>Right click on any folder and then click "Set As Preferred" on the pop-up menu.</value>
+  </data>
+  <data name="AddPreferredPlaylistsToolTip" xml:space="preserve">
+    <value>Click "Set As Preferred" in any Playlist page.</value>
+  </data>
+  <data name="AddPreferredSongsToolTip" xml:space="preserve">
+    <value>Right click on any music and then click "Set As Preferred" on the pop-up menu.</value>
+  </data>
   <data name="AlbumArtSaved" xml:space="preserve">
     <value>New album art has been saved!</value>
   </data>

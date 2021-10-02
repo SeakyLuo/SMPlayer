@@ -94,6 +94,18 @@
                                 </AppBarButton.Icon>
                             </AppBarButton>
                             <AppBarButton
+                                x:Name="SetAsPreferredButton"
+                                x:Uid="SetAsPreferredAppBarButton"
+                                Click="SetAsPreferredButton_Click"
+                                Icon="Favorite"
+                                Style="{ThemeResource PlaylistAppBarButtonStyle}" />
+                            <AppBarButton
+                                x:Name="UndoPreferButton"
+                                x:Uid="UndoPreferAppBarButton"
+                                Click="UndoPreferButton_Click"
+                                Icon="UnFavorite"
+                                Style="{ThemeResource PlaylistAppBarButtonStyle}" />
+                            <AppBarButton
                                 x:Name="SortButton"
                                 x:Uid="SortAppButton"
                                 Click="SortButton_Click"

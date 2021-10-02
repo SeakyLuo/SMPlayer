@@ -243,6 +243,9 @@
   <data name="ChangeAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Change Album Art</value>
   </data>
+  <data name="ClearAllAppBarButton.Label" xml:space="preserve">
+    <value>Clear All</value>
+  </data>
   <data name="ClearAppButton.Label" xml:space="preserve">
     <value>Clear</value>
   </data>
@@ -319,7 +322,10 @@
     <value>Delete Playlist</value>
   </data>
   <data name="DeleteItem.Text" xml:space="preserve">
-    <value>Delete Playlist</value>
+    <value>Delete</value>
+  </data>
+  <data name="DisableAllAppBarButton.Label" xml:space="preserve">
+    <value>Disable All</value>
   </data>
   <data name="DisplayCheckBox.Content" xml:space="preserve">
     <value>Don't show this next time</value>
@@ -328,7 +334,7 @@
     <value>Display</value>
   </data>
   <data name="DuplicateItem.Text" xml:space="preserve">
-    <value>Duplicate Playlist</value>
+    <value>Duplicate</value>
   </data>
   <data name="DurationHeader.Header" xml:space="preserve">
     <value>Duration</value>
@@ -414,6 +420,9 @@
   <data name="GenreTextBlock.Text" xml:space="preserve">
     <value>Genre</value>
   </data>
+  <data name="GoToAddAppBarButton.Label" xml:space="preserve">
+    <value>Add</value>
+  </data>
   <data name="GridViewItem.Label" xml:space="preserve">
     <value>Grid View</value>
   </data>
@@ -448,7 +457,10 @@
     <value>Least Played</value>
   </data>
   <data name="LeastPlayedPreferenceCheckBox.Content" xml:space="preserve">
-    <value>Prefer Least Played</value>
+    <value>Least Played</value>
+  </data>
+  <data name="LeastPlayedPreferenceCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Your least-played songs will have a higher probability appearing in "Quick Play".</value>
   </data>
   <data name="ListViewItem.Label" xml:space="preserve">
     <value>List View</value>
@@ -520,7 +532,10 @@
     <value>Most Played</value>
   </data>
   <data name="MostPlayedPreferenceCheckBox.Content" xml:space="preserve">
-    <value>Prefer Most Played</value>
+    <value>Most Played</value>
+  </data>
+  <data name="MostPlayedPreferenceCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Your most-played songs will have a higher probability appearing in "Quick Play".</value>
   </data>
   <data name="MultiSelect" xml:space="preserve">
     <value>Multi Select</value>
@@ -565,7 +580,10 @@
     <value>My Favorites</value>
   </data>
   <data name="MyFavoritePreferenceCheckBox.Content" xml:space="preserve">
-    <value>Prefer My Favorites</value>
+    <value>My Favorites</value>
+  </data>
+  <data name="MyFavoritePreferenceCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>My favorites will have a higher probability appearing in "Quick Play".</value>
   </data>
   <data name="MyFavoritesItem.Content" xml:space="preserve">
     <value>My Favorites</value>
@@ -717,8 +735,38 @@
   <data name="PreferenceSettingsButton.Label" xml:space="preserve">
     <value>Preference Settings</value>
   </data>
-  <data name="PreferenceSwitchCheckBox.Content" xml:space="preserve">
-    <value>If you turn this on, preferred items (songs, artists, albums, e.t.c) will have a higher posibility to show up in the shuffle playlist.</value>
+  <data name="PreferenceSettingsInfoTextBlock.Text" xml:space="preserve">
+    <value>Your preferences will have a higher probability appearing in "Random Play" -&gt; "Quick Play".</value>
+  </data>
+  <data name="PreferredAlbumsCheckBox.Content" xml:space="preserve">
+    <value>Preferred Albums</value>
+  </data>
+  <data name="PreferredAlbumsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Preferred albums will have a higher probability appearing in "Quick Play".</value>
+  </data>
+  <data name="PreferredArtistsCheckBox.Content" xml:space="preserve">
+    <value>Preferred Artists</value>
+  </data>
+  <data name="PreferredArtistsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Preferred artists will have a higher probability appearing in "Quick Play".</value>
+  </data>
+  <data name="PreferredFoldersCheckBox.Content" xml:space="preserve">
+    <value>Preferred Folders</value>
+  </data>
+  <data name="PreferredFoldersCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Preferred folders will have a higher probability appearing in "Quick Play".</value>
+  </data>
+  <data name="PreferredPlaylistsCheckBox.Content" xml:space="preserve">
+    <value>Preferred Playlists</value>
+  </data>
+  <data name="PreferredPlaylistsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Preferred playlists will have a higher probability appearing in "Quick Play".</value>
+  </data>
+  <data name="PreferredSongsCheckBox.Content" xml:space="preserve">
+    <value>Preferred Songs</value>
+  </data>
+  <data name="PreferredSongsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Preferred songs will have a higher probability appearing in "Quick Play".</value>
   </data>
   <data name="PrevButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Previous</value>
@@ -756,6 +804,12 @@
   <data name="RecentAddedItem.Header" xml:space="preserve">
     <value>Recently Added</value>
   </data>
+  <data name="RecentAddedPreferenceCheckBox.Content" xml:space="preserve">
+    <value>Recent Added</value>
+  </data>
+  <data name="RecentAddedPreferenceCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Recent added songs will have a higher probability appearing in "Quick Play".</value>
+  </data>
   <data name="RecentItem.Content" xml:space="preserve">
     <value>Recent</value>
   </data>
@@ -767,9 +821,6 @@
   </data>
   <data name="RecentPlayedItemTextBlock.Text" xml:space="preserve">
     <value>The number of recently played songs to keep: </value>
-  </data>
-  <data name="RecentPlayedPreferenceCheckBox.Content" xml:space="preserve">
-    <value>Prefer Recent Played</value>
   </data>
   <data name="RecentSearchesItem.Header" xml:space="preserve">
     <value>Recent Searches</value>
@@ -844,7 +895,7 @@
     <value>Some pages now shows the number of items in a collection.</value>
   </data>
   <data name="ReleaseNotesShowInExplorerBugFix.Text" xml:space="preserve">
-    <value>【Bug Fix】When you click "Show In Explorer" on a folder, the app no longer crashes.</value>
+    <value>【Bug Fix】When you click "Show In Explorer" or "Multi-Select" on a folder, the app no longer crashes;</value>
   </data>
   <data name="ReleaseNotesShowLyricsInNotifications.Text" xml:space="preserve">
     <value>Now lyrics can be displayed in notifications.</value>
@@ -892,7 +943,7 @@
     <value>Rename Playlist</value>
   </data>
   <data name="RenameItem.Text" xml:space="preserve">
-    <value>Rename Playlist</value>
+    <value>Rename</value>
   </data>
   <data name="ResetButton.Content" xml:space="preserve">
     <value>Reset</value>
@@ -981,6 +1032,9 @@
   <data name="SendNotificationComboBox.Content" xml:space="preserve">
     <value>Send notifications: </value>
   </data>
+  <data name="SetAsPreferredAppBarButton.Label" xml:space="preserve">
+    <value>Set As Preferred</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
@@ -1068,6 +1122,9 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   </data>
   <data name="UndoButton.Content" xml:space="preserve">
     <value>Undo</value>
+  </data>
+  <data name="UndoPreferAppBarButton.Label" xml:space="preserve">
+    <value>Undo Prefer</value>
   </data>
   <data name="UnPin" xml:space="preserve">
     <value>UnPin</value>

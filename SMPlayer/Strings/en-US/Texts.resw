@@ -198,6 +198,9 @@
   <data name="Recent" xml:space="preserve">
     <value>Recent</value>
   </data>
+  <data name="SetAsPreferred" xml:space="preserve">
+    <value>Set As Preferred</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
@@ -215,6 +218,9 @@
   </data>
   <data name="UndoLikeMusicToolTip" xml:space="preserve">
     <value>Remove From My Favorite</value>
+  </data>
+  <data name="UndoPrefer" xml:space="preserve">
+    <value>Undo Prefer</value>
   </data>
   <data name="UnPinToolTip" xml:space="preserve">
     <value>UnPin Playlist</value>

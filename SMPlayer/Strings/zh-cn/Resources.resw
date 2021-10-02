@@ -243,6 +243,9 @@
   <data name="ChangeAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>更改专辑插图</value>
   </data>
+  <data name="ClearAllAppBarButton.Label" xml:space="preserve">
+    <value>清空全部</value>
+  </data>
   <data name="ClearAppButton.Label" xml:space="preserve">
     <value>清空</value>
   </data>
@@ -319,7 +322,10 @@
     <value>删除播放列表</value>
   </data>
   <data name="DeleteItem.Text" xml:space="preserve">
-    <value>删除播放列表</value>
+    <value>删除</value>
+  </data>
+  <data name="DisableAllAppBarButton.Label" xml:space="preserve">
+    <value>停用全部</value>
   </data>
   <data name="DisplayCheckBox.Content" xml:space="preserve">
     <value>不再显示</value>
@@ -328,7 +334,7 @@
     <value>展示</value>
   </data>
   <data name="DuplicateItem.Text" xml:space="preserve">
-    <value>复制播放列表</value>
+    <value>复制</value>
   </data>
   <data name="DurationHeader.Header" xml:space="preserve">
     <value>时长</value>
@@ -414,6 +420,9 @@
   <data name="GenreTextBlock.Text" xml:space="preserve">
     <value>风格</value>
   </data>
+  <data name="GoToAddAppBarButton.Label" xml:space="preserve">
+    <value>去添加</value>
+  </data>
   <data name="GridViewItem.Label" xml:space="preserve">
     <value>网格模式</value>
   </data>
@@ -448,7 +457,10 @@
     <value>最少播放</value>
   </data>
   <data name="LeastPlayedPreferenceCheckBox.Content" xml:space="preserve">
-    <value>偏好最少播放</value>
+    <value>最少播放</value>
+  </data>
+  <data name="LeastPlayedPreferenceCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>最少播放的歌曲会有更高的概率出现在【快速播放】。</value>
   </data>
   <data name="ListViewItem.Label" xml:space="preserve">
     <value>列表模式</value>
@@ -520,7 +532,10 @@
     <value>最常播放</value>
   </data>
   <data name="MostPlayedPreferenceCheckBox.Content" xml:space="preserve">
-    <value>偏好最常播放</value>
+    <value>最常播放</value>
+  </data>
+  <data name="MostPlayedPreferenceCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>最常播放的歌曲会有更高的概率出现在【快速播放】。</value>
   </data>
   <data name="MultiSelect" xml:space="preserve">
     <value>多选</value>
@@ -565,7 +580,10 @@
     <value>我喜欢</value>
   </data>
   <data name="MyFavoritePreferenceCheckBox.Content" xml:space="preserve">
-    <value>偏好我喜欢</value>
+    <value>我喜欢</value>
+  </data>
+  <data name="MyFavoritePreferenceCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>我喜欢的歌曲会有更高的概率出现在【快速播放】。</value>
   </data>
   <data name="MyFavoritesItem.Content" xml:space="preserve">
     <value>我喜欢</value>
@@ -717,8 +735,38 @@
   <data name="PreferenceSettingsButton.Label" xml:space="preserve">
     <value>偏好设置</value>
   </data>
-  <data name="PreferenceSwitchCheckBox.Content" xml:space="preserve">
-    <value>如果你打开此开关，你喜欢的歌曲、歌手、专辑等会有更高的概率出现在随机播放列表中。</value>
+  <data name="PreferenceSettingsInfoTextBlock.Text" xml:space="preserve">
+    <value>偏好的项目会有更高的概率出现在【随机播放】-&gt;【快速播放】。</value>
+  </data>
+  <data name="PreferredAlbumsCheckBox.Content" xml:space="preserve">
+    <value>偏好专辑</value>
+  </data>
+  <data name="PreferredAlbumsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>偏好的专辑会有更高的概率出现在【快速播放】。</value>
+  </data>
+  <data name="PreferredArtistsCheckBox.Content" xml:space="preserve">
+    <value>偏好歌手</value>
+  </data>
+  <data name="PreferredArtistsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>偏好的歌手会有更高的概率出现在【快速播放】。</value>
+  </data>
+  <data name="PreferredFoldersCheckBox.Content" xml:space="preserve">
+    <value>偏好文件夹</value>
+  </data>
+  <data name="PreferredFoldersCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>偏好的文件夹会有更高的概率出现在【快速播放】。</value>
+  </data>
+  <data name="PreferredPlaylistsCheckBox.Content" xml:space="preserve">
+    <value>偏好播放列表</value>
+  </data>
+  <data name="PreferredPlaylistsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>偏好的播放列表会有更高的概率出现在【快速播放】。</value>
+  </data>
+  <data name="PreferredSongsCheckBox.Content" xml:space="preserve">
+    <value>偏好歌曲</value>
+  </data>
+  <data name="PreferredSongsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>偏好的歌曲会有更高的概率出现在【快速播放】。</value>
   </data>
   <data name="PrevButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>前一首</value>
@@ -756,6 +804,12 @@
   <data name="RecentAddedItem.Header" xml:space="preserve">
     <value>最近添加</value>
   </data>
+  <data name="RecentAddedPreferenceCheckBox.Content" xml:space="preserve">
+    <value>最近添加</value>
+  </data>
+  <data name="RecentAddedPreferenceCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>最近添加的歌曲会有更高的概率出现在【快速播放】。</value>
+  </data>
   <data name="RecentItem.Content" xml:space="preserve">
     <value>最近</value>
   </data>
@@ -767,9 +821,6 @@
   </data>
   <data name="RecentPlayedItemTextBlock.Text" xml:space="preserve">
     <value>保留最近播放的歌曲数：</value>
-  </data>
-  <data name="RecentPlayedPreferenceCheckBox.Content" xml:space="preserve">
-    <value>偏好最近播放</value>
   </data>
   <data name="RecentSearchesItem.Header" xml:space="preserve">
     <value>最近搜索</value>
@@ -844,7 +895,7 @@
     <value>部分页面会显示列表项总数了。</value>
   </data>
   <data name="ReleaseNotesShowInExplorerBugFix.Text" xml:space="preserve">
-    <value>【问题修复】修复了在文件夹上点击“在本地显示”时造成的闪退问题</value>
+    <value>【问题修复】修复了在文件夹上点击“在本地显示”时造成的闪退问题；修复了“本地”页面无法多选的问题。</value>
   </data>
   <data name="ReleaseNotesShowLyricsInNotifications.Text" xml:space="preserve">
     <value>现已支持在通知中显示歌词。</value>
@@ -889,7 +940,7 @@
     <value>重命名播放列表</value>
   </data>
   <data name="RenameItem.Text" xml:space="preserve">
-    <value>重命名播放列表</value>
+    <value>重命名</value>
   </data>
   <data name="ResetButton.Content" xml:space="preserve">
     <value>重置</value>
@@ -978,6 +1029,9 @@
   <data name="SendNotificationComboBox.Content" xml:space="preserve">
     <value>发送通知：</value>
   </data>
+  <data name="SetAsPreferredAppBarButton.Label" xml:space="preserve">
+    <value>设为偏好</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>设置</value>
   </data>
@@ -1065,6 +1119,9 @@
   </data>
   <data name="UndoButton.Content" xml:space="preserve">
     <value>撤销</value>
+  </data>
+  <data name="UndoPreferAppBarButton.Label" xml:space="preserve">
+    <value>取消偏好</value>
   </data>
   <data name="UnPin" xml:space="preserve">
     <value>解除固定</value>
