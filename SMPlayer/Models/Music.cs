@@ -162,10 +162,15 @@ namespace SMPlayer.Models
             }
         }
 
-        public static string GetFilename(string Path)
+        public static string GetFileFolder(string path)
         {
             //return Path.Substring(Settings.settings.RootPath.Length + 1); // Plus one due to "\"
-            string fullName = Path.Substring(Path.LastIndexOf('\\') + 1);
+            return path.Substring(path.LastIndexOf('\\') + 1);
+        }
+
+        public static string GetFilename(string path)
+        {
+            string fullName = GetFileFolder(path);
             return fullName.Substring(0, fullName.LastIndexOf("."));
         }
 

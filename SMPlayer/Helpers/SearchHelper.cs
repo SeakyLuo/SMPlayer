@@ -197,13 +197,13 @@ namespace SMPlayer.Helpers
                 if (startswith[i] != i)
                     list.Move(startswith[i], i);
             int exact = list.FindIndex(m => IsExact(m, keyword, selector));
-            if (exact != -1 && exact != 0) list.Move(exact, 0);
+            if (exact > 0) list.Move(exact, 0);
             return list;
         }
 
         public static bool IsExact<T>(T item, string keyword, Func<T, string> selector)
         {
-            return selector(item) == keyword;
+            return keyword.Equals(selector(item), StringComparison.OrdinalIgnoreCase);
         }
 
         public static async Task<SearchResult> Search(string keyword)

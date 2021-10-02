@@ -44,7 +44,16 @@ namespace SMPlayer.Helpers
                 return;
             if (IsToastActive(music, state)) return;
             Helper.Print("show toast");
-            ToastNotification toast = await BuildToast(music, state, display);
+            ToastNotification toast;
+            try
+            {
+                toast = await BuildToast(music, state, display);
+            }
+            catch(Exception e)
+            {
+                Helper.LogException(e);
+                return;
+            }
             lock (CurrentToastMap)
             {
                 HideToast();

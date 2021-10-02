@@ -34,6 +34,8 @@ Search multiple lyrics choose one.
 
 Improve recent music month.
 
+Shuffle preference, lyrics preference
+
 # TO FIX
 Able to drag titlebar when loading.
 

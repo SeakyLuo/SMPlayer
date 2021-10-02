@@ -309,6 +309,9 @@
   <data name="OpenSettingsFailed" xml:space="preserve">
     <value>无法打开系统设置</value>
   </data>
+  <data name="PathNotFound" xml:space="preserve">
+    <value>路径{0}不存在！</value>
+  </data>
   <data name="Pause" xml:space="preserve">
     <value>暂停</value>
   </data>

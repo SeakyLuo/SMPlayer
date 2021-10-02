@@ -36,10 +36,22 @@ namespace SMPlayer.Helpers
 
         public static async Task SetLyrics()
         {
-            await SetLyrics(MediaHelper.CurrentMusic);
+            try
+            {
+                await SetLyrics(MediaHelper.CurrentMusic);
+            }
+            catch (ArgumentException e)
+            {
+                // Value cannot be null. ?????????
+                Helper.LogException(e);
+            }
+            catch (Exception e)
+            {
+                Helper.LogException(e);
+            }
         }
 
-        public static async Task SetLyrics(Music music)
+        private static async Task SetLyrics(Music music)
         {
             if (CurrentMusic == music && !string.IsNullOrEmpty(CurrentLyrics))
                 return;

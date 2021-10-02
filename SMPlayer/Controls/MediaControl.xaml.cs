@@ -558,9 +558,9 @@ namespace SMPlayer
         {
             RepeatButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            ShuffleButton.SetToolTip(MoreShuffleButton.Label = Helper.LocalizeMessage("Shuffle: " + (isChecked ? "Enabled" : "Disabled")));
-            RepeatButton.SetToolTip(MoreRepeatButton.Label = Helper.LocalizeMessage("Repeat: Disabled"));
-            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = Helper.LocalizeMessage("Repeat One: Disabled"));
+            ShuffleButton.SetToolTip(MoreShuffleButton.Label = Helper.LocalizeMessage("Shuffle: " + (isChecked ? "Enabled" : "Disabled")), false);
+            RepeatButton.SetToolTip(MoreRepeatButton.Label = Helper.LocalizeMessage("Repeat: Disabled"), false);
+            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = Helper.LocalizeMessage("Repeat One: Disabled"), false);
             MoreShuffleButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
             MoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
             MoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
@@ -580,9 +580,9 @@ namespace SMPlayer
         {
             ShuffleButton.IsChecked = false;
             RepeatOneButton.IsChecked = false;
-            ShuffleButton.SetToolTip(MoreShuffleButton.Label = Helper.LocalizeMessage("Shuffle: Disabled"));
-            RepeatButton.SetToolTip(MoreRepeatButton.Label = Helper.LocalizeMessage("Repeat: " + (isChecked ? "Enabled" : "Disabled")));
-            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = Helper.LocalizeMessage("Repeat One: Disabled"));
+            ShuffleButton.SetToolTip(MoreShuffleButton.Label = Helper.LocalizeMessage("Shuffle: Disabled"), false);
+            RepeatButton.SetToolTip(MoreRepeatButton.Label = Helper.LocalizeMessage("Repeat: " + (isChecked ? "Enabled" : "Disabled")), false);
+            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = Helper.LocalizeMessage("Repeat One: Disabled"), false);
             MoreShuffleButton.IconBackground = ColorHelper.TransparentBrush;
             MoreRepeatButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
             MoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
@@ -603,9 +603,9 @@ namespace SMPlayer
         {
             ShuffleButton.IsChecked = false;
             RepeatButton.IsChecked = false;
-            ShuffleButton.SetToolTip(MoreShuffleButton.Label = Helper.LocalizeMessage("Shuffle: Disabled"));
-            RepeatButton.SetToolTip(MoreRepeatButton.Label = Helper.LocalizeMessage("Repeat: Disabled"));
-            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = Helper.LocalizeMessage("Repeat One: " + (isChecked ? "Enabled" : "Disabled")));
+            ShuffleButton.SetToolTip(MoreShuffleButton.Label = Helper.LocalizeMessage("Shuffle: Disabled"), false);
+            RepeatButton.SetToolTip(MoreRepeatButton.Label = Helper.LocalizeMessage("Repeat: Disabled"), false);
+            RepeatOneButton.SetToolTip(MoreRepeatOneButton.Label = Helper.LocalizeMessage("Repeat One: " + (isChecked ? "Enabled" : "Disabled")), false);
             MoreShuffleButton.IconBackground = ColorHelper.TransparentBrush;
             MoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
             MoreRepeatOneButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
@@ -666,7 +666,7 @@ namespace SMPlayer
 
         public void LikeMusic(bool isClick = true)
         {
-            LikeToggleButton.SetToolTip("Undo Favorite");
+            LikeToggleButton.SetToolTip("UndoLikeMusicToolTip");
             if (isClick)
             {
                 SetMusicFavorite(true);
@@ -677,7 +677,7 @@ namespace SMPlayer
 
         public void DislikeMusic(bool isClick = true)
         {
-            LikeToggleButton.SetToolTip("Set As Favorite");
+            LikeToggleButton.SetToolTip("LikeMusicToolTip");
             if (isClick)
             {
                 SetMusicFavorite(false);

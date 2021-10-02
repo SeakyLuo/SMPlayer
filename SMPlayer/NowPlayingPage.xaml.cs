@@ -60,12 +60,17 @@ namespace SMPlayer
 
         private void ShuffleMenuFlyout_Opening(object sender, object e)
         {
-            (sender as MenuFlyout).SetTo(MenuFlyoutHelper.GetShuffleMenu());
+            (sender as MenuFlyout).SetTo(MenuFlyoutHelper.GetShuffleMenu(100, SetEnabled));
         }
 
         private void PlayModeButton_Click(object sender, RoutedEventArgs e)
         {
             (Window.Current.Content as Frame).Navigate(typeof(NowPlayingFullPage));
+        }
+
+        private void PreferenceSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainPage.Instance.NavigateToPage(typeof(PreferenceSettings));
         }
     }
 }

@@ -1,0 +1,207 @@
+﻿<Page
+    x:Class="SMPlayer.PreferenceSettings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SMPlayer"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <ScrollViewer>
+        <StackPanel Padding="4,0">
+            <StackPanel Orientation="Horizontal" Margin="16">
+                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;"/>
+                <TextBlock x:Uid="PreferenceSettingsInfoTextBlock" Margin="16,0" Text="如果你在随机播放中选择了快速播放，偏好的项目会有更高的概率出现在播放列表。" />
+            </StackPanel>
+            <StackPanel>
+                <CommandBar
+                    Background="Transparent"
+                    DefaultLabelPosition="Right"
+                    IsOpen="False"
+                    OverflowButtonVisibility="Collapsed" >
+                    <CommandBar.Content>
+                        <TextBlock
+                            x:Uid="PreferredSongsTextBlock"
+                            Padding="15,10,0,10"
+                            Style="{StaticResource CompactHeaderStyle}"
+                            Text="Preferred Songs"
+                            TextAlignment="Center" />
+                    </CommandBar.Content>
+                    <AppBarToggleButton
+                        x:Name="PreferredSongsIsEnabledButton"
+                        x:Uid="IsEnabledAppBarToggleButton"
+                        Icon="Switch"
+                        Label="IsEnabled"
+                        Margin="4,0"
+                        Click="PreferredSongsIsEnabledButton_Click" />
+                    <AppBarButton 
+                        x:Name="GoToAddPreferredSongsButton" 
+                        x:Uid="GoToAddPreferredSongsButton"
+                        Icon="Add"
+                        Label="Go To Add"
+                        Margin="4,0"
+                        Click="GoToAddPreferredSongsButton_Click"/>
+                </CommandBar>
+                <Border Background="LightGray">
+                    <TextBlock
+                        x:Uid="NoItemsTextBlock"
+                        FontWeight="Bold"
+                        FontSize="16"
+                        Padding="16"
+                        Text="No item." />
+                </Border>
+            </StackPanel>
+            <StackPanel>
+                <CommandBar
+                    Background="Transparent"
+                    DefaultLabelPosition="Right"
+                    IsOpen="False"
+                    OverflowButtonVisibility="Collapsed" >
+                    <CommandBar.Content>
+                        <TextBlock
+                            x:Uid="PreferredArtistsTextBlock"
+                            Padding="15,10,0,10"
+                            Style="{StaticResource CompactHeaderStyle}"
+                            Text="Preferred Artists"
+                            TextAlignment="Center" />
+                    </CommandBar.Content>
+                    <AppBarToggleButton
+                        x:Name="PreferredArtistsIsEnabledButton"
+                        x:Uid="IsEnabledAppBarToggleButton"
+                        Icon="Switch"
+                        Label="IsEnabled"
+                        Margin="4,0"
+                        Click="PreferredArtistsIsEnabledButton_Click" />
+                    <AppBarButton 
+                        x:Name="GoToAddPreferredArtistsButton" 
+                        x:Uid="GoToAddPreferredArtistsButton"
+                        Icon="Add"
+                        Label="Go To Add"
+                        Margin="4,0"
+                        Click="GoToAddPreferredArtistsButton_Click"/>
+                </CommandBar>
+                <Border Background="LightGray">
+                    <TextBlock
+                        x:Uid="NoItemsTextBlock"
+                        FontWeight="Bold"
+                        FontSize="16"
+                        Padding="16"
+                        Text="No item." />
+                </Border>
+            </StackPanel>
+            <StackPanel>
+                <CommandBar
+                    Background="Transparent"
+                    DefaultLabelPosition="Right"
+                    IsOpen="False"
+                    OverflowButtonVisibility="Collapsed" >
+                    <CommandBar.Content>
+                        <TextBlock
+                            x:Uid="PreferredAlbumsTextBlock"
+                            Padding="15,10,0,10"
+                            Style="{StaticResource CompactHeaderStyle}"
+                            Text="Preferred Albums"
+                            TextAlignment="Center" />
+                    </CommandBar.Content>
+                    <AppBarToggleButton
+                        x:Name="PreferredAlbumsIsEnabledButton"
+                        x:Uid="IsEnabledAppBarToggleButton"
+                        Icon="Switch"
+                        Label="IsEnabled"
+                        Margin="4,0"
+                        Click="PreferredAlbumsIsEnabledButton_Click" />
+                    <AppBarButton 
+                        x:Name="GoToAddPreferredAlbumsButton" 
+                        x:Uid="GoToAddPreferredAlbumsButton"
+                        Icon="Add"
+                        Label="Go To Add"
+                        Margin="4,0"
+                        Click="GoToAddPreferredAlbumsButton_Click"/>
+                </CommandBar>
+                <Border Background="LightGray">
+                    <TextBlock
+                        x:Uid="NoItemsTextBlock"
+                        FontWeight="Bold"
+                        FontSize="16"
+                        Padding="16"
+                        Text="No item." />
+                </Border>
+            </StackPanel>
+            <StackPanel>
+                <CommandBar
+                    Background="Transparent"
+                    DefaultLabelPosition="Right"
+                    IsOpen="False"
+                    OverflowButtonVisibility="Collapsed" >
+                    <CommandBar.Content>
+                        <TextBlock
+                            x:Uid="PreferredPlaylistsTextBlock"
+                            Padding="15,10,0,10"
+                            Style="{StaticResource CompactHeaderStyle}"
+                            Text="Preferred Playlists"
+                            TextAlignment="Center" />
+                    </CommandBar.Content>
+                    <AppBarToggleButton
+                        x:Name="PreferredPlaylistsIsEnabledButton"
+                        x:Uid="IsEnabledAppBarToggleButton"
+                        Icon="Switch"
+                        Label="IsEnabled"
+                        Margin="4,0"
+                        Click="PreferredPlaylistsIsEnabledButton_Click" />
+                    <AppBarButton 
+                        x:Name="GoToAddPreferredPlaylistsButton" 
+                        x:Uid="GoToAddPreferredPlaylistsButton"
+                        Icon="Add"
+                        Label="Go To Add"
+                        Margin="4,0"
+                        Click="GoToAddPreferredPlaylistsButton_Click"/>
+                </CommandBar>
+                <Border Background="LightGray">
+                    <TextBlock
+                        x:Uid="NoItemsTextBlock"
+                        FontWeight="Bold"
+                        FontSize="16"
+                        Padding="16"
+                        Text="No item." />
+                </Border>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox
+                    x:Name="RecentPlayedPreferenceCheckBox"
+                    x:Uid="RecentPlayedPreferenceCheckBox"
+                    Checked="RecentPlayedPreferenceCheckBox_Checked"
+                    Content="Prefer Recent Played"
+                    Style="{ThemeResource SettingCheckBoxStyle}"
+                    Unchecked="RecentPlayedPreferenceCheckBox_Unchecked" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox
+                    x:Name="MyFavoritePreferenceCheckBox"
+                    x:Uid="MyFavoritePreferenceCheckBox"
+                    Checked="MyFavoritePreferenceCheckBox_Checked"
+                    Content="Prefer My Favorites"
+                    Style="{ThemeResource SettingCheckBoxStyle}"
+                    Unchecked="MyFavoritePreferenceCheckBox_Unchecked" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox
+                    x:Name="MostPlayedPreferenceCheckBox"
+                    x:Uid="MostPlayedPreferenceCheckBox"
+                    Checked="MostPlayedPreferenceCheckBox_Checked"
+                    Content="Prefer Most Played"
+                    Style="{ThemeResource SettingCheckBoxStyle}"
+                    Unchecked="MostPlayedPreferenceCheckBox_Unchecked" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox
+                    x:Name="LeastPlayedPreferenceCheckBox"
+                    x:Uid="LeastPlayedPreferenceCheckBox"
+                    Checked="LeastPlayedPreferenceCheckBox_Checked"
+                    Content="Prefer Least Played"
+                    Style="{ThemeResource SettingCheckBoxStyle}"
+                    Unchecked="LeastPlayedPreferenceCheckBox_Unchecked" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

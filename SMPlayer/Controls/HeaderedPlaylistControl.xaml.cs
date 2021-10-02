@@ -189,13 +189,13 @@ namespace SMPlayer
             {
                 PinToStartButton.Icon = new SymbolIcon(Symbol.UnPin);
                 PinToStartButton.Label = Helper.Localize("UnPin");
-                PinToStartButton.SetToolTip("UnPin Playlist");
+                PinToStartButton.SetToolTip("UnPinToolTip");
             }
             else
             {
                 PinToStartButton.Icon = new SymbolIcon(Symbol.Pin);
                 PinToStartButton.Label = Helper.Localize("Pin To Start");
-                PinToStartButton.SetToolTip("Pin Playlist to the Start Menu");
+                PinToStartButton.SetToolTip("PinToStartToolTip");
             }
         }
 

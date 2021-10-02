@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddToToolTip" xml:space="preserve">
+    <value>添加到播放列表</value>
+  </data>
   <data name="Albums" xml:space="preserve">
     <value>专辑</value>
   </data>
@@ -153,14 +156,26 @@
   <data name="FoldersWithCount" xml:space="preserve">
     <value>文件夹（{0}）</value>
   </data>
+  <data name="LikeMusicToolTip" xml:space="preserve">
+    <value>设为我喜欢</value>
+  </data>
+  <data name="NewPlaylistToolTip" xml:space="preserve">
+    <value>创建新的播放列表</value>
+  </data>
   <data name="Next" xml:space="preserve">
     <value>下一首</value>
   </data>
   <data name="NowPlaying" xml:space="preserve">
     <value>正在播放</value>
   </data>
-  <data name="Play/Pause" xml:space="preserve">
-    <value>播放/暂停</value>
+  <data name="Pause" xml:space="preserve">
+    <value>暂停</value>
+  </data>
+  <data name="PinToStartToolTip" xml:space="preserve">
+    <value>固定播放列表到开始菜单</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>播放</value>
   </data>
   <data name="Playlists" xml:space="preserve">
     <value>播放列表</value>
@@ -171,6 +186,15 @@
   <data name="PlayNext" xml:space="preserve">
     <value>下一首播放</value>
   </data>
+  <data name="PreferenceSettings" xml:space="preserve">
+    <value>偏好设置</value>
+  </data>
+  <data name="QuickPlay" xml:space="preserve">
+    <value>快速播放</value>
+  </data>
+  <data name="QuickPlayToolTip" xml:space="preserve">
+    <value>在随机播放歌曲的同时会有更高的概率播放偏好的歌曲</value>
+  </data>
   <data name="Recent" xml:space="preserve">
     <value>最近</value>
   </data>
@@ -180,11 +204,20 @@
   <data name="ShareFeedbacks" xml:space="preserve">
     <value>对简音播放器的反馈</value>
   </data>
+  <data name="ShuffleAndPlay" xml:space="preserve">
+    <value>随机播放</value>
+  </data>
   <data name="Songs" xml:space="preserve">
     <value>歌曲</value>
   </data>
   <data name="SongsWithCount" xml:space="preserve">
     <value>歌曲（{0}）</value>
+  </data>
+  <data name="UndoLikeMusicToolTip" xml:space="preserve">
+    <value>从我喜欢中移除</value>
+  </data>
+  <data name="UnPinToolTip" xml:space="preserve">
+    <value>解除固定播放列表</value>
   </data>
   <data name="ViaEmail" xml:space="preserve">
     <value>通过邮件</value>

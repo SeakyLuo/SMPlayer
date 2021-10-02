@@ -109,21 +109,24 @@ namespace SMPlayer
             };
             PlaybackList.CurrentItemChanged += (sender, args) =>
             {
-                if (PlaybackList.CurrentItemIndex >= CurrentPlaylist.Count) return;
-                Music current = CurrentMusic?.Copy(), next = args.NewItem.GetMusic();
-                try
+                lock (CurrentPlaylist)
                 {
-                    foreach (var listener in SwitchMusicListeners)
-                        listener.MusicSwitching(current, next, args.Reason);
+                    if (PlaybackList.CurrentItemIndex >= CurrentPlaylist.Count) return;
+                    Music current = CurrentMusic?.Copy(), next = args.NewItem.GetMusic();
+                    try
+                    {
+                        foreach (var listener in SwitchMusicListeners)
+                            listener.MusicSwitching(current, next, args.Reason);
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // Collection was modified; enumeration operation may not execute.
+                    }
+                    CurrentMusic = next;
+                    Settings.settings.LastMusicIndex = (int)PlaybackList.CurrentItemIndex;
+                    if (args.Reason == MediaPlaybackItemChangedReason.EndOfStream)
+                        App.Save();
                 }
-                catch (InvalidOperationException)
-                {
-                    // Collection was modified; enumeration operation may not execute.
-                }
-                CurrentMusic = next;
-                Settings.settings.LastMusicIndex = (int)PlaybackList.CurrentItemIndex;
-                if (args.Reason == MediaPlaybackItemChangedReason.EndOfStream)
-                    App.Save();
             };
             Player.MediaEnded += (sender, args) =>
             {
@@ -238,6 +241,11 @@ namespace SMPlayer
         }
 
         public static void ShuffleAndPlay()
+        {
+            ShuffleAndPlay(CurrentPlaylist);
+        }
+
+        public static void PreferredShuffleAndPlay()
         {
             ShuffleAndPlay(CurrentPlaylist);
         }

@@ -24,10 +24,22 @@ namespace SMPlayer.Models
 
         public static async void SaveAsync<T>(StorageFolder folder, string filename, T data)
         {
-            if (folder == null) return;
+            if (folder == null || data == null) return;
             if (!filename.EndsWith(extension)) filename += extension;
             StorageFile file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
-            var json = JsonConvert.SerializeObject(data);
+            string json;
+            lock (data)
+            {
+                try
+                {
+                    json = JsonConvert.SerializeObject(data);
+                }
+                catch (Exception e)
+                {
+                    Helper.LogException(e);
+                    return;
+                }
+            }
             while (true)
             {
                 try

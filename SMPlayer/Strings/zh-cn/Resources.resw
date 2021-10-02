@@ -156,6 +156,9 @@
   <data name="AlbumHeader.Header" xml:space="preserve">
     <value>专辑</value>
   </data>
+  <data name="AlbumPreferenceCheckBox.Content" xml:space="preserve">
+    <value>偏好专辑</value>
+  </data>
   <data name="Albums" xml:space="preserve">
     <value>所有专辑</value>
   </data>
@@ -186,6 +189,9 @@
   <data name="ArtistHeader.Header" xml:space="preserve">
     <value>歌手</value>
   </data>
+  <data name="ArtistPreferenceCheckBox.Content" xml:space="preserve">
+    <value>偏好歌手</value>
+  </data>
   <data name="Artists" xml:space="preserve">
     <value>所有歌手</value>
   </data>
@@ -204,11 +210,17 @@
   <data name="ArtistTextBlock.Text" xml:space="preserve">
     <value>歌手</value>
   </data>
-  <data name="AutoLyricsCheckBox.Content" xml:space="preserve">
-    <value>自动为最近添加的歌曲添加歌词</value>
+  <data name="AutoLyricsToggleSwitch.OffContent" xml:space="preserve">
+    <value>自动为添加的歌曲添加歌词</value>
   </data>
-  <data name="AutoPlayCheckBox.Content" xml:space="preserve">
-    <value>打开应用后自动播放</value>
+  <data name="AutoLyricsToggleSwitch.OnContent" xml:space="preserve">
+    <value>自动为添加的歌曲添加歌词</value>
+  </data>
+  <data name="AutoPlayToggleSwitch.OffContent" xml:space="preserve">
+    <value>打开应用后自动播放歌曲</value>
+  </data>
+  <data name="AutoPlayToggleSwitch.OnContent" xml:space="preserve">
+    <value>打开应用后自动播放歌曲</value>
   </data>
   <data name="AutoScrollLyricsCheckBox.Content" xml:space="preserve">
     <value>歌曲播放时自动滚动歌词</value>
@@ -269,9 +281,6 @@
   </data>
   <data name="ConfirmButton.Content" xml:space="preserve">
     <value>确认</value>
-  </data>
-  <data name="Create a New Playlist" xml:space="preserve">
-    <value>创建新的播放列表</value>
   </data>
   <data name="Create New Playlist" xml:space="preserve">
     <value>创建新的播放列表</value>
@@ -411,7 +420,10 @@
   <data name="GridViewItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>转为网格模式</value>
   </data>
-  <data name="HideMultiSelectCommandBarCheckBox.Content" xml:space="preserve">
+  <data name="HideMultiSelectCommandBarToggleSwitch.OffContent" xml:space="preserve">
+    <value>在操作后隐藏多选命令栏</value>
+  </data>
+  <data name="HideMultiSelectCommandBarToggleSwitch.OnContent" xml:space="preserve">
     <value>在操作后隐藏多选命令栏</value>
   </data>
   <data name="hour" xml:space="preserve">
@@ -426,11 +438,17 @@
   <data name="ImportLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>导入歌词</value>
   </data>
+  <data name="IsEnabledAppBarToggleButton.Label" xml:space="preserve">
+    <value>是否启用</value>
+  </data>
   <data name="KeepRecentCheckBox.Content" xml:space="preserve">
     <value>仅保留最近播放的100项而不是全部</value>
   </data>
   <data name="Least Played" xml:space="preserve">
     <value>最少播放</value>
+  </data>
+  <data name="LeastPlayedPreferenceCheckBox.Content" xml:space="preserve">
+    <value>偏好最少播放</value>
   </data>
   <data name="ListViewItem.Label" xml:space="preserve">
     <value>列表模式</value>
@@ -501,6 +519,9 @@
   <data name="Most Played" xml:space="preserve">
     <value>最常播放</value>
   </data>
+  <data name="MostPlayedPreferenceCheckBox.Content" xml:space="preserve">
+    <value>偏好最常播放</value>
+  </data>
   <data name="MultiSelect" xml:space="preserve">
     <value>多选</value>
   </data>
@@ -534,11 +555,17 @@
   <data name="MusicLibraryTextBlock.Text" xml:space="preserve">
     <value>音乐库</value>
   </data>
+  <data name="MusicPreferenceCheckBox.Content" xml:space="preserve">
+    <value>偏好音乐</value>
+  </data>
   <data name="Mute" xml:space="preserve">
     <value>静音</value>
   </data>
   <data name="My Favorites" xml:space="preserve">
     <value>我喜欢</value>
+  </data>
+  <data name="MyFavoritePreferenceCheckBox.Content" xml:space="preserve">
+    <value>偏好我喜欢</value>
   </data>
   <data name="MyFavoritesItem.Content" xml:space="preserve">
     <value>我喜欢</value>
@@ -624,9 +651,6 @@
   <data name="Pause" xml:space="preserve">
     <value>暂停</value>
   </data>
-  <data name="Pin Playlist to the Start Menu" xml:space="preserve">
-    <value>固定播放列表到开始菜单</value>
-  </data>
   <data name="Pin To Start" xml:space="preserve">
     <value>固定到开始菜单</value>
   </data>
@@ -672,6 +696,9 @@
   <data name="PlaylistMenuItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>显示正在播放列表</value>
   </data>
+  <data name="PlaylistPreferenceCheckBox.Content" xml:space="preserve">
+    <value>偏好播放列表</value>
+  </data>
   <data name="PlaylistsItem.Content" xml:space="preserve">
     <value>播放列表</value>
   </data>
@@ -682,10 +709,16 @@
     <value>播放列表</value>
   </data>
   <data name="PlayModeAppButton.Label" xml:space="preserve">
-    <value>播放模式</value>
+    <value>沉浸模式</value>
   </data>
   <data name="PlayTextBlock.Text" xml:space="preserve">
     <value>播放</value>
+  </data>
+  <data name="PreferenceSettingsButton.Label" xml:space="preserve">
+    <value>偏好设置</value>
+  </data>
+  <data name="PreferenceSwitchCheckBox.Content" xml:space="preserve">
+    <value>如果你打开此开关，你喜欢的歌曲、歌手、专辑等会有更高的概率出现在随机播放列表中。</value>
   </data>
   <data name="PrevButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>前一首</value>
@@ -734,6 +767,9 @@
   </data>
   <data name="RecentPlayedItemTextBlock.Text" xml:space="preserve">
     <value>保留最近播放的歌曲数：</value>
+  </data>
+  <data name="RecentPlayedPreferenceCheckBox.Content" xml:space="preserve">
+    <value>偏好最近播放</value>
   </data>
   <data name="RecentSearchesItem.Header" xml:space="preserve">
     <value>最近搜索</value>
@@ -795,11 +831,20 @@
   <data name="ReleaseNotesPlayWithSMPlayer.Text" xml:space="preserve">
     <value>支持用简音播放器播放音乐文件。</value>
   </data>
+  <data name="ReleaseNotesPreferenceSettingsAdded.Text" xml:space="preserve">
+    <value>【新功能！】“正在播放”页面中添加了偏好设置，处于偏好列表中的项目会有更高的概率被随机播放。</value>
+  </data>
   <data name="ReleaseNotesSearchPageAddAllToButton.Text" xml:space="preserve">
     <value>搜索页面有了“添加全部到”按钮。</value>
   </data>
+  <data name="ReleaseNotesSettingsCheckBoxChanged.Text" xml:space="preserve">
+    <value>【体验优化】优化了设置页面的一些控件展示。</value>
+  </data>
   <data name="ReleaseNotesShowCount.Text" xml:space="preserve">
     <value>部分页面会显示列表项总数了。</value>
+  </data>
+  <data name="ReleaseNotesShowInExplorerBugFix.Text" xml:space="preserve">
+    <value>【问题修复】修复了在文件夹上点击“在本地显示”时造成的闪退问题</value>
   </data>
   <data name="ReleaseNotesShowLyricsInNotifications.Text" xml:space="preserve">
     <value>现已支持在通知中显示歌词。</value>
@@ -876,8 +921,11 @@
   <data name="SavePlaylistMenuItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>将正在播放保存为新的播放列表</value>
   </data>
-  <data name="SaveProgressCheckBox.Content" xml:space="preserve">
-    <value>保存播放进度</value>
+  <data name="SaveProgressToggleSwitch.OffContent" xml:space="preserve">
+    <value>退出时保存播放进度</value>
+  </data>
+  <data name="SaveProgressToggleSwitch.OnContent" xml:space="preserve">
+    <value>退出时保存播放进度</value>
   </data>
   <data name="SaveTextBlock.Text" xml:space="preserve">
     <value>保存</value>
@@ -930,9 +978,6 @@
   <data name="SendNotificationComboBox.Content" xml:space="preserve">
     <value>发送通知：</value>
   </data>
-  <data name="Set As Favorite" xml:space="preserve">
-    <value>设为喜欢</value>
-  </data>
   <data name="Settings" xml:space="preserve">
     <value>设置</value>
   </data>
@@ -948,7 +993,10 @@
   <data name="ShowAllPlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>显示所有播放列表</value>
   </data>
-  <data name="ShowCounterCheckBox.Content" xml:space="preserve">
+  <data name="ShowCountToggleSwitch.OffContent" xml:space="preserve">
+    <value>展示计数</value>
+  </data>
+  <data name="ShowCountToggleSwitch.OnContent" xml:space="preserve">
     <value>展示计数</value>
   </data>
   <data name="ShowInExplorerButton.Content" xml:space="preserve">
@@ -957,17 +1005,17 @@
   <data name="ShowInExplorerButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>在本地中显示</value>
   </data>
-  <data name="ShowLyricsInNotificationCheckBox.Content" xml:space="preserve">
-    <value>在通知中显示歌词</value>
-  </data>
   <data name="ShowLyricsInNotificationInfo.ToolTipService.ToolTip" xml:space="preserve">
     <value>支持lrc格式歌词，并以百毫秒精度展示。
 会以以下顺序读取lrc歌词：本地音乐同名lrc文件、互联网、音乐内置歌词。</value>
   </data>
-  <data name="Shuffle" xml:space="preserve">
-    <value>随机播放</value>
+  <data name="ShowLyricsInNotificationToggleSwitch.OffContent" xml:space="preserve">
+    <value>在通知中显示歌词</value>
   </data>
-  <data name="Shuffle and Play" xml:space="preserve">
+  <data name="ShowLyricsInNotificationToggleSwitch.OnContent" xml:space="preserve">
+    <value>在通知中显示歌词</value>
+  </data>
+  <data name="Shuffle" xml:space="preserve">
     <value>随机播放</value>
   </data>
   <data name="ShuffleButton.Label" xml:space="preserve">
@@ -1012,9 +1060,6 @@
   <data name="TrackNumberTextBlock.Text" xml:space="preserve">
     <value>音轨</value>
   </data>
-  <data name="Undo Favorite" xml:space="preserve">
-    <value>取消喜欢</value>
-  </data>
   <data name="Undo Mute" xml:space="preserve">
     <value>取消静音</value>
   </data>
@@ -1023,9 +1068,6 @@
   </data>
   <data name="UnPin" xml:space="preserve">
     <value>解除固定</value>
-  </data>
-  <data name="UnPin Playlist" xml:space="preserve">
-    <value>解除固定播放列表</value>
   </data>
   <data name="UpdateMusicLibraryButton.Content" xml:space="preserve">
     <value>重新加载音乐库</value>

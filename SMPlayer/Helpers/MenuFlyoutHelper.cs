@@ -31,7 +31,7 @@ namespace SMPlayer
                 Text = Helper.Localize("Add To"),
                 Name = AddToSubItemName
             };
-            addToItem.SetToolTip("Add To Playlist");
+            addToItem.SetToolTip("AddToToolTip");
             if (CurrentPlaylistName != NowPlaying)
             {
                 var nowPlayingItem = new MenuFlyoutItem()
@@ -163,7 +163,7 @@ namespace SMPlayer
                 renameActionListener.Dialog = dialog;
                 await dialog.ShowAsync();
             };
-            newPlaylistItem.SetToolTip("Create a New Playlist");
+            newPlaylistItem.SetToolTip("NewPlaylistToolTip");
             flyout.Items.Add(newPlaylistItem);
             foreach (var playlist in Settings.settings.Playlists)
             {
@@ -234,7 +234,7 @@ namespace SMPlayer
                 Text = Helper.Localize("Shuffle"),
                 Name = PlaylistMenuName
             };
-            shuffleItem.SetToolTip("Shuffle and Play");
+            shuffleItem.SetToolTip("ShuffleAndPlay");
             shuffleItem.Click += (s, args) =>
             {
                 MediaHelper.ShuffleAndPlay(Data as IEnumerable<Music>);
@@ -254,9 +254,14 @@ namespace SMPlayer
             };
             item.Click += async (s, args) =>
             {
-                if (await Helper.FileNotExist(path))
+                if (path.Contains(".") && await Helper.FileNotExist(path))
                 {
                     Helper.ShowMusicNotFoundNotification(Music.GetFilename(path));
+                    return;
+                }
+                if (!path.Contains(".") && await Helper.FolderNotExist(path))
+                {
+                    Helper.ShowPathNotFoundNotification(path);
                     return;
                 }
                 ShowInExplorerWithLoader(path, type);
@@ -365,7 +370,7 @@ namespace SMPlayer
                 Text = localizedPlay,
                 Name = MusicMenuName
             };
-            playItem.SetToolTip(localizedPlay + Helper.LocalizeMessage("MusicName", music.Name));
+            playItem.SetToolTip(localizedPlay + Helper.LocalizeMessage("MusicName", music.Name), false);
             playItem.Click += (s, args) =>
             {
                 MediaHelper.SetMusicAndPlay(music);
@@ -617,9 +622,21 @@ namespace SMPlayer
             }
             flyout.ShowAt(sender as FrameworkElement);
         }
-        public static MenuFlyout GetShuffleMenu(int limit = 100)
+        public static MenuFlyout GetShuffleMenu(int randomLimit = 100, Action callback = null)
         {
             var flyout = new MenuFlyout();
+            var quickPlay = new MenuFlyoutItem()
+            {
+                Text = Helper.LocalizeText("QuickPlay")
+            };
+            quickPlay.Click += (sender, args) =>
+            {
+                MediaHelper.PreferredShuffleAndPlay();
+                callback?.Invoke();
+            };
+            quickPlay.SetToolTip("QuickPlayToolTip");
+            flyout.Items.Add(quickPlay);
+            flyout.Items.Add(new MenuFlyoutSeparator());
             var nowPlaying = new MenuFlyoutItem()
             {
                 Text = Helper.Localize("NowPlaying")
@@ -627,6 +644,7 @@ namespace SMPlayer
             nowPlaying.Click += (sender, args) =>
             {
                 MediaHelper.ShuffleAndPlay();
+                callback?.Invoke();
             };
             flyout.Items.Add(nowPlaying);
             flyout.Items.Add(new MenuFlyoutSeparator());
@@ -636,7 +654,8 @@ namespace SMPlayer
             };
             musicLibrary.Click += (sender, args) =>
             {
-                MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.AllSongs.RandItems(limit));
+                MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.AllSongs.RandItems(randomLimit));
+                callback?.Invoke();
             };
             flyout.Items.Add(musicLibrary);
             var artist = new MenuFlyoutItem()
@@ -648,6 +667,7 @@ namespace SMPlayer
                 var rArtist = MusicLibraryPage.AllSongs.GroupBy(m => m.Artist).RandItem();
                 MediaHelper.SetPlaylistAndPlay(rArtist.Shuffle());
                 Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("PlayRandomArtist", rArtist.Key));
+                callback?.Invoke();
             };
             flyout.Items.Add(artist);
             var album = new MenuFlyoutItem()
@@ -659,6 +679,7 @@ namespace SMPlayer
                 var rAlbum = MusicLibraryPage.AllSongs.GroupBy(m => m.Album).RandItem();
                 MediaHelper.SetPlaylistAndPlay(rAlbum.Shuffle());
                 Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("PlayRandomAlbum", rAlbum.Key));
+                callback?.Invoke();
             };
             flyout.Items.Add(album);
             if (Settings.settings.Playlists.Count > 0)
@@ -670,8 +691,9 @@ namespace SMPlayer
                 playlist.Click += (sender, args) =>
                 {
                     var rPlaylist = Settings.settings.Playlists.RandItem();
-                    MediaHelper.SetPlaylistAndPlay(rPlaylist.Songs.RandItems(limit));
+                    MediaHelper.SetPlaylistAndPlay(rPlaylist.Songs.RandItems(randomLimit));
                     Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("PlayRandomPlaylist", rPlaylist.Name));
+                    callback?.Invoke();
                 };
                 flyout.Items.Add(playlist);
             }
@@ -684,8 +706,9 @@ namespace SMPlayer
                 localFolder.Click += (sender, args) =>
                 {
                     var rLocalFolder = Settings.settings.Tree.GetAllTrees().Where(tree => tree.Files.Count > 0).RandItem();
-                    MediaHelper.SetMusicAndPlay(rLocalFolder.Files.RandItems(limit));
+                    MediaHelper.SetMusicAndPlay(rLocalFolder.Files.RandItems(randomLimit));
                     Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("PlayRandomLocalFolder", rLocalFolder.Directory));
+                    callback?.Invoke();
                 };
                 flyout.Items.Add(localFolder);
             }
@@ -697,7 +720,8 @@ namespace SMPlayer
                 };
                 recentAdded.Click += (sender, args) =>
                 {
-                    MediaHelper.SetMusicAndPlay(RecentPage.RecentAdded.TimeLine.RandItems(limit));
+                    MediaHelper.SetMusicAndPlay(RecentPage.RecentAdded.TimeLine.RandItems(randomLimit));
+                    callback?.Invoke();
                 };
                 flyout.Items.Add(recentAdded);
             }
@@ -710,10 +734,11 @@ namespace SMPlayer
                 recentPlayed.Click += (sender, args) =>
                 {
                     MediaHelper.SetMusicAndPlay(Settings.settings.RecentPlayed.ToMusicList());
+                    callback?.Invoke();
                 };
                 flyout.Items.Add(recentPlayed);
             }
-            if (MusicLibraryPage.SongCount > limit)
+            if (MusicLibraryPage.SongCount > randomLimit)
             {
                 flyout.Items.Add(new MenuFlyoutSeparator());
                 var mostPlayed = new MenuFlyoutItem()
@@ -725,10 +750,11 @@ namespace SMPlayer
                     List<Music> list = new List<Music>();
                     foreach (var group in MusicLibraryPage.AllSongs.GroupBy(m => m.PlayCount).OrderByDescending(g => g.Key))
                     {
-                        if (list.Count > limit) break;
+                        if (list.Count > randomLimit) break;
                         list.AddRange(group);
                     }
-                    MediaHelper.SetPlaylistAndPlay(list.Shuffle().Take(limit));
+                    MediaHelper.SetPlaylistAndPlay(list.Shuffle().Take(randomLimit));
+                    callback?.Invoke();
                 };
                 flyout.Items.Add(mostPlayed);
                 var leastPlayed = new MenuFlyoutItem()
@@ -740,10 +766,11 @@ namespace SMPlayer
                     List<Music> list = new List<Music>();
                     foreach (var group in MusicLibraryPage.AllSongs.GroupBy(m => m.PlayCount).OrderBy(g => g.Key))
                     {
-                        if (list.Count > limit) break;
+                        if (list.Count > randomLimit) break;
                         list.AddRange(group);
                     }
-                    MediaHelper.SetPlaylistAndPlay(list.Shuffle().Take(limit));
+                    MediaHelper.SetPlaylistAndPlay(list.Shuffle().Take(randomLimit));
+                    callback?.Invoke();
                 };
                 flyout.Items.Add(leastPlayed);
             }

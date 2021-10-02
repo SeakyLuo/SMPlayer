@@ -78,14 +78,14 @@ namespace SMPlayer.Controls
             {
                 PlayCountTextBlock.Text = "";
                 ClearPlayCountButton.Visibility = Visibility.Collapsed;
-                PlayCountTextBlock.SetToolTip(Helper.LocalizeMessage("NotPlayedYet", music.Name));
+                PlayCountTextBlock.SetToolTip(Helper.LocalizeMessage("NotPlayedYet", music.Name), false);
             }
             else
             {
                 PlayCountTextBlock.Text = music.PlayCount.ToString();
                 ClearPlayCountButton.Visibility = Visibility.Visible;
                 string times = Helper.CurrentLanguage.DisplayName.Contains("en") ? MusicDurationConverter.TryPlural("time", music.PlayCount) : "";
-                PlayCountTextBlock.SetToolTip(Helper.LocalizeMessage("HasBeenPlayed", music.Name, music.PlayCount, times));
+                PlayCountTextBlock.SetToolTip(Helper.LocalizeMessage("HasBeenPlayed", music.Name, music.PlayCount, times), false);
             }
         }
 

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddToToolTip" xml:space="preserve">
+    <value>Add to playlist</value>
+  </data>
   <data name="Albums" xml:space="preserve">
     <value>Albums</value>
   </data>
@@ -153,14 +156,26 @@
   <data name="FoldersWithCount" xml:space="preserve">
     <value>Folders ({0})</value>
   </data>
+  <data name="LikeMusicToolTip" xml:space="preserve">
+    <value>Set As My Favorite</value>
+  </data>
+  <data name="NewPlaylistToolTip" xml:space="preserve">
+    <value>Create a new playlist</value>
+  </data>
   <data name="Next" xml:space="preserve">
     <value>Next</value>
   </data>
   <data name="NowPlaying" xml:space="preserve">
     <value>Now Playing</value>
   </data>
-  <data name="Play/Pause" xml:space="preserve">
-    <value>Play/Pause</value>
+  <data name="Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="PinToStartToolTip" xml:space="preserve">
+    <value>Pin Playlist to the Start Menu</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>Play</value>
   </data>
   <data name="Playlists" xml:space="preserve">
     <value>Playlists</value>
@@ -171,6 +186,15 @@
   <data name="PlayNext" xml:space="preserve">
     <value>Play Next</value>
   </data>
+  <data name="PreferenceSettings" xml:space="preserve">
+    <value>Preference Settings</value>
+  </data>
+  <data name="QuickPlay" xml:space="preserve">
+    <value>Quick Play</value>
+  </data>
+  <data name="QuickPlayToolTip" xml:space="preserve">
+    <value>Play music with randomness and preferences</value>
+  </data>
   <data name="Recent" xml:space="preserve">
     <value>Recent</value>
   </data>
@@ -180,11 +204,20 @@
   <data name="ShareFeedbacks" xml:space="preserve">
     <value>Feedbacks about SMPlayer</value>
   </data>
+  <data name="ShuffleAndPlay" xml:space="preserve">
+    <value>Shuffle and play</value>
+  </data>
   <data name="Songs" xml:space="preserve">
     <value>Songs</value>
   </data>
   <data name="SongsWithCount" xml:space="preserve">
     <value>Songs ({0})</value>
+  </data>
+  <data name="UndoLikeMusicToolTip" xml:space="preserve">
+    <value>Remove From My Favorite</value>
+  </data>
+  <data name="UnPinToolTip" xml:space="preserve">
+    <value>UnPin Playlist</value>
   </data>
   <data name="ViaEmail" xml:space="preserve">
     <value>Via Email</value>

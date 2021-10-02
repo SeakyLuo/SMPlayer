@@ -73,6 +73,12 @@
                 Icon="PreviewLink"
                 IsEnabled="False"
                 Label="Play Mode" />
+            <AppBarButton
+                x:Name="PreferenceSettingsButton"
+                x:Uid="PreferenceSettingsButton"
+                Click="PreferenceSettingsButton_Click"
+                Icon="Setting"
+                Label="PreferenceSettings" />
         </CommandBar>
         <local:PlaylistControl
             x:Name="NowPlayingPlaylistControl"

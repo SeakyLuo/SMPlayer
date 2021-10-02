@@ -182,8 +182,28 @@ namespace SMPlayer
         {
             try
             {
-                await StorageFile.GetFileFromPathAsync(path);
-                return true;
+                StorageFile file = await StorageFile.GetFileFromPathAsync(path);
+                return file != null;
+            }
+            catch (FileNotFoundException)
+            {
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public static async Task<bool> FolderNotExist(string path)
+        {
+            return !await FolderExists(path);
+        }
+        public static async Task<bool> FolderExists(string path)
+        {
+            try
+            {
+                StorageFolder folder = await StorageFolder.GetFolderFromPathAsync(path);
+                return folder != null;
             }
             catch (FileNotFoundException)
             {
@@ -214,6 +234,10 @@ namespace SMPlayer
         public static void ShowMusicNotFoundNotification(string music, int duration = 5000)
         {
             GetMainPageContainer().ShowNotification(LocalizeMessage("MusicNotFound", music), duration);
+        }
+        public static void ShowPathNotFoundNotification(string path, int duration = 5000)
+        {
+            GetMainPageContainer().ShowNotification(LocalizeMessage("PathNotFound", Music.GetFileFolder(path)), duration);
         }
         public static void ShowAddMusicResultNotification(AddMusicResult result, Music target = null)
         {

@@ -47,13 +47,13 @@ namespace SMPlayer
             NotificationSendComboBox.SelectedIndex = (int)Settings.settings.NotificationSend;
             NotificationModeComboBox.SelectedIndex = (int)Settings.settings.NotificationDisplay;
             ThemeColorPicker.Color = Settings.settings.ThemeColor;
-            ShowCounterCheckBox.IsChecked = Settings.settings.ShowCount;
+            ShowCountToggleSwitch.IsOn = Settings.settings.ShowCount;
             KeepRecentComboBox.SelectedIndex = LimitedRecentPlayedItems.FindIndex(i => i == Settings.settings.LimitedRecentPlayedItems);
-            AutoPlayCheckBox.IsChecked = Settings.settings.AutoPlay;
-            AutoLyricsCheckBox.IsChecked = Settings.settings.AutoLyrics;
-            SaveProgressCheckBox.IsChecked = Settings.settings.SaveMusicProgress;
-            HideMultiSelectCommandBarCheckBox.IsChecked = Settings.settings.HideMultiSelectCommandBarAfterOperation;
-            ShowLyricsInNotificationCheckBox.IsChecked = Settings.settings.ShowLyricsInNotification;
+            AutoPlayToggleSwitch.IsOn = Settings.settings.AutoPlay;
+            AutoLyricsToggleSwitch.IsOn = Settings.settings.AutoLyrics;
+            SaveProgressToggleSwitch.IsOn = Settings.settings.SaveMusicProgress;
+            HideMultiSelectCommandBarToggleSwitch.IsOn = Settings.settings.HideMultiSelectCommandBarAfterOperation;
+            ShowLyricsInNotificationToggleSwitch.IsOn = Settings.settings.ShowLyricsInNotification;
         }
 
         private async void PathBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
@@ -283,40 +283,9 @@ namespace SMPlayer
             }
         }
 
-
-        private void AutoPlayCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.AutoPlay = true;
-        }
-
-        private void AutoPlayCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.AutoPlay = false;
-        }
-
-        private void SaveProgressCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.SaveMusicProgress = true;
-        }
-
-        private void SaveProgressCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.SaveMusicProgress = false;
-        }
-
         private void KeepRecentComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Settings.settings.LimitedRecentPlayedItems = LimitedRecentPlayedItems[(sender as ComboBox).SelectedIndex];
-        }
-
-        private void AutoLyricsCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.AutoLyrics = true;
-        }
-
-        private void AutoLyricsCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.AutoLyrics = false;
         }
 
         private async void ExportData_Click(object sender, RoutedEventArgs e)
@@ -378,26 +347,6 @@ namespace SMPlayer
         {
             var dialog = new ReleaseNotesDialog();
             await dialog.ShowAsync();
-        }
-
-        private void HideMultiSelectCommandBarCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.HideMultiSelectCommandBarAfterOperation = true;
-        }
-
-        private void HideMultiSelectCommandBarCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.HideMultiSelectCommandBarAfterOperation = false;
-        }
-
-        private void ShowCounterCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.ShowCount = true;
-        }
-
-        private void ShowCounterCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.ShowCount = false;
         }
 
         private static async Task ComposeEmail(string receiver, string subject, string messageBody)
@@ -462,18 +411,6 @@ namespace SMPlayer
             IsProcessing = false;
         }
 
-        private async void ShowLyricsInNotificationCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.ShowLyricsInNotification = true;
-            await LyricsHelper.SetLyrics();
-        }
-
-        private void ShowLyricsInNotificationCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.ShowLyricsInNotification = false;
-            LyricsHelper.ClearLyrics();
-        }
-
         private async void NotificationModeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (NotificationModeComboBox.SelectedIndex < 0) return;
@@ -488,6 +425,43 @@ namespace SMPlayer
         {
             if (NotificationModeComboBox.SelectedIndex < 0) return;
             Settings.settings.NotificationSend = SettingsEnum.NotificationSendModes[NotificationSendComboBox.SelectedIndex];
+        }
+
+        private void AutoPlayToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.AutoPlay = (sender as ToggleSwitch).IsOn;
+        }
+
+        private async void ShowLyricsInNotificationToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (Settings.settings.ShowLyricsInNotification = (sender as ToggleSwitch).IsOn)
+            {
+                await LyricsHelper.SetLyrics();
+            }
+            else
+            {
+                LyricsHelper.ClearLyrics();
+            }
+        }
+
+        private void HideMultiSelectCommandBarToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.HideMultiSelectCommandBarAfterOperation = (sender as ToggleSwitch).IsOn;
+        }
+
+        private void ShowCountToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.ShowCount = (sender as ToggleSwitch).IsOn;
+        }
+
+        private void AutoLyricsToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.AutoLyrics = (sender as ToggleSwitch).IsOn;
+        }
+
+        private void SaveProgressToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.SaveMusicProgress = (sender as ToggleSwitch).IsOn;
         }
     }
 

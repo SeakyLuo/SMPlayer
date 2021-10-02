@@ -156,6 +156,9 @@
   <data name="AlbumHeader.Header" xml:space="preserve">
     <value>Album</value>
   </data>
+  <data name="AlbumPreferenceCheckBox.Content" xml:space="preserve">
+    <value>Preferred Albums</value>
+  </data>
   <data name="Albums" xml:space="preserve">
     <value>Albums</value>
   </data>
@@ -186,6 +189,9 @@
   <data name="ArtistHeader.Header" xml:space="preserve">
     <value>Artist</value>
   </data>
+  <data name="ArtistPreferenceCheckBox.Content" xml:space="preserve">
+    <value>Preferred Artists</value>
+  </data>
   <data name="Artists" xml:space="preserve">
     <value>Artists</value>
   </data>
@@ -204,11 +210,17 @@
   <data name="ArtistTextBlock.Text" xml:space="preserve">
     <value>Artist</value>
   </data>
-  <data name="AutoLyricsCheckBox.Content" xml:space="preserve">
-    <value>Add lyrics for recently added music</value>
+  <data name="AutoLyricsToggleSwitch.OffContent" xml:space="preserve">
+    <value>Add lyrics automatically when music is added</value>
   </data>
-  <data name="AutoPlayCheckBox.Content" xml:space="preserve">
-    <value>Play music after App launches</value>
+  <data name="AutoLyricsToggleSwitch.OnContent" xml:space="preserve">
+    <value>Add lyrics automatically when music is added</value>
+  </data>
+  <data name="AutoPlayToggleSwitch.OffContent" xml:space="preserve">
+    <value>Play music automatically after this App is launched.</value>
+  </data>
+  <data name="AutoPlayToggleSwitch.OnContent" xml:space="preserve">
+    <value>Play music automatically after this App is launched.</value>
   </data>
   <data name="AutoScrollLyricsCheckBox.Content" xml:space="preserve">
     <value>Scroll lyrics automatically when playing music.</value>
@@ -269,9 +281,6 @@
   </data>
   <data name="ConfirmButton.Content" xml:space="preserve">
     <value>Confirm</value>
-  </data>
-  <data name="Create a New Playlist" xml:space="preserve">
-    <value>Create a New Playlist</value>
   </data>
   <data name="Create New Playlist" xml:space="preserve">
     <value>Create New Playlist</value>
@@ -411,7 +420,10 @@
   <data name="GridViewItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Change to Grid View</value>
   </data>
-  <data name="HideMultiSelectCommandBarCheckBox.Content" xml:space="preserve">
+  <data name="HideMultiSelectCommandBarToggleSwitch.OffContent" xml:space="preserve">
+    <value>Hide multi-select commandbar after operation</value>
+  </data>
+  <data name="HideMultiSelectCommandBarToggleSwitch.OnContent" xml:space="preserve">
     <value>Hide multi-select commandbar after operation</value>
   </data>
   <data name="hour" xml:space="preserve">
@@ -426,11 +438,17 @@
   <data name="ImportLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Import lyrics</value>
   </data>
+  <data name="IsEnabledAppBarToggleButton.Label" xml:space="preserve">
+    <value>Is Enabled</value>
+  </data>
   <data name="KeepRecentCheckBox.Content" xml:space="preserve">
     <value>Only keep 100 recently played items instead of all</value>
   </data>
   <data name="Least Played" xml:space="preserve">
     <value>Least Played</value>
+  </data>
+  <data name="LeastPlayedPreferenceCheckBox.Content" xml:space="preserve">
+    <value>Prefer Least Played</value>
   </data>
   <data name="ListViewItem.Label" xml:space="preserve">
     <value>List View</value>
@@ -501,6 +519,9 @@
   <data name="Most Played" xml:space="preserve">
     <value>Most Played</value>
   </data>
+  <data name="MostPlayedPreferenceCheckBox.Content" xml:space="preserve">
+    <value>Prefer Most Played</value>
+  </data>
   <data name="MultiSelect" xml:space="preserve">
     <value>Multi Select</value>
   </data>
@@ -534,11 +555,17 @@
   <data name="MusicLibraryTextBlock.Text" xml:space="preserve">
     <value>Music Library</value>
   </data>
+  <data name="MusicPreferenceCheckBox.Content" xml:space="preserve">
+    <value>Preferred Songs</value>
+  </data>
   <data name="Mute" xml:space="preserve">
     <value>Mute</value>
   </data>
   <data name="My Favorites" xml:space="preserve">
     <value>My Favorites</value>
+  </data>
+  <data name="MyFavoritePreferenceCheckBox.Content" xml:space="preserve">
+    <value>Prefer My Favorites</value>
   </data>
   <data name="MyFavoritesItem.Content" xml:space="preserve">
     <value>My Favorites</value>
@@ -624,9 +651,6 @@
   <data name="Pause" xml:space="preserve">
     <value>Pause</value>
   </data>
-  <data name="Pin Playlist to the Start Menu" xml:space="preserve">
-    <value>Pin Playlist to the Start Menu</value>
-  </data>
   <data name="Pin To Start" xml:space="preserve">
     <value>Pin To Start</value>
   </data>
@@ -672,6 +696,9 @@
   <data name="PlaylistMenuItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Show Now Playing Playlist</value>
   </data>
+  <data name="PlaylistPreferenceCheckBox.Content" xml:space="preserve">
+    <value>Preferred Playlists</value>
+  </data>
   <data name="PlaylistsItem.Content" xml:space="preserve">
     <value>Playlists</value>
   </data>
@@ -686,6 +713,12 @@
   </data>
   <data name="PlayTextBlock.Text" xml:space="preserve">
     <value>Play</value>
+  </data>
+  <data name="PreferenceSettingsButton.Label" xml:space="preserve">
+    <value>Preference Settings</value>
+  </data>
+  <data name="PreferenceSwitchCheckBox.Content" xml:space="preserve">
+    <value>If you turn this on, preferred items (songs, artists, albums, e.t.c) will have a higher posibility to show up in the shuffle playlist.</value>
   </data>
   <data name="PrevButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Previous</value>
@@ -734,6 +767,9 @@
   </data>
   <data name="RecentPlayedItemTextBlock.Text" xml:space="preserve">
     <value>The number of recently played songs to keep: </value>
+  </data>
+  <data name="RecentPlayedPreferenceCheckBox.Content" xml:space="preserve">
+    <value>Prefer Recent Played</value>
   </data>
   <data name="RecentSearchesItem.Header" xml:space="preserve">
     <value>Recent Searches</value>
@@ -795,11 +831,20 @@
   <data name="ReleaseNotesPlayWithSMPlayer.Text" xml:space="preserve">
     <value>Now supports play music with SMPlayer.</value>
   </data>
+  <data name="ReleaseNotesPreferenceSettingsAdded.Text" xml:space="preserve">
+    <value>【New Feature!!!】Preference Settings is added to the Now Playing page. Items the Preference List will have a high posibility of being played.</value>
+  </data>
   <data name="ReleaseNotesSearchPageAddAllToButton.Text" xml:space="preserve">
     <value>Search page now has an AddAllTo button.</value>
   </data>
+  <data name="ReleaseNotesSettingsCheckBoxChanged.Text" xml:space="preserve">
+    <value>【Improvements】Some check boxes in the Settings page are changed to toggle switches.</value>
+  </data>
   <data name="ReleaseNotesShowCount.Text" xml:space="preserve">
     <value>Some pages now shows the number of items in a collection.</value>
+  </data>
+  <data name="ReleaseNotesShowInExplorerBugFix.Text" xml:space="preserve">
+    <value>【Bug Fix】When you click "Show In Explorer" on a folder, the app no longer crashes.</value>
   </data>
   <data name="ReleaseNotesShowLyricsInNotifications.Text" xml:space="preserve">
     <value>Now lyrics can be displayed in notifications.</value>
@@ -879,8 +924,11 @@
   <data name="SavePlaylistMenuItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Save "Now Playing" as a Playlist</value>
   </data>
-  <data name="SaveProgressCheckBox.Content" xml:space="preserve">
-    <value>Save Music Progress</value>
+  <data name="SaveProgressToggleSwitch.OffContent" xml:space="preserve">
+    <value>Save music progress on exit.</value>
+  </data>
+  <data name="SaveProgressToggleSwitch.OnContent" xml:space="preserve">
+    <value>Save music progress on exit.</value>
   </data>
   <data name="SaveTextBlock.Text" xml:space="preserve">
     <value>Save</value>
@@ -933,9 +981,6 @@
   <data name="SendNotificationComboBox.Content" xml:space="preserve">
     <value>Send notifications: </value>
   </data>
-  <data name="Set As Favorite" xml:space="preserve">
-    <value>Set As Favorite</value>
-  </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
@@ -951,8 +996,11 @@
   <data name="ShowAllPlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Show All Playlists</value>
   </data>
-  <data name="ShowCounterCheckBox.Content" xml:space="preserve">
-    <value>Show Counter</value>
+  <data name="ShowCountToggleSwitch.OffContent" xml:space="preserve">
+    <value>Show Count</value>
+  </data>
+  <data name="ShowCountToggleSwitch.OnContent" xml:space="preserve">
+    <value>Show Count</value>
   </data>
   <data name="ShowInExplorerButton.Content" xml:space="preserve">
     <value>Check out</value>
@@ -960,18 +1008,18 @@
   <data name="ShowInExplorerButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Show In Explorer</value>
   </data>
-  <data name="ShowLyricsInNotificationCheckBox.Content" xml:space="preserve">
-    <value>Show lyrics in notification</value>
-  </data>
   <data name="ShowLyricsInNotificationInfo.ToolTipService.ToolTip" xml:space="preserve">
     <value>Supports showing lrc-format lyrics with hundred-millisecond precision.
 Lrc lyrics will be read in this order: local lrc files, Internet sources, music built-in lyrics.</value>
   </data>
+  <data name="ShowLyricsInNotificationToggleSwitch.OffContent" xml:space="preserve">
+    <value>Show lyrics in notification</value>
+  </data>
+  <data name="ShowLyricsInNotificationToggleSwitch.OnContent" xml:space="preserve">
+    <value>Show lyrics in notification</value>
+  </data>
   <data name="Shuffle" xml:space="preserve">
     <value>Shuffle</value>
-  </data>
-  <data name="Shuffle and Play" xml:space="preserve">
-    <value>Shuffle and Play</value>
   </data>
   <data name="ShuffleButton.Label" xml:space="preserve">
     <value>Shuffle</value>
@@ -1015,9 +1063,6 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="TrackNumberTextBlock.Text" xml:space="preserve">
     <value>Track Number</value>
   </data>
-  <data name="Undo Favorite" xml:space="preserve">
-    <value>Undo Favorite</value>
-  </data>
   <data name="Undo Mute" xml:space="preserve">
     <value>Undo Mute</value>
   </data>
@@ -1026,9 +1071,6 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   </data>
   <data name="UnPin" xml:space="preserve">
     <value>UnPin</value>
-  </data>
-  <data name="UnPin Playlist" xml:space="preserve">
-    <value>UnPin Playlist</value>
   </data>
   <data name="UpdateMusicLibraryButton.Content" xml:space="preserve">
     <value>Reload Music Library</value>

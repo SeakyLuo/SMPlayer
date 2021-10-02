@@ -166,7 +166,7 @@ namespace SMPlayer
         public static void SetToolTip(this DependencyObject obj, string tooltip, bool localize = true)
         {
             if (obj == null) return;
-            ToolTipService.SetToolTip(obj, localize ? Helper.Localize(tooltip) : tooltip);
+            ToolTipService.SetToolTip(obj, localize ? Helper.LocalizeText(tooltip) : tooltip);
         }
         public static bool SameAs(this IEnumerable<IMusicable> list1, IEnumerable<IMusicable> list2)
         {

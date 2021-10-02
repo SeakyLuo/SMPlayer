@@ -10,35 +10,12 @@
     Loaded="Page_Loaded"
     mc:Ignorable="d">
     <Page.Resources>
-        <x:Double x:Key="SmallLabelFontSize">20</x:Double>
-        <Style x:Key="SettingLabelStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="22" />
-            <Setter Property="Width" Value="128" />
-            <Setter Property="Margin" Value="8,0" />
-            <Setter Property="Height" Value="30" />
-        </Style>
-        <Style x:Key="ComboBoxLabelStyle" TargetType="TextBlock">
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="FontSize" Value="15" />
-        </Style>
-        <Style x:Key="MinimalSettingLabelStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="18" />
-            <Setter Property="Margin" Value="8,0" />
-            <Setter Property="Height" Value="30" />
-        </Style>
-        <Style x:Key="SettingCheckBoxStyle" TargetType="CheckBox">
-            <Setter Property="Height" Value="30" />
-            <Setter Property="Margin" Value="8" />
-        </Style>
-        <Style x:Key="MarginSetter" TargetType="FrameworkElement">
-            <Setter Property="Margin" Value="8" />
-        </Style>
         <Style x:Key="SettingsHyperLinkButtonStyle" TargetType="HyperlinkButton" BasedOn="{StaticResource TextBlockButtonStyle}">
             <Setter Property="Margin" Value="8" />
         </Style>
         <Style
             x:Key="SolidColorButton"
-            BasedOn="{StaticResource MarginSetter}"
+            BasedOn="{StaticResource SettingsMarginSetter}"
             TargetType="Button">
             <Setter Property="Background" Value="{ThemeResource ButtonBackground}" />
             <Setter Property="BackgroundSizing" Value="OuterBorderEdge" />
@@ -147,7 +124,7 @@
                         HorizontalAlignment="Stretch"
                         PlaceholderText="The Root Folder of Your Music Library"
                         QuerySubmitted="PathBox_QuerySubmitted"
-                        Style="{StaticResource MarginSetter}">
+                        Style="{StaticResource SettingsMarginSetter}">
                         <AutoSuggestBox.QueryIcon>
                             <FontIcon x:Uid="OpenFolderIcon" Glyph="&#xE838;" />
                         </AutoSuggestBox.QueryIcon>
@@ -191,12 +168,12 @@
                         x:Uid="NotificationTextBlock"
                         Style="{StaticResource SettingLabelStyle}"
                         Text="Notification" />
-                    <StackPanel Orientation="Horizontal" Style="{ThemeResource MarginSetter}">
+                    <StackPanel Orientation="Horizontal" Style="{ThemeResource SettingsMarginSetter}">
                         <TextBlock x:Uid="NotificationSendComboBoxTextBlock" Style="{StaticResource ComboBoxLabelStyle}"/>
                         <ComboBox
                             x:Name="NotificationSendComboBox"
                             SelectionChanged="NotificationSendComboBox_SelectionChanged"
-                            Style="{StaticResource MarginSetter}">
+                            Style="{StaticResource SettingsMarginSetter}">
                             <ComboBoxItem x:Uid="MusicChangedComboItem" Content="Music Changed" />
                             <ComboBoxItem x:Uid="NeverComboBoxItem" Content="Never" />
                         </ComboBox>
@@ -204,12 +181,12 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource SettingLabelStyle}" />
-                    <StackPanel Orientation="Horizontal" Style="{ThemeResource MarginSetter}">
+                    <StackPanel Orientation="Horizontal" Style="{ThemeResource SettingsMarginSetter}">
                         <TextBlock x:Uid="NotificationModeComboBoxTextBlock" Style="{StaticResource ComboBoxLabelStyle}"/>
                         <ComboBox
                             x:Name="NotificationModeComboBox"
                             SelectionChanged="NotificationModeComboBox_SelectionChanged"
-                            Style="{StaticResource MarginSetter}">
+                            Style="{StaticResource SettingsMarginSetter}">
                             <ComboBoxItem x:Uid="NotificationModeReminderComboItem" Content="Reminder" />
                             <ComboBoxItem x:Uid="NotificationModeNormalComboItem" Content="Normal" />
                             <ComboBoxItem x:Uid="NotificationModeQuickComboItem" Content="Quick" />
@@ -218,13 +195,14 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource SettingLabelStyle}" />
-                    <CheckBox
-                        x:Name="ShowLyricsInNotificationCheckBox"
-                        x:Uid="ShowLyricsInNotificationCheckBox"
-                        Checked="ShowLyricsInNotificationCheckBox_Checked"
-                        Content="Show Lyrics In Notification"
-                        Style="{ThemeResource SettingCheckBoxStyle}"
-                        Unchecked="ShowLyricsInNotificationCheckBox_Unchecked" />
+                    <ToggleSwitch
+                        x:Name="ShowLyricsInNotificationToggleSwitch"
+                        x:Uid="ShowLyricsInNotificationToggleSwitch"
+                        Style="{StaticResource SettingToggleSwitchStyle}"
+                        Toggled="ShowLyricsInNotificationToggleSwitch_Toggled"
+                        OnContent="Show Lyrics In Notification"
+                        OffContent="Show Lyrics In Notification"
+                        IsOn="False"/>
                     <FontIcon x:Uid="ShowLyricsInNotificationInfo" FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;" />
                 </StackPanel>
             </StackPanel>
@@ -235,23 +213,25 @@
                         x:Uid="DisplayTextBlock"
                         Style="{StaticResource SettingLabelStyle}"
                         Text="Display" />
-                    <CheckBox
-                        x:Name="ShowCounterCheckBox"
-                        x:Uid="ShowCounterCheckBox"
-                        Checked="ShowCounterCheckBox_Checked"
-                        Content="Show Count"
-                        Style="{ThemeResource SettingCheckBoxStyle}"
-                        Unchecked="ShowCounterCheckBox_Unchecked" />
+                    <ToggleSwitch
+                        x:Name="ShowCountToggleSwitch"
+                        x:Uid="ShowCountToggleSwitch"
+                        Style="{StaticResource SettingToggleSwitchStyle}"
+                        Toggled="ShowCountToggleSwitch_Toggled"
+                        OnContent="Show Count"
+                        OffContent="Show Count"
+                        IsOn="False"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource SettingLabelStyle}" />
-                    <CheckBox
-                        x:Name="HideMultiSelectCommandBarCheckBox"
-                        x:Uid="HideMultiSelectCommandBarCheckBox"
-                        Checked="HideMultiSelectCommandBarCheckBox_Checked"
-                        Content="Hide multi-select commandbar after operation"
-                        Style="{ThemeResource SettingCheckBoxStyle}"
-                        Unchecked="HideMultiSelectCommandBarCheckBox_Unchecked" />
+                    <ToggleSwitch
+                        x:Name="HideMultiSelectCommandBarToggleSwitch"
+                        x:Uid="HideMultiSelectCommandBarToggleSwitch"
+                        Style="{StaticResource SettingToggleSwitchStyle}"
+                        Toggled="HideMultiSelectCommandBarToggleSwitch_Toggled"
+                        OnContent="Hide multi-select commandbar after operation"
+                        OffContent="Hide multi-select commandbar after operation"
+                        IsOn="False"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Visibility="Collapsed">
                     <TextBlock Style="{StaticResource SettingLabelStyle}" />
@@ -317,7 +297,7 @@
                         x:Uid="RecentTextBlock"
                         Style="{StaticResource SettingLabelStyle}"
                         Text="Recent" />
-                    <StackPanel Style="{ThemeResource MarginSetter}" Orientation="Horizontal">
+                    <StackPanel Style="{ThemeResource SettingsMarginSetter}" Orientation="Horizontal">
                         <TextBlock
                             x:Uid="RecentPlayedItemTextBlock"
                             Style="{StaticResource ComboBoxLabelStyle}"
@@ -333,13 +313,14 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource SettingLabelStyle}" />
-                    <CheckBox
-                        x:Name="AutoLyricsCheckBox"
-                        x:Uid="AutoLyricsCheckBox"
-                        Checked="AutoLyricsCheckBox_Checked"
-                        Content="Auto Lyrics"
-                        Style="{ThemeResource SettingCheckBoxStyle}"
-                        Unchecked="AutoLyricsCheckBox_Unchecked" />
+                    <ToggleSwitch
+                        x:Name="AutoLyricsToggleSwitch"
+                        x:Uid="AutoLyricsToggleSwitch"
+                        Style="{StaticResource SettingToggleSwitchStyle}"
+                        Toggled="AutoLyricsToggleSwitch_Toggled"
+                        OnContent="Auto Lyrics"
+                        OffContent="Auto Lyrics"
+                        IsOn="False"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
@@ -348,13 +329,14 @@
                     x:Uid="PlayTextBlock"
                     Style="{StaticResource SettingLabelStyle}"
                     Text="Play" />
-                <CheckBox
-                    x:Name="AutoPlayCheckBox"
-                    x:Uid="AutoPlayCheckBox"
-                    Checked="AutoPlayCheckBox_Checked"
-                    Content="Auto Play"
-                    Style="{ThemeResource SettingCheckBoxStyle}"
-                    Unchecked="AutoPlayCheckBox_Unchecked" />
+                <ToggleSwitch
+                    x:Name="AutoPlayToggleSwitch"
+                    x:Uid="AutoPlayToggleSwitch"
+                    Style="{StaticResource SettingToggleSwitchStyle}"
+                    Toggled="AutoPlayToggleSwitch_Toggled"
+                    OnContent="Auto Play"
+                    OffContent="Auto Play"
+                    IsOn="False"/>
             </StackPanel>
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
@@ -363,13 +345,14 @@
                         x:Uid="SaveTextBlock"
                         Style="{StaticResource SettingLabelStyle}"
                         Text="Save" />
-                    <CheckBox
-                        x:Name="SaveProgressCheckBox"
-                        x:Uid="SaveProgressCheckBox"
-                        Checked="SaveProgressCheckBox_Checked"
-                        Content="Save Music Progress"
-                        Style="{ThemeResource SettingCheckBoxStyle}"
-                        Unchecked="SaveProgressCheckBox_Unchecked" />
+                    <ToggleSwitch
+                        x:Name="SaveProgressToggleSwitch"
+                        x:Uid="SaveProgressToggleSwitch"
+                        Style="{StaticResource SettingToggleSwitchStyle}"
+                        Toggled="SaveProgressToggleSwitch_Toggled"
+                        OnContent="Save Music Progress"
+                        OffContent="Save Music Progress"
+                        IsOn="False"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource SettingLabelStyle}" />
