@@ -54,7 +54,7 @@ namespace SMPlayer.Controls
             GenreTextBox.Text = string.Join(Helper.LocalizeMessage("Comma"), properties.Genre);
             if (ShowPlayButton)
             {
-                SetPlayButtonVisibility(MediaHelper.IsPlaying);
+                SetPlayButtonVisibility(IsCurrentMusic && MediaHelper.IsPlaying);
             }
         }
         public async void SetMusicInfo(Music music)
@@ -210,26 +210,26 @@ namespace SMPlayer.Controls
             {
                 MediaHelper.SetMusicAndPlay(CurrentMusic);
             }
-            SetPlayButtonVisibility(false);
+            SetPlayButtonVisibility(true);
         }
 
         private void PauseButton_Click(object sender, RoutedEventArgs e)
         {
             MediaHelper.Pause();
-            SetPlayButtonVisibility(true);
+            SetPlayButtonVisibility(false);
         }
 
         private void SetPlayButtonVisibility(bool isPlaying)
         {
             if (isPlaying)
             {
-                PlayButton.Visibility = Visibility.Visible;
-                PauseButton.Visibility = Visibility.Collapsed;
+                PlayButton.Visibility = Visibility.Collapsed;
+                PauseButton.Visibility = Visibility.Visible;
             }
             else
             {
-                PlayButton.Visibility = Visibility.Collapsed;
-                PauseButton.Visibility = Visibility.Visible;
+                PlayButton.Visibility = Visibility.Visible;
+                PauseButton.Visibility = Visibility.Collapsed;
             }
         }
     }
