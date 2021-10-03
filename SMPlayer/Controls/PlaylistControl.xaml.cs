@@ -190,7 +190,17 @@ namespace SMPlayer
         {
             if (SelectionMode != ListViewSelectionMode.None) return;
             Music music = (Music)e.ClickedItem;
-            MediaHelper.SetMusicAndPlay(CurrentPlaylist, music);
+            if (MediaHelper.CurrentMusic == music && MediaHelper.CurrentPlaylist.SameAs(CurrentPlaylist))
+            {
+                if (!MediaHelper.IsPlaying)
+                {
+                    MediaHelper.Play();
+                }
+            }
+            else
+            {
+                MediaHelper.SetMusicAndPlay(CurrentPlaylist, music);
+            }
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)

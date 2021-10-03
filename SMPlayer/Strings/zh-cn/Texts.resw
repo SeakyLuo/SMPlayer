@@ -198,6 +198,36 @@
   <data name="PreferenceSettings" xml:space="preserve">
     <value>偏好设置</value>
   </data>
+  <data name="PreferredAlbums" xml:space="preserve">
+    <value>偏好专辑</value>
+  </data>
+  <data name="PreferredAlbumsWithCount" xml:space="preserve">
+    <value>偏好专辑（{0}/{1}）</value>
+  </data>
+  <data name="PreferredArtists" xml:space="preserve">
+    <value>偏好歌手</value>
+  </data>
+  <data name="PreferredArtistsWithCount" xml:space="preserve">
+    <value>偏好歌手（{0}/{1}）</value>
+  </data>
+  <data name="PreferredFolders" xml:space="preserve">
+    <value>偏好文件夹</value>
+  </data>
+  <data name="PreferredFoldersWithCount" xml:space="preserve">
+    <value>偏好文件夹（{0}/{1}）</value>
+  </data>
+  <data name="PreferredPlaylists" xml:space="preserve">
+    <value>偏好播放列表</value>
+  </data>
+  <data name="PreferredPlaylistsWithCount" xml:space="preserve">
+    <value>偏好播放列表（{0}/{1}）</value>
+  </data>
+  <data name="PreferredSongs" xml:space="preserve">
+    <value>偏好歌曲</value>
+  </data>
+  <data name="PreferredSongsWithCount" xml:space="preserve">
+    <value>偏好歌曲（{0}/{1}）</value>
+  </data>
   <data name="QuickPlay" xml:space="preserve">
     <value>快速播放</value>
   </data>

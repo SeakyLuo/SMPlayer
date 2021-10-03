@@ -90,7 +90,7 @@ namespace SMPlayer.Models
             }
         }
 
-        private int GetMaxPreferenceItems(PreferType type)
+        public static int GetMaxPreferenceItems(PreferType type)
         {
             switch (type)
             {

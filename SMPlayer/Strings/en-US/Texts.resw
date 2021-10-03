@@ -198,6 +198,36 @@
   <data name="PreferenceSettings" xml:space="preserve">
     <value>Preference Settings</value>
   </data>
+  <data name="PreferredAlbums" xml:space="preserve">
+    <value>Preferred Albums</value>
+  </data>
+  <data name="PreferredAlbumsWithCount" xml:space="preserve">
+    <value>Preferred Albums ({0}/{1})</value>
+  </data>
+  <data name="PreferredArtists" xml:space="preserve">
+    <value>Preferred Artists</value>
+  </data>
+  <data name="PreferredArtistsWithCount" xml:space="preserve">
+    <value>Preferred Artists ({0}/{1})</value>
+  </data>
+  <data name="PreferredFolders" xml:space="preserve">
+    <value>Preferred Folders</value>
+  </data>
+  <data name="PreferredFoldersWithCount" xml:space="preserve">
+    <value>Preferred Folders ({0}/{1})</value>
+  </data>
+  <data name="PreferredPlaylists" xml:space="preserve">
+    <value>Preferred Playlists</value>
+  </data>
+  <data name="PreferredPlaylistsWithCount" xml:space="preserve">
+    <value>Preferred Playlists ({0}/{1})</value>
+  </data>
+  <data name="PreferredSongs" xml:space="preserve">
+    <value>Preferred Songs</value>
+  </data>
+  <data name="PreferredSongsWithCount" xml:space="preserve">
+    <value>Preferred Songs ({0}/{1})</value>
+  </data>
   <data name="QuickPlay" xml:space="preserve">
     <value>Quick Play</value>
   </data>

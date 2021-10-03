@@ -36,6 +36,10 @@ namespace SMPlayer
             {
                 SetPage(folder.Tree);
             }
+            else if (e.Parameter is FolderTree tree)
+            {
+                SetPage(tree);
+            }
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

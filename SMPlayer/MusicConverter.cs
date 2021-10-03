@@ -332,4 +332,20 @@ namespace SMPlayer
             throw new NotImplementedException();
         }
     }
+
+    class PreferenceCountConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            int count = (int)value;
+            PreferType type = (PreferType)Enum.Parse(typeof(PreferType), parameter.ToString());
+            string resource = $"Preferred{parameter}s";
+            return count == 0 ? Helper.LocalizeText(resource) : Helper.LocalizeText($"{resource}WithCount", count, PreferenceSetting.GetMaxPreferenceItems(type));
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
 }

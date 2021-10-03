@@ -71,6 +71,11 @@ namespace SMPlayer
             ClearInvalidPreferredFoldersButton.Visibility = PreferredFolders.Any(i => !i.IsValid) ? Visibility.Visible : Visibility.Collapsed;
         }
 
+        private void SetPreferredSongsCheckBoxContent()
+        {
+            PreferredSongsCheckBox.Content = PreferredSongs.Count == 0 ? Helper.LocalizeText(""):  Helper.LocalizeText("Prefer", PreferredSongs.Count, PreferenceSetting.MaxPreferredSongs);
+        }
+
         private ObservableCollection<PreferenceItemView> ConvertToViews(List<PreferenceItem> items, PreferType preferType)
         {
             return new ObservableCollection<PreferenceItemView>(items.AsParallel().Select(i => BuildView(i, preferType)));

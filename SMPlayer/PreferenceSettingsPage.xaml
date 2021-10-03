@@ -9,6 +9,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
+        <local:PreferenceCountConverter x:Key="PreferenceCountConverter" />
         <Style TargetType="CommandBar" x:Name="PreferenceCommandBarStyle">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="DefaultLabelPosition" Value="Right" />
@@ -34,7 +35,7 @@
         </Style>
 
         <Style TargetType="TextBlock" x:Name="NoItemTextBlockStyle">
-            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontWeight" Value="SemiBold" />
             <Setter Property="FontSize" Value="16" />
             <Setter Property="Padding" Value="16" />
             <Setter Property="Text" Value="No Item." />
@@ -54,7 +55,7 @@
                         VerticalAlignment="Center"
                         TextAlignment="Start"
                         Foreground="{x:Bind IsValid, Converter={StaticResource InvalidColorConverter}}"
-                        ToolTipService.ToolTip="{x:Bind ToolTip, Mode=OneWay}"/>
+                        ToolTipService.ToolTip="{x:Bind ToolTip}"/>
                     <Border 
                         Margin="8,0"
                         Padding="4" 
@@ -118,7 +119,7 @@
                             x:Name="PreferredSongsCheckBox"
                             x:Uid="PreferredSongsCheckBox"
                             Checked="PreferredSongsCheckBox_Checked"
-                            Content="Preferred Songs"
+                            Content="{x:Bind PreferredSongs.Count, Converter={StaticResource PreferenceCountConverter},ConverterParameter=Song,Mode=OneWay}"
                             Style="{ThemeResource SettingCheckBoxStyle}"
                             Unchecked="PreferredSongsCheckBox_Unchecked" />
                     </CommandBar.Content>
@@ -154,8 +155,8 @@
                         <CheckBox
                             x:Name="PreferredArtistsCheckBox"
                             x:Uid="PreferredArtistsCheckBox"
-                            Checked="PreferredArtistsCheckBox_Checked"  
-                            Content="Preferred Artists"
+                            Checked="PreferredArtistsCheckBox_Checked"
+                            Content="{x:Bind PreferredArtists.Count, Converter={StaticResource PreferenceCountConverter},ConverterParameter=Artist,Mode=OneWay}"
                             Style="{ThemeResource SettingCheckBoxStyle}"
                             Unchecked="PreferredArtistsCheckBox_Unchecked" />
                     </CommandBar.Content>
@@ -192,7 +193,7 @@
                             x:Name="PreferredAlbumsCheckBox"
                             x:Uid="PreferredAlbumsCheckBox"
                             Checked="PreferredAlbumsCheckBox_Checked"  
-                            Content="Preferred Albums"
+                            Content="{x:Bind PreferredAlbums.Count, Converter={StaticResource PreferenceCountConverter},ConverterParameter=Album,Mode=OneWay}"
                             Style="{ThemeResource SettingCheckBoxStyle}"
                             Unchecked="PreferredAlbumsCheckBox_Unchecked" />
                     </CommandBar.Content>
@@ -228,8 +229,8 @@
                         <CheckBox
                             x:Name="PreferredPlaylistsCheckBox"
                             x:Uid="PreferredPlaylistsCheckBox"
-                            Checked="PreferredPlaylistsCheckBox_Checked"  
-                            Content="Preferred Playlists"
+                            Checked="PreferredPlaylistsCheckBox_Checked"
+                            Content="{x:Bind PreferredPlaylists.Count, Converter={StaticResource PreferenceCountConverter},ConverterParameter=Playlist,Mode=OneWay}"
                             Style="{ThemeResource SettingCheckBoxStyle}"
                             Unchecked="PreferredPlaylistsCheckBox_Unchecked" />
                     </CommandBar.Content>
@@ -265,8 +266,8 @@
                         <CheckBox
                             x:Name="PreferredFoldersCheckBox"
                             x:Uid="PreferredFoldersCheckBox"
-                            Checked="PreferredFoldersCheckBox_Checked"  
-                            Content="Preferred Folders"
+                            Checked="PreferredFoldersCheckBox_Checked"
+                            Content="{x:Bind PreferredFolders.Count, Converter={StaticResource PreferenceCountConverter},ConverterParameter=Folder,Mode=OneWay}"
                             Style="{ThemeResource SettingCheckBoxStyle}"
                             Unchecked="PreferredFoldersCheckBox_Unchecked" />
                     </CommandBar.Content>

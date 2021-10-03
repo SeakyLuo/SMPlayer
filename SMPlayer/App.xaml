@@ -148,6 +148,7 @@
             <local:MusicArtistAlbumConverter x:Key="MusicArtistAlbumConverter" />
             <local:HorizontalAlignmentConverter x:Key="HorizontalAlignmentConverter" />
             <local:EmptyStringConverter x:Key="EmptyStringConverter" />
+            <local:PreferenceCountConverter x:Key="PreferenceCountConverter" />
             <AcrylicBrush
                 x:Key="MediaControlPlayButtonBorderBrush"
                 BackgroundSource="Backdrop"

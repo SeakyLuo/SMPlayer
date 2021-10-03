@@ -762,32 +762,17 @@
   <data name="PreferenceSettingsInfoTextBlock.Text" xml:space="preserve">
     <value>Your preferences will have a higher probability appearing in "Random Play" -&gt; "Quick Play".</value>
   </data>
-  <data name="PreferredAlbumsCheckBox.Content" xml:space="preserve">
-    <value>Preferred Albums</value>
-  </data>
   <data name="PreferredAlbumsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
     <value>Preferred albums will have a higher probability appearing in "Quick Play".</value>
-  </data>
-  <data name="PreferredArtistsCheckBox.Content" xml:space="preserve">
-    <value>Preferred Artists</value>
   </data>
   <data name="PreferredArtistsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
     <value>Preferred artists will have a higher probability appearing in "Quick Play".</value>
   </data>
-  <data name="PreferredFoldersCheckBox.Content" xml:space="preserve">
-    <value>Preferred Folders</value>
-  </data>
   <data name="PreferredFoldersCheckBox.ToolTipService.ToolTip" xml:space="preserve">
     <value>Preferred folders will have a higher probability appearing in "Quick Play".</value>
   </data>
-  <data name="PreferredPlaylistsCheckBox.Content" xml:space="preserve">
-    <value>Preferred Playlists</value>
-  </data>
   <data name="PreferredPlaylistsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
     <value>Preferred playlists will have a higher probability appearing in "Quick Play".</value>
-  </data>
-  <data name="PreferredSongsCheckBox.Content" xml:space="preserve">
-    <value>Preferred Songs</value>
   </data>
   <data name="PreferredSongsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
     <value>Preferred songs will have a higher probability appearing in "Quick Play".</value>

@@ -60,6 +60,7 @@ namespace SMPlayer
         public static DispatcherTimer Timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
         public static List<IMediaControlListener> MediaControlListeners = new List<IMediaControlListener>();
         public static List<ISwitchMusicListener> SwitchMusicListeners = new List<ISwitchMusicListener>();
+        public static List<IMediaPlayerStateChangedListener> MediaPlayerStateChangedListeners = new List<IMediaPlayerStateChangedListener>();
         public static List<Action> InitFinishedListeners = new List<Action>();
         public const string JsonFilename = "NowPlayingPlaylist";
 
@@ -127,6 +128,11 @@ namespace SMPlayer
                     if (args.Reason == MediaPlaybackItemChangedReason.EndOfStream)
                         App.Save();
                 }
+            };
+            Player.PlaybackSession.PlaybackStateChanged += (sender, args) =>
+            {
+                foreach (var listener in MediaPlayerStateChangedListeners)
+                    listener.StateChanged(sender.PlaybackState);
             };
             Player.MediaEnded += (sender, args) =>
             {
@@ -487,6 +493,11 @@ namespace SMPlayer
     {
         void Tick();
         void MediaEnded();
+    }
+
+    public interface IMediaPlayerStateChangedListener
+    {
+        void StateChanged(MediaPlaybackState state);
     }
 
     public enum AddMusicStatus

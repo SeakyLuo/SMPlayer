@@ -21,7 +21,7 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace SMPlayer
 {
-    public sealed partial class MediaControl : UserControl, ISwitchMusicListener, IMediaControlListener, IRemoveMusicListener, ILikeMusicListener
+    public sealed partial class MediaControl : UserControl, ISwitchMusicListener, IMediaControlListener, IRemoveMusicListener, ILikeMusicListener, IMediaPlayerStateChangedListener
     {
         public enum MediaControlMode
         {
@@ -374,23 +374,7 @@ namespace SMPlayer
                 MainMediaSlider.Visibility = Visibility.Visible;
             });
             Settings.LikeMusicListeners.Add(this);
-            MediaHelper.Player.PlaybackSession.PlaybackStateChanged += async (sender, args) =>
-            {
-                // For F3 Support
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-                {
-                    switch (sender.PlaybackState)
-                    {
-                        case MediaPlaybackState.Playing:
-                            PlayMusic();
-                            break;
-                        case MediaPlaybackState.Paused:
-                            PauseMusic();
-                            break;
-                    }
-                    await ToastHelper.ShowToast(MediaHelper.CurrentMusic, sender.PlaybackState);
-                });
-            };
+            MediaHelper.MediaPlayerStateChangedListeners.Add(this);
 
             Controls.MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
             {
@@ -1095,6 +1079,24 @@ namespace SMPlayer
                 if (isFavorite) LikeMusic(false);
                 else DislikeMusic(false);
             }
+        }
+
+        async void IMediaPlayerStateChangedListener.StateChanged(MediaPlaybackState state)
+        {
+            // For F3 Support
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            {
+                switch (state)
+                {
+                    case MediaPlaybackState.Playing:
+                        PlayMusic();
+                        break;
+                    case MediaPlaybackState.Paused:
+                        PauseMusic();
+                        break;
+                }
+                await ToastHelper.ShowToast(MediaHelper.CurrentMusic, state);
+            });
         }
     }
 

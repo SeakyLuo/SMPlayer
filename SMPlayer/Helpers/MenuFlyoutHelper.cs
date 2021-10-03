@@ -364,19 +364,22 @@ namespace SMPlayer
             if (option == null) option = new MenuFlyoutOption();
             Music music = (Data as IMusicable).ToMusic();
             var flyout = new MenuFlyout();
-            var localizedPlay = Helper.Localize("Play");
-            var playItem = new MenuFlyoutItem()
+            if (!MediaHelper.IsPlaying || MediaHelper.CurrentMusic != music)
             {
-                Icon = new SymbolIcon(Symbol.Play),
-                Text = localizedPlay,
-                Name = MusicMenuName
-            };
-            playItem.SetToolTip(localizedPlay + Helper.LocalizeMessage("MusicName", music.Name), false);
-            playItem.Click += (s, args) =>
-            {
-                MediaHelper.SetMusicAndPlay(music);
-            };
-            flyout.Items.Add(playItem);
+                var localizedPlay = Helper.Localize("Play");
+                var playItem = new MenuFlyoutItem()
+                {
+                    Icon = new SymbolIcon(Symbol.Play),
+                    Text = localizedPlay,
+                    Name = MusicMenuName
+                };
+                playItem.SetToolTip(localizedPlay + Helper.LocalizeMessage("MusicName", music.Name), false);
+                playItem.Click += (s, args) =>
+                {
+                    MediaHelper.SetMusicAndPlay(music);
+                };
+                flyout.Items.Add(playItem);
+            }
             if (MediaHelper.CurrentMusic != null && music != MediaHelper.CurrentMusic)
             {
                 var playNextItem = new MenuFlyoutItem()

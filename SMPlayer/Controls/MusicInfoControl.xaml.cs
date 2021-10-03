@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -12,7 +14,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace SMPlayer.Controls
 {
-    public sealed partial class MusicInfoControl : UserControl, ISwitchMusicListener
+    public sealed partial class MusicInfoControl : UserControl, ISwitchMusicListener, IMediaPlayerStateChangedListener
     {
         public bool AllowMusicSwitching { get; set; }
         public bool ShowHeader { get; set; }
@@ -35,6 +37,7 @@ namespace SMPlayer.Controls
             this.InitializeComponent();
             MediaControl.AddMusicModifiedListener(MusicModified);
             MediaHelper.SwitchMusicListeners.Add(this);
+            MediaHelper.MediaPlayerStateChangedListeners.Add(this);
         }
 
         public void SetMusicProperties(MusicProperties properties)
@@ -210,13 +213,11 @@ namespace SMPlayer.Controls
             {
                 MediaHelper.SetMusicAndPlay(CurrentMusic);
             }
-            SetPlayButtonVisibility(true);
         }
 
         private void PauseButton_Click(object sender, RoutedEventArgs e)
         {
             MediaHelper.Pause();
-            SetPlayButtonVisibility(false);
         }
 
         private void SetPlayButtonVisibility(bool isPlaying)
@@ -231,6 +232,15 @@ namespace SMPlayer.Controls
                 PlayButton.Visibility = Visibility.Visible;
                 PauseButton.Visibility = Visibility.Collapsed;
             }
+        }
+
+        async void IMediaPlayerStateChangedListener.StateChanged(MediaPlaybackState state)
+        {
+            // For F3 Support
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                SetPlayButtonVisibility(state == MediaPlaybackState.Playing);
+            });
         }
     }
 }

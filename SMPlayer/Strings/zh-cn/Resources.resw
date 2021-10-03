@@ -759,32 +759,17 @@
   <data name="PreferenceSettingsInfoTextBlock.Text" xml:space="preserve">
     <value>偏好的项目会有更高的概率出现在【随机播放】-&gt;【快速播放】。</value>
   </data>
-  <data name="PreferredAlbumsCheckBox.Content" xml:space="preserve">
-    <value>偏好专辑</value>
-  </data>
   <data name="PreferredAlbumsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
     <value>偏好的专辑会有更高的概率出现在【快速播放】。</value>
-  </data>
-  <data name="PreferredArtistsCheckBox.Content" xml:space="preserve">
-    <value>偏好歌手</value>
   </data>
   <data name="PreferredArtistsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
     <value>偏好的歌手会有更高的概率出现在【快速播放】。</value>
   </data>
-  <data name="PreferredFoldersCheckBox.Content" xml:space="preserve">
-    <value>偏好文件夹</value>
-  </data>
   <data name="PreferredFoldersCheckBox.ToolTipService.ToolTip" xml:space="preserve">
     <value>偏好的文件夹会有更高的概率出现在【快速播放】。</value>
   </data>
-  <data name="PreferredPlaylistsCheckBox.Content" xml:space="preserve">
-    <value>偏好播放列表</value>
-  </data>
   <data name="PreferredPlaylistsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
     <value>偏好的播放列表会有更高的概率出现在【快速播放】。</value>
-  </data>
-  <data name="PreferredSongsCheckBox.Content" xml:space="preserve">
-    <value>偏好歌曲</value>
   </data>
   <data name="PreferredSongsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
     <value>偏好的歌曲会有更高的概率出现在【快速播放】。</value>
