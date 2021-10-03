@@ -244,5 +244,10 @@ namespace SMPlayer
                 }
             }
         }
+
+        public static void RemoveAll<T>(this ObservableCollection<T> collection, Func<T, bool> predicate)
+        {
+            collection.Where(predicate).ToList().ForEach(e => collection.Remove(e));
+        }
     }
 }

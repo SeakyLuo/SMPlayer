@@ -132,17 +132,28 @@ namespace SMPlayer.Models
 
         public override int GetHashCode()
         {
-            return (Name + "%" + Artist).GetHashCode();
+            return GetAlbumKey().GetHashCode();
         }
 
         PreferenceItem IPreferable.AsPreferenceItem()
         {
-            return new PreferenceItem(GetHashCode().ToString(), Name);
+            return new PreferenceItem(GetAlbumKey(), ConcatNameAndArtist());
         }
 
-        PreferType IPreferable.GetPreferType()
+        PreferenceItemView IPreferable.AsPreferenceItemView()
         {
-            return PreferType.Album;
+            string name = ConcatNameAndArtist();
+            return new PreferenceItemView(GetAlbumKey(), name, name, PreferType.Album);
+        }
+
+        private string GetAlbumKey()
+        {
+            return TileHelper.BuildAlbumNavigationFlag(Name, Artist);
+        }
+
+        private string ConcatNameAndArtist()
+        {
+            return (string.IsNullOrEmpty(Name) ? Helper.LocalizeMessage("UnknownAlbum") : Name) + " - " + Artist;
         }
     }
 }

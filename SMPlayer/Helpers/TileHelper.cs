@@ -20,6 +20,11 @@ namespace SMPlayer.Helpers
 
         public static TileUpdater tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
 
+        public static string BuildAlbumNavigationFlag(string albumName, string artist)
+        {
+            return albumName + StringConcatenationFlag + artist;
+        }
+
         public static async Task UpdateTile(StorageItemThumbnail itemThumbnail, Music music)
         {
             if (music == null) return;

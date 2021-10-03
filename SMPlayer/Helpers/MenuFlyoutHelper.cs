@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Dialogs;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
@@ -455,10 +456,11 @@ namespace SMPlayer
                     Helper.ShowMusicNotFoundNotification(music.Name);
                     return;
                 }
+                string albumNavigationFlag = TileHelper.BuildAlbumNavigationFlag(music.Album, music.Artist);
                 if (MainPage.Instance.CurrentPage == typeof(AlbumPage))
-                    AlbumPage.Instance.LoadAlbum(music.GetAlbumNavigationString());
+                    AlbumPage.Instance.LoadAlbum(albumNavigationFlag);
                 else
-                    MainPage.Instance.NavigateToPage(typeof(AlbumPage), music.GetAlbumNavigationString());
+                    MainPage.Instance.NavigateToPage(typeof(AlbumPage), albumNavigationFlag);
             };
             return albumItem;
         }
@@ -803,13 +805,22 @@ namespace SMPlayer
             };
             item.Click += (sender, args) =>
             {
+                string name = data.AsPreferenceItem().Name;
                 if (isPreferred)
                 {
                     Settings.settings.Preference.UndoPrefer(data);
+                    Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("UndoPreferItem", name));
                 }
                 else
                 {
-                    Settings.settings.Preference.Prefer(data);
+                    if (Settings.settings.Preference.Prefer(data))
+                    {
+                        Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("SetItemAsPreferred", name));
+                    }
+                    else
+                    {
+                        Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("SetAsPreferredFailed"));
+                    }
                 }
             };
             return item;

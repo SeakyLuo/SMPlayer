@@ -60,6 +60,18 @@
                 Visibility="{x:Bind ShowHeader, Converter={StaticResource VisibilityConverter}}" />
             <StackPanel HorizontalAlignment="{x:Bind ShowHeader, Converter={StaticResource HorizontalAlignmentConverter}}" Orientation="Horizontal">
                 <Button
+                    x:Name="PlayButton"
+                    x:Uid="PlayButton"
+                    Click="PlayButton_Click"
+                    Content="&#xE102;"
+                    Style="{StaticResource MusicScrollHeaderButtonStyle}" />
+                <Button
+                    x:Name="PauseButton"
+                    x:Uid="PauseButton"
+                    Click="PauseButton_Click"
+                    Content="&#xE103;"
+                    Style="{StaticResource MusicScrollHeaderButtonStyle}" />
+                <Button
                     x:Name="SaveMusicPropertiesButton"
                     x:Uid="SaveMusicPropertiesButton"
                     Click="SaveMusicPropertiesButton_Click"

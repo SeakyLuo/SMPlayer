@@ -26,6 +26,7 @@
             <controls:MusicInfoControl
                 x:Name="MusicInfoController" 
                 ShowHeader="False"
+                ShowPlayButton="True"
                 MinHeight="{StaticResource MusicDialogPivotItemMinHeight}"/>
         </PivotItem>
         <PivotItem

@@ -134,6 +134,32 @@ namespace SMPlayer
         }
     }
 
+    class InvertedVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return VisibilityConverter.IsCollapsed(value) ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    class InvalidColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return (bool)value ? ColorHelper.BlackBrush : ColorHelper.LightGrayBrush;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     class WhiteColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

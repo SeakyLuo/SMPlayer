@@ -160,14 +160,18 @@ namespace SMPlayer.Helpers
                 JsonObject json = await GetQQMusicResponse(uri);
                 var list = json.GetNamedObject("data").GetNamedObject("lyric").GetNamedArray("list");
                 if (list.Count == 0) return "";
-                var lyrics = list.GetObjectAt(0).GetNamedString("content"); 
-                lyrics = string.Join("\n", new List<string>(System.Web.HttpUtility.HtmlDecode(lyrics.Replace("\\n", "\n")).Split("\n")).ConvertAll(line => line.Trim()));
-                return lyrics;
+                var lyrics = list.GetObjectAt(0).GetNamedString("content");
+                return string.Join("\n", new List<string>(System.Web.HttpUtility.HtmlDecode(TrimLyrics(lyrics)).Split("\n")).ConvertAll(line => line.Trim()));
             }
             catch (Exception)
             {
                 return "";
             }
+        }
+
+        private static string TrimLyrics(string lyrics)
+        {
+            return lyrics.Replace("<em>", "").Replace("</em>", "").Replace("\\n", "\n");
         }
 
         public static async Task<string> SearchLrcLyrics(Music music)

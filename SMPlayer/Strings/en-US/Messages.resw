@@ -468,6 +468,12 @@
   <data name="SelectedItemsRemoved" xml:space="preserve">
     <value>Selected items have been removed!</value>
   </data>
+  <data name="SetAsPreferredFailed" xml:space="preserve">
+    <value>Set as preferred failed. You have reached the limit of preferred items.</value>
+  </data>
+  <data name="SetItemAsPreferred" xml:space="preserve">
+    <value>{0} has been set as preferred!</value>
+  </data>
   <data name="SetPlayNext" xml:space="preserve">
     <value>“{0}” will be played next</value>
   </data>
@@ -542,6 +548,9 @@
   </data>
   <data name="UnauthorizedAccessException" xml:space="preserve">
     <value>Authorization is needed to access {0}!</value>
+  </data>
+  <data name="UndoPreferItem" xml:space="preserve">
+    <value>{0} is no longer preferred.</value>
   </data>
   <data name="UnknownAlbum" xml:space="preserve">
     <value>Unknown Album</value>

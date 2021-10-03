@@ -135,10 +135,12 @@
             <local:IntConverter x:Key="IntConverter" />
             <local:DateTimeConverter x:Key="DateTimeConverter" />
             <local:VisibilityConverter x:Key="VisibilityConverter" />
+            <local:InvertedVisibilityConverter x:Key="InvertedVisibilityConverter" />
             <local:ShowAlbumTextConverter x:Key="ShowAlbumTextConverter" />
             <local:MusicIsPlayingConverter x:Key="MusicIsPlayingConverter" />
             <local:PlaylistRowColorConverter x:Key="PlaylistRowColorConverter" />
             <local:ColorConverter x:Key="ColorConverter" />
+            <local:InvalidColorConverter x:Key="InvalidColorConverter" />
             <local:RowColorConverter x:Key="RowColorConverter" />
             <local:SongCountConverter x:Key="SongCountConverter" />
             <local:EnabledConverter x:Key="EnabledConverter" />

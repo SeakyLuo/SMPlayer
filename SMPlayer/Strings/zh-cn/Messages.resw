@@ -468,6 +468,12 @@
   <data name="SelectedItemsRemoved" xml:space="preserve">
     <value>选中项已被移除！</value>
   </data>
+  <data name="SetAsPreferredFailed" xml:space="preserve">
+    <value>设为偏好失败，你已达到偏好数量的上限</value>
+  </data>
+  <data name="SetItemAsPreferred" xml:space="preserve">
+    <value>已将“{0}”设为偏好！</value>
+  </data>
   <data name="SetPlayNext" xml:space="preserve">
     <value>《{0}》已被设为下一首播放的歌曲</value>
   </data>
@@ -542,6 +548,9 @@
   </data>
   <data name="UnauthorizedAccessException" xml:space="preserve">
     <value>没有权限访问路径{0}！</value>
+  </data>
+  <data name="UndoPreferItem" xml:space="preserve">
+    <value>已取消设置“{0}”为偏好！</value>
   </data>
   <data name="UnknownAlbum" xml:space="preserve">
     <value>未知专辑</value>

@@ -156,6 +156,15 @@
   <data name="FoldersWithCount" xml:space="preserve">
     <value>文件夹（{0}）</value>
   </data>
+  <data name="InvalidItemToolTip" xml:space="preserve">
+    <value>“{0}”已经失效或无法被找到</value>
+  </data>
+  <data name="IsEnabledToggleSwitchOffToolTip" xml:space="preserve">
+    <value>启用后，该项目会有更高的随机播放概率</value>
+  </data>
+  <data name="IsEnabledToggleSwitchOnToolTip" xml:space="preserve">
+    <value>停用后，该项目不会有更高的随机播放概率</value>
+  </data>
   <data name="LikeMusicToolTip" xml:space="preserve">
     <value>设为我喜欢</value>
   </data>

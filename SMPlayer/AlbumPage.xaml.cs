@@ -53,7 +53,10 @@ namespace SMPlayer
             {
                 int index = albumText.IndexOf(TileHelper.StringConcatenationFlag);
                 string albumName = albumText.Substring(0, index), albumArtist = albumText.Substring(index + TileHelper.StringConcatenationFlag.Length);
-                playlist = new Playlist(albumName, SearchAlbumSongs(albumName, albumArtist));
+                playlist = new Playlist(albumName, SearchAlbumSongs(albumName, albumArtist))
+                {
+                    Artist = albumArtist
+                };
                 AlbumPlaylistControl.SetPlaylistInfo(albumArtist);
             }
             await AlbumPlaylistControl.SetPlaylist(playlist);

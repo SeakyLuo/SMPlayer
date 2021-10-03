@@ -16,6 +16,7 @@ namespace SMPlayer.Controls
     {
         public bool AllowMusicSwitching { get; set; }
         public bool ShowHeader { get; set; }
+        public bool ShowPlayButton { get; set; } = false;
         public Windows.UI.Xaml.Media.Brush ProgressBarColor
         {
             get => SaveProgress.Foreground;
@@ -25,6 +26,10 @@ namespace SMPlayer.Controls
         private MusicProperties Properties;
         public static List<Action<Music, Music>> MusicModifiedListeners = new List<Action<Music, Music>>();
         public bool IsProcessing { get; private set; } = false;
+        public bool IsCurrentMusic
+        {
+            get => CurrentMusic == MediaHelper.CurrentMusic;
+        }
         public MusicInfoControl()
         {
             this.InitializeComponent();
@@ -47,6 +52,10 @@ namespace SMPlayer.Controls
             ComposersTextBox.Text = string.Join(Helper.LocalizeMessage("Comma"), properties.Composers);
             DurationTextBox.Text = MusicDurationConverter.ToTime(properties.Duration.TotalSeconds);
             GenreTextBox.Text = string.Join(Helper.LocalizeMessage("Comma"), properties.Genre);
+            if (ShowPlayButton)
+            {
+                SetPlayButtonVisibility(MediaHelper.IsPlaying);
+            }
         }
         public async void SetMusicInfo(Music music)
         {
@@ -188,6 +197,39 @@ namespace SMPlayer.Controls
                 if (YearTextBox.Text == "" && Properties.Year != 0) return true;
                 if (uint.TryParse(YearTextBox.Text, out uint Year) && Properties.Year != Year) return true;
                 return false;
+            }
+        }
+
+        private void PlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsCurrentMusic)
+            {
+                MediaHelper.Play();
+            }
+            else
+            {
+                MediaHelper.SetMusicAndPlay(CurrentMusic);
+            }
+            SetPlayButtonVisibility(false);
+        }
+
+        private void PauseButton_Click(object sender, RoutedEventArgs e)
+        {
+            MediaHelper.Pause();
+            SetPlayButtonVisibility(true);
+        }
+
+        private void SetPlayButtonVisibility(bool isPlaying)
+        {
+            if (isPlaying)
+            {
+                PlayButton.Visibility = Visibility.Visible;
+                PauseButton.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                PlayButton.Visibility = Visibility.Collapsed;
+                PauseButton.Visibility = Visibility.Visible;
             }
         }
     }

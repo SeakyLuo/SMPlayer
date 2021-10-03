@@ -246,8 +246,8 @@
     <Compile Include="Models\RecentTimeLine.cs" />
     <Compile Include="Models\TimeLine.cs" />
     <Compile Include="Models\TimeLineMusic.cs" />
-    <Compile Include="PreferenceSettings.xaml.cs">
-      <DependentUpon>PreferenceSettings.xaml</DependentUpon>
+    <Compile Include="PreferenceSettingsPage.xaml.cs">
+      <DependentUpon>PreferenceSettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="SearchResultPage.xaml.cs">
       <DependentUpon>SearchResultPage.xaml</DependentUpon>
@@ -579,7 +579,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PreferenceSettings.xaml">
+    <Page Include="PreferenceSettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

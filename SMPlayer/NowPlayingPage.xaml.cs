@@ -70,7 +70,7 @@ namespace SMPlayer
 
         private void PreferenceSettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            MainPage.Instance.NavigateToPage(typeof(PreferenceSettings));
+            MainPage.Instance.NavigateToPage(typeof(PreferenceSettingsPage));
         }
     }
 }

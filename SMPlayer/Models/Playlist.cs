@@ -244,12 +244,12 @@ namespace SMPlayer.Models
 
         PreferenceItem IPreferable.AsPreferenceItem()
         {
-            return new PreferenceItem(Name);
+            return new PreferenceItem(Name, Name);
         }
 
-        PreferType IPreferable.GetPreferType()
+        PreferenceItemView IPreferable.AsPreferenceItemView()
         {
-            return PreferType.Playlist;
+            return new PreferenceItemView(Name, Name, Name, PreferType.Playlist);
         }
     }
 }

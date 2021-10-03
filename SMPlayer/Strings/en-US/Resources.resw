@@ -244,7 +244,7 @@
     <value>Change Album Art</value>
   </data>
   <data name="ClearAllAppBarButton.Label" xml:space="preserve">
-    <value>Clear All</value>
+    <value>Clear Invalid</value>
   </data>
   <data name="ClearAppButton.Label" xml:space="preserve">
     <value>Clear</value>
@@ -254,6 +254,12 @@
   </data>
   <data name="ClearHistoryAppButton.Label" xml:space="preserve">
     <value>Clear History</value>
+  </data>
+  <data name="ClearInvalidAppBarButton.Label" xml:space="preserve">
+    <value>Clear Invalid</value>
+  </data>
+  <data name="ClearInvalidAppBarButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Remove all invalid items.</value>
   </data>
   <data name="ClearNowPlayingAppButton.Label" xml:space="preserve">
     <value>Clear All</value>
@@ -447,8 +453,17 @@
   <data name="ImportLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Import lyrics</value>
   </data>
+  <data name="InvalidTagTextBlock.Text" xml:space="preserve">
+    <value>Invalid</value>
+  </data>
   <data name="IsEnabledAppBarToggleButton.Label" xml:space="preserve">
     <value>Is Enabled</value>
+  </data>
+  <data name="IsEnabledToggleSwitch.OffContent" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="IsEnabledToggleSwitch.OnContent" xml:space="preserve">
+    <value>Enabled</value>
   </data>
   <data name="KeepRecentCheckBox.Content" xml:space="preserve">
     <value>Only keep 100 recently played items instead of all</value>
@@ -609,6 +624,9 @@
   <data name="NoAlbumArtTextBlock.Text" xml:space="preserve">
     <value>No Album Art</value>
   </data>
+  <data name="NoItemsTextBlock.Text" xml:space="preserve">
+    <value>No item.</value>
+  </data>
   <data name="NoResultTextBlock.Text" xml:space="preserve">
     <value>No result is found. Please check your spelling.</value>
   </data>
@@ -669,6 +687,9 @@
   <data name="Pause" xml:space="preserve">
     <value>Pause</value>
   </data>
+  <data name="PauseButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Pause</value>
+  </data>
   <data name="Pin To Start" xml:space="preserve">
     <value>Pin To Start</value>
   </data>
@@ -692,6 +713,9 @@
   </data>
   <data name="PlayArtistItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Play all music from this artist</value>
+  </data>
+  <data name="PlayButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Play</value>
   </data>
   <data name="PlayCountHeader.Header" xml:space="preserve">
     <value>Play Count</value>
@@ -926,6 +950,9 @@
   </data>
   <data name="RemoveAppButton.Label" xml:space="preserve">
     <value>Remove From List</value>
+  </data>
+  <data name="RemoveButton.Content" xml:space="preserve">
+    <value>Remove</value>
   </data>
   <data name="RemoveSwipeItem.Text" xml:space="preserve">
     <value>Remove</value>

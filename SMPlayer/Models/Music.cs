@@ -273,10 +273,7 @@ namespace SMPlayer.Models
             return string.IsNullOrEmpty(Artist) ? string.IsNullOrEmpty(Album) ? Name : string.Format("{0} - {1}", Name, Album) :
                                                   string.Format("{0} - {1}", Name, string.IsNullOrEmpty(Artist) ? Album : Artist);
         }
-        public string GetAlbumNavigationString()
-        {
-            return Album + TileHelper.StringConcatenationFlag + Artist;
-        }
+
         int IComparable<Music>.CompareTo(Music other)
         {
             int result = Name.CompareTo(other.Name);
@@ -330,9 +327,9 @@ namespace SMPlayer.Models
             return new PreferenceItem(Path, Name);
         }
 
-        PreferType IPreferable.GetPreferType()
+        PreferenceItemView IPreferable.AsPreferenceItemView()
         {
-            return PreferType.Song;
+            return new PreferenceItemView(Path, Name, Name, PreferType.Song);
         }
     }
 

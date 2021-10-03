@@ -1,10 +1,10 @@
 ﻿<Page
-    x:Class="SMPlayer.PreferenceSettings"
+    x:Class="SMPlayer.PreferenceSettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:SMPlayer"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:models="using:SMPlayer.Models"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -25,12 +25,8 @@
             <Setter Property="Label" Value="Go To Add" />
         </Style>
 
-        <Style TargetType="AppBarButton" x:Name="ClearAllButtonStyle" BasedOn="{StaticResource PreferenceAppBarButtonStyle}">
-            <Setter Property="Label" Value="Clear All" />
-        </Style>
-
-        <Style TargetType="AppBarButton" x:Name="DisableAllButtonStyle" BasedOn="{StaticResource PreferenceAppBarButtonStyle}">
-            <Setter Property="Label" Value="Disable All" />
+        <Style TargetType="AppBarButton" x:Name="ClearInvalidButtonStyle" BasedOn="{StaticResource PreferenceAppBarButtonStyle}">
+            <Setter Property="Label" Value="Clear Invalid" />
         </Style>
 
         <Style TargetType="Border" x:Name="NoItemBackground">
@@ -42,6 +38,70 @@
             <Setter Property="FontSize" Value="16" />
             <Setter Property="Padding" Value="16" />
             <Setter Property="Text" Value="No Item." />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <DataTemplate x:Name="PreferenceItemTemplate" x:DataType="models:PreferenceItemView">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Margin="8" Orientation="Horizontal">
+                    <TextBlock
+                        Text="{x:Bind Name}"
+                        VerticalAlignment="Center"
+                        TextAlignment="Start"
+                        Foreground="{x:Bind IsValid, Converter={StaticResource InvalidColorConverter}}"
+                        ToolTipService.ToolTip="{x:Bind ToolTip, Mode=OneWay}"/>
+                    <Border 
+                        Margin="8,0"
+                        Padding="4" 
+                        CornerRadius="16"
+                        MinWidth="60"
+                        BorderBrush="LightGray"
+                        BorderThickness="1"
+                        Visibility="{x:Bind IsValid, Converter={StaticResource InvertedVisibilityConverter}}">
+                        <TextBlock
+                            x:Uid="InvalidTagTextBlock"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Foreground="LightGray" />
+                    </Border>
+                </StackPanel>
+                <ToggleSwitch
+                    x:Uid="IsEnabledToggleSwitch"
+                    Grid.Column="1"
+                    IsOn="{x:Bind IsEnabled}"
+                    Toggled="IsEnabledToggleSwitch_Toggled"/>
+                <Button
+                    x:Uid="RemoveButton" 
+                    Grid.Column="2"
+                    Margin="4,0"
+                    BorderThickness="1"
+                    CornerRadius="16"
+                    MinWidth="60"
+                    Click="RemoveButton_Click"
+                    Content="Remove" />
+            </Grid>
+        </DataTemplate>
+
+        <Style TargetType="ListView" x:Name="PreferenceListViewStyle">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="BorderBrush" Value="WhiteSmoke" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="SelectionMode" Value="None" />
+            <Setter Property="IsItemClickEnabled" Value="True" />
+            <Setter Property="ItemTemplate" Value="{StaticResource PreferenceItemTemplate}" />
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="Padding" Value="0" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Page.Resources>
 
@@ -69,19 +129,22 @@
                         Style="{StaticResource GoToAddAppBarButtonStyle}"
                         Click="GoToAddPreferredSongsButton_Click"/>
                     <AppBarButton 
-                        x:Name="DisableAllPreferredSongsButton" 
-                        x:Uid="DisableAllAppBarButton"
-                        Icon="SelectAll"
-                        Style="{StaticResource DisableAllButtonStyle}"
-                        Click="DisableAllPreferredSongsButton_Click"/>
-                    <AppBarButton 
-                        x:Name="ClearAllPreferredSongsButton" 
-                        x:Uid="ClearAllAppBarButton"
+                        x:Name="ClearInvalidPreferredSongsButton" 
+                        x:Uid="ClearInvalidAppBarButton"
                         Icon="Clear"
-                        Style="{StaticResource ClearAllButtonStyle}"
-                        Click="ClearAllPreferredSongsButton_Click"/>
+                        Style="{StaticResource ClearInvalidButtonStyle}"
+                        Click="ClearInvalidPreferredSongsButton_Click"/>
                 </CommandBar>
-                <Border Style="{StaticResource NoItemBackground}">
+                <ListView
+                    x:Name="PreferredSongsListView"
+                    Style="{StaticResource PreferenceListViewStyle}"
+                    Visibility="{x:Bind PreferredSongs.Count, Converter={StaticResource VisibilityConverter},Mode=OneWay}"
+                    ItemClick="PreferredSongsListView_ItemClick"
+                    ContainerContentChanging="PreferenceListView_ContainerContentChanging"
+                    ItemsSource="{x:Bind PreferredSongs, Mode=OneWay}" />
+                <Border
+                    Style="{StaticResource NoItemBackground}"
+                    Visibility="{x:Bind PreferredSongs.Count, Converter={StaticResource InvertedVisibilityConverter},Mode=OneWay}">
                     <TextBlock x:Uid="NoItemsTextBlock" Style="{StaticResource NoItemTextBlockStyle}" />
                 </Border>
             </StackPanel>
@@ -103,22 +166,23 @@
                         Style="{StaticResource GoToAddAppBarButtonStyle}"
                         Click="GoToAddPreferredArtistsButton_Click"/>
                     <AppBarButton 
-                        x:Name="DisableAllPreferredArtistsButton" 
-                        x:Uid="DisableAllAppBarButton"
-                        Icon="SelectAll"
-                        Style="{StaticResource DisableAllButtonStyle}"
-                        Click="DisableAllPreferredArtistsButton_Click"/>
-                    <AppBarButton 
-                        x:Name="ClearAllPreferredArtistsButton" 
-                        x:Uid="ClearAllAppBarButton"
+                        x:Name="ClearInvalidPreferredArtistsButton" 
+                        x:Uid="ClearInvalidAppBarButton"
                         Icon="Clear"
-                        Style="{StaticResource ClearAllButtonStyle}"
-                        Click="ClearAllPreferredArtistsButton_Click"/>
+                        Style="{StaticResource ClearInvalidButtonStyle}"
+                        Click="ClearInvalidPreferredArtistsButton_Click"/>
                 </CommandBar>
-                <Border Style="{StaticResource NoItemBackground}">
-                    <TextBlock
-                        x:Uid="NoItemsTextBlock"
-                        Style="{StaticResource NoItemTextBlockStyle}" />
+                <ListView
+                    x:Name="PreferredArtistsListView"
+                    Style="{StaticResource PreferenceListViewStyle}"
+                    Visibility="{x:Bind PreferredArtists.Count, Converter={StaticResource VisibilityConverter},Mode=OneWay}"
+                    ItemClick="PreferredArtistsListView_ItemClick"
+                    ContainerContentChanging="PreferenceListView_ContainerContentChanging"
+                    ItemsSource="{x:Bind PreferredArtists, Mode=OneWay}" />
+                <Border
+                    Style="{StaticResource NoItemBackground}"
+                    Visibility="{x:Bind PreferredArtists.Count, Converter={StaticResource InvertedVisibilityConverter},Mode=OneWay}">
+                    <TextBlock x:Uid="NoItemsTextBlock" Style="{StaticResource NoItemTextBlockStyle}" />
                 </Border>
             </StackPanel>
             <StackPanel>
@@ -139,22 +203,23 @@
                         Style="{StaticResource GoToAddAppBarButtonStyle}"
                         Click="GoToAddPreferredAlbumsButton_Click"/>
                     <AppBarButton 
-                        x:Name="DisableAllPreferredAlbumsButton" 
-                        x:Uid="DisableAllAppBarButton"
-                        Icon="SelectAll"
-                        Style="{StaticResource DisableAllButtonStyle}"
-                        Click="DisableAllPreferredAlbumsButton_Click"/>
-                    <AppBarButton 
-                        x:Name="ClearAllPreferredAlbumsButton" 
-                        x:Uid="ClearAllAppBarButton"
+                        x:Name="ClearInvalidPreferredAlbumsButton" 
+                        x:Uid="ClearAppBarButton"
                         Icon="Clear"
-                        Style="{StaticResource ClearAllButtonStyle}"
-                        Click="ClearAllPreferredAlbumsButton_Click"/>
+                        Style="{StaticResource ClearInvalidButtonStyle}"
+                        Click="ClearInvalidPreferredAlbumsButton_Click"/>
                 </CommandBar>
-                <Border Style="{StaticResource NoItemBackground}">
-                    <TextBlock
-                        x:Uid="NoItemsTextBlock"
-                        Style="{StaticResource NoItemTextBlockStyle}" />
+                <ListView
+                    x:Name="PreferredAlbumsListView"
+                    Style="{StaticResource PreferenceListViewStyle}"
+                    Visibility="{x:Bind PreferredAlbums.Count, Converter={StaticResource VisibilityConverter},Mode=OneWay}"
+                    ItemClick="PreferredAlbumsListView_ItemClick"
+                    ContainerContentChanging="PreferenceListView_ContainerContentChanging"
+                    ItemsSource="{x:Bind PreferredAlbums, Mode=OneWay}" />
+                <Border 
+                    Style="{StaticResource NoItemBackground}"
+                    Visibility="{x:Bind PreferredAlbums.Count, Converter={StaticResource InvertedVisibilityConverter},Mode=OneWay}">
+                    <TextBlock x:Uid="NoItemsTextBlock" Style="{StaticResource NoItemTextBlockStyle}" />
                 </Border>
             </StackPanel>
             <StackPanel>
@@ -175,22 +240,23 @@
                         Style="{StaticResource GoToAddAppBarButtonStyle}"
                         Click="GoToAddPreferredPlaylistsButton_Click"/>
                     <AppBarButton 
-                        x:Name="DisableAllPreferredPlaylistsButton" 
-                        x:Uid="DisableAllAppBarButton"
-                        Icon="SelectAll"
-                        Style="{StaticResource DisableAllButtonStyle}"
-                        Click="DisableAllPreferredPlaylistsButton_Click"/>
-                    <AppBarButton 
-                        x:Name="ClearAllPreferredPlaylistsButton" 
-                        x:Uid="ClearAllAppBarButton"
+                        x:Name="ClearInvalidPreferredPlaylistsButton" 
+                        x:Uid="ClearInvalidAppBarButton"
                         Icon="Clear"
-                        Style="{StaticResource ClearAllButtonStyle}"
-                        Click="ClearAllPreferredPlaylistsButton_Click"/>
+                        Style="{StaticResource ClearInvalidButtonStyle}"
+                        Click="ClearInvalidPreferredPlaylistsButton_Click"/>
                 </CommandBar>
-                <Border Style="{StaticResource NoItemBackground}">
-                    <TextBlock
-                        x:Uid="NoItemsTextBlock"
-                        Style="{StaticResource NoItemTextBlockStyle}" />
+                <ListView
+                    x:Name="PreferredPlaylistsListView"
+                    Style="{StaticResource PreferenceListViewStyle}"
+                    Visibility="{x:Bind PreferredPlaylists.Count, Converter={StaticResource VisibilityConverter},Mode=OneWay}"
+                    ItemClick="PreferredPlaylistsListView_ItemClick"
+                    ContainerContentChanging="PreferenceListView_ContainerContentChanging"
+                    ItemsSource="{x:Bind PreferredPlaylists, Mode=OneWay}" />
+                <Border
+                    Style="{StaticResource NoItemBackground}"
+                    Visibility="{x:Bind PreferredPlaylists.Count, Converter={StaticResource InvertedVisibilityConverter},Mode=OneWay}">
+                    <TextBlock x:Uid="NoItemsTextBlock" Style="{StaticResource NoItemTextBlockStyle}" />
                 </Border>
             </StackPanel>
             <StackPanel>
@@ -211,22 +277,23 @@
                         Style="{StaticResource GoToAddAppBarButtonStyle}"
                         Click="GoToAddPreferredFoldersButton_Click"/>
                     <AppBarButton 
-                        x:Name="DisableAllPreferredFoldersButton" 
-                        x:Uid="DisableAllAppBarButton"
-                        Icon="SelectAll"
-                        Style="{StaticResource DisableAllButtonStyle}"
-                        Click="DisableAllPreferredFoldersButton_Click"/>
-                    <AppBarButton 
-                        x:Name="ClearAllPreferredFoldersButton" 
-                        x:Uid="ClearAllAppBarButton"
+                        x:Name="ClearInvalidPreferredFoldersButton" 
+                        x:Uid="ClearInvalidAppBarButton"
                         Icon="Clear"
-                        Style="{StaticResource ClearAllButtonStyle}"
-                        Click="ClearAllPreferredFoldersButton_Click"/>
+                        Style="{StaticResource ClearInvalidButtonStyle}"
+                        Click="ClearInvalidPreferredFoldersButton_Click"/>
                 </CommandBar>
-                <Border Style="{StaticResource NoItemBackground}">
-                    <TextBlock
-                        x:Uid="NoItemsTextBlock"
-                        Style="{StaticResource NoItemTextBlockStyle}" />
+                <ListView
+                    x:Name="PreferredFoldersListView"
+                    Style="{StaticResource PreferenceListViewStyle}"
+                    Visibility="{x:Bind PreferredFolders.Count, Converter={StaticResource VisibilityConverter},Mode=OneWay}"
+                    ItemClick="PreferredFoldersListView_ItemClick"
+                    ContainerContentChanging="PreferenceListView_ContainerContentChanging"
+                    ItemsSource="{x:Bind PreferredFolders, Mode=OneWay}" />
+                <Border 
+                    Style="{StaticResource NoItemBackground}"
+                    Visibility="{x:Bind PreferredFolders.Count, Converter={StaticResource InvertedVisibilityConverter},Mode=OneWay}">
+                    <TextBlock x:Uid="NoItemsTextBlock" Style="{StaticResource NoItemTextBlockStyle}" />
                 </Border>
             </StackPanel>
             <CheckBox

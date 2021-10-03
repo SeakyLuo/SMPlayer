@@ -136,12 +136,13 @@ namespace SMPlayer
             await dialog.ShowAsync();
         }
 
-        public bool Confirm(string OldName, string NewName)
+        public bool Confirm(string oldName, string newName)
         {
-            bool successful = PlaylistsPage.ConfirmRenaming(dialog, OldName, NewName);
+            bool successful = PlaylistsPage.ConfirmRenaming(dialog, oldName, newName);
             if (successful)
             {
-                PlaylistNameTextBlock.Text = NewName;
+                PlaylistNameTextBlock.Text = newName;
+                Settings.settings.Preference.UpdatePlaylistName(oldName, newName);
             }
             return successful;
         }
@@ -155,10 +156,7 @@ namespace SMPlayer
         {
             if (removeDialog == null)
             {
-                removeDialog = new RemoveDialog()
-                {
-                    Confirm = () => ExecutePlaylistDeletion(playlist)
-                };
+                removeDialog = new RemoveDialog();
             }
             if (removeDialog.IsChecked)
             {

@@ -243,9 +243,6 @@
   <data name="ChangeAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>更改专辑插图</value>
   </data>
-  <data name="ClearAllAppBarButton.Label" xml:space="preserve">
-    <value>清空全部</value>
-  </data>
   <data name="ClearAppButton.Label" xml:space="preserve">
     <value>清空</value>
   </data>
@@ -254,6 +251,12 @@
   </data>
   <data name="ClearHistoryAppButton.Label" xml:space="preserve">
     <value>清空历史</value>
+  </data>
+  <data name="ClearInvalidAppBarButton.Label" xml:space="preserve">
+    <value>清除失效</value>
+  </data>
+  <data name="ClearInvalidAppBarButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>一键清除所有失效项目</value>
   </data>
   <data name="ClearNowPlayingAppButton.Label" xml:space="preserve">
     <value>清空全部</value>
@@ -447,8 +450,17 @@
   <data name="ImportLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>导入歌词</value>
   </data>
+  <data name="InvalidTagTextBlock.Text" xml:space="preserve">
+    <value>已失效</value>
+  </data>
   <data name="IsEnabledAppBarToggleButton.Label" xml:space="preserve">
     <value>是否启用</value>
+  </data>
+  <data name="IsEnabledToggleSwitch.OffContent" xml:space="preserve">
+    <value>已停用</value>
+  </data>
+  <data name="IsEnabledToggleSwitch.OnContent" xml:space="preserve">
+    <value>已启用</value>
   </data>
   <data name="KeepRecentCheckBox.Content" xml:space="preserve">
     <value>仅保留最近播放的100项而不是全部</value>
@@ -609,6 +621,9 @@
   <data name="NoAlbumArtTextBlock.Text" xml:space="preserve">
     <value>没有专辑插图</value>
   </data>
+  <data name="NoItemsTextBlock.Text" xml:space="preserve">
+    <value>暂无项目</value>
+  </data>
   <data name="NoResultTextBlock.Text" xml:space="preserve">
     <value>找不到结果，请检查您的拼写。</value>
   </data>
@@ -669,6 +684,9 @@
   <data name="Pause" xml:space="preserve">
     <value>暂停</value>
   </data>
+  <data name="PauseButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>暂停</value>
+  </data>
   <data name="Pin To Start" xml:space="preserve">
     <value>固定到开始菜单</value>
   </data>
@@ -692,6 +710,9 @@
   </data>
   <data name="PlayArtistItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>播放该歌手所有歌曲</value>
+  </data>
+  <data name="PlayButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>播放</value>
   </data>
   <data name="PlayCountHeader.Header" xml:space="preserve">
     <value>播放次数</value>
@@ -923,6 +944,9 @@
   </data>
   <data name="RemoveAppButton.Label" xml:space="preserve">
     <value>从列表中移除</value>
+  </data>
+  <data name="RemoveButton.Content" xml:space="preserve">
+    <value>移除</value>
   </data>
   <data name="RemoveSwipeItem.Text" xml:space="preserve">
     <value>移除</value>

@@ -156,6 +156,15 @@
   <data name="FoldersWithCount" xml:space="preserve">
     <value>Folders ({0})</value>
   </data>
+  <data name="InvalidItemToolTip" xml:space="preserve">
+    <value>{0} is invalid or cannot be found</value>
+  </data>
+  <data name="IsEnabledToggleSwitchOffToolTip" xml:space="preserve">
+    <value>If you enable, this item will have a higher play probability.</value>
+  </data>
+  <data name="IsEnabledToggleSwitchOnToolTip" xml:space="preserve">
+    <value>If you disable, this item will not have a higher play probability.</value>
+  </data>
   <data name="LikeMusicToolTip" xml:space="preserve">
     <value>Set As My Favorite</value>
   </data>

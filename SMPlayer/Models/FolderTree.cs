@@ -415,9 +415,9 @@ namespace SMPlayer.Models
             return new PreferenceItem(Path, Directory);
         }
 
-        PreferType IPreferable.GetPreferType()
+        PreferenceItemView IPreferable.AsPreferenceItemView()
         {
-            return PreferType.Folder;
+            return new PreferenceItemView(Path, Directory, Path, PreferType.Folder);
         }
     }
     public struct TreeInfo

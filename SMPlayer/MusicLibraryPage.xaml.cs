@@ -83,7 +83,7 @@ namespace SMPlayer
         {
             var music = (Music)MusicLibraryDataGrid.SelectedItem;
             if (music == null) return;
-            MediaHelper.SetMusicAndPlay(AllSongs, music);
+            MediaHelper.SetMusicAndPlay(music);
         }
 
         public static void MusicModified(Music before, Music after)

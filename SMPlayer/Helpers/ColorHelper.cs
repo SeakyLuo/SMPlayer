@@ -18,6 +18,7 @@ namespace SMPlayer
         public static SolidColorBrush WhiteSmokeBrush = new SolidColorBrush(Colors.WhiteSmoke);
         public static SolidColorBrush GrayBrush = new SolidColorBrush(Colors.Gray);
         public static SolidColorBrush BlackBrush = new SolidColorBrush(Colors.Black);
+        public static SolidColorBrush LightGrayBrush = new SolidColorBrush(Colors.LightGray);
         public static SolidColorBrush TransparentBrush = new SolidColorBrush(Colors.Transparent);
         public static SolidColorBrush HighlightBrush
         {
