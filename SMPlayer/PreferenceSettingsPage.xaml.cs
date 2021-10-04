@@ -124,13 +124,15 @@ namespace SMPlayer
                     else
                     {
                         view.Name = music.Name;
+                        view.ToolTip = music.Path;
                     }
                     break;
                 case PreferType.Artist:
-                    view.Name = view.Id;
+                    view.ToolTip = view.Name = view.Id;
                     view.IsValid = MusicLibraryPage.AllSongs.Any(i => i.Artist == view.Id);
                     break;
                 case PreferType.Album:
+                    view.ToolTip = view.Name;
                     string[] albumId = view.Id.Split(Helpers.TileHelper.StringConcatenationFlag);
                     if (albumId.Length > 1)
                     {
@@ -139,7 +141,7 @@ namespace SMPlayer
                     }
                     break;
                 case PreferType.Playlist:
-                    view.Name = view.Id;
+                    view.ToolTip = view.Name = view.Id;
                     view.IsValid = Settings.settings.Playlists.Any(i => i.Name == view.Id);
                     break;
                 case PreferType.Folder:
@@ -151,6 +153,7 @@ namespace SMPlayer
                     else
                     {
                         view.Name = tree.Directory;
+                        view.ToolTip = tree.Path;
                     }
                     break;
             }

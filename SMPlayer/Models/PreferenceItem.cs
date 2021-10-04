@@ -29,8 +29,7 @@ namespace SMPlayer.Models
             {
                 Id = Id,
                 Name = Name,
-                IsEnabled = IsEnabled,
-                ToolTip = Name
+                IsEnabled = IsEnabled
             };
         }
 
