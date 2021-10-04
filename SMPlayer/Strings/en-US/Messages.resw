@@ -469,7 +469,7 @@
     <value>Selected items have been removed!</value>
   </data>
   <data name="SetAsPreferredFailed" xml:space="preserve">
-    <value>Set as preferred failed. You have reached the limit of preferred items.</value>
+    <value>Operation failed. You have too many preferences to flirt with!</value>
   </data>
   <data name="SetItemAsPreferred" xml:space="preserve">
     <value>{0} has been set as preferred!</value>

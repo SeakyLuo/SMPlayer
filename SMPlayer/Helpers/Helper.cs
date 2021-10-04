@@ -127,7 +127,7 @@ namespace SMPlayer
         }
         public static async Task Init()
         {
-            var initDefaultImage = MusicImage.DefaultImage; // 静态资源只有在用到的时候才会被加载，所以做一个无用的声明
+            var initDefaultImage = MusicImage.DefaultImage; // 静态资源只有在用到的时候才会被加载，所以做一个无用的声明强行用到
             TempFolder = await CreateFolder("Temp");
             if (LogFolder == null) LogFolder = await CreateFolder("Logs");
             await ClearBackups();

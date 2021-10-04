@@ -469,7 +469,7 @@
     <value>选中项已被移除！</value>
   </data>
   <data name="SetAsPreferredFailed" xml:space="preserve">
-    <value>设为偏好失败，你已达到偏好数量的上限</value>
+    <value>操作失败，你已达到偏好数量的上限，别太花心哦</value>
   </data>
   <data name="SetItemAsPreferred" xml:space="preserve">
     <value>已将“{0}”设为偏好！</value>

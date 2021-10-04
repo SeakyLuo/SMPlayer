@@ -810,7 +810,7 @@ namespace SMPlayer
                     }
                     else
                     {
-                        Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("SetAsPreferredFailed"));
+                        Helper.ShowNotification("SetAsPreferredFailed");
                     }
                 }
             };

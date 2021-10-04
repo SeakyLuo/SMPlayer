@@ -11,10 +11,10 @@ namespace SMPlayer.Models
     public class PreferenceSetting
     {
         public const int MaxPreferredSongs = 30,
-                         MaxPreferredArtists = 15,
-                         MaxPreferredAlbums = 20,
-                         MaxPreferredPlaylists = 10,
-                         MaxPreferredFolders = 5;
+                         MaxPreferredArtists = 20,
+                         MaxPreferredAlbums = 25,
+                         MaxPreferredPlaylists = 15,
+                         MaxPreferredFolders = 10;
 
         public List<PreferenceItem> PreferredSongs { get; set; } = new List<PreferenceItem>();
         public List<PreferenceItem> PreferredArtists { get; set; } = new List<PreferenceItem>();
