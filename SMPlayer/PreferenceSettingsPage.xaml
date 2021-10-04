@@ -9,7 +9,42 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
-        <local:PreferenceCountConverter x:Key="PreferenceCountConverter" />
+        <Storyboard x:Name="ExpandSongsSpinArrowAnimation">
+            <DoubleAnimation
+                By="180"
+                Storyboard.TargetName="ExpandPreferredSongsButtonIcon"
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                Duration="0:0:0.25" />
+        </Storyboard>
+        <Storyboard x:Name="ExpandArtistsSpinArrowAnimation">
+            <DoubleAnimation
+                By="180"
+                Storyboard.TargetName="ExpandPreferredArtistsButtonIcon"
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                Duration="0:0:0.25" />
+        </Storyboard>
+        <Storyboard x:Name="ExpandAlbumsSpinArrowAnimation">
+            <DoubleAnimation
+                By="180"
+                Storyboard.TargetName="ExpandPreferredAlbumsButtonIcon"
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                Duration="0:0:0.25" />
+        </Storyboard>
+        <Storyboard x:Name="ExpandPlaylistsSpinArrowAnimation">
+            <DoubleAnimation
+                By="180"
+                Storyboard.TargetName="ExpandPreferredPlaylistsButtonIcon"
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                Duration="0:0:0.25" />
+        </Storyboard>
+        <Storyboard x:Name="ExpandFoldersSpinArrowAnimation">
+            <DoubleAnimation
+                By="180"
+                Storyboard.TargetName="ExpandPreferredFoldersButtonIcon"
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                Duration="0:0:0.25" />
+        </Storyboard>
+
         <Style TargetType="CommandBar" x:Name="PreferenceCommandBarStyle">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="DefaultLabelPosition" Value="Right" />
@@ -30,12 +65,27 @@
             <Setter Property="Label" Value="Clear Invalid" />
         </Style>
 
+        <Style TargetType="FontIcon" x:Key="RotateDropDownIcon">
+            <Setter Property="Glyph" Value="&#xE70D;" />
+            <Setter Property="RenderTransformOrigin" Value=".5,.5" />
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <RotateTransform />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="AppBarButton" x:Name="ExpandButtonStyle" BasedOn="{StaticResource PreferenceAppBarButtonStyle}">
+            <Setter Property="Label" Value="Expand" />
+        </Style>
+
         <Style TargetType="Border" x:Name="NoItemBackground">
             <Setter Property="Background" Value="WhiteSmoke" />
         </Style>
 
         <Style TargetType="TextBlock" x:Name="NoItemTextBlockStyle">
-            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontWeight" Value="Light" />
+            <Setter Property="FontWeight" Value="Light" />
             <Setter Property="FontSize" Value="16" />
             <Setter Property="Padding" Value="16" />
             <Setter Property="Text" Value="No Item." />
@@ -78,13 +128,10 @@
                     Toggled="IsEnabledToggleSwitch_Toggled"/>
                 <Button
                     x:Uid="RemoveButton" 
+                    Style="{StaticResource RemoveButtonStyle}"
                     Grid.Column="2"
                     Margin="4,0"
-                    BorderThickness="1"
-                    CornerRadius="16"
-                    MinWidth="60"
-                    Click="RemoveButton_Click"
-                    Content="Remove" />
+                    Click="RemoveButton_Click" />
             </Grid>
         </DataTemplate>
 
@@ -123,12 +170,20 @@
                             Style="{ThemeResource SettingCheckBoxStyle}"
                             Unchecked="PreferredSongsCheckBox_Unchecked" />
                     </CommandBar.Content>
-                    <AppBarButton 
+                    <AppBarButton
                         x:Name="GoToAddPreferredSongsButton" 
                         x:Uid="GoToAddAppBarButton"
                         Icon="Add"
                         Style="{StaticResource GoToAddAppBarButtonStyle}"
                         Click="GoToAddPreferredSongsButton_Click"/>
+                    <AppBarButton
+                        x:Name="ExpandPreferredSongsButton"
+                        Style="{StaticResource ExpandButtonStyle}"
+                        Click="ExpandPreferredSongsButton_Click" >
+                        <AppBarButton.Icon>
+                            <FontIcon x:Name="ExpandPreferredSongsButtonIcon" Style="{StaticResource RotateDropDownIcon}" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
                     <AppBarButton 
                         x:Name="ClearInvalidPreferredSongsButton" 
                         x:Uid="ClearInvalidAppBarButton"
@@ -139,10 +194,10 @@
                 <ListView
                     x:Name="PreferredSongsListView"
                     Style="{StaticResource PreferenceListViewStyle}"
-                    Visibility="{x:Bind PreferredSongs.Count, Converter={StaticResource VisibilityConverter},Mode=OneWay}"
+                    Visibility="{x:Bind LimitedPreferredSongs.Count, Converter={StaticResource VisibilityConverter},Mode=OneWay}"
                     ItemClick="PreferredSongsListView_ItemClick"
                     ContainerContentChanging="PreferenceListView_ContainerContentChanging"
-                    ItemsSource="{x:Bind PreferredSongs, Mode=OneWay}" />
+                    ItemsSource="{x:Bind LimitedPreferredSongs, Mode=OneWay}" />
                 <Border
                     Style="{StaticResource NoItemBackground}"
                     Visibility="{x:Bind PreferredSongs.Count, Converter={StaticResource InvertedVisibilityConverter},Mode=OneWay}">
@@ -166,6 +221,14 @@
                         Icon="Add"
                         Style="{StaticResource GoToAddAppBarButtonStyle}"
                         Click="GoToAddPreferredArtistsButton_Click"/>
+                    <AppBarButton
+                        x:Name="ExpandPreferredArtistsButton"
+                        Style="{StaticResource ExpandButtonStyle}"
+                        Click="ExpandPreferredArtistsButton_Click">
+                        <AppBarButton.Icon>
+                            <FontIcon x:Name="ExpandPreferredArtistsButtonIcon" Style="{StaticResource RotateDropDownIcon}" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
                     <AppBarButton 
                         x:Name="ClearInvalidPreferredArtistsButton" 
                         x:Uid="ClearInvalidAppBarButton"
@@ -176,10 +239,10 @@
                 <ListView
                     x:Name="PreferredArtistsListView"
                     Style="{StaticResource PreferenceListViewStyle}"
-                    Visibility="{x:Bind PreferredArtists.Count, Converter={StaticResource VisibilityConverter},Mode=OneWay}"
+                    Visibility="{x:Bind LimitedPreferredArtists.Count, Converter={StaticResource VisibilityConverter},Mode=OneWay}"
                     ItemClick="PreferredArtistsListView_ItemClick"
                     ContainerContentChanging="PreferenceListView_ContainerContentChanging"
-                    ItemsSource="{x:Bind PreferredArtists, Mode=OneWay}" />
+                    ItemsSource="{x:Bind LimitedPreferredArtists, Mode=OneWay}" />
                 <Border
                     Style="{StaticResource NoItemBackground}"
                     Visibility="{x:Bind PreferredArtists.Count, Converter={StaticResource InvertedVisibilityConverter},Mode=OneWay}">
@@ -203,6 +266,14 @@
                         Icon="Add"
                         Style="{StaticResource GoToAddAppBarButtonStyle}"
                         Click="GoToAddPreferredAlbumsButton_Click"/>
+                    <AppBarButton
+                        x:Name="ExpandPreferredAlbumsButton"
+                        Style="{StaticResource ExpandButtonStyle}"
+                        Click="ExpandPreferredAlbumsButton_Click">
+                        <AppBarButton.Icon>
+                            <FontIcon x:Name="ExpandPreferredAlbumsButtonIcon" Style="{StaticResource RotateDropDownIcon}" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
                     <AppBarButton 
                         x:Name="ClearInvalidPreferredAlbumsButton" 
                         x:Uid="ClearAppBarButton"
@@ -213,10 +284,10 @@
                 <ListView
                     x:Name="PreferredAlbumsListView"
                     Style="{StaticResource PreferenceListViewStyle}"
-                    Visibility="{x:Bind PreferredAlbums.Count, Converter={StaticResource VisibilityConverter},Mode=OneWay}"
+                    Visibility="{x:Bind LimitedPreferredAlbums.Count, Converter={StaticResource VisibilityConverter},Mode=OneWay}"
                     ItemClick="PreferredAlbumsListView_ItemClick"
                     ContainerContentChanging="PreferenceListView_ContainerContentChanging"
-                    ItemsSource="{x:Bind PreferredAlbums, Mode=OneWay}" />
+                    ItemsSource="{x:Bind LimitedPreferredAlbums, Mode=OneWay}" />
                 <Border 
                     Style="{StaticResource NoItemBackground}"
                     Visibility="{x:Bind PreferredAlbums.Count, Converter={StaticResource InvertedVisibilityConverter},Mode=OneWay}">
@@ -240,6 +311,14 @@
                         Icon="Add"
                         Style="{StaticResource GoToAddAppBarButtonStyle}"
                         Click="GoToAddPreferredPlaylistsButton_Click"/>
+                    <AppBarButton
+                        x:Name="ExpandPreferredPlaylistsButton"
+                        Style="{StaticResource ExpandButtonStyle}"
+                        Click="ExpandPreferredPlaylistsButton_Click">
+                        <AppBarButton.Icon>
+                            <FontIcon x:Name="ExpandPreferredPlaylistsButtonIcon" Style="{StaticResource RotateDropDownIcon}" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
                     <AppBarButton 
                         x:Name="ClearInvalidPreferredPlaylistsButton" 
                         x:Uid="ClearInvalidAppBarButton"
@@ -250,10 +329,10 @@
                 <ListView
                     x:Name="PreferredPlaylistsListView"
                     Style="{StaticResource PreferenceListViewStyle}"
-                    Visibility="{x:Bind PreferredPlaylists.Count, Converter={StaticResource VisibilityConverter},Mode=OneWay}"
+                    Visibility="{x:Bind LimitedPreferredPlaylists.Count, Converter={StaticResource VisibilityConverter},Mode=OneWay}"
                     ItemClick="PreferredPlaylistsListView_ItemClick"
                     ContainerContentChanging="PreferenceListView_ContainerContentChanging"
-                    ItemsSource="{x:Bind PreferredPlaylists, Mode=OneWay}" />
+                    ItemsSource="{x:Bind LimitedPreferredPlaylists, Mode=OneWay}" />
                 <Border
                     Style="{StaticResource NoItemBackground}"
                     Visibility="{x:Bind PreferredPlaylists.Count, Converter={StaticResource InvertedVisibilityConverter},Mode=OneWay}">
@@ -277,6 +356,14 @@
                         Icon="Add"
                         Style="{StaticResource GoToAddAppBarButtonStyle}"
                         Click="GoToAddPreferredFoldersButton_Click"/>
+                    <AppBarButton
+                        x:Name="ExpandPreferredFoldersButton"
+                        Style="{StaticResource ExpandButtonStyle}"
+                        Click="ExpandPreferredFoldersButton_Click">
+                        <AppBarButton.Icon>
+                            <FontIcon x:Name="ExpandPreferredFoldersButtonIcon" Style="{StaticResource RotateDropDownIcon}" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
                     <AppBarButton 
                         x:Name="ClearInvalidPreferredFoldersButton" 
                         x:Uid="ClearInvalidAppBarButton"
@@ -287,10 +374,10 @@
                 <ListView
                     x:Name="PreferredFoldersListView"
                     Style="{StaticResource PreferenceListViewStyle}"
-                    Visibility="{x:Bind PreferredFolders.Count, Converter={StaticResource VisibilityConverter},Mode=OneWay}"
+                    Visibility="{x:Bind LimitedPreferredFolders.Count, Converter={StaticResource VisibilityConverter},Mode=OneWay}"
                     ItemClick="PreferredFoldersListView_ItemClick"
                     ContainerContentChanging="PreferenceListView_ContainerContentChanging"
-                    ItemsSource="{x:Bind PreferredFolders, Mode=OneWay}" />
+                    ItemsSource="{x:Bind LimitedPreferredFolders, Mode=OneWay}" />
                 <Border 
                     Style="{StaticResource NoItemBackground}"
                     Visibility="{x:Bind PreferredFolders.Count, Converter={StaticResource InvertedVisibilityConverter},Mode=OneWay}">

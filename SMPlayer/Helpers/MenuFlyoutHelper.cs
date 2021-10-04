@@ -637,7 +637,7 @@ namespace SMPlayer
             };
             quickPlay.Click += (sender, args) =>
             {
-                MediaHelper.PreferredShuffleAndPlay();
+                MediaHelper.QuickPlay();
                 callback?.Invoke();
             };
             quickPlay.SetToolTip("QuickPlayToolTip");

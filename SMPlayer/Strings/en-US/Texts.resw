@@ -150,6 +150,12 @@
   <data name="ArtistsWithCount" xml:space="preserve">
     <value>Artists ({0})</value>
   </data>
+  <data name="CollapseList" xml:space="preserve">
+    <value>Collapse</value>
+  </data>
+  <data name="ExpandList" xml:space="preserve">
+    <value>Expand</value>
+  </data>
   <data name="Folders" xml:space="preserve">
     <value>Folders</value>
   </data>

@@ -451,6 +451,11 @@ namespace SMPlayer
             helper.DefaultPlaylistName = Settings.settings.FindNextPlaylistName(playlistName);
         }
 
+        private void RemoveButton_Click(object sender, RoutedEventArgs e)
+        {
+            AskRemoveSearchHistory((sender as Button).DataContext as string);
+        }
+
         void IMenuFlyoutHelperBuildListener.OnBuild(MenuFlyoutHelper helper)
         {
             BuildMenuFlyoutHelper(helper);
@@ -459,11 +464,7 @@ namespace SMPlayer
         void IMenuFlyoutItemClickListener.Favorite(object data) { }
         void IMenuFlyoutItemClickListener.Delete(Music music) { }
         void IMenuFlyoutItemClickListener.UndoDelete(Music music) { }
-
-        void IMenuFlyoutItemClickListener.Remove(Music music)
-        {
-        }
-
+        void IMenuFlyoutItemClickListener.Remove(Music music) { }
         void IMenuFlyoutItemClickListener.Select(object data) { }
         void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type) { }
     }

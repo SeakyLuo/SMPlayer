@@ -150,6 +150,12 @@
   <data name="ArtistsWithCount" xml:space="preserve">
     <value>歌手（{0}）</value>
   </data>
+  <data name="CollapseList" xml:space="preserve">
+    <value>收起列表</value>
+  </data>
+  <data name="ExpandList" xml:space="preserve">
+    <value>展开列表</value>
+  </data>
   <data name="Folders" xml:space="preserve">
     <value>文件夹</value>
   </data>

@@ -245,9 +245,23 @@ namespace SMPlayer
             }
         }
 
-        public static void RemoveAll<T>(this ObservableCollection<T> collection, Func<T, bool> predicate)
+        public static ObservableCollection<T> RemoveAll<T>(this ObservableCollection<T> collection, Func<T, bool> predicate)
         {
             collection.Where(predicate).ToList().ForEach(e => collection.Remove(e));
+            return collection;
+        }
+
+        public static void AddRange<T>(this ObservableCollection<T> collection, IEnumerable<T> enumerable)
+        {
+            foreach (var item in enumerable)
+            {
+                collection.Add(item);
+            }
+        }
+
+        public static IEnumerable<T> GetRange<T>(this ObservableCollection<T> collection, int start, int end)
+        {
+            return collection.Skip(start).Take(end - start);
         }
     }
 }

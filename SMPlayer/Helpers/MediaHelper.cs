@@ -251,7 +251,7 @@ namespace SMPlayer
             ShuffleAndPlay(CurrentPlaylist);
         }
 
-        public static void PreferredShuffleAndPlay()
+        public static void QuickPlay()
         {
             ShuffleAndPlay(CurrentPlaylist);
         }
@@ -450,9 +450,6 @@ namespace SMPlayer
         {
             if (CurrentMusic != null && await CurrentMusic.GetStorageFileAsync() == null)
                 CurrentMusic = null;
-            //foreach (var music in CurrentPlaylist)
-            //    if (await music.GetStorageFileAsync() == null)
-            //        RemoveMusic(music);
         }
 
         public static void LikeMusic(Music music)

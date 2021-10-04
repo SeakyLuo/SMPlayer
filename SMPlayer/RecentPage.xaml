@@ -165,6 +165,12 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <TextBlock VerticalAlignment="Center" Text="{x:Bind}" />
+                                        <Button
+                                            x:Uid="RemoveButton" 
+                                            Style="{StaticResource RemoveButtonStyle}"
+                                            Grid.Column="1"
+                                            Margin="4,0"
+                                            Click="RemoveButton_Click" />
                                     </Grid>
                                 </SwipeControl>
                             </DataTemplate>
