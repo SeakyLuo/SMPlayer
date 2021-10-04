@@ -214,6 +214,28 @@ namespace SMPlayer
                 MainPage.Instance?.SetHeaderText("AllSongs");
             }
         }
+
+        public static List<Music> GetMostPlayed(int limit)
+        {
+            List<Music> list = new List<Music>();
+            foreach (var group in AllSongs.GroupBy(m => m.PlayCount).OrderByDescending(g => g.Key))
+            {
+                if (list.Count > limit) break;
+                list.AddRange(group);
+            }
+            return list;
+        }
+
+        public static List<Music> GetLeastPlayed(int limit)
+        {
+            List<Music> list = new List<Music>();
+            foreach (var group in AllSongs.GroupBy(m => m.PlayCount).OrderBy(g => g.Key))
+            {
+                if (list.Count > limit) break;
+                list.AddRange(group);
+            }
+            return list;
+        }
     }
 
     public interface IAfterSongsSetListener

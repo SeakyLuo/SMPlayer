@@ -245,13 +245,13 @@ namespace SMPlayer
             }
         }
 
-        public static ObservableCollection<T> RemoveAll<T>(this ObservableCollection<T> collection, Func<T, bool> predicate)
+        public static ICollection<T> RemoveAll<T>(this ICollection<T> collection, Func<T, bool> predicate)
         {
             collection.Where(predicate).ToList().ForEach(e => collection.Remove(e));
             return collection;
         }
 
-        public static void AddRange<T>(this ObservableCollection<T> collection, IEnumerable<T> enumerable)
+        public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> enumerable)
         {
             foreach (var item in enumerable)
             {
@@ -259,7 +259,7 @@ namespace SMPlayer
             }
         }
 
-        public static IEnumerable<T> GetRange<T>(this ObservableCollection<T> collection, int start, int end)
+        public static IEnumerable<T> GetRange<T>(this IEnumerable<T> collection, int start, int end)
         {
             return collection.Skip(start).Take(end - start);
         }

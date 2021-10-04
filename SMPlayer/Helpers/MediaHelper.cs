@@ -251,9 +251,9 @@ namespace SMPlayer
             ShuffleAndPlay(CurrentPlaylist);
         }
 
-        public static void QuickPlay()
+        public static void QuickPlay(int randomLimit)
         {
-            ShuffleAndPlay(CurrentPlaylist);
+            SetPlaylistAndPlay(Helpers.QuickPlayHelper.GetPlaylist(randomLimit));
         }
 
         public static void ShuffleOthers()

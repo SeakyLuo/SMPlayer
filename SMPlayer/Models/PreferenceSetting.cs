@@ -31,6 +31,36 @@ namespace SMPlayer.Models
         public bool MostPlayed { get; set; } = false;
         public bool LeastPlayed { get; set; } = false;
 
+        [Newtonsoft.Json.JsonIgnore]
+        public List<PreferenceItem> EnabledPreferredSongs
+        {
+            get => PreferredSongs.Where(i => i.IsEnabled).ToList();
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public List<PreferenceItem> EnabledPreferredArtists
+        {
+            get => PreferredArtists.Where(i => i.IsEnabled).ToList();
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public List<PreferenceItem> EnabledPreferredAlbums
+        {
+            get => PreferredAlbums.Where(i => i.IsEnabled).ToList();
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public List<PreferenceItem> EnabledPreferredPlaylists
+        {
+            get => PreferredPlaylists.Where(i => i.IsEnabled).ToList();
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public List<PreferenceItem> EnabledPreferredFolders
+        {
+            get => PreferredFolders.Where(i => i.IsEnabled).ToList();
+        }
+
         public void UpdatePlaylistName(string oldName, string newName)
         {
             if (PreferredPlaylists.Find(i => i.Name == oldName) is PreferenceItem item)

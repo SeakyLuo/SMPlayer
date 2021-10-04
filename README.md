@@ -14,33 +14,19 @@ Build it with local computer.
 Go to Settings and set the Root Folder of your music files.
 
 # TO DO
-Improve search algorithm.
-
-Move music from folder to folder.
-
 Improve editing album art by selecting a song in a dropdown with searching.
-
-Batch delete.
 
 Page shows no music hint.
 
 Album properties.
 
-Improve shy header.
-
 Album art in NowPlayingFull.
-
-Search multiple lyrics choose one.
-
-Improve recent music month.
-
-Lyrics preference.
 
 Improve voice assitant command set.
 
-Rename folder.
+Rename folder. Move music from folder to folder. Batch delete music file.
 
-Right-click menu with current item.
+Search multiple lyrics choose one. Lyrics priority in notification.
 
 # TO FIX
 Able to drag titlebar when loading, multi-select.
@@ -74,4 +60,8 @@ Grid Mode for PlaylistPage.
 
 Refresh directory does not refresh page.
 
-Search albums.
+Right-click menu with current item.
+
+Improve recent music month.
+
+Improve shy header.

@@ -637,7 +637,7 @@ namespace SMPlayer
             };
             quickPlay.Click += (sender, args) =>
             {
-                MediaHelper.QuickPlay();
+                MediaHelper.QuickPlay(randomLimit);
                 callback?.Invoke();
             };
             quickPlay.SetToolTip("QuickPlayToolTip");
@@ -753,13 +753,7 @@ namespace SMPlayer
                 };
                 mostPlayed.Click += (sender, args) =>
                 {
-                    List<Music> list = new List<Music>();
-                    foreach (var group in MusicLibraryPage.AllSongs.GroupBy(m => m.PlayCount).OrderByDescending(g => g.Key))
-                    {
-                        if (list.Count > randomLimit) break;
-                        list.AddRange(group);
-                    }
-                    MediaHelper.SetPlaylistAndPlay(list.Shuffle().Take(randomLimit));
+                    MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.GetMostPlayed(randomLimit).Shuffle().Take(randomLimit));
                     callback?.Invoke();
                 };
                 flyout.Items.Add(mostPlayed);
@@ -769,13 +763,7 @@ namespace SMPlayer
                 };
                 leastPlayed.Click += (sender, args) =>
                 {
-                    List<Music> list = new List<Music>();
-                    foreach (var group in MusicLibraryPage.AllSongs.GroupBy(m => m.PlayCount).OrderBy(g => g.Key))
-                    {
-                        if (list.Count > randomLimit) break;
-                        list.AddRange(group);
-                    }
-                    MediaHelper.SetPlaylistAndPlay(list.Shuffle().Take(randomLimit));
+                    MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.GetLeastPlayed(randomLimit).Shuffle().Take(randomLimit));
                     callback?.Invoke();
                 };
                 flyout.Items.Add(leastPlayed);
