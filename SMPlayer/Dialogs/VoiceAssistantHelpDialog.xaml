@@ -1,0 +1,53 @@
+﻿<ContentDialog
+    x:Class="SMPlayer.Dialogs.VoiceAssistantHelpDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SMPlayer.Dialogs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Style="{StaticResource StretchTitleContentDialogStyle}">
+    <ContentDialog.Resources>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource SemiBoldTitleTextBlockStyle}" x:Key="TitleTextBlockStyle">
+            <Setter Property="Margin" Value="2" />
+        </Style>
+    </ContentDialog.Resources>
+    
+    <ContentDialog.Title>
+        <RelativePanel>
+            <TextBlock 
+                x:Uid="VoiceAssistantHelpTextBlock"
+                FontWeight="SemiBold"
+                FontSize="32"
+                RelativePanel.AlignVerticalCenterWithPanel="True" />
+            <Button
+                RelativePanel.AlignRightWithPanel="True"
+                Click="CloseButton_Click"
+                Content="&#xE894;"
+                Style="{StaticResource FontIconButtonStyle}" />
+        </RelativePanel>
+    </ContentDialog.Title>
+
+    <ScrollViewer Width="600" Height="800">
+        <StackPanel>
+            <TextBlock 
+                x:Uid="VoiceAssistantSupportedCommandsTextBlock" 
+                Text="Supported Commands" 
+                Style="{StaticResource TitleTextBlockStyle}" />
+            <TextBlock TextWrapping="WrapWholeWords">
+            1. 播放 - 播放<LineBreak />
+            2. 暂停 <LineBreak />
+            3. 搜索 <LineBreak />
+            4. 前/后/上/下一首 <LineBreak />
+            5. 帮助 <LineBreak />
+            </TextBlock>
+            <TextBlock
+                x:Uid="NoticeTextBlock"
+                Text="Notice"
+                Style="{StaticResource TitleTextBlockStyle}" />
+            <TextBlock
+                x:Uid="VoiceAssistantNoticeTextBlock" 
+                Text="Notice" />
+        </StackPanel>
+    </ScrollViewer>
+</ContentDialog>

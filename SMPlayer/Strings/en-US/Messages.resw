@@ -567,6 +567,21 @@
   <data name="Updating" xml:space="preserve">
     <value>We are updating your data, please wait patiently. If you exit unexpectedly, please go to "Settings" and try "Update Music Library".</value>
   </data>
+  <data name="VoiceAssistantAudiblePrompt" xml:space="preserve">
+    <value>How can I help you?</value>
+  </data>
+  <data name="VoiceAssistantCannotUnderstand" xml:space="preserve">
+    <value>Sorry, I can't understand you.</value>
+  </data>
+  <data name="VoiceAssistantExampleText" xml:space="preserve">
+    <value>You can say "play something", "pause", "help", e.t.c.</value>
+  </data>
+  <data name="VoiceAssistantNoSearchResults" xml:space="preserve">
+    <value>Sorry, I can't find result for "{0}".</value>
+  </data>
+  <data name="VoiceAssitantError" xml:space="preserve">
+    <value>Sorry, something goes wrong.</value>
+  </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>

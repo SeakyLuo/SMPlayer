@@ -363,7 +363,21 @@
                         Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 </StackPanel>
             </StackPanel>
-            <StackPanel Grid.Column="1">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        x:Name="VoiceAssistantTextBlock"
+                        x:Uid="VoiceAssistantTextBlock"
+                        Style="{StaticResource SettingLabelStyle}"
+                        Text="Voice Assistant" />
+                    <HyperlinkButton
+                        x:Uid="HelpButton"
+                        Click="HelpButton_Click"
+                        Content="Help"
+                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
                         x:Name="OthersTextBlock"

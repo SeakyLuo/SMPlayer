@@ -22,11 +22,11 @@ Album properties.
 
 Album art in NowPlayingFull.
 
-Improve voice assitant command set.
-
 Rename folder. Move music from folder to folder. Batch delete music file.
 
 Search multiple lyrics choose one. Lyrics priority in notification.
+
+Preference priority.
 
 # TO FIX
 Able to drag titlebar when loading, multi-select.

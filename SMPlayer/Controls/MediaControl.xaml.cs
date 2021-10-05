@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using Windows.Foundation;
 using Windows.Media.Playback;
-using Windows.Media.SpeechRecognition;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -355,8 +354,6 @@ namespace SMPlayer
         private static List<Action<Music, Music>> MusicModifiedListeners = new List<Action<Music, Music>>();
         private static List<IMusicRequestListener> MusicRequestListeners = new List<IMusicRequestListener>();
         private static bool inited = false;
-        private SpeechRecognizer speechRecognizer = new SpeechRecognizer(Helper.CurrentLanguage);
-        private volatile bool IsSpeeching = false;
         private bool IsMinimalMain { get => MainMediaControlMoreButton.Visibility == Visibility.Visible; }
         private double MinimalLayoutWidth { get => (double) Resources["MinimalLayoutWidth"]; }
 
@@ -1009,56 +1006,9 @@ namespace SMPlayer
             MiniMoreFlyout.Hide();
         }
 
-        private async void VoiceAssistantButton_Click(object sender, RoutedEventArgs e)
+        private void VoiceAssistantButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsSpeeching)
-            {
-                await speechRecognizer.StopRecognitionAsync();
-                goto VoiceEnds;
-            }
-            IsSpeeching = true;
-            await speechRecognizer.CompileConstraintsAsync(); 
-            SpeechRecognitionResult speechRecognitionResult = null;
-            try
-            {
-                speechRecognitionResult = await speechRecognizer.RecognizeWithUIAsync();
-            }
-            catch (Exception)
-            {
-                ContentDialog Dialog = new ContentDialog()
-                {
-                    Title = Helper.LocalizeMessage("UnacceptedSpeechPrivacyPolicy"),
-                    Content = Helper.LocalizeMessage("OpenSettingsAndTurnOnSpeechInput"),
-                    PrimaryButtonText = Helper.LocalizeMessage("NeverMind"),
-                    SecondaryButtonText = Helper.LocalizeMessage("GoToSettings")
-                };
-                if (await Dialog.ShowAsync() == ContentDialogResult.Secondary)
-                {
-                    // https://stackoverflow.com/questions/42391526/exception-the-speech-privacy-policy-was-not-accepted-prior-to-attempting-a-spee
-                    if (!await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-speechtyping")))
-                    {
-                        await new ContentDialog()
-                        {
-                            Title = Helper.LocalizeMessage("ErrorOccurs"),
-                            Content = Helper.LocalizeMessage("OpenSettingsFailed"),
-                            PrimaryButtonText = Helper.LocalizeMessage("Close"),
-                        }.ShowAsync();
-                    }
-                }
-            }
-            try
-            {
-                if (speechRecognitionResult != null)
-                {
-                    VoiceAssistantHelper.HandleCommand(speechRecognitionResult.Text);
-                }
-            }
-            catch (Exception)
-            {
-                Helper.ShowNotification("Error");
-            }
-        VoiceEnds:
-            IsSpeeching = false;
+            VoiceAssistantHelper.AwakeVoiceAssistant();
             switch (mode)
             {
                 case MediaControlMode.Main:

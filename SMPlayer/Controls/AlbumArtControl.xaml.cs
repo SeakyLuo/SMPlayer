@@ -138,7 +138,7 @@ namespace SMPlayer.Controls
                         {
                             if (source.Tag.Pictures.Length == 0)
                             {
-                                Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("MusicNoAlbumArt", file.DisplayName));
+                                Helper.ShowNotificationRaw(Helper.LocalizeMessage("MusicNoAlbumArt", file.DisplayName));
                                 return;
                             }
                             sourcePics = source.Tag.Pictures;

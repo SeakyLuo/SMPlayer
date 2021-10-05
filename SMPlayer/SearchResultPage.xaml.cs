@@ -104,7 +104,7 @@ namespace SMPlayer
                     Criteria = SearchPage.FoldersCriteria;
                     break;
             }
-            MainPage.Instance.SetHeaderTextWithoutLocalization(SearchPage.GetSearchHeader(keyword, MainPage.Instance.IsMinimal));
+            MainPage.Instance.SetHeaderTextRaw(SearchPage.GetSearchHeader(keyword, MainPage.Instance.IsMinimal));
             switch (e.NavigationMode)
             {
                 case NavigationMode.New:

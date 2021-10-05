@@ -5,14 +5,10 @@
     xmlns:local="using:SMPlayer.Dialogs"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Style="{StaticResource StretchTitleContentDialogStyle}"
     mc:Ignorable="d">
-
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <RelativePanel Margin="0,8">
+    <ContentDialog.Title>
+        <RelativePanel>
             <TextBlock 
                 x:Uid="ReleaseNotesTextBlock"
                 FontSize="36"
@@ -25,12 +21,15 @@
                 Content="&#xE894;"
                 Style="{StaticResource FontIconButtonStyle}" />
         </RelativePanel>
-        <TextBlock Grid.Row="1" TextWrapping="WrapWholeWords">
-            <LineBreak />
+    </ContentDialog.Title>
+
+    <ScrollViewer>
+        <TextBlock TextWrapping="WrapWholeWords">
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.5.1</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesShowInExplorerBugFix"/><LineBreak />
             2. <Run x:Uid="ReleaseNotesSettingsCheckBoxChanged"/><LineBreak />
             3. <Run x:Uid="ReleaseNotesPreferenceSettingsAdded"/><LineBreak />
+            4. <Run x:Uid="ReleaseNotesVoiceAssistantImprovements"/><LineBreak />
             <LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.5.0</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesVoiceAssistant"/><LineBreak />
@@ -63,5 +62,5 @@
             1. <Run x:Uid="ReleaseNotesOpenWithSMPlayer"/><LineBreak />
             2. <Run x:Uid="ReleaseNotesSupportsMultiSelect"/><LineBreak />
         </TextBlock>
-    </Grid>
+    </ScrollViewer>
 </ContentDialog>

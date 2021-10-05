@@ -435,6 +435,9 @@
   <data name="GridViewItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Change to Grid View</value>
   </data>
+  <data name="HelpButton.Content" xml:space="preserve">
+    <value>Help</value>
+  </data>
   <data name="HideMultiSelectCommandBarToggleSwitch.OffContent" xml:space="preserve">
     <value>Hide multi-select commandbar after operation</value>
   </data>
@@ -629,6 +632,9 @@
   </data>
   <data name="NoResultTextBlock.Text" xml:space="preserve">
     <value>No result is found. Please check your spelling.</value>
+  </data>
+  <data name="NoticeTextBlock.Text" xml:space="preserve">
+    <value>Notice</value>
   </data>
   <data name="NotificationModeComboBoxTextBlock.Text" xml:space="preserve">
     <value>Notification Mode: </value>
@@ -924,6 +930,9 @@
   <data name="ReleaseNotesVoiceAssistant.Text" xml:space="preserve">
     <value>You can now play music via voice assistant. Notice: you can only say "play music/artist/album/folder/playlist".</value>
   </data>
+  <data name="ReleaseNotesVoiceAssistantImprovements.Text" xml:space="preserve">
+    <value>【Improvements】Voice assistant is a little little little bit smarter, and now supports some new commands. Check out Settings page for more information.</value>
+  </data>
   <data name="ReminderComboItem.Content" xml:space="preserve">
     <value>Reminder</value>
   </data>
@@ -1155,6 +1164,18 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   </data>
   <data name="VoiceAssistantButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Awake Voice Assistant</value>
+  </data>
+  <data name="VoiceAssistantHelpTextBlock.Text" xml:space="preserve">
+    <value>Voice Assistant Help</value>
+  </data>
+  <data name="VoiceAssistantNoticeTextBlock.Text" xml:space="preserve">
+    <value>This voice assistant is not driven by AI. Please follow the instructions above and make your commands as simple as posible.</value>
+  </data>
+  <data name="VoiceAssistantSupportedCommandsTextBlock.Text" xml:space="preserve">
+    <value>Supported Commands</value>
+  </data>
+  <data name="VoiceAssistantTextBlock.Text" xml:space="preserve">
+    <value>Voice Assistant</value>
   </data>
   <data name="VolumeButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Volume</value>

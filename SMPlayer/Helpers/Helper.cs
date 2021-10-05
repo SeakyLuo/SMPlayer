@@ -214,8 +214,11 @@ namespace SMPlayer
                 return false;
             }
         }
-        public static IMainPageContainer GetMainPageContainer() { return (Window.Current.Content as Frame).Content as IMainPageContainer; }
-        public static void ShowNotificationWithoutLocalization(string message, int duration = 2000)
+        public static IMainPageContainer GetMainPageContainer()
+        {
+            return (Window.Current?.Content as Frame)?.Content as IMainPageContainer;
+        }
+        public static void ShowNotificationRaw(string message, int duration = 2000)
         {
             GetMainPageContainer()?.ShowNotification(message, duration);
         }
@@ -227,7 +230,7 @@ namespace SMPlayer
         {
             GetMainPageContainer()?.ShowUndoNotification(LocalizeMessage(message), cancel, duration);
         }
-        public static void ShowCancelableNotificationWithoutLocalization(string message, Action cancel, int duration = 5000)
+        public static void ShowCancelableNotificationRaw(string message, Action cancel, int duration = 5000)
         {
             GetMainPageContainer()?.ShowUndoNotification(message, cancel, duration);
         }
@@ -388,6 +391,7 @@ namespace SMPlayer
         void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option = null);
         void HideMultiSelectCommandBar();
         void SetMultiSelectListener(IMultiSelectListener listener = null);
+        MediaElement GetMediaElement();
         MultiSelectCommandBar GetMultiSelectCommandBar();
     }
 }

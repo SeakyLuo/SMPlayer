@@ -13,7 +13,7 @@ namespace SMPlayer.Helpers
 
         public static List<Music> GetPlaylist(int randomLimit)
         {
-            HashSet<Music> songs = MusicLibraryPage.AllSongs.RandItems(randomLimit).ToHashSet();
+            HashSet<Music> songs = MusicLibraryPage.AllSongs.RandItems(randomLimit * 2).ToHashSet();
             PreferenceSetting preference = Settings.settings.Preference;
             HandlePreferredSongs(songs, preference);
             HandlePreferredArtists(songs, preference);

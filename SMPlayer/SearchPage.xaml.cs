@@ -50,7 +50,7 @@ namespace SMPlayer
         {
             base.OnNavigatedTo(e);
             SearchKeyword keyword = e.Parameter as SearchKeyword;
-            MainPage.Instance.SetHeaderTextWithoutLocalization(GetSearchHeader(keyword, MainPage.Instance.IsMinimal));
+            MainPage.Instance.SetHeaderTextRaw(GetSearchHeader(keyword, MainPage.Instance.IsMinimal));
             switch (e.NavigationMode)
             {
                 case NavigationMode.New:

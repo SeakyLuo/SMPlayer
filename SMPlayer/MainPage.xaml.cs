@@ -88,7 +88,7 @@ namespace SMPlayer
             if (!isTitleBarColorful) TitleBarBackground = isMinimal ? ColorHelper.MinimalTitleBarColor : ColorHelper.TransparentBrush;
             HeaderGrid.Visibility = collapsed ? Visibility.Collapsed : Visibility.Visible;
             if (!isMinimal) HideHeaderSearchBar(Visibility.Collapsed);
-            if (page == "SearchPage" || page == "SearchResultPage") SetHeaderTextWithoutLocalization(SearchPage.GetSearchHeader(SearchPage.History.Peek(), IsMinimal));
+            if (page == "SearchPage" || page == "SearchResultPage") SetHeaderTextRaw(SearchPage.GetSearchHeader(SearchPage.History.Peek(), IsMinimal));
             if (!MainNavigationView.IsPaneOpen)
                 if (isMinimal) PaneCloseMinimal();
                 else PaneCloseNormal();
@@ -292,7 +292,7 @@ namespace SMPlayer
         {
             MainNavigationViewHeader.Text = Helper.LocalizeText(header, args);
         }
-        public void SetHeaderTextWithoutLocalization(string header)
+        public void SetHeaderTextRaw(string header)
         {
             MainNavigationViewHeader.Text = header;
         }
@@ -448,5 +448,9 @@ namespace SMPlayer
             BottomMultiSelectCommandBar.MultiSelectListener = listener;
         }
 
+        public MediaElement GetMediaElement()
+        {
+            return mediaElement;
+        }
     }
 }

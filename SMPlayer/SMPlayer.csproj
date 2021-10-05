@@ -188,6 +188,9 @@
     <Compile Include="Dialogs\InputDialog.xaml.cs">
       <DependentUpon>InputDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\VoiceAssistantHelpDialog.xaml.cs">
+      <DependentUpon>VoiceAssistantHelpDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ExpressionBuilder\ExpressionBuilder.CompositionExtensions.cs" />
     <Compile Include="ExpressionBuilder\ExpressionNodes\ExpressionBuilder.BooleanNode.cs" />
     <Compile Include="ExpressionBuilder\ExpressionNodes\ExpressionBuilder.ColorNode.cs" />
@@ -375,6 +378,8 @@
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="VoiceAssistantCommandSet.xml" />
+    <None Include="Assets\zh.grxml" />
+    <None Include="Grammars\zh.grxml" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
@@ -476,6 +481,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialogs\VoiceAssistantHelpDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dictionaries\BackButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -537,6 +546,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dictionaries\SearchTextBlockButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dictionaries\StretchTitleContentDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

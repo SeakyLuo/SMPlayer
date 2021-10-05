@@ -210,15 +210,15 @@ namespace SMPlayer.Helpers
         {
             List<SearchResult> results = new List<SearchResult>();
 
-            Playlist artist = (await Task.Run(() => SearchArtists(MusicLibraryPage.AllSongs, keyword, SortBy.Artist)))?.FirstOrDefault();
+            Playlist artist = (await Task.Run(() => SearchArtists(MusicLibraryPage.AllSongs, keyword, SortBy.Default)))?.FirstOrDefault();
             results.Add(new SearchResult(SearchType.Artists, artist, EvaluateArtist(artist, keyword)));
-            Music music = (await Task.Run(() => SearchSongs(MusicLibraryPage.AllSongs, keyword, SortBy.Artist)))?.FirstOrDefault();
-            results.Add(new SearchResult(SearchType.Artists, artist, EvaluateMusic(music, keyword)));
-            AlbumView album = (await Task.Run(() => SearchAlbums(MusicLibraryPage.AllSongs, keyword, SortBy.Artist)))?.FirstOrDefault();
-            results.Add(new SearchResult(SearchType.Artists, album, EvaluateAlbum(album, keyword)));
-            GridFolderView folder = (await Task.Run(() => SearchFolders(Settings.settings.Tree, keyword, SortBy.Artist)))?.FirstOrDefault();
+            Music music = (await Task.Run(() => SearchSongs(MusicLibraryPage.AllSongs, keyword, SortBy.Default)))?.FirstOrDefault();
+            results.Add(new SearchResult(SearchType.Songs, music, EvaluateMusic(music, keyword)));
+            AlbumView album = (await Task.Run(() => SearchAlbums(MusicLibraryPage.AllSongs, keyword, SortBy.Default)))?.FirstOrDefault();
+            results.Add(new SearchResult(SearchType.Albums, album, EvaluateAlbum(album, keyword)));
+            GridFolderView folder = (await Task.Run(() => SearchFolders(Settings.settings.Tree, keyword, SortBy.Default)))?.FirstOrDefault();
             results.Add(new SearchResult(SearchType.Folders, folder, EvaluateFolder(folder, keyword)));
-            AlbumView playlist = (await Task.Run(() => SearchPlaylists(Settings.settings.Playlists, keyword, SortBy.Artist)))?.FirstOrDefault();
+            AlbumView playlist = (await Task.Run(() => SearchPlaylists(Settings.settings.Playlists, keyword, SortBy.Default)))?.FirstOrDefault();
             results.Add(new SearchResult(SearchType.Playlists, playlist, EvaluatePlaylist(playlist, keyword)));
 
             results.Sort((r1, r2) => r2.Score - r1.Score);

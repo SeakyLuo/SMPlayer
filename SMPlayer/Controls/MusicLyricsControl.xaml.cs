@@ -77,7 +77,7 @@ namespace SMPlayer.Controls
                 LyricsTextBox.IsEnabled = true;
             }
             IsProcessing = false;
-            Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("LyricsUpdated", CurrentMusic.Name));
+            Helper.ShowNotificationRaw(Helper.LocalizeMessage("LyricsUpdated", CurrentMusic.Name));
         }
         private async void SearchLyricsButton_Click(object sender, RoutedEventArgs e)
         {

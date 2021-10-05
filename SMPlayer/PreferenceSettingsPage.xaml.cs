@@ -426,7 +426,7 @@ namespace SMPlayer
             }
             else
             {
-                Helper.ShowNotificationWithoutLocalization(Helper.LocalizeText("InvalidItemToolTip", view.Name));
+                Helper.ShowNotificationRaw(Helper.LocalizeText("InvalidItemToolTip", view.Name));
             }
         }
 

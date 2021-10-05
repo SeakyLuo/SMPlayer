@@ -174,7 +174,7 @@ namespace SMPlayer
                 message = Helper.LocalizeMessage("CheckNewMusicResultAdded", data.More);
             else
                 message = Helper.LocalizeMessage("CheckNewMusicResultChange", data.More, data.Less);
-            Helper.ShowNotificationWithoutLocalization(message);
+            Helper.ShowNotificationRaw(message);
         }
 
         private async void UpdateMusicLibrary_Click(object sender, RoutedEventArgs e)
@@ -462,6 +462,16 @@ namespace SMPlayer
         private void SaveProgressToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {
             Settings.settings.SaveMusicProgress = (sender as ToggleSwitch).IsOn;
+        }
+
+        private VoiceAssistantHelpDialog voiceAssistantHelpDialog;
+        private async void HelpButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (voiceAssistantHelpDialog == null)
+            {
+                voiceAssistantHelpDialog = new VoiceAssistantHelpDialog();
+            }
+            await voiceAssistantHelpDialog.ShowAsync();
         }
     }
 

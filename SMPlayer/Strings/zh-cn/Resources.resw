@@ -432,6 +432,9 @@
   <data name="GridViewItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>转为网格模式</value>
   </data>
+  <data name="HelpButton.Content" xml:space="preserve">
+    <value>查看帮助</value>
+  </data>
   <data name="HideMultiSelectCommandBarToggleSwitch.OffContent" xml:space="preserve">
     <value>在操作后隐藏多选命令栏</value>
   </data>
@@ -626,6 +629,9 @@
   </data>
   <data name="NoResultTextBlock.Text" xml:space="preserve">
     <value>找不到结果，请检查您的拼写。</value>
+  </data>
+  <data name="NoticeTextBlock.Text" xml:space="preserve">
+    <value>注意</value>
   </data>
   <data name="NotificationModeComboBoxTextBlock.Text" xml:space="preserve">
     <value>通知模式：</value>
@@ -895,7 +901,7 @@
     <value>搜索页面有了“添加全部到”按钮。</value>
   </data>
   <data name="ReleaseNotesSettingsCheckBoxChanged.Text" xml:space="preserve">
-    <value>【体验优化】优化了设置页面的一些控件展示。</value>
+    <value>【体验优化】优化了设置页面的一些控件展示，搜索历史页面增加了“移除”按钮</value>
   </data>
   <data name="ReleaseNotesShowCount.Text" xml:space="preserve">
     <value>部分页面会显示列表项总数了。</value>
@@ -920,6 +926,9 @@
   </data>
   <data name="ReleaseNotesVoiceAssistant.Text" xml:space="preserve">
     <value>现在可以通过语音助手来播放歌曲。注意：目前仅支持说“播放歌曲/歌手/专辑/文件夹/播放列表”。</value>
+  </data>
+  <data name="ReleaseNotesVoiceAssistantImprovements.Text" xml:space="preserve">
+    <value>【体验优化】语音助手不仅更智能了一点点点，还支持更多命令了！请到设置页面查看其详情。</value>
   </data>
   <data name="Remove From List" xml:space="preserve">
     <value>从列表中移除</value>
@@ -1149,6 +1158,18 @@
   </data>
   <data name="VoiceAssistantButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>唤醒语音助手</value>
+  </data>
+  <data name="VoiceAssistantHelpTextBlock.Text" xml:space="preserve">
+    <value>语音助手帮助</value>
+  </data>
+  <data name="VoiceAssistantNoticeTextBlock.Text" xml:space="preserve">
+    <value>这个语音助手没有那么聪明，请按照上面的提示，给出尽可能简单的命令。</value>
+  </data>
+  <data name="VoiceAssistantSupportedCommandsTextBlock.Text" xml:space="preserve">
+    <value>支持的命令</value>
+  </data>
+  <data name="VoiceAssistantTextBlock.Text" xml:space="preserve">
+    <value>语音助手</value>
   </data>
   <data name="VolumeButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>音量</value>

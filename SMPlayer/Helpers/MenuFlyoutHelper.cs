@@ -54,7 +54,7 @@ namespace SMPlayer
                         listener?.AddTo(Data, MediaHelper.CurrentPlaylist, MediaHelper.CurrentPlaylist.Count - 1, AddToCollectionType.NowPlaying);
                         foreach (var clickListener in ClickListeners)
                             clickListener.AddTo(Data, MediaHelper.CurrentPlaylist, MediaHelper.CurrentPlaylist.Count - 1, AddToCollectionType.NowPlaying);
-                        Helper.ShowCancelableNotificationWithoutLocalization(Helper.LocalizeMessage("SongAddedTo", music.Name, NowPlaying), () =>
+                        Helper.ShowCancelableNotificationRaw(Helper.LocalizeMessage("SongAddedTo", music.Name, NowPlaying), () =>
                         {
                             MediaHelper.RemoveMusic(music);
                         });
@@ -69,7 +69,7 @@ namespace SMPlayer
                         listener?.AddTo(Data, MediaHelper.CurrentPlaylist, MediaHelper.CurrentPlaylist.Count - songs.Count() - 1, AddToCollectionType.NowPlaying);
                         foreach (var clickListener in ClickListeners)
                             clickListener.AddTo(Data, MediaHelper.CurrentPlaylist, MediaHelper.CurrentPlaylist.Count - songs.Count() - 1, AddToCollectionType.NowPlaying);
-                        Helper.ShowCancelableNotificationWithoutLocalization(message, () =>
+                        Helper.ShowCancelableNotificationRaw(message, () =>
                         {
                             foreach (var song in songs)
                                 MediaHelper.RemoveMusic(song.ToMusic());
@@ -102,7 +102,7 @@ namespace SMPlayer
                             return;
                         }
                         Settings.settings.LikeMusic(music);
-                        Helper.ShowCancelableNotificationWithoutLocalization(Helper.LocalizeMessage("SongAddedTo", music.Name, MyFavorites), () =>
+                        Helper.ShowCancelableNotificationRaw(Helper.LocalizeMessage("SongAddedTo", music.Name, MyFavorites), () =>
                         {
                             Settings.settings.DislikeMusic(music);
                         });
@@ -112,7 +112,7 @@ namespace SMPlayer
                         Settings.settings.LikeMusic(songs);
                         string message = songs.Count() == 1 ? Helper.LocalizeMessage("SongAddedTo", songs.ElementAt(0).ToMusic().Name, MyFavorites) :
                                                               Helper.LocalizeMessage("SongsAddedTo", songs.Count(), MyFavorites);
-                        Helper.ShowCancelableNotificationWithoutLocalization(message, () => 
+                        Helper.ShowCancelableNotificationRaw(message, () => 
                         {
                             foreach(var song in songs)
                                 Settings.settings.DislikeMusic(song.ToMusic());
@@ -189,7 +189,7 @@ namespace SMPlayer
                         listener?.AddTo(Data, playlist, playlist.Count - 1, AddToCollectionType.Playlist);
                         foreach (var clickListener in ClickListeners)
                             clickListener.AddTo(Data, playlist, playlist.Count - 1, AddToCollectionType.Playlist);
-                        Helper.ShowCancelableNotificationWithoutLocalization(Helper.LocalizeMessage("SongAddedTo", music.Name, playlist.Name), () =>
+                        Helper.ShowCancelableNotificationRaw(Helper.LocalizeMessage("SongAddedTo", music.Name, playlist.Name), () =>
                         {
                             playlist.Remove(music);
                         });
@@ -203,7 +203,7 @@ namespace SMPlayer
                         listener?.AddTo(Data, playlist, playlist.Count - songs.Count() - 1, AddToCollectionType.Playlist);
                         foreach (var clickListener in ClickListeners)
                             clickListener.AddTo(Data, playlist, playlist.Count - songs.Count() - 1, AddToCollectionType.Playlist);
-                        Helper.ShowCancelableNotificationWithoutLocalization(message, () =>
+                        Helper.ShowCancelableNotificationRaw(message, () =>
                         {
                             playlist.Remove(songs);
                         });
@@ -401,7 +401,7 @@ namespace SMPlayer
                         foreach (var clickListener in ClickListeners)
                             clickListener.AddTo(music, MediaHelper.CurrentPlaylist, index, AddToCollectionType.NowPlaying);
                     }
-                    Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("SetPlayNext", music.Name));
+                    Helper.ShowNotificationRaw(Helper.LocalizeMessage("SetPlayNext", music.Name));
                 };
                 flyout.Items.Add(playNextItem);
             }
@@ -672,7 +672,7 @@ namespace SMPlayer
             {
                 var rArtist = MusicLibraryPage.AllSongs.GroupBy(m => m.Artist).RandItem();
                 MediaHelper.SetPlaylistAndPlay(rArtist.Shuffle());
-                Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("PlayRandomArtist", rArtist.Key));
+                Helper.ShowNotificationRaw(Helper.LocalizeMessage("PlayRandomArtist", rArtist.Key));
                 callback?.Invoke();
             };
             flyout.Items.Add(artist);
@@ -684,7 +684,7 @@ namespace SMPlayer
             {
                 var rAlbum = MusicLibraryPage.AllSongs.GroupBy(m => m.Album).RandItem();
                 MediaHelper.SetPlaylistAndPlay(rAlbum.Shuffle());
-                Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("PlayRandomAlbum", rAlbum.Key));
+                Helper.ShowNotificationRaw(Helper.LocalizeMessage("PlayRandomAlbum", rAlbum.Key));
                 callback?.Invoke();
             };
             flyout.Items.Add(album);
@@ -698,7 +698,7 @@ namespace SMPlayer
                 {
                     var rPlaylist = Settings.settings.Playlists.RandItem();
                     MediaHelper.SetPlaylistAndPlay(rPlaylist.Songs.RandItems(randomLimit));
-                    Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("PlayRandomPlaylist", rPlaylist.Name));
+                    Helper.ShowNotificationRaw(Helper.LocalizeMessage("PlayRandomPlaylist", rPlaylist.Name));
                     callback?.Invoke();
                 };
                 flyout.Items.Add(playlist);
@@ -713,7 +713,7 @@ namespace SMPlayer
                 {
                     var rLocalFolder = Settings.settings.Tree.GetAllTrees().Where(tree => tree.Files.Count > 0).RandItem();
                     MediaHelper.SetMusicAndPlay(rLocalFolder.Files.RandItems(randomLimit));
-                    Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("PlayRandomLocalFolder", rLocalFolder.Directory));
+                    Helper.ShowNotificationRaw(Helper.LocalizeMessage("PlayRandomLocalFolder", rLocalFolder.Directory));
                     callback?.Invoke();
                 };
                 flyout.Items.Add(localFolder);
@@ -800,13 +800,13 @@ namespace SMPlayer
                 if (isPreferred)
                 {
                     Settings.settings.Preference.UndoPrefer(data);
-                    Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("UndoPreferItem", name));
+                    Helper.ShowNotificationRaw(Helper.LocalizeMessage("UndoPreferItem", name));
                 }
                 else
                 {
                     if (Settings.settings.Preference.Prefer(data))
                     {
-                        Helper.ShowNotificationWithoutLocalization(Helper.LocalizeMessage("SetItemAsPreferred", name));
+                        Helper.ShowNotificationRaw(Helper.LocalizeMessage("SetItemAsPreferred", name));
                     }
                     else
                     {

@@ -122,5 +122,10 @@ namespace SMPlayer
         {
             BottomMultiSelectCommandBar.MultiSelectListener = listener;
         }
+
+        public MediaElement GetMediaElement()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

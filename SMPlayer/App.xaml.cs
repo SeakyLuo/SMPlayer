@@ -98,7 +98,7 @@ namespace SMPlayer
             await AlbumsPage.Init();
             await RecentPage.Init();
             ToastHelper.Init();
-            //LaunchVoiceAssistant();
+            //VoiceAssistantHelper.Init();
 
             foreach (var listener in LoadedListeners) listener.Invoke();
             Inited = true;
@@ -215,12 +215,6 @@ namespace SMPlayer
             }
             var commands = args as VoiceCommandActivatedEventArgs;
             string command = commands.Result.RulePath[0];
-        }
-
-        private async void LaunchVoiceAssistant()
-        {
-            StorageFile commandSet = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx://VoiceAssistantCommandSet.xml"));
-            await VoiceCommandDefinitionManager.InstallCommandDefinitionsFromStorageFileAsync(commandSet);
         }
     }
 }
