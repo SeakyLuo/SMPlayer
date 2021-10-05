@@ -1,4 +1,6 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Controls;
+using SMPlayer.Models;
+using System;
 using Windows.Foundation;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -11,7 +13,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MiniModePage : Page
+    public sealed partial class MiniModePage : Page, IMainPageContainer
     {
         public static Size PageSize { get => new Size(300, 300); }
         //public static Size PageSize { get => new Size(300, Settings.settings.MiniModeWithDropdown ? 900 : 300); }
@@ -56,6 +58,40 @@ namespace SMPlayer
             var size = PageSize;
             ApplicationView.GetForCurrentView().SetPreferredMinSize(size);
             ApplicationView.GetForCurrentView().TryResizeView(size);
+        }
+
+        void IMainPageContainer.ShowNotification(string message, int duration)
+        {
+        }
+
+        void IMainPageContainer.ShowUndoNotification(string message, Action undo, int duration)
+        {
+        }
+
+        void IMainPageContainer.ShowLocalizedNotification(string message, int duration)
+        {
+        }
+
+        void IMainPageContainer.ShowMultiSelectCommandBar(MultiSelectCommandBarOption option)
+        {
+        }
+
+        void IMainPageContainer.HideMultiSelectCommandBar()
+        {
+        }
+
+        void IMainPageContainer.SetMultiSelectListener(IMultiSelectListener listener)
+        {
+        }
+
+        MediaElement IMainPageContainer.GetMediaElement()
+        {
+            return mediaElement;
+        }
+
+        MultiSelectCommandBar IMainPageContainer.GetMultiSelectCommandBar()
+        {
+            return null;
         }
     }
 }

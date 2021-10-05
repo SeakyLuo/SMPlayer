@@ -571,7 +571,7 @@
     <value>How can I help you?</value>
   </data>
   <data name="VoiceAssistantCannotUnderstand" xml:space="preserve">
-    <value>Sorry, I can't understand you.</value>
+    <value>Sorry, I can't understand you. Please simplify your words.</value>
   </data>
   <data name="VoiceAssistantExampleText" xml:space="preserve">
     <value>You can say "play something", "pause", "help", e.t.c.</value>

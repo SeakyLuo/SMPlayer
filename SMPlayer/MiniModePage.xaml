@@ -31,6 +31,7 @@
             VerticalAlignment="Top"
             Background="Transparent"
             IsHitTestVisible="True" />
+        <MediaElement x:Name="mediaElement" />
         <!--<Button
             x:Name="DropdownButton"
             Margin="0,0,0,15"

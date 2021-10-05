@@ -125,7 +125,7 @@ namespace SMPlayer
 
         public MediaElement GetMediaElement()
         {
-            throw new NotImplementedException();
+            return mediaElement;
         }
     }
 }

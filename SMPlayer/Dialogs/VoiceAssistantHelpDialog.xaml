@@ -9,7 +9,22 @@
     Style="{StaticResource StretchTitleContentDialogStyle}">
     <ContentDialog.Resources>
         <Style TargetType="TextBlock" BasedOn="{StaticResource SemiBoldTitleTextBlockStyle}" x:Key="TitleTextBlockStyle">
-            <Setter Property="Margin" Value="2" />
+            <Setter Property="Margin" Value="0,8" />
+        </Style>
+
+        <Style x:Key="LabelTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Width" Value="80" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="4,0" />
+        </Style>
+
+        <Style x:Key="CommandTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="8,0" />
+        </Style>
+
+        <Style x:Key="CommandStackPanel" TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="Margin" Value="0,6" />
         </Style>
     </ContentDialog.Resources>
     
@@ -34,20 +49,87 @@
                 x:Uid="VoiceAssistantSupportedCommandsTextBlock" 
                 Text="Supported Commands" 
                 Style="{StaticResource TitleTextBlockStyle}" />
-            <TextBlock TextWrapping="WrapWholeWords">
-            1. 播放 - 播放<LineBreak />
-            2. 暂停 <LineBreak />
-            3. 搜索 <LineBreak />
-            4. 前/后/上/下一首 <LineBreak />
-            5. 帮助 <LineBreak />
-            </TextBlock>
+            <StackPanel Style="{StaticResource CommandStackPanel}">
+                <TextBlock
+                    x:Uid="PlayTextBlock"
+                    Style="{StaticResource LabelTextBlockStyle}"
+                    Text="Play" />
+                <TextBlock
+                    x:Uid="PlayCommands1TextBlock"
+                    Style="{StaticResource CommandTextBlockStyle}"
+                    Text="Play Commands1" />
+            </StackPanel>
+            <StackPanel Style="{StaticResource CommandStackPanel}">
+                <TextBlock Style="{StaticResource LabelTextBlockStyle}" />
+                <TextBlock
+                    x:Uid="PlayCommands2TextBlock"
+                    Style="{StaticResource CommandTextBlockStyle}"
+                    Text="Play Commands2" />
+            </StackPanel>
+            <StackPanel Style="{StaticResource CommandStackPanel}">
+                <TextBlock Style="{StaticResource LabelTextBlockStyle}" />
+                <TextBlock
+                    x:Uid="PlayCommands3TextBlock"
+                    Style="{StaticResource CommandTextBlockStyle}"
+                    Text="Play Commands3" />
+            </StackPanel>
+            <StackPanel Style="{StaticResource CommandStackPanel}">
+                <TextBlock
+                    x:Uid="PlayControlTextBlock"
+                    Style="{StaticResource LabelTextBlockStyle}"
+                    Text="Play Control" />
+                <TextBlock
+                    x:Uid="PlayControlCommandsTextBlock"
+                    Style="{StaticResource CommandTextBlockStyle}"
+                    Text="Play Control Commands" />
+            </StackPanel>
+            <StackPanel Style="{StaticResource CommandStackPanel}">
+                <TextBlock
+                    x:Uid="VolumeTextBlock"
+                    Style="{StaticResource LabelTextBlockStyle}"
+                    Text="Volume" />
+                <TextBlock
+                    x:Uid="VolumeCommands1TextBlock"
+                    Style="{StaticResource CommandTextBlockStyle}"
+                    Text="Volume Commands1" />
+            </StackPanel>
+            <StackPanel Style="{StaticResource CommandStackPanel}">
+                <TextBlock Style="{StaticResource LabelTextBlockStyle}" />
+                <TextBlock
+                    x:Uid="VolumeCommands2TextBlock"
+                    Style="{StaticResource CommandTextBlockStyle}"
+                    Text="Volume Commands2" />
+            </StackPanel>
+            <StackPanel Style="{StaticResource CommandStackPanel}">
+                <TextBlock
+                    x:Uid="SearchTextBlock"
+                    Style="{StaticResource LabelTextBlockStyle}"
+                    Text="Search" />
+                <TextBlock
+                    x:Uid="SearchCommandsTextBlock"
+                    Style="{StaticResource CommandTextBlockStyle}"
+                    Text="Search Commands" />
+            </StackPanel>
+            <StackPanel Style="{StaticResource CommandStackPanel}">
+                <TextBlock
+                    x:Uid="HelpTextBlock"
+                    Style="{StaticResource LabelTextBlockStyle}"
+                    Text="Help" />
+                <TextBlock
+                    x:Uid="HelpCommandsTextBlock"
+                    Style="{StaticResource CommandTextBlockStyle}"
+                    Text="Help" />
+            </StackPanel>
             <TextBlock
                 x:Uid="NoticeTextBlock"
                 Text="Notice"
+                Margin="0,32,0,8"
                 Style="{StaticResource TitleTextBlockStyle}" />
-            <TextBlock
-                x:Uid="VoiceAssistantNoticeTextBlock" 
-                Text="Notice" />
+            <TextBlock>
+                1. <Run x:Uid="VoiceAssistantNoticeSmartness" /><LineBreak />
+                2. <Run x:Uid="VoiceAssistantNoticeCommandIntro" /><LineBreak />
+                3. <Run x:Uid="VoiceAssistantNoticeExample" /><LineBreak />
+            </TextBlock>
         </StackPanel>
     </ScrollViewer>
 </ContentDialog>

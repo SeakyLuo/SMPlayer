@@ -1002,7 +1002,7 @@ namespace SMPlayer
 
         private void MiniMoreShufflePlayButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.AllSongs.RandItems(100));
+            MediaHelper.QuickPlay();
             MiniMoreFlyout.Hide();
         }
 

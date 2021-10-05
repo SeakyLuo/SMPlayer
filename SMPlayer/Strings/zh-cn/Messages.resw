@@ -571,7 +571,7 @@
     <value>请问需要什么帮助？</value>
   </data>
   <data name="VoiceAssistantCannotUnderstand" xml:space="preserve">
-    <value>不好意思，我没听懂</value>
+    <value>不好意思，我没听懂，请简单的说出你的命令</value>
   </data>
   <data name="VoiceAssistantExampleText" xml:space="preserve">
     <value>你可以说“播放某某某”、“暂停”、“帮助”等等。</value>

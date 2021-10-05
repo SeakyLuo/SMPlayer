@@ -29,18 +29,19 @@ namespace SMPlayer.Helpers
 
         private static async void AddConstraints(SpeechRecognizer recognizer)
         {
-            // 获取文件。
+            recognizer.Constraints.Add(new SpeechRecognitionListConstraint(MusicLibraryPage.AllSongs.Select(i => i.Name).ToHashSet(), "Song"));
+            recognizer.Constraints.Add(new SpeechRecognitionListConstraint(MusicLibraryPage.AllSongs.Select(i => i.Artist).ToHashSet(), "Artist"));
+            recognizer.Constraints.Add(new SpeechRecognitionListConstraint(MusicLibraryPage.AllSongs.Select(i => i.Album).ToHashSet(), "Album"));
+            recognizer.Constraints.Add(new SpeechRecognitionListConstraint(Settings.settings.Playlists.Select(i => i.Name).ToHashSet(), "Playlist"));
+            recognizer.Constraints.Add(new SpeechRecognitionListConstraint(Settings.settings.Tree.GetAllTrees().Select(i => i.Directory).ToHashSet(), "Folder"));
+
             //StorageFile commandSet = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///VoiceAssistantCommandSet.xml"));
             //await VoiceCommandDefinitionManager.InstallCommandDefinitionsFromStorageFileAsync(commandSet);
             var test3 = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/folder.png"));
             var test2 = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/zh.grxml"));
             var grammarFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Grammars/zh.grxml"));
 
-            // 创建 SRGS 文件约束。
-            var srgsConstraint = new SpeechRecognitionGrammarFileConstraint(grammarFile);
-
-            // 添加约束。
-            recognizer.Constraints.Add(srgsConstraint);
+            recognizer.Constraints.Add(new SpeechRecognitionGrammarFileConstraint(grammarFile));
         }
 
         public static async void AwakeVoiceAssistant()

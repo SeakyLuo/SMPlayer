@@ -112,6 +112,7 @@
                     ShowHeader="True" />
             </controls:BladeItem>
         </controls:BladeView>
+        <MediaElement x:Name="mediaElement" />
         <controls:InAppNotification
             x:Name="ShowResultInAppNotification"
             Grid.Row="2"

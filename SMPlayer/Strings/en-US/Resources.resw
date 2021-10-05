@@ -438,6 +438,12 @@
   <data name="HelpButton.Content" xml:space="preserve">
     <value>Help</value>
   </data>
+  <data name="HelpCommandsTextBlock.Text" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="HelpTextBlock.Text" xml:space="preserve">
+    <value>Help</value>
+  </data>
   <data name="HideMultiSelectCommandBarToggleSwitch.OffContent" xml:space="preserve">
     <value>Hide multi-select commandbar after operation</value>
   </data>
@@ -722,6 +728,21 @@
   </data>
   <data name="PlayButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Play</value>
+  </data>
+  <data name="PlayCommands1TextBlock.Text" xml:space="preserve">
+    <value>Play {music | artist | album | list | folder} [keyword]</value>
+  </data>
+  <data name="PlayCommands2TextBlock.Text" xml:space="preserve">
+    <value>Play [keyword]</value>
+  </data>
+  <data name="PlayCommands3TextBlock.Text" xml:space="preserve">
+    <value>Quick Play</value>
+  </data>
+  <data name="PlayControlCommandsTextBlock.Text" xml:space="preserve">
+    <value>Play | Pause | Continue | Resume | Next | Previous</value>
+  </data>
+  <data name="PlayControlTextBlock.Text" xml:space="preserve">
+    <value>Play Control</value>
   </data>
   <data name="PlayCountHeader.Header" xml:space="preserve">
     <value>Play Count</value>
@@ -1017,8 +1038,14 @@
   <data name="SearchButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="SearchCommandsTextBlock.Text" xml:space="preserve">
+    <value>Search [keyword]</value>
+  </data>
   <data name="SearchLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Search Lyrics</value>
+  </data>
+  <data name="SearchTextBlock.Text" xml:space="preserve">
+    <value>Search</value>
   </data>
   <data name="second" xml:space="preserve">
     <value>second</value>
@@ -1168,6 +1195,12 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="VoiceAssistantHelpTextBlock.Text" xml:space="preserve">
     <value>Voice Assistant Help</value>
   </data>
+  <data name="VoiceAssistantNoticeCommandIntro.Text" xml:space="preserve">
+    <value>In the command set, the punctuation "|" means "or", {} means "require any"，[] means a variable，() means optional.</value>
+  </data>
+  <data name="VoiceAssistantNoticeExample.Text" xml:space="preserve">
+    <value>Some example commands: Play artist Michael Jackson, Turn up the volume by 10%.</value>
+  </data>
   <data name="VoiceAssistantNoticeTextBlock.Text" xml:space="preserve">
     <value>This voice assistant is not driven by AI. Please follow the instructions above and make your commands as simple as posible.</value>
   </data>
@@ -1178,6 +1211,15 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
     <value>Voice Assistant</value>
   </data>
   <data name="VolumeButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="VolumeCommands1TextBlock.Text" xml:space="preserve">
+    <value>Turn {up | down} (the volume) (to | by) [number | percentage]</value>
+  </data>
+  <data name="VolumeCommands2TextBlock.Text" xml:space="preserve">
+    <value>Mute | Unmute</value>
+  </data>
+  <data name="VolumeTextBlock.Text" xml:space="preserve">
     <value>Volume</value>
   </data>
   <data name="YearTextBlock.Text" xml:space="preserve">
