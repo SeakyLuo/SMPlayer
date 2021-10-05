@@ -98,7 +98,7 @@ namespace SMPlayer
             await AlbumsPage.Init();
             await RecentPage.Init();
             ToastHelper.Init();
-            //VoiceAssistantHelper.Init();
+            VoiceAssistantHelper.Init();
 
             foreach (var listener in LoadedListeners) listener.Invoke();
             Inited = true;

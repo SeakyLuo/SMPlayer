@@ -132,7 +132,7 @@
                     Style="{StaticResource MediaControlButtonStyle}"
                     Visibility="Collapsed" >
                     <Button.Flyout>
-                        <Flyout x:Name="MainMediaControlVoiceAssistantButtonFlyout">
+                        <Flyout x:Name="MainMediaControlVoiceAssistantButtonFlyout" Closed="VoiceAssistantButtonFlyout_Closed">
                             <ProgressBar IsIndeterminate="True" />
                         </Flyout>
                     </Button.Flyout>
@@ -384,7 +384,7 @@
                     Content="&#xE1D6;"
                     Style="{StaticResource MediaControlButtonStyle}" >
                     <Button.Flyout>
-                        <Flyout x:Name="MainVoiceAssistantButtonFlyout">
+                        <Flyout x:Name="MainVoiceAssistantButtonFlyout" Closed="VoiceAssistantButtonFlyout_Closed">
                             <ProgressBar IsIndeterminate="True" />
                         </Flyout>
                     </Button.Flyout>
@@ -626,7 +626,7 @@
                             Content="&#xE1D6;"
                             Style="{StaticResource DarkMediaControlButtonStyle}">
                             <Button.Flyout>
-                                <Flyout x:Name="FullVoiceAssistantButtonFlyout">
+                                <Flyout x:Name="FullVoiceAssistantButtonFlyout" Closed="VoiceAssistantButtonFlyout_Closed">
                                     <ProgressBar IsIndeterminate="True" />
                                 </Flyout>
                             </Button.Flyout>

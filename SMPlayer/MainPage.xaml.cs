@@ -452,5 +452,10 @@ namespace SMPlayer
         {
             return mediaElement;
         }
+
+        public MediaControl GetMediaControl()
+        {
+            return MainMediaControl;
+        }
     }
 }

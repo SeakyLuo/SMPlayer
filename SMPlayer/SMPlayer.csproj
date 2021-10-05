@@ -227,10 +227,13 @@
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\LyricsHelper.cs" />
     <Compile Include="Helpers\QuickPlayHelper.cs" />
+    <Compile Include="Helpers\RandomPlayHelper.cs" />
     <Compile Include="Helpers\TileHelper.cs" />
     <Compile Include="Helpers\ToastHelper.cs" />
     <Compile Include="Helpers\PermissionHelper.cs" />
-    <Compile Include="Helpers\VoiceAssistantHelper.cs" />
+    <Compile Include="Helpers\VoiceAssistant\VoiceAssistantChineseHelper.cs" />
+    <Compile Include="Helpers\VoiceAssistant\VoiceAssistantEnglishHelper.cs" />
+    <Compile Include="Helpers\VoiceAssistant\VoiceAssistantHelper.cs" />
     <Compile Include="Models\FullyObservableCollection.cs" />
     <Compile Include="Models\LoadingCache.cs" />
     <Compile Include="Helpers\SearchHelper.cs" />
@@ -378,8 +381,6 @@
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="VoiceAssistantCommandSet.xml" />
-    <None Include="Assets\zh.grxml" />
-    <None Include="Grammars\zh.grxml" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />

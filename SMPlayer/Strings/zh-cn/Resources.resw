@@ -613,7 +613,7 @@
     <value>我喜欢的音乐</value>
   </data>
   <data name="NeverComboBoxItem.Content" xml:space="preserve">
-    <value>永不显示</value>
+    <value>永不发送</value>
   </data>
   <data name="New Playlist" xml:space="preserve">
     <value>新的播放列表</value>

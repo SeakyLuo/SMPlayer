@@ -35,7 +35,19 @@ namespace SMPlayer
 
         public static ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
         public static ResourceLoader MessageResourceLoader = ResourceLoader.GetForCurrentView("Messages");
-        public static Language CurrentLanguage = new Language(Windows.System.UserProfile.GlobalizationPreferences.Languages[0]);
+        public const string Language_CN = "zh-Hans-CN", Language_EN = "en-US";
+        public static Language CurrentLanguage
+        {
+            get
+            {
+                if (currentLanguage != null) return currentLanguage;
+                IReadOnlyList<string> languages = Windows.System.UserProfile.GlobalizationPreferences.Languages;
+                string language = languages.FirstOrDefault(i => SupportedLanguages.Contains(i));
+                return currentLanguage = new Language(language ?? Language_EN);
+            }
+        }
+        private static readonly List<string> SupportedLanguages = new List<string>() { Language_EN, Language_CN };
+        private static Language currentLanguage;
         public static ResourceLoader TextResourceLoader = ResourceLoader.GetForCurrentView("Texts");
         public static string AppVersion
         {
@@ -393,5 +405,6 @@ namespace SMPlayer
         void SetMultiSelectListener(IMultiSelectListener listener = null);
         MediaElement GetMediaElement();
         MultiSelectCommandBar GetMultiSelectCommandBar();
+        MediaControl GetMediaControl();
     }
 }

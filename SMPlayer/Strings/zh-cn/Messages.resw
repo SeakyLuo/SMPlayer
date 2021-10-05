@@ -576,6 +576,9 @@
   <data name="VoiceAssistantExampleText" xml:space="preserve">
     <value>你可以说“播放某某某”、“暂停”、“帮助”等等。</value>
   </data>
+  <data name="VoiceAssistantNewVolume" xml:space="preserve">
+    <value>音量已调整至{0}</value>
+  </data>
   <data name="VoiceAssistantNoSearchResults" xml:space="preserve">
     <value>不好意思，找不到“{0}”相关的结果</value>
   </data>

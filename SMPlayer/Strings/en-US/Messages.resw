@@ -576,6 +576,9 @@
   <data name="VoiceAssistantExampleText" xml:space="preserve">
     <value>You can say "play something", "pause", "help", e.t.c.</value>
   </data>
+  <data name="VoiceAssistantNewVolume" xml:space="preserve">
+    <value>You have the volume to {0}.</value>
+  </data>
   <data name="VoiceAssistantNoSearchResults" xml:space="preserve">
     <value>Sorry, I can't find result for "{0}".</value>
   </data>

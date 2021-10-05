@@ -16,6 +16,10 @@ namespace SMPlayer
     public sealed partial class MiniModePage : Page, IMainPageContainer
     {
         public static Size PageSize { get => new Size(300, 300); }
+        public static bool IsMiniMode
+        {
+            get => ApplicationView.GetForCurrentView().ViewMode != ApplicationViewMode.Default;
+        }   
         //public static Size PageSize { get => new Size(300, Settings.settings.MiniModeWithDropdown ? 900 : 300); }
         public static ViewModePreferences ViewModePreferences
         {
@@ -60,6 +64,25 @@ namespace SMPlayer
             ApplicationView.GetForCurrentView().TryResizeView(size);
         }
 
+        public static async void EnterMiniMode()
+        {
+            if (!ApplicationView.GetForCurrentView().IsViewModeSupported(ApplicationViewMode.CompactOverlay))
+            {
+                Helper.ShowNotification("MiniModeFailed");
+                return;
+            }
+            (Window.Current.Content as Frame).Navigate(typeof(MiniModePage));
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(PageSize);
+            await ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.CompactOverlay, ViewModePreferences);
+        }
+
+        public static async void ExitMiniMode()
+        {
+            (Window.Current.Content as Frame).GoBack();
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size());
+            await ApplicationView.GetForCurrentView().TryEnterViewModeAsync(ApplicationViewMode.Default);
+        }
+
         void IMainPageContainer.ShowNotification(string message, int duration)
         {
         }
@@ -92,6 +115,11 @@ namespace SMPlayer
         MultiSelectCommandBar IMainPageContainer.GetMultiSelectCommandBar()
         {
             return null;
+        }
+
+        public MediaControl GetMediaControl()
+        {
+            return MiniMediaControl;
         }
     }
 }

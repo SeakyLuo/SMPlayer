@@ -660,7 +660,7 @@ namespace SMPlayer
             };
             musicLibrary.Click += (sender, args) =>
             {
-                MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.AllSongs.RandItems(randomLimit));
+                RandomPlayHelper.PlayMusic(randomLimit);
                 callback?.Invoke();
             };
             flyout.Items.Add(musicLibrary);
@@ -670,8 +670,7 @@ namespace SMPlayer
             };
             artist.Click += (sender, args) =>
             {
-                var rArtist = MusicLibraryPage.AllSongs.GroupBy(m => m.Artist).RandItem();
-                MediaHelper.SetPlaylistAndPlay(rArtist.Shuffle());
+                var rArtist = RandomPlayHelper.PlayArtist(randomLimit);
                 Helper.ShowNotificationRaw(Helper.LocalizeMessage("PlayRandomArtist", rArtist.Key));
                 callback?.Invoke();
             };
@@ -682,9 +681,8 @@ namespace SMPlayer
             };
             album.Click += (sender, args) =>
             {
-                var rAlbum = MusicLibraryPage.AllSongs.GroupBy(m => m.Album).RandItem();
-                MediaHelper.SetPlaylistAndPlay(rAlbum.Shuffle());
-                Helper.ShowNotificationRaw(Helper.LocalizeMessage("PlayRandomAlbum", rAlbum.Key));
+                var rAlbum = RandomPlayHelper.PlayAlbum(randomLimit);
+                Helper.ShowNotificationRaw(Helper.LocalizeMessage("PlayRandomAlbum", rAlbum.Name));
                 callback?.Invoke();
             };
             flyout.Items.Add(album);
@@ -696,8 +694,7 @@ namespace SMPlayer
                 };
                 playlist.Click += (sender, args) =>
                 {
-                    var rPlaylist = Settings.settings.Playlists.RandItem();
-                    MediaHelper.SetPlaylistAndPlay(rPlaylist.Songs.RandItems(randomLimit));
+                    var rPlaylist = RandomPlayHelper.PlayPlaylist(randomLimit);
                     Helper.ShowNotificationRaw(Helper.LocalizeMessage("PlayRandomPlaylist", rPlaylist.Name));
                     callback?.Invoke();
                 };
@@ -711,8 +708,7 @@ namespace SMPlayer
                 };
                 localFolder.Click += (sender, args) =>
                 {
-                    var rLocalFolder = Settings.settings.Tree.GetAllTrees().Where(tree => tree.Files.Count > 0).RandItem();
-                    MediaHelper.SetMusicAndPlay(rLocalFolder.Files.RandItems(randomLimit));
+                    var rLocalFolder = RandomPlayHelper.PlayFolder(randomLimit);
                     Helper.ShowNotificationRaw(Helper.LocalizeMessage("PlayRandomLocalFolder", rLocalFolder.Directory));
                     callback?.Invoke();
                 };

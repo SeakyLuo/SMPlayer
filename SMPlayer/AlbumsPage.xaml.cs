@@ -25,7 +25,7 @@ namespace SMPlayer
         public const string JsonFilename = "Albums";
         private ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         private bool IsProcessing = false;
-        private static volatile List<AlbumInfo> AlbumInfoList;
+        public static volatile List<AlbumInfo> AlbumInfoList;
         private static readonly SortBy[] SortByCriteria = { SortBy.Default, SortBy.Name, SortBy.Artist };
         public List<Music> SelectedSongs
         {

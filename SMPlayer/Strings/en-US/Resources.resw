@@ -1201,7 +1201,7 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="VoiceAssistantNoticeExample.Text" xml:space="preserve">
     <value>Some example commands: Play artist Michael Jackson, Turn up the volume by 10%.</value>
   </data>
-  <data name="VoiceAssistantNoticeTextBlock.Text" xml:space="preserve">
+  <data name="VoiceAssistantNoticeSmartness.Text" xml:space="preserve">
     <value>This voice assistant is not driven by AI. Please follow the instructions above and make your commands as simple as posible.</value>
   </data>
   <data name="VoiceAssistantSupportedCommandsTextBlock.Text" xml:space="preserve">
