@@ -14,7 +14,10 @@ namespace SMPlayer.Models
         public string Name { get; set; }
         public bool IsEnabled { get; set; }
 
-        public PreferenceItem() { }
+        public PreferenceItem()
+        {
+            IsEnabled = false;
+        }
 
         public PreferenceItem(string Id, string Name)
         {

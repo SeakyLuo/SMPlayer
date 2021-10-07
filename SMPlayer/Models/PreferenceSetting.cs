@@ -26,10 +26,10 @@ namespace SMPlayer.Models
         public bool Albums { get; set; } = false;
         public bool Playlists { get; set; } = false;
         public bool Folders { get; set; } = false;
-        public bool RecentAdded { get; set; } = false;
-        public bool MyFavorites { get; set; } = false;
-        public bool MostPlayed { get; set; } = false;
-        public bool LeastPlayed { get; set; } = false;
+        public PreferenceItem RecentAdded { get; set; } = new PreferenceItem();
+        public PreferenceItem MyFavorites { get; set; } = new PreferenceItem();
+        public PreferenceItem MostPlayed { get; set; } = new PreferenceItem();
+        public PreferenceItem LeastPlayed { get; set; } = new PreferenceItem();
 
         [Newtonsoft.Json.JsonIgnore]
         public List<PreferenceItem> EnabledPreferredSongs

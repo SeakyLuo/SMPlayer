@@ -89,7 +89,7 @@ namespace SMPlayer
             RenameButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
             DeleteButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
             bool isPreferred = IsPlaylist ? Settings.settings.Preference.IsPreferred(playlist) :
-                                            IsMyFavorites ? Settings.settings.Preference.MyFavorites :
+                                            IsMyFavorites ? Settings.settings.Preference.MyFavorites.IsEnabled :
                                                             Settings.settings.Preference.IsPreferred(playlist.ToAlbumView());
             SetAsPreferredButton.Visibility = isPreferred ? Visibility.Collapsed : Visibility.Visible;
             UndoPreferButton.Visibility = isPreferred ? Visibility.Visible : Visibility.Collapsed;
@@ -423,7 +423,7 @@ namespace SMPlayer
             {
                 if (IsMyFavorites)
                 {
-                    Settings.settings.Preference.MyFavorites = true;
+                    Settings.settings.Preference.MyFavorites.IsEnabled = true;
                 }
                 else
                 {
@@ -444,7 +444,7 @@ namespace SMPlayer
             {
                 if (IsMyFavorites)
                 {
-                    Settings.settings.Preference.MyFavorites = false;
+                    Settings.settings.Preference.MyFavorites.IsEnabled = false;
                 }
                 else
                 {

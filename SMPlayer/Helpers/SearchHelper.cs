@@ -241,7 +241,7 @@ namespace SMPlayer.Helpers
             IEnumerable<Music> artistMusic = MusicLibraryPage.AllSongs.Where(i => IsTargetArtist(i, artist));
             Music music = null;
             AlbumView album = null;
-            if (string.IsNullOrEmpty(keyword))
+            if (!string.IsNullOrEmpty(keyword))
             {
                 if (searchType == null || searchType == SearchType.Songs)
                 {

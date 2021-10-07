@@ -60,10 +60,10 @@ namespace SMPlayer
             PreferredAlbumsCheckBox.IsChecked = Settings.settings.Preference.Albums;
             PreferredPlaylistsCheckBox.IsChecked = Settings.settings.Preference.Playlists;
             PreferredFoldersCheckBox.IsChecked = Settings.settings.Preference.Folders;
-            RecentAddedPreferenceCheckBox.IsChecked = Settings.settings.Preference.RecentAdded;
-            MyFavoritePreferenceCheckBox.IsChecked = Settings.settings.Preference.MyFavorites;
-            MostPlayedPreferenceCheckBox.IsChecked = Settings.settings.Preference.MostPlayed;
-            LeastPlayedPreferenceCheckBox.IsChecked = Settings.settings.Preference.LeastPlayed;
+            RecentAddedPreferenceCheckBox.IsChecked = Settings.settings.Preference.RecentAdded.IsEnabled;
+            MyFavoritePreferenceCheckBox.IsChecked = Settings.settings.Preference.MyFavorites.IsEnabled;
+            MostPlayedPreferenceCheckBox.IsChecked = Settings.settings.Preference.MostPlayed.IsEnabled;
+            LeastPlayedPreferenceCheckBox.IsChecked = Settings.settings.Preference.LeastPlayed.IsEnabled;
 
             PreferredSongs = ConvertToViews(Settings.settings.Preference.PreferredSongs, PreferType.Song);
             PreferredArtists = ConvertToViews(Settings.settings.Preference.PreferredArtists, PreferType.Artist);
@@ -216,42 +216,42 @@ namespace SMPlayer
 
         private void MyFavoritePreferenceCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.MyFavorites = true;
+            Settings.settings.Preference.MyFavorites.IsEnabled = true;
         }
 
         private void MyFavoritePreferenceCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.MyFavorites = false;
+            Settings.settings.Preference.MyFavorites.IsEnabled = false;
         }
 
         private void MostPlayedPreferenceCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.MostPlayed = true;
+            Settings.settings.Preference.MostPlayed.IsEnabled = true;
         }
 
         private void MostPlayedPreferenceCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.MostPlayed = false;
+            Settings.settings.Preference.MostPlayed.IsEnabled = false;
         }
 
         private void LeastPlayedPreferenceCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.LeastPlayed = true;
+            Settings.settings.Preference.LeastPlayed.IsEnabled = true;
         }
 
         private void LeastPlayedPreferenceCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.LeastPlayed = false;
+            Settings.settings.Preference.LeastPlayed.IsEnabled = false;
         }
 
         private void RecentAddedPreferenceCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.RecentAdded = true;
+            Settings.settings.Preference.RecentAdded.IsEnabled = true;
         }
 
         private void RecentAddedPreferenceCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.RecentAdded = false;
+            Settings.settings.Preference.RecentAdded.IsEnabled = false;
         }
 
         private void PreferredSongsCheckBox_Checked(object sender, RoutedEventArgs e)

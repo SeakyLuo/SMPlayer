@@ -589,10 +589,10 @@ namespace SMPlayer.Helpers
         public ByArtistRequest(MatchCollection collection, string splitter)
         {
             string original = collection.GetValue();
-            string[] artistAndItem = original.Split(splitter);
+            int index = original.IndexOf(splitter);
 
-            Artist = artistAndItem[0];
-            Item = artistAndItem[1];
+            Artist = original.Substring(0, index);
+            Item = original.Substring(index + splitter.Length);
             Original = original;
         }
     }
