@@ -26,6 +26,7 @@ namespace SMPlayer
     {
         public static NotificationSendMode[] NotificationOptions = { NotificationSendMode.MusicChanged, NotificationSendMode.Never };
         private static readonly int[] LimitedRecentPlayedItems = { -1, 100, 200, 500, 1000 };
+        private static readonly VoiceAssistantLanguage[] VoiceAssistantPreferredLanguanges = { VoiceAssistantLanguage.English, VoiceAssistantLanguage.Chinese };
         private static readonly List<IAfterPathSetListener> listeners = new List<IAfterPathSetListener>();
         private static FolderTree loadingTree;
         private volatile int addLyricsClickCounter = 0;
@@ -54,6 +55,7 @@ namespace SMPlayer
             SaveProgressToggleSwitch.IsOn = Settings.settings.SaveMusicProgress;
             HideMultiSelectCommandBarToggleSwitch.IsOn = Settings.settings.HideMultiSelectCommandBarAfterOperation;
             ShowLyricsInNotificationToggleSwitch.IsOn = Settings.settings.ShowLyricsInNotification;
+            VoiceAssistantLanguageComboBox.SelectedIndex = (int)Settings.settings.VoiceAssistantPreferredLanguage;
         }
 
         private async void PathBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
@@ -322,6 +324,7 @@ namespace SMPlayer
                     string json = await FileIO.ReadTextAsync(file);
                     Settings settings = JsonFileHelper.Convert<Settings>(json);
                     bool successful = await UpdateMusicLibrary();
+                    App.Save();
                     MainPage.Instance.Loader.Hide();
                     MainPage.Instance.ShowLocalizedNotification(successful ? "DataImported" : "ImportDataCancelled");
                 }
@@ -472,6 +475,13 @@ namespace SMPlayer
                 voiceAssistantHelpDialog = new VoiceAssistantHelpDialog();
             }
             await voiceAssistantHelpDialog.ShowAsync();
+        }
+
+        private void VoiceAssistantLanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            VoiceAssistantLanguage language = VoiceAssistantPreferredLanguanges[(sender as ComboBox).SelectedIndex];
+            Settings.settings.VoiceAssistantPreferredLanguage = language;
+            VoiceAssistantHelper.SetLanguage(language);
         }
     }
 

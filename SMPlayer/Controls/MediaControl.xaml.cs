@@ -651,16 +651,27 @@ namespace SMPlayer
         private void VolumeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             if (!(sender as Slider).IsLoaded) return;
-            double newVolume = e.NewValue;
+            double volume = e.NewValue;
             MediaHelper.Player.IsMuted = false;
             Settings.settings.Volume = MediaHelper.Player.Volume = volume / 100;
             string icon = Helper.GetVolumeIcon(volume);
             if (VolumeButton != null) VolumeButton.Content = icon;
         }
 
-        public void SetVolume(double volume)
+        public void SetVolume(int volume)
         {
-            VolumeSlider.Value = volume;
+            if (volume < 0)
+            {
+                VolumeSlider.Value = 0;
+            }
+            else if (volume > 100)
+            {
+                VolumeSlider.Value = 100;
+            }
+            else
+            {
+                VolumeSlider.Value = volume;
+            }
         }
 
         public void LikeMusic(bool isClick = true)

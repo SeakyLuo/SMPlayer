@@ -15,7 +15,7 @@ namespace SMPlayer.Helpers
 
         public static async Task Init()
         {
-            Log = JsonFileHelper.Convert<UpdateLog>(await JsonFileHelper.ReadAsync(JsonFileName)) ?? new UpdateLog();
+            Log = await JsonFileHelper.ReadObjectAsync<UpdateLog>(JsonFileName) ?? new UpdateLog();
         }
 
         public static void Save()

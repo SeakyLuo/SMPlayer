@@ -22,7 +22,7 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class AlbumsPage : Page, IAfterSongsSetListener, IImageSavedListener, IMultiSelectListener
     {
-        public const string JsonFilename = "Albums";
+        public const string JsonFilename = "AlbumInfo";
         private ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         private bool IsProcessing = false;
         public static volatile List<AlbumInfo> AlbumInfoList;
@@ -51,7 +51,7 @@ namespace SMPlayer
         public static async Task Init()
         {
             if (AlbumInfoList != null) return;
-            var albums = JsonFileHelper.Convert<List<AlbumInfo>>(await JsonFileHelper.ReadAsync(JsonFilename));
+            var albums = await JsonFileHelper.ReadObjectAsync<List<AlbumInfo>>(JsonFilename);
             if (albums == null) AlbumInfoList = new List<AlbumInfo>();
             else AlbumInfoList = albums;
         }
@@ -89,23 +89,30 @@ namespace SMPlayer
         private async Task SetData(IEnumerable<Music> songs)
         {
             IsProcessing = true;
-            List<AlbumView> albums = new List<AlbumView>();
-            await Task.Run(() =>
+            try
             {
-                foreach (var group in songs.GroupBy(m => m.Album))
+                List<AlbumView> albums = new List<AlbumView>();
+                await Task.Run(() =>
                 {
-                    foreach (var subgroup in group.GroupBy(m => m.Artist))
+                    foreach (var group in songs.GroupBy(m => m.Album))
                     {
-                        Music music = subgroup.ElementAt(0);
-                        albums.Add(new AlbumView(music.Album, music.Artist, subgroup.OrderBy(m => m.Name), false));
+                        foreach (var subgroup in group.GroupBy(m => m.Artist))
+                        {
+                            Music music = subgroup.ElementAt(0);
+                            albums.Add(new AlbumView(music.Album, music.Artist, subgroup.OrderBy(m => m.Name), false));
+                        }
                     }
-                }
-                albums = Sort(Settings.settings.AlbumsCriterion, albums);
-                Save();
-            });
-            Albums.SetTo(albums);
-            SetHeader();
-            IsProcessing = false;
+                    albums = Sort(Settings.settings.AlbumsCriterion, albums);
+                    BuildAlbumInfoList(albums);
+                    Save();
+                });
+                Albums.SetTo(albums);
+                SetHeader();
+            }
+            finally
+            {
+                IsProcessing = false;
+            }
         }
 
         public void SetHeader()

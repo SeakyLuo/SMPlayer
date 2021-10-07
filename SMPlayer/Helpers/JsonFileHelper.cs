@@ -17,6 +17,12 @@ namespace SMPlayer.Models
             return await FileIO.ReadTextAsync(file);
         }
 
+        public static async Task<T> ReadObjectAsync<T>(string filename) where T : class
+        {
+            string json = await ReadAsync(Helper.LocalFolder, filename);
+            return json == null ? null : JsonConvert.DeserializeObject<T>(json);
+        }
+
         public static async Task<string> ReadAsync(string filename)
         {
             return await ReadAsync(Helper.LocalFolder, filename);

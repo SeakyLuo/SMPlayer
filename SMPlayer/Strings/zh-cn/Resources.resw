@@ -928,7 +928,7 @@
     <value>部分页面会显示列表项总数了。</value>
   </data>
   <data name="ReleaseNotesShowInExplorerBugFix.Text" xml:space="preserve">
-    <value>【问题修复】修复了在文件夹上点击“在本地显示”时造成的闪退问题；修复了“本地”页面无法多选的问题。</value>
+    <value>【问题修复】修复了在文件夹上点击“在本地显示”时造成的闪退问题；修复了“本地”页面无法多选的问题；修复了专辑页面不包含全部专辑的问题。</value>
   </data>
   <data name="ReleaseNotesShowLyricsInNotifications.Text" xml:space="preserve">
     <value>现已支持在通知中显示歌词。</value>
@@ -1071,9 +1071,6 @@
   <data name="SelectArtistTextBlock.Text" xml:space="preserve">
     <value>在左侧选择一位歌手</value>
   </data>
-  <data name="SendNotificationComboBox.Content" xml:space="preserve">
-    <value>发送通知：</value>
-  </data>
   <data name="SetAsPreferredAppBarButton.Label" xml:space="preserve">
     <value>设为偏好</value>
   </data>
@@ -1188,6 +1185,9 @@
   </data>
   <data name="VoiceAssistantHelpTextBlock.Text" xml:space="preserve">
     <value>语音助手帮助</value>
+  </data>
+  <data name="VoiceAssistantPreferredLanguageTextBlock.Text" xml:space="preserve">
+    <value>偏好语言：</value>
   </data>
   <data name="VoiceAssistantNoticeCommandIntro.Text" xml:space="preserve">
     <value>在命令列表中，符号“|”表示“或"，{}表示任一必须项，[]表示”变量”，()表示可选。</value>

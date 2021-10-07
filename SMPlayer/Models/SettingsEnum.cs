@@ -44,6 +44,12 @@ namespace SMPlayer.Models
         Quick = 2
     }
 
+    public enum VoiceAssistantLanguage
+    {
+        English = 0,
+        Chinese = 1
+    }
+
     public enum SortBy
     {
         Default = -1,

@@ -287,6 +287,7 @@ namespace SMPlayer
                     break;
             }
             Settings.settings.LastPage = name;
+            App.Save();
         }
         public void SetHeaderText(string header, params object[] args)
         {

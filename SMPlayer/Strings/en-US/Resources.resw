@@ -931,7 +931,7 @@
     <value>Some pages now shows the number of items in a collection.</value>
   </data>
   <data name="ReleaseNotesShowInExplorerBugFix.Text" xml:space="preserve">
-    <value>【Bug Fix】When you click "Show In Explorer" or "Multi-Select" on a folder, the app no longer crashes;</value>
+    <value>【Bug Fix】When you click "Show In Explorer" or "Multi-Select" on a folder, the app no longer crashes; Albums page now shows correct albums.</value>
   </data>
   <data name="ReleaseNotesShowLyricsInNotifications.Text" xml:space="preserve">
     <value>Now lyrics can be displayed in notifications.</value>
@@ -1077,9 +1077,6 @@
   <data name="SelectArtistTextBlock.Text" xml:space="preserve">
     <value>Select an artist on the left</value>
   </data>
-  <data name="SendNotificationComboBox.Content" xml:space="preserve">
-    <value>Send notifications: </value>
-  </data>
   <data name="SetAsPreferredAppBarButton.Label" xml:space="preserve">
     <value>Set As Preferred</value>
   </data>
@@ -1194,6 +1191,9 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   </data>
   <data name="VoiceAssistantHelpTextBlock.Text" xml:space="preserve">
     <value>Voice Assistant Help</value>
+  </data>
+  <data name="VoiceAssistantPreferredLanguageTextBlock.Text" xml:space="preserve">
+    <value>Preferred Languange: </value>
   </data>
   <data name="VoiceAssistantNoticeCommandIntro.Text" xml:space="preserve">
     <value>In the command set, the punctuation "|" means "or", {} means "require any"，[] means a variable，() means optional.</value>

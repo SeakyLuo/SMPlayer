@@ -69,7 +69,7 @@ namespace SMPlayer
             var settings = Settings.settings;
             if (music == null)
             {
-                var playlist = JsonFileHelper.Convert<List<string>>(await JsonFileHelper.ReadAsync(JsonFilename));
+                var playlist = await JsonFileHelper.ReadObjectAsync<List<string>>(JsonFilename);
                 if (playlist != null && playlist.Count != 0)
                 {
                     if (settings.LastMusicIndex == -1)

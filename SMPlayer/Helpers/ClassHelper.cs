@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
@@ -259,9 +260,25 @@ namespace SMPlayer
             }
         }
 
-        public static IEnumerable<T> GetRange<T>(this IEnumerable<T> collection, int start, int end)
+        public static IEnumerable<T> GetRange<T>(this IEnumerable<T> ienumerable, int start, int end)
         {
-            return collection.Skip(start).Take(end - start);
+            return ienumerable.Skip(start).Take(end - start);
         }
+
+        public static string GetValue(this MatchCollection matchCollection)
+        {
+            return matchCollection.ElementAt(0).Value.Trim();
+        }
+
+        public static bool IsEmpty<T>(this IEnumerable<T> ienumerable)
+        {
+            return ienumerable.Count() == 0;
+        }
+
+        public static bool IsNotEmpty<T>(this IEnumerable<T> ienumerable)
+        {
+            return !IsEmpty(ienumerable);
+        }
+
     }
-}
+    }

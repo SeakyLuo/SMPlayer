@@ -48,6 +48,7 @@ namespace SMPlayer.Models
         public bool ShowCount { get; set; } = true;
         public bool ShowLyricsInNotification { get; set; } = false;
         public ObservableCollection<string> RecentSearches = new ObservableCollection<string>();
+        public VoiceAssistantLanguage VoiceAssistantPreferredLanguage = VoiceAssistantHelper.ConvertLanguage(Helper.CurrentLanguage);
 
         public SortBy SearchArtistsCriterion { get; set; } = SortBy.Default;
         public SortBy SearchAlbumsCriterion { get; set; } = SortBy.Default;

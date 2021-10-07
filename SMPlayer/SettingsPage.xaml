@@ -302,7 +302,10 @@
                             x:Uid="RecentPlayedItemTextBlock"
                             Style="{StaticResource ComboBoxLabelStyle}"
                             Text="Recent Played" />
-                        <ComboBox x:Name="KeepRecentComboBox" SelectionChanged="KeepRecentComboBox_SelectionChanged">
+                        <ComboBox
+                            x:Name="KeepRecentComboBox"
+                            SelectionChanged="KeepRecentComboBox_SelectionChanged"
+                            Style="{StaticResource SettingsMarginSetter}">
                             <ComboBoxItem x:Uid="AllComboItem" Content="All" />
                             <ComboBoxItem x:Uid="100ComboItem" Content="100" />
                             <ComboBoxItem x:Uid="200ComboItem" Content="200" />
@@ -370,6 +373,20 @@
                         x:Uid="VoiceAssistantTextBlock"
                         Style="{StaticResource SettingLabelStyle}"
                         Text="Voice Assistant" />
+                    <TextBlock
+                        x:Uid="VoiceAssistantPreferredLanguageTextBlock"
+                        Text="Preferred Language: "
+                        Style="{StaticResource ComboBoxLabelStyle}"/>
+                    <ComboBox 
+                        x:Name="VoiceAssistantLanguageComboBox"
+                        SelectionChanged="VoiceAssistantLanguageComboBox_SelectionChanged"
+                        Style="{StaticResource SettingsMarginSetter}">
+                        <ComboBoxItem x:Uid="EnglishComboItem" Content="English" />
+                        <ComboBoxItem x:Uid="ChineseComboItem" Content="中文" />
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}"  />
                     <HyperlinkButton
                         x:Uid="HelpButton"
                         Click="HelpButton_Click"
