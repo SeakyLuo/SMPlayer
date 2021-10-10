@@ -276,4 +276,13 @@
   <data name="ViaWebBrowser" xml:space="preserve">
     <value>Via Web Browser</value>
   </data>
+  <data name="VoiceAssistantHints1" xml:space="preserve">
+    <value>You can try to say, "play music by {0}”</value>
+  </data>
+  <data name="VoiceAssistantHints2" xml:space="preserve">
+    <value>You can try to say, "play album {0}”</value>
+  </data>
+  <data name="VoiceAssistantHints3" xml:space="preserve">
+    <value>You can try to say, "quick play"</value>
+  </data>
 </root>

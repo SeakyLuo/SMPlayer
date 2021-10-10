@@ -18,11 +18,42 @@ namespace SMPlayer.Helpers
 {
     public class VoiceAssistantHelper
     {
-        public static List<Action<SpeechRecognizer, SpeechRecognizerStateChangedEventArgs>> StateChangedListeners = new List<Action<SpeechRecognizer, SpeechRecognizerStateChangedEventArgs>>();
+        private const string Hint_PlaySomeonesMusic = "VoiceAssistantHints1", Hint_PlayMusicInAlbum = "VoiceAssistantHints2", Hint_QuickPlay = "VoiceAssistantHints3";
+        private static readonly List<string> VoiceAssistantHints = new List<string>() { Hint_PlaySomeonesMusic, Hint_PlayMusicInAlbum, Hint_QuickPlay };
+        public static List<Action<SpeechRecognizer, VoiceAssistantEventArgs>> StateChangedListeners = new List<Action<SpeechRecognizer, VoiceAssistantEventArgs>>();
         private static SpeechRecognizer Recognizer;
         private static SpeechSynthesizer Synthesizer = new SpeechSynthesizer();
         private static IVoiceAssistantCommandHandler CommandHandler;
         private static bool IsRecognizing = false;
+
+        public static string GetRandomHint()
+        {
+            string hint = VoiceAssistantHints.RandItem();
+            switch (hint)
+            {
+                case Hint_PlaySomeonesMusic:
+                    string artist = MusicLibraryPage.AllSongs.RandItem().Artist;
+                    if (string.IsNullOrEmpty(artist) || artist.Length > 30)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        return Helper.LocalizeText(Hint_PlaySomeonesMusic, artist);
+                    }
+                case Hint_PlayMusicInAlbum:
+                    string album = MusicLibraryPage.AllSongs.RandItem().Album;
+                    if (string.IsNullOrEmpty(album) || album.Length > 30)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        return Helper.LocalizeText(Hint_PlayMusicInAlbum, album);
+                    }
+            }
+            return Helper.LocalizeText(Hint_QuickPlay);
+        }
 
         public static void Init()
         {
@@ -38,7 +69,8 @@ namespace SMPlayer.Helpers
             Recognizer.StateChanged += (sender, args) =>
             {
                 Helper.Print("[VoiceAssistantHelper] state: " + args.State);
-                foreach (var listener in StateChangedListeners) listener.Invoke(sender, args);
+                VoiceAssistantEventArgs a = new VoiceAssistantEventArgs { State = args.State };
+                foreach (var listener in StateChangedListeners) listener.Invoke(sender, a);
             };
             Recognizer.UIOptions.IsReadBackEnabled = false;
             await Recognizer.CompileConstraintsAsync();
@@ -118,7 +150,8 @@ namespace SMPlayer.Helpers
                 if (speechRecognitionResult != null)
                 {
                     HandleCommand(speechRecognitionResult.Text);
-                    //HandleCommand(speechRecognitionResult);
+                    VoiceAssistantEventArgs a = new VoiceAssistantEventArgs { Text = speechRecognitionResult.Text };
+                    foreach (var listener in StateChangedListeners) listener.Invoke(Recognizer, a);
                 }
             }
             catch (Exception e)
@@ -535,6 +568,12 @@ namespace SMPlayer.Helpers
     public interface IVoiceAssistantCommandHandler
     {
         CommandResult Handle(string text);
+    }
+
+    public class VoiceAssistantEventArgs
+    {
+        public SpeechRecognizerState State { get; set; }
+        public string Text { get; set; }
     }
 
     public enum MatchType

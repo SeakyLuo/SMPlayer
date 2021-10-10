@@ -283,6 +283,60 @@ namespace SMPlayer
             }
         }
 
+        public TextBlock VoiceAssistantTextBlock
+        {
+            get
+            {
+                switch (mode)
+                {
+                    case MediaControlMode.Main:
+                        return IsMinimalMain ? MainMediaControlVoiceAssistantTextBlock : MainVoiceAssistantTextBlock;
+                    case MediaControlMode.Full:
+                        return FullMediaControlVoiceAssistantTextBlock;
+                    case MediaControlMode.Mini:
+                        return MiniVoiceAssistantButtonTextBlock;
+                    default:
+                        return null;
+                }
+            }
+        }
+
+        public ProgressBar VoiceAssistantProgressBar
+        {
+            get
+            {
+                switch (mode)
+                {
+                    case MediaControlMode.Main:
+                        return IsMinimalMain ? MainMediaControlVoiceAssistantProgressBar : MainVoiceAssistantProgressBar;
+                    case MediaControlMode.Full:
+                        return FullMediaControlVoiceAssistantProgressBar;
+                    case MediaControlMode.Mini:
+                        return MiniVoiceAssistantButtonProgressBar;
+                    default:
+                        return null;
+                }
+            }
+        }
+
+        public Flyout VoiceAssistantButtonFlyout
+        {
+            get
+            {
+                switch (mode)
+                {
+                    case MediaControlMode.Main:
+                        return IsMinimalMain ? MainMediaControlVoiceAssistantButtonFlyout : MainVoiceAssistantButtonFlyout;
+                    case MediaControlMode.Full:
+                        return FullVoiceAssistantButtonFlyout;
+                    case MediaControlMode.Mini:
+                        return MiniVoiceAssistantButtonFlyout;
+                    default:
+                        return null;
+                }
+            }
+        }
+
         public Button MuteButton
         {
             get
@@ -398,14 +452,21 @@ namespace SMPlayer
             {
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
+                    if (!string.IsNullOrEmpty(args.Text))
+                    {
+                        VoiceAssistantTextBlock.Text = args.Text;
+                        VoiceAssistantTextBlock.Visibility = Visibility.Visible;
+                        VoiceAssistantProgressBar.Visibility = Visibility.Collapsed;
+                        return;
+                    }
                     switch (args.State)
                     {
                         case Windows.Media.SpeechRecognition.SpeechRecognizerState.SoundStarted:
+                            VoiceAssistantTextBlock.Visibility = Visibility.Collapsed;
+                            VoiceAssistantProgressBar.Visibility = Visibility.Visible;
                             break;
                         case Windows.Media.SpeechRecognition.SpeechRecognizerState.Idle:
-                            MainVoiceAssistantButtonFlyout.Hide();
-                            FullVoiceAssistantButtonFlyout.Hide();
-                            MainMediaControlVoiceAssistantButtonFlyout.Hide();
+                            VoiceAssistantButtonFlyout.Hide();
                             break;
                     }
                 });
@@ -1033,17 +1094,6 @@ namespace SMPlayer
         private void VoiceAssistantButton_Click(object sender, RoutedEventArgs e)
         {
             VoiceAssistantHelper.AwakeVoiceAssistant();
-            switch (mode)
-            {
-                case MediaControlMode.Main:
-                    (IsMinimalMain ? MainMediaControlVoiceAssistantButtonFlyout : MainVoiceAssistantButtonFlyout).Hide();
-                    break;
-                case MediaControlMode.Full:
-                    FullVoiceAssistantButtonFlyout.Hide();
-                    break;
-                case MediaControlMode.Mini:
-                    break;
-            }
         }
 
         public void MusicLiked(Music music, bool isFavorite)
@@ -1058,6 +1108,13 @@ namespace SMPlayer
         private void VoiceAssistantButtonFlyout_Closed(object sender, object e)
         {
             VoiceAssistantHelper.StopRecognition();
+        }
+
+        private void VoiceAssistantButtonFlyout_Opened(object sender, object e)
+        {
+            VoiceAssistantTextBlock.Text = VoiceAssistantHelper.GetRandomHint();
+            VoiceAssistantTextBlock.Visibility = Visibility.Visible;
+            VoiceAssistantProgressBar.Visibility = Visibility.Collapsed;
         }
 
         async void IMediaPlayerStateChangedListener.StateChanged(MediaPlaybackState state)
