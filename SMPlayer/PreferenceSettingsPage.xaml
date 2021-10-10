@@ -57,8 +57,8 @@
             <Setter Property="Margin" Value="4,0" />
         </Style>
 
-        <Style TargetType="AppBarButton" x:Name="GoToAddAppBarButtonStyle" BasedOn="{StaticResource PreferenceAppBarButtonStyle}">
-            <Setter Property="Label" Value="Go To Add" />
+        <Style TargetType="HyperlinkButton" x:Name="GoToAddHyperLinkButtonStyle" BasedOn="{StaticResource TextBlockButtonStyle}">
+            <Setter Property="Content" Value="Go to add >" />
         </Style>
 
         <Style TargetType="AppBarButton" x:Name="ClearInvalidButtonStyle" BasedOn="{StaticResource PreferenceAppBarButtonStyle}">
@@ -79,15 +79,14 @@
             <Setter Property="Label" Value="Expand" />
         </Style>
 
-        <Style TargetType="Border" x:Name="NoItemBackground">
+        <Style TargetType="StackPanel" x:Name="NoItemBackground">
             <Setter Property="Background" Value="WhiteSmoke" />
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="Height" Value="44" />
         </Style>
 
         <Style TargetType="TextBlock" x:Name="NoItemTextBlockStyle">
-            <Setter Property="FontWeight" Value="Light" />
-            <Setter Property="FontWeight" Value="Light" />
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="Padding" Value="16" />
+            <Setter Property="Margin" Value="10,0,4,0" />
             <Setter Property="Text" Value="No Item." />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
@@ -96,6 +95,7 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
@@ -126,11 +126,25 @@
                     Grid.Column="1"
                     IsOn="{x:Bind IsEnabled}"
                     Toggled="IsEnabledToggleSwitch_Toggled"/>
+                <ComboBox
+                    x:Uid="PreferLevelComboBox"
+                    MinWidth="80"
+                    Grid.Column="2"
+                    Margin="6,0"
+                    BorderThickness="1"
+                    VerticalAlignment="Center"
+                    Loaded="PreferLevelComboBox_Loaded"
+                    SelectionChanged="PreferLevelComboBox_SelectionChanged" >
+                    <ComboBoxItem x:Uid="PreferLevelLowComboItem" Content="Low" />
+                    <ComboBoxItem x:Uid="PreferLevelNormalComboItem" Content="Normal" />
+                    <ComboBoxItem x:Uid="PreferLevelHighComboItem" Content="High" />
+                    <ComboBoxItem x:Uid="PreferLevelHigherComboItem" Content="Higher"/>
+                </ComboBox>
                 <Button
                     x:Uid="RemoveButton" 
                     Style="{StaticResource RemoveButtonStyle}"
-                    Grid.Column="2"
-                    Margin="4,0"
+                    Grid.Column="3"
+                    Margin="6,0"
                     Click="RemoveButton_Click" />
             </Grid>
         </DataTemplate>
@@ -171,12 +185,6 @@
                             Unchecked="PreferredSongsCheckBox_Unchecked" />
                     </CommandBar.Content>
                     <AppBarButton
-                        x:Name="GoToAddPreferredSongsButton" 
-                        x:Uid="GoToAddAppBarButton"
-                        Icon="Add"
-                        Style="{StaticResource GoToAddAppBarButtonStyle}"
-                        Click="GoToAddPreferredSongsButton_Click"/>
-                    <AppBarButton
                         x:Name="ExpandPreferredSongsButton"
                         Style="{StaticResource ExpandButtonStyle}"
                         Click="ExpandPreferredSongsButton_Click" >
@@ -198,11 +206,16 @@
                     ItemClick="PreferredSongsListView_ItemClick"
                     ContainerContentChanging="PreferenceListView_ContainerContentChanging"
                     ItemsSource="{x:Bind LimitedPreferredSongs, Mode=OneWay}" />
-                <Border
+                <StackPanel
                     Style="{StaticResource NoItemBackground}"
                     Visibility="{x:Bind PreferredSongs.Count, Converter={StaticResource InvertedVisibilityConverter},Mode=OneWay}">
                     <TextBlock x:Uid="NoItemsTextBlock" Style="{StaticResource NoItemTextBlockStyle}" />
-                </Border>
+                    <HyperlinkButton
+                        x:Name="GoToAddPreferredSongsButton"
+                        x:Uid="GoToAddHyperlinkButton" 
+                        Click="GoToAddPreferredSongsButton_Click"
+                        Style="{StaticResource GoToAddHyperLinkButtonStyle}" />
+                </StackPanel>
             </StackPanel>
             <StackPanel>
                 <CommandBar Style="{StaticResource PreferenceCommandBarStyle}">
@@ -215,12 +228,6 @@
                             Style="{ThemeResource SettingCheckBoxStyle}"
                             Unchecked="PreferredArtistsCheckBox_Unchecked" />
                     </CommandBar.Content>
-                    <AppBarButton 
-                        x:Name="GoToAddPreferredArtistsButton" 
-                        x:Uid="GoToAddAppBarButton"
-                        Icon="Add"
-                        Style="{StaticResource GoToAddAppBarButtonStyle}"
-                        Click="GoToAddPreferredArtistsButton_Click"/>
                     <AppBarButton
                         x:Name="ExpandPreferredArtistsButton"
                         Style="{StaticResource ExpandButtonStyle}"
@@ -243,11 +250,16 @@
                     ItemClick="PreferredArtistsListView_ItemClick"
                     ContainerContentChanging="PreferenceListView_ContainerContentChanging"
                     ItemsSource="{x:Bind LimitedPreferredArtists, Mode=OneWay}" />
-                <Border
+                <StackPanel
                     Style="{StaticResource NoItemBackground}"
                     Visibility="{x:Bind PreferredArtists.Count, Converter={StaticResource InvertedVisibilityConverter},Mode=OneWay}">
                     <TextBlock x:Uid="NoItemsTextBlock" Style="{StaticResource NoItemTextBlockStyle}" />
-                </Border>
+                    <HyperlinkButton
+                        x:Name="GoToAddPreferredArtistsButton"
+                        x:Uid="GoToAddHyperlinkButton" 
+                        Click="GoToAddPreferredArtistsButton_Click"
+                        Style="{StaticResource GoToAddHyperLinkButtonStyle}" />
+                </StackPanel>
             </StackPanel>
             <StackPanel>
                 <CommandBar Style="{StaticResource PreferenceCommandBarStyle}">
@@ -260,12 +272,6 @@
                             Style="{ThemeResource SettingCheckBoxStyle}"
                             Unchecked="PreferredAlbumsCheckBox_Unchecked" />
                     </CommandBar.Content>
-                    <AppBarButton 
-                        x:Name="GoToAddPreferredAlbumsButton" 
-                        x:Uid="GoToAddAppBarButton"
-                        Icon="Add"
-                        Style="{StaticResource GoToAddAppBarButtonStyle}"
-                        Click="GoToAddPreferredAlbumsButton_Click"/>
                     <AppBarButton
                         x:Name="ExpandPreferredAlbumsButton"
                         Style="{StaticResource ExpandButtonStyle}"
@@ -288,11 +294,16 @@
                     ItemClick="PreferredAlbumsListView_ItemClick"
                     ContainerContentChanging="PreferenceListView_ContainerContentChanging"
                     ItemsSource="{x:Bind LimitedPreferredAlbums, Mode=OneWay}" />
-                <Border 
+                <StackPanel 
                     Style="{StaticResource NoItemBackground}"
                     Visibility="{x:Bind PreferredAlbums.Count, Converter={StaticResource InvertedVisibilityConverter},Mode=OneWay}">
                     <TextBlock x:Uid="NoItemsTextBlock" Style="{StaticResource NoItemTextBlockStyle}" />
-                </Border>
+                    <HyperlinkButton
+                        x:Name="GoToAddPreferredAlbumsButton"
+                        x:Uid="GoToAddHyperlinkButton" 
+                        Click="GoToAddPreferredSongsButton_Click"
+                        Style="{StaticResource GoToAddHyperLinkButtonStyle}" />
+                </StackPanel>
             </StackPanel>
             <StackPanel>
                 <CommandBar Style="{StaticResource PreferenceCommandBarStyle}">
@@ -305,12 +316,6 @@
                             Style="{ThemeResource SettingCheckBoxStyle}"
                             Unchecked="PreferredPlaylistsCheckBox_Unchecked" />
                     </CommandBar.Content>
-                    <AppBarButton 
-                        x:Name="GoToAddPreferredPlaylistsButton" 
-                        x:Uid="GoToAddAppBarButton"
-                        Icon="Add"
-                        Style="{StaticResource GoToAddAppBarButtonStyle}"
-                        Click="GoToAddPreferredPlaylistsButton_Click"/>
                     <AppBarButton
                         x:Name="ExpandPreferredPlaylistsButton"
                         Style="{StaticResource ExpandButtonStyle}"
@@ -333,11 +338,16 @@
                     ItemClick="PreferredPlaylistsListView_ItemClick"
                     ContainerContentChanging="PreferenceListView_ContainerContentChanging"
                     ItemsSource="{x:Bind LimitedPreferredPlaylists, Mode=OneWay}" />
-                <Border
+                <StackPanel
                     Style="{StaticResource NoItemBackground}"
                     Visibility="{x:Bind PreferredPlaylists.Count, Converter={StaticResource InvertedVisibilityConverter},Mode=OneWay}">
                     <TextBlock x:Uid="NoItemsTextBlock" Style="{StaticResource NoItemTextBlockStyle}" />
-                </Border>
+                    <HyperlinkButton
+                        x:Name="GoToAddPreferredPlaylistsButton"
+                        x:Uid="GoToAddHyperlinkButton" 
+                        Click="GoToAddPreferredPlaylistsButton_Click"
+                        Style="{StaticResource GoToAddHyperLinkButtonStyle}" />
+                </StackPanel>
             </StackPanel>
             <StackPanel>
                 <CommandBar Style="{StaticResource PreferenceCommandBarStyle}">
@@ -350,12 +360,6 @@
                             Style="{ThemeResource SettingCheckBoxStyle}"
                             Unchecked="PreferredFoldersCheckBox_Unchecked" />
                     </CommandBar.Content>
-                    <AppBarButton 
-                        x:Name="GoToAddPreferredFoldersButton" 
-                        x:Uid="GoToAddAppBarButton"
-                        Icon="Add"
-                        Style="{StaticResource GoToAddAppBarButtonStyle}"
-                        Click="GoToAddPreferredFoldersButton_Click"/>
                     <AppBarButton
                         x:Name="ExpandPreferredFoldersButton"
                         Style="{StaticResource ExpandButtonStyle}"
@@ -378,11 +382,16 @@
                     ItemClick="PreferredFoldersListView_ItemClick"
                     ContainerContentChanging="PreferenceListView_ContainerContentChanging"
                     ItemsSource="{x:Bind LimitedPreferredFolders, Mode=OneWay}" />
-                <Border 
+                <StackPanel 
                     Style="{StaticResource NoItemBackground}"
                     Visibility="{x:Bind PreferredFolders.Count, Converter={StaticResource InvertedVisibilityConverter},Mode=OneWay}">
                     <TextBlock x:Uid="NoItemsTextBlock" Style="{StaticResource NoItemTextBlockStyle}" />
-                </Border>
+                    <HyperlinkButton
+                        x:Name="GoToAddPreferredFoldersButton"
+                        x:Uid="GoToAddHyperlinkButton" 
+                        Click="GoToAddPreferredFoldersButton_Click"
+                        Style="{StaticResource GoToAddHyperLinkButtonStyle}" />
+                </StackPanel>
             </StackPanel>
             <CheckBox
                 x:Name="RecentAddedPreferenceCheckBox"

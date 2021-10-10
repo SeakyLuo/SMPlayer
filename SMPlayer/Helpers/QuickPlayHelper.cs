@@ -9,6 +9,7 @@ namespace SMPlayer.Helpers
 {
     class QuickPlayHelper
     {
+        private const int randomItems = 5;
         private static readonly Random random = new Random();
 
         public static List<Music> GetPlaylist(int randomLimit)
@@ -30,92 +31,101 @@ namespace SMPlayer.Helpers
         private static void HandlePreferredSongs(HashSet<Music> songs, PreferenceSetting preference)
         {
             if (!preference.Songs) return;
-            int randomCount = GetRandomPreferredItems();
-            if (randomCount == 0) return;
-            List<PreferenceItem> preferred = preference.EnabledPreferredSongs;
-            if (preferred.Count == 0) return;
-            songs.AddRange(preferred.RandItems(randomCount).Select(i => new Music { Path = i.Id }));
+            IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredSongs);
+            songs.AddRange(items.Select(i => new Music { Path = i.Id }));
         }
 
         private static void HandlePreferredArtists(HashSet<Music> songs, PreferenceSetting preference)
         {
             if (!preference.Artists) return;
-            int randomCount = GetRandomPreferredItems();
-            if (randomCount == 0) return;
-            List<PreferenceItem> preferred = preference.EnabledPreferredArtists;
-            if (preferred.Count == 0) return;
-            HashSet<string> preferredArtists = preferred.RandItems(randomCount).Select(i => i.Id).ToHashSet();
-            songs.AddRange(MusicLibraryPage.AllSongs.Where(m => preferredArtists.Contains(m.Artist)).RandItems(randomCount));
+            IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredArtists);
+            songs.AddRange(items.SelectMany(i => MusicLibraryPage.AllSongs.Where(m => i.Id == m.Artist)
+                                                                          .RandItems(GetRandomPreferredItems(i.Level))
+                                .RandItems(randomItems)));
         }
 
         private static void HandlePreferredAlbums(HashSet<Music> songs, PreferenceSetting preference)
         {
             if (!preference.Albums) return;
-            int randomCount = GetRandomPreferredItems();
-            if (randomCount == 0) return;
-            List<PreferenceItem> preferred = preference.EnabledPreferredAlbums;
-            if (preferred.Count == 0) return;
-            HashSet<string> preferredAlbums = preferred.RandItems(randomCount).Select(i => i.Id).ToHashSet();
-            songs.AddRange(MusicLibraryPage.AllSongs.Where(m => preferredAlbums.Contains(TileHelper.BuildAlbumNavigationFlag(m.Album, m.Artist))).RandItems(randomCount));
+            IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredArtists);
+            songs.AddRange(items.SelectMany(i => MusicLibraryPage.AllSongs.Where(m => i.Id == m.Album)
+                                                                .RandItems(GetRandomPreferredItems(i.Level))
+                                .RandItems(randomItems)));
         }
 
         private static void HandlePreferredPlaylists(HashSet<Music> songs, PreferenceSetting preference)
         {
             if (!preference.Playlists) return;
-            int randomCount = GetRandomPreferredItems();
-            if (randomCount == 0) return;
-            List<PreferenceItem> preferred = preference.EnabledPreferredPlaylists;
-            if (preferred.Count == 0) return;
-            HashSet<string> preferredPlaylists = preferred.RandItems(randomCount).Select(i => i.Id).ToHashSet();
-            songs.AddRange(Settings.settings.Playlists.Where(i => preferredPlaylists.Contains(i.Name)).SelectMany(i => i.Songs.RandItems(randomCount)).RandItems(randomCount));
+            IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredPlaylists);
+            songs.AddRange(items.SelectMany(i => Settings.settings.Playlists.Where(p => i.Name == p.Name)
+                                                                  .SelectMany(p => p.Songs.RandItems(GetRandomPreferredItems(i.Level)))
+                                .RandItems(randomItems)));
         }
 
         private static void HandlePreferredFolders(HashSet<Music> songs, PreferenceSetting preference)
         {
             if (!preference.Folders) return;
-            int randomCount = GetRandomPreferredItems();
-            if (randomCount == 0) return;
-            List<PreferenceItem> preferred = preference.EnabledPreferredFolders;
-            if (preferred.Count == 0) return;
-            HashSet<string> preferredFolders = preferred.RandItems(randomCount).Select(i => i.Id).ToHashSet();
-            songs.AddRange(preferredFolders.Select(i => Settings.settings.Tree.FindTree(i)).Where(i => i != null).SelectMany(i => i.Files.RandItems(randomCount)).RandItems(randomCount));
+            IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredFolders);
+            songs.AddRange(items.Select(i => new { Folder = Settings.settings.Tree.FindTree(i.Id), i.Level })
+                                .Where(i => i.Folder != null)
+                                .SelectMany(i => i.Folder.Files.RandItems(GetRandomPreferredItems(i.Level))).RandItems(randomItems));
+        }
+
+        private static IEnumerable<PreferenceItem> GetPreferenceItems(List<PreferenceItem> items)
+        {
+            if (items.Count == 0) return new List<PreferenceItem>();
+            if (items.Count == 1) return items;
+            return items.SelectMany(item =>
+            {
+                int max = GetRandomPreferredItems(item.Level);
+                List<PreferenceItem> ret = new List<PreferenceItem>();
+                for (int i = 0; i < max; i++)
+                {
+                    if (random.Next(2) == 1)
+                    {
+                        ret.Add(item);
+                    }
+                }
+                return ret.RandItems(randomItems).Distinct();
+            });
         }
 
         private static void HandledRecentAdded(HashSet<Music> songs, PreferenceSetting preference)
         {
-            if (!preference.RecentAdded.IsEnabled) return;
-            int randomCount = GetRandomPreferredItems();
-            if (randomCount == 0) return;
-            songs.AddRange(RecentPage.RecentAdded.TimeLine.RandItems(randomCount));
+            int count = GetPreferenceItems(preference.RecentAdded);
+            if (count == 0) return;
+            songs.AddRange(RecentPage.RecentAdded.TimeLine.RandItems(count));
         }
 
         private static void HandledMyFavorites(HashSet<Music> songs, PreferenceSetting preference)
         {
-            if (!preference.MyFavorites.IsEnabled) return;
-            int randomCount = GetRandomPreferredItems();
-            if (randomCount == 0) return;
-            songs.AddRange(Settings.settings.MyFavorites.Songs.RandItems(randomCount));
+            int count = GetPreferenceItems(preference.MyFavorites);
+            if (count == 0) return;
+            songs.AddRange(Settings.settings.MyFavorites.Songs.RandItems(count));
         }
 
         private static void HandledMostPlayed(HashSet<Music> songs, PreferenceSetting preference, int randomLimit)
         {
-            if (!preference.MostPlayed.IsEnabled) return;
-            int randomCount = GetRandomPreferredItems();
-            if (randomCount == 0) return;
+            int count = GetPreferenceItems(preference.MostPlayed);
+            if (count == 0) return;
             songs.AddRange(MusicLibraryPage.GetMostPlayed(randomLimit));
         }
 
         private static void HandledLeastPlayed(HashSet<Music> songs, PreferenceSetting preference, int randomLimit)
         {
-            if (!preference.LeastPlayed.IsEnabled) return;
-            int randomCount = GetRandomPreferredItems();
-            if (randomCount == 0) return;
+            int count = GetPreferenceItems(preference.LeastPlayed);
+            if (count == 0) return;
             songs.AddRange(MusicLibraryPage.GetLeastPlayed(randomLimit));
         }
 
-        private static int GetRandomPreferredItems()
+        private static int GetPreferenceItems(PreferenceItem item)
         {
-            return random.Next(0, 2);
+            return item.IsEnabled ? GetRandomPreferredItems(item.Level) : 0;
+        }
+
+        private static int GetRandomPreferredItems(PreferLevel level)
+        {
+            return random.Next((int)level + 1);
         }
     }
 }

@@ -13,6 +13,7 @@ namespace SMPlayer.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public bool IsEnabled { get; set; }
+        public PreferLevel Level { get; set; } = PreferLevel.Normal;
 
         public PreferenceItem()
         {
@@ -32,7 +33,8 @@ namespace SMPlayer.Models
             {
                 Id = Id,
                 Name = Name,
-                IsEnabled = IsEnabled
+                IsEnabled = IsEnabled,
+                Level = Level
             };
         }
 
@@ -82,6 +84,7 @@ namespace SMPlayer.Models
         private bool isValid = true;
         public string ToolTip { get; set; }
         public PreferType PreferType { get; set; }
+        public PreferLevel Level { get; set; }
 
         public PreferenceItem AsModel()
         {
@@ -89,7 +92,8 @@ namespace SMPlayer.Models
             {
                 Id = Id,
                 Name = Name,
-                IsEnabled = IsEnabled
+                IsEnabled = IsEnabled,
+                Level = Level
             };
         }
 
@@ -114,6 +118,11 @@ namespace SMPlayer.Models
     public enum PreferType
     {
         Song, Artist, Album, Playlist, Folder
+    }
+
+    public enum PreferLevel
+    {
+        Low = 1, Normal = 2, High = 3, Higher = 4
     }
 
     public interface IPreferable

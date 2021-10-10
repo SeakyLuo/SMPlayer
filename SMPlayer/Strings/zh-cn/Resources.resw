@@ -423,8 +423,8 @@
   <data name="GenreTextBlock.Text" xml:space="preserve">
     <value>风格</value>
   </data>
-  <data name="GoToAddAppBarButton.Label" xml:space="preserve">
-    <value>去添加</value>
+  <data name="GoToAddHyperlinkButton.Content" xml:space="preserve">
+    <value>去添加 &gt;</value>
   </data>
   <data name="GridViewItem.Label" xml:space="preserve">
     <value>网格模式</value>
@@ -631,7 +631,7 @@
     <value>没有专辑插图</value>
   </data>
   <data name="NoItemsTextBlock.Text" xml:space="preserve">
-    <value>暂无项目</value>
+    <value>暂无项目。</value>
   </data>
   <data name="NoResultTextBlock.Text" xml:space="preserve">
     <value>找不到结果，请检查您的拼写。</value>
@@ -1218,5 +1218,20 @@
   </data>
   <data name="YearTextBlock.Text" xml:space="preserve">
     <value>年份</value>
+  </data>
+  <data name="PreferLevelHighComboItem.Content" xml:space="preserve">
+    <value>高</value>
+  </data>
+  <data name="PreferLevelHigherComboItem.Content" xml:space="preserve">
+    <value>很高</value>
+  </data>
+  <data name="PreferLevelLowComboItem.Content" xml:space="preserve">
+    <value>低</value>
+  </data>
+  <data name="PreferLevelNormalComboItem.Content" xml:space="preserve">
+    <value>正常</value>
+  </data>
+  <data name="PreferLevelComboBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>表示该项目在随机播放中出现的概率</value>
   </data>
 </root>

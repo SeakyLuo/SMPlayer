@@ -481,9 +481,9 @@ namespace SMPlayer
         {
             ToggleSwitch toggleSwitch = sender as ToggleSwitch;
             toggleSwitch.SetToolTip(toggleSwitch.IsOn ? "IsEnabledToggleSwitchOnToolTip" : "IsEnabledToggleSwitchOffToolTip");
-            if (toggleSwitch.DataContext is PreferenceItem preferenceItem)
+            if (toggleSwitch.DataContext is PreferenceItemView view)
             {
-                preferenceItem.IsEnabled = !preferenceItem.IsEnabled;
+                GetPreferenceByType(view.PreferType).Find(i => i.Id == view.Id).IsEnabled = view.IsEnabled = !view.IsEnabled;
             }
         }
 
@@ -498,6 +498,23 @@ namespace SMPlayer
             for (int i = start; i < end; i++)
                 if (listView.ContainerFromIndex(i) is ListViewItem container)
                     container.Background = GetRowBackground(i);
+        }
+
+        private List<PreferLevel> preferLevels = new List<PreferLevel>() { PreferLevel.Low, PreferLevel.Normal, PreferLevel.High, PreferLevel.Higher };
+        private void PreferLevelComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox comboBox = (sender as ComboBox);
+             PreferLevel preferLevel = preferLevels[comboBox.SelectedIndex];
+
+            PreferenceItemView item = comboBox.DataContext as PreferenceItemView;
+            item.Level = preferLevel;
+            GetPreferenceByType(item.PreferType).Find(i => i.Id == item.Id).Level = preferLevel;
+        }
+
+        private void PreferLevelComboBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            ComboBox comboBox = (sender as ComboBox);
+            comboBox.SelectedIndex = preferLevels.IndexOf((comboBox.DataContext as PreferenceItemView).Level);
         }
 
         public static Brush GetRowBackground(int index)

@@ -426,8 +426,8 @@
   <data name="GenreTextBlock.Text" xml:space="preserve">
     <value>Genre</value>
   </data>
-  <data name="GoToAddAppBarButton.Label" xml:space="preserve">
-    <value>Add</value>
+  <data name="GoToAddHyperlinkButton.Content" xml:space="preserve">
+    <value>Go to add &gt;</value>
   </data>
   <data name="GridViewItem.Label" xml:space="preserve">
     <value>Grid View</value>
@@ -634,7 +634,7 @@
     <value>No Album Art</value>
   </data>
   <data name="NoItemsTextBlock.Text" xml:space="preserve">
-    <value>No item.</value>
+    <value>No item. </value>
   </data>
   <data name="NoResultTextBlock.Text" xml:space="preserve">
     <value>No result is found. Please check your spelling.</value>
@@ -1224,5 +1224,20 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   </data>
   <data name="YearTextBlock.Text" xml:space="preserve">
     <value>Year</value>
+  </data>
+  <data name="PreferLevelHighComboItem.Content" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="PreferLevelHigherComboItem.Content" xml:space="preserve">
+    <value>Higher</value>
+  </data>
+  <data name="PreferLevelLowComboItem.Content" xml:space="preserve">
+    <value>Low</value>
+  </data>
+  <data name="PreferLevelNormalComboItem.Content" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="PreferLevelComboBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>This means the probability of this item being randomly played.</value>
   </data>
 </root>
