@@ -65,6 +65,15 @@ namespace SMPlayer.Helpers.VoiceAssistant
             {
                 result.Type = MatchType.Help;
             }
+            else if (text.Contains("搜索"))
+            {
+                result.Type = MatchType.Search;
+                MatchCollection searchMatch = new Regex(@"(?<=搜索).+").Matches(text);
+                if (searchMatch.IsNotEmpty())
+                {
+                    result.Param = searchMatch.GetValue();
+                }
+            }
             else
             {
                 result.Type = MatchType.MatchNone;
@@ -81,57 +90,52 @@ namespace SMPlayer.Helpers.VoiceAssistant
         {
             CommandResult result = new CommandResult();
             MatchCollection playMusicMatch = new Regex(@"(?<=(播放(歌曲|音乐)|(来|放)(一)?(首|下)(歌)?)).*").Matches(text);
-            if (playMusicMatch.Count > 0)
+            if (playMusicMatch.IsNotEmpty())
             {
                 result.Type = MatchType.PlayMusic;
                 result.Param = playMusicMatch.GetValue();
                 return result;
             }
             MatchCollection playArtistMatch = new Regex(@"(?<=播放歌手).*").Matches(text);
-            if (playArtistMatch.Count > 0)
+            if (playArtistMatch.IsNotEmpty())
             {
-                MatchCollection playAlbumByArtistMatch = new Regex(@"(?<=播放歌手).+的专辑.+").Matches(text);
-                if (playAlbumByArtistMatch.Count > 0)
+                if (HandlePlayItemByArtist(text, "播放歌手") is CommandResult playByArtistResult)
                 {
-                    result.Type = MatchType.PlayByArtistAndAlbum;
-                    result.Param = new ByArtistRequest(playAlbumByArtistMatch, "的专辑");
-                    return result;
-                }
-                MatchCollection playSongByArtistMatch = new Regex(@"(?<=播放歌手).+的歌曲.+").Matches(text);
-                if (playSongByArtistMatch.Count > 0)
-                {
-                    result.Type = MatchType.PlayByArtistAndMusic;
-                    result.Param = new ByArtistRequest(playAlbumByArtistMatch, "的歌曲");
-                    return result;
-                }
-                MatchCollection playSongByArtistMatch2 = new Regex(@"(?<=播放歌手).+的歌.+").Matches(text);
-                if (playSongByArtistMatch2.Count > 0)
-                {
-                    result.Type = MatchType.PlayByArtistOrMusic;
-                    result.Param = new ByArtistRequest(playSongByArtistMatch2, "的歌");
-                    return result;
+                    return playByArtistResult;
                 }
                 result.Type = MatchType.PlayArtist;
                 result.Param = playArtistMatch.GetValue();
                 return result;
             }
             MatchCollection playAlbumMatch = new Regex(@"(?<=播放专辑).*").Matches(text);
-            if (playAlbumMatch.Count > 0)
+            if (playAlbumMatch.IsNotEmpty())
             {
+                if (HandlePlayMusicIn(text, @"(?<=播放专辑).+中的", MatchType.PlayMusicInAlbum) is CommandResult playMusicInAlbumMatch)
+                {
+                    return playMusicInAlbumMatch;
+                }
                 result.Type = MatchType.PlayAlbum;
                 result.Param = playAlbumMatch.GetValue();
                 return result;
             }
-            MatchCollection playPlaylistMatch = new Regex(@"(?<=播放列表).*").Matches(text);
-            if (playPlaylistMatch.Count > 0)
+            MatchCollection playPlaylistMatch = new Regex(@"(?<=播放(列表|歌单)).*").Matches(text);
+            if (playPlaylistMatch.IsNotEmpty())
             {
+                if (HandlePlayMusicIn(text, @"(?<=播放(列表|歌单)).+中的", MatchType.PlayMusicInPlaylist) is CommandResult playMusicInPlaylistMatch)
+                {
+                    return playMusicInPlaylistMatch;
+                }
                 result.Type = MatchType.PlayPlaylist;
                 result.Param = playPlaylistMatch.GetValue();
                 return result;
             }
             MatchCollection playFolderMatch = new Regex(@"(?<=文件夹).*").Matches(text);
-            if (playFolderMatch.Count > 0)
+            if (playFolderMatch.IsNotEmpty())
             {
+                if (HandlePlayMusicIn(text, @"(?<=播放文件夹).+中的", MatchType.PlayMusicInFolder) is CommandResult playMusicInFolderMatch)
+                {
+                    return playMusicInFolderMatch;
+                }
                 result.Type = MatchType.PlayFolder;
                 result.Param = playFolderMatch.GetValue();
                 return result;
@@ -142,7 +146,7 @@ namespace SMPlayer.Helpers.VoiceAssistant
                 return playItemByArtistResult;
             }
             MatchCollection playArtistMatch2 = new Regex(patternPrefix + "的歌.*").Matches(text);
-            if (playArtistMatch2.Count > 0)
+            if (playArtistMatch2.IsNotEmpty())
             {
                 result.Type = MatchType.PlayByArtistOrMusic;
                 result.Param = new ByArtistRequest(playArtistMatch2, "的歌")
@@ -151,8 +155,13 @@ namespace SMPlayer.Helpers.VoiceAssistant
                 };
                 return result;
             }
+            MatchCollection playMusicInMatch = new Regex(patternPrefix + @"中的.+").Matches(text);
+            if (playMusicInMatch.IsNotEmpty())
+            {
+                return HandlePlayMusicIn(text, patternPrefix);
+            }
             MatchCollection playByArtistMatch = new Regex(patternPrefix + @"(的).+").Matches(text);
-            if (playByArtistMatch.Count > 0)
+            if (playByArtistMatch.IsNotEmpty())
             {
                 result.Type = MatchType.PlayByArtist;
                 result.Param = new ByArtistRequest(playByArtistMatch, "的");
@@ -188,15 +197,32 @@ namespace SMPlayer.Helpers.VoiceAssistant
             return null;
         }
 
+        private CommandResult HandlePlayMusicIn(string text, string patternPrefix, MatchType matchType = MatchType.PlayMusicIn)
+        {
+            if (HandlePlayItemByArtist(text, patternPrefix, "歌曲", matchType) is CommandResult music0)
+            {
+                return music0;
+            }
+            if (HandlePlayItemByArtist(text, patternPrefix, "歌", matchType) is CommandResult music1)
+            {
+                return music1;
+            }
+            if (HandlePlayItemByArtist(text, patternPrefix, "", matchType) is CommandResult music2)
+            {
+                return music2;
+            }
+            return null;
+        }
+
         private CommandResult HandlePlayItemByArtist(string text, string patternPrefix, string tag, MatchType type)
         {
-            MatchCollection playAlbumByArtistMatch = new Regex(patternPrefix + tag + ".+").Matches(text);
-            if (playAlbumByArtistMatch.Count > 0)
+            MatchCollection match = new Regex(patternPrefix + tag + ".+").Matches(text);
+            if (match.IsNotEmpty())
             {
                 return new CommandResult
                 {
                     Type = type,
-                    Param = new ByArtistRequest(playAlbumByArtistMatch, tag)
+                    Param = new ByArtistRequest(match, tag)
                 };
             }
             return null;
@@ -218,7 +244,7 @@ namespace SMPlayer.Helpers.VoiceAssistant
             else
             {
                 To = text.Contains("至") || text.Contains("到") || text.Contains("成");
-                if (fractionMatch.Count > 0)
+                if (fractionMatch.IsNotEmpty())
                 {
                     value = VoiceAssistantHelper.FractionToDouble(fractionMatch.GetValue());
                     Percentage = true;

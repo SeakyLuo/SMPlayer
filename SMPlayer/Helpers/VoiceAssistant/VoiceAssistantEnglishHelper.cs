@@ -69,6 +69,15 @@ namespace SMPlayer.Helpers.VoiceAssistant
             {
                 result.Type = MatchType.Help;
             }
+            else if (text.Contains("search", Comparison))
+            {
+                result.Type = MatchType.Search;
+                MatchCollection searchMatch = new Regex(@"(?<=search).+").Matches(text);
+                if (searchMatch.IsNotEmpty())
+                {
+                    result.Param = searchMatch.GetValue();
+                }
+            }
             else
             {
                 result.Type = MatchType.MatchNone;
@@ -85,32 +94,36 @@ namespace SMPlayer.Helpers.VoiceAssistant
         private CommandResult HandlePlayMusic(string text)
         {
             CommandResult result = new CommandResult();
-            MatchCollection playMusicMatch = VoiceAssistantHelper.Matches(text, @"(?<=play.*music).*");
-            if (playMusicMatch.Count > 0)
+            MatchCollection playMusicMatch = VoiceAssistantHelper.Matches(text, @"(?<=play .*music).*");
+            if (playMusicMatch.IsNotEmpty())
             {
-                MatchCollection playMusicByArtistMatch = VoiceAssistantHelper.Matches(text, @"(?<=play.*music).+ by .+");
-                if (playMusicByArtistMatch.Count > 0)
+                MatchCollection playMusicByArtistMatch = VoiceAssistantHelper.Matches(text, @"(?<=play .*music).+ by .+");
+                if (playMusicByArtistMatch.IsNotEmpty())
                 {
                     result.Type = MatchType.PlayByArtistAndMusic;
                     result.Param = new ByArtistRequest(playMusicByArtistMatch, " by ");
                     return result;
                 }
+                if (HandlePlayMusicIn(text, "play .*music") is CommandResult playMusicInResult)
+                {
+                    return playMusicInResult;
+                }
                 result.Type = MatchType.PlayMusic;
                 result.Param = playMusicMatch.GetValue();
                 return result;
             }
-            MatchCollection playArtistMatch = VoiceAssistantHelper.Matches(text, @"(?<=play.*(artist|musician|singer)).*");
-            if (playArtistMatch.Count > 0)
+            MatchCollection playArtistMatch = VoiceAssistantHelper.Matches(text, @"(?<=play .*(artist|musician|singer)).*");
+            if (playArtistMatch.IsNotEmpty())
             {
                 result.Type = MatchType.PlayArtist;
                 result.Param = playArtistMatch.GetValue();
                 return result;
             }
-            MatchCollection playAlbumMatch = VoiceAssistantHelper.Matches(text, @"(?<=play.*album).*");
-            if (playAlbumMatch.Count > 0)
+            MatchCollection playAlbumMatch = VoiceAssistantHelper.Matches(text, @"(?<=play .*album).*");
+            if (playAlbumMatch.IsNotEmpty())
             {
-                MatchCollection playAlbumByArtistMatch = VoiceAssistantHelper.Matches(text, @"(?<=play.*album) .+ by .+");
-                if (playAlbumByArtistMatch.Count > 0)
+                MatchCollection playAlbumByArtistMatch = VoiceAssistantHelper.Matches(text, @"(?<=play .*album) .+ by .+");
+                if (playAlbumByArtistMatch.IsNotEmpty())
                 {
                     result.Type = MatchType.PlayByArtistAndMusic;
                     result.Param = new ByArtistRequest(playAlbumByArtistMatch, " by ");
@@ -120,29 +133,33 @@ namespace SMPlayer.Helpers.VoiceAssistant
                 result.Param = playAlbumMatch.GetValue();
                 return result;
             }
-            MatchCollection playPlaylistMatch = VoiceAssistantHelper.Matches(text, @"(?<=play.*playlist).*");
-            if (playPlaylistMatch.Count > 0)
+            MatchCollection playPlaylistMatch = VoiceAssistantHelper.Matches(text, @"(?<=play .*playlist).*");
+            if (playPlaylistMatch.IsNotEmpty())
             {
                 result.Type = MatchType.PlayPlaylist;
                 result.Param = playPlaylistMatch.GetValue();
                 return result;
             }
-            MatchCollection playFolderMatch = VoiceAssistantHelper.Matches(text, @"(?<=play.*folder).*");
-            if (playFolderMatch.Count > 0)
+            MatchCollection playFolderMatch = VoiceAssistantHelper.Matches(text, @"(?<=play .*folder).*");
+            if (playFolderMatch.IsNotEmpty())
             {
                 result.Type = MatchType.PlayFolder;
                 result.Param = playFolderMatch.GetValue();
                 return result;
             }
             MatchCollection playByArtistMatch = VoiceAssistantHelper.Matches(text, @"(?<=play) .+ by .+");
-            if (playByArtistMatch.Count > 0)
+            if (playByArtistMatch.IsNotEmpty())
             {
                 result.Type = MatchType.PlayByArtist;
                 result.Param = new ByArtistRequest(playByArtistMatch, " by ");
                 return result;
             }
+            if (HandlePlayMusicIn(text, "play .+") is CommandResult playInResult)
+            {
+                return playInResult;
+            }
             MatchCollection playByArtistMatch2 = VoiceAssistantHelper.Matches(text, @"(?<=play) .+'s .+");
-            if (playByArtistMatch2.Count > 0)
+            if (playByArtistMatch2.IsNotEmpty())
             {
                 result.Type = MatchType.PlayByArtist;
                 result.Param = new ByArtistRequest(playByArtistMatch, "'s ");
@@ -160,6 +177,54 @@ namespace SMPlayer.Helpers.VoiceAssistant
             }
             return result;
         }
+        private CommandResult HandlePlayMusicIn(string text, string patternPrefix)
+        {
+            string prepositions = "(in|from|of)";
+            MatchCollection playMusicInMatch = VoiceAssistantHelper.Matches(text, $@"(?<={patternPrefix}).+ {prepositions} .+");
+            if (playMusicInMatch.IsEmpty())
+            {
+                return null;
+            }
+            ByArtistRequest request = new ByArtistRequest
+            {
+                Original = playMusicInMatch.GetValue(),
+                Item = VoiceAssistantHelper.Matches(text, $@"(?<={patternPrefix}).+ (?={prepositions})").GetValue()
+            };
+            MatchType matchType;
+            MatchCollection playMusicInSthMatch = VoiceAssistantHelper.Matches(text, patternPrefix + $@"{patternPrefix}.+ {prepositions} .+(?<=(album|playlist|folder)) .+");
+            string afterPrep = VoiceAssistantHelper.Matches(text, patternPrefix + $@"{patternPrefix}.+ (?<={prepositions}) .+").GetValue();
+            if (playMusicInSthMatch.IsEmpty())
+            {
+                matchType = MatchType.PlayMusicIn;
+                request.Artist = afterPrep;
+            }
+            else
+            {
+                if (afterPrep.Contains("album", Comparison))
+                {
+                    matchType = MatchType.PlayMusicInAlbum;
+                }
+                else if (afterPrep.Contains("playlist", Comparison))
+                {
+                    matchType = MatchType.PlayMusicInPlaylist;
+                }
+                else if (afterPrep.Contains("folder", Comparison))
+                {
+                    matchType = MatchType.PlayMusicInFolder;
+                }
+                else
+                {
+                    matchType = MatchType.PlayMusicIn;
+                }
+                request.Artist = playMusicInSthMatch.GetValue();
+            }
+            return new CommandResult
+            {
+                Param = request,
+                Type = matchType
+            };
+        }
+
 
         private VolumeRequest HandleVolume(string text)
         {
@@ -178,7 +243,7 @@ namespace SMPlayer.Helpers.VoiceAssistant
             else
             {
                 To = text.Contains("to");
-                if (fractionMatch.Count > 0)
+                if (fractionMatch.IsNotEmpty())
                 {
                     value = VoiceAssistantHelper.FractionToDouble(fractionMatch.GetValue());
                     Percentage = true;

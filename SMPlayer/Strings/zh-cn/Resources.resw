@@ -727,7 +727,7 @@
     <value>播放</value>
   </data>
   <data name="PlayCommands1TextBlock.Text" xml:space="preserve">
-    <value>播放{歌曲|歌手|专辑|列表|文件夹} [关键词]</value>
+    <value>播放{歌曲|歌手|专辑|歌单|文件夹} [关键词]</value>
   </data>
   <data name="PlayCommands2TextBlock.Text" xml:space="preserve">
     <value>播放[关键词]</value>

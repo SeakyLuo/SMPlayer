@@ -398,11 +398,15 @@ namespace SMPlayer
             {
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    if (args.State == Windows.Media.SpeechRecognition.SpeechRecognizerState.Idle)
+                    switch (args.State)
                     {
-                        MainVoiceAssistantButtonFlyout.Hide();
-                        FullVoiceAssistantButtonFlyout.Hide();
-                        MainMediaControlVoiceAssistantButtonFlyout.Hide();
+                        case Windows.Media.SpeechRecognition.SpeechRecognizerState.SoundStarted:
+                            break;
+                        case Windows.Media.SpeechRecognition.SpeechRecognizerState.Idle:
+                            MainVoiceAssistantButtonFlyout.Hide();
+                            FullVoiceAssistantButtonFlyout.Hide();
+                            MainMediaControlVoiceAssistantButtonFlyout.Hide();
+                            break;
                     }
                 });
             });

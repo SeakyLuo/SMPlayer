@@ -26,10 +26,6 @@ Rename folder. Move music from folder to folder. Batch delete music file.
 
 Search multiple lyrics choose one. Lyrics priority in notification.
 
-Preference priority.
-
-Show voice assistant recognizing state. Set voice assistant language.
-
 # TO FIX
 Able to drag titlebar when loading, multi-select.
 

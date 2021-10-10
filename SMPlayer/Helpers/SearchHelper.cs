@@ -236,6 +236,31 @@ namespace SMPlayer.Helpers
             return await SearchByArtist(artist, keyword, SearchType.Albums);
         }
 
+        public static async Task<SearchResult> SearchAlbumMusic(string albumName, string keyword)
+        {
+            AlbumView album = (await Task.Run(() => SearchAlbums(MusicLibraryPage.AllSongs, albumName, SortBy.Default)))?.FirstOrDefault();
+            return SearchMusicInCollection(album?.Songs, keyword);
+        }
+
+        public static async Task<SearchResult> SearchPlaylistMusic(string playlistName, string keyword)
+        {
+            AlbumView playlist = (await Task.Run(() => SearchPlaylists(Settings.settings.Playlists, playlistName, SortBy.Default)))?.FirstOrDefault();
+            return SearchMusicInCollection(playlist?.Songs, keyword);
+        }
+
+        public static async Task<SearchResult> SearchFolderMusic(string folderName, string keyword)
+        {
+            GridFolderView folder = (await Task.Run(() => SearchFolders(Settings.settings.Tree, folderName, SortBy.Default)))?.FirstOrDefault();
+            return SearchMusicInCollection(folder?.Songs, keyword);
+        }
+
+        private static SearchResult SearchMusicInCollection(IEnumerable<Music> list, string keyword)
+        {
+            if (list == null) return null;
+            var music = SearchSongs(list, keyword, SortBy.Default).FirstOrDefault();
+            return new SearchResult(SearchType.Songs, music, EvaluateMusic(music, keyword));
+        }
+
         private static async Task<SearchResult> SearchByArtist(string artist, string keyword, SearchType? searchType)
         {
             IEnumerable<Music> artistMusic = MusicLibraryPage.AllSongs.Where(i => IsTargetArtist(i, artist));

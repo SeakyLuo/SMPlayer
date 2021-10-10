@@ -37,6 +37,7 @@ namespace SMPlayer.Helpers
             Recognizer = new SpeechRecognizer(ConvertLanguage(language));
             Recognizer.StateChanged += (sender, args) =>
             {
+                Helper.Print("[VoiceAssistantHelper] state: " + args.State);
                 foreach (var listener in StateChangedListeners) listener.Invoke(sender, args);
             };
             Recognizer.UIOptions.IsReadBackEnabled = false;
@@ -172,7 +173,6 @@ namespace SMPlayer.Helpers
         {
             if (string.IsNullOrEmpty(text))
             {
-                SpeakNotUnderstand();
                 return;
             }
             CommandResult result = CommandHandler.Handle(text);
@@ -362,9 +362,8 @@ namespace SMPlayer.Helpers
             }
         }
 
-        private static async void PlayByArtist(ByArtistRequest request)
+        private static async void PlayByArtist(ByArtistRequest request, SearchResult byArtistResult)
         {
-            var byArtistResult = await SearchHelper.SearchByArtist(request.Artist, request.Item);
             var originalResult = await SearchHelper.Search(request.Original);
             if (byArtistResult == null && originalResult == null)
             {
@@ -381,60 +380,42 @@ namespace SMPlayer.Helpers
             {
                 PlayBySearch(originalResult, request.Original);
             }
+        }
+
+        private static async void PlayByArtist(ByArtistRequest request)
+        {
+            var byArtistResult = await SearchHelper.SearchByArtist(request.Artist, request.Item);
+            PlayByArtist(request, byArtistResult);
         }
 
         private static async void PlayByArtistAndAlbum(ByArtistRequest request)
         {
-            var byArtistResult = await SearchHelper.SearchByArtist(request.Artist, request.Item);
-            var originalResult = await SearchHelper.Search(request.Original);
-            if (byArtistResult == null && originalResult == null)
-            {
-                SpeakNoResults(request.Original);
-                return;
-            }
-            int byArtistScore = byArtistResult == null ? 0 : byArtistResult.Score;
-            int originalScore = originalResult == null ? 0 : originalResult.Score;
-            if (byArtistScore >= originalScore)
-            {
-                PlayBySearch(byArtistResult, request.Item);
-            }
-            else
-            {
-                PlayBySearch(originalResult, request.Original);
-            }
+            var byArtistResult = await SearchHelper.SearchByArtistAlbum(request.Artist, request.Item);
+            PlayByArtist(request, byArtistResult);
         }
 
         private static async void PlayByArtistAndMusic(ByArtistRequest request)
         {
-            var byArtistResult = await SearchHelper.SearchByArtist(request.Artist, request.Item);
-            var originalResult = await SearchHelper.Search(request.Original);
-            if (byArtistResult == null && originalResult == null)
-            {
-                SpeakNoResults(request.Original);
-                return;
-            }
-            int byArtistScore = byArtistResult == null ? 0 : byArtistResult.Score;
-            int originalScore = originalResult == null ? 0 : originalResult.Score;
-            if (byArtistScore >= originalScore)
-            {
-                PlayBySearch(byArtistResult, request.Item);
-            }
-            else
-            {
-                PlayBySearch(originalResult, request.Original);
-            }
+            var byArtistResult = await SearchHelper.SearchByArtistMusic(request.Artist, request.Item);
+            PlayByArtist(request, byArtistResult);
         }
 
-        private static void PlayMusicInAlbum(ByArtistRequest request)
+        private static async void PlayMusicInAlbum(ByArtistRequest request)
         {
+            var byArtistResult = await SearchHelper.SearchAlbumMusic(request.Artist, request.Item);
+            PlayByArtist(request, byArtistResult);
         }
 
-        private static void PlayMusicInPlaylist(ByArtistRequest request)
+        private static async void PlayMusicInPlaylist(ByArtistRequest request)
         {
+            var byArtistResult = await SearchHelper.SearchPlaylistMusic(request.Artist, request.Item);
+            PlayByArtist(request, byArtistResult);
         }
 
-        private static void PlayMusicInFolder(ByArtistRequest request)
+        private static async void PlayMusicInFolder(ByArtistRequest request)
         {
+            var byArtistResult = await SearchHelper.SearchFolderMusic(request.Artist, request.Item);
+            PlayByArtist(request, byArtistResult);
         }
 
         private static async void SearchAndPlay(string text)
@@ -559,7 +540,7 @@ namespace SMPlayer.Helpers
     public enum MatchType
     {
         Play, PlayMusic, PlayArtist, PlayAlbum, PlayPlaylist, PlayFolder, SearchAndPlay, QuickPlay, PlayByArtistOrMusic,
-        PlayByArtist, PlayByArtistAndMusic, PlayByArtistAndAlbum, PlayMusicInAlbum, PlayMusicInFolder, PlayMusicInPlaylist,
+        PlayByArtist, PlayByArtistAndMusic, PlayByArtistAndAlbum, PlayMusicIn, PlayMusicInAlbum, PlayMusicInFolder, PlayMusicInPlaylist,
         Pause, Previous, Next, ChangeVolume, Search, Mute, UnMute, Help,
         MatchNone
     }
