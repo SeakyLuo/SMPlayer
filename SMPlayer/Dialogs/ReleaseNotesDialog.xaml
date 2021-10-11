@@ -25,6 +25,10 @@
 
     <ScrollViewer>
         <TextBlock TextWrapping="WrapWholeWords">
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.5.2</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesVoiceAssistantImprovements2"/><LineBreak />
+            2. <Run x:Uid="ReleaseNotesPreferenceSettingsPreferenceLevelAdded"/><LineBreak />
+            <LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.5.1</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesShowInExplorerBugFix"/><LineBreak />
             2. <Run x:Uid="ReleaseNotesSettingsCheckBoxChanged"/><LineBreak />

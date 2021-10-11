@@ -1240,4 +1240,10 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="PreferLevelComboBox.ToolTipService.ToolTip" xml:space="preserve">
     <value>This means the probability of this item being randomly played.</value>
   </data>
+  <data name="ReleaseNotesPreferenceSettingsPreferenceLevelAdded.Text" xml:space="preserve">
+    <value>You can now set the probability of preferred items in Preference Settings </value>
+  </data>
+  <data name="ReleaseNotesVoiceAssistantImprovements2.Text" xml:space="preserve">
+    <value>Minor improvements have made to Voice Assistant.</value>
+  </data>
 </root>

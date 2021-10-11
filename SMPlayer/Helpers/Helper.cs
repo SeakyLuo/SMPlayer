@@ -67,7 +67,10 @@ namespace SMPlayer
 
         public static void Print(string message, params object[] args)
         {
-            Debug.WriteLine(message, args);
+            StackFrame[] frames = new StackTrace().GetFrames();
+            StackFrame frame = frames[1];
+            System.Reflection.MethodBase m = frame.GetMethod();
+            Debug.WriteLine($"[{m.DeclaringType.FullName}][{m.Name}] {message}", args);
         }
 
         public static void Log(string text)

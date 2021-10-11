@@ -74,6 +74,10 @@ namespace SMPlayer.Helpers.VoiceAssistant
                     result.Param = searchMatch.GetValue();
                 }
             }
+            else if (text.StartsWith("没事") || text.StartsWith("算了"))
+            {
+                result.Type = MatchType.Nothing;
+            }
             else
             {
                 result.Type = MatchType.MatchNone;

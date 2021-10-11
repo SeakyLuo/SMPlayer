@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Timers;
 using Windows.Foundation;
 using Windows.Media.Playback;
 using Windows.UI.Core;
@@ -410,6 +411,7 @@ namespace SMPlayer
         private static bool inited = false;
         private bool IsMinimalMain { get => MainMediaControlMoreButton.Visibility == Visibility.Visible; }
         private double MinimalLayoutWidth { get => (double) Resources["MinimalLayoutWidth"]; }
+        private Timer VoiceAssistantFlyoutTimer = new Timer(5000);
 
         public MediaControl()
         {
@@ -452,25 +454,23 @@ namespace SMPlayer
             {
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    if (!string.IsNullOrEmpty(args.Text))
-                    {
-                        VoiceAssistantTextBlock.Text = args.Text;
-                        VoiceAssistantTextBlock.Visibility = Visibility.Visible;
-                        VoiceAssistantProgressBar.Visibility = Visibility.Collapsed;
-                        return;
-                    }
                     switch (args.State)
                     {
-                        case Windows.Media.SpeechRecognition.SpeechRecognizerState.SoundStarted:
+                        case Windows.Media.SpeechRecognition.SpeechRecognizerState.Processing:
                             VoiceAssistantTextBlock.Visibility = Visibility.Collapsed;
                             VoiceAssistantProgressBar.Visibility = Visibility.Visible;
-                            break;
-                        case Windows.Media.SpeechRecognition.SpeechRecognizerState.Idle:
-                            VoiceAssistantButtonFlyout.Hide();
                             break;
                     }
                 });
             });
+
+            VoiceAssistantFlyoutTimer.Elapsed += async (s, args) =>
+            {
+                await Dispatcher.RunIdleAsync(a =>
+                {
+                    VoiceAssistantButtonFlyout.Hide();
+                });
+            };
         }
 
         private void AfterLoaded()
@@ -1091,9 +1091,20 @@ namespace SMPlayer
             MiniMoreFlyout.Hide();
         }
 
-        private void VoiceAssistantButton_Click(object sender, RoutedEventArgs e)
+        private async void VoiceAssistantButton_Click(object sender, RoutedEventArgs e)
         {
-            VoiceAssistantHelper.AwakeVoiceAssistant();
+            if (await VoiceAssistantHelper.Recognize() is Windows.Media.SpeechRecognition.SpeechRecognitionResult result)
+            {
+                VoiceAssistantTextBlock.Text = result.Text;
+                VoiceAssistantProgressBar.Visibility = Visibility.Collapsed;
+                VoiceAssistantTextBlock.Visibility = Visibility.Visible;
+                await VoiceAssistantHelper.HandleCommand(result);
+                VoiceAssistantFlyoutTimer.Start();
+            } 
+            else
+            {
+                VoiceAssistantButtonFlyout.Hide();
+            }
         }
 
         public void MusicLiked(Music music, bool isFavorite)

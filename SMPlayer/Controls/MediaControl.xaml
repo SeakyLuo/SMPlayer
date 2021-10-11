@@ -31,6 +31,8 @@
             <Setter Property="IsIndeterminate" Value="True" />
             <Setter Property="Visibility" Value="Collapsed" />
             <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,8" />
         </Style>
     </UserControl.Resources>
 

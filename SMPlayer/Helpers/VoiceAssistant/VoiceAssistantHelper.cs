@@ -35,6 +35,10 @@ namespace SMPlayer.Helpers
                     string artist = MusicLibraryPage.AllSongs.RandItem().Artist;
                     if (string.IsNullOrEmpty(artist) || artist.Length > 30)
                     {
+                        artist = MusicLibraryPage.AllSongs.RandItem().Artist;
+                    }
+                    if (string.IsNullOrEmpty(artist) || artist.Length > 30)
+                    {
                         break;
                     }
                     else
@@ -43,6 +47,10 @@ namespace SMPlayer.Helpers
                     }
                 case Hint_PlayMusicInAlbum:
                     string album = MusicLibraryPage.AllSongs.RandItem().Album;
+                    if (string.IsNullOrEmpty(album) || album.Length > 30)
+                    {
+                        album = MusicLibraryPage.AllSongs.RandItem().Album;
+                    }
                     if (string.IsNullOrEmpty(album) || album.Length > 30)
                     {
                         break;
@@ -68,7 +76,7 @@ namespace SMPlayer.Helpers
             Recognizer = new SpeechRecognizer(ConvertLanguage(language));
             Recognizer.StateChanged += (sender, args) =>
             {
-                Helper.Print("[VoiceAssistantHelper] state: " + args.State);
+                Helper.Print("state: " + args.State);
                 VoiceAssistantEventArgs a = new VoiceAssistantEventArgs { State = args.State };
                 foreach (var listener in StateChangedListeners) listener.Invoke(sender, a);
             };
@@ -123,41 +131,26 @@ namespace SMPlayer.Helpers
             }
         }
 
-        public static async void AwakeVoiceAssistant()
+        public static async Task<SpeechRecognitionResult> Recognize()
         {
             if (IsRecognizing)
             {
-                return;
+                return null;
             }
             IsRecognizing = true;
-            SpeechRecognitionResult speechRecognitionResult;
             try
             {
-                speechRecognitionResult = await Recognizer.RecognizeWithUIAsync();
+                return await Recognizer.RecognizeWithUIAsync();
             }
             catch (Exception e)
             {
                 Helper.LogException(e);
                 await ShowAcceptPrivacyDialog();
-                return;
+                return null;
             }
             finally
             {
                 IsRecognizing = false;
-            }
-            try
-            {
-                if (speechRecognitionResult != null)
-                {
-                    HandleCommand(speechRecognitionResult.Text);
-                    VoiceAssistantEventArgs a = new VoiceAssistantEventArgs { Text = speechRecognitionResult.Text };
-                    foreach (var listener in StateChangedListeners) listener.Invoke(Recognizer, a);
-                }
-            }
-            catch (Exception e)
-            {
-                Helper.LogException(e);
-                Speak("VoiceAssitantError");
             }
         }
 
@@ -201,8 +194,23 @@ namespace SMPlayer.Helpers
             mediaElement.Play();
         }
 
+        public static async Task HandleCommand(SpeechRecognitionResult result)
+        {
+            try
+            {
+                if (result != null)
+                {
+                    await HandleCommand(result.Text);
+                }
+            }
+            catch (Exception e)
+            {
+                Helper.LogException(e);
+                Speak("VoiceAssitantError");
+            }
+        }
 
-        public static async void HandleCommand(string text)
+        private static async Task HandleCommand(string text)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -264,9 +272,11 @@ namespace SMPlayer.Helpers
                     break;
                 case MatchType.Previous:
                     MediaHelper.MovePrev();
+                    MediaHelper.Play();
                     break;
                 case MatchType.Next:
                     MediaHelper.MoveNext();
+                    MediaHelper.Play();
                     break;
                 case MatchType.Mute:
                     Helper.GetMainPageContainer().GetMediaControl().SetMuted(true);
@@ -279,6 +289,8 @@ namespace SMPlayer.Helpers
                     break;
                 case MatchType.ChangeVolume:
                     ChangeVolume(result.Param as VolumeRequest);
+                    break;
+                case MatchType.Nothing:
                     break;
                 case MatchType.MatchNone:
                     SpeakNotUnderstand();
@@ -581,7 +593,7 @@ namespace SMPlayer.Helpers
         Play, PlayMusic, PlayArtist, PlayAlbum, PlayPlaylist, PlayFolder, SearchAndPlay, QuickPlay, PlayByArtistOrMusic,
         PlayByArtist, PlayByArtistAndMusic, PlayByArtistAndAlbum, PlayMusicIn, PlayMusicInAlbum, PlayMusicInFolder, PlayMusicInPlaylist,
         Pause, Previous, Next, ChangeVolume, Search, Mute, UnMute, Help,
-        MatchNone
+        MatchNone, Nothing
     }
 
     public class CommandResult

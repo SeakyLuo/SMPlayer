@@ -46,7 +46,6 @@
                 x:Name="LocateCurrentButton"
                 x:Uid="LocateCurrentButton"
                 Click="LocateCurrentButton_Click"
-                IsEnabled="False"
                 Label="Current Music">
                 <AppBarButton.Icon>
                     <FontIcon Glyph="&#xE767;" />
@@ -57,21 +56,18 @@
                 x:Uid="AddToAppButton"
                 Click="SaveToButton_Click"
                 Icon="Add"
-                IsEnabled="False"
                 Label="Add To" />
             <AppBarButton
                 x:Name="ClearButton"
                 x:Uid="ClearNowPlayingAppButton"
                 Click="ClearButton_Click"
                 Icon="Clear"
-                IsEnabled="False"
                 Label="Clear All" />
             <AppBarButton
                 x:Name="PlayModeButton"
                 x:Uid="PlayModeAppButton"
                 Click="PlayModeButton_Click"
                 Icon="PreviewLink"
-                IsEnabled="False"
                 Label="Play Mode" />
             <AppBarButton
                 x:Name="PreferenceSettingsButton"

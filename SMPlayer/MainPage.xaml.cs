@@ -26,7 +26,7 @@ namespace SMPlayer
         public static MainPage Instance
         {
             // This will return null when your current page is not a MainPage instance!
-            get => (Window.Current.Content as Frame)?.Content as MainPage;
+            get => (Window.Current?.Content as Frame)?.Content as MainPage;
         }
         public bool IsMinimal { get => MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal; }
         public Brush TitleBarBackground

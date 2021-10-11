@@ -256,8 +256,10 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is ICollection<Music>)
-                return (value as ICollection<Music>).Count > 0;
+            if (value is IEnumerable<Music> collection)
+                return collection.Count() > 0;
+            if (value is int count)
+                return count > 0;
             return false;
         }
 

@@ -78,6 +78,10 @@ namespace SMPlayer.Helpers.VoiceAssistant
                     result.Param = searchMatch.GetValue();
                 }
             }
+            else if (text.Contains("nothing", Comparison) || text.Contains("never mind", Comparison))
+            {
+                result.Type = MatchType.Nothing;
+            }
             else
             {
                 result.Type = MatchType.MatchNone;

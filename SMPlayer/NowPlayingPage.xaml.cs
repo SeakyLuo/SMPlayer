@@ -1,6 +1,7 @@
 ﻿using SMPlayer.Models;
 using System;
 using System.Threading.Tasks;
+using Windows.Media.Playback;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -12,12 +13,13 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class NowPlayingPage : Page
+    public sealed partial class NowPlayingPage : Page, ISwitchMusicListener
     {
         public NowPlayingPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            MediaHelper.SwitchMusicListeners.Add(this);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -28,9 +30,9 @@ namespace SMPlayer
 
         private void SetEnabled()
         {
-            LocateCurrentButton.IsEnabled = SaveToButton.IsEnabled = ClearButton.IsEnabled = PlayModeButton.IsEnabled = 
-                                            MediaHelper.CurrentPlaylist.Count != 0;
-            RandomPlayButton.IsEnabled = MusicLibraryPage.SongCount != 0;
+            LocateCurrentButton.Visibility = SaveToButton.Visibility = ClearButton.Visibility = PlayModeButton.Visibility = 
+                                            MediaHelper.CurrentPlaylist.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
+            RandomPlayButton.Visibility = MusicLibraryPage.SongCount == 0 ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void SaveToButton_Click(object sender, RoutedEventArgs e)
@@ -71,6 +73,17 @@ namespace SMPlayer
         private void PreferenceSettingsButton_Click(object sender, RoutedEventArgs e)
         {
             MainPage.Instance.NavigateToPage(typeof(PreferenceSettingsPage));
+        }
+
+        async void ISwitchMusicListener.MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
+            {
+                if (MainPage.Instance is MainPage main && main.CurrentPage == typeof(NowPlayingPage))
+                {
+                    SetEnabled();
+                }
+            });
         }
     }
 }
