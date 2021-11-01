@@ -104,6 +104,11 @@ namespace SMPlayer
             GetExpandButton(type).Visibility = GetPreferenceViewByType(type).Count > GetLimitedPreferenceViewByType(type).Count ? Visibility.Visible : Visibility.Collapsed;
         }
 
+        private void SetClearInvalidButtonVisibility(PreferType type)
+        {
+            GetClearInvalidButton(type).Visibility = GetPreferenceViewByType(type).Any(i => !i.IsValid) ? Visibility.Visible : Visibility.Collapsed;
+        }
+
         private ObservableCollection<PreferenceItemView> ConvertToViews(List<PreferenceItem> items, PreferType type)
         {
             return new ObservableCollection<PreferenceItemView>(items.AsParallel().AsOrdered().Select(i => BuildView(i, type)));
@@ -379,6 +384,7 @@ namespace SMPlayer
 
             AlternateRowBackgroud(type, index, limitedViews.Count);
             SetExpandButtonVisibility(type);
+            SetClearInvalidButtonVisibility(type);
         }
 
         private void PreferredSongsListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -612,6 +618,25 @@ namespace SMPlayer
                     return ExpandPlaylistsSpinArrowAnimation;
                 case PreferType.Folder:
                     return ExpandFoldersSpinArrowAnimation;
+                default:
+                    return null;
+            }
+        }
+
+        private AppBarButton GetClearInvalidButton(PreferType type)
+        {
+            switch (type)
+            {
+                case PreferType.Song:
+                    return ClearInvalidPreferredSongsButton;
+                case PreferType.Artist:
+                    return ClearInvalidPreferredArtistsButton;
+                case PreferType.Album:
+                    return ClearInvalidPreferredAlbumsButton;
+                case PreferType.Playlist:
+                    return ClearInvalidPreferredPlaylistsButton;
+                case PreferType.Folder:
+                    return ClearInvalidPreferredFoldersButton;
                 default:
                     return null;
             }

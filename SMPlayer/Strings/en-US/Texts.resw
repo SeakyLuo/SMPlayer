@@ -153,6 +153,18 @@
   <data name="CollapseList" xml:space="preserve">
     <value>Collapse</value>
   </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="CreateNewFolder" xml:space="preserve">
+    <value>Create New Folder</value>
+  </data>
+  <data name="CreateNewPlaylist" xml:space="preserve">
+    <value>Create New Playlist</value>
+  </data>
+  <data name="DeleteFolder" xml:space="preserve">
+    <value>Delete Folder</value>
+  </data>
   <data name="ExpandList" xml:space="preserve">
     <value>Expand</value>
   </data>
@@ -173,6 +185,9 @@
   </data>
   <data name="LikeMusicToolTip" xml:space="preserve">
     <value>Set As My Favorite</value>
+  </data>
+  <data name="NewFolderName" xml:space="preserve">
+    <value>New Folder</value>
   </data>
   <data name="NewPlaylistToolTip" xml:space="preserve">
     <value>Create a new playlist</value>
@@ -242,6 +257,15 @@
   </data>
   <data name="Recent" xml:space="preserve">
     <value>Recent</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="RenameFolder" xml:space="preserve">
+    <value>Rename Folder</value>
+  </data>
+  <data name="RenamePlaylist" xml:space="preserve">
+    <value>Rename Playlist</value>
   </data>
   <data name="SetAsPreferred" xml:space="preserve">
     <value>Set As Preferred</value>

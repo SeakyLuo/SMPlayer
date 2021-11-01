@@ -131,6 +131,12 @@ namespace SMPlayer
                 addToItem.Items.Add(item);
             return addToItem;
         }
+
+        internal static MenuFlyoutItemBase GetRenameFolderItem(FolderTree tree, Action<object, object> p)
+        {
+            throw new NotImplementedException();
+        }
+
         public MenuFlyout GetAddToPlaylistsMenuFlyout(IMenuFlyoutItemClickListener listener = null)
         {
             var flyout = new MenuFlyout();
@@ -160,7 +166,7 @@ namespace SMPlayer
                             clickListener?.AddTo(Data, null, -1, AddToCollectionType.NewPlaylist);
                     }
                 };
-                var dialog = new RenameDialog(renameActionListener, RenameOption.New, DefaultPlaylistName);
+                var dialog = new RenameDialog(renameActionListener, RenameOption.Create, RenameTarget.Playlist, DefaultPlaylistName);
                 renameActionListener.Dialog = dialog;
                 await dialog.ShowAsync();
             };
@@ -320,6 +326,23 @@ namespace SMPlayer
             await Windows.System.Launcher.LaunchFolderAsync(folder, options);
         }
 
+        public static MenuFlyoutItem GetRenameFolderItem(FolderTree tree, Func<string, string, Task<NamingError>> confirmAsync, Action<string, string> afterConfirmation)
+        {
+            var item = new MenuFlyoutItem()
+            {
+                Icon = new SymbolIcon(Symbol.Rename),
+                Text = Helper.LocalizeText("RenameFolder")
+            };
+            item.Click += async (s, args) =>
+            {
+                await new RenameDialog(confirmAsync, RenameOption.Rename, RenameTarget.Folder, tree.Directory)
+                {
+                    AfterConfirmation = afterConfirmation
+                }.ShowAsync();
+            };
+            return item;
+        }
+
         public static MenuFlyoutItem GetRefreshDirectoryItem(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
         {
             var item = new MenuFlyoutItem()
@@ -330,6 +353,37 @@ namespace SMPlayer
             item.Click += (s, args) =>
             {
                 SettingsPage.CheckNewMusic(tree, afterTreeUpdated);
+            };
+            return item;
+        }
+
+        public static MenuFlyoutItem GetDeleteFolderItem(FolderTree tree, Action<FolderTree> afterTreeDeleted = null)
+        {
+            var item = new MenuFlyoutItem()
+            {
+                Icon = new SymbolIcon(Symbol.Delete),
+                Text = Helper.LocalizeText("DeleteFolder")
+            };
+            item.Click += async (s, args) =>
+            {
+                await new RemoveDialog()
+                {
+                    Message = Helper.LocalizeMessage("DeleteFolder", tree.Directory),
+                    CheckBoxVisibility = Visibility.Collapsed,
+                    Confirm = async () =>
+                    {
+
+                        StorageFolder folder = await tree.GetStorageFolderAsync();
+                        if (folder != null) await folder.DeleteAsync();
+                        Settings.settings.DeleteFolder(tree);
+                        MusicLibraryPage.AllSongs.RemoveAll(i => i.Path.StartsWith(tree.Path));
+                        RecentPage.RecentAdded.DeleteFolder(tree.Path);
+                        afterTreeDeleted?.Invoke(tree);
+                        App.Save();
+                     
+                        Helper.ShowNotificationRaw(Helper.LocalizeMessage("FolderIsDeleted", tree.Directory));
+                    }
+                }.ShowAsync();
             };
             return item;
         }
@@ -423,10 +477,11 @@ namespace SMPlayer
                     Confirm = async () =>
                     {
                         MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
+                        listener?.Delete(music);
                         MusicLibraryPage.AllSongs.Remove(music);
                         Settings.settings.RemoveMusic(music);
                         MediaHelper.DeleteMusic(music);
-                        listener?.Delete(music);
+                        RecentPage.RecentAdded.Remove(music);
                         if (!await Helper.FileNotExist(music.Path))
                         {
                             StorageFile file = await StorageFile.GetFileFromPathAsync(music.Path);

@@ -35,8 +35,10 @@ namespace SMPlayer.Dialogs
 
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
-            Confirm?.Invoke();
             this.Hide();
+            MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
+            Confirm?.Invoke();
+            MainPage.Instance?.Loader.Hide();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

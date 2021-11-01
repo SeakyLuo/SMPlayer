@@ -192,6 +192,9 @@
   <data name="DataImported" xml:space="preserve">
     <value>Data imported!</value>
   </data>
+  <data name="DeleteFolder" xml:space="preserve">
+    <value>You are deleting folder "{0}". This operation will also delete everything under this folder and is irrevertible. Are you sure?</value>
+  </data>
   <data name="DeleteMusic" xml:space="preserve">
     <value>Delete "{0}"</value>
   </data>
@@ -206,6 +209,9 @@
   </data>
   <data name="FailToOpenBrowser" xml:space="preserve">
     <value>Fail to open web browser. Link has been copied to the clipboard.</value>
+  </data>
+  <data name="FolderIsDeleted" xml:space="preserve">
+    <value>Folder "{0}" is deleted!</value>
   </data>
   <data name="FolderNotFound" xml:space="preserve">
     <value>Cannot find folder "{0}"!</value>
@@ -422,6 +428,9 @@
   </data>
   <data name="RootNotFound" xml:space="preserve">
     <value>Cannot find music folder. Please reset it.</value>
+  </data>
+  <data name="SameFolderAlreadyExists" xml:space="preserve">
+    <value>Folder with the same name already exists!</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>

@@ -109,7 +109,7 @@ namespace SMPlayer
         {
             var flyoutItem = sender as MenuFlyoutItem;
             var playlist = flyoutItem.DataContext as Playlist;
-            dialog = new RenameDialog(this, RenameOption.Rename, playlist.Name);
+            dialog = new RenameDialog(this, RenameOption.Rename, RenameTarget.Playlist, playlist.Name);
             await dialog.ShowAsync();
         }
 
@@ -142,18 +142,6 @@ namespace SMPlayer
             PlaylistController.DeletePlaylist(playlist);
         }
 
-        public bool Confirm(string oldName, string newName)
-        {
-            return ConfirmRenaming(dialog, oldName, newName);
-        }
-        public static bool ConfirmRenaming(RenameDialog dialog, string oldName, string newName)
-        {
-            return new VirtualRenameActionListener()
-            {
-                Dialog = dialog
-            }.Confirm(oldName, newName);
-        }
-
         private void OpenPlaylistsFlyout(object sender, object e)
         {
             SpinArrowAnimation.Begin();
@@ -161,12 +149,12 @@ namespace SMPlayer
             flyout.Items.Clear();
             var createNewPlaylist = new MenuFlyoutItem()
             {
-                Text = Helper.Localize("Create New Playlist")
+                Text = Helper.LocalizeText("CreateNewPlaylist")
             };
             createNewPlaylist.Click += async (s, args) =>
             {
                 string name = Helper.Localize("Playlist");
-                dialog = new RenameDialog(this, RenameOption.New, Settings.settings.FindNextPlaylistName(name));
+                dialog = new RenameDialog(this, RenameOption.Create, RenameTarget.Playlist, Settings.settings.FindNextPlaylistName(name));
                 await dialog.ShowAsync();
             };
             flyout.Items.Add(createNewPlaylist);
@@ -226,6 +214,34 @@ namespace SMPlayer
                 PlaylistController.ScrollToTop();
             }
             PreviousPlaylist = CurrentPlaylist;
+        }
+
+        public static NamingError ConfirmRenaming(RenameDialog dialog, string oldName, string newName)
+        {
+            return new VirtualRenameActionListener()
+            {
+                Dialog = dialog
+            }.Confirm(oldName, newName);
+        }
+
+        NamingError IRenameActionListener.Confirm(string oldName, string newName)
+        {
+            return ConfirmRenaming(dialog, oldName, newName);
+        }
+
+        public static void AfterConfirmation(RenameDialog dialog, string oldName, string newName)
+        {
+            new VirtualRenameActionListener
+            {
+                Dialog = dialog
+            }.AfterConfirmation(oldName, newName);
+            Settings.settings.Preference.UpdatePlaylistName(oldName, newName);
+        }
+
+        void IRenameActionListener.AfterConfirmation(string oldName, string newName)
+        {
+            PlaylistController.AfterConfirmation(oldName, newName);
+            AfterConfirmation(dialog, oldName, newName);
         }
     }
 }

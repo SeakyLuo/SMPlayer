@@ -21,7 +21,7 @@ using EF = ExpressionBuilder.ExpressionFunctions;
 
 namespace SMPlayer
 {
-    public sealed partial class HeaderedPlaylistControl : UserControl, IRemoveMusicListener, IImageSavedListener, IMultiSelectListener
+    public sealed partial class HeaderedPlaylistControl : UserControl, IRemoveMusicListener, IImageSavedListener, IMultiSelectListener, IRenameActionListener
     {
         public PlaylistControl HeaderedPlaylist { get => HeaderedPlaylistController; }
         public Playlist CurrentPlaylist { get; private set; }
@@ -132,19 +132,24 @@ namespace SMPlayer
 
         private async void Rename_Click(object sender, RoutedEventArgs e)
         {
-            dialog = new RenameDialog(Confirm, RenameOption.Rename, CurrentPlaylist.Name);
+            dialog = new RenameDialog(Confirm, RenameOption.Rename, RenameTarget.Playlist, CurrentPlaylist.Name)
+            {
+                AfterConfirmation = (oldName, newName) => {
+                    PlaylistsPage.AfterConfirmation(dialog, oldName, newName);
+                    AfterConfirmation(oldName, newName);
+                }
+            };
             await dialog.ShowAsync();
         }
 
-        public bool Confirm(string oldName, string newName)
+        public NamingError Confirm(string oldName, string newName)
         {
-            bool successful = PlaylistsPage.ConfirmRenaming(dialog, oldName, newName);
-            if (successful)
-            {
-                PlaylistNameTextBlock.Text = newName;
-                Settings.settings.Preference.UpdatePlaylistName(oldName, newName);
-            }
-            return successful;
+            return PlaylistsPage.ConfirmRenaming(dialog, oldName, newName);
+        }
+
+        public void AfterConfirmation(string oldName, string newName)
+        {
+            PlaylistNameTextBlock.Text = newName;
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)

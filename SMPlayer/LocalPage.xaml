@@ -50,6 +50,15 @@
             <NavigationView.PaneFooter>
                 <StackPanel Orientation="Horizontal">
                     <local:IconTextButton
+                        x:Name="NewFolderItem"
+                        x:Uid="NewFolderItem"
+                        IsHighlightAll="True"
+                        Label="New Folder"
+                        Style="{StaticResource TopNavigationViewFooterItemStyle}"
+                        Icon="Add"
+                        Tapped="NewFolderItem_Tapped">
+                    </local:IconTextButton>
+                    <local:IconTextButton
                         x:Name="LocalRefreshItem"
                         x:Uid="RefreshItem"
                         IsHighlightAll="True"
@@ -134,14 +143,17 @@
                         <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
+                        <Setter Target="NewFolderItem.Padding" Value="10,0" />
                         <Setter Target="LocalRefreshItem.Padding" Value="10,0" />
                         <Setter Target="LocalShuffleItem.Padding" Value="10,0" />
                         <Setter Target="LocalListViewItem.Padding" Value="10,0" />
                         <Setter Target="LocalGridViewItem.Padding" Value="10,0" />
+                        <Setter Target="NewFolderItem.Label" Value="" />
                         <Setter Target="LocalRefreshItem.Label" Value="" />
                         <Setter Target="LocalShuffleItem.Label" Value="" />
                         <Setter Target="LocalListViewItem.Label" Value="" />
                         <Setter Target="LocalGridViewItem.Label" Value="" />
+                        <Setter Target="NewFolderItem.IconTextMargin" Value="0" />
                         <Setter Target="LocalRefreshItem.IconTextMargin" Value="0" />
                         <Setter Target="LocalShuffleItem.IconTextMargin" Value="0" />
                         <Setter Target="LocalListViewItem.IconTextMargin" Value="0" />

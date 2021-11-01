@@ -123,6 +123,14 @@ namespace SMPlayer.Models
             IsThumbnailLoading = false;
             ThumbnailLoaded = true;
         }
+
+        public void Rename(string newPath)
+        {
+            Tree.Rename(newPath);
+            OnPropertyChanged("Name");
+        }
+
+
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
             // Raise the PropertyChanged event, passing the name of the property whose value has changed.

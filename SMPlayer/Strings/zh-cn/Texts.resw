@@ -153,6 +153,18 @@
   <data name="CollapseList" xml:space="preserve">
     <value>收起列表</value>
   </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="CreateNewFolder" xml:space="preserve">
+    <value>新建文件夹</value>
+  </data>
+  <data name="CreateNewPlaylist" xml:space="preserve">
+    <value>新建播放列表</value>
+  </data>
+  <data name="DeleteFolder" xml:space="preserve">
+    <value>删除文件夹</value>
+  </data>
   <data name="ExpandList" xml:space="preserve">
     <value>展开列表</value>
   </data>
@@ -173,6 +185,9 @@
   </data>
   <data name="LikeMusicToolTip" xml:space="preserve">
     <value>设为我喜欢</value>
+  </data>
+  <data name="NewFolderName" xml:space="preserve">
+    <value>新建文件夹</value>
   </data>
   <data name="NewPlaylistToolTip" xml:space="preserve">
     <value>创建新的播放列表</value>
@@ -242,6 +257,15 @@
   </data>
   <data name="Recent" xml:space="preserve">
     <value>最近</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>重命名</value>
+  </data>
+  <data name="RenameFolder" xml:space="preserve">
+    <value>重命名文件夹</value>
+  </data>
+  <data name="RenamePlaylist" xml:space="preserve">
+    <value>重命名播放列表</value>
   </data>
   <data name="SetAsPreferred" xml:space="preserve">
     <value>设为偏好</value>

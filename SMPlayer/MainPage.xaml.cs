@@ -46,14 +46,14 @@ namespace SMPlayer
         {
             get
             {
-                if (NaviFrame.CurrentSourcePageType == null) return false;
-                var page = NaviFrame.CurrentSourcePageType.Name;
-                return page == "AlbumPage" || page == "MyFavoritesPage";
+                var page = NaviFrame.CurrentSourcePageType;
+                return page != null && (page == typeof(AlbumPage) || page == typeof(MyFavoritesPage));
             }
         }
         private static bool PageUnset = true;
         public Type CurrentPage { get => NaviFrame.CurrentSourcePageType; }
         public Frame NavigationFrame { get => NaviFrame; }
+        public static List<IWindowResizeListener> WindowResizeListeners = new List<IWindowResizeListener>();
 
         public MainPage()
         {
@@ -77,21 +77,25 @@ namespace SMPlayer
         {
             bool isMinimal = e.Size.Width < 720;
             bool isTitleBarColorful = IsTitleBarColorful;
-            var page = NaviFrame.CurrentSourcePageType?.Name;
-            if (page == null) return;
-            bool collapsed = (page == "NowPlayingPage" && isMinimal) ||
-                             page == "PlaylistsPage" ||
-                             (page == "RecentPage" && !isMinimal) || 
-                             (isTitleBarColorful && !isMinimal);
+            if (CurrentPage == null) return;
+            bool collapsed = (CurrentPage == typeof(NowPlayingPage) && isMinimal) ||
+                              CurrentPage == typeof(PlaylistsPage) ||
+                              (CurrentPage == typeof(RecentPage) && !isMinimal) || 
+                              (isTitleBarColorful && !isMinimal);
             AppTitleBorder.Background = isMinimal ? ColorHelper.TransparentBrush : ColorHelper.MainNavigationViewBackground;
             TitleBarForeground = isMinimal && isTitleBarColorful ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
             if (!isTitleBarColorful) TitleBarBackground = isMinimal ? ColorHelper.MinimalTitleBarColor : ColorHelper.TransparentBrush;
             HeaderGrid.Visibility = collapsed ? Visibility.Collapsed : Visibility.Visible;
             if (!isMinimal) HideHeaderSearchBar(Visibility.Collapsed);
-            if (page == "SearchPage" || page == "SearchResultPage") SetHeaderTextRaw(SearchPage.GetSearchHeader(SearchPage.History.Peek(), IsMinimal));
+            if (CurrentPage == typeof(SearchPage) || CurrentPage == typeof(SearchResultPage))
+                SetHeaderTextRaw(SearchPage.GetSearchHeader(SearchPage.History.Peek(), IsMinimal));
             if (!MainNavigationView.IsPaneOpen)
                 if (isMinimal) PaneCloseMinimal();
                 else PaneCloseNormal();
+            foreach (var listener in WindowResizeListeners)
+            {
+                listener.Resized(e);
+            }
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -458,5 +462,10 @@ namespace SMPlayer
         {
             return MainMediaControl;
         }
+    }
+
+    public interface IWindowResizeListener
+    {
+        void Resized(WindowSizeChangedEventArgs e);
     }
 }

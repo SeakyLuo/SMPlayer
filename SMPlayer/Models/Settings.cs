@@ -84,6 +84,24 @@ namespace SMPlayer.Models
             return index == 0 ? Name : Helper.GetPlaylistName(Name, index);
         }
 
+        public int FindNextFolderNameIndex(string path, string name)
+        {
+            if (!string.IsNullOrEmpty(name))
+            {
+                var siblings = Tree.FindTree(path)?.Trees.Select(p => p.Directory).ToHashSet();
+                for (int i = 1; i <= siblings.Count; i++)
+                    if (!siblings.Contains(Helper.GetPlaylistName(name, i)))
+                        return i;
+            }
+            return 0;
+        }
+
+        public string FindNextFolderName(string path, string Name)
+        {
+            int index = FindNextFolderNameIndex(path, Name);
+            return index == 0 ? Name : Helper.GetPlaylistName(Name, index);
+        }
+
         public static async Task Init()
         {
             Inited = false;
@@ -140,7 +158,9 @@ namespace SMPlayer.Models
         private void FindAllMusicAndOperate(Music target, Action<Music> action) {
             Music music;
             if ((music = Tree.FindMusic(target)) is Music)
+            {
                 action.Invoke(music);
+            }
             foreach (var playlist in settings.Playlists)
                 if ((music = playlist.Songs.FirstOrDefault(m => m == target)) is Music)
                     action.Invoke(music);
@@ -277,7 +297,7 @@ namespace SMPlayer.Models
         {
             switch (option)
             {
-                case RenameOption.New:
+                case RenameOption.Create:
                     Playlist playlist = new Playlist(newName);
                     if (data != null) playlist.Add(data);
                     await playlist.SetDisplayItemAsync();
@@ -288,6 +308,10 @@ namespace SMPlayer.Models
                     break;
                 case RenameOption.Rename:
                     if (oldName == newName) break;
+                    if (LastPlaylist == oldName)
+                    {
+                        LastPlaylist = newName;
+                    }
                     int index = Playlists.FindIndex(p => p.Name == oldName);
                     Playlists[index].Name = newName;
                     PlaylistsPage.Playlists[index].Name = newName;
@@ -313,6 +337,45 @@ namespace SMPlayer.Models
         public static async Task<StorageFolder> GetRootFolder()
         {
             return await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
+        }
+
+        public void RenameFolder(FolderTree original, string newPath)
+        {
+            FolderTree tree = Tree.FindTree(original);
+            if (tree == null)
+            {
+                return;
+            }
+            tree.Rename(newPath);
+
+            if (original.Path == RootPath)
+            {
+                RootPath = newPath;
+            }
+
+            string oldPath = original.Path;
+            foreach (var playlist in Playlists)
+            {
+                foreach (var song in playlist.Songs)
+                {
+                    song.RenameFolder(oldPath, newPath);
+                }
+            }
+            foreach (var song in MyFavorites.Songs)
+            {
+                song.RenameFolder(oldPath, newPath);
+            }
+            RecentPlayed = new ObservableCollection<string>(RecentPlayed.Select(i => i.Replace(oldPath, newPath)));
+            Preference.PreferredFolders.ForEach(p => p.Id = p.Id.Replace(oldPath, newPath));
+            Preference.PreferredSongs.ForEach(p => p.Id = p.Id.Replace(oldPath, newPath));
+        }
+
+        public void DeleteFolder(FolderTree target)
+        {
+            FolderTree folderTree = Tree.FindTree(target.ParentPath);
+            folderTree?.Trees.Remove(target);
+            RecentPlayed.RemoveAll(i => i.StartsWith(target.Path));
+            Preference.PreferredFolders.RemoveAll(i => i.Id == target.Path);
         }
     }
 
@@ -352,7 +415,13 @@ namespace SMPlayer.Models
 
     public enum RenameOption
     {
-        New = 0,
-        Rename = 1
+        Create,
+        Rename,
+    }
+
+    public enum RenameTarget
+    {
+        Playlist,
+        Folder,
     }
 }

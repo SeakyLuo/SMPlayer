@@ -48,6 +48,19 @@ namespace SMPlayer.Models
             return successful;
         }
 
+        public void RenameFolder(string oldPath, string newPath)
+        {
+            foreach (var item in TimeLine)
+            {
+                item.RenameFolder(oldPath, newPath);
+            }
+        }
+
+        public void DeleteFolder(string path)
+        {
+            TimeLine.RemoveAll(i => i.Path.StartsWith(path));
+        }
+
         public static RecentTimeLine FromMusicList(IEnumerable<Music> list)
         {
             return new RecentTimeLine(list?.OrderByDescending(m => m.DateAdded).Take(MAX_RECENT_TIMELINE_ITEMS));

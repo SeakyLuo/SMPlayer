@@ -39,7 +39,12 @@ namespace SMPlayer.Controls
         }
         private void GridViewItem_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            VisualStateManager.GoToState(sender as Control, "PointerOver", true);
+            Control control = sender as Control;
+            GridFolderView folder = control.DataContext as GridFolderView;
+            if (folder.Songs.IsNotEmpty())
+            {
+                VisualStateManager.GoToState(control, "PointerOver", true);
+            }
         }
 
         private void GridViewItem_PointerExited(object sender, PointerRoutedEventArgs e)
@@ -49,10 +54,13 @@ namespace SMPlayer.Controls
 
         private async void UserControl_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
         {
-            if (sender.DataContext is GridFolderView data && !data.ThumbnailLoaded
-                && ImageHelper.NeedsLoading(sender, args))
+            if (sender.DataContext is GridFolderView data)
             {
-                await data.SetThumbnailAsync();
+                Helper.Print($"EffectiveViewportChanged, name {data.Name}, isLoaded {data.ThumbnailLoaded}, isPartiallyVisible {ImageHelper.NeedsLoading(sender, args)}");
+                if (!data.ThumbnailLoaded && ImageHelper.NeedsLoading(sender, args))
+                {
+                    await data.SetThumbnailAsync();
+                }
             }
         }
     }

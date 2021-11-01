@@ -26,6 +26,16 @@ namespace SMPlayer.Models
         public int FileCount { get => Trees.Sum(t => t.FileCount) + Files.Count; }
         [Newtonsoft.Json.JsonIgnore]
         public string Directory { get => Path.Substring(Path.LastIndexOf("\\") + 1); }
+        [Newtonsoft.Json.JsonIgnore]
+        public string ParentPath
+        {
+            get
+            {
+                int index = Path.LastIndexOf("\\");
+                return index == -1 ? "" : Path.Substring(0, index);
+            }
+        }
+
         private static volatile ExecutionStatus LoadingStatus = ExecutionStatus.Ready;
 
         public FolderTree() { }
@@ -383,6 +393,25 @@ namespace SMPlayer.Models
             {
                 return null;
             }
+        }
+
+        public void Rename(string newPath)
+        {
+            Rename(Path, newPath);
+            OnPropertyChanged("Directory");
+        }
+
+        public void Rename(string oldPath, string newPath)
+        {
+            foreach (var tree in Trees)
+            {
+                tree.Rename(oldPath, newPath);
+            }
+            foreach (var file in Files)
+            {
+                file.RenameFolder(oldPath, newPath);
+            }
+            Path = Path.Replace(oldPath, newPath);
         }
 
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)

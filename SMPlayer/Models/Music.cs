@@ -268,6 +268,12 @@ namespace SMPlayer.Models
             return new MediaPlaybackItem(source);
         }
 
+        public bool RenameFolder(string oldPath, string newPath)
+        {
+            Path = Path.Replace(oldPath, newPath);
+            return Path.Contains(newPath);
+        }
+
         public string GetToastText()
         {
             return string.IsNullOrEmpty(Artist) ? string.IsNullOrEmpty(Album) ? Name : string.Format("{0} - {1}", Name, Album) :

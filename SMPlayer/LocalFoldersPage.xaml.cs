@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -78,6 +79,7 @@ namespace SMPlayer
                 return;
             }
             var folderView = (GridFolderView)e.ClickedItem;
+            if (folderView.Tree.IsEmpty) return;
             setter.SetPage(CurrentTree.Trees[GridItems.IndexOf(folderView)]);
         }
 
@@ -117,6 +119,45 @@ namespace SMPlayer
             flyout.Items.Add(MenuFlyoutHelper.GetPreferItem(tree));
             flyout.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(tree.Path, Windows.Storage.StorageItemTypes.Folder));
             flyout.Items.Add(MenuFlyoutHelper.GetRefreshDirectoryItem(tree, AfterTreeUpdated));
+            flyout.Items.Add(MenuFlyoutHelper.GetDeleteFolderItem(tree, t =>
+            {
+                GridItems.RemoveAll(g => g.Tree == tree);
+                FindNode(tree.ParentPath);
+                setter.SetNavText(CurrentTree.Info);
+            }));
+            flyout.Items.Add(MenuFlyoutHelper.GetRenameFolderItem(tree,
+                async (oldName, newName) =>
+                {
+                    try
+                    {
+                        if (await StorageFolder.GetFolderFromPathAsync(tree.ParentPath + "\\" + newName) != null)
+                        {
+                            return NamingError.Used;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Helper.Print(ex.ToString());
+                    }
+                    return NamingError.Good;
+                },
+                async (oldName, newName) =>
+                {
+
+                    StorageFolder folder = await tree.GetStorageFolderAsync();
+                    await folder.RenameAsync(newName);
+                    string newPath = tree.Path.Substring(0, tree.Path.LastIndexOf('\\') + 1) + newName;
+                    Settings.settings.RenameFolder(tree, newPath);
+                    RecentPage.RecentAdded.RenameFolder(tree.Path, newPath);
+
+                    GridItems.FirstOrDefault(i => i.Tree.Equals(tree))?.Rename(newPath);
+                    if (FindNode(tree) is TreeViewNode node)
+                    {
+                        (node.Content as FolderTree).Rename(newPath);
+                    }
+
+                    App.Save();
+                }));
             flyout.Items.Add(MenuFlyoutHelper.GetSearchDirectoryItem(tree));
         }
         private void AfterTreeUpdated(FolderTree tree)
@@ -136,7 +177,7 @@ namespace SMPlayer
                     GridItems[index] = item;
                 }
                 if (tree.Equals(Settings.settings.Tree)) SetupTreeView(tree);
-                else if (FindNode(LocalFoldersTreeView.RootNodes.FirstOrDefault(n => tree.Path.StartsWith((n.Content as FolderTree).Path)), tree) is TreeViewNode node)
+                else if (FindNode(tree) is TreeViewNode node)
                 {
                     node.Content = tree;
                     if (!node.HasUnrealizedChildren)
@@ -147,13 +188,18 @@ namespace SMPlayer
 
         private TreeViewNode FindNode(FolderTree tree)
         {
-            return LocalFoldersTreeView.RootNodes.FirstOrDefault(node => FindNode(node, tree) is TreeViewNode);
+            return FindNode(tree.Path);
         }
 
-        private TreeViewNode FindNode(TreeViewNode node, FolderTree tree)
+        private TreeViewNode FindNode(string path)
         {
-            return node == null || tree.Equals(node.Content) ? node :
-                   FindNode(node.Children.FirstOrDefault(sub => tree.Path.StartsWith((sub.Content as FolderTree).Path)), tree);
+            return LocalFoldersTreeView.RootNodes.FirstOrDefault(node => FindNode(node, path) is TreeViewNode);
+        }
+
+        private TreeViewNode FindNode(TreeViewNode node, string tree)
+        {
+            return node == null || tree == (node.Content as FolderTree).Path ? node :
+                   FindNode(node.Children.FirstOrDefault(sub => tree.StartsWith((sub.Content as FolderTree).Path)), tree);
         }
 
         private void OpenMusicFlyout(object sender, object e)
@@ -196,10 +242,26 @@ namespace SMPlayer
             node.Children.Clear();
             var tree = node.Content as FolderTree;
             foreach (var item in tree.Trees)
-                node.Children.Add(new TreeViewNode() { Content = item, HasUnrealizedChildren = true });
+                node.Children.Add(TreeToNode(item));
             foreach (var item in tree.Files)
                 node.Children.Add(new TreeViewNode() { Content = item });
             return node;
+        }
+
+        public void AddTree(string path, FolderTree tree)
+        {
+            CurrentTree.Trees.Add(tree);
+            GridItems.Add(new GridFolderView(tree));
+            TreeViewNode node = TreeToNode(tree);
+            if (path == TreePath)
+            {
+                LocalFoldersTreeView.RootNodes.Add(node);
+            }
+        }
+
+        private TreeViewNode TreeToNode(FolderTree tree)
+        {
+            return new TreeViewNode() { Content = tree, HasUnrealizedChildren = true };
         }
 
         private void LocalFoldersTreeView_Expanding(TreeView sender, TreeViewExpandingEventArgs args)
@@ -323,10 +385,13 @@ namespace SMPlayer
 
         private async void GridFolderControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            if (sender.DataContext is GridFolderView data && !data.ThumbnailLoaded
-                && sender.IsPartiallyVisible(LocalFoldersGridView))
+            if (sender.DataContext is GridFolderView data)
             {
-                await data.SetThumbnailAsync();
+                Helper.Print($"DataContextChanged, name {data.Name}, isLoaded {data.ThumbnailLoaded}, isPartiallyVisible {sender.IsPartiallyVisible(LocalFoldersGridView)}");
+                if (!data.ThumbnailLoaded && sender.IsPartiallyVisible(LocalFoldersGridView))
+                {
+                    await data.SetThumbnailAsync();
+                }
             }
         }
     }

@@ -1,8 +1,11 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Dialogs;
+using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -15,8 +18,13 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalPage : Page, ILocalSetter, IAfterPathSetListener
+    public sealed partial class LocalPage : Page, ILocalSetter, IAfterPathSetListener, IWindowResizeListener
     {
+        public static LocalPage Instance
+        {
+            // This will return null when your current page is not a MainPage instance!
+            get => ((Window.Current?.Content as Frame)?.Content as MainPage).NavigationFrame.Content as LocalPage;
+        }
         public static ILocalPageButtonListener MusicListener, FolderListener;
         public static Stack<FolderTree> History = new Stack<FolderTree>();
         public LocalPage()
@@ -27,6 +35,7 @@ namespace SMPlayer
             LocalMusicPage.setter = this;
             SetPage(Settings.settings.Tree);
             SettingsPage.AddAfterPathSetListener(this);
+            MainPage.WindowResizeListeners.Add(this);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -86,16 +95,15 @@ namespace SMPlayer
             LocalFrame.GoBack();
             var info = History.Peek().Info;
             SetText(info);
-            switch (page.SourcePageType.Name)
+            if (page.SourcePageType == typeof(LocalFoldersPage))
             {
-                case "LocalFoldersPage":
-                    LocalFoldersItem.IsSelected = true;
-                    SetLocalGridView(Settings.settings.LocalFolderGridView);
-                    break;
-                case "LocalMusicPage":
-                    LocalSongsItem.IsSelected = true;
-                    SetLocalGridView(Settings.settings.LocalMusicGridView);
-                    break;
+                LocalFoldersItem.IsSelected = true;
+                SetLocalGridView(Settings.settings.LocalFolderGridView);
+            }
+            else if (page.SourcePageType == typeof(LocalMusicPage))
+            {
+                LocalSongsItem.IsSelected = true;
+                SetLocalGridView(Settings.settings.LocalMusicGridView);
             }
             SetBackButtonVisibility();
         }
@@ -170,28 +178,56 @@ namespace SMPlayer
             if (setHeader) SetHeader(info);
             SetNavText(info);
         }
+
         public void SetNavText(TreeInfo info)
         {
-            LocalFoldersItem.Content = Helper.LocalizeMessage("Folders", info.Folders);
+            if (Window.Current.Bounds.Width <= 720)
+            {
+                LocalFoldersItem.Content = info.Folders;
+                LocalSongsItem.Content = info.Songs;
+                LocalFoldersItem.SetToolTip(Helper.LocalizeMessage("Folders", info.Folders));
+                LocalSongsItem.SetToolTip(Helper.LocalizeMessage("Songs", info.Songs));
+            }
+            else
+            {
+                LocalFoldersItem.Content = Helper.LocalizeMessage("Folders", info.Folders);
+                LocalSongsItem.Content = Helper.LocalizeMessage("Songs", info.Songs);
+            }
             LocalFoldersItem.IsEnabled = info.Folders != 0;
-            LocalSongsItem.Content = Helper.LocalizeMessage("Songs", info.Songs);
             LocalSongsItem.IsEnabled = info.Songs != 0;
+        }
+
+        void IWindowResizeListener.Resized(WindowSizeChangedEventArgs e)
+        {
+            SetNavText(History.Peek().Info);
         }
 
         public void SetPage(FolderTree tree, bool setHeader = true)
         {
             if (History.Count > 0 && History.Peek() == tree) return;
             History.Push(tree);
-            SetBackButtonVisibility();
             TreeInfo info = tree.Info;
             SetText(info, setHeader);
+            if (tree.IsEmpty)
+            {
+                NewFolderItem.Visibility = Visibility.Collapsed;
+                LocalRefreshItem.Visibility = Visibility.Collapsed;
+                LocalShuffleItem.Visibility = Visibility.Collapsed;
+                LocalListViewItem.Visibility = Visibility.Collapsed;
+                LocalGridViewItem.Visibility = Visibility.Collapsed;
+                return;
+            }
+            NewFolderItem.Visibility = Visibility.Visible;
+            LocalRefreshItem.Visibility = Visibility.Visible;
+            LocalShuffleItem.Visibility = Visibility.Visible;
+            SetBackButtonVisibility();
             if (IsBackToMusicPage(info))
             {
                 LocalNavigationView.SelectedItem = LocalSongsItem;
                 LocalFrame.Navigate(typeof(LocalMusicPage), tree);
                 SetLocalGridView(Settings.settings.LocalMusicGridView);
             }
-            else if (info.Folders > 0)
+            else if (info.Folders >= 0)
             {
                 LocalNavigationView.SelectedItem = LocalFoldersItem;
                 LocalFrame.Navigate(typeof(LocalFoldersPage), tree);
@@ -252,6 +288,41 @@ namespace SMPlayer
                 if (LocalFrame.Content is LocalMusicPage page) page.Reverse();
                 else LocalMusicPage.ReverseRequested = !LocalMusicPage.ReverseRequested;
             }));
+        }
+
+        private async void NewFolderItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            string path = History.Peek().Path;
+            StorageFolder folder = await StorageFolder.GetFolderFromPathAsync(path);
+
+            string defaultName = Settings.settings.FindNextFolderName(History.Peek().Path, Helper.LocalizeText("NewFolderName"));
+            RenameDialog renameDialog = new RenameDialog(async (oldName, newName) =>
+            {
+                try
+                {
+                    if (await folder.GetFolderAsync(newName) != null)
+                    {
+                        return NamingError.Used;
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+                return NamingError.Good;
+            }, RenameOption.Create, RenameTarget.Folder, defaultName)
+            {
+                AfterConfirmation = async (oldName, newName) =>
+                {
+                    StorageFolder newFolder = await folder.CreateFolderAsync(newName);
+                    FolderTree tree = new FolderTree() { Path = newFolder.Path };
+                    (LocalFrame.Content as LocalFoldersPage)?.AddTree(path, tree);
+                    SetNavText(History.Peek().Info);
+
+                    App.Save();
+                }
+            };
+            await renameDialog.ShowAsync();
         }
     }
     public interface ILocalSetter

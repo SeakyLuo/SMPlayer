@@ -975,9 +975,6 @@
   <data name="Rename" xml:space="preserve">
     <value>Rename</value>
   </data>
-  <data name="Rename Playlist" xml:space="preserve">
-    <value>Rename Playlist</value>
-  </data>
   <data name="RenameButton.Label" xml:space="preserve">
     <value>Rename</value>
   </data>
@@ -1245,5 +1242,11 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   </data>
   <data name="ReleaseNotesVoiceAssistantImprovements2.Text" xml:space="preserve">
     <value>Minor improvements have made to Voice Assistant.</value>
+  </data>
+  <data name="NewFolderItem.Label" xml:space="preserve">
+    <value>New Folder</value>
+  </data>
+  <data name="NewFolderItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Create New Folder</value>
   </data>
 </root>

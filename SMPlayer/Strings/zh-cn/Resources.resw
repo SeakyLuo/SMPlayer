@@ -288,9 +288,6 @@
   <data name="ConfirmButton.Content" xml:space="preserve">
     <value>确认</value>
   </data>
-  <data name="Create New Playlist" xml:space="preserve">
-    <value>创建新的播放列表</value>
-  </data>
   <data name="DateAddedHeader.Header" xml:space="preserve">
     <value>添加日期</value>
   </data>
@@ -969,9 +966,6 @@
   <data name="Rename" xml:space="preserve">
     <value>重命名</value>
   </data>
-  <data name="Rename Playlist" xml:space="preserve">
-    <value>重命名播放列表</value>
-  </data>
   <data name="RenameButton.Label" xml:space="preserve">
     <value>重命名</value>
   </data>
@@ -1239,5 +1233,11 @@
   </data>
   <data name="ReleaseNotesVoiceAssistantImprovements2.Text" xml:space="preserve">
     <value>语音助手进行了一些小优化~</value>
+  </data>
+  <data name="NewFolderItem.Label" xml:space="preserve">
+    <value>新建文件夹</value>
+  </data>
+  <data name="NewFolderItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>新建文件夹</value>
   </data>
 </root>

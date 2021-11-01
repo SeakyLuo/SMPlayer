@@ -40,8 +40,8 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
             SetHeader();
+            if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
             MediaHelper.FindMusicAndSetPlaying(AllSongs, null, MediaHelper.CurrentMusic);
         }
 

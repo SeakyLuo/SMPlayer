@@ -192,6 +192,9 @@
   <data name="DataImported" xml:space="preserve">
     <value>数据已导入！</value>
   </data>
+  <data name="DeleteFolder" xml:space="preserve">
+    <value>你将要删除文件夹“{0}”，此操作还会删除该文件夹下所有的文件夹和音乐，且不可撤销，是否确认？</value>
+  </data>
   <data name="DeleteMusic" xml:space="preserve">
     <value>删除《{0}》</value>
   </data>
@@ -206,6 +209,9 @@
   </data>
   <data name="FailToOpenBrowser" xml:space="preserve">
     <value>无法打开浏览器，链接已复制到剪贴板</value>
+  </data>
+  <data name="FolderIsDeleted" xml:space="preserve">
+    <value>文件夹“{0}”已被删除！</value>
   </data>
   <data name="FolderNotFound" xml:space="preserve">
     <value>找不到文件夹“{0}”！</value>
@@ -422,6 +428,9 @@
   </data>
   <data name="RootNotFound" xml:space="preserve">
     <value>找不到音乐文件夹，请重新设置</value>
+  </data>
+  <data name="SameFolderAlreadyExists" xml:space="preserve">
+    <value>同名文件夹已经存在！</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>搜索</value>
