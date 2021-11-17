@@ -183,8 +183,17 @@
   <data name="IsEnabledToggleSwitchOnToolTip" xml:space="preserve">
     <value>If you disable, this item will not have a higher play probability.</value>
   </data>
+  <data name="LeastPlayed" xml:space="preserve">
+    <value>Least Played</value>
+  </data>
   <data name="LikeMusicToolTip" xml:space="preserve">
     <value>Set As My Favorite</value>
+  </data>
+  <data name="MostPlayed" xml:space="preserve">
+    <value>Most Played</value>
+  </data>
+  <data name="MyFavorites" xml:space="preserve">
+    <value>My Favorites</value>
   </data>
   <data name="NewFolderName" xml:space="preserve">
     <value>New Folder</value>
@@ -257,6 +266,12 @@
   </data>
   <data name="Recent" xml:space="preserve">
     <value>Recent</value>
+  </data>
+  <data name="RecentAdded" xml:space="preserve">
+    <value>Recent Added</value>
+  </data>
+  <data name="RecentPlayed" xml:space="preserve">
+    <value>Recent Played</value>
   </data>
   <data name="Rename" xml:space="preserve">
     <value>Rename</value>

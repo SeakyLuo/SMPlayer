@@ -87,6 +87,22 @@ namespace SMPlayer
             SetMultiSelectListener();
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            if (e.Parameter == null)
+            {
+                return;
+            }
+            if (e.Parameter is string selectedItem)
+            {
+                if (selectedItem == "RecentAdded")
+                {
+                    RecentPivot.SelectedItem = RecentAddedItem;
+                }
+            }
+        }
+
         private void SetMultiSelectListener()
         {
             if (RecentPivot.SelectedItem == RecentAddedItem)
@@ -226,9 +242,9 @@ namespace SMPlayer
         {
             if (recentSearchesRemoveDialog == null) recentSearchesRemoveDialog = new RemoveDialog();
             string keyword = null;
-            if (item is string)
+            if (item is string @string)
             {
-                keyword = (string)item;
+                keyword = @string;
             }
             else if (item is IList<string> list && list.Count() == 1)
             {
@@ -313,7 +329,10 @@ namespace SMPlayer
 
         private void RecentAddedItem_Loaded(object sender, RoutedEventArgs e)
         {
-            SetupAdded(RecentAdded.TimeLine);
+            if (RecentAdded != null)
+            {
+                SetupAdded(RecentAdded.TimeLine);
+            }
         }
 
         private void RecentAddedMultiSelectAppButton_Click(object sender, RoutedEventArgs e)

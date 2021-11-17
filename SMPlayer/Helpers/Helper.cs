@@ -153,23 +153,23 @@ namespace SMPlayer
             return await ApplicationData.Current.LocalFolder.CreateFolderAsync(folderName, CreationCollisionOption.OpenIfExists);
         }
 
-        public static async Task ClearBackups(int maxBackups = 3)
+        public static async Task ClearBackups(int maxBackups = 5)
         {
             await ClearTempFiles(maxBackups);
             await ClearLogFiles(maxBackups);
         }
 
-        private static async Task ClearTempFiles(int maxBackups = 3)
+        private static async Task ClearTempFiles(int maxBackups = 5)
         {
             if (TempFolder == null) return;
             var files = await TempFolder.GetFilesAsync();
             await ClearBackup(files, Settings.JsonFilename, maxBackups);
+            await ClearBackup(files, Settings.NewFilename, maxBackups);
             await ClearBackup(files, MediaHelper.JsonFilename, maxBackups);
-            await ClearBackup(files, MusicLibraryPage.JsonFilename, maxBackups);
             await ClearBackup(files, AlbumsPage.JsonFilename, maxBackups);
         }
 
-        private static async Task ClearLogFiles(int maxBackups = 3)
+        private static async Task ClearLogFiles(int maxBackups = 5)
         {
             if (LogFolder == null) return;
             var files = await LogFolder.GetFilesAsync();

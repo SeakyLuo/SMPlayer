@@ -119,6 +119,15 @@ namespace SMPlayer
                     ShowLocalizedNotification("UpdateFinished");
                 }
             }
+            if (!UpdateHelper.Log.NewSettings)
+            {
+                UpdateHelper.UpdateIds();
+                Loader.Hide();
+                if (Helper.CurrentFolder != null)
+                {
+                    ShowLocalizedNotification("UpdateFinished");
+                }
+            }
             if (UpdateHelper.Log.ShowReleaseNotesDialog)
             {
                 SettingsPage.ShowReleaseNotes();

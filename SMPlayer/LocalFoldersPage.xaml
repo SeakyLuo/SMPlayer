@@ -34,7 +34,9 @@
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="FileTemplate" x:DataType="TreeViewNode">
-            <Grid Background="Transparent">
+            <Grid
+                Background="Transparent"
+                DoubleTapped="FileTemplate_DoubleTapped" >
                 <Grid.ContextFlyout>
                     <MenuFlyout Opening="OpenMusicFlyout" />
                 </Grid.ContextFlyout>
@@ -298,11 +300,14 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             HorizontalContentAlignment="Stretch"
-            SelectionMode="None"
+            SelectionMode="Single"
             Expanding="LocalFoldersTreeView_Expanding"
             ItemContainerStyle="{StaticResource StretchTreeViewItemStyle}"
             ItemInvoked="LocalFoldersTreeView_ItemInvoked"
             ItemTemplateSelector="{StaticResource FolderTreeTemplateSelector}"
+            CanDragItems="True"
+            DragItemsStarting="LocalFoldersTreeView_DragItemsStarting"
+            DragItemsCompleted="LocalFoldersTreeView_DragItemsCompleted"
             Visibility="Collapsed" />
     </Grid>
 </Page>

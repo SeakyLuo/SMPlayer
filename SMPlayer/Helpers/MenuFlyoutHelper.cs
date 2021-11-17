@@ -773,7 +773,7 @@ namespace SMPlayer
             {
                 var recentAdded = new MenuFlyoutItem()
                 {
-                    Text = Helper.Localize("Recent Added")
+                    Text = Helper.LocalizeText("RecentAdded")
                 };
                 recentAdded.Click += (sender, args) =>
                 {
@@ -786,7 +786,7 @@ namespace SMPlayer
             {
                 var recentPlayed = new MenuFlyoutItem()
                 {
-                    Text = Helper.Localize("Recent Played")
+                    Text = Helper.LocalizeText("RecentPlayed")
                 };
                 recentPlayed.Click += (sender, args) =>
                 {
@@ -800,7 +800,7 @@ namespace SMPlayer
                 flyout.Items.Add(new MenuFlyoutSeparator());
                 var mostPlayed = new MenuFlyoutItem()
                 {
-                    Text = Helper.Localize("Most Played")
+                    Text = Helper.LocalizeText("MostPlayed")
                 };
                 mostPlayed.Click += (sender, args) =>
                 {
@@ -810,7 +810,7 @@ namespace SMPlayer
                 flyout.Items.Add(mostPlayed);
                 var leastPlayed = new MenuFlyoutItem()
                 {
-                    Text = Helper.Localize("Least Played")
+                    Text = Helper.LocalizeText("LeastPlayed")
                 };
                 leastPlayed.Click += (sender, args) =>
                 {

@@ -183,8 +183,17 @@
   <data name="IsEnabledToggleSwitchOnToolTip" xml:space="preserve">
     <value>停用后，该项目不会有更高的随机播放概率</value>
   </data>
+  <data name="LeastPlayed" xml:space="preserve">
+    <value>最少播放</value>
+  </data>
   <data name="LikeMusicToolTip" xml:space="preserve">
     <value>设为我喜欢</value>
+  </data>
+  <data name="MostPlayed" xml:space="preserve">
+    <value>最常播放</value>
+  </data>
+  <data name="MyFavorites" xml:space="preserve">
+    <value>我喜欢</value>
   </data>
   <data name="NewFolderName" xml:space="preserve">
     <value>新建文件夹</value>
@@ -257,6 +266,12 @@
   </data>
   <data name="Recent" xml:space="preserve">
     <value>最近</value>
+  </data>
+  <data name="RecentAdded" xml:space="preserve">
+    <value>最近添加</value>
+  </data>
+  <data name="RecentPlayed" xml:space="preserve">
+    <value>最近播放</value>
   </data>
   <data name="Rename" xml:space="preserve">
     <value>重命名</value>

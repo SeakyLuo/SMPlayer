@@ -50,7 +50,6 @@
             <Setter Property="DefaultLabelPosition" Value="Right" />
             <Setter Property="IsOpen" Value="False" />
             <Setter Property="OverflowButtonVisibility" Value="Collapsed" />
-            <Setter Property="Margin" Value="0,4" />
         </Style>
 
         <Style TargetType="AppBarButton" x:Name="PreferenceAppBarButtonStyle">
@@ -128,11 +127,9 @@
                     Toggled="IsEnabledToggleSwitch_Toggled"/>
                 <ComboBox
                     x:Uid="PreferLevelComboBox"
-                    MinWidth="80"
                     Grid.Column="2"
                     Margin="6,0"
-                    BorderThickness="1"
-                    VerticalAlignment="Center"
+                    Style="{StaticResource PreferLevelComboBoxStyle}"
                     Loaded="PreferLevelComboBox_Loaded"
                     SelectionChanged="PreferLevelComboBox_SelectionChanged" >
                     <ComboBoxItem x:Uid="PreferLevelLowComboItem" Content="Low" />
@@ -141,13 +138,21 @@
                     <ComboBoxItem x:Uid="PreferLevelHigherComboItem" Content="Higher"/>
                 </ComboBox>
                 <Button
+                    x:Name="RemoveButton"
                     x:Uid="RemoveButton" 
                     Style="{StaticResource RemoveButtonStyle}"
                     Grid.Column="3"
                     Margin="6,0"
+                    Visibility="{x:Bind ShowRemove, Converter={StaticResource BoolToVisibilityConverter}}"
                     Click="RemoveButton_Click" />
             </Grid>
         </DataTemplate>
+
+        <Style TargetType="ComboBox" x:Name="PreferLevelComboBoxStyle">
+            <Setter Property="MinWidth" Value="80" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
 
         <Style TargetType="ListView" x:Name="PreferenceListViewStyle">
             <Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -165,6 +170,10 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style TargetType="FrameworkElement" x:Name="PreferenceContainerStyle">
+            <Setter Property="Margin" Value="0,0,0,12" />
+        </Style>
     </Page.Resources>
 
     <ScrollViewer>
@@ -173,7 +182,7 @@
                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;"/>
                 <TextBlock x:Uid="PreferenceSettingsInfoTextBlock" Margin="16,0" Text="Preference Settings" />
             </StackPanel>
-            <StackPanel>
+            <StackPanel Style="{StaticResource PreferenceContainerStyle}">
                 <CommandBar Style="{StaticResource PreferenceCommandBarStyle}">
                     <CommandBar.Content>
                         <CheckBox
@@ -217,7 +226,7 @@
                         Style="{StaticResource GoToAddHyperLinkButtonStyle}" />
                 </StackPanel>
             </StackPanel>
-            <StackPanel>
+            <StackPanel Style="{StaticResource PreferenceContainerStyle}">
                 <CommandBar Style="{StaticResource PreferenceCommandBarStyle}">
                     <CommandBar.Content>
                         <CheckBox
@@ -261,7 +270,7 @@
                         Style="{StaticResource GoToAddHyperLinkButtonStyle}" />
                 </StackPanel>
             </StackPanel>
-            <StackPanel>
+            <StackPanel Style="{StaticResource PreferenceContainerStyle}">
                 <CommandBar Style="{StaticResource PreferenceCommandBarStyle}">
                     <CommandBar.Content>
                         <CheckBox
@@ -301,11 +310,11 @@
                     <HyperlinkButton
                         x:Name="GoToAddPreferredAlbumsButton"
                         x:Uid="GoToAddHyperlinkButton" 
-                        Click="GoToAddPreferredSongsButton_Click"
+                        Click="GoToAddPreferredAlbumsButton_Click"
                         Style="{StaticResource GoToAddHyperLinkButtonStyle}" />
                 </StackPanel>
             </StackPanel>
-            <StackPanel>
+            <StackPanel Style="{StaticResource PreferenceContainerStyle}">
                 <CommandBar Style="{StaticResource PreferenceCommandBarStyle}">
                     <CommandBar.Content>
                         <CheckBox
@@ -349,7 +358,7 @@
                         Style="{StaticResource GoToAddHyperLinkButtonStyle}" />
                 </StackPanel>
             </StackPanel>
-            <StackPanel>
+            <StackPanel Style="{StaticResource PreferenceContainerStyle}">
                 <CommandBar Style="{StaticResource PreferenceCommandBarStyle}">
                     <CommandBar.Content>
                         <CheckBox
@@ -393,34 +402,22 @@
                         Style="{StaticResource GoToAddHyperLinkButtonStyle}" />
                 </StackPanel>
             </StackPanel>
-            <CheckBox
-                x:Name="RecentAddedPreferenceCheckBox"
-                x:Uid="RecentAddedPreferenceCheckBox"
-                Checked="RecentAddedPreferenceCheckBox_Checked"
-                Content="Recent Added"
-                Style="{ThemeResource SettingCheckBoxStyle}"
-                Unchecked="RecentAddedPreferenceCheckBox_Unchecked" />
-            <CheckBox
-                x:Name="MyFavoritePreferenceCheckBox"
-                x:Uid="MyFavoritePreferenceCheckBox"
-                Checked="MyFavoritePreferenceCheckBox_Checked"
-                Content="My Favorites"
-                Style="{ThemeResource SettingCheckBoxStyle}"
-                Unchecked="MyFavoritePreferenceCheckBox_Unchecked" />
-            <CheckBox
-                x:Name="MostPlayedPreferenceCheckBox"
-                x:Uid="MostPlayedPreferenceCheckBox"
-                Checked="MostPlayedPreferenceCheckBox_Checked"
-                Content="Most Played"
-                Style="{ThemeResource SettingCheckBoxStyle}"
-                Unchecked="MostPlayedPreferenceCheckBox_Unchecked" />
-            <CheckBox
-                x:Name="LeastPlayedPreferenceCheckBox"
-                x:Uid="LeastPlayedPreferenceCheckBox"
-                Checked="LeastPlayedPreferenceCheckBox_Checked"
-                Content="Least Played"
-                Style="{ThemeResource SettingCheckBoxStyle}"
-                Unchecked="LeastPlayedPreferenceCheckBox_Unchecked" />
+            <StackPanel Style="{StaticResource PreferenceContainerStyle}">
+                <CommandBar Style="{StaticResource PreferenceCommandBarStyle}">
+                    <CommandBar.Content>
+                        <TextBlock
+                            x:Uid="OthersTextBlock"
+                            Style="{StaticResource SettingCheckBoxStyle}"
+                            Text="Others" />
+                    </CommandBar.Content>
+                </CommandBar>
+                <ListView
+                    x:Name="PreferredOthersListView"
+                    Style="{StaticResource PreferenceListViewStyle}"
+                    ItemClick="PreferredOthersListView_ItemClick"
+                    ContainerContentChanging="PreferenceListView_ContainerContentChanging"
+                    ItemsSource="{x:Bind PreferredOthers, Mode=OneWay}" />
+            </StackPanel>
         </StackPanel>
     </ScrollViewer>
 </Page>

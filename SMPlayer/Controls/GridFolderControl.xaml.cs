@@ -59,7 +59,7 @@ namespace SMPlayer.Controls
                 Helper.Print($"EffectiveViewportChanged, name {data.Name}, isLoaded {data.ThumbnailLoaded}, isPartiallyVisible {ImageHelper.NeedsLoading(sender, args)}");
                 if (!data.ThumbnailLoaded && ImageHelper.NeedsLoading(sender, args))
                 {
-                    await data.SetThumbnailAsync();
+                    await data.LoadThumbnailAsync();
                 }
             }
         }

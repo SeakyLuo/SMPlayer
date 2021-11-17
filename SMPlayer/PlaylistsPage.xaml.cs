@@ -33,7 +33,7 @@ namespace SMPlayer
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             Playlists = new ObservableCollection<Playlist>(Settings.settings.Playlists);
             PlaylistTabView.ItemsSource = Playlists;
-            SelectPlaylist(Settings.settings.LastPlaylist);
+            PlaylistTabView.SelectedIndex = Settings.settings.Playlists.FindIndex(p => p.Id == Settings.settings.LastPlaylistId);
             Settings.PlaylistAddedListeners.Add(playlist =>
             {
                 PlaylistTabView.SelectedItem = playlist;
@@ -57,6 +57,7 @@ namespace SMPlayer
                 SelectPlaylist(albumView.Name);
             }
         }
+
         private void SelectPlaylist(string target)
         {
             PlaylistTabView.SelectedItem = Playlists.FirstOrDefault(p => p.Name == target);
@@ -69,9 +70,9 @@ namespace SMPlayer
             {
                 foreach (var playlist in Playlists)
                 {
-                    if (IsLoaded && playlist.Name != Settings.settings.LastPlaylist)
+                    if (IsLoaded && playlist.Id != Settings.settings.LastPlaylistId)
                     {
-                        await playlist.SetDisplayItemAsync();
+                        await playlist.LoadDisplayItemAsync();
                     }
                 }
             }
@@ -92,7 +93,7 @@ namespace SMPlayer
                 return;
             }
             var playlist = tabview.SelectedItem as Playlist;
-            Settings.settings.LastPlaylist = playlist.Name;
+            Settings.settings.LastPlaylistId = playlist.Id;
             foreach (var music in playlist.Songs)
                 music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
             if (PlaylistController != null)
@@ -120,8 +121,8 @@ namespace SMPlayer
             string name = Helper.GetPlaylistName(target.Name, next), prev = next == 1 ? target.Name : Helper.GetPlaylistName(target.Name, next - 1);
             var duplicate = target.Duplicate(name);
             int index = Settings.settings.Playlists.FindLastIndex(p => p.Name.StartsWith(prev)) + 1;
+            Settings.settings.InsertPlaylist(duplicate, index);
             Playlists.Insert(index, duplicate);
-            Settings.settings.Playlists.Insert(index, duplicate);
             PlaylistTabView.SelectedIndex = index;
         }
 

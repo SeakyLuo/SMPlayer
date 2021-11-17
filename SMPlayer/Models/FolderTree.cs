@@ -12,6 +12,7 @@ namespace SMPlayer.Models
     [Serializable]
     public class FolderTree : INotifyPropertyChanged, IComparable, IPreferable
     {
+        public long Id { get; set; }
         public List<FolderTree> Trees { get; set; } = new List<FolderTree>();
         public List<Music> Files { get; set; } = new List<Music>();
         public string Path { get; set; } = "";
@@ -131,7 +132,7 @@ namespace SMPlayer.Models
                 newSet.Add(file.Path);
                 if (!pathSet.Contains(file.Path))
                 {
-                    Music music = await Music.GetMusicAsync(file);
+                    Music music = await Music.LoadFromFileAsync(file);
                     newList.Add(music);
                     data.More++;
                 }
@@ -176,7 +177,7 @@ namespace SMPlayer.Models
                     if (LoadingStatus == ExecutionStatus.Break) return false;
                     if (file.IsMusicFile())
                     {
-                        Music music = await Music.GetMusicAsync(file);
+                        Music music = await Music.LoadFromFileAsync(file);
                         updater?.Invoke(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
                         Files.Add(music);
                     }
@@ -214,7 +215,7 @@ namespace SMPlayer.Models
                     if (LoadingStatus == ExecutionStatus.Break) return false;
                     if (file.IsMusicFile())
                     {
-                        Music music = await Music.GetMusicAsync(file);
+                        Music music = await Music.LoadFromFileAsync(file);
                         updater?.Invoke(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
                         newTree.Files.Add(music);
                     }
@@ -244,9 +245,10 @@ namespace SMPlayer.Models
                     if (LoadingStatus == ExecutionStatus.Break) return false;
                     if (file.IsMusicFile())
                     {
-                        Music music = await Music.GetMusicAsync(file);
-                        if (samePath && MusicLibraryPage.AllSongsSet.FirstOrDefault(m => m == music) is Music oldItem)
+                        Music music = await Music.LoadFromFileAsync(file);
+                        if (samePath && Settings.FindMusic(music) is Music oldItem)
                         {
+                            music.Id = oldItem.Id;
                             music.PlayCount = oldItem.PlayCount;
                             music.Favorite = oldItem.Favorite;
                         }
@@ -412,6 +414,14 @@ namespace SMPlayer.Models
                 file.RenameFolder(oldPath, newPath);
             }
             Path = Path.Replace(oldPath, newPath);
+        }
+
+        public void MoveBranch(FolderTree branch, string newPath)
+        {
+            FolderTree tree = FindTree(branch);
+            FindTree(branch.ParentPath).Trees.Remove(branch);
+            tree.Rename(tree.Path, newPath + "\\" + Directory);
+            FindTree(newPath)?.Trees.Add(tree);
         }
 
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)

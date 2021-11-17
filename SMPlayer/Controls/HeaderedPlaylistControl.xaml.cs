@@ -96,7 +96,7 @@ namespace SMPlayer
             SetPinState(Windows.UI.StartScreen.SecondaryTile.Exists(TileHelper.FormatTileId(playlist, IsPlaylist)));
             if (playlist.DisplayItem == null)
             {
-                await playlist.SetDisplayItemAsync();
+                await playlist.LoadDisplayItemAsync();
             }
             await SetMusicDisplayItem(playlist.DisplayItem);
             ShowPlaylistCover();

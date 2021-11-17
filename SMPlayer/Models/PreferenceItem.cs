@@ -10,6 +10,7 @@ namespace SMPlayer.Models
     [Serializable]
     public class PreferenceItem
     {
+        public int ItemId { get; set; }
         public string Id { get; set; }
         public string Name { get; set; }
         public bool IsEnabled { get; set; }
@@ -81,6 +82,9 @@ namespace SMPlayer.Models
                 }
             }
         }
+
+        public bool ShowRemove { get; set; } = true;
+
         private bool isValid = true;
         public string ToolTip { get; set; }
         public PreferType PreferType { get; set; }
@@ -117,7 +121,7 @@ namespace SMPlayer.Models
 
     public enum PreferType
     {
-        Song, Artist, Album, Playlist, Folder
+        Song, Artist, Album, Playlist, Folder, RecentAdded, MyFavorites, MostPlayed, LeastPlayed
     }
 
     public enum PreferLevel

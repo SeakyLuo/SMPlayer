@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -88,6 +89,13 @@ namespace SMPlayer
             return $"[{string.Join(", ", list.Select(i => i.ToString()))}]";
         }
         public static void AddOrMoveToTheFirst<T>(this Collection<T> list, T item)
+        {
+            if (item.Equals(list.ElementAtOrDefault(0)))
+                return;
+            list.Remove(item);
+            list.Insert(0, item);
+        }
+        public static void AddOrMoveToTheFirst<T>(this List<T> list, T item)
         {
             if (item.Equals(list.ElementAtOrDefault(0)))
                 return;
@@ -270,15 +278,14 @@ namespace SMPlayer
             return matchCollection.ElementAt(0).Value.Trim();
         }
 
-        public static bool IsEmpty<T>(this IEnumerable<T> ienumerable)
+        public static bool IsEmpty<T>(this IEnumerable<T> src)
         {
-            return ienumerable.Count() == 0;
+            return src == null || src.Count() == 0;
         }
 
-        public static bool IsNotEmpty<T>(this IEnumerable<T> ienumerable)
+        public static bool IsNotEmpty<T>(this IEnumerable<T> src)
         {
-            return !IsEmpty(ienumerable);
+            return !IsEmpty(src);
         }
-
     }
-    }
+}

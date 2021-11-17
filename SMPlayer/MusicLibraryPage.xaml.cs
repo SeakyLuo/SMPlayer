@@ -1,8 +1,10 @@
 ﻿using Microsoft.Toolkit.Uwp.UI.Controls;
+using Newtonsoft.Json.Linq;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -21,10 +23,8 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class MusicLibraryPage : Page, ISwitchMusicListener, IAfterSongsSetListener, ILikeMusicListener, IMenuFlyoutHelperBuildListener
     {
-        public const string JsonFilename = "MusicLibrary";
         public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
         public static int SongCount { get => AllSongs.Count; }
-        public static HashSet<Music> AllSongsSet;
         public static bool IsLibraryUnchangedAfterChecking = true;
 
         private static List<IAfterSongsSetListener> listeners = new List<IAfterSongsSetListener>();
@@ -36,31 +36,16 @@ namespace SMPlayer
             listeners.Add(this);
             SongsSet(AllSongs);
             MediaHelper.SwitchMusicListeners.Add(this);
+            MediaControl.AddMusicModifiedListener(MusicModified);
+            Controls.MusicInfoControl.MusicModifiedListeners.Add(MusicModified);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             SetHeader();
             if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
+            SortAndSetAllSongs(Settings.settings.MusicLibrary.Values);
             MediaHelper.FindMusicAndSetPlaying(AllSongs, null, MediaHelper.CurrentMusic);
-        }
-
-        public static async Task Init()
-        {
-            var songs = await JsonFileHelper.ReadObjectAsync<List<Music>>(JsonFilename);
-            // 如果初始化了设置但是音乐库没有音乐
-            if (songs?.Count == 0 && Settings.Inited && (songs = Settings.settings.Tree.Flatten()).Count > 0)
-                SortAndSetAllSongs(songs);
-            else
-                SetAllSongs(songs);
-            MediaControl.AddMusicModifiedListener(MusicModified);
-            Controls.MusicInfoControl.MusicModifiedListeners.Add(MusicModified);
-        }
-
-        public static void Save()
-        {
-            JsonFileHelper.SaveAsync(JsonFilename, AllSongs);
-            JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, AllSongs);
         }
 
         public static async void CheckLibrary()
@@ -123,7 +108,6 @@ namespace SMPlayer
             }
             else e.Column.SortDirection = DataGridSortDirection.Ascending;
             SetAllSongs(temp.ToList());
-            Save();
             MusicLibraryDataGrid.ItemsSource = AllSongs;
         }
 
@@ -131,19 +115,19 @@ namespace SMPlayer
         {
             if (songs == null) return;
             AllSongs.Clear();
-            var favSet = Settings.settings.MyFavorites.Songs.ToHashSet();
+            var favSet = Settings.settings.MyFavorites.SongIds.ToHashSet();
             foreach (var item in songs)
             {
-                item.Favorite = favSet.Contains(item);
+                item.Favorite = favSet.Contains(item.Id);
                 AllSongs.Add(item);
             }
-            AllSongsSet = AllSongs.ToHashSet();
             SetHeader();
             NotifyListeners();
         }
+
         public static void AddMusic(Music music)
         {
-            if (!AllSongsSet.Add(music)) return;
+            if (Settings.FindMusic(music) != null) return;
             var keySelector = SortByConverter.GetKeySelector(Settings.settings.MusicLibraryCriterion);
             for (int i = 0; i < SongCount; i++)
             {
@@ -159,9 +143,10 @@ namespace SMPlayer
             Settings.settings.AddMusic(music);
             NotifyListeners();
         }
+
         public static void RemoveMusic(Music music)
         {
-            if (!AllSongsSet.Remove(music)) return;
+            if (Settings.FindMusic(music) == null) return;
             AllSongs.Remove(music);
             SetHeader();
             Settings.settings.RemoveMusic(music);

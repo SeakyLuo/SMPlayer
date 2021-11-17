@@ -29,36 +29,52 @@ namespace SMPlayer.Helpers
             Save();
         }
 
-        public static async Task FillDateAdded(FolderTree tree)
+        public static void UpdateIds()
         {
-            foreach (var music in tree.Files)
+            UpdateTreeFileId(Settings.settings.Tree);
+            foreach (var playlist in Settings.settings.Playlists)
             {
-                if (music.DateAdded == null || music.DateAdded == DateTimeOffset.MinValue)
+                UpdatePlaylistId(playlist);
+            }
+            UpdatePlaylistId(Settings.settings.MyFavorites);
+            Log.NewSettings = true;
+            Save();
+        }
+
+        private static void UpdatePlaylistId(Playlist playlist)
+        {
+            playlist.Id = Settings.settings.IdGenerator.GeneratePlaylistId();
+            foreach (var music in playlist.Songs)
+            {
+                if (Settings.FindMusic(music) is Music m)
                 {
-                    StorageFile file = await music.GetStorageFileAsync();
-                    if (file == null)
-                    {
-                        //Settings.settings.RemoveMusic(music);
-                    }
-                    else
-                    {
-                        music.DateAdded = file.DateCreated;
-                    }
+                    music.Id = m.Id;
                 }
             }
+        }
+
+        private static void UpdateTreeFileId(FolderTree tree)
+        {
             foreach (var branch in tree.Trees)
             {
-                await FillDateAdded(branch);
+                UpdateTreeFileId(branch);
+            }
+            foreach (var file in tree.Files)
+            {
+                file.Id = Settings.settings.IdGenerator.GenerateMusicId();
             }
         }
+
     }
 
     public class UpdateLog
     {
         public string LastReleaseNotesVersion { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
         public bool ShowReleaseNotesDialog { get => LastReleaseNotesVersion != Helper.AppVersion; }
         public bool DateAdded { get; set; } = false;
-
-        public bool AllUpdated { get => DateAdded; }
+        public bool NewSettings { get; set; } = false;
+        [Newtonsoft.Json.JsonIgnore]
+        public bool AllUpdated { get => DateAdded && NewSettings; }
     }
 }

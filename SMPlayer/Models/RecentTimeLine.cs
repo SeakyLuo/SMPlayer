@@ -17,6 +17,8 @@ namespace SMPlayer.Models
         public ObservableCollection<Music> TimeLine { get; private set; }
         public int Count { get => TimeLine.Count; }
         public NotifyRecentTimeLineChangedEventHandler CollectionChanged;
+        private int justRemovedIndex = -1;
+        private long justRemovedMusic = -1;
 
         public RecentTimeLine() 
         {
@@ -30,22 +32,26 @@ namespace SMPlayer.Models
 
         public void Add(Music music)
         {
-            if (Count == MAX_RECENT_TIMELINE_ITEMS)
+            if (Count >= MAX_RECENT_TIMELINE_ITEMS)
             {
                 Remove(TimeLine.Last());
             }
-            TimeLine.Insert(0, music);
+            TimeLine.Insert(justRemovedMusic == music.Id ? justRemovedIndex : 0, music);
             CollectionChanged?.Invoke();
         }
 
+        // TODO 记录just removed index
         public bool Remove(Music music)
         {
-            bool successful = TimeLine.Remove(music);
-            if (successful)
+            justRemovedIndex = TimeLine.IndexOf(music);
+            if (justRemovedIndex >= 0)
             {
+                justRemovedMusic = music.Id;
+                TimeLine.RemoveAt(justRemovedIndex);
                 CollectionChanged?.Invoke();
+                return true;
             }
-            return successful;
+            return false;
         }
 
         public void RenameFolder(string oldPath, string newPath)

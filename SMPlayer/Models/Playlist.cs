@@ -13,6 +13,7 @@ namespace SMPlayer.Models
     public class Playlist : INotifyPropertyChanged, IPreferable
     {
         public static SortBy[] Criteria = new SortBy[] { SortBy.Title, SortBy.Artist, SortBy.Album, SortBy.Duration, SortBy.PlayCount, SortBy.DateAdded };
+        public long Id { get; set; }
         private string name;
         public string Name
         {
@@ -34,8 +35,38 @@ namespace SMPlayer.Models
         [Newtonsoft.Json.JsonIgnore]
         public string Artist { get; set; }
 
-        public ObservableCollection<Music> Songs { get; set; }
+        public ObservableCollection<Music> Songs
+        {
+            get
+            {
+                if (songs.IsEmpty() && SongIds.IsNotEmpty()) songs.AddRange(Settings.settings.SelectByIds(SongIds));
+                return songs;
+            }
+            set
+            {
+                songs = value;
+            }
+        }
+        private ObservableCollection<Music> songs { get; set; } = new ObservableCollection<Music>();
 
+        [Newtonsoft.Json.JsonIgnore]
+        public List<long> SongIds
+        {
+            get
+            {
+                if (songIds.IsEmpty() && songs.IsNotEmpty())
+                    return songs.Select(i => i.Id).ToList();
+                return songIds;
+            }
+            set
+            {
+                songIds = value;
+            }
+        }
+
+        private List<long> songIds = new List<long>();
+
+        [Newtonsoft.Json.JsonIgnore]
         public int Count { get => Songs.Count; }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -130,6 +161,11 @@ namespace SMPlayer.Models
             Sort();
         }
 
+        public void RemoveAll(Func<Music, bool> predicate)
+        {
+            Songs.RemoveAll(predicate);
+        }
+
         public bool Contains(Music music)
         {
             return Songs.Contains(music);
@@ -140,7 +176,7 @@ namespace SMPlayer.Models
             Songs.Clear();
         }
 
-        public async Task SetDisplayItemAsync()
+        public async Task LoadDisplayItemAsync()
         {
             if (DisplayItem != null && !DisplayItem.IsDefault) return;
             foreach (var song in Songs)

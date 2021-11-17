@@ -224,6 +224,7 @@
     <Compile Include="ExpressionBuilder\ReferenceNodes\ExpressionBuilder.SurfaceBrushReferenceNode.cs" />
     <Compile Include="ExpressionBuilder\ReferenceNodes\ExpressionBuilder.VisualReferenceNode.cs" />
     <Compile Include="Helpers\ClassHelper.cs" />
+    <Compile Include="Helpers\DAOHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\LyricsHelper.cs" />
     <Compile Include="Helpers\QuickPlayHelper.cs" />
@@ -234,6 +235,14 @@
     <Compile Include="Helpers\VoiceAssistant\VoiceAssistantChineseHelper.cs" />
     <Compile Include="Helpers\VoiceAssistant\VoiceAssistantEnglishHelper.cs" />
     <Compile Include="Helpers\VoiceAssistant\VoiceAssistantHelper.cs" />
+    <Compile Include="Models\DAO\FileDAO.cs" />
+    <Compile Include="Models\DAO\FolderTreeDAO.cs" />
+    <Compile Include="Models\DAO\IdGenerator.cs" />
+    <Compile Include="Models\DAO\MusicDAO.cs" />
+    <Compile Include="Models\DAO\PlaylistDAO.cs" />
+    <Compile Include="Models\DAO\PreferenceItemDAO.cs" />
+    <Compile Include="Models\DAO\PreferenceSettingsDAO.cs" />
+    <Compile Include="Models\DAO\SettingsDAO.cs" />
     <Compile Include="Models\FullyObservableCollection.cs" />
     <Compile Include="Models\LoadingCache.cs" />
     <Compile Include="Helpers\SearchHelper.cs" />

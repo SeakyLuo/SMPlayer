@@ -81,7 +81,7 @@ namespace SMPlayer.Models
             folderTree = tree;
         }
 
-        public async Task SetThumbnailAsync()
+        public async Task LoadThumbnailAsync()
         {
             if (IsThumbnailLoading) return;
             IsThumbnailLoading = true;

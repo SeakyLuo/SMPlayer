@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SMPlayer.Models
 {
     [Serializable]
-    public class PreferenceSetting
+    public class PreferenceSettings
     {
         public const int MaxPreferredSongs = 30,
                          MaxPreferredArtists = 20,

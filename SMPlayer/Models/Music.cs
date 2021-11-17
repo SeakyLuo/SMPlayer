@@ -17,6 +17,7 @@ namespace SMPlayer.Models
     [Serializable]
     public class Music : IComparable<Music>, INotifyPropertyChanged, IMusicable, IPreferable
     {
+        public long Id { get; set; }
         public string Path { get; set; }
         public string Name
         {
@@ -140,6 +141,7 @@ namespace SMPlayer.Models
 
         public Music CopyFrom(Music source)
         {
+            Id = source.Id;
             Path = source.Path;
             Name = source.Name;
             Artist = source.Artist;
@@ -180,12 +182,12 @@ namespace SMPlayer.Models
             return await file.Properties.GetMusicPropertiesAsync();
         }
 
-        public static async Task<Music> GetMusicAsync(string path)
+        public static async Task<Music> LoadFromPathAsync(string path)
         {
-            return await GetMusicAsync(await StorageFile.GetFileFromPathAsync(path));
+            return await LoadFromFileAsync(await StorageFile.GetFileFromPathAsync(path));
         }
 
-        public static async Task<Music> GetMusicAsync(StorageFile file)
+        public static async Task<Music> LoadFromFileAsync(StorageFile file)
         {
             return new Music(file, await file.Properties.GetMusicPropertiesAsync());
             //using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(file), TagLib.ReadStyle.Average))
@@ -272,6 +274,11 @@ namespace SMPlayer.Models
         {
             Path = Path.Replace(oldPath, newPath);
             return Path.Contains(newPath);
+        }
+
+        public string MoveToFolder(string newPath)
+        {
+            return Path = newPath + "\\" + GetFilename(Path);
         }
 
         public string GetToastText()

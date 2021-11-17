@@ -117,7 +117,7 @@ namespace SMPlayer
             if (flyout.Target.DataContext is GridFolderView gridFolderView) tree = gridFolderView.Tree;
             else if (flyout.Target.DataContext is TreeViewNode node) tree = node.Content as FolderTree;
             flyout.Items.Add(MenuFlyoutHelper.GetPreferItem(tree));
-            flyout.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(tree.Path, Windows.Storage.StorageItemTypes.Folder));
+            flyout.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(tree.Path, StorageItemTypes.Folder));
             flyout.Items.Add(MenuFlyoutHelper.GetRefreshDirectoryItem(tree, AfterTreeUpdated));
             flyout.Items.Add(MenuFlyoutHelper.GetDeleteFolderItem(tree, t =>
             {
@@ -143,7 +143,6 @@ namespace SMPlayer
                 },
                 async (oldName, newName) =>
                 {
-
                     StorageFolder folder = await tree.GetStorageFolderAsync();
                     await folder.RenameAsync(newName);
                     string newPath = tree.Path.Substring(0, tree.Path.LastIndexOf('\\') + 1) + newName;
@@ -233,7 +232,7 @@ namespace SMPlayer
         private void SetupTreeView(FolderTree tree)
         {
             LocalFoldersTreeView.RootNodes.Clear();
-            foreach (var node in FillTreeNode(new TreeViewNode() { Content = tree, IsExpanded = true, HasUnrealizedChildren = true }).Children)
+            foreach (var node in FillTreeNode(new TreeViewNode() { Content = tree, IsExpanded = true, HasUnrealizedChildren = !tree.IsEmpty }).Children)
                 LocalFoldersTreeView.RootNodes.Add(node);
         }
         private TreeViewNode FillTreeNode(TreeViewNode node)
@@ -261,7 +260,7 @@ namespace SMPlayer
 
         private TreeViewNode TreeToNode(FolderTree tree)
         {
-            return new TreeViewNode() { Content = tree, HasUnrealizedChildren = true };
+            return new TreeViewNode() { Content = tree, HasUnrealizedChildren = !tree.IsEmpty };
         }
 
         private void LocalFoldersTreeView_Expanding(TreeView sender, TreeViewExpandingEventArgs args)
@@ -272,6 +271,8 @@ namespace SMPlayer
             }
         }
 
+        private TreeViewNode lastSelected = null;
+
         private void LocalFoldersTreeView_ItemInvoked(TreeView sender, TreeViewItemInvokedEventArgs args)
         {
             var node = args.InvokedItem as TreeViewNode;
@@ -279,15 +280,28 @@ namespace SMPlayer
             {
                 node.IsExpanded = !node.IsExpanded;
             }
-            else if (node.Content is Music music)
+            if (sender.SelectionMode == TreeViewSelectionMode.Multiple)
             {
-                MediaHelper.SetMusicAndPlay((node.Parent.Content as FolderTree).Files, music);
             }
+            else
+            {
+                if (node == lastSelected)
+                {
+                    sender.SelectionMode = TreeViewSelectionMode.None;
+                }
+                else
+                {
+                    sender.SelectionMode = TreeViewSelectionMode.Single;
+                    sender.SelectedNodes.Add(node);
+                }
+            }
+            lastSelected = node;
         }
 
         private void FolderTemplate_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
             var tree = ((sender as Grid).DataContext as TreeViewNode).Content as FolderTree;
+            if (tree.IsEmpty) return;
             setter.SetPage(tree);
         }
 
@@ -390,9 +404,68 @@ namespace SMPlayer
                 Helper.Print($"DataContextChanged, name {data.Name}, isLoaded {data.ThumbnailLoaded}, isPartiallyVisible {sender.IsPartiallyVisible(LocalFoldersGridView)}");
                 if (!data.ThumbnailLoaded && sender.IsPartiallyVisible(LocalFoldersGridView))
                 {
-                    await data.SetThumbnailAsync();
+                    await data.LoadThumbnailAsync();
                 }
             }
         }
+
+        private TreeViewNode originalParentNode;
+        private int originalIndex;
+
+        private void LocalFoldersTreeView_DragItemsStarting(TreeView sender, TreeViewDragItemsStartingEventArgs args)
+        {
+            TreeViewNode node = args.Items[0] as TreeViewNode;
+            originalParentNode = node.Parent;
+            originalIndex = GetSiblings(node).IndexOf(node);
+        }
+
+        private void LocalFoldersTreeView_DragItemsCompleted(TreeView sender, TreeViewDragItemsCompletedEventArgs args)
+        {
+            TreeViewNode node = args.Items[0] as TreeViewNode;
+            if (node.Parent == originalParentNode)
+            {
+                // 如果移动到同一个树下面，恢复拖动前的位置
+                IList<TreeViewNode> siblings = GetSiblings(node);
+                int currentIndex = siblings.IndexOf(node);
+                if (currentIndex != originalIndex)
+                {
+                    siblings.RemoveAt(currentIndex);
+                    siblings.Insert(originalIndex, node);
+                }
+                return;
+            }
+            if (!(node.Parent.Content is FolderTree))
+            {
+                // 如果移动到非文件夹节点，恢复拖动前的位置
+                node.Parent.Children.Remove(node);
+                originalParentNode.Children.Insert(originalIndex, node);
+                return;
+            }
+            object content = node.Content;
+            string path = (node.Parent.Content == null ? CurrentTree : node.Parent.Content as FolderTree).Path;
+            if (content is FolderTree tree)
+            {
+                Settings.settings.MoveFolder(tree, path);
+                App.Save();
+            }
+            else if (content is Music music)
+            {
+                Settings.settings.MoveMusic(music, path);
+                App.Save();
+            }
+        }
+
+        private IList<TreeViewNode> GetSiblings(TreeViewNode node)
+        {
+            return node == null ? LocalFoldersTreeView.RootNodes : node.Parent.Children;
+        }
+
+        private void FileTemplate_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            TreeViewNode node = (sender as Grid).DataContext as TreeViewNode;
+            Music music = node.Content as Music;
+            MediaHelper.SetMusicAndPlay(GetSiblings(node).Select(n => n.Content).Where(n => n is Music).Select(n => (Music)n).ToList(), music);
+        }
+
     }
 }

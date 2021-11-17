@@ -45,7 +45,6 @@ namespace SMPlayer
         private async void OnLaunched(LaunchActivatedEventArgs e, Music music)
         {
             await Settings.Init();
-            await MusicLibraryPage.Init();
             if (Settings.settings.LastPage == "Albums")
                 await AlbumsPage.Init();
             await Helper.Init();
@@ -152,7 +151,6 @@ namespace SMPlayer
         public static async void Save()
         {
             Settings.Save();
-            MusicLibraryPage.Save();
             MediaHelper.Save();
             AlbumsPage.Save();
             RecentPage.Save();
@@ -190,7 +188,7 @@ namespace SMPlayer
         protected override async void OnFileActivated(FileActivatedEventArgs args)
         {
             base.OnFileActivated(args);
-            Music music = await Music.GetMusicAsync(args.Files[0].Path);
+            Music music = await Music.LoadFromPathAsync(args.Files[0].Path);
             if (args.PreviousExecutionState == ApplicationExecutionState.Running)
             {
                 MediaHelper.SetMusicAndPlay(music);

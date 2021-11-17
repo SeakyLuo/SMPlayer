@@ -49,6 +49,7 @@ namespace SMPlayer
         private readonly ObservableCollection<PreferenceItemView> PreferredAlbums;
         private readonly ObservableCollection<PreferenceItemView> PreferredPlaylists;
         private readonly ObservableCollection<PreferenceItemView> PreferredFolders;
+        private readonly ObservableCollection<PreferenceItemView> PreferredOthers = new ObservableCollection<PreferenceItemView>();
         private static RemoveDialog removeDialog;
 
         public PreferenceSettingsPage()
@@ -60,10 +61,11 @@ namespace SMPlayer
             PreferredAlbumsCheckBox.IsChecked = Settings.settings.Preference.Albums;
             PreferredPlaylistsCheckBox.IsChecked = Settings.settings.Preference.Playlists;
             PreferredFoldersCheckBox.IsChecked = Settings.settings.Preference.Folders;
-            RecentAddedPreferenceCheckBox.IsChecked = Settings.settings.Preference.RecentAdded.IsEnabled;
-            MyFavoritePreferenceCheckBox.IsChecked = Settings.settings.Preference.MyFavorites.IsEnabled;
-            MostPlayedPreferenceCheckBox.IsChecked = Settings.settings.Preference.MostPlayed.IsEnabled;
-            LeastPlayedPreferenceCheckBox.IsChecked = Settings.settings.Preference.LeastPlayed.IsEnabled;
+
+            PreferredOthers.Add(BuildView(Settings.settings.Preference.RecentAdded, PreferType.RecentAdded));
+            PreferredOthers.Add(BuildView(Settings.settings.Preference.MyFavorites, PreferType.MyFavorites));
+            PreferredOthers.Add(BuildView(Settings.settings.Preference.MostPlayed, PreferType.MostPlayed));
+            PreferredOthers.Add(BuildView(Settings.settings.Preference.LeastPlayed, PreferType.LeastPlayed));
 
             PreferredSongs = ConvertToViews(Settings.settings.Preference.PreferredSongs, PreferType.Song);
             PreferredArtists = ConvertToViews(Settings.settings.Preference.PreferredArtists, PreferType.Artist);
@@ -161,6 +163,22 @@ namespace SMPlayer
                         view.ToolTip = tree.Path;
                     }
                     break;
+                case PreferType.RecentAdded:
+                    view.Name = Helper.LocalizeText("RecentAdded");
+                    view.ShowRemove = false;
+                    break;
+                case PreferType.MyFavorites:
+                    view.Name = Helper.LocalizeText("MyFavorites");
+                    view.ShowRemove = false;
+                    break;
+                case PreferType.MostPlayed:
+                    view.Name = Helper.LocalizeText("MostPlayed");
+                    view.ShowRemove = false;
+                    break;
+                case PreferType.LeastPlayed:
+                    view.Name = Helper.LocalizeText("LeastPlayed");
+                    view.ShowRemove = false;
+                    break;
             }
             if (!view.IsValid)
             {
@@ -217,46 +235,6 @@ namespace SMPlayer
                 MainPage.Instance.ShowLocalizedNotification("AddPreferredFoldersToolTip", 5000);
                 ShowAddPreferredFoldersToolTip = true;
             }
-        }
-
-        private void MyFavoritePreferenceCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.Preference.MyFavorites.IsEnabled = true;
-        }
-
-        private void MyFavoritePreferenceCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.Preference.MyFavorites.IsEnabled = false;
-        }
-
-        private void MostPlayedPreferenceCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.Preference.MostPlayed.IsEnabled = true;
-        }
-
-        private void MostPlayedPreferenceCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.Preference.MostPlayed.IsEnabled = false;
-        }
-
-        private void LeastPlayedPreferenceCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.Preference.LeastPlayed.IsEnabled = true;
-        }
-
-        private void LeastPlayedPreferenceCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.Preference.LeastPlayed.IsEnabled = false;
-        }
-
-        private void RecentAddedPreferenceCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.Preference.RecentAdded.IsEnabled = true;
-        }
-
-        private void RecentAddedPreferenceCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Settings.settings.Preference.RecentAdded.IsEnabled = false;
         }
 
         private void PreferredSongsCheckBox_Checked(object sender, RoutedEventArgs e)
@@ -514,7 +492,19 @@ namespace SMPlayer
 
             PreferenceItemView item = comboBox.DataContext as PreferenceItemView;
             item.Level = preferLevel;
-            GetPreferenceByType(item.PreferType).Find(i => i.Id == item.Id).Level = preferLevel;
+
+            switch (item.PreferType)
+            {
+                case PreferType.RecentAdded:
+                case PreferType.MyFavorites:
+                case PreferType.MostPlayed:
+                case PreferType.LeastPlayed:
+                    GetOthersPreferenceByType(item.PreferType).Level = preferLevel;
+                    break;
+                default:
+                    GetPreferenceByType(item.PreferType).Find(i => i.Id == item.Id).Level = preferLevel;
+                    break;
+            }
         }
 
         private void PreferLevelComboBox_Loaded(object sender, RoutedEventArgs e)
@@ -526,6 +516,23 @@ namespace SMPlayer
         public static Brush GetRowBackground(int index)
         {
             return index % 2 == 0 ? ColorHelper.WhiteSmokeBrush : ColorHelper.WhiteBrush;
+        }
+
+        private void PreferredOthersListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            PreferenceItemView view = e.ClickedItem as PreferenceItemView;
+            switch (view.PreferType)
+            {
+                case PreferType.RecentAdded:
+                    MainPage.Instance.NavigateToPage(typeof(RecentPage), "RecentAdded");
+                    break;
+                case PreferType.MyFavorites:
+                    MainPage.Instance.NavigateToPage(typeof(MyFavoritesPage));
+                    break;
+                case PreferType.MostPlayed:
+                case PreferType.LeastPlayed:
+                    break;
+            }
         }
 
         private ObservableCollection<PreferenceItemView> GetPreferenceViewByType(PreferType type)
@@ -582,6 +589,23 @@ namespace SMPlayer
                     return Settings.settings.Preference.PreferredFolders;
                 default:
                     return new List<PreferenceItem>();
+            }
+        }
+
+        private PreferenceItem GetOthersPreferenceByType(PreferType type)
+        {
+            switch (type)
+            {
+                case PreferType.RecentAdded:
+                    return Settings.settings.Preference.RecentAdded;
+                case PreferType.MyFavorites:
+                    return Settings.settings.Preference.MyFavorites;
+                case PreferType.MostPlayed:
+                    return Settings.settings.Preference.MostPlayed;
+                case PreferType.LeastPlayed:
+                    return Settings.settings.Preference.LeastPlayed;
+                default:
+                    return null;
             }
         }
 

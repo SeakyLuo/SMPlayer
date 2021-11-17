@@ -15,7 +15,7 @@ namespace SMPlayer.Helpers
         public static List<Music> GetPlaylist(int randomLimit)
         {
             HashSet<Music> songs = MusicLibraryPage.AllSongs.RandItems(randomLimit * 2).ToHashSet();
-            PreferenceSetting preference = Settings.settings.Preference;
+            PreferenceSettings preference = Settings.settings.Preference;
             HandlePreferredSongs(songs, preference);
             HandlePreferredArtists(songs, preference);
             HandlePreferredAlbums(songs, preference);
@@ -28,14 +28,14 @@ namespace SMPlayer.Helpers
             return songs.RandItems(randomLimit).ToList();
         }
 
-        private static void HandlePreferredSongs(HashSet<Music> songs, PreferenceSetting preference)
+        private static void HandlePreferredSongs(HashSet<Music> songs, PreferenceSettings preference)
         {
             if (!preference.Songs) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredSongs);
             songs.AddRange(items.Select(i => new Music { Path = i.Id }));
         }
 
-        private static void HandlePreferredArtists(HashSet<Music> songs, PreferenceSetting preference)
+        private static void HandlePreferredArtists(HashSet<Music> songs, PreferenceSettings preference)
         {
             if (!preference.Artists) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredArtists);
@@ -44,7 +44,7 @@ namespace SMPlayer.Helpers
                                 .RandItems(randomItems)));
         }
 
-        private static void HandlePreferredAlbums(HashSet<Music> songs, PreferenceSetting preference)
+        private static void HandlePreferredAlbums(HashSet<Music> songs, PreferenceSettings preference)
         {
             if (!preference.Albums) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredArtists);
@@ -53,7 +53,7 @@ namespace SMPlayer.Helpers
                                 .RandItems(randomItems)));
         }
 
-        private static void HandlePreferredPlaylists(HashSet<Music> songs, PreferenceSetting preference)
+        private static void HandlePreferredPlaylists(HashSet<Music> songs, PreferenceSettings preference)
         {
             if (!preference.Playlists) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredPlaylists);
@@ -62,7 +62,7 @@ namespace SMPlayer.Helpers
                                 .RandItems(randomItems)));
         }
 
-        private static void HandlePreferredFolders(HashSet<Music> songs, PreferenceSetting preference)
+        private static void HandlePreferredFolders(HashSet<Music> songs, PreferenceSettings preference)
         {
             if (!preference.Folders) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredFolders);
@@ -90,28 +90,28 @@ namespace SMPlayer.Helpers
             });
         }
 
-        private static void HandledRecentAdded(HashSet<Music> songs, PreferenceSetting preference)
+        private static void HandledRecentAdded(HashSet<Music> songs, PreferenceSettings preference)
         {
             int count = GetPreferenceItems(preference.RecentAdded);
             if (count == 0) return;
             songs.AddRange(RecentPage.RecentAdded.TimeLine.RandItems(count));
         }
 
-        private static void HandledMyFavorites(HashSet<Music> songs, PreferenceSetting preference)
+        private static void HandledMyFavorites(HashSet<Music> songs, PreferenceSettings preference)
         {
             int count = GetPreferenceItems(preference.MyFavorites);
             if (count == 0) return;
             songs.AddRange(Settings.settings.MyFavorites.Songs.RandItems(count));
         }
 
-        private static void HandledMostPlayed(HashSet<Music> songs, PreferenceSetting preference, int randomLimit)
+        private static void HandledMostPlayed(HashSet<Music> songs, PreferenceSettings preference, int randomLimit)
         {
             int count = GetPreferenceItems(preference.MostPlayed);
             if (count == 0) return;
             songs.AddRange(MusicLibraryPage.GetMostPlayed(randomLimit));
         }
 
-        private static void HandledLeastPlayed(HashSet<Music> songs, PreferenceSetting preference, int randomLimit)
+        private static void HandledLeastPlayed(HashSet<Music> songs, PreferenceSettings preference, int randomLimit)
         {
             int count = GetPreferenceItems(preference.LeastPlayed);
             if (count == 0) return;
@@ -125,7 +125,8 @@ namespace SMPlayer.Helpers
 
         private static int GetRandomPreferredItems(PreferLevel level)
         {
-            return random.Next((int)level + 1);
+            int min = (int)level + 1;
+            return random.Next(min, min * 3);
         }
     }
 }
