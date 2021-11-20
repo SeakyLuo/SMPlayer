@@ -14,7 +14,7 @@ namespace SMPlayer.Helpers
 
         public static List<Music> GetPlaylist(int randomLimit)
         {
-            HashSet<Music> songs = MusicLibraryPage.AllSongs.RandItems(randomLimit * 2).ToHashSet();
+            HashSet<Music> songs = Settings.settings.AllSongs.RandItems(randomLimit * 2).ToHashSet();
             PreferenceSettings preference = Settings.settings.Preference;
             HandlePreferredSongs(songs, preference);
             HandlePreferredArtists(songs, preference);
@@ -32,14 +32,14 @@ namespace SMPlayer.Helpers
         {
             if (!preference.Songs) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredSongs);
-            songs.AddRange(items.Select(i => new Music { Path = i.Id }));
+            songs.AddRange(items.Select(i => Settings.settings.SelectMusicById(i.LongId)));
         }
 
         private static void HandlePreferredArtists(HashSet<Music> songs, PreferenceSettings preference)
         {
             if (!preference.Artists) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredArtists);
-            songs.AddRange(items.SelectMany(i => MusicLibraryPage.AllSongs.Where(m => i.Id == m.Artist)
+            songs.AddRange(items.SelectMany(i => Settings.settings.AllSongs.Where(m => i.Id == m.Artist)
                                                                           .RandItems(GetRandomPreferredItems(i.Level))
                                 .RandItems(randomItems)));
         }
@@ -48,7 +48,7 @@ namespace SMPlayer.Helpers
         {
             if (!preference.Albums) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredArtists);
-            songs.AddRange(items.SelectMany(i => MusicLibraryPage.AllSongs.Where(m => i.Id == m.Album)
+            songs.AddRange(items.SelectMany(i => Settings.settings.AllSongs.Where(m => i.Id == m.Album)
                                                                 .RandItems(GetRandomPreferredItems(i.Level))
                                 .RandItems(randomItems)));
         }
@@ -57,16 +57,16 @@ namespace SMPlayer.Helpers
         {
             if (!preference.Playlists) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredPlaylists);
-            songs.AddRange(items.SelectMany(i => Settings.settings.Playlists.Where(p => i.Name == p.Name)
-                                                                  .SelectMany(p => p.Songs.RandItems(GetRandomPreferredItems(i.Level)))
-                                .RandItems(randomItems)));
+            songs.AddRange(items.SelectMany(i => Settings.settings.SelectPlaylistById(i.LongId)
+                                                         .Songs.RandItems(GetRandomPreferredItems(i.Level)))
+                                .RandItems(randomItems));
         }
 
         private static void HandlePreferredFolders(HashSet<Music> songs, PreferenceSettings preference)
         {
             if (!preference.Folders) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredFolders);
-            songs.AddRange(items.Select(i => new { Folder = Settings.settings.Tree.FindTree(i.Id), i.Level })
+            songs.AddRange(items.Select(i => new { Folder = Settings.settings.Tree.FindTree(i.LongId), i.Level })
                                 .Where(i => i.Folder != null)
                                 .SelectMany(i => i.Folder.Files.RandItems(GetRandomPreferredItems(i.Level))).RandItems(randomItems));
         }

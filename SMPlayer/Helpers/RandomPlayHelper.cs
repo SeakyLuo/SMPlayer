@@ -11,12 +11,12 @@ namespace SMPlayer.Helpers
     {
         public static void PlayMusic(int randomLimit = 100)
         {
-            MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.AllSongs.RandItems(randomLimit));
+            MediaHelper.SetPlaylistAndPlay(Settings.settings.AllSongs.RandItems(randomLimit));
         }
 
         public static IGrouping<string, Music> PlayArtist(int randomLimit = 100)
         {
-            var rArtist = MusicLibraryPage.AllSongs.GroupBy(m => m.Artist).RandItem();
+            var rArtist = Settings.settings.AllSongs.GroupBy(m => m.Artist).RandItem();
             MediaHelper.SetPlaylistAndPlay(rArtist.RandItems(randomLimit));
             return rArtist;
         }
@@ -25,7 +25,7 @@ namespace SMPlayer.Helpers
         {
             var album = AlbumsPage.AlbumInfoList.RandItem();
             // 没有检查Artist，不过无所谓
-            MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.AllSongs.Where(i => i.Album == album.Name).RandItems(randomLimit));
+            MediaHelper.SetPlaylistAndPlay(Settings.settings.AllSongs.Where(i => i.Album == album.Name).RandItems(randomLimit));
             return album;
         }
         public static Playlist PlayPlaylist(int randomLimit = 100)

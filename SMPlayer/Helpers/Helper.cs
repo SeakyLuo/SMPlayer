@@ -163,8 +163,8 @@ namespace SMPlayer
         {
             if (TempFolder == null) return;
             var files = await TempFolder.GetFilesAsync();
-            await ClearBackup(files, Settings.JsonFilename, maxBackups);
-            await ClearBackup(files, Settings.NewFilename, maxBackups);
+            await ClearBackup(files, SettingsHelper.JsonFilename, maxBackups);
+            await ClearBackup(files, SettingsHelper.NewFilename, maxBackups);
             await ClearBackup(files, MediaHelper.JsonFilename, maxBackups);
             await ClearBackup(files, AlbumsPage.JsonFilename, maxBackups);
         }

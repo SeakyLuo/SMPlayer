@@ -57,7 +57,7 @@ namespace SMPlayer.Models
             if (IsLoading) return;
             NotLoaded = true;
             IsLoading = true;
-            CopySongs(MusicLibraryPage.AllSongs.Where(m => m.Artist == Name));
+            CopySongs(Settings.settings.AllSongs.Where(m => m.Artist == Name));
             NotLoaded = false;
             IsLoading = false;
         }
@@ -69,7 +69,7 @@ namespace SMPlayer.Models
             List<AlbumView> albums = new List<AlbumView>();
             await Task.Run(() =>
             {
-                Songs = MusicLibraryPage.AllSongs.Where(m => m.Artist == Name).ToList();
+                Songs = Settings.settings.AllSongs.Where(m => m.Artist == Name).ToList();
                 foreach (var group in Songs.GroupBy(m => m.Album).OrderBy(g => g.Key))
                     albums.Add(new AlbumView(group.Key, Name, group.OrderBy(m => m.Name), false));
                 IsLoading = false;

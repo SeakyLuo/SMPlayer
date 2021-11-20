@@ -67,7 +67,7 @@ namespace SMPlayer
         {
             MainPage.Instance.SetMultiSelectListener(this);
             SetHeader();
-            if (Albums.Count == 0) Setup(MusicLibraryPage.AllSongs); // have not listened to changes
+            if (Albums.Count == 0) Setup(Settings.settings.AllSongs); // have not listened to changes
         }
 
         private async void Setup(IEnumerable<Music> songs)

@@ -66,7 +66,7 @@ namespace SMPlayer
 
         public static IEnumerable<Music> SearchAlbumSongs(string albumName, string albumArtist)
         {
-            return MusicLibraryPage.AllSongs.Where(m => m.Album == albumName && m.Artist == albumArtist);
+            return Settings.settings.AllSongs.Where(m => m.Album == albumName && m.Artist == albumArtist);
         }
     }
 }

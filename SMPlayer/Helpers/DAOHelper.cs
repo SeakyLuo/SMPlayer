@@ -65,7 +65,7 @@ namespace SMPlayer.Helpers
         {
             return new PreferenceItem()
             {
-                ItemId = src.ItemId,
+                Id = src.ItemId,
                 Name = src.ItemName,
                 IsEnabled = src.IsEnabled,
                 Level = src.Level
@@ -76,7 +76,7 @@ namespace SMPlayer.Helpers
         {
             return new PreferenceItemDAO()
             {
-                ItemId = src.ItemId,
+                ItemId = src.Id,
                 ItemName = src.Name,
                 IsEnabled = src.IsEnabled,
                 Level = src.Level
@@ -209,7 +209,8 @@ namespace SMPlayer.Helpers
                 SearchPlaylistsCriterion = src.SearchPlaylistsCriterion,
                 SearchFoldersCriterion = src.SearchFoldersCriterion,
                 Preference = src.Preference.FromDAO(),
-                IdGenerator = new IdGenerator(src.IdMap)
+                IdGenerator = new IdGenerator(src.IdMap),
+                RecentAdded = src.RecentAdded,
             };
         }
 
@@ -217,6 +218,7 @@ namespace SMPlayer.Helpers
         {
             return new SettingsDAO()
             {
+                MusicLibrary = src.MusicLibrary,
                 RootPath = src.RootPath,
                 Tree = src.Tree.ToDAO(),
                 LastMusicIndex = src.LastMusicIndex,
@@ -253,7 +255,8 @@ namespace SMPlayer.Helpers
                 SearchPlaylistsCriterion = src.SearchPlaylistsCriterion,
                 SearchFoldersCriterion = src.SearchFoldersCriterion,
                 Preference = src.Preference.ToDAO(),
-                IdMap = src.IdGenerator.IdMap
+                IdMap = src.IdGenerator.IdMap,
+                RecentAdded = src.RecentAdded,
             };
         }
     }

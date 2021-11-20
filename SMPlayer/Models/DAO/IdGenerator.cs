@@ -16,7 +16,7 @@ namespace SMPlayer.Models.DAO
         {
             foreach (var idType in Enum.GetValues(typeof(IdType)))
             {
-                IdMap.Add((IdType)idType, 1);
+                IdMap.Add((IdType)idType, 0);
                 LockMap.Add((IdType)idType, false);
             }
         }
@@ -65,6 +65,11 @@ namespace SMPlayer.Models.DAO
             return GenerateId(IdType.Playlist);
         }
 
+        public int GenerateTreeId()
+        {
+            return GenerateId(IdType.FolderTree);
+        }
+
         public int GenerateId(IdType type)
         {
             return Retry(() => LockAndGenerateId(type), id => id > 0, $"生成{type}类型ID失败");
@@ -101,6 +106,6 @@ namespace SMPlayer.Models.DAO
 
     public enum IdType
     {
-        Music, Playlist
+        Music, Playlist, FolderTree
     }
 }

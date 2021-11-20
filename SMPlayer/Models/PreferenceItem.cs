@@ -10,8 +10,9 @@ namespace SMPlayer.Models
     [Serializable]
     public class PreferenceItem
     {
-        public int ItemId { get; set; }
         public string Id { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        public long LongId { get => long.Parse(Id); }
         public string Name { get; set; }
         public bool IsEnabled { get; set; }
         public PreferLevel Level { get; set; } = PreferLevel.Normal;
@@ -38,12 +39,12 @@ namespace SMPlayer.Models
                 Level = Level
             };
         }
-
     }
 
     public class PreferenceItemView : INotifyPropertyChanged
     {
         public string Id { get; set; }
+        public long LongId { get => long.Parse(Id); }
         public string Name
         {
             get => name;

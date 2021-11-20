@@ -72,13 +72,25 @@ namespace SMPlayer
 
         public static async Task Init()
         {
-            string json = await JsonFileHelper.ReadAsync(JsonFileName);
-            RecentAdded = RecentTimeLine.FromMusicList(JsonFileHelper.Convert<ObservableCollection<Music>>(json) ?? MusicLibraryPage.AllSongs);
+            if (Settings.settings.RecentAdded.IsEmpty())
+            {
+                ObservableCollection<Music> recentAdded = JsonFileHelper.Convert<ObservableCollection<Music>>(await JsonFileHelper.ReadAsync(JsonFileName));
+                foreach (var music in recentAdded)
+                {
+                    music.Id = Settings.FindMusic(music.Path).Id;
+                }
+                RecentAdded = RecentTimeLine.FromMusicList(recentAdded ?? Settings.settings.AllSongs);
+            }
+            else
+            {
+                RecentAdded = RecentTimeLine.FromMusicList(Settings.settings.SelectMusicByIds(Settings.settings.RecentAdded));
+            }
         }
 
         public static void Save()
         {
             if (RecentAdded == null) return;
+            Settings.settings.RecentAdded = RecentAdded.TimeLine.Select(i => i.Id).ToList();
             JsonFileHelper.SaveAsync(JsonFileName, RecentAdded.TimeLine);
         }
 
@@ -90,16 +102,9 @@ namespace SMPlayer
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (e.Parameter == null)
+            if (e.Parameter is string selectedItem && selectedItem == "RecentAdded")
             {
-                return;
-            }
-            if (e.Parameter is string selectedItem)
-            {
-                if (selectedItem == "RecentAdded")
-                {
-                    RecentPivot.SelectedItem = RecentAddedItem;
-                }
+                RecentPivot.SelectedItem = RecentAddedItem;
             }
         }
 
@@ -135,7 +140,7 @@ namespace SMPlayer
             RecentAddedProgressRing.IsActive = AddedModified = false;
         }
 
-        public void SetupPlayed(IEnumerable<string> list)
+        public void SetupPlayed(IEnumerable<long> list)
         {
             if (PlayedModifed)
             {
@@ -182,7 +187,7 @@ namespace SMPlayer
             ShowYesNoDialog("ClearPlayHistory", () =>
             {
                 Settings.settings.RecentPlayed.Clear();
-                SetupPlayed(Settings.settings.RecentPlayed);
+                SetupPlayed(Settings.settings.RecentPlayedSongs);
             });
         }
 
@@ -318,7 +323,7 @@ namespace SMPlayer
             }
             else if (RecentPivot.SelectedItem == RecentPlayedItem)
             {
-                SetupPlayed(Settings.settings.RecentPlayed);
+                SetupPlayed(Settings.settings.RecentPlayedSongs);
             }
             else
             {

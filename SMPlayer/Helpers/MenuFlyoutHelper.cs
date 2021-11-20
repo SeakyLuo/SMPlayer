@@ -376,8 +376,6 @@ namespace SMPlayer
                         StorageFolder folder = await tree.GetStorageFolderAsync();
                         if (folder != null) await folder.DeleteAsync();
                         Settings.settings.DeleteFolder(tree);
-                        MusicLibraryPage.AllSongs.RemoveAll(i => i.Path.StartsWith(tree.Path));
-                        RecentPage.RecentAdded.DeleteFolder(tree.Path);
                         afterTreeDeleted?.Invoke(tree);
                         App.Save();
                      
@@ -478,10 +476,8 @@ namespace SMPlayer
                     {
                         MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
                         listener?.Delete(music);
-                        MusicLibraryPage.AllSongs.Remove(music);
                         Settings.settings.RemoveMusic(music);
                         MediaHelper.DeleteMusic(music);
-                        RecentPage.RecentAdded.Remove(music);
                         if (!await Helper.FileNotExist(music.Path))
                         {
                             StorageFile file = await StorageFile.GetFileFromPathAsync(music.Path);

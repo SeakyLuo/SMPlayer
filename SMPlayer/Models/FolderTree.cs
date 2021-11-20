@@ -47,6 +47,7 @@ namespace SMPlayer.Models
 
         public void CopyFrom(FolderTree tree)
         {
+            Id = Id;
             Trees = tree.Trees.ToList();
             Files = tree.Files.ToList();
             Path = tree.Path;
@@ -89,6 +90,7 @@ namespace SMPlayer.Models
         }
         private void AddToMusicLibrary()
         {
+            Id = Settings.settings.IdGenerator.GenerateTreeId();
             foreach (var music in Files)
                 MusicLibraryPage.AddMusic(music);
             foreach (var tree in Trees)
@@ -97,7 +99,7 @@ namespace SMPlayer.Models
         private async Task<bool> CheckNewFile(StorageFolder folder, TreeUpdateData data = null)
         {
             LoadingStatus = ExecutionStatus.Running;
-            var pathSet = new HashSet<string>(); // folder name set
+            var pathSet = new HashSet<string>(); // folder path set
             foreach (var sub in await folder.GetFoldersAsync())
             {
                 if (LoadingStatus == ExecutionStatus.Break) return false;
@@ -161,6 +163,7 @@ namespace SMPlayer.Models
         private async Task<bool> Init(StorageFolder folder, Action<string, string, int, int> updater, TreeOperationIndicator indicator)
         {
             LoadingStatus = ExecutionStatus.Running;
+            Id = Settings.settings.IdGenerator.GenerateTreeId();
             var samePath = folder.Path == Path;
             if (string.IsNullOrEmpty(Path))
             {
@@ -348,7 +351,7 @@ namespace SMPlayer.Models
         public FolderTree FindTree(FolderTree target)
         {
             //return Trees.FirstOrDefault(tree => tree.Equals(target)) ?? Trees.FirstOrDefault(tree => target.Path.StartsWith(tree.Path))?.FindTree(target);
-            return FindTree(target.Path);
+            return FindTree(target.Id);
         }
         public FolderTree FindTree(string path)
         {
@@ -360,6 +363,16 @@ namespace SMPlayer.Models
                     return tree;
                 if (path.StartsWith(tree.Path))
                     return tree.FindTree(path);
+            }
+            return null;
+        }
+        public FolderTree FindTree(long id)
+        {
+            if (Id == id) return this;
+            foreach (var tree in Trees)
+            {
+                if (tree.FindTree(id) is FolderTree target)
+                    return target;
             }
             return null;
         }

@@ -216,7 +216,7 @@ namespace SMPlayer
             HyperlinkButton button = (HyperlinkButton)sender;
             List<Music> skipped = new List<Music>();
             int count = MusicLibraryPage.SongCount, counter = 0;
-            foreach (Music music in MusicLibraryPage.AllSongs)
+            foreach (Music music in Settings.settings.AllSongs)
             {
                 if (addLyricsClickCounter == 0)
                 {
@@ -302,7 +302,7 @@ namespace SMPlayer
             {
                 MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-                JsonFileHelper.SaveAsync(folder, Settings.JsonFilename, Settings.settings);
+                JsonFileHelper.SaveAsync(folder, SettingsHelper.JsonFilename, Settings.settings);
                 MainPage.Instance.Loader.Hide();
                 MainPage.Instance.ShowLocalizedNotification("DataExported");
             }

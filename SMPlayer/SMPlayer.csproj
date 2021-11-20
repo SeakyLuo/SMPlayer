@@ -229,6 +229,7 @@
     <Compile Include="Helpers\LyricsHelper.cs" />
     <Compile Include="Helpers\QuickPlayHelper.cs" />
     <Compile Include="Helpers\RandomPlayHelper.cs" />
+    <Compile Include="Helpers\SettingsHelper.cs" />
     <Compile Include="Helpers\TileHelper.cs" />
     <Compile Include="Helpers\ToastHelper.cs" />
     <Compile Include="Helpers\PermissionHelper.cs" />

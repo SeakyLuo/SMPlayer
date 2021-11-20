@@ -56,6 +56,15 @@ namespace SMPlayer
             {
                 SelectPlaylist(albumView.Name);
             }
+            else if (e.Parameter is long id)
+            {
+                SelectPlaylist(id);
+            }
+        }
+
+        private void SelectPlaylist(long id)
+        {
+            PlaylistTabView.SelectedItem = Playlists.FirstOrDefault(p => p.Id == id);
         }
 
         private void SelectPlaylist(string target)

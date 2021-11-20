@@ -943,12 +943,12 @@ namespace SMPlayer
 
         private void PlayAlbumItem_Click(object sender, RoutedEventArgs e)
         {
-            MediaHelper.SetMusicAndPlay(MusicLibraryPage.AllSongs.Where(m => m.Album == MediaHelper.CurrentMusic.Album));
+            MediaHelper.SetMusicAndPlay(Settings.settings.AllSongs.Where(m => m.Album == MediaHelper.CurrentMusic.Album));
         }
 
         private void PlayArtistItem_Click(object sender, RoutedEventArgs e)
         {
-            MediaHelper.SetMusicAndPlay(MusicLibraryPage.AllSongs.Where(m => m.Artist == MediaHelper.CurrentMusic.Artist));
+            MediaHelper.SetMusicAndPlay(Settings.settings.AllSongs.Where(m => m.Artist == MediaHelper.CurrentMusic.Artist));
         }
         public void Tick()
         {

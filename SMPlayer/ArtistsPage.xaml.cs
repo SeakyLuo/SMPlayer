@@ -90,7 +90,7 @@ namespace SMPlayer
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (Artists.Count == 0) Setup(MusicLibraryPage.AllSongs);
+            if (Artists.Count == 0) Setup(Settings.settings.AllSongs);
             targetArtist = e.Parameter;
         }
 
@@ -148,7 +148,7 @@ namespace SMPlayer
             }
         }
 
-        private async void Setup(ICollection<Music> songs)
+        private async void Setup(IEnumerable<Music> songs)
         {
             if (IsProcessing) return;
             LoadingProgress.Visibility = Visibility.Visible;
@@ -156,7 +156,7 @@ namespace SMPlayer
             LoadingProgress.Visibility = Visibility.Collapsed;
         }
 
-        private async Task SetData(ICollection<Music> songs)
+        private async Task SetData(IEnumerable<Music> songs)
         {
             IsProcessing = true;
             List<ArtistView> artists = new List<ArtistView>();

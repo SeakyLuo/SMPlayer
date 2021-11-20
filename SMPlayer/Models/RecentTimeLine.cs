@@ -40,7 +40,6 @@ namespace SMPlayer.Models
             CollectionChanged?.Invoke();
         }
 
-        // TODO 记录just removed index
         public bool Remove(Music music)
         {
             justRemovedIndex = TimeLine.IndexOf(music);
@@ -52,14 +51,6 @@ namespace SMPlayer.Models
                 return true;
             }
             return false;
-        }
-
-        public void RenameFolder(string oldPath, string newPath)
-        {
-            foreach (var item in TimeLine)
-            {
-                item.RenameFolder(oldPath, newPath);
-            }
         }
 
         public void DeleteFolder(string path)

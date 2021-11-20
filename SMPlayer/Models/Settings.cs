@@ -15,12 +15,12 @@ namespace SMPlayer.Models
     public class Settings
     {
         public static Settings settings;
-        public const string JsonFilename = "SMPlayerSettings", NewFilename = "SMPlayerSettingsFile";
         public static List<ILikeMusicListener> LikeMusicListeners = new List<ILikeMusicListener>();
         public static List<Action<Playlist>> PlaylistAddedListeners = new List<Action<Playlist>>();
-        public static bool Inited { get; private set; } = false;
 
         public Dictionary<long, Music> MusicLibrary { get; set; } = new Dictionary<long, Music>();
+        [Newtonsoft.Json.JsonIgnore]
+        public IEnumerable<Music> AllSongs { get => MusicLibrary.Values; }
         public string RootPath { get; set; } = "";
         public FolderTree Tree { get; set; } = new FolderTree();
         public int LastMusicIndex { get; set; } = -1;
@@ -65,92 +65,16 @@ namespace SMPlayer.Models
         private List<Music> JustRemoved = new List<Music>();
 
         public IdGenerator IdGenerator = new IdGenerator();
+        public List<long> RecentAdded = new List<long>();
 
         public Settings()
         {
             MyFavorites = new Playlist(MenuFlyoutHelper.MyFavorites);
         }
 
-        public static async Task Init()
-        {
-            Inited = false;
-            var newSettings = await JsonFileHelper.ReadAsync(NewFilename);
-            if (string.IsNullOrEmpty(newSettings))
-            {
-                if (await JsonFileHelper.ReadAsync(JsonFilename) is string json)
-                {
-                    settings = JsonFileHelper.Convert<Settings>(json);
-                    if (settings.MusicLibrary.IsEmpty() && !settings.Tree.IsEmpty)
-                    {
-                        settings.MusicLibrary = settings.Tree.Flatten()
-                                                             .Select(m => { m.Id = settings.IdGenerator.GenerateMusicId(); return m; })
-                                                             .ToDictionary(m => m.Id);
-                    }
-                    await Init(settings);
-                }
-                else
-                {
-                    settings = new Settings();
-                    Save();
-                }
-            }
-            else
-            {
-                settings = JsonFileHelper.Convert<SettingsDAO>(newSettings).FromDAO();
-                await Init(settings);
-            }
-            Inited = true;
-        }
-
-        private static async Task Init(Settings settings)
-        {
-            if (string.IsNullOrEmpty(settings.RootPath)) return;
-            try
-            {
-                Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
-            }
-            catch (FileNotFoundException)
-            {
-                App.LoadedListeners.Add(() =>
-                {
-                    MainPage.Instance.ShowLocalizedNotification("RootNotFound");
-                    MainPage.Instance.NavigateToPage(typeof(SettingsPage));
-                });
-            }
-            catch (Exception)
-            {
-
-            }
-            MediaControl.AddMusicModifiedListener((before, after) =>
-            {
-                settings.SelectById(before.Id).CopyFrom(after);
-            });
-            foreach (var item in await ApplicationData.Current.LocalFolder.GetItemsAsync())
-                if (item.Name.EndsWith(".TMP") || item.Name.EndsWith(".~tmp"))
-                    await item.DeleteAsync();
-        }
-
-        public static void Save()
-        {
-            if (settings == null) return;
-            settings.MusicProgress = MediaHelper.Position;
-            JsonFileHelper.SaveAsync(JsonFilename, settings);
-            JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, settings);
-            try
-            {
-                SettingsDAO settingsDAO = settings.ToDAO();
-                JsonFileHelper.SaveAsync(NewFilename, settingsDAO);
-                JsonFileHelper.SaveAsync(Helper.TempFolder, NewFilename + Helper.TimeStamp, settingsDAO);
-            }
-            catch (Exception e)
-            {
-                Helper.Print(e.ToString());
-            }
-        }
-
         public static Music FindMusic(IMusicable target) { return FindMusic(target.ToMusic()); }
-        public static Music FindMusic(Music target) { return settings.Tree.FindMusic(target) is Music music ? settings.SelectById(music.Id) : null; }
-        public static Music FindMusic(string target) { return settings.Tree.FindMusic(target) is Music music ? settings.SelectById(music.Id) : null; }
+        public static Music FindMusic(Music target) { return settings.Tree.FindMusic(target) is Music music ? settings.SelectMusicById(music.Id) : null; }
+        public static Music FindMusic(string target) { return settings.Tree.FindMusic(target) is Music music ? settings.SelectMusicById(music.Id) : null; }
 
         public int FindNextPlaylistNameIndex(string Name)
         {
@@ -282,14 +206,20 @@ namespace SMPlayer.Models
             RecentPage.RecentAdded.Add(music); // TODO: ugly impl
         }
 
-        public Music SelectById(long id)
+        public Music SelectMusicById(long id)
         {
-            return MusicLibrary[id];
+            MusicLibrary.TryGetValue(id, out Music music);
+            return music;
         }
 
-        public List<Music> SelectByIds(IEnumerable<long> ids)
+        public List<Music> SelectMusicByIds(IEnumerable<long> ids)
         {
-            return ids.Select(i => SelectById(i)).ToList();
+            return ids.Select(i => SelectMusicById(i)).ToList();
+        }
+
+        public Playlist SelectPlaylistById(long id)
+        {
+            return Playlists.FirstOrDefault(i => i.Id == id);
         }
 
         public void Played(Music music)
@@ -360,10 +290,10 @@ namespace SMPlayer.Models
             if (folderTree == null) return;
             folderTree.Trees.Remove(target);
             MusicLibrary.RemoveAll(pair => pair.Value.Path.StartsWith(target.Path));
-            RecentPlayedSongs.RemoveAll(id => SelectById(id).Path.StartsWith(target.Path));
+            RecentPlayedSongs.RemoveAll(id => SelectMusicById(id).Path.StartsWith(target.Path));
             foreach (var playlist in Playlists) playlist.RemoveAll(i => i.Path.StartsWith(target.Path));
             MyFavorites.RemoveAll(i => i.Path.StartsWith(target.Path));
-            Preference.PreferredSongs.RemoveAll(i => SelectById(int.Parse(i.Id)).Path.StartsWith(target.Path));
+            Preference.PreferredSongs.RemoveAll(i => SelectMusicById(int.Parse(i.Id)).Path.StartsWith(target.Path));
             Preference.PreferredFolders.RemoveAll(i => i.Id == folderTree.Id.ToString());
             RecentPage.RecentAdded.DeleteFolder(target.Path);
         }
@@ -376,8 +306,7 @@ namespace SMPlayer.Models
 
         public void MoveFolder(FolderTree tree, string path)
         {
-            FolderTree branch = Tree.FindTree(tree);
-            Tree.FindTree(tree).MoveToFolder(path);
+            Tree.MoveBranch(tree, path);
             foreach (var music in MusicLibrary.Values)
             {
                 if (music.Path.StartsWith(path))

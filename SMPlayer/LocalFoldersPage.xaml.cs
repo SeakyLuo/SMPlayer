@@ -147,14 +147,12 @@ namespace SMPlayer
                     await folder.RenameAsync(newName);
                     string newPath = tree.Path.Substring(0, tree.Path.LastIndexOf('\\') + 1) + newName;
                     Settings.settings.RenameFolder(tree, newPath);
-                    RecentPage.RecentAdded.RenameFolder(tree.Path, newPath);
 
                     GridItems.FirstOrDefault(i => i.Tree.Equals(tree))?.Rename(newPath);
                     if (FindNode(tree) is TreeViewNode node)
                     {
                         (node.Content as FolderTree).Rename(newPath);
                     }
-
                     App.Save();
                 }));
             flyout.Items.Add(MenuFlyoutHelper.GetSearchDirectoryItem(tree));

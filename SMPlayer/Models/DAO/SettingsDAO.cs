@@ -27,7 +27,7 @@ namespace SMPlayer.Models.DAO
         public bool LocalMusicGridView { get; set; } = true;
         public bool LocalFolderGridView { get; set; } = true;
         public PlaylistDAO MyFavorites { get; set; } = new PlaylistDAO() { Name = MenuFlyoutHelper.MyFavorites };
-        public List<int> RecentPlayed { get; set; } = new List<int>();
+        public List<long> RecentPlayed { get; set; } = new List<long>();
         public bool MiniModeWithDropdown { get; set; } = false;
         public bool IsMuted { get; set; } = false;
         public int LimitedRecentPlayedItems { get; set; } = -1;
@@ -51,13 +51,14 @@ namespace SMPlayer.Models.DAO
 
         public PreferenceSettingsDAO Preference { get; set; } = new PreferenceSettingsDAO();
 
-        public Dictionary<IdType, int> IdMap = new Dictionary<IdType, int>();
+        public Dictionary<IdType, int> IdMap { get; set; } = new Dictionary<IdType, int>();
+        public List<long> RecentAdded { get; set; } = new List<long>();
 
         public SettingsDAO()
         {
             foreach (var idType in Enum.GetValues(typeof(IdType)))
             {
-                IdMap.Add((IdType)idType, 1);
+                IdMap.Add((IdType)idType, 0);
             }
         }
 

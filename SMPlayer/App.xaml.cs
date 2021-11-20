@@ -44,7 +44,7 @@ namespace SMPlayer
 
         private async void OnLaunched(LaunchActivatedEventArgs e, Music music)
         {
-            await Settings.Init();
+            await SettingsHelper.Init();
             if (Settings.settings.LastPage == "Albums")
                 await AlbumsPage.Init();
             await Helper.Init();
@@ -150,7 +150,7 @@ namespace SMPlayer
 
         public static async void Save()
         {
-            Settings.Save();
+            SettingsHelper.Save();
             MediaHelper.Save();
             AlbumsPage.Save();
             RecentPage.Save();

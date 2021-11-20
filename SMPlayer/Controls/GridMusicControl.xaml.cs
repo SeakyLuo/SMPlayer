@@ -64,7 +64,7 @@ namespace SMPlayer
             }
         }
 
-        public void Setup(IEnumerable<string> collection)
+        public void Setup(IEnumerable<long> collection)
         {
             Setup(collection.Select(i => new MusicPath(i)));
         }
@@ -265,15 +265,15 @@ namespace SMPlayer
 
     public class MusicPath : IMusicable
     {
-        public string Path { get; set; }
-        public MusicPath(string path)
+        public long Id { get; set; }
+        public MusicPath(long Id)
         {
-            Path = path;
+            this.Id = Id;
         }
 
         Music IMusicable.ToMusic()
         {
-            return Settings.FindMusic(Path);
+            return Settings.settings.SelectMusicById(Id);
         }
     }
 }
