@@ -32,7 +32,7 @@ namespace SMPlayer
         {
             LocateCurrentButton.Visibility = SaveToButton.Visibility = ClearButton.Visibility = PlayModeButton.Visibility = 
                                             MediaHelper.CurrentPlaylist.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
-            RandomPlayButton.Visibility = MusicLibraryPage.SongCount == 0 ? Visibility.Collapsed : Visibility.Visible;
+            RandomPlayButton.Visibility = Settings.settings.MusicLibrary.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void SaveToButton_Click(object sender, RoutedEventArgs e)

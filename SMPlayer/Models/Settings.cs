@@ -15,7 +15,8 @@ namespace SMPlayer.Models
     public class Settings
     {
         public static Settings settings;
-        public static List<ILikeMusicListener> LikeMusicListeners = new List<ILikeMusicListener>();
+        private static List<IMusicEventListener> MusicEventListeners = new List<IMusicEventListener>();
+        public static void AddMusicEventListener(IMusicEventListener listener) { MusicEventListeners.Add(listener); }
         public static List<Action<Playlist>> PlaylistAddedListeners = new List<Action<Playlist>>();
 
         public Dictionary<long, Music> MusicLibrary { get; set; } = new Dictionary<long, Music>();
@@ -118,7 +119,7 @@ namespace SMPlayer.Models
             music.Favorite = true;
             MyFavorites.Add(music);
             MediaHelper.LikeMusic(music);
-            foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, true);
+            foreach (var listener in MusicEventListeners) listener.Liked(music, true);
         }
 
         public void LikeMusic(IEnumerable<IMusicable> playlist)
@@ -134,7 +135,7 @@ namespace SMPlayer.Models
             music.Favorite = false;
             MyFavorites.Remove(music);
             MediaHelper.DislikeMusic(music);
-            foreach (var listener in LikeMusicListeners) listener.MusicLiked(music, false);
+            foreach (var listener in MusicEventListeners) listener.Liked(music, false);
         }
 
         public async void AddMusic(Music music)
@@ -194,7 +195,7 @@ namespace SMPlayer.Models
             JustRemoved.Remove(music);
             if (Tree.FindTree(music) is FolderTree tree)
             {
-                tree.Files.Add(music);
+                tree.Files.Add(new FolderFile(music));
                 tree.Sort();
             }
             foreach (var pair in removedMusicInPlaylist)
@@ -214,7 +215,7 @@ namespace SMPlayer.Models
 
         public List<Music> SelectMusicByIds(IEnumerable<long> ids)
         {
-            return ids.Select(i => SelectMusicById(i)).ToList();
+            return ids.Select(i => SelectMusicById(i)).Where(i => i != null).ToList();
         }
 
         public Playlist SelectPlaylistById(long id)
@@ -315,11 +316,42 @@ namespace SMPlayer.Models
                 }
             }
         }
+
+        public List<Music> GetMostPlayed(int limit)
+        {
+            List<Music> list = new List<Music>();
+            foreach (var group in AllSongs.GroupBy(m => m.PlayCount).OrderByDescending(g => g.Key))
+            {
+                if (list.Count > limit) break;
+                list.AddRange(group);
+            }
+            return list;
+        }
+
+        public List<Music> GetLeastPlayed(int limit)
+        {
+            List<Music> list = new List<Music>();
+            foreach (var group in AllSongs.GroupBy(m => m.PlayCount).OrderBy(g => g.Key))
+            {
+                if (list.Count > limit) break;
+                list.AddRange(group);
+            }
+            return list;
+        }
+
+        public void MusicModified(Music before, Music after)
+        {
+            SelectMusicById(before.Id)?.CopyFrom(after);
+            foreach (var listener in MusicEventListeners) listener.Modified(before, after);
+        }
     }
 
-    public interface ILikeMusicListener
+    public interface IMusicEventListener
     {
-        void MusicLiked(Music music, bool isFavorite);
+        void Liked(Music music, bool isFavorite);
+        void Added(Music music);
+        void Removed(Music music);
+        void Modified(Music before, Music after);
     }
 
     public enum NamingError

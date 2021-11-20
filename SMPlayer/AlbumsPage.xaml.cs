@@ -20,12 +20,12 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class AlbumsPage : Page, IAfterSongsSetListener, IImageSavedListener, IMultiSelectListener
+    public sealed partial class AlbumsPage : Page, IImageSavedListener, IMultiSelectListener, IMusicEventListener
     {
         public const string JsonFilename = "AlbumInfo";
         private ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         private bool IsProcessing = false;
-        public static volatile List<AlbumInfo> AlbumInfoList;
+        public static List<AlbumInfo> AlbumInfoList;
         private static readonly SortBy[] SortByCriteria = { SortBy.Default, SortBy.Name, SortBy.Artist };
         public List<Music> SelectedSongs
         {
@@ -44,7 +44,6 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MusicLibraryPage.AddAfterSongsSetListener(this);
             AlbumArtControl.ImageSavedListeners.Add(this);
         }
 
@@ -125,14 +124,6 @@ namespace SMPlayer
             {
                 MainPage.Instance?.SetHeaderText("AllAbums");
             }
-        }
-
-        public async void SongsSet(ICollection<Music> songs)
-        {
-            if (MainPage.Instance.CurrentPage == typeof(AlbumsPage))
-                Setup(songs);
-            else
-                await SetData(songs);
         }
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)
@@ -284,6 +275,40 @@ namespace SMPlayer
         void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar)
         {
             AlbumsGridView.SelectedItems.Clear();
+        }
+
+        void IMusicEventListener.Liked(Music music, bool isFavorite)
+        {
+        }
+
+        void IMusicEventListener.Added(Music music)
+        {
+            if (Albums.FirstOrDefault(a => a.Name == music.Album) is AlbumView album)
+            {
+                album.AddMusic(music);
+            }
+            else
+            {
+                album = new AlbumView(music);
+                Albums.Add(album);
+                Albums.SetTo(Sort(Settings.settings.AlbumsCriterion, Albums));
+            }
+        }
+
+        void IMusicEventListener.Removed(Music music)
+        {
+            if (Albums.FirstOrDefault(a => a.Name == music.Album) is AlbumView album)
+            {
+                album.RemoveMusic(music);
+                if (album.Songs.IsEmpty())
+                {
+                    Albums.Remove(album);
+                }
+            }
+        }
+
+        void IMusicEventListener.Modified(Music before, Music after)
+        {
         }
     }
 }

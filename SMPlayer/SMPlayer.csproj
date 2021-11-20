@@ -244,6 +244,7 @@
     <Compile Include="Models\DAO\PreferenceItemDAO.cs" />
     <Compile Include="Models\DAO\PreferenceSettingsDAO.cs" />
     <Compile Include="Models\DAO\SettingsDAO.cs" />
+    <Compile Include="Models\FolderFile.cs" />
     <Compile Include="Models\FullyObservableCollection.cs" />
     <Compile Include="Models\LoadingCache.cs" />
     <Compile Include="Helpers\SearchHelper.cs" />

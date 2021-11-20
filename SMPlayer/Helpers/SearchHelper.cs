@@ -171,7 +171,7 @@ namespace SMPlayer.Helpers
         }
         public static bool IsTargetFolder(FolderTree tree, string keyword)
         {
-            return tree.Directory.Contains(keyword, Comparison) || tree.Files.Any(music => IsTargetMusic(music, keyword));
+            return tree.Directory.Contains(keyword, Comparison) || tree.Songs.Any(music => IsTargetMusic(music, keyword));
         }
         public static IEnumerable<GridFolderView> SortFolders(IEnumerable<GridFolderView> src, string keyword, SortBy criterion)
         {

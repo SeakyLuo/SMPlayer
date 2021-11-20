@@ -96,6 +96,10 @@ namespace SMPlayer.Models
             Songs.Add(music);
             Songs.SetTo(Songs.OrderBy(m => m.Name));
         }
+        public void RemoveMusic(Music music)
+        {
+            Songs.Remove(music);
+        }
         public void SetSongs(IEnumerable<Music> music)
         {
             Songs = new ObservableCollection<Music>(music);

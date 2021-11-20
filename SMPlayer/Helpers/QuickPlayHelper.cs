@@ -68,7 +68,7 @@ namespace SMPlayer.Helpers
             IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredFolders);
             songs.AddRange(items.Select(i => new { Folder = Settings.settings.Tree.FindTree(i.LongId), i.Level })
                                 .Where(i => i.Folder != null)
-                                .SelectMany(i => i.Folder.Files.RandItems(GetRandomPreferredItems(i.Level))).RandItems(randomItems));
+                                .SelectMany(i => i.Folder.Songs.RandItems(GetRandomPreferredItems(i.Level))).RandItems(randomItems));
         }
 
         private static IEnumerable<PreferenceItem> GetPreferenceItems(List<PreferenceItem> items)
@@ -108,14 +108,14 @@ namespace SMPlayer.Helpers
         {
             int count = GetPreferenceItems(preference.MostPlayed);
             if (count == 0) return;
-            songs.AddRange(MusicLibraryPage.GetMostPlayed(randomLimit));
+            songs.AddRange(Settings.settings.GetMostPlayed(randomLimit));
         }
 
         private static void HandledLeastPlayed(HashSet<Music> songs, PreferenceSettings preference, int randomLimit)
         {
             int count = GetPreferenceItems(preference.LeastPlayed);
             if (count == 0) return;
-            songs.AddRange(MusicLibraryPage.GetLeastPlayed(randomLimit));
+            songs.AddRange(Settings.settings.GetLeastPlayed(randomLimit));
         }
 
         private static int GetPreferenceItems(PreferenceItem item)

@@ -13,7 +13,7 @@ using Windows.UI.Xaml.Media;
 
 namespace SMPlayer
 {
-    public sealed partial class PlaylistControl : UserControl, ISwitchMusicListener, IMenuFlyoutItemClickListener, IMultiSelectListener
+    public sealed partial class PlaylistControl : UserControl, IMusicEventListener, ISwitchMusicListener, IMenuFlyoutItemClickListener, IMultiSelectListener
     {
         public bool IsNowPlaying
         {
@@ -121,13 +121,6 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             MediaHelper.SwitchMusicListeners.Add(this);
-            MediaControl.AddMusicModifiedListener(CopyMusic);
-            MusicInfoControl.MusicModifiedListeners.Add(CopyMusic);
-        }
-
-        private void CopyMusic(Music before, Music after)
-        {
-            CurrentPlaylist.FirstOrDefault(m => m == before)?.CopyFrom(after);
         }
 
         private void PlaylistController_Loaded(object sender, RoutedEventArgs e)
@@ -480,6 +473,31 @@ namespace SMPlayer
         {
             SongsListView.ReverseSelections();
             MultiSelectListener?.ReverseSelections(commandBar);
+        }
+
+        void IMusicEventListener.Liked(Music music, bool isFavorite)
+        {
+        }
+
+        void IMusicEventListener.Added(Music music)
+        {
+            if (justRemoveMusic == music)
+            {
+                CurrentPlaylist.Insert(justRemovedIndex, music);
+            }
+        }
+
+        private int justRemovedIndex = -1;
+        private Music justRemoveMusic = null;
+        void IMusicEventListener.Removed(Music music)
+        {
+            justRemovedIndex = CurrentPlaylist.IndexOf(music);
+            CurrentPlaylist.RemoveAt(justRemovedIndex);
+        }
+
+        void IMusicEventListener.Modified(Music before, Music after)
+        {
+            CurrentPlaylist.FirstOrDefault(m => m == before)?.CopyFrom(after);
         }
     }
 

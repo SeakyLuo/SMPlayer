@@ -21,23 +21,17 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MusicLibraryPage : Page, ISwitchMusicListener, IAfterSongsSetListener, ILikeMusicListener, IMenuFlyoutHelperBuildListener
+    public sealed partial class MusicLibraryPage : Page, ISwitchMusicListener, IMusicEventListener, IMenuFlyoutHelperBuildListener
     {
-        public static ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
-        public static int SongCount { get => AllSongs.Count; }
+        public ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
         public static bool IsLibraryUnchangedAfterChecking = true;
-
-        private static List<IAfterSongsSetListener> listeners = new List<IAfterSongsSetListener>();
 
         public MusicLibraryPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            listeners.Add(this);
-            SongsSet(AllSongs);
+            Settings.AddMusicEventListener(this);
             MediaHelper.SwitchMusicListeners.Add(this);
-            MediaControl.AddMusicModifiedListener(MusicModified);
-            Controls.MusicInfoControl.MusicModifiedListeners.Add(MusicModified);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -48,20 +42,14 @@ namespace SMPlayer
             MediaHelper.FindMusicAndSetPlaying(AllSongs, null, MediaHelper.CurrentMusic);
         }
 
-        public static async void CheckLibrary()
+        public async void CheckLibrary()
         {
             if (Helper.CurrentFolder == null) return;
             var data = new TreeUpdateData();
             await Settings.settings.Tree.CheckNewFile(data);
             if (IsLibraryUnchangedAfterChecking = data.More == 0 && data.Less == 0) return;
             SortAndSetAllSongs(Settings.settings.Tree.Flatten());
-            NotifyListeners();
             App.Save();
-        }
-
-        public static void AddAfterSongsSetListener(IAfterSongsSetListener listener)
-        {
-            listeners.Add(listener);
         }
 
         private void MusicLibraryDataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
@@ -69,12 +57,6 @@ namespace SMPlayer
             var music = (Music)MusicLibraryDataGrid.SelectedItem;
             if (music == null) return;
             MediaHelper.SetMusicAndPlay(music);
-        }
-
-        public static void MusicModified(Music before, Music after)
-        {
-            AllSongs.FirstOrDefault(m => m == before)?.CopyFrom(after);
-            Settings.FindMusic(before)?.CopyFrom(after);
         }
 
         private void MenuFlyout_Opening(object sender, object e)
@@ -89,7 +71,7 @@ namespace SMPlayer
         {
             return playlist.OrderBy(SortByConverter.GetKeySelector(criterion));
         }
-        public static void SortAndSetAllSongs(IEnumerable<Music> list)
+        public void SortAndSetAllSongs(IEnumerable<Music> list)
         {
             SetAllSongs(SortPlaylist(list, Settings.settings.MusicLibraryCriterion));
         }
@@ -108,10 +90,9 @@ namespace SMPlayer
             }
             else e.Column.SortDirection = DataGridSortDirection.Ascending;
             SetAllSongs(temp.ToList());
-            MusicLibraryDataGrid.ItemsSource = AllSongs;
         }
 
-        public static void SetAllSongs(IEnumerable<Music> songs)
+        public void SetAllSongs(IEnumerable<Music> songs)
         {
             if (songs == null) return;
             AllSongs.Clear();
@@ -122,56 +103,11 @@ namespace SMPlayer
                 AllSongs.Add(item);
             }
             SetHeader();
-            NotifyListeners();
-        }
-
-        public static void AddMusic(Music music)
-        {
-            if (Settings.FindMusic(music) != null) return;
-            var keySelector = SortByConverter.GetKeySelector(Settings.settings.MusicLibraryCriterion);
-            for (int i = 0; i < SongCount; i++)
-            {
-                if (keySelector(music).CompareTo(keySelector(AllSongs[i])) <= 0)
-                {
-                    AllSongs.Insert(i, music);
-                    goto AfterInsertion;
-                }
-            }
-            AllSongs.Add(music);
-            AfterInsertion:
-            SetHeader();
-            Settings.settings.AddMusic(music);
-            NotifyListeners();
-        }
-
-        public static void RemoveMusic(Music music)
-        {
-            if (Settings.FindMusic(music) == null) return;
-            AllSongs.Remove(music);
-            SetHeader();
-            Settings.settings.RemoveMusic(music);
-            NotifyListeners();
-        }
-
-        private static void NotifyListeners()
-        {
-            foreach (var listener in listeners) listener.SongsSet(AllSongs);
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () => MediaHelper.FindMusicAndSetPlaying(AllSongs, current, next));
-        }
-
-        public void SongsSet(ICollection<Music> songs)
-        {
-            MusicLibraryDataGrid.ItemsSource = songs;
-        }
-
-        public void MusicLiked(Music music, bool isFavorite)
-        {
-            var target = AllSongs.FirstOrDefault(m => m == music);
-            if (target != null) target.Favorite = isFavorite;
         }
 
         public void OnBuild(MenuFlyoutHelper helper)
@@ -184,7 +120,7 @@ namespace SMPlayer
             helper.Data = list;
         }
 
-        public static void SetHeader()
+        public void SetHeader()
         {
             if (MainPage.Instance?.CurrentPage != typeof(MusicLibraryPage))
             {
@@ -200,31 +136,37 @@ namespace SMPlayer
             }
         }
 
-        public static List<Music> GetMostPlayed(int limit)
+        void IMusicEventListener.Liked(Music music, bool isFavorite)
         {
-            List<Music> list = new List<Music>();
-            foreach (var group in AllSongs.GroupBy(m => m.PlayCount).OrderByDescending(g => g.Key))
-            {
-                if (list.Count > limit) break;
-                list.AddRange(group);
-            }
-            return list;
+            if (AllSongs.FirstOrDefault(m => m == music) is Music target)
+                target.Favorite = isFavorite;
         }
 
-        public static List<Music> GetLeastPlayed(int limit)
+        void IMusicEventListener.Added(Music music)
         {
-            List<Music> list = new List<Music>();
-            foreach (var group in AllSongs.GroupBy(m => m.PlayCount).OrderBy(g => g.Key))
-            {
-                if (list.Count > limit) break;
-                list.AddRange(group);
-            }
-            return list;
+            //    var keySelector = SortByConverter.GetKeySelector(Settings.settings.MusicLibraryCriterion);
+            //    for (int i = 0; i < AllSongs.Count; i++)
+            //    {
+            //        if (keySelector(music).CompareTo(keySelector(AllSongs[i])) <= 0)
+            //        {
+            //            AllSongs.Insert(i, music);
+            //            goto AfterInsertion;
+            //        }
+            //    }
+            //    AllSongs.Add(music);
+            //    AfterInsertion:
+            //    SetHeader();
         }
-    }
 
-    public interface IAfterSongsSetListener
-    {
-        void SongsSet(ICollection<Music> songs);
+        void IMusicEventListener.Removed(Music music)
+        {
+            AllSongs.Remove(music);
+            SetHeader();
+        }
+
+        void IMusicEventListener.Modified(Music before, Music after)
+        {
+            AllSongs.FirstOrDefault(m => m == before)?.CopyFrom(after);
+        }
     }
 }

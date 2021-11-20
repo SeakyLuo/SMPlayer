@@ -312,7 +312,7 @@ namespace SMPlayer.Models
 
         public override bool Equals(object obj)
         {
-            return obj is Music music && Path == music.Path;
+            return obj is Music music && Id == music.Id;
         }
 
         public bool IndexedEquals(Music music)
@@ -337,12 +337,12 @@ namespace SMPlayer.Models
 
         PreferenceItem IPreferable.AsPreferenceItem()
         {
-            return new PreferenceItem(Path, Name);
+            return new PreferenceItem(Id.ToString(), Name);
         }
 
         PreferenceItemView IPreferable.AsPreferenceItemView()
         {
-            return new PreferenceItemView(Path, Name, Name, PreferType.Song);
+            return new PreferenceItemView(Id.ToString(), Name, Path, PreferType.Song);
         }
     }
 

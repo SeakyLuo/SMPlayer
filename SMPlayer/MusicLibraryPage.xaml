@@ -37,6 +37,7 @@
             IsReadOnly="True"
             SelectionMode="Extended"
             Sorting="MusicLibraryDataGrid_Sorting"
+            ItemsSource="{x:Bind AllSongs, Mode=OneWay}"
             VerticalScrollBarVisibility="Visible">
             <controls:DataGrid.Columns>
                 <controls:DataGridTextColumn

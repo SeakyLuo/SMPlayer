@@ -18,7 +18,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalFoldersPage : Page, ILocalPageButtonListener, IMenuFlyoutItemClickListener, IMultiSelectListener
+    public sealed partial class LocalFoldersPage : Page, IMusicEventListener, ILocalPageButtonListener, IMenuFlyoutItemClickListener, IMultiSelectListener
     {
         public static FolderTree CurrentTree;
         private ObservableCollection<GridFolderView> GridItems = new ObservableCollection<GridFolderView>();
@@ -30,34 +30,6 @@ namespace SMPlayer
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             LocalPage.FolderListener = this;
-            MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
-            {
-                if (CurrentTree.Contains(before))
-                {
-                    CurrentTree = Settings.settings.Tree.FindTree(CurrentTree);
-                    foreach (var node in LocalFoldersTreeView.RootNodes)
-                    {
-                        if (node.Content is Music music)
-                        {
-                            if (music == before)
-                            {
-                                music.CopyFrom(after);
-                                break;
-                            }
-                        }
-                        else if (node.Content is FolderTree tree)
-                        {
-                            if (tree.FindMusic(before) is Music m)
-                            {
-                                m.CopyFrom(after);
-                                break;
-                            }
-                        }
-                    }
-                    if (GridItems.FirstOrDefault(item => item.Tree.Contains(before)) is GridFolderView gridItem)
-                        gridItem.Tree.FindMusic(before).CopyFrom(after);
-                }
-            });
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -240,7 +212,7 @@ namespace SMPlayer
             var tree = node.Content as FolderTree;
             foreach (var item in tree.Trees)
                 node.Children.Add(TreeToNode(item));
-            foreach (var item in tree.Files)
+            foreach (var item in tree.Songs)
                 node.Children.Add(new TreeViewNode() { Content = item });
             return node;
         }
@@ -386,9 +358,9 @@ namespace SMPlayer
                     {
                         list.AddRange(tree.Flatten());
                     }
-                    else if (node.Content is Music music)
+                    else if (node.Content is FolderFile file)
                     {
-                        list.Add(music);
+                        list.Add(file.ToMusic());
                     }
                 }
             }
@@ -465,5 +437,37 @@ namespace SMPlayer
             MediaHelper.SetMusicAndPlay(GetSiblings(node).Select(n => n.Content).Where(n => n is Music).Select(n => (Music)n).ToList(), music);
         }
 
+        void IMusicEventListener.Liked(Music music, bool isFavorite)
+        {
+        }
+
+        void IMusicEventListener.Added(Music music)
+        {
+        }
+
+        void IMusicEventListener.Removed(Music music)
+        {
+        }
+
+        void IMusicEventListener.Modified(Music before, Music after)
+        {
+            if (CurrentTree.Contains(before.Path))
+            {
+                CurrentTree = Settings.settings.Tree.FindTree(CurrentTree);
+                foreach (var node in LocalFoldersTreeView.RootNodes)
+                {
+                    if (node.Content is FolderTree tree)
+                    {
+                        if (tree.FindMusic(before) is Music m)
+                        {
+                            m.CopyFrom(after);
+                            break;
+                        }
+                    }
+                }
+                if (GridItems.FirstOrDefault(item => item.Tree.Contains(before.Path)) is GridFolderView gridItem)
+                    gridItem.Tree.FindMusic(before).CopyFrom(after);
+            }
+        }
     }
 }

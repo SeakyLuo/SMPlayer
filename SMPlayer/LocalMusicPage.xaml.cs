@@ -16,7 +16,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalMusicPage : Page, ISwitchMusicListener, ILocalPageButtonListener, IRemoveMusicListener
+    public sealed partial class LocalMusicPage : Page, IMusicEventListener, ISwitchMusicListener, ILocalPageButtonListener, IRemoveMusicListener
     {
         public static FolderTree CurrentTree;
         private ObservableCollection<Music> Songs = new ObservableCollection<Music>();
@@ -36,14 +36,6 @@ namespace SMPlayer
             {
                 MultiSelectOption = new MultiSelectCommandBarOption() { ShowRemove = false }
             };
-            MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
-            {
-                if (CurrentTree.FindMusic(before) is Music music)
-                {
-                    music.CopyFrom(after);
-                    Songs.FirstOrDefault(m => m == before).CopyFrom(after);
-                }
-            });
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -70,19 +62,17 @@ namespace SMPlayer
         private void Setup(FolderTree tree)
         {
             LoadingProgressBar.Visibility = Visibility.Visible;
-            foreach (var music in tree.Files)
-                music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
             try
             {
                 if (GridMusicView.Visibility == Visibility.Visible)
                 {
-                    GridMusicView.Setup(tree.Files);
-                    Songs.SetTo(tree.Files);
+                    GridMusicView.Setup(tree.Songs);
+                    Songs.SetTo(tree.Songs);
                 }
                 else
                 {
-                    Songs.SetTo(tree.Files);
-                    GridMusicView.Setup(tree.Files);
+                    Songs.SetTo(tree.Songs);
+                    GridMusicView.Setup(tree.Songs);
                 }
             }
             catch (InvalidOperationException)
@@ -150,8 +140,29 @@ namespace SMPlayer
         public void MusicRemoved(int index, Music music, IEnumerable<Music> newCollection)
         {
             // It is actually delete music
-            CurrentTree.Files.Remove(music);
+            CurrentTree.RemoveMusic(music);
             setter.SetNavText(CurrentTree.Info);
+        }
+
+        void IMusicEventListener.Liked(Music music, bool isFavorite)
+        {
+        }
+
+        void IMusicEventListener.Added(Music music)
+        {
+        }
+
+        void IMusicEventListener.Removed(Music music)
+        {
+        }
+
+        void IMusicEventListener.Modified(Music before, Music after)
+        {
+            if (CurrentTree.FindMusic(before) is Music music)
+            {
+                music.CopyFrom(after);
+                Songs.FirstOrDefault(m => m == before).CopyFrom(after);
+            }
         }
     }
 }

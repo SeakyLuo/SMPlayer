@@ -280,12 +280,12 @@ namespace SMPlayer.Models
 
         PreferenceItem IPreferable.AsPreferenceItem()
         {
-            return new PreferenceItem(Name, Name);
+            return new PreferenceItem(Id.ToString(), Name);
         }
 
         PreferenceItemView IPreferable.AsPreferenceItemView()
         {
-            return new PreferenceItemView(Name, Name, Name, PreferType.Playlist);
+            return new PreferenceItemView(Id.ToString(), Name, Name, PreferType.Playlist);
         }
     }
 }

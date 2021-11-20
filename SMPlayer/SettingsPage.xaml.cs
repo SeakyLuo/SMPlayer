@@ -105,7 +105,6 @@ namespace SMPlayer
                 Settings.settings.Tree = loadingTree;
                 Settings.settings.RootPath = folder.Path;
             });
-            MusicLibraryPage.SortAndSetAllSongs(await Task.Run(Settings.settings.Tree.Flatten));
             MainPage.Instance.Loader.Progress = 0;
             MainPage.Instance.Loader.Max = listeners.Count;
             for (int i = 0; i < listeners.Count;)
@@ -159,7 +158,6 @@ namespace SMPlayer
             if (data.More != 0 || data.Less != 0)
             {
                 Settings.settings.Tree.FindTree(tree).CopyFrom(tree);
-                MusicLibraryPage.SortAndSetAllSongs(Settings.settings.Tree.Flatten());
                 foreach (var listener in listeners)
                     listener.PathSet(tree.Path);
                 if (data.Less != 0) MediaHelper.RemoveBadMusic();
@@ -215,7 +213,7 @@ namespace SMPlayer
             string paren = Helper.LocalizeMessage("PostParenthesis");
             HyperlinkButton button = (HyperlinkButton)sender;
             List<Music> skipped = new List<Music>();
-            int count = MusicLibraryPage.SongCount, counter = 0;
+            int count = Settings.settings.MusicLibrary.Count, counter = 0;
             foreach (Music music in Settings.settings.AllSongs)
             {
                 if (addLyricsClickCounter == 0)

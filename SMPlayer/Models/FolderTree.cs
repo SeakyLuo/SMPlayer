@@ -14,7 +14,9 @@ namespace SMPlayer.Models
     {
         public long Id { get; set; }
         public List<FolderTree> Trees { get; set; } = new List<FolderTree>();
-        public List<Music> Files { get; set; } = new List<Music>();
+        public List<FolderFile> Files { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        public List<Music> Songs { get => Settings.settings.SelectMusicByIds(Files.Select(i => i.Id)); }
         public string Path { get; set; } = "";
         public SortBy Criterion { get; set; } = SortBy.Title;
 
@@ -91,8 +93,8 @@ namespace SMPlayer.Models
         private void AddToMusicLibrary()
         {
             Id = Settings.settings.IdGenerator.GenerateTreeId();
-            foreach (var music in Files)
-                MusicLibraryPage.AddMusic(music);
+            foreach (var music in Songs)
+                Settings.settings.AddMusic(music);
             foreach (var tree in Trees)
                 tree.AddToMusicLibrary();
         }
@@ -100,15 +102,17 @@ namespace SMPlayer.Models
         {
             LoadingStatus = ExecutionStatus.Running;
             var pathSet = new HashSet<string>(); // folder path set
-            foreach (var sub in await folder.GetFoldersAsync())
+            foreach (var subFolder in await folder.GetFoldersAsync())
             {
                 if (LoadingStatus == ExecutionStatus.Break) return false;
-                if (Trees.FirstOrDefault(t => t.Path == sub.Path) is FolderTree tree)
-                    await tree.CheckNewFile(sub, data);
+                if (Trees.FirstOrDefault(t => t.Path == subFolder.Path) is FolderTree tree)
+                {
+                    await tree.CheckNewFile(subFolder, data);
+                }
                 else
                 {
                     tree = new FolderTree();
-                    await tree.Init(sub);
+                    await tree.Init(subFolder);
                     if (!tree.IsEmpty)
                     {
                         Trees.Add(tree);
@@ -116,7 +120,7 @@ namespace SMPlayer.Models
                         tree.AddToMusicLibrary();
                     }
                 }
-                pathSet.Add(sub.Name);
+                pathSet.Add(subFolder.Name);
             }
             foreach (var tree in Trees.FindAll(t => !pathSet.Contains(t.Directory)))
             {
@@ -125,7 +129,7 @@ namespace SMPlayer.Models
                 tree.Clear();
             }
             pathSet = Files.Select(m => m.Path).ToHashSet(); // file path set
-            var newList = new List<Music>();
+            var newList = new List<FolderFile>();
             var newSet = new HashSet<string>();
             foreach (var file in await folder.GetFilesAsync())
             {
@@ -135,7 +139,7 @@ namespace SMPlayer.Models
                 if (!pathSet.Contains(file.Path))
                 {
                     Music music = await Music.LoadFromFileAsync(file);
-                    newList.Add(music);
+                    newList.Add(new FolderFile(music));
                     data.More++;
                 }
             }
@@ -144,13 +148,11 @@ namespace SMPlayer.Models
             {
                 if (LoadingStatus == ExecutionStatus.Break) return false;
                 Files.Remove(music);
-                MusicLibraryPage.RemoveMusic(music);
             }
             data.Less += before - Files.Count;
             foreach (var music in newList)
             {
                 Files.Add(music);
-                MusicLibraryPage.AddMusic(music);
             }
             Sort();
             LoadingStatus = ExecutionStatus.Ready;
@@ -182,7 +184,7 @@ namespace SMPlayer.Models
                     {
                         Music music = await Music.LoadFromFileAsync(file);
                         updater?.Invoke(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
-                        Files.Add(music);
+                        Files.Add(new FolderFile(music));
                     }
                 }
             }
@@ -220,7 +222,7 @@ namespace SMPlayer.Models
                     {
                         Music music = await Music.LoadFromFileAsync(file);
                         updater?.Invoke(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
-                        newTree.Files.Add(music);
+                        newTree.Files.Add(new FolderFile(music));
                     }
                 }
                 CopyFrom(newTree);
@@ -256,7 +258,7 @@ namespace SMPlayer.Models
                             music.Favorite = oldItem.Favorite;
                         }
                         updater?.Invoke(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
-                        Files.Add(music);
+                        Files.Add(new FolderFile(music));
                     }
                 }
             }
@@ -266,14 +268,15 @@ namespace SMPlayer.Models
             return true;
         }
 
-        public bool Contains(Music music)
+        public bool Contains(string path)
         {
-            return Files.Contains(music) || Trees.Any(tree => tree.Contains(music));
+            return FindFile(path) != null;
         }
 
         public bool RemoveMusic(Music music)
         {
-            return Files.Remove(music) || (Trees.FirstOrDefault(t => music.Path.StartsWith(t.Path)) is FolderTree tree && tree.RemoveMusic(music));
+            return Files.RemoveAll(f =>f.Path == music.Path) > 0 ||
+                   (Trees.FirstOrDefault(t => music.Path.StartsWith(t.Path)) is FolderTree tree && tree.RemoveMusic(music));
         }
 
         public FolderTree MergeFrom(FolderTree tree)
@@ -295,7 +298,7 @@ namespace SMPlayer.Models
             List<Music> list = new List<Music>();
             foreach (var branch in Trees)
                 list.AddRange(branch.Flatten());
-            list.AddRange(Files);
+            list.AddRange(Songs);
             return list;
         }
         public List<FolderTree> GetAllTrees()
@@ -324,22 +327,28 @@ namespace SMPlayer.Models
         public List<Music> SortByTitle()
         {
             Criterion = SortBy.Title;
-            return Files = Files.OrderBy(m => m.Name).ToList();
+            List<Music> songs = Songs.OrderBy(m => m.Name).ToList();
+            Files = songs.Select(i => new FolderFile(i)).ToList();
+            return songs;
         }
         public List<Music> SortByArtist()
         {
             Criterion = SortBy.Artist;
-            return Files = Files.OrderBy(m => m.Artist).ToList();
+            List<Music> songs = Songs.OrderBy(m => m.Artist).ToList();
+            Files = songs.Select(i => new FolderFile(i)).ToList();
+            return songs;
         }
         public List<Music> SortByAlbum()
         {
             Criterion = SortBy.Album;
-            return Files = Files.OrderBy(m => m.Album).ToList();
+            List<Music> songs = Songs.OrderBy(m => m.Album).ToList();
+            Files = songs.Select(i => new FolderFile(i)).ToList();
+            return songs;
         }
         public List<Music> Reverse()
         {
             Files.Reverse();
-            return Files;
+            return Songs;
         }
         public void Clear()
         {
@@ -383,7 +392,11 @@ namespace SMPlayer.Models
         }
         public Music FindMusic(string path)
         {
-            return Files.FirstOrDefault(m => m.Path == path) ?? Trees.FirstOrDefault(tree => path.StartsWith(tree.Path))?.FindMusic(path);
+            return FindFile(path) is FolderFile file ? Settings.settings.SelectMusicById(file.Id) : null;
+        }
+        private FolderFile FindFile(string path)
+        {
+            return Files.FirstOrDefault(m => m.Path == path) ?? Trees.FirstOrDefault(tree => path.StartsWith(tree.Path))?.FindFile(path);
         }
         public Music FindMusic(Music target)
         {
@@ -464,12 +477,12 @@ namespace SMPlayer.Models
 
         PreferenceItem IPreferable.AsPreferenceItem()
         {
-            return new PreferenceItem(Path, Directory);
+            return new PreferenceItem(Id.ToString(), Directory);
         }
 
         PreferenceItemView IPreferable.AsPreferenceItemView()
         {
-            return new PreferenceItemView(Path, Directory, Path, PreferType.Folder);
+            return new PreferenceItemView(Id.ToString(), Directory, Path, PreferType.Folder);
         }
     }
     public struct TreeInfo

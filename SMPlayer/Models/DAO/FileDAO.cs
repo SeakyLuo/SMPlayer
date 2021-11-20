@@ -13,8 +13,4 @@ namespace SMPlayer.Models.DAO
         public FileType Type { get; set; }
         public string Path { get; set; }
     }
-
-    public enum FileType {
-        Music
-    }
 }

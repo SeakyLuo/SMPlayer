@@ -21,7 +21,7 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace SMPlayer
 {
-    public sealed partial class MediaControl : UserControl, ISwitchMusicListener, IMediaControlListener, IRemoveMusicListener, ILikeMusicListener, IMediaPlayerStateChangedListener
+    public sealed partial class MediaControl : UserControl, ISwitchMusicListener, IMediaControlListener, IRemoveMusicListener, IMusicEventListener, IMediaPlayerStateChangedListener
     {
         public enum MediaControlMode
         {
@@ -426,14 +426,8 @@ namespace SMPlayer
                 MainSliderProgressBar.Visibility = Visibility.Collapsed;
                 MainMediaSlider.Visibility = Visibility.Visible;
             });
-            Settings.LikeMusicListeners.Add(this);
+            Settings.AddMusicEventListener(this);
             MediaHelper.MediaPlayerStateChangedListeners.Add(this);
-
-            Controls.MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
-            {
-                if (CurrentMusic == before)
-                    UpdateMusic(after);
-            });
             var left = new KeyboardAccelerator() { Key = Windows.System.VirtualKey.Left };
             left.Invoked += (sender, args) =>
             {
@@ -561,10 +555,6 @@ namespace SMPlayer
         {
             if (CurrentMusic == music) return;
             UpdateMusic(music);
-        }
-        public static void AddMusicModifiedListener(Action<Music, Music> listener)
-        {
-            MusicModifiedListeners.Add(listener);
         }
 
         public static void AddMusicRequestListener(IMusicRequestListener listener)
@@ -1039,6 +1029,8 @@ namespace SMPlayer
                     foreach (var item in propertyItems.Reverse())
                         flyout.Items.Insert(0, item);
                 }
+                var setAsPreferredItem = MenuFlyoutHelper.GetPreferItem(MediaHelper.CurrentMusic);
+                flyout.Items.Insert(1, setAsPreferredItem);
             }
         }
 
@@ -1083,6 +1075,7 @@ namespace SMPlayer
             if (flyout.Items.Last().Name == MenuFlyoutHelper.ShuffleSubItemName)
                 flyout.Items.RemoveAt(flyout.Items.Count - 1);
             flyout.Items.Add(MenuFlyoutHelper.GetShuffleSubItem());
+            flyout.Items.Add(MenuFlyoutHelper.GetPreferItem(MediaHelper.CurrentMusic));
         }
 
         private void MiniMoreShufflePlayButton_Tapped(object sender, TappedRoutedEventArgs e)
@@ -1144,6 +1137,24 @@ namespace SMPlayer
                 }
                 await ToastHelper.ShowToast(MediaHelper.CurrentMusic, state);
             });
+        }
+
+        void IMusicEventListener.Liked(Music music, bool isFavorite)
+        {
+        }
+
+        void IMusicEventListener.Added(Music music)
+        {
+        }
+
+        void IMusicEventListener.Removed(Music music)
+        {
+        }
+
+        void IMusicEventListener.Modified(Music before, Music after)
+        {
+            if (CurrentMusic == before)
+                UpdateMusic(after);
         }
     }
 

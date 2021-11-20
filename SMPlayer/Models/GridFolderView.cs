@@ -103,7 +103,7 @@ namespace SMPlayer.Models
                 }
                 return false;
             }
-            if (!await addThumbnail(Tree.Files))
+            if (!await addThumbnail(Tree.Songs))
                 foreach (var tree in Tree.Trees)
                     if (await addThumbnail(tree.Flatten()))
                         break;

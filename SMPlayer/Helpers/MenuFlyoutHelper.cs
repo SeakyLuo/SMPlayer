@@ -791,7 +791,7 @@ namespace SMPlayer
                 };
                 flyout.Items.Add(recentPlayed);
             }
-            if (MusicLibraryPage.SongCount > randomLimit)
+            if (Settings.settings.MusicLibrary.Count > randomLimit)
             {
                 flyout.Items.Add(new MenuFlyoutSeparator());
                 var mostPlayed = new MenuFlyoutItem()
@@ -800,7 +800,7 @@ namespace SMPlayer
                 };
                 mostPlayed.Click += (sender, args) =>
                 {
-                    MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.GetMostPlayed(randomLimit).Shuffle().Take(randomLimit));
+                    MediaHelper.SetPlaylistAndPlay(Settings.settings.GetMostPlayed(randomLimit).Shuffle().Take(randomLimit));
                     callback?.Invoke();
                 };
                 flyout.Items.Add(mostPlayed);
@@ -810,7 +810,7 @@ namespace SMPlayer
                 };
                 leastPlayed.Click += (sender, args) =>
                 {
-                    MediaHelper.SetPlaylistAndPlay(MusicLibraryPage.GetLeastPlayed(randomLimit).Shuffle().Take(randomLimit));
+                    MediaHelper.SetPlaylistAndPlay(Settings.settings.GetLeastPlayed(randomLimit).Shuffle().Take(randomLimit));
                     callback?.Invoke();
                 };
                 flyout.Items.Add(leastPlayed);
@@ -911,7 +911,7 @@ namespace SMPlayer
             else if (obj is GridMusicView gridMusic) return gridMusic.Source;
             else if (obj is TreeViewNode node)
             {
-                if (node.Content is FolderTree tree) return tree.Files;
+                if (node.Content is FolderTree tree) return tree.Songs;
                 return node.Content as Music;
             }
             return null;

@@ -83,21 +83,22 @@ namespace SMPlayer.Helpers
             };
         }
 
-        public static Music FromDAO(this FileDAO src)
+        public static FolderFile FromDAO(this FileDAO src)
         {
-            return new Music()
+            return new FolderFile()
             {
                 Id = src.Id,
+                Type = src.Type,
                 Path = src.Path,
             };
         }
 
-        public static FileDAO ToFileDAO(this Music src)
+        public static FileDAO ToDAO(this FolderFile src)
         {
             return new FileDAO()
             {
                 Id = src.Id,
-                Type = FileType.Music,
+                Type = src.Type,
                 Path = src.Path,
             };
         }
@@ -120,7 +121,7 @@ namespace SMPlayer.Helpers
             {
                 Id = src.Id,
                 Trees = src.Trees.Select(i => i.ToDAO()).ToList(),
-                Files = src.Files.Select(i => i.ToFileDAO()).ToList(),
+                Files = src.Files.Select(i => i.ToDAO()).ToList(),
                 Path = src.Path,
                 Criterion = src.Criterion
             };

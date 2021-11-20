@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Input;
 
 namespace SMPlayer
 {
-    public sealed partial class GridMusicControl : UserControl, ISwitchMusicListener, IMenuFlyoutItemClickListener, IMultiSelectListener
+    public sealed partial class GridMusicControl : UserControl, IMusicEventListener, ISwitchMusicListener, IMenuFlyoutItemClickListener, IMultiSelectListener
     {
         public object Header { get => MusicGridView.Header; set => MusicGridView.Header = value; }
         public ListViewSelectionMode SelectionMode { get => MusicGridView.SelectionMode; set => MusicGridView.SelectionMode = value; }
@@ -37,14 +37,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             MediaHelper.SwitchMusicListeners.Add(this);
-            MusicInfoControl.MusicModifiedListeners.Add((before, after) =>
-            {
-                int index = MusicCollection.IndexOf(before);
-                if (index > -1)
-                {
-                    GridMusicCollection[index].Source = MusicCollection[index] = after;
-                }
-            });
+            Settings.AddMusicEventListener(this);
         }
 
         private void MusicGridView_ItemClick(object sender, ItemClickEventArgs e)
@@ -261,6 +254,28 @@ namespace SMPlayer
 
         void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type) { }
         void IMenuFlyoutItemClickListener.UndoDelete(Music music) { }
+
+        void IMusicEventListener.Liked(Music music, bool isFavorite)
+        {
+
+        }
+
+        void IMusicEventListener.Added(Music music)
+        {
+        }
+
+        void IMusicEventListener.Removed(Music music)
+        {
+        }
+
+        void IMusicEventListener.Modified(Music before, Music after)
+        {
+            int index = MusicCollection.IndexOf(before);
+            if (index > -1)
+            {
+                GridMusicCollection[index].Source = MusicCollection[index] = after;
+            }
+        }
     }
 
     public class MusicPath : IMusicable

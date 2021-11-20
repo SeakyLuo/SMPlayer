@@ -94,10 +94,6 @@ namespace SMPlayer.Helpers
             {
 
             }
-            MediaControl.AddMusicModifiedListener((before, after) =>
-            {
-                settings.SelectMusicById(before.Id).CopyFrom(after);
-            });
             foreach (var item in await ApplicationData.Current.LocalFolder.GetItemsAsync())
                 if (item.Name.EndsWith(".TMP") || item.Name.EndsWith(".~tmp"))
                     await item.DeleteAsync();

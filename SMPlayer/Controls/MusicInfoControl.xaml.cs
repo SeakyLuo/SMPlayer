@@ -35,7 +35,6 @@ namespace SMPlayer.Controls
         public MusicInfoControl()
         {
             this.InitializeComponent();
-            MediaControl.AddMusicModifiedListener(MusicModified);
             MediaHelper.SwitchMusicListeners.Add(this);
             MediaHelper.MediaPlayerStateChangedListeners.Add(this);
         }
@@ -75,13 +74,7 @@ namespace SMPlayer.Controls
         {
             CurrentMusic.PlayCount = 0;
             SetPlayCount(CurrentMusic);
-            NotifyListeners(CurrentMusic, CurrentMusic);
-        }
-        private static void NotifyListeners(Music before, Music after)
-        {
-            Settings.settings.Tree.FindMusic(before).CopyFrom(after);
-            MediaControl.NotifyMusicModifiedListeners(before, after);
-            foreach (var listener in MusicModifiedListeners) listener.Invoke(before, after);
+            Settings.settings.MusicModified(CurrentMusic, CurrentMusic);
         }
 
         public void SetPlayCount(Music music)
@@ -140,7 +133,7 @@ namespace SMPlayer.Controls
                 {
                     await Properties.SavePropertiesAsync();
                 });
-                NotifyListeners(CurrentMusic, newMusic);
+                Settings.settings.MusicModified(CurrentMusic, newMusic);
                 CurrentMusic.CopyFrom(newMusic);
                 SaveProgress.Visibility = Visibility.Collapsed;
             }
