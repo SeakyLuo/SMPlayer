@@ -39,6 +39,11 @@ namespace SMPlayer.Models
             Path = file.Path;
         }
 
+        public bool IsMusicFile()
+        {
+            return Type == FileType.Music;
+        }
+
         public override bool Equals(object obj)
         {
             return obj is FolderFile file && Path == file.Path;

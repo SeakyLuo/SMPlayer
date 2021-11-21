@@ -1249,4 +1249,13 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="NewFolderItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>Create New Folder</value>
   </data>
+  <data name="ReleaseNotesBugFixesForAddingPlaylistWhenNone.Text" xml:space="preserve">
+    <value>Fixed some bugs. The app no longer crashes when you try to add a playlist with no playlists.</value>
+  </data>
+  <data name="ReleaseNotesImportantNoteDataStructureChanged.Text" xml:space="preserve">
+    <value>【Important Note !!!】Data structure has changed! If you backed up before, please back up again.</value>
+  </data>
+  <data name="ReleaseNotesImprovedLocalManagement.Text" xml:space="preserve">
+    <value>You can now add/delete folder, move music file in SMPlayer.</value>
+  </data>
 </root>

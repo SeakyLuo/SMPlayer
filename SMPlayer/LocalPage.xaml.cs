@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Dialogs;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace SMPlayer
             LocalFoldersPage.setter = this;
             LocalMusicPage.setter = this;
             SetPage(Settings.settings.Tree);
-            SettingsPage.AddAfterPathSetListener(this);
+            UpdateHelper.AddAfterPathSetListener(this);
             MainPage.WindowResizeListeners.Add(this);
         }
 
@@ -152,7 +153,7 @@ namespace SMPlayer
 
         private void LocalRefreshItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            SettingsPage.CheckNewMusic(History.Peek(), tree =>
+            UpdateHelper.CheckNewMusic(History.Peek(), tree =>
             {
                 if (LocalFoldersItem.IsSelected)
                 {

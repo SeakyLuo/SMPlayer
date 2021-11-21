@@ -492,6 +492,7 @@ namespace SMPlayer
         void IMusicEventListener.Removed(Music music)
         {
             justRemovedIndex = CurrentPlaylist.IndexOf(music);
+            justRemoveMusic = music;
             CurrentPlaylist.RemoveAt(justRemovedIndex);
         }
 

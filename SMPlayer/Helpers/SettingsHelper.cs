@@ -1,4 +1,5 @@
-﻿using SMPlayer.Models;
+﻿using Newtonsoft.Json.Linq;
+using SMPlayer.Models;
 using SMPlayer.Models.DAO;
 using System;
 using System.Collections.Generic;
@@ -19,30 +20,34 @@ namespace SMPlayer.Helpers
         {
             Inited = false;
             var newSettings = await JsonFileHelper.ReadAsync(NewFilename);
-            if (string.IsNullOrEmpty(newSettings))
+            if (await JsonFileHelper.ReadObjectAsync<SettingsDAO>(NewFilename) is SettingsDAO settingsDAO)
             {
-                if (await JsonFileHelper.ReadAsync(JsonFilename) is string json && !string.IsNullOrEmpty(json))
+                Settings.settings = settingsDAO.FromDAO();
+                await Init(Settings.settings);
+            }
+            else
+            {
+                string json = await JsonFileHelper.ReadAsync(JsonFilename);
+                if (!string.IsNullOrEmpty(json) && JsonFileHelper.Convert<Settings>(json) is Settings settings)
                 {
-                    Settings.settings = JsonFileHelper.Convert<Settings>(json);
-                    if (Settings.settings.MusicLibrary.IsEmpty() && !Settings.settings.Tree.IsEmpty)
-                    {
-                        ResetTreeId(Settings.settings.Tree);
-                        Settings.settings.MusicLibrary = Settings.settings.Tree.Flatten()
-                                                                 .Select(m => { m.Id = Settings.settings.IdGenerator.GenerateMusicId(); return m; })
-                                                                 .ToDictionary(m => m.Id);
-                        Settings.settings.Playlists.ForEach(p => p.Id = Settings.settings.IdGenerator.GeneratePlaylistId());
-                        ResetPlaylistSongsId(Settings.settings.MyFavorites);
-                        Settings.settings.Playlists.ForEach(p => ResetPlaylistSongsId(p));
-                        Settings.settings.RecentPlayedSongs = MusicPathToId(Settings.settings.RecentPlayed);
+                    Settings.settings = settings;
+                    ResetTreeId(settings.Tree);
+                    var jsonObject = JsonFileHelper.Convert<JObject>(json);
+                    List<Music> songs = FlattenFolderTreeInJson(jsonObject["Tree"]);
+                    settings.MusicLibrary = songs.Select(m => { m.Id = settings.Tree.FindFile(m.Path).Id; return m; })
+                                                 .ToDictionary(m => m.Id);
+                    settings.Playlists.ForEach(p => p.Id = settings.IdGenerator.GeneratePlaylistId());
+                    ResetPlaylistSongsId(Settings.settings.MyFavorites);
+                    settings.Playlists.ForEach(p => ResetPlaylistSongsId(p));
+                    settings.RecentPlayedSongs = MusicPathToId(Settings.settings.RecentPlayed);
 
-                        foreach (PreferenceItem item in Settings.settings.Preference.PreferredFolders)
-                            item.Id = Settings.settings.Tree.FindTree(item.Id).Id.ToString();
-                        foreach (PreferenceItem item in Settings.settings.Preference.PreferredSongs)
-                            item.Id = Settings.settings.Tree.FindMusic(item.Id).Id.ToString();
-                        foreach (PreferenceItem item in Settings.settings.Preference.PreferredPlaylists)
-                            item.Id = Settings.settings.Playlists.FirstOrDefault(i => i.Name == item.Id).Id.ToString();
-                    }
-                    await Init(Settings.settings);
+                    foreach (PreferenceItem item in Settings.settings.Preference.PreferredFolders)
+                        item.Id = settings.Tree.FindTree(item.Id).Id.ToString();
+                    foreach (PreferenceItem item in Settings.settings.Preference.PreferredSongs)
+                        item.Id = settings.Tree.FindMusic(item.Id).Id.ToString();
+                    foreach (PreferenceItem item in Settings.settings.Preference.PreferredPlaylists)
+                        item.Id = settings.Playlists.FirstOrDefault(i => i.Name == item.Id).Id.ToString();
+                    await Init(settings);
                 }
                 else
                 {
@@ -50,12 +55,24 @@ namespace SMPlayer.Helpers
                     Save();
                 }
             }
-            else
-            {
-                Settings.settings = JsonFileHelper.Convert<SettingsDAO>(newSettings).FromDAO();
-                await Init(Settings.settings);
-            }
             Inited = true;
+        }
+
+        public static bool Init(string json)
+        {
+            if (JsonFileHelper.Convert<SettingsDAO>(json) is SettingsDAO dao)
+            {
+                Settings.settings = dao.FromDAO();
+                return true;
+            }
+            return false;
+        }
+
+        private static List<Music> FlattenFolderTreeInJson(JToken tree)
+        {
+            List<Music> songs = tree["Files"].Select(i => i.ToObject<Music>()).ToList();
+            songs.AddRange(tree["Trees"].SelectMany(t => FlattenFolderTreeInJson(t)));
+            return songs;
         }
 
         private static void ResetTreeId(FolderTree tree)
@@ -63,6 +80,8 @@ namespace SMPlayer.Helpers
             tree.Id = Settings.settings.IdGenerator.GenerateTreeId();
             foreach (var branch in tree.Trees)
                 ResetTreeId(branch);
+            foreach (var file in tree.Files)
+                file.Id = Settings.settings.IdGenerator.GenerateMusicId();
         }
 
         private static void ResetPlaylistSongsId(Playlist playlist)

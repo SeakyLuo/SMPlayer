@@ -26,6 +26,8 @@ Rename folder. Move music from folder to folder. Batch delete music file.
 
 Search multiple lyrics choose one. Lyrics priority in notification.
 
+If there is no playlist, change dropdown to add button.
+
 # TO FIX
 Able to drag titlebar when loading, multi-select.
 

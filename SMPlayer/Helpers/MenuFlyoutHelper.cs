@@ -352,7 +352,7 @@ namespace SMPlayer
             };
             item.Click += (s, args) =>
             {
-                SettingsPage.CheckNewMusic(tree, afterTreeUpdated);
+                UpdateHelper.CheckNewMusic(tree, afterTreeUpdated);
             };
             return item;
         }

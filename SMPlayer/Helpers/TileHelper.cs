@@ -208,8 +208,8 @@ namespace SMPlayer.Helpers
 
         public static string FormatTileId(Playlist playlist, bool isPlaylist)
         {
-            var tilename = playlist.Name;
-            return isPlaylist ? tilename : tilename + StringConcatenationFlag + playlist.Artist;
+            if (isPlaylist && !playlist.IsMyFavorite) return playlist.Id.ToString();
+            return playlist.Name + StringConcatenationFlag + playlist.Artist;
         }
     }
 }

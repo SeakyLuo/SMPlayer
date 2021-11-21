@@ -14,7 +14,7 @@ namespace SMPlayer.Models
     {
         public long Id { get; set; }
         public List<FolderTree> Trees { get; set; } = new List<FolderTree>();
-        public List<FolderFile> Files { get; set; }
+        public List<FolderFile> Files { get; set; } = new List<FolderFile>();
         [Newtonsoft.Json.JsonIgnore]
         public List<Music> Songs { get => Settings.settings.SelectMusicByIds(Files.Select(i => i.Id)); }
         public string Path { get; set; } = "";
@@ -25,6 +25,8 @@ namespace SMPlayer.Models
         public TreeInfo Info { get => new TreeInfo(Directory, Trees.Count, Files.Count); }
         [Newtonsoft.Json.JsonIgnore]
         public bool IsEmpty { get => Files.Count == 0 && Trees.All(tree => tree.IsEmpty); }
+        [Newtonsoft.Json.JsonIgnore]
+        public bool IsNotEmpty { get => !IsEmpty; }
         [Newtonsoft.Json.JsonIgnore]
         public int FileCount { get => Trees.Sum(t => t.FileCount) + Files.Count; }
         [Newtonsoft.Json.JsonIgnore]
@@ -39,8 +41,6 @@ namespace SMPlayer.Models
             }
         }
 
-        private static volatile ExecutionStatus LoadingStatus = ExecutionStatus.Ready;
-
         public FolderTree() { }
         public FolderTree(FolderTree tree)
         {
@@ -49,223 +49,12 @@ namespace SMPlayer.Models
 
         public void CopyFrom(FolderTree tree)
         {
-            Id = Id;
+            Id = tree.Id;
             Trees = tree.Trees.ToList();
             Files = tree.Files.ToList();
             Path = tree.Path;
             Criterion = tree.Criterion;
             OnPropertyChanged();
-        }
-
-        public static async Task<int> CountFilesAsync(StorageFolder folder)
-        {
-            int count = (await folder.GetFilesAsync()).Count(f => f.IsMusicFile());
-            foreach (var sub in await folder.GetFoldersAsync())
-                count += await CountFilesAsync(sub);
-            return count;
-        }
-
-        public void PauseLoading()
-        {
-            LoadingStatus = ExecutionStatus.Break;
-        }
-        public async Task<bool> CheckNewFile(TreeUpdateData data = null)
-        {
-            StorageFolder folder;
-            try
-            {
-                folder = await GetStorageFolderAsync();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                if (data != null)
-                    data.Message = Helper.LocalizeMessage("UnauthorizedAccessException", Path);
-                return false;
-            }
-            if (folder == null)
-            {
-                if (data != null)
-                    data.Message = Helper.LocalizeMessage("FolderNotFound", Path);
-                return false;
-            }
-            return await CheckNewFile(folder, data);
-        }
-        private void AddToMusicLibrary()
-        {
-            Id = Settings.settings.IdGenerator.GenerateTreeId();
-            foreach (var music in Songs)
-                Settings.settings.AddMusic(music);
-            foreach (var tree in Trees)
-                tree.AddToMusicLibrary();
-        }
-        private async Task<bool> CheckNewFile(StorageFolder folder, TreeUpdateData data = null)
-        {
-            LoadingStatus = ExecutionStatus.Running;
-            var pathSet = new HashSet<string>(); // folder path set
-            foreach (var subFolder in await folder.GetFoldersAsync())
-            {
-                if (LoadingStatus == ExecutionStatus.Break) return false;
-                if (Trees.FirstOrDefault(t => t.Path == subFolder.Path) is FolderTree tree)
-                {
-                    await tree.CheckNewFile(subFolder, data);
-                }
-                else
-                {
-                    tree = new FolderTree();
-                    await tree.Init(subFolder);
-                    if (!tree.IsEmpty)
-                    {
-                        Trees.Add(tree);
-                        data.More += tree.FileCount;
-                        tree.AddToMusicLibrary();
-                    }
-                }
-                pathSet.Add(subFolder.Name);
-            }
-            foreach (var tree in Trees.FindAll(t => !pathSet.Contains(t.Directory)))
-            {
-                data.Less += tree.FileCount;
-                Trees.Remove(tree);
-                tree.Clear();
-            }
-            pathSet = Files.Select(m => m.Path).ToHashSet(); // file path set
-            var newList = new List<FolderFile>();
-            var newSet = new HashSet<string>();
-            foreach (var file in await folder.GetFilesAsync())
-            {
-                if (LoadingStatus == ExecutionStatus.Break) return false;
-                if (!file.IsMusicFile()) continue;
-                newSet.Add(file.Path);
-                if (!pathSet.Contains(file.Path))
-                {
-                    Music music = await Music.LoadFromFileAsync(file);
-                    newList.Add(new FolderFile(music));
-                    data.More++;
-                }
-            }
-            int before = Files.Count;
-            foreach (var music in Files.FindAll(m => !newSet.Contains(m.Path)))
-            {
-                if (LoadingStatus == ExecutionStatus.Break) return false;
-                Files.Remove(music);
-            }
-            data.Less += before - Files.Count;
-            foreach (var music in newList)
-            {
-                Files.Add(music);
-            }
-            Sort();
-            LoadingStatus = ExecutionStatus.Ready;
-            return true;
-        }
-        public async Task<bool> Init(StorageFolder folder, Action<string, string, int, int> listener = null)
-        {
-            return await Init(folder, listener, new TreeOperationIndicator() { Max = listener == null ? 0 : await CountFilesAsync(folder) });
-        }
-        private async Task<bool> Init(StorageFolder folder, Action<string, string, int, int> updater, TreeOperationIndicator indicator)
-        {
-            LoadingStatus = ExecutionStatus.Running;
-            Id = Settings.settings.IdGenerator.GenerateTreeId();
-            var samePath = folder.Path == Path;
-            if (string.IsNullOrEmpty(Path))
-            {
-                // New folder tree
-                foreach (var subFolder in await folder.GetFoldersAsync())
-                {
-                    if (LoadingStatus == ExecutionStatus.Break) return false;
-                    var tree = new FolderTree();
-                    await tree.Init(subFolder, updater, indicator);
-                    if (!tree.IsEmpty) Trees.Add(tree);
-                }
-                foreach (var file in await folder.GetFilesAsync())
-                {
-                    if (LoadingStatus == ExecutionStatus.Break) return false;
-                    if (file.IsMusicFile())
-                    {
-                        Music music = await Music.LoadFromFileAsync(file);
-                        updater?.Invoke(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
-                        Files.Add(new FolderFile(music));
-                    }
-                }
-            }
-            else if (!samePath && folder.Path.StartsWith(Path))
-            {
-                // New folder is a Subfolder of the current folder
-                FolderTree tree = FindTree(folder.Path);
-                CopyFrom(tree);
-                updater?.Invoke(folder.DisplayName, "", 0, 0);
-            }
-            else if (!samePath && Path.StartsWith(folder.Path))
-            {
-                // Current folder is a Subfolder of the new folder
-                FolderTree newTree = new FolderTree();
-                var folders = await folder.GetFoldersAsync();
-                foreach (var subFolder in folders)
-                {
-                    if (LoadingStatus == ExecutionStatus.Break) return false;
-                    FolderTree tree;
-                    if (subFolder.Path == Path)
-                    {
-                        tree = new FolderTree(this);
-                    }
-                    else
-                    {
-                        tree = new FolderTree();
-                        await tree.Init(subFolder, updater, indicator);
-                    }
-                    if (tree.Files.Count != 0) newTree.Trees.Add(tree);
-                }
-                foreach (var file in await folder.GetFilesAsync())
-                {
-                    if (LoadingStatus == ExecutionStatus.Break) return false;
-                    if (file.IsMusicFile())
-                    {
-                        Music music = await Music.LoadFromFileAsync(file);
-                        updater?.Invoke(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
-                        newTree.Files.Add(new FolderFile(music));
-                    }
-                }
-                CopyFrom(newTree);
-            }
-            else
-            {
-                // No hierarchy between folders
-                // or update folder
-                var trees = new List<FolderTree>();
-                foreach (var subFolder in await folder.GetFoldersAsync())
-                {
-                    if (LoadingStatus == ExecutionStatus.Break) return false;
-                    var source = Trees.FirstOrDefault(t => t.Path == subFolder.Path);
-                    var tree = new FolderTree()
-                    {
-                        Criterion = source?.Criterion ?? SortBy.Title
-                    };
-                    await tree.Init(subFolder, updater, indicator);
-                    if (!tree.IsEmpty) trees.Add(tree);
-                }
-                Clear();
-                Trees = trees;
-                foreach (var file in await folder.GetFilesAsync())
-                {
-                    if (LoadingStatus == ExecutionStatus.Break) return false;
-                    if (file.IsMusicFile())
-                    {
-                        Music music = await Music.LoadFromFileAsync(file);
-                        if (samePath && Settings.FindMusic(music) is Music oldItem)
-                        {
-                            music.Id = oldItem.Id;
-                            music.PlayCount = oldItem.PlayCount;
-                            music.Favorite = oldItem.Favorite;
-                        }
-                        updater?.Invoke(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
-                        Files.Add(new FolderFile(music));
-                    }
-                }
-            }
-            Path = folder.Path;
-            Sort();
-            LoadingStatus = ExecutionStatus.Ready;
-            return true;
         }
 
         public bool Contains(string path)
@@ -279,20 +68,6 @@ namespace SMPlayer.Models
                    (Trees.FirstOrDefault(t => music.Path.StartsWith(t.Path)) is FolderTree tree && tree.RemoveMusic(music));
         }
 
-        public FolderTree MergeFrom(FolderTree tree)
-        {
-            // Merge to this tree
-            foreach (var folder in tree.Trees)
-                Trees.FirstOrDefault(f => f.Equals(folder))?.MergeFrom(folder);
-            var set = Files.ToHashSet();
-            foreach (var file in tree.Files)
-                if (set.Contains(file))
-                    Files.First(f => f.Equals(file)).CopyFrom(file);
-            Criterion = tree.Criterion;
-            Sort();
-            OnPropertyChanged();
-            return this;
-        }
         public List<Music> Flatten()
         {
             List<Music> list = new List<Music>();
@@ -392,15 +167,21 @@ namespace SMPlayer.Models
         }
         public Music FindMusic(string path)
         {
+            if (string.IsNullOrEmpty(path)) return null;
             return FindFile(path) is FolderFile file ? Settings.settings.SelectMusicById(file.Id) : null;
-        }
-        private FolderFile FindFile(string path)
-        {
-            return Files.FirstOrDefault(m => m.Path == path) ?? Trees.FirstOrDefault(tree => path.StartsWith(tree.Path))?.FindFile(path);
         }
         public Music FindMusic(Music target)
         {
             return FindMusic(target.Path);
+        }
+        public FolderFile FindFile(FolderFile file)
+        {
+            return FindFile(file?.Path);
+        }
+        public FolderFile FindFile(string path)
+        {
+            if (string.IsNullOrEmpty(path)) return null;
+            return Files.FirstOrDefault(m => m.Path == path) ?? Trees.FirstOrDefault(tree => path.StartsWith(tree.Path))?.FindFile(path);
         }
         //public static bool operator == (FolderTree tree1, FolderTree tree2)
         //{
@@ -485,6 +266,7 @@ namespace SMPlayer.Models
             return new PreferenceItemView(Id.ToString(), Directory, Path, PreferType.Folder);
         }
     }
+
     public struct TreeInfo
     {
         public string Directory { get; set; }
@@ -502,19 +284,5 @@ namespace SMPlayer.Models
             if (Folders > 0) info = Helper.LocalizeMessage("Folders:") + Folders + " • " + info;
             return info;
         }
-    }
-
-    public class TreeOperationIndicator
-    {
-        public int Progress { get; set; } = 0;
-        public int Max { get; set; } = 0;
-        public int Update() { return ++Progress; }
-    }
-
-    public class TreeUpdateData
-    {
-        public int More { get; set; } = 0;
-        public int Less { get; set; } = 0;
-        public string Message { get; set; }
     }
 }

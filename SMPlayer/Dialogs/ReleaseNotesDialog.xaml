@@ -25,6 +25,11 @@
 
     <ScrollViewer>
         <TextBlock TextWrapping="WrapWholeWords">
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.5.3</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesImprovedLocalManagement"/><LineBreak />
+            2. <Run x:Uid="ReleaseNotesBugFixesForAddingPlaylistWhenNone"/><LineBreak />
+            2. <Run x:Uid="ReleaseNotesImportantNoteDataStructureChanged"/><LineBreak />
+            <LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.5.2</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesVoiceAssistantImprovements2"/><LineBreak />
             2. <Run x:Uid="ReleaseNotesPreferenceSettingsPreferenceLevelAdded"/><LineBreak />

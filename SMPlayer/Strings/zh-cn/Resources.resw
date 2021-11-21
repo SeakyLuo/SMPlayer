@@ -1240,4 +1240,13 @@
   <data name="NewFolderItem.ToolTipService.ToolTip" xml:space="preserve">
     <value>新建文件夹</value>
   </data>
+  <data name="ReleaseNotesBugFixesForAddingPlaylistWhenNone.Text" xml:space="preserve">
+    <value>修复了一些问题，比如当没有播放列表时无法创建播放列表。</value>
+  </data>
+  <data name="ReleaseNotesImportantNoteDataStructureChanged.Text" xml:space="preserve">
+    <value>【重要！！！】数据结构有变化。如果之前备份过数据文件，请重新导出！</value>
+  </data>
+  <data name="ReleaseNotesImprovedLocalManagement.Text" xml:space="preserve">
+    <value>增强了本地文件管理功能，支持在播放器中新增删除文件夹、移动歌曲至其他文件夹等。</value>
+  </data>
 </root>

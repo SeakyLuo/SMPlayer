@@ -74,7 +74,7 @@ namespace SMPlayer.Models
         }
 
         public static Music FindMusic(IMusicable target) { return FindMusic(target.ToMusic()); }
-        public static Music FindMusic(Music target) { return settings.Tree.FindMusic(target) is Music music ? settings.SelectMusicById(music.Id) : null; }
+        public static Music FindMusic(Music target) { return FindMusic(target?.Path); }
         public static Music FindMusic(string target) { return settings.Tree.FindMusic(target) is Music music ? settings.SelectMusicById(music.Id) : null; }
 
         public int FindNextPlaylistNameIndex(string Name)
@@ -142,8 +142,12 @@ namespace SMPlayer.Models
         {
             if (JustRemoved.Any(m => m.Name == music.Name && m.Artist == music.Artist && m.Album == music.Album && m.Duration == music.Duration))
                 return;
-            if (Tree.FindMusic(music) != null)
+            if (Tree.FindMusic(music) is Music oldItem)
+            {
+                music.Id = oldItem.Id;
+                oldItem.CopyMusicProperties(music);
                 return;
+            }
             music.Id = settings.IdGenerator.GenerateMusicId();
             MusicLibrary.Add(music.Id, music);
             RecentPage.RecentAdded.Add(music);
@@ -157,6 +161,15 @@ namespace SMPlayer.Models
                         await music.SaveLyricsAsync(await LyricsHelper.SearchLyrics(music));
                     }
                 });
+            }
+            foreach (var listener in MusicEventListeners) listener.Added(music);
+        }
+
+        public void RemoveFile(FolderFile file)
+        {
+            if (file.IsMusicFile())
+            {
+                RemoveMusic(SelectMusicById(file.Id));
             }
         }
 
@@ -188,6 +201,7 @@ namespace SMPlayer.Models
             if ((preferredMusicRemovedIndex = Preference.PreferredSongs.FindIndex(m => m.Id == music.Id.ToString())) > -1)
                 Preference.PreferredSongs.RemoveAt(preferredMusicRemovedIndex);
             RecentPage.RecentAdded.Remove(music); // TODO: ugly impl
+            foreach (var listener in MusicEventListeners) listener.Removed(music);
         }
 
         public void UndoRemoveMusic(Music music)
@@ -205,6 +219,7 @@ namespace SMPlayer.Models
             if (recentPlayedRemovedIndex > -1)
                 RecentPlayed.Insert(recentPlayedRemovedIndex, music.Path);
             RecentPage.RecentAdded.Add(music); // TODO: ugly impl
+            foreach (var listener in MusicEventListeners) listener.Added(music);
         }
 
         public Music SelectMusicById(long id)
@@ -352,6 +367,13 @@ namespace SMPlayer.Models
         void Added(Music music);
         void Removed(Music music);
         void Modified(Music before, Music after);
+    }
+
+    public interface IPlaylistEventListener
+    {
+        void Added(Playlist playlist);
+        void Renamed(Playlist playlist);
+        void Removed(Playlist playlist);
     }
 
     public enum NamingError

@@ -139,20 +139,28 @@ namespace SMPlayer.Models
             return new Music(this);
         }
 
-        public Music CopyFrom(Music source)
+        public Music CopyFrom(Music src)
         {
-            Id = source.Id;
-            Path = source.Path;
-            Name = source.Name;
-            Artist = source.Artist;
-            Album = source.Album;
-            Duration = source.Duration;
-            Favorite = source.Favorite;
-            PlayCount = source.PlayCount;
-            DateAdded = source.DateAdded;
-            IsPlaying = source.IsPlaying;
-            Index = source.Index;
-            return source;
+            Id = src.Id;
+            Path = src.Path;
+            CopyMusicProperties(src);
+            Favorite = src.Favorite;
+            PlayCount = src.PlayCount;
+            IsPlaying = src.IsPlaying;
+            Index = src.Index;
+            return src;
+        }
+
+        public bool CopyMusicProperties(Music src)
+        {
+            if (Name == src.Name && Artist == src.Artist && Album == src.Album && Duration == src.Duration && DateAdded == src.DateAdded)
+                return false;
+            Name = src.Name;
+            Artist = src.Artist;
+            Album = src.Album;
+            Duration = src.Duration;
+            DateAdded = src.DateAdded;
+            return true;
         }
 
         public void Played()

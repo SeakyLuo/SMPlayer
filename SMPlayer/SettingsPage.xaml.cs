@@ -1,6 +1,7 @@
 ﻿using SMPlayer.Dialogs;
 using SMPlayer.Helpers;
 using SMPlayer.Models;
+using SMPlayer.Models.DAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,8 +28,6 @@ namespace SMPlayer
         public static NotificationSendMode[] NotificationOptions = { NotificationSendMode.MusicChanged, NotificationSendMode.Never };
         private static readonly int[] LimitedRecentPlayedItems = { -1, 100, 200, 500, 1000 };
         private static readonly VoiceAssistantLanguage[] VoiceAssistantPreferredLanguanges = { VoiceAssistantLanguage.English, VoiceAssistantLanguage.Chinese };
-        private static readonly List<IAfterPathSetListener> listeners = new List<IAfterPathSetListener>();
-        private static FolderTree loadingTree;
         private volatile int addLyricsClickCounter = 0;
         private readonly string addLyricsContent = Helper.Localize("AddLyrics");
 
@@ -36,26 +35,29 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
-            MainPage.Instance.Loader.BreakLoadingListeners.Add(() => loadingTree?.PauseLoading());
-            listeners.Add(this);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            PathBox.Text = Settings.settings.RootPath;
-            int notificationSend = (int)Settings.settings.NotificationSend;
-            int notificationDisplay = (int)Settings.settings.NotificationDisplay;
-            NotificationSendComboBox.SelectedIndex = (int)Settings.settings.NotificationSend;
-            NotificationModeComboBox.SelectedIndex = (int)Settings.settings.NotificationDisplay;
-            ThemeColorPicker.Color = Settings.settings.ThemeColor;
-            ShowCountToggleSwitch.IsOn = Settings.settings.ShowCount;
-            KeepRecentComboBox.SelectedIndex = LimitedRecentPlayedItems.FindIndex(i => i == Settings.settings.LimitedRecentPlayedItems);
-            AutoPlayToggleSwitch.IsOn = Settings.settings.AutoPlay;
-            AutoLyricsToggleSwitch.IsOn = Settings.settings.AutoLyrics;
-            SaveProgressToggleSwitch.IsOn = Settings.settings.SaveMusicProgress;
-            HideMultiSelectCommandBarToggleSwitch.IsOn = Settings.settings.HideMultiSelectCommandBarAfterOperation;
-            ShowLyricsInNotificationToggleSwitch.IsOn = Settings.settings.ShowLyricsInNotification;
-            VoiceAssistantLanguageComboBox.SelectedIndex = (int)Settings.settings.VoiceAssistantPreferredLanguage;
+            FillSettings(Settings.settings);
+        }
+
+        private void FillSettings(Settings settings)
+        {
+            PathBox.Text = settings.RootPath;
+            int notificationSend = (int)settings.NotificationSend;
+            int notificationDisplay = (int)settings.NotificationDisplay;
+            NotificationSendComboBox.SelectedIndex = (int)settings.NotificationSend;
+            NotificationModeComboBox.SelectedIndex = (int)settings.NotificationDisplay;
+            ThemeColorPicker.Color = settings.ThemeColor;
+            ShowCountToggleSwitch.IsOn = settings.ShowCount;
+            KeepRecentComboBox.SelectedIndex = LimitedRecentPlayedItems.FindIndex(i => i == settings.LimitedRecentPlayedItems);
+            AutoPlayToggleSwitch.IsOn = settings.AutoPlay;
+            AutoLyricsToggleSwitch.IsOn = settings.AutoLyrics;
+            SaveProgressToggleSwitch.IsOn = settings.SaveMusicProgress;
+            HideMultiSelectCommandBarToggleSwitch.IsOn = settings.HideMultiSelectCommandBarAfterOperation;
+            ShowLyricsInNotificationToggleSwitch.IsOn = settings.ShowLyricsInNotification;
+            VoiceAssistantLanguageComboBox.SelectedIndex = (int)settings.VoiceAssistantPreferredLanguage;
         }
 
         private async void PathBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
@@ -66,64 +68,10 @@ namespace SMPlayer
             };
             picker.FileTypeFilter.Add("*");
             StorageFolder folder = await picker.PickSingleFolderAsync();
-            if (folder != null)
-            {
-                Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-                await UpdateMusicLibrary(folder);
-            }
-        }
-
-        public static async Task<bool> UpdateMusicLibrary(string message = null)
-        {
-            return Helper.CurrentFolder == null || await UpdateMusicLibrary(Helper.CurrentFolder, message);
-        }
-
-        public static async Task<bool> UpdateMusicLibrary(StorageFolder folder, string message = null)
-        {
-            MainPage.Instance.Loader.ShowDeterminant(message ?? "LoadMusicLibrary", true);
-            loadingTree = new FolderTree();
-            if (!await loadingTree.Init(folder, (treeFolder, file, progress, max) =>
-            {
-                bool isDeterminant = max != 0;
-                if (MainPage.Instance.Loader.IsDeterminant != isDeterminant)
-                    MainPage.Instance.Loader.IsDeterminant = isDeterminant;
-                if (isDeterminant)
-                {
-                    MainPage.Instance.Loader.Max = max;
-                    MainPage.Instance.Loader.Progress = progress;
-                    MainPage.Instance.Loader.Text = message ?? file;
-                }
-            }))
-            {
-                return false;
-            }
-            MainPage.Instance.Loader.SetLocalizedText(message ?? "UpdateMusicLibrary");
-            Helper.CurrentFolder = folder;
-            await Task.Run(() =>
-            {
-                loadingTree.MergeFrom(Settings.settings.Tree);
-                Settings.settings.Tree = loadingTree;
-                Settings.settings.RootPath = folder.Path;
-            });
-            MainPage.Instance.Loader.Progress = 0;
-            MainPage.Instance.Loader.Max = listeners.Count;
-            for (int i = 0; i < listeners.Count;)
-            {
-                var listener = listeners[i];
-                listener.PathSet(folder.Path);
-                MainPage.Instance.Loader.Progress = ++i;
-            }
-            MediaHelper.RemoveBadMusic();
-            App.Save();
-            MainPage.Instance.Loader.Hide();
-            return true;
-        }
-
-        public static void NotifyLibraryChange(string path) { foreach (var listener in listeners) listener.PathSet(path); }
-
-        public static void AddAfterPathSetListener(IAfterPathSetListener listener)
-        {
-            listeners.Add(listener);
+            if (folder == null) return;
+            Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
+            await UpdateHelper.UpdateMusicLibrary(folder);
+            PathBox.Text = folder.Path;
         }
 
         private void ConfirmColorButton_Click(object sender, RoutedEventArgs e)
@@ -144,39 +92,6 @@ namespace SMPlayer
             ColorPickerFlyout.Hide();
         }
 
-        public static async void CheckNewMusic(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
-        {
-            MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
-            var data = new TreeUpdateData();
-            if (!await tree.CheckNewFile(data))
-            {
-                if (!string.IsNullOrEmpty(data.Message))
-                    MainPage.Instance.ShowNotification(data.Message);
-                MainPage.Instance?.Loader.Hide();
-                return;
-            }
-            if (data.More != 0 || data.Less != 0)
-            {
-                Settings.settings.Tree.FindTree(tree).CopyFrom(tree);
-                foreach (var listener in listeners)
-                    listener.PathSet(tree.Path);
-                if (data.Less != 0) MediaHelper.RemoveBadMusic();
-                afterTreeUpdated?.Invoke(tree);
-                App.Save();
-            }
-            MainPage.Instance?.Loader.Hide();
-            string message;
-            if (data.More == 0 && data.Less == 0)
-                message = Helper.LocalizeMessage("CheckNewMusicResultNoChange");
-            else if (data.More == 0)
-                message = Helper.LocalizeMessage("CheckNewMusicResultRemoved", data.Less);
-            else if (data.Less == 0)
-                message = Helper.LocalizeMessage("CheckNewMusicResultAdded", data.More);
-            else
-                message = Helper.LocalizeMessage("CheckNewMusicResultChange", data.More, data.Less);
-            Helper.ShowNotificationRaw(message);
-        }
-
         private async void UpdateMusicLibrary_Click(object sender, RoutedEventArgs e)
         {
             if (Helper.CurrentFolder == null)
@@ -185,7 +100,7 @@ namespace SMPlayer
             }
             else
             {
-                await UpdateMusicLibrary();
+                await UpdateHelper.UpdateMusicLibrary();
             }
 
         }
@@ -296,14 +211,12 @@ namespace SMPlayer
             };
             picker.FileTypeFilter.Add("*");
             StorageFolder folder = await picker.PickSingleFolderAsync();
-            if (folder != null)
-            {
-                MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
-                Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-                JsonFileHelper.SaveAsync(folder, SettingsHelper.JsonFilename, Settings.settings);
-                MainPage.Instance.Loader.Hide();
-                MainPage.Instance.ShowLocalizedNotification("DataExported");
-            }
+            if (folder == null) return;
+            MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
+            Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
+            JsonFileHelper.SaveAsync(folder, SettingsHelper.JsonFilename, Settings.settings);
+            MainPage.Instance.Loader.Hide();
+            MainPage.Instance.ShowLocalizedNotification("DataExported");
         }
 
         private async void ImportData_Click(object sender, RoutedEventArgs e)
@@ -314,23 +227,24 @@ namespace SMPlayer
             };
             picker.FileTypeFilter.Add(".json");
             StorageFile file = await picker.PickSingleFileAsync();
-            if (file != null)
+            if (file == null) return;
+            MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
+            try
             {
-                MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
-                try
+                if (!SettingsHelper.Init(await FileIO.ReadTextAsync(file))) return;
+                bool successful = await UpdateHelper.UpdateMusicLibrary();
+                if (successful)
                 {
-                    string json = await FileIO.ReadTextAsync(file);
-                    Settings settings = JsonFileHelper.Convert<Settings>(json);
-                    bool successful = await UpdateMusicLibrary();
                     App.Save();
-                    MainPage.Instance.Loader.Hide();
-                    MainPage.Instance.ShowLocalizedNotification(successful ? "DataImported" : "ImportDataCancelled");
+                    FillSettings(Settings.settings);
                 }
-                catch (Exception ex)
-                {
-                    MainPage.Instance.Loader.Hide();
-                    MainPage.Instance.ShowLocalizedNotification("ImportDataFailed" + ex.Message);
-                }
+                MainPage.Instance.Loader.Hide();
+                MainPage.Instance.ShowLocalizedNotification(successful ? "DataImported" : "ImportDataCancelled");
+            }
+            catch (Exception ex)
+            {
+                MainPage.Instance.Loader.Hide();
+                MainPage.Instance.ShowLocalizedNotification("ImportDataFailed" + ex.Message);
             }
         }
 
@@ -481,10 +395,5 @@ namespace SMPlayer
             Settings.settings.VoiceAssistantPreferredLanguage = language;
             VoiceAssistantHelper.SetLanguage(language);
         }
-    }
-
-    public interface IAfterPathSetListener
-    {
-        void PathSet(string path);
     }
 }

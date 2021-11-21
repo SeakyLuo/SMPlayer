@@ -152,6 +152,13 @@ namespace SMPlayer
         {
             return file.FileType.EndsWith(".mp3");
         }
+        public static async Task<int> CountFilesAsync(this StorageFolder folder)
+        {
+            int count = (await folder.GetFilesAsync()).Count(f => f.IsMusicFile());
+            foreach (var sub in await folder.GetFoldersAsync())
+                count += await CountFilesAsync(sub);
+            return count;
+        }
         public static string GetLyrics(this StorageFile file)
         {
             using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(file), TagLib.ReadStyle.Average))

@@ -472,7 +472,14 @@ namespace SMPlayer
             toggleSwitch.SetToolTip(toggleSwitch.IsOn ? "IsEnabledToggleSwitchOnToolTip" : "IsEnabledToggleSwitchOffToolTip");
             if (toggleSwitch.DataContext is PreferenceItemView view)
             {
-                GetPreferenceByType(view.PreferType).Find(i => i.Id == view.Id).IsEnabled = view.IsEnabled = !view.IsEnabled;
+                if (GetOthersPreferenceByType(view.PreferType) is PreferenceItem other)
+                {
+                    other.IsEnabled = !other.IsEnabled;
+                }
+                else
+                {
+                    GetPreferenceByType(view.PreferType).Find(i => i.Id == view.Id).IsEnabled = view.IsEnabled = !view.IsEnabled;
+                }
             }
         }
 

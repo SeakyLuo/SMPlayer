@@ -74,12 +74,13 @@ namespace SMPlayer
         {
             if (Settings.settings.RecentAdded.IsEmpty())
             {
-                ObservableCollection<Music> recentAdded = JsonFileHelper.Convert<ObservableCollection<Music>>(await JsonFileHelper.ReadAsync(JsonFileName));
+                List<Music> recentAdded = await JsonFileHelper.ReadObjectAsync<List<Music>>(JsonFileName) ?? new List<Music>();
                 foreach (var music in recentAdded)
                 {
                     music.Id = Settings.FindMusic(music.Path).Id;
                 }
                 RecentAdded = RecentTimeLine.FromMusicList(recentAdded ?? Settings.settings.AllSongs);
+                Settings.settings.RecentAdded = recentAdded.Select(i => i.Id).ToList();
             }
             else
             {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.UI.Controls;
 using Newtonsoft.Json.Linq;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
@@ -38,18 +39,18 @@ namespace SMPlayer
         {
             SetHeader();
             if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
-            SortAndSetAllSongs(Settings.settings.MusicLibrary.Values);
+            SortAndSetAllSongs(Settings.settings.AllSongs);
             MediaHelper.FindMusicAndSetPlaying(AllSongs, null, MediaHelper.CurrentMusic);
         }
 
-        public async void CheckLibrary()
+        public void CheckLibrary()
         {
             if (Helper.CurrentFolder == null) return;
-            var data = new TreeUpdateData();
-            await Settings.settings.Tree.CheckNewFile(data);
-            if (IsLibraryUnchangedAfterChecking = data.More == 0 && data.Less == 0) return;
-            SortAndSetAllSongs(Settings.settings.Tree.Flatten());
-            App.Save();
+            UpdateHelper.CheckNewMusic(Settings.settings.Tree, (folder) =>
+            {
+                IsLibraryUnchangedAfterChecking = true;
+                SortAndSetAllSongs(Settings.settings.AllSongs);
+            });
         }
 
         private void MusicLibraryDataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)

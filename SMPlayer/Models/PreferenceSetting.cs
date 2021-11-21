@@ -61,14 +61,6 @@ namespace SMPlayer.Models
             get => PreferredFolders.Where(i => i.IsEnabled).ToList();
         }
 
-        public void UpdatePlaylistName(string oldName, string newName)
-        {
-            if (PreferredPlaylists.Find(i => i.Name == oldName) is PreferenceItem item)
-            {
-                item.Name = newName;
-            }
-        }
-
         public bool Prefer(IPreferable preferable)
         {
             PreferType preferType = preferable.AsPreferenceItemView().PreferType;

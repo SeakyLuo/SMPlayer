@@ -50,10 +50,11 @@ namespace SMPlayer
                 return page != null && (page == typeof(AlbumPage) || page == typeof(MyFavoritesPage));
             }
         }
-        private static bool PageUnset = true;
+        private static bool switchPage = true;
         public Type CurrentPage { get => NaviFrame.CurrentSourcePageType; }
         public Frame NavigationFrame { get => NaviFrame; }
         public static List<IWindowResizeListener> WindowResizeListeners = new List<IWindowResizeListener>();
+        public static List<Action> MainPageLoadedListeners = new List<Action>();
 
         public MainPage()
         {
@@ -98,6 +99,16 @@ namespace SMPlayer
             }
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            // 如果从磁贴唤醒，就不需要切换
+            if ("True".Equals(e.Parameter) || "False".Equals(e.Parameter))
+            {
+                switchPage = false;
+            }
+        }
+
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (IsTitleBarColorful) TitleBarHelper.SetDarkTitleBar();
@@ -105,10 +116,10 @@ namespace SMPlayer
             Window.Current.SetTitleBar(AppTitleBar);
             UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar);
 
-            if (PageUnset)
+            if (switchPage)
             {
                 SwitchPage(Settings.settings.LastPage);
-                PageUnset = false;
+                switchPage = false;
             }
             if (!UpdateHelper.Log.DateAdded)
             {
@@ -132,6 +143,7 @@ namespace SMPlayer
             {
                 SettingsPage.ShowReleaseNotes();
             }
+            foreach (var listener in MainPageLoadedListeners) listener.Invoke();
         }
 
         private void UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar coreTitleBar)
@@ -271,6 +283,15 @@ namespace SMPlayer
 
         private void SwitchPage(string name)
         {
+            // 不知道为啥下面的不行……
+            //if (Type.GetType(name + "Page") is Type type)
+            //{
+            //    NaviFrame.Navigate(type);
+            //}
+            //else
+            //{
+            //    NaviFrame.Navigate(typeof(MusicLibraryPage));
+            //}
             switch (name)
             {
                 case "Albums":
@@ -329,66 +350,71 @@ namespace SMPlayer
         private void NaviFrame_Navigated(object sender, NavigationEventArgs e)
         {
             SetBackButtonVisible(NaviFrame.CanGoBack);
-            var page = NaviFrame.CurrentSourcePageType.Name;
-            switch (page)
+            var page = NaviFrame.CurrentSourcePageType;
+            if (page == typeof(MusicLibraryPage))
             {
-                case "MusicLibraryPage":
-                    HeaderGrid.Visibility = Visibility.Visible;
-                    MainNavigationView.SelectedItem = MusicLibraryItem;
-                    break;
-                case "ArtistsPage":
-                    HeaderGrid.Visibility = Visibility.Visible;
-                    MainNavigationView.SelectedItem = ArtistsItem;
-                    break;
-                case "AlbumPage":
-                    SetHeaderText("Album");
-                    HeaderGrid.Visibility = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? Visibility.Visible : Visibility.Collapsed;
-                    MainNavigationView.SelectedItem = null;
-                    break;
-                case "AlbumsPage":
-                    HeaderGrid.Visibility = Visibility.Visible;
-                    MainNavigationView.SelectedItem = AlbumsItem;
-                    break;
-                case "NowPlayingPage":
-                    SetHeaderText("NowPlaying");
-                    HeaderGrid.Visibility = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? Visibility.Collapsed : Visibility.Visible;
-                    MainNavigationView.SelectedItem = NowPlayingItem;
-                    break;
-                case "RecentPage":
-                    SetHeaderText("Recent");
-                    HeaderGrid.Visibility = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? Visibility.Visible : Visibility.Collapsed;
-                    MainNavigationView.SelectedItem = RecentItem;
-                    break;
-                case "LocalPage":
-                    HeaderGrid.Visibility = Visibility.Visible;
-                    MainNavigationView.SelectedItem = LocalItem;
-                    break;
-                case "PlaylistsPage":
-                    HeaderGrid.Visibility = Visibility.Collapsed;
-                    MainNavigationView.SelectedItem = PlaylistsItem;
-                    break;
-                case "MyFavoritesPage":
-                    SetHeaderText("");
-                    HeaderGrid.Visibility = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? Visibility.Visible : Visibility.Collapsed;
-                    MainNavigationView.SelectedItem = MyFavoritesItem;
-                    break;
-                case "SearchPage":
-                    HeaderGrid.Visibility = Visibility.Visible;
-                    MainNavigationView.SelectedItem = null;
-                    break;
-                case "SearchResultPage":
-                    HeaderGrid.Visibility = Visibility.Visible;
-                    MainNavigationView.SelectedItem = null;
-                    break;
-                case "SettingsPage":
-                    SetHeaderText("Settings");
-                    HeaderGrid.Visibility = Visibility.Visible;
-                    MainNavigationView.SelectedItem = MainNavigationView.SettingsItem;
-                    break;
-                default:
-                    Debug.WriteLine("Navigate to " + NaviFrame.CurrentSourcePageType.Name);
-                    MainNavigationView.SelectedItem = null;
-                    break;
+                HeaderGrid.Visibility = Visibility.Visible;
+                MainNavigationView.SelectedItem = MusicLibraryItem;
+            }
+            else if (page == typeof(ArtistsPage))
+            {
+                HeaderGrid.Visibility = Visibility.Visible;
+                MainNavigationView.SelectedItem = ArtistsItem;
+            }
+            else if (page == typeof(AlbumPage))
+            {
+                SetHeaderText("Album");
+                HeaderGrid.Visibility = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? Visibility.Visible : Visibility.Collapsed;
+                MainNavigationView.SelectedItem = null;
+            }
+            else if (page == typeof(AlbumsPage))
+            {
+                HeaderGrid.Visibility = Visibility.Visible;
+                MainNavigationView.SelectedItem = AlbumsItem;
+            }
+            else if (page == typeof(NowPlayingPage))
+            {
+                SetHeaderText("NowPlaying");
+                HeaderGrid.Visibility = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? Visibility.Collapsed : Visibility.Visible;
+                MainNavigationView.SelectedItem = NowPlayingItem;
+            }
+            else if (page == typeof(RecentPage))
+            {
+                SetHeaderText("Recent");
+                HeaderGrid.Visibility = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? Visibility.Visible : Visibility.Collapsed;
+                MainNavigationView.SelectedItem = RecentItem;
+            }
+            else if (page == typeof(LocalPage))
+            {
+                HeaderGrid.Visibility = Visibility.Visible;
+                MainNavigationView.SelectedItem = LocalItem;
+            }
+            else if (page == typeof(PlaylistsPage))
+            {
+                HeaderGrid.Visibility = Visibility.Collapsed;
+                MainNavigationView.SelectedItem = PlaylistsItem;
+            }
+            else if (page == typeof(MyFavoritesPage))
+            {
+                SetHeaderText("");
+                HeaderGrid.Visibility = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? Visibility.Visible : Visibility.Collapsed;
+                MainNavigationView.SelectedItem = MyFavoritesItem;
+            }
+            else if (page == typeof(SearchPage))
+            {
+                HeaderGrid.Visibility = Visibility.Visible;
+                MainNavigationView.SelectedItem = null;
+            }
+            else if (page == typeof(SearchResultPage))
+            {
+                HeaderGrid.Visibility = Visibility.Visible;
+                MainNavigationView.SelectedItem = null;
+            }
+            else if (page == typeof(SettingsPage))
+            {
+                SetHeaderText("Settings");
+                HeaderGrid.Visibility = Visibility.Visible;
+                MainNavigationView.SelectedItem = MainNavigationView.SettingsItem;
             }
             if (IsTitleBarColorful)
             {

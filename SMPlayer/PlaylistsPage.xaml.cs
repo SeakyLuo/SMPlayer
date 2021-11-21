@@ -245,12 +245,11 @@ namespace SMPlayer
             {
                 Dialog = dialog
             }.AfterConfirmation(oldName, newName);
-            Settings.settings.Preference.UpdatePlaylistName(oldName, newName);
         }
 
         void IRenameActionListener.AfterConfirmation(string oldName, string newName)
         {
-            PlaylistController.AfterConfirmation(oldName, newName);
+            PlaylistController?.AfterConfirmation(oldName, newName);
             AfterConfirmation(dialog, oldName, newName);
         }
     }

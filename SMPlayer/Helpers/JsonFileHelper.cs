@@ -20,7 +20,7 @@ namespace SMPlayer.Models
         public static async Task<T> ReadObjectAsync<T>(string filename) where T : class
         {
             string json = await ReadAsync(Helper.LocalFolder, filename);
-            return json == null ? null : JsonConvert.DeserializeObject<T>(json);
+            return string.IsNullOrEmpty(json) ? null : JsonConvert.DeserializeObject<T>(json);
         }
 
         public static async Task<string> ReadAsync(string filename)
@@ -38,7 +38,7 @@ namespace SMPlayer.Models
             {
                 try
                 {
-                    json = JsonConvert.SerializeObject(data);
+                    json = Serialize(data);
                 }
                 catch (Exception e)
                 {
@@ -73,6 +73,11 @@ namespace SMPlayer.Models
         public static T Convert<T>(string json) where T : class
         {
             return json == null ? null : JsonConvert.DeserializeObject<T>(json);
+        }
+
+        public static string Serialize(object obj)
+        {
+            return JsonConvert.SerializeObject(obj);
         }
 
         public static void DeleteFile(string filename)

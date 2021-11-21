@@ -69,6 +69,9 @@ namespace SMPlayer.Models
         [Newtonsoft.Json.JsonIgnore]
         public int Count { get => Songs.Count; }
 
+        [Newtonsoft.Json.JsonIgnore]
+        public bool IsMyFavorite { get => Name == Helper.Localize(MenuFlyoutHelper.MyFavorites); }
+
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public Playlist() { }
