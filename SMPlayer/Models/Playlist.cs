@@ -39,7 +39,8 @@ namespace SMPlayer.Models
         {
             get
             {
-                if (songs.IsEmpty() && SongIds.IsNotEmpty()) songs.AddRange(Settings.settings.SelectMusicByIds(SongIds));
+                if (songs.IsEmpty() && SongIds.IsNotEmpty())
+                    songs.AddRange(Settings.settings.SelectMusicByIds(SongIds));
                 return songs;
             }
             set
@@ -55,7 +56,7 @@ namespace SMPlayer.Models
             get
             {
                 if (songIds.IsEmpty() && songs.IsNotEmpty())
-                    return songs.Select(i => i.Id).ToList();
+                    songIds.AddRange(songs.Select(i => i.Id).ToList());
                 return songIds;
             }
             set

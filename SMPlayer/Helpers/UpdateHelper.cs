@@ -36,42 +36,6 @@ namespace SMPlayer.Helpers
             Save();
         }
 
-        public static void UpdateIds()
-        {
-            UpdateTreeFileId(Settings.settings.Tree);
-            foreach (var playlist in Settings.settings.Playlists)
-            {
-                UpdatePlaylistId(playlist);
-            }
-            UpdatePlaylistId(Settings.settings.MyFavorites);
-            Log.NewSettings = true;
-            Save();
-        }
-
-        private static void UpdatePlaylistId(Playlist playlist)
-        {
-            playlist.Id = Settings.settings.IdGenerator.GeneratePlaylistId();
-            foreach (var music in playlist.Songs)
-            {
-                if (Settings.FindMusic(music) is Music m)
-                {
-                    music.Id = m.Id;
-                }
-            }
-        }
-
-        private static void UpdateTreeFileId(FolderTree tree)
-        {
-            foreach (var branch in tree.Trees)
-            {
-                UpdateTreeFileId(branch);
-            }
-            foreach (var file in tree.Files)
-            {
-                file.Id = Settings.settings.IdGenerator.GenerateMusicId();
-            }
-        }
-
         public static void AddAfterPathSetListener(IAfterPathSetListener listener)
         {
             listeners.Add(listener);
@@ -226,16 +190,15 @@ namespace SMPlayer.Helpers
 
         /**
          * Merge source to target
-         * 注意会把老树中存在、新树中不存在的项目加到新树中，不然老信息会丢失，而用户无感知这样不太好
          */
         private static FolderTree MergeTree(FolderTree source, FolderTree target)
         {
             foreach (var branch in target.Trees)
             {
-                if (source.FindTree(branch) is FolderTree tree)
+                if (source.FindTree(branch) is FolderTree src)
                 {
                     // 如果有能合并的老树
-                    MergeTree(branch, tree);
+                    MergeTree(src, branch);
                 }
                 else
                 {
@@ -243,24 +206,10 @@ namespace SMPlayer.Helpers
                     branch.Id = Settings.settings.IdGenerator.GenerateTreeId();
                 }
             }
-            foreach (var item in source.Trees)
+            if (source.FindTree(target) is FolderTree srcTree)
             {
-                if (target.FindTree(item) == null)
-                {
-                    target.Trees.Add(item);
-                }
+                target.CopyFrom(srcTree);
             }
-            foreach (var item in source.Files)
-            {
-                if (target.FindFile(item) == null)
-                {
-                    target.Files.Add(item);
-                }
-            }
-            target.Id = source.Id;
-            target.Path = source.Path;
-            target.Criterion = source.Criterion;
-            target.Sort();
             return target;
         }
 
@@ -403,9 +352,8 @@ namespace SMPlayer.Helpers
         [Newtonsoft.Json.JsonIgnore]
         public bool ShowReleaseNotesDialog { get => LastReleaseNotesVersion != Helper.AppVersion; }
         public bool DateAdded { get; set; } = false;
-        public bool NewSettings { get; set; } = false;
         [Newtonsoft.Json.JsonIgnore]
-        public bool AllUpdated { get => DateAdded && NewSettings; }
+        public bool AllUpdated { get => DateAdded; }
     }
 
     class TreeUpdateListener : ITreeUpdateListener

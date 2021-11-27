@@ -98,6 +98,7 @@ namespace SMPlayer.Models
                     SortByArtist();
                     break;
             }
+            OnPropertyChanged();
         }
         public List<Music> SortByTitle()
         {

@@ -150,12 +150,7 @@ namespace SMPlayer
             MusicRequestListeners.Add(listener);
         }
 
-        private void AlternateRowBackgroud()
-        {
-            AlternateRowBackgroud(0, CurrentPlaylist.Count);
-        }
-
-        private void AlternateRowBackgroud(int start)
+        private void AlternateRowBackgroud(int start = 0)
         {
             AlternateRowBackgroud(start, CurrentPlaylist.Count);
         }

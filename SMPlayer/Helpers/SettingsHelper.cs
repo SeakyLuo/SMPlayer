@@ -37,15 +37,15 @@ namespace SMPlayer.Helpers
                     settings.MusicLibrary = songs.Select(m => { m.Id = settings.Tree.FindFile(m.Path).Id; return m; })
                                                  .ToDictionary(m => m.Id);
                     settings.Playlists.ForEach(p => p.Id = settings.IdGenerator.GeneratePlaylistId());
-                    ResetPlaylistSongsId(Settings.settings.MyFavorites);
+                    ResetPlaylistSongsId(settings.MyFavorites);
                     settings.Playlists.ForEach(p => ResetPlaylistSongsId(p));
-                    settings.RecentPlayedSongs = MusicPathToId(Settings.settings.RecentPlayed);
+                    settings.RecentPlayedSongs = MusicPathToId(settings.RecentPlayed);
 
-                    foreach (PreferenceItem item in Settings.settings.Preference.PreferredFolders)
+                    foreach (PreferenceItem item in settings.Preference.PreferredFolders)
                         item.Id = settings.Tree.FindTree(item.Id).Id.ToString();
-                    foreach (PreferenceItem item in Settings.settings.Preference.PreferredSongs)
+                    foreach (PreferenceItem item in settings.Preference.PreferredSongs)
                         item.Id = settings.Tree.FindMusic(item.Id).Id.ToString();
-                    foreach (PreferenceItem item in Settings.settings.Preference.PreferredPlaylists)
+                    foreach (PreferenceItem item in settings.Preference.PreferredPlaylists)
                         item.Id = settings.Playlists.FirstOrDefault(i => i.Name == item.Id).Id.ToString();
                     await Init(settings);
                 }
@@ -87,6 +87,10 @@ namespace SMPlayer.Helpers
         private static void ResetPlaylistSongsId(Playlist playlist)
         {
             playlist.SongIds = MusicPathToId(playlist.Songs.ToList().Select(i => i.Path));
+            for (int i = 0; i < playlist.SongIds.Count; i++)
+            {
+                playlist.Songs[i].Id = playlist.SongIds[i];
+            }
         }
 
         private static List<long> MusicPathToId(IEnumerable<string> paths)
