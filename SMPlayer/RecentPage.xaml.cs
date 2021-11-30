@@ -21,7 +21,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class RecentPage : Page, IInitListener, IMultiSelectListener, IMenuFlyoutItemClickListener, IMenuFlyoutHelperBuildListener
+    public sealed partial class RecentPage : Page, IInitListener, IMultiSelectListener, IMenuFlyoutItemClickListener, IMenuFlyoutHelperBuildListener, IMusicEventListener, IFolderTreeEventListener
     {
         public static RecentTimeLine RecentAdded;
         private const string JsonFileName = "RecentAddedTimeLine";
@@ -79,7 +79,7 @@ namespace SMPlayer
                 {
                     music.Id = Settings.FindMusic(music.Path).Id;
                 }
-                RecentAdded = RecentTimeLine.FromMusicList(recentAdded ?? Settings.settings.AllSongs);
+                RecentAdded = RecentTimeLine.FromMusicList(recentAdded.IsEmpty() ? Settings.settings.AllSongs : recentAdded);
                 Settings.settings.RecentAdded = recentAdded.Select(i => i.Id).ToList();
             }
             else
@@ -131,6 +131,7 @@ namespace SMPlayer
             RecentAddedProgressRing.IsActive = true;
             try
             {
+                RecentAddedMultiSelectAppButton.IsEnabled = list.IsNotEmpty();
                 AddedMusicView.Setup(list);
             }
             catch (InvalidOperationException)
@@ -149,7 +150,8 @@ namespace SMPlayer
                 try
                 {
                     PlayedMusicView.Setup(list);
-                    ClearPlayHistoryAppButton.IsEnabled = list.Count() != 0;
+                    RecentPlayedMultiSelectAppButton.IsEnabled = list.IsNotEmpty();
+                    ClearPlayHistoryAppButton.IsEnabled = list.IsNotEmpty();
                 }
                 catch (InvalidOperationException)
                 {
@@ -173,7 +175,8 @@ namespace SMPlayer
             try
             {
                 ResetColor();
-                ClearSearchHistoryAppButton.IsEnabled = list.Count() != 0;
+                RecentSearchesMultiSelectAppButton.IsEnabled = list.IsNotEmpty();
+                ClearSearchHistoryAppButton.IsEnabled = list.IsNotEmpty();
             }
             catch (InvalidOperationException)
             {
@@ -492,6 +495,19 @@ namespace SMPlayer
         void IMenuFlyoutItemClickListener.Remove(Music music) { }
         void IMenuFlyoutItemClickListener.Select(object data) { }
         void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type) { }
+        void IFolderTreeEventListener.Added(FolderTree branch, FolderTree root) { }
+        void IFolderTreeEventListener.Renamed(FolderTree folder, string newPath) { }
+        void IFolderTreeEventListener.Removed(FolderTree folder)
+        {
+            RecentAdded.DeleteByFolder(folder.Path);
+        }
+        void IMusicEventListener.Liked(Music music, bool isFavorite) { }
+        void IMusicEventListener.Added(Music music) { }
+        void IMusicEventListener.Removed(Music music)
+        {
+            RecentAdded.Remove(music);
+        }
+        void IMusicEventListener.Modified(Music before, Music after) { }
     }
 
     public interface IInitListener

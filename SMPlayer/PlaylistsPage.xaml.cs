@@ -19,10 +19,10 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class PlaylistsPage : Page, IRenameActionListener
+    public sealed partial class PlaylistsPage : Page, IPlaylistEventListener
     {
         public static PlaylistsPage Instance { get => MainPage.Instance.NavigationFrame.Content as PlaylistsPage; }
-        public static ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
+        private ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
         public Playlist CurrentPlaylist { get => PlaylistTabView.SelectedItem as Playlist; }
         private Playlist PreviousPlaylist;
         private HeaderedPlaylistControl PlaylistController;
@@ -34,11 +34,7 @@ namespace SMPlayer
             Playlists = new ObservableCollection<Playlist>(Settings.settings.Playlists);
             PlaylistTabView.ItemsSource = Playlists;
             PlaylistTabView.SelectedIndex = Settings.settings.Playlists.FindIndex(p => p.Id == Settings.settings.LastPlaylistId);
-            Settings.PlaylistAddedListeners.Add(playlist =>
-            {
-                PlaylistTabView.SelectedItem = playlist;
-                BringSelectedTabIntoView();
-            });
+            Settings.AddPlaylistEventListener(this);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -62,9 +58,14 @@ namespace SMPlayer
             }
         }
 
+        private Playlist SelectPlaylistById(long id)
+        {
+            return Playlists.FirstOrDefault(p => p.Id == id);
+        }
+
         private void SelectPlaylist(long id)
         {
-            PlaylistTabView.SelectedItem = Playlists.FirstOrDefault(p => p.Id == id);
+            PlaylistTabView.SelectedItem = SelectPlaylistById(id);
         }
 
         private void SelectPlaylist(string target)
@@ -104,7 +105,7 @@ namespace SMPlayer
             var playlist = tabview.SelectedItem as Playlist;
             Settings.settings.LastPlaylistId = playlist.Id;
             foreach (var music in playlist.Songs)
-                music.IsPlaying = music.Equals(MediaHelper.CurrentMusic);
+                music.IsPlaying = music.Equals(MusicPlayer.CurrentMusic);
             if (PlaylistController != null)
                 await PlaylistController.SetPlaylist(playlist);
         }
@@ -119,7 +120,11 @@ namespace SMPlayer
         {
             var flyoutItem = sender as MenuFlyoutItem;
             var playlist = flyoutItem.DataContext as Playlist;
-            dialog = new RenameDialog(this, RenameOption.Rename, RenameTarget.Playlist, playlist.Name);
+            dialog = new RenameDialog(RenameOption.Rename, RenameTarget.Playlist, playlist.Name)
+            {
+                Validate = Settings.settings.ValidatePlaylistName,
+                Confirmed = (newName) => Settings.settings.RenamePlaylist(playlist, newName)
+            };
             await dialog.ShowAsync();
         }
 
@@ -152,6 +157,17 @@ namespace SMPlayer
             PlaylistController.DeletePlaylist(playlist);
         }
 
+        private async void CreateNewPlaylist()
+        {
+            string name = Helper.Localize("Playlist");
+            dialog = new RenameDialog(RenameOption.Create, RenameTarget.Playlist, Settings.settings.FindNextPlaylistName(name))
+            {
+                Validate = Settings.settings.ValidatePlaylistName,
+                Confirmed = (newName) => Settings.settings.AddPlaylist(newName)
+            };
+            await dialog.ShowAsync();
+        }
+
         private void OpenPlaylistsFlyout(object sender, object e)
         {
             SpinArrowAnimation.Begin();
@@ -161,11 +177,9 @@ namespace SMPlayer
             {
                 Text = Helper.LocalizeText("CreateNewPlaylist")
             };
-            createNewPlaylist.Click += async (s, args) =>
+            createNewPlaylist.Click += (s, args) =>
             {
-                string name = Helper.Localize("Playlist");
-                dialog = new RenameDialog(this, RenameOption.Create, RenameTarget.Playlist, Settings.settings.FindNextPlaylistName(name));
-                await dialog.ShowAsync();
+                CreateNewPlaylist();
             };
             flyout.Items.Add(createNewPlaylist);
             flyout.Items.Add(new MenuFlyoutSeparator());
@@ -226,31 +240,33 @@ namespace SMPlayer
             PreviousPlaylist = CurrentPlaylist;
         }
 
-        public static NamingError ConfirmRenaming(RenameDialog dialog, string oldName, string newName)
+        private void CreatePlaylistButton_Click(object sender, RoutedEventArgs e)
         {
-            return new VirtualRenameActionListener()
+            CreateNewPlaylist();
+        }
+
+        void IPlaylistEventListener.Added(Playlist playlist, int? index)
+        {
+            if (index == null)
             {
-                Dialog = dialog
-            }.Confirm(oldName, newName);
-        }
-
-        NamingError IRenameActionListener.Confirm(string oldName, string newName)
-        {
-            return ConfirmRenaming(dialog, oldName, newName);
-        }
-
-        public static void AfterConfirmation(RenameDialog dialog, string oldName, string newName)
-        {
-            new VirtualRenameActionListener
+                Playlists.Add(playlist);
+            }
+            else
             {
-                Dialog = dialog
-            }.AfterConfirmation(oldName, newName);
+                Playlists.Insert((int)index, playlist);
+            }
+            PlaylistTabView.SelectedItem = playlist;
+            BringSelectedTabIntoView();
         }
 
-        void IRenameActionListener.AfterConfirmation(string oldName, string newName)
+        void IPlaylistEventListener.Renamed(Playlist playlist)
         {
-            PlaylistController?.AfterConfirmation(oldName, newName);
-            AfterConfirmation(dialog, oldName, newName);
+            SelectPlaylistById(playlist.Id)?.CopyFrom(playlist);
+        }
+
+        void IPlaylistEventListener.Removed(Playlist playlist, int index)
+        {
+            Playlists.RemoveAt(index);
         }
     }
 }

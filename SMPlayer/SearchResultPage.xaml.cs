@@ -231,7 +231,7 @@ namespace SMPlayer
 
         void IMultiSelectListener.Play(MultiSelectCommandBar commandBar)
         {
-            MediaHelper.SetMusicAndPlay(GetSelectItems());
+            MusicPlayer.SetMusicAndPlay(GetSelectItems());
         }
 
         private List<Music> GetSelectItems()

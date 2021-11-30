@@ -75,13 +75,13 @@ namespace SMPlayer.Helpers
 
         private static void UpdateToast()
         {
-            if (!MediaHelper.IsPlaying || CurrentToastMap.Count == 0) return;
-            if (!IsToastActive(MediaHelper.CurrentMusic, MediaPlaybackState.Playing)) return;
+            if (!MusicPlayer.IsPlaying || CurrentToastMap.Count == 0) return;
+            if (!IsToastActive(MusicPlayer.CurrentMusic, MediaPlaybackState.Playing)) return;
             // Create NotificationData and make sure the sequence number is incremented
             // since last update, or assign 0 for updating regardless of order
             var data = new NotificationData { SequenceNumber = 0 };
-            data.Values["MediaControlPosition"] = MediaHelper.Progress.ToString();
-            data.Values["MediaControlPositionTime"] = MusicDurationConverter.ToTime(MediaHelper.Position);
+            data.Values["MediaControlPosition"] = MusicPlayer.Progress.ToString();
+            data.Values["MediaControlPositionTime"] = MusicDurationConverter.ToTime(MusicPlayer.Position);
             data.Values["Lyrics"] = Settings.settings.ShowLyricsInNotification ? LyricsHelper.GetLyrics() : "";
 
             // Update the existing notification's data by using tag/group
@@ -200,8 +200,8 @@ namespace SMPlayer.Helpers
                 toast.ExpirationTime = DateTime.Now.AddSeconds(Math.Min(10, music.Duration));
             }
             //toast.Dismissed += (sender, args) => HideToast("Dismissed");
-            toast.Data.Values["MediaControlPosition"] = MediaHelper.Progress.ToString();
-            toast.Data.Values["MediaControlPositionTime"] = MusicDurationConverter.ToTime(MediaHelper.Position);
+            toast.Data.Values["MediaControlPosition"] = MusicPlayer.Progress.ToString();
+            toast.Data.Values["MediaControlPositionTime"] = MusicDurationConverter.ToTime(MusicPlayer.Position);
             return toast;
         }
     }

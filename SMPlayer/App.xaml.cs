@@ -100,7 +100,7 @@ namespace SMPlayer
                 return;
             }
             Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
-            MediaHelper.Init(music);
+            MusicPlayer.Init(music);
             await AlbumsPage.Init();
             await RecentPage.Init();
             ToastHelper.Init();
@@ -158,7 +158,7 @@ namespace SMPlayer
         public static async void Save()
         {
             SettingsHelper.Save();
-            MediaHelper.Save();
+            MusicPlayer.Save();
             AlbumsPage.Save();
             RecentPage.Save();
             UpdateHelper.Save();
@@ -177,13 +177,13 @@ namespace SMPlayer
                         switch (details.Argument)
                         {
                             case "Next":
-                                MediaHelper.MoveNext();
+                                MusicPlayer.MoveNext();
                                 break;
                             case "Pause":
-                                MediaHelper.Pause();
+                                MusicPlayer.Pause();
                                 break;
                             case "Play":
-                                MediaHelper.Play();
+                                MusicPlayer.Play();
                                 break;
                         }
                     }
@@ -198,7 +198,7 @@ namespace SMPlayer
             Music music = await Music.LoadFromPathAsync(args.Files[0].Path);
             if (args.PreviousExecutionState == ApplicationExecutionState.Running)
             {
-                MediaHelper.SetMusicAndPlay(music);
+                MusicPlayer.SetMusicAndPlay(music);
             }
             else
             {

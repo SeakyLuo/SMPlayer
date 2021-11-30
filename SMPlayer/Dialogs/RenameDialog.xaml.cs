@@ -1,6 +1,7 @@
 ﻿using SMPlayer.Models;
 using System;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -13,29 +14,13 @@ namespace SMPlayer.Dialogs
         public RenameOption Option { get; set; }
         public RenameTarget Target { get; set; }
         public string DefaultName { get; set; }
-        public Func<string, string, NamingError> Confirm { get; set; }
-        public Func<string, string, Task<NamingError>> ConfirmAsync { get; set; }
-        public Action<string, string> AfterConfirmation { get; set; }
+        public Func<string, NamingError> Validate { get; set; }
+        public Func<string, Task<NamingError>> ValidateAsync { get; set; }
+        public Action<string> Confirmed { get; set; }
 
-        public RenameDialog(Func<string, string, NamingError> confirm, RenameOption option, RenameTarget target, string defaultName)
-        {
-            Constructor(confirm, null, option, target, defaultName);
-        }
-        public RenameDialog(Func<string, string, Task<NamingError>> confirmAsync, RenameOption option, RenameTarget target, string defaultName)
-        {
-            Constructor(null, confirmAsync, option, target, defaultName);
-        }
-        public RenameDialog(IRenameActionListener listener, RenameOption option, RenameTarget target, string defaultName)
-        {
-            AfterConfirmation = listener.AfterConfirmation;
-            Constructor(listener.Confirm, null, option, target, defaultName);
-        }
-        private void Constructor(Func<string, string, NamingError> confirm, Func<string, string, Task<NamingError>> confirmAsync,
-                                 RenameOption option, RenameTarget target, string defaultName)
+        public RenameDialog(RenameOption option, RenameTarget target, string defaultName)
         {
             this.InitializeComponent();
-            Confirm = confirm;
-            ConfirmAsync = confirmAsync;
             Option = option;
             DefaultName = defaultName;
             string dialogTitle, confirmContent;
@@ -97,13 +82,13 @@ namespace SMPlayer.Dialogs
                 return;
             }
             NamingError error = NamingError.Good;
-            if (ConfirmAsync != null)
+            if (ValidateAsync != null)
             {
-                error = await ConfirmAsync(DefaultName, newName);
+                error = await ValidateAsync(newName);
             }
-            else if (Confirm != null)
+            else if (Validate != null)
             {
-                error = Confirm(DefaultName, newName);
+                error = Validate(newName);
             }
             if (error != NamingError.Good)
             {
@@ -112,7 +97,7 @@ namespace SMPlayer.Dialogs
             }
             Cancel();
             MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
-            AfterConfirmation?.Invoke(DefaultName, newName);
+            Confirmed?.Invoke(newName);
             MainPage.Instance?.Loader.Hide();
         }
 
@@ -127,28 +112,5 @@ namespace SMPlayer.Dialogs
             NewPlaylistNameTextBox.Text = "";
             NamingErrorTextBox.Visibility = Visibility.Collapsed;
         }
-    }
-
-    public class VirtualRenameActionListener : IRenameActionListener
-    {
-        public RenameDialog Dialog { get; set; }
-        public object Data { get; set; }
-        public Action ConfirmAction { get; set; }
-        public NamingError Confirm(string oldName, string newName)
-        {
-            return Settings.settings.CheckPlaylistNamingError(newName);
-        }
-
-        public void AfterConfirmation(string oldName, string newName)
-        {
-            Settings.settings.RenamePlaylist(oldName, newName, Dialog.Option, Data);
-            ConfirmAction?.Invoke();
-        }
-    }
-
-    public interface IRenameActionListener
-    {
-        NamingError Confirm(string oldName, string newName);
-        void AfterConfirmation(string oldName, string newName);
     }
 }

@@ -29,7 +29,7 @@ namespace SMPlayer.Controls
         private void PlayAllButton_Click(object sender, RoutedEventArgs e)
         {
             var data = (sender as Button).DataContext as GridFolderView;
-            MediaHelper.ShuffleAndPlay(data.Songs);
+            MusicPlayer.ShuffleAndPlay(data.Songs);
         }
         private void AddToButton_Click(object sender, RoutedEventArgs e)
         {

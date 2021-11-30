@@ -33,7 +33,7 @@ namespace SMPlayer.Controls
         public MusicLyricsControl()
         {
             this.InitializeComponent();
-            MediaHelper.SwitchMusicListeners.Add(this);
+            MusicPlayer.SwitchMusicListeners.Add(this);
         }
         private void ResetLyricsButton_Click(object sender, RoutedEventArgs e)
         {

@@ -11,7 +11,7 @@ namespace SMPlayer.Models
 {
     public class GridFolderView : INotifyPropertyChanged
     {
-        public string Name { get => Tree.Directory; }
+        public string Name { get => Tree.Name; }
         public string FolderInfo { get => Tree.Info.ToString(); }
         public BitmapImage First
         {

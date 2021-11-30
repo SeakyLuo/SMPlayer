@@ -21,7 +21,7 @@ using EF = ExpressionBuilder.ExpressionFunctions;
 
 namespace SMPlayer
 {
-    public sealed partial class HeaderedPlaylistControl : UserControl, IRemoveMusicListener, IImageSavedListener, IMultiSelectListener, IRenameActionListener
+    public sealed partial class HeaderedPlaylistControl : UserControl, IRemoveMusicListener, IImageSavedListener, IMultiSelectListener, IPlaylistEventListener
     {
         public PlaylistControl HeaderedPlaylist { get => HeaderedPlaylistController; }
         public Playlist CurrentPlaylist { get; private set; }
@@ -74,18 +74,21 @@ namespace SMPlayer
             this.InitializeComponent();
             HeaderedPlaylistController.RemoveListeners.Add(this);
             HeaderedPlaylistController.MultiSelectListener = this;
+            Settings.AddPlaylistEventListener(this);
             AlbumArtControl.ImageSavedListeners.Add(this);
         }
 
         public async Task SetPlaylist(Playlist playlist)
         {
             HidePlaylistCover();
-            MediaHelper.FindMusicAndSetPlaying(playlist.Songs, null, MediaHelper.CurrentMusic);
+            MusicPlayer.FindMusicAndSetPlaying(playlist.Songs, null, MusicPlayer.CurrentMusic);
             CurrentPlaylist = playlist;
             HeaderedPlaylist.ItemsSource = playlist.Songs;
             PlaylistNameTextBlock.Text = string.IsNullOrEmpty(playlist.Name) && !IsPlaylist ? Helper.LocalizeMessage("UnknownAlbum") : playlist.Name;
             SetPlaylistInfo(SongCountConverter.ToStr(playlist.Songs));
-            ShuffleButton.IsEnabled = playlist.Count != 0;
+            ShuffleButton.IsEnabled = !playlist.IsEmpty;
+            MultiSelectButton.IsEnabled = !playlist.IsEmpty;
+            ClearButton.Visibility = playlist.IsEmpty ? Visibility.Collapsed : Visibility.Visible;
             RenameButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
             DeleteButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
             bool isPreferred = IsPlaylist ? Settings.settings.Preference.IsPreferred(playlist) :
@@ -127,27 +130,20 @@ namespace SMPlayer
 
         private void Shuffle_Click(object sender, RoutedEventArgs e)
         {
-            MediaHelper.ShuffleAndPlay(CurrentPlaylist.Songs);
+            MusicPlayer.ShuffleAndPlay(CurrentPlaylist.Songs);
         }
 
         private async void Rename_Click(object sender, RoutedEventArgs e)
         {
-            dialog = new RenameDialog(Confirm, RenameOption.Rename, RenameTarget.Playlist, CurrentPlaylist.Name)
+            dialog = new RenameDialog(RenameOption.Rename, RenameTarget.Playlist, CurrentPlaylist.Name)
             {
-                AfterConfirmation = (oldName, newName) => {
-                    PlaylistsPage.AfterConfirmation(dialog, oldName, newName);
-                    AfterConfirmation(oldName, newName);
-                }
+                Validate = (newName) => Settings.settings.ValidatePlaylistName(newName),
+                Confirmed = (newName) => Confirmed(newName)
             };
             await dialog.ShowAsync();
         }
 
-        public NamingError Confirm(string oldName, string newName)
-        {
-            return PlaylistsPage.ConfirmRenaming(dialog, oldName, newName);
-        }
-
-        public void AfterConfirmation(string oldName, string newName)
+        public void Confirmed(string newName)
         {
             PlaylistNameTextBlock.Text = newName;
         }
@@ -176,13 +172,10 @@ namespace SMPlayer
         }
         private void ExecutePlaylistDeletion(Playlist playlist)
         {
-            int index = Settings.settings.Playlists.IndexOf(playlist);
-            PlaylistsPage.Playlists.RemoveAt(index);
-            Settings.settings.Playlists.RemoveAt(index);
+            int index = Settings.settings.RemovePlaylist(playlist);
             MainPage.Instance.ShowUndoNotification(Helper.LocalizeMessage("PlaylistRemoved", playlist.Name), () =>
             {
-                PlaylistsPage.Playlists.Insert(index, playlist);
-                Settings.settings.Playlists.Insert(index, playlist);
+                Settings.settings.InsertPlaylist(playlist, index);
             });
         }
 
@@ -244,9 +237,96 @@ namespace SMPlayer
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
-                MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist.Songs, current, next);
+                MusicPlayer.FindMusicAndSetPlaying(CurrentPlaylist.Songs, current, next);
             });
         }
+
+        public async void SaveAlbum(AlbumView album, BitmapImage image)
+        {
+            // IsAlbum
+            if (!IsPlaylist && CurrentPlaylist.Name == album.Name)
+            {
+                MusicDisplayItem item = await album.Songs[0].GetMusicDisplayItemAsync();
+                await SetMusicDisplayItem(CurrentPlaylist.DisplayItem = item);
+            }
+        }
+
+        public async void SaveMusic(Music music, BitmapImage image)
+        {
+            // IsAlbum
+            if (!IsPlaylist && CurrentPlaylist.Name == music.Album && CurrentPlaylist.Count == 1)
+            {
+                MusicDisplayItem item = await music.GetMusicDisplayItemAsync();
+                await SetMusicDisplayItem(CurrentPlaylist.DisplayItem = item);
+            }
+        }
+
+        private void SortButton_Click(object sender, RoutedEventArgs e)
+        {
+            MenuFlyoutHelper.SetPlaylistSortByMenu(sender, CurrentPlaylist);
+        }
+
+        void IMultiSelectListener.AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper)
+        {
+            helper.DefaultPlaylistName = MenuFlyoutHelper.IsBadNewPlaylistName(CurrentPlaylist.Name) ? "" : Settings.settings.FindNextPlaylistName(CurrentPlaylist.Name);
+            helper.CurrentPlaylistName = CurrentPlaylist.Name;
+        }
+
+        void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar) { }
+        void IMultiSelectListener.Play(MultiSelectCommandBar commandBar) { }
+        void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar) { }
+        void IMultiSelectListener.SelectAll(MultiSelectCommandBar commandBar) { }
+        void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar) { }
+        void IMultiSelectListener.ReverseSelections(MultiSelectCommandBar commandBar) { }
+
+        private void SetAsPreferredButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsPlaylist)
+            {
+                Settings.settings.Preference.Prefer(CurrentPlaylist);
+            }
+            else
+            {
+                if (IsMyFavorites)
+                {
+                    Settings.settings.Preference.MyFavorites.IsEnabled = true;
+                }
+                else
+                {
+                    Settings.settings.Preference.Prefer(CurrentPlaylist.ToAlbumView());
+                }
+            }
+            (sender as AppBarButton).Visibility = Visibility.Collapsed;
+            UndoPreferButton.Visibility = Visibility.Visible;
+        }
+
+        private void UndoPreferButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsPlaylist)
+            {
+                Settings.settings.Preference.UndoPrefer(CurrentPlaylist);
+            }
+            else
+            {
+                if (IsMyFavorites)
+                {
+                    Settings.settings.Preference.MyFavorites.IsEnabled = false;
+                }
+                else
+                {
+                    Settings.settings.Preference.UndoPrefer(CurrentPlaylist.ToAlbumView());
+                }
+            }
+            (sender as AppBarButton).Visibility = Visibility.Collapsed;
+            SetAsPreferredButton.Visibility = Visibility.Visible;
+        }
+
+        void IPlaylistEventListener.Added(Playlist playlist, int? index) { }
+        void IPlaylistEventListener.Renamed(Playlist playlist)
+        {
+            Confirmed(playlist.Name);
+        }
+        void IPlaylistEventListener.Removed(Playlist playlist, int index) { }
 
         CompositionPropertySet _props;
         CompositionPropertySet _scrollerPropertySet;
@@ -378,86 +458,6 @@ namespace SMPlayer
             {
                 _blurredBackgroundImageVisual.Size = new Vector2((float)OverlayRectangle.ActualWidth, (float)OverlayRectangle.ActualHeight);
             }
-        }
-
-        public async void SaveAlbum(AlbumView album, BitmapImage image)
-        {
-            // IsAlbum
-            if (!IsPlaylist && CurrentPlaylist.Name == album.Name)
-            {
-                MusicDisplayItem item = await album.Songs[0].GetMusicDisplayItemAsync();
-                await SetMusicDisplayItem(CurrentPlaylist.DisplayItem = item);
-            }
-        }
-
-        public async void SaveMusic(Music music, BitmapImage image)
-        {
-            // IsAlbum
-            if (!IsPlaylist && CurrentPlaylist.Name == music.Album && CurrentPlaylist.Count == 1)
-            {
-                MusicDisplayItem item = await music.GetMusicDisplayItemAsync();
-                await SetMusicDisplayItem(CurrentPlaylist.DisplayItem = item);
-            }
-        }
-
-        private void SortButton_Click(object sender, RoutedEventArgs e)
-        {
-            MenuFlyoutHelper.SetPlaylistSortByMenu(sender, CurrentPlaylist);
-        }
-
-        void IMultiSelectListener.AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper)
-        {
-            helper.DefaultPlaylistName = MenuFlyoutHelper.IsBadNewPlaylistName(CurrentPlaylist.Name) ? "" : Settings.settings.FindNextPlaylistName(CurrentPlaylist.Name);
-            helper.CurrentPlaylistName = CurrentPlaylist.Name;
-        }
-
-        void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar) { }
-        void IMultiSelectListener.Play(MultiSelectCommandBar commandBar) { }
-        void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar) { }
-        void IMultiSelectListener.SelectAll(MultiSelectCommandBar commandBar) { }
-        void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar) { }
-        void IMultiSelectListener.ReverseSelections(MultiSelectCommandBar commandBar) { }
-
-        private void SetAsPreferredButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (IsPlaylist)
-            {
-                Settings.settings.Preference.Prefer(CurrentPlaylist);
-            }
-            else
-            {
-                if (IsMyFavorites)
-                {
-                    Settings.settings.Preference.MyFavorites.IsEnabled = true;
-                }
-                else
-                {
-                    Settings.settings.Preference.Prefer(CurrentPlaylist.ToAlbumView());
-                }
-            }
-            (sender as AppBarButton).Visibility = Visibility.Collapsed;
-            UndoPreferButton.Visibility = Visibility.Visible;
-        }
-
-        private void UndoPreferButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (IsPlaylist)
-            {
-                Settings.settings.Preference.UndoPrefer(CurrentPlaylist);
-            }
-            else
-            {
-                if (IsMyFavorites)
-                {
-                    Settings.settings.Preference.MyFavorites.IsEnabled = false;
-                }
-                else
-                {
-                    Settings.settings.Preference.UndoPrefer(CurrentPlaylist.ToAlbumView());
-                }
-            }
-            (sender as AppBarButton).Visibility = Visibility.Collapsed;
-            SetAsPreferredButton.Visibility = Visibility.Visible;
         }
     }
 }

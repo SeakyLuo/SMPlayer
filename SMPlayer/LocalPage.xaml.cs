@@ -19,7 +19,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalPage : Page, ILocalSetter, IAfterPathSetListener, IWindowResizeListener
+    public sealed partial class LocalPage : Page, ILocalSetter, IAfterPathSetListener, IWindowResizeListener, IFolderTreeEventListener
     {
         public static LocalPage Instance
         {
@@ -37,6 +37,7 @@ namespace SMPlayer
             SetPage(Settings.settings.Tree);
             UpdateHelper.AddAfterPathSetListener(this);
             MainPage.WindowResizeListeners.Add(this);
+            Settings.AddFolderTreeEventListener(this);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -171,7 +172,7 @@ namespace SMPlayer
         private void LocalShuffleItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
             var tree = History.Peek();
-            MediaHelper.ShuffleAndPlay(LocalFrame.SourcePageType == typeof(LocalMusicPage) ? tree.Songs : tree.Flatten());
+            MusicPlayer.ShuffleAndPlay(LocalFrame.SourcePageType == typeof(LocalMusicPage) ? tree.Songs : tree.Flatten());
         }
 
         private void SetText(TreeInfo info, bool setHeader = true)
@@ -262,7 +263,7 @@ namespace SMPlayer
             var helper = new MenuFlyoutHelper()
             {
                 Data = tree.Files,
-                DefaultPlaylistName = tree.Directory
+                DefaultPlaylistName = tree.Name
             };
             flyout.Items.Add(helper.GetAddToMenuFlyoutSubItem());
             flyout.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(tree.Path, StorageItemTypes.Folder));
@@ -293,37 +294,31 @@ namespace SMPlayer
 
         private async void NewFolderItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            string path = History.Peek().Path;
-            StorageFolder folder = await StorageFolder.GetFolderFromPathAsync(path);
+            FolderTree currentTree = History.Peek();
+            string path = currentTree.Path;
 
-            string defaultName = Settings.settings.FindNextFolderName(History.Peek().Path, Helper.LocalizeText("NewFolderName"));
-            RenameDialog renameDialog = new RenameDialog(async (oldName, newName) =>
+            string defaultName = Settings.settings.FindNextFolderName(path, Helper.LocalizeText("NewFolderName"));
+            RenameDialog renameDialog = new RenameDialog(RenameOption.Create, RenameTarget.Folder, defaultName)
             {
-                try
+                ValidateAsync = async (newName) => await Settings.ValidateFolderName(path, newName),
+                Confirmed = async (newName) =>
                 {
-                    if (await folder.GetFolderAsync(newName) != null)
-                    {
-                        return NamingError.Used;
-                    }
-                }
-                catch (Exception)
-                {
-
-                }
-                return NamingError.Good;
-            }, RenameOption.Create, RenameTarget.Folder, defaultName)
-            {
-                AfterConfirmation = async (oldName, newName) =>
-                {
-                    StorageFolder newFolder = await folder.CreateFolderAsync(newName);
-                    FolderTree tree = new FolderTree() { Path = newFolder.Path };
-                    (LocalFrame.Content as LocalFoldersPage)?.AddTree(path, tree);
-                    SetNavText(History.Peek().Info);
-
+                    FolderTree tree = new FolderTree() { Path = FileHelper.JoinPaths(path, newName) };
+                    await Settings.settings.AddFolder(tree, currentTree);
                     App.Save();
                 }
             };
             await renameDialog.ShowAsync();
+        }
+
+        void IFolderTreeEventListener.Added(FolderTree folder, FolderTree root)
+        {
+            SetNavText(History.Peek().Info);
+        }
+        void IFolderTreeEventListener.Renamed(FolderTree folder, string newPath) { }
+        void IFolderTreeEventListener.Removed(FolderTree folder)
+        {
+            SetNavText(History.Peek().Info);
         }
     }
     public interface ILocalSetter

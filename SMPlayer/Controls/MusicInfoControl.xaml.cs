@@ -30,13 +30,13 @@ namespace SMPlayer.Controls
         public bool IsProcessing { get; private set; } = false;
         public bool IsCurrentMusic
         {
-            get => CurrentMusic == MediaHelper.CurrentMusic;
+            get => CurrentMusic == MusicPlayer.CurrentMusic;
         }
         public MusicInfoControl()
         {
             this.InitializeComponent();
-            MediaHelper.SwitchMusicListeners.Add(this);
-            MediaHelper.MediaPlayerStateChangedListeners.Add(this);
+            MusicPlayer.SwitchMusicListeners.Add(this);
+            MusicPlayer.MediaPlayerStateChangedListeners.Add(this);
         }
 
         public void SetMusicProperties(MusicProperties properties)
@@ -56,7 +56,7 @@ namespace SMPlayer.Controls
             GenreTextBox.Text = string.Join(Helper.LocalizeMessage("Comma"), properties.Genre);
             if (ShowPlayButton)
             {
-                SetPlayButtonVisibility(IsCurrentMusic && MediaHelper.IsPlaying);
+                SetPlayButtonVisibility(IsCurrentMusic && MusicPlayer.IsPlaying);
             }
         }
         public async void SetMusicInfo(Music music)
@@ -200,17 +200,17 @@ namespace SMPlayer.Controls
         {
             if (IsCurrentMusic)
             {
-                MediaHelper.Play();
+                MusicPlayer.Play();
             }
             else
             {
-                MediaHelper.SetMusicAndPlay(CurrentMusic);
+                MusicPlayer.SetMusicAndPlay(CurrentMusic);
             }
         }
 
         private void PauseButton_Click(object sender, RoutedEventArgs e)
         {
-            MediaHelper.Pause();
+            MusicPlayer.Pause();
         }
 
         private void SetPlayButtonVisibility(bool isPlaying)

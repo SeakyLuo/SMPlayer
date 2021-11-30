@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Graphics.Imaging;
+using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.UI.Xaml;
@@ -293,6 +294,11 @@ namespace SMPlayer
         public static bool IsNotEmpty<T>(this IEnumerable<T> src)
         {
             return !IsEmpty(src);
+        }
+
+        public static Music GetMusic(this MediaPlaybackItem item)
+        {
+            return item.Source.CustomProperties["Source"] as Music;
         }
     }
 }

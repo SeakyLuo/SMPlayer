@@ -13,7 +13,7 @@ using Windows.UI.Xaml.Media;
 
 namespace SMPlayer
 {
-    public sealed partial class PlaylistControl : UserControl, IMusicEventListener, ISwitchMusicListener, IMenuFlyoutItemClickListener, IMultiSelectListener
+    public sealed partial class PlaylistControl : UserControl, IMusicEventListener, ISwitchMusicListener, IMenuFlyoutItemClickListener, IMultiSelectListener, ICurrentPlaylistChangedListener
     {
         public bool IsNowPlaying
         {
@@ -32,15 +32,8 @@ namespace SMPlayer
             }
         }
         public static readonly DependencyProperty IsNowPlayingProperty = DependencyProperty.Register("SelectableProperty", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(false));
-        
-        private ObservableCollection<Music> currentPlaylist = new ObservableCollection<Music>();
-        public ObservableCollection<Music> CurrentPlaylist
-        {
-            get => IsNowPlaying ? MediaHelper.CurrentPlaylist :
-                                  currentPlaylist.Count == 0 ? currentPlaylist = ItemsSource : currentPlaylist;
-            set => currentPlaylist = value;
-        }
 
+        public ObservableCollection<Music> CurrentPlaylist = new ObservableCollection<Music>();
         private static List<IMusicRequestListener> MusicRequestListeners = new List<IMusicRequestListener>();
         public bool AlternatingRowColor { get; set; }
         public IPlaylistScrollListener ScrollListener { get; set; }
@@ -115,17 +108,18 @@ namespace SMPlayer
         public MultiSelectCommandBarOption MultiSelectOption { get; set; }
         public List<IRemoveMusicListener> RemoveListeners = new List<IRemoveMusicListener>();
         private Dialogs.RemoveDialog dialog;
-        private int dragIndex, dropIndex, removedMusicIndex;
+        private int dragIndex, dropIndex, removedMusicIndex = -1;
+        private Music removedMusic = null;
 
         public PlaylistControl()
         {
             this.InitializeComponent();
-            MediaHelper.SwitchMusicListeners.Add(this);
+            MusicPlayer.SwitchMusicListeners.Add(this);
         }
 
         private void PlaylistController_Loaded(object sender, RoutedEventArgs e)
         {
-            if (ItemsSource == null) ItemsSource = MediaHelper.CurrentPlaylist;
+            if (IsNowPlaying) CurrentPlaylist.SetTo(MusicPlayer.CurrentPlaylist);
             Helper.GetMainPageContainer().SetMultiSelectListener(this);
         }
 
@@ -178,33 +172,33 @@ namespace SMPlayer
         {
             if (SelectionMode != ListViewSelectionMode.None) return;
             Music music = (Music)e.ClickedItem;
-            if (MediaHelper.CurrentMusic == music && MediaHelper.CurrentPlaylist.SameAs(CurrentPlaylist))
+            if (MusicPlayer.CurrentMusic == music && MusicPlayer.CurrentPlaylist.SameAs(CurrentPlaylist))
             {
-                if (!MediaHelper.IsPlaying)
+                if (!MusicPlayer.IsPlaying)
                 {
-                    MediaHelper.Play();
+                    MusicPlayer.Play();
                 }
             }
             else
             {
-                MediaHelper.SetMusicAndPlay(CurrentPlaylist, music);
+                MusicPlayer.SetMusicAndPlay(CurrentPlaylist, music);
             }
         }
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(CurrentPlaylist, current, next));
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MusicPlayer.FindMusicAndSetPlaying(CurrentPlaylist, current, next));
         }
 
         public void CancelMusicRemoval(int index, Music music)
         {
             if (IsNowPlaying)
             {
-                MediaHelper.AddMusic(music, index);
+                MusicPlayer.AddMusic(music, index);
             }
             else
             {
-                currentPlaylist.Insert(index, music);
+                CurrentPlaylist.Insert(index, music);
             }
             AlternateRowBackgroud(index);
         }
@@ -215,7 +209,7 @@ namespace SMPlayer
             Music music = args.Items[0] as Music;
             dropIndex = CurrentPlaylist.FindIndex(m => m == music && m.Index == music.Index);
             if (dragIndex == dropIndex) return;
-            if (IsNowPlaying) MediaHelper.MoveMusic(dragIndex, dropIndex, false);
+            if (IsNowPlaying) MusicPlayer.MoveMusic(dragIndex, dropIndex, false);
             AlternateRowBackgroud(Math.Min(dragIndex, dropIndex), Math.Max(dragIndex, dropIndex) + 1);
         }
         private void OpenMusicMenuFlyout(object sender, object e)
@@ -241,55 +235,42 @@ namespace SMPlayer
             if (dialog == null) dialog = new Dialogs.RemoveDialog();
             if (dialog.IsChecked)
             {
-                RemoveMusic(music);
+                RemoveMusicAndNotify(music, true);
             }
             else
             {
-                dialog.Confirm = () => RemoveMusic(music);
+                dialog.Confirm = () => RemoveMusicAndNotify(music, true);
                 dialog.Message = Helper.LocalizeMessage("RemoveMusic", music.Name);
                 await dialog.ShowAsync();
             }
         }
 
-        private void RemoveMusic(Music music, bool showNotification = true)
+        private void RemoveMusic(Music music, bool alternateRowBackgroud = true)
         {
-            removedMusicIndex = IsNowPlaying ?  music.Index : currentPlaylist.IndexOf(music);
-            if (IsNowPlaying ? MediaHelper.RemoveMusic(music) : currentPlaylist.Remove(music))
-            {
-                AlternateRowBackgroud(removedMusicIndex);
-                foreach (var listener in RemoveListeners) listener.MusicRemoved(removedMusicIndex, music, CurrentPlaylist);
-                if (showNotification)
-                    Helper.ShowCancelableNotification(Helper.LocalizeMessage("MusicRemoved", music.Name), () => CancelMusicRemoval(removedMusicIndex, music));
-            }
+            removedMusicIndex = CurrentPlaylist.IndexOf(music);
+            if (removedMusicIndex == -1) return;
+            removedMusic = music;
+            CurrentPlaylist.RemoveAt(removedMusicIndex);
+            if (alternateRowBackgroud) AlternateRowBackgroud(removedMusicIndex);
+            foreach (var listener in RemoveListeners) listener.MusicRemoved(removedMusicIndex, music, CurrentPlaylist);
         }
 
-        private void RemoveMusic(IEnumerable<Music> playlist, bool showNotification = true)
+        private void RemoveMusicAndNotify(Music music, bool showNotification)
         {
-            if (IsNowPlaying)
+            if (IsNowPlaying) MusicPlayer.RemoveMusic(music);
+            RemoveMusic(music);
+            if (showNotification)
+                Helper.ShowCancelableNotification(Helper.LocalizeMessage("MusicRemoved", music.Name), () => CancelMusicRemoval(removedMusicIndex, music));
+        }
+
+        private void RemoveMusic(IEnumerable<Music> playlist)
+        {
+            foreach (var music in playlist)
             {
-                foreach (var music in playlist)
-                {
-                    removedMusicIndex = MediaHelper.CurrentPlaylist.IndexOf(music);
-                    if (MediaHelper.RemoveMusic(music))
-                    {
-                        foreach (var listener in RemoveListeners)
-                            listener.MusicRemoved(removedMusicIndex, music, MediaHelper.CurrentPlaylist);
-                    }
-                }
-            }
-            else
-            {
-                foreach (var music in playlist)
-                {
-                    removedMusicIndex = currentPlaylist.IndexOf(music);
-                    if (removedMusicIndex == -1) continue;
-                    currentPlaylist.RemoveAt(removedMusicIndex);
-                    foreach (var listener in RemoveListeners) listener.MusicRemoved(removedMusicIndex, music, currentPlaylist);
-                }
+                RemoveMusic(music, false);
             }
             AlternateRowBackgroud();
-            if (showNotification)
-                Helper.ShowNotification("SelectedItemsRemoved");
+            Helper.ShowNotification("SelectedItemsRemoved");
         }
 
         private void FavoriteItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
@@ -308,10 +289,10 @@ namespace SMPlayer
 
         public async void ScrollToCurrentMusic(bool showNotification = false)
         {
-            if (!ScrollToMusic(MediaHelper.CurrentMusic, false))
+            if (!ScrollToMusic(MusicPlayer.CurrentMusic, false))
             {
                 Windows.UI.Xaml.Data.LoadMoreItemsResult result = await SongsListView.LoadMoreItemsAsync();
-                ScrollToMusic(MediaHelper.CurrentMusic, showNotification);
+                ScrollToMusic(MusicPlayer.CurrentMusic, showNotification);
             }
         }
         public bool ScrollToMusic(Music music, bool showNotification = false)
@@ -363,7 +344,7 @@ namespace SMPlayer
 
         void IMenuFlyoutItemClickListener.Delete(Music music)
         {
-            RemoveMusic(music, false);
+            RemoveMusicAndNotify(music, false);
         }
 
         void IMenuFlyoutItemClickListener.Remove(Music music)
@@ -381,8 +362,7 @@ namespace SMPlayer
 
         void IMenuFlyoutItemClickListener.UndoDelete(Music music)
         {
-            if (IsNowPlaying) return;
-            currentPlaylist.Insert(removedMusicIndex, music);
+            CurrentPlaylist.Insert(removedMusicIndex, music);
             AlternateRowBackgroud(removedMusicIndex);
         }
 
@@ -421,7 +401,7 @@ namespace SMPlayer
         void IMultiSelectListener.Play(MultiSelectCommandBar commandBar)
         {
             if (SelectedItemsCount == 0) return;
-            MediaHelper.SetPlaylistAndPlay(SelectedItems);
+            MusicPlayer.SetPlaylistAndPlay(SelectedItems);
             MultiSelectListener?.Play(commandBar);
         }
 
@@ -472,28 +452,48 @@ namespace SMPlayer
 
         void IMusicEventListener.Liked(Music music, bool isFavorite)
         {
+            MusicModified(music, music);
         }
 
         void IMusicEventListener.Added(Music music)
         {
-            if (justRemoveMusic == music)
+            if (removedMusic == music)
             {
-                CurrentPlaylist.Insert(justRemovedIndex, music);
+                CurrentPlaylist.Insert(removedMusicIndex, music);
             }
         }
 
-        private int justRemovedIndex = -1;
-        private Music justRemoveMusic = null;
         void IMusicEventListener.Removed(Music music)
         {
-            justRemovedIndex = CurrentPlaylist.IndexOf(music);
-            justRemoveMusic = music;
-            CurrentPlaylist.RemoveAt(justRemovedIndex);
+            RemoveMusic(music);
         }
 
         void IMusicEventListener.Modified(Music before, Music after)
         {
+            MusicModified(before, after);
+        }
+
+        private void MusicModified(Music before, Music after)
+        {
             CurrentPlaylist.FirstOrDefault(m => m == before)?.CopyFrom(after);
+        }
+
+        void ICurrentPlaylistChangedListener.AddMusic(Music music, int index)
+        {
+            if (IsNowPlaying)
+                CurrentPlaylist.Insert(index, music);
+        }
+
+        void ICurrentPlaylistChangedListener.RemoveMusic(Music music)
+        {
+            if (IsNowPlaying)
+                RemoveMusic(music);
+        }
+
+        void ICurrentPlaylistChangedListener.Cleared()
+        {
+            if (IsNowPlaying)
+                CurrentPlaylist.Clear();
         }
     }
 

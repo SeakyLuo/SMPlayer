@@ -19,7 +19,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MediaHelper.SwitchMusicListeners.Add(this);
+            MusicPlayer.SwitchMusicListeners.Add(this);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -31,7 +31,7 @@ namespace SMPlayer
         private void SetEnabled()
         {
             LocateCurrentButton.Visibility = SaveToButton.Visibility = ClearButton.Visibility = PlayModeButton.Visibility = 
-                                            MediaHelper.CurrentPlaylist.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
+                                            MusicPlayer.CurrentPlaylist.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
             RandomPlayButton.Visibility = Settings.settings.MusicLibrary.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
         }
 
@@ -42,7 +42,7 @@ namespace SMPlayer
             var defaultName = index == 0 ? name : Helper.GetPlaylistName(name, index);
             var helper = new MenuFlyoutHelper
             {
-                Data = MediaHelper.CurrentPlaylist,
+                Data = MusicPlayer.CurrentPlaylist,
                 DefaultPlaylistName = defaultName,
                 CurrentPlaylistName = MenuFlyoutHelper.NowPlaying
             };
@@ -51,7 +51,7 @@ namespace SMPlayer
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            MediaHelper.Clear();
+            MusicPlayer.Clear();
             SetEnabled();
         }
 

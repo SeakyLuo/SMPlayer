@@ -15,9 +15,12 @@ namespace SMPlayer.Models
     public class Settings
     {
         public static Settings settings;
-        private static List<IMusicEventListener> MusicEventListeners = new List<IMusicEventListener>();
+        private static readonly List<IMusicEventListener> MusicEventListeners = new List<IMusicEventListener>();
         public static void AddMusicEventListener(IMusicEventListener listener) { MusicEventListeners.Add(listener); }
-        public static List<Action<Playlist>> PlaylistAddedListeners = new List<Action<Playlist>>();
+        private static readonly List<IPlaylistEventListener> PlaylistEventListeners = new List<IPlaylistEventListener>();
+        public static void AddPlaylistEventListener(IPlaylistEventListener listener) { PlaylistEventListeners.Add(listener); }
+        private static readonly List<IFolderTreeEventListener> FolderTreeEventListeners = new List<IFolderTreeEventListener>();
+        public static void AddFolderTreeEventListener(IFolderTreeEventListener listener) { FolderTreeEventListeners.Add(listener); }
 
         public Dictionary<long, Music> MusicLibrary { get; set; } = new Dictionary<long, Music>();
         [Newtonsoft.Json.JsonIgnore]
@@ -76,6 +79,7 @@ namespace SMPlayer.Models
         public static Music FindMusic(IMusicable target) { return FindMusic(target.ToMusic()); }
         public static Music FindMusic(Music target) { return FindMusic(target?.Path); }
         public static Music FindMusic(string target) { return settings.Tree.FindMusic(target) is Music music ? settings.SelectMusicById(music.Id) : null; }
+        public static Music FindMusic(FolderFile target) { return settings.SelectMusicById(target.Id); }
 
         public int FindNextPlaylistNameIndex(string Name)
         {
@@ -99,7 +103,7 @@ namespace SMPlayer.Models
         {
             if (!string.IsNullOrEmpty(name))
             {
-                var siblings = Tree.FindTree(path)?.Trees.Select(p => p.Directory).ToHashSet();
+                var siblings = Tree.FindTree(path)?.Trees.Select(p => p.Name).ToHashSet();
                 for (int i = 1; i <= siblings.Count; i++)
                     if (!siblings.Contains(Helper.GetPlaylistName(name, i)))
                         return i;
@@ -118,7 +122,6 @@ namespace SMPlayer.Models
             if (MyFavorites.Contains(music)) return;
             music.Favorite = true;
             MyFavorites.Add(music);
-            MediaHelper.LikeMusic(music);
             foreach (var listener in MusicEventListeners) listener.Liked(music, true);
         }
 
@@ -134,7 +137,6 @@ namespace SMPlayer.Models
         {
             music.Favorite = false;
             MyFavorites.Remove(music);
-            MediaHelper.DislikeMusic(music);
             foreach (var listener in MusicEventListeners) listener.Liked(music, false);
         }
 
@@ -178,7 +180,7 @@ namespace SMPlayer.Models
         private int myFavoratesRemovedIndex = -1, recentPlayedRemovedIndex = -1, preferredMusicRemovedIndex = -1;
         public void RemoveMusic(Music music)
         {
-            if (!Tree.RemoveMusic(music))
+            if (!Tree.RemoveFile(music.Path))
             {
                 return;
             }
@@ -200,7 +202,6 @@ namespace SMPlayer.Models
                 RecentPlayedSongs.RemoveAt(recentPlayedRemovedIndex);
             if ((preferredMusicRemovedIndex = Preference.PreferredSongs.FindIndex(m => m.Id == music.Id.ToString())) > -1)
                 Preference.PreferredSongs.RemoveAt(preferredMusicRemovedIndex);
-            RecentPage.RecentAdded.Remove(music); // TODO: ugly impl
             foreach (var listener in MusicEventListeners) listener.Removed(music);
         }
 
@@ -213,7 +214,7 @@ namespace SMPlayer.Models
                 tree.Sort();
             }
             foreach (var pair in removedMusicInPlaylist)
-                Playlists.FirstOrDefault(p => p.Id == pair.Key)?.Songs.Insert(pair.Value, music);
+                SelectPlaylistById(pair.Key)?.Songs.Insert(pair.Value, music);
             if (myFavoratesRemovedIndex > -1)
                 MyFavorites.Songs.Insert(myFavoratesRemovedIndex, music);
             if (recentPlayedRemovedIndex > -1)
@@ -241,9 +242,13 @@ namespace SMPlayer.Models
         public void Played(Music music)
         {
             if (music == null) return;
-            RecentPlayed.AddOrMoveToTheFirst(music.Path);
-            if (LimitedRecentPlayedItems > -1 && RecentPlayed.Count > LimitedRecentPlayedItems)
-                RecentPlayed.RemoveAt(LimitedRecentPlayedItems);
+            Music newMusic = SelectMusicById(music.Id);
+            Music oldMusic = newMusic.Copy();
+            newMusic.Played();
+            RecentPlayedSongs.AddOrMoveToTheFirst(music.Id);
+            if (LimitedRecentPlayedItems > -1 && RecentPlayedSongs.Count > LimitedRecentPlayedItems)
+                RecentPlayedSongs.RemoveAt(LimitedRecentPlayedItems);
+            MusicModified(oldMusic, newMusic);
         }
 
         public void Search(string keyword)
@@ -251,7 +256,7 @@ namespace SMPlayer.Models
             RecentSearches.AddOrMoveToTheFirst(keyword);
         }
 
-        public NamingError CheckPlaylistNamingError(string newName)
+        public NamingError ValidatePlaylistName(string newName)
         {
             if (string.IsNullOrEmpty(newName) || string.IsNullOrWhiteSpace(newName))
                 return NamingError.EmptyOrWhiteSpace;
@@ -264,40 +269,100 @@ namespace SMPlayer.Models
             return NamingError.Good;
         }
 
-        public async void RenamePlaylist(string oldName, string newName, RenameOption option, object data = null)
+        public static async Task<NamingError> ValidateFolderName(string root, string newFolderName)
         {
-            switch (option)
+            try
             {
-                case RenameOption.Create:
-                    Playlist playlist = new Playlist(newName)
-                    {
-                        Id = settings.IdGenerator.GeneratePlaylistId()
-                    };
-                    if (data != null) playlist.Add(data);
-                    await playlist.LoadDisplayItemAsync();
-                    Playlists.Add(playlist);
-                    PlaylistsPage.Playlists.Add(playlist); // TODO: ugly impl
-                    foreach (var listener in PlaylistAddedListeners)
-                        listener.Invoke(playlist);
-                    break;
-                case RenameOption.Rename:
-                    if (oldName == newName) break;
-                    int index = Playlists.FindIndex(p => p.Name == oldName);
-                    Playlists[index].Name = newName;
-                    PlaylistsPage.Playlists[index].Name = newName; // TODO: ugly impl
-                    break;
+                if (await StorageFolder.GetFolderFromPathAsync(root + "\\" + newFolderName) != null)
+                {
+                    return NamingError.Used;
+                }
+}
+            catch (Exception ex)
+            {
+                Helper.Print(ex.ToString());
             }
+            return NamingError.Good;
+        }
+
+        public async void AddPlaylist(string name, object data = null)
+        {
+            Playlist playlist = new Playlist(name)
+            {
+                Id = settings.IdGenerator.GeneratePlaylistId()
+            };
+            if (data != null) playlist.Add(data);
+            Playlists.Add(playlist);
+            foreach (var listener in PlaylistEventListeners)
+                listener.Added(playlist, null);
+        }
+
+        public void RenamePlaylist(Playlist playlist, string newName)
+        {
+            Playlist target = SelectPlaylistById(playlist.Id);
+            if (target.Name == newName)
+            {
+                return;
+            }
+            foreach (var item in Preference.PreferredPlaylists)
+            {
+                if (item.Id == playlist.Id.ToString())
+                {
+                    item.Name = newName;
+                }
+            }
+            target.Name = newName;
+            foreach (var listener in PlaylistEventListeners)
+                listener.Renamed(target);
         }
 
         public void InsertPlaylist(Playlist playlist, int index)
         {
-            playlist.Id = settings.IdGenerator.GeneratePlaylistId();
-            settings.Playlists.Insert(index, playlist);
+            playlist.Id = IdGenerator.GeneratePlaylistId();
+            Playlists.Insert(index, playlist);
+            foreach (var listener in PlaylistEventListeners)
+                listener.Added(playlist, index);
         }
 
-        public void RenameFolder(FolderTree original, string newPath)
+        public int RemovePlaylist(Playlist playlist)
         {
+            int index = Playlists.IndexOf(playlist);
+            Playlists.RemoveAt(index);
+            foreach (var listener in PlaylistEventListeners)
+                listener.Removed(playlist, index);
+            return index;
+        }
+
+        /**
+         * Add branch to root
+         */
+        public async Task AddFolder(FolderTree branch, FolderTree root)
+        {
+            StorageFolder folder = await root.GetStorageFolderAsync();
+            await folder.CreateFolderAsync(branch.Name);
+
+            Tree.FindTree(root)?.Trees.Add(branch);
+            foreach (var listener in FolderTreeEventListeners)
+                listener.Added(branch, root);
+        }
+
+        public async Task RenameFolder(FolderTree original, string newName)
+        {
+            StorageFolder folder = await original.GetStorageFolderAsync();
+            await folder.RenameAsync(newName);
+            string newPath = folder.Path;
+
+            foreach (var item in Preference.PreferredFolders)
+            {
+                if (original.Equals(Tree.FindTree(item.Id)))
+                {
+                    item.Name = newName;
+                }
+            }
             Tree.FindTree(original)?.Rename(newPath);
+            foreach (var listener in FolderTreeEventListeners)
+                listener.Renamed(original, newPath);
+            original.Rename(newPath);
         }
 
         public void DeleteFolder(FolderTree target)
@@ -311,13 +376,9 @@ namespace SMPlayer.Models
             MyFavorites.RemoveAll(i => i.Path.StartsWith(target.Path));
             Preference.PreferredSongs.RemoveAll(i => SelectMusicById(int.Parse(i.Id)).Path.StartsWith(target.Path));
             Preference.PreferredFolders.RemoveAll(i => i.Id == folderTree.Id.ToString());
-            RecentPage.RecentAdded.DeleteFolder(target.Path);
-        }
 
-        public void MoveMusic(Music music, string path)
-        {
-            Tree.FindMusic(music).MoveToFolder(path);
-            MusicLibrary[music.Id].MoveToFolder(path);
+            foreach (var listener in FolderTreeEventListeners)
+                listener.Removed(target);
         }
 
         public void MoveFolder(FolderTree tree, string path)
@@ -327,9 +388,34 @@ namespace SMPlayer.Models
             {
                 if (music.Path.StartsWith(path))
                 {
-                    music.MoveToFolder(path);
+                    MoveMusic(music, path);
                 }
             }
+
+            foreach (var listener in FolderTreeEventListeners)
+                listener.Renamed(tree, tree.Path);
+        }
+
+        public void MoveFile(FolderFile file, string path)
+        {
+            Tree.MoveFile(file, path);
+            if (file.IsMusicFile())
+            {
+                MoveMusic(SelectMusicById(file.Id), path);
+            }
+        }
+
+        private void MoveMusic(Music music, string newPath)
+        {
+            Music oldMusic = music.Copy();
+            music.MoveToFolder(newPath);
+            MusicModified(oldMusic, music);
+        }
+
+        public void MusicModified(Music before, Music after)
+        {
+            SelectMusicById(before.Id)?.CopyFrom(after);
+            foreach (var listener in MusicEventListeners) listener.Modified(before, after);
         }
 
         public List<Music> GetMostPlayed(int limit)
@@ -353,12 +439,6 @@ namespace SMPlayer.Models
             }
             return list;
         }
-
-        public void MusicModified(Music before, Music after)
-        {
-            SelectMusicById(before.Id)?.CopyFrom(after);
-            foreach (var listener in MusicEventListeners) listener.Modified(before, after);
-        }
     }
 
     public interface IMusicEventListener
@@ -371,9 +451,16 @@ namespace SMPlayer.Models
 
     public interface IPlaylistEventListener
     {
-        void Added(Playlist playlist);
+        void Added(Playlist playlist, int? index);
         void Renamed(Playlist playlist);
-        void Removed(Playlist playlist);
+        void Removed(Playlist playlist, int index);
+    }
+
+    public interface IFolderTreeEventListener
+    {
+        void Added(FolderTree folder, FolderTree root);
+        void Renamed(FolderTree folder, string newPath);
+        void Removed(FolderTree folder);
     }
 
     public enum NamingError

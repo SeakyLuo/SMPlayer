@@ -73,6 +73,9 @@ namespace SMPlayer.Models
         [Newtonsoft.Json.JsonIgnore]
         public bool IsMyFavorite { get => Name == Helper.Localize(MenuFlyoutHelper.MyFavorites); }
 
+        [Newtonsoft.Json.JsonIgnore]
+        public bool IsEmpty { get => Songs.Count == 0; }
+
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public Playlist() { }
@@ -100,7 +103,7 @@ namespace SMPlayer.Models
             return new Playlist(NewName, Songs);
         }
 
-        public void Add(object item)
+        public async void Add(object item)
         {
             if (item is IMusicable musicable)
             {
@@ -109,20 +112,16 @@ namespace SMPlayer.Models
                 {
                     return;
                 }
-                else
-                {
-
-                    Songs.Add(music);
-                }
+                Songs.Add(music);
             }
             else if (item is IEnumerable<IMusicable> songs)
             {
-                var set = Songs.Select(m => m.Path).ToHashSet();
+                var set = Songs.Select(m => m.Id).ToHashSet();
                 bool neverAdded = true;
                 foreach (var song in songs)
                 {
                     Music music = song.ToMusic();
-                    if (!set.Contains(music.Path))
+                    if (!set.Contains(music.Id))
                     {
                         Songs.Add(music);
                         neverAdded = false;
@@ -135,6 +134,7 @@ namespace SMPlayer.Models
                 return;
             }
             Sort();
+            await LoadDisplayItemAsync();
         }
 
         public void Remove(object item)
@@ -223,8 +223,13 @@ namespace SMPlayer.Models
             return new AlbumView(Name, SongCountConverter.GetSongCount(Count))
             {
                 Songs = Songs,
-                ThumbnailSource = DisplayItem?.Source.Path,
+                ThumbnailSource = DisplayItem?.Source?.Path,
             };
+        }
+
+        public void CopyFrom(Playlist playlist)
+        {
+            Name = playlist.Name;
         }
 
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)

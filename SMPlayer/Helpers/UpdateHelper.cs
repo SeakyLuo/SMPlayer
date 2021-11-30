@@ -80,7 +80,7 @@ namespace SMPlayer.Helpers
                 listener.PathSet(folder.Path);
                 MainPage.Instance.Loader.Progress = ++i;
             }
-            MediaHelper.RemoveBadMusic();
+            MusicPlayer.RemoveBadMusic();
             App.Save();
             MainPage.Instance.Loader.Hide();
             return true;

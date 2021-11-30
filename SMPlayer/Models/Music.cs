@@ -178,12 +178,6 @@ namespace SMPlayer.Models
             return path.Substring(path.LastIndexOf('\\') + 1);
         }
 
-        public static string GetFilename(string path)
-        {
-            string fullName = GetFileFolder(path);
-            return fullName.Substring(0, fullName.LastIndexOf("."));
-        }
-
         public async Task<MusicProperties> GetMusicPropertiesAsync()
         {
             var file = await GetStorageFileAsync();
@@ -254,7 +248,7 @@ namespace SMPlayer.Models
             }
             catch (Exception exception)
             {
-                Debug.WriteLine(string.Format("Exception ({0}) when saving lyrics for {1}", exception.Message, Name));
+                Helper.Print($"Exception ({exception.Message}) when saving lyrics for {Name}");
                 return false;
             }
         }
@@ -278,15 +272,9 @@ namespace SMPlayer.Models
             return new MediaPlaybackItem(source);
         }
 
-        public bool RenameFolder(string oldPath, string newPath)
-        {
-            Path = Path.Replace(oldPath, newPath);
-            return Path.Contains(newPath);
-        }
-
         public string MoveToFolder(string newPath)
         {
-            return Path = newPath + "\\" + GetFilename(Path);
+            return Path = FileHelper.MoveToPath(Path, newPath);
         }
 
         public string GetToastText()
@@ -330,7 +318,7 @@ namespace SMPlayer.Models
 
         public override int GetHashCode()
         {
-            return Path.GetHashCode();
+            return Id.GetHashCode();
         }
 
         public override string ToString()
@@ -356,15 +344,14 @@ namespace SMPlayer.Models
 
     public class MusicStream : IRandomAccessStreamReference
     {
-        private string path;
+        private readonly string path;
 
         public MusicStream(string path)
         {
             this.path = path;
         }
 
-        public IAsyncOperation<IRandomAccessStreamWithContentType> OpenReadAsync()
-            => Open().AsAsyncOperation();
+        public IAsyncOperation<IRandomAccessStreamWithContentType> OpenReadAsync() => Open().AsAsyncOperation();
 
         // private async helper task that is necessary if you need to use await.
         private async Task<IRandomAccessStreamWithContentType> Open()
@@ -376,7 +363,7 @@ namespace SMPlayer.Models
             }
             catch (FileNotFoundException)
             {
-                Helper.ShowMusicNotFoundNotification(Music.GetFilename(path));
+                Helper.ShowMusicNotFoundNotification(path);
                 return await (await StorageFile.GetFileFromPathAsync(path)).OpenReadAsync();
             }
         }

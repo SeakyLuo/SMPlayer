@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMPlayer.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -22,7 +23,7 @@ namespace SMPlayer.Models
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         [Newtonsoft.Json.JsonIgnore]
-        public TreeInfo Info { get => new TreeInfo(Directory, Trees.Count, Files.Count); }
+        public TreeInfo Info { get => new TreeInfo(Name, Trees.Count, Files.Count); }
         [Newtonsoft.Json.JsonIgnore]
         public bool IsEmpty { get => Files.Count == 0 && Trees.All(tree => tree.IsEmpty); }
         [Newtonsoft.Json.JsonIgnore]
@@ -30,16 +31,9 @@ namespace SMPlayer.Models
         [Newtonsoft.Json.JsonIgnore]
         public int FileCount { get => Trees.Sum(t => t.FileCount) + Files.Count; }
         [Newtonsoft.Json.JsonIgnore]
-        public string Directory { get => Path.Substring(Path.LastIndexOf("\\") + 1); }
+        public string Name { get => FileHelper.GetDisplayName(Path); }
         [Newtonsoft.Json.JsonIgnore]
-        public string ParentPath
-        {
-            get
-            {
-                int index = Path.LastIndexOf("\\");
-                return index == -1 ? "" : Path.Substring(0, index);
-            }
-        }
+        public string ParentPath { get => FileHelper.GetParentPath(Path); }
 
         public FolderTree() { }
         public FolderTree(FolderTree tree)
@@ -57,15 +51,19 @@ namespace SMPlayer.Models
             OnPropertyChanged();
         }
 
+        public void AddTree(FolderTree tree)
+        {
+            Trees.Add(tree);
+        }
+
+        public void AddFile(FolderFile file)
+        {
+            Files.Add(file);
+        }
+
         public bool Contains(string path)
         {
             return FindFile(path) != null;
-        }
-
-        public bool RemoveMusic(Music music)
-        {
-            return Files.RemoveAll(f =>f.Path == music.Path) > 0 ||
-                   (Trees.FirstOrDefault(t => music.Path.StartsWith(t.Path)) is FolderTree tree && tree.RemoveMusic(music));
         }
 
         public List<Music> Flatten()
@@ -85,7 +83,7 @@ namespace SMPlayer.Models
         }
         public void Sort()
         {
-            Trees = Trees.OrderBy(t => t.Directory).ToList();
+            Trees = Trees.OrderBy(t => t.Name).ToList();
             switch (Criterion)
             {
                 case SortBy.Title:
@@ -163,7 +161,7 @@ namespace SMPlayer.Models
         }
         public FolderTree FindTree(Music music)
         {
-            string path = music.Path.Substring(0, music.Path.LastIndexOf('\\'));
+            string path = FileHelper.GetParentPath(music.Path);
             return FindTree(path);
         }
         public Music FindMusic(string path)
@@ -224,12 +222,32 @@ namespace SMPlayer.Models
             Path = Path.Replace(oldPath, newPath);
         }
 
+        public bool RemoveBranch(string path)
+        {
+            return Trees.RemoveAll(f => f.Path == path) > 0 ||
+                   (Trees.FirstOrDefault(t => path.StartsWith(t.Path)) is FolderTree tree && tree.RemoveBranch(path));
+        }
+
         public void MoveBranch(FolderTree branch, string newPath)
         {
             FolderTree tree = FindTree(branch);
-            FindTree(branch.ParentPath).Trees.Remove(branch);
-            tree.Rename(tree.Path, newPath + "\\" + Directory);
-            FindTree(newPath)?.Trees.Add(tree);
+            RemoveBranch(branch.Path);
+            tree.Rename(tree.Path, FileHelper.JoinPaths(newPath, Name));
+            FindTree(newPath)?.AddTree(tree);
+        }
+
+        public bool RemoveFile(string path)
+        {
+            return Files.RemoveAll(f => f.Path == path) > 0 ||
+                   (Trees.FirstOrDefault(t => path.StartsWith(t.Path)) is FolderTree tree && tree.RemoveFile(path));
+        }
+
+        public void MoveFile(FolderFile src, string newPath)
+        {
+            FolderFile file = FindFile(src.Path);
+            RemoveFile(src.Path);
+            file.MoveToFolder(newPath);
+            FindTree(newPath)?.AddFile(file);
         }
 
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
@@ -259,12 +277,12 @@ namespace SMPlayer.Models
 
         PreferenceItem IPreferable.AsPreferenceItem()
         {
-            return new PreferenceItem(Id.ToString(), Directory);
+            return new PreferenceItem(Id.ToString(), Name);
         }
 
         PreferenceItemView IPreferable.AsPreferenceItemView()
         {
-            return new PreferenceItemView(Id.ToString(), Directory, Path, PreferType.Folder);
+            return new PreferenceItemView(Id.ToString(), Name, Path, PreferType.Folder);
         }
     }
 

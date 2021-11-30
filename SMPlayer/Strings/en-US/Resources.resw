@@ -1258,4 +1258,7 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="ReleaseNotesImprovedLocalManagement.Text" xml:space="preserve">
     <value>You can now add/delete folder, move music file in SMPlayer.</value>
   </data>
+  <data name="CreatePlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Add Playlist</value>
+  </data>
 </root>

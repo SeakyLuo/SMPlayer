@@ -36,7 +36,7 @@ namespace SMPlayer
         public GridMusicControl()
         {
             this.InitializeComponent();
-            MediaHelper.SwitchMusicListeners.Add(this);
+            MusicPlayer.SwitchMusicListeners.Add(this);
             Settings.AddMusicEventListener(this);
         }
 
@@ -49,7 +49,7 @@ namespace SMPlayer
             var item = (GridMusicView)e.ClickedItem;
             if (GridItemClickedListener == null)
             {
-                MediaHelper.SetMusicAndPlay(MusicCollection, item.Source);
+                MusicPlayer.SetMusicAndPlay(MusicCollection, item.Source);
             }
             else
             {
@@ -76,7 +76,7 @@ namespace SMPlayer
         public void AddMusic(Music music)
         {
             var copy = music.Copy();
-            copy.IsPlaying = copy.Equals(MediaHelper.CurrentMusic);
+            copy.IsPlaying = copy.Equals(MusicPlayer.CurrentMusic);
             MusicCollection.Add(copy);
             GridMusicCollection.Add(new GridMusicView(copy));
         }
@@ -146,7 +146,7 @@ namespace SMPlayer
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
-                MediaHelper.FindMusicAndSetPlaying(MusicCollection, current, next);
+                MusicPlayer.FindMusicAndSetPlaying(MusicCollection, current, next);
                 foreach (var item in GridMusicCollection)
                     item.Source.IsPlaying = item.Source.Equals(next);
             });
@@ -225,7 +225,7 @@ namespace SMPlayer
         void IMultiSelectListener.Play(MultiSelectCommandBar commandBar)
         {
             if (SelectedItemsCount == 0) return;
-            MediaHelper.SetMusicAndPlay(MusicGridView.SelectedItems.Select(i => (GridMusicView)i));
+            MusicPlayer.SetMusicAndPlay(MusicGridView.SelectedItems.Select(i => (GridMusicView)i));
             MultiSelectListener?.Play(commandBar);
         }
 

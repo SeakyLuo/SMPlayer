@@ -73,13 +73,15 @@ namespace SMPlayer
         {
             if (IsProcessing) return;
             AlbumPageProgressRing.Visibility = Visibility.Visible;
-            if (AlbumInfoList.Count > 0)
+            if (AlbumInfoList.IsNotEmpty())
             {
+                MultiSelectButton.IsEnabled = true;
                 Albums.SetTo(AlbumInfoList.Select(a => a.ToAlbumView()));
                 SetHeader();
             }
             else
             {
+                MultiSelectButton.IsEnabled = false;
                 await SetData(songs);
             }
             AlbumPageProgressRing.Visibility = Visibility.Collapsed;
@@ -257,7 +259,7 @@ namespace SMPlayer
 
         void IMultiSelectListener.Play(MultiSelectCommandBar commandBar)
         {
-            MediaHelper.SetMusicAndPlay(SelectedSongs);
+            MusicPlayer.SetMusicAndPlay(SelectedSongs);
         }
 
         void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar) { }

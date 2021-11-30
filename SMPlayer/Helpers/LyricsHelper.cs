@@ -38,7 +38,7 @@ namespace SMPlayer.Helpers
         {
             try
             {
-                await SetLyrics(MediaHelper.CurrentMusic);
+                await SetLyrics(MusicPlayer.CurrentMusic);
             }
             catch (ArgumentException e)
             {
@@ -99,7 +99,7 @@ namespace SMPlayer.Helpers
                 string lyric = IsLrc ? GetLrcLyrics() : null;
                 if (lyric == null)
                 {
-                    int index = Math.Min(LyricsList.Length - 1, (int)(LyricsList.Length * MediaHelper.Progress));
+                    int index = Math.Min(LyricsList.Length - 1, (int)(LyricsList.Length * MusicPlayer.Progress));
                     lyric = CurrentLine = LyricsList[index];
                 }
                 if (!string.IsNullOrWhiteSpace(lyric))
@@ -116,7 +116,7 @@ namespace SMPlayer.Helpers
 
         private static string GetLrcLyrics()
         {
-            double position = MediaHelper.Position;
+            double position = MusicPlayer.Position;
             string time = ToTime(position);
             if (CurrentLine != null && CurrentLine.Contains(time)) return DisplayLine;
             if (LyricsList.Length == 1)

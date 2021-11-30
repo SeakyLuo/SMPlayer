@@ -53,7 +53,7 @@ namespace SMPlayer.Models
             return false;
         }
 
-        public void DeleteFolder(string path)
+        public void DeleteByFolder(string path)
         {
             TimeLine.RemoveAll(i => i.Path.StartsWith(path));
         }

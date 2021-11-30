@@ -164,7 +164,7 @@ namespace SMPlayer
                     }
                     else
                     {
-                        view.Name = tree.Directory;
+                        view.Name = tree.Name;
                         view.ToolTip = tree.Path;
                     }
                     break;

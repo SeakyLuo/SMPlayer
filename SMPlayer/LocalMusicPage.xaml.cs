@@ -16,10 +16,10 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalMusicPage : Page, IMusicEventListener, ISwitchMusicListener, ILocalPageButtonListener, IRemoveMusicListener
+    public sealed partial class LocalMusicPage : Page, IMusicEventListener, ISwitchMusicListener, ILocalPageButtonListener
     {
         public static FolderTree CurrentTree;
-        private ObservableCollection<Music> Songs = new ObservableCollection<Music>();
+        private readonly ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         private string TreePath;
         public static bool ReverseRequested = false, SortByTitleRequested = false, SortByArtistRequested = false, SortByAlbumRequested = false;
         public static ILocalSetter setter;
@@ -27,11 +27,9 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MediaHelper.SwitchMusicListeners.Add(this);
+            MusicPlayer.SwitchMusicListeners.Add(this);
             LocalPage.MusicListener = this;
-            LocalPlaylist.RemoveListeners.Add(this);
             LocalPlaylist.MultiSelectOption = new MultiSelectCommandBarOption() { ShowRemove = false };
-            GridMusicView.RemoveListeners.Add(this);
             GridMusicView.MenuFlyoutOpeningOption = new MenuFlyoutOption()
             {
                 MultiSelectOption = new MultiSelectCommandBarOption() { ShowRemove = false }
@@ -78,7 +76,7 @@ namespace SMPlayer
             catch (InvalidOperationException)
             {
                 // Loading while Set New Folder will cause this Exception
-                System.Diagnostics.Debug.WriteLine("InvalidOperationException On Local Music Page");
+                Helper.Print("InvalidOperationException On Local Music Page");
             }
             TreePath = tree.Path;
             CurrentTree = tree;
@@ -87,7 +85,7 @@ namespace SMPlayer
 
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MediaHelper.FindMusicAndSetPlaying(Songs, current, next));
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MusicPlayer.FindMusicAndSetPlaying(Songs, current, next));
         }
 
         public void ModeChanged(bool isGridView)
@@ -137,23 +135,12 @@ namespace SMPlayer
             Settings.settings.Tree.FindTree(CurrentTree).CopyFrom(CurrentTree);
         }
 
-        public void MusicRemoved(int index, Music music, IEnumerable<Music> newCollection)
-        {
-            // It is actually delete music
-            CurrentTree.RemoveMusic(music);
-            setter.SetNavText(CurrentTree.Info);
-        }
-
-        void IMusicEventListener.Liked(Music music, bool isFavorite)
-        {
-        }
-
-        void IMusicEventListener.Added(Music music)
-        {
-        }
-
+        void IMusicEventListener.Liked(Music music, bool isFavorite) { }
+        void IMusicEventListener.Added(Music music) { }
         void IMusicEventListener.Removed(Music music)
         {
+            CurrentTree.RemoveFile(music.Path);
+            Songs.RemoveAll(i => i.Id == music.Id);
         }
 
         void IMusicEventListener.Modified(Music before, Music after)

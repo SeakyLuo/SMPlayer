@@ -55,7 +55,7 @@ namespace SMPlayer
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             Settings.AddMusicEventListener(this);
-            MediaHelper.SwitchMusicListeners.Add(this);
+            MusicPlayer.SwitchMusicListeners.Add(this);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -146,7 +146,7 @@ namespace SMPlayer
                 SuggestionList.Add(artist.Name);
                 Suggestions.Add(artist.Name);
             }
-            FindMusicAndSetPlaying(MediaHelper.CurrentMusic);
+            FindMusicAndSetPlaying(MusicPlayer.CurrentMusic);
             SetHeader();
             initListener?.Inited();
             IsProcessing = false;
@@ -177,7 +177,7 @@ namespace SMPlayer
             ListView listView = (ListView)sender;
             if (listView.SelectionMode != ListViewSelectionMode.None) return;
             Music music = (Music)e.ClickedItem;
-            MediaHelper.SetMusicAndPlay(listView.ItemsSource as ObservableCollection<Music>, music);
+            MusicPlayer.SetMusicAndPlay(listView.ItemsSource as ObservableCollection<Music>, music);
         }
 
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
@@ -323,7 +323,7 @@ namespace SMPlayer
         {
             List<Music> selectedItems = SelectedItems;
             if (selectedItems.Count == 0) return;
-            MediaHelper.SetPlaylistAndPlay(SelectedItems);
+            MusicPlayer.SetPlaylistAndPlay(SelectedItems);
             commandBar.Hide();
         }
 

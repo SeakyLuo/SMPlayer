@@ -148,7 +148,7 @@ namespace SMPlayer
             string header = Helper.LocalizeMessage("Quotations", keyword.Text);
             return isMinimal ? header :
                                keyword.Tree == Settings.settings.Tree ? Helper.LocalizeMessage("SearchResult", keyword.Text) :
-                                                                        Helper.LocalizeMessage("SearchDirectoryResult", keyword.Text, keyword.Tree.Directory);
+                                                                        Helper.LocalizeMessage("SearchDirectoryResult", keyword.Text, keyword.Tree.Name);
         }
         private void SearchArtistView_ItemClick(object sender, ItemClickEventArgs e)
         {

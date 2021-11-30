@@ -30,7 +30,7 @@
                 <TextBlock
                     Grid.Column="1"
                     Margin="10,0"
-                    Text="{Binding Content.Directory, Mode=OneWay}" />
+                    Text="{Binding Content.Name, Mode=OneWay}" />
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="FileTemplate" x:DataType="TreeViewNode">

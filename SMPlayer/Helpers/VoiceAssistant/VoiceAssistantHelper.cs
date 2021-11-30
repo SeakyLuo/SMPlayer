@@ -220,7 +220,7 @@ namespace SMPlayer.Helpers
             switch (result.Type)
             {
                 case MatchType.Play:
-                    MediaHelper.Play();
+                    MusicPlayer.Play();
                     break;
                 case MatchType.PlayMusic:
                     PlayMusic(result.Param as string);
@@ -256,7 +256,7 @@ namespace SMPlayer.Helpers
                     PlayFolder(result.Param as string);
                     break;
                 case MatchType.QuickPlay:
-                    MediaHelper.QuickPlay();
+                    MusicPlayer.QuickPlay();
                     break;
                 case MatchType.PlayByArtistOrMusic:
                     PlayByArtistOrMusic(result.Param as ByArtistRequest);
@@ -268,15 +268,15 @@ namespace SMPlayer.Helpers
                     Search(result.Param as string);
                     break;
                 case MatchType.Pause:
-                    MediaHelper.Pause();
+                    MusicPlayer.Pause();
                     break;
                 case MatchType.Previous:
-                    MediaHelper.MovePrev();
-                    MediaHelper.Play();
+                    MusicPlayer.MovePrev();
+                    MusicPlayer.Play();
                     break;
                 case MatchType.Next:
-                    MediaHelper.MoveNext();
-                    MediaHelper.Play();
+                    MusicPlayer.MoveNext();
+                    MusicPlayer.Play();
                     break;
                 case MatchType.Mute:
                     Helper.GetMainPageContainer().GetMediaControl().SetMuted(true);
@@ -312,7 +312,7 @@ namespace SMPlayer.Helpers
         {
             if (string.IsNullOrEmpty(text))
             {
-                MediaHelper.QuickPlay();
+                MusicPlayer.QuickPlay();
                 return;
             }
             IEnumerable<Music> list = SearchHelper.SearchSongs(Settings.settings.AllSongs, text, SortBy.Default);
@@ -321,7 +321,7 @@ namespace SMPlayer.Helpers
                 SpeakNoResults(text);
                 return;
             }
-            MediaHelper.SetMusicAndPlay(list.ElementAt(0));
+            MusicPlayer.SetMusicAndPlay(list.ElementAt(0));
         }
 
         private static void PlayArtist(string text)
@@ -337,7 +337,7 @@ namespace SMPlayer.Helpers
                 SpeakNoResults(text);
                 return;
             }
-            MediaHelper.ShuffleAndPlay(list.ElementAt(0).Songs);
+            MusicPlayer.ShuffleAndPlay(list.ElementAt(0).Songs);
         }
 
         private static void PlayAlbum(string text)
@@ -353,7 +353,7 @@ namespace SMPlayer.Helpers
                 SpeakNoResults(text);
                 return;
             }
-            MediaHelper.ShuffleAndPlay(list.ElementAt(0).Songs);
+            MusicPlayer.ShuffleAndPlay(list.ElementAt(0).Songs);
         }
 
         private static void PlayPlaylist(string text)
@@ -369,7 +369,7 @@ namespace SMPlayer.Helpers
                 SpeakNoResults(text);
                 return;
             }
-            MediaHelper.ShuffleAndPlay(list.ElementAt(0).Songs);
+            MusicPlayer.ShuffleAndPlay(list.ElementAt(0).Songs);
         }
 
         private static void PlayFolder(string text)
@@ -385,7 +385,7 @@ namespace SMPlayer.Helpers
                 SpeakNoResults(text);
                 return;
             }
-            MediaHelper.ShuffleAndPlay(list.ElementAt(0).Songs);
+            MusicPlayer.ShuffleAndPlay(list.ElementAt(0).Songs);
         }
 
         private static async void PlayByArtistOrMusic(ByArtistRequest request)
@@ -399,7 +399,7 @@ namespace SMPlayer.Helpers
             }
             if (byArtistResult.IsNotEmpty())
             {
-                MediaHelper.ShuffleAndPlay(byArtistResult.ElementAt(0).Songs);
+                MusicPlayer.ShuffleAndPlay(byArtistResult.ElementAt(0).Songs);
             }
             if (originalResult != null)
             {
@@ -485,7 +485,7 @@ namespace SMPlayer.Helpers
             {
                 case SearchType.Artists:
                     Playlist artist = result.Result as Playlist;
-                    MediaHelper.ShuffleAndPlay(artist.Songs);
+                    MusicPlayer.ShuffleAndPlay(artist.Songs);
                     if (IsBadSearch(text, artist.Name, result))
                     {
                         Speak("SearchResultArtist", artist.Name);
@@ -493,7 +493,7 @@ namespace SMPlayer.Helpers
                     break;
                 case SearchType.Albums:
                     AlbumView album = result.Result as AlbumView;
-                    MediaHelper.ShuffleAndPlay(album.Songs);
+                    MusicPlayer.ShuffleAndPlay(album.Songs);
                     if (IsBadSearch(text, album.Name, result))
                     {
                         Speak("SearchResultAlbum", album.Name);
@@ -501,7 +501,7 @@ namespace SMPlayer.Helpers
                     break;
                 case SearchType.Playlists:
                     AlbumView playlist = result.Result as AlbumView;
-                    MediaHelper.ShuffleAndPlay(playlist.Songs);
+                    MusicPlayer.ShuffleAndPlay(playlist.Songs);
                     if (IsBadSearch(text, playlist.Name, result))
                     {
                         Speak("SearchResultPlaylist", playlist.Name);
@@ -509,7 +509,7 @@ namespace SMPlayer.Helpers
                     break;
                 case SearchType.Folders:
                     GridFolderView folder = result.Result as GridFolderView;
-                    MediaHelper.ShuffleAndPlay(folder.Songs);
+                    MusicPlayer.ShuffleAndPlay(folder.Songs);
                     if (IsBadSearch(text, folder.Name, result))
                     {
                         Speak("SearchResultFolder", folder.Name);
@@ -517,7 +517,7 @@ namespace SMPlayer.Helpers
                     break;
                 case SearchType.Songs:
                     Music music = result.Result as Music;
-                    MediaHelper.SetMusicAndPlay(music);
+                    MusicPlayer.SetMusicAndPlay(music);
                     if (IsBadSearch(text, music.Name, result))
                     {
                         Speak("SearchResultMusic", music.Name);
@@ -535,9 +535,9 @@ namespace SMPlayer.Helpers
             }
             else
             {
-                double currentVolume = MediaHelper.Player.Volume * 100;
+                double currentVolume = MusicPlayer.Player.Volume * 100;
                 int positive = request.TurnUp ? 1 : -1;
-                double percent = request.Percentage ? MediaHelper.Player.Volume : 1;
+                double percent = request.Percentage ? MusicPlayer.Player.Volume : 1;
                 newVolume = (int) (currentVolume + positive * request.Value * percent);
             }
             Helper.GetMainPageContainer().GetMediaControl().SetVolume(newVolume);

@@ -226,6 +226,7 @@
     <Compile Include="Helpers\ClassHelper.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\DAOHelper.cs" />
+    <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\LyricsHelper.cs" />
     <Compile Include="Helpers\QuickPlayHelper.cs" />
@@ -291,7 +292,7 @@
     <Compile Include="Controls\MediaControl.xaml.cs">
       <DependentUpon>MediaControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\MediaHelper.cs" />
+    <Compile Include="Helpers\MusicPlayer.cs" />
     <Compile Include="Models\ArtistView.cs" />
     <Compile Include="Models\AlbumView.cs" />
     <Compile Include="Models\GridFolderView.cs" />

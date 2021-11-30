@@ -32,7 +32,7 @@ namespace SMPlayer
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             Settings.AddMusicEventListener(this);
-            MediaHelper.SwitchMusicListeners.Add(this);
+            MusicPlayer.SwitchMusicListeners.Add(this);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -40,7 +40,7 @@ namespace SMPlayer
             SetHeader();
             if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
             SortAndSetAllSongs(Settings.settings.AllSongs);
-            MediaHelper.FindMusicAndSetPlaying(AllSongs, null, MediaHelper.CurrentMusic);
+            MusicPlayer.FindMusicAndSetPlaying(AllSongs, null, MusicPlayer.CurrentMusic);
         }
 
         public void CheckLibrary()
@@ -57,7 +57,7 @@ namespace SMPlayer
         {
             var music = (Music)MusicLibraryDataGrid.SelectedItem;
             if (music == null) return;
-            MediaHelper.SetMusicAndPlay(music);
+            MusicPlayer.SetMusicAndPlay(music);
         }
 
         private void MenuFlyout_Opening(object sender, object e)
@@ -108,7 +108,7 @@ namespace SMPlayer
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () => MediaHelper.FindMusicAndSetPlaying(AllSongs, current, next));
+            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () => MusicPlayer.FindMusicAndSetPlaying(AllSongs, current, next));
         }
 
         public void OnBuild(MenuFlyoutHelper helper)

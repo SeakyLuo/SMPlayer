@@ -125,7 +125,7 @@ namespace SMPlayer.Helpers
         public static void Save()
         {
             if (Settings.settings == null) return;
-            Settings.settings.MusicProgress = MediaHelper.Position;
+            Settings.settings.MusicProgress = MusicPlayer.Position;
             JsonFileHelper.SaveAsync(JsonFilename, Settings.settings);
             JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, Settings.settings);
             try

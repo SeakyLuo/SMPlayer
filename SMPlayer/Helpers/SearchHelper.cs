@@ -138,7 +138,7 @@ namespace SMPlayer.Helpers
 
         public static IEnumerable<AlbumView> SortPlaylists(IEnumerable<AlbumView> src, string keyword, SortBy criterion)
         {
-            var nowPlaying = MediaHelper.NowPlaying;
+            var nowPlaying = MusicPlayer.NowPlaying;
             bool isNowPlayingTarget = IsTargetPlaylist(nowPlaying, keyword),
                  isFavoriteTarget = IsTargetPlaylist(Settings.settings.MyFavorites, keyword);
             List<AlbumView> list;
@@ -171,7 +171,7 @@ namespace SMPlayer.Helpers
         }
         public static bool IsTargetFolder(FolderTree tree, string keyword)
         {
-            return tree.Directory.Contains(keyword, Comparison) || tree.Songs.Any(music => IsTargetMusic(music, keyword));
+            return tree.Name.Contains(keyword, Comparison) || tree.Songs.Any(music => IsTargetMusic(music, keyword));
         }
         public static IEnumerable<GridFolderView> SortFolders(IEnumerable<GridFolderView> src, string keyword, SortBy criterion)
         {

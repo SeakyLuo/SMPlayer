@@ -35,7 +35,7 @@ namespace SMPlayer
             Window.Current.SetTitleBar(AppTitleBar);
             UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar);
 
-            SetMusic(MediaHelper.CurrentMusic);
+            SetMusic(MusicPlayer.CurrentMusic);
             FullPlaylistControl.ScrollToCurrentMusic();
         }
         private void UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar coreTitleBar)

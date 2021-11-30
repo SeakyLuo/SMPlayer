@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMPlayer.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,11 @@ namespace SMPlayer.Models
         public void RenameFolder(string oldPath, string newPath)
         {
             Path = Path.Replace(oldPath, newPath);
+        }
+
+        public void MoveToFolder(string newPath)
+        {
+            Path = FileHelper.MoveToPath(Path, newPath);
         }
 
         public void CopyFrom(FolderFile file)

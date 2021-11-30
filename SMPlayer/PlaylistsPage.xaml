@@ -20,6 +20,16 @@
                 Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
                 Duration="0:0:0.25" />
         </Storyboard>
+        <Style x:Key="HeaderButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonRevealStyle}">
+            <Setter Property="Width" Value="{StaticResource HeaderButtonWidth}" />
+            <Setter Property="Height" Value="{StaticResource NavigationViewButtonWidth}" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
     </Page.Resources>
 
     <Grid>
@@ -38,6 +48,7 @@
             IsCloseButtonOverlay="False"
             SelectionChanged="PlaylistTabView_SelectionChanged"
             SelectionMode="Single"
+            ItemsSource="{x:Bind Playlists, Mode=OneWay}"
             Style="{ThemeResource PlaylistTabViewStyle}"
             TabClosing="PlaylistTabView_TabClosing"
             TabNavigation="Cycle"
@@ -89,19 +100,18 @@
             <controls:TabView.TabStartHeader>
                 <StackPanel Orientation="Horizontal">
                     <Button
+                        x:Name="CreatePlaylistButton"
+                        x:Uid="CreatePlaylistButton"
+                        Content="&#xE109;"
+                        Visibility="{x:Bind Playlists.Count, Converter={StaticResource InvertedVisibilityConverter}, Mode=OneWay}"
+                        Click="CreatePlaylistButton_Click"
+                        Style="{ThemeResource HeaderButtonStyle}" />
+                    <Button
                         x:Name="PlaylistDropdownButton"
                         x:Uid="PlaylistDropdownButton"
-                        Width="{StaticResource HeaderButtonWidth}"
-                        Height="{StaticResource NavigationViewButtonWidth}"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Background="Transparent"
-                        BorderThickness="0"
                         Content="&#xE70D;"
-                        FontFamily="Segoe MDL2 Assets"
-                        FontSize="16"
-                        RenderTransformOrigin=".5,.5"
-                        Style="{ThemeResource ButtonRevealStyle}" >
+                        Visibility="{x:Bind Playlists.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
+                        Style="{ThemeResource HeaderButtonStyle}" >
                         <Button.Flyout>
                             <MenuFlyout Closed="ClosePlaylistsFlyout" Opening="OpenPlaylistsFlyout" />
                         </Button.Flyout>

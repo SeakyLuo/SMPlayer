@@ -21,7 +21,7 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace SMPlayer
 {
-    public sealed partial class MediaControl : UserControl, ISwitchMusicListener, IMediaControlListener, IRemoveMusicListener, IMusicEventListener, IMediaPlayerStateChangedListener
+    public sealed partial class MediaControl : UserControl, ISwitchMusicListener, IMediaControlListener, ICurrentPlaylistChangedListener, IMusicEventListener, IMediaPlayerStateChangedListener
     {
         public enum MediaControlMode
         {
@@ -406,7 +406,6 @@ namespace SMPlayer
 
         private Music CurrentMusic = null;
         private bool ShouldUpdate = true, SliderClicked = false;
-        private static List<Action<Music, Music>> MusicModifiedListeners = new List<Action<Music, Music>>();
         private static List<IMusicRequestListener> MusicRequestListeners = new List<IMusicRequestListener>();
         private static bool inited = false;
         private bool IsMinimalMain { get => MainMediaControlMoreButton.Visibility == Visibility.Visible; }
@@ -416,10 +415,9 @@ namespace SMPlayer
         public MediaControl()
         {
             this.InitializeComponent();
-            MediaHelper.SwitchMusicListeners.Add(this);
-            MediaHelper.MediaControlListeners.Add(this);
-            MediaHelper.RemoveMusicListeners.Add(this);
-            MediaHelper.InitFinishedListeners.Add(() =>
+            MusicPlayer.SwitchMusicListeners.Add(this);
+            MusicPlayer.MediaControlListeners.Add(this);
+            MusicPlayer.InitFinishedListeners.Add(() =>
             {
                 AfterLoaded();
                 inited = true;
@@ -427,19 +425,19 @@ namespace SMPlayer
                 MainMediaSlider.Visibility = Visibility.Visible;
             });
             Settings.AddMusicEventListener(this);
-            MediaHelper.MediaPlayerStateChangedListeners.Add(this);
+            MusicPlayer.MediaPlayerStateChangedListeners.Add(this);
             var left = new KeyboardAccelerator() { Key = Windows.System.VirtualKey.Left };
             left.Invoked += (sender, args) =>
             {
-                if (MediaHelper.CurrentMusic != null)
-                    MediaHelper.Position = Math.Max(MediaHelper.Position - 5, 0);
+                if (MusicPlayer.CurrentMusic != null)
+                    MusicPlayer.Position = Math.Max(MusicPlayer.Position - 5, 0);
             };
             KeyboardAccelerators.Add(left);
             var right = new KeyboardAccelerator() { Key = Windows.System.VirtualKey.Right };
             right.Invoked += (sender, args) =>
             {
-                if (MediaHelper.CurrentMusic != null)
-                    MediaHelper.Position = Math.Min(MediaHelper.Position + 5, MediaHelper.CurrentMusic.Duration);
+                if (MusicPlayer.CurrentMusic != null)
+                    MusicPlayer.Position = Math.Min(MusicPlayer.Position + 5, MusicPlayer.CurrentMusic.Duration);
             };
             KeyboardAccelerators.Add(right);
             KeyboardAcceleratorPlacementMode = KeyboardAcceleratorPlacementMode.Hidden;
@@ -469,10 +467,10 @@ namespace SMPlayer
 
         private void AfterLoaded()
         {
-            UpdateMusic(MediaHelper.CurrentMusic);
-            MediaSlider.Value = MediaHelper.Position;
+            UpdateMusic(MusicPlayer.CurrentMusic);
+            MediaSlider.Value = MusicPlayer.Position;
 
-            if (MediaHelper.IsPlaying) PlayMusic();
+            if (MusicPlayer.IsPlaying) PlayMusic();
             else PauseMusic();
 
             double volume = Settings.settings.Volume * 100;
@@ -504,7 +502,7 @@ namespace SMPlayer
             MediaSlider.IsEnabled = true;
             TitleTextBlock.Text = music.Name;
             ArtistTextBlock.Text = music.Artist;
-            MediaSlider.Value = MediaHelper.Progress;
+            MediaSlider.Value = MusicPlayer.Progress;
             MediaSlider.Maximum = music.Duration;
             if (RightTimeTextBlock != null) RightTimeTextBlock.Text = MusicDurationConverter.ToTime(music.Duration);
             if (LikeToggleButton != null)
@@ -561,11 +559,6 @@ namespace SMPlayer
         {
             MusicRequestListeners.Add(listener);
         }
-        public static void NotifyMusicModifiedListeners(Music before, Music after)
-        {
-            foreach (var listener in MusicModifiedListeners)
-                listener.Invoke(before, after);
-        }
 
         public void SetPlayMode(PlayMode mode)
         {
@@ -594,8 +587,8 @@ namespace SMPlayer
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
             SetShuffle((bool)ShuffleButton.IsChecked);
-            if (MediaHelper.ShuffleEnabled)
-                MediaHelper.ShuffleOthers();
+            if (MusicPlayer.ShuffleEnabled)
+                MusicPlayer.ShuffleOthers();
         }
         private void MoreShuffleButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
@@ -614,7 +607,7 @@ namespace SMPlayer
             MoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
             MoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
             var mode = isChecked ? PlayMode.Shuffle : PlayMode.Once;
-            if (mode != Settings.settings.Mode) MediaHelper.SetMode(mode);
+            if (mode != Settings.settings.Mode) MusicPlayer.SetMode(mode);
         }
         private void RepeatButton_Click(object sender, RoutedEventArgs e)
         {
@@ -636,7 +629,7 @@ namespace SMPlayer
             MoreRepeatButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
             MoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
             var mode = isChecked ? PlayMode.Repeat : PlayMode.Once;
-            if (mode != Settings.settings.Mode) MediaHelper.SetMode(mode);
+            if (mode != Settings.settings.Mode) MusicPlayer.SetMode(mode);
         }
 
         private void RepeatOneButton_Click(object sender, RoutedEventArgs e)
@@ -659,7 +652,7 @@ namespace SMPlayer
             MoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
             MoreRepeatOneButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
             var mode = isChecked ? PlayMode.RepeatOne : PlayMode.Once;
-            if (mode != Settings.settings.Mode) MediaHelper.SetMode(mode);
+            if (mode != Settings.settings.Mode) MusicPlayer.SetMode(mode);
         }
 
         public void PlayMusic()
@@ -679,13 +672,13 @@ namespace SMPlayer
             var button = (Button)sender;
             if (button.Content.ToString() == "\uE768")
             {
-                if (MediaHelper.CurrentMusic == null || MediaHelper.CurrentPlaylist.Count == 0)
+                if (MusicPlayer.CurrentMusic == null || MusicPlayer.CurrentPlaylist.Count == 0)
                     return;
-                MediaHelper.Play();
+                MusicPlayer.Play();
             }
             else
             {
-                MediaHelper.Pause();
+                MusicPlayer.Pause();
             }
         }
 
@@ -693,7 +686,7 @@ namespace SMPlayer
         {
             string tooltip = Helper.Localize(isMuted ? "Undo Mute" : "Mute");
             VolumeButton.Content = isMuted ? "\uE74F" : Helper.GetVolumeIcon(VolumeSlider.Value);
-            MediaHelper.Player.IsMuted = isMuted;
+            MusicPlayer.Player.IsMuted = isMuted;
             VolumeButton.SetToolTip(tooltip, false);
             MuteButton.SetToolTip(tooltip, false);
         }
@@ -707,8 +700,8 @@ namespace SMPlayer
         {
             if (!(sender as Slider).IsLoaded) return;
             double volume = e.NewValue;
-            MediaHelper.Player.IsMuted = false;
-            Settings.settings.Volume = MediaHelper.Player.Volume = volume / 100;
+            MusicPlayer.Player.IsMuted = false;
+            Settings.settings.Volume = MusicPlayer.Player.Volume = volume / 100;
             string icon = Helper.GetVolumeIcon(volume);
             if (VolumeButton != null) VolumeButton.Content = icon;
         }
@@ -734,8 +727,7 @@ namespace SMPlayer
             LikeToggleButton.SetToolTip("UndoLikeMusicToolTip");
             if (isClick)
             {
-                SetMusicFavorite(true);
-                Settings.settings.LikeMusic(MediaHelper.CurrentMusic);
+                Settings.settings.LikeMusic(MusicPlayer.CurrentMusic);
             }
             else LikeToggleButton.IsChecked = true;
         }
@@ -745,17 +737,9 @@ namespace SMPlayer
             LikeToggleButton.SetToolTip("LikeMusicToolTip");
             if (isClick)
             {
-                SetMusicFavorite(false);
-                Settings.settings.DislikeMusic(MediaHelper.CurrentMusic);
+                Settings.settings.DislikeMusic(MusicPlayer.CurrentMusic);
             }
             else LikeToggleButton.IsChecked = false;
-        }
-
-        private void SetMusicFavorite(bool favorite)
-        {
-            Music before = MediaHelper.CurrentMusic.Copy();
-            MediaHelper.CurrentMusic.Favorite = favorite;
-            NotifyMusicModifiedListeners(before, MediaHelper.CurrentMusic);
         }
 
         private void LikeButton_Click(object sender, RoutedEventArgs e)
@@ -768,16 +752,16 @@ namespace SMPlayer
         private void PrevButton_Click(object sender, RoutedEventArgs e)
         {
             MediaSlider.Value = 0;
-            if (MediaHelper.Position > 5)
-                MediaHelper.Position = 0;
+            if (MusicPlayer.Position > 5)
+                MusicPlayer.Position = 0;
             else
-                MediaHelper.MovePrev();
+                MusicPlayer.MovePrev();
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
             MediaSlider.Value = 0;
-            MediaHelper.MoveNext();
+            MusicPlayer.MoveNext();
         }
 
         private void MediaSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
@@ -790,7 +774,7 @@ namespace SMPlayer
 
         private void MediaSlider_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
         {
-            MediaHelper.Position = MediaSlider.Value;
+            MusicPlayer.Position = MediaSlider.Value;
             ShouldUpdate = true;
             Debug.WriteLine("Completed");
         }
@@ -805,13 +789,13 @@ namespace SMPlayer
             Debug.WriteLine("Starting");
             if (SliderClicked)
             {
-                MediaHelper.Position = MediaSlider.Value;
+                MusicPlayer.Position = MediaSlider.Value;
             }
         }
 
         private void MainMusicInfoGrid_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            if (MediaHelper.CurrentMusic == null || MainPage.Instance == null) return;
+            if (MusicPlayer.CurrentMusic == null || MainPage.Instance == null) return;
             MainPage.Instance.Frame.Navigate(typeof(NowPlayingFullPage), null, new DrillInNavigationTransitionInfo());
         }
 
@@ -896,19 +880,19 @@ namespace SMPlayer
         private void PlaylistButton_Click(object sender, RoutedEventArgs e)
         {
             foreach (var listener in MusicRequestListeners)
-                listener.PlaylistRequested(MediaHelper.CurrentPlaylist);
+                listener.PlaylistRequested(MusicPlayer.CurrentPlaylist);
         }
 
         private void MusicInfoButton_Click(object sender, RoutedEventArgs e)
         {
             foreach (var listener in MusicRequestListeners)
-                listener.MusicInfoRequested(MediaHelper.CurrentMusic);
+                listener.MusicInfoRequested(MusicPlayer.CurrentMusic);
         }
 
         private void LyricsButton_Click(object sender, RoutedEventArgs e)
         {
             foreach (var listener in MusicRequestListeners)
-                listener.LyricsRequested(MediaHelper.CurrentMusic);
+                listener.LyricsRequested(MusicPlayer.CurrentMusic);
         }
 
         private async void SavePlaylistItem_Click(object sender, RoutedEventArgs e)
@@ -916,9 +900,11 @@ namespace SMPlayer
             var name = Helper.Localize("Now Playing") + " - " + DateTime.Now.ToString("yy/MM/dd");
             int index = Settings.settings.FindNextPlaylistNameIndex(name);
             var defaultName = index == 0 ? name : Helper.GetPlaylistName(name, index);
-            var listener = new VirtualRenameActionListener() { Data = MediaHelper.CurrentPlaylist };
-            var dialog = new RenameDialog(listener, RenameOption.Create, RenameTarget.Playlist, defaultName);
-            listener.Dialog = dialog;
+            var dialog = new RenameDialog(RenameOption.Create, RenameTarget.Playlist, defaultName)
+            {
+                Validate = Settings.settings.ValidatePlaylistName,
+                Confirmed = (newName) => Settings.settings.AddPlaylist(newName, MusicPlayer.CurrentPlaylist)
+            };
             await dialog.ShowAsync();
         }
 
@@ -927,24 +913,25 @@ namespace SMPlayer
             if (NowPlayingFullPage.Instance != null)
             {
                 NowPlayingFullPage.Instance.GoBack();
-                MediaHelper.Clear();
+                MusicPlayer.Clear();
             }
         }
 
         private void PlayAlbumItem_Click(object sender, RoutedEventArgs e)
         {
-            MediaHelper.SetMusicAndPlay(Settings.settings.AllSongs.Where(m => m.Album == MediaHelper.CurrentMusic.Album));
+            MusicPlayer.SetMusicAndPlay(Settings.settings.AllSongs.Where(m => m.Album == MusicPlayer.CurrentMusic.Album));
         }
 
         private void PlayArtistItem_Click(object sender, RoutedEventArgs e)
         {
-            MediaHelper.SetMusicAndPlay(Settings.settings.AllSongs.Where(m => m.Artist == MediaHelper.CurrentMusic.Artist));
+            MusicPlayer.SetMusicAndPlay(Settings.settings.AllSongs.Where(m => m.Artist == MusicPlayer.CurrentMusic.Artist));
         }
+
         public void Tick()
         {
-            if (ShouldUpdate)
+            if (ShouldUpdate && MusicPlayer.IsPlaying)
             {
-                MediaSlider.Value = MediaHelper.Position;
+                MediaSlider.Value = MusicPlayer.Position;
             }
         }
 
@@ -954,13 +941,8 @@ namespace SMPlayer
             {
                 if (reason == MediaPlaybackItemChangedReason.EndOfStream)
                 {
-                    Music before = current.Copy();
-                    current.Played();
-                    MediaHelper.MusicModified(before, current);
-                    NotifyMusicModifiedListeners(before, current);
-                    MediaSlider.Value = 0;
+                    Settings.settings.Played(current);
                 }
-                Settings.settings.Played(current);
                 next.IsPlaying = true;
                 SetMusic(next);
                 if (MainTitleTextBlock.IsScrolling) MainTitleTextBlock.StopScrolling();
@@ -968,20 +950,14 @@ namespace SMPlayer
                 // avoid showing toast on app launch
                 if (reason != MediaPlaybackItemChangedReason.InitialItem)
                 {
-                    await ToastHelper.ShowToast(next, MediaHelper.PlaybackState);
+                    await ToastHelper.ShowToast(next, MusicPlayer.PlaybackState);
                 }
             });
         }
 
-        public async void MediaEnded()
+        public void MediaEnded()
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                if (Settings.settings.Mode == PlayMode.Once)
-                    PauseMusic();
-                MediaSlider.Value = 0;
-                ToastHelper.HideToast();
-            });
+            ToastHelper.HideToast();
         }
 
         public void ClearMusic()
@@ -1005,7 +981,7 @@ namespace SMPlayer
         private void MainMoreMenuFlyout_Opening(object sender, object e)
         {
             var flyout = sender as MenuFlyout;
-            if (MediaHelper.CurrentMusic == null)
+            if (MusicPlayer.CurrentMusic == null)
             {
                 if (flyout.Items[0].Name == MenuFlyoutHelper.AddToSubItemName)
                 {
@@ -1015,7 +991,7 @@ namespace SMPlayer
             }
             else
             {
-                var helper = new MenuFlyoutHelper() { Data = MediaHelper.CurrentMusic };
+                var helper = new MenuFlyoutHelper() { Data = MusicPlayer.CurrentMusic };
                 var addToItem = helper.GetAddToMenuFlyoutSubItem();
                 var propertyItems = helper.GetMusicPropertiesMenuFlyout().Items;
                 propertyItems.Insert(0, addToItem);
@@ -1029,14 +1005,14 @@ namespace SMPlayer
                     foreach (var item in propertyItems.Reverse())
                         flyout.Items.Insert(0, item);
                 }
-                var setAsPreferredItem = MenuFlyoutHelper.GetPreferItem(MediaHelper.CurrentMusic);
+                var setAsPreferredItem = MenuFlyoutHelper.GetPreferItem(MusicPlayer.CurrentMusic);
                 flyout.Items.Insert(1, setAsPreferredItem);
             }
         }
 
         private void MainMusicInfoGrid_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            if (MediaHelper.CurrentMusic == null) return;
+            if (MusicPlayer.CurrentMusic == null) return;
             VisualStateManager.GoToState(this, "PointerOver", true);
             MainTitleTextBlock.StartScrolling();
             MainArtistTextBlock.StartScrolling();
@@ -1044,29 +1020,23 @@ namespace SMPlayer
 
         private void MainMusicInfoGrid_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            if (MediaHelper.CurrentMusic == null) return;
+            if (MusicPlayer.CurrentMusic == null) return;
             VisualStateManager.GoToState(this, "Normal", true);
         }
 
         private async void MainMediaControlMoreMusicInfoItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            await new MusicDialog(MusicDialogOption.Properties, MediaHelper.CurrentMusic).ShowAsync();
+            await new MusicDialog(MusicDialogOption.Properties, MusicPlayer.CurrentMusic).ShowAsync();
         }
 
         private async void MainMediaControlMoreLyricsItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            await new MusicDialog(MusicDialogOption.Lyrics, MediaHelper.CurrentMusic).ShowAsync();
+            await new MusicDialog(MusicDialogOption.Lyrics, MusicPlayer.CurrentMusic).ShowAsync();
         }
 
         private async void MainMediaControlMoreAlbumArtItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            await new MusicDialog(MusicDialogOption.AlbumArt, MediaHelper.CurrentMusic).ShowAsync();
-        }
-
-        public void MusicRemoved(int index, Music music, IEnumerable<Music> newCollection)
-        {
-            if (newCollection.Count() == 0)
-                ClearMusic();
+            await new MusicDialog(MusicDialogOption.AlbumArt, MusicPlayer.CurrentMusic).ShowAsync();
         }
 
         private void FullMoreMenuFlyout_Opening(object sender, object e)
@@ -1075,12 +1045,12 @@ namespace SMPlayer
             if (flyout.Items.Last().Name == MenuFlyoutHelper.ShuffleSubItemName)
                 flyout.Items.RemoveAt(flyout.Items.Count - 1);
             flyout.Items.Add(MenuFlyoutHelper.GetShuffleSubItem());
-            flyout.Items.Add(MenuFlyoutHelper.GetPreferItem(MediaHelper.CurrentMusic));
+            flyout.Items.Add(MenuFlyoutHelper.GetPreferItem(MusicPlayer.CurrentMusic));
         }
 
         private void MiniMoreShufflePlayButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            MediaHelper.QuickPlay();
+            MusicPlayer.QuickPlay();
             MiniMoreFlyout.Hide();
         }
 
@@ -1102,7 +1072,7 @@ namespace SMPlayer
 
         public void MusicLiked(Music music, bool isFavorite)
         {
-            if (music == MediaHelper.CurrentMusic)
+            if (music == MusicPlayer.CurrentMusic)
             {
                 if (isFavorite) LikeMusic(false);
                 else DislikeMusic(false);
@@ -1135,26 +1105,24 @@ namespace SMPlayer
                         PauseMusic();
                         break;
                 }
-                await ToastHelper.ShowToast(MediaHelper.CurrentMusic, state);
+                await ToastHelper.ShowToast(MusicPlayer.CurrentMusic, state);
             });
         }
 
-        void IMusicEventListener.Liked(Music music, bool isFavorite)
-        {
-        }
-
-        void IMusicEventListener.Added(Music music)
-        {
-        }
-
-        void IMusicEventListener.Removed(Music music)
-        {
-        }
-
+        void IMusicEventListener.Liked(Music music, bool isFavorite) { }
+        void IMusicEventListener.Added(Music music) { }
+        void IMusicEventListener.Removed(Music music) { }
         void IMusicEventListener.Modified(Music before, Music after)
         {
             if (CurrentMusic == before)
                 UpdateMusic(after);
+        }
+
+        void ICurrentPlaylistChangedListener.AddMusic(Music music, int index) { }
+        void ICurrentPlaylistChangedListener.RemoveMusic(Music music) { }
+        void ICurrentPlaylistChangedListener.Cleared()
+        {
+            ClearMusic();
         }
     }
 

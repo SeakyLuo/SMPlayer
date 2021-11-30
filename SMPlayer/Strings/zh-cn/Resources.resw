@@ -1249,4 +1249,7 @@
   <data name="ReleaseNotesImprovedLocalManagement.Text" xml:space="preserve">
     <value>增强了本地文件管理功能，支持在播放器中新增删除文件夹、移动歌曲至其他文件夹等。</value>
   </data>
+  <data name="CreatePlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>添加播放列表</value>
+  </data>
 </root>

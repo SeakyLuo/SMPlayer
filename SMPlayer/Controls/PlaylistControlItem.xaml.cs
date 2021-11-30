@@ -29,7 +29,7 @@ namespace SMPlayer.Controls
         public PlaylistControlItem()
         {
             this.InitializeComponent();
-            MediaHelper.SwitchMusicListeners.Add(this);
+            MusicPlayer.SwitchMusicListeners.Add(this);
         }
 
         private void Album_Click(object sender, RoutedEventArgs e)
@@ -54,7 +54,7 @@ namespace SMPlayer.Controls
         public void SetTextColor(Music music)
         {
             if (Data == null) return;
-            if (Data.Index == -1 ? Data == music : MediaHelper.IsMusicPlaying(Data))
+            if (Data.Index == -1 ? Data == music : MusicPlayer.IsMusicPlaying(Data))
             {
                 PlayingIcon.Visibility = Visibility.Visible;
                 TitleTextBlock.Foreground = ArtistTextButton.Foreground = AlbumTextButton.Foreground = DurationTextBlock.Foreground =
@@ -86,7 +86,7 @@ namespace SMPlayer.Controls
 
         private void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            SetTextColor(MediaHelper.CurrentMusic);
+            SetTextColor(MusicPlayer.CurrentMusic);
         }
     }
 }

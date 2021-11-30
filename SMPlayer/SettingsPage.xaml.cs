@@ -140,7 +140,7 @@ namespace SMPlayer
                 string lyrics = await music.GetLyricsAsync();
                 if (string.IsNullOrEmpty(lyrics))
                 {
-                    if (music == MediaHelper.CurrentMusic)
+                    if (music == MusicPlayer.CurrentMusic)
                     {
                         skipped.Add(music);
                         continue;
@@ -163,7 +163,7 @@ namespace SMPlayer
                         MainPage.Instance.Loader.Hide();
                         goto Done;
                     }
-                    if (music == MediaHelper.CurrentMusic && skipped.Count > 1) continue;
+                    if (music == MusicPlayer.CurrentMusic && skipped.Count > 1) continue;
                     await Task.Run(async () =>
                     {
                         string lyrics = await LyricsHelper.SearchLyrics(music);
@@ -332,7 +332,7 @@ namespace SMPlayer
             Settings.settings.NotificationDisplay = SettingsEnum.NotificationDisplayModes[NotificationModeComboBox.SelectedIndex];
             if (Settings.settings.NotificationDisplay == NotificationDisplayMode.Reminder)
             {
-                await ToastHelper.ShowToast(MediaHelper.CurrentMusic, MediaHelper.PlaybackState);
+                await ToastHelper.ShowToast(MusicPlayer.CurrentMusic, MusicPlayer.PlaybackState);
             }
         }
 
