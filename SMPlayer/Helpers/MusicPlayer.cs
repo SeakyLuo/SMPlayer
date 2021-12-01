@@ -133,6 +133,8 @@ namespace SMPlayer
             };
             Player.MediaEnded += (sender, args) =>
             {
+                Helper.Print("MediaEnded");
+                Settings.settings.Played(CurrentMusic);
                 foreach (var listener in MediaControlListeners)
                     listener.MediaEnded();
             };
@@ -171,6 +173,7 @@ namespace SMPlayer
                     _PlaybackList.AutoRepeatEnabled = true;
                     break;
             }
+            //PrintPlaybackList(0, CurrentPlaylist.Count - 1);
             Settings.settings.Mode = mode;
             ShuffleEnabled = mode == PlayMode.Shuffle;
         }
@@ -344,12 +347,14 @@ namespace SMPlayer
         }
         private static void PrintPlaylist(int from, int to)
         {
+            Helper.Print("PrintPlaylist:");
             for (int k = from; k <= to; k++)
                 Debug.Write(CurrentPlaylist[k].Name + " ");
             Debug.Write("\n");
         }
         private static void PrintPlaybackList(int from, int to)
         {
+            Helper.Print("PrintPlaybackList:");
             for (int k = from; k <= to; k++)
                 Debug.Write(PlaybackList.Items[k].GetMusic().Name + " ");
             Debug.Write("\n");

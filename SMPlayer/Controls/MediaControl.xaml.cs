@@ -929,7 +929,7 @@ namespace SMPlayer
 
         public void Tick()
         {
-            if (ShouldUpdate && MusicPlayer.IsPlaying)
+            if (ShouldUpdate)
             {
                 MediaSlider.Value = MusicPlayer.Position;
             }

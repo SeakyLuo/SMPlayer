@@ -70,7 +70,7 @@ namespace SMPlayer
             StackFrame[] frames = new StackTrace().GetFrames();
             StackFrame frame = frames[1];
             System.Reflection.MethodBase m = frame.GetMethod();
-            Debug.WriteLine($"[{m.DeclaringType.FullName}][{m.Name}] {message}", args);
+            Debug.WriteLine($"[{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss.fff}][{m.DeclaringType.FullName}][{m.Name}] {message}", args);
         }
 
         public static void Log(string text)

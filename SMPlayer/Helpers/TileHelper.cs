@@ -199,7 +199,7 @@ namespace SMPlayer.Helpers
                     }
                 }
             }
-            var tile = new SecondaryTile(tileid, tilename, isPlaylist.ToString(), new Uri(uri), TileSize.Default);
+            var tile = new SecondaryTile(tileid, tilename, isPlaylist.ToString(), new Uri(uri), Windows.UI.StartScreen.TileSize.Default);
             tile.VisualElements.ShowNameOnSquare150x150Logo = tile.VisualElements.ShowNameOnSquare310x310Logo = tile.VisualElements.ShowNameOnWide310x150Logo = true;
             if (SecondaryTile.Exists(tileid)) await tile.RequestDeleteAsync();
             else await tile.RequestCreateAsync();

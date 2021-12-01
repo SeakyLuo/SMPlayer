@@ -8,5 +8,6 @@ namespace SMPlayer.Helpers
 {
     class Constants
     {
+        public static string NowPlaying = Helper.Localize("Now Playing"), MyFavorites = Helper.Localize("My Favorites");
     }
 }

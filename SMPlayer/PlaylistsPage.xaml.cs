@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.UI.Controls;
+using Microsoft.UI.Xaml.Controls;
 using SMPlayer.Dialogs;
 using SMPlayer.Models;
 using System;
@@ -95,7 +96,7 @@ namespace SMPlayer
 
         private async void PlaylistTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var tabview = sender as TabView;
+            var tabview = sender as Microsoft.Toolkit.Uwp.UI.Controls.TabView;
             if (tabview.SelectedIndex == -1)
             {
                 // If CurrentTab is deleted
