@@ -15,7 +15,7 @@ namespace SMPlayer
     {
         public static bool ShuffleEnabled;
         public static Music CurrentMusic;
-        public static ObservableCollection<Music> CurrentPlaylist = new ObservableCollection<Music>();
+        public static List<Music> CurrentPlaylist = new List<Music>();
 
         public static double Position
         {

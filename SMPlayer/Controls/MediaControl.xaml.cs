@@ -672,7 +672,7 @@ namespace SMPlayer
             var button = (Button)sender;
             if (button.Content.ToString() == "\uE768")
             {
-                if (MusicPlayer.CurrentMusic == null || MusicPlayer.CurrentPlaylist.Count == 0)
+                if (MusicPlayer.CurrentMusic == null || MusicPlayer.CurrentPlaylist.IsEmpty())
                     return;
                 MusicPlayer.Play();
             }

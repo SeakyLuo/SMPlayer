@@ -31,8 +31,8 @@ namespace SMPlayer
         private void SetEnabled()
         {
             LocateCurrentButton.Visibility = SaveToButton.Visibility = ClearButton.Visibility = PlayModeButton.Visibility = 
-                                            MusicPlayer.CurrentPlaylist.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
-            RandomPlayButton.Visibility = Settings.settings.MusicLibrary.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
+                                            MusicPlayer.CurrentPlaylist.IsEmpty() ? Visibility.Collapsed : Visibility.Visible;
+            RandomPlayButton.Visibility = Settings.settings.MusicLibrary.IsEmpty() ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void SaveToButton_Click(object sender, RoutedEventArgs e)

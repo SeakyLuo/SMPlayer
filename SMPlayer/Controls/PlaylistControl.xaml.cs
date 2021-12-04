@@ -33,7 +33,12 @@ namespace SMPlayer
         }
         public static readonly DependencyProperty IsNowPlayingProperty = DependencyProperty.Register("SelectableProperty", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(false));
 
-        public ObservableCollection<Music> CurrentPlaylist = new ObservableCollection<Music>();
+        public ObservableCollection<Music> CurrentPlaylist
+        {
+            get => currentPlaylist;
+            set => currentPlaylist.SetTo(value);
+        }
+        private ObservableCollection<Music> currentPlaylist = new ObservableCollection<Music>();
         private static List<IMusicRequestListener> MusicRequestListeners = new List<IMusicRequestListener>();
         public bool AlternatingRowColor { get; set; }
         public IPlaylistScrollListener ScrollListener { get; set; }
@@ -59,8 +64,8 @@ namespace SMPlayer
 
         public ObservableCollection<Music> ItemsSource
         {
-            get => SongsListView.ItemsSource as ObservableCollection<Music>;
-            set => SongsListView.ItemsSource = CurrentPlaylist = value;
+            get => currentPlaylist;
+            set => currentPlaylist.SetTo(value);
         }
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
         public bool ShowAlbumText

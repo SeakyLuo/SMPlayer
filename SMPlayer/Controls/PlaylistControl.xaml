@@ -27,7 +27,7 @@
         DragItemsStarting="SongsListView_DragItemsStarting"
         IsItemClickEnabled="True"
         ItemClick="SongsListView_ItemClick"
-        ItemsSource="{x:Bind CurrentPlaylist, Mode=OneWay}"
+        ItemsSource="{x:Bind CurrentPlaylist, Mode=TwoWay}"
         ItemContainerStyle="{StaticResource StretchListViewItemStyle}"
         Loaded="SongsListView_Loaded"
         Opacity="{x:Bind Opacity}"

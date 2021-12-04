@@ -83,7 +83,7 @@ namespace SMPlayer
             HidePlaylistCover();
             MusicPlayer.FindMusicAndSetPlaying(playlist.Songs, null, MusicPlayer.CurrentMusic);
             CurrentPlaylist = playlist;
-            HeaderedPlaylist.ItemsSource = playlist.Songs;
+            HeaderedPlaylist.CurrentPlaylist = playlist.Songs;
             PlaylistNameTextBlock.Text = string.IsNullOrEmpty(playlist.Name) && !IsPlaylist ? Helper.LocalizeMessage("UnknownAlbum") : playlist.Name;
             SetPlaylistInfo(SongCountConverter.ToStr(playlist.Songs));
             ShuffleButton.IsEnabled = !playlist.IsEmpty;

@@ -103,6 +103,12 @@ namespace SMPlayer
             list.Remove(item);
             list.Insert(0, item);
         }
+        public static void Move<T>(this List<T> list, int from, int to)
+        {
+            T ele = list[from];
+            list.Remove(ele);
+            list.Insert(to, ele);
+        }
         public static int FindIndex<T>(this IEnumerable<T> list, Predicate<T> match)
         {
             if (match == null) return -1;
