@@ -1,5 +1,4 @@
-﻿using MetroLog;
-using SMPlayer.Helpers.VoiceAssistant;
+﻿using SMPlayer.Helpers.VoiceAssistant;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
