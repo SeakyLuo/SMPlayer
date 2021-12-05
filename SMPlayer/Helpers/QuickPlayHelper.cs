@@ -14,6 +14,18 @@ namespace SMPlayer.Helpers
 
         public static List<Music> GetPlaylist(int randomLimit)
         {
+            //HashSet<Music> songs = Helper.Timer(() => Settings.settings.AllSongs.RandItems(randomLimit * 2).ToHashSet(), "AllSongs.RandItems");
+            //PreferenceSettings preference = Settings.settings.Preference;
+            //Helper.Timer(() => HandlePreferredSongs(songs, preference), "HandlePreferredSongs");
+            //Helper.Timer(() => HandlePreferredArtists(songs, preference), "HandlePreferredArtists");
+            //Helper.Timer(() => HandlePreferredAlbums(songs, preference), "HandlePreferredAlbums");
+            //Helper.Timer(() => HandlePreferredPlaylists(songs, preference), "HandlePreferredPlaylists");
+            //Helper.Timer(() => HandlePreferredFolders(songs, preference), "HandlePreferredFolders");
+            //Helper.Timer(() => HandledRecentAdded(songs, preference), "HandledRecentAdded");
+            //Helper.Timer(() => HandledMyFavorites(songs, preference), "HandledMyFavorites");
+            //Helper.Timer(() => HandledMostPlayed(songs, preference, randomLimit), "HandledMostPlayed");
+            //Helper.Timer(() => HandledLeastPlayed(songs, preference, randomLimit), "HandledLeastPlayed");
+            //return Helper.Timer(() => songs.RandItems(randomLimit).ToList(), "Final RandItems");
             HashSet<Music> songs = Settings.settings.AllSongs.RandItems(randomLimit * 2).ToHashSet();
             PreferenceSettings preference = Settings.settings.Preference;
             HandlePreferredSongs(songs, preference);

@@ -85,12 +85,12 @@ namespace SMPlayer
             StackFrame frame = frames[4];
             MethodBase method = frame.GetMethod();
             string className = method.DeclaringType.FullName;
-            return string.Format($"[{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss.fff}][{className}][{method.Name}][{level}]");
+            return string.Format($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}][{className}][{method.Name}][{level}]");
         }
 
         private void AppendText(string filename, string message)
         {
-            string filePath = Path.Combine(LogFolder.Path, $"{filename}_{DateTime.UtcNow:yyyy-MM-dd}.log");
+            string filePath = Path.Combine(LogFolder.Path, $"{filename}_{DateTime.Now:yyyy-MM-dd}.log");
             File.AppendAllText(filePath, message + Environment.NewLine);
         }
     }

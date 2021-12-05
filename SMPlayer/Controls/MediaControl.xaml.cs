@@ -968,6 +968,7 @@ namespace SMPlayer
             PauseMusic();
             CurrentMusic = null;
             AlbumCover.Source = MusicImage.DefaultImage;
+            MainMediaControlGrid.Background = ColorHelper.HighlightBrush;
             TitleTextBlock.Text = "";
             ArtistTextBlock.Text = "";
             FullAlbumTextBlock.Text = "";

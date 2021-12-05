@@ -63,6 +63,21 @@ namespace SMPlayer
         private static List<Music> NotFoundHistory = new List<Music>();
         private static readonly Random random = new Random();
 
+        public static T Timer<T>(Func<T> action, string funcName = null)
+        {
+            DateTime start = DateTime.Now;
+            T t = action.Invoke();
+            Log.Debug($"Time of {funcName ?? action.Method.Name}: {(DateTime.Now - start).TotalMilliseconds}");
+            return t;
+        }
+
+        public static void Timer(Action action, string funcName = null)
+        {
+            DateTime start = DateTime.Now;
+            action.Invoke();
+            Log.Debug($"Time of {funcName ?? action.Method.Name}: {(DateTime.Now - start).TotalMilliseconds}");
+        }
+
         public static int RandRange(int min, int max)
         {
             return random.Next(min, max);
