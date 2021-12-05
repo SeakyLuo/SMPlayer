@@ -1,4 +1,5 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Helpers;
+using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -133,7 +134,7 @@ namespace SMPlayer
             };
             Player.MediaEnded += (sender, args) =>
             {
-                Helper.Print("MediaEnded");
+                Log.Info("MediaEnded");
                 Settings.settings.Played(CurrentMusic);
                 foreach (var listener in MediaControlListeners)
                     listener.MediaEnded();
@@ -347,14 +348,14 @@ namespace SMPlayer
         }
         private static void PrintPlaylist(int from, int to)
         {
-            Helper.Print("PrintPlaylist:");
+            Log.Info("PrintPlaylist:");
             for (int k = from; k <= to; k++)
                 Debug.Write(CurrentPlaylist[k].Name + " ");
             Debug.Write("\n");
         }
         private static void PrintPlaybackList(int from, int to)
         {
-            Helper.Print("PrintPlaybackList:");
+            Log.Info("PrintPlaybackList:");
             for (int k = from; k <= to; k++)
                 Debug.Write(PlaybackList.Items[k].GetMusic().Name + " ");
             Debug.Write("\n");
@@ -404,7 +405,7 @@ namespace SMPlayer
 
         public static bool RemoveMusic(Music music)
         {
-            if (music == null || music.Index > -1) return false;
+            if (music == null || music.Index < 0) return false;
             try
             {
                 CurrentPlaylist.RemoveAt(music.Index);
@@ -415,8 +416,9 @@ namespace SMPlayer
                     listener.RemoveMusic(music);
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Log.Warn("RemoveMusic Exception {0}", e);
                 return false;
             }
         }
@@ -432,11 +434,11 @@ namespace SMPlayer
                 listener.Cleared();
         }
 
-        public static void FindMusicAndSetPlaying(IEnumerable<Music> playlist, Music current, Music next)
+        public static void SetMusicPlaying(IEnumerable<Music> playlist, Music playing)
         {
             if (playlist.IsEmpty()) return;
             foreach (var music in playlist)
-                music.IsPlaying = music.Index >= 0 ? IsMusicPlaying(music) : music.Equals(next);
+                music.IsPlaying = music.Index >= 0 ? IsMusicPlaying(music) : music.Equals(playing);
         }
 
         public static async void RemoveBadMusic()

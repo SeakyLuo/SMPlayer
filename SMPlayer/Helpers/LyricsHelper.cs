@@ -43,11 +43,11 @@ namespace SMPlayer.Helpers
             catch (ArgumentException e)
             {
                 // Value cannot be null. ?????????
-                Helper.LogException(e);
+                Log.Warn("SetLyrics.ArgumentException {0}", e);
             }
             catch (Exception e)
             {
-                Helper.LogException(e);
+                Log.Warn("SetLyrics.Exception {0}", e);
             }
         }
 
@@ -109,7 +109,7 @@ namespace SMPlayer.Helpers
             }
             catch (Exception e)
             {
-                Helper.LogException(e);
+                Log.Warn("Exception {0}", e);
             }
             return DisplayLine;
         }

@@ -1,4 +1,5 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Helpers;
+using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -66,6 +67,11 @@ namespace SMPlayer
                 list[n] = value;
             }
             return list;
+        }
+
+        public static T RandItem<T>(this IEnumerable<T> list)
+        {
+            return list.ElementAt(Helper.RandRange(list.Count()));
         }
 
         public static IEnumerable<Music> ToMusicList(this IEnumerable<string> paths)
@@ -305,6 +311,18 @@ namespace SMPlayer
         public static Music GetMusic(this MediaPlaybackItem item)
         {
             return item.Source.CustomProperties["Source"] as Music;
+        }
+
+        public static IEnumerable<T> RandItems<T>(this IEnumerable<T> enumerable, int count) where T : class
+        {
+            List<T> list = enumerable is List<T> l ? l : enumerable.ToList();
+            if (list.Count <= count) return enumerable.Shuffle();
+            HashSet<int> indices = new HashSet<int>();
+            while (indices.Count < count)
+            {
+                indices.Add(Helper.RandRange(list.Count));
+            }
+            return indices.Select(index => list[index]);
         }
     }
 }

@@ -12,12 +12,13 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MyFavoritesPage : Page
+    public sealed partial class MyFavoritesPage : Page, IMusicEventListener
     {
         public MyFavoritesPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            Settings.AddMusicEventListener(this);
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -27,6 +28,23 @@ namespace SMPlayer
                 await MyFavoritesPlaylistControl.SetPlaylist(Settings.settings.MyFavorites);
             MainPage.Instance.TitleBarBackground = MyFavoritesPlaylistControl.HeaderBackground;
             MainPage.Instance.TitleBarForeground = MainPage.Instance.IsMinimal ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
+        }
+
+        void IMusicEventListener.Added(Music music)
+        {
+        }
+
+        async void IMusicEventListener.Liked(Music music, bool isFavorite)
+        {
+            await MyFavoritesPlaylistControl.SetPlaylist(Settings.settings.MyFavorites);
+        }
+
+        void IMusicEventListener.Modified(Music before, Music after)
+        {
+        }
+
+        void IMusicEventListener.Removed(Music music)
+        {
         }
     }
 }

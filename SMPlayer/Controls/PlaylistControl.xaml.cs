@@ -119,6 +119,7 @@ namespace SMPlayer
         public PlaylistControl()
         {
             this.InitializeComponent();
+            MusicPlayer.CurrentPlaylistChangedListeners.Add(this);
             MusicPlayer.SwitchMusicListeners.Add(this);
         }
 
@@ -192,7 +193,7 @@ namespace SMPlayer
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MusicPlayer.FindMusicAndSetPlaying(CurrentPlaylist, current, next));
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MusicPlayer.SetMusicPlaying(CurrentPlaylist, next));
         }
 
         public void CancelMusicRemoval(int index, Music music)
@@ -240,30 +241,36 @@ namespace SMPlayer
             if (dialog == null) dialog = new Dialogs.RemoveDialog();
             if (dialog.IsChecked)
             {
-                RemoveMusicAndNotify(music, true);
+                RemoveMusicAndNotifyUser(music, true);
             }
             else
             {
-                dialog.Confirm = () => RemoveMusicAndNotify(music, true);
+                dialog.Confirm = () => RemoveMusicAndNotifyUser(music, true);
                 dialog.Message = Helper.LocalizeMessage("RemoveMusic", music.Name);
                 await dialog.ShowAsync();
             }
         }
 
-        private void RemoveMusic(Music music, bool alternateRowBackgroud = true)
+        private void RemoveMusicAndNotifyListeners(Music music, bool alternateRowBackgroud = true)
         {
-            removedMusicIndex = CurrentPlaylist.IndexOf(music);
-            if (removedMusicIndex == -1) return;
-            removedMusic = music;
-            CurrentPlaylist.RemoveAt(removedMusicIndex);
-            if (alternateRowBackgroud) AlternateRowBackgroud(removedMusicIndex);
+            if (!RemoveMusic(music)) return;
+            if (IsNowPlaying) MusicPlayer.RemoveMusic(music);
             foreach (var listener in RemoveListeners) listener.MusicRemoved(removedMusicIndex, music, CurrentPlaylist);
         }
 
-        private void RemoveMusicAndNotify(Music music, bool showNotification)
+        private bool RemoveMusic(Music music, bool alternateRowBackgroud = true)
         {
-            if (IsNowPlaying) MusicPlayer.RemoveMusic(music);
-            RemoveMusic(music);
+            removedMusicIndex = IsNowPlaying ? music.Index : CurrentPlaylist.IndexOf(music);
+            if (removedMusicIndex == -1) return false;
+            removedMusic = music;
+            CurrentPlaylist.RemoveAt(removedMusicIndex);
+            if (alternateRowBackgroud) AlternateRowBackgroud(removedMusicIndex);
+            return true;
+        }
+
+        private void RemoveMusicAndNotifyUser(Music music, bool showNotification)
+        {
+            RemoveMusicAndNotifyListeners(music, true);
             if (showNotification)
                 Helper.ShowCancelableNotification(Helper.LocalizeMessage("MusicRemoved", music.Name), () => CancelMusicRemoval(removedMusicIndex, music));
         }
@@ -272,7 +279,7 @@ namespace SMPlayer
         {
             foreach (var music in playlist)
             {
-                RemoveMusic(music, false);
+                RemoveMusicAndNotifyListeners(music, false);
             }
             AlternateRowBackgroud();
             Helper.ShowNotification("SelectedItemsRemoved");
@@ -349,7 +356,7 @@ namespace SMPlayer
 
         void IMenuFlyoutItemClickListener.Delete(Music music)
         {
-            RemoveMusicAndNotify(music, false);
+            RemoveMusicAndNotifyUser(music, false);
         }
 
         void IMenuFlyoutItemClickListener.Remove(Music music)
@@ -470,7 +477,7 @@ namespace SMPlayer
 
         void IMusicEventListener.Removed(Music music)
         {
-            RemoveMusic(music);
+            RemoveMusicAndNotifyListeners(music);
         }
 
         void IMusicEventListener.Modified(Music before, Music after)

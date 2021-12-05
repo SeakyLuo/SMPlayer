@@ -30,7 +30,7 @@ namespace SMPlayer
         public static string TimeStamp { get => DateTime.Now.ToString("yyyyMMdd_HHmmss"); }
         public static string TimeStampInMills { get => DateTime.Now.ToString("yyyyMMdd_HHmmss.fff"); }
 
-        public static StorageFolder CurrentFolder, ThumbnailFolder, TempFolder, LogFolder;
+        public static StorageFolder CurrentFolder, ThumbnailFolder, TempFolder;
         public static StorageFolder LocalFolder { get => ApplicationData.Current.LocalFolder; }
 
         public static ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
@@ -60,59 +60,8 @@ namespace SMPlayer
             }
         }
 
-        private const string ExceptionLogFileNamePrefix = "ExceptionLog", LogFileNamePrefix = "Log";
-
         private static List<Music> NotFoundHistory = new List<Music>();
         private static readonly Random random = new Random();
-
-        public static void Print(string message, params object[] args)
-        {
-            StackFrame[] frames = new StackTrace().GetFrames();
-            StackFrame frame = frames[1];
-            System.Reflection.MethodBase m = frame.GetMethod();
-            Debug.WriteLine($"[{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss.fff}][{m.DeclaringType.FullName}][{m.Name}] {message}", args);
-        }
-
-        public static void Log(string text)
-        {
-            Logger(LogFileNamePrefix, text);
-        }
-
-        public static void LogException(Exception e)
-        {
-            string text = "Exception: " + e.ToString() + "\nSource: " + e.Source + "\nStackTrace: " + e.StackTrace +
-                          "\nTargetSite: " + e.TargetSite + "\nHelpLink: " + e.HelpLink + "\nHResult" + e.HResult;
-            Logger(ExceptionLogFileNamePrefix, text);
-        }
-
-        private static async void Logger(string prefix, string text)
-        {
-            if (LogFolder == null) LogFolder = await CreateFolder("Logs");
-            StorageFile log;
-            string name = prefix + TimeStampInMills;
-            int index = 0;
-            while (true)
-            {
-                try
-                {
-                    log = await LogFolder.CreateFileAsync(name + ".txt");
-                    break;
-                }
-                catch (Exception)
-                {
-                    // 当文件已存在时，无法创建该文件
-                    name += "_" + index++;
-                }
-            }
-            await FileIO.WriteTextAsync(log, text);
-        }
-
-        public static void Timer(Action action, string funcName = null)
-        {
-            DateTime start = DateTime.Now;
-            action.Invoke();
-            Debug.WriteLine("Time of " + (funcName ?? action.Method.Name) + ": " + (DateTime.Now - start).TotalMilliseconds);
-        }
 
         public static int RandRange(int min, int max)
         {
@@ -124,39 +73,17 @@ namespace SMPlayer
             return random.Next(max);
         }
 
-        public static T RandItem<T>(this IEnumerable<T> list)
-        {
-            return list.ElementAt(RandRange(list.Count()));
-        }
-
-        public static IEnumerable<T> RandItems<T>(this IEnumerable<T> list, int count)
-        {
-            int listSize = list.Count();
-            if (listSize < count) return list.Shuffle();
-            HashSet<int> indices = new HashSet<int>();
-            while (indices.Count < count)
-            {
-                indices.Add(RandRange(listSize));
-            }
-            return indices.Select(index => list.ElementAt(index));
-        }
         public static async Task Init()
         {
             var initDefaultImage = MusicImage.DefaultImage; // 静态资源只有在用到的时候才会被加载，所以做一个无用的声明强行用到
-            TempFolder = await CreateFolder("Temp");
-            if (LogFolder == null) LogFolder = await CreateFolder("Logs");
+            TempFolder = await FileHelper.CreateFolder("Temp");
             await ClearBackups();
-        }
-
-        private static async Task<StorageFolder> CreateFolder(string folderName)
-        {
-            return await ApplicationData.Current.LocalFolder.CreateFolderAsync(folderName, CreationCollisionOption.OpenIfExists);
         }
 
         public static async Task ClearBackups(int maxBackups = 5)
         {
             await ClearTempFiles(maxBackups);
-            await ClearLogFiles(maxBackups);
+            await Log.ClearLogFiles(maxBackups);
         }
 
         private static async Task ClearTempFiles(int maxBackups = 5)
@@ -169,15 +96,7 @@ namespace SMPlayer
             await ClearBackup(files, AlbumsPage.JsonFilename, maxBackups);
         }
 
-        private static async Task ClearLogFiles(int maxBackups = 5)
-        {
-            if (LogFolder == null) return;
-            var files = await LogFolder.GetFilesAsync();
-            await ClearBackup(files, LogFileNamePrefix, maxBackups);
-            await ClearBackup(files, ExceptionLogFileNamePrefix, maxBackups);
-        }
-
-        private static async Task ClearBackup(IEnumerable<StorageFile> files, string prefix, int maxBackups)
+        public static async Task ClearBackup(IEnumerable<StorageFile> files, string prefix, int maxBackups)
         {
             var targets = files.Where(f => f.Name.StartsWith(prefix)).OrderBy(f => f.DateCreated);
             foreach (var file in targets.Take(targets.Count() - maxBackups))
@@ -188,46 +107,6 @@ namespace SMPlayer
         {
             ulong kb = bytes >> 10;
             return kb < 1024 ? kb + " KB" : Math.Round((double)kb / 1024, 2) + " MB";
-        }
-        public static async Task<bool> FileNotExist(string path)
-        {
-            return !await FileExists(path);
-        }
-        public static async Task<bool> FileExists(string path)
-        {
-            try
-            {
-                StorageFile file = await StorageFile.GetFileFromPathAsync(path);
-                return file != null;
-            }
-            catch (FileNotFoundException)
-            {
-                return false;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-        public static async Task<bool> FolderNotExist(string path)
-        {
-            return !await FolderExists(path);
-        }
-        public static async Task<bool> FolderExists(string path)
-        {
-            try
-            {
-                StorageFolder folder = await StorageFolder.GetFolderFromPathAsync(path);
-                return folder != null;
-            }
-            catch (FileNotFoundException)
-            {
-                return false;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
         }
         public static IMainPageContainer GetMainPageContainer()
         {
@@ -255,7 +134,7 @@ namespace SMPlayer
         }
         public static void ShowPathNotFoundNotification(string path, int duration = 5000)
         {
-            GetMainPageContainer().ShowNotification(LocalizeMessage("PathNotFound", Music.GetFileFolder(path)), duration);
+            GetMainPageContainer().ShowNotification(LocalizeMessage("PathNotFound", FileHelper.GetParentPath(path)), duration);
         }
         public static void ShowAddMusicResultNotification(AddMusicResult result, Music target = null)
         {

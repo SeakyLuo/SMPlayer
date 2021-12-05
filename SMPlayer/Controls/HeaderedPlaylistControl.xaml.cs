@@ -81,7 +81,7 @@ namespace SMPlayer
         public async Task SetPlaylist(Playlist playlist)
         {
             HidePlaylistCover();
-            MusicPlayer.FindMusicAndSetPlaying(playlist.Songs, null, MusicPlayer.CurrentMusic);
+            MusicPlayer.SetMusicPlaying(playlist.Songs, MusicPlayer.CurrentMusic);
             CurrentPlaylist = playlist;
             HeaderedPlaylist.CurrentPlaylist = playlist.Songs;
             PlaylistNameTextBlock.Text = string.IsNullOrEmpty(playlist.Name) && !IsPlaylist ? Helper.LocalizeMessage("UnknownAlbum") : playlist.Name;
@@ -119,8 +119,8 @@ namespace SMPlayer
 
         public async Task SetMusicDisplayItem(MusicDisplayItem item)
         {
-            PlaylistCover.Source = await item.GetThumbnailAsync();
             HeaderBackground = item.Color;
+            PlaylistCover.Source = await item.GetThumbnailAsync();
         }
 
         public void SetPlaylistInfo(string info)
@@ -137,8 +137,8 @@ namespace SMPlayer
         {
             dialog = new RenameDialog(RenameOption.Rename, RenameTarget.Playlist, CurrentPlaylist.Name)
             {
-                Validate = (newName) => Settings.settings.ValidatePlaylistName(newName),
-                Confirmed = (newName) => Confirmed(newName)
+                Validate = Settings.settings.ValidatePlaylistName,
+                Confirmed = Confirmed
             };
             await dialog.ShowAsync();
         }
@@ -146,6 +146,7 @@ namespace SMPlayer
         public void Confirmed(string newName)
         {
             PlaylistNameTextBlock.Text = newName;
+            Settings.settings.RenamePlaylist(CurrentPlaylist, newName);
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
@@ -182,6 +183,10 @@ namespace SMPlayer
         public void MusicRemoved(int index, Music music, IEnumerable<Music> newCollection)
         {
             if (AllowClear) SetPlaylistInfo(SongCountConverter.ToStr(newCollection));
+            if (IsPlaylist)
+            {
+                Settings.settings.SelectPlaylistById(CurrentPlaylist.Id)?.Remove(music);
+            }
         }
 
         private async void PinToStart_Click(object sender, RoutedEventArgs e)
@@ -237,7 +242,7 @@ namespace SMPlayer
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
-                MusicPlayer.FindMusicAndSetPlaying(CurrentPlaylist.Songs, current, next);
+                MusicPlayer.SetMusicPlaying(CurrentPlaylist.Songs, next);
             });
         }
 
@@ -457,6 +462,18 @@ namespace SMPlayer
             if (_blurredBackgroundImageVisual != null)
             {
                 _blurredBackgroundImageVisual.Size = new Vector2((float)OverlayRectangle.ActualWidth, (float)OverlayRectangle.ActualHeight);
+            }
+        }
+
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (CurrentPlaylist == null) return;
+            if (CurrentPlaylist.DisplayItem == null || CurrentPlaylist.DisplayItem.IsDefault)
+            {
+                HidePlaylistCover();
+                await CurrentPlaylist.LoadDisplayItemAsync();
+                await SetMusicDisplayItem(CurrentPlaylist.DisplayItem);
+                ShowPlaylistCover();
             }
         }
     }

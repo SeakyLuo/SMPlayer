@@ -45,7 +45,7 @@ namespace SMPlayer
                     if (Data is IMusicable musicable)
                     {
                         Music music = musicable.ToMusic();
-                        if (await Helper.FileNotExist(music.Path))
+                        if (await FileHelper.FileNotExist(music.Path))
                         {
                             Helper.ShowMusicNotFoundNotification(music.Name);
                             return;
@@ -96,7 +96,7 @@ namespace SMPlayer
                     if (Data is IMusicable musicable)
                     {
                         Music music = musicable.ToMusic();
-                        if (await Helper.FileNotExist(music.Path))
+                        if (await FileHelper.FileNotExist(music.Path))
                         {
                             Helper.ShowMusicNotFoundNotification(music.Name);
                             return;
@@ -132,11 +132,6 @@ namespace SMPlayer
             return addToItem;
         }
 
-        internal static MenuFlyoutItemBase GetRenameFolderItem(FolderTree tree, Action<object, object> p)
-        {
-            throw new NotImplementedException();
-        }
-
         public MenuFlyout GetAddToPlaylistsMenuFlyout(IMenuFlyoutItemClickListener listener = null)
         {
             var flyout = new MenuFlyout();
@@ -150,7 +145,7 @@ namespace SMPlayer
                 if (Data is IMusicable musicable)
                 {
                     Music music = musicable.ToMusic();
-                    if (await Helper.FileNotExist(music.Path))
+                    if (await FileHelper.FileNotExist(music.Path))
                     {
                         Helper.ShowMusicNotFoundNotification(music.Name);
                         return;
@@ -161,6 +156,7 @@ namespace SMPlayer
                     Validate = Settings.settings.ValidatePlaylistName,
                     Confirmed = (newName) =>
                     {
+                        Settings.settings.AddPlaylist(newName, Data);
                         listener?.AddTo(Data, null, -1, AddToCollectionType.NewPlaylist);
                         foreach (var clickListener in ClickListeners)
                             clickListener?.AddTo(Data, null, -1, AddToCollectionType.NewPlaylist);
@@ -184,7 +180,7 @@ namespace SMPlayer
                     if (Data is IMusicable musicable)
                     {
                         Music music = musicable.ToMusic();
-                        if (await Helper.FileNotExist(music.Path))
+                        if (await FileHelper.FileNotExist(music.Path))
                         {
                             Helper.ShowMusicNotFoundNotification(music.Name);
                             return;
@@ -259,12 +255,12 @@ namespace SMPlayer
             };
             item.Click += async (s, args) =>
             {
-                if (path.Contains(".") && await Helper.FileNotExist(path))
+                if (path.Contains(".") && await FileHelper.FileNotExist(path))
                 {
                     Helper.ShowMusicNotFoundNotification(FileHelper.GetDisplayName(path));
                     return;
                 }
-                if (!path.Contains(".") && await Helper.FolderNotExist(path))
+                if (!path.Contains(".") && await FileHelper.FolderNotExist(path))
                 {
                     Helper.ShowPathNotFoundNotification(path);
                     return;
@@ -476,7 +472,7 @@ namespace SMPlayer
                         MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
                         listener?.Delete(music);
                         Settings.settings.RemoveMusic(music);
-                        if (!await Helper.FileNotExist(music.Path))
+                        if (!await FileHelper.FileNotExist(music.Path))
                         {
                             StorageFile file = await StorageFile.GetFileFromPathAsync(music.Path);
                             await file.DeleteAsync();
@@ -503,7 +499,7 @@ namespace SMPlayer
             };
             albumItem.Click += async (s, args) =>
             {
-                if (await Helper.FileNotExist(music.Path))
+                if (await FileHelper.FileNotExist(music.Path))
                 {
                     Helper.ShowMusicNotFoundNotification(music.Name);
                     return;
@@ -530,7 +526,7 @@ namespace SMPlayer
                 };
                 artistItem.Click += async (s, args) =>
                 {
-                    if (await Helper.FileNotExist(music.Path))
+                    if (await FileHelper.FileNotExist(music.Path))
                     {
                         Helper.ShowMusicNotFoundNotification(music.Name);
                         return;
@@ -550,7 +546,7 @@ namespace SMPlayer
             };
             musicInfoItem.Click += async (s, args) =>
             {
-                if (await Helper.FileNotExist(music.Path))
+                if (await FileHelper.FileNotExist(music.Path))
                 {
                     Helper.ShowMusicNotFoundNotification(music.Name);
                     return;
@@ -566,7 +562,7 @@ namespace SMPlayer
             };
             lyricsItem.Click += async (s, args) =>
             {
-                if (await Helper.FileNotExist(music.Path))
+                if (await FileHelper.FileNotExist(music.Path))
                 {
                     Helper.ShowMusicNotFoundNotification(music.Name);
                     return;
@@ -584,7 +580,7 @@ namespace SMPlayer
                 };
                 albumArtItem.Click += async (s, args) =>
                 {
-                    if (await Helper.FileNotExist(music.Path))
+                    if (await FileHelper.FileNotExist(music.Path))
                     {
                         Helper.ShowMusicNotFoundNotification(music.Name);
                         return;

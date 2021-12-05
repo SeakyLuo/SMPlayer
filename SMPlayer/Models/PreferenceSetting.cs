@@ -21,11 +21,11 @@ namespace SMPlayer.Models
         public List<PreferenceItem> PreferredAlbums { get; set; } = new List<PreferenceItem>();
         public List<PreferenceItem> PreferredPlaylists { get; set; } = new List<PreferenceItem>();
         public List<PreferenceItem> PreferredFolders { get; set; } = new List<PreferenceItem>();
-        public bool Songs { get; set; } = false;
-        public bool Artists { get; set; } = false;
-        public bool Albums { get; set; } = false;
-        public bool Playlists { get; set; } = false;
-        public bool Folders { get; set; } = false;
+        public bool Songs { get; set; } = true;
+        public bool Artists { get; set; } = true;
+        public bool Albums { get; set; } = true;
+        public bool Playlists { get; set; } = true;
+        public bool Folders { get; set; } = true;
         public PreferenceItem RecentAdded { get; set; } = new PreferenceItem();
         public PreferenceItem MyFavorites { get; set; } = new PreferenceItem();
         public PreferenceItem MostPlayed { get; set; } = new PreferenceItem();

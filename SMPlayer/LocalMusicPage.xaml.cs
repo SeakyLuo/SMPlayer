@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Controls;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
@@ -73,10 +74,10 @@ namespace SMPlayer
                     GridMusicView.Setup(tree.Songs);
                 }
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException e)
             {
                 // Loading while Set New Folder will cause this Exception
-                Helper.Print("InvalidOperationException On Local Music Page");
+                Log.Warn("InvalidOperationException On Local Music Page {0}", e);
             }
             TreePath = tree.Path;
             CurrentTree = tree;
@@ -85,7 +86,7 @@ namespace SMPlayer
 
         public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MusicPlayer.FindMusicAndSetPlaying(Songs, current, next));
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MusicPlayer.SetMusicPlaying(Songs, next));
         }
 
         public void ModeChanged(bool isGridView)

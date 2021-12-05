@@ -17,9 +17,7 @@
             Margin="10,10,10,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            x:DefaultBindMode="OneWay"
             AlternatingRowBackground="WhiteSmoke"
-            AlternatingRowForeground="Gray"
             AreRowDetailsFrozen="False"
             AreRowGroupHeadersFrozen="True"
             AutoGenerateColumns="False"
@@ -45,7 +43,7 @@
                     Binding="{Binding IsPlaying, Converter={StaticResource MusicIsPlayingConverter}, Mode=OneWay}"
                     CanUserResize="False"
                     CanUserSort="False"
-                    Foreground="#0078D7"
+                    Foreground="#FF3399FF"
                     Header="">
                     <controls:DataGridTextColumn.CellStyle>
                         <Style TargetType="controls:DataGridCell">

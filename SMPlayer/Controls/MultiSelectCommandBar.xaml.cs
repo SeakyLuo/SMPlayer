@@ -117,21 +117,12 @@ namespace SMPlayer.Controls
             HideAfterOperation();
         }
 
-        void IMenuFlyoutItemClickListener.Delete(Music music)
-        {
-        }
+        void IMenuFlyoutItemClickListener.Delete(Music music) { }
+        void IMenuFlyoutItemClickListener.UndoDelete(Music music) { }
 
-        void IMenuFlyoutItemClickListener.UndoDelete(Music music)
-        {
-        }
+        void IMenuFlyoutItemClickListener.Remove(Music music) { }
 
-        void IMenuFlyoutItemClickListener.Remove(Music music)
-        {
-        }
-
-        void IMenuFlyoutItemClickListener.Select(object data)
-        {
-        }
+        void IMenuFlyoutItemClickListener.Select(object data) { }
     }
 
     public interface IMultiSelectListener

@@ -56,7 +56,7 @@ namespace SMPlayer.Controls
         {
             if (sender.DataContext is GridFolderView data)
             {
-                Helper.Print($"EffectiveViewportChanged, name {data.Name}, isLoaded {data.ThumbnailLoaded}, isPartiallyVisible {ImageHelper.NeedsLoading(sender, args)}");
+                Log.Info($"EffectiveViewportChanged, name {data.Name}, isLoaded {data.ThumbnailLoaded}, isPartiallyVisible {ImageHelper.NeedsLoading(sender, args)}");
                 if (!data.ThumbnailLoaded && ImageHelper.NeedsLoading(sender, args))
                 {
                     await data.LoadThumbnailAsync();

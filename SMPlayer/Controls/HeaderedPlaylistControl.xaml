@@ -6,6 +6,7 @@
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     SizeChanged="UserControl_SizeChanged"
+    Loaded="UserControl_Loaded"
     mc:Ignorable="d">
 
     <local:PlaylistControl

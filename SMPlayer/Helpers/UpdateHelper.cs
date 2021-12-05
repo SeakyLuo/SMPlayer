@@ -53,10 +53,10 @@ namespace SMPlayer.Helpers
             return Helper.CurrentFolder == null || await UpdateMusicLibrary(Helper.CurrentFolder, message);
         }
 
-        public static async Task<bool> UpdateMusicLibrary(StorageFolder folder, string message = null)
+        public static async Task<bool> UpdateMusicLibrary(StorageFolder folder, string loadingMessage = null)
         {
-            MainPage.Instance.Loader.ShowDeterminant(message ?? "LoadMusicLibrary", true);
-            treeUpdateListener.Message = message;
+            MainPage.Instance.Loader.ShowDeterminant(loadingMessage ?? "LoadMusicLibrary", true);
+            treeUpdateListener.Message = loadingMessage;
             FolderTree tree = new FolderTree();
             TreeOperationIndicator indicator = new TreeOperationIndicator()
             {
@@ -66,10 +66,10 @@ namespace SMPlayer.Helpers
             {
                 return false;
             }
-            MainPage.Instance.Loader.SetLocalizedText(message ?? "UpdateMusicLibrary");
+            MainPage.Instance.Loader.SetLocalizedText(loadingMessage ?? "UpdateMusicLibrary");
             Helper.CurrentFolder = folder;
 
-            Settings.settings.Tree = Settings.settings.Tree.IsEmpty ? tree : MergeTree(Settings.settings.Tree, tree);
+            Settings.settings.Tree = Settings.settings.Tree.IsEmpty ? SetTreeId(tree) : MergeTree(Settings.settings.Tree, tree);
             Settings.settings.RootPath = folder.Path;
 
             MainPage.Instance.Loader.Progress = 0;
@@ -195,7 +195,7 @@ namespace SMPlayer.Helpers
         {
             foreach (var branch in target.Trees)
             {
-                if (source.FindTree(branch) is FolderTree src)
+                if (source.FindTree(branch.Path) is FolderTree src)
                 {
                     // 如果有能合并的老树
                     MergeTree(src, branch);
@@ -206,11 +206,21 @@ namespace SMPlayer.Helpers
                     branch.Id = Settings.settings.IdGenerator.GenerateTreeId();
                 }
             }
-            if (source.FindTree(target) is FolderTree srcTree)
+            if (source.FindTree(target.Path) is FolderTree srcTree)
             {
                 target.CopyFrom(srcTree);
             }
             return target;
+        }
+
+        private static FolderTree SetTreeId(FolderTree tree)
+        {
+            tree.Id = Settings.settings.IdGenerator.GenerateTreeId();
+            foreach (var branch in tree.Trees)
+            {
+                SetTreeId(branch);
+            }
+            return tree;
         }
 
         public static async void CheckNewMusic(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
@@ -304,9 +314,9 @@ namespace SMPlayer.Helpers
                 if (!pathSet.Contains(file.Path))
                 {
                     Music music = await Music.LoadFromFileAsync(file);
+                    Settings.settings.AddMusic(music);
                     tree.Files.Add(new FolderFile(music));
                     data.More++;
-                    Settings.settings.AddMusic(music);
                 }
             }
             foreach (var file in tree.Files.FindAll(m => !newFolderFilePathSet.Contains(m.Path)))

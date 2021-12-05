@@ -76,7 +76,7 @@ namespace SMPlayer.Helpers
             Recognizer = new SpeechRecognizer(ConvertLanguage(language));
             Recognizer.StateChanged += (sender, args) =>
             {
-                Helper.Print("state: " + args.State);
+                Log.Info("state: " + args.State);
                 VoiceAssistantEventArgs a = new VoiceAssistantEventArgs { State = args.State };
                 foreach (var listener in StateChangedListeners) listener.Invoke(sender, a);
             };
@@ -127,7 +127,7 @@ namespace SMPlayer.Helpers
             }
             catch (Exception e)
             {
-                Helper.LogException(e);
+                Log.Warn("StopRecognition.Exception", e);
             }
         }
 
@@ -144,7 +144,7 @@ namespace SMPlayer.Helpers
             }
             catch (Exception e)
             {
-                Helper.LogException(e);
+                Log.Warn("Recognize.RecognizeException {0}", e);
                 await ShowAcceptPrivacyDialog();
                 return null;
             }
@@ -205,7 +205,7 @@ namespace SMPlayer.Helpers
             }
             catch (Exception e)
             {
-                Helper.LogException(e);
+                Log.Warn("Recognize.Exception {0}", e);
                 Speak("VoiceAssitantError");
             }
         }

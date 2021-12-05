@@ -57,7 +57,7 @@ namespace SMPlayer.Helpers
             {
                 Id = src.Id,
                 Name = src.Name,
-                Songs = src.Songs.Select(i => i.Id).ToList()
+                Songs = src.SongIds
             };
         }
 

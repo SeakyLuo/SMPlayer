@@ -1,6 +1,7 @@
 ﻿using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +40,93 @@ namespace SMPlayer.Helpers
         public static string JoinPaths(params string[] values)
         {
             return string.Join(PathJoiner, values);
+        }
+
+        public static async Task<StorageFolder> LoadFolderAsync(string path)
+        {
+            try
+            {
+                return await StorageFolder.GetFolderFromPathAsync(path);
+            }
+            catch (Exception e)
+            {
+                Log.Info("LoadFolderAsync Exception {0}", e);
+                return null;
+            }
+        }
+
+        public static async Task<StorageFile> LoadFileAsync(string path)
+        {
+            try
+            {
+                return await StorageFile.GetFileFromPathAsync(path);
+            }
+            catch (Exception e)
+            {
+                Log.Info("LoadFileAsync Exception {0}", e);
+                return null;
+            }
+        }
+
+        public static async Task<StorageFile> LoadFileAsync(this StorageFolder folder, string filename)
+        {
+            try
+            {
+                return await folder.GetFileAsync(filename);
+            }
+            catch (Exception e)
+            {
+                //Log.Info("LoadFileAsync Exception {0}", e);
+                return null;
+            }
+        }
+
+        public static async Task<StorageFolder> CreateFolder(string folderName)
+        {
+            return await ApplicationData.Current.LocalFolder.CreateFolderAsync(folderName, CreationCollisionOption.OpenIfExists);
+        }
+
+        public static async Task<bool> FileNotExist(string path)
+        {
+            return !await FileExists(path);
+        }
+
+        public static async Task<bool> FileExists(string path)
+        {
+            try
+            {
+                StorageFile file = await StorageFile.GetFileFromPathAsync(path);
+                return file != null;
+            }
+            catch (FileNotFoundException)
+            {
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public static async Task<bool> FolderNotExist(string path)
+        {
+            return !await FolderExists(path);
+        }
+
+        public static async Task<bool> FolderExists(string path)
+        {
+            try
+            {
+                return await StorageFolder.GetFolderFromPathAsync(path) != null;
+            }
+            catch (FileNotFoundException)
+            {
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

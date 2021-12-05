@@ -32,9 +32,8 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            Playlists = new ObservableCollection<Playlist>(Settings.settings.Playlists);
-            PlaylistTabView.ItemsSource = Playlists;
-            PlaylistTabView.SelectedIndex = Settings.settings.Playlists.FindIndex(p => p.Id == Settings.settings.LastPlaylistId);
+            Playlists.SetTo(Settings.settings.Playlists);
+            PlaylistTabView.SelectedIndex = Playlists.FindIndex(p => p.Id == Settings.settings.LastPlaylistId);
             Settings.AddPlaylistEventListener(this);
         }
 

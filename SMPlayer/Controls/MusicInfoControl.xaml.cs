@@ -72,9 +72,10 @@ namespace SMPlayer.Controls
         }
         private void ClearPlayCountButton_Click(object sender, RoutedEventArgs e)
         {
+            Music oldMusic = CurrentMusic.Copy();
             CurrentMusic.PlayCount = 0;
             SetPlayCount(CurrentMusic);
-            Settings.settings.MusicModified(CurrentMusic, CurrentMusic);
+            Settings.settings.MusicModified(oldMusic, CurrentMusic);
         }
 
         public void SetPlayCount(Music music)

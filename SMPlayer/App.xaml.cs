@@ -50,10 +50,11 @@ namespace SMPlayer
             // 只需确保窗口处于活动状态
             if (rootFrame == null)
             {
+                await Log.Init();
+                await Helper.Init();
                 await SettingsHelper.Init();
                 if (Settings.settings.LastPage == "Albums")
                     await AlbumsPage.Init();
-                await Helper.Init();
                 await UpdateHelper.Init();
 
                 // 创建要充当导航上下文的框架，并导航到第一页
@@ -134,7 +135,7 @@ namespace SMPlayer
         ///<param name="e">有关导航失败的详细信息</param>
         void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
-            Helper.LogException(e.Exception);
+            Log.Error("OnNavigationFailed {0}", e.Exception);
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
 
@@ -208,7 +209,7 @@ namespace SMPlayer
 
         private void App_UnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
         {
-            Helper.LogException(e.Exception);
+            Log.Error("App_UnhandledException {0}", e.Exception);
         }
 
         protected override void OnActivated(IActivatedEventArgs args)

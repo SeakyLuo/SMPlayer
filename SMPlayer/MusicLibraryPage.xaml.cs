@@ -40,7 +40,7 @@ namespace SMPlayer
             SetHeader();
             if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
             SortAndSetAllSongs(Settings.settings.AllSongs);
-            MusicPlayer.FindMusicAndSetPlaying(AllSongs, null, MusicPlayer.CurrentMusic);
+            MusicPlayer.SetMusicPlaying(AllSongs, MusicPlayer.CurrentMusic);
         }
 
         public void CheckLibrary()
@@ -108,7 +108,10 @@ namespace SMPlayer
 
         public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () => MusicPlayer.FindMusicAndSetPlaying(AllSongs, current, next));
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                MusicPlayer.SetMusicPlaying(AllSongs, next);
+            });
         }
 
         public void OnBuild(MenuFlyoutHelper helper)
@@ -140,7 +143,9 @@ namespace SMPlayer
         void IMusicEventListener.Liked(Music music, bool isFavorite)
         {
             if (AllSongs.FirstOrDefault(m => m == music) is Music target)
+            {
                 target.Favorite = isFavorite;
+            }
         }
 
         void IMusicEventListener.Added(Music music)
@@ -167,6 +172,7 @@ namespace SMPlayer
 
         void IMusicEventListener.Modified(Music before, Music after)
         {
+            Log.Info("MusicLibraryPage Modified");
             AllSongs.FirstOrDefault(m => m == before)?.CopyFrom(after);
         }
     }

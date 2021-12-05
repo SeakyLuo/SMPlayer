@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMPlayer.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -95,7 +96,7 @@ namespace SMPlayer.Models.DAO
                 }
                 catch (Exception e)
                 {
-                    Helper.Print(e.ToString());
+                    Log.Warn("Retry Failed", e);
                 }
             }
             throw new Exception(failMessage);

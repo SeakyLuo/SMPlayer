@@ -80,6 +80,8 @@ namespace SMPlayer.Models
         public static Music FindMusic(Music target) { return FindMusic(target?.Path); }
         public static Music FindMusic(string target) { return settings.Tree.FindMusic(target) is Music music ? settings.SelectMusicById(music.Id) : null; }
         public static Music FindMusic(FolderFile target) { return settings.SelectMusicById(target.Id); }
+        public static Music FindMusic(long id) { return settings.SelectMusicById(id); }
+        public static List<Music> FindMusicList(List<long> ids) { return settings.SelectMusicByIds(ids); }
 
         public int FindNextPlaylistNameIndex(string Name)
         {
@@ -147,7 +149,7 @@ namespace SMPlayer.Models
             if (Tree.FindMusic(music) is Music oldItem)
             {
                 music.Id = oldItem.Id;
-                oldItem.CopyMusicProperties(music);
+                oldItem.CopyMusicProperties(music, false);
                 return;
             }
             music.Id = settings.IdGenerator.GenerateMusicId();
@@ -248,7 +250,7 @@ namespace SMPlayer.Models
             RecentPlayedSongs.AddOrMoveToTheFirst(music.Id);
             if (LimitedRecentPlayedItems > -1 && RecentPlayedSongs.Count > LimitedRecentPlayedItems)
                 RecentPlayedSongs.RemoveAt(LimitedRecentPlayedItems);
-            MusicModified(oldMusic, newMusic);
+            NotifyMusicModified(oldMusic, newMusic);
         }
 
         public void Search(string keyword)
@@ -260,32 +262,27 @@ namespace SMPlayer.Models
         {
             if (string.IsNullOrEmpty(newName) || string.IsNullOrWhiteSpace(newName))
                 return NamingError.EmptyOrWhiteSpace;
-            if (newName == MenuFlyoutHelper.NowPlaying || newName == MenuFlyoutHelper.MyFavorites || Playlists.Any(p => p.Name == newName))
+            if (newName.Length > 50)
+                return NamingError.TooLong;
+            if (newName == Constants.NowPlaying || newName == Constants.MyFavorites || Playlists.Any(p => p.Name == newName))
                 return NamingError.Used;
             if (newName.Contains(TileHelper.StringConcatenationFlag) || newName.Contains("{0}"))
                 return NamingError.Special;
+            return NamingError.Good;
+        }
+
+        public static async Task<NamingError> ValidateFolderName(string root, string newName)
+        {
+            if (string.IsNullOrEmpty(newName) || string.IsNullOrWhiteSpace(newName))
+                return NamingError.EmptyOrWhiteSpace;
             if (newName.Length > 50)
                 return NamingError.TooLong;
+            if (await FileHelper.FolderExists(Path.Combine(root, newName)))
+                return NamingError.Used;
             return NamingError.Good;
         }
 
-        public static async Task<NamingError> ValidateFolderName(string root, string newFolderName)
-        {
-            try
-            {
-                if (await StorageFolder.GetFolderFromPathAsync(root + "\\" + newFolderName) != null)
-                {
-                    return NamingError.Used;
-                }
-}
-            catch (Exception ex)
-            {
-                Helper.Print(ex.ToString());
-            }
-            return NamingError.Good;
-        }
-
-        public async void AddPlaylist(string name, object data = null)
+        public void AddPlaylist(string name, object data = null)
         {
             Playlist playlist = new Playlist(name)
             {
@@ -414,8 +411,13 @@ namespace SMPlayer.Models
 
         public void MusicModified(Music before, Music after)
         {
-            SelectMusicById(before.Id)?.CopyFrom(after);
-            foreach (var listener in MusicEventListeners) listener.Modified(before, after);
+            SelectMusicById(before.Id)?.CopyFrom(after, false);
+            NotifyMusicModified(before, after);
+        }
+
+        private void NotifyMusicModified(Music before, Music after)
+        {
+            foreach (var listener in MusicEventListeners) listener?.Modified(before, after);
         }
 
         public List<Music> GetMostPlayed(int limit)

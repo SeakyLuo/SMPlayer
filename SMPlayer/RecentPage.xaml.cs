@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Media.Playback;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -21,7 +22,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class RecentPage : Page, IInitListener, IMultiSelectListener, IMenuFlyoutItemClickListener, IMenuFlyoutHelperBuildListener, IMusicEventListener, IFolderTreeEventListener
+    public sealed partial class RecentPage : Page, IInitListener, IMultiSelectListener, IMenuFlyoutItemClickListener, IMenuFlyoutHelperBuildListener, IMusicEventListener, IFolderTreeEventListener, ISwitchMusicListener
     {
         public static RecentTimeLine RecentAdded;
         private const string JsonFileName = "RecentAddedTimeLine";
@@ -63,6 +64,7 @@ namespace SMPlayer
             {
                 ShowRemove = true
             };
+            MusicPlayer.SwitchMusicListeners.Add(this);
         }
 
         public void Inited()
@@ -212,9 +214,9 @@ namespace SMPlayer
         {
             if (recentPlayedRemoveDialog == null) recentPlayedRemoveDialog = new RemoveDialog();
             GridMusicView music = null;
-            if (item is GridMusicView)
+            if (item is GridMusicView gridMusicView)
             {
-                music = (GridMusicView) item;
+                music = gridMusicView;
             }
             else if (item is IEnumerable<GridMusicView> list && list.Count() == 1)
             {
@@ -251,9 +253,9 @@ namespace SMPlayer
         {
             if (recentSearchesRemoveDialog == null) recentSearchesRemoveDialog = new RemoveDialog();
             string keyword = null;
-            if (item is string @string)
+            if (item is string record)
             {
-                keyword = @string;
+                keyword = record;
             }
             else if (item is IList<string> list && list.Count() == 1)
             {
@@ -508,6 +510,15 @@ namespace SMPlayer
             RecentAdded.Remove(music);
         }
         void IMusicEventListener.Modified(Music before, Music after) { }
+
+        async void ISwitchMusicListener.MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                PlayedModifed = true;
+                SetupPlayed(Settings.settings.RecentPlayedSongs);
+            });
+        }
     }
 
     public interface IInitListener

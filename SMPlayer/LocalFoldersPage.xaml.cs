@@ -339,7 +339,7 @@ namespace SMPlayer
         {
             if (sender.DataContext is GridFolderView data)
             {
-                Helper.Print($"DataContextChanged, name {data.Name}, isLoaded {data.ThumbnailLoaded}, isPartiallyVisible {sender.IsPartiallyVisible(LocalFoldersGridView)}");
+                Log.Info($"DataContextChanged, name {data.Name}, isLoaded {data.ThumbnailLoaded}, isPartiallyVisible {sender.IsPartiallyVisible(LocalFoldersGridView)}");
                 if (!data.ThumbnailLoaded && sender.IsPartiallyVisible(LocalFoldersGridView))
                 {
                     await data.LoadThumbnailAsync();

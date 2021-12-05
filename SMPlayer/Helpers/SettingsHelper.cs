@@ -126,8 +126,6 @@ namespace SMPlayer.Helpers
         {
             if (Settings.settings == null) return;
             Settings.settings.MusicProgress = MusicPlayer.Position;
-            JsonFileHelper.SaveAsync(JsonFilename, Settings.settings);
-            JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, Settings.settings);
             try
             {
                 SettingsDAO settingsDAO = Settings.settings.ToDAO();
@@ -136,7 +134,7 @@ namespace SMPlayer.Helpers
             }
             catch (Exception e)
             {
-                Helper.Print(e.ToString());
+                Log.Warn("Save Exception {0}", e);
             }
         }
     }

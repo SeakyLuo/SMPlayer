@@ -146,7 +146,7 @@ namespace SMPlayer
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
-                MusicPlayer.FindMusicAndSetPlaying(MusicCollection, current, next);
+                MusicPlayer.SetMusicPlaying(MusicCollection, next);
                 foreach (var item in GridMusicCollection)
                     item.Source.IsPlaying = item.Source.Equals(next);
             });

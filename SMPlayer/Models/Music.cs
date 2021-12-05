@@ -14,7 +14,6 @@ using Windows.UI.Xaml.Media;
 
 namespace SMPlayer.Models
 {
-    [Serializable]
     public class Music : IComparable<Music>, INotifyPropertyChanged, IMusicable, IPreferable
     {
         public long Id { get; set; }
@@ -24,8 +23,11 @@ namespace SMPlayer.Models
             get => name;
             set
             {
-                name = value;
-                OnPropertyChanged();
+                if (name != value)
+                {
+                    name = value;
+                    OnPropertyChanged("Name");
+                }
             }
         }
         private string name;
@@ -34,18 +36,24 @@ namespace SMPlayer.Models
             get => artist;
             set
             {
-                artist = value;
-                OnPropertyChanged();
+                if (artist != value)
+                {
+                    artist = value;
+                    OnPropertyChanged("Artist");
+                }
             }
         }
         private string artist;
         public string Album
         {
             get => album;
-            set 
+            set
             {
-                album = value;
-                OnPropertyChanged();
+                if (album != value)
+                {
+                    album = value;
+                    OnPropertyChanged("Album");
+                }
             }
         }
         private string album;
@@ -61,7 +69,7 @@ namespace SMPlayer.Models
                 if (isFavorite != value)
                 {
                     isFavorite = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged("Favorite");
                 }
             }
         }
@@ -72,29 +80,31 @@ namespace SMPlayer.Models
             get => playCount;
             set
             {
-                playCount = value;
-                OnPropertyChanged();
+                if (playCount != value)
+                {
+                    playCount = value;
+                    OnPropertyChanged("PlayCount");
+                }
             }
         }
 
         public DateTimeOffset DateAdded { get; set; }
 
         private bool isPlaying = false;
-        [Newtonsoft.Json.JsonIgnore]
         public bool IsPlaying
         {
             get => isPlaying;
             set
             {
+                Log.Debug("SetIsPlaying, Name {0} Current {1} Target {2}", Name, isPlaying, value);
                 if (isPlaying != value)
                 {
                     isPlaying = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged("IsPlaying");
                 }
             }
         }
-        [Newtonsoft.Json.JsonIgnore]
-        public int Index = -1;
+        public int Index { get; set; } = -1;
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -102,7 +112,7 @@ namespace SMPlayer.Models
         public Music(Music obj)
         {
             if (obj == null) return;
-            CopyFrom(obj);
+            CopyFrom(obj, false);
         }
         public Music(StorageFile file, MusicProperties properties)
         {
@@ -139,43 +149,58 @@ namespace SMPlayer.Models
             return new Music(this);
         }
 
-        public Music CopyFrom(Music src)
+        public Music CopyFrom(Music src, bool notifyPropertyChange = true)
         {
             Id = src.Id;
             Path = src.Path;
-            CopyMusicProperties(src);
-            Favorite = src.Favorite;
-            PlayCount = src.PlayCount;
-            IsPlaying = src.IsPlaying;
             Index = src.Index;
+            CopyMusicProperties(src, notifyPropertyChange);
+            if (notifyPropertyChange)
+            {
+                Favorite = src.Favorite;
+                PlayCount = src.PlayCount;
+                IsPlaying = src.IsPlaying;
+            }
+            else
+            {
+                isFavorite = src.Favorite;
+                playCount = src.PlayCount;
+                isPlaying = src.IsPlaying;
+            }
             return src;
         }
 
-        public bool CopyMusicProperties(Music src)
+        public void CopyMusicProperties(Music src, bool notifyPropertyChange = true)
         {
-            if (Name == src.Name && Artist == src.Artist && Album == src.Album && Duration == src.Duration && DateAdded == src.DateAdded)
-                return false;
-            Name = src.Name;
-            Artist = src.Artist;
-            Album = src.Album;
+            if (notifyPropertyChange)
+            {
+                Name = src.Name;
+                Artist = src.Artist;
+                Album = src.Album;
+            }
+            else
+            {
+                name = src.Name;
+                artist = src.Artist;
+                album = src.Album;
+            }
             Duration = src.Duration;
             DateAdded = src.DateAdded;
-            return true;
         }
 
         public void Played()
         {
-            if (IsPlaying)
-            {
-                PlayCount++;
-                IsPlaying = false;
-            }
+            playCount++;
+            isPlaying = false;
         }
 
-        public static string GetFileFolder(string path)
+        public void SetPlaying(bool IsPlaying)
         {
-            //return Path.Substring(Settings.settings.RootPath.Length + 1); // Plus one due to "\"
-            return path.Substring(path.LastIndexOf('\\') + 1);
+            if (this.IsPlaying != IsPlaying)
+            {
+                this.IsPlaying = IsPlaying;
+                OnPropertyChanged("IsPlaying");
+            }
         }
 
         public async Task<MusicProperties> GetMusicPropertiesAsync()
@@ -248,7 +273,7 @@ namespace SMPlayer.Models
             }
             catch (Exception exception)
             {
-                Helper.Print($"Exception ({exception.Message}) when saving lyrics for {Name}");
+                Log.Info($"Saving lyrics for {Name} Exception {exception}");
                 return false;
             }
         }
@@ -306,9 +331,12 @@ namespace SMPlayer.Models
             return !(music1 == music2);
         }
 
+        /**
+         * 不知道为啥obj is Music music && Id == music.Id不行……obj变成了music后值变成null
+         */
         public override bool Equals(object obj)
         {
-            return obj is Music music && Id == music.Id;
+            return obj is Music && Id == (obj as Music).Id;
         }
 
         public bool IndexedEquals(Music music)

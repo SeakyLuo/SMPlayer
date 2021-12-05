@@ -424,8 +424,9 @@ namespace SMPlayer
                 MainSliderProgressBar.Visibility = Visibility.Collapsed;
                 MainMediaSlider.Visibility = Visibility.Visible;
             });
-            Settings.AddMusicEventListener(this);
             MusicPlayer.MediaPlayerStateChangedListeners.Add(this);
+            MusicPlayer.CurrentPlaylistChangedListeners.Add(this);
+            Settings.AddMusicEventListener(this);
             var left = new KeyboardAccelerator() { Key = Windows.System.VirtualKey.Left };
             left.Invoked += (sender, args) =>
             {
@@ -491,7 +492,7 @@ namespace SMPlayer
             }
         }
 
-        public void UpdateMusic(Music music)
+        public async void UpdateMusic(Music music)
         {
             CurrentMusic = music;
             if (music == null)
@@ -499,19 +500,22 @@ namespace SMPlayer
                 ClearMusic();
                 return;
             }
-            MediaSlider.IsEnabled = true;
-            TitleTextBlock.Text = music.Name;
-            ArtistTextBlock.Text = music.Artist;
-            MediaSlider.Value = MusicPlayer.Progress;
-            MediaSlider.Maximum = music.Duration;
-            if (RightTimeTextBlock != null) RightTimeTextBlock.Text = MusicDurationConverter.ToTime(music.Duration);
-            if (LikeToggleButton != null)
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                LikeToggleButton.IsEnabled = true;
-                if (music.Favorite) LikeMusic(false);
-                else DislikeMusic(false);
-            }
-            SetThumbnail(music);
+                MediaSlider.IsEnabled = true;
+                TitleTextBlock.Text = music.Name;
+                ArtistTextBlock.Text = music.Artist;
+                MediaSlider.Value = MusicPlayer.Progress;
+                MediaSlider.Maximum = music.Duration;
+                if (RightTimeTextBlock != null) RightTimeTextBlock.Text = MusicDurationConverter.ToTime(music.Duration);
+                if (LikeToggleButton != null)
+                {
+                    LikeToggleButton.IsEnabled = true;
+                    if (music.Favorite) LikeMusic(false);
+                    else DislikeMusic(false);
+                }
+                SetThumbnail(music);
+            });
         }
 
         public async void SetThumbnail(Music music)
@@ -768,7 +772,6 @@ namespace SMPlayer
         {
             int newValue = (int)e.NewValue, oldValue = (int)e.OldValue, diff = newValue - oldValue;
             SliderClicked = diff != 1 && diff != 0;
-            //Debug.WriteLine("ValueChanged To " + MusicDurationConverter.ToTime(newValue));
             if (LeftTimeTextBlock != null) LeftTimeTextBlock.Text = MusicDurationConverter.ToTime(newValue);
         }
 
@@ -776,17 +779,17 @@ namespace SMPlayer
         {
             MusicPlayer.Position = MediaSlider.Value;
             ShouldUpdate = true;
-            Debug.WriteLine("Completed");
+            Log.Info("MediaSlider_ManipulationCompleted");
         }
 
         private void MediaSlider_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
             ShouldUpdate = false;
-            Debug.WriteLine("Started");
+            Log.Info("MediaSlider_ManipulationStarted");
         }
         private void MediaSlider_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e)
         {
-            Debug.WriteLine("Starting");
+            Log.Info("MediaSlider_ManipulationStarting");
             if (SliderClicked)
             {
                 MusicPlayer.Position = MediaSlider.Value;

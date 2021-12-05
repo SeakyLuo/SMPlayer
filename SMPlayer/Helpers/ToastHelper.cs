@@ -43,7 +43,7 @@ namespace SMPlayer.Helpers
             if (Window.Current.Visible && (display == NotificationDisplayMode.Normal || display == NotificationDisplayMode.Quick))
                 return;
             if (IsToastActive(music, state)) return;
-            Helper.Print("show toast");
+            Log.Info("show toast");
             ToastNotification toast;
             try
             {
@@ -51,7 +51,7 @@ namespace SMPlayer.Helpers
             }
             catch(Exception e)
             {
-                Helper.LogException(e);
+                Log.Warn("Exception {0}", e);
                 return;
             }
             lock (CurrentToastMap)
@@ -63,7 +63,7 @@ namespace SMPlayer.Helpers
                     lock (Notifier)
                     {
                         Notifier.Show(toast);
-                        Helper.Print("show toast, music: {0}, state: {1}", music.Name, state);
+                        Log.Info("show toast, music: {0}, state: {1}", music.Name, state);
                     }
                 }
                 catch (Exception)
@@ -98,13 +98,13 @@ namespace SMPlayer.Helpers
 
         public static void HideToast()
         {
-            Helper.Print("hide toast");
+            Log.Info("hide toast");
             foreach (var e in CurrentToastMap)
             {
                 try
                 {
                     Notifier.Hide(e.Value);
-                    Helper.Print("hide toast, music: {0}, state: {1}", e.Key.Music.Name, e.Key.State);
+                    Log.Info("hide toast, music: {0}, state: {1}", e.Key.Music.Name, e.Key.State);
                 }
                 catch (Exception)
                 {

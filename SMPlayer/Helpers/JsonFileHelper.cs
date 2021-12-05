@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SMPlayer.Helpers;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace SMPlayer.Models
                 }
                 catch (Exception e)
                 {
-                    Helper.LogException(e);
+                    Log.Warn("serialize json failed {0}", e);
                     return;
                 }
             }
@@ -77,7 +78,7 @@ namespace SMPlayer.Models
 
         public static string Serialize(object obj)
         {
-            return JsonConvert.SerializeObject(obj);
+            return obj == null ? null : JsonConvert.SerializeObject(obj);
         }
 
         public static void DeleteFile(string filename)
