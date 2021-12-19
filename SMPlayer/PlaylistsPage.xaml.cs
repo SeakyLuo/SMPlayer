@@ -134,10 +134,9 @@ namespace SMPlayer
             int next = Settings.settings.FindNextPlaylistNameIndex(target.Name);
             string name = Helper.GetPlaylistName(target.Name, next), prev = next == 1 ? target.Name : Helper.GetPlaylistName(target.Name, next - 1);
             var duplicate = target.Duplicate(name);
-            int index = Settings.settings.Playlists.FindLastIndex(p => p.Name.StartsWith(prev)) + 1;
-            Settings.settings.InsertPlaylist(duplicate, index);
-            Playlists.Insert(index, duplicate);
-            PlaylistTabView.SelectedIndex = index;
+            Settings.settings.AddPlaylist(duplicate);
+            Playlists.Add(duplicate);
+            PlaylistTabView.SelectedItem = duplicate;
         }
 
         private void PlaylistTabView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
@@ -245,16 +244,9 @@ namespace SMPlayer
             CreateNewPlaylist();
         }
 
-        void IPlaylistEventListener.Added(Playlist playlist, int? index)
+        void IPlaylistEventListener.Added(Playlist playlist)
         {
-            if (index == null)
-            {
-                Playlists.Add(playlist);
-            }
-            else
-            {
-                Playlists.Insert((int)index, playlist);
-            }
+            Playlists.Add(playlist);
             PlaylistTabView.SelectedItem = playlist;
             BringSelectedTabIntoView();
         }
@@ -264,9 +256,9 @@ namespace SMPlayer
             SelectPlaylistById(playlist.Id)?.CopyFrom(playlist);
         }
 
-        void IPlaylistEventListener.Removed(Playlist playlist, int index)
+        void IPlaylistEventListener.Removed(Playlist playlist)
         {
-            Playlists.RemoveAt(index);
+            Playlists.Remove(playlist);
         }
     }
 }

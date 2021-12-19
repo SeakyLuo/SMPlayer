@@ -16,24 +16,18 @@ namespace SMPlayer.Models
         public long Id { get; set; }
         public List<FolderTree> Trees { get; set; } = new List<FolderTree>();
         public List<FolderFile> Files { get; set; } = new List<FolderFile>();
-        [Newtonsoft.Json.JsonIgnore]
-        public List<Music> Songs { get => Settings.settings.SelectMusicByIds(Files.Select(i => i.Id)); }
+        public List<Music> Songs { get => Settings.FindMusicList(Files.Select(i => i.FileId)); }
         public string Path { get; set; } = "";
         public SortBy Criterion { get; set; } = SortBy.Title;
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
-        [Newtonsoft.Json.JsonIgnore]
         public TreeInfo Info { get => new TreeInfo(Name, Trees.Count, Files.Count); }
-        [Newtonsoft.Json.JsonIgnore]
         public bool IsEmpty { get => Files.Count == 0 && Trees.All(tree => tree.IsEmpty); }
-        [Newtonsoft.Json.JsonIgnore]
         public bool IsNotEmpty { get => !IsEmpty; }
-        [Newtonsoft.Json.JsonIgnore]
         public int FileCount { get => Trees.Sum(t => t.FileCount) + Files.Count; }
-        [Newtonsoft.Json.JsonIgnore]
         public string Name { get => FileHelper.GetDisplayName(Path); }
-        [Newtonsoft.Json.JsonIgnore]
         public string ParentPath { get => FileHelper.GetParentPath(Path); }
+        public long ParentId { get; set; }
 
         public FolderTree() { }
         public FolderTree(FolderTree tree)
@@ -167,7 +161,7 @@ namespace SMPlayer.Models
         public Music FindMusic(string path)
         {
             if (string.IsNullOrEmpty(path)) return null;
-            return FindFile(path) is FolderFile file ? Settings.settings.SelectMusicById(file.Id) : null;
+            return FindFile(path) is FolderFile file ? Settings.FindMusic(file.FileId) : null;
         }
         public Music FindMusic(Music target)
         {
@@ -232,7 +226,7 @@ namespace SMPlayer.Models
         {
             FolderTree tree = FindTree(branch);
             RemoveBranch(branch.Path);
-            tree.Rename(tree.Path, FileHelper.JoinPaths(newPath, Name));
+            tree.Rename(tree.Path, System.IO.Path.Combine(newPath, Name));
             FindTree(newPath)?.AddTree(tree);
         }
 

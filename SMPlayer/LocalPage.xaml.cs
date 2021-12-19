@@ -3,6 +3,7 @@ using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -297,13 +298,13 @@ namespace SMPlayer
             FolderTree currentTree = History.Peek();
             string path = currentTree.Path;
 
-            string defaultName = Settings.settings.FindNextFolderName(path, Helper.LocalizeText("NewFolderName"));
+            string defaultName = Settings.settings.FindNextFolderName(currentTree, Helper.LocalizeText("NewFolderName"));
             RenameDialog renameDialog = new RenameDialog(RenameOption.Create, RenameTarget.Folder, defaultName)
             {
                 ValidateAsync = async (newName) => await Settings.ValidateFolderName(path, newName),
                 Confirmed = async (newName) =>
                 {
-                    FolderTree tree = new FolderTree() { Path = FileHelper.JoinPaths(path, newName) };
+                    FolderTree tree = new FolderTree() { Path = Path.Combine(path, newName) };
                     await Settings.settings.AddFolder(tree, currentTree);
                     App.Save();
                 }

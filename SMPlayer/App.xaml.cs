@@ -51,6 +51,7 @@ namespace SMPlayer
             if (rootFrame == null)
             {
                 await Log.Init();
+                SQLHelper.Init();
                 await Helper.Init();
                 await SettingsHelper.Init();
                 if (Settings.settings.LastPage == "Albums")

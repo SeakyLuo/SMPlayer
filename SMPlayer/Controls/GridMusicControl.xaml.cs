@@ -288,7 +288,7 @@ namespace SMPlayer
 
         Music IMusicable.ToMusic()
         {
-            return Settings.settings.SelectMusicById(Id);
+            return Settings.FindMusic(Id);
         }
     }
 }

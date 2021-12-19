@@ -30,14 +30,11 @@ namespace SMPlayer.Models
         public SortBy Criterion { get; set; } = SortBy.Title;
         public MusicDisplayItem DisplayItem { get; set; }
         public string Artist { get; set; }
-        public ObservableCollection<Music> Songs
-        {
-            get => new ObservableCollection<Music>(Settings.FindMusicList(SongIds));
-        }
+        public ObservableCollection<Music> Songs { get; set; } = new ObservableCollection<Music>();
         public List<long> SongIds { get; set; }
         public int Count { get => SongIds.Count; }
         public bool IsMyFavorite { get => Name == Constants.MyFavorites; }
-        public bool IsEmpty { get => SongIds.Count == 0; }
+        public bool IsEmpty { get => SongIds.IsEmpty(); }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -46,24 +43,27 @@ namespace SMPlayer.Models
         public Playlist(string Name)
         {
             this.Name = Name;
+            this.Songs = new ObservableCollection<Music>();
             this.SongIds = new List<long>();
         }
 
         public Playlist(string Name, Music music)
         {
             this.Name = Name;
+            this.Songs = new ObservableCollection<Music>() { music };
             this.SongIds = new List<long>() { music.Id };
         }
 
         public Playlist(string Name, IEnumerable<Music> Songs)
         {
             this.Name = Name;
+            this.Songs = new ObservableCollection<Music>(Songs);
             this.SongIds = Songs.Select(i => i.Id).ToList();
         }
 
-        public Playlist Duplicate(string NewName)
+        public Playlist Duplicate(string newName)
         {
-            return new Playlist(NewName, Songs);
+            return new Playlist(newName, Songs);
         }
 
         public void Add(object item)

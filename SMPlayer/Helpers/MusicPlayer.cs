@@ -77,7 +77,7 @@ namespace SMPlayer
                 {
                     if (settings.LastMusicIndex == -1)
                         settings.LastMusicIndex = 0;
-                    SetPlaylist(Settings.settings.SelectMusicByIds(playlist));
+                    SetPlaylist(Settings.FindMusicList(playlist));
                     if (settings.LastMusicIndex < CurrentPlaylist.Count)
                         CurrentMusic = CurrentPlaylist[settings.LastMusicIndex];
                 }
@@ -198,6 +198,13 @@ namespace SMPlayer
         public static bool IsMusicPlaying(Music music)
         {
             return music.IndexedEquals(CurrentMusic);
+        }
+
+        public static void AddMusicAndPlay(IMusicable source)
+        {
+            AddMusic(source);
+            MoveToMusic(source.ToMusic());
+            Play();
         }
 
         public static void AddMusic(IMusicable source)

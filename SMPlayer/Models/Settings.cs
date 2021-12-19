@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Helpers;
 using SMPlayer.Models.DAO;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,9 +23,8 @@ namespace SMPlayer.Models
         private static readonly List<IFolderTreeEventListener> FolderTreeEventListeners = new List<IFolderTreeEventListener>();
         public static void AddFolderTreeEventListener(IFolderTreeEventListener listener) { FolderTreeEventListeners.Add(listener); }
 
-        public Dictionary<long, Music> MusicLibrary { get; set; } = new Dictionary<long, Music>();
-        [Newtonsoft.Json.JsonIgnore]
-        public IEnumerable<Music> AllSongs { get => MusicLibrary.Values; }
+        public static IEnumerable<Music> AllSongs { get => SQLHelper.Run(c => c.SelectAllMusic()); }
+
         public string RootPath { get; set; } = "";
         public FolderTree Tree { get; set; } = new FolderTree();
         public int LastMusicIndex { get; set; } = -1;
@@ -40,6 +40,7 @@ namespace SMPlayer.Models
         public bool LocalMusicGridView { get; set; } = true;
         public bool LocalFolderGridView { get; set; } = true;
         public Playlist MyFavorites { get; set; }
+        public long MyFavoritesId { get; set; }
         public ObservableCollection<string> RecentPlayed { get; set; } = new ObservableCollection<string>();
         public List<long> RecentPlayedSongs { get; set; } = new List<long>();
         public bool MiniModeWithDropdown { get; set; } = false;
@@ -68,7 +69,6 @@ namespace SMPlayer.Models
         [Newtonsoft.Json.JsonIgnore]
         private List<Music> JustRemoved = new List<Music>();
 
-        public IdGenerator IdGenerator = new IdGenerator();
         public List<long> RecentAdded = new List<long>();
 
         public Settings()
@@ -77,17 +77,25 @@ namespace SMPlayer.Models
         }
 
         public static Music FindMusic(IMusicable target) { return FindMusic(target.ToMusic()); }
-        public static Music FindMusic(Music target) { return FindMusic(target?.Path); }
-        public static Music FindMusic(string target) { return settings.Tree.FindMusic(target) is Music music ? settings.SelectMusicById(music.Id) : null; }
-        public static Music FindMusic(FolderFile target) { return settings.SelectMusicById(target.Id); }
-        public static Music FindMusic(long id) { return settings.SelectMusicById(id); }
-        public static List<Music> FindMusicList(List<long> ids) { return settings.SelectMusicByIds(ids); }
+        public static Music FindMusic(Music target) 
+        {
+            if (target == null) return null;
+            return SQLHelper.Run(c => target.Id == 0 ? c.SelectMusicByPath(target.Path) : c.SelectMusicById(target.Id)); 
+        }
+        public static Music FindMusic(string target) { return SQLHelper.Run(c => c.SelectMusicByPath(target)); }
+        public static Music FindMusic(FolderFile target) { return FindMusic(target.FileId); }
+        public static Music FindMusic(long id) { return SQLHelper.Run(c => c.SelectMusicById(id)); }
+        public static List<Music> FindMusicList(IEnumerable<long> ids) { return SQLHelper.Run(c => c.SelectMusicByIds(ids)); }
+        public static Playlist FindPlaylist(long id) { return SQLHelper.Run(c => c.SelectPlaylistById(id)); }
+        public static Playlist FindPlaylist(Playlist playlist) { return FindPlaylist(playlist.Id); }
 
         public int FindNextPlaylistNameIndex(string Name)
         {
             if (!string.IsNullOrEmpty(Name))
             {
-                var siblings = Playlists.FindAll(p => p.Name.StartsWith(Name)).Select(p => p.Name).ToHashSet();
+                var siblings = SQLHelper.Run(c => c.SelectAllPlaylists())
+                                        .FindAll(p => p.Name.StartsWith(Name))
+                                        .Select(p => p.Name).ToHashSet();
                 for (int i = 1; i <= siblings.Count; i++)
                     if (!siblings.Contains(Helper.GetPlaylistName(Name, i)))
                         return i;
@@ -101,11 +109,11 @@ namespace SMPlayer.Models
             return index == 0 ? Name : Helper.GetPlaylistName(Name, index);
         }
 
-        public int FindNextFolderNameIndex(string path, string name)
+        public int FindNextFolderNameIndex(FolderTree parent, string name)
         {
             if (!string.IsNullOrEmpty(name))
             {
-                var siblings = Tree.FindTree(path)?.Trees.Select(p => p.Name).ToHashSet();
+                var siblings = SQLHelper.Run(c => c.SelectSubFolders(parent)).Select(p => p.Name).ToHashSet();
                 for (int i = 1; i <= siblings.Count; i++)
                     if (!siblings.Contains(Helper.GetPlaylistName(name, i)))
                         return i;
@@ -113,18 +121,40 @@ namespace SMPlayer.Models
             return 0;
         }
 
-        public string FindNextFolderName(string path, string Name)
+        public string FindNextFolderName(FolderTree parent, string Name)
         {
-            int index = FindNextFolderNameIndex(path, Name);
+            int index = FindNextFolderNameIndex(parent, Name);
             return index == 0 ? Name : Helper.GetPlaylistName(Name, index);
+        }
+
+        private Playlist GetMyFavorites(SQLiteConnection c)
+        {
+            return c.SelectPlaylistById(MyFavoritesId);
         }
 
         public void LikeMusic(Music music)
         {
-            if (MyFavorites.Contains(music)) return;
             music.Favorite = true;
-            MyFavorites.Add(music);
-            foreach (var listener in MusicEventListeners) listener.Liked(music, true);
+            SQLHelper.Run(c =>
+            {
+                Playlist myFavorites = GetMyFavorites(c);
+                if (myFavorites.Contains(music)) return;
+                AddMusicToPlaylist(myFavorites, music);
+                foreach (var listener in MusicEventListeners) listener.Liked(music, true);
+            });
+        }
+
+        public void AddMusicToPlaylist(Playlist playlist, Music music)
+        {
+            SQLHelper.Run(c =>
+            {
+                AddMusicToPlaylist(c, playlist, music);
+            });
+        }
+
+        private void AddMusicToPlaylist(SQLiteConnection c, Playlist playlist, Music music)
+        {
+            c.Insert(music.ToPlaylistItemDAO(playlist));
         }
 
         public void LikeMusic(IEnumerable<IMusicable> playlist)
@@ -138,23 +168,37 @@ namespace SMPlayer.Models
         public void DislikeMusic(Music music)
         {
             music.Favorite = false;
-            MyFavorites.Remove(music);
+            SQLHelper.Run(c =>
+            {
+                RemoveMusicFromPlaylist(MyFavoritesId, music);
+            });
             foreach (var listener in MusicEventListeners) listener.Liked(music, false);
         }
 
-        public async void AddMusic(Music music)
+        public void RemoveMusicFromPlaylist(Playlist playlist, Music music)
         {
-            if (JustRemoved.Any(m => m.Name == music.Name && m.Artist == music.Artist && m.Album == music.Album && m.Duration == music.Duration))
-                return;
-            if (Tree.FindMusic(music) is Music oldItem)
+            RemoveMusicFromPlaylist(playlist.Id, music);
+        }
+
+        private void RemoveMusicFromPlaylist(long playlistId, Music music)
+        {
+            SQLHelper.Run(c =>
             {
-                music.Id = oldItem.Id;
-                oldItem.CopyMusicProperties(music, false);
+                c.Execute("delete from PlaylistItem where playlistId = ? and itemId = ?", playlistId, music.Id);
+            });
+        }
+
+        public async void AddMusic(SQLiteConnection c, Music music)
+        {
+            if (JustRemoved.Any(m => m.PossiblyEquals(music)))
+                return;
+            if (music.Id != 0)
+            {
+                MusicModified(c, music, music);
                 return;
             }
-            music.Id = settings.IdGenerator.GenerateMusicId();
-            MusicLibrary.Add(music.Id, music);
-            RecentPage.RecentAdded.Add(music);
+            SQLHelper.InsertMusic(c, music);
+            SQLHelper.InsertRecentAdded(c, music);
             if (AutoLyrics)
             {
                 await Task.Run(async() =>
@@ -173,89 +217,70 @@ namespace SMPlayer.Models
         {
             if (file.IsMusicFile())
             {
-                RemoveMusic(SelectMusicById(file.Id));
+                RemoveMusic(FindMusic(file.FileId));
             }
         }
 
-        // playlist.Id - musicRemoveIndex
-        private Dictionary<long, int> removedMusicInPlaylist = new Dictionary<long, int>();
-        private int myFavoratesRemovedIndex = -1, recentPlayedRemovedIndex = -1, preferredMusicRemovedIndex = -1;
         public void RemoveMusic(Music music)
         {
-            if (!Tree.RemoveFile(music.Path))
-            {
-                return;
-            }
-            MusicLibrary.Remove(music.Id);
             JustRemoved.Add(music);
-            removedMusicInPlaylist.Clear();
-            int removeIndex;
-            foreach (var playlist in Playlists)
-            {
-                if ((removeIndex = playlist.Songs.IndexOf(music)) > -1)
-                {
-                    removedMusicInPlaylist.Add(playlist.Id, removeIndex);
-                    playlist.Remove(removeIndex);
-                }
-            }
-            if ((myFavoratesRemovedIndex = MyFavorites.Songs.IndexOf(music)) > -1)
-                MyFavorites.Remove(music);
-            if ((recentPlayedRemovedIndex = RecentPlayedSongs.IndexOf(music.Id)) > -1)
-                RecentPlayedSongs.RemoveAt(recentPlayedRemovedIndex);
-            if ((preferredMusicRemovedIndex = Preference.PreferredSongs.FindIndex(m => m.Id == music.Id.ToString())) > -1)
-                Preference.PreferredSongs.RemoveAt(preferredMusicRemovedIndex);
+            SQLHelper.Run(c => ActivateMusic(c, music, ActiveState.Inactive));
             foreach (var listener in MusicEventListeners) listener.Removed(music);
         }
 
         public void UndoRemoveMusic(Music music)
         {
             JustRemoved.Remove(music);
-            if (Tree.FindTree(music) is FolderTree tree)
-            {
-                tree.Files.Add(new FolderFile(music));
-                tree.Sort();
-            }
-            foreach (var pair in removedMusicInPlaylist)
-                SelectPlaylistById(pair.Key)?.Songs.Insert(pair.Value, music);
-            if (myFavoratesRemovedIndex > -1)
-                MyFavorites.Songs.Insert(myFavoratesRemovedIndex, music);
-            if (recentPlayedRemovedIndex > -1)
-                RecentPlayed.Insert(recentPlayedRemovedIndex, music.Path);
-            RecentPage.RecentAdded.Add(music); // TODO: ugly impl
+            SQLHelper.Run(c => ActivateMusic(c, music, ActiveState.Active));
             foreach (var listener in MusicEventListeners) listener.Added(music);
         }
 
-        public Music SelectMusicById(long id)
+        private void ActivateMusic(SQLiteConnection c, Music music, ActiveState state)
         {
-            MusicLibrary.TryGetValue(id, out Music music);
-            return music;
-        }
-
-        public List<Music> SelectMusicByIds(IEnumerable<long> ids)
-        {
-            return ids.Select(i => SelectMusicById(i)).Where(i => i != null).ToList();
-        }
-
-        public Playlist SelectPlaylistById(long id)
-        {
-            return Playlists.FirstOrDefault(i => i.Id == id);
+            c.Execute("update Music set State = ? where Id = ?", state, music.Id);
+            c.Execute("update File set State = ? where Path = ?", state, music.Path);
+            c.Execute("update PlaylistItem set State = ? where ItemId = ?", state, music.Id);
+            UpdateRecentRecordState(c, RecentType.Add, music.Id.ToString(), state);
+            UpdateRecentRecordState(c, RecentType.Play, music.Id.ToString(), state);
+            c.Execute("update PreferenceItem set State = ? where Type = ? and ItemId = ? ", state, PreferType.Song, music.Id);
         }
 
         public void Played(Music music)
         {
             if (music == null) return;
-            Music newMusic = SelectMusicById(music.Id);
-            Music oldMusic = newMusic.Copy();
-            newMusic.Played();
-            RecentPlayedSongs.AddOrMoveToTheFirst(music.Id);
-            if (LimitedRecentPlayedItems > -1 && RecentPlayedSongs.Count > LimitedRecentPlayedItems)
-                RecentPlayedSongs.RemoveAt(LimitedRecentPlayedItems);
-            NotifyMusicModified(oldMusic, newMusic);
+            SQLHelper.Run(c =>
+            {
+                Music newMusic = c.SelectMusicById(music.Id);
+                Music oldMusic = newMusic.Copy();
+                newMusic.Played();
+                c.Update(newMusic);
+                UpdateRecentRecordState(c, RecentType.Play, music.Id.ToString(), ActiveState.Inactive);
+                c.InsertRecentPlayed(music);
+                NotifyMusicModified(oldMusic, newMusic);
+            });
         }
 
         public void Search(string keyword)
         {
-            RecentSearches.AddOrMoveToTheFirst(keyword);
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return;
+            }
+            SQLHelper.Run(c =>
+            {
+                UpdateRecentRecordState(c, RecentType.Search, keyword, ActiveState.Inactive);
+                c.Insert(new RecentRecordDAO()
+                {
+                    Type = RecentType.Search,
+                    Item = keyword,
+                    Time = DateTimeOffset.Now,
+                });
+            });
+        }
+
+        private void UpdateRecentRecordState(SQLiteConnection c, RecentType recentType, string item, ActiveState state)
+        {
+            c.Execute("update RecentRecord set State = ? where Type = ? and Item = ? ", state, recentType, item);
         }
 
         public NamingError ValidatePlaylistName(string newName)
@@ -282,52 +307,68 @@ namespace SMPlayer.Models
             return NamingError.Good;
         }
 
-        public void AddPlaylist(string name, object data = null)
+        public Playlist AddPlaylist(string name, object data = null)
         {
-            Playlist playlist = new Playlist(name)
-            {
-                Id = settings.IdGenerator.GeneratePlaylistId()
-            };
+            Playlist playlist = new Playlist(name);
             if (data != null) playlist.Add(data);
-            Playlists.Add(playlist);
+            SQLHelper.Run(c => c.InsertPlaylist(playlist));
             foreach (var listener in PlaylistEventListeners)
-                listener.Added(playlist, null);
+                listener.Added(playlist);
+            return playlist;
+        }
+
+        public void AddPlaylist(Playlist playlist)
+        {
+            SQLHelper.Run(c =>
+            {
+                if (playlist.Id == 0)
+                {
+                    c.InsertPlaylist(playlist);
+                }
+                else
+                {
+                    UpdatePlaylistState(c, playlist, ActiveState.Active);
+                }
+            });
+            foreach (var listener in PlaylistEventListeners)
+                listener.Added(playlist);
         }
 
         public void RenamePlaylist(Playlist playlist, string newName)
         {
-            Playlist target = SelectPlaylistById(playlist.Id);
-            if (target.Name == newName)
+            SQLHelper.Run(c =>
             {
-                return;
-            }
-            foreach (var item in Preference.PreferredPlaylists)
-            {
-                if (item.Id == playlist.Id.ToString())
+                Playlist target = c.SelectPlaylistById(playlist.Id);
+                if (target.Name == newName)
                 {
-                    item.Name = newName;
+                    return;
                 }
-            }
-            target.Name = newName;
-            foreach (var listener in PlaylistEventListeners)
-                listener.Renamed(target);
+                target.Name = newName;
+                c.UpdatePlaylist(playlist);
+                PreferenceItemDAO item = c.SelectPreferenceItem(PreferType.Playlist, playlist.Id.ToString());
+                if (item != null)
+                {
+                    item.ItemName = newName;
+                    c.Update(item);
+                }
+                foreach (var listener in PlaylistEventListeners)
+                    listener.Renamed(target);
+            });
         }
 
-        public void InsertPlaylist(Playlist playlist, int index)
+        public void RemovePlaylist(Playlist playlist)
         {
-            playlist.Id = IdGenerator.GeneratePlaylistId();
-            Playlists.Insert(index, playlist);
+            SQLHelper.Run(c =>
+            {
+                UpdatePlaylistState(c, playlist, ActiveState.Inactive);
+            });
             foreach (var listener in PlaylistEventListeners)
-                listener.Added(playlist, index);
+                listener.Removed(playlist);
         }
 
-        public int RemovePlaylist(Playlist playlist)
+        private void UpdatePlaylistState(SQLiteConnection c, Playlist playlist, ActiveState state)
         {
-            int index = Playlists.IndexOf(playlist);
-            Playlists.RemoveAt(index);
-            foreach (var listener in PlaylistEventListeners)
-                listener.Removed(playlist, index);
-            return index;
+            c.Execute("update Playlist set State = ? where Id = ?", state, playlist.Id);
         }
 
         /**
@@ -337,8 +378,8 @@ namespace SMPlayer.Models
         {
             StorageFolder folder = await root.GetStorageFolderAsync();
             await folder.CreateFolderAsync(branch.Name);
-
-            Tree.FindTree(root)?.Trees.Add(branch);
+            branch.ParentId = root.Id;
+            SQLHelper.Run(c => c.InsertFolder(branch));
             foreach (var listener in FolderTreeEventListeners)
                 listener.Added(branch, root);
         }
@@ -348,15 +389,12 @@ namespace SMPlayer.Models
             StorageFolder folder = await original.GetStorageFolderAsync();
             await folder.RenameAsync(newName);
             string newPath = folder.Path;
-
-            foreach (var item in Preference.PreferredFolders)
+            original.Rename(newPath);
+            SQLHelper.Run(c =>
             {
-                if (original.Equals(Tree.FindTree(item.Id)))
-                {
-                    item.Name = newName;
-                }
-            }
-            Tree.FindTree(original)?.Rename(newPath);
+                c.Update(original.ToDAO());
+                c.Execute("update PreferenceItem set ItemName = ? where ItemId = ?", newName, original.Id);
+            });
             foreach (var listener in FolderTreeEventListeners)
                 listener.Renamed(original, newPath);
             original.Rename(newPath);
@@ -364,54 +402,116 @@ namespace SMPlayer.Models
 
         public void DeleteFolder(FolderTree target)
         {
-            FolderTree folderTree = Tree.FindTree(target.ParentPath);
-            if (folderTree == null) return;
-            folderTree.Trees.Remove(target);
-            MusicLibrary.RemoveAll(pair => pair.Value.Path.StartsWith(target.Path));
-            RecentPlayedSongs.RemoveAll(id => SelectMusicById(id).Path.StartsWith(target.Path));
-            foreach (var playlist in Playlists) playlist.RemoveAll(i => i.Path.StartsWith(target.Path));
-            MyFavorites.RemoveAll(i => i.Path.StartsWith(target.Path));
-            Preference.PreferredSongs.RemoveAll(i => SelectMusicById(int.Parse(i.Id)).Path.StartsWith(target.Path));
-            Preference.PreferredFolders.RemoveAll(i => i.Id == folderTree.Id.ToString());
-
+            SQLHelper.Run(c =>
+            {
+                DeleteFolder(c, target);
+                foreach (var music in c.SelectAllMusic())
+                {
+                    if (music.Path.StartsWith(target.Path))
+                    {
+                        RemoveMusic(music);
+                    }
+                }
+            });
             foreach (var listener in FolderTreeEventListeners)
                 listener.Removed(target);
         }
 
-        public void MoveFolder(FolderTree tree, string path)
+        private void DeleteFolder(SQLiteConnection c, FolderTree target)
         {
-            Tree.MoveBranch(tree, path);
-            foreach (var music in MusicLibrary.Values)
+            FolderDAO folderDAO = target.ToDAO();
+            folderDAO.State = ActiveState.Inactive;
+            c.Update(folderDAO);
+            c.Execute("update PreferenceItem set State = ? where ItemId = ?", ActiveState.Inactive, target.Id.ToString());
+            foreach (var item in c.SelectSubFolders(target))
             {
-                if (music.Path.StartsWith(path))
-                {
-                    MoveMusic(music, path);
-                }
+                DeleteFolder(c, item);
             }
+            foreach (var item in c.SelectSubFiles(target))
+            {
+                FileDAO dao = item.ToDAO();
+                dao.State = ActiveState.Inactive;
+                c.Update(dao);
+            }
+        }
 
+        public async Task MoveFolder(FolderTree tree, string path)
+        {
+            await MoveFolder(await tree.GetStorageFolderAsync(), await StorageFolder.GetFolderFromPathAsync(path));
+            tree.Rename(tree.ParentPath, path);
+            SQLHelper.Run(c =>
+            {
+                MoveFolder(c, tree, path);
+                foreach (var music in AllSongs)
+                {
+                    if (music.Path.StartsWith(path))
+                    {
+                        MoveMusic(c, music, path);
+                    }
+                }
+            });
             foreach (var listener in FolderTreeEventListeners)
                 listener.Renamed(tree, tree.Path);
         }
 
-        public void MoveFile(FolderFile file, string path)
+        private async Task MoveFolder(StorageFolder folder, StorageFolder target)
         {
-            Tree.MoveFile(file, path);
-            if (file.IsMusicFile())
+            StorageFolder subFolder = await target.CreateFolderAsync(folder.Name, CreationCollisionOption.OpenIfExists);
+            foreach (var item in await folder.GetFoldersAsync())
             {
-                MoveMusic(SelectMusicById(file.Id), path);
+                await MoveFolder(item, subFolder);
+            }
+            foreach (var item in await folder.GetFilesAsync())
+            {
+                await item.MoveAsync(subFolder);
             }
         }
 
-        private void MoveMusic(Music music, string newPath)
+        private void MoveFolder(SQLiteConnection c, FolderTree tree, string path)
+        {
+            FolderTree target = c.SelectFolderByPath(path);
+            tree.ParentId = target.Id;
+            c.Update(target);
+            foreach (var item in c.SelectSubFolders(target))
+            {
+                MoveFolder(c, item, path);
+            }
+            foreach (var item in c.SelectSubFiles(target))
+            {
+                MoveFile(c, item, path);
+            }
+        }
+
+        public void MoveFile(FolderFile file, string path)
+        {
+            SQLHelper.Run(c => MoveFile(c, file, path));
+        }
+
+        private void MoveFile(SQLiteConnection c, FolderFile file, string path)
+        {
+            file.MoveToFolder(path);
+            c.Update(file.ToDAO());
+            if (file.IsMusicFile())
+            {
+                MoveMusic(c, FindMusic(file.FileId), path);
+            }
+        }
+
+        private void MoveMusic(SQLiteConnection c, Music music, string newPath)
         {
             Music oldMusic = music.Copy();
             music.MoveToFolder(newPath);
-            MusicModified(oldMusic, music);
+            MusicModified(c, oldMusic, music);
         }
 
         public void MusicModified(Music before, Music after)
         {
-            SelectMusicById(before.Id)?.CopyFrom(after, false);
+            SQLHelper.Run(c => MusicModified(c, before, after));
+        }
+
+        public void MusicModified(SQLiteConnection c, Music before, Music after)
+        {
+            c.UpdateMusic(after);
             NotifyMusicModified(before, after);
         }
 
@@ -453,9 +553,9 @@ namespace SMPlayer.Models
 
     public interface IPlaylistEventListener
     {
-        void Added(Playlist playlist, int? index);
+        void Added(Playlist playlist);
         void Renamed(Playlist playlist);
-        void Removed(Playlist playlist, int index);
+        void Removed(Playlist playlist);
     }
 
     public interface IFolderTreeEventListener

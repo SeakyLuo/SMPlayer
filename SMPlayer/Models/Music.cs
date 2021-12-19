@@ -14,7 +14,7 @@ using Windows.UI.Xaml.Media;
 
 namespace SMPlayer.Models
 {
-    public class Music : IComparable<Music>, INotifyPropertyChanged, IMusicable, IPreferable
+    public class Music : IComparable<Music>, INotifyPropertyChanged, IMusicable, IPreferable, IFolderFile
     {
         public long Id { get; set; }
         public string Path { get; set; }
@@ -96,7 +96,6 @@ namespace SMPlayer.Models
             get => isPlaying;
             set
             {
-                Log.Debug("SetIsPlaying, Name {0} Current {1} Target {2}", Name, isPlaying, value);
                 if (isPlaying != value)
                 {
                     isPlaying = value;
@@ -344,6 +343,11 @@ namespace SMPlayer.Models
             return this == music && Index == music.Index;
         }
 
+        public bool PossiblyEquals(Music music)
+        {
+            return Name == music.Name && Artist == music.Artist && Album == music.Album && Duration == music.Duration;
+        }
+
         public override int GetHashCode()
         {
             return Id.GetHashCode();
@@ -367,6 +371,17 @@ namespace SMPlayer.Models
         PreferenceItemView IPreferable.AsPreferenceItemView()
         {
             return new PreferenceItemView(Id.ToString(), Name, Path, PreferType.Song);
+        }
+
+        public FolderFile ToFolderFile()
+        {
+            return new FolderFile
+            {
+                FileId = Id,
+                FileType = FileType.Music,
+                Path = Path,
+                src = this
+            };
         }
     }
 

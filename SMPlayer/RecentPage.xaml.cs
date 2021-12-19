@@ -81,12 +81,12 @@ namespace SMPlayer
                 {
                     music.Id = Settings.FindMusic(music.Path).Id;
                 }
-                RecentAdded = RecentTimeLine.FromMusicList(recentAdded.IsEmpty() ? Settings.settings.AllSongs : recentAdded);
+                RecentAdded = RecentTimeLine.FromMusicList(recentAdded.IsEmpty() ? Settings.AllSongs : recentAdded);
                 Settings.settings.RecentAdded = recentAdded.Select(i => i.Id).ToList();
             }
             else
             {
-                RecentAdded = RecentTimeLine.FromMusicList(Settings.settings.SelectMusicByIds(Settings.settings.RecentAdded));
+                RecentAdded = RecentTimeLine.FromMusicList(Settings.FindMusicList(Settings.settings.RecentAdded));
             }
         }
 

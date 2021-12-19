@@ -13,14 +13,14 @@ namespace SMPlayer.Helpers
     {
         public static Music FromDAO(this MusicDAO src)
         {
-            return new Music()
+            return src == null ? null : new Music()
             {
                 Id = src.Id,
                 Path = src.Path,
                 Name = src.Name,
+                Artist = src.Artist,
                 Album = src.Album,
                 Duration = src.Duration,
-                Favorite = src.Favorite,
                 PlayCount = src.PlayCount,
                 DateAdded = src.DateAdded
             };
@@ -33,9 +33,9 @@ namespace SMPlayer.Helpers
                 Id = src.Id,
                 Path = src.Path,
                 Name = src.Name,
+                Artist = src.Artist,
                 Album = src.Album,
                 Duration = src.Duration,
-                Favorite = src.Favorite,
                 PlayCount = src.PlayCount,
                 DateAdded = src.DateAdded
             };
@@ -47,7 +47,7 @@ namespace SMPlayer.Helpers
             {
                 Id = src.Id,
                 Name = src.Name,
-                SongIds = src.Songs
+                Criterion = src.Criterion
             };
         }
 
@@ -57,14 +57,21 @@ namespace SMPlayer.Helpers
             {
                 Id = src.Id,
                 Name = src.Name,
-                Songs = src.SongIds
+                Criterion = src.Criterion,
+                Songs = src.Songs.Select(m => m.ToPlaylistItemDAO(src)).ToList()
             };
+        }
+
+        public static PlaylistItemDAO ToPlaylistItemDAO(this Music src, Playlist playlist)
+        {
+            return new PlaylistItemDAO { PlaylistId = playlist.Id, ItemId = src.Id };
         }
 
         public static PreferenceItem FromDAO(this PreferenceItemDAO src)
         {
             return new PreferenceItem()
             {
+                ItemId = src.Id,
                 Id = src.ItemId,
                 Name = src.ItemName,
                 IsEnabled = src.IsEnabled,
@@ -72,24 +79,29 @@ namespace SMPlayer.Helpers
             };
         }
 
-        public static PreferenceItemDAO ToDAO(this PreferenceItem src)
+        public static PreferenceItemDAO ToDAO(this PreferenceItem src, PreferType preferType)
         {
             return new PreferenceItemDAO()
             {
+                Id = src.ItemId,
                 ItemId = src.Id,
                 ItemName = src.Name,
                 IsEnabled = src.IsEnabled,
-                Level = src.Level
+                Level = src.Level,
+                Type = preferType,
+
             };
         }
 
         public static FolderFile FromDAO(this FileDAO src)
         {
-            return new FolderFile()
+            return src == null ? null : new FolderFile()
             {
                 Id = src.Id,
-                Type = src.Type,
+                FileId = src.FileId,
+                FileType = src.FileType,
                 Path = src.Path,
+                ParentId = src.ParentId,
             };
         }
 
@@ -98,32 +110,32 @@ namespace SMPlayer.Helpers
             return new FileDAO()
             {
                 Id = src.Id,
-                Type = src.Type,
+                FileId = src.FileId,
+                FileType = src.FileType,
                 Path = src.Path,
+                ParentId = src.ParentId,
             };
         }
 
-        public static FolderTree FromDAO(this FolderTreeDAO src)
+        public static FolderTree FromDAO(this FolderDAO src)
         {
             return new FolderTree()
             {
                 Id = src.Id,
-                Trees = src.Trees.Select(i => i.FromDAO()).ToList(),
-                Files = src.Files.Select(i => i.FromDAO()).ToList(),
                 Path = src.Path,
                 Criterion = src.Criterion
             };
         }
 
-        public static FolderTreeDAO ToDAO(this FolderTree src)
+        public static FolderDAO ToDAO(this FolderTree src)
         {
-            return new FolderTreeDAO()
+            return new FolderDAO()
             {
                 Id = src.Id,
-                Trees = src.Trees.Select(i => i.ToDAO()).ToList(),
-                Files = src.Files.Select(i => i.ToDAO()).ToList(),
                 Path = src.Path,
-                Criterion = src.Criterion
+                Criterion = src.Criterion,
+                Folders = src.Trees.Select(i => i.ToDAO()).ToList(),
+                Files = src.Files.Select(i => i.ToDAO()).ToList()
             };
         }
 
@@ -136,15 +148,6 @@ namespace SMPlayer.Helpers
                 Albums = src.Albums,
                 Playlists = src.Playlists,
                 Folders = src.Folders,
-                PreferredSongs = src.PreferredSongs.Select(i => i.FromDAO()).ToList(),
-                PreferredArtists = src.PreferredArtists.Select(i => i.FromDAO()).ToList(),
-                PreferredAlbums = src.PreferredAlbums.Select(i => i.FromDAO()).ToList(),
-                PreferredPlaylists = src.PreferredPlaylists.Select(i => i.FromDAO()).ToList(),
-                PreferredFolders = src.PreferredFolders.Select(i => i.FromDAO()).ToList(),
-                RecentAdded = src.RecentAdded.FromDAO(),
-                MyFavorites = src.MyFavorites.FromDAO(),
-                MostPlayed = src.MostPlayed.FromDAO(),
-                LeastPlayed = src.LeastPlayed.FromDAO()
             };
         }
 
@@ -157,15 +160,6 @@ namespace SMPlayer.Helpers
                 Albums = src.Albums,
                 Playlists = src.Playlists,
                 Folders = src.Folders,
-                PreferredSongs = src.PreferredSongs.Select(i => i.ToDAO()).ToList(),
-                PreferredArtists = src.PreferredArtists.Select(i => i.ToDAO()).ToList(),
-                PreferredAlbums = src.PreferredAlbums.Select(i => i.ToDAO()).ToList(),
-                PreferredPlaylists = src.PreferredPlaylists.Select(i => i.ToDAO()).ToList(),
-                PreferredFolders = src.PreferredFolders.Select(i => i.ToDAO()).ToList(),
-                RecentAdded = src.RecentAdded.ToDAO(),
-                MyFavorites = src.MyFavorites.ToDAO(),
-                MostPlayed = src.MostPlayed.ToDAO(),
-                LeastPlayed = src.LeastPlayed.ToDAO()
             };
         }
 
@@ -173,9 +167,7 @@ namespace SMPlayer.Helpers
         {
             return new Settings()
             {
-                MusicLibrary = src.MusicLibrary,
                 RootPath = src.RootPath,
-                Tree = src.Tree.FromDAO(),
                 LastMusicIndex = src.LastMusicIndex,
                 Mode = src.Mode,
                 Volume = src.Volume,
@@ -184,11 +176,9 @@ namespace SMPlayer.Helpers
                 NotificationSend = src.NotificationSend,
                 NotificationDisplay = src.NotificationDisplay,
                 LastPage = src.LastPage,
-                Playlists = src.Playlists.Select(p => p.FromDAO()).ToList(),
                 LastPlaylistId = src.LastPlaylist,
                 LocalFolderGridView = src.LocalFolderGridView,
                 LocalMusicGridView = src.LocalMusicGridView,
-                MyFavorites = src.MyFavorites.FromDAO(),
                 RecentPlayedSongs = src.RecentPlayed,
                 LimitedRecentPlayedItems = src.LimitedRecentPlayedItems,
                 MiniModeWithDropdown = src.MiniModeWithDropdown,
@@ -210,7 +200,6 @@ namespace SMPlayer.Helpers
                 SearchPlaylistsCriterion = src.SearchPlaylistsCriterion,
                 SearchFoldersCriterion = src.SearchFoldersCriterion,
                 Preference = src.Preference.FromDAO(),
-                IdGenerator = new IdGenerator(src.IdMap),
                 RecentAdded = src.RecentAdded,
             };
         }
@@ -219,9 +208,7 @@ namespace SMPlayer.Helpers
         {
             return new SettingsDAO()
             {
-                MusicLibrary = src.MusicLibrary,
                 RootPath = src.RootPath,
-                Tree = src.Tree.ToDAO(),
                 LastMusicIndex = src.LastMusicIndex,
                 Mode = src.Mode,
                 Volume = src.Volume,
@@ -230,11 +217,9 @@ namespace SMPlayer.Helpers
                 NotificationSend = src.NotificationSend,
                 NotificationDisplay = src.NotificationDisplay,
                 LastPage = src.LastPage,
-                Playlists = src.Playlists.Select(p => p.ToDAO()).ToList(),
                 LastPlaylist = src.LastPlaylistId,
                 LocalFolderGridView = src.LocalFolderGridView,
                 LocalMusicGridView = src.LocalMusicGridView,
-                MyFavorites = src.MyFavorites.ToDAO(),
                 RecentPlayed = src.RecentPlayedSongs,
                 LimitedRecentPlayedItems = src.LimitedRecentPlayedItems,
                 MiniModeWithDropdown = src.MiniModeWithDropdown,
@@ -256,7 +241,6 @@ namespace SMPlayer.Helpers
                 SearchPlaylistsCriterion = src.SearchPlaylistsCriterion,
                 SearchFoldersCriterion = src.SearchFoldersCriterion,
                 Preference = src.Preference.ToDAO(),
-                IdMap = src.IdGenerator.IdMap,
                 RecentAdded = src.RecentAdded,
             };
         }

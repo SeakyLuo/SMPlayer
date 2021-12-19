@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,16 @@ using System.Threading.Tasks;
 
 namespace SMPlayer.Models.DAO
 {
+    [Table("File")]
     public class FileDAO
     {
-        // 文件ID
+        [PrimaryKey, AutoIncrement]
         public long Id { get; set; }
-        public FileType Type { get; set; }
+        [Indexed]
+        public long ParentId { get; set; }
+        public long FileId { get; set; } // 对应的文件ID，非该记录ID
+        public FileType FileType { get; set; }
         public string Path { get; set; }
+        public ActiveState State { get; set; }
     }
 }

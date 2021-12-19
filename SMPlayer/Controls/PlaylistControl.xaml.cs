@@ -65,7 +65,7 @@ namespace SMPlayer
         public ObservableCollection<Music> ItemsSource
         {
             get => currentPlaylist;
-            set => currentPlaylist.SetTo(value);
+            set => currentPlaylist = value;
         }
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
         public bool ShowAlbumText
@@ -125,7 +125,7 @@ namespace SMPlayer
 
         private void PlaylistController_Loaded(object sender, RoutedEventArgs e)
         {
-            if (IsNowPlaying) CurrentPlaylist.SetTo(MusicPlayer.CurrentPlaylist);
+            if (IsNowPlaying) CurrentPlaylist.SetTo(MusicPlayer.CurrentPlaylist.Select(i => i.Copy()));
             Helper.GetMainPageContainer().SetMultiSelectListener(this);
         }
 

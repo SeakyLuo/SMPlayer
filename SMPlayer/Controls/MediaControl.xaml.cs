@@ -922,12 +922,12 @@ namespace SMPlayer
 
         private void PlayAlbumItem_Click(object sender, RoutedEventArgs e)
         {
-            MusicPlayer.SetMusicAndPlay(Settings.settings.AllSongs.Where(m => m.Album == MusicPlayer.CurrentMusic.Album));
+            MusicPlayer.SetMusicAndPlay(Settings.AllSongs.Where(m => m.Album == MusicPlayer.CurrentMusic.Album));
         }
 
         private void PlayArtistItem_Click(object sender, RoutedEventArgs e)
         {
-            MusicPlayer.SetMusicAndPlay(Settings.settings.AllSongs.Where(m => m.Artist == MusicPlayer.CurrentMusic.Artist));
+            MusicPlayer.SetMusicAndPlay(Settings.AllSongs.Where(m => m.Artist == MusicPlayer.CurrentMusic.Artist));
         }
 
         public void Tick()

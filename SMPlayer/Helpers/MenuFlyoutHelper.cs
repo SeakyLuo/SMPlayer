@@ -785,7 +785,7 @@ namespace SMPlayer
                 };
                 flyout.Items.Add(recentPlayed);
             }
-            if (Settings.settings.MusicLibrary.Count > randomLimit)
+            if (Settings.AllSongs.Count() > randomLimit)
             {
                 flyout.Items.Add(new MenuFlyoutSeparator());
                 var mostPlayed = new MenuFlyoutItem()

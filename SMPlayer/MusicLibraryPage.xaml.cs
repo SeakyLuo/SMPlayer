@@ -39,7 +39,7 @@ namespace SMPlayer
         {
             SetHeader();
             if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
-            SortAndSetAllSongs(Settings.settings.AllSongs);
+            SortAndSetAllSongs(Settings.AllSongs);
             MusicPlayer.SetMusicPlaying(AllSongs, MusicPlayer.CurrentMusic);
         }
 
@@ -49,7 +49,7 @@ namespace SMPlayer
             UpdateHelper.CheckNewMusic(Settings.settings.Tree, (folder) =>
             {
                 IsLibraryUnchangedAfterChecking = true;
-                SortAndSetAllSongs(Settings.settings.AllSongs);
+                SortAndSetAllSongs(Settings.AllSongs);
             });
         }
 
@@ -57,7 +57,7 @@ namespace SMPlayer
         {
             var music = (Music)MusicLibraryDataGrid.SelectedItem;
             if (music == null) return;
-            MusicPlayer.SetMusicAndPlay(music);
+            MusicPlayer.AddMusicAndPlay(music);
         }
 
         private void MenuFlyout_Opening(object sender, object e)
@@ -100,8 +100,9 @@ namespace SMPlayer
             var favSet = Settings.settings.MyFavorites.SongIds.ToHashSet();
             foreach (var item in songs)
             {
-                item.Favorite = favSet.Contains(item.Id);
-                AllSongs.Add(item);
+                Music music = item.Copy();
+                music.Favorite = favSet.Contains(item.Id);
+                AllSongs.Add(music);
             }
             SetHeader();
         }

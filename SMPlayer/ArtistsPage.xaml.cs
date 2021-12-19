@@ -61,7 +61,7 @@ namespace SMPlayer
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (Artists.Count == 0) Setup(Settings.settings.AllSongs);
+            if (Artists.Count == 0) Setup(Settings.AllSongs);
             targetArtist = e.Parameter;
         }
 

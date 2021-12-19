@@ -133,7 +133,8 @@ namespace SMPlayer.Helpers
         }
         public static bool IsTargetPlaylist(Playlist playlist, string keyword)
         {
-            return playlist.Name.Contains(keyword, Comparison) || playlist.Songs.Any(m => IsTargetMusic(m, keyword));
+            return playlist.Name.Contains(keyword, Comparison) || 
+                   (!playlist.IsEmpty && playlist.Songs.Any(m => IsTargetMusic(m, keyword)));
         }
 
         public static IEnumerable<AlbumView> SortPlaylists(IEnumerable<AlbumView> src, string keyword, SortBy criterion)
@@ -213,9 +214,9 @@ namespace SMPlayer.Helpers
 
         public static async Task<SearchResult> Search(string keyword)
         {
-            Music music = (await Task.Run(() => SearchSongs(Settings.settings.AllSongs, keyword, SortBy.Default)))?.FirstOrDefault();
-            Playlist artist = (await Task.Run(() => SearchArtists(Settings.settings.AllSongs, keyword, SortBy.Default)))?.FirstOrDefault();
-            AlbumView album = (await Task.Run(() => SearchAlbums(Settings.settings.AllSongs, keyword, SortBy.Default)))?.FirstOrDefault();
+            Music music = (await Task.Run(() => SearchSongs(Settings.AllSongs, keyword, SortBy.Default)))?.FirstOrDefault();
+            Playlist artist = (await Task.Run(() => SearchArtists(Settings.AllSongs, keyword, SortBy.Default)))?.FirstOrDefault();
+            AlbumView album = (await Task.Run(() => SearchAlbums(Settings.AllSongs, keyword, SortBy.Default)))?.FirstOrDefault();
             AlbumView playlist = (await Task.Run(() => SearchPlaylists(Settings.settings.Playlists, keyword, SortBy.Default)))?.FirstOrDefault();
             GridFolderView folder = (await Task.Run(() => SearchFolders(Settings.settings.Tree, keyword, SortBy.Default)))?.FirstOrDefault();
             return MergeSearchResult(keyword, music, artist, album, playlist, folder);
@@ -238,7 +239,7 @@ namespace SMPlayer.Helpers
 
         public static async Task<SearchResult> SearchAlbumMusic(string albumName, string keyword)
         {
-            AlbumView album = (await Task.Run(() => SearchAlbums(Settings.settings.AllSongs, albumName, SortBy.Default)))?.FirstOrDefault();
+            AlbumView album = (await Task.Run(() => SearchAlbums(Settings.AllSongs, albumName, SortBy.Default)))?.FirstOrDefault();
             return SearchMusicInCollection(album?.Songs, keyword);
         }
 
@@ -263,7 +264,7 @@ namespace SMPlayer.Helpers
 
         private static async Task<SearchResult> SearchByArtist(string artist, string keyword, SearchType? searchType)
         {
-            IEnumerable<Music> artistMusic = Settings.settings.AllSongs.Where(i => IsTargetArtist(i, artist));
+            IEnumerable<Music> artistMusic = Settings.AllSongs.Where(i => IsTargetArtist(i, artist));
             Music music = null;
             AlbumView album = null;
             if (!string.IsNullOrEmpty(keyword))

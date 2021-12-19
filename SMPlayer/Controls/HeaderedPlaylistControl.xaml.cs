@@ -173,10 +173,10 @@ namespace SMPlayer
         }
         private void ExecutePlaylistDeletion(Playlist playlist)
         {
-            int index = Settings.settings.RemovePlaylist(playlist);
+            Settings.settings.RemovePlaylist(playlist);
             MainPage.Instance.ShowUndoNotification(Helper.LocalizeMessage("PlaylistRemoved", playlist.Name), () =>
             {
-                Settings.settings.InsertPlaylist(playlist, index);
+                Settings.settings.AddPlaylist(playlist);
             });
         }
 
@@ -185,7 +185,7 @@ namespace SMPlayer
             if (AllowClear) SetPlaylistInfo(SongCountConverter.ToStr(newCollection));
             if (IsPlaylist)
             {
-                Settings.settings.SelectPlaylistById(CurrentPlaylist.Id)?.Remove(music);
+                Settings.settings.RemoveMusicFromPlaylist(CurrentPlaylist, music);
             }
         }
 
@@ -326,12 +326,12 @@ namespace SMPlayer
             SetAsPreferredButton.Visibility = Visibility.Visible;
         }
 
-        void IPlaylistEventListener.Added(Playlist playlist, int? index) { }
+        void IPlaylistEventListener.Added(Playlist playlist) { }
         void IPlaylistEventListener.Renamed(Playlist playlist)
         {
             Confirmed(playlist.Name);
         }
-        void IPlaylistEventListener.Removed(Playlist playlist, int index) { }
+        void IPlaylistEventListener.Removed(Playlist playlist) { }
 
         CompositionPropertySet _props;
         CompositionPropertySet _scrollerPropertySet;

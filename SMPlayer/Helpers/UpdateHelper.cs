@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Models;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,19 +58,21 @@ namespace SMPlayer.Helpers
         {
             MainPage.Instance.Loader.ShowDeterminant(loadingMessage ?? "LoadMusicLibrary", true);
             treeUpdateListener.Message = loadingMessage;
-            FolderTree tree = new FolderTree();
             TreeOperationIndicator indicator = new TreeOperationIndicator()
             {
                 Max = treeUpdateListener == null ? 0 : await folder.CountFilesAsync()
             };
-            if (!await Init(tree, folder, treeUpdateListener, indicator))
+            bool initFinished = false;
+            SQLHelper.Run(async c =>
+            {
+                initFinished = await LoadFolder(c, folder, treeUpdateListener, indicator);
+            });
+            if (!initFinished)
             {
                 return false;
             }
             MainPage.Instance.Loader.SetLocalizedText(loadingMessage ?? "UpdateMusicLibrary");
             Helper.CurrentFolder = folder;
-
-            Settings.settings.Tree = Settings.settings.Tree.IsEmpty ? SetTreeId(tree) : MergeTree(Settings.settings.Tree, tree);
             Settings.settings.RootPath = folder.Path;
 
             MainPage.Instance.Loader.Progress = 0;
@@ -86,141 +89,94 @@ namespace SMPlayer.Helpers
             return true;
         }
 
-        private static async Task<bool> Init(FolderTree tree, StorageFolder folder, ITreeUpdateListener listener, TreeOperationIndicator indicator)
+        private static async Task<bool> LoadFolder(SQLiteConnection c, StorageFolder folder, ITreeUpdateListener listener, TreeOperationIndicator indicator, TreeUpdateData updateData = null)
         {
             LoadingStatus = ExecutionStatus.Running;
-            var samePath = folder.Path == tree.Path;
-            if (string.IsNullOrEmpty(tree.Path))
+            FolderTree tree = new FolderTree();
+            foreach (var subFolder in await folder.GetFoldersAsync())
             {
-                // New folder tree
-                foreach (var subFolder in await folder.GetFoldersAsync())
+                if (LoadingStatus == ExecutionStatus.Break) return false;
+                var branch = new FolderTree();
+                await LoadFolder(c, subFolder, listener, indicator);
+                if (branch.IsNotEmpty)
                 {
-                    if (LoadingStatus == ExecutionStatus.Break) return false;
-                    var branch = new FolderTree();
-                    await Init(branch, subFolder, listener, indicator);
-                    if (branch.IsNotEmpty) tree.Trees.Add(branch);
-                }
-                foreach (var file in await folder.GetFilesAsync())
-                {
-                    if (LoadingStatus == ExecutionStatus.Break) return false;
-                    if (file.IsMusicFile())
-                    {
-                        Music music = await Music.LoadFromFileAsync(file);
-                        Settings.settings.AddMusic(music);
-                        listener?.OnUpdate(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
-                        tree.Files.Add(new FolderFile(music));
-                    }
+                    tree.Trees.Add(branch);
                 }
             }
-            else if (!samePath && folder.Path.StartsWith(tree.Path))
+            foreach (var file in await folder.GetFilesAsync())
             {
-                // New folder is a Subfolder of the current folder
-                FolderTree branch = tree.FindTree(folder.Path);
-                tree.CopyFrom(branch);
-                listener?.OnUpdate(folder.DisplayName, "", 0, 0);
+                if (LoadingStatus == ExecutionStatus.Break) return false;
+                if (file.IsMusicFile())
+                {
+                    Music music = await Music.LoadFromFileAsync(file);
+                    listener?.OnUpdate(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
+                    tree.Files.Add(music.ToFolderFile());
+                }
             }
-            else if (!samePath && tree.Path.StartsWith(folder.Path))
+            if (tree.IsEmpty)
             {
-                // Current folder is a Subfolder of the new folder
-                FolderTree newTree = new FolderTree();
-                var folders = await folder.GetFoldersAsync();
-                foreach (var subFolder in folders)
-                {
-                    if (LoadingStatus == ExecutionStatus.Break) return false;
-                    FolderTree branch;
-                    if (subFolder.Path == tree.Path)
-                    {
-                        branch = new FolderTree(tree);
-                    }
-                    else
-                    {
-                        branch = new FolderTree();
-                        await Init(branch, subFolder, listener, indicator);
-                    }
-                    if (tree.IsNotEmpty) newTree.Trees.Add(tree);
-                }
-                foreach (var file in await folder.GetFilesAsync())
-                {
-                    if (LoadingStatus == ExecutionStatus.Break) return false;
-                    if (file.IsMusicFile())
-                    {
-                        Music music = await Music.LoadFromFileAsync(file);
-                        Settings.settings.AddMusic(music);
-                        listener?.OnUpdate(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
-                        newTree.Files.Add(new FolderFile(music));
-                    }
-                }
-                tree.CopyFrom(newTree);
-            }
-            else
-            {
-                // No hierarchy between folders
-                // or update folder
-                var trees = new List<FolderTree>();
-                foreach (var subFolder in await folder.GetFoldersAsync())
-                {
-                    if (LoadingStatus == ExecutionStatus.Break) return false;
-                    var source = tree.Trees.FirstOrDefault(t => t.Path == subFolder.Path);
-                    var branch = new FolderTree()
-                    {
-                        Criterion = source?.Criterion ?? SortBy.Title
-                    };
-                    await Init(branch, subFolder, listener, indicator);
-                    if (branch.IsNotEmpty) trees.Add(branch);
-                }
-                tree.Clear();
-                tree.Trees = trees;
-                foreach (var file in await folder.GetFilesAsync())
-                {
-                    if (LoadingStatus == ExecutionStatus.Break) return false;
-                    if (file.IsMusicFile())
-                    {
-                        Music music = await Music.LoadFromFileAsync(file);
-                        Settings.settings.AddMusic(music);
-                        listener?.OnUpdate(folder.DisplayName, music.Name, indicator.Update(), indicator.Max);
-                        tree.Files.Add(new FolderFile(music));
-                    }
-                }
+                return true;
             }
             tree.Path = folder.Path;
-            tree.Sort();
+            ResetFolderData(c, tree, updateData);
             LoadingStatus = ExecutionStatus.Ready;
             return true;
         }
 
         /**
-         * Merge source to target
+         * 重置文件夹数据库
          */
-        private static FolderTree MergeTree(FolderTree source, FolderTree target)
+        private static void ResetFolderData(SQLiteConnection c, FolderTree folder, TreeUpdateData updateData)
         {
-            foreach (var branch in target.Trees)
+            FolderTree existing = c.SelectFolderByPath(folder.Path);
+            if (existing == null)
             {
-                if (source.FindTree(branch.Path) is FolderTree src)
+                c.InsertFolder(folder);
+            }
+            else
+            {
+                folder.Id = existing.Id;
+            }
+            foreach (var item in folder.Trees)
+            {
+                item.ParentId = folder.Id;
+                ResetFolderData(c, item, updateData);
+            }
+            HashSet<string> currentFilePathSet = folder.Files.Select(f => f.Path).ToHashSet();
+            Dictionary<string, FolderFile> existingFileDict = c.SelectSubFiles(folder).ToDictionary(i => i.Path);
+            foreach (var entry in existingFileDict)
+            {
+                if (!currentFilePathSet.Contains(entry.Key))
                 {
-                    // 如果有能合并的老树
-                    MergeTree(src, branch);
+                    Settings.settings.RemoveFile(entry.Value);
+                    updateData.Removed++;
+                }
+            }
+            foreach (var item in folder.Files)
+            {
+                item.ParentId = folder.Id;
+                FolderFile existingFile = existingFileDict[item.Path];
+                if (existingFile != null)
+                {
+                    if (item.FileType == FileType.Music)
+                    {
+                        Music music = (Music)item.src;
+                        music.Id = existingFile.FileId;
+                        Settings.settings.AddMusic(c, music);
+                    }
                 }
                 else
                 {
-                    // 没有的话这就是棵新树
-                    branch.Id = Settings.settings.IdGenerator.GenerateTreeId();
+                    if (item.FileType == FileType.Music)
+                    {
+                        Music music = (Music)item.src;
+                        Settings.settings.AddMusic(c, music);
+                        item.FileId = music.Id;
+                    }
+                    updateData.Added++;
+                    c.InsertFile(item);
                 }
             }
-            if (source.FindTree(target.Path) is FolderTree srcTree)
-            {
-                target.CopyFrom(srcTree);
-            }
-            return target;
-        }
-
-        private static FolderTree SetTreeId(FolderTree tree)
-        {
-            tree.Id = Settings.settings.IdGenerator.GenerateTreeId();
-            foreach (var branch in tree.Trees)
-            {
-                SetTreeId(branch);
-            }
-            return tree;
         }
 
         public static async void CheckNewMusic(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
@@ -244,28 +200,32 @@ namespace SMPlayer.Helpers
                 ExitChecking(data);
                 return;
             }
-            if (!await CheckNewFile(tree, folder, data))
+            bool isFinished = false;
+            SQLHelper.Run(async c =>
+            {
+                isFinished = await LoadFolder(c, folder, null, null, data);
+            });
+            if (!isFinished)
             {
                 ExitChecking(data);
                 return;
             }
-            if (data.More != 0 || data.Less != 0)
+            if (data.Added != 0 || data.Removed != 0)
             {
-                Settings.settings.Tree.FindTree(tree).CopyFrom(tree);
                 NotifyLibraryChange(tree.Path);
                 afterTreeUpdated?.Invoke(tree);
                 App.Save();
             }
             MainPage.Instance?.Loader.Hide();
             string message;
-            if (data.More == 0 && data.Less == 0)
+            if (data.Added == 0 && data.Removed == 0)
                 message = Helper.LocalizeMessage("CheckNewMusicResultNoChange");
-            else if (data.More == 0)
-                message = Helper.LocalizeMessage("CheckNewMusicResultRemoved", data.Less);
-            else if (data.Less == 0)
-                message = Helper.LocalizeMessage("CheckNewMusicResultAdded", data.More);
+            else if (data.Added == 0)
+                message = Helper.LocalizeMessage("CheckNewMusicResultRemoved", data.Removed);
+            else if (data.Removed == 0)
+                message = Helper.LocalizeMessage("CheckNewMusicResultAdded", data.Added);
             else
-                message = Helper.LocalizeMessage("CheckNewMusicResultChange", data.More, data.Less);
+                message = Helper.LocalizeMessage("CheckNewMusicResultChange", data.Added, data.Removed);
             Helper.ShowNotificationRaw(message);
         }
 
@@ -275,60 +235,6 @@ namespace SMPlayer.Helpers
                 MainPage.Instance.ShowNotification(data.Message);
             MainPage.Instance?.Loader.Hide();
             return data;
-        }
-
-        /**
-         * 同MergeTree，这里不做删除
-         */ 
-        private static async Task<bool> CheckNewFile(FolderTree tree, StorageFolder folder, TreeUpdateData data)
-        {
-            LoadingStatus = ExecutionStatus.Running;
-            var pathSet = new HashSet<string>(); // folder path set
-            foreach (var subFolder in await folder.GetFoldersAsync())
-            {
-                if (LoadingStatus == ExecutionStatus.Break) return false;
-                if (tree.Trees.FirstOrDefault(t => t.Path == subFolder.Path) is FolderTree branch)
-                {
-                    await CheckNewFile(branch, subFolder, data);
-                }
-                else
-                {
-                    branch = new FolderTree();
-                    if (!await Init(branch, subFolder, null, null)) return false;
-                    if (branch.IsNotEmpty)
-                    {
-                        branch.Id = Settings.settings.IdGenerator.GenerateTreeId();
-                        tree.Trees.Add(branch);
-                        data.More += branch.FileCount;
-                    }
-                }
-                pathSet.Add(subFolder.Name);
-            }
-            pathSet = tree.Files.Select(m => m.Path).ToHashSet(); // file path set
-            var newFolderFilePathSet = new HashSet<string>();
-            foreach (var file in await folder.GetFilesAsync())
-            {
-                if (LoadingStatus == ExecutionStatus.Break) return false;
-                if (!file.IsMusicFile()) continue;
-                newFolderFilePathSet.Add(file.Path);
-                if (!pathSet.Contains(file.Path))
-                {
-                    Music music = await Music.LoadFromFileAsync(file);
-                    Settings.settings.AddMusic(music);
-                    tree.Files.Add(new FolderFile(music));
-                    data.More++;
-                }
-            }
-            foreach (var file in tree.Files.FindAll(m => !newFolderFilePathSet.Contains(m.Path)))
-            {
-                if (LoadingStatus == ExecutionStatus.Break) return false;
-                tree.Files.Remove(file);
-                data.Less++;
-                Settings.settings.RemoveFile(file);
-            }
-            tree.Sort();
-            LoadingStatus = ExecutionStatus.Ready;
-            return true;
         }
     }
 
@@ -351,8 +257,8 @@ namespace SMPlayer.Helpers
 
     public class TreeUpdateData
     {
-        public int More { get; set; } = 0;
-        public int Less { get; set; } = 0;
+        public int Added { get; set; } = 0;
+        public int Removed { get; set; } = 0;
         public string Message { get; set; }
     }
 

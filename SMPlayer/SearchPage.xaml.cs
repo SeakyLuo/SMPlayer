@@ -306,7 +306,7 @@ namespace SMPlayer
     public class SearchKeyword
     {
         public string Text;
-        public IEnumerable<Music> Songs = Settings.settings.AllSongs;
+        public IEnumerable<Music> Songs = Settings.AllSongs;
         public IEnumerable<Playlist> Playlists = Settings.settings.Playlists;
         public FolderTree Tree = Settings.settings.Tree;
     }

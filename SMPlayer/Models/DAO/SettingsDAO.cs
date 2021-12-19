@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Helpers;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,11 +10,11 @@ using Windows.UI;
 
 namespace SMPlayer.Models.DAO
 {
+    [Table("Settings")]
     public class SettingsDAO
     {
-        public Dictionary<long, Music> MusicLibrary { get; set; } = new Dictionary<long, Music>();
         public string RootPath { get; set; } = "";
-        public FolderTreeDAO Tree { get; set; } = new FolderTreeDAO();
+        public long RootTreeId { get; set; }
         public int LastMusicIndex { get; set; } = -1;
         public PlayMode Mode { get; set; } = PlayMode.Once;
         public double Volume { get; set; } = 50.0d;
@@ -22,12 +23,10 @@ namespace SMPlayer.Models.DAO
         public NotificationSendMode NotificationSend { get; set; } = NotificationSendMode.MusicChanged;
         public NotificationDisplayMode NotificationDisplay { get; set; } = NotificationDisplayMode.Normal;
         public string LastPage { get; set; } = "";
-        public List<PlaylistDAO> Playlists { get; set; } = new List<PlaylistDAO>();
         public long LastPlaylist { get; set; }
         public bool LocalMusicGridView { get; set; } = true;
         public bool LocalFolderGridView { get; set; } = true;
-        public PlaylistDAO MyFavorites { get; set; } = new PlaylistDAO() { Name = MenuFlyoutHelper.MyFavorites };
-        public List<long> RecentPlayed { get; set; } = new List<long>();
+        public long MyFavorites { get; set; }
         public bool MiniModeWithDropdown { get; set; } = false;
         public bool IsMuted { get; set; } = false;
         public int LimitedRecentPlayedItems { get; set; } = -1;
@@ -40,27 +39,16 @@ namespace SMPlayer.Models.DAO
         public bool HideMultiSelectCommandBarAfterOperation { get; set; } = true;
         public bool ShowCount { get; set; } = true;
         public bool ShowLyricsInNotification { get; set; } = false;
-        public List<string> RecentSearches = new List<string>();
-        public VoiceAssistantLanguage VoiceAssistantPreferredLanguage = VoiceAssistantHelper.ConvertLanguage(Helper.CurrentLanguage);
-
+        public List<string> RecentSearches { get; set; } = new List<string>();
+        public List<long> RecentAdded { get; set; } = new List<long>();
+        public List<long> RecentPlayed { get; set; } = new List<long>();
+        public VoiceAssistantLanguage VoiceAssistantPreferredLanguage { get; set; } = VoiceAssistantHelper.ConvertLanguage(Helper.CurrentLanguage);
         public SortBy SearchArtistsCriterion { get; set; } = SortBy.Default;
         public SortBy SearchAlbumsCriterion { get; set; } = SortBy.Default;
         public SortBy SearchSongsCriterion { get; set; } = SortBy.Default;
         public SortBy SearchPlaylistsCriterion { get; set; } = SortBy.Default;
         public SortBy SearchFoldersCriterion { get; set; } = SortBy.Default;
-
         public PreferenceSettingsDAO Preference { get; set; } = new PreferenceSettingsDAO();
-
-        public Dictionary<IdType, int> IdMap { get; set; } = new Dictionary<IdType, int>();
-        public List<long> RecentAdded { get; set; } = new List<long>();
-
-        public SettingsDAO()
-        {
-            foreach (var idType in Enum.GetValues(typeof(IdType)))
-            {
-                IdMap.Add((IdType)idType, 0);
-            }
-        }
 
     }
 }

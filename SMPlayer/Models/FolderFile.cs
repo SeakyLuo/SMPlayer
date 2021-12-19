@@ -9,23 +9,26 @@ namespace SMPlayer.Models
 {
     public class FolderFile
     {
-        // 文件ID
         public long Id { get; set; }
-        public FileType Type { get; set; }
+        // 文件ID
+        public long FileId { get; set; }
+        public FileType FileType { get; set; }
         public string Path { get; set; }
+        public IFolderFile src { get; set; }
+        public long ParentId { get; set; }
 
         public FolderFile() { }
 
         public FolderFile(Music music)
         {
-            Id = music.Id;
-            Type = FileType.Music;
+            FileId = music.Id;
+            FileType = FileType.Music;
             Path = music.Path;
         }
 
         public Music ToMusic()
         {
-            return Settings.settings.SelectMusicById(Id);
+            return Settings.FindMusic(FileId);
         }
 
         public void RenameFolder(string oldPath, string newPath)
@@ -40,14 +43,14 @@ namespace SMPlayer.Models
 
         public void CopyFrom(FolderFile file)
         {
-            Id = file.Id;
-            Type = file.Type;
+            FileId = file.FileId;
+            FileType = file.FileType;
             Path = file.Path;
         }
 
         public bool IsMusicFile()
         {
-            return Type == FileType.Music;
+            return FileType == FileType.Music;
         }
 
         public override bool Equals(object obj)
@@ -64,5 +67,10 @@ namespace SMPlayer.Models
     public enum FileType
     {
         Music
+    }
+
+    public interface IFolderFile
+    {
+        FolderFile ToFolderFile();
     }
 }
