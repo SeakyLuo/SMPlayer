@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI;
 
 namespace SMPlayer.Helpers
 {
@@ -58,13 +59,13 @@ namespace SMPlayer.Helpers
                 Id = src.Id,
                 Name = src.Name,
                 Criterion = src.Criterion,
-                Songs = src.Songs.Select(m => m.ToPlaylistItemDAO(src)).ToList()
+                Songs = src.Songs.Select(m => m.ToPlaylistItemDAO(src.Id)).ToList()
             };
         }
 
-        public static PlaylistItemDAO ToPlaylistItemDAO(this Music src, Playlist playlist)
+        public static PlaylistItemDAO ToPlaylistItemDAO(this Music src, long playlistId)
         {
-            return new PlaylistItemDAO { PlaylistId = playlist.Id, ItemId = src.Id };
+            return new PlaylistItemDAO { PlaylistId = playlistId, ItemId = src.Id };
         }
 
         public static PreferenceItem FromDAO(this PreferenceItemDAO src)
@@ -172,15 +173,14 @@ namespace SMPlayer.Helpers
                 Mode = src.Mode,
                 Volume = src.Volume,
                 IsNavigationCollapsed = src.IsNavigationCollapsed,
-                ThemeColor = src.ThemeColor,
+                ThemeColor = (Color)Windows.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(typeof(Color), src.ThemeColor),
                 NotificationSend = src.NotificationSend,
                 NotificationDisplay = src.NotificationDisplay,
                 LastPage = src.LastPage,
                 LastPlaylistId = src.LastPlaylist,
                 LocalFolderGridView = src.LocalFolderGridView,
                 LocalMusicGridView = src.LocalMusicGridView,
-                RecentPlayedSongs = src.RecentPlayed,
-                LimitedRecentPlayedItems = src.LimitedRecentPlayedItems,
+                MyFavoritesId = src.MyFavorites,
                 MiniModeWithDropdown = src.MiniModeWithDropdown,
                 IsMuted = src.IsMuted,
                 AutoPlay = src.AutoPlay,
@@ -192,15 +192,12 @@ namespace SMPlayer.Helpers
                 HideMultiSelectCommandBarAfterOperation = src.HideMultiSelectCommandBarAfterOperation,
                 ShowCount = src.ShowCount,
                 ShowLyricsInNotification = src.ShowLyricsInNotification,
-                RecentSearches = new ObservableCollection<string>(src.RecentSearches),
                 VoiceAssistantPreferredLanguage = src.VoiceAssistantPreferredLanguage,
                 SearchSongsCriterion = src.SearchSongsCriterion,
                 SearchArtistsCriterion = src.SearchArtistsCriterion,
                 SearchAlbumsCriterion = src.SearchAlbumsCriterion,
                 SearchPlaylistsCriterion = src.SearchPlaylistsCriterion,
                 SearchFoldersCriterion = src.SearchFoldersCriterion,
-                Preference = src.Preference.FromDAO(),
-                RecentAdded = src.RecentAdded,
             };
         }
 
@@ -209,19 +206,19 @@ namespace SMPlayer.Helpers
             return new SettingsDAO()
             {
                 RootPath = src.RootPath,
+                RootTreeId = src.Tree.Id,
                 LastMusicIndex = src.LastMusicIndex,
                 Mode = src.Mode,
                 Volume = src.Volume,
                 IsNavigationCollapsed = src.IsNavigationCollapsed,
-                ThemeColor = src.ThemeColor,
+                ThemeColor = src.ThemeColor.ToString(),
                 NotificationSend = src.NotificationSend,
                 NotificationDisplay = src.NotificationDisplay,
                 LastPage = src.LastPage,
                 LastPlaylist = src.LastPlaylistId,
                 LocalFolderGridView = src.LocalFolderGridView,
                 LocalMusicGridView = src.LocalMusicGridView,
-                RecentPlayed = src.RecentPlayedSongs,
-                LimitedRecentPlayedItems = src.LimitedRecentPlayedItems,
+                MyFavorites = src.MyFavoritesId,
                 MiniModeWithDropdown = src.MiniModeWithDropdown,
                 IsMuted = src.IsMuted,
                 AutoPlay = src.AutoPlay,
@@ -233,15 +230,12 @@ namespace SMPlayer.Helpers
                 HideMultiSelectCommandBarAfterOperation = src.HideMultiSelectCommandBarAfterOperation,
                 ShowCount = src.ShowCount,
                 ShowLyricsInNotification = src.ShowLyricsInNotification,
-                RecentSearches = src.RecentSearches.ToList(),
                 VoiceAssistantPreferredLanguage = src.VoiceAssistantPreferredLanguage,
                 SearchSongsCriterion = src.SearchSongsCriterion,
                 SearchArtistsCriterion = src.SearchArtistsCriterion,
                 SearchAlbumsCriterion = src.SearchAlbumsCriterion,
                 SearchPlaylistsCriterion = src.SearchPlaylistsCriterion,
                 SearchFoldersCriterion = src.SearchFoldersCriterion,
-                Preference = src.Preference.ToDAO(),
-                RecentAdded = src.RecentAdded,
             };
         }
     }

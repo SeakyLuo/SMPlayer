@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace SMPlayer.Models.DAO
 {
-    [Table("PreferenceItem")]
+    [Table(TableName)]
     public class PreferenceItemDAO
     {
+        public const string TableName = "PreferenceItem";
+
         [PrimaryKey, AutoIncrement]
         public long Id { get; set; } 
         public PreferType Type { get; set; }

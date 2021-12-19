@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace SMPlayer.Models.DAO
 {
-    [Table("RecentRecord")]
+    [Table(TableName)]
     public class RecentRecordDAO
     {
+        public const string TableName = "RecentRecord";
+
         [PrimaryKey, AutoIncrement]
         public long Id { get; set; }
         public RecentType Type { get; set; }

@@ -13,10 +13,11 @@ namespace SMPlayer.Models.DAO
         [PrimaryKey, AutoIncrement]
         public long Id { get; set; }
         [Indexed]
+        public string Path { get; set; }
+        [Indexed]
         public long ParentId { get; set; }
         public long FileId { get; set; } // 对应的文件ID，非该记录ID
         public FileType FileType { get; set; }
-        public string Path { get; set; }
         public ActiveState State { get; set; }
     }
 }

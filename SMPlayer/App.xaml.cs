@@ -51,12 +51,12 @@ namespace SMPlayer
             if (rootFrame == null)
             {
                 await Log.Init();
-                SQLHelper.Init();
                 await Helper.Init();
                 await SettingsHelper.Init();
+                await SQLHelper.Init();
+                await UpdateHelper.Init();
                 if (Settings.settings.LastPage == "Albums")
                     await AlbumsPage.Init();
-                await UpdateHelper.Init();
 
                 // 创建要充当导航上下文的框架，并导航到第一页
                 rootFrame = new Frame();

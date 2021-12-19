@@ -24,36 +24,69 @@ namespace SMPlayer.Helpers
             if (!string.IsNullOrEmpty(json) && JsonFileHelper.Convert<Settings>(json) is Settings settings)
             {
                 Settings.settings = settings;
-                var jsonObject = JsonFileHelper.Convert<JObject>(json);
-                List<Music> songs = FlattenFolderTreeInJson(jsonObject["Tree"]);
-                //List<Music> recentAdded = await JsonFileHelper.ReadObjectAsync<List<Music>>(JsonFileName) ?? new List<Music>();
-                SQLHelper.Run(c =>
-                {
-                    c.InsertAll(songs.Select(i => i.ToDAO()));
-                    InsertTree(c, settings.Tree);
-                    InsertPlaylists(c, settings.Playlists);
-                    InsertPreferenceSettings(c, settings.Preference);
-                    InsertRecentPlayed(c, settings);
-                    InsertRecentSearches(c, settings);
-                });
                 await Init(settings);
             }
             else
             {
                 Settings.settings = new Settings();
-                Save();
             }
             Inited = true;
         }
 
-        public static bool Init(string json)
+        // TODO
+        public static async Task Init(StorageFile file)
         {
-            if (JsonFileHelper.Convert<SettingsDAO>(json) is SettingsDAO dao)
+            await file.CopyAsync(Helper.CurrentFolder);
+        }
+
+        public static async Task LoadSettingsAndInsertToDb()
+        {
+            string json = await JsonFileHelper.ReadAsync(JsonFilename);
+            var jsonObject = JsonFileHelper.Convert<JObject>(json);
+            List<Music> songs = FlattenFolderTreeInJson(jsonObject["Tree"]);
+            //List<Music> recentAdded = await JsonFileHelper.ReadObjectAsync<List<Music>>(JsonFileName) ?? new List<Music>();
+            SQLHelper.Run(c =>
             {
-                Settings.settings = dao.FromDAO();
-                return true;
+                c.InsertAll(songs.Select(i => i.ToDAO()));
+                InsertTree(c, Settings.settings.Tree);
+                InsertPlaylist(c, Settings.settings.MyFavorites);
+                InsertPlaylists(c, Settings.settings.Playlists);
+                InsertPreferenceSettings(c, Settings.settings.Preference);
+                InsertRecentPlayed(c, Settings.settings);
+                InsertRecentSearches(c, Settings.settings);
+                c.Insert(Settings.settings.ToDAO());
+            });
+        }
+
+        public static void Save()
+        {
+            if (Settings.settings == null) return;
+            Settings.settings.MusicProgress = MusicPlayer.Position;
+            SQLHelper.Run(c => c.Insert(Settings.settings.ToDAO()));
+        }
+
+        private static async Task Init(Settings settings)
+        {
+            if (string.IsNullOrEmpty(settings.RootPath)) return;
+            try
+            {
+                Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
             }
-            return false;
+            catch (FileNotFoundException)
+            {
+                App.LoadedListeners.Add(() =>
+                {
+                    MainPage.Instance.ShowLocalizedNotification("RootNotFound");
+                    MainPage.Instance.NavigateToPage(typeof(SettingsPage));
+                });
+            }
+            catch (Exception)
+            {
+
+            }
+            foreach (var item in await ApplicationData.Current.LocalFolder.GetItemsAsync())
+                if (item.Name.EndsWith(".TMP") || item.Name.EndsWith(".~tmp"))
+                    await item.DeleteAsync();
         }
 
         private static List<Music> FlattenFolderTreeInJson(JToken tree)
@@ -67,7 +100,10 @@ namespace SMPlayer.Helpers
         {
             FolderDAO result = c.InsertFolder(tree);
             foreach (var folder in tree.Trees)
-                c.InsertFolder(folder);
+            {
+                folder.ParentId = result.Id;
+                InsertTree(c, folder);
+            }
             foreach (FolderFile file in tree.Files)
             {
                 FileDAO fileDAO = file.ToDAO();
@@ -81,30 +117,44 @@ namespace SMPlayer.Helpers
         {
             foreach (var playlist in playlists)
             {
-                foreach (var music in playlist.Songs)
-                {
-                    music.Id = c.SelectMusicByPath(music.Path).Id;
-                }
-                c.InsertPlaylist(playlist);
+                InsertPlaylist(c, playlist);
             }
+        }
+
+        private static void InsertPlaylist(SQLiteConnection c, Playlist playlist)
+        {
+            foreach (var music in playlist.Songs)
+            {
+                music.Id = c.SelectMusicByPath(music.Path).Id;
+            }
+            c.InsertPlaylist(playlist);
         }
 
         private static void InsertPreferenceSettings(SQLiteConnection c, PreferenceSettings settings)
         {
             foreach (PreferenceItem item in settings.PreferredFolders)
             {
-                item.Id = c.SelectFolderByPath(item.Id).Id.ToString();
-                c.InsertPreferenceItem(item, PreferType.Folder);
+                if (c.SelectFolderByPath(item.Id) is FolderTree result)
+                {
+                    item.Id = result.Id.ToString();
+                    c.InsertPreferenceItem(item, PreferType.Folder);
+                }
             }
             foreach (PreferenceItem item in settings.PreferredSongs)
             {
-                item.Id = c.SelectMusicByPath(item.Id).Id.ToString();
-                c.InsertPreferenceItem(item, PreferType.Song);
+                if (c.SelectMusicByPath(item.Id) is Music result)
+                {
+                    item.Id = result.Id.ToString();
+                    c.InsertPreferenceItem(item, PreferType.Song);
+                }
             }
             foreach (PreferenceItem item in settings.PreferredPlaylists)
             {
-                item.Id = c.SelectPlaylistByName(item.Id).Id.ToString();
-                c.InsertPreferenceItem(item, PreferType.Playlist);
+                if (c.SelectPlaylistByName(item.Id) is Playlist result)
+                {
+                    item.Id = result.Id.ToString();
+                    c.InsertPreferenceItem(item, PreferType.Playlist);
+                }
             }
             foreach (PreferenceItem item in settings.PreferredAlbums)
             {
@@ -158,46 +208,6 @@ namespace SMPlayer.Helpers
                     Item = item,
                     Time = DateTimeOffset.Now,
                 });
-            }
-        }
-
-        private static async Task Init(Settings settings)
-        {
-            if (string.IsNullOrEmpty(settings.RootPath)) return;
-            try
-            {
-                Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
-            }
-            catch (FileNotFoundException)
-            {
-                App.LoadedListeners.Add(() =>
-                {
-                    MainPage.Instance.ShowLocalizedNotification("RootNotFound");
-                    MainPage.Instance.NavigateToPage(typeof(SettingsPage));
-                });
-            }
-            catch (Exception)
-            {
-
-            }
-            foreach (var item in await ApplicationData.Current.LocalFolder.GetItemsAsync())
-                if (item.Name.EndsWith(".TMP") || item.Name.EndsWith(".~tmp"))
-                    await item.DeleteAsync();
-        }
-
-        public static void Save()
-        {
-            if (Settings.settings == null) return;
-            Settings.settings.MusicProgress = MusicPlayer.Position;
-            try
-            {
-                //SettingsDAO settingsDAO = Settings.settings.ToDAO();
-                //JsonFileHelper.SaveAsync(NewFilename, settingsDAO);
-                //JsonFileHelper.SaveAsync(Helper.TempFolder, NewFilename + Helper.TimeStamp, settingsDAO);
-            }
-            catch (Exception e)
-            {
-                Log.Warn("Save Exception {0}", e);
             }
         }
     }

@@ -186,6 +186,7 @@ namespace SMPlayer
                             return;
                         }
                         playlist.Add(music);
+                        Settings.settings.AddMusicToPlaylist(playlist, music);
                         listener?.AddTo(Data, playlist, playlist.Count - 1, AddToCollectionType.Playlist);
                         foreach (var clickListener in ClickListeners)
                             clickListener.AddTo(Data, playlist, playlist.Count - 1, AddToCollectionType.Playlist);

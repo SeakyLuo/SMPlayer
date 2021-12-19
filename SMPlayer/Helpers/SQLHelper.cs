@@ -14,27 +14,41 @@ namespace SMPlayer.Helpers
 {
     public static class SQLHelper
     {
-        private const string DBName = "SMPlayerSettings.db";
+        private const string DBFileName = "SMPlayerSettings.db";
 
         private static string BuildDBPath()
         {
-            return Path.Combine(ApplicationData.Current.LocalFolder.Path, DBName);
+            return Path.Combine(Helper.LocalFolder.Path, DBFileName);
         }
 
-        public async static void Init()
+        public async static Task Init()
         {
-            await ApplicationData.Current.LocalFolder.CreateFileAsync(DBName, CreationCollisionOption.OpenIfExists);
+            if (await FileHelper.FileExists(BuildDBPath()))
+            {
+                return;
+            }
+            await Helper.LocalFolder.CreateFileAsync(DBFileName, CreationCollisionOption.OpenIfExists);
             Run(c =>
             {
                 c.CreateTable<SettingsDAO>();
                 c.CreateTable<MusicDAO>();
+                c.CreateIndex<MusicDAO>(i => i.Path, true);
                 c.CreateTable<FolderDAO>();
+                c.CreateIndex<FolderDAO>(i => i.Path, true);
+                c.CreateIndex<FolderDAO>(i => i.ParentId);
                 c.CreateTable<FileDAO>();
+                c.CreateIndex<FileDAO>(i => i.Path, true);
+                c.CreateIndex<FileDAO>(i => i.ParentId);
                 c.CreateTable<PlaylistDAO>();
                 c.CreateTable<PlaylistItemDAO>();
+                c.CreateIndex<PlaylistItemDAO>(i => i.PlaylistId);
                 c.CreateTable<PreferenceSettingsDAO>();
                 c.CreateTable<PreferenceItemDAO>();
+                c.CreateIndex(PreferenceItemDAO.TableName, new string[] { "Type", "ItemId" });
+                c.CreateTable<RecentRecordDAO>();
+                c.CreateIndex(RecentRecordDAO.TableName, new string[] { "Type", "Item" });
             });
+            await SettingsHelper.LoadSettingsAndInsertToDb();
         }
 
         public static void Run(Action<SQLiteConnection> connectionHandler)
@@ -141,11 +155,11 @@ namespace SMPlayer.Helpers
 
         public static Music SelectMusicById(this SQLiteConnection c, long id)
         {
-            return c.Query<MusicDAO>("select * from Music where Id = ? and State = ?", id, ActiveState.Active).FirstOrDefault().FromDAO();
+            return c.Query<MusicDAO>("select * from Music where Id = ? and State = ?", id, ActiveState.Active).FirstOrDefault()?.FromDAO();
         }
         public static List<Music> SelectMusicByIds(this SQLiteConnection c, IEnumerable<long> Ids)
         {
-            return c.Query<MusicDAO>("select * from Music where Id in ? and State = ?", Ids, ActiveState.Active).Select(i => i.FromDAO()).ToList();
+            return Ids.Select(id => c.SelectMusicById(id)).Where(i => i != null).ToList();
         }
 
         public static Music SelectMusicByPath(this SQLiteConnection c, string path)
@@ -205,7 +219,16 @@ namespace SMPlayer.Helpers
 
         public static Playlist SelectPlaylistById(this SQLiteConnection c, long id)
         {
-            return c.Query<PlaylistDAO>("select * from Playlist where Id = ? and State = ?", id, ActiveState.Active).FirstOrDefault().FromDAO();
+            Playlist playlist = c.Query<PlaylistDAO>("select * from Playlist where Id = ? and State = ?", id, ActiveState.Active).FirstOrDefault().FromDAO();
+            if (playlist == null) return null;
+            playlist.Songs.SetTo(SelectPlaylistItems(c, id));
+            return playlist;
+        }
+
+        public static List<Music> SelectPlaylistItems(this SQLiteConnection c, long id)
+        {
+            List<PlaylistItemDAO> items = c.Query<PlaylistItemDAO>("select * from PlaylistItem where PlaylistId = ? and State = ?", id, ActiveState.Active);
+            return SelectMusicByIds(c, items.Select(i => i.ItemId));
         }
 
         public static PreferenceItemDAO SelectPreferenceItem(this SQLiteConnection c, PreferType preferType, string itemId)

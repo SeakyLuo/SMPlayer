@@ -22,8 +22,9 @@ namespace SMPlayer.Models
         public static void AddPlaylistEventListener(IPlaylistEventListener listener) { PlaylistEventListeners.Add(listener); }
         private static readonly List<IFolderTreeEventListener> FolderTreeEventListeners = new List<IFolderTreeEventListener>();
         public static void AddFolderTreeEventListener(IFolderTreeEventListener listener) { FolderTreeEventListeners.Add(listener); }
-
         public static IEnumerable<Music> AllSongs { get => SQLHelper.Run(c => c.SelectAllMusic()); }
+        public static IEnumerable<Music> MyFavoriteSongs { get => SQLHelper.Run(c => c.SelectPlaylistItems(settings.MyFavoritesId)); }
+        public static List<Playlist> AllPlaylists { get => SQLHelper.Run(c => c.SelectAllPlaylists()); }
 
         public string RootPath { get; set; } = "";
         public FolderTree Tree { get; set; } = new FolderTree();
@@ -73,7 +74,7 @@ namespace SMPlayer.Models
 
         public Settings()
         {
-            MyFavorites = new Playlist(MenuFlyoutHelper.MyFavorites);
+            MyFavorites = new Playlist(Constants.MyFavorites);
         }
 
         public static Music FindMusic(IMusicable target) { return FindMusic(target.ToMusic()); }
@@ -88,6 +89,7 @@ namespace SMPlayer.Models
         public static List<Music> FindMusicList(IEnumerable<long> ids) { return SQLHelper.Run(c => c.SelectMusicByIds(ids)); }
         public static Playlist FindPlaylist(long id) { return SQLHelper.Run(c => c.SelectPlaylistById(id)); }
         public static Playlist FindPlaylist(Playlist playlist) { return FindPlaylist(playlist.Id); }
+        public static List<Music> FindPlaylistItems(long id) { return SQLHelper.Run(c => c.SelectPlaylistItems(id)); }
 
         public int FindNextPlaylistNameIndex(string Name)
         {
@@ -127,9 +129,9 @@ namespace SMPlayer.Models
             return index == 0 ? Name : Helper.GetPlaylistName(Name, index);
         }
 
-        private Playlist GetMyFavorites(SQLiteConnection c)
+        public bool IsFavorite(SQLiteConnection c, Music music)
         {
-            return c.SelectPlaylistById(MyFavoritesId);
+            return c.SelectPlaylistItems(MyFavoritesId).Contains(music);
         }
 
         public void LikeMusic(Music music)
@@ -137,9 +139,8 @@ namespace SMPlayer.Models
             music.Favorite = true;
             SQLHelper.Run(c =>
             {
-                Playlist myFavorites = GetMyFavorites(c);
-                if (myFavorites.Contains(music)) return;
-                AddMusicToPlaylist(myFavorites, music);
+                if (IsFavorite(c, music)) return;
+                AddMusicToPlaylist(c, MyFavoritesId, music);
                 foreach (var listener in MusicEventListeners) listener.Liked(music, true);
             });
         }
@@ -148,11 +149,11 @@ namespace SMPlayer.Models
         {
             SQLHelper.Run(c =>
             {
-                AddMusicToPlaylist(c, playlist, music);
+                AddMusicToPlaylist(c, playlist.Id, music);
             });
         }
 
-        private void AddMusicToPlaylist(SQLiteConnection c, Playlist playlist, Music music)
+        private void AddMusicToPlaylist(SQLiteConnection c, long playlist, Music music)
         {
             c.Insert(music.ToPlaylistItemDAO(playlist));
         }

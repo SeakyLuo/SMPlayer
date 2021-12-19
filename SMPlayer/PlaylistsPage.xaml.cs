@@ -32,8 +32,8 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            Playlists.SetTo(Settings.settings.Playlists);
-            PlaylistTabView.SelectedIndex = Playlists.FindIndex(p => p.Id == Settings.settings.LastPlaylistId);
+            Playlists.SetTo(Settings.AllPlaylists);
+            SelectPlaylist(Settings.settings.LastPlaylistId);
             Settings.AddPlaylistEventListener(this);
         }
 
@@ -42,7 +42,7 @@ namespace SMPlayer
             base.OnNavigatedTo(e);
             if (e.Parameter is Playlist playlist)
             {
-                SelectPlaylist(playlist.Name);
+                SelectPlaylist(playlist.Id);
             }
             else if (e.Parameter is string playlistName)
             {
@@ -65,32 +65,26 @@ namespace SMPlayer
 
         private void SelectPlaylist(long id)
         {
-            PlaylistTabView.SelectedItem = SelectPlaylistById(id);
+            Playlist selected = SelectPlaylistById(id);
+            LoadPlaylistSongs(selected);
+            PlaylistTabView.SelectedItem = selected;
         }
 
         private void SelectPlaylist(string target)
         {
-            PlaylistTabView.SelectedItem = Playlists.FirstOrDefault(p => p.Name == target);
+            Playlist selected = Playlists.FirstOrDefault(p => p.Name == target);
+            LoadPlaylistSongs(selected);
+            PlaylistTabView.SelectedItem = selected;
         }
 
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        private void LoadPlaylistSongs(Playlist playlist)
+        {
+            playlist?.Songs.SetTo(Settings.FindPlaylistItems(playlist.Id));
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             BringSelectedTabIntoView();
-            try
-            {
-                foreach (var playlist in Playlists)
-                {
-                    if (IsLoaded && playlist.Id != Settings.settings.LastPlaylistId)
-                    {
-                        await playlist.LoadDisplayItemAsync();
-                    }
-                }
-            }
-            catch (InvalidOperationException)
-            {
-                // Collection was modified; enumeration operation may not execute.
-                // 发生在加载的过程中用户添加了新的播放列表
-            }
         }
 
         private async void PlaylistTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -103,6 +97,7 @@ namespace SMPlayer
                 return;
             }
             var playlist = tabview.SelectedItem as Playlist;
+            LoadPlaylistSongs(playlist);
             Settings.settings.LastPlaylistId = playlist.Id;
             foreach (var music in playlist.Songs)
                 music.IsPlaying = music.Equals(MusicPlayer.CurrentMusic);

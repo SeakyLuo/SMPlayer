@@ -225,13 +225,13 @@ namespace SMPlayer
             {
                 SuggestedStartLocation = PickerLocationId.MusicLibrary
             };
-            picker.FileTypeFilter.Add(".json");
+            picker.FileTypeFilter.Add(".db");
             StorageFile file = await picker.PickSingleFileAsync();
             if (file == null) return;
             MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
             try
             {
-                if (!SettingsHelper.Init(await FileIO.ReadTextAsync(file))) return;
+                await SettingsHelper.Init(file);
                 bool successful = await UpdateHelper.UpdateMusicLibrary();
                 if (successful)
                 {

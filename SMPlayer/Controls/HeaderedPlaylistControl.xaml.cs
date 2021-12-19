@@ -97,7 +97,7 @@ namespace SMPlayer
             SetAsPreferredButton.Visibility = isPreferred ? Visibility.Collapsed : Visibility.Visible;
             UndoPreferButton.Visibility = isPreferred ? Visibility.Visible : Visibility.Collapsed;
             SetPinState(Windows.UI.StartScreen.SecondaryTile.Exists(TileHelper.FormatTileId(playlist, IsPlaylist)));
-            if (playlist.DisplayItem == null)
+            if (MusicDisplayItem.IsNullOrEmpty(playlist.DisplayItem))
             {
                 await playlist.LoadDisplayItemAsync();
             }
