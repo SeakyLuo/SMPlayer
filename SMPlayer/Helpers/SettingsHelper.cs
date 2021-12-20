@@ -17,9 +17,13 @@ namespace SMPlayer.Helpers
         public static bool Inited { get; private set; } = false;
         public const string JsonFilename = "SMPlayerSettings";
 
-        public static async Task Init()
+        public static async Task InitOld()
         {
             Inited = false;
+            if (await SQLHelper.Initialized())
+            {
+                return;
+            }
             string json = await JsonFileHelper.ReadAsync(JsonFilename);
             if (!string.IsNullOrEmpty(json) && JsonFileHelper.Convert<Settings>(json) is Settings settings)
             {
@@ -33,10 +37,21 @@ namespace SMPlayer.Helpers
             Inited = true;
         }
 
+        public static void Init()
+        {
+            Settings.settings = SQLHelper.Run(c => c.SelectSettings());
+            Inited = true;
+        }
+
         // TODO
         public static async Task Init(StorageFile file)
         {
-            await file.CopyAsync(Helper.CurrentFolder);
+            StorageFile newDbFile = await file.CopyAsync(Helper.CurrentFolder);
+            if (newDbFile.Name != SQLHelper.DBFileName)
+            {
+                await newDbFile.RenameAsync(SQLHelper.DBFileName);
+            }
+            Init();
         }
 
         public static async Task LoadSettingsAndInsertToDb()
@@ -50,11 +65,12 @@ namespace SMPlayer.Helpers
                 c.InsertAll(songs.Select(i => i.ToDAO()));
                 InsertTree(c, Settings.settings.Tree);
                 InsertPlaylist(c, Settings.settings.MyFavorites);
+                Settings.settings.MyFavoritesId = Settings.settings.MyFavorites.Id;
                 InsertPlaylists(c, Settings.settings.Playlists);
                 InsertPreferenceSettings(c, Settings.settings.Preference);
                 InsertRecentPlayed(c, Settings.settings);
                 InsertRecentSearches(c, Settings.settings);
-                c.Insert(Settings.settings.ToDAO());
+                c.InsertSettings(Settings.settings);
             });
         }
 
@@ -62,7 +78,7 @@ namespace SMPlayer.Helpers
         {
             if (Settings.settings == null) return;
             Settings.settings.MusicProgress = MusicPlayer.Position;
-            SQLHelper.Run(c => c.Insert(Settings.settings.ToDAO()));
+            SQLHelper.Run(c => c.Update(Settings.settings.ToDAO()));
         }
 
         private static async Task Init(Settings settings)

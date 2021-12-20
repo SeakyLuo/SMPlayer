@@ -26,6 +26,7 @@ namespace SMPlayer.Models
         public static IEnumerable<Music> MyFavoriteSongs { get => SQLHelper.Run(c => c.SelectPlaylistItems(settings.MyFavoritesId)); }
         public static List<Playlist> AllPlaylists { get => SQLHelper.Run(c => c.SelectAllPlaylists()); }
 
+        public long Id { get; set; }
         public string RootPath { get; set; } = "";
         public FolderTree Tree { get; set; } = new FolderTree();
         public int LastMusicIndex { get; set; } = -1;

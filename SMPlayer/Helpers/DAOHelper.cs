@@ -168,6 +168,7 @@ namespace SMPlayer.Helpers
         {
             return new Settings()
             {
+                Id = src.Id,
                 RootPath = src.RootPath,
                 LastMusicIndex = src.LastMusicIndex,
                 Mode = src.Mode,
@@ -205,6 +206,7 @@ namespace SMPlayer.Helpers
         {
             return new SettingsDAO()
             {
+                Id = src.Id,
                 RootPath = src.RootPath,
                 RootTreeId = src.Tree.Id,
                 LastMusicIndex = src.LastMusicIndex,

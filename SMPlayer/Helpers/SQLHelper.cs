@@ -14,16 +14,21 @@ namespace SMPlayer.Helpers
 {
     public static class SQLHelper
     {
-        private const string DBFileName = "SMPlayerSettings.db";
+        public const string DBFileName = "SMPlayerSettings.db";
 
         private static string BuildDBPath()
         {
             return Path.Combine(Helper.LocalFolder.Path, DBFileName);
         }
 
+        public static async Task<bool> Initialized()
+        {
+            return await FileHelper.FileExists(BuildDBPath());
+        }
+
         public async static Task Init()
         {
-            if (await FileHelper.FileExists(BuildDBPath()))
+            if (await Initialized())
             {
                 return;
             }
@@ -65,6 +70,19 @@ namespace SMPlayer.Helpers
             {
                 return connectionHandler.Invoke(connection);
             }
+        }
+
+        public static SettingsDAO InsertSettings(this SQLiteConnection c, Settings src)
+        {
+            SettingsDAO dao = src.ToDAO();
+            c.Insert(dao);
+            src.Id = dao.Id;
+            return dao;
+        }
+
+        public static Settings SelectSettings(this SQLiteConnection c)
+        {
+            return c.Query<SettingsDAO>("select * from Settings order by Id desc").FirstOrDefault()?.FromDAO();
         }
 
         public static MusicDAO InsertMusic(this SQLiteConnection c, Music src)
