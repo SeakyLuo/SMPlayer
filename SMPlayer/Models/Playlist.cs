@@ -31,6 +31,7 @@ namespace SMPlayer.Models
         public MusicDisplayItem DisplayItem { get; set; }
         public string Artist { get; set; }
         public ObservableCollection<Music> Songs { get; set; } = new ObservableCollection<Music>();
+        public int Priority { get; set; }
         public int Count { get => Songs.Count; }
         public bool IsMyFavorite { get => Name == Constants.MyFavorites; }
         public bool IsEmpty { get => Songs.IsEmpty(); }
@@ -54,7 +55,7 @@ namespace SMPlayer.Models
         public Playlist(string Name, IEnumerable<Music> Songs)
         {
             this.Name = Name;
-            this.Songs = new ObservableCollection<Music>(Songs);
+            this.Songs = Songs.IsEmpty() ? new ObservableCollection<Music>() : new ObservableCollection<Music>(Songs);
         }
 
         public Playlist Duplicate(string newName)

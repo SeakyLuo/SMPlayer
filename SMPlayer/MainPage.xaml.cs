@@ -54,7 +54,10 @@ namespace SMPlayer
         public Type CurrentPage { get => NaviFrame.CurrentSourcePageType; }
         public Frame NavigationFrame { get => NaviFrame; }
         public static List<IWindowResizeListener> WindowResizeListeners = new List<IWindowResizeListener>();
+        public static List<Func<Task>> MainPageLoadedAsyncListeners = new List<Func<Task>>();
         public static List<Action> MainPageLoadedListeners = new List<Action>();
+        public static void AddMainPageLoadedListener(Func<Task> action) { MainPageLoadedAsyncListeners.Add(action); }
+        public static void AddMainPageLoadedListener(Action action) { MainPageLoadedListeners.Add(action); }
 
         public MainPage()
         {
@@ -116,25 +119,27 @@ namespace SMPlayer
             Window.Current.SetTitleBar(AppTitleBar);
             UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar);
 
+            foreach (var listener in MainPageLoadedListeners) listener.Invoke();
+            foreach (var listener in MainPageLoadedAsyncListeners) await listener.Invoke();
+
             if (switchPage)
             {
                 SwitchPage(Settings.settings.LastPage);
                 switchPage = false;
             }
-            if (!UpdateHelper.Log.DateAdded)
-            {
-                await UpdateHelper.Update();
-                Loader.Hide();
-                if (Helper.CurrentFolder != null)
-                {
-                    ShowLocalizedNotification("UpdateFinished");
-                }
-            }
+            //if (!UpdateHelper.Log.DateAdded)
+            //{
+            //    await UpdateHelper.Update();
+            //    Loader.Hide();
+            //    if (Helper.CurrentFolder != null)
+            //    {
+            //        ShowLocalizedNotification("UpdateFinished");
+            //    }
+            //}
             if (UpdateHelper.Log.ShowReleaseNotesDialog)
             {
                 SettingsPage.ShowReleaseNotes();
             }
-            foreach (var listener in MainPageLoadedListeners) listener.Invoke();
         }
 
         private void UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar coreTitleBar)

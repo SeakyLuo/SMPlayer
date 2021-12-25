@@ -29,6 +29,7 @@ namespace SMPlayer.Models.DAO
         public bool LocalMusicGridView { get; set; }
         public bool LocalFolderGridView { get; set; }
         public long MyFavorites { get; set; }
+        public long NowPlaying { get; set; }
         public bool MiniModeWithDropdown { get; set; }
         public bool IsMuted { get; set; }
         public bool AutoPlay { get; set; }

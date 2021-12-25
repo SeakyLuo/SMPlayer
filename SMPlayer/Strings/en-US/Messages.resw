@@ -567,6 +567,15 @@
   <data name="UnknownArtist" xml:space="preserve">
     <value>Unknown Artist</value>
   </data>
+  <data name="UpdateDBMsgInitDatabase" xml:space="preserve">
+    <value>Initializing database......</value>
+  </data>
+  <data name="UpdateDBMsgReadingSettings" xml:space="preserve">
+    <value>Deserializing your settings file. It might take a couple of minutes, please wait patiently......</value>
+  </data>
+  <data name="UpdateDBMsgUpdatingDatabase" xml:space="preserve">
+    <value>Updating database......</value>
+  </data>
   <data name="UpdateFinished" xml:space="preserve">
     <value>Your data has been updated!</value>
   </data>

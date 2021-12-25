@@ -48,7 +48,8 @@ namespace SMPlayer.Helpers
             {
                 Id = src.Id,
                 Name = src.Name,
-                Criterion = src.Criterion
+                Criterion = src.Criterion,
+                Priority = src.Priority
             };
         }
 
@@ -59,7 +60,8 @@ namespace SMPlayer.Helpers
                 Id = src.Id,
                 Name = src.Name,
                 Criterion = src.Criterion,
-                Songs = src.Songs.Select(m => m.ToPlaylistItemDAO(src.Id)).ToList()
+                Songs = src.Songs.Select(m => m.ToPlaylistItemDAO(src.Id)).ToList(),
+                Priority = src.Priority
             };
         }
 
@@ -182,6 +184,7 @@ namespace SMPlayer.Helpers
                 LocalFolderGridView = src.LocalFolderGridView,
                 LocalMusicGridView = src.LocalMusicGridView,
                 MyFavoritesId = src.MyFavorites,
+                NowPlayingId = src.NowPlaying,
                 MiniModeWithDropdown = src.MiniModeWithDropdown,
                 IsMuted = src.IsMuted,
                 AutoPlay = src.AutoPlay,
@@ -221,6 +224,7 @@ namespace SMPlayer.Helpers
                 LocalFolderGridView = src.LocalFolderGridView,
                 LocalMusicGridView = src.LocalMusicGridView,
                 MyFavorites = src.MyFavoritesId,
+                NowPlaying = src.NowPlayingId,
                 MiniModeWithDropdown = src.MiniModeWithDropdown,
                 IsMuted = src.IsMuted,
                 AutoPlay = src.AutoPlay,

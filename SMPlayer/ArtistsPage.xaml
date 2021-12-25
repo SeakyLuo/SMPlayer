@@ -180,7 +180,6 @@
                                             x:Name="AlbumMoreButton"
                                             Margin="0,40,20,0"
                                             Background="Transparent"
-                                            Foreground="{ThemeResource SystemColorHighlightColor}"
                                             RelativePanel.AlignRightWithPanel="True"
                                             Style="{StaticResource MoreButtonStyle}">
                                             <Button.Flyout>

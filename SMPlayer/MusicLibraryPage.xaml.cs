@@ -97,7 +97,7 @@ namespace SMPlayer
         {
             if (songs == null) return;
             AllSongs.Clear();
-            var favSet = Settings.MyFavoriteSongs.Select(i => i.Id).ToHashSet();
+            var favSet = Settings.MyFavoritesPlaylist.Songs.Select(i => i.Id).ToHashSet();
             foreach (var item in songs)
             {
                 Music music = item.Copy();

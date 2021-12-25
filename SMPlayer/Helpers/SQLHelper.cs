@@ -15,6 +15,7 @@ namespace SMPlayer.Helpers
     public static class SQLHelper
     {
         public const string DBFileName = "SMPlayerSettings.db";
+        private static bool Inited = false;
 
         private static string BuildDBPath()
         {
@@ -23,7 +24,8 @@ namespace SMPlayer.Helpers
 
         public static async Task<bool> Initialized()
         {
-            return await FileHelper.FileExists(BuildDBPath());
+            if (Inited) return true;
+            return Inited = await FileHelper.FileExists(BuildDBPath());
         }
 
         public async static Task Init()
@@ -32,28 +34,34 @@ namespace SMPlayer.Helpers
             {
                 return;
             }
-            await Helper.LocalFolder.CreateFileAsync(DBFileName, CreationCollisionOption.OpenIfExists);
-            Run(c =>
+            MainPage.AddMainPageLoadedListener(async () =>
             {
-                c.CreateTable<SettingsDAO>();
-                c.CreateTable<MusicDAO>();
-                c.CreateIndex<MusicDAO>(i => i.Path, true);
-                c.CreateTable<FolderDAO>();
-                c.CreateIndex<FolderDAO>(i => i.Path, true);
-                c.CreateIndex<FolderDAO>(i => i.ParentId);
-                c.CreateTable<FileDAO>();
-                c.CreateIndex<FileDAO>(i => i.Path, true);
-                c.CreateIndex<FileDAO>(i => i.ParentId);
-                c.CreateTable<PlaylistDAO>();
-                c.CreateTable<PlaylistItemDAO>();
-                c.CreateIndex<PlaylistItemDAO>(i => i.PlaylistId);
-                c.CreateTable<PreferenceSettingsDAO>();
-                c.CreateTable<PreferenceItemDAO>();
-                c.CreateIndex(PreferenceItemDAO.TableName, new string[] { "Type", "ItemId" });
-                c.CreateTable<RecentRecordDAO>();
-                c.CreateIndex(RecentRecordDAO.TableName, new string[] { "Type", "Item" });
+                MainPage.Instance.Loader.ShowIndeterminant("UpdateDBMsgInitDatabase");
+                await Helper.LocalFolder.CreateFileAsync(DBFileName, CreationCollisionOption.OpenIfExists);
+                Run(c =>
+                {
+                    CreateFlags flag = CreateFlags.AllImplicit | CreateFlags.AutoIncPK;
+                    c.CreateTable<SettingsDAO>(flag);
+                    c.CreateTable<MusicDAO>(flag);
+                    c.CreateIndex<MusicDAO>(i => i.Path, true);
+                    c.CreateTable<FolderDAO>(flag);
+                    c.CreateIndex<FolderDAO>(i => i.Path, true);
+                    c.CreateIndex<FolderDAO>(i => i.ParentId);
+                    c.CreateTable<FileDAO>(flag);
+                    c.CreateIndex<FileDAO>(i => i.Path, true);
+                    c.CreateIndex<FileDAO>(i => i.ParentId);
+                    c.CreateTable<PlaylistDAO>(flag);
+                    c.CreateTable<PlaylistItemDAO>(flag);
+                    c.CreateIndex<PlaylistItemDAO>(i => i.PlaylistId);
+                    c.CreateTable<PreferenceSettingsDAO>(flag);
+                    c.CreateTable<PreferenceItemDAO>(flag);
+                    c.CreateIndex(PreferenceItemDAO.TableName, new string[] { "Type", "ItemId" });
+                    c.CreateTable<RecentRecordDAO>(flag);
+                    c.CreateIndex(RecentRecordDAO.TableName, new string[] { "Type", "ItemId" });
+                });
+                await SettingsHelper.LoadSettingsAndInsertToDb();
+                MainPage.Instance.Loader.Hide();
             });
-            await SettingsHelper.LoadSettingsAndInsertToDb();
         }
 
         public static void Run(Action<SQLiteConnection> connectionHandler)
@@ -69,6 +77,14 @@ namespace SMPlayer.Helpers
             using (SQLiteConnection connection = new SQLiteConnection(BuildDBPath()))
             {
                 return connectionHandler.Invoke(connection);
+            }
+        }
+
+        public static async Task<T> RunAsync<T>(Func<SQLiteConnection, Task<T>> connectionHandler)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(BuildDBPath()))
+            {
+                return await connectionHandler.Invoke(connection);
             }
         }
 
@@ -141,7 +157,7 @@ namespace SMPlayer.Helpers
             c.Insert(new RecentRecordDAO()
             {
                 Type = RecentType.Add,
-                Item = src.Id.ToString(),
+                ItemId = src.Id.ToString(),
                 Time = src.DateAdded,
             });
         }
@@ -151,7 +167,7 @@ namespace SMPlayer.Helpers
             c.Insert(new RecentRecordDAO()
             {
                 Type = RecentType.Play,
-                Item = src.Id.ToString(),
+                ItemId = src.Id.ToString(),
                 Time = DateTimeOffset.Now,
             });
         }
@@ -161,7 +177,7 @@ namespace SMPlayer.Helpers
             c.Insert(new RecentRecordDAO()
             {
                 Type = RecentType.Search,
-                Item = src,
+                ItemId = src,
                 Time = DateTimeOffset.Now,
             });
         }
@@ -225,9 +241,13 @@ namespace SMPlayer.Helpers
             return c.Query<FileDAO>("select * from File where ParentId = ? and State = ?", folder.Id, ActiveState.Active).Select(i => i.FromDAO()).ToList();
         }
 
-        public static List<Playlist> SelectAllPlaylists(this SQLiteConnection c)
+        public static List<Playlist> SelectAllPlaylists(this SQLiteConnection c, Func<Playlist, bool> predicate = null)
         {
-            return c.Query<PlaylistDAO>("select * from Playlist where State = ?", ActiveState.Active).Select(i => i.FromDAO()).ToList();
+            return c.Query<PlaylistDAO>("select * from Playlist where State = ?", ActiveState.Active)
+                    .Select(i => i.FromDAO())
+                    .Where(i => predicate == null || predicate.Invoke(i))
+                    .OrderBy(i => i.Priority)
+                    .ToList();
         }
 
         public static Playlist SelectPlaylistByName(this SQLiteConnection c, string name)

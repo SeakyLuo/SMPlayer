@@ -567,6 +567,15 @@
   <data name="UnknownArtist" xml:space="preserve">
     <value>未知歌手</value>
   </data>
+  <data name="UpdateDBMsgInitDatabase" xml:space="preserve">
+    <value>正在初始化数据库……</value>
+  </data>
+  <data name="UpdateDBMsgReadingSettings" xml:space="preserve">
+    <value>正在读取设置文件，耗时可能长达几分钟，请稍候……</value>
+  </data>
+  <data name="UpdateDBMsgUpdatingDatabase" xml:space="preserve">
+    <value>正在更新数据库……</value>
+  </data>
   <data name="UpdateFinished" xml:space="preserve">
     <value>数据更新完成！</value>
   </data>

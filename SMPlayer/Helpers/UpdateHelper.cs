@@ -19,9 +19,9 @@ namespace SMPlayer.Helpers
 
         public static async Task Init()
         {
-            MainPage.MainPageLoadedListeners.Add(() =>
+            MainPage.AddMainPageLoadedListener(() =>
             {
-                MainPage.Instance.Loader.BreakLoadingListeners.Add(() => PauseLoading());
+                //MainPage.Instance.Loader.BreakLoadingListeners.Add(() => PauseLoading());
             });
             Log = await JsonFileHelper.ReadObjectAsync<UpdateLog>(JsonFileName) ?? new UpdateLog();
         }
@@ -63,15 +63,15 @@ namespace SMPlayer.Helpers
                 Max = treeUpdateListener == null ? 0 : await folder.CountFilesAsync()
             };
             bool initFinished = false;
-            SQLHelper.Run(async c =>
+            await SQLHelper.RunAsync(async c =>
             {
-                initFinished = await LoadFolder(c, folder, treeUpdateListener, indicator);
+                return initFinished = await LoadFolder(c, folder, treeUpdateListener, indicator);
             });
             if (!initFinished)
             {
                 return false;
             }
-            MainPage.Instance.Loader.SetLocalizedText(loadingMessage ?? "UpdateMusicLibrary");
+            MainPage.Instance.Loader.SetMessage(loadingMessage ?? "UpdateMusicLibrary");
             Helper.CurrentFolder = folder;
             Settings.settings.RootPath = folder.Path;
 
@@ -92,12 +92,18 @@ namespace SMPlayer.Helpers
         private static async Task<bool> LoadFolder(SQLiteConnection c, StorageFolder folder, ITreeUpdateListener listener, TreeOperationIndicator indicator, TreeUpdateData updateData = null)
         {
             LoadingStatus = ExecutionStatus.Running;
-            FolderTree tree = new FolderTree();
+            await LoadFolder(c, folder, new FolderTree(), listener, indicator, updateData);
+            LoadingStatus = ExecutionStatus.Done;
+            return true;
+        }
+
+        private static async Task<bool> LoadFolder(SQLiteConnection c, StorageFolder folder, FolderTree tree, ITreeUpdateListener listener, TreeOperationIndicator indicator, TreeUpdateData updateData = null)
+        {
             foreach (var subFolder in await folder.GetFoldersAsync())
             {
                 if (LoadingStatus == ExecutionStatus.Break) return false;
                 var branch = new FolderTree();
-                await LoadFolder(c, subFolder, listener, indicator);
+                await LoadFolder(c, subFolder, branch, listener, indicator);
                 if (branch.IsNotEmpty)
                 {
                     tree.Trees.Add(branch);
@@ -119,7 +125,6 @@ namespace SMPlayer.Helpers
             }
             tree.Path = folder.Path;
             ResetFolderData(c, tree, updateData);
-            LoadingStatus = ExecutionStatus.Ready;
             return true;
         }
 
@@ -149,13 +154,13 @@ namespace SMPlayer.Helpers
                 if (!currentFilePathSet.Contains(entry.Key))
                 {
                     Settings.settings.RemoveFile(entry.Value);
-                    updateData.Removed++;
+                    if (updateData != null) updateData.Removed++;
                 }
             }
             foreach (var item in folder.Files)
             {
                 item.ParentId = folder.Id;
-                FolderFile existingFile = existingFileDict[item.Path];
+                existingFileDict.TryGetValue(item.Path, out FolderFile existingFile);
                 if (existingFile != null)
                 {
                     if (item.FileType == FileType.Music)
@@ -173,7 +178,7 @@ namespace SMPlayer.Helpers
                         Settings.settings.AddMusic(c, music);
                         item.FileId = music.Id;
                     }
-                    updateData.Added++;
+                    if (updateData != null) updateData.Added++;
                     c.InsertFile(item);
                 }
             }
@@ -285,7 +290,7 @@ namespace SMPlayer.Helpers
             {
                 MainPage.Instance.Loader.Max = Max;
                 MainPage.Instance.Loader.Progress = Progress;
-                MainPage.Instance.Loader.Text = Message ?? Filename;
+                MainPage.Instance.Loader.SetRawMessage(Message ?? Filename);
             }
         }
     }

@@ -136,7 +136,10 @@ namespace SMPlayer
 
         private void PlaylistTabView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
-            Settings.settings.Playlists = (PlaylistTabView.ItemsSource as ObservableCollection<Playlist>).ToList();
+            ObservableCollection<Playlist> playlists = PlaylistTabView.ItemsSource as ObservableCollection<Playlist>;
+            for (int i = 0; i < playlists.Count; i++)
+                playlists[i].Priority = i;
+            Settings.settings.UpdatePlaylists(playlists);
         }
 
         private void PlaylistTabView_TabClosing(object sender, TabClosingEventArgs e)

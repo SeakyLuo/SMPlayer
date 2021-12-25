@@ -25,7 +25,7 @@ namespace SMPlayer
         {
             base.OnNavigatedTo(e);
             if (e.NavigationMode != NavigationMode.Back)
-                await MyFavoritesPlaylistControl.SetPlaylist(Settings.settings.MyFavorites);
+                await MyFavoritesPlaylistControl.SetPlaylist(Settings.MyFavoritesPlaylist);
             MainPage.Instance.TitleBarBackground = MyFavoritesPlaylistControl.HeaderBackground;
             MainPage.Instance.TitleBarForeground = MainPage.Instance.IsMinimal ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
         }

@@ -15,7 +15,7 @@ namespace SMPlayer.Models.DAO
         [PrimaryKey, AutoIncrement]
         public long Id { get; set; }
         public RecentType Type { get; set; }
-        public string Item { get; set; }
+        public string ItemId { get; set; }
         public DateTimeOffset Time { get; set; }
         public ActiveState State { get; set; } = ActiveState.Active;
 

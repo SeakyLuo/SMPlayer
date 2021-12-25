@@ -54,7 +54,7 @@ namespace SMPlayer
                 await Helper.Init();
                 await SettingsHelper.InitOld();
                 await SQLHelper.Init();
-                SettingsHelper.Init();
+                await SettingsHelper.Init();
                 await UpdateHelper.Init();
                 if (Settings.settings.LastPage == "Albums")
                     await AlbumsPage.Init();
@@ -105,7 +105,7 @@ namespace SMPlayer
             Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             MusicPlayer.Init(music);
             await AlbumsPage.Init();
-            await RecentPage.Init();
+            //await RecentPage.Init();
             ToastHelper.Init();
             VoiceAssistantHelper.Init();
 

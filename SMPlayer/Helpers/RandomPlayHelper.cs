@@ -30,7 +30,7 @@ namespace SMPlayer.Helpers
         }
         public static Playlist PlayPlaylist(int randomLimit = 100)
         {
-            var playlist = Settings.settings.Playlists.RandItem();
+            var playlist = Settings.AllPlaylists.RandItem();
             MusicPlayer.SetPlaylistAndPlay(playlist.Songs.RandItems(randomLimit));
             return playlist;
         }

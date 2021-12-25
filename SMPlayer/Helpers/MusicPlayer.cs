@@ -67,7 +67,15 @@ namespace SMPlayer
 
         public MusicPlayer() { Settings.AddMusicEventListener(this); }
 
-        public static async void Init(Music music = null)
+        public static void Init(Music music = null)
+        {
+            MainPage.AddMainPageLoadedListener(async () =>
+            {
+                await InitWithMusic(music);
+            });
+        }
+
+        public static async Task InitWithMusic(Music music = null)
         {
             var settings = Settings.settings;
             if (music == null)

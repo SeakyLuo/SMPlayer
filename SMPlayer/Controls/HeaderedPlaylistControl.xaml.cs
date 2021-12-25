@@ -119,7 +119,7 @@ namespace SMPlayer
 
         public async Task SetMusicDisplayItem(MusicDisplayItem item)
         {
-            HeaderBackground = item.Color;
+            HeaderBackground = item == null ? MusicDisplayItem.DefaultItem.Color : item.Color;
             PlaylistCover.Source = await item.GetThumbnailAsync();
         }
 

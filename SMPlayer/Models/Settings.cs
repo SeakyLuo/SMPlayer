@@ -23,8 +23,12 @@ namespace SMPlayer.Models
         private static readonly List<IFolderTreeEventListener> FolderTreeEventListeners = new List<IFolderTreeEventListener>();
         public static void AddFolderTreeEventListener(IFolderTreeEventListener listener) { FolderTreeEventListeners.Add(listener); }
         public static IEnumerable<Music> AllSongs { get => SQLHelper.Run(c => c.SelectAllMusic()); }
+        public static Playlist MyFavoritesPlaylist { get => FindPlaylist(settings.MyFavoritesId); }
         public static IEnumerable<Music> MyFavoriteSongs { get => SQLHelper.Run(c => c.SelectPlaylistItems(settings.MyFavoritesId)); }
-        public static List<Playlist> AllPlaylists { get => SQLHelper.Run(c => c.SelectAllPlaylists()); }
+        public static List<Playlist> AllPlaylists
+        {
+            get => SQLHelper.Run(c => c.SelectAllPlaylists(i => i.Id != settings.MyFavoritesId && i.Id != settings.NowPlayingId).ToList()); 
+        }
 
         public long Id { get; set; }
         public string RootPath { get; set; } = "";
@@ -43,6 +47,8 @@ namespace SMPlayer.Models
         public bool LocalFolderGridView { get; set; } = true;
         public Playlist MyFavorites { get; set; }
         public long MyFavoritesId { get; set; }
+
+        public long NowPlayingId { get; set; }
         public ObservableCollection<string> RecentPlayed { get; set; } = new ObservableCollection<string>();
         public List<long> RecentPlayedSongs { get; set; } = new List<long>();
         public bool MiniModeWithDropdown { get; set; } = false;
@@ -96,9 +102,7 @@ namespace SMPlayer.Models
         {
             if (!string.IsNullOrEmpty(Name))
             {
-                var siblings = SQLHelper.Run(c => c.SelectAllPlaylists())
-                                        .FindAll(p => p.Name.StartsWith(Name))
-                                        .Select(p => p.Name).ToHashSet();
+                var siblings = AllPlaylists.FindAll(p => p.Name.StartsWith(Name)).Select(p => p.Name).ToHashSet();
                 for (int i = 1; i <= siblings.Count; i++)
                     if (!siblings.Contains(Helper.GetPlaylistName(Name, i)))
                         return i;
@@ -255,7 +259,7 @@ namespace SMPlayer.Models
                 Music newMusic = c.SelectMusicById(music.Id);
                 Music oldMusic = newMusic.Copy();
                 newMusic.Played();
-                c.Update(newMusic);
+                c.UpdateMusic(newMusic);
                 UpdateRecentRecordState(c, RecentType.Play, music.Id.ToString(), ActiveState.Inactive);
                 c.InsertRecentPlayed(music);
                 NotifyMusicModified(oldMusic, newMusic);
@@ -274,7 +278,7 @@ namespace SMPlayer.Models
                 c.Insert(new RecentRecordDAO()
                 {
                     Type = RecentType.Search,
-                    Item = keyword,
+                    ItemId = keyword,
                     Time = DateTimeOffset.Now,
                 });
             });
@@ -282,7 +286,7 @@ namespace SMPlayer.Models
 
         private void UpdateRecentRecordState(SQLiteConnection c, RecentType recentType, string item, ActiveState state)
         {
-            c.Execute("update RecentRecord set State = ? where Type = ? and Item = ? ", state, recentType, item);
+            c.Execute("update RecentRecord set State = ? where Type = ? and ItemId = ? ", state, recentType, item);
         }
 
         public NamingError ValidatePlaylistName(string newName)
@@ -291,7 +295,7 @@ namespace SMPlayer.Models
                 return NamingError.EmptyOrWhiteSpace;
             if (newName.Length > 50)
                 return NamingError.TooLong;
-            if (newName == Constants.NowPlaying || newName == Constants.MyFavorites || Playlists.Any(p => p.Name == newName))
+            if (newName == Constants.NowPlaying || newName == Constants.MyFavorites || AllPlaylists.Any(p => p.Name == newName))
                 return NamingError.Used;
             if (newName.Contains(TileHelper.StringConcatenationFlag) || newName.Contains("{0}"))
                 return NamingError.Special;
@@ -355,6 +359,23 @@ namespace SMPlayer.Models
                 }
                 foreach (var listener in PlaylistEventListeners)
                     listener.Renamed(target);
+            });
+        }
+
+        public void UpdatePlaylist(Playlist playlist)
+        {
+            SQLHelper.Run(c =>
+            {
+                c.UpdatePlaylist(playlist);
+            });
+        }
+
+        public void UpdatePlaylists(IEnumerable<Playlist> playlists)
+        {
+            SQLHelper.Run(c =>
+            {
+                foreach (var playlist in playlists)
+                    c.UpdatePlaylist(playlist);
             });
         }
 

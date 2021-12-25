@@ -363,7 +363,7 @@ namespace SMPlayer.Helpers
                 RandomPlayHelper.PlayPlaylist();
                 return;
             }
-            IEnumerable<AlbumView> list = SearchHelper.SearchPlaylists(Settings.settings.Playlists, text, SortBy.Default);
+            IEnumerable<AlbumView> list = SearchHelper.SearchPlaylists(Settings.AllPlaylists, text, SortBy.Default);
             if (list.Count() == 0)
             {
                 SpeakNoResults(text);

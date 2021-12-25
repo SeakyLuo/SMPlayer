@@ -37,8 +37,12 @@ namespace SMPlayer.Helpers
             Inited = true;
         }
 
-        public static void Init()
+        public static async Task Init()
         {
+            if (!await SQLHelper.Initialized())
+            {
+                return;
+            }
             Settings.settings = SQLHelper.Run(c => c.SelectSettings());
             Inited = true;
         }
@@ -51,27 +55,43 @@ namespace SMPlayer.Helpers
             {
                 await newDbFile.RenameAsync(SQLHelper.DBFileName);
             }
-            Init();
+            await Init();
         }
 
         public static async Task LoadSettingsAndInsertToDb()
         {
+            MainPage.Instance.Loader.SetMessage("UpdateDBMsgReadingSettings");
             string json = await JsonFileHelper.ReadAsync(JsonFilename);
+            if (string.IsNullOrEmpty(json))
+            {
+                SQLHelper.Run(c => InsertNowPlayingAndMyFavorites(c, null));
+                return;
+            }
             var jsonObject = JsonFileHelper.Convert<JObject>(json);
             List<Music> songs = FlattenFolderTreeInJson(jsonObject["Tree"]);
+            MainPage.Instance.Loader.SetMessage("UpdateDBMsgUpdatingDatabase");
+            List<Music> nowPlayingSongs = await JsonFileHelper.ReadObjectAsync<List<Music>>(MusicPlayer.JsonFilename);
             //List<Music> recentAdded = await JsonFileHelper.ReadObjectAsync<List<Music>>(JsonFileName) ?? new List<Music>();
             SQLHelper.Run(c =>
             {
                 c.InsertAll(songs.Select(i => i.ToDAO()));
                 InsertTree(c, Settings.settings.Tree);
-                InsertPlaylist(c, Settings.settings.MyFavorites);
-                Settings.settings.MyFavoritesId = Settings.settings.MyFavorites.Id;
                 InsertPlaylists(c, Settings.settings.Playlists);
                 InsertPreferenceSettings(c, Settings.settings.Preference);
                 InsertRecentPlayed(c, Settings.settings);
                 InsertRecentSearches(c, Settings.settings);
-                c.InsertSettings(Settings.settings);
+                InsertNowPlayingAndMyFavorites(c, nowPlayingSongs);
             });
+        }
+
+        private static void InsertNowPlayingAndMyFavorites(SQLiteConnection c, List<Music> nowPlayingSongs)
+        {
+            Playlist nowPlaying = new Playlist(Constants.NowPlaying, nowPlayingSongs);
+            InsertPlaylist(c, nowPlaying);
+            Settings.settings.NowPlayingId = nowPlaying.Id;
+            InsertPlaylist(c, Settings.settings.MyFavorites);
+            Settings.settings.MyFavoritesId = Settings.settings.MyFavorites.Id;
+            c.InsertSettings(Settings.settings);
         }
 
         public static void Save()
@@ -131,8 +151,10 @@ namespace SMPlayer.Helpers
         
         private static void InsertPlaylists(SQLiteConnection c, List<Playlist> playlists)
         {
-            foreach (var playlist in playlists)
+            for (int i = 0; i < playlists.Count; i++)
             {
+                Playlist playlist = playlists[i];
+                playlist.Priority = i;
                 InsertPlaylist(c, playlist);
             }
         }
@@ -195,7 +217,7 @@ namespace SMPlayer.Helpers
                 c.Insert(new RecentRecordDAO()
                 {
                     Type = RecentType.Search,
-                    Item = item.ToString(),
+                    ItemId = item.ToString(),
                     Time = DateTimeOffset.Now,
                 });
             }
@@ -208,7 +230,7 @@ namespace SMPlayer.Helpers
                 c.Insert(new RecentRecordDAO()
                 {
                     Type = RecentType.Search,
-                    Item = c.SelectMusicByPath(item)?.Id.ToString(),
+                    ItemId = c.SelectMusicByPath(item)?.Id.ToString(),
                     Time = DateTimeOffset.Now,
                 });
             }
@@ -221,7 +243,7 @@ namespace SMPlayer.Helpers
                 c.Insert(new RecentRecordDAO()
                 {
                     Type = RecentType.Search,
-                    Item = item,
+                    ItemId = item,
                     Time = DateTimeOffset.Now,
                 });
             }

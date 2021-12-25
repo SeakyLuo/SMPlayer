@@ -166,10 +166,11 @@ namespace SMPlayer
             };
             newPlaylistItem.SetToolTip("NewPlaylistToolTip");
             flyout.Items.Add(newPlaylistItem);
-            foreach (var playlist in Settings.settings.Playlists)
+            List<Playlist> playlists = Settings.AllPlaylists.AsParallel().Where(p => p.Name != CurrentPlaylistName)
+                                               .Where(p => !(Data is IMusicable m) || !Settings.FindPlaylist(p.Id).Contains(m.ToMusic()))
+                                               .ToList();
+            foreach (var playlist in playlists)
             {
-                if (playlist.Name == CurrentPlaylistName ||
-                    (Data is IMusicable m && playlist.Contains(m.ToMusic()))) continue;
                 var item = new MenuFlyoutItem()
                 {
                     Icon = new SymbolIcon(Symbol.Audio),
@@ -732,7 +733,7 @@ namespace SMPlayer
                 callback?.Invoke();
             };
             flyout.Items.Add(album);
-            if (Settings.settings.Playlists.Count > 0)
+            if (Settings.AllPlaylists.Count > 0)
             {
                 var playlist = new MenuFlyoutItem()
                 {
