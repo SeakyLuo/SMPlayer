@@ -140,10 +140,10 @@ namespace SMPlayer.Helpers
             await file.DeleteAsync();
         }
 
-        public static async Task<string> ReadFileAsync(StorageFolder folder, string filename, ReadFilePolicy policy = ReadFilePolicy.CreateIfNotExist)
+        public static async Task<string> ReadFileAsync(StorageFolder folder, string filename)
         {
             if (folder == null) return null;
-            if (policy == ReadFilePolicy.QuickReturn && await FileNotExist(Path.Combine(folder.Path, filename)))
+            if (await FileNotExist(Path.Combine(folder.Path, filename)))
             {
                 return null;
             }
@@ -153,6 +153,7 @@ namespace SMPlayer.Helpers
 
         public static async Task WriteFileAsync(StorageFolder folder, string filename, string content)
         {
+            if (folder == null || content == null) return;
             StorageFile file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
             while (true)
             {

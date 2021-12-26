@@ -207,7 +207,7 @@ namespace SMPlayer.Helpers
                 return;
             }
             bool isFinished = false;
-            SQLHelper.Run(async c =>
+            await SQLHelper.Run(async c =>
             {
                 isFinished = await LoadFolder(c, folder, null, null, data);
             });

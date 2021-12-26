@@ -11,15 +11,15 @@ namespace SMPlayer.Models
     {
         private const string extension = ".json";
         
-        public static async Task<string> ReadAsync(string filename, ReadFilePolicy policy = ReadFilePolicy.CreateIfNotExist)
+        public static async Task<string> ReadAsync(string filename)
         {
             if (!filename.EndsWith(extension)) filename += extension;
-            return await FileHelper.ReadFileAsync(Helper.LocalFolder, filename, policy);
+            return await FileHelper.ReadFileAsync(Helper.LocalFolder, filename);
         }
 
-        public static async Task<T> ReadObjectAsync<T>(string filename, ReadFilePolicy policy = ReadFilePolicy.CreateIfNotExist) where T : class
+        public static async Task<T> ReadObjectAsync<T>(string filename) where T : class
         {
-            string json = await ReadAsync(filename, policy);
+            string json = await ReadAsync(filename);
             return string.IsNullOrEmpty(json) ? null : JsonConvert.DeserializeObject<T>(json);
         }
 

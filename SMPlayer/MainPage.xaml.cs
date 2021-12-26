@@ -54,8 +54,8 @@ namespace SMPlayer
         public Type CurrentPage { get => NaviFrame.CurrentSourcePageType; }
         public Frame NavigationFrame { get => NaviFrame; }
         public static List<IWindowResizeListener> WindowResizeListeners = new List<IWindowResizeListener>();
-        public static List<Func<Task>> MainPageLoadedAsyncListeners = new List<Func<Task>>();
-        public static List<Action> MainPageLoadedListeners = new List<Action>();
+        private static List<Func<Task>> MainPageLoadedAsyncListeners = new List<Func<Task>>();
+        private static List<Action> MainPageLoadedListeners = new List<Action>();
         public static void AddMainPageLoadedListener(Func<Task> action) { MainPageLoadedAsyncListeners.Add(action); }
         public static void AddMainPageLoadedListener(Action action) { MainPageLoadedListeners.Add(action); }
 

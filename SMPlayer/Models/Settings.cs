@@ -27,7 +27,7 @@ namespace SMPlayer.Models
         public static IEnumerable<Music> MyFavoriteSongs { get => SQLHelper.Run(c => c.SelectPlaylistItems(settings.MyFavoritesId)); }
         public static List<Playlist> AllPlaylists
         {
-            get => SQLHelper.Run(c => c.SelectAllPlaylists(i => i.Id != settings.MyFavoritesId && i.Id != settings.NowPlayingId).ToList()); 
+            get => SQLHelper.Run(c => c.SelectAllPlaylists(i => i.Id != settings.MyFavoritesId).ToList()); 
         }
 
         public long Id { get; set; }
@@ -47,8 +47,6 @@ namespace SMPlayer.Models
         public bool LocalFolderGridView { get; set; } = true;
         public Playlist MyFavorites { get; set; }
         public long MyFavoritesId { get; set; }
-
-        public long NowPlayingId { get; set; }
         public ObservableCollection<string> RecentPlayed { get; set; } = new ObservableCollection<string>();
         public List<long> RecentPlayedSongs { get; set; } = new List<long>();
         public bool MiniModeWithDropdown { get; set; } = false;
@@ -63,8 +61,8 @@ namespace SMPlayer.Models
         public bool HideMultiSelectCommandBarAfterOperation { get; set; } = true;
         public bool ShowCount { get; set; } = true;
         public bool ShowLyricsInNotification { get; set; } = false;
-        public ObservableCollection<string> RecentSearches = new ObservableCollection<string>();
-        public VoiceAssistantLanguage VoiceAssistantPreferredLanguage = VoiceAssistantHelper.ConvertLanguage(Helper.CurrentLanguage);
+        public ObservableCollection<string> RecentSearches { get; set; } = new ObservableCollection<string>();
+        public VoiceAssistantLanguage VoiceAssistantPreferredLanguage { get; set; } = VoiceAssistantHelper.ConvertLanguage(Helper.CurrentLanguage);
 
         public SortBy SearchArtistsCriterion { get; set; } = SortBy.Default;
         public SortBy SearchAlbumsCriterion { get; set; } = SortBy.Default;
@@ -93,7 +91,7 @@ namespace SMPlayer.Models
         public static Music FindMusic(string target) { return SQLHelper.Run(c => c.SelectMusicByPath(target)); }
         public static Music FindMusic(FolderFile target) { return FindMusic(target.FileId); }
         public static Music FindMusic(long id) { return SQLHelper.Run(c => c.SelectMusicById(id)); }
-        public static List<Music> FindMusicList(IEnumerable<long> ids) { return SQLHelper.Run(c => c.SelectMusicByIds(ids)); }
+        public static List<Music> FindMusicList(IEnumerable<long> ids) { return ids.IsEmpty() ? new List<Music>() : SQLHelper.Run(c => c.SelectMusicByIds(ids)); }
         public static Playlist FindPlaylist(long id) { return SQLHelper.Run(c => c.SelectPlaylistById(id)); }
         public static Playlist FindPlaylist(Playlist playlist) { return FindPlaylist(playlist.Id); }
         public static List<Music> FindPlaylistItems(long id) { return SQLHelper.Run(c => c.SelectPlaylistItems(id)); }
@@ -201,7 +199,7 @@ namespace SMPlayer.Models
         {
             SQLHelper.Run(c =>
             {
-                c.Execute("delete from PlaylistItem where playlistId = ? and itemId = ?", playlistId, music.Id);
+                c.Execute("delete from PlaylistItem where PlaylistId = ? and ItemId = ?", playlistId, music.Id);
             });
         }
 

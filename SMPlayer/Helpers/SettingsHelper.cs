@@ -24,10 +24,11 @@ namespace SMPlayer.Helpers
             {
                 return;
             }
-            if (await JsonFileHelper.ReadObjectAsync<Settings>(JsonFilename, ReadFilePolicy.QuickReturn) is Settings settings)
+            if (await JsonFileHelper.ReadObjectAsync<Settings>(JsonFilename) is Settings settings)
             {
                 Settings.settings = settings;
                 await Init(settings);
+                FileHelper.DeleteFile(JsonFilename);
             }
             else
             {
@@ -46,7 +47,6 @@ namespace SMPlayer.Helpers
             Inited = true;
         }
 
-        // TODO
         public static async Task Init(StorageFile file)
         {
             StorageFile newDbFile = await file.CopyAsync(Helper.CurrentFolder);
@@ -60,10 +60,10 @@ namespace SMPlayer.Helpers
         public static async Task LoadSettingsAndInsertToDb()
         {
             MainPage.Instance.Loader.SetMessage("UpdateDBMsgReadingSettings");
-            string json = await JsonFileHelper.ReadAsync(JsonFilename, ReadFilePolicy.QuickReturn);
+            string json = await JsonFileHelper.ReadAsync(JsonFilename);
             if (string.IsNullOrEmpty(json))
             {
-                SQLHelper.Run(c => InsertNowPlayingAndMyFavorites(c, null));
+                SQLHelper.Run(c => InsertMyFavoritesAndSettings(c, null));
                 return;
             }
             var jsonObject = JsonFileHelper.FromJson<JObject>(json);
@@ -79,15 +79,12 @@ namespace SMPlayer.Helpers
                 InsertPreferenceSettings(c, Settings.settings.Preference);
                 InsertRecentPlayed(c, Settings.settings);
                 InsertRecentSearches(c, Settings.settings);
-                InsertNowPlayingAndMyFavorites(c, nowPlayingSongs);
+                InsertMyFavoritesAndSettings(c, nowPlayingSongs);
             });
         }
 
-        private static void InsertNowPlayingAndMyFavorites(SQLiteConnection c, List<Music> nowPlayingSongs)
+        private static void InsertMyFavoritesAndSettings(SQLiteConnection c, List<Music> nowPlayingSongs)
         {
-            Playlist nowPlaying = new Playlist(Constants.NowPlaying, nowPlayingSongs);
-            InsertPlaylist(c, nowPlaying);
-            Settings.settings.NowPlayingId = nowPlaying.Id;
             InsertPlaylist(c, Settings.settings.MyFavorites);
             Settings.settings.MyFavoritesId = Settings.settings.MyFavorites.Id;
             c.InsertSettings(Settings.settings);

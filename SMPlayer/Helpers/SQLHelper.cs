@@ -145,6 +145,12 @@ namespace SMPlayer.Helpers
             return dao;
         }
 
+        public static void UpdatePlaylistItems(this SQLiteConnection c, long id, IEnumerable<Music> songs)
+        {
+            c.Execute("delete from PlaylistItem where PlaylistId = ?", id);
+            c.InsertAll(songs.Select(i => i.ToPlaylistItemDAO(id)));
+        }
+
         public static PreferenceItemDAO InsertPreferenceItem(this SQLiteConnection c, PreferenceItem src, PreferType type)
         {
             PreferenceItemDAO dao = src.ToDAO(type);
