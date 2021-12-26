@@ -199,7 +199,8 @@ namespace SMPlayer
                     else if (Data is IEnumerable<IMusicable> songs)
                     {
                         if (songs.IsEmpty()) return;
-                        playlist.Add(Data);
+                        playlist.Add(songs);
+                        Settings.settings.AddMusicToPlaylist(playlist, songs);
                         string message = songs.Count() == 1 ? Helper.LocalizeMessage("SongAddedTo", songs.ElementAt(0).ToMusic().Name, playlist.Name) :
                                                               Helper.LocalizeMessage("SongsAddedTo", songs.Count(), playlist.Name);
                         listener?.AddTo(Data, playlist, playlist.Count - songs.Count() - 1, AddToCollectionType.Playlist);
@@ -628,11 +629,14 @@ namespace SMPlayer
             }
             return sortByItem;
         }
-        public static void SetPlaylistSortByMenu(object sender, Playlist playlist)
+        public static void SetPlaylistSortByMenu(object sender, Playlist playlist, Action<SortBy> sortListener = null)
         {
             var flyout = new MenuFlyout();
             var reverseItem = new MenuFlyoutItem() { Text = Helper.LocalizeMessage("Reverse Playlist") };
-            reverseItem.Click += (send, args) => playlist.Reverse();
+            reverseItem.Click += (s, args) =>
+            {
+                Settings.settings.SortPlaylist(playlist, SortBy.Reverse);
+            };
             flyout.Items.Add(reverseItem);
             flyout.Items.Add(new MenuFlyoutSeparator());
             foreach (var criterion in Playlist.Criteria)
@@ -643,9 +647,9 @@ namespace SMPlayer
                     Text = sortby,
                     IsChecked = playlist.Criterion == criterion
                 };
-                radioItem.Click += (send, args) =>
+                radioItem.Click += (s, args) =>
                 {
-                    playlist.SetCriterionAndSort(criterion);
+                    Settings.settings.SortPlaylist(playlist, criterion);
                 };
                 flyout.Items.Add(radioItem);
             }

@@ -66,43 +66,44 @@ namespace SMPlayer
         private void SelectPlaylist(long id)
         {
             Playlist selected = SelectPlaylistById(id);
-            LoadPlaylistSongs(selected);
             PlaylistTabView.SelectedItem = selected;
         }
 
         private void SelectPlaylist(string target)
         {
             Playlist selected = Playlists.FirstOrDefault(p => p.Name == target);
-            LoadPlaylistSongs(selected);
             PlaylistTabView.SelectedItem = selected;
         }
 
-        private void LoadPlaylistSongs(Playlist playlist)
+        private async void LoadPlaylistSongs(Playlist playlist)
         {
-            playlist?.Songs.SetTo(Settings.FindPlaylistItems(playlist.Id));
+            if (playlist == null) return;
+            playlist.Songs.SetTo(Settings.FindPlaylistItems(playlist.Id));
+            playlist.Sort();
+            foreach (var music in playlist.Songs)
+                music.IsPlaying = music.Equals(MusicPlayer.CurrentMusic);
+            if (PlaylistController != null)
+                await PlaylistController.SetPlaylist(playlist);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             BringSelectedTabIntoView();
+            LoadPlaylistSongs(CurrentPlaylist);
         }
 
-        private async void PlaylistTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void PlaylistTabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var tabview = sender as Microsoft.Toolkit.Uwp.UI.Controls.TabView;
             if (tabview.SelectedIndex == -1)
             {
                 // If CurrentTab is deleted
-                if (Playlists.Count > 0) tabview.SelectedIndex = Playlists.Count - 1;
+                if (Playlists.IsNotEmpty()) tabview.SelectedIndex = Playlists.Count - 1;
                 return;
             }
             var playlist = tabview.SelectedItem as Playlist;
-            LoadPlaylistSongs(playlist);
             Settings.settings.LastPlaylistId = playlist.Id;
-            foreach (var music in playlist.Songs)
-                music.IsPlaying = music.Equals(MusicPlayer.CurrentMusic);
-            if (PlaylistController != null)
-                await PlaylistController.SetPlaylist(playlist);
+            LoadPlaylistSongs(playlist);
         }
 
         private void DeleteClick(object sender, RoutedEventArgs e)
@@ -127,7 +128,7 @@ namespace SMPlayer
         {
             var target = (sender as MenuFlyoutItem).DataContext as Playlist;
             int next = Settings.settings.FindNextPlaylistNameIndex(target.Name);
-            string name = Helper.GetPlaylistName(target.Name, next), prev = next == 1 ? target.Name : Helper.GetPlaylistName(target.Name, next - 1);
+            string name = Helper.GetPlaylistName(target.Name, next);
             var duplicate = target.Duplicate(name);
             Settings.settings.AddPlaylist(duplicate);
             Playlists.Add(duplicate);
@@ -257,6 +258,11 @@ namespace SMPlayer
         void IPlaylistEventListener.Removed(Playlist playlist)
         {
             Playlists.Remove(playlist);
+        }
+
+        void IPlaylistEventListener.Sorted(Playlist playlist, SortBy criterion)
+        {
+            LoadPlaylistSongs(playlist);
         }
     }
 }

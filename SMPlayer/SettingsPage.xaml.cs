@@ -4,6 +4,7 @@ using SMPlayer.Models;
 using SMPlayer.Models.DAO;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Contacts;
@@ -214,7 +215,8 @@ namespace SMPlayer
             if (folder == null) return;
             MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
             Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-            JsonFileHelper.SaveAsync(folder, SettingsHelper.JsonFilename, Settings.settings);
+            StorageFile dbFile = await FileHelper.LoadFileAsync(Path.Combine(Helper.LocalFolder.Path, SQLHelper.DBFileName));
+            await dbFile.CopyAsync(folder);
             MainPage.Instance.Loader.Hide();
             MainPage.Instance.ShowLocalizedNotification("DataExported");
         }

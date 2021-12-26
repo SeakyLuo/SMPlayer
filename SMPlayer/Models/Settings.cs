@@ -158,6 +158,17 @@ namespace SMPlayer.Models
             });
         }
 
+        public void AddMusicToPlaylist(Playlist playlist, IEnumerable<IMusicable> musicables)
+        {
+            SQLHelper.Run(c =>
+            {
+                foreach (var musicable in musicables)
+                {
+                    AddMusicToPlaylist(c, playlist.Id, musicable.ToMusic());
+                }
+            });
+        }
+
         private void AddMusicToPlaylist(SQLiteConnection c, long playlist, Music music)
         {
             c.Insert(music.ToPlaylistItemDAO(playlist));
@@ -362,12 +373,15 @@ namespace SMPlayer.Models
             });
         }
 
-        public void UpdatePlaylist(Playlist playlist)
+        public void SortPlaylist(Playlist playlist, SortBy criterion)
         {
+            playlist.SetCriterionAndSort(criterion);
             SQLHelper.Run(c =>
             {
                 c.UpdatePlaylist(playlist);
             });
+            foreach (var listener in PlaylistEventListeners)
+                listener.Sorted(playlist, criterion);
         }
 
         public void UpdatePlaylists(IEnumerable<Playlist> playlists)
@@ -579,6 +593,7 @@ namespace SMPlayer.Models
         void Added(Playlist playlist);
         void Renamed(Playlist playlist);
         void Removed(Playlist playlist);
+        void Sorted(Playlist playlist, SortBy criterion);
     }
 
     public interface IFolderTreeEventListener

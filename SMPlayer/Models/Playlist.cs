@@ -208,12 +208,12 @@ namespace SMPlayer.Models
                 default:
                     return;
             }
-            Songs.SetTo(list);
+            Songs.SetTo(list.ToList());
         }
 
         public void Reverse()
         {
-            Songs.Reverse();
+            Songs.SetTo(Songs.Reverse().ToList());
         }
 
         PreferenceItem IPreferable.AsPreferenceItem()

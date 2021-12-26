@@ -10,36 +10,29 @@ namespace SMPlayer.Models
     public class JsonFileHelper
     {
         private const string extension = ".json";
-        public static async Task<string> ReadAsync(StorageFolder folder, string filename)
+        
+        public static async Task<string> ReadAsync(string filename, ReadFilePolicy policy = ReadFilePolicy.CreateIfNotExist)
         {
-            if (folder == null) return null;
             if (!filename.EndsWith(extension)) filename += extension;
-            StorageFile file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
-            return await FileIO.ReadTextAsync(file);
+            return await FileHelper.ReadFileAsync(Helper.LocalFolder, filename, policy);
         }
 
-        public static async Task<T> ReadObjectAsync<T>(string filename) where T : class
+        public static async Task<T> ReadObjectAsync<T>(string filename, ReadFilePolicy policy = ReadFilePolicy.CreateIfNotExist) where T : class
         {
-            string json = await ReadAsync(Helper.LocalFolder, filename);
+            string json = await ReadAsync(filename, policy);
             return string.IsNullOrEmpty(json) ? null : JsonConvert.DeserializeObject<T>(json);
-        }
-
-        public static async Task<string> ReadAsync(string filename)
-        {
-            return await ReadAsync(Helper.LocalFolder, filename);
         }
 
         public static async void SaveAsync<T>(StorageFolder folder, string filename, T data)
         {
             if (folder == null || data == null) return;
             if (!filename.EndsWith(extension)) filename += extension;
-            StorageFile file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
             string json;
             lock (data)
             {
                 try
                 {
-                    json = Serialize(data);
+                    json = ToJson(data);
                 }
                 catch (Exception e)
                 {
@@ -47,23 +40,7 @@ namespace SMPlayer.Models
                     return;
                 }
             }
-            while (true)
-            {
-                try
-                {
-                    await FileIO.WriteTextAsync(file, json);
-                    break;
-                }
-                catch (FileLoadException)
-                {
-                    System.Threading.Thread.Sleep(1000);
-                }
-                catch (Exception)
-                {
-                    // 无法删除要被替换的文件
-                    break;
-                }
-            }
+            await FileHelper.WriteFileAsync(folder, filename, json);
         }
 
         public static void SaveAsync<T>(string filename, T data)
@@ -71,25 +48,15 @@ namespace SMPlayer.Models
             SaveAsync(Helper.LocalFolder, filename, data);
         }
 
-        public static T Convert<T>(string json) where T : class
+        public static T FromJson<T>(string json) where T : class
         {
             return json == null ? null : JsonConvert.DeserializeObject<T>(json);
         }
 
-        public static string Serialize(object obj)
+        public static string ToJson(object obj)
         {
             return obj == null ? null : JsonConvert.SerializeObject(obj);
         }
 
-        public static void DeleteFile(string filename)
-        {
-            DeleteFile(Helper.LocalFolder, filename);
-        }
-
-        public static async void DeleteFile(StorageFolder folder, string filename)
-        {
-            var file = await folder.GetFileAsync(filename);
-            await file.DeleteAsync();
-        }
     }
 }

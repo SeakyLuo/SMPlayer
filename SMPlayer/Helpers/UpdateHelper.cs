@@ -92,12 +92,14 @@ namespace SMPlayer.Helpers
         private static async Task<bool> LoadFolder(SQLiteConnection c, StorageFolder folder, ITreeUpdateListener listener, TreeOperationIndicator indicator, TreeUpdateData updateData = null)
         {
             LoadingStatus = ExecutionStatus.Running;
-            await LoadFolder(c, folder, new FolderTree(), listener, indicator, updateData);
+            FolderTree tree = new FolderTree();
+            await LoadFolder(c, folder, tree, listener, indicator);
+            ResetFolderData(c, tree, updateData);
             LoadingStatus = ExecutionStatus.Done;
             return true;
         }
 
-        private static async Task<bool> LoadFolder(SQLiteConnection c, StorageFolder folder, FolderTree tree, ITreeUpdateListener listener, TreeOperationIndicator indicator, TreeUpdateData updateData = null)
+        private static async Task<bool> LoadFolder(SQLiteConnection c, StorageFolder folder, FolderTree tree, ITreeUpdateListener listener, TreeOperationIndicator indicator)
         {
             foreach (var subFolder in await folder.GetFoldersAsync())
             {
@@ -124,7 +126,6 @@ namespace SMPlayer.Helpers
                 return true;
             }
             tree.Path = folder.Path;
-            ResetFolderData(c, tree, updateData);
             return true;
         }
 

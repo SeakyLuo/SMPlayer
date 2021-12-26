@@ -31,41 +31,15 @@ namespace SMPlayer
             set => OverlayRectangle.Fill = headerBackground = value;
         }
         private Brush headerBackground = ColorHelper.HighlightBrush;
-        public bool ShowAlbumText
+        private bool IsPlaylist 
         {
-            get => HeaderedPlaylistController.ShowAlbumText;
-            set => HeaderedPlaylistController.ShowAlbumText = value;
+            get => PlaylistType == HeaderedPlaylistType.Playlist;
         }
-        public bool IsPlaylist 
+        private bool IsMyFavorites
         {
-            get => isPlaylist;
-            set
-            {
-                isPlaylist = value;
-                EditAlbumArtButton.Visibility = value ? Visibility.Collapsed : Visibility.Visible;
-            }
+            get => PlaylistType == HeaderedPlaylistType.MyFavorites;
         }
-        private bool isPlaylist = true;
-        public bool AllowClear
-        {
-            get => allowClear;
-            set
-            {
-                allowClear = value;
-                ClearButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-        private bool allowClear = true;
-        public bool Removable
-        {
-            get => HeaderedPlaylistController.Removable;
-            set => HeaderedPlaylistController.Removable = value;
-        }
-
-        public bool IsMyFavorites
-        {
-            get => CurrentPlaylist.Name == Settings.settings.MyFavorites.Name;
-        }
+        public HeaderedPlaylistType PlaylistType { get; set; } = HeaderedPlaylistType.Playlist;
 
         private static RenameDialog dialog;
         private static RemoveDialog removeDialog;
@@ -89,8 +63,33 @@ namespace SMPlayer
             ShuffleButton.IsEnabled = !playlist.IsEmpty;
             MultiSelectButton.IsEnabled = !playlist.IsEmpty;
             ClearButton.Visibility = playlist.IsEmpty ? Visibility.Collapsed : Visibility.Visible;
-            RenameButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
-            DeleteButton.Visibility = IsPlaylist ? Visibility.Visible : Visibility.Collapsed;
+            switch (PlaylistType)
+            {
+                case HeaderedPlaylistType.Playlist:
+                    HeaderedPlaylistController.ShowAlbumText = true;
+                    HeaderedPlaylistController.Removable = true;
+                    RenameButton.Visibility = Visibility.Visible;
+                    DeleteButton.Visibility = Visibility.Visible;
+                    EditAlbumArtButton.Visibility = Visibility.Collapsed;
+                    ClearButton.Visibility = Visibility.Visible;
+                    break;
+                case HeaderedPlaylistType.MyFavorites:
+                    HeaderedPlaylistController.ShowAlbumText = true;
+                    HeaderedPlaylistController.Removable = true;
+                    RenameButton.Visibility = Visibility.Collapsed;
+                    DeleteButton.Visibility = Visibility.Collapsed;
+                    EditAlbumArtButton.Visibility = Visibility.Collapsed;
+                    ClearButton.Visibility = Visibility.Visible;
+                    break;
+                case HeaderedPlaylistType.Album:
+                    HeaderedPlaylistController.ShowAlbumText = false;
+                    HeaderedPlaylistController.Removable = false;
+                    RenameButton.Visibility = Visibility.Collapsed;
+                    DeleteButton.Visibility = Visibility.Collapsed;
+                    EditAlbumArtButton.Visibility = Visibility.Visible;
+                    ClearButton.Visibility = Visibility.Collapsed;
+                    break;
+            }
             bool isPreferred = IsPlaylist ? Settings.settings.Preference.IsPreferred(playlist) :
                                             IsMyFavorites ? Settings.settings.Preference.MyFavorites.IsEnabled :
                                                             Settings.settings.Preference.IsPreferred(playlist.ToAlbumView());
@@ -182,7 +181,7 @@ namespace SMPlayer
 
         public void MusicRemoved(int index, Music music, IEnumerable<Music> newCollection)
         {
-            if (AllowClear) SetPlaylistInfo(SongCountConverter.ToStr(newCollection));
+            SetPlaylistInfo(SongCountConverter.ToStr(newCollection));
             if (IsPlaylist)
             {
                 Settings.settings.RemoveMusicFromPlaylist(CurrentPlaylist, music);
@@ -268,7 +267,8 @@ namespace SMPlayer
 
         private void SortButton_Click(object sender, RoutedEventArgs e)
         {
-            MenuFlyoutHelper.SetPlaylistSortByMenu(sender, CurrentPlaylist);
+            MenuFlyoutHelper.SetPlaylistSortByMenu(sender, CurrentPlaylist,
+                                                    _ => HeaderedPlaylist.CurrentPlaylist = CurrentPlaylist.Songs);
         }
 
         void IMultiSelectListener.AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper)
@@ -332,6 +332,7 @@ namespace SMPlayer
             Confirmed(playlist.Name);
         }
         void IPlaylistEventListener.Removed(Playlist playlist) { }
+        void IPlaylistEventListener.Sorted(Playlist playlist, SortBy criterion) { }
 
         CompositionPropertySet _props;
         CompositionPropertySet _scrollerPropertySet;
@@ -476,5 +477,10 @@ namespace SMPlayer
                 ShowPlaylistCover();
             }
         }
+    }
+
+    public enum HeaderedPlaylistType
+    {
+        Playlist, Album, MyFavorites
     }
 }

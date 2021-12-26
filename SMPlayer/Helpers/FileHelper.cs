@@ -128,5 +128,54 @@ namespace SMPlayer.Helpers
                 return false;
             }
         }
+
+        public static void DeleteFile(string filename)
+        {
+            DeleteFile(Helper.LocalFolder, filename);
+        }
+
+        public static async void DeleteFile(StorageFolder folder, string filename)
+        {
+            var file = await folder.GetFileAsync(filename);
+            await file.DeleteAsync();
+        }
+
+        public static async Task<string> ReadFileAsync(StorageFolder folder, string filename, ReadFilePolicy policy = ReadFilePolicy.CreateIfNotExist)
+        {
+            if (folder == null) return null;
+            if (policy == ReadFilePolicy.QuickReturn && await FileNotExist(Path.Combine(folder.Path, filename)))
+            {
+                return null;
+            }
+            StorageFile file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
+            return await FileIO.ReadTextAsync(file);
+        }
+
+        public static async Task WriteFileAsync(StorageFolder folder, string filename, string content)
+        {
+            StorageFile file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
+            while (true)
+            {
+                try
+                {
+                    await FileIO.WriteTextAsync(file, content);
+                    break;
+                }
+                catch (FileLoadException)
+                {
+                    System.Threading.Thread.Sleep(1000);
+                }
+                catch (Exception)
+                {
+                    // 无法删除要被替换的文件
+                    break;
+                }
+            }
+        }
+    }
+
+    public enum ReadFilePolicy
+    {
+        CreateIfNotExist, QuickReturn
     }
 }

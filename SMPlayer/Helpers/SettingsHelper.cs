@@ -24,8 +24,7 @@ namespace SMPlayer.Helpers
             {
                 return;
             }
-            string json = await JsonFileHelper.ReadAsync(JsonFilename);
-            if (!string.IsNullOrEmpty(json) && JsonFileHelper.Convert<Settings>(json) is Settings settings)
+            if (await JsonFileHelper.ReadObjectAsync<Settings>(JsonFilename, ReadFilePolicy.QuickReturn) is Settings settings)
             {
                 Settings.settings = settings;
                 await Init(settings);
@@ -61,13 +60,13 @@ namespace SMPlayer.Helpers
         public static async Task LoadSettingsAndInsertToDb()
         {
             MainPage.Instance.Loader.SetMessage("UpdateDBMsgReadingSettings");
-            string json = await JsonFileHelper.ReadAsync(JsonFilename);
+            string json = await JsonFileHelper.ReadAsync(JsonFilename, ReadFilePolicy.QuickReturn);
             if (string.IsNullOrEmpty(json))
             {
                 SQLHelper.Run(c => InsertNowPlayingAndMyFavorites(c, null));
                 return;
             }
-            var jsonObject = JsonFileHelper.Convert<JObject>(json);
+            var jsonObject = JsonFileHelper.FromJson<JObject>(json);
             List<Music> songs = FlattenFolderTreeInJson(jsonObject["Tree"]);
             MainPage.Instance.Loader.SetMessage("UpdateDBMsgUpdatingDatabase");
             List<Music> nowPlayingSongs = await JsonFileHelper.ReadObjectAsync<List<Music>>(MusicPlayer.JsonFilename);
