@@ -126,6 +126,7 @@ namespace SMPlayer.Helpers
             {
                 Id = src.Id,
                 Path = src.Path,
+                ParentId = src.ParentId,
                 Criterion = src.Criterion
             };
         }
@@ -136,6 +137,7 @@ namespace SMPlayer.Helpers
             {
                 Id = src.Id,
                 Path = src.Path,
+                ParentId = src.ParentId,
                 Criterion = src.Criterion,
                 Folders = src.Trees.Select(i => i.ToDAO()).ToList(),
                 Files = src.Files.Select(i => i.ToDAO()).ToList()
@@ -210,7 +212,6 @@ namespace SMPlayer.Helpers
             {
                 Id = src.Id,
                 RootPath = src.RootPath,
-                RootTreeId = src.Tree.Id,
                 LastMusicIndex = src.LastMusicIndex,
                 Mode = src.Mode,
                 Volume = src.Volume,

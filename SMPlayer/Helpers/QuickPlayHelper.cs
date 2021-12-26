@@ -78,8 +78,8 @@ namespace SMPlayer.Helpers
         {
             if (!preference.Folders) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredFolders);
-            songs.AddRange(items.Select(i => new { Folder = Settings.settings.Tree.FindTree(i.LongId), i.Level })
-                                .Where(i => i.Folder != null)
+            songs.AddRange(items.Select(i => new { Folder = Settings.FindFolder(i.LongId), i.Level })
+                                .Where(i => i.Folder != null && i.Folder.IsNotEmpty)
                                 .SelectMany(i => i.Folder.Songs.RandItems(GetRandomPreferredItems(i.Level)))
                                 .RandItems(randomItems).ToList());
         }

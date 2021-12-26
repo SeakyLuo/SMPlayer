@@ -379,7 +379,7 @@ namespace SMPlayer.Helpers
                 RandomPlayHelper.PlayFolder();
                 return;
             }
-            IEnumerable<GridFolderView> list = SearchHelper.SearchFolders(Settings.settings.Tree, text, SortBy.Default);
+            IEnumerable<GridFolderView> list = SearchHelper.SearchFolders(Settings.FullRoot, text, SortBy.Default);
             if (list.Count() == 0)
             {
                 SpeakNoResults(text);

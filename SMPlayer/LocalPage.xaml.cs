@@ -35,7 +35,7 @@ namespace SMPlayer
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             LocalFoldersPage.setter = this;
             LocalMusicPage.setter = this;
-            SetPage(Settings.settings.Tree);
+            SetPage(Settings.FullRoot);
             UpdateHelper.AddAfterPathSetListener(this);
             MainPage.WindowResizeListeners.Add(this);
             Settings.AddFolderTreeEventListener(this);
@@ -250,9 +250,10 @@ namespace SMPlayer
         public void PathSet(string path)
         {
             History.Clear();
-            SetPage(Settings.settings.Tree, false);
-            if (LocalFoldersItem.IsSelected) FolderListener.UpdatePage(Settings.settings.Tree);
-            else MusicListener.UpdatePage(Settings.settings.Tree);
+            FolderTree fullRoot = Settings.FullRoot;
+            SetPage(fullRoot, false);
+            if (LocalFoldersItem.IsSelected) FolderListener.UpdatePage(fullRoot);
+            else MusicListener.UpdatePage(fullRoot);
         }
 
         private void OpenLocalMusicFlyout(object sender, object e)

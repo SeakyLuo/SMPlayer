@@ -305,10 +305,10 @@ namespace SMPlayer
     }
     public class SearchKeyword
     {
-        public string Text;
-        public IEnumerable<Music> Songs = Settings.AllSongs;
-        public IEnumerable<Playlist> Playlists = Settings.AllPlaylists;
-        public FolderTree Tree = Settings.settings.Tree;
+        public string Text { get; set; }
+        public IEnumerable<Music> Songs { get; set; } = Settings.AllSongs;
+        public IEnumerable<Playlist> Playlists { get; set; } = Settings.AllPlaylists;
+        public FolderTree Tree { get; set; } = Settings.FullRoot;
     }
     public class SearchArgs
     {

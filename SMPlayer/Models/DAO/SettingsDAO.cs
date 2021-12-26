@@ -16,7 +16,6 @@ namespace SMPlayer.Models.DAO
         [PrimaryKey, AutoIncrement]
         public long Id { get; set; }
         public string RootPath { get; set; }
-        public long RootTreeId { get; set; }
         public int LastMusicIndex { get; set; }
         public PlayMode Mode { get; set; }
         public double Volume { get; set; }

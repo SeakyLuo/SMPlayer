@@ -109,7 +109,6 @@ namespace SMPlayer
             Songs.SetTo(CurrentTree.Reverse());
             GridMusicView.Reverse();
             ReverseRequested = false;
-            Settings.settings.Tree.FindTree(CurrentTree).CopyFrom(CurrentTree);
         }
         public void SortByTitle()
         {
@@ -117,7 +116,7 @@ namespace SMPlayer
             GridMusicView.SortByTitle();
             SortByTitleRequested = false;
             CurrentTree.Criterion = SortBy.Title;
-            Settings.settings.Tree.FindTree(CurrentTree).CopyFrom(CurrentTree);
+            Settings.settings.UpdateFolder(CurrentTree);
         }
         public void SortByArtist()
         {
@@ -125,7 +124,7 @@ namespace SMPlayer
             GridMusicView.SortByArtist();
             SortByAlbumRequested = false;
             CurrentTree.Criterion = SortBy.Artist;
-            Settings.settings.Tree.FindTree(CurrentTree).CopyFrom(CurrentTree);
+            Settings.settings.UpdateFolder(CurrentTree);
         }
         public void SortByAlbum()
         {
@@ -133,7 +132,7 @@ namespace SMPlayer
             GridMusicView.SortByAlbum();
             SortByAlbumRequested = false;
             CurrentTree.Criterion = SortBy.Album;
-            Settings.settings.Tree.FindTree(CurrentTree).CopyFrom(CurrentTree);
+            Settings.settings.UpdateFolder(CurrentTree);
         }
 
         void IMusicEventListener.Liked(Music music, bool isFavorite) { }

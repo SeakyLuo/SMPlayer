@@ -37,24 +37,24 @@ namespace SMPlayer.Helpers
             Inited = true;
         }
 
-        public static async Task Init()
+        public static async Task InitNew()
         {
             if (!await SQLHelper.Initialized())
             {
                 return;
             }
-            Settings.settings = SQLHelper.Run(c => c.SelectSettings());
+            await Init(Settings.settings = SQLHelper.Run(c => c.SelectSettings()));
             Inited = true;
         }
 
-        public static async Task Init(StorageFile file)
+        public static async Task InitWithFile(StorageFile file)
         {
             StorageFile newDbFile = await file.CopyAsync(Helper.CurrentFolder);
             if (newDbFile.Name != SQLHelper.DBFileName)
             {
                 await newDbFile.RenameAsync(SQLHelper.DBFileName);
             }
-            await Init();
+            await InitNew();
         }
 
         public static async Task LoadSettingsAndInsertToDb()
@@ -168,7 +168,7 @@ namespace SMPlayer.Helpers
         {
             foreach (PreferenceItem item in settings.PreferredFolders)
             {
-                if (c.SelectFolderByPath(item.Id) is FolderTree result)
+                if (c.SelectFolderInfoByPath(item.Id) is FolderTree result)
                 {
                     item.Id = result.Id.ToString();
                     c.InsertPreferenceItem(item, PreferType.Folder);

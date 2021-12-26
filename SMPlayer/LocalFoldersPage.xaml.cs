@@ -129,7 +129,7 @@ namespace SMPlayer
                     item.Tree = tree;
                     GridItems[index] = item;
                 }
-                if (tree.Equals(Settings.settings.Tree)) SetupTreeView(tree);
+                if (tree.Path == Settings.settings.RootPath) SetupTreeView(tree);
                 else if (FindNode(tree) is TreeViewNode node)
                 {
                     node.Content = tree;
@@ -417,23 +417,24 @@ namespace SMPlayer
 
         void IMusicEventListener.Modified(Music before, Music after)
         {
-            if (CurrentTree.Contains(before.Path))
+            if (!CurrentTree.Contains(before.Path))
             {
-                CurrentTree = Settings.settings.Tree.FindTree(CurrentTree);
-                foreach (var node in LocalFoldersTreeView.RootNodes)
+                return;
+            }
+            CurrentTree = Settings.FindFolderInfo(CurrentTree.Id);
+            foreach (var node in LocalFoldersTreeView.RootNodes)
+            {
+                if (node.Content is FolderTree tree)
                 {
-                    if (node.Content is FolderTree tree)
+                    if (tree.FindMusic(before) is Music m)
                     {
-                        if (tree.FindMusic(before) is Music m)
-                        {
-                            m.CopyFrom(after);
-                            break;
-                        }
+                        m.CopyFrom(after);
+                        break;
                     }
                 }
-                if (GridItems.FirstOrDefault(item => item.Tree.Contains(before.Path)) is GridFolderView gridItem)
-                    gridItem.Tree.FindMusic(before).CopyFrom(after);
             }
+            if (GridItems.FirstOrDefault(item => item.Tree.Contains(before.Path)) is GridFolderView gridItem)
+                gridItem.Tree.FindMusic(before).CopyFrom(after);
         }
 
         void IFolderTreeEventListener.Added(FolderTree folder, FolderTree root)

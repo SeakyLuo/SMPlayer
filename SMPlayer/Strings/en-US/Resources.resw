@@ -211,10 +211,10 @@
     <value>Artist</value>
   </data>
   <data name="AutoLyricsToggleSwitch.OffContent" xml:space="preserve">
-    <value>Add lyrics automatically when music is added</value>
+    <value>Automatically add lyrics  to recent added songs.</value>
   </data>
   <data name="AutoLyricsToggleSwitch.OnContent" xml:space="preserve">
-    <value>Add lyrics automatically when music is added</value>
+    <value>Automatically add lyrics  to recent added songs.</value>
   </data>
   <data name="AutoPlayToggleSwitch.OffContent" xml:space="preserve">
     <value>Play music automatically after this App is launched.</value>

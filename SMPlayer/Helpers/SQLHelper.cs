@@ -98,13 +98,17 @@ namespace SMPlayer.Helpers
 
         public static Settings SelectSettings(this SQLiteConnection c)
         {
-            return c.Query<SettingsDAO>("select * from Settings order by Id desc").FirstOrDefault()?.FromDAO();
+            Settings settings = c.Query<SettingsDAO>("select * from Settings order by Id desc").FirstOrDefault()?.FromDAO();
+            if (settings == null) return null;
+            settings.Tree = c.SelectFolderInfoByPath(settings.RootPath);
+            return settings;
         }
 
         public static MusicDAO InsertMusic(this SQLiteConnection c, Music src)
         {
             MusicDAO dao = src.ToDAO();
             c.Insert(dao);
+            src.Id = dao.Id;
             return dao;
         }
 
@@ -207,7 +211,28 @@ namespace SMPlayer.Helpers
             return c.Query<MusicDAO>("select * from Music where Path = ? and State = ?", path, ActiveState.Active).FirstOrDefault().FromDAO();
         }
 
-        public static FolderTree SelectFolderByPath(this SQLiteConnection c, string path)
+        public static FolderTree SelectFullFolder(this SQLiteConnection c, long id)
+        {
+            FolderTree root = c.SelectFolder(id);
+            if (root == null) return null;
+            root.Trees = root.Trees.AsParallel().Select(i => c.SelectFullFolder(i.Id)).ToList();
+            return root;
+        }
+        public static FolderTree SelectFolder(this SQLiteConnection c, long id)
+        {
+            FolderTree root = c.SelectFolderInfoById(id);
+            if (root == null) return null;
+            root.Files = c.SelectSubFiles(root);
+            root.Trees = c.SelectSubFolders(root);
+            return root;
+        }
+
+        public static FolderTree SelectFolderInfoById(this SQLiteConnection c, long id)
+        {
+            return c.Query<FolderDAO>("select * from Folder where Id = ? and State = ?", id, ActiveState.Active).FirstOrDefault()?.FromDAO();
+        }
+
+        public static FolderTree SelectFolderInfoByPath(this SQLiteConnection c, string path)
         {
             return SelectFolderDAOByPath(c, path)?.FromDAO();
         }

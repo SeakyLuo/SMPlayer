@@ -54,7 +54,7 @@ namespace SMPlayer
                 await Helper.Init();
                 await SettingsHelper.InitOld();
                 await SQLHelper.Init();
-                await SettingsHelper.Init();
+                await SettingsHelper.InitNew();
                 await UpdateHelper.Init();
                 if (Settings.settings.LastPage == "Albums")
                     await AlbumsPage.Init();

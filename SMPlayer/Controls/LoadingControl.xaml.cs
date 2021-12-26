@@ -123,11 +123,11 @@ namespace SMPlayer
 
         public void Increment(string text = null)
         {
+            Progress++;
             if (!string.IsNullOrWhiteSpace(text))
             {
                 SetMessage(text);
             }
-            Progress++;
         }
 
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)

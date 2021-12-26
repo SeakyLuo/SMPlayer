@@ -29,6 +29,35 @@ namespace SMPlayer.Models
         {
             get => SQLHelper.Run(c => c.SelectAllPlaylists(i => i.Id != settings.MyFavoritesId).ToList()); 
         }
+        public static FolderTree FullRoot { get => FindFullFolder(settings.Tree.Id); }
+        public static Music FindMusic(Music target)
+        {
+            if (target == null) return null;
+            return SQLHelper.Run(c => target.Id == 0 ? c.SelectMusicByPath(target.Path) : c.SelectMusicById(target.Id));
+        }
+        public static Music FindMusic(string target) { return SQLHelper.Run(c => c.SelectMusicByPath(target)); }
+        public static Music FindMusic(FolderFile target) { return FindMusic(target.FileId); }
+        public static Music FindMusic(long id) { return SQLHelper.Run(c => c.SelectMusicById(id)); }
+        public static List<Music> FindMusicList(IEnumerable<long> ids) { return ids.IsEmpty() ? new List<Music>() : SQLHelper.Run(c => c.SelectMusicByIds(ids)); }
+        public static Playlist FindPlaylist(long id) { return SQLHelper.Run(c => c.SelectPlaylistById(id)); }
+        public static Playlist FindPlaylist(Playlist playlist) { return FindPlaylist(playlist.Id); }
+        public static List<Music> FindPlaylistItems(long id) { return SQLHelper.Run(c => c.SelectPlaylistItems(id)); }
+        public static FolderTree FindFolderInfo(long id)
+        {
+            return SQLHelper.Run(c => c.SelectFolderInfoById(id));
+        }
+        public static FolderTree FindFolderInfo(string path)
+        {
+            return SQLHelper.Run(c => c.SelectFolderInfoByPath(path));
+        }
+        public static FolderTree FindFolder(long id)
+        {
+            return SQLHelper.Run(c => c.SelectFolderInfoById(id));
+        }
+        public static FolderTree FindFullFolder(long id)
+        {
+            return SQLHelper.Run(c => c.SelectFullFolder(id));
+        }
 
         public long Id { get; set; }
         public string RootPath { get; set; } = "";
@@ -69,10 +98,8 @@ namespace SMPlayer.Models
         public SortBy SearchSongsCriterion { get; set; } = SortBy.Default;
         public SortBy SearchPlaylistsCriterion { get; set; } = SortBy.Default;
         public SortBy SearchFoldersCriterion { get; set; } = SortBy.Default;
-
         public PreferenceSettings Preference { get; set; } = new PreferenceSettings();
 
-        [Newtonsoft.Json.JsonIgnore]
         private List<Music> JustRemoved = new List<Music>();
 
         public List<long> RecentAdded = new List<long>();
@@ -81,20 +108,6 @@ namespace SMPlayer.Models
         {
             MyFavorites = new Playlist(Constants.MyFavorites);
         }
-
-        public static Music FindMusic(IMusicable target) { return FindMusic(target.ToMusic()); }
-        public static Music FindMusic(Music target) 
-        {
-            if (target == null) return null;
-            return SQLHelper.Run(c => target.Id == 0 ? c.SelectMusicByPath(target.Path) : c.SelectMusicById(target.Id)); 
-        }
-        public static Music FindMusic(string target) { return SQLHelper.Run(c => c.SelectMusicByPath(target)); }
-        public static Music FindMusic(FolderFile target) { return FindMusic(target.FileId); }
-        public static Music FindMusic(long id) { return SQLHelper.Run(c => c.SelectMusicById(id)); }
-        public static List<Music> FindMusicList(IEnumerable<long> ids) { return ids.IsEmpty() ? new List<Music>() : SQLHelper.Run(c => c.SelectMusicByIds(ids)); }
-        public static Playlist FindPlaylist(long id) { return SQLHelper.Run(c => c.SelectPlaylistById(id)); }
-        public static Playlist FindPlaylist(Playlist playlist) { return FindPlaylist(playlist.Id); }
-        public static List<Music> FindPlaylistItems(long id) { return SQLHelper.Run(c => c.SelectPlaylistItems(id)); }
 
         public int FindNextPlaylistNameIndex(string Name)
         {
@@ -406,6 +419,11 @@ namespace SMPlayer.Models
             c.Execute("update Playlist set State = ? where Id = ?", state, playlist.Id);
         }
 
+        public void UpdateFolder(FolderTree folder)
+        {
+            SQLHelper.Run(c => c.Update(folder.ToDAO()));
+        }
+
         /**
          * Add branch to root
          */
@@ -504,7 +522,7 @@ namespace SMPlayer.Models
 
         private void MoveFolder(SQLiteConnection c, FolderTree tree, string path)
         {
-            FolderTree target = c.SelectFolderByPath(path);
+            FolderTree target = c.SelectFolderInfoByPath(path);
             tree.ParentId = target.Id;
             c.Update(target);
             foreach (var item in c.SelectSubFolders(target))

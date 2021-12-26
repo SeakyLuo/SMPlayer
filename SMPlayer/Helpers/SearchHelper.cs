@@ -218,7 +218,7 @@ namespace SMPlayer.Helpers
             Playlist artist = (await Task.Run(() => SearchArtists(Settings.AllSongs, keyword, SortBy.Default)))?.FirstOrDefault();
             AlbumView album = (await Task.Run(() => SearchAlbums(Settings.AllSongs, keyword, SortBy.Default)))?.FirstOrDefault();
             AlbumView playlist = (await Task.Run(() => SearchPlaylists(Settings.AllPlaylists, keyword, SortBy.Default)))?.FirstOrDefault();
-            GridFolderView folder = (await Task.Run(() => SearchFolders(Settings.settings.Tree, keyword, SortBy.Default)))?.FirstOrDefault();
+            GridFolderView folder = (await Task.Run(() => SearchFolders(Settings.FullRoot, keyword, SortBy.Default)))?.FirstOrDefault();
             return MergeSearchResult(keyword, music, artist, album, playlist, folder);
         }
 
@@ -251,7 +251,7 @@ namespace SMPlayer.Helpers
 
         public static async Task<SearchResult> SearchFolderMusic(string folderName, string keyword)
         {
-            GridFolderView folder = (await Task.Run(() => SearchFolders(Settings.settings.Tree, folderName, SortBy.Default)))?.FirstOrDefault();
+            GridFolderView folder = (await Task.Run(() => SearchFolders(Settings.FullRoot, folderName, SortBy.Default)))?.FirstOrDefault();
             return SearchMusicInCollection(folder?.Songs, keyword);
         }
 

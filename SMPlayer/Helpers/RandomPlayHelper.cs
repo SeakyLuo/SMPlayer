@@ -37,7 +37,7 @@ namespace SMPlayer.Helpers
 
         public static FolderTree PlayFolder(int randomLimit = 100)
         {
-            var folder = Settings.settings.Tree.GetAllTrees().Where(tree => tree.Files.Count > 0).RandItem();
+            var folder = Settings.FullRoot.GetAllTrees().Where(tree => tree.Files.Count > 0).RandItem();
             MusicPlayer.SetMusicAndPlay(folder.Songs.RandItems(randomLimit));
             return folder;
         }

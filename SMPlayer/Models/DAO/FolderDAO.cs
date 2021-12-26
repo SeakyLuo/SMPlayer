@@ -17,7 +17,7 @@ namespace SMPlayer.Models.DAO
         public SortBy Criterion { get; set; } = SortBy.Title;
         [Indexed]
         public long ParentId { get; set; }
-        public ActiveState State { get; set; }
+        public ActiveState State { get; set; } = ActiveState.Active;
         [Ignore]
         public List<FolderDAO> Folders { get; set; }
         [Ignore]

@@ -52,7 +52,6 @@ namespace SMPlayer
             NotificationModeComboBox.SelectedIndex = (int)settings.NotificationDisplay;
             ThemeColorPicker.Color = settings.ThemeColor;
             ShowCountToggleSwitch.IsOn = settings.ShowCount;
-            KeepRecentComboBox.SelectedIndex = LimitedRecentPlayedItems.FindIndex(i => i == settings.LimitedRecentPlayedItems);
             AutoPlayToggleSwitch.IsOn = settings.AutoPlay;
             AutoLyricsToggleSwitch.IsOn = settings.AutoLyrics;
             SaveProgressToggleSwitch.IsOn = settings.SaveMusicProgress;
@@ -95,9 +94,9 @@ namespace SMPlayer
 
         private async void UpdateMusicLibrary_Click(object sender, RoutedEventArgs e)
         {
-            if (Helper.CurrentFolder == null)
+            if (string.IsNullOrEmpty(Settings.settings.RootPath))
             {
-                MainPage.Instance.ShowNotification("SetRootFolder");
+                MainPage.Instance.ShowLocalizedNotification("SetRootFolder");
             }
             else
             {
@@ -233,7 +232,7 @@ namespace SMPlayer
             MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
             try
             {
-                await SettingsHelper.Init(file);
+                await SettingsHelper.InitWithFile(file);
                 bool successful = await UpdateHelper.UpdateMusicLibrary();
                 if (successful)
                 {

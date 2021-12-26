@@ -157,7 +157,7 @@ namespace SMPlayer
                     view.IsValid = playlist != null;
                     break;
                 case PreferType.Folder:
-                    FolderTree tree = Settings.settings.Tree.FindTree(item.LongId);
+                    FolderTree tree = Settings.FindFolderInfo(item.LongId);
                     if (tree == null)
                     {
                         view.IsValid = false;
@@ -401,7 +401,7 @@ namespace SMPlayer
         private void PreferredFoldersListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             PreferredListView_ItemClick(sender, e,
-                                        view => MainPage.Instance.NavigateToPage(typeof(LocalPage), Settings.settings.Tree.FindTree(view.LongId)));
+                                        view => MainPage.Instance.NavigateToPage(typeof(LocalPage), Settings.FindFolderInfo(view.LongId)));
         }
 
         private void PreferredListView_ItemClick(object sender, ItemClickEventArgs e, Action<PreferenceItemView> action)

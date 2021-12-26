@@ -8,6 +8,6 @@ namespace SMPlayer.Models.DAO
 {
     public enum ActiveState
     {
-        Active, Inactive
+        Inactive = 0, Active = 1,
     }
 }

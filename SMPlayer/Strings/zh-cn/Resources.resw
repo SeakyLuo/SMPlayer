@@ -211,10 +211,10 @@
     <value>歌手</value>
   </data>
   <data name="AutoLyricsToggleSwitch.OffContent" xml:space="preserve">
-    <value>自动为添加的歌曲添加歌词</value>
+    <value>自动为最近添加的歌曲添加歌词</value>
   </data>
   <data name="AutoLyricsToggleSwitch.OnContent" xml:space="preserve">
-    <value>自动为添加的歌曲添加歌词</value>
+    <value>自动为最近添加的歌曲添加歌词</value>
   </data>
   <data name="AutoPlayToggleSwitch.OffContent" xml:space="preserve">
     <value>打开应用后自动播放歌曲</value>

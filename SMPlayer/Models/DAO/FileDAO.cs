@@ -18,6 +18,6 @@ namespace SMPlayer.Models.DAO
         public long ParentId { get; set; }
         public long FileId { get; set; } // 对应的文件ID，非该记录ID
         public FileType FileType { get; set; }
-        public ActiveState State { get; set; }
+        public ActiveState State { get; set; } = ActiveState.Active;
     }
 }
