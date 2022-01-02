@@ -87,7 +87,7 @@ namespace SMPlayer
         {
         }
 
-        void IMainPageContainer.ShowUndoNotification(string message, Action undo, int duration)
+        void IMainPageContainer.ShowUndoableNotification(string message, Action undo, int duration)
         {
         }
 

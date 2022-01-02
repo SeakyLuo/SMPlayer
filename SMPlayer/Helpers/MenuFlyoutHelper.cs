@@ -778,7 +778,7 @@ namespace SMPlayer
                 };
                 flyout.Items.Add(recentAdded);
             }
-            if (Settings.settings.RecentPlayed.Count > 0)
+            if (Settings.RecentPlay.IsNotEmpty())
             {
                 var recentPlayed = new MenuFlyoutItem()
                 {
@@ -786,7 +786,7 @@ namespace SMPlayer
                 };
                 recentPlayed.Click += (sender, args) =>
                 {
-                    MusicPlayer.SetMusicAndPlay(Settings.settings.RecentPlayed.ToMusicList());
+                    MusicPlayer.SetMusicAndPlay(Settings.RecentPlay);
                     callback?.Invoke();
                 };
                 flyout.Items.Add(recentPlayed);

@@ -173,7 +173,7 @@ namespace SMPlayer
         private void ExecutePlaylistDeletion(Playlist playlist)
         {
             Settings.settings.RemovePlaylist(playlist);
-            MainPage.Instance.ShowUndoNotification(Helper.LocalizeMessage("PlaylistRemoved", playlist.Name), () =>
+            MainPage.Instance.ShowUndoableNotification(Helper.LocalizeMessage("PlaylistRemoved", playlist.Name), () =>
             {
                 Settings.settings.AddPlaylist(playlist);
             });

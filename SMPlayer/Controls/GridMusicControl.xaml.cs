@@ -73,12 +73,21 @@ namespace SMPlayer
             }      
             IsProcessing = false;
         }
-        public void AddMusic(Music music)
+        public void AddMusic(Music music, int index = -1)
         {
             var copy = music.Copy();
             copy.IsPlaying = copy.Equals(MusicPlayer.CurrentMusic);
-            MusicCollection.Add(copy);
-            GridMusicCollection.Add(new GridMusicView(copy));
+            GridMusicView gridMusicView = new GridMusicView(copy);
+            if (index == -1)
+            {
+                MusicCollection.Add(copy);
+                GridMusicCollection.Add(gridMusicView);
+            }
+            else
+            {
+                MusicCollection.Insert(index, copy);
+                GridMusicCollection.Insert(index, gridMusicView);
+            }
         }
         public void Clear()
         {
@@ -179,10 +188,24 @@ namespace SMPlayer
         public bool RemoveMusic(Music music)
         {
             removedItemIndex = MusicCollection.IndexOf(music);
-            MusicCollection.RemoveAt(removedItemIndex);
-            GridMusicCollection.RemoveAt(removedItemIndex);
-            foreach (var listener in RemoveListeners) listener.MusicRemoved(removedItemIndex, music, MusicCollection);
+            if (removedItemIndex > -1)
+            {
+                MusicCollection.RemoveAt(removedItemIndex);
+                GridMusicCollection.RemoveAt(removedItemIndex);
+                foreach (var listener in RemoveListeners) listener.MusicRemoved(removedItemIndex, music, MusicCollection);
+            }
             return removedItemIndex > -1;
+        }
+
+        public void AddOrMoveToTheFirst(Music music)
+        {
+            int removedItemIndex = MusicCollection.IndexOf(music);
+            if (removedItemIndex > -1)
+            {
+                MusicCollection.RemoveAt(removedItemIndex);
+                GridMusicCollection.RemoveAt(removedItemIndex);
+            }
+            AddMusic(music, 0);
         }
 
         private async void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)

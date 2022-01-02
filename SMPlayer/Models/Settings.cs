@@ -22,6 +22,9 @@ namespace SMPlayer.Models
         public static void AddPlaylistEventListener(IPlaylistEventListener listener) { PlaylistEventListeners.Add(listener); }
         private static readonly List<IFolderTreeEventListener> FolderTreeEventListeners = new List<IFolderTreeEventListener>();
         public static void AddFolderTreeEventListener(IFolderTreeEventListener listener) { FolderTreeEventListeners.Add(listener); }
+        private static readonly List<IRecentEventListener> RecentEventListeners = new List<IRecentEventListener>();
+        public static void AddRecentEventListener(IRecentEventListener listener) { RecentEventListeners.Add(listener); }
+
         public static IEnumerable<Music> AllSongs { get => SQLHelper.Run(c => c.SelectAllMusic()); }
         public static Playlist MyFavoritesPlaylist { get => FindPlaylist(settings.MyFavoritesId); }
         public static IEnumerable<Music> MyFavoriteSongs { get => SQLHelper.Run(c => c.SelectPlaylistItems(settings.MyFavoritesId)); }
@@ -59,6 +62,21 @@ namespace SMPlayer.Models
             return SQLHelper.Run(c => c.SelectFullFolder(id));
         }
 
+        public static List<Music> RecentPlay
+        {
+            get => SQLHelper.Run(c => c.SelectRecentRecords(RecentType.Play)
+                                       .Select(r => r.ItemId)
+                                       .Select(i => c.SelectMusicById(long.Parse(i)))
+                                       .ToList());
+        }
+
+        public static List<string> RecentSearch
+        {
+            get => SQLHelper.Run(c => c.SelectRecentRecords(RecentType.Search)
+                                       .Select(r => r.ItemId)
+                                       .ToList());
+        }
+
         public long Id { get; set; }
         public string RootPath { get; set; } = "";
         public FolderTree Tree { get; set; } = new FolderTree();
@@ -77,7 +95,6 @@ namespace SMPlayer.Models
         public Playlist MyFavorites { get; set; }
         public long MyFavoritesId { get; set; }
         public ObservableCollection<string> RecentPlayed { get; set; } = new ObservableCollection<string>();
-        public List<long> RecentPlayedSongs { get; set; } = new List<long>();
         public bool MiniModeWithDropdown { get; set; } = false;
         public bool IsMuted { get; set; } = false;
         public int LimitedRecentPlayedItems { get; set; } = -1;
@@ -101,8 +118,6 @@ namespace SMPlayer.Models
         public PreferenceSettings Preference { get; set; } = new PreferenceSettings();
 
         private List<Music> JustRemoved = new List<Music>();
-
-        public List<long> RecentAdded = new List<long>();
 
         public Settings()
         {
@@ -276,16 +291,23 @@ namespace SMPlayer.Models
         public void Played(Music music)
         {
             if (music == null) return;
+            Music newMusic = null, oldMusic = null;
             SQLHelper.Run(c =>
             {
-                Music newMusic = c.SelectMusicById(music.Id);
-                Music oldMusic = newMusic.Copy();
+                newMusic = c.SelectMusicById(music.Id) ?? c.SelectMusicByPath(music.Path);
+                if (newMusic == null) return; // 直接从本地文件播放而不是读取的数据库会导致null
+                oldMusic = newMusic.Copy();
                 newMusic.Played();
                 c.UpdateMusic(newMusic);
                 UpdateRecentRecordState(c, RecentType.Play, music.Id.ToString(), ActiveState.Inactive);
                 c.InsertRecentPlayed(music);
-                NotifyMusicModified(oldMusic, newMusic);
             });
+            if (newMusic != null)
+            {
+                NotifyMusicModified(oldMusic, newMusic);
+                foreach (var listener in RecentEventListeners)
+                    listener.Played(music);
+            }
         }
 
         public void Search(string keyword)
@@ -304,11 +326,21 @@ namespace SMPlayer.Models
                     Time = DateTimeOffset.Now,
                 });
             });
+            foreach (var listener in RecentEventListeners)
+                listener.Search(keyword);
         }
 
         private void UpdateRecentRecordState(SQLiteConnection c, RecentType recentType, string item, ActiveState state)
         {
-            c.Execute("update RecentRecord set State = ? where Type = ? and ItemId = ? ", state, recentType, item);
+            string sql = "update RecentRecord set State = ? where Type = ?";
+            if (item == null)
+            {
+                c.Execute(sql, state, recentType);
+            }
+            else
+            {
+                c.Execute(sql + " and ItemId = ?", state, recentType, item);
+            }
         }
 
         public NamingError ValidatePlaylistName(string newName)
@@ -594,6 +626,39 @@ namespace SMPlayer.Models
             }
             return list;
         }
+
+        public void RemoveRecentPlayed(Music music = null)
+        {
+            SQLHelper.Run(c =>
+            {
+                UpdateRecentRecordState(c, RecentType.Play, music?.Id.ToString(), ActiveState.Inactive);
+            });
+        }
+
+        // 极端情况可能更改多个RecentRecord，先忽略吧
+        public void UndoRemoveRecentPlayed(Music music)
+        {
+            SQLHelper.Run(c =>
+            {
+                UpdateRecentRecordState(c, RecentType.Play, music.Id.ToString(), ActiveState.Active);
+            });
+        }
+
+        public void RemoveSearchHistory(string keyword = null)
+        {
+            SQLHelper.Run(c =>
+            {
+                UpdateRecentRecordState(c, RecentType.Search, keyword, ActiveState.Inactive);
+            });
+        }
+
+        public void UndoRemoveSearchHistory(string keyword)
+        {
+            SQLHelper.Run(c =>
+            {
+                UpdateRecentRecordState(c, RecentType.Search, keyword, ActiveState.Active);
+            });
+        }
     }
 
     public interface IMusicEventListener
@@ -610,6 +675,12 @@ namespace SMPlayer.Models
         void Renamed(Playlist playlist);
         void Removed(Playlist playlist);
         void Sorted(Playlist playlist, SortBy criterion);
+    }
+
+    public interface IRecentEventListener
+    {
+        void Search(string keyword);
+        void Played(Music music);
     }
 
     public interface IFolderTreeEventListener

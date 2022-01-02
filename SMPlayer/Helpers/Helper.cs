@@ -136,11 +136,11 @@ namespace SMPlayer
         }
         public static void ShowCancelableNotification(string message, Action cancel, int duration = 5000)
         {
-            GetMainPageContainer()?.ShowUndoNotification(LocalizeMessage(message), cancel, duration);
+            GetMainPageContainer()?.ShowUndoableNotification(LocalizeMessage(message), cancel, duration);
         }
         public static void ShowCancelableNotificationRaw(string message, Action cancel, int duration = 5000)
         {
-            GetMainPageContainer()?.ShowUndoNotification(message, cancel, duration);
+            GetMainPageContainer()?.ShowUndoableNotification(message, cancel, duration);
         }
         public static void ShowMusicNotFoundNotification(string music, int duration = 5000)
         {
@@ -294,7 +294,7 @@ namespace SMPlayer
     public interface IMainPageContainer
     {
         void ShowNotification(string message, int duration = 2000);
-        void ShowUndoNotification(string message, Action undo, int duration = 5000);
+        void ShowUndoableNotification(string message, Action undo, int duration = 5000);
         void ShowLocalizedNotification(string message, int duration = 2000);
         void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option = null);
         void HideMultiSelectCommandBar();

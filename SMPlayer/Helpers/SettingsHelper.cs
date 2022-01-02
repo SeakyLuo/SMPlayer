@@ -206,26 +206,13 @@ namespace SMPlayer.Helpers
             c.Insert(dao);
         }
 
-        private static void InsertRecentAdded(SQLiteConnection c, Settings settings)
-        {
-            foreach (var item in settings.RecentAdded)
-            {
-                c.Insert(new RecentRecordDAO()
-                {
-                    Type = RecentType.Search,
-                    ItemId = item.ToString(),
-                    Time = DateTimeOffset.Now,
-                });
-            }
-        }
-
         private static void InsertRecentPlayed(SQLiteConnection c, Settings settings)
         {
             foreach (var item in settings.RecentPlayed)
             {
                 c.Insert(new RecentRecordDAO()
                 {
-                    Type = RecentType.Search,
+                    Type = RecentType.Play,
                     ItemId = c.SelectMusicByPath(item)?.Id.ToString(),
                     Time = DateTimeOffset.Now,
                 });

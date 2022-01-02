@@ -105,7 +105,6 @@ namespace SMPlayer
             Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             MusicPlayer.Init(music);
             await AlbumsPage.Init();
-            //await RecentPage.Init();
             ToastHelper.Init();
             VoiceAssistantHelper.Init();
 

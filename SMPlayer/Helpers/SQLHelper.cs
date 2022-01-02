@@ -186,7 +186,7 @@ namespace SMPlayer.Helpers
         {
             c.Insert(new RecentRecordDAO()
             {
-                Type = RecentType.Search,
+                Type = RecentType.Add,
                 ItemId = src,
                 Time = DateTimeOffset.Now,
             });
@@ -303,6 +303,11 @@ namespace SMPlayer.Helpers
         public static PreferenceItemDAO SelectPreferenceItem(this SQLiteConnection c, PreferType preferType, string itemId)
         {
             return c.Query<PreferenceItemDAO>("select * from PreferenceItem where Type = ? and ItemId = ? and State = ?", preferType, itemId, ActiveState.Active).FirstOrDefault();
+        }
+
+        public static List<RecentRecordDAO> SelectRecentRecords(this SQLiteConnection c, RecentType recentType)
+        {
+            return c.Query<RecentRecordDAO>("select * from RecentRecord where Type = ? and State order by Id desc", recentType, ActiveState.Active);
         }
     }
 
