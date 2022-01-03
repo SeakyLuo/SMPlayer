@@ -24,7 +24,8 @@
             <AppBarButton
                 x:Name="MultiSelectButton"
                 x:Uid="MultiSelectAppButton"
-                Click="MultiSelectButton_Click">
+                Click="MultiSelectButton_Click"
+                IsEnabled="False">
                 <AppBarButton.Icon>
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE762;" />
                 </AppBarButton.Icon>

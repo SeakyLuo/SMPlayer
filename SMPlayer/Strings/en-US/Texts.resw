@@ -189,6 +189,42 @@
   <data name="LikeMusicToolTip" xml:space="preserve">
     <value>Set As My Favorite</value>
   </data>
+  <data name="Month1" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="Month10" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="Month11" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="Month12" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="Month2" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="Month3" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="Month4" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="Month5" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="Month6" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="Month7" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="Month8" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="Month9" xml:space="preserve">
+    <value>September</value>
+  </data>
   <data name="MostPlayed" xml:space="preserve">
     <value>Most Played</value>
   </data>
@@ -299,6 +335,15 @@
   </data>
   <data name="SongsWithCount" xml:space="preserve">
     <value>Songs ({0})</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>This Month</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>This Week</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Today</value>
   </data>
   <data name="UndoLikeMusicToolTip" xml:space="preserve">
     <value>Remove From My Favorite</value>

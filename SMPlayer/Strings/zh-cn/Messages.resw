@@ -378,12 +378,6 @@
   <data name="Quotations" xml:space="preserve">
     <value>“{0}”</value>
   </data>
-  <data name="Recent3Months" xml:space="preserve">
-    <value>最近3个月</value>
-  </data>
-  <data name="Recent6Months" xml:space="preserve">
-    <value>最近6个月</value>
-  </data>
   <data name="RemoveAlbumArt" xml:space="preserve">
     <value>你想要移除《{0}》的专辑插图吗？</value>
   </data>
@@ -533,18 +527,6 @@
   </data>
   <data name="StopAddingLyrics" xml:space="preserve">
     <value>正在尝试中止添加歌词……</value>
-  </data>
-  <data name="ThisMonth" xml:space="preserve">
-    <value>本月</value>
-  </data>
-  <data name="ThisWeek" xml:space="preserve">
-    <value>本周</value>
-  </data>
-  <data name="ThisYear" xml:space="preserve">
-    <value>今年</value>
-  </data>
-  <data name="Today" xml:space="preserve">
-    <value>今日</value>
   </data>
   <data name="UnableToChangeAlbumArt" xml:space="preserve">
     <value>无法更改专辑插图</value>

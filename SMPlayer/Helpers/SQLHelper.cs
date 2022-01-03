@@ -88,6 +88,20 @@ namespace SMPlayer.Helpers
             }
         }
 
+        public static void ClearInactive()
+        {
+            Run(c =>
+            {
+                c.Execute("delete from File where State = ?", ActiveState.Inactive);
+                c.Execute("delete from Folder where State = ?", ActiveState.Inactive);
+                c.Execute("delete from Music where State = ?", ActiveState.Inactive);
+                c.Execute("delete from Playlist where State = ?", ActiveState.Inactive);
+                c.Execute("delete from PlaylistItem where State = ?", ActiveState.Inactive);
+                c.Execute("delete from PreferenceItem where State = ?", ActiveState.Inactive);
+                c.Execute("delete from RecentRecord where State = ?", ActiveState.Inactive);
+            });
+        }
+
         public static SettingsDAO InsertSettings(this SQLiteConnection c, Settings src)
         {
             SettingsDAO dao = src.ToDAO();

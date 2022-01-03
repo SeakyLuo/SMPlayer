@@ -43,7 +43,7 @@ namespace SMPlayer.Models
             await FileHelper.WriteFileAsync(folder, filename, json);
         }
 
-        public static void SaveAsync<T>(string filename, T data)
+        public static void Save<T>(string filename, T data)
         {
             SaveAsync(Helper.LocalFolder, filename, data);
         }

@@ -269,8 +269,6 @@
     <Compile Include="Models\PreferenceItem.cs" />
     <Compile Include="Models\PreferenceSetting.cs" />
     <Compile Include="Models\RecentTimeLine.cs" />
-    <Compile Include="Models\TimeLine.cs" />
-    <Compile Include="Models\TimeLineMusic.cs" />
     <Compile Include="PreferenceSettingsPage.xaml.cs">
       <DependentUpon>PreferenceSettingsPage.xaml</DependentUpon>
     </Compile>

@@ -157,7 +157,7 @@ namespace SMPlayer
         public static void Save()
         {
             var paths = CurrentPlaylist.Select(m => m.Id);
-            JsonFileHelper.SaveAsync(JsonFilename, paths);
+            JsonFileHelper.Save(JsonFilename, paths);
             JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, paths);
         }
 

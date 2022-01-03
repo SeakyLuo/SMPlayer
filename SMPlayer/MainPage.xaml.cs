@@ -127,16 +127,7 @@ namespace SMPlayer
                 SwitchPage(Settings.settings.LastPage);
                 switchPage = false;
             }
-            //if (!UpdateHelper.Log.DateAdded)
-            //{
-            //    await UpdateHelper.Update();
-            //    Loader.Hide();
-            //    if (Helper.CurrentFolder != null)
-            //    {
-            //        ShowLocalizedNotification("UpdateFinished");
-            //    }
-            //}
-            if (UpdateHelper.Log.ShowReleaseNotesDialog)
+            if (Settings.settings.ShowReleaseNotesDialog)
             {
                 SettingsPage.ShowReleaseNotes();
             }

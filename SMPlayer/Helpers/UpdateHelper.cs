@@ -11,31 +11,9 @@ namespace SMPlayer.Helpers
 {
     public static class UpdateHelper
     {
-        private const string JsonFileName = "UpdateLogger";
-        public static UpdateLog Log;
         private static readonly List<IAfterPathSetListener> listeners = new List<IAfterPathSetListener>();
         private static TreeUpdateListener treeUpdateListener = new TreeUpdateListener();
         private static volatile ExecutionStatus LoadingStatus = ExecutionStatus.Ready;
-
-        public static async Task Init()
-        {
-            MainPage.AddMainPageLoadedListener(() =>
-            {
-                //MainPage.Instance.Loader.BreakLoadingListeners.Add(() => PauseLoading());
-            });
-            Log = await JsonFileHelper.ReadObjectAsync<UpdateLog>(JsonFileName) ?? new UpdateLog();
-        }
-
-        public static void Save()
-        {
-            JsonFileHelper.SaveAsync(JsonFileName, Log);
-        }
-
-        public static async Task Update()
-        {
-            Log.DateAdded = await UpdateMusicLibrary("Updating");
-            Save();
-        }
 
         public static void AddAfterPathSetListener(IAfterPathSetListener listener)
         {
@@ -43,11 +21,6 @@ namespace SMPlayer.Helpers
         }
 
         public static void NotifyLibraryChange(string path) { foreach (var listener in listeners) listener.PathSet(path); }
-
-        public static void PauseLoading()
-        {
-            LoadingStatus = ExecutionStatus.Break;
-        }
 
         public static async Task<bool> UpdateMusicLibrary(string message = null)
         {
@@ -264,11 +237,6 @@ namespace SMPlayer.Helpers
     public class UpdateLog
     {
         public string LastReleaseNotesVersion { get; set; }
-        [Newtonsoft.Json.JsonIgnore]
-        public bool ShowReleaseNotesDialog { get => LastReleaseNotesVersion != Helper.AppVersion; }
-        public bool DateAdded { get; set; } = false;
-        [Newtonsoft.Json.JsonIgnore]
-        public bool AllUpdated { get => DateAdded; }
     }
 
     class TreeUpdateListener : ITreeUpdateListener

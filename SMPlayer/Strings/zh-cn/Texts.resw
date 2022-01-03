@@ -189,6 +189,42 @@
   <data name="LikeMusicToolTip" xml:space="preserve">
     <value>设为我喜欢</value>
   </data>
+  <data name="Month1" xml:space="preserve">
+    <value>1月</value>
+  </data>
+  <data name="Month10" xml:space="preserve">
+    <value>10月</value>
+  </data>
+  <data name="Month11" xml:space="preserve">
+    <value>11月</value>
+  </data>
+  <data name="Month12" xml:space="preserve">
+    <value>12月</value>
+  </data>
+  <data name="Month2" xml:space="preserve">
+    <value>2月</value>
+  </data>
+  <data name="Month3" xml:space="preserve">
+    <value>3月</value>
+  </data>
+  <data name="Month4" xml:space="preserve">
+    <value>4月</value>
+  </data>
+  <data name="Month5" xml:space="preserve">
+    <value>5月</value>
+  </data>
+  <data name="Month6" xml:space="preserve">
+    <value>6月</value>
+  </data>
+  <data name="Month7" xml:space="preserve">
+    <value>7月</value>
+  </data>
+  <data name="Month8" xml:space="preserve">
+    <value>8月</value>
+  </data>
+  <data name="Month9" xml:space="preserve">
+    <value>9月</value>
+  </data>
   <data name="MostPlayed" xml:space="preserve">
     <value>最常播放</value>
   </data>
@@ -267,6 +303,9 @@
   <data name="Recent" xml:space="preserve">
     <value>最近</value>
   </data>
+  <data name="Recent30Days" xml:space="preserve">
+    <value>最近30天</value>
+  </data>
   <data name="RecentAdded" xml:space="preserve">
     <value>最近添加</value>
   </data>
@@ -299,6 +338,15 @@
   </data>
   <data name="SongsWithCount" xml:space="preserve">
     <value>歌曲（{0}）</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>本月</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>本周</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>今日</value>
   </data>
   <data name="UndoLikeMusicToolTip" xml:space="preserve">
     <value>从我喜欢中移除</value>

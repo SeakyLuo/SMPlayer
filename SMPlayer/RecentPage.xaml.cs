@@ -30,7 +30,7 @@ namespace SMPlayer
         private static bool AddedModified = true, PlayedModifed = true, SearchModified = true;
         private readonly ObservableCollection<string> RecentSearches = new ObservableCollection<string>();
         private RemoveDialog recentPlayedRemoveDialog, recentSearchesRemoveDialog;
-        private object CurrentCategory;
+        private string CurrentCategory;
         private RecentType? CurrentMultiSelectItem;
 
         public RecentPage()
@@ -43,11 +43,11 @@ namespace SMPlayer
             {
                 if (sender.DataContext is GridMusicView music)
                 {
-                    object category = RecentTimeLine.Categorize(music.Source.DateAdded);
+                    string category = RecentTimeLine.Categorize(music.Source.DateAdded);
                     if (category != CurrentCategory)
                     {
                         CurrentCategory = category;
-                        RecentAddedHeader.Text = Helper.LocalizeMessage(category.ToString());
+                        RecentAddedHeader.Text = Helper.LocalizeText(category);
                     }
                 }
             };
@@ -71,8 +71,7 @@ namespace SMPlayer
             {
                 //List<Music> recentAdded = await JsonFileHelper.ReadObjectAsync<List<Music>>(JsonFileName);
                 //if (recentAdded.IsEmpty()) recentAdded = Settings.AllSongs.OrderByDescending(m => m.DateAdded).ToList();
-                List<Music> recentAdded = Settings.AllSongs.OrderByDescending(m => m.DateAdded).ToList();
-                RecentAdded = RecentTimeLine.FromMusicList(recentAdded);
+                RecentAdded = RecentTimeLine.FromMusicList(Settings.AllSongs);
                 SetupAdded();
             }
         }

@@ -50,40 +50,38 @@ namespace SMPlayer
         public static async Task Init()
         {
             if (AlbumInfoList != null) return;
-            var albums = await JsonFileHelper.ReadObjectAsync<List<AlbumInfo>>(JsonFilename);
-            if (albums == null) AlbumInfoList = new List<AlbumInfo>();
-            else AlbumInfoList = albums;
+            AlbumInfoList = await JsonFileHelper.ReadObjectAsync<List<AlbumInfo>>(JsonFilename) ?? new List<AlbumInfo>();
         }
 
         public static void Save()
         {
             if (AlbumInfoList?.Count == 0) return;
-            JsonFileHelper.SaveAsync(JsonFilename, AlbumInfoList);
+            JsonFileHelper.Save(JsonFilename, AlbumInfoList);
             JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, AlbumInfoList);
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             MainPage.Instance.SetMultiSelectListener(this);
             SetHeader();
-            if (Albums.Count == 0) Setup(Settings.AllSongs); // have not listened to changes
+            await Setup();
         }
 
-        private async void Setup(IEnumerable<Music> songs)
+        private async Task Setup()
         {
             if (IsProcessing) return;
+            if (Albums.IsNotEmpty()) return;
             AlbumPageProgressRing.Visibility = Visibility.Visible;
-            if (AlbumInfoList.IsNotEmpty())
+            if (AlbumInfoList.IsEmpty())
             {
-                MultiSelectButton.IsEnabled = true;
-                Albums.SetTo(AlbumInfoList.Select(a => a.ToAlbumView()));
-                SetHeader();
+                await SetData(Settings.AllSongs);
             }
             else
             {
-                MultiSelectButton.IsEnabled = false;
-                await SetData(songs);
+                Albums.SetTo(AlbumInfoList.Select(a => a.ToAlbumView()));
             }
+            SetHeader();
+            MultiSelectButton.IsEnabled = Albums.IsNotEmpty();
             AlbumPageProgressRing.Visibility = Visibility.Collapsed;
         }
 
@@ -93,7 +91,7 @@ namespace SMPlayer
             try
             {
                 List<AlbumView> albums = new List<AlbumView>();
-                await Task.Run(() =>
+                await Task.Run(() => // 加一个异步，主要是为了AlbumPageProgressRing能转起来
                 {
                     foreach (var group in songs.GroupBy(m => m.Album))
                     {
@@ -108,7 +106,6 @@ namespace SMPlayer
                     Save();
                 });
                 Albums.SetTo(albums);
-                SetHeader();
             }
             finally
             {

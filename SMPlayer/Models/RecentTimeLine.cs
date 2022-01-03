@@ -63,47 +63,39 @@ namespace SMPlayer.Models
             return new RecentTimeLine(list?.OrderByDescending(m => m.DateAdded).Take(MAX_RECENT_TIMELINE_ITEMS));
         }
 
-        public static object Categorize(DateTimeOffset dateAdded)
+        public static string Categorize(DateTimeOffset dateAdded)
         {
-            if (dateAdded.Year == DateTime.Now.Year)
+            DateTime now = DateTime.Now;
+            if (dateAdded.Year == now.Year)
             {
-                if (dateAdded.Month == DateTime.Now.Month)
+                if (dateAdded.Month == now.Month)
                 {
-                    if (dateAdded.Day == DateTime.Now.Day)
+                    if (dateAdded.Day == now.Day)
                     {
-                        return RecentTimeLineCategory.Today;
+                        return "Today";
                     }
-                    else if ((DateTime.Now - dateAdded).Days <= 7)
+                    else if ((now - dateAdded).Days <= 7)
                     {
-                        return RecentTimeLineCategory.ThisWeek;
+                        return "ThisWeek";
                     }
                     else
                     {
-                        return RecentTimeLineCategory.ThisMonth;
+                        return "ThisMonth";
                     }
                 }
-                else if (DateTime.Now.Month - dateAdded.Month <= 3)
+                else if ((now - dateAdded).Days <= 30)
                 {
-                    return RecentTimeLineCategory.Recent3Months;
-                }
-                else if (DateTime.Now.Month - dateAdded.Month <= 6)
-                {
-                    return RecentTimeLineCategory.Recent6Months;
+                    return "Recent30Days";
                 }
                 else
                 {
-                    return RecentTimeLineCategory.ThisYear;
+                    return "Month" + now.Month;
                 }
             }
             else
             {
-                return dateAdded.Year;
+                return dateAdded.Year.ToString();
             }
         }
-    }
-
-    public enum RecentTimeLineCategory
-    {
-        Today, ThisWeek, ThisMonth, Recent3Months, Recent6Months, ThisYear
     }
 }

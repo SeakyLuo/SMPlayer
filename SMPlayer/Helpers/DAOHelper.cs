@@ -203,6 +203,7 @@ namespace SMPlayer.Helpers
                 SearchAlbumsCriterion = src.SearchAlbumsCriterion,
                 SearchPlaylistsCriterion = src.SearchPlaylistsCriterion,
                 SearchFoldersCriterion = src.SearchFoldersCriterion,
+                LastReleaseNotesVersion = src.LastReleaseNotesVersion,
             };
         }
 
@@ -241,6 +242,7 @@ namespace SMPlayer.Helpers
                 SearchAlbumsCriterion = src.SearchAlbumsCriterion,
                 SearchPlaylistsCriterion = src.SearchPlaylistsCriterion,
                 SearchFoldersCriterion = src.SearchFoldersCriterion,
+                LastReleaseNotesVersion = src.LastReleaseNotesVersion,
             };
         }
     }

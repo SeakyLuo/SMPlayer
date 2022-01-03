@@ -32,7 +32,7 @@ namespace SMPlayer.Models
         {
             get => SQLHelper.Run(c => c.SelectAllPlaylists(i => i.Id != settings.MyFavoritesId).ToList()); 
         }
-        public static FolderTree FullRoot { get => FindFullFolder(settings.Tree.Id); }
+        public static FolderTree FullRoot { get => FindFullFolder(settings.Tree.Id) ?? new FolderTree(); }
         public static Music FindMusic(Music target)
         {
             if (target == null) return null;
@@ -116,6 +116,8 @@ namespace SMPlayer.Models
         public SortBy SearchPlaylistsCriterion { get; set; } = SortBy.Default;
         public SortBy SearchFoldersCriterion { get; set; } = SortBy.Default;
         public PreferenceSettings Preference { get; set; } = new PreferenceSettings();
+        public string LastReleaseNotesVersion { get; set; }
+        public bool ShowReleaseNotesDialog { get => LastReleaseNotesVersion != Helper.AppVersion; }
 
         private List<Music> JustRemoved = new List<Music>();
 

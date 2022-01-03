@@ -63,27 +63,35 @@ namespace SMPlayer.Helpers
             string json = await JsonFileHelper.ReadAsync(JsonFilename);
             if (string.IsNullOrEmpty(json))
             {
-                SQLHelper.Run(c => InsertMyFavoritesAndSettings(c, null));
+                SQLHelper.Run(c => InsertMyFavoritesAndSettings(c));
                 return;
             }
             var jsonObject = JsonFileHelper.FromJson<JObject>(json);
             List<Music> songs = FlattenFolderTreeInJson(jsonObject["Tree"]);
             MainPage.Instance.Loader.SetMessage("UpdateDBMsgUpdatingDatabase");
             List<Music> nowPlayingSongs = await JsonFileHelper.ReadObjectAsync<List<Music>>(MusicPlayer.JsonFilename);
-            //List<Music> recentAdded = await JsonFileHelper.ReadObjectAsync<List<Music>>(JsonFileName) ?? new List<Music>();
+            UpdateLog updateLog = await JsonFileHelper.ReadObjectAsync<UpdateLog>("UpdateLogger") ?? new UpdateLog();
+            Settings.settings.LastReleaseNotesVersion = updateLog.LastReleaseNotesVersion;
             SQLHelper.Run(c =>
             {
-                c.InsertAll(songs.Select(i => i.ToDAO()));
+                c.InsertAll(songs.Select(async i =>
+                {
+                    if (i.DateAdded == null && await i.GetStorageFileAsync() is StorageFile file)
+                    {
+                        i.DateAdded = file.DateCreated;
+                    }
+                    return i.ToDAO();
+                }));
                 InsertTree(c, Settings.settings.Tree);
                 InsertPlaylists(c, Settings.settings.Playlists);
                 InsertPreferenceSettings(c, Settings.settings.Preference);
                 InsertRecentPlayed(c, Settings.settings);
                 InsertRecentSearches(c, Settings.settings);
-                InsertMyFavoritesAndSettings(c, nowPlayingSongs);
+                InsertMyFavoritesAndSettings(c);
             });
         }
 
-        private static void InsertMyFavoritesAndSettings(SQLiteConnection c, List<Music> nowPlayingSongs)
+        private static void InsertMyFavoritesAndSettings(SQLiteConnection c)
         {
             InsertPlaylist(c, Settings.settings.MyFavorites);
             Settings.settings.MyFavoritesId = Settings.settings.MyFavorites.Id;
