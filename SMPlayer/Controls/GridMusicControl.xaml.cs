@@ -232,47 +232,41 @@ namespace SMPlayer
             }
         }
 
-        void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar)
+        public void CancelMultiSelect()
         {
             MusicGridView.SelectionMode = ListViewSelectionMode.Single;
-            MultiSelectListener?.Cancel(commandBar);
         }
 
-        void IMultiSelectListener.AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper)
+        void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
         {
-            if (SelectedItemsCount == 0) return;
-            helper.Data = MusicGridView.SelectedItems.Select(i => (GridMusicView)i);
-            MultiSelectListener?.AddTo(commandBar, helper);
-        }
-
-        void IMultiSelectListener.Play(MultiSelectCommandBar commandBar)
-        {
-            if (SelectedItemsCount == 0) return;
-            MusicPlayer.SetMusicAndPlay(MusicGridView.SelectedItems.Select(i => (GridMusicView)i));
-            MultiSelectListener?.Play(commandBar);
-        }
-
-        void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar)
-        {
-            MultiSelectListener?.Remove(commandBar);
-        }
-
-        void IMultiSelectListener.SelectAll(MultiSelectCommandBar commandBar)
-        {
-            MusicGridView.SelectAll();
-            MultiSelectListener?.SelectAll(commandBar);
-        }
-
-        void IMultiSelectListener.ReverseSelections(MultiSelectCommandBar commandBar)
-        {
-            MusicGridView.ReverseSelections();
-            MultiSelectListener?.ReverseSelections(commandBar);
-        }
-
-        void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar)
-        {
-            MusicGridView.ClearSelections();
-            MultiSelectListener?.ClearSelections(commandBar);
+            switch (args.Event)
+            {
+                case MultiSelectEvent.Cancel:
+                    CancelMultiSelect();
+                    break;
+                case MultiSelectEvent.AddTo:
+                    if (SelectedItemsCount == 0) return;
+                    args.FlyoutHelper.Data = MusicGridView.SelectedItems.Select(i => (GridMusicView)i);
+                    break;
+                case MultiSelectEvent.Play:
+                    if (SelectedItemsCount == 0) return;
+                    MusicPlayer.SetMusicAndPlay(MusicGridView.SelectedItems.Select(i => (GridMusicView)i));
+                    break;
+                case MultiSelectEvent.Remove:
+                    break;
+                case MultiSelectEvent.SelectAll:
+                    MusicGridView.SelectAll();
+                    break;
+                case MultiSelectEvent.ReverseSelections:
+                    MusicGridView.ReverseSelections();
+                    break;
+                case MultiSelectEvent.ClearSelections:
+                    MusicGridView.ClearSelections();
+                    break;
+                case MultiSelectEvent.MoveToFolder:
+                    break;
+            }
+            MultiSelectListener?.Execute(commandBar, args);
         }
 
         void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type) { }

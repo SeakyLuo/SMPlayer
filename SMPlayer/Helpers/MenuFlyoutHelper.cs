@@ -1,6 +1,7 @@
 ﻿using SMPlayer.Dialogs;
 using SMPlayer.Helpers;
 using SMPlayer.Models;
+using SMPlayer.Models.VO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -474,12 +475,7 @@ namespace SMPlayer
                     {
                         MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
                         listener?.Delete(music);
-                        Settings.settings.RemoveMusic(music);
-                        if (!await FileHelper.FileNotExist(music.Path))
-                        {
-                            StorageFile file = await StorageFile.GetFileFromPathAsync(music.Path);
-                            await file.DeleteAsync();
-                        }
+                        await Settings.settings.DeleteFile(music.ToFolderFile());
                         MainPage.Instance?.Loader.Hide();
                         Helper.ShowNotification(Helper.LocalizeMessage("MusicDeleted", music.Name));
                     }
@@ -508,7 +504,7 @@ namespace SMPlayer
                     return;
                 }
                 string albumNavigationFlag = TileHelper.BuildAlbumNavigationFlag(music.Album, music.Artist);
-                if (MainPage.Instance.CurrentPage == typeof(AlbumPage))
+                if (MainPage.Instance?.CurrentPage == typeof(AlbumPage))
                     AlbumPage.Instance.LoadAlbum(albumNavigationFlag);
                 else
                     MainPage.Instance.NavigateToPage(typeof(AlbumPage), albumNavigationFlag);
@@ -534,7 +530,7 @@ namespace SMPlayer
                         Helper.ShowMusicNotFoundNotification(music.Name);
                         return;
                     }
-                    if (MainPage.Instance.CurrentPage == typeof(ArtistsPage))
+                    if (MainPage.Instance?.CurrentPage == typeof(ArtistsPage))
                         ArtistsPage.Instance.SelectArtist(music.Artist);
                     else
                         MainPage.Instance.NavigateToPage(typeof(ArtistsPage), music.Artist);
@@ -874,7 +870,6 @@ namespace SMPlayer
         private static MenuFlyout SetMenu(Func<MenuFlyoutHelper, MenuFlyout> GetMenu, object sender, IMenuFlyoutHelperBuildListener buildListener = null)
         {
             MenuFlyout flyout;
-            MenuFlyoutHelper helper;
             object data;
             if (sender is MenuFlyout)
             {
@@ -887,7 +882,7 @@ namespace SMPlayer
                 flyout = new MenuFlyout();
                 data = (sender as FrameworkElement).DataContext;
             }
-            helper = new MenuFlyoutHelper()
+            MenuFlyoutHelper helper = new MenuFlyoutHelper()
             {
                 Data = FindMusic(data),
                 DefaultPlaylistName = Settings.settings.FindNextPlaylistName(FindPlaylistName(data))
@@ -912,7 +907,7 @@ namespace SMPlayer
             else if (obj is TreeViewNode node)
             {
                 if (node.Content is FolderTree tree) return tree.Songs;
-                return node.Content as Music;
+                return Settings.FindMusic((node.Content as TreeViewFolderFile).FileId);
             }
             return null;
         }
@@ -936,6 +931,26 @@ namespace SMPlayer
         void UndoDelete(Music music);
         void Remove(Music music);
         void Select(object data);
+    }
+
+    public enum MenuFlyoutEvent
+    {
+        AddTo, Favorite, Delete, UndoDelete, Remove, Select, MoveToFolder
+    }
+
+    public class MenuFlyoutEventArgs
+    {
+        public MenuFlyoutEvent Event { get; set; }
+        public object Data { get; set; }
+        public Music Music { get => (Music)Data; }
+    }
+
+    public class MenuFlyoutAddToEventArgs : MenuFlyoutEventArgs
+    {
+        public object Collection { get; set; } // add to collection
+        public int Index { get; set; }
+        public AddToCollectionType CollectionType { get; set; }
+
     }
 
     public interface IMenuFlyoutHelperBuildListener

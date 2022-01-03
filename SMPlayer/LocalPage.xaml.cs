@@ -20,7 +20,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalPage : Page, ILocalSetter, IAfterPathSetListener, IWindowResizeListener, IFolderTreeEventListener
+    public sealed partial class LocalPage : Page, IAfterPathSetListener, IWindowResizeListener, IFolderTreeEventListener
     {
         public static LocalPage Instance
         {
@@ -29,13 +29,11 @@ namespace SMPlayer
         }
         public static ILocalPageButtonListener MusicListener, FolderListener;
         public static Stack<FolderTree> History = new Stack<FolderTree>();
+        private bool IsProcessing = false, PathSet = false;
         public LocalPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            LocalFoldersPage.setter = this;
-            LocalMusicPage.setter = this;
-            SetPage(Settings.FullRoot);
             UpdateHelper.AddAfterPathSetListener(this);
             MainPage.WindowResizeListeners.Add(this);
             Settings.AddFolderTreeEventListener(this);
@@ -51,6 +49,10 @@ namespace SMPlayer
             else if (e.Parameter is FolderTree tree)
             {
                 SetPage(tree);
+            }
+            else
+            {
+                SetPage(Settings.FullRoot);
             }
         }
 
@@ -97,7 +99,7 @@ namespace SMPlayer
             } while (true);
             LocalFrame.GoBack();
             var info = History.Peek().Info;
-            SetText(info);
+            SetHeaderAndNavText(info);
             if (page.SourcePageType == typeof(LocalFoldersPage))
             {
                 LocalFoldersItem.IsSelected = true;
@@ -176,9 +178,9 @@ namespace SMPlayer
             MusicPlayer.ShuffleAndPlay(LocalFrame.SourcePageType == typeof(LocalMusicPage) ? tree.Songs : tree.Flatten());
         }
 
-        private void SetText(TreeInfo info, bool setHeader = true)
+        private void SetHeaderAndNavText(TreeInfo info)
         {
-            if (setHeader) SetHeader(info);
+            SetHeader(info);
             SetNavText(info);
         }
 
@@ -205,12 +207,17 @@ namespace SMPlayer
             SetNavText(History.Peek().Info);
         }
 
-        public void SetPage(FolderTree tree, bool setHeader = true)
+        public void SetPage(FolderTree tree)
         {
-            if (History.Count > 0 && History.Peek() == tree) return;
+            if (!PathSet)
+            {
+                if (IsProcessing) return;
+                if (History.IsNotEmpty() && History.Peek() == tree) return;
+            }
+            IsProcessing = true;
             History.Push(tree);
             TreeInfo info = tree.Info;
-            SetText(info, setHeader);
+            SetHeaderAndNavText(info);
             if (tree.IsEmpty)
             {
                 NewFolderItem.Visibility = Visibility.Collapsed;
@@ -240,6 +247,8 @@ namespace SMPlayer
             {
                 LocalNavigationView.SelectedItem = null;
             }
+            PathSet = false;
+            IsProcessing = false;
         }
 
         private bool IsBackToMusicPage(TreeInfo info)
@@ -247,18 +256,23 @@ namespace SMPlayer
             return info.Songs > info.Folders;
         }
 
-        public void PathSet(string path)
+        void IAfterPathSetListener.PathSet(string path)
         {
+            if (MainPage.Instance?.CurrentPage != typeof(LocalPage))
+            {
+                PathSet = true;
+                return;
+            }
             History.Clear();
             FolderTree fullRoot = Settings.FullRoot;
-            SetPage(fullRoot, false);
+            SetPage(fullRoot);
             if (LocalFoldersItem.IsSelected) FolderListener.UpdatePage(fullRoot);
             else MusicListener.UpdatePage(fullRoot);
         }
 
         private void OpenLocalMusicFlyout(object sender, object e)
         {
-            if (History.Count == 0) return;
+            if (History.IsEmpty()) return;
             var tree = History.Peek();
             var flyout = sender as MenuFlyout;
             flyout.Items.Clear();
@@ -271,21 +285,30 @@ namespace SMPlayer
             flyout.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(tree.Path, StorageItemTypes.Folder));
             flyout.Items.Add(MenuFlyoutHelper.GetSortByMenuSubItem(new Dictionary<SortBy, Action>
             {
-                { SortBy.Title, () =>
-                {
-                    if (LocalFrame.Content is LocalMusicPage page) page.SortByTitle();
-                    else LocalMusicPage.SortByTitleRequested = !LocalMusicPage.SortByTitleRequested;
-                } },
-                { SortBy.Artist, () =>
-                {
-                    if (LocalFrame.Content is LocalMusicPage page) page.SortByArtist();
-                    else LocalMusicPage.SortByArtistRequested = !LocalMusicPage.SortByArtistRequested;
-                } },
-                { SortBy.Album, () =>
-                {
-                    if (LocalFrame.Content is LocalMusicPage page) page.SortByAlbum();
-                    else LocalMusicPage.SortByAlbumRequested = !LocalMusicPage.SortByAlbumRequested;
-                } },
+                { 
+                    SortBy.Title,
+                    () =>
+                    {
+                        if (LocalFrame.Content is LocalMusicPage page) page.SortByTitle();
+                        else LocalMusicPage.SortByTitleRequested = !LocalMusicPage.SortByTitleRequested;
+                    }
+                },
+                { 
+                    SortBy.Artist,
+                    () => 
+                    {
+                        if (LocalFrame.Content is LocalMusicPage page) page.SortByArtist();
+                        else LocalMusicPage.SortByArtistRequested = !LocalMusicPage.SortByArtistRequested;
+                    }
+                },
+                { 
+                    SortBy.Album,
+                    () =>
+                    {
+                        if (LocalFrame.Content is LocalMusicPage page) page.SortByAlbum();
+                        else LocalMusicPage.SortByAlbumRequested = !LocalMusicPage.SortByAlbumRequested;
+                    }
+                },
             },
             () =>
             {
@@ -322,11 +345,6 @@ namespace SMPlayer
         {
             SetNavText(History.Peek().Info);
         }
-    }
-    public interface ILocalSetter
-    {
-        void SetPage(FolderTree tree, bool setHeader = true);
-        void SetNavText(TreeInfo treeInfo);
     }
 
     public interface ILocalPageButtonListener

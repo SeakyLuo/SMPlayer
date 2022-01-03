@@ -127,7 +127,8 @@ namespace SMPlayer
                 SwitchPage(Settings.settings.LastPage);
                 switchPage = false;
             }
-            if (Settings.settings.ShowReleaseNotesDialog)
+            if (!string.IsNullOrEmpty(Settings.settings.LastReleaseNotesVersion) &&
+                Settings.settings.LastReleaseNotesVersion != Helper.AppVersion)
             {
                 SettingsPage.ShowReleaseNotes();
             }

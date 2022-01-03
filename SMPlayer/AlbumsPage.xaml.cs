@@ -243,37 +243,29 @@ namespace SMPlayer
         {
             AlbumInfoList = albums.Select(a => a.ToAlbumInfo()).ToList();
         }
-
-        void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar)
+        void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
         {
-            AlbumsGridView.SelectionMode = ListViewSelectionMode.None;
-        }
-
-        void IMultiSelectListener.AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper)
-        {
-            helper.Data = SelectedSongs;
-        }
-
-        void IMultiSelectListener.Play(MultiSelectCommandBar commandBar)
-        {
-            MusicPlayer.SetMusicAndPlay(SelectedSongs);
-        }
-
-        void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar) { }
-
-        void IMultiSelectListener.SelectAll(MultiSelectCommandBar commandBar)
-        {
-            AlbumsGridView.SelectAll();
-        }
-
-        void IMultiSelectListener.ReverseSelections(MultiSelectCommandBar commandBar)
-        {
-            AlbumsGridView.ReverseSelections();
-        }
-
-        void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar)
-        {
-            AlbumsGridView.SelectedItems.Clear();
+            switch (args.Event)
+            {
+                case MultiSelectEvent.Cancel:
+                    AlbumsGridView.SelectionMode = ListViewSelectionMode.None;
+                    break;
+                case MultiSelectEvent.AddTo:
+                    args.FlyoutHelper.Data = SelectedSongs;
+                    break;
+                case MultiSelectEvent.Play:
+                    MusicPlayer.SetMusicAndPlay(SelectedSongs);
+                    break;
+                case MultiSelectEvent.SelectAll:
+                    AlbumsGridView.SelectAll();
+                    break;
+                case MultiSelectEvent.ReverseSelections:
+                    AlbumsGridView.ReverseSelections();
+                    break;
+                case MultiSelectEvent.ClearSelections:
+                    AlbumsGridView.ClearSelections();
+                    break;
+            }
         }
 
         void IMusicEventListener.Liked(Music music, bool isFavorite)
@@ -309,5 +301,6 @@ namespace SMPlayer
         void IMusicEventListener.Modified(Music before, Music after)
         {
         }
+
     }
 }

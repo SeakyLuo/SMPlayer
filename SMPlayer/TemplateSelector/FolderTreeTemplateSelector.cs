@@ -12,7 +12,7 @@ namespace SMPlayer.TemplateSelector
         {
             var content = (item as TreeViewNode).Content;
             if (content is Models.FolderTree) return FolderTemplate;
-            if (content is Models.Music) return FileTemplate;
+            if (content is Models.IFolderFile) return FileTemplate;
             return null;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Helpers;
+using SMPlayer.Models.VO;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -380,7 +381,7 @@ namespace SMPlayer.Models
                 FileId = Id,
                 FileType = FileType.Music,
                 Path = Path,
-                src = this
+                Source = this
             };
         }
     }

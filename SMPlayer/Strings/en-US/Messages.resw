@@ -201,6 +201,9 @@
   <data name="DeleteMusicMessage" xml:space="preserve">
     <value>You are deleting "{0}" from your device.\nThis operation is not fully revertible.\nDo you want to continue?</value>
   </data>
+  <data name="DuplicateFoundWhenMovingFile" xml:space="preserve">
+    <value>File "{0}" already exists in folder "{1}". Continue?</value>
+  </data>
   <data name="Error" xml:space="preserve">
     <value>Error occurs</value>
   </data>

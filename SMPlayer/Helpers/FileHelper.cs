@@ -129,13 +129,23 @@ namespace SMPlayer.Helpers
             }
         }
 
-        public static void DeleteFile(string filename)
+        public static async void DeleteLocalFile(string filename)
         {
-            DeleteFile(Helper.LocalFolder, filename);
+            await DeleteFile(Helper.LocalFolder, filename);
         }
 
-        public static async void DeleteFile(StorageFolder folder, string filename)
+        public static async Task DeleteFile(string filePath)
         {
+            StorageFile file = await LoadFileAsync(filePath);
+            if (file != null)
+            {
+                await file.DeleteAsync();
+            }
+        }
+
+        public static async Task DeleteFile(StorageFolder folder, string filename)
+        {
+            if (folder == null || string.IsNullOrEmpty(filename)) return;
             var file = await folder.GetFileAsync(filename);
             await file.DeleteAsync();
         }

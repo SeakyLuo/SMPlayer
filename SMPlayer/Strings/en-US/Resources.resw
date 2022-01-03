@@ -1261,4 +1261,7 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="CreatePlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Add Playlist</value>
   </data>
+  <data name="MoveToFolderAppButton.Label" xml:space="preserve">
+    <value>Move To Folder</value>
+  </data>
 </root>

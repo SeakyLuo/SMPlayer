@@ -270,19 +270,16 @@ namespace SMPlayer
             MenuFlyoutHelper.SetPlaylistSortByMenu(sender, CurrentPlaylist,
                                                     _ => HeaderedPlaylist.CurrentPlaylist = CurrentPlaylist.Songs);
         }
-
-        void IMultiSelectListener.AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper)
+        void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
         {
-            helper.DefaultPlaylistName = MenuFlyoutHelper.IsBadNewPlaylistName(CurrentPlaylist.Name) ? "" : Settings.settings.FindNextPlaylistName(CurrentPlaylist.Name);
-            helper.CurrentPlaylistName = CurrentPlaylist.Name;
+            switch (args.Event)
+            {
+                case MultiSelectEvent.AddTo:
+                    args.FlyoutHelper.DefaultPlaylistName = MenuFlyoutHelper.IsBadNewPlaylistName(CurrentPlaylist.Name) ? "" : Settings.settings.FindNextPlaylistName(CurrentPlaylist.Name);
+                    args.FlyoutHelper.CurrentPlaylistName = CurrentPlaylist.Name;
+                    break;
+            }
         }
-
-        void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar) { }
-        void IMultiSelectListener.Play(MultiSelectCommandBar commandBar) { }
-        void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar) { }
-        void IMultiSelectListener.SelectAll(MultiSelectCommandBar commandBar) { }
-        void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar) { }
-        void IMultiSelectListener.ReverseSelections(MultiSelectCommandBar commandBar) { }
 
         private void SetAsPreferredButton_Click(object sender, RoutedEventArgs e)
         {

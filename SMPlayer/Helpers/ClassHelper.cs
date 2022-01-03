@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Helpers;
 using SMPlayer.Models;
+using SMPlayer.Models.VO;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -323,6 +324,11 @@ namespace SMPlayer
                 indices.Add(Helper.RandRange(list.Count));
             }
             return indices.Select(index => list[index]);
+        }
+
+        public static bool IsMusic(this FileType fileType)
+        {
+            return fileType == FileType.Music;
         }
     }
 }

@@ -23,7 +23,7 @@ namespace SMPlayer
         private readonly ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         private string TreePath;
         public static bool ReverseRequested = false, SortByTitleRequested = false, SortByArtistRequested = false, SortByAlbumRequested = false;
-        public static ILocalSetter setter;
+        
         public LocalMusicPage()
         {
             this.InitializeComponent();

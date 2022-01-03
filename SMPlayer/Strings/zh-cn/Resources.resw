@@ -1252,4 +1252,7 @@
   <data name="CreatePlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>添加播放列表</value>
   </data>
+  <data name="MoveToFolderAppButton.Label" xml:space="preserve">
+    <value>移动到文件夹</value>
+  </data>
 </root>

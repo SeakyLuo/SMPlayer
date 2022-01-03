@@ -36,7 +36,8 @@
         <DataTemplate x:Key="FileTemplate" x:DataType="TreeViewNode">
             <Grid
                 Background="Transparent"
-                DoubleTapped="FileTemplate_DoubleTapped" >
+                DoubleTapped="FileTemplate_DoubleTapped"
+                ToolTipService.ToolTip="{Binding Content.Path, Mode=OneWay}">
                 <Grid.ContextFlyout>
                     <MenuFlyout Opening="OpenMusicFlyout" />
                 </Grid.ContextFlyout>
@@ -46,7 +47,7 @@
                     <ColumnDefinition x:Name="ArtistColumnDefinition" Width="3*" />
                     <ColumnDefinition x:Name="AlbumColumnDefinition" Width="5*" />
                 </Grid.ColumnDefinitions>
-                <Image Width="{StaticResource IconSize}" Source="Assets/colorful_no_bg.png" />
+                <Image Width="{StaticResource IconSize}" Source="{Binding Content.Icon}" />
                 <TextBlock
                     Grid.Column="1"
                     Margin="10,0"
@@ -54,11 +55,11 @@
                 <TextBlock
                     Grid.Column="2"
                     Margin="10,0"
-                    Text="{Binding Content.Artist, Mode=OneWay}" />
+                    Text="{Binding Content.Creator, Mode=OneWay}" />
                 <TextBlock
                     Grid.Column="3"
                     Margin="10,0"
-                    Text="{Binding Content.Album, Mode=OneWay}" />
+                    Text="{Binding Content.Collection, Mode=OneWay}" />
             </Grid>
         </DataTemplate>
         <templateselector:FolderTreeTemplateSelector

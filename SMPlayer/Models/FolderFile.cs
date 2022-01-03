@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Helpers;
+using SMPlayer.Models.VO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,13 @@ namespace SMPlayer.Models
     public class FolderFile
     {
         public long Id { get; set; }
-        // 文件ID
-        public long FileId { get; set; }
+        public long FileId { get; set; } // 文件ID
         public FileType FileType { get; set; }
         public string Path { get; set; }
-        public IFolderFile src { get; set; }
+        public IFolderFile Source { get; set; }
         public long ParentId { get; set; }
+        public string Name { get => System.IO.Path.GetFileNameWithoutExtension(Path); }
+        public string ParentPath { get => FileHelper.GetParentPath(Path); }
 
         public FolderFile() { }
 
@@ -26,7 +28,7 @@ namespace SMPlayer.Models
             Path = music.Path;
         }
 
-        public Music ToMusic()
+        public Music FindMusic()
         {
             return Settings.FindMusic(FileId);
         }
@@ -50,7 +52,7 @@ namespace SMPlayer.Models
 
         public bool IsMusicFile()
         {
-            return FileType == FileType.Music;
+            return FileType.IsMusic();
         }
 
         public override bool Equals(object obj)

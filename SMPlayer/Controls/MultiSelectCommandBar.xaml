@@ -876,6 +876,12 @@
                 Label="Remove From List"
                 Click="RemoveAppButton_Click" />
         <AppBarButton
+                x:Name="MoveToFolderAppButton"
+                x:Uid="MoveToFolderAppButton"
+                Icon="MoveToFolder"
+                Label="Move To Folder"
+                Click="MoveToFolderAppButton_Click" />
+        <AppBarButton
                 x:Name="DeleteAppButton"
                 x:Uid="DeleteAppButton"
                 Icon="Delete"

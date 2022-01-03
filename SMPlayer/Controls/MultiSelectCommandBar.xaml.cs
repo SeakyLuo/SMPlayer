@@ -37,11 +37,12 @@ namespace SMPlayer.Controls
         public void Show(MultiSelectCommandBarOption option = null)
         {
             if (option == null) option = new MultiSelectCommandBarOption();
-            PlayAppButton.Visibility = option.ShowPlay ? Visibility.Visible : Visibility.Collapsed;
-            AddToAppButton.Visibility = option.ShowAdd ? Visibility.Visible : Visibility.Collapsed;
-            RemoveAppButton.Visibility = option.ShowRemove ? Visibility.Visible : Visibility.Collapsed;
-            DeleteAppButton.Visibility = option.ShowDelete ? Visibility.Visible : Visibility.Collapsed;
-            ReverseSelectionAppButton.Visibility = option.ShowReverseSelection ? Visibility.Visible : Visibility.Collapsed;
+            PlayAppButton.Visibility = VisibilityConverter.BoolToVisibility(option.ShowPlay);
+            AddToAppButton.Visibility = VisibilityConverter.BoolToVisibility(option.ShowAdd);
+            RemoveAppButton.Visibility = VisibilityConverter.BoolToVisibility(option.ShowRemove);
+            MoveToFolderAppButton.Visibility = VisibilityConverter.BoolToVisibility(option.ShowMoveToFolder);
+            DeleteAppButton.Visibility = VisibilityConverter.BoolToVisibility(option.ShowDelete);
+            ReverseSelectionAppButton.Visibility = VisibilityConverter.BoolToVisibility(option.ShowReverseSelection);
             CommandBarContainer.IsOpen = true;
         }
 
@@ -59,8 +60,9 @@ namespace SMPlayer.Controls
 
         private void Cancel()
         {
+            MultiSelectListener?.Execute(this, new MultiSelectEventArgs(MultiSelectEvent.ClearSelections));
+            MultiSelectListener?.Execute(this, new MultiSelectEventArgs(MultiSelectEvent.Cancel));
             Hide();
-            MultiSelectListener?.Cancel(this);
         }
 
         private void CancelAppButton_Click(object sender, RoutedEventArgs e)
@@ -71,39 +73,47 @@ namespace SMPlayer.Controls
         private void AddToAppButton_Click(object sender, RoutedEventArgs e)
         {
             MenuFlyoutHelper helper = new MenuFlyoutHelper();
-            MultiSelectListener?.AddTo(this, helper);
+            MultiSelectListener?.Execute(this, new MultiSelectEventArgs(MultiSelectEvent.AddTo) { FlyoutHelper = helper });
             helper.GetAddToMenuFlyout(this).ShowAt(sender as FrameworkElement);
         }
 
         private void PlayAppButton_Click(object sender, RoutedEventArgs e)
         {
-            MultiSelectListener?.Play(this);
+            MultiSelectListener?.Execute(this, new MultiSelectEventArgs(MultiSelectEvent.Play));
             HideAfterOperation();
         }
 
         private void RemoveAppButton_Click(object sender, RoutedEventArgs e)
         {
-            MultiSelectListener?.Remove(this);
+            MultiSelectListener?.Execute(this, new MultiSelectEventArgs(MultiSelectEvent.Remove));
             HideAfterOperation();
+        }
+
+        private void MoveToFolderAppButton_Click(object sender, RoutedEventArgs e)
+        {
+            MenuFlyoutHelper helper = new MenuFlyoutHelper();
+            MultiSelectListener?.Execute(this, new MultiSelectEventArgs(MultiSelectEvent.MoveToFolder) { FlyoutHelper = helper });
+            helper.GetAddToMenuFlyout(this).ShowAt(sender as FrameworkElement);
         }
 
         private void SelectAllAppButton_Click(object sender, RoutedEventArgs e)
         {
-            MultiSelectListener?.SelectAll(this);
+            MultiSelectListener?.Execute(this, new MultiSelectEventArgs(MultiSelectEvent.SelectAll));
         }
 
         private void ReverseSelectionAppButton_Click(object sender, RoutedEventArgs e)
         {
-            MultiSelectListener?.ReverseSelections(this);
+            MultiSelectListener?.Execute(this, new MultiSelectEventArgs(MultiSelectEvent.ReverseSelections));
         }
 
         private void ClearSelectionAppButton_Click(object sender, RoutedEventArgs e)
         {
-            MultiSelectListener?.ClearSelections(this);
+            MultiSelectListener?.Execute(this, new MultiSelectEventArgs(MultiSelectEvent.ClearSelections));
         }
 
         private void DeleteAppButton_Click(object sender, RoutedEventArgs e)
         {
+            MultiSelectListener?.Execute(this, new MultiSelectEventArgs(MultiSelectEvent.Delete));
             HideAfterOperation();
         }
 
@@ -127,12 +137,23 @@ namespace SMPlayer.Controls
 
     public interface IMultiSelectListener
     {
-        void Cancel(MultiSelectCommandBar commandBar);
-        void AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper);
-        void Play(MultiSelectCommandBar commandBar);
-        void Remove(MultiSelectCommandBar commandBar);
-        void SelectAll(MultiSelectCommandBar commandBar);
-        void ReverseSelections(MultiSelectCommandBar commandBar);
-        void ClearSelections(MultiSelectCommandBar commandBar);
+        void Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args);
+    }
+
+    public enum MultiSelectEvent
+    {
+        Cancel, AddTo, Play, Remove, Delete, MoveToFolder, SelectAll, ReverseSelections, ClearSelections,
+    }
+
+    public class MultiSelectEventArgs
+    {
+        public MultiSelectEvent Event { get; set; }
+        public MenuFlyoutHelper FlyoutHelper { get; set; }
+
+        public MultiSelectEventArgs() { }
+        public MultiSelectEventArgs(MultiSelectEvent Event)
+        {
+            this.Event = Event;
+        }
     }
 }

@@ -17,6 +17,7 @@ using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.UI.Notifications;
+using Windows.UI.Popups;
 using Windows.UI.StartScreen;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -284,6 +285,25 @@ namespace SMPlayer
             //Rect rect = new Rect(0.0, 0.0, sender.ActualWidth, sender.ActualHeight);
             //Rect bounds = parent.TransformToVisual(sender).TransformBounds(new Rect(0.0, 0.0, parent.ActualWidth, parent.ActualHeight));
             //return rect.Contains(new Point(bounds.Left, bounds.Top)) || rect.Contains(new Point(bounds.Right, bounds.Bottom));
+        }
+
+        public static async Task ShowYesNoDialog(string message, Action onYes)
+        {
+            var messageDialog = new MessageDialog(LocalizeMessage(message));
+            messageDialog.Commands.Add(new UICommand(LocalizeMessage("Yes"), new UICommandInvokedHandler(command =>
+            {
+                onYes.Invoke();
+            })));
+            messageDialog.Commands.Add(new UICommand(LocalizeMessage("No")));
+
+            // Set the command that will be invoked by default
+            messageDialog.DefaultCommandIndex = 1;
+
+            // Set the command to be invoked when escape is pressed
+            messageDialog.CancelCommandIndex = 1;
+
+            // Show the message dialog
+            await messageDialog.ShowAsync();
         }
     }
     public enum ExecutionStatus

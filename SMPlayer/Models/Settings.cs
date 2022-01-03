@@ -39,7 +39,6 @@ namespace SMPlayer.Models
             return SQLHelper.Run(c => target.Id == 0 ? c.SelectMusicByPath(target.Path) : c.SelectMusicById(target.Id));
         }
         public static Music FindMusic(string target) { return SQLHelper.Run(c => c.SelectMusicByPath(target)); }
-        public static Music FindMusic(FolderFile target) { return FindMusic(target.FileId); }
         public static Music FindMusic(long id) { return SQLHelper.Run(c => c.SelectMusicById(id)); }
         public static List<Music> FindMusicList(IEnumerable<long> ids) { return ids.IsEmpty() ? new List<Music>() : SQLHelper.Run(c => c.SelectMusicByIds(ids)); }
         public static Playlist FindPlaylist(long id) { return SQLHelper.Run(c => c.SelectPlaylistById(id)); }
@@ -117,7 +116,6 @@ namespace SMPlayer.Models
         public SortBy SearchFoldersCriterion { get; set; } = SortBy.Default;
         public PreferenceSettings Preference { get; set; } = new PreferenceSettings();
         public string LastReleaseNotesVersion { get; set; }
-        public bool ShowReleaseNotesDialog { get => LastReleaseNotesVersion != Helper.AppVersion; }
 
         private List<Music> JustRemoved = new List<Music>();
 
@@ -256,6 +254,12 @@ namespace SMPlayer.Models
                 });
             }
             foreach (var listener in MusicEventListeners) listener.Added(music);
+        }
+
+        public async Task DeleteFile(FolderFile file)
+        {
+            await FileHelper.DeleteFile(file.Path);
+            RemoveFile(file);
         }
 
         public void RemoveFile(FolderFile file)
@@ -522,7 +526,7 @@ namespace SMPlayer.Models
             }
         }
 
-        public async Task MoveFolder(FolderTree tree, string path)
+        public async Task MoveFolderAsync(FolderTree tree, string path)
         {
             await MoveFolder(await tree.GetStorageFolderAsync(), await StorageFolder.GetFolderFromPathAsync(path));
             tree.Rename(tree.ParentPath, path);
@@ -569,9 +573,18 @@ namespace SMPlayer.Models
             }
         }
 
-        public void MoveFile(FolderFile file, string path)
+        public async Task MoveFile(FolderFile file, string path)
         {
+            StorageFile localFile = await FileHelper.LoadFileAsync(file.Path);
+            StorageFolder targetFolder = await FileHelper.LoadFolderAsync(path);
+            await localFile.MoveAsync(targetFolder);
             SQLHelper.Run(c => MoveFile(c, file, path));
+        }
+
+        public async Task MoveAndReplaceFile(FolderFile file, string path)
+        {
+            await DeleteFile(file);
+            await MoveFile(file, path);
         }
 
         private void MoveFile(SQLiteConnection c, FolderFile file, string path)

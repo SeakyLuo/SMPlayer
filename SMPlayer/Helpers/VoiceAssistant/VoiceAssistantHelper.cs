@@ -380,7 +380,7 @@ namespace SMPlayer.Helpers
                 return;
             }
             IEnumerable<GridFolderView> list = SearchHelper.SearchFolders(Settings.FullRoot, text, SortBy.Default);
-            if (list.Count() == 0)
+            if (list.IsEmpty())
             {
                 SpeakNoResults(text);
                 return;

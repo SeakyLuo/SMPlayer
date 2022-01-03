@@ -335,9 +335,9 @@ namespace SMPlayer
             MainPage.Instance.ShowMultiSelectCommandBar();
         }
 
-        private void ClearPlayHistoryAppButton_Click(object sender, RoutedEventArgs e)
+        private async void ClearPlayHistoryAppButton_Click(object sender, RoutedEventArgs e)
         {
-            ShowYesNoDialog("ClearPlayHistory", () =>
+            await Helper.ShowYesNoDialog("ClearPlayHistory", () =>
             {
                 Settings.settings.RemoveRecentPlayed();
                 PlayedModifed = true;
@@ -345,9 +345,9 @@ namespace SMPlayer
             });
         }
 
-        private void ClearSearchHistoryAppButton_Click(object sender, RoutedEventArgs e)
+        private async void ClearSearchHistoryAppButton_Click(object sender, RoutedEventArgs e)
         {
-            ShowYesNoDialog("ClearSearchHistory", () =>
+            await Helper.ShowYesNoDialog("ClearSearchHistory", () =>
             {
                 Settings.settings.RemoveSearchHistory();
                 SearchModified = true;
@@ -355,48 +355,42 @@ namespace SMPlayer
             });
         }
 
-        private async void ShowYesNoDialog(string message, Action onYes)
+        void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
         {
-            var messageDialog = new MessageDialog(Helper.LocalizeMessage(message));
-            messageDialog.Commands.Add(new UICommand(Helper.LocalizeMessage("Yes"), new UICommandInvokedHandler(command => 
+            switch (args.Event)
             {
-                onYes.Invoke();
-            })));
-            messageDialog.Commands.Add(new UICommand(Helper.LocalizeMessage("No")));
-
-            // Set the command that will be invoked by default
-            messageDialog.DefaultCommandIndex = 1;
-
-            // Set the command to be invoked when escape is pressed
-            messageDialog.CancelCommandIndex = 1;
-
-            // Show the message dialog
-            await messageDialog.ShowAsync();
-        }
-
-        void IMultiSelectListener.AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper)
-        {
-            BuildMenuFlyoutHelper(helper);
-        }
-
-        void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar)
-        {
-            if (CurrentMultiSelectItem == RecentType.Search)
-                SearchHistoryListView.SelectionMode = ListViewSelectionMode.None;
-            CurrentMultiSelectItem = null;
-        }
-        void IMultiSelectListener.Play(MultiSelectCommandBar commandBar) { }
-        void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar)
-        {
-            switch (CurrentMultiSelectItem)
-            {
-                case RecentType.Play:
-                    if (PlayedMusicView.SelectedItemsCount == 0) return;
-                    AskRemoveRecentPlayed(PlayedMusicView.SelectedItems.ToList());
+                case MultiSelectEvent.Cancel:
+                    if (CurrentMultiSelectItem == RecentType.Search)
+                        SearchHistoryListView.SelectionMode = ListViewSelectionMode.None;
+                    CurrentMultiSelectItem = null;
                     break;
-                case RecentType.Search:
-                    if (SearchHistoryListView.SelectedItems.Count == 0) return;
-                    AskRemoveSearchHistory(SearchHistoryListView.SelectedItems.ToList());
+                case MultiSelectEvent.AddTo:
+                    BuildMenuFlyoutHelper(args.FlyoutHelper);
+                    break;
+                case MultiSelectEvent.Remove:
+                    switch (CurrentMultiSelectItem)
+                    {
+                        case RecentType.Play:
+                            if (PlayedMusicView.SelectedItemsCount == 0) return;
+                            AskRemoveRecentPlayed(PlayedMusicView.SelectedItems.ToList());
+                            break;
+                        case RecentType.Search:
+                            if (SearchHistoryListView.SelectedItems.Count == 0) return;
+                            AskRemoveSearchHistory(SearchHistoryListView.SelectedItems.ToList());
+                            break;
+                    }
+                    break;
+                case MultiSelectEvent.SelectAll:
+                    if (CurrentMultiSelectItem == RecentType.Search)
+                        SearchHistoryListView.SelectAll();
+                    break;
+                case MultiSelectEvent.ClearSelections:
+                    if (CurrentMultiSelectItem == RecentType.Search)
+                        SearchHistoryListView.ClearSelections();
+                    break;
+                case MultiSelectEvent.ReverseSelections:
+                    if (CurrentMultiSelectItem == RecentType.Search)
+                        SearchHistoryListView.ReverseSelections();
                     break;
             }
         }
@@ -424,22 +418,6 @@ namespace SMPlayer
             ResetSearchHistoryRowColor();
             SetupSearchedButtonState(RecentSearches);
             MainPage.Instance.ShowNotification(Helper.LocalizeMessage("ItemsRemoved", selected.Count));
-        }
-
-        void IMultiSelectListener.SelectAll(MultiSelectCommandBar commandBar)
-        {
-            if (CurrentMultiSelectItem == RecentType.Search)
-                SearchHistoryListView.SelectAll();
-        }
-        void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar) 
-        {
-            if (CurrentMultiSelectItem == RecentType.Search)
-                SearchHistoryListView.ClearSelections();
-        }
-        void IMultiSelectListener.ReverseSelections(MultiSelectCommandBar commandBar) 
-        {
-            if (CurrentMultiSelectItem == RecentType.Search)
-                SearchHistoryListView.ReverseSelections();
         }
 
         private void BuildMenuFlyoutHelper(MenuFlyoutHelper helper)

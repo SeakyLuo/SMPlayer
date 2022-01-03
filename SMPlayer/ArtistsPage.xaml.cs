@@ -304,73 +304,64 @@ namespace SMPlayer
                 await (sender.DataContext as AlbumView)?.SetThumbnailAsync();
             }
         }
-
-        void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar)
+        void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
         {
-            foreach (var listView in listViews)
+            switch (args.Event)
             {
-                listView.SelectionMode = ListViewSelectionMode.None;
-            }
-        }
+                case MultiSelectEvent.Cancel:
+                    foreach (var listView in listViews)
+                    {
+                        listView.SelectionMode = ListViewSelectionMode.None;
+                    }
+                    break;
+                case MultiSelectEvent.AddTo:
+                    args.FlyoutHelper.Data = SelectedItems;
+                    args.FlyoutHelper.DefaultPlaylistName = SelectedArtist.Name;
+                    break;
+                case MultiSelectEvent.Play:
+                    List<Music> selectedItems = SelectedItems;
+                    if (selectedItems.Count == 0) return;
+                    MusicPlayer.SetPlaylistAndPlay(SelectedItems);
+                    break;
+                case MultiSelectEvent.SelectAll:
+                    foreach (var listView in listViews)
+                    {
+                        try
+                        {
+                            listView.SelectAll();
+                        }
+                        catch (Exception)
+                        {
+                            // NotSupportException 没有加载完成导致部分ListView.SelectionMode还是None
+                        }
+                    }
+                    break;
+                case MultiSelectEvent.ReverseSelections:
+                    foreach (var listView in listViews)
+                    {
+                        try
+                        {
+                            listView.ReverseSelections();
+                        }
+                        catch (Exception)
+                        {
 
-        void IMultiSelectListener.AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper)
-        {
-            helper.Data = SelectedItems;
-            helper.DefaultPlaylistName = SelectedArtist.Name;
-        }
+                        }
+                    }
+                    break;
+                case MultiSelectEvent.ClearSelections:
+                    foreach (var listView in listViews)
+                    {
+                        try
+                        {
+                            listView.ClearSelections();
+                        }
+                        catch (Exception)
+                        {
 
-        void IMultiSelectListener.Play(MultiSelectCommandBar commandBar)
-        {
-            List<Music> selectedItems = SelectedItems;
-            if (selectedItems.Count == 0) return;
-            MusicPlayer.SetPlaylistAndPlay(SelectedItems);
-            commandBar.Hide();
-        }
-
-        void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar) { }
-
-        void IMultiSelectListener.SelectAll(MultiSelectCommandBar commandBar)
-        {
-            foreach (var listView in listViews)
-            {
-                try
-                {
-                    listView.SelectAll();
-                }
-                catch (Exception)
-                {
-                    // NotSupportException 没有加载完成导致部分ListView.SelectionMode还是None
-                }
-            }
-        }
-
-        void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar)
-        {
-            foreach (var listView in listViews)
-            {
-                try
-                {
-                    listView.ClearSelections();
-                }
-                catch (Exception)
-                {
-
-                }
-            }
-        }
-
-        void IMultiSelectListener.ReverseSelections(MultiSelectCommandBar commandBar)
-        {
-            foreach (var listView in listViews)
-            {
-                try
-                {
-                    listView.ReverseSelections();
-                }
-                catch (Exception)
-                {
-
-                }
+                        }
+                    }
+                    break;
             }
         }
 

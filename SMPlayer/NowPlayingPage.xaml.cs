@@ -79,7 +79,7 @@ namespace SMPlayer
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
             {
-                if (MainPage.Instance is MainPage main && main.CurrentPage == typeof(NowPlayingPage))
+                if (MainPage.Instance?.CurrentPage == typeof(NowPlayingPage))
                 {
                     SetEnabled();
                 }

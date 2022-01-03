@@ -92,26 +92,29 @@ namespace SMPlayer.Models
             }
             OnPropertyChanged();
         }
-        public List<Music> SortByTitle()
+        public IEnumerable<Music> SortByTitle()
         {
             Criterion = SortBy.Title;
-            List<Music> songs = Songs.OrderBy(m => m.Name).ToList();
-            Files = songs.Select(i => new FolderFile(i)).ToList();
-            return songs;
+            var list = Files.Select(f => new { File = f, Music = Settings.FindMusic(f.FileId) })
+                            .OrderBy(i => i.Music.Name).ToList();
+            Files = list.Select(i => i.File).ToList();
+            return list.Select(i => i.Music);
         }
-        public List<Music> SortByArtist()
+        public IEnumerable<Music> SortByArtist()
         {
             Criterion = SortBy.Artist;
-            List<Music> songs = Songs.OrderBy(m => m.Artist).ToList();
-            Files = songs.Select(i => new FolderFile(i)).ToList();
-            return songs;
+            var list = Files.Select(f => new { File = f, Music = Settings.FindMusic(f.FileId) })
+                            .OrderBy(i => i.Music.Artist).ToList();
+            Files = list.Select(i => i.File).ToList();
+            return list.Select(i => i.Music);
         }
-        public List<Music> SortByAlbum()
+        public IEnumerable<Music> SortByAlbum()
         {
             Criterion = SortBy.Album;
-            List<Music> songs = Songs.OrderBy(m => m.Album).ToList();
-            Files = songs.Select(i => new FolderFile(i)).ToList();
-            return songs;
+            var list = Files.Select(f => new { File = f, Music = Settings.FindMusic(f.FileId) })
+                            .OrderBy(i => i.Music.Album).ToList();
+            Files = list.Select(i => i.File).ToList();
+            return list.Select(i => i.Music);
         }
         public List<Music> Reverse()
         {
@@ -241,7 +244,14 @@ namespace SMPlayer.Models
             FolderFile file = FindFile(src.Path);
             RemoveFile(src.Path);
             file.MoveToFolder(newPath);
-            FindTree(newPath)?.AddFile(file);
+            if (FindTree(newPath) is FolderTree newParent)
+            {
+                if (newParent.Contains(src.Path))
+                {
+                    newParent.RemoveFile(src.Path);
+                }
+                newParent.AddFile(file);
+            }
         }
 
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)

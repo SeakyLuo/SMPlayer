@@ -28,7 +28,7 @@ namespace SMPlayer.Helpers
             {
                 Settings.settings = settings;
                 await Init(settings);
-                FileHelper.DeleteFile(JsonFilename);
+                FileHelper.DeleteLocalFile(JsonFilename);
             }
             else
             {

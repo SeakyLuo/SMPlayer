@@ -269,6 +269,7 @@
     <Compile Include="Models\PreferenceItem.cs" />
     <Compile Include="Models\PreferenceSetting.cs" />
     <Compile Include="Models\RecentTimeLine.cs" />
+    <Compile Include="Models\VO\TreeViewFolderFile.cs" />
     <Compile Include="PreferenceSettingsPage.xaml.cs">
       <DependentUpon>PreferenceSettingsPage.xaml</DependentUpon>
     </Compile>

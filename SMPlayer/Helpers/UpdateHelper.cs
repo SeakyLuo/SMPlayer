@@ -137,7 +137,7 @@ namespace SMPlayer.Helpers
                 {
                     if (item.FileType == FileType.Music)
                     {
-                        Music music = (Music)item.src;
+                        Music music = (Music)item.Source;
                         music.Id = existingFile.FileId;
                         Settings.settings.AddMusic(c, music);
                     }
@@ -146,7 +146,7 @@ namespace SMPlayer.Helpers
                 {
                     if (item.FileType == FileType.Music)
                     {
-                        Music music = (Music)item.src;
+                        Music music = (Music)item.Source;
                         Settings.settings.AddMusic(c, music);
                         item.FileId = music.Id;
                     }
