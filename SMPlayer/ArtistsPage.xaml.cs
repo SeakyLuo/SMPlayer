@@ -364,22 +364,20 @@ namespace SMPlayer
                     break;
             }
         }
-
-        void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type) { }
-        void IMenuFlyoutItemClickListener.Favorite(object data) { }
-        void IMenuFlyoutItemClickListener.Delete(Music music) { }
-        void IMenuFlyoutItemClickListener.UndoDelete(Music music) { }
-        void IMenuFlyoutItemClickListener.Remove(Music music) { }
-        void IMenuFlyoutItemClickListener.Select(object data)
+        void IMenuFlyoutItemClickListener.Execute(MenuFlyoutEventArgs args)
         {
-            if (data is Music music)
+            if (args.Event != MenuFlyoutEvent.Select)
+            {
+                return;
+            }
+            if (args.Data is Music music)
             {
                 foreach (var listView in listViews)
                 {
                     listView.SelectionMode = ListViewSelectionMode.Multiple;
                     if (listView.DataContext is AlbumView album && album.Contains(music))
                     {
-                        listView.SelectedItems.Add(data);
+                        listView.SelectedItems.Add(music);
                     }
                 }
             }
@@ -388,7 +386,7 @@ namespace SMPlayer
                 foreach (var listView in listViews)
                 {
                     listView.SelectionMode = ListViewSelectionMode.Multiple;
-                    if (listView.DataContext.Equals(data))
+                    if (listView.DataContext.Equals(args.Data))
                     {
                         listView.SelectAll();
                     }

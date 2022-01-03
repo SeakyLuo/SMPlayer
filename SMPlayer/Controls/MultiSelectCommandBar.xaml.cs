@@ -117,22 +117,18 @@ namespace SMPlayer.Controls
             HideAfterOperation();
         }
 
-        void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type)
+        void IMenuFlyoutItemClickListener.Execute(MenuFlyoutEventArgs args)
         {
-            HideAfterOperation();
+            switch (args.Event)
+            {
+                case MenuFlyoutEvent.AddTo:
+                case MenuFlyoutEvent.Favorite:
+                    HideAfterOperation();
+                    break;
+                case MenuFlyoutEvent.MoveToFolder:
+                    break;
+            }
         }
-
-        void IMenuFlyoutItemClickListener.Favorite(object data)
-        {
-            HideAfterOperation();
-        }
-
-        void IMenuFlyoutItemClickListener.Delete(Music music) { }
-        void IMenuFlyoutItemClickListener.UndoDelete(Music music) { }
-
-        void IMenuFlyoutItemClickListener.Remove(Music music) { }
-
-        void IMenuFlyoutItemClickListener.Select(object data) { }
     }
 
     public interface IMultiSelectListener

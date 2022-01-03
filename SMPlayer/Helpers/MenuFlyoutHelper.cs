@@ -52,9 +52,7 @@ namespace SMPlayer
                             return;
                         }
                         MusicPlayer.AddMusic(music);
-                        listener?.AddTo(Data, MusicPlayer.CurrentPlaylist, MusicPlayer.CurrentPlaylist.Count - 1, AddToCollectionType.NowPlaying);
-                        foreach (var clickListener in ClickListeners)
-                            clickListener.AddTo(Data, MusicPlayer.CurrentPlaylist, MusicPlayer.CurrentPlaylist.Count - 1, AddToCollectionType.NowPlaying);
+                        ExecuteAddToListeners(listener, Data, MusicPlayer.CurrentPlaylist, MusicPlayer.CurrentPlaylist.Count - 1, AddToCollectionType.NowPlaying);
                         Helper.ShowCancelableNotificationRaw(Helper.LocalizeMessage("SongAddedTo", music.Name, NowPlaying), () =>
                         {
                             MusicPlayer.RemoveMusic(music);
@@ -67,9 +65,7 @@ namespace SMPlayer
                             MusicPlayer.AddMusic(song);
                         string message = songs.Count() == 1 ? Helper.LocalizeMessage("SongAddedTo", songs.ElementAt(0).ToMusic().Name, NowPlaying) :
                                                               Helper.LocalizeMessage("SongsAddedTo", songs.Count(), NowPlaying);
-                        listener?.AddTo(Data, MusicPlayer.CurrentPlaylist, MusicPlayer.CurrentPlaylist.Count - songs.Count() - 1, AddToCollectionType.NowPlaying);
-                        foreach (var clickListener in ClickListeners)
-                            clickListener.AddTo(Data, MusicPlayer.CurrentPlaylist, MusicPlayer.CurrentPlaylist.Count - songs.Count() - 1, AddToCollectionType.NowPlaying);
+                        ExecuteAddToListeners(listener, Data, MusicPlayer.CurrentPlaylist, MusicPlayer.CurrentPlaylist.Count - songs.Count() - 1, AddToCollectionType.NowPlaying);
                         Helper.ShowCancelableNotificationRaw(message, () =>
                         {
                             foreach (var song in songs)
@@ -123,7 +119,10 @@ namespace SMPlayer
                     {
                         return;
                     }
-                    listener?.Favorite(Data);
+                    listener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.Favorite)
+                    {
+                        Data = Data
+                    });
                 };
                 addToItem.Items.Add(favItem);
             }
@@ -158,9 +157,7 @@ namespace SMPlayer
                     Confirmed = (newName) =>
                     {
                         Settings.settings.AddPlaylist(newName, Data);
-                        listener?.AddTo(Data, null, -1, AddToCollectionType.NewPlaylist);
-                        foreach (var clickListener in ClickListeners)
-                            clickListener?.AddTo(Data, null, -1, AddToCollectionType.NewPlaylist);
+                        ExecuteAddToListeners(listener, Data, null, -1, AddToCollectionType.NewPlaylist);
                     }
                 };
                 await dialog.ShowAsync();
@@ -189,9 +186,7 @@ namespace SMPlayer
                         }
                         playlist.Add(music);
                         Settings.settings.AddMusicToPlaylist(playlist, music);
-                        listener?.AddTo(Data, playlist, playlist.Count - 1, AddToCollectionType.Playlist);
-                        foreach (var clickListener in ClickListeners)
-                            clickListener.AddTo(Data, playlist, playlist.Count - 1, AddToCollectionType.Playlist);
+                        ExecuteAddToListeners(listener, Data, playlist, playlist.Count - 1, AddToCollectionType.Playlist);
                         Helper.ShowCancelableNotificationRaw(Helper.LocalizeMessage("SongAddedTo", music.Name, playlist.Name), () =>
                         {
                             playlist.Remove(music);
@@ -204,9 +199,7 @@ namespace SMPlayer
                         Settings.settings.AddMusicToPlaylist(playlist, songs);
                         string message = songs.Count() == 1 ? Helper.LocalizeMessage("SongAddedTo", songs.ElementAt(0).ToMusic().Name, playlist.Name) :
                                                               Helper.LocalizeMessage("SongsAddedTo", songs.Count(), playlist.Name);
-                        listener?.AddTo(Data, playlist, playlist.Count - songs.Count() - 1, AddToCollectionType.Playlist);
-                        foreach (var clickListener in ClickListeners)
-                            clickListener.AddTo(Data, playlist, playlist.Count - songs.Count() - 1, AddToCollectionType.Playlist);
+                        ExecuteAddToListeners(listener, Data, playlist, playlist.Count - songs.Count() - 1, AddToCollectionType.Playlist);
                         Helper.ShowCancelableNotificationRaw(message, () =>
                         {
                             playlist.Remove(songs);
@@ -290,7 +283,10 @@ namespace SMPlayer
             };
             item.Click += (s, args) =>
             {
-                listener?.Select((s as FrameworkElement).DataContext);
+                listener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.Select)
+                {
+                    Data = (s as FrameworkElement).DataContext
+                });
                 Helper.ShowMultiSelectCommandBar(option);
             };
             return item;
@@ -376,8 +372,6 @@ namespace SMPlayer
                         if (folder != null) await folder.DeleteAsync();
                         Settings.settings.DeleteFolder(tree);
                         afterTreeDeleted?.Invoke(tree);
-                        App.Save();
-                     
                         Helper.ShowNotificationRaw(Helper.LocalizeMessage("FolderIsDeleted", tree.Name));
                     }
                 }.ShowAsync();
@@ -448,9 +442,7 @@ namespace SMPlayer
                     else
                     {
                         MusicPlayer.AddMusic(music, index);
-                        listener?.AddTo(music, MusicPlayer.CurrentPlaylist, index, AddToCollectionType.NowPlaying);
-                        foreach (var clickListener in ClickListeners)
-                            clickListener.AddTo(music, MusicPlayer.CurrentPlaylist, index, AddToCollectionType.NowPlaying);
+                        ExecuteAddToListeners(listener, music, MusicPlayer.CurrentPlaylist, index, AddToCollectionType.NowPlaying);
                     }
                     Helper.ShowNotificationRaw(Helper.LocalizeMessage("SetPlayNext", music.Name));
                 };
@@ -474,7 +466,7 @@ namespace SMPlayer
                     Confirm = async () =>
                     {
                         MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
-                        listener?.Delete(music);
+                        listener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.Delete) { Data = music });
                         await Settings.settings.DeleteFile(music.ToFolderFile());
                         MainPage.Instance?.Loader.Hide();
                         Helper.ShowNotification(Helper.LocalizeMessage("MusicDeleted", music.Name));
@@ -486,6 +478,14 @@ namespace SMPlayer
             foreach (var item in GetMusicPropertiesMenuFlyout(option.ShowSeeArtistsAndSeeAlbum).Items)
                 flyout.Items.Add(item);
             return flyout;
+        }
+
+        private static void ExecuteAddToListeners(IMenuFlyoutItemClickListener listener, object data, object collection, int index, AddToCollectionType collectionType)
+        {
+            MenuFlyoutAddToEventArgs args = new MenuFlyoutAddToEventArgs(data, collection, index, collectionType);
+            listener?.Execute(args);
+            foreach (var clickListener in ClickListeners)
+                clickListener?.Execute(args);
         }
 
         public static MenuFlyoutItem GetSeeAlbumFlyout(Music music)
@@ -600,7 +600,7 @@ namespace SMPlayer
             };
             removeItem.Click += (sender, args) =>
             {
-                listener?.Remove(music);
+                listener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.Remove) { Data = music });
             };
             removeItem.SetToolTip(Helper.LocalizeMessage("RemoveFromList", music.Name), false);
             return removeItem;
@@ -925,12 +925,7 @@ namespace SMPlayer
 
     public interface IMenuFlyoutItemClickListener
     {
-        void AddTo(object data, object collection, int index, AddToCollectionType type);
-        void Favorite(object data);
-        void Delete(Music music);
-        void UndoDelete(Music music);
-        void Remove(Music music);
-        void Select(object data);
+        void Execute(MenuFlyoutEventArgs args);
     }
 
     public enum MenuFlyoutEvent
@@ -943,6 +938,13 @@ namespace SMPlayer
         public MenuFlyoutEvent Event { get; set; }
         public object Data { get; set; }
         public Music Music { get => (Music)Data; }
+
+        public MenuFlyoutEventArgs() { }
+
+        public MenuFlyoutEventArgs(MenuFlyoutEvent Event)
+        {
+            this.Event = Event;
+        }
     }
 
     public class MenuFlyoutAddToEventArgs : MenuFlyoutEventArgs
@@ -950,6 +952,14 @@ namespace SMPlayer
         public object Collection { get; set; } // add to collection
         public int Index { get; set; }
         public AddToCollectionType CollectionType { get; set; }
+
+        public MenuFlyoutAddToEventArgs(object data, object collection, int index, AddToCollectionType collectionType)
+        {
+            Event = MenuFlyoutEvent.AddTo;
+            Data = data;
+            Collection = collection;
+            CollectionType = collectionType;
+        }
 
     }
 
@@ -960,6 +970,7 @@ namespace SMPlayer
 
     public enum AddToCollectionType
     {
-        NowPlaying, MyFavorites, Playlist, NewPlaylist
+        NowPlaying, Playlist, NewPlaylist,
+        // MyFavorites 用Favorite事件代替
     }
 }

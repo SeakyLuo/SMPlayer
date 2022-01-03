@@ -161,28 +161,32 @@ namespace SMPlayer
             });
         }
 
-        void IMenuFlyoutItemClickListener.Favorite(object data) { }
-
-        void IMenuFlyoutItemClickListener.Delete(Music music)
+        void IMenuFlyoutItemClickListener.Execute(MenuFlyoutEventArgs args)
         {
-            RemoveMusic(music);
-        }
-
-        void IMenuFlyoutItemClickListener.Remove(Music music)
-        {
-            RemoveMusic(music);
+            if (args.Event != MenuFlyoutEvent.Select)
+            {
+                return;
+            }
+            switch (args.Event)
+            {
+                case MenuFlyoutEvent.Remove:
+                case MenuFlyoutEvent.Delete:
+                    RemoveMusic(args.Music);
+                    break;
+                case MenuFlyoutEvent.UndoDelete:
+                    UndoDelete(args.Music);
+                    break;
+                case MenuFlyoutEvent.Select:
+                    MusicGridView.SelectionMode = ListViewSelectionMode.Multiple;
+                    MusicGridView.SelectedItems.Add(args.Data);
+                    break;
+            }
         }
 
         public void UndoDelete(Music music)
         {
             MusicCollection.Insert(removedItemIndex, music);
             GridMusicCollection.Insert(removedItemIndex, new GridMusicView(music));
-        }
-
-        void IMenuFlyoutItemClickListener.Select(object data) 
-        {
-            MusicGridView.SelectionMode = ListViewSelectionMode.Multiple;
-            MusicGridView.SelectedItems.Add(data);
         }
 
         public bool RemoveMusic(Music music)
@@ -268,9 +272,6 @@ namespace SMPlayer
             }
             MultiSelectListener?.Execute(commandBar, args);
         }
-
-        void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type) { }
-        void IMenuFlyoutItemClickListener.UndoDelete(Music music) { }
 
         void IMusicEventListener.Liked(Music music, bool isFavorite)
         {

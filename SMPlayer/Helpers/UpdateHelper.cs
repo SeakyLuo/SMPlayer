@@ -177,7 +177,7 @@ namespace SMPlayer.Helpers
                 ExitChecking(data);
                 return;
             }
-            if (!await SQLHelper.Run(async c => await LoadFolder(c, folder, null, null, data)))
+            if (!await SQLHelper.RunAsync(async c => await LoadFolder(c, folder, null, null, data)))
             {
                 ExitChecking(data);
                 return;

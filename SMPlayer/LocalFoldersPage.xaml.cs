@@ -245,26 +245,26 @@ namespace SMPlayer
             LocalPage.Instance.SetPage(tree);
         }
 
-        void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type) { }
-        void IMenuFlyoutItemClickListener.Favorite(object data) { }
-        void IMenuFlyoutItemClickListener.Delete(Music music) { }
-        void IMenuFlyoutItemClickListener.UndoDelete(Music music) { }
-        void IMenuFlyoutItemClickListener.Remove(Music music) { }
-
-        void IMenuFlyoutItemClickListener.Select(object data)
+        void IMenuFlyoutItemClickListener.Execute(MenuFlyoutEventArgs args)
         {
-            if (Settings.settings.LocalFolderGridView)
+            switch (args.Event)
             {
-                LocalFoldersGridView.SelectionMode = ListViewSelectionMode.Multiple;
-                LocalFoldersGridView.SelectedValue = data;
-            }
-            else
-            {
-                LocalFoldersTreeView.SelectionMode = TreeViewSelectionMode.Multiple;
-                LocalFoldersTreeView.SelectedNodes.Add((TreeViewNode)data);
+                case MenuFlyoutEvent.AddTo:
+                    break;
+                case MenuFlyoutEvent.Select:
+                    if (Settings.settings.LocalFolderGridView)
+                    {
+                        LocalFoldersGridView.SelectionMode = ListViewSelectionMode.Multiple;
+                        LocalFoldersGridView.SelectedValue = args.Data;
+                    }
+                    else
+                    {
+                        LocalFoldersTreeView.SelectionMode = TreeViewSelectionMode.Multiple;
+                        LocalFoldersTreeView.SelectedNodes.Add((TreeViewNode)args.Data);
+                    }
+                    break;
             }
         }
-
         async void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
         {
             switch (args.Event)
@@ -312,6 +312,7 @@ namespace SMPlayer
                             }
                             else if (node.Content is TreeViewFolderFile file)
                             {
+
                             }
                         }
                     }
@@ -450,7 +451,10 @@ namespace SMPlayer
 
         void IMusicEventListener.Added(Music music) { }
 
-        void IMusicEventListener.Removed(Music music) { }
+        void IMusicEventListener.Removed(Music music)
+        {
+            CurrentTree.RemoveFile(music.Path);
+        }
 
         void IMusicEventListener.Modified(Music before, Music after)
         {

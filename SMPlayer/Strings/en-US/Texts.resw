@@ -303,6 +303,12 @@
   <data name="Recent" xml:space="preserve">
     <value>Recent</value>
   </data>
+  <data name="Recent30Days" xml:space="preserve">
+    <value>Recent 30 Days</value>
+  </data>
+  <data name="Recent7Days" xml:space="preserve">
+    <value>Recent 7 Days</value>
+  </data>
   <data name="RecentAdded" xml:space="preserve">
     <value>Recent Added</value>
   </data>
@@ -338,9 +344,6 @@
   </data>
   <data name="ThisMonth" xml:space="preserve">
     <value>This Month</value>
-  </data>
-  <data name="ThisWeek" xml:space="preserve">
-    <value>This Week</value>
   </data>
   <data name="Today" xml:space="preserve">
     <value>Today</value>

@@ -76,7 +76,7 @@ namespace SMPlayer.Models
                     }
                     else if ((now - dateAdded).Days <= 7)
                     {
-                        return "ThisWeek";
+                        return "Recent7Days";
                     }
                     else
                     {

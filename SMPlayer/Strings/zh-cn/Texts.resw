@@ -306,6 +306,9 @@
   <data name="Recent30Days" xml:space="preserve">
     <value>最近30天</value>
   </data>
+  <data name="Recent7Days" xml:space="preserve">
+    <value>最近7天</value>
+  </data>
   <data name="RecentAdded" xml:space="preserve">
     <value>最近添加</value>
   </data>
@@ -341,9 +344,6 @@
   </data>
   <data name="ThisMonth" xml:space="preserve">
     <value>本月</value>
-  </data>
-  <data name="ThisWeek" xml:space="preserve">
-    <value>本周</value>
   </data>
   <data name="Today" xml:space="preserve">
     <value>今日</value>

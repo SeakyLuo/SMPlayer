@@ -345,37 +345,32 @@ namespace SMPlayer
                 ScrollToMusicRequestedWhenUnloaded = -1;
             }
         }
-
-        void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type)
+        void IMenuFlyoutItemClickListener.Execute(MenuFlyoutEventArgs args)
         {
-            if (type == AddToCollectionType.NowPlaying && IsNowPlaying)
+            switch (args.Event)
             {
-                AlternateRowBackgroud(index);
+                case MenuFlyoutEvent.AddTo:
+                    MenuFlyoutAddToEventArgs addToArgs = (MenuFlyoutAddToEventArgs)args;
+                    if (addToArgs.CollectionType == AddToCollectionType.NowPlaying && IsNowPlaying)
+                    {
+                        AlternateRowBackgroud(addToArgs.Index);
+                    }
+                    break;
+                case MenuFlyoutEvent.Delete:
+                    RemoveMusicAndNotifyUser(args.Music, false);
+                    break;
+                case MenuFlyoutEvent.Remove:
+                    AskRemoveMusic(args.Music);
+                    break;
+                case MenuFlyoutEvent.UndoDelete:
+                    CurrentPlaylist.Insert(removedMusicIndex, args.Music);
+                    AlternateRowBackgroud(removedMusicIndex);
+                    break;
+                case MenuFlyoutEvent.Select:
+                    SelectionMode = ListViewSelectionMode.Multiple;
+                    SongsListView.SelectedItems.Add(args.Data);
+                    break;
             }
-        }
-
-        void IMenuFlyoutItemClickListener.Delete(Music music)
-        {
-            RemoveMusicAndNotifyUser(music, false);
-        }
-
-        void IMenuFlyoutItemClickListener.Remove(Music music)
-        {
-            AskRemoveMusic(music);
-        }
-
-        void IMenuFlyoutItemClickListener.Favorite(object data) { }
-
-        void IMenuFlyoutItemClickListener.Select(object data)
-        {
-            SelectionMode = ListViewSelectionMode.Multiple;
-            SongsListView.SelectedItems.Add(data as Music);
-        }
-
-        void IMenuFlyoutItemClickListener.UndoDelete(Music music)
-        {
-            CurrentPlaylist.Insert(removedMusicIndex, music);
-            AlternateRowBackgroud(removedMusicIndex);
         }
 
         private void SongsListView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
