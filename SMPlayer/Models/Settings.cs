@@ -30,9 +30,12 @@ namespace SMPlayer.Models
         public static IEnumerable<Music> MyFavoriteSongs { get => SQLHelper.Run(c => c.SelectPlaylistItems(settings.MyFavoritesId)); }
         public static List<Playlist> AllPlaylists
         {
-            get => SQLHelper.Run(c => c.SelectAllPlaylists(i => i.Id != settings.MyFavoritesId).ToList()); 
+            get => SQLHelper.Run(c => c.SelectAllPlaylists(i => i.Id != settings.MyFavoritesId).ToList());
         }
         public static FolderTree FullRoot { get => FindFullFolder(settings.Tree.Id) ?? new FolderTree(); }
+        public static FolderTree Root { get => FindFolder(settings.Tree.Id) ?? new FolderTree(); }
+        public static List<FolderTree> AllFolders { get => SQLHelper.Run(c => c.Query<FolderDAO>("select * from Folder where State = ?", ActiveState.Active))
+                                                                  .Select(i => i.FromDAO()).ToList(); }
         public static Music FindMusic(Music target)
         {
             if (target == null) return null;
@@ -54,7 +57,7 @@ namespace SMPlayer.Models
         }
         public static FolderTree FindFolder(long id)
         {
-            return SQLHelper.Run(c => c.SelectFolderInfoById(id));
+            return SQLHelper.Run(c => c.SelectFolder(id));
         }
         public static FolderTree FindFullFolder(long id)
         {
@@ -89,8 +92,7 @@ namespace SMPlayer.Models
         public string LastPage { get; set; } = "";
         public List<Playlist> Playlists { get; set; } = new List<Playlist>();
         public long LastPlaylistId { get; set; } = 0;
-        public bool LocalMusicGridView { get; set; } = true;
-        public bool LocalFolderGridView { get; set; } = true;
+        public LocalPageViewMode LocalViewMode { get; set; } = LocalPageViewMode.Grid;
         public Playlist MyFavorites { get; set; }
         public long MyFavoritesId { get; set; }
         public ObservableCollection<string> RecentPlayed { get; set; } = new ObservableCollection<string>();

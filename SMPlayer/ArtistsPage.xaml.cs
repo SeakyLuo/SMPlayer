@@ -55,7 +55,7 @@ namespace SMPlayer
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             Settings.AddMusicEventListener(this);
-            MusicPlayer.SwitchMusicListeners.Add(this);
+            MusicPlayer.AddSwitchMusicListener(this);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

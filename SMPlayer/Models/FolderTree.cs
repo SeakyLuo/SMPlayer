@@ -11,7 +11,7 @@ using Windows.Storage;
 namespace SMPlayer.Models
 {
     [Serializable]
-    public class FolderTree : INotifyPropertyChanged, IComparable, IPreferable
+    public class FolderTree : IComparable, IPreferable
     {
         public long Id { get; set; }
         public List<FolderTree> Trees { get; set; } = new List<FolderTree>();
@@ -42,7 +42,6 @@ namespace SMPlayer.Models
             Files = tree.Files.ToList();
             Path = tree.Path;
             Criterion = tree.Criterion;
-            OnPropertyChanged();
         }
 
         public void AddTree(FolderTree tree)
@@ -62,6 +61,10 @@ namespace SMPlayer.Models
 
         public List<Music> Flatten()
         {
+            if (IsEmpty)
+            {
+                CopyFrom(Settings.FindFolder(Id));
+            }
             List<Music> list = new List<Music>();
             foreach (var branch in Trees)
                 list.AddRange(branch.Flatten());
@@ -74,23 +77,6 @@ namespace SMPlayer.Models
             foreach (var tree in Trees)
                 list.AddRange(tree.GetAllTrees());
             return list;
-        }
-        public void Sort()
-        {
-            Trees = Trees.OrderBy(t => t.Name).ToList();
-            switch (Criterion)
-            {
-                case SortBy.Title:
-                    SortByTitle();
-                    break;
-                case SortBy.Album:
-                    SortByAlbum();
-                    break;
-                case SortBy.Artist:
-                    SortByArtist();
-                    break;
-            }
-            OnPropertyChanged();
         }
         public IEnumerable<Music> SortByTitle()
         {
@@ -128,14 +114,9 @@ namespace SMPlayer.Models
             Trees.Clear();
             Files.Clear();
         }
-        public FolderTree FindTree(FolderTree target)
-        {
-            //return Trees.FirstOrDefault(tree => tree.Equals(target)) ?? Trees.FirstOrDefault(tree => target.Path.StartsWith(tree.Path))?.FindTree(target);
-            return FindTree(target.Id);
-        }
+
         public FolderTree FindTree(string path)
         {
-            //return Trees.FirstOrDefault(tree => tree.Equals(target)) ?? Trees.FirstOrDefault(tree => target.Path.StartsWith(tree.Path))?.FindTree(target);
             if (Path.Equals(path)) return this;
             foreach (var tree in Trees)
             {
@@ -156,54 +137,21 @@ namespace SMPlayer.Models
             }
             return null;
         }
-        public FolderTree FindTree(Music music)
-        {
-            string path = FileHelper.GetParentPath(music.Path);
-            return FindTree(path);
-        }
-        public Music FindMusic(string path)
-        {
-            if (string.IsNullOrEmpty(path)) return null;
-            return FindFile(path) is FolderFile file ? Settings.FindMusic(file.FileId) : null;
-        }
-        public Music FindMusic(Music target)
-        {
-            return FindMusic(target.Path);
-        }
-        public FolderFile FindFile(FolderFile file)
-        {
-            return FindFile(file?.Path);
-        }
+
         public FolderFile FindFile(string path)
         {
             if (string.IsNullOrEmpty(path)) return null;
             return Files.FirstOrDefault(m => m.Path == path) ?? Trees.FirstOrDefault(tree => path.StartsWith(tree.Path))?.FindFile(path);
         }
-        //public static bool operator == (FolderTree tree1, FolderTree tree2)
-        //{
-        //    if (!tree1.Equals(tree2)) return false;
-        //    return tree1.Files.Zip(tree2.Files, (m1, m2) => m1 == m2).All(v => v) && tree1.Trees.Zip(tree2.Trees, (t1, t2) => t1 == t2).All(v => v);
-        //}
-        //public static bool operator !=(FolderTree tree1, FolderTree tree2)
-        //{
-        //    return !(tree1 == tree2);
-        //}
+
         public async Task<StorageFolder> GetStorageFolderAsync()
         {
-            try
-            {
-                return await StorageFolder.GetFolderFromPathAsync(Path);
-            }
-            catch (FileNotFoundException)
-            {
-                return null;
-            }
+            return await FileHelper.LoadFolderAsync(Path);
         }
 
         public void Rename(string newPath)
         {
             Rename(Path, newPath);
-            OnPropertyChanged("Directory");
         }
 
         public void Rename(string oldPath, string newPath)
@@ -227,7 +175,7 @@ namespace SMPlayer.Models
 
         public void MoveBranch(FolderTree branch, string newPath)
         {
-            FolderTree tree = FindTree(branch);
+            FolderTree tree = FindTree(branch.Id);
             RemoveBranch(branch.Path);
             tree.Rename(tree.Path, System.IO.Path.Combine(newPath, Name));
             FindTree(newPath)?.AddTree(tree);
@@ -252,12 +200,6 @@ namespace SMPlayer.Models
                 }
                 newParent.AddFile(file);
             }
-        }
-
-        public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
-        {
-            // Raise the PropertyChanged event, passing the name of the property whose value has changed.
-            this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public override bool Equals(object obj)

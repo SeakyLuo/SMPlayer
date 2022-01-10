@@ -59,11 +59,13 @@ namespace SMPlayer
         public static MediaPlayer Player = new MediaPlayer() { Source = PlaybackList };
         public static DispatcherTimer Timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
         public static List<IMediaControlListener> MediaControlListeners = new List<IMediaControlListener>();
-        public static List<ISwitchMusicListener> SwitchMusicListeners = new List<ISwitchMusicListener>();
+        private static List<ISwitchMusicListener> SwitchMusicListeners = new List<ISwitchMusicListener>();
         public static List<ICurrentPlaylistChangedListener> CurrentPlaylistChangedListeners = new List<ICurrentPlaylistChangedListener>();
         public static List<IMediaPlayerStateChangedListener> MediaPlayerStateChangedListeners = new List<IMediaPlayerStateChangedListener>();
         public static List<Action> InitFinishedListeners = new List<Action>();
         public const string JsonFilename = "NowPlaying";
+
+        public static void AddSwitchMusicListener(ISwitchMusicListener listener) { SwitchMusicListeners.Add(listener); }
 
         public MusicPlayer() { Settings.AddMusicEventListener(this); }
 

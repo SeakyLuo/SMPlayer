@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Helpers.VoiceAssistant;
 using SMPlayer.Models;
+using SMPlayer.Models.VO;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -379,7 +380,7 @@ namespace SMPlayer.Helpers
                 RandomPlayHelper.PlayFolder();
                 return;
             }
-            IEnumerable<GridFolderView> list = SearchHelper.SearchFolders(Settings.FullRoot, text, SortBy.Default);
+            IEnumerable<GridViewFolder> list = SearchHelper.SearchFolders(Settings.FullRoot, text, SortBy.Default);
             if (list.IsEmpty())
             {
                 SpeakNoResults(text);
@@ -508,7 +509,7 @@ namespace SMPlayer.Helpers
                     }
                     break;
                 case SearchType.Folders:
-                    GridFolderView folder = result.Result as GridFolderView;
+                    GridViewFolder folder = result.Result as GridViewFolder;
                     MusicPlayer.ShuffleAndPlay(folder.Songs);
                     if (IsBadSearch(text, folder.Name, result))
                     {

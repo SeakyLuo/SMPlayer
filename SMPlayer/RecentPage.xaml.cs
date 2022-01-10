@@ -2,6 +2,7 @@
 using SMPlayer.Dialogs;
 using SMPlayer.Models;
 using SMPlayer.Models.DAO;
+using SMPlayer.Models.VO;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -41,7 +42,7 @@ namespace SMPlayer
 
             AddedMusicView.TopItemEffectiveViewportChanged += (sender, args) =>
             {
-                if (sender.DataContext is GridMusicView music)
+                if (sender.DataContext is GridViewMusic music)
                 {
                     string category = RecentTimeLine.Categorize(music.Source.DateAdded);
                     if (category != CurrentCategory)
@@ -61,17 +62,18 @@ namespace SMPlayer
 
         public static void Save()
         {
-            //if (RecentAdded == null) return;
-            //JsonFileHelper.SaveAsync(JsonFileName, RecentAdded.TimeLine);
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (RecentAdded == null)
             {
                 //List<Music> recentAdded = await JsonFileHelper.ReadObjectAsync<List<Music>>(JsonFileName);
                 //if (recentAdded.IsEmpty()) recentAdded = Settings.AllSongs.OrderByDescending(m => m.DateAdded).ToList();
-                RecentAdded = RecentTimeLine.FromMusicList(Settings.AllSongs);
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    RecentAdded = RecentTimeLine.FromMusicList(Settings.AllSongs);
+                });
                 SetupAdded();
             }
         }
@@ -172,14 +174,14 @@ namespace SMPlayer
         private async void AskRemoveRecentPlayed(object item)
         {
             if (recentPlayedRemoveDialog == null) recentPlayedRemoveDialog = new RemoveDialog();
-            GridMusicView music = null;
-            if (item is GridMusicView gridMusicView)
+            GridViewMusic music = null;
+            if (item is GridViewMusic gridMusicView)
             {
                 music = gridMusicView;
             }
             else if (item is List<object> list && list.Count() == 1)
             {
-                music = list.ElementAt(0) as GridMusicView;
+                music = list.ElementAt(0) as GridViewMusic;
             }
             if (recentPlayedRemoveDialog.IsChecked)
             {
@@ -248,7 +250,7 @@ namespace SMPlayer
             }
         }
 
-        private void RemoveRecentPlayed(GridMusicView item)
+        private void RemoveRecentPlayed(GridViewMusic item)
         {
             PlayedMusicView.RemoveMusic(item.Source);
             Settings.settings.RemoveRecentPlayed(item.Source);
@@ -398,7 +400,7 @@ namespace SMPlayer
         private void RemoveRecentPlayed(object items)
         {
             var selected = (List<object>)items;
-            foreach (GridMusicView item in selected)
+            foreach (GridViewMusic item in selected)
             {
                 PlayedMusicView.RemoveMusic(item.Source);
                 Settings.settings.RemoveRecentPlayed(item.Source);

@@ -53,7 +53,7 @@
                         Grid.Row="1"
                         Width="100"
                         Height="100"/>
-                    <local:GridMusicControl
+                    <local:MusicGridViewControl
                         x:Name="AddedMusicView"
                         Grid.Row="1"
                         Margin="0,5,0,0" />
@@ -95,7 +95,7 @@
                         IsActive="False"
                         Width="100"
                         Height="100"/>
-                    <local:GridMusicControl
+                    <local:MusicGridViewControl
                         x:Name="PlayedMusicView"
                         Grid.Row="1"
                         Margin="0,5,0,0" />

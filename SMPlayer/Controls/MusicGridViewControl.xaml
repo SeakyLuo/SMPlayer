@@ -1,0 +1,32 @@
+﻿<UserControl
+    x:Class="SMPlayer.MusicGridViewControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:data="using:SMPlayer.Models.VO"
+    xmlns:local="using:SMPlayer"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="using:SMPlayer.Controls"
+    mc:Ignorable="d">
+
+    <GridView
+        x:Name="MusicGridView"
+        Margin="5"
+        IsItemClickEnabled="True"
+        ItemClick="MusicGridView_ItemClick"
+        ItemContainerStyle="{StaticResource DropShadowGridViewItemStyle}"
+        ItemsSource="{x:Bind GridMusicCollection, Mode=OneWay}"
+        SelectionMode="None">
+        <GridView.ItemTemplate>
+            <DataTemplate x:DataType="data:GridViewMusic">
+                <controls:GridViewMusicItemControl
+                    EffectiveViewportChanged="UserControl_EffectiveViewportChanged"
+                    DataContextChanged="UserControl_DataContextChanged">
+                    <controls:GridViewMusicItemControl.ContextFlyout>
+                        <MenuFlyout Opening="MenuFlyout_Opening" />
+                    </controls:GridViewMusicItemControl.ContextFlyout>
+                </controls:GridViewMusicItemControl>
+            </DataTemplate>
+        </GridView.ItemTemplate>
+    </GridView>
+
+</UserControl>

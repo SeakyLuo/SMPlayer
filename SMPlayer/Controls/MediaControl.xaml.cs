@@ -415,7 +415,7 @@ namespace SMPlayer
         public MediaControl()
         {
             this.InitializeComponent();
-            MusicPlayer.SwitchMusicListeners.Add(this);
+            MusicPlayer.AddSwitchMusicListener(this);
             MusicPlayer.MediaControlListeners.Add(this);
             MusicPlayer.InitFinishedListeners.Add(() =>
             {

@@ -312,6 +312,9 @@
   <data name="NoLyricsAvailable" xml:space="preserve">
     <value>No Lyrics Available</value>
   </data>
+  <data name="NoMusicUnderCurrentFolder" xml:space="preserve">
+    <value>There is no music file found under the current folder!</value>
+  </data>
   <data name="NoResult" xml:space="preserve">
     <value>No result can be found!</value>
   </data>

@@ -19,7 +19,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MusicPlayer.SwitchMusicListeners.Add(this);
+            MusicPlayer.AddSwitchMusicListener(this);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

@@ -1264,4 +1264,16 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="MoveToFolderAppButton.Label" xml:space="preserve">
     <value>Move To Folder</value>
   </data>
+  <data name="ViewModeAppButton.Label" xml:space="preserve">
+    <value>Display Mode</value>
+  </data>
+  <data name="ViewModel.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Change Display Mode</value>
+  </data>
+  <data name="GridViewFlyoutItem.Text" xml:space="preserve">
+    <value>Grid View</value>
+  </data>
+  <data name="ListViewFlyoutItem.Text" xml:space="preserve">
+    <value>List View</value>
+  </data>
 </root>

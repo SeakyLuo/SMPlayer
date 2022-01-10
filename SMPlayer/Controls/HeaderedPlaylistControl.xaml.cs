@@ -267,8 +267,12 @@ namespace SMPlayer
 
         private void SortButton_Click(object sender, RoutedEventArgs e)
         {
-            MenuFlyoutHelper.SetPlaylistSortByMenu(sender, CurrentPlaylist,
-                                                    _ => HeaderedPlaylist.CurrentPlaylist = CurrentPlaylist.Songs);
+            SortBy[] criteria = new SortBy[] { SortBy.Reverse, SortBy.Title, SortBy.Artist, SortBy.Album, SortBy.Duration, SortBy.PlayCount, SortBy.DateAdded };
+            MenuFlyoutHelper.ShowSortByMenu(sender, CurrentPlaylist.Criterion, criteria, (criterion) =>
+            {
+                Settings.settings.SortPlaylist(CurrentPlaylist, criterion);
+                HeaderedPlaylist.CurrentPlaylist = CurrentPlaylist.Songs;
+            });
         }
         void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
         {

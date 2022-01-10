@@ -120,7 +120,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             MusicPlayer.CurrentPlaylistChangedListeners.Add(this);
-            MusicPlayer.SwitchMusicListeners.Add(this);
+            MusicPlayer.AddSwitchMusicListener(this);
         }
 
         private void PlaylistController_Loaded(object sender, RoutedEventArgs e)

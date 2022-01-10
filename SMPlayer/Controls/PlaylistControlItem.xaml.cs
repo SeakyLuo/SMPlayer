@@ -29,7 +29,7 @@ namespace SMPlayer.Controls
         public PlaylistControlItem()
         {
             this.InitializeComponent();
-            MusicPlayer.SwitchMusicListeners.Add(this);
+            MusicPlayer.AddSwitchMusicListener(this);
         }
 
         private void Album_Click(object sender, RoutedEventArgs e)

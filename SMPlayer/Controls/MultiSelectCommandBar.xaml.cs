@@ -93,7 +93,7 @@ namespace SMPlayer.Controls
         {
             MenuFlyoutHelper helper = new MenuFlyoutHelper();
             MultiSelectListener?.Execute(this, new MultiSelectEventArgs(MultiSelectEvent.MoveToFolder) { FlyoutHelper = helper });
-            helper.GetAddToMenuFlyout(this).ShowAt(sender as FrameworkElement);
+            helper.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
         }
 
         private void SelectAllAppButton_Click(object sender, RoutedEventArgs e)

@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Models;
+using SMPlayer.Models.VO;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace SMPlayer
         public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         public ObservableCollection<AlbumView> Playlists = new ObservableCollection<AlbumView>();
-        public ObservableCollection<GridFolderView> Folders = new ObservableCollection<GridFolderView>();
+        public ObservableCollection<GridViewFolder> Folders = new ObservableCollection<GridViewFolder>();
         private SortBy[] Criteria;
         private SearchType searchType;
         private SearchKeyword CurrentKeyword;
@@ -149,7 +150,7 @@ namespace SMPlayer
                     Playlists.SetTo(list as ObservableCollection<AlbumView>);
                     break;
                 case SearchType.Folders:
-                    Folders.SetTo(list as ObservableCollection<GridFolderView>);
+                    Folders.SetTo(list as ObservableCollection<GridViewFolder>);
                     break;
             }
             LoadingProgress.IsActive = false;
@@ -266,7 +267,7 @@ namespace SMPlayer
                 list.Add(item);
             foreach (AlbumView item in PlaylistsGridView.SelectedItems)
                 list.AddRange(item.Songs);
-            foreach (GridFolderView item in FoldersGridView.SelectedItems)
+            foreach (GridViewFolder item in FoldersGridView.SelectedItems)
                 list.AddRange(item.Songs);
             foreach (Playlist item in ArtistsGridView.SelectedItems)
                 list.AddRange(item.Songs);
@@ -275,7 +276,7 @@ namespace SMPlayer
 
         private void SortButton_Click(object sender, RoutedEventArgs e)
         {
-            MenuFlyoutHelper.SetSortByMenu(sender, SettingsCriterion, Criteria, item => SettingsCriterion = item);
+            MenuFlyoutHelper.ShowSortByMenu(sender, SettingsCriterion, Criteria, item => SettingsCriterion = item);
         }
     }
 }

@@ -25,8 +25,7 @@ namespace SMPlayer.Models.DAO
         public NotificationDisplayMode NotificationDisplay { get; set; }
         public string LastPage { get; set; }
         public long LastPlaylist { get; set; }
-        public bool LocalMusicGridView { get; set; }
-        public bool LocalFolderGridView { get; set; }
+        public LocalPageViewMode LocalViewMode { get; set; }
         public long MyFavorites { get; set; }
         public long NowPlaying { get; set; }
         public bool MiniModeWithDropdown { get; set; }

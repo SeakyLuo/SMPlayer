@@ -12,7 +12,6 @@ namespace SMPlayer.Models
     [Serializable]
     public class Playlist : INotifyPropertyChanged, IPreferable
     {
-        public static SortBy[] Criteria = new SortBy[] { SortBy.Title, SortBy.Artist, SortBy.Album, SortBy.Duration, SortBy.PlayCount, SortBy.DateAdded };
         public long Id { get; set; }
         private string name;
         public string Name

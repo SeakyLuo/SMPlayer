@@ -312,6 +312,9 @@
   <data name="NoLyricsAvailable" xml:space="preserve">
     <value>没有歌词</value>
   </data>
+  <data name="NoMusicUnderCurrentFolder" xml:space="preserve">
+    <value>当前目录下没有音乐！</value>
+  </data>
   <data name="NoResult" xml:space="preserve">
     <value>找不到结果</value>
   </data>

@@ -11,6 +11,7 @@ namespace SMPlayer.Models.VO
         public long Id { get; set; }
         public string Icon { get; set; }
         public string Name { get; set; }
+        public string NameWithExtension { get; set; }
         public string Creator { get; set; }
         public string Collection { get; set; } // 从属的集合
         public long FileId { get; set; }
@@ -25,6 +26,7 @@ namespace SMPlayer.Models.VO
             FileId = source.FileId;
             Path = source.Path;
             Name = System.IO.Path.GetFileNameWithoutExtension(Path);
+            NameWithExtension = System.IO.Path.GetFileName(Path);
             FileType = source.FileType;
             if (!source.IsMusicFile())
             {

@@ -26,7 +26,6 @@ namespace SMPlayer
         private ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         private bool IsProcessing = false;
         public static List<AlbumInfo> AlbumInfoList;
-        private static readonly SortBy[] SortByCriteria = { SortBy.Default, SortBy.Name, SortBy.Artist };
         public List<Music> SelectedSongs
         {
             get
@@ -198,22 +197,24 @@ namespace SMPlayer
 
         private void SortButton_Click(object sender, RoutedEventArgs e)
         {
-            MenuFlyoutHelper.SetSortByMenu(sender, Settings.settings.AlbumsCriterion, SortByCriteria,
+            SortBy[] SortByCriteria = { SortBy.Reverse, SortBy.Default, SortBy.Name, SortBy.Artist };
+            MenuFlyoutHelper.ShowSortByMenu(sender, Settings.settings.AlbumsCriterion, SortByCriteria,
                                            async criterion => 
                                            {
                                                AlbumPageProgressRing.Visibility = Visibility.Visible;
-                                               Albums.SetTo(await Task.Run(() => Sort(criterion, Albums)));
-                                               AlbumPageProgressRing.Visibility = Visibility.Collapsed;
-                                           },
-                                           async () =>
-                                           {
-                                               AlbumPageProgressRing.Visibility = Visibility.Visible;
-                                               Albums.CopyAndSetTo(await Task.Run(() =>
+                                               if (criterion == SortBy.Reverse)
                                                {
-                                                   var albums = Albums.Reverse();
-                                                   BuildAlbumInfoList(albums);
-                                                   return albums;
-                                               })); 
+                                                   Albums.CopyAndSetTo(await Task.Run(() =>
+                                                   {
+                                                       var albums = Albums.Reverse();
+                                                       BuildAlbumInfoList(albums);
+                                                       return albums;
+                                                   }));
+                                               }
+                                               else
+                                               {
+                                                   Albums.SetTo(await Task.Run(() => Sort(criterion, Albums)));
+                                               }
                                                AlbumPageProgressRing.Visibility = Visibility.Collapsed;
                                            });
         }

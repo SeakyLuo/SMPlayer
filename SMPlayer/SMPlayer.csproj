@@ -147,11 +147,14 @@
     <Compile Include="Controls\DropShadowControl.xaml.cs">
       <DependentUpon>DropShadowControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\GridFolderControl.xaml.cs">
-      <DependentUpon>GridFolderControl.xaml</DependentUpon>
+    <Compile Include="Controls\GridViewFolderItemControl.xaml.cs">
+      <DependentUpon>GridViewFolderItemControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\GridMusicControl.xaml.cs">
-      <DependentUpon>GridMusicControl.xaml</DependentUpon>
+    <Compile Include="Controls\GridViewMusicItemControl.xaml.cs">
+      <DependentUpon>GridViewMusicItemControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MusicGridViewControl.xaml.cs">
+      <DependentUpon>MusicGridViewControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\IconTextButton.xaml.cs">
       <DependentUpon>IconTextButton.xaml</DependentUpon>
@@ -252,8 +255,8 @@
     <Compile Include="Models\DAO\RecentRecordDAO.cs" />
     <Compile Include="Models\DAO\SettingsDAO.cs" />
     <Compile Include="Models\FolderFile.cs" />
-    <Compile Include="Models\FullyObservableCollection.cs" />
-    <Compile Include="Models\LoadingCache.cs" />
+    <Compile Include="DataStructure\FullyObservableCollection.cs" />
+    <Compile Include="DataStructure\LoadingCache.cs" />
     <Compile Include="Helpers\SearchHelper.cs" />
     <Compile Include="Helpers\UpdateHelper.cs" />
     <Compile Include="Helpers\VisualTreeHelperExtensions.cs" />
@@ -269,6 +272,7 @@
     <Compile Include="Models\PreferenceItem.cs" />
     <Compile Include="Models\PreferenceSetting.cs" />
     <Compile Include="Models\RecentTimeLine.cs" />
+    <Compile Include="Models\VO\GridViewStorageItem.cs" />
     <Compile Include="Models\VO\TreeViewFolderFile.cs" />
     <Compile Include="PreferenceSettingsPage.xaml.cs">
       <DependentUpon>PreferenceSettingsPage.xaml</DependentUpon>
@@ -276,19 +280,14 @@
     <Compile Include="SearchResultPage.xaml.cs">
       <DependentUpon>SearchResultPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TemplateSelector\FolderTreeTemplateSelector.cs" />
+    <Compile Include="TemplateSelector\GridViewStorageItemTemplateSelector.cs" />
+    <Compile Include="TemplateSelector\TreeViewStorageItemTemplateSelector.cs" />
     <Compile Include="Helpers\MenuFlyoutHelper.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Controls\LoadingControl.xaml.cs">
       <DependentUpon>LoadingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\TitleBarHelper.cs" />
-    <Compile Include="LocalFoldersPage.xaml.cs">
-      <DependentUpon>LocalFoldersPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="LocalMusicPage.xaml.cs">
-      <DependentUpon>LocalMusicPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="LocalPage.xaml.cs">
       <DependentUpon>LocalPage.xaml</DependentUpon>
     </Compile>
@@ -299,8 +298,8 @@
     <Compile Include="Helpers\MusicPlayer.cs" />
     <Compile Include="Models\ArtistView.cs" />
     <Compile Include="Models\AlbumView.cs" />
-    <Compile Include="Models\GridFolderView.cs" />
-    <Compile Include="Models\GridMusicView.cs" />
+    <Compile Include="Models\VO\GridViewFolder.cs" />
+    <Compile Include="Models\VO\GridViewMusic.cs" />
     <Compile Include="NowPlayingFullPage.xaml.cs">
       <DependentUpon>NowPlayingFullPage.xaml</DependentUpon>
     </Compile>
@@ -442,11 +441,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\GridFolderControl.xaml">
+    <Page Include="Controls\GridViewFolderItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\GridMusicControl.xaml">
+    <Page Include="Controls\GridViewMusicItemControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MusicGridViewControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -567,14 +570,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dictionaries\StretchTitleContentDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="LocalFoldersPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="LocalMusicPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

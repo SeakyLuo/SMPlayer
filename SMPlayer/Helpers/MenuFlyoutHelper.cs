@@ -606,64 +606,38 @@ namespace SMPlayer
             return removeItem;
         }
 
-        public static MenuFlyoutSubItem GetSortByMenuSubItem(Dictionary<SortBy, Action> actions, Action reverse = null)
+        public static void ShowFolderSortByMenu(object sender, FolderTree folder, Dictionary<SortBy, Action> actions, Action reverse = null)
         {
-            var sortByItem = new MenuFlyoutSubItem() { Text = Helper.Localize("Sort") };
+            var flyout = new MenuFlyout();
             if (reverse != null)
             {
                 var reverseItem = new MenuFlyoutItem() { Text = Helper.LocalizeMessage("Reverse Playlist") };
-                reverseItem.Click += (sender, args) => reverse.Invoke();
-                sortByItem.Items.Add(reverseItem);
-                sortByItem.Items.Add(new MenuFlyoutSeparator());
+                reverseItem.Click += (s, args) => reverse.Invoke();
+                flyout.Items.Add(reverseItem);
+                flyout.Items.Add(new MenuFlyoutSeparator());
             }
             foreach (var pair in actions)
             {
                 string sortby = Helper.LocalizeMessage("Sort By " + pair.Key.ToStr());
-                var item = new MenuFlyoutItem() { Text = sortby };
-                item.Click += (sender, args) => pair.Value?.Invoke();
-                sortByItem.Items.Add(item);
-            }
-            return sortByItem;
-        }
-        public static void SetPlaylistSortByMenu(object sender, Playlist playlist, Action<SortBy> sortListener = null)
-        {
-            var flyout = new MenuFlyout();
-            var reverseItem = new MenuFlyoutItem() { Text = Helper.LocalizeMessage("Reverse Playlist") };
-            reverseItem.Click += (s, args) =>
-            {
-                Settings.settings.SortPlaylist(playlist, SortBy.Reverse);
-            };
-            flyout.Items.Add(reverseItem);
-            flyout.Items.Add(new MenuFlyoutSeparator());
-            foreach (var criterion in Playlist.Criteria)
-            {
-                string sortby = Helper.LocalizeMessage("Sort By " + criterion.ToStr());
-                var radioItem = new ToggleMenuFlyoutItem()
-                {
-                    Text = sortby,
-                    IsChecked = playlist.Criterion == criterion
-                };
-                radioItem.Click += (s, args) =>
-                {
-                    Settings.settings.SortPlaylist(playlist, criterion);
-                };
-                flyout.Items.Add(radioItem);
+                var item = new ToggleMenuFlyoutItem() { Text = sortby };
+                item.Click += (s, args) => pair.Value?.Invoke();
+                flyout.Items.Add(item);
             }
             flyout.ShowAt(sender as FrameworkElement);
         }
-        public static void SetSortByMenu(object sender, SortBy criterion, SortBy[] criteria, Action<SortBy> onSelected, Action reverse = null)
+        public static void ShowSortByMenu(object sender, SortBy criterion, SortBy[] criteria, Action<SortBy> onSelected)
         {
             var flyout = new MenuFlyout();
-            flyout.Items.Clear();
-            if (reverse != null)
-            {
-                var reverseItem = new MenuFlyoutItem() { Text = Helper.LocalizeMessage("ReverseList") };
-                reverseItem.Click += (send, args) => reverse.Invoke();
-                flyout.Items.Add(reverseItem);
-                flyout.Items.Add(new MenuFlyoutSeparator());
-            }
             foreach (var item in criteria)
             {
+                if (item == SortBy.Reverse)
+                {
+                    var reverseItem = new MenuFlyoutItem() { Text = Helper.LocalizeMessage("ReverseList") };
+                    reverseItem.Click += (send, args) => onSelected.Invoke(item);
+                    flyout.Items.Add(reverseItem);
+                    flyout.Items.Add(new MenuFlyoutSeparator());
+                    continue;
+                }
                 string sortby = Helper.LocalizeMessage("Sort By " + item.ToStr());
                 var radioItem = new ToggleMenuFlyoutItem()
                 {
@@ -859,6 +833,35 @@ namespace SMPlayer
             };
             return item;
         }
+
+        public static MenuFlyout GetFoldersMenu(FolderFile file, IMenuFlyoutItemClickListener clickListener = null, IMenuFlyoutHelperBuildListener buildListener = null)
+        {
+            MenuFlyout flyout = new MenuFlyout();
+            MenuFlyoutHelper helper = new MenuFlyoutHelper()
+            {
+                Data = file,
+            };
+            buildListener?.OnBuild(helper);
+            foreach (var tree in Settings.AllFolders)
+            {
+                if (file.ParentPath == tree.Path)
+                {
+                    continue;
+                }
+                MenuFlyoutItem item = new MenuFlyoutItem()
+                {
+                    Text = tree.Name
+                };
+                item.SetToolTip(tree.Path);
+                item.Click += (sender, e) =>
+                {
+                    clickListener.Execute(new MenuFlyoutEventArgs() { Data = tree });
+                };
+                flyout.Items.Add(item);
+            }
+            return flyout;
+        } 
+
         public static MenuFlyout SetPlaylistMenu(object sender, IMenuFlyoutItemClickListener clickListener = null, IMenuFlyoutHelperBuildListener buildListener = null, MenuFlyoutOption option = null)
         {
             return SetMenu(helper => helper.GetPlaylistMenuFlyout(clickListener, option), sender, buildListener);
@@ -902,8 +905,8 @@ namespace SMPlayer
             else if (obj is ArtistView artist) return artist.Songs;
             else if (obj is AlbumView album) return album.Songs;
             else if (obj is Playlist playlist) return playlist.Songs;
-            else if (obj is GridFolderView folder) return folder.Songs;
-            else if (obj is GridMusicView gridMusic) return gridMusic.Source;
+            else if (obj is GridViewFolder folder) return folder.Songs;
+            else if (obj is GridViewMusic gridMusic) return gridMusic.Source;
             else if (obj is TreeViewNode node)
             {
                 if (node.Content is FolderTree tree) return tree.Songs;
@@ -917,7 +920,7 @@ namespace SMPlayer
             if (obj is ArtistView artist) return artist.Name;
             else if (obj is AlbumView album) return album.Name;
             else if (obj is Playlist playlist) return playlist.Name;
-            else if (obj is GridFolderView folder) return folder.Name;
+            else if (obj is GridViewFolder folder) return folder.Name;
             else if (obj is TreeViewNode node && node.Content is FolderTree tree) return tree.Name;
             return "";
         }
