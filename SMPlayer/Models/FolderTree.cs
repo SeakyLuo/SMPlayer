@@ -11,29 +11,20 @@ using Windows.Storage;
 namespace SMPlayer.Models
 {
     [Serializable]
-    public class FolderTree : IComparable, IPreferable
+    public class FolderTree : StorageItem, IPreferable
     {
         public long Id { get; set; }
         public List<FolderTree> Trees { get; set; } = new List<FolderTree>();
         public List<FolderFile> Files { get; set; } = new List<FolderFile>();
         public List<Music> Songs { get => Settings.FindMusicList(Files.Select(i => i.FileId)); }
-        public string Path { get; set; } = "";
         public SortBy Criterion { get; set; } = SortBy.Title;
-
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
         public TreeInfo Info { get => new TreeInfo(Name, Trees.Count, Files.Count); }
         public bool IsEmpty { get => Files.Count == 0 && Trees.All(tree => tree.IsEmpty); }
         public bool IsNotEmpty { get => !IsEmpty; }
         public int FileCount { get => Trees.Sum(t => t.FileCount) + Files.Count; }
-        public string Name { get => FileHelper.GetDisplayName(Path); }
-        public string ParentPath { get => FileHelper.GetParentPath(Path); }
         public long ParentId { get; set; }
 
         public FolderTree() { }
-        public FolderTree(FolderTree tree)
-        {
-            CopyFrom(tree);
-        }
 
         public void CopyFrom(FolderTree tree)
         {
@@ -190,6 +181,7 @@ namespace SMPlayer.Models
         public void MoveFile(FolderFile src, string newPath)
         {
             FolderFile file = FindFile(src.Path);
+            if (file == null) return;
             RemoveFile(src.Path);
             file.MoveToFolder(newPath);
             if (FindTree(newPath) is FolderTree newParent)
@@ -214,11 +206,6 @@ namespace SMPlayer.Models
         public override string ToString()
         {
             return Path;
-        }
-
-        public int CompareTo(object obj)
-        {
-            return ToString().CompareTo(obj.ToString());
         }
 
         PreferenceItem IPreferable.AsPreferenceItem()

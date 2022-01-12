@@ -19,27 +19,9 @@ namespace SMPlayer.Helpers
             return index == -1 ? "" : path.Substring(0, index);
         }
 
-        public static string GetFilename(string path)
-        {
-            int startIndex = path.LastIndexOf(PathJoiner) + 1;
-            return path.Substring(startIndex);
-        }
-
-        public static string GetDisplayName(string path)
-        {
-            string filename = GetFilename(path);
-            int dot = path.LastIndexOf('.');
-            return dot == -1 ? filename : filename.Substring(0, dot);
-        }
-
         public static string MoveToPath(string path, string newPath)
         {
             return path.Replace(GetParentPath(path), newPath);
-        }
-
-        public static string JoinPaths(params string[] values)
-        {
-            return string.Join(PathJoiner, values);
         }
 
         public static async Task<StorageFolder> LoadFolderAsync(string path)
@@ -76,7 +58,7 @@ namespace SMPlayer.Helpers
             }
             catch (Exception e)
             {
-                //Log.Info("LoadFileAsync Exception {0}", e);
+                Log.Info("LoadFileAsync Exception {0}", e);
                 return null;
             }
         }
@@ -183,10 +165,5 @@ namespace SMPlayer.Helpers
                 }
             }
         }
-    }
-
-    public enum ReadFilePolicy
-    {
-        CreateIfNotExist, QuickReturn
     }
 }

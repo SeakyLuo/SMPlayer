@@ -8,16 +8,14 @@ using System.Threading.Tasks;
 
 namespace SMPlayer.Models
 {
-    public class FolderFile
+    public class FolderFile : StorageItem
     {
         public long Id { get; set; }
         public long FileId { get; set; } // 文件ID
         public FileType FileType { get; set; }
-        public string Path { get; set; }
         public IFolderFile Source { get; set; }
         public long ParentId { get; set; }
-        public string Name { get => System.IO.Path.GetFileNameWithoutExtension(Path); }
-        public string ParentPath { get => FileHelper.GetParentPath(Path); }
+        public string NameWithExtension { get => System.IO.Path.GetFileName(Path); }
 
         public FolderFile() { }
 
@@ -28,9 +26,17 @@ namespace SMPlayer.Models
             Path = music.Path;
         }
 
-        public Music FindMusic()
+        public FolderFile Copy()
         {
-            return Settings.FindMusic(FileId);
+            return new FolderFile()
+            {
+                Id = Id,
+                FileId = FileId,
+                FileType = FileType,
+                Path = Path,
+                Source = Source,
+                ParentId = ParentId,
+            };
         }
 
         public void RenameFolder(string oldPath, string newPath)
@@ -41,13 +47,6 @@ namespace SMPlayer.Models
         public void MoveToFolder(string newPath)
         {
             Path = FileHelper.MoveToPath(Path, newPath);
-        }
-
-        public void CopyFrom(FolderFile file)
-        {
-            FileId = file.FileId;
-            FileType = file.FileType;
-            Path = file.Path;
         }
 
         public bool IsMusicFile()

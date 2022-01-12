@@ -272,6 +272,7 @@
     <Compile Include="Models\PreferenceItem.cs" />
     <Compile Include="Models\PreferenceSetting.cs" />
     <Compile Include="Models\RecentTimeLine.cs" />
+    <Compile Include="Models\StorageItem.cs" />
     <Compile Include="Models\VO\GridViewStorageItem.cs" />
     <Compile Include="Models\VO\TreeViewFolderFile.cs" />
     <Compile Include="PreferenceSettingsPage.xaml.cs">

@@ -24,7 +24,7 @@ namespace SMPlayer
 {
     public static class ClassHelper
     {
-        public static int FindSortedListInsertIndex<T>(this IEnumerable<T> list, IComparable comparable)
+        public static int FindSortedListInsertIndex<T>(this IEnumerable<T> list, T comparable) where T : IComparable
         {
             int count = list.Count();
             for (int i = 0; i < count - 1; i++)
@@ -247,30 +247,58 @@ namespace SMPlayer
             }
         }
 
-        public static void ClearSelections(this ListViewBase listView)
+        public static void ClearSelections(this ListViewBase view)
         {
-            listView.SelectedItems.Clear();
+            view.SelectedItems.Clear();
         }
 
-        public static void ReverseSelections(this ListViewBase listView)
+        public static void ReverseSelections(this ListViewBase view)
         {
-            if (listView.SelectedItems.Count == 0)
+            if (view.SelectedItems.IsEmpty())
             {
-                listView.SelectAll();
+                view.SelectAll();
                 return;
             }
-            if (listView.SelectedItems.Count == listView.Items.Count)
+            if (view.SelectedItems.Count == view.Items.Count)
             {
-                listView.ClearSelections();
+                view.ClearSelections();
                 return;
             }
-            var selected = listView.SelectedItems.ToHashSet();
-            listView.SelectedItems.Clear();
-            foreach (var item in selected)
+            var selected = view.SelectedItems.ToHashSet();
+            view.ClearSelections();
+            foreach (var item in view.Items)
             {
                 if (!selected.Contains(item))
                 {
-                    listView.SelectedItems.Add(item);
+                    view.SelectedItems.Add(item);
+                }
+            }
+        }
+
+        public static void ClearSelections(this TreeView view)
+        {
+            view.SelectedNodes.Clear();
+        }
+
+        public static void ReverseSelections(this TreeView view)
+        {
+            if (view.SelectedNodes.IsEmpty())
+            {
+                view.SelectAll();
+                return;
+            }
+            if (view.SelectedNodes.Count == view.RootNodes.Count)
+            {
+                view.ClearSelections();
+                return;
+            }
+            var selected = view.SelectedNodes.ToHashSet();
+            view.ClearSelections();
+            foreach (var item in view.RootNodes)
+            {
+                if (!selected.Contains(item))
+                {
+                    view.SelectedNodes.Add(item);
                 }
             }
         }

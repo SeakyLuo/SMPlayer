@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Media;
 
 namespace SMPlayer.Models
 {
-    public class Music : IComparable<Music>, INotifyPropertyChanged, IMusicable, IPreferable, IFolderFile
+    public class Music : IComparable, INotifyPropertyChanged, IMusicable, IPreferable, IFolderFile
     {
         public long Id { get; set; }
         public string Path { get; set; }
@@ -308,12 +308,13 @@ namespace SMPlayer.Models
                                                   string.Format("{0} - {1}", Name, string.IsNullOrEmpty(Artist) ? Album : Artist);
         }
 
-        int IComparable<Music>.CompareTo(Music other)
+        int IComparable.CompareTo(object obj)
         {
-            int result = Name.CompareTo(other.Name);
-            if (result != 0) result = Artist.CompareTo(other.Artist);
-            if (result != 0) result = Album.CompareTo(other.Album);
-            if (result != 0) result = Path.CompareTo(other.Path);
+            Music m = obj as Music;
+            int result = Name.CompareTo(m.Name);
+            if (result != 0) result = Artist.CompareTo(m.Artist);
+            if (result != 0) result = Album.CompareTo(m.Album);
+            if (result != 0) result = Path.CompareTo(m.Path);
             return result;
         }
 

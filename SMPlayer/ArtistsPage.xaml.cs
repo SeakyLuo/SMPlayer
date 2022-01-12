@@ -412,14 +412,15 @@ namespace SMPlayer
 
         void IMusicEventListener.Added(Music music)
         {
-            if (Artists.FirstOrDefault(a => a.Name == music.Artist) is ArtistView artist)
+            ArtistView artist = Artists.FirstOrDefault(a => a.Name == music.Artist);
+            if (artist != null)
             {
-                // TODO: add to artist.Songs
+                artist.AddMusic(music);
             }
             else
             {
-                // TODO: sort
-                Artists.Add(new ArtistView(music));
+                artist = new ArtistView(music);
+                Artists.Insert(Artists.FindSortedListInsertIndex(artist), artist);
             }
         }
 
@@ -427,9 +428,8 @@ namespace SMPlayer
         {
             if (Artists.FirstOrDefault(a => a.Name == music.Artist) is ArtistView artist)
             {
-                // TODO: remove from artist.Albums
-                artist.Songs.Remove(music);
-                if (artist.Songs.Count == 0)
+                artist.RemoveMusic(music);
+                if (artist.Songs.IsEmpty())
                 {
                     Artists.Remove(artist);
                 }

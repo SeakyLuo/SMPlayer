@@ -214,6 +214,42 @@ namespace SMPlayer
             }
             return flyout;
         }
+
+        public MenuFlyout GetMoveToFolderFlyout()
+        {
+            MenuFlyout flyout = new MenuFlyout();
+            List<StorageItem> items = (List<StorageItem>)Data;
+            foreach (var folder in Settings.AllFolders)
+            {
+                // 文件夹不能移动到其本身或者父文件夹，文件也不需要移动到他的父文件夹
+                if (items.Any(i => i.Path == folder.Path || i.ParentPath == folder.Path))
+                {
+                    continue;
+                }
+                MenuFlyoutItem item = new MenuFlyoutItem()
+                {
+                    Text = folder.Name
+                };
+                item.SetToolTip(folder.Path);
+                item.Click += async (sender, e) =>
+                {
+                    foreach (var storageItem in items)
+                    {
+                        if (storageItem is FolderTree folderTree)
+                        {
+                            await Settings.settings.MoveFolderAsync(folderTree, folder.Path);
+                        }
+                        else if (storageItem is FolderFile folderFile)
+                        {
+                            await Settings.settings.MoveFileAsync(folderFile, folder.Path);
+                        }
+                    }
+                };
+                flyout.Items.Add(item);
+            }
+            return flyout;
+        }
+
         public static MenuFlyoutSubItem GetShuffleSubItem()
         {
             MenuFlyoutSubItem subItem = GetShuffleMenu().ToSubItem();
@@ -254,7 +290,7 @@ namespace SMPlayer
             {
                 if (path.Contains(".") && await FileHelper.FileNotExist(path))
                 {
-                    Helper.ShowMusicNotFoundNotification(FileHelper.GetDisplayName(path));
+                    Helper.ShowMusicNotFoundNotification(System.IO.Path.GetFileName(path));
                     return;
                 }
                 if (!path.Contains(".") && await FileHelper.FolderNotExist(path))
@@ -833,35 +869,6 @@ namespace SMPlayer
             };
             return item;
         }
-
-        public static MenuFlyout GetFoldersMenu(FolderFile file, IMenuFlyoutItemClickListener clickListener = null, IMenuFlyoutHelperBuildListener buildListener = null)
-        {
-            MenuFlyout flyout = new MenuFlyout();
-            MenuFlyoutHelper helper = new MenuFlyoutHelper()
-            {
-                Data = file,
-            };
-            buildListener?.OnBuild(helper);
-            foreach (var tree in Settings.AllFolders)
-            {
-                if (file.ParentPath == tree.Path)
-                {
-                    continue;
-                }
-                MenuFlyoutItem item = new MenuFlyoutItem()
-                {
-                    Text = tree.Name
-                };
-                item.SetToolTip(tree.Path);
-                item.Click += (sender, e) =>
-                {
-                    clickListener.Execute(new MenuFlyoutEventArgs() { Data = tree });
-                };
-                flyout.Items.Add(item);
-            }
-            return flyout;
-        } 
-
         public static MenuFlyout SetPlaylistMenu(object sender, IMenuFlyoutItemClickListener clickListener = null, IMenuFlyoutHelperBuildListener buildListener = null, MenuFlyoutOption option = null)
         {
             return SetMenu(helper => helper.GetPlaylistMenuFlyout(clickListener, option), sender, buildListener);

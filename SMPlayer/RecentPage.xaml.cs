@@ -24,7 +24,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class RecentPage : Page, IMultiSelectListener, IMenuFlyoutHelperBuildListener, IMusicEventListener, IFolderTreeEventListener, IRecentEventListener
+    public sealed partial class RecentPage : Page, IMultiSelectListener, IMenuFlyoutHelperBuildListener, IMusicEventListener, IRecentEventListener
     {
         public static RecentTimeLine RecentAdded;
         private const string JsonFileName = "RecentAddedTimeLine";
@@ -448,12 +448,6 @@ namespace SMPlayer
         void IMenuFlyoutHelperBuildListener.OnBuild(MenuFlyoutHelper helper)
         {
             BuildMenuFlyoutHelper(helper);
-        }
-        void IFolderTreeEventListener.Added(FolderTree branch, FolderTree root) { }
-        void IFolderTreeEventListener.Renamed(FolderTree folder, string newPath) { }
-        void IFolderTreeEventListener.Removed(FolderTree folder)
-        {
-            AddedModified = true;
         }
         void IMusicEventListener.Liked(Music music, bool isFavorite) { }
         void IMusicEventListener.Added(Music music)

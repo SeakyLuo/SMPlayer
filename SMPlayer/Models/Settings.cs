@@ -20,8 +20,8 @@ namespace SMPlayer.Models
         public static void AddMusicEventListener(IMusicEventListener listener) { MusicEventListeners.Add(listener); }
         private static readonly List<IPlaylistEventListener> PlaylistEventListeners = new List<IPlaylistEventListener>();
         public static void AddPlaylistEventListener(IPlaylistEventListener listener) { PlaylistEventListeners.Add(listener); }
-        private static readonly List<IFolderTreeEventListener> FolderTreeEventListeners = new List<IFolderTreeEventListener>();
-        public static void AddFolderTreeEventListener(IFolderTreeEventListener listener) { FolderTreeEventListeners.Add(listener); }
+        private static readonly List<IStorageItemEventListener> StorageItemEventListeners = new List<IStorageItemEventListener>();
+        public static void AddFolderTreeEventListener(IStorageItemEventListener listener) { StorageItemEventListeners.Add(listener); }
         private static readonly List<IRecentEventListener> RecentEventListeners = new List<IRecentEventListener>();
         public static void AddRecentEventListener(IRecentEventListener listener) { RecentEventListeners.Add(listener); }
 
@@ -473,8 +473,8 @@ namespace SMPlayer.Models
             await folder.CreateFolderAsync(branch.Name);
             branch.ParentId = root.Id;
             SQLHelper.Run(c => c.InsertFolder(branch));
-            foreach (var listener in FolderTreeEventListeners)
-                listener.Added(branch, root);
+            foreach (var listener in StorageItemEventListeners)
+                listener.ExecuteFolderEvent(branch, new StorageItemEventArgs(StorageItemEventType.Add) { Folder = root });
         }
 
         public async Task RenameFolder(FolderTree original, string newName)
@@ -488,8 +488,8 @@ namespace SMPlayer.Models
                 c.Update(original.ToDAO());
                 c.Execute("update PreferenceItem set ItemName = ? where ItemId = ?", newName, original.Id);
             });
-            foreach (var listener in FolderTreeEventListeners)
-                listener.Renamed(original, newPath);
+            foreach (var listener in StorageItemEventListeners)
+                listener.ExecuteFolderEvent(original, new StorageItemEventArgs(StorageItemEventType.Rename) { Path = newPath });
             original.Rename(newPath);
         }
 
@@ -506,8 +506,8 @@ namespace SMPlayer.Models
                     }
                 }
             });
-            foreach (var listener in FolderTreeEventListeners)
-                listener.Removed(target);
+            foreach (var listener in StorageItemEventListeners)
+                listener.ExecuteFolderEvent(target, new StorageItemEventArgs(StorageItemEventType.Remove));
         }
 
         private void DeleteFolder(SQLiteConnection c, FolderTree target)
@@ -528,13 +528,13 @@ namespace SMPlayer.Models
             }
         }
 
-        public async Task MoveFolderAsync(FolderTree tree, string path)
+        public async Task MoveFolderAsync(FolderTree folder, string path)
         {
-            await MoveFolder(await tree.GetStorageFolderAsync(), await StorageFolder.GetFolderFromPathAsync(path));
-            tree.Rename(tree.ParentPath, path);
+            await MoveFolder(folder, await StorageFolder.GetFolderFromPathAsync(path));
+            folder.Rename(folder.ParentPath, path);
             SQLHelper.Run(c =>
             {
-                MoveFolder(c, tree, path);
+                MoveFolder(c, folder, path);
                 foreach (var music in AllSongs)
                 {
                     if (music.Path.StartsWith(path))
@@ -543,20 +543,20 @@ namespace SMPlayer.Models
                     }
                 }
             });
-            foreach (var listener in FolderTreeEventListeners)
-                listener.Renamed(tree, tree.Path);
+            foreach (var listener in StorageItemEventListeners)
+                listener.ExecuteFolderEvent(folder, new StorageItemEventArgs(StorageItemEventType.Move) { Path = path });
         }
 
-        private async Task MoveFolder(StorageFolder folder, StorageFolder target)
+        private async Task MoveFolder(FolderTree folder, StorageFolder target)
         {
             StorageFolder subFolder = await target.CreateFolderAsync(folder.Name, CreationCollisionOption.OpenIfExists);
-            foreach (var item in await folder.GetFoldersAsync())
+            foreach (var item in SQLHelper.Run(c => c.SelectSubFolders(folder)))
             {
                 await MoveFolder(item, subFolder);
             }
-            foreach (var item in await folder.GetFilesAsync())
+            foreach (var item in SQLHelper.Run(c => c.SelectSubFiles(folder)))
             {
-                await item.MoveAsync(subFolder);
+                await MoveFileAsync(item, subFolder.Path);
             }
         }
 
@@ -575,15 +575,33 @@ namespace SMPlayer.Models
             }
         }
 
-        public async Task MoveFile(FolderFile file, string path)
+        public async Task MoveFileAsync(FolderFile file, string newParent)
+        {
+            if (await FileHelper.FileExists(Path.Combine(newParent, file.NameWithExtension)))
+            {
+                string message = Helper.LocalizeMessage("DuplicateFoundWhenMovingFile", file.Name, Path.GetDirectoryName(newParent));
+                await Helper.ShowYesNoDialog(message, async () =>
+                {
+                    await MoveAndReplaceFile(file, newParent);
+                });
+            }
+            else
+            {
+                await MoveFile(file, newParent);
+            }
+        }
+
+        private async Task MoveFile(FolderFile file, string path)
         {
             StorageFile localFile = await FileHelper.LoadFileAsync(file.Path);
             StorageFolder targetFolder = await FileHelper.LoadFolderAsync(path);
             await localFile.MoveAsync(targetFolder);
             SQLHelper.Run(c => MoveFile(c, file, path));
+            foreach (var listener in StorageItemEventListeners)
+                listener.ExecuteFileEvent(file, new StorageItemEventArgs(StorageItemEventType.Move) { Path = path });
         }
 
-        public async Task MoveAndReplaceFile(FolderFile file, string path)
+        private async Task MoveAndReplaceFile(FolderFile file, string path)
         {
             await DeleteFile(file);
             await MoveFile(file, path);
@@ -591,11 +609,12 @@ namespace SMPlayer.Models
 
         private void MoveFile(SQLiteConnection c, FolderFile file, string path)
         {
-            file.MoveToFolder(path);
-            c.Update(file.ToDAO());
-            if (file.IsMusicFile())
+            FolderFile copy = file.Copy();
+            copy.MoveToFolder(path);
+            c.Update(copy.ToDAO());
+            if (copy.IsMusicFile())
             {
-                MoveMusic(c, FindMusic(file.FileId), path);
+                MoveMusic(c, FindMusic(copy.FileId), path);
             }
         }
 
@@ -700,11 +719,26 @@ namespace SMPlayer.Models
         void Played(Music music);
     }
 
-    public interface IFolderTreeEventListener
+    public interface IStorageItemEventListener
     {
-        void Added(FolderTree folder, FolderTree root);
-        void Renamed(FolderTree folder, string newPath);
-        void Removed(FolderTree folder);
+        void ExecuteFileEvent(FolderFile file, StorageItemEventArgs args);
+        void ExecuteFolderEvent(FolderTree folder, StorageItemEventArgs args);
+    }
+
+    public class StorageItemEventArgs
+    {
+        public StorageItemEventType EventType { get; set; }
+        public string Path { get; set; }
+        public FolderTree Folder { get; set; }
+        public StorageItemEventArgs(StorageItemEventType eventType)
+        {
+            EventType = eventType;
+        }
+    }
+
+    public enum StorageItemEventType
+    {
+        Add, Rename, Remove, Move
     }
 
     public enum NamingError
