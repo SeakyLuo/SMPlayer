@@ -156,7 +156,7 @@ namespace SMPlayer.Helpers
             }
         }
 
-        public static async void CheckNewMusic(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
+        public static async void RefreshFolder(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
         {
             MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
             var data = new TreeUpdateData();

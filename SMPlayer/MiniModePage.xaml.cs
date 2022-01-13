@@ -99,7 +99,7 @@ namespace SMPlayer
         {
         }
 
-        void IMainPageContainer.HideMultiSelectCommandBar()
+        void IMainPageContainer.CancelMultiSelectCommandBar()
         {
         }
 

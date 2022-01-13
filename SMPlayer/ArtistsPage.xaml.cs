@@ -167,7 +167,7 @@ namespace SMPlayer
         private void Artist_Tapped(object sender, TappedRoutedEventArgs e)
         {
             listViews.Clear();
-            MainPage.Instance.HideMultiSelectCommandBar();
+            MainPage.Instance.CancelMultiSelectCommandBar();
             var artist = (sender as FrameworkElement).DataContext as ArtistView;
             LoadArtist(artist);
         }
@@ -270,7 +270,7 @@ namespace SMPlayer
         private void ChooseSuggestion(string artist)
         {
             listViews.Clear();
-            MainPage.Instance.HideMultiSelectCommandBar();
+            MainPage.Instance.CancelMultiSelectCommandBar();
             ArtistSearchBox.Text = artist;
             ArtistMasterDetailsView.SelectedItem = FindAndLoadArtist(artist);
             ScrollToArtist(artist);

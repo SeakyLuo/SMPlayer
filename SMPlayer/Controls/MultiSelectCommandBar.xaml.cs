@@ -48,6 +48,11 @@ namespace SMPlayer.Controls
 
         public void Hide()
         {
+            Cancel();
+        }
+
+        private void Close()
+        {
             shouldOpen = false;
             CommandBarContainer.IsOpen = false;
             shouldOpen = true;
@@ -62,7 +67,7 @@ namespace SMPlayer.Controls
         {
             MultiSelectListener?.Execute(this, new MultiSelectEventArgs(MultiSelectEvent.ClearSelections));
             MultiSelectListener?.Execute(this, new MultiSelectEventArgs(MultiSelectEvent.Cancel));
-            Hide();
+            Close();
         }
 
         private void CancelAppButton_Click(object sender, RoutedEventArgs e)

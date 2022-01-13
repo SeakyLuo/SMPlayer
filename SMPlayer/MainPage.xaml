@@ -11,6 +11,33 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <Style x:Key="InAppNotificationStyle" TargetType="controls:InAppNotification">
+            <Setter Property="AnimationDuration" Value="0:0:0.1" />
+            <Setter Property="ShowDismissButton" Value="True" />
+            <Setter Property="ShowDismissButton" Value="True" />
+            <Setter Property="StackMode" Value="Replace" />
+        </Style>
+        <DataTemplate x:Key="UndoInAppNotificationDataTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Text="{Binding ElementName=UndoInAppNotification, Path=Content}"
+                    TextTrimming="CharacterEllipsis"
+                    TextWrapping="WrapWholeWords" />
+                <Button
+                    x:Uid="UndoButton"
+                    Grid.Column="1"
+                    Click="UndoButton_Click" />
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -117,11 +144,13 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <localControls:MultiSelectCommandBar x:Name="BottomMultiSelectCommandBar" Grid.Row="1" />
                 <Frame
                     x:Name="NaviFrame"
                     IsNavigationStackEnabled="True"
                     Navigated="NaviFrame_Navigated" />
+                <localControls:MultiSelectCommandBar
+                    x:Name="BottomMultiSelectCommandBar"
+                    Grid.Row="1" />
             </Grid>
         </NavigationView>
         <Grid
@@ -257,38 +286,21 @@
         <controls:InAppNotification
             x:Name="ShowResultInAppNotification"
             Grid.Row="1"
-            AnimationDuration="0:0:0.1"
-            HorizontalOffset="0"
-            ShowDismissButton="True"
-            StackMode="Replace"
-            VerticalOffset="100" />
+            Style="{StaticResource InAppNotificationStyle}" />
         <controls:InAppNotification
             x:Name="UndoInAppNotification"
             Grid.Row="1"
-            AnimationDuration="00:00:00.1"
-            HorizontalOffset="0"
-            StackMode="Replace"
-            VerticalOffset="100">
-            <controls:InAppNotification.ContentTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Text="{Binding ElementName=UndoInAppNotification, Path=Content}"
-                            TextTrimming="CharacterEllipsis"
-                            TextWrapping="WrapWholeWords" />
-                        <Button
-                            x:Uid="UndoButton"
-                            Grid.Column="1"
-                            Click="UndoButton_Click" />
-                    </Grid>
-                </DataTemplate>
-            </controls:InAppNotification.ContentTemplate>
-        </controls:InAppNotification>
+            ContentTemplate="{StaticResource UndoInAppNotificationDataTemplate}"
+            Style="{StaticResource InAppNotificationStyle}" />
+        <controls:InAppNotification
+            x:Name="Row2ShowResultInAppNotification"
+            Grid.Row="2"
+            Style="{StaticResource InAppNotificationStyle}" />
+        <controls:InAppNotification
+            x:Name="Row2UndoInAppNotification"
+            Grid.Row="2"
+            ContentTemplate="{StaticResource UndoInAppNotificationDataTemplate}"
+            Style="{StaticResource InAppNotificationStyle}" />
         <MediaElement x:Name="mediaElement" Grid.Row="1"/>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WindowWidthChange">
@@ -310,6 +322,8 @@
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="{StaticResource MinimalNavigationViewWindowWidth}" />
                     </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                    </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
             <VisualStateGroup x:Name="NavigationViewPaneStateChange">

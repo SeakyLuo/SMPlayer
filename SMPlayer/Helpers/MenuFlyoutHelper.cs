@@ -383,7 +383,7 @@ namespace SMPlayer
             };
             item.Click += (s, args) =>
             {
-                UpdateHelper.CheckNewMusic(tree, afterTreeUpdated);
+                UpdateHelper.RefreshFolder(tree, afterTreeUpdated);
             };
             return item;
         }

@@ -35,7 +35,7 @@ namespace SMPlayer.Models
             Criterion = tree.Criterion;
         }
 
-        public void AddTree(FolderTree tree)
+        public void AddBranch(FolderTree tree)
         {
             Trees.Add(tree);
         }
@@ -169,7 +169,7 @@ namespace SMPlayer.Models
             FolderTree tree = FindTree(branch.Id);
             RemoveBranch(branch.Path);
             tree.Rename(tree.Path, System.IO.Path.Combine(newPath, Name));
-            FindTree(newPath)?.AddTree(tree);
+            FindTree(newPath)?.AddBranch(tree);
         }
 
         public bool RemoveFile(string path)

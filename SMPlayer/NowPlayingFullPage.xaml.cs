@@ -113,7 +113,7 @@ namespace SMPlayer
             return BottomMultiSelectCommandBar;
         }
 
-        public void HideMultiSelectCommandBar()
+        public void CancelMultiSelectCommandBar()
         {
             BottomMultiSelectCommandBar.Hide();
         }

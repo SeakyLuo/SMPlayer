@@ -317,7 +317,7 @@ namespace SMPlayer
         void ShowUndoableNotification(string message, Action undo, int duration = 5000);
         void ShowLocalizedNotification(string message, int duration = 2000);
         void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option = null);
-        void HideMultiSelectCommandBar();
+        void CancelMultiSelectCommandBar();
         void SetMultiSelectListener(IMultiSelectListener listener = null);
         MediaElement GetMediaElement();
         MultiSelectCommandBar GetMultiSelectCommandBar();

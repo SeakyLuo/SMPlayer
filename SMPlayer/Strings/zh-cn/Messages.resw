@@ -366,6 +366,9 @@
   <data name="PlayRandomPlaylist" xml:space="preserve">
     <value>正在播放播放列表“{0}”的歌曲</value>
   </data>
+  <data name="PleaseExitMultiSelectMode" xml:space="preserve">
+    <value>请先退出多选模式！</value>
+  </data>
   <data name="PostParenthesis" xml:space="preserve">
     <value>{0}（{1}）</value>
   </data>

@@ -1,4 +1,5 @@
-﻿using SMPlayer.Controls;
+﻿using Microsoft.Toolkit.Uwp.UI.Controls;
+using SMPlayer.Controls;
 using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
@@ -41,7 +42,7 @@ namespace SMPlayer
             set => AppTitleBarForeground = AppTitle.Foreground = MainNavigationViewHeader.Foreground = HeaderSearchButton.Foreground = FakeTogglePaneButton.Foreground = BackButton.Foreground = value;
         }
         private Brush AppTitleBarForeground;
-        public LoadingControl Loader { get => MainLoadingControl; }
+        public LoadingControl Loader => MainLoadingControl;
         public bool IsTitleBarColorful
         {
             get
@@ -51,14 +52,17 @@ namespace SMPlayer
             }
         }
         private static bool switchPage = true;
-        public Type CurrentPage { get => NaviFrame.CurrentSourcePageType; }
-        public Frame NavigationFrame { get => NaviFrame; }
+        public Type CurrentPage => NaviFrame.CurrentSourcePageType;
+        public Frame NavigationFrame => NaviFrame;
+        private InAppNotification Notification => BottomMultiSelectCommandBar.IsVisible ? Row2ShowResultInAppNotification : ShowResultInAppNotification;
+        private InAppNotification UndoableNotification => BottomMultiSelectCommandBar.IsVisible ? ShowResultInAppNotification : UndoInAppNotification;
+
         public static List<IWindowResizeListener> WindowResizeListeners = new List<IWindowResizeListener>();
         private static List<Func<Task>> MainPageLoadedAsyncListeners = new List<Func<Task>>();
         private static List<Action> MainPageLoadedListeners = new List<Action>();
         public static void AddMainPageLoadedListener(Func<Task> action) { MainPageLoadedAsyncListeners.Add(action); }
         public static void AddMainPageLoadedListener(Action action) { MainPageLoadedListeners.Add(action); }
-
+ 
         public MainPage()
         {
             this.InitializeComponent();
@@ -433,17 +437,17 @@ namespace SMPlayer
 
         public void ShowNotification(string message, int duration = 2000)
         {
-            ShowResultInAppNotification.Content = message;
-            ShowResultInAppNotification.Show(duration);
+            Notification.Content = message;
+            Notification.Show(duration);
         }
 
         private Action undo;
 
         public void ShowUndoableNotification(string message, Action undo, int duration = 5000)
         {
-            UndoInAppNotification.Content = message;
+            UndoableNotification.Content = message;
             this.undo = undo;
-            UndoInAppNotification.Show(duration);
+            UndoableNotification.Show(duration);
         }
         public void ShowLocalizedNotification(string message, int duration = 2000)
         {
@@ -452,8 +456,8 @@ namespace SMPlayer
 
         private void UndoButton_Click(object sender, RoutedEventArgs e)
         {
-            undo.Invoke();
-            UndoInAppNotification.Dismiss();
+            undo?.Invoke();
+            UndoableNotification.Dismiss();
         }
 
         public void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option = null)
@@ -466,7 +470,7 @@ namespace SMPlayer
             return BottomMultiSelectCommandBar;
         }
 
-        public void HideMultiSelectCommandBar()
+        public void CancelMultiSelectCommandBar()
         {
             BottomMultiSelectCommandBar.Hide();
         }

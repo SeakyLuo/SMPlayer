@@ -123,6 +123,7 @@ namespace SMPlayer
             LocalProgressRing.Visibility = Visibility.Visible;
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
+                ClearMultiSelectStatus();
                 SortFolder(tree, tree.Criterion);
                 switch (Settings.settings.LocalViewMode)
                 {
@@ -222,10 +223,7 @@ namespace SMPlayer
 
         private void LocalGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (LocalGridView.SelectionMode == ListViewSelectionMode.Multiple)
-            {
-                return;
-            }
+            if (PleaseExitMultiSelectMode()) return;
             if (e.ClickedItem is GridViewFolder folder)
             {
                 SetPage(Settings.FindFolder(folder.Id));
@@ -348,8 +346,7 @@ namespace SMPlayer
 
         private void LocalTreeView_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
-            if (LocalTreeView.SelectionMode == TreeViewSelectionMode.Multiple)
-                return;
+            if (PleaseExitMultiSelectMode()) return;
             object dataContext = (e.OriginalSource as FrameworkElement).DataContext;
             if (dataContext == null)
             {
@@ -388,7 +385,7 @@ namespace SMPlayer
 
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
-            UpdateHelper.CheckNewMusic(CurrentFolder, AfterFolderUpdated);
+            UpdateHelper.RefreshFolder(CurrentFolder, AfterFolderUpdated);
         }
 
         private void AfterFolderUpdated(FolderTree folder)
@@ -414,11 +411,13 @@ namespace SMPlayer
 
         private void ListViewFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
+            if (PleaseExitMultiSelectMode()) return;
             SwitchViewMode(LocalPageViewMode.List);
         }
 
         private void GridViewFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
+            if (PleaseExitMultiSelectMode()) return;
             SwitchViewMode(LocalPageViewMode.Grid);
         }
 
@@ -460,6 +459,7 @@ namespace SMPlayer
 
         private void SortAppButton_Click(object sender, RoutedEventArgs e)
         {
+            if (PleaseExitMultiSelectMode()) return;
             SortBy[] criteria = new SortBy[] { SortBy.Reverse, SortBy.Title, SortBy.Artist, SortBy.Album };
             MenuFlyoutHelper.ShowSortByMenu(sender, CurrentFolder.Criterion, criteria,
                 async criterion =>
@@ -481,6 +481,28 @@ namespace SMPlayer
                     });
                     LocalProgressRing.Visibility = Visibility.Collapsed;
                 });
+        }
+
+        private bool PleaseExitMultiSelectMode()
+        {
+            switch (Settings.settings.LocalViewMode)
+            {
+                case LocalPageViewMode.List:
+                    if (LocalTreeView.SelectionMode == TreeViewSelectionMode.Multiple)
+                    {
+                        Helper.ShowNotification("PleaseExitMultiSelectMode");
+                        return true;
+                    }
+                    return false;
+                case LocalPageViewMode.Grid:
+                    if (LocalGridView.SelectionMode == ListViewSelectionMode.Multiple)
+                    {
+                        Helper.ShowNotification("PleaseExitMultiSelectMode");
+                        return true;
+                    }
+                    return false;
+            }
+            return false;
         }
 
         void IMenuFlyoutItemClickListener.Execute(MenuFlyoutEventArgs args)
@@ -512,18 +534,14 @@ namespace SMPlayer
                 case LocalPageViewMode.List:
                     if (LocalTreeView.SelectionMode == TreeViewSelectionMode.Multiple)
                     {
-                        LocalTreeView.ClearSelections();
-                        LocalTreeView.SelectionMode = TreeViewSelectionMode.None;
-                        MainPage.Instance.HideMultiSelectCommandBar();
+                        MainPage.Instance.CancelMultiSelectCommandBar();
                         return true;
                     }
                     return false;
                 case LocalPageViewMode.Grid:
                     if (LocalGridView.SelectionMode == ListViewSelectionMode.Multiple)
                     {
-                        LocalGridView.ClearSelections();
-                        LocalGridView.SelectionMode = ListViewSelectionMode.None;
-                        MainPage.Instance.HideMultiSelectCommandBar();
+                        MainPage.Instance.CancelMultiSelectCommandBar();
                         return true;
                     }
                     return false;
@@ -536,10 +554,15 @@ namespace SMPlayer
             switch (args.Event)
             {
                 case MultiSelectEvent.Cancel:
-                    LocalGridView.ClearSelections();
-                    LocalGridView.SelectionMode = ListViewSelectionMode.None;
-                    LocalTreeView.ClearSelections();
-                    LocalTreeView.SelectionMode = TreeViewSelectionMode.None;
+                    switch (Settings.settings.LocalViewMode)
+                    {
+                        case LocalPageViewMode.List:
+                            LocalTreeView.SelectionMode = TreeViewSelectionMode.None;
+                            break;
+                        case LocalPageViewMode.Grid:
+                            LocalGridView.SelectionMode = ListViewSelectionMode.None;
+                            break;
+                    }
                     break;
                 case MultiSelectEvent.AddTo:
                     args.FlyoutHelper.Data = SelectedItems;
@@ -649,17 +672,21 @@ namespace SMPlayer
             {
                 case StorageItemEventType.Add:
                     if (args.Folder.Equals(currentFolder))
-                        SetNavText(currentFolder);
+                    {
+                        currentFolder.AddBranch(folder);
+                    }
                     break;
                 case StorageItemEventType.Remove:
                     if (folder.ParentId == currentFolder.Id)
-                        SetNavText(currentFolder);
+                    {
+                        currentFolder.RemoveBranch(folder.Path);
+                    }
                     break;
                 case StorageItemEventType.Move:
-                    SetNavText(currentFolder);
                     currentFolder.MoveBranch(folder, args.Path);
                     break;
             }
+            SetNavText(currentFolder);
         }
 
 

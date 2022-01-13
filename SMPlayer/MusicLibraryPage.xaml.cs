@@ -46,7 +46,7 @@ namespace SMPlayer
         public void CheckLibrary()
         {
             if (Helper.CurrentFolder == null) return;
-            UpdateHelper.CheckNewMusic(Settings.settings.Tree, (folder) =>
+            UpdateHelper.RefreshFolder(Settings.settings.Tree, (folder) =>
             {
                 IsLibraryUnchangedAfterChecking = true;
                 SortAndSetAllSongs(Settings.AllSongs);

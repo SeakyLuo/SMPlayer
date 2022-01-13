@@ -366,6 +366,9 @@
   <data name="PlayRandomPlaylist" xml:space="preserve">
     <value>Now playing music from playlist "{0}".</value>
   </data>
+  <data name="PleaseExitMultiSelectMode" xml:space="preserve">
+    <value>Please exit multi-select mode first!</value>
+  </data>
   <data name="PostParenthesis" xml:space="preserve">
     <value>{0} ({1})</value>
   </data>
