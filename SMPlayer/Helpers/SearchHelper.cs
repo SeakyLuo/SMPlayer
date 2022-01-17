@@ -42,10 +42,25 @@ namespace SMPlayer.Helpers
             var list = source.Where(i => IsTargetPlaylist(i, keyword)).Select(i => i.ToSearchAlbumView());
             return SortPlaylists(list, keyword, criterion);
         }
-        public static IEnumerable<GridViewFolder> SearchFolders(FolderTree source, string keyword, SortBy criterion)
+        public static IEnumerable<GridViewFolder> SearchFolders(IEnumerable<FolderTree> source, string keyword, SortBy criterion)
         {
-            var list = source.GetAllTrees().Where(i => IsTargetFolder(i, keyword)).Select(tree => new GridViewFolder(tree));
+            var list = source.Where(i => IsTargetFolder(i, keyword)).Select(tree => new GridViewFolder(tree));
             return SortFolders(list, keyword, criterion);
+        }
+        public static IEnumerable<GridViewFolder> SearchFolders(IEnumerable<Music> songs, IEnumerable<FolderTree> source, string keyword, SortBy criterion)
+        {
+            var list = source.Where(i => IsTargetFolder(i, keyword))
+                             .AsParallel().Select(tree => new GridViewFolder(tree)).ToList();
+            var pathSet = list.Select(i => i.Path).ToHashSet();
+            list.AddRange(songs.Where(i => IsTargetMusic(i, keyword)).Select(i => FileHelper.GetParentPath(i.Path))
+                               .Distinct().Where(i => !pathSet.Contains(i))
+                               .AsParallel().Select(i => Settings.FindFolderInfo(i))
+                               .Where(i => i != null).Select(tree => new GridViewFolder(tree)).ToList());
+            return SortFolders(list.AsParallel().Select(i =>
+            {
+                i.Source = Settings.FindFullFolder(i.Source.Id);
+                return i;
+            }), keyword, criterion);
         }
         public static bool IsTargetArtist(Music music, string keyword)
         {
@@ -173,7 +188,7 @@ namespace SMPlayer.Helpers
         }
         public static bool IsTargetFolder(FolderTree tree, string keyword)
         {
-            return tree.Name.Contains(keyword, Comparison) || tree.Songs.Any(music => IsTargetMusic(music, keyword));
+            return tree.Name.Contains(keyword, Comparison);
         }
         public static IEnumerable<GridViewFolder> SortFolders(IEnumerable<GridViewFolder> src, string keyword, SortBy criterion)
         {
@@ -215,11 +230,12 @@ namespace SMPlayer.Helpers
 
         public static async Task<SearchResult> Search(string keyword)
         {
-            Music music = (await Task.Run(() => SearchSongs(Settings.AllSongs, keyword, SortBy.Default)))?.FirstOrDefault();
-            Playlist artist = (await Task.Run(() => SearchArtists(Settings.AllSongs, keyword, SortBy.Default)))?.FirstOrDefault();
-            AlbumView album = (await Task.Run(() => SearchAlbums(Settings.AllSongs, keyword, SortBy.Default)))?.FirstOrDefault();
+            IEnumerable<Music> allSongs = Settings.AllSongs;
+            Music music = (await Task.Run(() => SearchSongs(allSongs, keyword, SortBy.Default)))?.FirstOrDefault();
+            Playlist artist = (await Task.Run(() => SearchArtists(allSongs, keyword, SortBy.Default)))?.FirstOrDefault();
+            AlbumView album = (await Task.Run(() => SearchAlbums(allSongs, keyword, SortBy.Default)))?.FirstOrDefault();
             AlbumView playlist = (await Task.Run(() => SearchPlaylists(Settings.AllPlaylists, keyword, SortBy.Default)))?.FirstOrDefault();
-            GridViewFolder folder = (await Task.Run(() => SearchFolders(Settings.FullRoot, keyword, SortBy.Default)))?.FirstOrDefault();
+            GridViewFolder folder = (await Task.Run(() => SearchFolders(Settings.AllFolders, keyword, SortBy.Default)))?.FirstOrDefault();
             return MergeSearchResult(keyword, music, artist, album, playlist, folder);
         }
 
@@ -252,8 +268,10 @@ namespace SMPlayer.Helpers
 
         public static async Task<SearchResult> SearchFolderMusic(string folderName, string keyword)
         {
-            GridViewFolder folder = (await Task.Run(() => SearchFolders(Settings.FullRoot, folderName, SortBy.Default)))?.FirstOrDefault();
-            return SearchMusicInCollection(folder?.Songs, keyword);
+            GridViewFolder folder = (await Task.Run(() => SearchFolders(Settings.AllFolders, folderName, SortBy.Default)))?.FirstOrDefault();
+            if (folder == null) return null;
+            folder.Source = Settings.FindFolder(folder.Id);
+            return SearchMusicInCollection(folder.Songs, keyword);
         }
 
         private static SearchResult SearchMusicInCollection(IEnumerable<Music> list, string keyword)

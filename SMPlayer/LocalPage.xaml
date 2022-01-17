@@ -278,6 +278,15 @@
                 </AppBarButton.Flyout>
             </AppBarButton>
             <AppBarButton
+                x:Name="MultiSelectAppButton"
+                x:Uid="MultiSelectAppButton"
+                Label="MultiSelect"
+                Click="MultiSelectAppButton_Click">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE762;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton
                 x:Name="SortAppButton"
                 x:Uid="SortAppButton"
                 Label="Sort"

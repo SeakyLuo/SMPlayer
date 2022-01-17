@@ -1113,13 +1113,15 @@ namespace SMPlayer
             });
         }
 
-        void IMusicEventListener.Liked(Music music, bool isFavorite) { }
-        void IMusicEventListener.Added(Music music) { }
-        void IMusicEventListener.Removed(Music music) { }
-        void IMusicEventListener.Modified(Music before, Music after)
+        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
-            if (CurrentMusic == before)
-                UpdateMusic(after);
+            switch (args.EventType)
+            {
+                case MusicEventType.Modify:
+                    if (CurrentMusic == music)
+                        UpdateMusic(args.ModifiedMusic);
+                    break;
+            }
         }
 
         void ICurrentPlaylistChangedListener.AddMusic(Music music, int index) { }

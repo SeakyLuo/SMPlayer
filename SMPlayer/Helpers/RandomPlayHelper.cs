@@ -30,14 +30,24 @@ namespace SMPlayer.Helpers
         }
         public static Playlist PlayPlaylist(int randomLimit = 100)
         {
-            var playlist = Settings.AllPlaylists.RandItem();
+            List<Playlist> allPlaylists = Settings.AllPlaylists;
+            Playlist playlist;
+            do
+            {
+                playlist = allPlaylists.RandItem();
+            } while (playlist.IsEmpty);
             MusicPlayer.SetPlaylistAndPlay(playlist.Songs.RandItems(randomLimit));
             return playlist;
         }
 
         public static FolderTree PlayFolder(int randomLimit = 100)
         {
-            var folder = Settings.FullRoot.GetAllTrees().Where(tree => tree.Files.Count > 0).RandItem();
+            List<FolderTree> allFolders = Settings.AllFolders;
+            FolderTree folder;
+            do
+            {
+                folder = Settings.FindFolder(allFolders.RandItem().Id);
+            } while (folder.IsEmpty);
             MusicPlayer.SetMusicAndPlay(folder.Songs.RandItems(randomLimit));
             return folder;
         }

@@ -63,6 +63,7 @@ namespace SMPlayer.Models
             return new RecentTimeLine(list?.OrderByDescending(m => m.DateAdded).Take(MAX_RECENT_TIMELINE_ITEMS));
         }
 
+        // TODO: Yesterday/Recent7Days/Recent30Days的计算有问题
         public static string Categorize(DateTimeOffset dateAdded)
         {
             DateTime now = DateTime.Now;
@@ -73,6 +74,10 @@ namespace SMPlayer.Models
                     if (dateAdded.Day == now.Day)
                     {
                         return "Today";
+                    }
+                    if ((now - dateAdded).Days <= 1)
+                    {
+                        return "Yesterday";
                     }
                     else if ((now - dateAdded).Days <= 7)
                     {

@@ -93,7 +93,7 @@ namespace SMPlayer
             await SearchAlbums(keyword.Songs, modifiedKeyowrd, Settings.settings.SearchAlbumsCriterion);
             await SearchSongs(keyword.Songs, modifiedKeyowrd, Settings.settings.SearchSongsCriterion);
             await SearchPlaylists(keyword.Playlists, modifiedKeyowrd, Settings.settings.SearchPlaylistsCriterion);
-            await SearchFolders(keyword.Tree, modifiedKeyowrd, Settings.settings.SearchFoldersCriterion);
+            await SearchFolders(keyword.Songs, keyword.Folders, modifiedKeyowrd, Settings.settings.SearchFoldersCriterion);
             NoResultTextBlock.Visibility = Artists.Count == 0 && Albums.Count == 0 && Songs.Count == 0 && Playlists.Count == 0 && Folders.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
             LoadingProgress.Visibility = Visibility.Collapsed;
             IsSearching = false;
@@ -135,9 +135,9 @@ namespace SMPlayer
             SortPlaylistsButton.Visibility = Playlists.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
 
-        public async Task SearchFolders(FolderTree source, string keyword, SortBy criterion)
+        public async Task SearchFolders(IEnumerable<Music> songs, IEnumerable<FolderTree> source, string keyword, SortBy criterion)
         {
-            AllFolders.SetTo(await Task.Run(() => SearchHelper.SearchFolders(source, keyword, criterion)));
+            AllFolders.SetTo(await Task.Run(() => SearchHelper.SearchFolders(songs, source, keyword, criterion)));
             Folders.SetTo(AllFolders.Take(FolderLimit));
             FoldersTextBlock.Text = Settings.settings.ShowCount ? Helper.LocalizeText("FoldersWithCount", AllFolders.Count) : Helper.LocalizeText("Folders");
             FoldersViewAllButton.Visibility = AllFolders.Count > FolderLimit ? Visibility.Visible : Visibility.Collapsed;
@@ -147,9 +147,9 @@ namespace SMPlayer
         public static string GetSearchHeader(SearchKeyword keyword, bool isMinimal)
         {
             string header = Helper.LocalizeMessage("Quotations", keyword.Text);
-            return isMinimal ? header :
-                               keyword.Tree == Settings.settings.Tree ? Helper.LocalizeMessage("SearchResult", keyword.Text) :
-                                                                        Helper.LocalizeMessage("SearchDirectoryResult", keyword.Text, keyword.Tree.Name);
+            if (isMinimal) return header;
+            return keyword.Folder == null || keyword.Folder == Settings.settings.Tree ? 
+                Helper.LocalizeMessage("SearchResult", keyword.Text) : Helper.LocalizeMessage("SearchDirectoryResult", keyword.Text, keyword.Folder.Name);
         }
         private void SearchArtistView_ItemClick(object sender, ItemClickEventArgs e)
         {
@@ -307,9 +307,10 @@ namespace SMPlayer
     public class SearchKeyword
     {
         public string Text { get; set; }
+        public FolderTree Folder { get; set; }
         public IEnumerable<Music> Songs { get; set; } = Settings.AllSongs;
         public IEnumerable<Playlist> Playlists { get; set; } = Settings.AllPlaylists;
-        public FolderTree Tree { get; set; } = Settings.FullRoot;
+        public IEnumerable<FolderTree> Folders { get; set; } = Settings.AllFolders;
     }
     public class SearchArgs
     {

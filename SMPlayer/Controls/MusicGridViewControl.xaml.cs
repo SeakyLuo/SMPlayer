@@ -250,27 +250,20 @@ namespace SMPlayer
             MultiSelectListener?.Execute(commandBar, args);
         }
 
-        void IMusicEventListener.Liked(Music music, bool isFavorite)
+        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
-
-        }
-
-        void IMusicEventListener.Added(Music music)
-        {
-        }
-
-        void IMusicEventListener.Removed(Music music)
-        {
-        }
-
-        void IMusicEventListener.Modified(Music before, Music after)
-        {
-            int index = MusicCollection.IndexOf(before);
-            if (index > -1)
+            switch (args.EventType)
             {
-                GridMusicCollection[index].Source = MusicCollection[index] = after;
+                case MusicEventType.Modify:
+                    int index = MusicCollection.IndexOf(music);
+                    if (index > -1)
+                    {
+                        GridMusicCollection[index].Source = MusicCollection[index] = args.ModifiedMusic;
+                    }
+                    break;
             }
         }
+
     }
 
     public class MusicPath : IMusicable

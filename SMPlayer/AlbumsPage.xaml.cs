@@ -269,39 +269,34 @@ namespace SMPlayer
             }
         }
 
-        void IMusicEventListener.Liked(Music music, bool isFavorite)
+        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
-        }
-
-        void IMusicEventListener.Added(Music music)
-        {
-            if (Albums.FirstOrDefault(a => a.Name == music.Album) is AlbumView album)
+            AlbumView album = Albums.FirstOrDefault(a => a.Name == music.Album);
+            switch (args.EventType)
             {
-                album.AddMusic(music);
-            }
-            else
-            {
-                album = new AlbumView(music);
-                Albums.Add(album);
-                Albums.SetTo(Sort(Settings.settings.AlbumsCriterion, Albums));
+                case MusicEventType.Add:
+                    if (album != null)
+                    {
+                        album.AddMusic(music);
+                    }
+                    else
+                    {
+                        album = new AlbumView(music);
+                        Albums.Add(album);
+                        Albums.SetTo(Sort(Settings.settings.AlbumsCriterion, Albums));
+                    }
+                    break;
+                case MusicEventType.Remove:
+                    if (album != null)
+                    {
+                        album.RemoveMusic(music);
+                        if (album.Songs.IsEmpty())
+                        {
+                            Albums.Remove(album);
+                        }
+                    }
+                    break;
             }
         }
-
-        void IMusicEventListener.Removed(Music music)
-        {
-            if (Albums.FirstOrDefault(a => a.Name == music.Album) is AlbumView album)
-            {
-                album.RemoveMusic(music);
-                if (album.Songs.IsEmpty())
-                {
-                    Albums.Remove(album);
-                }
-            }
-        }
-
-        void IMusicEventListener.Modified(Music before, Music after)
-        {
-        }
-
     }
 }

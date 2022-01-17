@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Models;
+using SMPlayer.Models.DAO;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -11,16 +12,13 @@ namespace SMPlayer.Helpers
 {
     public static class UpdateHelper
     {
-        private static readonly List<IAfterPathSetListener> listeners = new List<IAfterPathSetListener>();
-        private static TreeUpdateListener treeUpdateListener = new TreeUpdateListener();
         private static volatile ExecutionStatus LoadingStatus = ExecutionStatus.Ready;
 
-        public static void AddAfterPathSetListener(IAfterPathSetListener listener)
+        public static void NotifyLibraryChange(FolderTree folder)
         {
-            listeners.Add(listener);
+            foreach (var listener in Settings.StorageItemEventListeners)
+                listener.ExecuteFolderEvent(folder, new StorageItemEventArgs(StorageItemEventType.Update));
         }
-
-        public static void NotifyLibraryChange(string path) { foreach (var listener in listeners) listener.PathSet(path); }
 
         public static async Task<bool> UpdateMusicLibrary(string message = null)
         {
@@ -30,12 +28,12 @@ namespace SMPlayer.Helpers
         public static async Task<bool> UpdateMusicLibrary(StorageFolder folder, string loadingMessage = null)
         {
             MainPage.Instance.Loader.ShowDeterminant(loadingMessage ?? "LoadMusicLibrary", true);
-            treeUpdateListener.Message = loadingMessage;
-            TreeOperationIndicator indicator = new TreeOperationIndicator()
+            FolderProgressUpdater updater = new FolderProgressUpdater
             {
-                Max = treeUpdateListener == null ? 0 : await folder.CountFilesAsync()
+                Message = loadingMessage,
+                Max = await folder.CountFilesAsync(),
             };
-            if (!await SQLHelper.RunAsync(async c => await LoadFolder(c, folder, treeUpdateListener, indicator)))
+            if (!await SQLHelper.RunAsync(async c => await LoadFolder(c, folder, updater)))
             {
                 return false;
             }
@@ -46,11 +44,11 @@ namespace SMPlayer.Helpers
             if (loadingMessage != null)
                 MainPage.Instance.Loader.SetMessage(loadingMessage);
             MainPage.Instance.Loader.Progress = 0;
-            MainPage.Instance.Loader.Max = listeners.Count;
-            for (int i = 0; i < listeners.Count; i++)
+            MainPage.Instance.Loader.Max = Settings.StorageItemEventListeners.Count;
+            for (int i = 0; i < Settings.StorageItemEventListeners.Count; i++)
             {
-                var listener = listeners[i];
-                listener.PathSet(folder.Path);
+                var listener = Settings.StorageItemEventListeners[i];
+                listener.ExecuteFolderEvent(Settings.settings.Tree, new StorageItemEventArgs(StorageItemEventType.Update));
                 MainPage.Instance.Loader.Progress = i + 1;
             }
             MusicPlayer.RemoveBadMusic();
@@ -59,37 +57,55 @@ namespace SMPlayer.Helpers
             return true;
         }
 
-        private static async Task<bool> LoadFolder(SQLiteConnection c, StorageFolder folder, ITreeUpdateListener listener, TreeOperationIndicator indicator, TreeUpdateData updateData = null)
+        private static async Task<bool> LoadFolder(SQLiteConnection c, StorageFolder folder, FolderProgressUpdater updater)
         {
             LoadingStatus = ExecutionStatus.Running;
             FolderTree tree = new FolderTree();
-            await LoadFolder(c, folder, tree, listener, indicator);
-            listener?.OnUpdate(Helper.LocalizeMessage("UpdateMusicLibrary"), indicator.Update(), indicator.Max);
-            ResetFolderData(c, tree, updateData);
+            bool unbroken = await LoadFolder(c, folder, tree, updater);
+            if (await LoadFolder(c, folder, tree, updater))
+            {
+                updater.UpdateProgressBar(Helper.LocalizeMessage("UpdateMusicLibrary"));
+                ResetFolderData(c, tree, updater);
+            }
             LoadingStatus = ExecutionStatus.Done;
-            return true;
+            return unbroken;
         }
 
-        private static async Task<bool> LoadFolder(SQLiteConnection c, StorageFolder folder, FolderTree tree, ITreeUpdateListener listener, TreeOperationIndicator indicator)
+        private static async Task<bool> LoadFolder(SQLiteConnection c, StorageFolder folder, FolderTree tree, FolderProgressUpdater updater)
         {
             foreach (var subFolder in await folder.GetFoldersAsync())
             {
                 if (LoadingStatus == ExecutionStatus.Break) return false;
-                var branch = new FolderTree();
-                await LoadFolder(c, subFolder, branch, listener, indicator);
-                if (branch.IsNotEmpty)
+                var branch = tree.FindFolder(subFolder.Path) ?? new FolderTree();
+                await LoadFolder(c, subFolder, branch, updater);
+                if (branch.Id == 0 && branch.IsNotEmpty)
                 {
                     tree.Trees.Add(branch);
                 }
             }
+            HashSet<string> existing = tree.Files.Select(i => i.Path).ToHashSet();
+            HashSet<string> newFiles = new HashSet<string>();
             foreach (var file in await folder.GetFilesAsync())
             {
                 if (LoadingStatus == ExecutionStatus.Break) return false;
                 if (file.IsMusicFile())
                 {
-                    Music music = await Music.LoadFromFileAsync(file);
-                    listener?.OnUpdate(music.Name, indicator.Update(), indicator.Max);
-                    tree.Files.Add(music.ToFolderFile());
+                    newFiles.Add(file.Path);
+                    if (!existing.Contains(file.Path))
+                    {
+                        Music music = await Music.LoadFromFileAsync(file);
+                        tree.Files.Add(music.ToFolderFile());
+                        updater.UpdateProgressBar(file.Name);
+                        Log.Info("file is added, path {0}", file.Path);
+                    }
+                }
+            }
+            foreach (var file in tree.Files)
+            {
+                if (!newFiles.Contains(file.Path))
+                {
+                    file.State = ActiveState.Inactive;
+                    Log.Info("file is deleted, path {0}", file.Path);
                 }
             }
             if (tree.IsEmpty)
@@ -103,7 +119,7 @@ namespace SMPlayer.Helpers
         /**
          * 重置文件夹数据库
          */
-        private static void ResetFolderData(SQLiteConnection c, FolderTree folder, TreeUpdateData updateData)
+        private static void ResetFolderData(SQLiteConnection c, FolderTree folder, FolderProgressUpdater updater)
         {
             FolderTree existing = c.SelectFolderInfoByPath(folder.Path);
             if (existing == null)
@@ -117,121 +133,90 @@ namespace SMPlayer.Helpers
             foreach (var item in folder.Trees)
             {
                 item.ParentId = folder.Id;
-                ResetFolderData(c, item, updateData);
-            }
-            HashSet<string> currentFilePathSet = folder.Files.Select(f => f.Path).ToHashSet();
-            Dictionary<string, FolderFile> existingFileDict = c.SelectSubFiles(folder).ToDictionary(i => i.Path);
-            foreach (var entry in existingFileDict)
-            {
-                if (!currentFilePathSet.Contains(entry.Key))
-                {
-                    Settings.settings.RemoveFile(entry.Value);
-                    if (updateData != null) updateData.Removed++;
-                }
+                ResetFolderData(c, item, updater);
             }
             foreach (var item in folder.Files)
             {
-                item.ParentId = folder.Id;
-                existingFileDict.TryGetValue(item.Path, out FolderFile existingFile);
-                if (existingFile != null)
+                if (item.Id == 0)
                 {
-                    if (item.FileType == FileType.Music)
-                    {
-                        Music music = (Music)item.Source;
-                        music.Id = existingFile.FileId;
-                        Settings.settings.AddMusic(c, music);
-                    }
-                }
-                else
-                {
+                    item.ParentId = folder.Id;
                     if (item.FileType == FileType.Music)
                     {
                         Music music = (Music)item.Source;
                         Settings.settings.AddMusic(c, music);
                         item.FileId = music.Id;
                     }
-                    if (updateData != null) updateData.Added++;
+                    updater.Added++;
                     c.InsertFile(item);
+                }
+                else
+                {
+                    if (item.State.isInactive())
+                    {
+                        updater.Removed++;
+                        Settings.settings.RemoveFile(item);
+                    }
                 }
             }
         }
 
-        public static async void RefreshFolder(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
+        public static async void RefreshFolder(FolderTree tree)
         {
             MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
-            var data = new TreeUpdateData();
             StorageFolder folder;
             try
             {
                 folder = await tree.GetStorageFolderAsync();
                 if (folder == null)
                 {
-                    data.Message = Helper.LocalizeMessage("FolderNotFound", tree.Path);
-                    ExitChecking(data);
+                    ExitChecking(Helper.LocalizeMessage("FolderNotFound", tree.Path));
                     return;
                 }
             }
             catch (UnauthorizedAccessException)
             {
-                data.Message = Helper.LocalizeMessage("UnauthorizedAccessException", tree.Path);
-                ExitChecking(data);
+                ExitChecking(Helper.LocalizeMessage("UnauthorizedAccessException", tree.Path));
                 return;
             }
-            if (!await SQLHelper.RunAsync(async c => await LoadFolder(c, folder, null, null, data)))
+            var updater = new FolderProgressUpdater();
+            LoadingStatus = ExecutionStatus.Running;
+            FolderTree fullFolder = Settings.FindFullFolder(tree.Id);
+            bool unbroken = await SQLHelper.Run(async c => await LoadFolder(c, folder, fullFolder, updater));
+            LoadingStatus = ExecutionStatus.Done;
+            if (!unbroken)
             {
-                ExitChecking(data);
+                ExitChecking("");
                 return;
             }
-            if (data.Added != 0 || data.Removed != 0)
+            SQLHelper.Run(c => ResetFolderData(c, fullFolder, updater));
+            if (updater.Added != 0 || updater.Removed != 0)
             {
-                NotifyLibraryChange(tree.Path);
-                afterTreeUpdated?.Invoke(tree);
-                App.Save();
+                NotifyLibraryChange(fullFolder);
             }
             MainPage.Instance?.Loader.Hide();
             string message;
-            if (data.Added == 0 && data.Removed == 0)
+            if (updater.Added == 0 && updater.Removed == 0)
                 message = Helper.LocalizeMessage("CheckNewMusicResultNoChange");
-            else if (data.Added == 0)
-                message = Helper.LocalizeMessage("CheckNewMusicResultRemoved", data.Removed);
-            else if (data.Removed == 0)
-                message = Helper.LocalizeMessage("CheckNewMusicResultAdded", data.Added);
+            else if (updater.Added == 0)
+                message = Helper.LocalizeMessage("CheckNewMusicResultRemoved", updater.Removed);
+            else if (updater.Removed == 0)
+                message = Helper.LocalizeMessage("CheckNewMusicResultAdded", updater.Added);
             else
-                message = Helper.LocalizeMessage("CheckNewMusicResultChange", data.Added, data.Removed);
+                message = Helper.LocalizeMessage("CheckNewMusicResultChange", updater.Added, updater.Removed);
             Helper.ShowNotificationRaw(message);
         }
 
-        private static TreeUpdateData ExitChecking(TreeUpdateData data)
+        private static void ExitChecking(string message)
         {
-            if (!string.IsNullOrEmpty(data.Message))
-                MainPage.Instance.ShowNotification(data.Message);
+            if (!string.IsNullOrEmpty(message))
+                MainPage.Instance.ShowNotification(message);
             MainPage.Instance?.Loader.Hide();
-            return data;
         }
     }
 
-    public interface IAfterPathSetListener
+    public interface IFolderUpdateListener
     {
-        void PathSet(string path);
-    }
-
-    public interface ITreeUpdateListener
-    {
-        void OnUpdate(string Filename, int Progress, int Max);
-    }
-
-    public class TreeOperationIndicator
-    {
-        public int Progress { get; set; } = 0;
-        public int Max { get; set; } = 0;
-        public int Update() { return ++Progress; }
-    }
-
-    public class TreeUpdateData
-    {
-        public int Added { get; set; } = 0;
-        public int Removed { get; set; } = 0;
-        public string Message { get; set; }
+        void FolderUpdated(FolderTree folder);
     }
 
     public class UpdateLog
@@ -239,19 +224,23 @@ namespace SMPlayer.Helpers
         public string LastReleaseNotesVersion { get; set; }
     }
 
-    class TreeUpdateListener : ITreeUpdateListener
+    class FolderProgressUpdater
     {
         public string Message { get; set; }
+        public int Progress { get; set; } = 0;
+        public int Max { get; set; } = 0;
+        public int Added { get; set; } = 0;
+        public int Removed { get; set; } = 0;
 
-        void ITreeUpdateListener.OnUpdate(string message, int progress, int max)
+        public void UpdateProgressBar(string message)
         {
-            bool isDeterminant = max != 0;
+            bool isDeterminant = Max != 0;
             if (MainPage.Instance.Loader.IsDeterminant != isDeterminant)
                 MainPage.Instance.Loader.IsDeterminant = isDeterminant;
             if (isDeterminant)
             {
-                MainPage.Instance.Loader.Max = max;
-                MainPage.Instance.Loader.Progress = progress;
+                MainPage.Instance.Loader.Max = Max;
+                MainPage.Instance.Loader.Progress = ++Progress;
                 MainPage.Instance.Loader.SetRawMessage(Message ?? message);
             }
         }

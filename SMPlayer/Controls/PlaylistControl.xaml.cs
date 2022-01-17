@@ -448,27 +448,26 @@ namespace SMPlayer
             MultiSelectListener?.Execute(commandBar, args);
         }
 
-        void IMusicEventListener.Liked(Music music, bool isFavorite)
+        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
-            MusicModified(music, music);
-        }
-
-        void IMusicEventListener.Added(Music music)
-        {
-            if (removedMusic == music)
+            switch (args.EventType)
             {
-                CurrentPlaylist.Insert(removedMusicIndex, music);
+                case MusicEventType.Add:
+                    if (removedMusic == music)
+                    {
+                        CurrentPlaylist.Insert(removedMusicIndex, music);
+                    }
+                    break;
+                case MusicEventType.Remove:
+                    RemoveMusicAndNotifyListeners(music);
+                    break;
+                case MusicEventType.Like:
+                    MusicModified(music, new Music(music) { Favorite = args.IsFavorite });
+                    break;
+                case MusicEventType.Modify:
+                    MusicModified(music, args.ModifiedMusic);
+                    break;
             }
-        }
-
-        void IMusicEventListener.Removed(Music music)
-        {
-            RemoveMusicAndNotifyListeners(music);
-        }
-
-        void IMusicEventListener.Modified(Music before, Music after)
-        {
-            MusicModified(before, after);
         }
 
         private void MusicModified(Music before, Music after)

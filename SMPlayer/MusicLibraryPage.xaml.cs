@@ -35,23 +35,31 @@ namespace SMPlayer
             MusicPlayer.AddSwitchMusicListener(this);
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             SetHeader();
             if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
-            SortAndSetAllSongs(Settings.AllSongs);
-            MusicPlayer.SetMusicPlaying(AllSongs, MusicPlayer.CurrentMusic);
-        }
-
-        public void CheckLibrary()
-        {
-            if (Helper.CurrentFolder == null) return;
-            UpdateHelper.RefreshFolder(Settings.settings.Tree, (folder) =>
+            LoadingProgress.Visibility = Visibility.Visible;
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                IsLibraryUnchangedAfterChecking = true;
-                SortAndSetAllSongs(Settings.AllSongs);
+                if (AllSongs.IsEmpty())
+                {
+                    SortAndSetAllSongs(Settings.AllSongs);
+                }
+                MusicPlayer.SetMusicPlaying(AllSongs, MusicPlayer.CurrentMusic);
+                LoadingProgress.Visibility = Visibility.Collapsed;
             });
         }
+
+        //public void CheckLibrary()
+        //{
+        //    if (Helper.CurrentFolder == null) return;
+        //    UpdateHelper.RefreshFolder(Settings.settings.Tree, (folder) =>
+        //    {
+        //        IsLibraryUnchangedAfterChecking = true;
+        //        SortAndSetAllSongs(Settings.AllSongs);
+        //    });
+        //}
 
         private void MusicLibraryDataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
@@ -141,40 +149,28 @@ namespace SMPlayer
             }
         }
 
-        void IMusicEventListener.Liked(Music music, bool isFavorite)
+        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
-            if (AllSongs.FirstOrDefault(m => m == music) is Music target)
+            switch (args.EventType)
             {
-                target.Favorite = isFavorite;
+                case MusicEventType.Add:
+                    AllSongs.Add(music);
+                    SortAndSetAllSongs(AllSongs);
+                    break;
+                case MusicEventType.Remove:
+                    AllSongs.Remove(music);
+                    SetHeader();
+                    break;
+                case MusicEventType.Like:
+                    if (AllSongs.FirstOrDefault(m => m == music) is Music target)
+                    {
+                        target.Favorite = args.IsFavorite;
+                    }
+                    break;
+                case MusicEventType.Modify:
+                    AllSongs.FirstOrDefault(m => m == music)?.CopyFrom(args.ModifiedMusic);
+                    break;
             }
-        }
-
-        void IMusicEventListener.Added(Music music)
-        {
-            //    var keySelector = SortByConverter.GetKeySelector(Settings.settings.MusicLibraryCriterion);
-            //    for (int i = 0; i < AllSongs.Count; i++)
-            //    {
-            //        if (keySelector(music).CompareTo(keySelector(AllSongs[i])) <= 0)
-            //        {
-            //            AllSongs.Insert(i, music);
-            //            goto AfterInsertion;
-            //        }
-            //    }
-            //    AllSongs.Add(music);
-            //    AfterInsertion:
-            //    SetHeader();
-        }
-
-        void IMusicEventListener.Removed(Music music)
-        {
-            AllSongs.Remove(music);
-            SetHeader();
-        }
-
-        void IMusicEventListener.Modified(Music before, Music after)
-        {
-            Log.Info("MusicLibraryPage Modified");
-            AllSongs.FirstOrDefault(m => m == before)?.CopyFrom(after);
         }
     }
 }

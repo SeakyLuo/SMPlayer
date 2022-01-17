@@ -249,7 +249,15 @@ namespace SMPlayer
 
         public static void ClearSelections(this ListViewBase view)
         {
-            view.SelectedItems.Clear();
+            try
+            {
+                view.SelectedItems.Clear();
+            }
+            catch (Exception e)
+            {
+                // ???
+                Log.Debug("灾难性故障, {0}", e);
+            }
         }
 
         public static void ReverseSelections(this ListViewBase view)
@@ -277,7 +285,15 @@ namespace SMPlayer
 
         public static void ClearSelections(this TreeView view)
         {
-            view.SelectedNodes.Clear();
+            try
+            {
+                view.SelectedNodes.Clear();
+            } 
+            catch (Exception e)
+            {
+                // ???
+                Log.Debug("灾难性故障, {0}", e);
+            }
         }
 
         public static void ReverseSelections(this TreeView view)

@@ -175,9 +175,9 @@ namespace SMPlayer
         {
             if (recentPlayedRemoveDialog == null) recentPlayedRemoveDialog = new RemoveDialog();
             GridViewMusic music = null;
-            if (item is GridViewMusic gridMusicView)
+            if (item is GridViewMusic gridViewMusic)
             {
-                music = gridMusicView;
+                music = gridViewMusic;
             }
             else if (item is List<object> list && list.Count() == 1)
             {
@@ -449,16 +449,23 @@ namespace SMPlayer
         {
             BuildMenuFlyoutHelper(helper);
         }
-        void IMusicEventListener.Liked(Music music, bool isFavorite) { }
-        void IMusicEventListener.Added(Music music)
+
+        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
-            AddedModified = true;
+            switch (args.EventType)
+            {
+                case MusicEventType.Add:
+                    AddedModified = true;
+                    break;
+                case MusicEventType.Remove:
+                    RecentAdded.Remove(music);
+                    break;
+                case MusicEventType.Like:
+                    break;
+                case MusicEventType.Modify:
+                    break;
+            }
         }
-        void IMusicEventListener.Removed(Music music)
-        {
-            RecentAdded.Remove(music);
-        }
-        void IMusicEventListener.Modified(Music before, Music after) { }
 
         void IRecentEventListener.Search(string keyword)
         {

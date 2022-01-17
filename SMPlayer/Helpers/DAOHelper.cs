@@ -105,6 +105,7 @@ namespace SMPlayer.Helpers
                 FileType = src.FileType,
                 Path = src.Path,
                 ParentId = src.ParentId,
+                State = src.State,
             };
         }
 
@@ -117,6 +118,7 @@ namespace SMPlayer.Helpers
                 FileType = src.FileType,
                 Path = src.Path,
                 ParentId = src.ParentId,
+                State = src.State,
             };
         }
 

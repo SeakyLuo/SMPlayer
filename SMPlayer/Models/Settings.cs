@@ -16,15 +16,14 @@ namespace SMPlayer.Models
     public class Settings
     {
         public static Settings settings;
-        private static readonly List<IMusicEventListener> MusicEventListeners = new List<IMusicEventListener>();
         public static void AddMusicEventListener(IMusicEventListener listener) { MusicEventListeners.Add(listener); }
-        private static readonly List<IPlaylistEventListener> PlaylistEventListeners = new List<IPlaylistEventListener>();
+        private static readonly List<IMusicEventListener> MusicEventListeners = new List<IMusicEventListener>();
         public static void AddPlaylistEventListener(IPlaylistEventListener listener) { PlaylistEventListeners.Add(listener); }
-        private static readonly List<IStorageItemEventListener> StorageItemEventListeners = new List<IStorageItemEventListener>();
-        public static void AddFolderTreeEventListener(IStorageItemEventListener listener) { StorageItemEventListeners.Add(listener); }
-        private static readonly List<IRecentEventListener> RecentEventListeners = new List<IRecentEventListener>();
+        private static readonly List<IPlaylistEventListener> PlaylistEventListeners = new List<IPlaylistEventListener>();
+        public static void AddStorageItemEventListener(IStorageItemEventListener listener) { StorageItemEventListeners.Add(listener); }
+        public static readonly List<IStorageItemEventListener> StorageItemEventListeners = new List<IStorageItemEventListener>();
         public static void AddRecentEventListener(IRecentEventListener listener) { RecentEventListeners.Add(listener); }
-
+        private static readonly List<IRecentEventListener> RecentEventListeners = new List<IRecentEventListener>();
         public static IEnumerable<Music> AllSongs { get => SQLHelper.Run(c => c.SelectAllMusic()); }
         public static Playlist MyFavoritesPlaylist { get => FindPlaylist(settings.MyFavoritesId); }
         public static IEnumerable<Music> MyFavoriteSongs { get => SQLHelper.Run(c => c.SelectPlaylistItems(settings.MyFavoritesId)); }
@@ -32,7 +31,6 @@ namespace SMPlayer.Models
         {
             get => SQLHelper.Run(c => c.SelectAllPlaylists(i => i.Id != settings.MyFavoritesId).ToList());
         }
-        public static FolderTree FullRoot { get => FindFullFolder(settings.Tree.Id) ?? new FolderTree(); }
         public static FolderTree Root { get => FindFolder(settings.Tree.Id) ?? new FolderTree(); }
         public static List<FolderTree> AllFolders { get => SQLHelper.Run(c => c.Query<FolderDAO>("select * from Folder where State = ?", ActiveState.Active))
                                                                   .Select(i => i.FromDAO()).ToList(); }
@@ -62,6 +60,14 @@ namespace SMPlayer.Models
         public static FolderTree FindFullFolder(long id)
         {
             return SQLHelper.Run(c => c.SelectFullFolder(id));
+        }
+        public static List<FolderTree> FindSubFolders(FolderTree folder)
+        {
+            return SQLHelper.Run(c => c.SelectSubFolders(folder));
+        }
+        public static FolderFile FindFile(long id)
+        {
+            return SQLHelper.Run(c => c.SelectFile(id));
         }
 
         public static List<Music> RecentPlay
@@ -119,8 +125,6 @@ namespace SMPlayer.Models
         public PreferenceSettings Preference { get; set; } = new PreferenceSettings();
         public string LastReleaseNotesVersion { get; set; }
 
-        private List<Music> JustRemoved = new List<Music>();
-
         public Settings()
         {
             MyFavorites = new Playlist(Constants.MyFavorites);
@@ -174,8 +178,9 @@ namespace SMPlayer.Models
             {
                 if (IsFavorite(c, music)) return;
                 AddMusicToPlaylist(c, MyFavoritesId, music);
-                foreach (var listener in MusicEventListeners) listener.Liked(music, true);
             });
+            foreach (var listener in MusicEventListeners)
+                listener?.Execute(music, new MusicEventArgs(MusicEventType.Like) { IsFavorite = true });
         }
 
         public void AddMusicToPlaylist(Playlist playlist, Music music)
@@ -217,7 +222,8 @@ namespace SMPlayer.Models
             {
                 RemoveMusicFromPlaylist(MyFavoritesId, music);
             });
-            foreach (var listener in MusicEventListeners) listener.Liked(music, false);
+            foreach (var listener in MusicEventListeners)
+                listener?.Execute(music, new MusicEventArgs(MusicEventType.Like) { IsFavorite = false });
         }
 
         public void RemoveMusicFromPlaylist(Playlist playlist, Music music)
@@ -235,8 +241,6 @@ namespace SMPlayer.Models
 
         public async void AddMusic(SQLiteConnection c, Music music)
         {
-            if (JustRemoved.Any(m => m.PossiblyEquals(music)))
-                return;
             if (music.Id != 0)
             {
                 MusicModified(c, music, music);
@@ -246,7 +250,7 @@ namespace SMPlayer.Models
             SQLHelper.InsertRecentAdded(c, music);
             if (AutoLyrics)
             {
-                await Task.Run(async() =>
+                await Task.Run(async () =>
                 {
                     string lyrics = await music.GetLyricsAsync();
                     if (string.IsNullOrEmpty(lyrics))
@@ -255,7 +259,8 @@ namespace SMPlayer.Models
                     }
                 });
             }
-            foreach (var listener in MusicEventListeners) listener.Added(music);
+            foreach (var listener in MusicEventListeners)
+                listener?.Execute(music, new MusicEventArgs(MusicEventType.Add));
         }
 
         public async Task DeleteFile(FolderFile file)
@@ -274,16 +279,17 @@ namespace SMPlayer.Models
 
         public void RemoveMusic(Music music)
         {
-            JustRemoved.Add(music);
+            if (music == null) return;
             SQLHelper.Run(c => ActivateMusic(c, music, ActiveState.Inactive));
-            foreach (var listener in MusicEventListeners) listener.Removed(music);
+            foreach (var listener in MusicEventListeners)
+                listener?.Execute(music, new MusicEventArgs(MusicEventType.Remove));
         }
 
         public void UndoRemoveMusic(Music music)
         {
-            JustRemoved.Remove(music);
             SQLHelper.Run(c => ActivateMusic(c, music, ActiveState.Active));
-            foreach (var listener in MusicEventListeners) listener.Added(music);
+            foreach (var listener in MusicEventListeners)
+                listener?.Execute(music, new MusicEventArgs(MusicEventType.Add));
         }
 
         private void ActivateMusic(SQLiteConnection c, Music music, ActiveState state)
@@ -531,10 +537,8 @@ namespace SMPlayer.Models
         public async Task MoveFolderAsync(FolderTree folder, string path)
         {
             await MoveFolder(folder, await StorageFolder.GetFolderFromPathAsync(path));
-            folder.Rename(folder.ParentPath, path);
             SQLHelper.Run(c =>
             {
-                MoveFolder(c, folder, path);
                 foreach (var music in AllSongs)
                 {
                     if (music.Path.StartsWith(path))
@@ -549,29 +553,31 @@ namespace SMPlayer.Models
 
         private async Task MoveFolder(FolderTree folder, StorageFolder target)
         {
-            StorageFolder subFolder = await target.CreateFolderAsync(folder.Name, CreationCollisionOption.OpenIfExists);
+            StorageFolder branch = await target.CreateFolderAsync(folder.Name, CreationCollisionOption.OpenIfExists);
+            if (FindFolderInfo(branch.Path) is FolderTree duplicate)
+            {
+                SQLHelper.Run(c => c.Delete(folder.ToDAO()));
+                folder = duplicate;
+            }
+            else
+            {
+                folder.Rename(folder.ParentPath, target.Path);
+                FolderTree newParent = FindFolderInfo(target.Path);
+                folder.ParentId = newParent.Id;
+                SQLHelper.Run(c => c.Update(folder.ToDAO()));
+            }
             foreach (var item in SQLHelper.Run(c => c.SelectSubFolders(folder)))
             {
-                await MoveFolder(item, subFolder);
+                await MoveFolder(item, branch);
             }
             foreach (var item in SQLHelper.Run(c => c.SelectSubFiles(folder)))
             {
-                await MoveFileAsync(item, subFolder.Path);
+                await MoveFileAsync(item, branch.Path);
             }
-        }
-
-        private void MoveFolder(SQLiteConnection c, FolderTree tree, string path)
-        {
-            FolderTree target = c.SelectFolderInfoByPath(path);
-            tree.ParentId = target.Id;
-            c.Update(target);
-            foreach (var item in c.SelectSubFolders(target))
+            StorageFolder localFolder = await folder.GetStorageFolderAsync();
+            if ((await localFolder.GetFilesAsync()).IsEmpty())
             {
-                MoveFolder(c, item, path);
-            }
-            foreach (var item in c.SelectSubFiles(target))
-            {
-                MoveFile(c, item, path);
+                await localFolder.DeleteAsync();
             }
         }
 
@@ -610,7 +616,8 @@ namespace SMPlayer.Models
         private void MoveFile(SQLiteConnection c, FolderFile file, string path)
         {
             FolderFile copy = file.Copy();
-            copy.MoveToFolder(path);
+            FolderTree newParent = c.SelectFolderInfoByPath(path);
+            copy.MoveToFolder(newParent);
             c.Update(copy.ToDAO());
             if (copy.IsMusicFile())
             {
@@ -630,7 +637,7 @@ namespace SMPlayer.Models
             SQLHelper.Run(c => MusicModified(c, before, after));
         }
 
-        public void MusicModified(SQLiteConnection c, Music before, Music after)
+        private void MusicModified(SQLiteConnection c, Music before, Music after)
         {
             c.UpdateMusic(after);
             NotifyMusicModified(before, after);
@@ -638,7 +645,8 @@ namespace SMPlayer.Models
 
         private void NotifyMusicModified(Music before, Music after)
         {
-            foreach (var listener in MusicEventListeners) listener?.Modified(before, after);
+            foreach (var listener in MusicEventListeners)
+                listener?.Execute(before, new MusicEventArgs(MusicEventType.Modify) { ModifiedMusic = after });
         }
 
         public List<Music> GetMostPlayed(int limit)
@@ -699,10 +707,7 @@ namespace SMPlayer.Models
 
     public interface IMusicEventListener
     {
-        void Liked(Music music, bool isFavorite);
-        void Added(Music music);
-        void Removed(Music music);
-        void Modified(Music before, Music after);
+        void Execute(Music music, MusicEventArgs args);
     }
 
     public interface IPlaylistEventListener
@@ -725,6 +730,23 @@ namespace SMPlayer.Models
         void ExecuteFolderEvent(FolderTree folder, StorageItemEventArgs args);
     }
 
+    public enum MusicEventType
+    {
+        Like, Add, Remove, Modify
+    }
+
+    public class MusicEventArgs
+    {
+        public MusicEventType EventType { get; set; }
+        public bool IsFavorite { get; set; }
+        public Music ModifiedMusic { get; set; } 
+
+        public MusicEventArgs(MusicEventType eventType)
+        {
+            EventType = eventType;
+        }
+    }
+
     public class StorageItemEventArgs
     {
         public StorageItemEventType EventType { get; set; }
@@ -738,7 +760,7 @@ namespace SMPlayer.Models
 
     public enum StorageItemEventType
     {
-        Add, Rename, Remove, Move
+        Add, Rename, Remove, Move, Update
     }
 
     public enum NamingError

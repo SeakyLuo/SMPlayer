@@ -470,21 +470,22 @@ namespace SMPlayer
                 CurrentMusic?.CopyFrom(after);
         }
 
-        void IMusicEventListener.Liked(Music music, bool isFavorite)
+        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
-            MusicModified(music, music);
-        }
-
-        void IMusicEventListener.Added(Music music) { }
-
-        void IMusicEventListener.Removed(Music music)
-        {
-            RemoveMusic(music);
-        }
-
-        void IMusicEventListener.Modified(Music before, Music after)
-        {
-            MusicModified(before, after);
+            switch (args.EventType)
+            {
+                case MusicEventType.Add:
+                    break;
+                case MusicEventType.Remove:
+                    RemoveMusic(music);
+                    break;
+                case MusicEventType.Like:
+                    MusicModified(music, new Music(music) { Favorite = args.IsFavorite });
+                    break;
+                case MusicEventType.Modify:
+                    MusicModified(music, args.ModifiedMusic);
+                    break;
+            }
         }
     }
 

@@ -24,7 +24,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class SettingsPage : Page, IAfterPathSetListener
+    public sealed partial class SettingsPage : Page, IFolderUpdateListener
     {
         public static NotificationSendMode[] NotificationOptions = { NotificationSendMode.MusicChanged, NotificationSendMode.Never };
         private static readonly int[] LimitedRecentPlayedItems = { -1, 100, 200, 500, 1000 };
@@ -249,9 +249,9 @@ namespace SMPlayer
             }
         }
 
-        void IAfterPathSetListener.PathSet(string path)
+        void IFolderUpdateListener.FolderUpdated(FolderTree folder)
         {
-            PathBox.Text = path;
+            PathBox.Text = folder.Path;
         }
 
         private void ReleaseNotesButton_Click(object sender, RoutedEventArgs e)

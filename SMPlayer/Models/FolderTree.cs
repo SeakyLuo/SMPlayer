@@ -13,7 +13,6 @@ namespace SMPlayer.Models
     [Serializable]
     public class FolderTree : StorageItem, IPreferable
     {
-        public long Id { get; set; }
         public List<FolderTree> Trees { get; set; } = new List<FolderTree>();
         public List<FolderFile> Files { get; set; } = new List<FolderFile>();
         public List<Music> Songs { get => Settings.FindMusicList(Files.Select(i => i.FileId)); }
@@ -38,14 +37,16 @@ namespace SMPlayer.Models
         public void AddBranch(FolderTree tree)
         {
             Trees.Add(tree);
+            Trees.Sort((t1, t2) => t1.Name.CompareTo(t2.Name));
         }
 
         public void AddFile(FolderFile file)
         {
             Files.Add(file);
+            SortFiles();
         }
 
-        public bool Contains(string path)
+        public bool ContainsFile(string path)
         {
             return FindFile(path) != null;
         }
@@ -62,13 +63,23 @@ namespace SMPlayer.Models
             list.AddRange(Songs);
             return list;
         }
-        public List<FolderTree> GetAllTrees()
+
+        public void SortFiles()
         {
-            List<FolderTree> list = new List<FolderTree> { this };
-            foreach (var tree in Trees)
-                list.AddRange(tree.GetAllTrees());
-            return list;
+            switch (Criterion)
+            {
+                case SortBy.Title:
+                    SortByTitle();
+                    break;
+                case SortBy.Artist:
+                    SortByArtist();
+                    break;
+                case SortBy.Album:
+                    SortByAlbum();
+                    break;
+            }
         }
+
         public IEnumerable<Music> SortByTitle()
         {
             Criterion = SortBy.Title;
@@ -106,7 +117,7 @@ namespace SMPlayer.Models
             Files.Clear();
         }
 
-        public FolderTree FindTree(string path)
+        public FolderTree FindFolder(string path)
         {
             if (Path.Equals(path)) return this;
             foreach (var tree in Trees)
@@ -114,7 +125,7 @@ namespace SMPlayer.Models
                 if (path.Equals(tree.Path))
                     return tree;
                 if (path.StartsWith(tree.Path))
-                    return tree.FindTree(path);
+                    return tree.FindFolder(path);
             }
             return null;
         }
@@ -169,7 +180,7 @@ namespace SMPlayer.Models
             FolderTree tree = FindTree(branch.Id);
             RemoveBranch(branch.Path);
             tree.Rename(tree.Path, System.IO.Path.Combine(newPath, Name));
-            FindTree(newPath)?.AddBranch(tree);
+            FindFolder(newPath)?.AddBranch(tree);
         }
 
         public bool RemoveFile(string path)
@@ -180,18 +191,15 @@ namespace SMPlayer.Models
 
         public void MoveFile(FolderFile src, string newPath)
         {
-            FolderFile file = FindFile(src.Path);
-            if (file == null) return;
-            RemoveFile(src.Path);
-            file.MoveToFolder(newPath);
-            if (FindTree(newPath) is FolderTree newParent)
-            {
-                if (newParent.Contains(src.Path))
-                {
-                    newParent.RemoveFile(src.Path);
-                }
-                newParent.AddFile(file);
-            }
+            //FolderFile file = FindFile(src.Path);
+            //if (file == null) return;
+            //RemoveFile(src.Path);
+            //file.MoveToFolder(newPath);
+            //if (FindFolder(newPath) is FolderTree newParent)
+            //{
+            //    newParent.RemoveFile(src.Path);
+            //    newParent.AddFile(file);
+            //}
         }
 
         public override bool Equals(object obj)

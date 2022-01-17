@@ -145,11 +145,11 @@ namespace SMPlayer
         }
         public static void ShowMusicNotFoundNotification(string music, int duration = 5000)
         {
-            GetMainPageContainer().ShowNotification(LocalizeMessage("MusicNotFound", music), duration);
+            GetMainPageContainer()?.ShowNotification(LocalizeMessage("MusicNotFound", music), duration);
         }
         public static void ShowPathNotFoundNotification(string path, int duration = 5000)
         {
-            GetMainPageContainer().ShowNotification(LocalizeMessage("PathNotFound", FileHelper.GetParentPath(path)), duration);
+            GetMainPageContainer()?.ShowNotification(LocalizeMessage("PathNotFound", FileHelper.GetParentPath(path)), duration);
         }
         public static void ShowAddMusicResultNotification(AddMusicResult result, Music target = null)
         {
@@ -157,14 +157,14 @@ namespace SMPlayer
             {
                 IMainPageContainer container = GetMainPageContainer();
                 int duration = 5000;
-                if (result.FailCount > 1) container.ShowNotification(LocalizeMessage("MusicsNotFound", result.FailCount), duration);
+                if (result.FailCount > 1) container?.ShowNotification(LocalizeMessage("MusicsNotFound", result.FailCount), duration);
                 else
                 {
                     if (target == null || !result.Failed.Contains(target)) target = result.Failed[0];
                     if (!NotFoundHistory.Contains(target))
                     {
                         NotFoundHistory.Add(target);
-                        container.ShowNotification(LocalizeMessage("MusicNotFound", target.Name), duration);
+                        container?.ShowNotification(LocalizeMessage("MusicNotFound", target.Name), duration);
                     }
                 }
             }

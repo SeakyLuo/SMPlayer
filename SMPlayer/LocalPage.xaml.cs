@@ -24,14 +24,13 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalPage : Page, IAfterPathSetListener, IWindowResizeListener, IStorageItemEventListener, IMenuFlyoutItemClickListener, IMenuFlyoutHelperBuildListener, IMultiSelectListener, ISwitchMusicListener
+    public sealed partial class LocalPage : Page, IWindowResizeListener, IStorageItemEventListener, IMenuFlyoutItemClickListener, IMenuFlyoutHelperBuildListener, IMultiSelectListener, ISwitchMusicListener, IMusicEventListener
     {
-        public static Stack<FolderTree> History = new Stack<FolderTree>();
-        private readonly ObservableCollection<GridViewFolder> GridFolders = new ObservableCollection<GridViewFolder>();
+        private Stack<FolderTree> History = new Stack<FolderTree>();
         private readonly ObservableCollection<GridViewStorageItem> GridItems = new ObservableCollection<GridViewStorageItem>();
-        private bool IsProcessing = false, PathSet = false;
+        private bool IsProcessing = false, folderUpdated = false;
         private FolderTree CurrentFolder { get => History.IsEmpty() ? null : History.Peek(); }
-        public List<Music> SelectedItems
+        public List<Music> SelectedSongs
         {
             get
             {
@@ -69,14 +68,20 @@ namespace SMPlayer
             }
         }
 
+        private MultiSelectCommandBarOption MultiSelectOption => new MultiSelectCommandBarOption
+        {
+            ShowRemove = false,
+            ShowMoveToFolder = true,
+        };
+
         public LocalPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             SwitchViewMode(Settings.settings.LocalViewMode);
-            UpdateHelper.AddAfterPathSetListener(this);
             MainPage.WindowResizeListeners.Add(this);
-            Settings.AddFolderTreeEventListener(this);
+            Settings.AddStorageItemEventListener(this);
+            Settings.AddMusicEventListener(this);
             MusicPlayer.AddSwitchMusicListener(this);
         }
 
@@ -98,7 +103,7 @@ namespace SMPlayer
             }
             else
             {
-                folder = Settings.Root;
+                folder = History.IsEmpty() ? Settings.Root : History.Peek();
             }
             SetPage(folder);
         }
@@ -114,17 +119,17 @@ namespace SMPlayer
 
         public async void SetPage(FolderTree tree)
         {
-            if (!PathSet)
+            if (!folderUpdated)
             {
                 if (IsProcessing) return;
-                if (CurrentFolder?.Equals(tree) == true) return;
+                if (tree.Equals(CurrentFolder)) return;
             }
             IsProcessing = true;
             LocalProgressRing.Visibility = Visibility.Visible;
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 ClearMultiSelectStatus();
-                SortFolder(tree, tree.Criterion);
+                tree.SortFiles();
                 switch (Settings.settings.LocalViewMode)
                 {
                     case LocalPageViewMode.List:
@@ -149,10 +154,10 @@ namespace SMPlayer
                         SetupTreeView(tree);
                         break;
                 }
+                LocalProgressRing.Visibility = Visibility.Collapsed;
+                folderUpdated = false;
+                IsProcessing = false;
             });
-            PathSet = false;
-            LocalProgressRing.Visibility = Visibility.Collapsed;
-            IsProcessing = false;
         }
 
         private void SetupTreeView(FolderTree tree)
@@ -223,7 +228,7 @@ namespace SMPlayer
 
         private void LocalGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (PleaseExitMultiSelectMode()) return;
+            if (LocalGridView.SelectionMode == ListViewSelectionMode.Multiple) return;
             if (e.ClickedItem is GridViewFolder folder)
             {
                 SetPage(Settings.FindFolder(folder.Id));
@@ -245,6 +250,7 @@ namespace SMPlayer
 
         private async void LocalTreeView_DragItemsCompleted(TreeView sender, TreeViewDragItemsCompletedEventArgs args)
         {
+            MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
             TreeViewNode node = args.Items[0] as TreeViewNode;
             if (node.Parent == originalParentNode)
             {
@@ -256,37 +262,35 @@ namespace SMPlayer
                     siblings.RemoveAt(currentIndex);
                     siblings.Insert(originalIndex, node);
                 }
-                return;
             }
-            if (!(node.Parent.Content is FolderTree))
+            else if (!(node.Parent.Content is FolderTree))
             {
                 // 如果移动到非文件夹节点，恢复拖动前的位置
                 node.Parent.Children.Remove(node);
                 originalParentNode.Children.Insert(originalIndex, node);
-                return;
             }
-            FolderTree currentFolder = CurrentFolder;
-            object content = node.Content;
-            string newParent = (node.Parent.Content == null ? currentFolder : node.Parent.Content as FolderTree).Path;
-            if (content is FolderTree folder)
+            else
             {
-                await Settings.settings.MoveFolderAsync(folder, newParent);
+                FolderTree currentFolder = CurrentFolder;
+                object content = node.Content;
+                string newParent = (node.Parent.Content == null ? currentFolder : node.Parent.Content as FolderTree).Path;
+                if (content is FolderTree folder)
+                {
+                    await Settings.settings.MoveFolderAsync(folder, newParent);
+                }
+                else if (content is TreeViewFolderFile file)
+                {
+                    await Settings.settings.MoveFileAsync(file.ToFolderFile(), newParent);
+                }
             }
-            else if (content is TreeViewFolderFile file)
-            {
-                await Settings.settings.MoveFileAsync(file.ToFolderFile(), newParent);
-            }
+            MainPage.Instance?.Loader.Hide();
         }
 
         private void OpenMusicFlyout(object sender, object e)
         {
             MenuFlyoutHelper.SetMusicMenu(sender, this, this, new MenuFlyoutOption
             {
-                MultiSelectOption = new MultiSelectCommandBarOption
-                {
-                    ShowRemove = false,
-                    ShowMoveToFolder = true,
-                }
+                MultiSelectOption = MultiSelectOption
             });
         }
 
@@ -295,31 +299,25 @@ namespace SMPlayer
             var flyout = sender as MenuFlyout;
             MenuFlyoutHelper.SetPlaylistMenu(sender, this, this, new MenuFlyoutOption
             {
-                MultiSelectOption = new MultiSelectCommandBarOption
-                {
-                    ShowRemove = false,
-                    ShowMoveToFolder = true,
-                }
+                MultiSelectOption = MultiSelectOption
             });
             FolderTree folder = null;
             if (flyout.Target.DataContext is GridViewFolder gridFolderView) folder = gridFolderView.Source;
             else if (flyout.Target.DataContext is TreeViewNode node) folder = node.Content as FolderTree;
             flyout.Items.Add(MenuFlyoutHelper.GetPreferItem(folder));
             flyout.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(folder.Path, StorageItemTypes.Folder));
-            flyout.Items.Add(MenuFlyoutHelper.GetRefreshDirectoryItem(folder, AfterFolderUpdated));
-            flyout.Items.Add(MenuFlyoutHelper.GetDeleteFolderItem(folder, t =>
-            {
-                GridFolders.RemoveAll(g => g.Source == folder);
-                FindNode(folder.ParentPath);
-                SetNavText(CurrentFolder);
-            }));
+            flyout.Items.Add(MenuFlyoutHelper.GetRefreshDirectoryItem(folder));
+            flyout.Items.Add(MenuFlyoutHelper.GetDeleteFolderItem(folder));
             flyout.Items.Add(MenuFlyoutHelper.GetRenameFolderItem(folder,
                 async (newName) => await Settings.ValidateFolderName(folder.ParentPath, newName),
                 async (newName) =>
                 {
                     await Settings.settings.RenameFolder(folder, newName);
                     string newPath = folder.Path;
-                    GridFolders.FirstOrDefault(i => i.Source.Equals(folder))?.Rename(newPath);
+                    if (GridItems.FirstOrDefault(i => i.Path == newPath) is GridViewFolder gridViewFolder)
+                    {
+                        gridViewFolder.Rename(newPath);
+                    }
                     if (FindNode(folder) is TreeViewNode node)
                     {
                         (node.Content as FolderTree).Rename(newPath);
@@ -385,15 +383,7 @@ namespace SMPlayer
 
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
-            UpdateHelper.RefreshFolder(CurrentFolder, AfterFolderUpdated);
-        }
-
-        private void AfterFolderUpdated(FolderTree folder)
-        {
-            if (!CurrentFolder.Equals(folder)) return;
-            if (MainPage.Instance.CurrentPage != typeof(LocalPage)) return;
-            History.Pop();
-            SetPage(folder);
+            UpdateHelper.RefreshFolder(CurrentFolder);
         }
 
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
@@ -441,20 +431,18 @@ namespace SMPlayer
             Settings.settings.LocalViewMode = mode;
         }
 
-        private void SortFolder(FolderTree folder, SortBy criterion)
+        private void MultiSelectAppButton_Click(object sender, RoutedEventArgs e)
         {
-            switch (criterion)
+            switch (Settings.settings.LocalViewMode)
             {
-                case SortBy.Title:
-                    folder.SortByTitle();
+                case LocalPageViewMode.List:
+                    LocalTreeView.SelectionMode = TreeViewSelectionMode.Multiple;
                     break;
-                case SortBy.Artist:
-                    folder.SortByArtist();
-                    break;
-                case SortBy.Album:
-                    folder.SortByAlbum();
+                case LocalPageViewMode.Grid:
+                    LocalGridView.SelectionMode = ListViewSelectionMode.Multiple;
                     break;
             }
+            MainPage.Instance.ShowMultiSelectCommandBar(MultiSelectOption);
         }
 
         private void SortAppButton_Click(object sender, RoutedEventArgs e)
@@ -473,7 +461,7 @@ namespace SMPlayer
                         }
                         else
                         {
-                            SortFolder(CurrentFolder, criterion);
+                            CurrentFolder.SortFiles();
                             Settings.settings.UpdateFolder(CurrentFolder);
                         }
                         SetupGridView(CurrentFolder);
@@ -549,7 +537,7 @@ namespace SMPlayer
             return false;
         }
 
-        async void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
+        void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
         {
             switch (args.Event)
             {
@@ -565,11 +553,11 @@ namespace SMPlayer
                     }
                     break;
                 case MultiSelectEvent.AddTo:
-                    args.FlyoutHelper.Data = SelectedItems;
+                    args.FlyoutHelper.Data = SelectedSongs;
                     args.FlyoutHelper.DefaultPlaylistName = CurrentFolder.Name;
                     break;
                 case MultiSelectEvent.Play:
-                    MusicPlayer.SetMusicAndPlay(SelectedItems);
+                    MusicPlayer.SetMusicAndPlay(SelectedSongs);
                     break;
                 case MultiSelectEvent.SelectAll:
                     switch (Settings.settings.LocalViewMode)
@@ -605,48 +593,23 @@ namespace SMPlayer
                     }
                     break;
                 case MultiSelectEvent.MoveToFolder:
+                    List<StorageItem> items = new List<StorageItem>();
                     switch (Settings.settings.LocalViewMode)
                     {
                         case LocalPageViewMode.List:
-                            foreach (var node in LocalTreeView.SelectedNodes)
+                            items.AddRange(LocalTreeView.SelectedNodes.Select(i =>
                             {
-                                if (node.Content is FolderTree folder)
-                                {
-                                    await Settings.settings.MoveFolderAsync(folder, args.TargetPath);
-                                }
-                                else if (node.Content is TreeViewFolderFile file)
-                                {
-                                    await Settings.settings.MoveFileAsync(file.ToFolderFile(), args.TargetPath);
-                                }
-                            }
+                                if (i.Content is TreeViewFolderFile file) return file.ToFolderFile();
+                                else return i.Content as StorageItem;
+                            }).ToList());
                             break;
                         case LocalPageViewMode.Grid:
-                            foreach (var item in LocalGridView.SelectedItems)
-                            {
-                                if (item is GridViewFolder folder)
-                                {
-                                    await Settings.settings.MoveFolderAsync(folder.Source, args.TargetPath);
-                                }
-                                else if (item is GridViewMusic file)
-                                {
-                                    await Settings.settings.MoveFileAsync(file.Source.ToFolderFile(), args.TargetPath);
-                                }
-                            }
+                            items.AddRange(LocalGridView.SelectedItems.Select(i => (i as GridViewStorageItem).AsStorageItem()).ToList());
                             break;
                     }
+                    args.FlyoutHelper.Data = items;
                     break;
             }
-        }
-
-        void IAfterPathSetListener.PathSet(string path)
-        {
-            if (MainPage.Instance?.CurrentPage != typeof(LocalPage))
-            {
-                PathSet = true;
-                return;
-            }
-            History.Clear();
-            SetPage(Settings.Root);
         }
 
         void IStorageItemEventListener.ExecuteFileEvent(FolderFile file, StorageItemEventArgs args)
@@ -656,39 +619,65 @@ namespace SMPlayer
             switch (args.EventType)
             {
                 case StorageItemEventType.Move:
-                    if (args.Path == currentFolder.Path || file.ParentId == currentFolder.Id)
-                        SetNavText(currentFolder);
-                    currentFolder.MoveFile(file, args.Path);
+                    currentFolder.RemoveFile(file.Path);
+                    GridItems.RemoveAll(i => i.Path == file.Path);
+                    if (GridItems.FirstOrDefault(i => i.Path == args.Path) is GridViewFolder folder)
+                    {
+                        folder.AddFile(file);
+                    }
                     break;
             }
+            SetNavText(currentFolder);
         }
 
         void IStorageItemEventListener.ExecuteFolderEvent(FolderTree folder, StorageItemEventArgs args)
         {
             FolderTree currentFolder = CurrentFolder;
             if (currentFolder == null) return;
-            if (!folder.Equals(CurrentFolder)) return;
             switch (args.EventType)
             {
                 case StorageItemEventType.Add:
                     if (args.Folder.Equals(currentFolder))
                     {
                         currentFolder.AddBranch(folder);
+                        GridViewFolder gridViewFolder = new GridViewFolder(folder);
+                        int index = GridItems.FindSortedListInsertIndex(gridViewFolder, i => i.Name);
+                        GridItems.Insert(index, gridViewFolder);
+                        SetupTreeView(currentFolder);
                     }
                     break;
                 case StorageItemEventType.Remove:
                     if (folder.ParentId == currentFolder.Id)
                     {
                         currentFolder.RemoveBranch(folder.Path);
+                        GridItems.RemoveAll(i => i.Path == folder.Path);
+                        LocalTreeView.RootNodes.RemoveAll(i => i.Content is FolderTree tree && tree.Path == folder.Path);
                     }
                     break;
                 case StorageItemEventType.Move:
                     currentFolder.MoveBranch(folder, args.Path);
+                    GridItems.RemoveAll(i => i.Path == folder.Path);
                     break;
+                case StorageItemEventType.Update:
+                    if (MainPage.Instance?.CurrentPage != typeof(LocalPage))
+                    {
+                        folderUpdated = true;
+                        return;
+                    }
+                    if (folder.Equals(currentFolder))
+                    {
+                        History.Pop();
+                        SetPage(folder);
+                    }
+                    else if (currentFolder.FindFolder(folder.Path) != null)
+                    {
+                        GridViewFolder gridViewFolder = GridItems.FirstOrDefault(i => i.Path == folder.Path) as GridViewFolder;
+                        gridViewFolder.Source = folder;
+                    }
+                    return;
             }
             SetNavText(currentFolder);
         }
-
 
         void IWindowResizeListener.Resized(WindowSizeChangedEventArgs e)
         {
@@ -712,6 +701,26 @@ namespace SMPlayer
                     }
                 }
             });
+        }
+
+        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
+        {
+            FolderTree currentFolder = CurrentFolder;
+            if (currentFolder == null) return;
+            switch (args.EventType)
+            {
+                case MusicEventType.Add:
+                    break;
+                case MusicEventType.Remove:
+                    currentFolder.RemoveFile(music.Path);
+                    GridItems.RemoveAll(i => i.Path == music.Path);
+                    LocalTreeView.RootNodes.RemoveAll(i => i.Content is TreeViewFolderFile file && file.Path == music.Path);
+                    break;
+                case MusicEventType.Like:
+                    break;
+                case MusicEventType.Modify:
+                    break;
+            }
         }
     }
 }

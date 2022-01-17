@@ -215,39 +215,79 @@ namespace SMPlayer
             return flyout;
         }
 
-        public MenuFlyout GetMoveToFolderFlyout()
+        public MenuFlyout GetMoveToFolderFlyout(IMenuFlyoutItemClickListener listener = null)
         {
             MenuFlyout flyout = new MenuFlyout();
-            List<StorageItem> items = (List<StorageItem>)Data;
-            foreach (var folder in Settings.AllFolders)
+            MenuFlyoutItemBase itemBase = GetMoveToFolderMenuTree(Settings.settings.Tree, (List<StorageItem>)Data, listener);
+            if (itemBase is MenuFlyoutItem item)
             {
-                // 文件夹不能移动到其本身或者父文件夹，文件也不需要移动到他的父文件夹
-                if (items.Any(i => i.Path == folder.Path || i.ParentPath == folder.Path))
-                {
-                    continue;
-                }
-                MenuFlyoutItem item = new MenuFlyoutItem()
-                {
-                    Text = folder.Name
-                };
-                item.SetToolTip(folder.Path);
-                item.Click += async (sender, e) =>
-                {
-                    foreach (var storageItem in items)
-                    {
-                        if (storageItem is FolderTree folderTree)
-                        {
-                            await Settings.settings.MoveFolderAsync(folderTree, folder.Path);
-                        }
-                        else if (storageItem is FolderFile folderFile)
-                        {
-                            await Settings.settings.MoveFileAsync(folderFile, folder.Path);
-                        }
-                    }
-                };
                 flyout.Items.Add(item);
             }
+            else if (itemBase is MenuFlyoutSubItem subItem)
+            {
+                flyout.Items.AddRange(subItem.Items);
+            }
             return flyout;
+        }
+
+        private static MenuFlyoutItemBase GetMoveToFolderMenuTree(FolderTree folder, List<StorageItem> items, IMenuFlyoutItemClickListener listener = null)
+        {
+            List<FolderTree> branches = Settings.FindSubFolders(folder);
+            if (branches.IsEmpty())
+            {
+                return GetMoveToFolderMenuFlyoutItem(folder, items, listener);
+            }
+            MenuFlyoutSubItem item = new MenuFlyoutSubItem()
+            {
+                Text = folder.Name
+            };
+            item.SetToolTip(Helper.LocalizeText("MoveToFolderOfPath", folder.Path), false);
+            if (IsTargetFolder(folder, items))
+            {
+                item.Items.Add(GetMoveToFolderMenuFlyoutItem(folder, items, listener));
+                item.Items.Add(new MenuFlyoutSeparator());
+            }
+            foreach (var branch in branches)
+            {
+                if (IsTargetFolder(branch, items))
+                {
+                    item.Items.Add(GetMoveToFolderMenuTree(branch, items, listener));
+                }
+            }
+            return item;
+        }
+
+        // 文件夹不能移动到其本身或者父文件夹，文件也不需要移动到他的父文件夹
+        private static bool IsTargetFolder(FolderTree folder, List<StorageItem> items)
+        {
+            return !items.Any(i => i.Path == folder.Path || i.ParentPath == folder.Path);
+        }
+
+        private static MenuFlyoutItem GetMoveToFolderMenuFlyoutItem(FolderTree folder, List<StorageItem> items, IMenuFlyoutItemClickListener listener = null)
+        {
+            MenuFlyoutItem item = new MenuFlyoutItem()
+            {
+                Text = folder.Name
+            };
+            item.SetToolTip(Helper.LocalizeText("MoveToFolderOfPath", folder.Path), false);
+            item.Click += async (s, e) =>
+            {
+                MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
+                foreach (var storageItem in items)
+                {
+                    if (storageItem is FolderTree folderTree)
+                    {
+                        await Settings.settings.MoveFolderAsync(folderTree, folder.Path);
+                    }
+                    else if (storageItem is FolderFile folderFile)
+                    {
+                        await Settings.settings.MoveFileAsync(Settings.FindFile(folderFile.Id), folder.Path);
+                    }
+                }
+                listener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.MoveToFolder));
+                MainPage.Instance?.Loader.Hide();
+            };
+            return item;
         }
 
         public static MenuFlyoutSubItem GetShuffleSubItem()
@@ -374,17 +414,14 @@ namespace SMPlayer
             return item;
         }
 
-        public static MenuFlyoutItem GetRefreshDirectoryItem(FolderTree tree, Action<FolderTree> afterTreeUpdated = null)
+        public static MenuFlyoutItem GetRefreshDirectoryItem(FolderTree tree)
         {
             var item = new MenuFlyoutItem()
             {
                 Icon = new SymbolIcon(Symbol.Refresh),
                 Text = Helper.Localize("Refresh Directory")
             };
-            item.Click += (s, args) =>
-            {
-                UpdateHelper.RefreshFolder(tree, afterTreeUpdated);
-            };
+            item.Click += (s, args) => UpdateHelper.RefreshFolder(tree);
             return item;
         }
 
@@ -403,7 +440,6 @@ namespace SMPlayer
                     CheckBoxVisibility = Visibility.Collapsed,
                     Confirm = async () =>
                     {
-
                         StorageFolder folder = await tree.GetStorageFolderAsync();
                         if (folder != null) await folder.DeleteAsync();
                         Settings.settings.DeleteFolder(tree);
@@ -433,7 +469,7 @@ namespace SMPlayer
                         {
                             Text = inputText,
                             Songs = tree.Flatten(),
-                            Tree = tree
+                            Folder = tree
                         });
                     }
                 }.ShowAsync();

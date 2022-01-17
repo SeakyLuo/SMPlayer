@@ -12,6 +12,7 @@ namespace SMPlayer.Models.VO
 {
     public class GridViewFolder : GridViewStorageItem
     {
+        public override long Id => Source.Id;
         public override string Name => Source.Name;
         public override string Info => Source.Info.ToString();
         public override string PlayButtonToolTip => Helper.LocalizeText("GridViewMusicPlayInfo", Name);
@@ -22,7 +23,6 @@ namespace SMPlayer.Models.VO
         }
         public override string TypeIcon => "ms-appx:///Assets/folder.png";
 
-        public long Id { get => Source.Id; }
         public BitmapImage First
         {
             get => first;
@@ -60,7 +60,16 @@ namespace SMPlayer.Models.VO
             }
         }
         private BitmapImage first, second, third, fourth;
-        public FolderTree Source { get; set; }
+        public FolderTree Source
+        {
+            get => source;
+            set
+            {
+                source = value;
+                OnPropertyChanged("Info");
+            }
+        }
+        private FolderTree source { get; set; }
         public List<Music> Songs { get => Source.Flatten(); }
 
         public GridViewFolder(FolderTree folder)
@@ -119,6 +128,26 @@ namespace SMPlayer.Models.VO
         {
             Source.Rename(newPath);
             OnPropertyChanged("Name");
+        }
+
+        public async void AddFile(FolderFile file)
+        {
+            Source.Files.Add(file);
+            if (Source.Files.Count == 1)
+            {
+                await LoadThumbnailAsync();
+            }
+            OnPropertyChanged("Info");
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is GridViewFolder folder && Id == folder.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
         }
     }
 }

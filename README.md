@@ -37,6 +37,8 @@ MultiSelectCommandBar is too high.
 
 RecentPivot loses header after switching back.
 
+PlayFirst has wrong order when there are identical songs.
+
 # MIGHT DO
 Improve path header display (like Windows).
 
@@ -65,3 +67,5 @@ Right-click menu with current item.
 Improve recent music month.
 
 Improve shy header.
+
+After loading folder, the UI looks still.

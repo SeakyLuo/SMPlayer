@@ -30,21 +30,20 @@ namespace SMPlayer
             MainPage.Instance.TitleBarForeground = MainPage.Instance.IsMinimal ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
         }
 
-        void IMusicEventListener.Added(Music music)
+        async void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
-        }
-
-        async void IMusicEventListener.Liked(Music music, bool isFavorite)
-        {
-            await MyFavoritesPlaylistControl.SetPlaylist(Settings.settings.MyFavorites);
-        }
-
-        void IMusicEventListener.Modified(Music before, Music after)
-        {
-        }
-
-        void IMusicEventListener.Removed(Music music)
-        {
+            switch (args.EventType)
+            {
+                case MusicEventType.Add:
+                    break;
+                case MusicEventType.Remove:
+                    break;
+                case MusicEventType.Like:
+                    await MyFavoritesPlaylistControl.SetPlaylist(Settings.settings.MyFavorites);
+                    break;
+                case MusicEventType.Modify:
+                    break;
+            }
         }
     }
 }

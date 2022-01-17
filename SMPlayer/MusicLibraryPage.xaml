@@ -11,6 +11,11 @@
     mc:Ignorable="d">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ProgressBar x:Name="LoadingProgress" IsIndeterminate="True" Visibility="Collapsed" />
         <controls:DataGrid
             x:Name="MusicLibraryDataGrid"
             Grid.Row="1"

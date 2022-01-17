@@ -8,6 +8,7 @@ namespace SMPlayer.Models.VO
 {
     public class GridViewMusic : GridViewStorageItem, IMusicable
     {
+        public override long Id => Source.Id;
         public override string Name => Source.Name;
         public override string Info => Source.Artist;
         public override string PlayButtonToolTip => Helper.LocalizeText("GridViewMusicPlayInfo", Name);

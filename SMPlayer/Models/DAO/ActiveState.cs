@@ -10,4 +10,11 @@ namespace SMPlayer.Models.DAO
     {
         Inactive = 0, Active = 1,
     }
+
+    public static class ActiveStateExtensions
+    {
+        public static bool isActive(this ActiveState state) { return state == ActiveState.Active; }
+        public static bool isInactive(this ActiveState state) { return state == ActiveState.Inactive; }
+
+    }
 }

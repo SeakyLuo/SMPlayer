@@ -234,6 +234,9 @@
   <data name="MostPlayed" xml:space="preserve">
     <value>最常播放</value>
   </data>
+  <data name="MoveToFolderOfPath" xml:space="preserve">
+    <value>移动到{0}</value>
+  </data>
   <data name="MyFavorites" xml:space="preserve">
     <value>我喜欢</value>
   </data>
@@ -377,5 +380,8 @@
   </data>
   <data name="VoiceAssistantHints3" xml:space="preserve">
     <value>你可以说：“快速播放”</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>昨天</value>
   </data>
 </root>

@@ -234,6 +234,9 @@
   <data name="MostPlayed" xml:space="preserve">
     <value>Most Played</value>
   </data>
+  <data name="MoveToFolderOfPath" xml:space="preserve">
+    <value>Move to {0}</value>
+  </data>
   <data name="MyFavorites" xml:space="preserve">
     <value>My Favorites</value>
   </data>
@@ -377,5 +380,8 @@
   </data>
   <data name="VoiceAssistantHints3" xml:space="preserve">
     <value>You can try to say, "quick play"</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
   </data>
 </root>

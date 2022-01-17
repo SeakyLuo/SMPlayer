@@ -12,6 +12,7 @@ namespace SMPlayer.Models.VO
     {
         public string Path { get; set; }
         public StorageType Type { get; protected set; }
+        public abstract long Id { get; }
         public abstract string Name { get; }
         public abstract string Info { get; }
         public abstract string PlayButtonToolTip { get; }
@@ -47,6 +48,12 @@ namespace SMPlayer.Models.VO
         public override int GetHashCode()
         {
             return Path.GetHashCode();
+        }
+
+        public StorageItem AsStorageItem()
+        {
+            return Type == StorageType.Folder ? (StorageItem) new FolderTree { Path = Path, Id = Id } :
+                                                (StorageItem) new FolderFile { Path = Path, Id = Id, };
         }
     }
 

@@ -229,7 +229,7 @@ namespace SMPlayer.Helpers
         {
             FolderTree root = c.SelectFolder(id);
             if (root == null) return null;
-            root.Trees = root.Trees.AsParallel().Select(i => c.SelectFullFolder(i.Id)).ToList();
+            root.Trees = root.Trees.AsParallel().AsOrdered().Select(i => c.SelectFullFolder(i.Id)).ToList();
             return root;
         }
         public static FolderTree SelectFolder(this SQLiteConnection c, long id)
@@ -264,6 +264,11 @@ namespace SMPlayer.Helpers
         public static List<FolderTree> SelectSubFolders(this SQLiteConnection c, FolderTree folder)
         {
             return c.Query<FolderDAO>("select * from Folder where ParentId = ? and State = ?", folder.Id, ActiveState.Active).Select(i => i.FromDAO()).ToList();
+        }
+
+        public static FolderFile SelectFile(this SQLiteConnection c, long Id)
+        {
+            return c.Query<FileDAO>("select * from File where Id = ? and State = ?", Id, ActiveState.Active).FirstOrDefault()?.FromDAO();
         }
 
         public static FolderFile SelectFileByPath(this SQLiteConnection c, string path)
