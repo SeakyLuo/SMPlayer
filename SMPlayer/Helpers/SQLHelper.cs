@@ -232,9 +232,24 @@ namespace SMPlayer.Helpers
             root.Trees = root.Trees.AsParallel().AsOrdered().Select(i => c.SelectFullFolder(i.Id)).ToList();
             return root;
         }
+        public static FolderTree SelectFullFolder(this SQLiteConnection c, string path)
+        {
+            FolderTree root = c.SelectFolder(path);
+            if (root == null) return null;
+            root.Trees = root.Trees.AsParallel().AsOrdered().Select(i => c.SelectFullFolder(i.Id)).ToList();
+            return root;
+        }
         public static FolderTree SelectFolder(this SQLiteConnection c, long id)
         {
             FolderTree root = c.SelectFolderInfoById(id);
+            if (root == null) return null;
+            root.Files = c.SelectSubFiles(root);
+            root.Trees = c.SelectSubFolders(root);
+            return root;
+        }
+        public static FolderTree SelectFolder(this SQLiteConnection c, string path)
+        {
+            FolderTree root = c.SelectFolderInfoByPath(path);
             if (root == null) return null;
             root.Files = c.SelectSubFiles(root);
             root.Trees = c.SelectSubFolders(root);

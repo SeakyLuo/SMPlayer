@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -82,7 +83,7 @@ namespace SMPlayer
             Message = message;
         }
 
-        public void ShowDeterminant(string text, bool allowBreak = false, int max = 0)
+        public void ShowDeterminant(string text, bool allowBreak = false, int max = 0, Action action = null)
         { 
             SetMessage(text);
             IsDeterminant = true;
@@ -90,6 +91,11 @@ namespace SMPlayer
             Max = max;
             AllowBreak = allowBreak;
             this.Visibility = Visibility.Visible;
+            if (action != null)
+            {
+                action.Invoke();
+                Hide();
+            }
         }
 
         public void ShowIndeterminant(string text, bool allowBreak = false, Action action = null)
@@ -116,12 +122,31 @@ namespace SMPlayer
             Hide();
         }
 
-        public void Increment(string text = null)
+        public async Task IncrementAsync(string message = null)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => Increment(message));
+        }
+
+        public void Increment(string message = null)
         {
             Progress++;
-            if (!string.IsNullOrWhiteSpace(text))
+            if (!string.IsNullOrWhiteSpace(message))
             {
-                SetMessage(text);
+                SetRawMessage(message);
+            }
+        }
+
+        public async Task ResetAsync(string message = null)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => Reset(message));
+        }
+
+        public void Reset(string message = null)
+        {
+            Progress = 0;
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                SetMessage(message);
             }
         }
 

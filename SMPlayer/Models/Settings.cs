@@ -61,6 +61,10 @@ namespace SMPlayer.Models
         {
             return SQLHelper.Run(c => c.SelectFullFolder(id));
         }
+        public static FolderTree FindFullFolder(string path)
+        {
+            return SQLHelper.Run(c => c.SelectFullFolder(path));
+        }
         public static List<FolderTree> FindSubFolders(FolderTree folder)
         {
             return SQLHelper.Run(c => c.SelectSubFolders(folder));

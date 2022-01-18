@@ -24,7 +24,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class SettingsPage : Page, IFolderUpdateListener
+    public sealed partial class SettingsPage : Page
     {
         public static NotificationSendMode[] NotificationOptions = { NotificationSendMode.MusicChanged, NotificationSendMode.Never };
         private static readonly int[] LimitedRecentPlayedItems = { -1, 100, 200, 500, 1000 };
@@ -100,7 +100,7 @@ namespace SMPlayer
             }
             else
             {
-                await UpdateHelper.UpdateMusicLibrary();
+                await UpdateHelper.UpdateMusicLibrary(Helper.CurrentFolder);
             }
 
         }
@@ -233,7 +233,7 @@ namespace SMPlayer
             try
             {
                 await SettingsHelper.InitWithFile(file);
-                bool successful = await UpdateHelper.UpdateMusicLibrary();
+                bool successful = await UpdateHelper.UpdateMusicLibrary(Helper.CurrentFolder);
                 if (successful)
                 {
                     App.Save();
@@ -247,11 +247,6 @@ namespace SMPlayer
                 MainPage.Instance.Loader.Hide();
                 MainPage.Instance.ShowLocalizedNotification("ImportDataFailed" + ex.Message);
             }
-        }
-
-        void IFolderUpdateListener.FolderUpdated(FolderTree folder)
-        {
-            PathBox.Text = folder.Path;
         }
 
         private void ReleaseNotesButton_Click(object sender, RoutedEventArgs e)
