@@ -39,7 +39,7 @@ namespace SMPlayer
         {
             var name = Helper.Localize("Now Playing") + " - " + DateTime.Now.ToString("yy/MM/dd");
             int index = Settings.settings.FindNextPlaylistNameIndex(name);
-            var defaultName = index == 0 ? name : Helper.GetPlaylistName(name, index);
+            var defaultName = index == 0 ? name : Helper.GetNextName(name, index);
             var helper = new MenuFlyoutHelper
             {
                 Data = MusicPlayer.CurrentPlaylist,

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace SMPlayer.Models
 {
@@ -45,10 +46,17 @@ namespace SMPlayer.Models
             Path = Path.Replace(oldPath, newPath);
         }
 
-        public void MoveToFolder(FolderTree folder)
+        public void MoveToFolder(FolderTree folder, string newFilename = null)
         {
             ParentId = folder.Id;
-            Path = FileHelper.MoveToPath(Path, folder.Path);
+            if (string.IsNullOrEmpty(newFilename))
+            {
+                Path = FileHelper.MoveToPath(Path, folder.Path);
+            }
+            else
+            {
+                Path = System.IO.Path.Combine(folder.Path, newFilename);
+            }
         }
 
         public bool IsMusicFile()
@@ -64,6 +72,11 @@ namespace SMPlayer.Models
         public override int GetHashCode()
         {
             return Path.GetHashCode();
+        }
+
+        public async Task<StorageFile> GetStorageFileAsync()
+        {
+            return await FileHelper.LoadFileAsync(Path);
         }
     }
 

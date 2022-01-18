@@ -210,7 +210,7 @@ namespace SMPlayer
             return string.IsNullOrEmpty(str) ? resource : str;
         }
 
-        public static string GetPlaylistName(string Name, int index)
+        public static string GetNextName(string Name, int index)
         {
             return LocalizeMessage("PlaylistName", Name, index);
         }
@@ -289,18 +289,25 @@ namespace SMPlayer
 
         public static async Task ShowYesNoDialog(string message, Action onYes)
         {
+            await ShowMessageDialog(message, 1, 1, ("Yes", onYes), ("No", null));
+        }
+
+        public static async Task ShowMessageDialog(string message, uint defaultCommandIndex = 0, uint cancelCommandIndex = 0, params (string, Action)[] buttonActionTuples)
+        {
             var messageDialog = new MessageDialog(LocalizeMessage(message));
-            messageDialog.Commands.Add(new UICommand(LocalizeMessage("Yes"), new UICommandInvokedHandler(command =>
+            foreach (var (button, action) in buttonActionTuples)
             {
-                onYes.Invoke();
-            })));
-            messageDialog.Commands.Add(new UICommand(LocalizeMessage("No")));
+                messageDialog.Commands.Add(new UICommand(LocalizeText(button), new UICommandInvokedHandler(command =>
+                {
+                    action?.Invoke();
+                })));
+            }
 
             // Set the command that will be invoked by default
-            messageDialog.DefaultCommandIndex = 1;
+            messageDialog.DefaultCommandIndex = defaultCommandIndex;
 
             // Set the command to be invoked when escape is pressed
-            messageDialog.CancelCommandIndex = 1;
+            messageDialog.CancelCommandIndex = cancelCommandIndex;
 
             // Show the message dialog
             await messageDialog.ShowAsync();

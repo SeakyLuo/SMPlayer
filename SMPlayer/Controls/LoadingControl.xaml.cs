@@ -66,7 +66,7 @@ namespace SMPlayer
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        public List<Action> BreakLoadingListeners = new List<Action>();
+        public Action BreakLoadingListener { get; set; }
         public LoadingControl()
         {
             this.InitializeComponent();
@@ -82,7 +82,7 @@ namespace SMPlayer
             Message = message;
         }
 
-        public void ShowDeterminant(string text, bool allowBreak = false, int max = 0, Action action = null)
+        public void ShowDeterminant(string text, bool allowBreak = false, int max = 0)
         { 
             SetMessage(text);
             IsDeterminant = true;
@@ -90,11 +90,6 @@ namespace SMPlayer
             Max = max;
             AllowBreak = allowBreak;
             this.Visibility = Visibility.Visible;
-            if (action != null)
-            {
-                action.Invoke();
-                Hide();
-            }
         }
 
         public void ShowIndeterminant(string text, bool allowBreak = false, Action action = null)
@@ -117,7 +112,7 @@ namespace SMPlayer
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var listener in BreakLoadingListeners) listener.Invoke();
+            BreakLoadingListener?.Invoke();
             Hide();
         }
 
@@ -129,6 +124,7 @@ namespace SMPlayer
                 SetMessage(text);
             }
         }
+
 
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {

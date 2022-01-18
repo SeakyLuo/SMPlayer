@@ -189,6 +189,9 @@
   <data name="IsEnabledToggleSwitchOnToolTip" xml:space="preserve">
     <value>If you disable, this item will not have a higher play probability.</value>
   </data>
+  <data name="KeepBoth" xml:space="preserve">
+    <value>Keep Both</value>
+  </data>
   <data name="LeastPlayed" xml:space="preserve">
     <value>Least Played</value>
   </data>
@@ -234,6 +237,9 @@
   <data name="MostPlayed" xml:space="preserve">
     <value>Most Played</value>
   </data>
+  <data name="MoveAndReplace" xml:space="preserve">
+    <value>Move and Replace</value>
+  </data>
   <data name="MoveToFolderOfPath" xml:space="preserve">
     <value>Move to {0}</value>
   </data>
@@ -248,6 +254,9 @@
   </data>
   <data name="Next" xml:space="preserve">
     <value>Next</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
   </data>
   <data name="NowPlaying" xml:space="preserve">
     <value>Now Playing</value>
@@ -345,6 +354,9 @@
   <data name="ShuffleAndPlay" xml:space="preserve">
     <value>Shuffle and play</value>
   </data>
+  <data name="SkipThis" xml:space="preserve">
+    <value>Skip</value>
+  </data>
   <data name="Songs" xml:space="preserve">
     <value>Songs</value>
   </data>
@@ -380,6 +392,9 @@
   </data>
   <data name="VoiceAssistantHints3" xml:space="preserve">
     <value>You can try to say, "quick play"</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
   <data name="Yesterday" xml:space="preserve">
     <value>Yesterday</value>

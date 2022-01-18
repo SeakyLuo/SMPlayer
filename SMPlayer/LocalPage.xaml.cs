@@ -273,7 +273,7 @@ namespace SMPlayer
             {
                 FolderTree currentFolder = CurrentFolder;
                 object content = node.Content;
-                string newParent = (node.Parent.Content == null ? currentFolder : node.Parent.Content as FolderTree).Path;
+                FolderTree newParent = node.Parent.Content == null ? currentFolder : node.Parent.Content as FolderTree;
                 if (content is FolderTree folder)
                 {
                     await Settings.settings.MoveFolderAsync(folder, newParent);
@@ -621,7 +621,7 @@ namespace SMPlayer
                 case StorageItemEventType.Move:
                     currentFolder.RemoveFile(file.Path);
                     GridItems.RemoveAll(i => i.Path == file.Path);
-                    if (GridItems.FirstOrDefault(i => i.Path == args.Path) is GridViewFolder folder)
+                    if (GridItems.FirstOrDefault(i => i.Equals(args.Folder)) is GridViewFolder folder)
                     {
                         folder.AddFile(file);
                     }

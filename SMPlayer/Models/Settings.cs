@@ -136,7 +136,7 @@ namespace SMPlayer.Models
             {
                 var siblings = AllPlaylists.FindAll(p => p.Name.StartsWith(Name)).Select(p => p.Name).ToHashSet();
                 for (int i = 1; i <= siblings.Count; i++)
-                    if (!siblings.Contains(Helper.GetPlaylistName(Name, i)))
+                    if (!siblings.Contains(Helper.GetNextName(Name, i)))
                         return i;
             }
             return 0;
@@ -145,7 +145,7 @@ namespace SMPlayer.Models
         public string FindNextPlaylistName(string Name)
         {
             int index = FindNextPlaylistNameIndex(Name);
-            return index == 0 ? Name : Helper.GetPlaylistName(Name, index);
+            return index == 0 ? Name : Helper.GetNextName(Name, index);
         }
 
         public int FindNextFolderNameIndex(FolderTree parent, string name)
@@ -154,7 +154,7 @@ namespace SMPlayer.Models
             {
                 var siblings = SQLHelper.Run(c => c.SelectSubFolders(parent)).Select(p => p.Name).ToHashSet();
                 for (int i = 1; i <= siblings.Count; i++)
-                    if (!siblings.Contains(Helper.GetPlaylistName(name, i)))
+                    if (!siblings.Contains(Helper.GetNextName(name, i)))
                         return i;
             }
             return 0;
@@ -163,7 +163,7 @@ namespace SMPlayer.Models
         public string FindNextFolderName(FolderTree parent, string Name)
         {
             int index = FindNextFolderNameIndex(parent, Name);
-            return index == 0 ? Name : Helper.GetPlaylistName(Name, index);
+            return index == 0 ? Name : Helper.GetNextName(Name, index);
         }
 
         public bool IsFavorite(SQLiteConnection c, Music music)
@@ -534,26 +534,27 @@ namespace SMPlayer.Models
             }
         }
 
-        public async Task MoveFolderAsync(FolderTree folder, string path)
+        public async Task MoveFolderAsync(FolderTree folder, FolderTree target)
         {
-            await MoveFolder(folder, await StorageFolder.GetFolderFromPathAsync(path));
+            await MoveFolder(folder, target);
             SQLHelper.Run(c =>
             {
                 foreach (var music in AllSongs)
                 {
-                    if (music.Path.StartsWith(path))
+                    if (music.Path.StartsWith(target.Path))
                     {
-                        MoveMusic(c, music, path);
+                        MoveMusic(c, music, target.Path);
                     }
                 }
             });
             foreach (var listener in StorageItemEventListeners)
-                listener.ExecuteFolderEvent(folder, new StorageItemEventArgs(StorageItemEventType.Move) { Path = path });
+                listener.ExecuteFolderEvent(folder, new StorageItemEventArgs(StorageItemEventType.Move) { Folder = target });
         }
 
-        private async Task MoveFolder(FolderTree folder, StorageFolder target)
+        private async Task MoveFolder(FolderTree folder, FolderTree target)
         {
-            StorageFolder branch = await target.CreateFolderAsync(folder.Name, CreationCollisionOption.OpenIfExists);
+            StorageFolder localTarget = await target.GetStorageFolderAsync();
+            StorageFolder branch = await localTarget.CreateFolderAsync(folder.Name, CreationCollisionOption.OpenIfExists);
             if (FindFolderInfo(branch.Path) is FolderTree duplicate)
             {
                 SQLHelper.Run(c => c.Delete(folder.ToDAO()));
@@ -568,11 +569,11 @@ namespace SMPlayer.Models
             }
             foreach (var item in SQLHelper.Run(c => c.SelectSubFolders(folder)))
             {
-                await MoveFolder(item, branch);
+                await MoveFolder(item, folder);
             }
             foreach (var item in SQLHelper.Run(c => c.SelectSubFiles(folder)))
             {
-                await MoveFileAsync(item, branch.Path);
+                await MoveFileAsync(item, folder);
             }
             StorageFolder localFolder = await folder.GetStorageFolderAsync();
             if ((await localFolder.GetFilesAsync()).IsEmpty())
@@ -581,15 +582,15 @@ namespace SMPlayer.Models
             }
         }
 
-        public async Task MoveFileAsync(FolderFile file, string newParent)
+        public async Task MoveFileAsync(FolderFile file, FolderTree newParent)
         {
-            if (await FileHelper.FileExists(Path.Combine(newParent, file.NameWithExtension)))
+            if (await FileHelper.FileExists(Path.Combine(newParent.Path, file.NameWithExtension)))
             {
-                string message = Helper.LocalizeMessage("DuplicateFoundWhenMovingFile", file.Name, Path.GetDirectoryName(newParent));
-                await Helper.ShowYesNoDialog(message, async () =>
-                {
-                    await MoveAndReplaceFile(file, newParent);
-                });
+                string message = Helper.LocalizeMessage("DuplicateFoundWhenMovingFile", file.Name, newParent.Name);
+                await Helper.ShowMessageDialog(message, 2, 2,
+                    ("MoveAndReplace", async () => { await MoveAndReplaceFile(file, newParent); }),
+                    ("KeepBoth", async () => { await MoveAndKeepBothFile(file, newParent); }),
+                    ("SkipThis", null));
             }
             else
             {
@@ -597,31 +598,48 @@ namespace SMPlayer.Models
             }
         }
 
-        private async Task MoveFile(FolderFile file, string path)
+        private async Task MoveFile(FolderFile file, FolderTree folder)
         {
+            string path = folder.Path;
             StorageFile localFile = await FileHelper.LoadFileAsync(file.Path);
             StorageFolder targetFolder = await FileHelper.LoadFolderAsync(path);
             await localFile.MoveAsync(targetFolder);
-            SQLHelper.Run(c => MoveFile(c, file, path));
+            SQLHelper.Run(c => MoveFile(c, file, folder));
             foreach (var listener in StorageItemEventListeners)
-                listener.ExecuteFileEvent(file, new StorageItemEventArgs(StorageItemEventType.Move) { Path = path });
+                listener.ExecuteFileEvent(file, new StorageItemEventArgs(StorageItemEventType.Move) { Folder = folder});
         }
 
-        private async Task MoveAndReplaceFile(FolderFile file, string path)
+        private async Task MoveAndReplaceFile(FolderFile file, FolderTree newParent)
         {
             await DeleteFile(file);
-            await MoveFile(file, path);
+            await MoveFile(file, newParent);
         }
 
-        private void MoveFile(SQLiteConnection c, FolderFile file, string path)
+        private async Task MoveAndKeepBothFile(FolderFile file, FolderTree newParent)
+        {
+            StorageFile localFile = await file.GetStorageFileAsync();
+            StorageFolder localFolder = await FileHelper.LoadFolderAsync(newParent.Path);
+            HashSet<string> filenames = (await localFolder.GetFilesAsync()).Select(i => i.Name).ToHashSet();
+            string newFilename;
+            int index = 1;
+            do
+            {
+                newFilename = Helper.GetNextName(localFile.DisplayName, index++) + localFile.FileType;
+            } while (filenames.Contains(newFilename));
+            await localFile.MoveAsync(localFolder, newFilename);
+            foreach (var listener in StorageItemEventListeners)
+                listener.ExecuteFileEvent(file, new StorageItemEventArgs(StorageItemEventType.Move) { Folder = newParent });
+            SQLHelper.Run(c => MoveFile(c, file, newParent, newFilename));
+        }
+
+        private void MoveFile(SQLiteConnection c, FolderFile file, FolderTree newParent, string newFilename = "")
         {
             FolderFile copy = file.Copy();
-            FolderTree newParent = c.SelectFolderInfoByPath(path);
-            copy.MoveToFolder(newParent);
+            copy.MoveToFolder(newParent, newFilename);
             c.Update(copy.ToDAO());
             if (copy.IsMusicFile())
             {
-                MoveMusic(c, FindMusic(copy.FileId), path);
+                MoveMusic(c, FindMusic(copy.FileId), newParent.Path);
             }
         }
 

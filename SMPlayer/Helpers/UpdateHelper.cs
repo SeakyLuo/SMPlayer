@@ -28,6 +28,10 @@ namespace SMPlayer.Helpers
         public static async Task<bool> UpdateMusicLibrary(StorageFolder folder, string loadingMessage = null)
         {
             MainPage.Instance.Loader.ShowDeterminant(loadingMessage ?? "LoadMusicLibrary", true);
+            MainPage.Instance.Loader.BreakLoadingListener = () =>
+            {
+                LoadingStatus = ExecutionStatus.Break;
+            };
             FolderProgressUpdater updater = new FolderProgressUpdater
             {
                 Message = loadingMessage,
@@ -61,10 +65,12 @@ namespace SMPlayer.Helpers
         {
             LoadingStatus = ExecutionStatus.Running;
             FolderTree tree = new FolderTree();
+            Log.Info("LoadFolder");
             bool unbroken = await LoadFolder(c, folder, tree, updater);
             if (await LoadFolder(c, folder, tree, updater))
             {
-                updater.UpdateProgressBar(Helper.LocalizeMessage("UpdateMusicLibrary"));
+                Log.Info("UpdateMusicLibrary");
+                updater.Reset(Helper.LocalizeMessage("UpdateMusicLibrary"));
                 ResetFolderData(c, tree, updater);
             }
             LoadingStatus = ExecutionStatus.Done;
@@ -146,6 +152,7 @@ namespace SMPlayer.Helpers
                         Settings.settings.AddMusic(c, music);
                         item.FileId = music.Id;
                     }
+                    updater.UpdateProgressBar();
                     updater.Added++;
                     c.InsertFile(item);
                 }
@@ -243,6 +250,17 @@ namespace SMPlayer.Helpers
                 MainPage.Instance.Loader.Progress = ++Progress;
                 MainPage.Instance.Loader.SetRawMessage(Message ?? message);
             }
+        }
+
+        public void UpdateProgressBar()
+        {
+            MainPage.Instance.Loader.Progress = ++Progress;
+        }
+
+        public void Reset(string message)
+        {
+            MainPage.Instance.Loader.SetRawMessage(message);
+            MainPage.Instance.Loader.Progress = 0;
         }
     }
 }

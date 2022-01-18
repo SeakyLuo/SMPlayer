@@ -73,8 +73,8 @@ namespace SMPlayer
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
                     RecentAdded = RecentTimeLine.FromMusicList(Settings.AllSongs);
+                    SetupAdded();
                 });
-                SetupAdded();
             }
         }
 

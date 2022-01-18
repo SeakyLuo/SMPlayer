@@ -128,7 +128,7 @@ namespace SMPlayer
         {
             var target = (sender as MenuFlyoutItem).DataContext as Playlist;
             int next = Settings.settings.FindNextPlaylistNameIndex(target.Name);
-            string name = Helper.GetPlaylistName(target.Name, next);
+            string name = Helper.GetNextName(target.Name, next);
             var duplicate = target.Duplicate(name);
             Settings.settings.AddPlaylist(duplicate);
             Playlists.Add(duplicate);

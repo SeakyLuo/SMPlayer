@@ -277,11 +277,11 @@ namespace SMPlayer
                 {
                     if (storageItem is FolderTree folderTree)
                     {
-                        await Settings.settings.MoveFolderAsync(folderTree, folder.Path);
+                        await Settings.settings.MoveFolderAsync(folderTree, folder);
                     }
                     else if (storageItem is FolderFile folderFile)
                     {
-                        await Settings.settings.MoveFileAsync(Settings.FindFile(folderFile.Id), folder.Path);
+                        await Settings.settings.MoveFileAsync(Settings.FindFile(folderFile.Id), folder);
                     }
                 }
                 listener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.MoveToFolder));
