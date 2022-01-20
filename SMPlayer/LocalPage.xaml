@@ -405,6 +405,7 @@
                         <Setter Target="RefreshButton.Label" Value="" />
                         <Setter Target="ShuffleButton.Label" Value="" />
                         <Setter Target="ViewModeAppButton.Label" Value="" />
+                        <Setter Target="MultiSelectAppButton.Label" Value="" />
                         <Setter Target="SortAppButton.Label" Value="" />
                     </VisualState.Setters>
                 </VisualState>

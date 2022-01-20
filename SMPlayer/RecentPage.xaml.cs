@@ -463,6 +463,7 @@ namespace SMPlayer
                 case MusicEventType.Like:
                     break;
                 case MusicEventType.Modify:
+                    RecentAdded.TimeLine.FirstOrDefault(i => i == music)?.CopyFrom(music);
                     break;
             }
         }

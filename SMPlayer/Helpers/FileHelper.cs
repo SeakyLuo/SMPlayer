@@ -111,7 +111,7 @@ namespace SMPlayer.Helpers
             }
         }
 
-        public static async void DeleteLocalFile(string filename)
+        public static async Task DeleteLocalFile(string filename)
         {
             await DeleteFile(Helper.LocalFolder, filename);
         }
@@ -129,7 +129,7 @@ namespace SMPlayer.Helpers
         {
             if (folder == null || string.IsNullOrEmpty(filename)) return;
             var file = await folder.GetFileAsync(filename);
-            await file.DeleteAsync();
+            if (file != null) await file.DeleteAsync();
         }
 
         public static async Task<string> ReadFileAsync(StorageFolder folder, string filename)

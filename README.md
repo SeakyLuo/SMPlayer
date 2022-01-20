@@ -22,11 +22,13 @@ Album properties.
 
 Album art in NowPlayingFull.
 
-Rename folder. Move music from folder to folder. Batch delete music file.
-
 Search multiple lyrics choose one. Lyrics priority in notification.
 
 If there is no playlist, change dropdown to add button.
+
+Search in lryics.
+
+Allow MainSearchBar to have a search history dropdown.
 
 # TO FIX
 Able to drag titlebar when loading, multi-select.
@@ -39,16 +41,14 @@ RecentPivot loses header after switching back.
 
 PlayFirst has wrong order when there are identical songs.
 
+Improve recent music month.
+
 # MIGHT DO
 Improve path header display (like Windows).
-
-Real-time update Playlist Info when new music added.
 
 Save SearchKeyword instead of a string.
 
 Mini mode media control fade in/out.
-
-Allow MainSearchBar to have a search history dropdown.
 
 Shuffle after one round of playing.
 
@@ -60,12 +60,6 @@ Mini mode shuffle button like NowPlayingPage.
 
 Grid Mode for PlaylistPage.
 
-Refresh directory does not refresh page.
-
-Right-click menu with current item.
-
-Improve recent music month.
-
 Improve shy header.
 
-After loading folder, the UI looks still.
+Batch delete music file.

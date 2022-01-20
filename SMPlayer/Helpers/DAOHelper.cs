@@ -129,7 +129,8 @@ namespace SMPlayer.Helpers
                 Id = src.Id,
                 Path = src.Path,
                 ParentId = src.ParentId,
-                Criterion = src.Criterion
+                Criterion = src.Criterion,
+                State = src.State,
             };
         }
 
@@ -142,7 +143,8 @@ namespace SMPlayer.Helpers
                 ParentId = src.ParentId,
                 Criterion = src.Criterion,
                 Folders = src.Trees.Select(i => i.ToDAO()).ToList(),
-                Files = src.Files.Select(i => i.ToDAO()).ToList()
+                Files = src.Files.Select(i => i.ToDAO()).ToList(),
+                State = src.State,
             };
         }
 

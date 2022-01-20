@@ -59,7 +59,27 @@ namespace SMPlayer.Helpers
                     c.CreateTable<RecentRecordDAO>(flag);
                     c.CreateIndex(RecentRecordDAO.TableName, new string[] { "Type", "ItemId" });
                 });
-                await SettingsHelper.LoadSettingsAndInsertToDb();
+                try
+                {
+                    await SettingsHelper.LoadSettingsAndInsertToDb();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("SettingsHelper.LoadSettingsAndInsertToDb Exception {0}", ex);
+                    Run(c =>
+                    {
+                        c.DeleteAll<SettingsDAO>();
+                        c.DeleteAll<MusicDAO>();
+                        c.DeleteAll<FolderDAO>();
+                        c.DeleteAll<FileDAO>();
+                        c.DeleteAll<PlaylistDAO>();
+                        c.DeleteAll<PlaylistItemDAO>();
+                        c.DeleteAll<PreferenceSettingsDAO>();
+                        c.DeleteAll<PreferenceItemDAO>();
+                        c.DeleteAll<RecentRecordDAO>();
+                    });
+                    Helper.ShowNotification("LoadSettingsAndInsertToDbFailed", 10000);
+                }
                 MainPage.Instance.Loader.Hide();
             });
         }

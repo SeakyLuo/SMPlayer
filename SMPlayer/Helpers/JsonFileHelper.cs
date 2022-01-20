@@ -48,6 +48,12 @@ namespace SMPlayer.Models
             SaveAsync(Helper.LocalFolder, filename, data);
         }
 
+        public static async Task DeleteFile(string filename)
+        {
+            if (!filename.EndsWith(extension)) filename += extension;
+            await FileHelper.DeleteLocalFile(filename);
+        }
+
         public static T FromJson<T>(string json) where T : class
         {
             return json == null ? null : JsonConvert.DeserializeObject<T>(json);

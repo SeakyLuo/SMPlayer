@@ -20,19 +20,19 @@ namespace SMPlayer.Helpers
         public static async Task InitOld()
         {
             Inited = false;
-            if (await SQLHelper.Initialized())
+            Settings settings = await JsonFileHelper.ReadObjectAsync<Settings>(JsonFilename);
+            if (await SQLHelper.Initialized() && settings == null)
             {
                 return;
             }
-            if (await JsonFileHelper.ReadObjectAsync<Settings>(JsonFilename) is Settings settings)
+            if (settings == null)
             {
-                Settings.settings = settings;
-                await Init(settings);
-                FileHelper.DeleteLocalFile(JsonFilename);
+                Settings.settings = new Settings();
             }
             else
             {
-                Settings.settings = new Settings();
+                Settings.settings = settings;
+                await Init(settings);
             }
             Inited = true;
         }
@@ -68,20 +68,23 @@ namespace SMPlayer.Helpers
             }
             var jsonObject = JsonFileHelper.FromJson<JObject>(json);
             List<Music> songs = FlattenFolderTreeInJson(jsonObject["Tree"]);
-            MainPage.Instance.Loader.SetMessage("UpdateDBMsgUpdatingDatabase");
+            await MainPage.Instance.Loader.SetMessageAsync("UpdateDBMsgPreparing");
             List<Music> nowPlayingSongs = await JsonFileHelper.ReadObjectAsync<List<Music>>(MusicPlayer.JsonFilename);
             UpdateLog updateLog = await JsonFileHelper.ReadObjectAsync<UpdateLog>("UpdateLogger") ?? new UpdateLog();
             Settings.settings.LastReleaseNotesVersion = updateLog.LastReleaseNotesVersion;
+            List<MusicDAO> list = new List<MusicDAO>();
+            foreach (var i in songs)
+            {
+                if (i.DateAdded == null && await i.GetStorageFileAsync() is StorageFile file)
+                {
+                    i.DateAdded = file.DateCreated;
+                }
+                list.Add(i.ToDAO());
+            }
+            await MainPage.Instance.Loader.SetMessageAsync("UpdateDBMsgUpdatingDatabase");
             SQLHelper.Run(c =>
             {
-                c.InsertAll(songs.Select(async i =>
-                {
-                    if (i.DateAdded == null && await i.GetStorageFileAsync() is StorageFile file)
-                    {
-                        i.DateAdded = file.DateCreated;
-                    }
-                    return i.ToDAO();
-                }));
+                c.InsertAll(list);
                 InsertTree(c, Settings.settings.Tree);
                 InsertPlaylists(c, Settings.settings.Playlists);
                 InsertPreferenceSettings(c, Settings.settings.Preference);
@@ -89,6 +92,7 @@ namespace SMPlayer.Helpers
                 InsertRecentSearches(c, Settings.settings);
                 InsertMyFavoritesAndSettings(c);
             });
+            await JsonFileHelper.DeleteFile(JsonFilename);
         }
 
         private static void InsertMyFavoritesAndSettings(SQLiteConnection c)
@@ -107,7 +111,7 @@ namespace SMPlayer.Helpers
 
         private static async Task Init(Settings settings)
         {
-            if (string.IsNullOrEmpty(settings.RootPath)) return;
+            if (settings == null || string.IsNullOrEmpty(settings.RootPath)) return;
             try
             {
                 Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);

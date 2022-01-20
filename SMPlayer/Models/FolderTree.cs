@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Helpers;
+using SMPlayer.Models.DAO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,6 +23,7 @@ namespace SMPlayer.Models
         public bool IsNotEmpty { get => !IsEmpty; }
         public int FileCount { get => Trees.Sum(t => t.FileCount) + Files.Count; }
         public long ParentId { get; set; }
+        public ActiveState State { get; set; } = ActiveState.Active;
 
         public FolderTree() { }
 
@@ -84,6 +86,7 @@ namespace SMPlayer.Models
         {
             Criterion = SortBy.Title;
             var list = Files.Select(f => new { File = f, Music = Settings.FindMusic(f.FileId) })
+                            .Where(i => i.Music != null)
                             .OrderBy(i => i.Music.Name).ToList();
             Files = list.Select(i => i.File).ToList();
             return list.Select(i => i.Music);
@@ -92,6 +95,7 @@ namespace SMPlayer.Models
         {
             Criterion = SortBy.Artist;
             var list = Files.Select(f => new { File = f, Music = Settings.FindMusic(f.FileId) })
+                            .Where(i => i.Music != null)
                             .OrderBy(i => i.Music.Artist).ToList();
             Files = list.Select(i => i.File).ToList();
             return list.Select(i => i.Music);
@@ -100,6 +104,7 @@ namespace SMPlayer.Models
         {
             Criterion = SortBy.Album;
             var list = Files.Select(f => new { File = f, Music = Settings.FindMusic(f.FileId) })
+                            .Where(i => i.Music != null)
                             .OrderBy(i => i.Music.Album).ToList();
             Files = list.Select(i => i.File).ToList();
             return list.Select(i => i.Music);

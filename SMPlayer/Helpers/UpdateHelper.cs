@@ -54,17 +54,27 @@ namespace SMPlayer.Helpers
 
         private static async Task<bool> LoadFolder(StorageFolder folder, FolderTree tree)
         {
+            HashSet<string> existingFolders = tree.Trees.Select(i => i.Path).ToHashSet();
+            HashSet<string> newFolders = new HashSet<string>();
             foreach (var subFolder in await folder.GetFoldersAsync())
             {
                 if (LoadingStatus == ExecutionStatus.Break) return false;
                 var branch = tree.FindFolder(subFolder.Path) ?? new FolderTree();
                 await LoadFolder(subFolder, branch);
+                newFolders.Add(subFolder.Path);
                 if (branch.Id == 0 && branch.IsNotEmpty)
                 {
                     tree.Trees.Add(branch);
                 }
             }
-            HashSet<string> existing = tree.Files.Select(i => i.Path).ToHashSet();
+            foreach (var branch in tree.Trees)
+            {
+                if (!newFolders.Contains(branch.Path))
+                {
+                    branch.State = ActiveState.Inactive;
+                }
+            }
+            HashSet<string> existingFiles = tree.Files.Select(i => i.Path).ToHashSet();
             HashSet<string> newFiles = new HashSet<string>();
             foreach (var file in await folder.GetFilesAsync())
             {
@@ -72,7 +82,7 @@ namespace SMPlayer.Helpers
                 if (file.IsMusicFile())
                 {
                     newFiles.Add(file.Path);
-                    if (!existing.Contains(file.Path))
+                    if (!existingFiles.Contains(file.Path))
                     {
                         Music music = await Music.LoadFromFileAsync(file);
                         tree.Files.Add(music.ToFolderFile());
@@ -100,12 +110,19 @@ namespace SMPlayer.Helpers
          */
         private static async Task ResetFolderData(FolderTree folder, FolderUpdateResult result = null)
         {
+            if (folder.State.IsInactive())
+            {
+                SQLHelper.Run(c => c.Update(folder.ToDAO()));
+                result?.RemoveFolder(folder.Path);
+                return;
+            }
             SQLHelper.Run(c =>
             {
                 FolderTree existing = c.SelectFolderInfoByPath(folder.Path);
                 if (existing == null)
                 {
                     c.InsertFolder(folder);
+                    result?.AddFolder(folder.Path);
                 }
                 else
                 {
@@ -117,6 +134,7 @@ namespace SMPlayer.Helpers
                 item.ParentId = folder.Id;
                 await ResetFolderData(item, result);
             }
+            folder.Trees.RemoveAll(i => i.State.IsInactive());
             foreach (var item in folder.Files)
             {
                 if (item.Id == 0)
@@ -130,7 +148,7 @@ namespace SMPlayer.Helpers
                             Settings.settings.AddMusic(c, music);
                             item.FileId = music.Id;
                         }
-                        result?.FileAdded();
+                        result?.AddFile(item.Path);
                         c.InsertFile(item);
                         Log.Debug("file is added, path {0}", item.Path);
                     });
@@ -138,14 +156,15 @@ namespace SMPlayer.Helpers
                 }
                 else
                 {
-                    if (item.State.isInactive())
+                    if (item.State.IsInactive())
                     {
-                        result?.FileRemoved();
+                        result?.RemoveFile(item.Path);
                         Settings.settings.RemoveFile(item);
                         Log.Info("file is deleted, path {0}", item.Path);
                     }
                 }
             }
+            folder.Files.RemoveAll(i => i.State.IsInactive());
         }
 
         public static async void RefreshFolder(FolderTree tree)
@@ -177,20 +196,20 @@ namespace SMPlayer.Helpers
             }
             var result = new FolderUpdateResult();
             await ResetFolderData(folderTree, result);
-            if (result.Added != 0 || result.Removed != 0)
+            if (result.FilesAdded.IsNotEmpty() || result.FilesRemoved.IsNotEmpty())
             {
                 NotifyLibraryChange(folderTree);
             }
             MainPage.Instance?.Loader.Hide();
             string message;
-            if (result.Added == 0 && result.Removed == 0)
+            if (result.FilesAdded.IsEmpty() && result.FilesRemoved.IsEmpty())
                 message = Helper.LocalizeMessage("CheckNewMusicResultNoChange");
-            else if (result.Added == 0)
-                message = Helper.LocalizeMessage("CheckNewMusicResultRemoved", result.Removed);
-            else if (result.Removed == 0)
-                message = Helper.LocalizeMessage("CheckNewMusicResultAdded", result.Added);
+            else if (result.FilesRemoved.IsNotEmpty())
+                message = Helper.LocalizeMessage("CheckNewMusicResultRemoved", result.FilesRemoved.Count);
+            else if (result.FilesAdded.IsNotEmpty())
+                message = Helper.LocalizeMessage("CheckNewMusicResultAdded", result.FilesAdded.Count);
             else
-                message = Helper.LocalizeMessage("CheckNewMusicResultChange", result.Added, result.Removed);
+                message = Helper.LocalizeMessage("CheckNewMusicResultChange", result.FilesAdded.Count, result.FilesRemoved.Count);
             Helper.ShowNotificationRaw(message);
         }
 
@@ -209,11 +228,26 @@ namespace SMPlayer.Helpers
 
     class FolderUpdateResult
     {
-        public int Added { get; set; } = 0;
-        public int Removed { get; set; } = 0;
+        public List<string> FilesAdded { get; set; } = new List<string>();
+        public List<string> FilesRemoved { get; set; } = new List<string>();
+        public List<string> FoldersAdded { get; set; } = new List<string>();
+        public List<string> FoldersRemoved { get; set; } = new List<string>();
 
-        public void FileAdded() { Added++; }
-        public void FileRemoved() { Removed++; }
-
+        public void AddFile(string path)
+        {
+            FilesAdded.Add(path);
+        }
+        public void RemoveFile(string path) 
+        {
+            FilesRemoved.Add(path);
+        }
+        public void AddFolder(string path)
+        {
+            FoldersAdded.Add(path);
+        }
+        public void RemoveFolder(string path)
+        {
+            FoldersRemoved.Add(path);
+        }
     }
 }

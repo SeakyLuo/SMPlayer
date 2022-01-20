@@ -401,13 +401,21 @@ namespace SMPlayer
 
         private void ListViewFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            if (PleaseExitMultiSelectMode()) return;
+            if (PleaseExitMultiSelectMode())
+            {
+                ListViewFlyoutItem.IsChecked = false;
+                return;
+            }
             SwitchViewMode(LocalPageViewMode.List);
         }
 
         private void GridViewFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            if (PleaseExitMultiSelectMode()) return;
+            if (PleaseExitMultiSelectMode())
+            {
+                GridViewFlyoutItem.IsChecked = false;
+                return;
+            }
             SwitchViewMode(LocalPageViewMode.Grid);
         }
 

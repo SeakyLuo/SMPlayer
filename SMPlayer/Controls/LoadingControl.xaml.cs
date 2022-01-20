@@ -83,6 +83,11 @@ namespace SMPlayer
             Message = message;
         }
 
+        public async Task SetMessageAsync(string text, params object[] args)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => SetMessage(text, args));
+        } 
+
         public void ShowDeterminant(string text, bool allowBreak = false, int max = 0, Action action = null)
         { 
             SetMessage(text);
@@ -129,6 +134,7 @@ namespace SMPlayer
 
         public void Increment(string message = null)
         {
+            if (!IsDeterminant) return;
             Progress++;
             if (!string.IsNullOrWhiteSpace(message))
             {

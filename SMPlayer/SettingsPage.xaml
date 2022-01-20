@@ -146,11 +146,6 @@
                         x:Uid="MusicLibraryTextBlock"
                         Style="{StaticResource SettingLabelStyle}"
                         Text="Music Library" />
-                    <HyperlinkButton
-                        x:Uid="UpdateMusicLibraryButton"
-                        Click="UpdateMusicLibrary_Click"
-                        Content="Update Music Library"
-                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource SettingLabelStyle}" />

@@ -92,19 +92,6 @@ namespace SMPlayer
             ColorPickerFlyout.Hide();
         }
 
-        private async void UpdateMusicLibrary_Click(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(Settings.settings.RootPath))
-            {
-                MainPage.Instance.ShowLocalizedNotification("SetRootFolder");
-            }
-            else
-            {
-                await UpdateHelper.UpdateMusicLibrary(Helper.CurrentFolder);
-            }
-
-        }
-
         private void SaveChanges_Click(object sender, RoutedEventArgs e)
         {
             App.Save();

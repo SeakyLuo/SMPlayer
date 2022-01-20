@@ -196,7 +196,7 @@ namespace SMPlayer
             {
                 MusicPlayer.SetMusicPlaying(MusicCollection, next);
                 foreach (var item in GridMusicCollection)
-                    item.Source.IsPlaying = item.Source.Equals(next);
+                    item.IsPlaying = item.Source.Equals(next);
             });
         }
 
