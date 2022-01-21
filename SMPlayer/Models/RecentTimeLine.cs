@@ -63,44 +63,35 @@ namespace SMPlayer.Models
             return new RecentTimeLine(list?.OrderByDescending(m => m.DateAdded).Take(MAX_RECENT_TIMELINE_ITEMS));
         }
 
-        // TODO: Yesterday/Recent7Days/Recent30Days的计算有问题
         public static string Categorize(DateTimeOffset dateAdded)
         {
             DateTime now = DateTime.Now;
+            if (dateAdded.Year == now.Year && dateAdded.Month == now.Month && dateAdded.Day == now.Day)
+            {
+                return "Today";
+            }
+            string formatedDateAdded = dateAdded.ToString("yyyyMMdd");
+            if (formatedDateAdded == DateTime.Now.AddDays(-1).ToString())
+            {
+                return "Yesterday";
+            }
+            if (formatedDateAdded == DateTime.Now.AddDays(-7).ToString())
+            {
+                return "Recent7Days";
+            }
+            if (dateAdded.Year == now.Year && dateAdded.Month == now.Month)
+            {
+                return "ThisMonth";
+            }
+            if (formatedDateAdded == DateTime.Now.AddDays(-30).ToString())
+            {
+                return "Recent30Days";
+            }
             if (dateAdded.Year == now.Year)
             {
-                if (dateAdded.Month == now.Month)
-                {
-                    if (dateAdded.Day == now.Day)
-                    {
-                        return "Today";
-                    }
-                    if ((now - dateAdded).Days <= 1)
-                    {
-                        return "Yesterday";
-                    }
-                    else if ((now - dateAdded).Days <= 7)
-                    {
-                        return "Recent7Days";
-                    }
-                    else
-                    {
-                        return "ThisMonth";
-                    }
-                }
-                else if ((now - dateAdded).Days <= 30)
-                {
-                    return "Recent30Days";
-                }
-                else
-                {
-                    return "Month" + now.Month;
-                }
+                return "Month" + dateAdded.Month;
             }
-            else
-            {
-                return dateAdded.Year.ToString();
-            }
+            return dateAdded.ToString("yyyy.MM");
         }
     }
 }

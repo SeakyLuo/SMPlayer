@@ -663,7 +663,7 @@ namespace SMPlayer
                     }
                     break;
                 case StorageItemEventType.Move:
-                    currentFolder.MoveBranch(folder, args.Path);
+                    currentFolder.MoveBranch(folder, args.Folder);
                     GridItems.RemoveAll(i => i.Path == folder.Path);
                     break;
                 case StorageItemEventType.Update:

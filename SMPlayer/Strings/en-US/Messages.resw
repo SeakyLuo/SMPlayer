@@ -156,17 +156,32 @@
   <data name="ChangesSaved" xml:space="preserve">
     <value>Changes has been saved.</value>
   </data>
-  <data name="CheckNewMusicResultAdded" xml:space="preserve">
-    <value>Music added: {0}</value>
+  <data name="CheckNewMusicResult1Added" xml:space="preserve">
+    <value>"{0}" is added.</value>
+  </data>
+  <data name="CheckNewMusicResult1Added1Removed" xml:space="preserve">
+    <value>"{0}" is added, and "{1}" is removed.</value>
+  </data>
+  <data name="CheckNewMusicResult1Removed" xml:space="preserve">
+    <value>"{0}" is removed!</value>
+  </data>
+  <data name="CheckNewMusicResult2Added" xml:space="preserve">
+    <value>"{0}" and "{1}" are added.</value>
+  </data>
+  <data name="CheckNewMusicResult2Removed" xml:space="preserve">
+    <value>"{0}" and "{1}" are removed!</value>
   </data>
   <data name="CheckNewMusicResultChange" xml:space="preserve">
     <value>Music added: {0}, removed: {1}</value>
   </data>
+  <data name="CheckNewMusicResultMultipleAdded" xml:space="preserve">
+    <value>Music added: {0}</value>
+  </data>
+  <data name="CheckNewMusicResultMultipleRemoved" xml:space="preserve">
+    <value>Music removed: {0}</value>
+  </data>
   <data name="CheckNewMusicResultNoChange" xml:space="preserve">
     <value>No changes have been found.</value>
-  </data>
-  <data name="CheckNewMusicResultRemoved" xml:space="preserve">
-    <value>Music removed: {0}</value>
   </data>
   <data name="ClearPlayHistory" xml:space="preserve">
     <value>Do you want to clear your play history?</value>

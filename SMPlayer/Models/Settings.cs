@@ -541,45 +541,39 @@ namespace SMPlayer.Models
         public async Task MoveFolderAsync(FolderTree folder, FolderTree target)
         {
             await MoveFolder(folder, target);
-            SQLHelper.Run(c =>
-            {
-                foreach (var music in AllSongs)
-                {
-                    if (music.Path.StartsWith(target.Path))
-                    {
-                        MoveMusic(c, music, target.Path);
-                    }
-                }
-            });
             foreach (var listener in StorageItemEventListeners)
                 listener.ExecuteFolderEvent(folder, new StorageItemEventArgs(StorageItemEventType.Move) { Folder = target });
         }
 
         private async Task MoveFolder(FolderTree folder, FolderTree target)
         {
+            StorageFolder localFolder = await folder.GetStorageFolderAsync();
             StorageFolder localTarget = await target.GetStorageFolderAsync();
             StorageFolder branch = await localTarget.CreateFolderAsync(folder.Name, CreationCollisionOption.OpenIfExists);
+            FolderTree oldFolder = new FolderTree() { Id = folder.Id };
+            FolderDAO folderDAO;
             if (FindFolderInfo(branch.Path) is FolderTree duplicate)
             {
-                SQLHelper.Run(c => c.Delete(folder.ToDAO()));
-                folder = duplicate;
+                folderDAO = folder.ToDAO();
+                folderDAO.State = ActiveState.Inactive;
+                folder.Id = duplicate.Id;
+                folder.Path = duplicate.Path;
+                folder.ParentId = duplicate.ParentId;
             }
             else
             {
-                folder.Rename(folder.ParentPath, target.Path);
-                FolderTree newParent = FindFolderInfo(target.Path);
-                folder.ParentId = newParent.Id;
-                SQLHelper.Run(c => c.Update(folder.ToDAO()));
+                folder.MoveToFolder(FindFolderInfo(target.Id));
+                folderDAO = folder.ToDAO();
             }
-            foreach (var item in SQLHelper.Run(c => c.SelectSubFolders(folder)))
+            foreach (var item in SQLHelper.Run(c => c.SelectSubFolders(oldFolder)))
             {
                 await MoveFolder(item, folder);
             }
-            foreach (var item in SQLHelper.Run(c => c.SelectSubFiles(folder)))
+            foreach (var item in SQLHelper.Run(c => c.SelectSubFiles(oldFolder)))
             {
                 await MoveFileAsync(item, folder);
             }
-            StorageFolder localFolder = await folder.GetStorageFolderAsync();
+            SQLHelper.Run(c => c.Update(folderDAO));
             if ((await localFolder.GetFilesAsync()).IsEmpty())
             {
                 await localFolder.DeleteAsync();

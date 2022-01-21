@@ -19,7 +19,7 @@ namespace SMPlayer.Models
         public List<Music> Songs { get => Settings.FindMusicList(Files.Select(i => i.FileId)); }
         public SortBy Criterion { get; set; } = SortBy.Title;
         public TreeInfo Info { get => new TreeInfo(Name, Trees.Count, Files.Count); }
-        public bool IsEmpty { get => Files.Count == 0 && Trees.All(tree => tree.IsEmpty); }
+        public bool IsEmpty { get => Files.IsEmpty() && Trees.All(tree => tree.IsEmpty); }
         public bool IsNotEmpty { get => !IsEmpty; }
         public int FileCount { get => Trees.Sum(t => t.FileCount) + Files.Count; }
         public long ParentId { get; set; }
@@ -134,12 +134,12 @@ namespace SMPlayer.Models
             }
             return null;
         }
-        public FolderTree FindTree(long id)
+        public FolderTree FindFolder(long id)
         {
             if (Id == id) return this;
             foreach (var tree in Trees)
             {
-                if (tree.FindTree(id) is FolderTree target)
+                if (tree.FindFolder(id) is FolderTree target)
                     return target;
             }
             return null;
@@ -174,37 +174,29 @@ namespace SMPlayer.Models
             Path = Path.Replace(oldPath, newPath);
         }
 
+        public void MoveToFolder(FolderTree target)
+        {
+            Rename(ParentPath, target.Path);
+            ParentId = target.Id;
+        }
+
         public bool RemoveBranch(string path)
         {
             return Trees.RemoveAll(f => f.Path == path) > 0 ||
                    (Trees.FirstOrDefault(t => path.StartsWith(t.Path)) is FolderTree tree && tree.RemoveBranch(path));
         }
 
-        public void MoveBranch(FolderTree branch, string newPath)
+        public void MoveBranch(FolderTree branch, FolderTree newParent)
         {
-            FolderTree tree = FindTree(branch.Id);
             RemoveBranch(branch.Path);
-            tree.Rename(tree.Path, System.IO.Path.Combine(newPath, Name));
-            FindFolder(newPath)?.AddBranch(tree);
+            FindFolder(branch.Id)?.MoveToFolder(newParent);
+            FindFolder(newParent.Path)?.AddBranch(branch);
         }
 
         public bool RemoveFile(string path)
         {
             return Files.RemoveAll(f => f.Path == path) > 0 ||
                    (Trees.FirstOrDefault(t => path.StartsWith(t.Path)) is FolderTree tree && tree.RemoveFile(path));
-        }
-
-        public void MoveFile(FolderFile src, string newPath)
-        {
-            //FolderFile file = FindFile(src.Path);
-            //if (file == null) return;
-            //RemoveFile(src.Path);
-            //file.MoveToFolder(newPath);
-            //if (FindFolder(newPath) is FolderTree newParent)
-            //{
-            //    newParent.RemoveFile(src.Path);
-            //    newParent.AddFile(file);
-            //}
         }
 
         public override bool Equals(object obj)

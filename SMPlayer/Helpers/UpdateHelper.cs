@@ -114,6 +114,17 @@ namespace SMPlayer.Helpers
             {
                 SQLHelper.Run(c => c.Update(folder.ToDAO()));
                 result?.RemoveFolder(folder.Path);
+                foreach (var item in folder.Trees)
+                {
+                    item.State = ActiveState.Inactive;
+                    await ResetFolderData(item, result);
+                }
+                foreach (var item in folder.Files)
+                {
+                    result?.RemoveFile(item.Path);
+                    Settings.settings.RemoveFile(item);
+                    Log.Info("file is deleted, path {0}", item.Path);
+                }
                 return;
             }
             SQLHelper.Run(c =>
@@ -201,16 +212,7 @@ namespace SMPlayer.Helpers
                 NotifyLibraryChange(folderTree);
             }
             MainPage.Instance?.Loader.Hide();
-            string message;
-            if (result.FilesAdded.IsEmpty() && result.FilesRemoved.IsEmpty())
-                message = Helper.LocalizeMessage("CheckNewMusicResultNoChange");
-            else if (result.FilesRemoved.IsNotEmpty())
-                message = Helper.LocalizeMessage("CheckNewMusicResultRemoved", result.FilesRemoved.Count);
-            else if (result.FilesAdded.IsNotEmpty())
-                message = Helper.LocalizeMessage("CheckNewMusicResultAdded", result.FilesAdded.Count);
-            else
-                message = Helper.LocalizeMessage("CheckNewMusicResultChange", result.FilesAdded.Count, result.FilesRemoved.Count);
-            Helper.ShowNotificationRaw(message);
+            Helper.ShowNotificationRaw(result.ToDisplayMessage());
         }
 
         private static void ExitChecking(string message)
@@ -233,6 +235,11 @@ namespace SMPlayer.Helpers
         public List<string> FoldersAdded { get; set; } = new List<string>();
         public List<string> FoldersRemoved { get; set; } = new List<string>();
 
+        public string FirstFileAdded { get => System.IO.Path.GetFileNameWithoutExtension(FilesAdded[0]); }
+        public string SecondFileAdded { get => System.IO.Path.GetFileNameWithoutExtension(FilesAdded[1]); }
+        public string FirstFileRemoved { get => System.IO.Path.GetFileNameWithoutExtension(FilesRemoved[0]); }
+        public string SecondFileRemoved { get => System.IO.Path.GetFileNameWithoutExtension(FilesRemoved[1]); }
+
         public void AddFile(string path)
         {
             FilesAdded.Add(path);
@@ -248,6 +255,52 @@ namespace SMPlayer.Helpers
         public void RemoveFolder(string path)
         {
             FoldersRemoved.Add(path);
+        }
+
+        public string ToDisplayMessage()
+        {
+            if (FilesAdded.IsNotEmpty() && FilesRemoved.IsNotEmpty())
+            {
+                if (FilesAdded.Count == 1 && FilesRemoved.Count == 1)
+                {
+                    return Helper.LocalizeMessage("CheckNewMusicResult1Added1Removed", FirstFileAdded, FirstFileRemoved);
+                }
+                else
+                {
+                    return Helper.LocalizeMessage("CheckNewMusicResultChange", FilesAdded.Count, FilesRemoved.Count);
+                }
+            }
+            if (FilesRemoved.IsNotEmpty())
+            {
+                if (FilesRemoved.Count == 1)
+                {
+                    return Helper.LocalizeMessage("CheckNewMusicResult1Removed", FirstFileRemoved);
+                }
+                else if (FilesRemoved.Count == 2)
+                {
+                    return Helper.LocalizeMessage("CheckNewMusicResult2Removed", FirstFileRemoved, SecondFileRemoved);
+                }
+                else
+                {
+                    return Helper.LocalizeMessage("CheckNewMusicResultMultipleRemoved", FilesRemoved.Count);
+                }
+            }
+            if (FilesAdded.IsNotEmpty())
+            {
+                if (FilesAdded.Count == 1)
+                {
+                    return Helper.LocalizeMessage("CheckNewMusicResult1Added", FirstFileAdded);
+                }
+                else if (FilesAdded.Count == 2)
+                {
+                    return Helper.LocalizeMessage("CheckNewMusicResult2Added", FirstFileAdded, SecondFileAdded);
+                }
+                else
+                {
+                    return Helper.LocalizeMessage("CheckNewMusicResultMultipleAdded", FilesAdded.Count);
+                }
+            }
+            return Helper.LocalizeMessage("CheckNewMusicResultNoChange");
         }
     }
 }

@@ -30,6 +30,8 @@ Search in lryics.
 
 Allow MainSearchBar to have a search history dropdown.
 
+Refresh folder show detail dialog.
+
 # TO FIX
 Able to drag titlebar when loading, multi-select.
 
