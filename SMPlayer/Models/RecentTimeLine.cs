@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SMPlayer.Models
 {
-    public delegate void NotifyRecentTimeLineChangedEventHandler();
+    public delegate void NotifyRecentTimeLineChangedEventHandler(RecentTimeLineChangedEventArgs args);
 
     public class RecentTimeLine
     {
@@ -37,7 +37,7 @@ namespace SMPlayer.Models
                 Remove(TimeLine.Last());
             }
             TimeLine.Insert(justRemovedMusic == music.Id ? justRemovedIndex : 0, music);
-            CollectionChanged?.Invoke();
+            CollectionChanged?.Invoke(new RecentTimeLineChangedEventArgs() { Item = music, Type = MusicEventType.Add });
         }
 
         public bool Remove(Music music)
@@ -47,7 +47,7 @@ namespace SMPlayer.Models
             {
                 justRemovedMusic = music.Id;
                 TimeLine.RemoveAt(justRemovedIndex);
-                CollectionChanged?.Invoke();
+                CollectionChanged?.Invoke(new RecentTimeLineChangedEventArgs() { Item = music, Type = MusicEventType.Remove });
                 return true;
             }
             return false;
@@ -93,5 +93,11 @@ namespace SMPlayer.Models
             }
             return dateAdded.ToString("yyyy.MM");
         }
+    }
+
+    public class RecentTimeLineChangedEventArgs
+    {
+        public Music Item { get; set; }
+        public MusicEventType Type { get; set; }
     }
 }

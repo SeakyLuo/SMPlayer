@@ -39,6 +39,7 @@ namespace SMPlayer
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             Settings.AddRecentEventListener(this);
+            Settings.AddMusicEventListener(this);
 
             AddedMusicView.TopItemEffectiveViewportChanged += (sender, args) =>
             {
@@ -68,11 +69,20 @@ namespace SMPlayer
         {
             if (RecentAdded == null)
             {
-                //List<Music> recentAdded = await JsonFileHelper.ReadObjectAsync<List<Music>>(JsonFileName);
-                //if (recentAdded.IsEmpty()) recentAdded = Settings.AllSongs.OrderByDescending(m => m.DateAdded).ToList();
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
                     RecentAdded = RecentTimeLine.FromMusicList(Settings.AllSongs);
+                    RecentAdded.CollectionChanged += (args) =>
+                    {
+                        if (args.Type == MusicEventType.Add)
+                        {
+                            AddedMusicView.AddOrMoveToTheFirst(args.Item);
+                        }
+                        else
+                        {
+                            AddedMusicView.RemoveMusic(args.Item);
+                        }
+                    };
                     SetupAdded();
                 });
             }
@@ -106,12 +116,12 @@ namespace SMPlayer
 
         public void SetupAdded()
         {
-            if (RecentAdded == null || !AddedModified) return;
+            if (RecentAdded == null) return;
             RecentAddedProgressRing.IsActive = true;
             ObservableCollection<Music> list = RecentAdded.TimeLine;
             SetupAddedButtonState(list);
             AddedMusicView.Setup(list);
-            RecentAddedProgressRing.IsActive = AddedModified = false;
+            RecentAddedProgressRing.IsActive = false;
         }
 
         private void SetupAddedButtonState(ObservableCollection<Music> list)
@@ -455,7 +465,7 @@ namespace SMPlayer
             switch (args.EventType)
             {
                 case MusicEventType.Add:
-                    AddedModified = true;
+                    RecentAdded.Add(music);
                     break;
                 case MusicEventType.Remove:
                     RecentAdded.Remove(music);

@@ -469,7 +469,7 @@ namespace SMPlayer
                         }
                         else
                         {
-                            CurrentFolder.SortFiles();
+                            CurrentFolder.SortFiles(criterion);
                             Settings.settings.UpdateFolder(CurrentFolder);
                         }
                         SetupGridView(CurrentFolder);

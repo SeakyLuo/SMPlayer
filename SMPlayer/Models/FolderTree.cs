@@ -66,8 +66,9 @@ namespace SMPlayer.Models
             return list;
         }
 
-        public void SortFiles()
+        public void SortFiles(SortBy? criterion = null)
         {
+            if (criterion != null) Criterion = (SortBy)criterion;
             switch (Criterion)
             {
                 case SortBy.Title:
