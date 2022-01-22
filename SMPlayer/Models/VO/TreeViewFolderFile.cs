@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 
 namespace SMPlayer.Models.VO
 {
-    public class TreeViewFolderFile : IFolderFile
+    public class TreeViewFolderFile : StorageItem, IFolderFile
     {
-        public long Id { get; set; }
         public string Icon { get; set; }
-        public string Name { get => System.IO.Path.GetFileNameWithoutExtension(Path); }
         public string Creator { get; set; }
         public string Collection { get; set; } // 从属的集合
         public long FileId { get; set; }
-        public string Path { get; set; }
         public FileType FileType { get; set; }
 
         public TreeViewFolderFile() { }

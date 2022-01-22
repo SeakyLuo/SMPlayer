@@ -69,47 +69,22 @@ namespace SMPlayer.Models
         public void SortFiles(SortBy? criterion = null)
         {
             if (criterion != null) Criterion = (SortBy)criterion;
-            switch (Criterion)
-            {
-                case SortBy.Title:
-                    SortByTitle();
-                    break;
-                case SortBy.Artist:
-                    SortByArtist();
-                    break;
-                case SortBy.Album:
-                    SortByAlbum();
-                    break;
-            }
+            Files = Files.Select(f => new { File = f, Music = Settings.FindMusic(f.FileId) })
+                         .Where(i => i.Music != null)
+                         .OrderBy(i =>
+                         {
+                             switch (Criterion)
+                             {
+                                 case SortBy.Artist:
+                                     return i.Music.Artist;
+                                 case SortBy.Album:
+                                     return i.Music.Album;
+                                 default:
+                                     return i.Music.Name;
+                             }
+                         }).Select(i => i.File).ToList();
         }
 
-        public IEnumerable<Music> SortByTitle()
-        {
-            Criterion = SortBy.Title;
-            var list = Files.Select(f => new { File = f, Music = Settings.FindMusic(f.FileId) })
-                            .Where(i => i.Music != null)
-                            .OrderBy(i => i.Music.Name).ToList();
-            Files = list.Select(i => i.File).ToList();
-            return list.Select(i => i.Music);
-        }
-        public IEnumerable<Music> SortByArtist()
-        {
-            Criterion = SortBy.Artist;
-            var list = Files.Select(f => new { File = f, Music = Settings.FindMusic(f.FileId) })
-                            .Where(i => i.Music != null)
-                            .OrderBy(i => i.Music.Artist).ToList();
-            Files = list.Select(i => i.File).ToList();
-            return list.Select(i => i.Music);
-        }
-        public IEnumerable<Music> SortByAlbum()
-        {
-            Criterion = SortBy.Album;
-            var list = Files.Select(f => new { File = f, Music = Settings.FindMusic(f.FileId) })
-                            .Where(i => i.Music != null)
-                            .OrderBy(i => i.Music.Album).ToList();
-            Files = list.Select(i => i.File).ToList();
-            return list.Select(i => i.Music);
-        }
         public List<Music> Reverse()
         {
             Files.Reverse();

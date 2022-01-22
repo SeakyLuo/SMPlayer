@@ -2,6 +2,7 @@
 using SMPlayer.Dialogs;
 using SMPlayer.Helpers;
 using SMPlayer.Models;
+using SMPlayer.Models.DAO;
 using SMPlayer.Models.VO;
 using System;
 using System.Collections.Generic;
@@ -126,38 +127,31 @@ namespace SMPlayer
             }
             IsProcessing = true;
             LocalProgressRing.Visibility = Visibility.Visible;
+            ClearMultiSelectStatus();
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                ClearMultiSelectStatus();
+                if (tree.IsEmpty) return;
                 tree.SortFiles();
                 switch (Settings.settings.LocalViewMode)
                 {
                     case LocalPageViewMode.List:
                         SetupTreeView(tree);
-                        break;
-                    case LocalPageViewMode.Grid:
-                        SetupGridView(tree);
-                        break;
-                }
-                History.Push(tree);
-                SetHeader(tree);
-                SetNavText(tree);
-                SetLocalCommandBar(tree);
-                SetBackButtonIsEnabled();
-                // 不展示的放在后面加载
-                switch (Settings.settings.LocalViewMode)
-                {
-                    case LocalPageViewMode.List:
                         SetupGridView(tree);
                         break;
                     case LocalPageViewMode.Grid:
+                        SetupGridView(tree);
                         SetupTreeView(tree);
                         break;
                 }
-                LocalProgressRing.Visibility = Visibility.Collapsed;
-                folderUpdated = false;
-                IsProcessing = false;
+                History.Push(tree);
             });
+            SetHeader(tree);
+            SetNavText(tree);
+            SetLocalCommandBar(tree);
+            SetBackButtonIsEnabled();
+            LocalProgressRing.Visibility = Visibility.Collapsed;
+            folderUpdated = false;
+            IsProcessing = false;
         }
 
         private void SetupTreeView(FolderTree tree)
@@ -266,8 +260,7 @@ namespace SMPlayer
             else if (!(node.Parent.Content is FolderTree))
             {
                 // 如果移动到非文件夹节点，恢复拖动前的位置
-                node.Parent.Children.Remove(node);
-                originalParentNode.Children.Insert(originalIndex, node);
+                MoveBackNode(node);
             }
             else
             {
@@ -276,14 +269,28 @@ namespace SMPlayer
                 FolderTree newParent = node.Parent.Content == null ? currentFolder : node.Parent.Content as FolderTree;
                 if (content is FolderTree folder)
                 {
-                    await Settings.settings.MoveFolderAsync(folder, newParent);
+                    // 文件夹没有移动成功的话，就把节点移动回去
+                    if (!await Settings.settings.MoveFolderAsync(folder, newParent))
+                    {
+                        MoveBackNode(node);
+                    }
                 }
                 else if (content is TreeViewFolderFile file)
                 {
-                    await Settings.settings.MoveFileAsync(file.ToFolderFile(), newParent);
+                    // 文件没有移动成功的话，就把节点移动回去
+                    if (!await Settings.settings.MoveFileAsync(file.ToFolderFile(), newParent))
+                    {
+                        MoveBackNode(node);
+                    }
                 }
             }
             MainPage.Instance?.Loader.Hide();
+        }
+
+        private void MoveBackNode(TreeViewNode node)
+        {
+            node.Parent.Children.Remove(node);
+            originalParentNode.Children.Insert(originalIndex, node);
         }
 
         private void OpenMusicFlyout(object sender, object e)
@@ -318,7 +325,7 @@ namespace SMPlayer
                     {
                         gridViewFolder.Rename(newPath);
                     }
-                    if (FindNode(folder) is TreeViewNode node)
+                    if (FindNode(folder.Path) is TreeViewNode node)
                     {
                         (node.Content as FolderTree).Rename(newPath);
                     }
@@ -326,20 +333,21 @@ namespace SMPlayer
             flyout.Items.Add(MenuFlyoutHelper.GetSearchDirectoryItem(folder));
         }
 
-        private TreeViewNode FindNode(FolderTree tree)
-        {
-            return FindNode(tree.Path);
-        }
-
         private TreeViewNode FindNode(string path)
         {
-            return LocalTreeView.RootNodes.FirstOrDefault(node => FindNode(node, path) is TreeViewNode);
+            return FindNode(LocalTreeView.RootNodes, path);
         }
 
-        private TreeViewNode FindNode(TreeViewNode node, string tree)
+        private TreeViewNode FindNode(IList<TreeViewNode> nodes, string path)
         {
-            return node == null || tree == (node.Content as FolderTree).Path ? node :
-                   FindNode(node.Children.FirstOrDefault(sub => tree.StartsWith((sub.Content as FolderTree).Path)), tree);
+            if (nodes.IsEmpty()) return null;
+            foreach (var node in nodes)
+            {
+                StorageItem item = node.Content as StorageItem;
+                if (path == item.Path) return node;
+                if (FindNode(node.Children, path) is TreeViewNode target) return target;
+            }
+            return null;
         }
 
         private void LocalTreeView_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
@@ -663,8 +671,13 @@ namespace SMPlayer
                     }
                     break;
                 case StorageItemEventType.Move:
-                    currentFolder.MoveBranch(folder, args.Folder);
-                    GridItems.RemoveAll(i => i.Path == folder.Path);
+                    if (folder.State.IsInactive())
+                    {
+                        currentFolder.MoveBranch(folder, args.Folder);
+                        GridItems.RemoveAll(i => i.Path == folder.Path);
+                        string newPath = Path.Combine(args.Folder.Path, folder.Name);
+                        FindNode(folder.Path).Content = Settings.FindFolderInfo(newPath);
+                    }
                     break;
                 case StorageItemEventType.Update:
                     if (MainPage.Instance?.CurrentPage != typeof(LocalPage))

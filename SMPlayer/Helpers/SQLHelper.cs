@@ -134,7 +134,7 @@ namespace SMPlayer.Helpers
         {
             Settings settings = c.Query<SettingsDAO>("select * from Settings order by Id desc").FirstOrDefault()?.FromDAO();
             if (settings == null) return null;
-            settings.Tree = c.SelectFolderInfoByPath(settings.RootPath);
+            settings.Tree = c.SelectFolderInfoByPath(settings.RootPath) ?? new FolderTree();
             return settings;
         }
 

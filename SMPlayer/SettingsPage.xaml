@@ -146,9 +146,6 @@
                         x:Uid="MusicLibraryTextBlock"
                         Style="{StaticResource SettingLabelStyle}"
                         Text="Music Library" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
                     <HyperlinkButton
                         x:Uid="AddLyricsButton"
                         Click="AddLyrics_Click"

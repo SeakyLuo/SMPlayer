@@ -73,6 +73,10 @@ namespace SMPlayer.Models
         {
             return SQLHelper.Run(c => c.SelectFile(id));
         }
+        public static FolderFile FindFile(string path)
+        {
+            return SQLHelper.Run(c => c.SelectFileByPath(path));
+        }
 
         public static List<Music> RecentPlay
         {
@@ -538,69 +542,69 @@ namespace SMPlayer.Models
             }
         }
 
-        public async Task MoveFolderAsync(FolderTree folder, FolderTree target)
+        public async Task<bool> MoveFolderAsync(FolderTree folder, FolderTree target)
         {
-            await MoveFolder(folder, target);
+            bool moved = await MoveFolder(folder, target);
             foreach (var listener in StorageItemEventListeners)
                 listener.ExecuteFolderEvent(folder, new StorageItemEventArgs(StorageItemEventType.Move) { Folder = target });
+            return moved;
         }
 
-        private async Task MoveFolder(FolderTree folder, FolderTree target)
+        private async Task<bool> MoveFolder(FolderTree folder, FolderTree target)
         {
             StorageFolder localFolder = await folder.GetStorageFolderAsync();
             StorageFolder localTarget = await target.GetStorageFolderAsync();
-            StorageFolder branch = await localTarget.CreateFolderAsync(folder.Name, CreationCollisionOption.OpenIfExists);
-            FolderTree oldFolder = new FolderTree() { Id = folder.Id };
-            FolderDAO folderDAO;
-            if (FindFolderInfo(branch.Path) is FolderTree duplicate)
+            StorageFolder newFolder = await localTarget.CreateFolderAsync(folder.Name, CreationCollisionOption.OpenIfExists);
+            FolderTree duplicate = FindFolderInfo(newFolder.Path);
+            if (duplicate == null)
             {
-                folderDAO = folder.ToDAO();
-                folderDAO.State = ActiveState.Inactive;
-                folder.Id = duplicate.Id;
-                folder.Path = duplicate.Path;
-                folder.ParentId = duplicate.ParentId;
+                folder.MoveToFolder(target);
             }
-            else
+            foreach (var item in SQLHelper.Run(c => c.SelectSubFolders(folder)))
             {
-                folder.MoveToFolder(FindFolderInfo(target.Id));
-                folderDAO = folder.ToDAO();
+                await MoveFolder(item, duplicate ?? folder);
             }
-            foreach (var item in SQLHelper.Run(c => c.SelectSubFolders(oldFolder)))
+            bool moved = true;
+            foreach (var item in SQLHelper.Run(c => c.SelectSubFiles(folder)))
             {
-                await MoveFolder(item, folder);
+                moved &= await MoveFileAsync(item, duplicate ?? folder);
             }
-            foreach (var item in SQLHelper.Run(c => c.SelectSubFiles(oldFolder)))
-            {
-                await MoveFileAsync(item, folder);
-            }
-            SQLHelper.Run(c => c.Update(folderDAO));
             if ((await localFolder.GetFilesAsync()).IsEmpty())
             {
                 await localFolder.DeleteAsync();
             }
+            if (duplicate != null && moved)
+            {
+                folder.State = ActiveState.Inactive;
+            }
+            SQLHelper.Run(c => c.Update(folder.ToDAO()));
+            return moved;
         }
 
-        public async Task MoveFileAsync(FolderFile file, FolderTree newParent)
+        public async Task<bool> MoveFileAsync(FolderFile file, FolderTree newParent)
         {
             if (await FileHelper.FileExists(Path.Combine(newParent.Path, file.NameWithExtension)))
             {
                 string message = Helper.LocalizeMessage("DuplicateFoundWhenMovingFile", file.Name, newParent.Name);
+                bool moved = true;
                 await Helper.ShowMessageDialog(message, 2, 2,
                     ("MoveAndReplace", async () => { await MoveAndReplaceFile(file, newParent); }),
                     ("KeepBoth", async () => { await MoveAndKeepBothFile(file, newParent); }),
-                    ("SkipThis", null));
+                    ("SkipThis", () => { moved = false; }
+                ));
+                return moved;
             }
             else
             {
                 await MoveFile(file, newParent);
+                return true;
             }
         }
 
         private async Task MoveFile(FolderFile file, FolderTree folder)
         {
-            string path = folder.Path;
             StorageFile localFile = await FileHelper.LoadFileAsync(file.Path);
-            StorageFolder targetFolder = await FileHelper.LoadFolderAsync(path);
+            StorageFolder targetFolder = await FileHelper.LoadFolderAsync(folder.Path);
             await localFile.MoveAsync(targetFolder);
             SQLHelper.Run(c => MoveFile(c, file, folder));
             foreach (var listener in StorageItemEventListeners)
@@ -609,7 +613,7 @@ namespace SMPlayer.Models
 
         private async Task MoveAndReplaceFile(FolderFile file, FolderTree newParent)
         {
-            await DeleteFile(file);
+            await DeleteFile(FindFile(Path.Combine(newParent.Path, file.NameWithExtension)));
             await MoveFile(file, newParent);
         }
 
