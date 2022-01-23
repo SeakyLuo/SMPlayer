@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Helpers;
 using SMPlayer.Models;
+using SMPlayer.Models.VO;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,7 +24,15 @@ namespace SMPlayer
 {
     public static class ClassHelper
     {
-        public static int FindSortedListInsertIndex<T>(this IEnumerable<T> list, IComparable comparable)
+        public static void InsertWithOrder<T>(this ObservableCollection<T> list, T comparable) where T : IComparable
+        {
+            list.Insert(FindSortedListInsertIndex(list, comparable), comparable);
+        }
+        public static void InsertWithOrder<T>(this List<T> list, T comparable) where T : IComparable
+        {
+            list.Insert(FindSortedListInsertIndex(list, comparable), comparable);
+        }
+        public static int FindSortedListInsertIndex<T>(this IEnumerable<T> list, T comparable) where T : IComparable
         {
             int count = list.Count();
             for (int i = 0; i < count - 1; i++)
@@ -157,7 +166,7 @@ namespace SMPlayer
             }
             return dst;
         }
-        public static ObservableCollection<T> CopyAndSetTo<T>(this ObservableCollection<T> dst, IEnumerable<T> src)
+        public static ObservableCollection<T> SetToCopy<T>(this ObservableCollection<T> dst, IEnumerable<T> src)
         {
             return dst.SetTo(src.ToList());
         }
@@ -246,30 +255,74 @@ namespace SMPlayer
             }
         }
 
-        public static void ClearSelections(this ListViewBase listView)
+        public static void ClearSelections(this ListViewBase view)
         {
-            listView.SelectedItems.Clear();
+            try
+            {
+                view.SelectedItems.Clear();
+            }
+            catch (Exception e)
+            {
+                // ???
+                Log.Debug("灾难性故障, {0}", e);
+            }
         }
 
-        public static void ReverseSelections(this ListViewBase listView)
+        public static void ReverseSelections(this ListViewBase view)
         {
-            if (listView.SelectedItems.Count == 0)
+            if (view.SelectedItems.IsEmpty())
             {
-                listView.SelectAll();
+                view.SelectAll();
                 return;
             }
-            if (listView.SelectedItems.Count == listView.Items.Count)
+            if (view.SelectedItems.Count == view.Items.Count)
             {
-                listView.ClearSelections();
+                view.ClearSelections();
                 return;
             }
-            var selected = listView.SelectedItems.ToHashSet();
-            listView.SelectedItems.Clear();
-            foreach (var item in selected)
+            var selected = view.SelectedItems.ToHashSet();
+            view.ClearSelections();
+            foreach (var item in view.Items)
             {
                 if (!selected.Contains(item))
                 {
-                    listView.SelectedItems.Add(item);
+                    view.SelectedItems.Add(item);
+                }
+            }
+        }
+
+        public static void ClearSelections(this TreeView view)
+        {
+            try
+            {
+                view.SelectedNodes.Clear();
+            } 
+            catch (Exception e)
+            {
+                // ???
+                Log.Debug("灾难性故障, {0}", e);
+            }
+        }
+
+        public static void ReverseSelections(this TreeView view)
+        {
+            if (view.SelectedNodes.IsEmpty())
+            {
+                view.SelectAll();
+                return;
+            }
+            if (view.SelectedNodes.Count == view.RootNodes.Count)
+            {
+                view.ClearSelections();
+                return;
+            }
+            var selected = view.SelectedNodes.ToHashSet();
+            view.ClearSelections();
+            foreach (var item in view.RootNodes)
+            {
+                if (!selected.Contains(item))
+                {
+                    view.SelectedNodes.Add(item);
                 }
             }
         }
@@ -323,6 +376,11 @@ namespace SMPlayer
                 indices.Add(Helper.RandRange(list.Count));
             }
             return indices.Select(index => list[index]);
+        }
+
+        public static bool IsMusic(this FileType fileType)
+        {
+            return fileType == FileType.Music;
         }
     }
 }

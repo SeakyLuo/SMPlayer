@@ -19,27 +19,9 @@ namespace SMPlayer.Helpers
             return index == -1 ? "" : path.Substring(0, index);
         }
 
-        public static string GetFilename(string path)
-        {
-            int startIndex = path.LastIndexOf(PathJoiner) + 1;
-            return path.Substring(startIndex);
-        }
-
-        public static string GetDisplayName(string path)
-        {
-            string filename = GetFilename(path);
-            int dot = path.LastIndexOf('.');
-            return dot == -1 ? filename : filename.Substring(0, dot);
-        }
-
         public static string MoveToPath(string path, string newPath)
         {
             return path.Replace(GetParentPath(path), newPath);
-        }
-
-        public static string JoinPaths(params string[] values)
-        {
-            return string.Join(PathJoiner, values);
         }
 
         public static async Task<StorageFolder> LoadFolderAsync(string path)
@@ -76,7 +58,7 @@ namespace SMPlayer.Helpers
             }
             catch (Exception e)
             {
-                //Log.Info("LoadFileAsync Exception {0}", e);
+                Log.Info("LoadFileAsync Exception {0}", e);
                 return null;
             }
         }
@@ -126,6 +108,61 @@ namespace SMPlayer.Helpers
             catch (Exception)
             {
                 return false;
+            }
+        }
+
+        public static async Task DeleteLocalFile(string filename)
+        {
+            await DeleteFile(Helper.LocalFolder, filename);
+        }
+
+        public static async Task DeleteFile(string filePath)
+        {
+            StorageFile file = await LoadFileAsync(filePath);
+            if (file != null)
+            {
+                await file.DeleteAsync();
+            }
+        }
+
+        public static async Task DeleteFile(StorageFolder folder, string filename)
+        {
+            if (folder == null || string.IsNullOrEmpty(filename)) return;
+            var file = await folder.GetFileAsync(filename);
+            if (file != null) await file.DeleteAsync();
+        }
+
+        public static async Task<string> ReadFileAsync(StorageFolder folder, string filename)
+        {
+            if (folder == null) return null;
+            if (await FileNotExist(Path.Combine(folder.Path, filename)))
+            {
+                return null;
+            }
+            StorageFile file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
+            return await FileIO.ReadTextAsync(file);
+        }
+
+        public static async Task WriteFileAsync(StorageFolder folder, string filename, string content)
+        {
+            if (folder == null || content == null) return;
+            StorageFile file = await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
+            while (true)
+            {
+                try
+                {
+                    await FileIO.WriteTextAsync(file, content);
+                    break;
+                }
+                catch (FileLoadException)
+                {
+                    System.Threading.Thread.Sleep(1000);
+                }
+                catch (Exception)
+                {
+                    // 无法删除要被替换的文件
+                    break;
+                }
             }
         }
     }

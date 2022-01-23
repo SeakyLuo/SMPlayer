@@ -169,8 +169,7 @@ namespace SMPlayer
             {
                 list.RemoveAt(0);
             }
-            int index = list.FindSortedListInsertIndex(item);
-            list.Insert(index, item);
+            list.InsertWithOrder(item);
         }
 
         public bool Contains(T item)

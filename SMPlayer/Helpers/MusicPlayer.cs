@@ -59,15 +59,25 @@ namespace SMPlayer
         public static MediaPlayer Player = new MediaPlayer() { Source = PlaybackList };
         public static DispatcherTimer Timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
         public static List<IMediaControlListener> MediaControlListeners = new List<IMediaControlListener>();
-        public static List<ISwitchMusicListener> SwitchMusicListeners = new List<ISwitchMusicListener>();
+        private static List<ISwitchMusicListener> SwitchMusicListeners = new List<ISwitchMusicListener>();
         public static List<ICurrentPlaylistChangedListener> CurrentPlaylistChangedListeners = new List<ICurrentPlaylistChangedListener>();
         public static List<IMediaPlayerStateChangedListener> MediaPlayerStateChangedListeners = new List<IMediaPlayerStateChangedListener>();
         public static List<Action> InitFinishedListeners = new List<Action>();
         public const string JsonFilename = "NowPlaying";
 
+        public static void AddSwitchMusicListener(ISwitchMusicListener listener) { SwitchMusicListeners.Add(listener); }
+
         public MusicPlayer() { Settings.AddMusicEventListener(this); }
 
-        public static async void Init(Music music = null)
+        public static void Init(Music music = null)
+        {
+            MainPage.AddMainPageLoadedListener(async () =>
+            {
+                await InitWithMusic(music);
+            });
+        }
+
+        public static async Task InitWithMusic(Music music = null)
         {
             var settings = Settings.settings;
             if (music == null)
@@ -77,7 +87,7 @@ namespace SMPlayer
                 {
                     if (settings.LastMusicIndex == -1)
                         settings.LastMusicIndex = 0;
-                    SetPlaylist(Settings.settings.SelectMusicByIds(playlist));
+                    SetPlaylist(Settings.FindMusicList(playlist));
                     if (settings.LastMusicIndex < CurrentPlaylist.Count)
                         CurrentMusic = CurrentPlaylist[settings.LastMusicIndex];
                 }
@@ -149,7 +159,7 @@ namespace SMPlayer
         public static void Save()
         {
             var paths = CurrentPlaylist.Select(m => m.Id);
-            JsonFileHelper.SaveAsync(JsonFilename, paths);
+            JsonFileHelper.Save(JsonFilename, paths);
             JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, paths);
         }
 
@@ -198,6 +208,13 @@ namespace SMPlayer
         public static bool IsMusicPlaying(Music music)
         {
             return music.IndexedEquals(CurrentMusic);
+        }
+
+        public static void AddMusicAndPlay(IMusicable source)
+        {
+            AddMusic(source);
+            MoveToMusic(source.ToMusic());
+            Play();
         }
 
         public static void AddMusic(IMusicable source)
@@ -453,21 +470,22 @@ namespace SMPlayer
                 CurrentMusic?.CopyFrom(after);
         }
 
-        void IMusicEventListener.Liked(Music music, bool isFavorite)
+        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
-            MusicModified(music, music);
-        }
-
-        void IMusicEventListener.Added(Music music) { }
-
-        void IMusicEventListener.Removed(Music music)
-        {
-            RemoveMusic(music);
-        }
-
-        void IMusicEventListener.Modified(Music before, Music after)
-        {
-            MusicModified(before, after);
+            switch (args.EventType)
+            {
+                case MusicEventType.Add:
+                    break;
+                case MusicEventType.Remove:
+                    RemoveMusic(music);
+                    break;
+                case MusicEventType.Like:
+                    MusicModified(music, new Music(music) { Favorite = args.IsFavorite });
+                    break;
+                case MusicEventType.Modify:
+                    MusicModified(music, args.ModifiedMusic);
+                    break;
+            }
         }
     }
 

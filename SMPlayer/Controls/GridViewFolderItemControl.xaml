@@ -6,12 +6,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SMPlayer.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    EffectiveViewportChanged="UserControl_EffectiveViewportChanged"
+    DataContextChanged="UserControl_DataContextChanged"
     PointerEntered="GridViewItem_PointerEntered"
     PointerExited="GridViewItem_PointerExited"
     mc:Ignorable="d">
 
-    <StackPanel Margin="10">
+    <StackPanel Margin="10" MaxWidth="180">
         <controls:DropShadowPanel
             x:Name="ShadowPanel"
             VerticalContentAlignment="Top"
@@ -51,8 +51,18 @@
                 <Image
                     Grid.RowSpan="2"
                     Grid.ColumnSpan="2"
-                    Source="{Binding LargeThumbnail, Mode=OneWay}"
-                    Visibility="{Binding LargeThumbnail, Converter={StaticResource VisibilityConverter}}" />
+                    Source="{Binding Thumbnail, Mode=OneWay}"
+                    Visibility="{Binding Thumbnail, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
+                <Grid 
+                    Grid.Row="1"
+                    Width="20"
+                    Height="20"
+                    Grid.Column="1"
+                    Margin="60,60,0,0"
+                    Background="White"
+                    Visibility="{Binding TypeIcon, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    <Image Source="{Binding TypeIcon}" />
+                </Grid>
                 <StackPanel
                     x:Name="ButtonStackPanel"
                     Grid.RowSpan="2"
@@ -64,6 +74,7 @@
                         x:Uid="PlayAllButton"
                         Click="PlayAllButton_Click"
                         Content="&#xE768;"
+                        ToolTipService.ToolTip="{Binding PlayButtonToolTip, Mode=OneWay}"
                         Style="{StaticResource HoverButtonStyle}" />
                     <Button
                         x:Uid="AddToButton"
@@ -73,20 +84,36 @@
                 </StackPanel>
             </Grid>
         </controls:DropShadowPanel>
-        <TextBlock
-            FontSize="16"
-            FontWeight="SemiBold"
-            HorizontalTextAlignment="Left"
-            MaxLines="2"
-            Text="{Binding Name, Mode=OneWay}"
-            TextWrapping="Wrap" />
+        <RelativePanel HorizontalAlignment="Stretch">
+            <TextBlock
+                MaxWidth="160"
+                FontSize="15"
+                FontWeight="SemiBold"
+                HorizontalTextAlignment="Left"
+                MaxLines="1"
+                Foreground="{Binding IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
+                Text="{Binding Name, Mode=OneWay}"
+                ToolTipService.ToolTip="{Binding Path, Mode=OneWay}"
+                RelativePanel.AlignLeftWithPanel="True"
+                RelativePanel.AlignVerticalCenterWithPanel="True"
+                TextWrapping="Wrap" />
+            <FontIcon
+                x:Name="PlayingIcon"
+                Foreground="{ThemeResource SystemColorHighlightColor}"
+                Glyph="&#xE767;"
+                FontSize="13"
+                RelativePanel.AlignRightWithPanel="True"
+                RelativePanel.AlignVerticalCenterWithPanel="True"
+                Visibility="{Binding IsPlaying, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
+        </RelativePanel>
         <TextBlock
             Margin="0,3,0,0"
             FontSize="12"
-            Foreground="Gray"
+            Foreground="{Binding IsPlaying, Converter={StaticResource ColorConverter}, ConverterParameter=Gray, Mode=OneWay}"
             HorizontalTextAlignment="Left"
-            MaxLines="2"
-            Text="{Binding FolderInfo, Mode=OneWay}" />
+            MaxLines="1"
+            Text="{Binding Info, Mode=OneWay}"
+            TextWrapping="Wrap" />
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="CommonStates">
                 <VisualState x:Name="Normal" />

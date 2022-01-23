@@ -4,6 +4,7 @@ using SMPlayer.Models;
 using SMPlayer.Models.DAO;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Contacts;
@@ -23,7 +24,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class SettingsPage : Page, IAfterPathSetListener
+    public sealed partial class SettingsPage : Page
     {
         public static NotificationSendMode[] NotificationOptions = { NotificationSendMode.MusicChanged, NotificationSendMode.Never };
         private static readonly int[] LimitedRecentPlayedItems = { -1, 100, 200, 500, 1000 };
@@ -51,7 +52,6 @@ namespace SMPlayer
             NotificationModeComboBox.SelectedIndex = (int)settings.NotificationDisplay;
             ThemeColorPicker.Color = settings.ThemeColor;
             ShowCountToggleSwitch.IsOn = settings.ShowCount;
-            KeepRecentComboBox.SelectedIndex = LimitedRecentPlayedItems.FindIndex(i => i == settings.LimitedRecentPlayedItems);
             AutoPlayToggleSwitch.IsOn = settings.AutoPlay;
             AutoLyricsToggleSwitch.IsOn = settings.AutoLyrics;
             SaveProgressToggleSwitch.IsOn = settings.SaveMusicProgress;
@@ -92,19 +92,6 @@ namespace SMPlayer
             ColorPickerFlyout.Hide();
         }
 
-        private async void UpdateMusicLibrary_Click(object sender, RoutedEventArgs e)
-        {
-            if (Helper.CurrentFolder == null)
-            {
-                MainPage.Instance.ShowNotification("SetRootFolder");
-            }
-            else
-            {
-                await UpdateHelper.UpdateMusicLibrary();
-            }
-
-        }
-
         private void SaveChanges_Click(object sender, RoutedEventArgs e)
         {
             App.Save();
@@ -128,8 +115,8 @@ namespace SMPlayer
             string paren = Helper.LocalizeMessage("PostParenthesis");
             HyperlinkButton button = (HyperlinkButton)sender;
             List<Music> skipped = new List<Music>();
-            int count = Settings.settings.MusicLibrary.Count, counter = 0;
-            foreach (Music music in Settings.settings.AllSongs)
+            int count = Settings.AllSongs.Count(), counter = 0;
+            foreach (Music music in Settings.AllSongs)
             {
                 if (addLyricsClickCounter == 0)
                 {
@@ -214,7 +201,8 @@ namespace SMPlayer
             if (folder == null) return;
             MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
             Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-            JsonFileHelper.SaveAsync(folder, SettingsHelper.JsonFilename, Settings.settings);
+            StorageFile dbFile = await FileHelper.LoadFileAsync(Path.Combine(Helper.LocalFolder.Path, SQLHelper.DBFileName));
+            await dbFile.CopyAsync(folder);
             MainPage.Instance.Loader.Hide();
             MainPage.Instance.ShowLocalizedNotification("DataExported");
         }
@@ -225,14 +213,14 @@ namespace SMPlayer
             {
                 SuggestedStartLocation = PickerLocationId.MusicLibrary
             };
-            picker.FileTypeFilter.Add(".json");
+            picker.FileTypeFilter.Add(".db");
             StorageFile file = await picker.PickSingleFileAsync();
             if (file == null) return;
             MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
             try
             {
-                if (!SettingsHelper.Init(await FileIO.ReadTextAsync(file))) return;
-                bool successful = await UpdateHelper.UpdateMusicLibrary();
+                await SettingsHelper.InitWithFile(file);
+                bool successful = await UpdateHelper.UpdateMusicLibrary(Helper.CurrentFolder);
                 if (successful)
                 {
                     App.Save();
@@ -246,11 +234,6 @@ namespace SMPlayer
                 MainPage.Instance.Loader.Hide();
                 MainPage.Instance.ShowLocalizedNotification("ImportDataFailed" + ex.Message);
             }
-        }
-
-        void IAfterPathSetListener.PathSet(string path)
-        {
-            PathBox.Text = path;
         }
 
         private void ReleaseNotesButton_Click(object sender, RoutedEventArgs e)

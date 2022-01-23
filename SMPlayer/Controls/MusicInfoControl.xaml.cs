@@ -35,7 +35,7 @@ namespace SMPlayer.Controls
         public MusicInfoControl()
         {
             this.InitializeComponent();
-            MusicPlayer.SwitchMusicListeners.Add(this);
+            MusicPlayer.AddSwitchMusicListener(this);
             MusicPlayer.MediaPlayerStateChangedListeners.Add(this);
         }
 

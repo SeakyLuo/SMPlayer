@@ -65,7 +65,7 @@ namespace SMPlayer
         public ObservableCollection<Music> ItemsSource
         {
             get => currentPlaylist;
-            set => currentPlaylist.SetTo(value);
+            set => currentPlaylist = value;
         }
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
         public bool ShowAlbumText
@@ -120,12 +120,12 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             MusicPlayer.CurrentPlaylistChangedListeners.Add(this);
-            MusicPlayer.SwitchMusicListeners.Add(this);
+            MusicPlayer.AddSwitchMusicListener(this);
         }
 
         private void PlaylistController_Loaded(object sender, RoutedEventArgs e)
         {
-            if (IsNowPlaying) CurrentPlaylist.SetTo(MusicPlayer.CurrentPlaylist);
+            if (IsNowPlaying) CurrentPlaylist.SetTo(MusicPlayer.CurrentPlaylist.Select(i => i.Copy()));
             Helper.GetMainPageContainer().SetMultiSelectListener(this);
         }
 
@@ -345,37 +345,32 @@ namespace SMPlayer
                 ScrollToMusicRequestedWhenUnloaded = -1;
             }
         }
-
-        void IMenuFlyoutItemClickListener.AddTo(object data, object collection, int index, AddToCollectionType type)
+        void IMenuFlyoutItemClickListener.Execute(MenuFlyoutEventArgs args)
         {
-            if (type == AddToCollectionType.NowPlaying && IsNowPlaying)
+            switch (args.Event)
             {
-                AlternateRowBackgroud(index);
+                case MenuFlyoutEvent.AddTo:
+                    MenuFlyoutAddToEventArgs addToArgs = (MenuFlyoutAddToEventArgs)args;
+                    if (addToArgs.CollectionType == AddToCollectionType.NowPlaying && IsNowPlaying)
+                    {
+                        AlternateRowBackgroud(addToArgs.Index);
+                    }
+                    break;
+                case MenuFlyoutEvent.Delete:
+                    RemoveMusicAndNotifyUser(args.Music, false);
+                    break;
+                case MenuFlyoutEvent.Remove:
+                    AskRemoveMusic(args.Music);
+                    break;
+                case MenuFlyoutEvent.UndoDelete:
+                    CurrentPlaylist.Insert(removedMusicIndex, args.Music);
+                    AlternateRowBackgroud(removedMusicIndex);
+                    break;
+                case MenuFlyoutEvent.Select:
+                    SelectionMode = ListViewSelectionMode.Multiple;
+                    SongsListView.SelectedItems.Add(args.Data);
+                    break;
             }
-        }
-
-        void IMenuFlyoutItemClickListener.Delete(Music music)
-        {
-            RemoveMusicAndNotifyUser(music, false);
-        }
-
-        void IMenuFlyoutItemClickListener.Remove(Music music)
-        {
-            AskRemoveMusic(music);
-        }
-
-        void IMenuFlyoutItemClickListener.Favorite(object data) { }
-
-        void IMenuFlyoutItemClickListener.Select(object data)
-        {
-            SelectionMode = ListViewSelectionMode.Multiple;
-            SongsListView.SelectedItems.Add(data as Music);
-        }
-
-        void IMenuFlyoutItemClickListener.UndoDelete(Music music)
-        {
-            CurrentPlaylist.Insert(removedMusicIndex, music);
-            AlternateRowBackgroud(removedMusicIndex);
         }
 
         private void SongsListView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
@@ -398,91 +393,81 @@ namespace SMPlayer
             SongsListView.ClearSelections();
         }
 
-        void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar)
-        {
-            SelectionMode = ListViewSelectionMode.None;
-            MultiSelectListener?.Cancel(commandBar);
-        }
 
-        void IMultiSelectListener.AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper)
+        async void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
         {
-            helper.Data = SelectedItems;
-            MultiSelectListener?.AddTo(commandBar, helper);
-        }
-
-        void IMultiSelectListener.Play(MultiSelectCommandBar commandBar)
-        {
-            if (SelectedItemsCount == 0) return;
-            MusicPlayer.SetPlaylistAndPlay(SelectedItems);
-            MultiSelectListener?.Play(commandBar);
-        }
-
-        async void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar)
-        {
-            if (SongsListView.SelectedItems.Count == 0)
+            switch (args.Event)
             {
-                return;
+                case MultiSelectEvent.Cancel:
+                    SelectionMode = ListViewSelectionMode.None;
+                    break;
+                case MultiSelectEvent.AddTo:
+                    if (SelectedItemsCount == 0) return;
+                    args.FlyoutHelper.Data = SelectedItems;
+                    break;
+                case MultiSelectEvent.Play:
+                    if (SelectedItemsCount == 0) return;
+                    MusicPlayer.SetPlaylistAndPlay(SelectedItems);
+                    break;
+                case MultiSelectEvent.Remove:
+                    if (SelectedItemsCount == 0)
+                    {
+                        return;
+                    }
+                    if (SelectedItemsCount == 1)
+                    {
+                        AskRemoveMusic(SongsListView.SelectedItems[0] as Music);
+                    }
+                    else
+                    {
+                        if (dialog == null) dialog = new Dialogs.RemoveDialog();
+                        if (dialog.IsChecked)
+                        {
+                            RemoveMusic(SelectedItems);
+                        }
+                        else
+                        {
+                            dialog.Confirm = () => RemoveMusic(SelectedItems);
+                            dialog.Message = Helper.LocalizeMessage("RemoveMusicList", SongsListView.SelectedItems.Count);
+                            await dialog.ShowAsync();
+                        }
+                    }
+                    break;
+                case MultiSelectEvent.SelectAll:
+                    SongsListView.SelectAll();
+                    break;
+                case MultiSelectEvent.ReverseSelections:
+                    SongsListView.ReverseSelections();
+                    break;
+                case MultiSelectEvent.ClearSelections:
+                    SongsListView.ClearSelections();
+                    break;
+                case MultiSelectEvent.MoveToFolder:
+                    break;
             }
-            if (SongsListView.SelectedItems.Count == 1)
+            MultiSelectListener?.Execute(commandBar, args);
+        }
+
+        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
+        {
+            switch (args.EventType)
             {
-                AskRemoveMusic(SongsListView.SelectedItems[0] as Music);
+                case MusicEventType.Add:
+                    if (removedMusic == music)
+                    {
+                        CurrentPlaylist.Insert(removedMusicIndex, music);
+                    }
+                    break;
+                case MusicEventType.Remove:
+                    RemoveMusicAndNotifyListeners(music);
+                    break;
+                case MusicEventType.Like:
+                    MusicModified(music, new Music(music) { Favorite = args.IsFavorite });
+                    break;
+                case MusicEventType.Modify:
+                    MusicModified(music, args.ModifiedMusic);
+                    break;
             }
-            else
-            {
-                if (dialog == null) dialog = new Dialogs.RemoveDialog();
-                if (dialog.IsChecked)
-                {
-                    RemoveMusic(SelectedItems);
-                }
-                else
-                {
-                    dialog.Confirm = () => RemoveMusic(SelectedItems);
-                    dialog.Message = Helper.LocalizeMessage("RemoveMusicList", SongsListView.SelectedItems.Count);
-                    await dialog.ShowAsync();
-                }
-            }
-            MultiSelectListener?.Remove(commandBar);
-        }
-
-        void IMultiSelectListener.SelectAll(MultiSelectCommandBar commandBar)
-        {
-            SongsListView.SelectAll();
-            MultiSelectListener?.SelectAll(commandBar);
-        }
-
-        void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar)
-        {
-            SongsListView.ClearSelections();
-            MultiSelectListener?.ClearSelections(commandBar);
-        }
-
-        void IMultiSelectListener.ReverseSelections(MultiSelectCommandBar commandBar)
-        {
-            SongsListView.ReverseSelections();
-            MultiSelectListener?.ReverseSelections(commandBar);
-        }
-
-        void IMusicEventListener.Liked(Music music, bool isFavorite)
-        {
-            MusicModified(music, music);
-        }
-
-        void IMusicEventListener.Added(Music music)
-        {
-            if (removedMusic == music)
-            {
-                CurrentPlaylist.Insert(removedMusicIndex, music);
-            }
-        }
-
-        void IMusicEventListener.Removed(Music music)
-        {
-            RemoveMusicAndNotifyListeners(music);
-        }
-
-        void IMusicEventListener.Modified(Music before, Music after)
-        {
-            MusicModified(before, after);
         }
 
         private void MusicModified(Music before, Music after)

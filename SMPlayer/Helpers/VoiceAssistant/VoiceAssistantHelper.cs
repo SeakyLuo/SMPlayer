@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Helpers.VoiceAssistant;
 using SMPlayer.Models;
+using SMPlayer.Models.VO;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -32,10 +33,10 @@ namespace SMPlayer.Helpers
             switch (hint)
             {
                 case Hint_PlaySomeonesMusic:
-                    string artist = Settings.settings.AllSongs.RandItem().Artist;
+                    string artist = Settings.AllSongs.RandItem().Artist;
                     if (string.IsNullOrEmpty(artist) || artist.Length > 30)
                     {
-                        artist = Settings.settings.AllSongs.RandItem().Artist;
+                        artist = Settings.AllSongs.RandItem().Artist;
                     }
                     if (string.IsNullOrEmpty(artist) || artist.Length > 30)
                     {
@@ -46,10 +47,10 @@ namespace SMPlayer.Helpers
                         return Helper.LocalizeText(Hint_PlaySomeonesMusic, artist);
                     }
                 case Hint_PlayMusicInAlbum:
-                    string album = Settings.settings.AllSongs.RandItem().Album;
+                    string album = Settings.AllSongs.RandItem().Album;
                     if (string.IsNullOrEmpty(album) || album.Length > 30)
                     {
-                        album = Settings.settings.AllSongs.RandItem().Album;
+                        album = Settings.AllSongs.RandItem().Album;
                     }
                     if (string.IsNullOrEmpty(album) || album.Length > 30)
                     {
@@ -315,7 +316,7 @@ namespace SMPlayer.Helpers
                 MusicPlayer.QuickPlay();
                 return;
             }
-            IEnumerable<Music> list = SearchHelper.SearchSongs(Settings.settings.AllSongs, text, SortBy.Default);
+            IEnumerable<Music> list = SearchHelper.SearchSongs(Settings.AllSongs, text, SortBy.Default);
             if (list.Count() == 0)
             {
                 SpeakNoResults(text);
@@ -331,7 +332,7 @@ namespace SMPlayer.Helpers
                 RandomPlayHelper.PlayArtist();
                 return;
             }
-            IEnumerable<Playlist> list = SearchHelper.SearchArtists(Settings.settings.AllSongs, text, SortBy.Default);
+            IEnumerable<Playlist> list = SearchHelper.SearchArtists(Settings.AllSongs, text, SortBy.Default);
             if (list.Count() == 0)
             {
                 SpeakNoResults(text);
@@ -347,7 +348,7 @@ namespace SMPlayer.Helpers
                 RandomPlayHelper.PlayAlbum();
                 return;
             }
-            IEnumerable<AlbumView> list = SearchHelper.SearchAlbums(Settings.settings.AllSongs, text, SortBy.Default);
+            IEnumerable<AlbumView> list = SearchHelper.SearchAlbums(Settings.AllSongs, text, SortBy.Default);
             if (list.Count() == 0)
             {
                 SpeakNoResults(text);
@@ -363,7 +364,7 @@ namespace SMPlayer.Helpers
                 RandomPlayHelper.PlayPlaylist();
                 return;
             }
-            IEnumerable<AlbumView> list = SearchHelper.SearchPlaylists(Settings.settings.Playlists, text, SortBy.Default);
+            IEnumerable<AlbumView> list = SearchHelper.SearchPlaylists(Settings.AllPlaylists, text, SortBy.Default);
             if (list.Count() == 0)
             {
                 SpeakNoResults(text);
@@ -379,18 +380,18 @@ namespace SMPlayer.Helpers
                 RandomPlayHelper.PlayFolder();
                 return;
             }
-            IEnumerable<GridFolderView> list = SearchHelper.SearchFolders(Settings.settings.Tree, text, SortBy.Default);
-            if (list.Count() == 0)
+            IEnumerable<GridViewFolder> list = SearchHelper.SearchFolders(Settings.AllFolders, text, SortBy.Default);
+            if (list.IsEmpty())
             {
                 SpeakNoResults(text);
                 return;
             }
-            MusicPlayer.ShuffleAndPlay(list.ElementAt(0).Songs);
+            MusicPlayer.ShuffleAndPlay(Settings.FindFolder(list.ElementAt(0).Id).Flatten());
         }
 
         private static async void PlayByArtistOrMusic(ByArtistRequest request)
         {
-            var byArtistResult = SearchHelper.SearchArtists(Settings.settings.AllSongs, request.Artist, SortBy.Default);
+            var byArtistResult = SearchHelper.SearchArtists(Settings.AllSongs, request.Artist, SortBy.Default);
             var originalResult = await SearchHelper.Search(request.Original);
             if (byArtistResult.IsEmpty() && originalResult == null)
             {
@@ -508,7 +509,7 @@ namespace SMPlayer.Helpers
                     }
                     break;
                 case SearchType.Folders:
-                    GridFolderView folder = result.Result as GridFolderView;
+                    GridViewFolder folder = result.Result as GridViewFolder;
                     MusicPlayer.ShuffleAndPlay(folder.Songs);
                     if (IsBadSearch(text, folder.Name, result))
                     {

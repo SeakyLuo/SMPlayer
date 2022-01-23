@@ -211,10 +211,10 @@
     <value>Artist</value>
   </data>
   <data name="AutoLyricsToggleSwitch.OffContent" xml:space="preserve">
-    <value>Add lyrics automatically when music is added</value>
+    <value>Automatically add lyrics  to recent added songs.</value>
   </data>
   <data name="AutoLyricsToggleSwitch.OnContent" xml:space="preserve">
-    <value>Add lyrics automatically when music is added</value>
+    <value>Automatically add lyrics  to recent added songs.</value>
   </data>
   <data name="AutoPlayToggleSwitch.OffContent" xml:space="preserve">
     <value>Play music automatically after this App is launched.</value>
@@ -1030,10 +1030,10 @@
     <value>Search</value>
   </data>
   <data name="SearchBar.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Search</value>
+    <value>Search music, artist, album, playlist, folder</value>
   </data>
   <data name="SearchButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Search</value>
+    <value>Search music, artist, album, playlist, folder</value>
   </data>
   <data name="SearchCommandsTextBlock.Text" xml:space="preserve">
     <value>Search [keyword]</value>
@@ -1260,5 +1260,23 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   </data>
   <data name="CreatePlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Add Playlist</value>
+  </data>
+  <data name="MoveToFolderAppButton.Label" xml:space="preserve">
+    <value>Move To Folder</value>
+  </data>
+  <data name="ViewModeAppButton.Label" xml:space="preserve">
+    <value>Display Mode</value>
+  </data>
+  <data name="ViewModel.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Change Display Mode</value>
+  </data>
+  <data name="GridViewFlyoutItem.Text" xml:space="preserve">
+    <value>Grid View</value>
+  </data>
+  <data name="ListViewFlyoutItem.Text" xml:space="preserve">
+    <value>List View</value>
+  </data>
+  <data name="AlbumSearchBar.PlaceholderText" xml:space="preserve">
+    <value>Search Album</value>
   </data>
 </root>

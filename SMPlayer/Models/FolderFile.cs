@@ -1,31 +1,44 @@
 ﻿using SMPlayer.Helpers;
+using SMPlayer.Models.DAO;
+using SMPlayer.Models.VO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace SMPlayer.Models
 {
-    public class FolderFile
+    public class FolderFile : StorageItem
     {
-        // 文件ID
-        public long Id { get; set; }
-        public FileType Type { get; set; }
-        public string Path { get; set; }
+        public long FileId { get; set; } // 文件ID
+        public FileType FileType { get; set; }
+        public IFolderFile Source { get; set; }
+        public long ParentId { get; set; }
+        public string NameWithExtension { get => System.IO.Path.GetFileName(Path); }
+        public ActiveState State { get; set; } = ActiveState.Active;
 
         public FolderFile() { }
 
         public FolderFile(Music music)
         {
-            Id = music.Id;
-            Type = FileType.Music;
+            FileId = music.Id;
+            FileType = FileType.Music;
             Path = music.Path;
         }
 
-        public Music ToMusic()
+        public FolderFile Copy()
         {
-            return Settings.settings.SelectMusicById(Id);
+            return new FolderFile()
+            {
+                Id = Id,
+                FileId = FileId,
+                FileType = FileType,
+                Path = Path,
+                Source = Source,
+                ParentId = ParentId,
+            };
         }
 
         public void RenameFolder(string oldPath, string newPath)
@@ -33,21 +46,22 @@ namespace SMPlayer.Models
             Path = Path.Replace(oldPath, newPath);
         }
 
-        public void MoveToFolder(string newPath)
+        public void MoveToFolder(FolderTree folder, string newFilename = null)
         {
-            Path = FileHelper.MoveToPath(Path, newPath);
-        }
-
-        public void CopyFrom(FolderFile file)
-        {
-            Id = file.Id;
-            Type = file.Type;
-            Path = file.Path;
+            ParentId = folder.Id;
+            if (string.IsNullOrEmpty(newFilename))
+            {
+                Path = FileHelper.MoveToPath(Path, folder.Path);
+            }
+            else
+            {
+                Path = System.IO.Path.Combine(folder.Path, newFilename);
+            }
         }
 
         public bool IsMusicFile()
         {
-            return Type == FileType.Music;
+            return FileType.IsMusic();
         }
 
         public override bool Equals(object obj)
@@ -59,10 +73,20 @@ namespace SMPlayer.Models
         {
             return Path.GetHashCode();
         }
+
+        public async Task<StorageFile> GetStorageFileAsync()
+        {
+            return await FileHelper.LoadFileAsync(Path);
+        }
     }
 
     public enum FileType
     {
         Music
+    }
+
+    public interface IFolderFile
+    {
+        FolderFile ToFolderFile();
     }
 }

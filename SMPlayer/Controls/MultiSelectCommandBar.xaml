@@ -843,13 +843,13 @@
     </UserControl.Resources>
 
     <CommandBar
-            x:Name="CommandBarContainer"
-            Style="{ThemeResource MultiSelectCommandBarStyle}"
-            IsOpen="False"
-            IsSticky="True"
-            ClosedDisplayMode="Hidden"
-            OverflowButtonVisibility="Collapsed"
-            DefaultLabelPosition="Bottom">
+        x:Name="CommandBarContainer"
+        Style="{ThemeResource MultiSelectCommandBarStyle}"
+        IsOpen="False"
+        IsSticky="True"
+        ClosedDisplayMode="Hidden"
+        OverflowButtonVisibility="Collapsed"
+        DefaultLabelPosition="Bottom">
         <AppBarButton
                 x:Name="CancelAppButton"
                 x:Uid="CancelAppButton"
@@ -875,6 +875,12 @@
                 Icon="Remove"
                 Label="Remove From List"
                 Click="RemoveAppButton_Click" />
+        <AppBarButton
+                x:Name="MoveToFolderAppButton"
+                x:Uid="MoveToFolderAppButton"
+                Icon="MoveToFolder"
+                Label="Move To Folder"
+                Click="MoveToFolderAppButton_Click" />
         <AppBarButton
                 x:Name="DeleteAppButton"
                 x:Uid="DeleteAppButton"

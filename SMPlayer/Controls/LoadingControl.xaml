@@ -55,7 +55,7 @@
                 FontSize="36"
                 Foreground="White"
                 MaxLines="3"
-                Text="{x:Bind Text, Mode=OneWay}"
+                Text="{x:Bind Message, Mode=OneWay}"
                 TextAlignment="Center"
                 TextWrapping="WrapWholeWords" />
             <Button

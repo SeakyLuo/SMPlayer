@@ -147,14 +147,6 @@
                         Style="{StaticResource SettingLabelStyle}"
                         Text="Music Library" />
                     <HyperlinkButton
-                        x:Uid="UpdateMusicLibraryButton"
-                        Click="UpdateMusicLibrary_Click"
-                        Content="Update Music Library"
-                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
-                    <HyperlinkButton
                         x:Uid="AddLyricsButton"
                         Click="AddLyrics_Click"
                         Content="Add Lyrics"
@@ -297,25 +289,6 @@
                         x:Uid="RecentTextBlock"
                         Style="{StaticResource SettingLabelStyle}"
                         Text="Recent" />
-                    <StackPanel Style="{ThemeResource SettingsMarginSetter}" Orientation="Horizontal">
-                        <TextBlock
-                            x:Uid="RecentPlayedItemTextBlock"
-                            Style="{StaticResource ComboBoxLabelStyle}"
-                            Text="Recent Played" />
-                        <ComboBox
-                            x:Name="KeepRecentComboBox"
-                            SelectionChanged="KeepRecentComboBox_SelectionChanged"
-                            Style="{StaticResource SettingsMarginSetter}">
-                            <ComboBoxItem x:Uid="AllComboItem" Content="All" />
-                            <ComboBoxItem x:Uid="100ComboItem" Content="100" />
-                            <ComboBoxItem x:Uid="200ComboItem" Content="200" />
-                            <ComboBoxItem x:Uid="500ComboItem" Content="500" />
-                            <ComboBoxItem x:Uid="1000ComboItem" Content="1000" />
-                        </ComboBox>
-                    </StackPanel>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
                     <ToggleSwitch
                         x:Name="AutoLyricsToggleSwitch"
                         x:Uid="AutoLyricsToggleSwitch"

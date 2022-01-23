@@ -39,6 +39,5 @@
 
     <local:HeaderedPlaylistControl
         x:Name="MyFavoritesPlaylistControl"
-        AllowClear="True"
-        IsPlaylist="False" />
+        PlaylistType="MyFavorites" />
 </Page>

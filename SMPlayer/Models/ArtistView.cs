@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SMPlayer.Models
 {
-    public class ArtistView : INotifyPropertyChanged, IPreferable
+    public class ArtistView : INotifyPropertyChanged, IPreferable, IComparable
     {
         public string Name { get; set; }
         public ObservableCollection<AlbumView> Albums { get; set; } = new ObservableCollection<AlbumView>();
@@ -34,7 +35,7 @@ namespace SMPlayer.Models
             }
         }
         private string info = "";
-        public List<Music> Songs { get; set; } = new List<Music>();
+        public List<Music> Songs { get => Albums.SelectMany(i => i.Songs).ToList(); }
         public ArtistView(string Name)
         {
             this.Name = Name;
@@ -46,18 +47,13 @@ namespace SMPlayer.Models
             Songs.Add(music);
             NotLoaded = false;
         }
-        public ArtistView(string Name, ICollection<Music> Songs)
-        {
-            this.Name = Name;
-            CopySongs(Songs);
-            NotLoaded = false;
-        }
+
         public void Load()
         {
             if (IsLoading) return;
             NotLoaded = true;
             IsLoading = true;
-            CopySongs(Settings.settings.AllSongs.Where(m => m.Artist == Name));
+            CopySongs(Settings.AllSongs.Where(m => m.Artist == Name));
             NotLoaded = false;
             IsLoading = false;
         }
@@ -69,18 +65,39 @@ namespace SMPlayer.Models
             List<AlbumView> albums = new List<AlbumView>();
             await Task.Run(() =>
             {
-                Songs = Settings.settings.AllSongs.Where(m => m.Artist == Name).ToList();
-                foreach (var group in Songs.GroupBy(m => m.Album).OrderBy(g => g.Key))
+                foreach (var group in Settings.AllSongs.Where(m => m.Artist == Name).GroupBy(m => m.Album).OrderBy(g => g.Key))
                     albums.Add(new AlbumView(group.Key, Name, group.OrderBy(m => m.Name), false));
                 IsLoading = false;
             });
             Albums.SetTo(albums);
             NotLoaded = false;
         }
+
+        public void AddMusic(Music music)
+        {
+            if (Albums.FirstOrDefault(i => i.Name == music.Album) is AlbumView album)
+            {
+                album.AddMusic(music);
+            }
+            else
+            {
+                Albums.Add(new AlbumView(music));
+            }
+        }
+
+        public void RemoveMusic(Music music)
+        {
+            if (Albums.FirstOrDefault(i => i.Name == music.Album) is AlbumView album)
+            {
+                album.RemoveMusic(music);
+                if (album.Songs.IsEmpty()) Albums.Remove(album);
+            }
+        }
+
         public void CopySongs(IEnumerable<Music> songs)
         {
             Albums.Clear();
-            foreach (var group in (Songs = songs.ToList()).GroupBy(m => m.Album).OrderBy(g => g.Key))
+            foreach (var group in songs.GroupBy(m => m.Album).OrderBy(g => g.Key))
                 Albums.Add(new AlbumView(group.Key, Name, group.OrderBy(m => m.Name), false));
         }
 
@@ -115,6 +132,12 @@ namespace SMPlayer.Models
         PreferenceItemView IPreferable.AsPreferenceItemView()
         {
             return new PreferenceItemView(Name, Name, Name, PreferType.Artist);
+        }
+
+        public int CompareTo(object obj)
+        {
+            ArtistView artist = obj as ArtistView;
+            return Name.CompareTo(artist.Name);
         }
     }
 

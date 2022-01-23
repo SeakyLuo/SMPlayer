@@ -29,14 +29,14 @@ namespace SMPlayer.Controls
         public PlaylistControlItem()
         {
             this.InitializeComponent();
-            MusicPlayer.SwitchMusicListeners.Add(this);
+            MusicPlayer.AddSwitchMusicListener(this);
         }
 
         private void Album_Click(object sender, RoutedEventArgs e)
         {
             if (NowPlayingFullPage.Instance != null) NowPlayingFullPage.Instance.GoBack();
             var playlist = new System.Collections.ObjectModel.ObservableCollection<Music>();
-            foreach (var music in Settings.settings.AllSongs)
+            foreach (var music in Settings.AllSongs)
                 if (music.Album == Data.Album)
                     playlist.Add(music);
             MainPage.Instance.NavigateToPage(typeof(AlbumPage), new AlbumView(Data.Album, Data.Artist)

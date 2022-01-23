@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -7,26 +9,30 @@ using Windows.UI.Xaml.Controls;
 
 namespace SMPlayer
 {
-    public sealed partial class LoadingControl : UserControl
+    public sealed partial class LoadingControl : UserControl, INotifyPropertyChanged
     {
-        public string Text
+        public string Message
         {
-            get => (string)GetValue(TextProperty);
-            set => SetValue(TextProperty, value);
+            get => Message_;
+            set
+            {
+                Message_ = value;
+                OnPropertyChanged("Message");
+            }
         }
-        public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text",
-                                                                                              typeof(string),
-                                                                                              typeof(LoadingControl),
-                                                                                              new PropertyMetadata("Loading..."));
+        private string Message_ = "";
+
         public double Progress
         {
-            get => (double)GetValue(ProgressProperty);
-            set => SetValue(ProgressProperty, value);
+            get => Progress_;
+            set
+            {
+                Progress_ = value;
+                OnPropertyChanged("Progress");
+            }
         }
-        public static readonly DependencyProperty ProgressProperty = DependencyProperty.Register("Progress",
-                                                                                                 typeof(double),
-                                                                                                 typeof(LoadingControl),
-                                                                                                 new PropertyMetadata(0d));
+        private double Progress_ { get; set; } = 0;
+
 
         public bool IsDeterminant
         {
@@ -39,39 +45,55 @@ namespace SMPlayer
                                                                                                     new PropertyMetadata(false));
         public double Max
         {
-            get => (double)GetValue(MaxProperty);
-            set => SetValue(MaxProperty, value);
+            get => Max_;
+            set
+            {
+                Max_ = value;
+                OnPropertyChanged("Max");
+            }
         }
-        public static readonly DependencyProperty MaxProperty = DependencyProperty.Register("Max",
-                                                                                        typeof(double),
-                                                                                        typeof(LoadingControl),
-                                                                                        new PropertyMetadata(0d));
+        private double Max_ { get; set; } = 0;
 
         public bool AllowBreak
         {
-            get => (bool)GetValue(AllowBreakProperty);
-            set => SetValue(AllowBreakProperty, value);
+            get => AllowBreak_;
+            set
+            {
+                AllowBreak_ = value;
+                OnPropertyChanged("AllowBreak");
+            }
         }
-        public static readonly DependencyProperty AllowBreakProperty = DependencyProperty.Register("AllowBreak",
-                                                                                        typeof(bool),
-                                                                                        typeof(LoadingControl),
-                                                                                        new PropertyMetadata(false));
-        public List<Action> BreakLoadingListeners = new List<Action>();
+        private bool AllowBreak_ = false;
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+        public Action BreakLoadingListener { get; set; }
         public LoadingControl()
         {
             this.InitializeComponent();
         }
 
-        public void SetLocalizedText(string text, params object[] args)
+        public void SetMessage(string text, params object[] args)
         {
-            Text = Helper.LocalizeMessage(text, args);
+            Message = Helper.LocalizeMessage(text, args);
         }
 
-        public void ShowDeterminant(string text, bool allowBreak = false, int progress = 0, Action action = null)
+        public void SetRawMessage(string message)
+        {
+            Message = message;
+        }
+
+        public async Task SetMessageAsync(string text, params object[] args)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => SetMessage(text, args));
+        } 
+
+        public void ShowDeterminant(string text, bool allowBreak = false, int max = 0, Action action = null)
         { 
-            SetLocalizedText(text);
+            SetMessage(text);
             IsDeterminant = true;
-            Progress = progress;
+            Progress = 0;
+            Max = max;
             AllowBreak = allowBreak;
             this.Visibility = Visibility.Visible;
             if (action != null)
@@ -83,7 +105,7 @@ namespace SMPlayer
 
         public void ShowIndeterminant(string text, bool allowBreak = false, Action action = null)
         {
-            SetLocalizedText(text);
+            SetMessage(text);
             IsDeterminant = false;
             AllowBreak = allowBreak;
             this.Visibility = Visibility.Visible;
@@ -101,8 +123,49 @@ namespace SMPlayer
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var listener in BreakLoadingListeners) listener.Invoke();
+            BreakLoadingListener?.Invoke();
             Hide();
+        }
+
+        public async Task IncrementAsync(string message = null)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => Increment(message));
+        }
+
+        public void Increment(string message = null)
+        {
+            if (!IsDeterminant) return;
+            Progress++;
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                SetRawMessage(message);
+            }
+        }
+
+        public async Task ResetAsync(string message = null, int max = 0)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => Reset(message, max));
+        }
+
+        public void Reset(string message = null, int max = 0)
+        {
+            Progress = 0;
+            Max = max;
+            if (max > 0)
+            {
+                IsDeterminant = true;
+            }
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                SetMessage(message);
+            }
+        }
+
+
+        public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            // Raise the PropertyChanged event, passing the name of the property whose value has changed.
+            this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

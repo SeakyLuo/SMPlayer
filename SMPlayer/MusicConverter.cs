@@ -115,6 +115,10 @@ namespace SMPlayer
 
     class VisibilityConverter : IValueConverter
     {
+        public static Visibility BoolToVisibility(bool boolean)
+        {
+            return boolean ? Visibility.Visible : Visibility.Collapsed;
+        }
         public static bool IsCollapsed(object value)
         {
             if (value is string str) return string.IsNullOrEmpty(str);
