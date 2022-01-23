@@ -123,7 +123,7 @@ namespace SMPlayer
             switch (type)
             {
                 case PreferType.Song:
-                    Music music = Settings.settings.SelectMusicById(item.LongId);
+                    Music music = Settings.FindMusic(item.LongId);
                     if (music == null)
                     {
                         view.IsValid = false;
@@ -136,7 +136,7 @@ namespace SMPlayer
                     break;
                 case PreferType.Artist:
                     view.ToolTip = view.Name = view.Id;
-                    view.IsValid = Settings.settings.AllSongs.Any(i => i.Artist == view.Id);
+                    view.IsValid = Settings.AllSongs.Any(i => i.Artist == view.Id);
                     break;
                 case PreferType.Album:
                     view.ToolTip = view.Name;
@@ -144,7 +144,7 @@ namespace SMPlayer
                     if (albumId.Length > 1)
                     {
                         string album = albumId[0], artist = albumId[1];
-                        view.IsValid = Settings.settings.AllSongs.Any(i => i.Album == album && i.Artist == artist);
+                        view.IsValid = Settings.AllSongs.Any(i => i.Album == album && i.Artist == artist);
                     }
                     else
                     {
@@ -152,12 +152,12 @@ namespace SMPlayer
                     }
                     break;
                 case PreferType.Playlist:
-                    Playlist playlist = Settings.settings.SelectPlaylistById(item.LongId);
+                    Playlist playlist = Settings.FindPlaylist(item.LongId);
                     view.ToolTip = view.Name = playlist?.Name;
                     view.IsValid = playlist != null;
                     break;
                 case PreferType.Folder:
-                    FolderTree tree = Settings.settings.Tree.FindTree(item.LongId);
+                    FolderTree tree = Settings.FindFolderInfo(item.LongId);
                     if (tree == null)
                     {
                         view.IsValid = false;
@@ -375,7 +375,7 @@ namespace SMPlayer
             PreferredListView_ItemClick(sender, e,
                                         async (view) =>
                                         {
-                                            MusicDialog dialog = new MusicDialog(MusicDialogOption.Properties, Settings.settings.SelectMusicById(view.LongId));
+                                            MusicDialog dialog = new MusicDialog(MusicDialogOption.Properties, Settings.FindMusic(view.LongId));
                                             await dialog.ShowAsync();
                                         });
         }
@@ -401,7 +401,7 @@ namespace SMPlayer
         private void PreferredFoldersListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             PreferredListView_ItemClick(sender, e,
-                                        view => MainPage.Instance.NavigateToPage(typeof(LocalPage), Settings.settings.Tree.FindTree(view.LongId)));
+                                        view => MainPage.Instance.NavigateToPage(typeof(LocalPage), Settings.FindFolderInfo(view.LongId)));
         }
 
         private void PreferredListView_ItemClick(object sender, ItemClickEventArgs e, Action<PreferenceItemView> action)

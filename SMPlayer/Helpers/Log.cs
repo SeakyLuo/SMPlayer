@@ -84,8 +84,7 @@ namespace SMPlayer
             StackFrame[] frames = new StackTrace().GetFrames();
             StackFrame frame = frames[4];
             MethodBase method = frame.GetMethod();
-            string className = method.DeclaringType.FullName;
-            return string.Format($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}][{className}][{method.Name}][{level}]");
+            return string.Format($"{DateTime.Now:yyyy/MM/dd HH:mm:ss.fff} [{level}] ({method.DeclaringType.Name})");
         }
 
         private void AppendText(string filename, string message)

@@ -13,5 +13,6 @@ namespace SMPlayer.Models
         public bool ShowRemove { get; set; } = true;
         public bool ShowDelete { get; set; } = false;
         public bool ShowReverseSelection { get; set; } = true;
+        public bool ShowMoveToFolder { get; set; } = false;
     }
 }

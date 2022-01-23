@@ -211,10 +211,10 @@
     <value>歌手</value>
   </data>
   <data name="AutoLyricsToggleSwitch.OffContent" xml:space="preserve">
-    <value>自动为添加的歌曲添加歌词</value>
+    <value>自动为最近添加的歌曲添加歌词</value>
   </data>
   <data name="AutoLyricsToggleSwitch.OnContent" xml:space="preserve">
-    <value>自动为添加的歌曲添加歌词</value>
+    <value>自动为最近添加的歌曲添加歌词</value>
   </data>
   <data name="AutoPlayToggleSwitch.OffContent" xml:space="preserve">
     <value>打开应用后自动播放歌曲</value>
@@ -1021,10 +1021,10 @@
     <value>搜索</value>
   </data>
   <data name="SearchBar.ToolTipService.ToolTip" xml:space="preserve">
-    <value>搜索</value>
+    <value>搜索歌曲、歌手、专辑、播放列表、文件夹</value>
   </data>
   <data name="SearchButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>搜索</value>
+    <value>搜索歌曲、歌手、专辑、播放列表、文件夹</value>
   </data>
   <data name="SearchCommandsTextBlock.Text" xml:space="preserve">
     <value>搜索[关键词]</value>
@@ -1251,5 +1251,23 @@
   </data>
   <data name="CreatePlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>添加播放列表</value>
+  </data>
+  <data name="MoveToFolderAppButton.Label" xml:space="preserve">
+    <value>移动到文件夹</value>
+  </data>
+  <data name="ViewModeAppButton.Label" xml:space="preserve">
+    <value>展示模式</value>
+  </data>
+  <data name="ViewModel.ToolTipService.ToolTip" xml:space="preserve">
+    <value>更改展示模式</value>
+  </data>
+  <data name="GridViewFlyoutItem.Text" xml:space="preserve">
+    <value>网格模式</value>
+  </data>
+  <data name="ListViewFlyoutItem.Text" xml:space="preserve">
+    <value>列表模式</value>
+  </data>
+  <data name="AlbumSearchBar.PlaceholderText" xml:space="preserve">
+    <value>搜索专辑</value>
   </data>
 </root>

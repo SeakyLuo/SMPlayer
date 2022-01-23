@@ -19,7 +19,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MusicPlayer.SwitchMusicListeners.Add(this);
+            MusicPlayer.AddSwitchMusicListener(this);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -32,14 +32,14 @@ namespace SMPlayer
         {
             LocateCurrentButton.Visibility = SaveToButton.Visibility = ClearButton.Visibility = PlayModeButton.Visibility = 
                                             MusicPlayer.CurrentPlaylist.IsEmpty() ? Visibility.Collapsed : Visibility.Visible;
-            RandomPlayButton.Visibility = Settings.settings.MusicLibrary.IsEmpty() ? Visibility.Collapsed : Visibility.Visible;
+            RandomPlayButton.Visibility = Settings.AllSongs.IsEmpty() ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void SaveToButton_Click(object sender, RoutedEventArgs e)
         {
             var name = Helper.Localize("Now Playing") + " - " + DateTime.Now.ToString("yy/MM/dd");
             int index = Settings.settings.FindNextPlaylistNameIndex(name);
-            var defaultName = index == 0 ? name : Helper.GetPlaylistName(name, index);
+            var defaultName = index == 0 ? name : Helper.GetNextName(name, index);
             var helper = new MenuFlyoutHelper
             {
                 Data = MusicPlayer.CurrentPlaylist,
@@ -79,7 +79,7 @@ namespace SMPlayer
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
             {
-                if (MainPage.Instance is MainPage main && main.CurrentPage == typeof(NowPlayingPage))
+                if (MainPage.Instance?.CurrentPage == typeof(NowPlayingPage))
                 {
                     SetEnabled();
                 }

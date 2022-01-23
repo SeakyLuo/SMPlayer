@@ -1,4 +1,4 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Models.VO;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,20 +28,38 @@ namespace SMPlayer.Controls
 
         private void PlayAllButton_Click(object sender, RoutedEventArgs e)
         {
-            var data = (sender as Button).DataContext as GridFolderView;
-            MusicPlayer.ShuffleAndPlay(data.Songs);
+            FrameworkElement fe = sender as FrameworkElement;
+            var data = fe.DataContext;
+            if (data is GridViewFolder folder)
+            {
+                MusicPlayer.ShuffleAndPlay(folder.Songs);
+            }
+            else if (data is GridViewMusic music)
+            {
+                MusicPlayer.AddMusicAndPlay(music.Source);
+            }
         }
         private void AddToButton_Click(object sender, RoutedEventArgs e)
         {
-            var data = (sender as Button).DataContext as GridFolderView;
-            var helper = new MenuFlyoutHelper() { Data = data.Songs, DefaultPlaylistName = data.Name };
-            helper.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
+            FrameworkElement fe = sender as FrameworkElement;
+            var data = fe.DataContext;
+            var helper = new MenuFlyoutHelper();
+            if (data is GridViewFolder folder)
+            {
+                helper.Data = folder.Songs;
+                helper.DefaultPlaylistName = folder.Name;
+            }
+            else if (data is GridViewMusic music)
+            {
+                helper.Data = music.Source;
+            }
+            helper.GetAddToMenuFlyout().ShowAt(fe);
         }
         private void GridViewItem_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             Control control = sender as Control;
-            GridFolderView folder = control.DataContext as GridFolderView;
-            if (folder.Songs.IsNotEmpty())
+            if ((control.DataContext is GridViewFolder folder && folder.Source.IsNotEmpty) ||
+                 control.DataContext is GridViewMusic)
             {
                 VisualStateManager.GoToState(control, "PointerOver", true);
             }
@@ -52,16 +70,11 @@ namespace SMPlayer.Controls
             VisualStateManager.GoToState(sender as Control, "Normal", true);
         }
 
-        private async void UserControl_EffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
+        private async void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            if (sender.DataContext is GridFolderView data)
-            {
-                Log.Info($"EffectiveViewportChanged, name {data.Name}, isLoaded {data.ThumbnailLoaded}, isPartiallyVisible {ImageHelper.NeedsLoading(sender, args)}");
-                if (!data.ThumbnailLoaded && ImageHelper.NeedsLoading(sender, args))
-                {
-                    await data.LoadThumbnailAsync();
-                }
-            }
+            GridViewStorageItem item = sender.DataContext as GridViewStorageItem;
+            if (item == null) return;
+            await item.LoadThumbnailAsync();
         }
     }
 }

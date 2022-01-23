@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using SMPlayer.Models;
 using SMPlayer.Models.DAO;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,93 +15,101 @@ namespace SMPlayer.Helpers
     class SettingsHelper
     {
         public static bool Inited { get; private set; } = false;
-        public const string JsonFilename = "SMPlayerSettings", NewFilename = "SMPlayerSettingsFile";
+        public const string JsonFilename = "SMPlayerSettings";
 
-        public static async Task Init()
+        public static async Task InitOld()
         {
             Inited = false;
-            var newSettings = await JsonFileHelper.ReadAsync(NewFilename);
-            if (await JsonFileHelper.ReadObjectAsync<SettingsDAO>(NewFilename) is SettingsDAO settingsDAO)
+            Settings settings = await JsonFileHelper.ReadObjectAsync<Settings>(JsonFilename);
+            if (await SQLHelper.Initialized() && settings == null)
             {
-                Settings.settings = settingsDAO.FromDAO();
-                await Init(Settings.settings);
+                return;
+            }
+            if (settings == null)
+            {
+                Settings.settings = new Settings();
             }
             else
             {
-                string json = await JsonFileHelper.ReadAsync(JsonFilename);
-                if (!string.IsNullOrEmpty(json) && JsonFileHelper.Convert<Settings>(json) is Settings settings)
-                {
-                    Settings.settings = settings;
-                    ResetTreeId(settings.Tree);
-                    var jsonObject = JsonFileHelper.Convert<JObject>(json);
-                    List<Music> songs = FlattenFolderTreeInJson(jsonObject["Tree"]);
-                    settings.MusicLibrary = songs.Select(m => { m.Id = settings.Tree.FindFile(m.Path).Id; return m; })
-                                                 .ToDictionary(m => m.Id);
-                    settings.Playlists.ForEach(p => p.Id = settings.IdGenerator.GeneratePlaylistId());
-                    ResetPlaylistSongsId(settings.MyFavorites);
-                    settings.Playlists.ForEach(p => ResetPlaylistSongsId(p));
-                    settings.RecentPlayedSongs = MusicPathToId(settings.RecentPlayed);
-
-                    foreach (PreferenceItem item in settings.Preference.PreferredFolders)
-                        item.Id = settings.Tree.FindTree(item.Id).Id.ToString();
-                    foreach (PreferenceItem item in settings.Preference.PreferredSongs)
-                        item.Id = settings.Tree.FindMusic(item.Id).Id.ToString();
-                    foreach (PreferenceItem item in settings.Preference.PreferredPlaylists)
-                        item.Id = settings.Playlists.FirstOrDefault(i => i.Name == item.Id).Id.ToString();
-                    await Init(settings);
-                }
-                else
-                {
-                    Settings.settings = new Settings();
-                    Save();
-                }
+                Settings.settings = settings;
+                await Init(settings);
             }
             Inited = true;
         }
 
-        public static bool Init(string json)
+        public static async Task InitNew()
         {
-            if (JsonFileHelper.Convert<SettingsDAO>(json) is SettingsDAO dao)
+            if (!await SQLHelper.Initialized())
             {
-                Settings.settings = dao.FromDAO();
-                return true;
+                return;
             }
-            return false;
+            await Init(Settings.settings = SQLHelper.Run(c => c.SelectSettings()));
+            Inited = true;
         }
 
-        private static List<Music> FlattenFolderTreeInJson(JToken tree)
+        public static async Task InitWithFile(StorageFile file)
         {
-            List<Music> songs = tree["Files"].Select(i => i.ToObject<Music>()).ToList();
-            songs.AddRange(tree["Trees"].SelectMany(t => FlattenFolderTreeInJson(t)));
-            return songs;
-        }
-
-        private static void ResetTreeId(FolderTree tree)
-        {
-            tree.Id = Settings.settings.IdGenerator.GenerateTreeId();
-            foreach (var branch in tree.Trees)
-                ResetTreeId(branch);
-            foreach (var file in tree.Files)
-                file.Id = Settings.settings.IdGenerator.GenerateMusicId();
-        }
-
-        private static void ResetPlaylistSongsId(Playlist playlist)
-        {
-            playlist.SongIds = MusicPathToId(playlist.Songs.ToList().Select(i => i.Path));
-            for (int i = 0; i < playlist.SongIds.Count; i++)
+            StorageFile newDbFile = await file.CopyAsync(Helper.CurrentFolder);
+            if (newDbFile.Name != SQLHelper.DBFileName)
             {
-                playlist.Songs[i].Id = playlist.SongIds[i];
+                await newDbFile.RenameAsync(SQLHelper.DBFileName);
             }
+            await InitNew();
         }
 
-        private static List<long> MusicPathToId(IEnumerable<string> paths)
+        public static async Task LoadSettingsAndInsertToDb()
         {
-            return paths.Select(i => Settings.FindMusic(i)).Where(i => i != null).Select(i => i.Id).ToList();
+            await MainPage.Instance.Loader.SetMessageAsync("UpdateDBMsgPreparing");
+            string json = await JsonFileHelper.ReadAsync(JsonFilename);
+            if (string.IsNullOrEmpty(json))
+            {
+                SQLHelper.Run(c => InsertMyFavoritesAndSettings(c));
+                return;
+            }
+            var jsonObject = JsonFileHelper.FromJson<JObject>(json);
+            List<Music> songs = FlattenFolderTreeInJson(jsonObject["Tree"]);
+            UpdateLog updateLog = await JsonFileHelper.ReadObjectAsync<UpdateLog>("UpdateLogger") ?? new UpdateLog();
+            Settings.settings.LastReleaseNotesVersion = updateLog.LastReleaseNotesVersion;
+            List<MusicDAO> list = new List<MusicDAO>();
+            foreach (var i in songs)
+            {
+                if (i.DateAdded == null && await i.GetStorageFileAsync() is StorageFile file)
+                {
+                    i.DateAdded = file.DateCreated;
+                }
+                list.Add(i.ToDAO());
+            }
+            await MainPage.Instance.Loader.SetMessageAsync("UpdateDBMsgUpdatingDatabase");
+            SQLHelper.Run(c =>
+            {
+                c.InsertAll(list);
+                InsertTree(c, Settings.settings.Tree);
+                InsertPlaylists(c, Settings.settings.Playlists);
+                InsertPreferenceSettings(c, Settings.settings.Preference);
+                InsertRecentPlayed(c, Settings.settings);
+                InsertRecentSearches(c, Settings.settings);
+                InsertMyFavoritesAndSettings(c);
+            });
+            await JsonFileHelper.DeleteFile(JsonFilename);
+        }
+
+        private static void InsertMyFavoritesAndSettings(SQLiteConnection c)
+        {
+            InsertPlaylist(c, Settings.settings.MyFavorites);
+            Settings.settings.MyFavoritesId = Settings.settings.MyFavorites.Id;
+            c.InsertSettings(Settings.settings);
+        }
+
+        public static void Save()
+        {
+            if (Settings.settings == null) return;
+            Settings.settings.MusicProgress = MusicPlayer.Position;
+            SQLHelper.Run(c => c.Update(Settings.settings.ToDAO()));
         }
 
         private static async Task Init(Settings settings)
         {
-            if (string.IsNullOrEmpty(settings.RootPath)) return;
+            if (settings == null || string.IsNullOrEmpty(settings.RootPath)) return;
             try
             {
                 Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
@@ -122,19 +131,114 @@ namespace SMPlayer.Helpers
                     await item.DeleteAsync();
         }
 
-        public static void Save()
+        private static List<Music> FlattenFolderTreeInJson(JToken tree)
         {
-            if (Settings.settings == null) return;
-            Settings.settings.MusicProgress = MusicPlayer.Position;
-            try
+            List<Music> songs = tree["Files"].Select(i => i.ToObject<Music>()).ToList();
+            songs.AddRange(tree["Trees"].SelectMany(t => FlattenFolderTreeInJson(t)));
+            return songs;
+        }
+
+        private static void InsertTree(SQLiteConnection c, FolderTree tree)
+        {
+            FolderDAO result = c.InsertFolder(tree);
+            foreach (var folder in tree.Trees)
             {
-                SettingsDAO settingsDAO = Settings.settings.ToDAO();
-                JsonFileHelper.SaveAsync(NewFilename, settingsDAO);
-                JsonFileHelper.SaveAsync(Helper.TempFolder, NewFilename + Helper.TimeStamp, settingsDAO);
+                folder.ParentId = result.Id;
+                InsertTree(c, folder);
             }
-            catch (Exception e)
+            foreach (FolderFile file in tree.Files)
             {
-                Log.Warn("Save Exception {0}", e);
+                FileDAO fileDAO = file.ToDAO();
+                fileDAO.FileId = c.SelectMusicByPath(file.Path).Id;
+                fileDAO.ParentId = result.Id;
+                c.Insert(fileDAO);
+            }
+        }
+        
+        private static void InsertPlaylists(SQLiteConnection c, List<Playlist> playlists)
+        {
+            for (int i = 0; i < playlists.Count; i++)
+            {
+                Playlist playlist = playlists[i];
+                playlist.Priority = i;
+                InsertPlaylist(c, playlist);
+            }
+        }
+
+        private static void InsertPlaylist(SQLiteConnection c, Playlist playlist)
+        {
+            foreach (var music in playlist.Songs)
+            {
+                music.Id = c.SelectMusicByPath(music.Path).Id;
+            }
+            c.InsertPlaylist(playlist);
+        }
+
+        private static void InsertPreferenceSettings(SQLiteConnection c, PreferenceSettings settings)
+        {
+            foreach (PreferenceItem item in settings.PreferredFolders)
+            {
+                if (c.SelectFolderInfo(item.Id) is FolderTree result)
+                {
+                    item.Id = result.Id.ToString();
+                    c.InsertPreferenceItem(item, PreferType.Folder);
+                }
+            }
+            foreach (PreferenceItem item in settings.PreferredSongs)
+            {
+                if (c.SelectMusicByPath(item.Id) is Music result)
+                {
+                    item.Id = result.Id.ToString();
+                    c.InsertPreferenceItem(item, PreferType.Song);
+                }
+            }
+            foreach (PreferenceItem item in settings.PreferredPlaylists)
+            {
+                if (c.SelectPlaylistByName(item.Id) is Playlist result)
+                {
+                    item.Id = result.Id.ToString();
+                    c.InsertPreferenceItem(item, PreferType.Playlist);
+                }
+            }
+            foreach (PreferenceItem item in settings.PreferredAlbums)
+            {
+                c.InsertPreferenceItem(item, PreferType.Album);
+            }
+            foreach (PreferenceItem item in settings.PreferredArtists)
+            {
+                c.InsertPreferenceItem(item, PreferType.Artist);
+            }
+            PreferenceSettingsDAO dao = settings.ToDAO();
+            dao.MostPlayedId = c.InsertPreferenceItem(settings.MostPlayed, PreferType.MostPlayed).Id;
+            dao.LeastPlayedId = c.InsertPreferenceItem(settings.LeastPlayed, PreferType.LeastPlayed).Id;
+            dao.RecentAddedId = c.InsertPreferenceItem(settings.RecentAdded, PreferType.RecentAdded).Id;
+            dao.MyFavoritesId = c.InsertPreferenceItem(settings.MyFavorites, PreferType.MyFavorites).Id;
+            c.Insert(dao);
+        }
+
+        private static void InsertRecentPlayed(SQLiteConnection c, Settings settings)
+        {
+            foreach (var item in settings.RecentPlayed)
+            {
+                c.Insert(new RecentRecordDAO()
+                {
+                    Type = RecentType.Play,
+                    ItemId = c.SelectMusicByPath(item)?.Id.ToString(),
+                    Time = DateTimeOffset.Now,
+                });
+            }
+        }
+
+        private static void InsertRecentSearches(SQLiteConnection c, Settings settings)
+        {
+            foreach (var item in settings.RecentSearches)
+            {
+                c.Insert(new RecentRecordDAO()
+                {
+                    Type = RecentType.Search,
+                    ItemId = item,
+                    Time = DateTimeOffset.Now,
+                });
             }
         }
     }

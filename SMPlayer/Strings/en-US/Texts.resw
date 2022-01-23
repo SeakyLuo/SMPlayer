@@ -174,6 +174,12 @@
   <data name="FoldersWithCount" xml:space="preserve">
     <value>Folders ({0})</value>
   </data>
+  <data name="GridViewFolderPlayInfo" xml:space="preserve">
+    <value>Play all music under "{0}"</value>
+  </data>
+  <data name="GridViewMusicPlayInfo" xml:space="preserve">
+    <value>Play "{0}" first</value>
+  </data>
   <data name="InvalidItemToolTip" xml:space="preserve">
     <value>{0} is invalid or cannot be found</value>
   </data>
@@ -183,14 +189,59 @@
   <data name="IsEnabledToggleSwitchOnToolTip" xml:space="preserve">
     <value>If you disable, this item will not have a higher play probability.</value>
   </data>
+  <data name="KeepBoth" xml:space="preserve">
+    <value>Keep Both</value>
+  </data>
   <data name="LeastPlayed" xml:space="preserve">
     <value>Least Played</value>
   </data>
   <data name="LikeMusicToolTip" xml:space="preserve">
     <value>Set As My Favorite</value>
   </data>
+  <data name="Month1" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="Month10" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="Month11" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="Month12" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="Month2" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="Month3" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="Month4" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="Month5" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="Month6" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="Month7" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="Month8" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="Month9" xml:space="preserve">
+    <value>September</value>
+  </data>
   <data name="MostPlayed" xml:space="preserve">
     <value>Most Played</value>
+  </data>
+  <data name="MoveAndReplace" xml:space="preserve">
+    <value>Move and Replace</value>
+  </data>
+  <data name="MoveToFolderOfPath" xml:space="preserve">
+    <value>Move to {0}</value>
   </data>
   <data name="MyFavorites" xml:space="preserve">
     <value>My Favorites</value>
@@ -203,6 +254,9 @@
   </data>
   <data name="Next" xml:space="preserve">
     <value>Next</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
   </data>
   <data name="NowPlaying" xml:space="preserve">
     <value>Now Playing</value>
@@ -267,6 +321,12 @@
   <data name="Recent" xml:space="preserve">
     <value>Recent</value>
   </data>
+  <data name="Recent30Days" xml:space="preserve">
+    <value>Recent 30 Days</value>
+  </data>
+  <data name="Recent7Days" xml:space="preserve">
+    <value>Recent 7 Days</value>
+  </data>
   <data name="RecentAdded" xml:space="preserve">
     <value>Recent Added</value>
   </data>
@@ -294,11 +354,20 @@
   <data name="ShuffleAndPlay" xml:space="preserve">
     <value>Shuffle and play</value>
   </data>
+  <data name="SkipThis" xml:space="preserve">
+    <value>Skip</value>
+  </data>
   <data name="Songs" xml:space="preserve">
     <value>Songs</value>
   </data>
   <data name="SongsWithCount" xml:space="preserve">
     <value>Songs ({0})</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>This Month</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Today</value>
   </data>
   <data name="UndoLikeMusicToolTip" xml:space="preserve">
     <value>Remove From My Favorite</value>
@@ -323,5 +392,11 @@
   </data>
   <data name="VoiceAssistantHints3" xml:space="preserve">
     <value>You can try to say, "quick play"</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
   </data>
 </root>

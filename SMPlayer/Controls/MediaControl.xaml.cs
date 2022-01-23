@@ -415,7 +415,7 @@ namespace SMPlayer
         public MediaControl()
         {
             this.InitializeComponent();
-            MusicPlayer.SwitchMusicListeners.Add(this);
+            MusicPlayer.AddSwitchMusicListener(this);
             MusicPlayer.MediaControlListeners.Add(this);
             MusicPlayer.InitFinishedListeners.Add(() =>
             {
@@ -902,7 +902,7 @@ namespace SMPlayer
         {
             var name = Helper.Localize("Now Playing") + " - " + DateTime.Now.ToString("yy/MM/dd");
             int index = Settings.settings.FindNextPlaylistNameIndex(name);
-            var defaultName = index == 0 ? name : Helper.GetPlaylistName(name, index);
+            var defaultName = index == 0 ? name : Helper.GetNextName(name, index);
             var dialog = new RenameDialog(RenameOption.Create, RenameTarget.Playlist, defaultName)
             {
                 Validate = Settings.settings.ValidatePlaylistName,
@@ -922,12 +922,12 @@ namespace SMPlayer
 
         private void PlayAlbumItem_Click(object sender, RoutedEventArgs e)
         {
-            MusicPlayer.SetMusicAndPlay(Settings.settings.AllSongs.Where(m => m.Album == MusicPlayer.CurrentMusic.Album));
+            MusicPlayer.SetMusicAndPlay(Settings.AllSongs.Where(m => m.Album == MusicPlayer.CurrentMusic.Album));
         }
 
         private void PlayArtistItem_Click(object sender, RoutedEventArgs e)
         {
-            MusicPlayer.SetMusicAndPlay(Settings.settings.AllSongs.Where(m => m.Artist == MusicPlayer.CurrentMusic.Artist));
+            MusicPlayer.SetMusicAndPlay(Settings.AllSongs.Where(m => m.Artist == MusicPlayer.CurrentMusic.Artist));
         }
 
         public void Tick()
@@ -1113,13 +1113,15 @@ namespace SMPlayer
             });
         }
 
-        void IMusicEventListener.Liked(Music music, bool isFavorite) { }
-        void IMusicEventListener.Added(Music music) { }
-        void IMusicEventListener.Removed(Music music) { }
-        void IMusicEventListener.Modified(Music before, Music after)
+        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
-            if (CurrentMusic == before)
-                UpdateMusic(after);
+            switch (args.EventType)
+            {
+                case MusicEventType.Modify:
+                    if (CurrentMusic == music)
+                        UpdateMusic(args.ModifiedMusic);
+                    break;
+            }
         }
 
         void ICurrentPlaylistChangedListener.AddMusic(Music music, int index) { }

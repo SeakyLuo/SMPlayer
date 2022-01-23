@@ -52,10 +52,9 @@ namespace SMPlayer
             {
                 await Log.Init();
                 await Helper.Init();
-                await SettingsHelper.Init();
-                if (Settings.settings.LastPage == "Albums")
-                    await AlbumsPage.Init();
-                await UpdateHelper.Init();
+                await SettingsHelper.InitOld();
+                await SQLHelper.Init();
+                await SettingsHelper.InitNew();
 
                 // 创建要充当导航上下文的框架，并导航到第一页
                 rootFrame = new Frame();
@@ -102,8 +101,6 @@ namespace SMPlayer
             }
             Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             MusicPlayer.Init(music);
-            await AlbumsPage.Init();
-            await RecentPage.Init();
             ToastHelper.Init();
             VoiceAssistantHelper.Init();
 
@@ -152,6 +149,7 @@ namespace SMPlayer
             TileHelper.ResumeTile();
             ToastHelper.HideToast();
             Save();
+            SQLHelper.ClearInactive();
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
         }
@@ -162,7 +160,6 @@ namespace SMPlayer
             MusicPlayer.Save();
             AlbumsPage.Save();
             RecentPage.Save();
-            UpdateHelper.Save();
             await Helper.ClearBackups(10);
         }
 

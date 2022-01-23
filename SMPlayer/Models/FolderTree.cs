@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Helpers;
+using SMPlayer.Models.DAO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,34 +12,24 @@ using Windows.Storage;
 namespace SMPlayer.Models
 {
     [Serializable]
-    public class FolderTree : INotifyPropertyChanged, IComparable, IPreferable
+    public class FolderTree : StorageItem, IPreferable
     {
-        public long Id { get; set; }
         public List<FolderTree> Trees { get; set; } = new List<FolderTree>();
         public List<FolderFile> Files { get; set; } = new List<FolderFile>();
-        [Newtonsoft.Json.JsonIgnore]
-        public List<Music> Songs { get => Settings.settings.SelectMusicByIds(Files.Select(i => i.Id)); }
-        public string Path { get; set; } = "";
+        public List<Music> Songs { get => Settings.FindMusicList(Files.Select(i => i.FileId)); }
         public SortBy Criterion { get; set; } = SortBy.Title;
-
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
-        [Newtonsoft.Json.JsonIgnore]
         public TreeInfo Info { get => new TreeInfo(Name, Trees.Count, Files.Count); }
-        [Newtonsoft.Json.JsonIgnore]
-        public bool IsEmpty { get => Files.Count == 0 && Trees.All(tree => tree.IsEmpty); }
-        [Newtonsoft.Json.JsonIgnore]
+        public bool IsEmpty { get => Files.IsEmpty() && Trees.All(tree => tree.IsEmpty); }
         public bool IsNotEmpty { get => !IsEmpty; }
-        [Newtonsoft.Json.JsonIgnore]
         public int FileCount { get => Trees.Sum(t => t.FileCount) + Files.Count; }
-        [Newtonsoft.Json.JsonIgnore]
-        public string Name { get => FileHelper.GetDisplayName(Path); }
-        [Newtonsoft.Json.JsonIgnore]
-        public string ParentPath { get => FileHelper.GetParentPath(Path); }
+        public long ParentId { get; set; }
+        public ActiveState State { get; set; } = ActiveState.Active;
 
         public FolderTree() { }
-        public FolderTree(FolderTree tree)
+
+        public FolderTree(string path)
         {
-            CopyFrom(tree);
+            Path = path;
         }
 
         public void CopyFrom(FolderTree tree)
@@ -46,79 +37,60 @@ namespace SMPlayer.Models
             Id = tree.Id;
             Trees = tree.Trees.ToList();
             Files = tree.Files.ToList();
+            ParentId = tree.ParentId;
             Path = tree.Path;
             Criterion = tree.Criterion;
-            OnPropertyChanged();
         }
 
-        public void AddTree(FolderTree tree)
+        public void AddBranch(FolderTree tree)
         {
             Trees.Add(tree);
+            Trees.Sort((t1, t2) => t1.Name.CompareTo(t2.Name));
         }
 
         public void AddFile(FolderFile file)
         {
             Files.Add(file);
+            SortFiles();
         }
 
-        public bool Contains(string path)
+        public bool ContainsFile(string path)
         {
             return FindFile(path) != null;
         }
 
         public List<Music> Flatten()
         {
+            if (IsEmpty)
+            {
+                CopyFrom(Settings.FindFolder(Id));
+            }
             List<Music> list = new List<Music>();
             foreach (var branch in Trees)
                 list.AddRange(branch.Flatten());
             list.AddRange(Songs);
             return list;
         }
-        public List<FolderTree> GetAllTrees()
+
+        public void SortFiles(SortBy? criterion = null)
         {
-            List<FolderTree> list = new List<FolderTree> { this };
-            foreach (var tree in Trees)
-                list.AddRange(tree.GetAllTrees());
-            return list;
+            if (criterion != null) Criterion = (SortBy)criterion;
+            Files = Files.Select(f => new { File = f, Music = Settings.FindMusic(f.FileId) })
+                         .Where(i => i.Music != null)
+                         .OrderBy(i =>
+                         {
+                             switch (Criterion)
+                             {
+                                 case SortBy.Artist:
+                                     return i.Music.Artist;
+                                 case SortBy.Album:
+                                     return i.Music.Album;
+                                 default:
+                                     return i.Music.Name;
+                             }
+                         }).Select(i => i.File).ToList();
         }
-        public void Sort()
-        {
-            Trees = Trees.OrderBy(t => t.Name).ToList();
-            switch (Criterion)
-            {
-                case SortBy.Title:
-                    SortByTitle();
-                    break;
-                case SortBy.Album:
-                    SortByAlbum();
-                    break;
-                case SortBy.Artist:
-                    SortByArtist();
-                    break;
-            }
-            OnPropertyChanged();
-        }
-        public List<Music> SortByTitle()
-        {
-            Criterion = SortBy.Title;
-            List<Music> songs = Songs.OrderBy(m => m.Name).ToList();
-            Files = songs.Select(i => new FolderFile(i)).ToList();
-            return songs;
-        }
-        public List<Music> SortByArtist()
-        {
-            Criterion = SortBy.Artist;
-            List<Music> songs = Songs.OrderBy(m => m.Artist).ToList();
-            Files = songs.Select(i => new FolderFile(i)).ToList();
-            return songs;
-        }
-        public List<Music> SortByAlbum()
-        {
-            Criterion = SortBy.Album;
-            List<Music> songs = Songs.OrderBy(m => m.Album).ToList();
-            Files = songs.Select(i => new FolderFile(i)).ToList();
-            return songs;
-        }
+
         public List<Music> Reverse()
         {
             Files.Reverse();
@@ -131,82 +103,44 @@ namespace SMPlayer.Models
             Trees.Clear();
             Files.Clear();
         }
-        public FolderTree FindTree(FolderTree target)
+
+        public FolderTree FindFolder(string path)
         {
-            //return Trees.FirstOrDefault(tree => tree.Equals(target)) ?? Trees.FirstOrDefault(tree => target.Path.StartsWith(tree.Path))?.FindTree(target);
-            return FindTree(target.Id);
-        }
-        public FolderTree FindTree(string path)
-        {
-            //return Trees.FirstOrDefault(tree => tree.Equals(target)) ?? Trees.FirstOrDefault(tree => target.Path.StartsWith(tree.Path))?.FindTree(target);
             if (Path.Equals(path)) return this;
             foreach (var tree in Trees)
             {
                 if (path.Equals(tree.Path))
                     return tree;
                 if (path.StartsWith(tree.Path))
-                    return tree.FindTree(path);
+                    return tree.FindFolder(path);
             }
             return null;
         }
-        public FolderTree FindTree(long id)
+        public FolderTree FindFolder(long id)
         {
             if (Id == id) return this;
             foreach (var tree in Trees)
             {
-                if (tree.FindTree(id) is FolderTree target)
+                if (tree.FindFolder(id) is FolderTree target)
                     return target;
             }
             return null;
         }
-        public FolderTree FindTree(Music music)
-        {
-            string path = FileHelper.GetParentPath(music.Path);
-            return FindTree(path);
-        }
-        public Music FindMusic(string path)
-        {
-            if (string.IsNullOrEmpty(path)) return null;
-            return FindFile(path) is FolderFile file ? Settings.settings.SelectMusicById(file.Id) : null;
-        }
-        public Music FindMusic(Music target)
-        {
-            return FindMusic(target.Path);
-        }
-        public FolderFile FindFile(FolderFile file)
-        {
-            return FindFile(file?.Path);
-        }
+
         public FolderFile FindFile(string path)
         {
             if (string.IsNullOrEmpty(path)) return null;
             return Files.FirstOrDefault(m => m.Path == path) ?? Trees.FirstOrDefault(tree => path.StartsWith(tree.Path))?.FindFile(path);
         }
-        //public static bool operator == (FolderTree tree1, FolderTree tree2)
-        //{
-        //    if (!tree1.Equals(tree2)) return false;
-        //    return tree1.Files.Zip(tree2.Files, (m1, m2) => m1 == m2).All(v => v) && tree1.Trees.Zip(tree2.Trees, (t1, t2) => t1 == t2).All(v => v);
-        //}
-        //public static bool operator !=(FolderTree tree1, FolderTree tree2)
-        //{
-        //    return !(tree1 == tree2);
-        //}
+
         public async Task<StorageFolder> GetStorageFolderAsync()
         {
-            try
-            {
-                return await StorageFolder.GetFolderFromPathAsync(Path);
-            }
-            catch (FileNotFoundException)
-            {
-                return null;
-            }
+            return await FileHelper.LoadFolderAsync(Path);
         }
 
         public void Rename(string newPath)
         {
             Rename(Path, newPath);
-            OnPropertyChanged("Directory");
         }
 
         public void Rename(string oldPath, string newPath)
@@ -222,38 +156,29 @@ namespace SMPlayer.Models
             Path = Path.Replace(oldPath, newPath);
         }
 
+        public void MoveToFolder(FolderTree target)
+        {
+            Rename(ParentPath, target.Path);
+            ParentId = target.Id;
+        }
+
         public bool RemoveBranch(string path)
         {
             return Trees.RemoveAll(f => f.Path == path) > 0 ||
                    (Trees.FirstOrDefault(t => path.StartsWith(t.Path)) is FolderTree tree && tree.RemoveBranch(path));
         }
 
-        public void MoveBranch(FolderTree branch, string newPath)
+        public void MoveBranch(FolderTree branch, FolderTree newParent)
         {
-            FolderTree tree = FindTree(branch);
             RemoveBranch(branch.Path);
-            tree.Rename(tree.Path, FileHelper.JoinPaths(newPath, Name));
-            FindTree(newPath)?.AddTree(tree);
+            FindFolder(branch.Id)?.MoveToFolder(newParent);
+            FindFolder(newParent.Path)?.AddBranch(branch);
         }
 
         public bool RemoveFile(string path)
         {
             return Files.RemoveAll(f => f.Path == path) > 0 ||
                    (Trees.FirstOrDefault(t => path.StartsWith(t.Path)) is FolderTree tree && tree.RemoveFile(path));
-        }
-
-        public void MoveFile(FolderFile src, string newPath)
-        {
-            FolderFile file = FindFile(src.Path);
-            RemoveFile(src.Path);
-            file.MoveToFolder(newPath);
-            FindTree(newPath)?.AddFile(file);
-        }
-
-        public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
-        {
-            // Raise the PropertyChanged event, passing the name of the property whose value has changed.
-            this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public override bool Equals(object obj)
@@ -268,11 +193,6 @@ namespace SMPlayer.Models
         public override string ToString()
         {
             return Path;
-        }
-
-        public int CompareTo(object obj)
-        {
-            return ToString().CompareTo(obj.ToString());
         }
 
         PreferenceItem IPreferable.AsPreferenceItem()

@@ -5,6 +5,7 @@
     xmlns:controls="using:SMPlayer.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:SMPlayer.Models"
+    xmlns:vo="using:SMPlayer.Models.VO"
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -300,7 +301,7 @@
                     ItemsSource="{x:Bind Folders, Mode=OneWay}"
                     Style="{StaticResource HorizontalListViewStyle}">
                     <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="data:GridFolderView">
+                        <DataTemplate x:DataType="vo:GridViewFolder">
                             <controls:GridFolderControl />
                         </DataTemplate>
                     </ListView.ItemTemplate>

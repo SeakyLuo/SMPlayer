@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SMPlayer.Models
 {
-    public delegate void NotifyRecentTimeLineChangedEventHandler();
+    public delegate void NotifyRecentTimeLineChangedEventHandler(RecentTimeLineChangedEventArgs args);
 
     public class RecentTimeLine
     {
@@ -37,7 +37,7 @@ namespace SMPlayer.Models
                 Remove(TimeLine.Last());
             }
             TimeLine.Insert(justRemovedMusic == music.Id ? justRemovedIndex : 0, music);
-            CollectionChanged?.Invoke();
+            CollectionChanged?.Invoke(new RecentTimeLineChangedEventArgs() { Item = music, Type = MusicEventType.Add });
         }
 
         public bool Remove(Music music)
@@ -47,7 +47,7 @@ namespace SMPlayer.Models
             {
                 justRemovedMusic = music.Id;
                 TimeLine.RemoveAt(justRemovedIndex);
-                CollectionChanged?.Invoke();
+                CollectionChanged?.Invoke(new RecentTimeLineChangedEventArgs() { Item = music, Type = MusicEventType.Remove });
                 return true;
             }
             return false;
@@ -63,47 +63,42 @@ namespace SMPlayer.Models
             return new RecentTimeLine(list?.OrderByDescending(m => m.DateAdded).Take(MAX_RECENT_TIMELINE_ITEMS));
         }
 
-        public static object Categorize(DateTimeOffset dateAdded)
+        public static string Categorize(DateTimeOffset dateAdded)
         {
-            if (dateAdded.Year == DateTime.Now.Year)
+            DateTime now = DateTime.Now;
+            if (dateAdded.Year == now.Year && dateAdded.Month == now.Month && dateAdded.Day == now.Day)
             {
-                if (dateAdded.Month == DateTime.Now.Month)
-                {
-                    if (dateAdded.Day == DateTime.Now.Day)
-                    {
-                        return RecentTimeLineCategory.Today;
-                    }
-                    else if ((DateTime.Now - dateAdded).Days <= 7)
-                    {
-                        return RecentTimeLineCategory.ThisWeek;
-                    }
-                    else
-                    {
-                        return RecentTimeLineCategory.ThisMonth;
-                    }
-                }
-                else if (DateTime.Now.Month - dateAdded.Month <= 3)
-                {
-                    return RecentTimeLineCategory.Recent3Months;
-                }
-                else if (DateTime.Now.Month - dateAdded.Month <= 6)
-                {
-                    return RecentTimeLineCategory.Recent6Months;
-                }
-                else
-                {
-                    return RecentTimeLineCategory.ThisYear;
-                }
+                return "Today";
             }
-            else
+            const string dateFormat = "yyyyMMdd";
+            string formatedDateAdded = dateAdded.ToString(dateFormat);
+            if (formatedDateAdded == now.AddDays(-1).ToString(dateFormat))
             {
-                return dateAdded.Year;
+                return "Yesterday";
             }
+            if (formatedDateAdded == now.AddDays(-7).ToString(dateFormat))
+            {
+                return "Recent7Days";
+            }
+            if (dateAdded.Year == now.Year && dateAdded.Month == now.Month)
+            {
+                return "ThisMonth";
+            }
+            if (formatedDateAdded == now.AddDays(-30).ToString(dateFormat))
+            {
+                return "Recent30Days";
+            }
+            if (dateAdded.Year == now.Year)
+            {
+                return "Month" + dateAdded.Month;
+            }
+            return dateAdded.ToString("yyyy.MM");
         }
     }
 
-    public enum RecentTimeLineCategory
+    public class RecentTimeLineChangedEventArgs
     {
-        Today, ThisWeek, ThisMonth, Recent3Months, Recent6Months, ThisYear
+        public Music Item { get; set; }
+        public MusicEventType Type { get; set; }
     }
 }

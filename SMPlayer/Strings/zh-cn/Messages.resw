@@ -156,17 +156,35 @@
   <data name="ChangesSaved" xml:space="preserve">
     <value>已保存！</value>
   </data>
-  <data name="CheckNewMusicResultAdded" xml:space="preserve">
-    <value>添加了{0}首歌</value>
+  <data name="CheckNewMusicResult1Added" xml:space="preserve">
+    <value>添加了《{0}》</value>
+  </data>
+  <data name="CheckNewMusicResult1Added1Removed" xml:space="preserve">
+    <value>添加了《{0}》，移除了《{1}》</value>
+  </data>
+  <data name="CheckNewMusicResult1Removed" xml:space="preserve">
+    <value>移除了《{0}》</value>
+  </data>
+  <data name="CheckNewMusicResult2Added" xml:space="preserve">
+    <value>添加了《{0}》和《{1}》</value>
+  </data>
+  <data name="CheckNewMusicResult2Removed" xml:space="preserve">
+    <value>移除了《{0}》和《{1}》</value>
   </data>
   <data name="CheckNewMusicResultChange" xml:space="preserve">
     <value>添加了{0}首歌，移除了{1}首歌</value>
   </data>
+  <data name="CheckNewMusicResultMultipleAdded" xml:space="preserve">
+    <value>添加了{0}首歌</value>
+  </data>
+  <data name="CheckNewMusicResultMultipleRemoved" xml:space="preserve">
+    <value>移除了{0}首歌</value>
+  </data>
   <data name="CheckNewMusicResultNoChange" xml:space="preserve">
     <value>没有检查到变化</value>
   </data>
-  <data name="CheckNewMusicResultRemoved" xml:space="preserve">
-    <value>移除了{0}首歌</value>
+  <data name="ClearExpiredData" xml:space="preserve">
+    <value>正在清除过期数据……</value>
   </data>
   <data name="ClearPlayHistory" xml:space="preserve">
     <value>你想清空播放历史吗？</value>
@@ -200,6 +218,9 @@
   </data>
   <data name="DeleteMusicMessage" xml:space="preserve">
     <value>你将要删除《{0}》。该项操作无法完全撤销，是否要继续？</value>
+  </data>
+  <data name="DuplicateFoundWhenMovingFile" xml:space="preserve">
+    <value>文件夹“{1}”已经包含文件“{0}”，是否继续？</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>发生了错误</value>
@@ -248,6 +269,9 @@
   </data>
   <data name="LoadMusicLibrary" xml:space="preserve">
     <value>正在加载音乐库……</value>
+  </data>
+  <data name="LoadSettingsAndInsertToDbFailed" xml:space="preserve">
+    <value>数据库写入失败，为避免影响后续使用，请在设置页面点击“提供反馈”并反馈问题。</value>
   </data>
   <data name="Lyrics" xml:space="preserve">
     <value>歌词</value>
@@ -309,6 +333,9 @@
   <data name="NoLyricsAvailable" xml:space="preserve">
     <value>没有歌词</value>
   </data>
+  <data name="NoMusicUnderCurrentFolder" xml:space="preserve">
+    <value>当前目录下没有音乐！</value>
+  </data>
   <data name="NoResult" xml:space="preserve">
     <value>找不到结果</value>
   </data>
@@ -360,6 +387,9 @@
   <data name="PlayRandomPlaylist" xml:space="preserve">
     <value>正在播放播放列表“{0}”的歌曲</value>
   </data>
+  <data name="PleaseExitMultiSelectMode" xml:space="preserve">
+    <value>请先退出多选模式！</value>
+  </data>
   <data name="PostParenthesis" xml:space="preserve">
     <value>{0}（{1}）</value>
   </data>
@@ -377,12 +407,6 @@
   </data>
   <data name="Quotations" xml:space="preserve">
     <value>“{0}”</value>
-  </data>
-  <data name="Recent3Months" xml:space="preserve">
-    <value>最近3个月</value>
-  </data>
-  <data name="Recent6Months" xml:space="preserve">
-    <value>最近6个月</value>
   </data>
   <data name="RemoveAlbumArt" xml:space="preserve">
     <value>你想要移除《{0}》的专辑插图吗？</value>
@@ -419,6 +443,9 @@
   </data>
   <data name="Repeat: Enabled" xml:space="preserve">
     <value>循环播放：打开</value>
+  </data>
+  <data name="ResyncData" xml:space="preserve">
+    <value>正在同步数据……</value>
   </data>
   <data name="Reverse Playlist" xml:space="preserve">
     <value>使播放列表倒序</value>
@@ -534,18 +561,6 @@
   <data name="StopAddingLyrics" xml:space="preserve">
     <value>正在尝试中止添加歌词……</value>
   </data>
-  <data name="ThisMonth" xml:space="preserve">
-    <value>本月</value>
-  </data>
-  <data name="ThisWeek" xml:space="preserve">
-    <value>本周</value>
-  </data>
-  <data name="ThisYear" xml:space="preserve">
-    <value>今年</value>
-  </data>
-  <data name="Today" xml:space="preserve">
-    <value>今日</value>
-  </data>
   <data name="UnableToChangeAlbumArt" xml:space="preserve">
     <value>无法更改专辑插图</value>
   </data>
@@ -567,14 +582,20 @@
   <data name="UnknownArtist" xml:space="preserve">
     <value>未知歌手</value>
   </data>
+  <data name="UpdateDBMsgInitDatabase" xml:space="preserve">
+    <value>正在初始化数据库......</value>
+  </data>
+  <data name="UpdateDBMsgPreparing" xml:space="preserve">
+    <value>正在准备数据以写入数据，请稍等几分钟，不要退出……</value>
+  </data>
+  <data name="UpdateDBMsgUpdatingDatabase" xml:space="preserve">
+    <value>正在更新数据库，请勿退出</value>
+  </data>
   <data name="UpdateFinished" xml:space="preserve">
     <value>数据更新完成！</value>
   </data>
   <data name="UpdateMusicLibrary" xml:space="preserve">
     <value>正在更新音乐库……</value>
-  </data>
-  <data name="Updating" xml:space="preserve">
-    <value>正在更新你的数据，请稍等。如果你意外退出了，请到“设置-&gt;更新音乐库”重新执行该操作。</value>
   </data>
   <data name="VoiceAssistantAudiblePrompt" xml:space="preserve">
     <value>请问需要什么帮助？</value>

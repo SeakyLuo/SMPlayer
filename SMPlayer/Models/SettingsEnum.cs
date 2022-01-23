@@ -62,6 +62,11 @@ namespace SMPlayer.Models
         Name = 6,
         Reverse = 7
     }
+
+    public enum LocalPageViewMode
+    {
+        Grid, List
+    }
     public static class SortByConverter
     {
         public static string ToStr(this SortBy criterion)

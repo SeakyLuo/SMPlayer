@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Models;
+using SMPlayer.Models.VO;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace SMPlayer
         public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
         public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
         public ObservableCollection<AlbumView> Playlists = new ObservableCollection<AlbumView>();
-        public ObservableCollection<GridFolderView> Folders = new ObservableCollection<GridFolderView>();
+        public ObservableCollection<GridViewFolder> Folders = new ObservableCollection<GridViewFolder>();
         private SortBy[] Criteria;
         private SearchType searchType;
         private SearchKeyword CurrentKeyword;
@@ -149,7 +150,7 @@ namespace SMPlayer
                     Playlists.SetTo(list as ObservableCollection<AlbumView>);
                     break;
                 case SearchType.Folders:
-                    Folders.SetTo(list as ObservableCollection<GridFolderView>);
+                    Folders.SetTo(list as ObservableCollection<GridViewFolder>);
                     break;
             }
             LoadingProgress.IsActive = false;
@@ -214,24 +215,47 @@ namespace SMPlayer
             }
         }
 
-        void IMultiSelectListener.Cancel(MultiSelectCommandBar commandBar)
-        {
-            AlbumsGridView.SelectionMode = ListViewSelectionMode.None;
-            ArtistsGridView.SelectionMode = ListViewSelectionMode.None;
-            SearchMusicView.SelectionMode = ListViewSelectionMode.None;
-            PlaylistsGridView.SelectionMode = ListViewSelectionMode.None;
-            FoldersGridView.SelectionMode = ListViewSelectionMode.None;
-        }
 
-        void IMultiSelectListener.AddTo(MultiSelectCommandBar commandBar, MenuFlyoutHelper helper)
+        void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
         {
-            helper.DefaultPlaylistName = Settings.settings.FindNextPlaylistName(CurrentKeyword.Text);
-            helper.Data = GetSelectItems();
-        }
-
-        void IMultiSelectListener.Play(MultiSelectCommandBar commandBar)
-        {
-            MusicPlayer.SetMusicAndPlay(GetSelectItems());
+            switch (args.Event)
+            {
+                case MultiSelectEvent.Cancel:
+                    AlbumsGridView.SelectionMode = ListViewSelectionMode.None;
+                    ArtistsGridView.SelectionMode = ListViewSelectionMode.None;
+                    SearchMusicView.SelectionMode = ListViewSelectionMode.None;
+                    PlaylistsGridView.SelectionMode = ListViewSelectionMode.None;
+                    FoldersGridView.SelectionMode = ListViewSelectionMode.None;
+                    break;
+                case MultiSelectEvent.AddTo:
+                    args.FlyoutHelper.DefaultPlaylistName = Settings.settings.FindNextPlaylistName(CurrentKeyword.Text);
+                    args.FlyoutHelper.Data = GetSelectItems();
+                    break;
+                case MultiSelectEvent.Play:
+                    MusicPlayer.SetMusicAndPlay(GetSelectItems());
+                    break;
+                case MultiSelectEvent.SelectAll:
+                    AlbumsGridView.SelectAll();
+                    SearchMusicView.SelectAll();
+                    PlaylistsGridView.SelectAll();
+                    FoldersGridView.SelectAll();
+                    ArtistsGridView.SelectAll();
+                    break;
+                case MultiSelectEvent.ClearSelections:
+                    AlbumsGridView.ClearSelections();
+                    SearchMusicView.ClearSelections();
+                    PlaylistsGridView.ClearSelections();
+                    FoldersGridView.ClearSelections();
+                    ArtistsGridView.ClearSelections();
+                    break;
+                case MultiSelectEvent.ReverseSelections:
+                    AlbumsGridView.ReverseSelections();
+                    SearchMusicView.ReverseSelections();
+                    PlaylistsGridView.ReverseSelections();
+                    FoldersGridView.ReverseSelections();
+                    ArtistsGridView.ReverseSelections();
+                    break;
+            }
         }
 
         private List<Music> GetSelectItems()
@@ -243,45 +267,16 @@ namespace SMPlayer
                 list.Add(item);
             foreach (AlbumView item in PlaylistsGridView.SelectedItems)
                 list.AddRange(item.Songs);
-            foreach (GridFolderView item in FoldersGridView.SelectedItems)
+            foreach (GridViewFolder item in FoldersGridView.SelectedItems)
                 list.AddRange(item.Songs);
             foreach (Playlist item in ArtistsGridView.SelectedItems)
                 list.AddRange(item.Songs);
             return list;
         }
 
-        void IMultiSelectListener.Remove(MultiSelectCommandBar commandBar) { }
-
-        void IMultiSelectListener.SelectAll(MultiSelectCommandBar commandBar)
-        {
-            AlbumsGridView.SelectAll();
-            SearchMusicView.SelectAll();
-            PlaylistsGridView.SelectAll();
-            FoldersGridView.SelectAll();
-            ArtistsGridView.SelectAll();
-        }
-
-        void IMultiSelectListener.ReverseSelections(MultiSelectCommandBar commandBar)
-        {
-            AlbumsGridView.ReverseSelections();
-            SearchMusicView.ReverseSelections();
-            PlaylistsGridView.ReverseSelections();
-            FoldersGridView.ReverseSelections();
-            ArtistsGridView.ReverseSelections();
-        }
-
-        void IMultiSelectListener.ClearSelections(MultiSelectCommandBar commandBar)
-        {
-            AlbumsGridView.ClearSelections();
-            SearchMusicView.ClearSelections();
-            PlaylistsGridView.ClearSelections();
-            FoldersGridView.ClearSelections();
-            ArtistsGridView.ClearSelections();
-        }
-
         private void SortButton_Click(object sender, RoutedEventArgs e)
         {
-            MenuFlyoutHelper.SetSortByMenu(sender, SettingsCriterion, Criteria, item => SettingsCriterion = item);
+            MenuFlyoutHelper.ShowSortByMenu(sender, SettingsCriterion, Criteria, item => SettingsCriterion = item);
         }
     }
 }

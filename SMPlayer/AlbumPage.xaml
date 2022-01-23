@@ -11,7 +11,5 @@
 
     <local:HeaderedPlaylistControl
         x:Name="AlbumPlaylistControl"
-        IsPlaylist="False"
-        ShowAlbumText="False" 
-        Removable="False" />
+        PlaylistType="Album" />
 </Page>

@@ -12,7 +12,6 @@ namespace SMPlayer.Models
     [Serializable]
     public class Playlist : INotifyPropertyChanged, IPreferable
     {
-        public static SortBy[] Criteria = new SortBy[] { SortBy.Title, SortBy.Artist, SortBy.Album, SortBy.Duration, SortBy.PlayCount, SortBy.DateAdded };
         public long Id { get; set; }
         private string name;
         public string Name
@@ -30,14 +29,11 @@ namespace SMPlayer.Models
         public SortBy Criterion { get; set; } = SortBy.Title;
         public MusicDisplayItem DisplayItem { get; set; }
         public string Artist { get; set; }
-        public ObservableCollection<Music> Songs
-        {
-            get => new ObservableCollection<Music>(Settings.FindMusicList(SongIds));
-        }
-        public List<long> SongIds { get; set; }
-        public int Count { get => SongIds.Count; }
+        public ObservableCollection<Music> Songs { get; set; } = new ObservableCollection<Music>();
+        public int Priority { get; set; }
+        public int Count { get => Songs.Count; }
         public bool IsMyFavorite { get => Name == Constants.MyFavorites; }
-        public bool IsEmpty { get => SongIds.Count == 0; }
+        public bool IsEmpty { get => Songs.IsEmpty(); }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -46,24 +42,24 @@ namespace SMPlayer.Models
         public Playlist(string Name)
         {
             this.Name = Name;
-            this.SongIds = new List<long>();
+            this.Songs = new ObservableCollection<Music>();
         }
 
         public Playlist(string Name, Music music)
         {
             this.Name = Name;
-            this.SongIds = new List<long>() { music.Id };
+            this.Songs = new ObservableCollection<Music>() { music };
         }
 
         public Playlist(string Name, IEnumerable<Music> Songs)
         {
             this.Name = Name;
-            this.SongIds = Songs.Select(i => i.Id).ToList();
+            this.Songs = Songs.IsEmpty() ? new ObservableCollection<Music>() : new ObservableCollection<Music>(Songs);
         }
 
-        public Playlist Duplicate(string NewName)
+        public Playlist Duplicate(string newName)
         {
-            return new Playlist(NewName, Songs);
+            return new Playlist(newName, Songs);
         }
 
         public void Add(object item)
@@ -75,18 +71,18 @@ namespace SMPlayer.Models
                 {
                     return;
                 }
-                SongIds.Add(music.Id);
+                Songs.Add(music);
             }
             else if (item is IEnumerable<IMusicable> songs)
             {
-                var set = SongIds.ToHashSet();
+                var set = Songs.Select(i => i.Id).ToHashSet();
                 bool neverAdded = true;
                 foreach (var song in songs)
                 {
                     Music music = song.ToMusic();
                     if (!set.Contains(music.Id))
                     {
-                        SongIds.Add(music.Id);
+                        Songs.Add(music);
                         neverAdded = false;
                     }
                 }
@@ -102,43 +98,43 @@ namespace SMPlayer.Models
         public void Remove(IEnumerable<IMusicable> musicables)
         {
             foreach (var music in musicables)
-                SongIds.Remove(music.ToMusic().Id);
+                Songs.Remove(music.ToMusic());
             Sort();
         }
 
         public void Remove(Music music)
         {
-            SongIds.Remove(music.Id);
+            Songs.Remove(music);
             Sort();
         }
 
         public void Remove(int index)
         {
-            SongIds.RemoveAt(index);
+            Songs.RemoveAt(index);
             Sort();
         }
 
         public void RemoveAll(Func<Music, bool> predicate)
         {
-            SongIds.RemoveAll(i => predicate.Invoke(Settings.FindMusic(i)));
+            Songs.RemoveAll(i => predicate.Invoke(Settings.FindMusic(i)));
         }
 
         public bool Contains(Music music)
         {
-            return SongIds.Contains(music.Id);
+            return Songs.Contains(music);
         }
 
         public void Clear()
         {
-            SongIds.Clear();
+            Songs.Clear();
         }
 
         public async Task LoadDisplayItemAsync()
         {
             if (DisplayItem != null && !DisplayItem.IsDefault) return;
-            foreach (var songId in SongIds)
+            foreach (var song in Songs)
             {
-                DisplayItem = await Settings.FindMusic(songId).GetMusicDisplayItemAsync();
+                DisplayItem = await song.GetMusicDisplayItemAsync();
                 if (!DisplayItem.IsDefault) return;
             }
             DisplayItem = MusicDisplayItem.DefaultItem;
@@ -187,38 +183,36 @@ namespace SMPlayer.Models
 
         public void Sort()
         {
-            IOrderedEnumerable<long> list;
+            IOrderedEnumerable<Music> list;
             switch (Criterion)
             {
                 case SortBy.Title:
-                    list = SongIds.OrderBy(m => Settings.FindMusic(m).Name);
+                    list = Songs.OrderBy(m => m.Name);
                     break;
                 case SortBy.Artist:
-                    list = SongIds.OrderBy(m => Settings.FindMusic(m).Artist);
+                    list = Songs.OrderBy(m => m.Artist);
                     break;
                 case SortBy.Album:
-                    list = SongIds.OrderBy(m => Settings.FindMusic(m).Album);
+                    list = Songs.OrderBy(m => m.Album);
                     break;
                 case SortBy.Duration:
-                    list = SongIds.OrderBy(m => Settings.FindMusic(m).Duration);
+                    list = Songs.OrderBy(m => m.Duration);
                     break;
                 case SortBy.PlayCount:
-                    list = SongIds.OrderBy(m => Settings.FindMusic(m).PlayCount);
+                    list = Songs.OrderBy(m => m.PlayCount);
                     break;
                 case SortBy.DateAdded:
-                    list = SongIds.OrderBy(m => Settings.FindMusic(m).DateAdded);
+                    list = Songs.OrderBy(m => m.DateAdded);
                     break;
                 default:
                     return;
             }
-            SongIds = list.ToList();
-            OnPropertyChanged("Songs");
+            Songs.SetTo(list.ToList());
         }
 
         public void Reverse()
         {
-            SongIds.Reverse();
-            OnPropertyChanged("Songs");
+            Songs.SetTo(Songs.Reverse().ToList());
         }
 
         PreferenceItem IPreferable.AsPreferenceItem()

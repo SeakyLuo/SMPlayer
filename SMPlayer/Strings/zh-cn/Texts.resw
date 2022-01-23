@@ -174,6 +174,12 @@
   <data name="FoldersWithCount" xml:space="preserve">
     <value>文件夹（{0}）</value>
   </data>
+  <data name="GridViewFolderPlayInfo" xml:space="preserve">
+    <value>随机播放“{0}”下所有歌曲</value>
+  </data>
+  <data name="GridViewMusicPlayInfo" xml:space="preserve">
+    <value>优先播放《{0}》</value>
+  </data>
   <data name="InvalidItemToolTip" xml:space="preserve">
     <value>“{0}”已经失效或无法被找到</value>
   </data>
@@ -183,14 +189,59 @@
   <data name="IsEnabledToggleSwitchOnToolTip" xml:space="preserve">
     <value>停用后，该项目不会有更高的随机播放概率</value>
   </data>
+  <data name="KeepBoth" xml:space="preserve">
+    <value>保留两者</value>
+  </data>
   <data name="LeastPlayed" xml:space="preserve">
     <value>最少播放</value>
   </data>
   <data name="LikeMusicToolTip" xml:space="preserve">
     <value>设为我喜欢</value>
   </data>
+  <data name="Month1" xml:space="preserve">
+    <value>1月</value>
+  </data>
+  <data name="Month10" xml:space="preserve">
+    <value>10月</value>
+  </data>
+  <data name="Month11" xml:space="preserve">
+    <value>11月</value>
+  </data>
+  <data name="Month12" xml:space="preserve">
+    <value>12月</value>
+  </data>
+  <data name="Month2" xml:space="preserve">
+    <value>2月</value>
+  </data>
+  <data name="Month3" xml:space="preserve">
+    <value>3月</value>
+  </data>
+  <data name="Month4" xml:space="preserve">
+    <value>4月</value>
+  </data>
+  <data name="Month5" xml:space="preserve">
+    <value>5月</value>
+  </data>
+  <data name="Month6" xml:space="preserve">
+    <value>6月</value>
+  </data>
+  <data name="Month7" xml:space="preserve">
+    <value>7月</value>
+  </data>
+  <data name="Month8" xml:space="preserve">
+    <value>8月</value>
+  </data>
+  <data name="Month9" xml:space="preserve">
+    <value>9月</value>
+  </data>
   <data name="MostPlayed" xml:space="preserve">
     <value>最常播放</value>
+  </data>
+  <data name="MoveAndReplace" xml:space="preserve">
+    <value>移动并覆盖</value>
+  </data>
+  <data name="MoveToFolderOfPath" xml:space="preserve">
+    <value>移动到{0}</value>
   </data>
   <data name="MyFavorites" xml:space="preserve">
     <value>我喜欢</value>
@@ -203,6 +254,9 @@
   </data>
   <data name="Next" xml:space="preserve">
     <value>下一首</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>否</value>
   </data>
   <data name="NowPlaying" xml:space="preserve">
     <value>正在播放</value>
@@ -267,6 +321,12 @@
   <data name="Recent" xml:space="preserve">
     <value>最近</value>
   </data>
+  <data name="Recent30Days" xml:space="preserve">
+    <value>最近30天</value>
+  </data>
+  <data name="Recent7Days" xml:space="preserve">
+    <value>最近7天</value>
+  </data>
   <data name="RecentAdded" xml:space="preserve">
     <value>最近添加</value>
   </data>
@@ -294,11 +354,20 @@
   <data name="ShuffleAndPlay" xml:space="preserve">
     <value>随机播放</value>
   </data>
+  <data name="SkipThis" xml:space="preserve">
+    <value>跳过</value>
+  </data>
   <data name="Songs" xml:space="preserve">
     <value>歌曲</value>
   </data>
   <data name="SongsWithCount" xml:space="preserve">
     <value>歌曲（{0}）</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>本月</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>今日</value>
   </data>
   <data name="UndoLikeMusicToolTip" xml:space="preserve">
     <value>从我喜欢中移除</value>
@@ -323,5 +392,11 @@
   </data>
   <data name="VoiceAssistantHints3" xml:space="preserve">
     <value>你可以说：“快速播放”</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>是</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>昨天</value>
   </data>
 </root>

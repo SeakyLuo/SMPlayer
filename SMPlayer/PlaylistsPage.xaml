@@ -89,10 +89,8 @@
             <controls:TabView.ItemTemplate>
                 <DataTemplate x:DataType="data:Playlist">
                     <local:HeaderedPlaylistControl
-                        AllowClear="True"
-                        IsPlaylist="True"
-                        Loaded="HeaderedPlaylistControl_Loaded"
-                        Removable="True" />
+                        PlaylistType="Playlist"
+                        Loaded="HeaderedPlaylistControl_Loaded" />
                 </DataTemplate>
             </controls:TabView.ItemTemplate>
 

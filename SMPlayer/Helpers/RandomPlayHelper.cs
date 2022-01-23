@@ -11,12 +11,12 @@ namespace SMPlayer.Helpers
     {
         public static void PlayMusic(int randomLimit = 100)
         {
-            MusicPlayer.SetPlaylistAndPlay(Settings.settings.AllSongs.RandItems(randomLimit));
+            MusicPlayer.SetPlaylistAndPlay(Settings.AllSongs.RandItems(randomLimit));
         }
 
         public static IGrouping<string, Music> PlayArtist(int randomLimit = 100)
         {
-            var rArtist = Settings.settings.AllSongs.GroupBy(m => m.Artist).RandItem();
+            var rArtist = Settings.AllSongs.GroupBy(m => m.Artist).RandItem();
             MusicPlayer.SetPlaylistAndPlay(rArtist.RandItems(randomLimit));
             return rArtist;
         }
@@ -25,19 +25,29 @@ namespace SMPlayer.Helpers
         {
             var album = AlbumsPage.AlbumInfoList.RandItem();
             // 没有检查Artist，不过无所谓
-            MusicPlayer.SetPlaylistAndPlay(Settings.settings.AllSongs.Where(i => i.Album == album.Name).RandItems(randomLimit));
+            MusicPlayer.SetPlaylistAndPlay(Settings.AllSongs.Where(i => i.Album == album.Name).RandItems(randomLimit));
             return album;
         }
         public static Playlist PlayPlaylist(int randomLimit = 100)
         {
-            var playlist = Settings.settings.Playlists.RandItem();
+            List<Playlist> allPlaylists = Settings.AllPlaylists;
+            Playlist playlist;
+            do
+            {
+                playlist = allPlaylists.RandItem();
+            } while (playlist.IsEmpty);
             MusicPlayer.SetPlaylistAndPlay(playlist.Songs.RandItems(randomLimit));
             return playlist;
         }
 
         public static FolderTree PlayFolder(int randomLimit = 100)
         {
-            var folder = Settings.settings.Tree.GetAllTrees().Where(tree => tree.Files.Count > 0).RandItem();
+            List<FolderTree> allFolders = Settings.AllFolders;
+            FolderTree folder;
+            do
+            {
+                folder = Settings.FindFolder(allFolders.RandItem().Id);
+            } while (folder.IsEmpty);
             MusicPlayer.SetMusicAndPlay(folder.Songs.RandItems(randomLimit));
             return folder;
         }

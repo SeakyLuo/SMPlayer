@@ -102,9 +102,9 @@
                                             Margin="0,0,0,10"
                                             FontSize="24"
                                             FontWeight="Bold"
-                                            Text="{x:Bind Name, Mode=OneWay}"
+                                            Text="{x:Bind Name, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist, Mode=OneWay}"
                                             TextWrapping="WrapWholeWords"
-                                            ToolTipService.ToolTip="{x:Bind Name, Mode=OneWay}" />
+                                            ToolTipService.ToolTip="{x:Bind Name, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist, Mode=OneWay}" />
                                         <TextBlock
                                             x:Name="ArtistInfoTextBlock"
                                             FontSize="18"
@@ -180,7 +180,6 @@
                                             x:Name="AlbumMoreButton"
                                             Margin="0,40,20,0"
                                             Background="Transparent"
-                                            Foreground="{ThemeResource SystemColorHighlightColor}"
                                             RelativePanel.AlignRightWithPanel="True"
                                             Style="{StaticResource MoreButtonStyle}">
                                             <Button.Flyout>

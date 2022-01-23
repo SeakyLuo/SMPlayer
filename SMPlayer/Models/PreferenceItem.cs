@@ -10,8 +10,8 @@ namespace SMPlayer.Models
     [Serializable]
     public class PreferenceItem
     {
-        public string Id { get; set; }
-        [Newtonsoft.Json.JsonIgnore]
+        public long ItemId { get; set; } // id of this record
+        public string Id { get; set; } // Preferred Item's Id
         public long LongId { get => long.Parse(Id); }
         public string Name { get; set; }
         public bool IsEnabled { get; set; }

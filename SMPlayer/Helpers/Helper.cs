@@ -17,6 +17,7 @@ using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.UI.Notifications;
+using Windows.UI.Popups;
 using Windows.UI.StartScreen;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -106,7 +107,6 @@ namespace SMPlayer
             if (TempFolder == null) return;
             var files = await TempFolder.GetFilesAsync();
             await ClearBackup(files, SettingsHelper.JsonFilename, maxBackups);
-            await ClearBackup(files, SettingsHelper.NewFilename, maxBackups);
             await ClearBackup(files, MusicPlayer.JsonFilename, maxBackups);
             await ClearBackup(files, AlbumsPage.JsonFilename, maxBackups);
         }
@@ -137,19 +137,19 @@ namespace SMPlayer
         }
         public static void ShowCancelableNotification(string message, Action cancel, int duration = 5000)
         {
-            GetMainPageContainer()?.ShowUndoNotification(LocalizeMessage(message), cancel, duration);
+            GetMainPageContainer()?.ShowUndoableNotification(LocalizeMessage(message), cancel, duration);
         }
         public static void ShowCancelableNotificationRaw(string message, Action cancel, int duration = 5000)
         {
-            GetMainPageContainer()?.ShowUndoNotification(message, cancel, duration);
+            GetMainPageContainer()?.ShowUndoableNotification(message, cancel, duration);
         }
         public static void ShowMusicNotFoundNotification(string music, int duration = 5000)
         {
-            GetMainPageContainer().ShowNotification(LocalizeMessage("MusicNotFound", music), duration);
+            GetMainPageContainer()?.ShowNotification(LocalizeMessage("MusicNotFound", music), duration);
         }
         public static void ShowPathNotFoundNotification(string path, int duration = 5000)
         {
-            GetMainPageContainer().ShowNotification(LocalizeMessage("PathNotFound", FileHelper.GetParentPath(path)), duration);
+            GetMainPageContainer()?.ShowNotification(LocalizeMessage("PathNotFound", FileHelper.GetParentPath(path)), duration);
         }
         public static void ShowAddMusicResultNotification(AddMusicResult result, Music target = null)
         {
@@ -157,14 +157,14 @@ namespace SMPlayer
             {
                 IMainPageContainer container = GetMainPageContainer();
                 int duration = 5000;
-                if (result.FailCount > 1) container.ShowNotification(LocalizeMessage("MusicsNotFound", result.FailCount), duration);
+                if (result.FailCount > 1) container?.ShowNotification(LocalizeMessage("MusicsNotFound", result.FailCount), duration);
                 else
                 {
                     if (target == null || !result.Failed.Contains(target)) target = result.Failed[0];
                     if (!NotFoundHistory.Contains(target))
                     {
                         NotFoundHistory.Add(target);
-                        container.ShowNotification(LocalizeMessage("MusicNotFound", target.Name), duration);
+                        container?.ShowNotification(LocalizeMessage("MusicNotFound", target.Name), duration);
                     }
                 }
             }
@@ -210,7 +210,7 @@ namespace SMPlayer
             return string.IsNullOrEmpty(str) ? resource : str;
         }
 
-        public static string GetPlaylistName(string Name, int index)
+        public static string GetNextName(string Name, int index)
         {
             return LocalizeMessage("PlaylistName", Name, index);
         }
@@ -286,6 +286,32 @@ namespace SMPlayer
             //Rect bounds = parent.TransformToVisual(sender).TransformBounds(new Rect(0.0, 0.0, parent.ActualWidth, parent.ActualHeight));
             //return rect.Contains(new Point(bounds.Left, bounds.Top)) || rect.Contains(new Point(bounds.Right, bounds.Bottom));
         }
+
+        public static async Task ShowYesNoDialog(string message, Action onYes)
+        {
+            await ShowMessageDialog(message, 1, 1, ("Yes", onYes), ("No", null));
+        }
+
+        public static async Task ShowMessageDialog(string message, uint defaultCommandIndex = 0, uint cancelCommandIndex = 0, params (string, Action)[] buttonActionTuples)
+        {
+            var messageDialog = new MessageDialog(LocalizeMessage(message));
+            foreach (var (button, action) in buttonActionTuples)
+            {
+                messageDialog.Commands.Add(new UICommand(LocalizeText(button), new UICommandInvokedHandler(command =>
+                {
+                    action?.Invoke();
+                })));
+            }
+
+            // Set the command that will be invoked by default
+            messageDialog.DefaultCommandIndex = defaultCommandIndex;
+
+            // Set the command to be invoked when escape is pressed
+            messageDialog.CancelCommandIndex = cancelCommandIndex;
+
+            // Show the message dialog
+            await messageDialog.ShowAsync();
+        }
     }
     public enum ExecutionStatus
     {
@@ -295,10 +321,10 @@ namespace SMPlayer
     public interface IMainPageContainer
     {
         void ShowNotification(string message, int duration = 2000);
-        void ShowUndoNotification(string message, Action undo, int duration = 5000);
+        void ShowUndoableNotification(string message, Action undo, int duration = 5000);
         void ShowLocalizedNotification(string message, int duration = 2000);
         void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option = null);
-        void HideMultiSelectCommandBar();
+        void CancelMultiSelectCommandBar();
         void SetMultiSelectListener(IMultiSelectListener listener = null);
         MediaElement GetMediaElement();
         MultiSelectCommandBar GetMultiSelectCommandBar();

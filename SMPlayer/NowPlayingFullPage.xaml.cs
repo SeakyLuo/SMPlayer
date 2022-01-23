@@ -58,7 +58,7 @@ namespace SMPlayer
 
         private Action undo;
 
-        public void ShowUndoNotification(string message, Action undo, int duration = 5000)
+        public void ShowUndoableNotification(string message, Action undo, int duration = 5000)
         {
             UndoInAppNotification.Content = message;
             this.undo = undo;
@@ -113,7 +113,7 @@ namespace SMPlayer
             return BottomMultiSelectCommandBar;
         }
 
-        public void HideMultiSelectCommandBar()
+        public void CancelMultiSelectCommandBar()
         {
             BottomMultiSelectCommandBar.Hide();
         }

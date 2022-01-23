@@ -20,7 +20,7 @@
                 x:Name="RecentAddedItem"
                 x:Uid="RecentAddedItem"
                 Header="Recently Added">
-                <Grid Loaded="RecentAddedItem_Loaded">
+                <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
@@ -53,7 +53,7 @@
                         Grid.Row="1"
                         Width="100"
                         Height="100"/>
-                    <local:GridMusicControl
+                    <local:MusicGridViewControl
                         x:Name="AddedMusicView"
                         Grid.Row="1"
                         Margin="0,5,0,0" />
@@ -95,7 +95,7 @@
                         IsActive="False"
                         Width="100"
                         Height="100"/>
-                    <local:GridMusicControl
+                    <local:MusicGridViewControl
                         x:Name="PlayedMusicView"
                         Grid.Row="1"
                         Margin="0,5,0,0" />
@@ -139,7 +139,7 @@
                         IsItemClickEnabled="True"
                         ItemClick="SearchHistoryListView_ItemClick"
                         ItemContainerStyle="{StaticResource StretchListViewItemStyle}"
-                        ItemsSource="{x:Bind recentSearches, Mode=OneWay}"
+                        ItemsSource="{x:Bind RecentSearches, Mode=OneWay}"
                         Loaded="SearchHistoryListView_Loaded"
                         SelectionMode="None">
                         <ListView.ItemTemplate>
