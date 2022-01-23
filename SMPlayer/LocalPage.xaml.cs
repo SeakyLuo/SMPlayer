@@ -130,7 +130,6 @@ namespace SMPlayer
             ClearMultiSelectStatus();
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                if (tree.IsEmpty) return;
                 tree.SortFiles();
                 switch (Settings.settings.LocalViewMode)
                 {
@@ -143,7 +142,8 @@ namespace SMPlayer
                         SetupTreeView(tree);
                         break;
                 }
-                History.Push(tree);
+                if (GridItems.IsNotEmpty())
+                    History.Push(tree);
             });
             SetHeader(tree);
             SetNavText(tree);

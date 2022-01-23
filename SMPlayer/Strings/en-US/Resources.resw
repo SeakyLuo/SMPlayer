@@ -1030,10 +1030,10 @@
     <value>Search</value>
   </data>
   <data name="SearchBar.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Search</value>
+    <value>Search music, artist, album, playlist, folder</value>
   </data>
   <data name="SearchButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Search</value>
+    <value>Search music, artist, album, playlist, folder</value>
   </data>
   <data name="SearchCommandsTextBlock.Text" xml:space="preserve">
     <value>Search [keyword]</value>
@@ -1275,5 +1275,8 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   </data>
   <data name="ListViewFlyoutItem.Text" xml:space="preserve">
     <value>List View</value>
+  </data>
+  <data name="AlbumSearchBar.PlaceholderText" xml:space="preserve">
+    <value>Search Album</value>
   </data>
 </root>

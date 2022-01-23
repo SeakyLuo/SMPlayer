@@ -29,11 +29,7 @@ namespace SMPlayer
         private object targetArtist;
         private List<ListView> listViews = new List<ListView>();
         private IInitListener initListener;
-
-        private ArtistView SelectedArtist
-        {
-            get => ArtistMasterDetailsView.SelectedItem as ArtistView;
-        }
+        private ArtistView SelectedArtist => ArtistMasterDetailsView.SelectedItem as ArtistView;
         private List<Music> SelectedItems
         {
             get

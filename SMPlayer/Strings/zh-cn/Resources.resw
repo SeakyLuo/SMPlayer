@@ -1021,10 +1021,10 @@
     <value>搜索</value>
   </data>
   <data name="SearchBar.ToolTipService.ToolTip" xml:space="preserve">
-    <value>搜索</value>
+    <value>搜索歌曲、歌手、专辑、播放列表、文件夹</value>
   </data>
   <data name="SearchButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>搜索</value>
+    <value>搜索歌曲、歌手、专辑、播放列表、文件夹</value>
   </data>
   <data name="SearchCommandsTextBlock.Text" xml:space="preserve">
     <value>搜索[关键词]</value>
@@ -1266,5 +1266,8 @@
   </data>
   <data name="ListViewFlyoutItem.Text" xml:space="preserve">
     <value>列表模式</value>
+  </data>
+  <data name="AlbumSearchBar.PlaceholderText" xml:space="preserve">
+    <value>搜索专辑</value>
   </data>
 </root>

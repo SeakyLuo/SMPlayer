@@ -97,6 +97,11 @@ namespace SMPlayer.Helpers
             return music.Album.Contains(keyword, Comparison) || music.Artist.Contains(keyword, Comparison);
         }
 
+        public static bool IsTargetAlbum(AlbumView album, string keyword)
+        {
+            return album.Name.Contains(keyword, Comparison) || album.Artist.Contains(keyword, Comparison);
+        }
+
         public static IEnumerable<AlbumView> SortAlbums(IEnumerable<AlbumView> list, string keyword, SortBy criterion)
         {
             switch (criterion)

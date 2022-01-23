@@ -166,7 +166,7 @@ namespace SMPlayer
             }
             return dst;
         }
-        public static ObservableCollection<T> CopyAndSetTo<T>(this ObservableCollection<T> dst, IEnumerable<T> src)
+        public static ObservableCollection<T> SetToCopy<T>(this ObservableCollection<T> dst, IEnumerable<T> src)
         {
             return dst.SetTo(src.ToList());
         }

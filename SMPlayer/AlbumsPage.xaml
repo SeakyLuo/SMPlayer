@@ -21,6 +21,15 @@
             x:Name="AlbumsCommandBar"
             Background="Transparent"
             DefaultLabelPosition="Right">
+            <CommandBar.Content>
+                <AutoSuggestBox
+                    x:Name="AlbumSearchBar"
+                    x:Uid="AlbumSearchBar"
+                    MinWidth="120"
+                    Margin="6,4"
+                    TextChanged="AlbumSearchBar_TextChanged"
+                    Style="{StaticResource BorderlessAutoSuggestBoxStyle}" />
+            </CommandBar.Content>
             <AppBarButton
                 x:Name="MultiSelectButton"
                 x:Uid="MultiSelectAppButton"
@@ -50,7 +59,7 @@
             IsItemClickEnabled="True"
             ItemClick="GridView_ItemClick"
             ItemContainerStyle="{StaticResource DropShadowGridViewItemStyle}"
-            ItemsSource="{x:Bind Albums, Mode=OneWay}"
+            ItemsSource="{x:Bind Suggestions, Mode=OneWay}"
             SelectionMode="None">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:AlbumView">
