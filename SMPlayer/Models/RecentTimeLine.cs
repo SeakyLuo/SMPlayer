@@ -70,12 +70,13 @@ namespace SMPlayer.Models
             {
                 return "Today";
             }
-            string formatedDateAdded = dateAdded.ToString("yyyyMMdd");
-            if (formatedDateAdded == DateTime.Now.AddDays(-1).ToString())
+            const string dateFormat = "yyyyMMdd";
+            string formatedDateAdded = dateAdded.ToString(dateFormat);
+            if (formatedDateAdded == now.AddDays(-1).ToString(dateFormat))
             {
                 return "Yesterday";
             }
-            if (formatedDateAdded == DateTime.Now.AddDays(-7).ToString())
+            if (formatedDateAdded == now.AddDays(-7).ToString(dateFormat))
             {
                 return "Recent7Days";
             }
@@ -83,7 +84,7 @@ namespace SMPlayer.Models
             {
                 return "ThisMonth";
             }
-            if (formatedDateAdded == DateTime.Now.AddDays(-30).ToString())
+            if (formatedDateAdded == now.AddDays(-30).ToString(dateFormat))
             {
                 return "Recent30Days";
             }
