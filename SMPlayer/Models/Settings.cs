@@ -251,31 +251,49 @@ namespace SMPlayer.Models
             });
         }
 
-        public async void AddMusic(SQLiteConnection c, Music music)
+        public async void AddFile(FolderFile item)
         {
-            MusicDAO musicDAO = c.Query<MusicDAO>("select * from Music where Path = ?", music.Path).FirstOrDefault();
-            if (musicDAO != null)
+            if (item.IsMusicFile())
             {
-                music.Id = musicDAO.Id;
-                ActivateMusic(c, music, ActiveState.Active);
-            }
-            else
-            {
-                SQLHelper.InsertMusic(c, music);
-                if (AutoLyrics) // 默认上面那种情况有了
+                Music music = (Music)item.Source;
+                if (await AddMusic(music))
                 {
-                    await Task.Run(async () =>
-                    {
-                        string lyrics = await music.GetLyricsAsync();
-                        if (string.IsNullOrEmpty(lyrics))
-                        {
-                            await music.SaveLyricsAsync(await LyricsHelper.SearchLyrics(music));
-                        }
-                    });
+                    item.FileId = music.Id;
+                    SQLHelper.Run(c => c.InsertFile(item));
                 }
+            }
+        }
+
+        public async Task<bool> AddMusic(Music music)
+        {
+            bool isNew = SQLHelper.Run(c =>
+            {
+                MusicDAO musicDAO = c.Query<MusicDAO>("select * from Music where Path = ?", music.Path).FirstOrDefault();
+                if (musicDAO == null)
+                {
+                    c.InsertMusic(music);
+                }
+                else
+                {
+                    music.Id = musicDAO.Id;
+                    ActivateMusic(c, music, ActiveState.Active);
+                }
+                return musicDAO == null;
+            });
+            if (isNew && AutoLyrics) // 默认上面那种情况有了
+            {
+                await Task.Run(async () =>
+                {
+                    string lyrics = await music.GetLyricsAsync();
+                    if (string.IsNullOrEmpty(lyrics))
+                    {
+                        await music.SaveLyricsAsync(await LyricsHelper.SearchLyrics(music));
+                    }
+                });
             }
             foreach (var listener in MusicEventListeners)
                 listener?.Execute(music, new MusicEventArgs(MusicEventType.Add));
+            return isNew;
         }
 
         public async Task DeleteFile(FolderFile file)

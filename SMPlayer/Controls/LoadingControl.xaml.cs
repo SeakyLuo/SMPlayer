@@ -142,14 +142,19 @@ namespace SMPlayer
             }
         }
 
-        public async Task ResetAsync(string message = null)
+        public async Task ResetAsync(string message = null, int max = 0)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => Reset(message));
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => Reset(message, max));
         }
 
-        public void Reset(string message = null)
+        public void Reset(string message = null, int max = 0)
         {
             Progress = 0;
+            Max = max;
+            if (max > 0)
+            {
+                IsDeterminant = true;
+            }
             if (!string.IsNullOrWhiteSpace(message))
             {
                 SetMessage(message);

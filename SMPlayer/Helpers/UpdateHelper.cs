@@ -38,8 +38,7 @@ namespace SMPlayer.Helpers
             Helper.CurrentFolder = folder;
             Settings.settings.Tree = tree;
             Settings.settings.RootPath = folder.Path;
-            await MainPage.Instance.Loader.ResetAsync();
-            MainPage.Instance.Loader.Max = Settings.StorageItemEventListeners.Count;
+            await MainPage.Instance.Loader.ResetAsync("ResyncData", Settings.StorageItemEventListeners.Count);
             for (int i = 0; i < Settings.StorageItemEventListeners.Count; i++)
             {
                 var listener = Settings.StorageItemEventListeners[i];
@@ -57,6 +56,7 @@ namespace SMPlayer.Helpers
         {
             HashSet<string> existingFolders = tree.Trees.Select(i => i.Path).ToHashSet();
             HashSet<string> newFolders = new HashSet<string>();
+            List<FolderTree> newBranches = new List<FolderTree>();
             foreach (var subFolder in await folder.GetFoldersAsync())
             {
                 if (LoadingStatus == ExecutionStatus.Break) return false;
@@ -65,16 +65,19 @@ namespace SMPlayer.Helpers
                 newFolders.Add(subFolder.Path);
                 if (branch.IsNotEmpty)
                 {
-                    tree.Trees.Add(branch);
+                    newBranches.Add(branch);
                 }
             }
             foreach (var branch in tree.Trees)
             {
                 if (!newFolders.Contains(branch.Path))
                 {
-                    branch.State = ActiveState.Inactive;
+                    FolderTree folderTree = Settings.FindFullFolder(branch.Id);
+                    folderTree.State = ActiveState.Inactive;
+                    newBranches.Add(folderTree);
                 }
             }
+            tree.Trees = newBranches;
             HashSet<string> existingFiles = tree.Files.Select(i => i.Path).ToHashSet();
             HashSet<string> newFiles = new HashSet<string>();
             foreach (var file in await folder.GetFilesAsync())
@@ -128,28 +131,18 @@ namespace SMPlayer.Helpers
             });
             foreach (var item in folder.Trees)
             {
-                FolderTree branch = Settings.FindFolder(item.Id) ?? item;
-                branch.ParentId = folder.Id;
-                await ResetFolderData(branch, result);
+                item.ParentId = folder.Id;
+                await ResetFolderData(item, result);
             }
-            folder.Trees.RemoveAll(i => i.State.IsInactive());
+            folder.Trees.RemoveAll(i => i.State.IsInactive() || i.IsEmpty);
             foreach (var item in folder.Files)
             {
                 if (item.Id == 0)
                 {
-                    SQLHelper.Run(c =>
-                    {
-                        item.ParentId = folder.Id;
-                        if (item.FileType == FileType.Music)
-                        {
-                            Music music = (Music)item.Source;
-                            Settings.settings.AddMusic(c, music);
-                            item.FileId = music.Id;
-                        }
-                        result?.AddFile(item.Path);
-                        c.InsertFile(item);
-                        Log.Debug("file is added, path {0}", item.Path);
-                    });
+                    item.ParentId = folder.Id;
+                    Settings.settings.AddFile(item);
+                    result?.AddFile(item.Path);
+                    Log.Debug("file is added, path {0}", item.Path);
                     await MainPage.Instance.Loader.IncrementAsync();
                 }
                 else
@@ -163,10 +156,15 @@ namespace SMPlayer.Helpers
                 }
             }
             folder.Files.RemoveAll(i => i.State.IsInactive());
+            if (folder.IsEmpty)
+            {
+                RemoveFolder(folder, result);
+            }
         }
 
         private static void RemoveFolder(FolderTree folder, FolderUpdateResult result = null)
         {
+            Log.Info("folder is deleted, path {0}", folder.Path);
             FolderDAO folderDAO = folder.ToDAO();
             folderDAO.State = ActiveState.Inactive;
             SQLHelper.Run(c => c.Update(folderDAO));

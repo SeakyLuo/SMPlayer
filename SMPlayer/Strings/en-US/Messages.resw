@@ -444,6 +444,9 @@
   <data name="Repeat: Enabled" xml:space="preserve">
     <value>Repeat: Enabled</value>
   </data>
+  <data name="ResyncData" xml:space="preserve">
+    <value>Sychronizing data changes......</value>
+  </data>
   <data name="Reverse Playlist" xml:space="preserve">
     <value>Reverse Playlist</value>
   </data>
@@ -580,13 +583,10 @@
     <value>Unknown Artist</value>
   </data>
   <data name="UpdateDBMsgInitDatabase" xml:space="preserve">
-    <value>Initializing database......</value>
+    <value>Initializing database...... </value>
   </data>
   <data name="UpdateDBMsgPreparing" xml:space="preserve">
-    <value>Now preparing data to write.</value>
-  </data>
-  <data name="UpdateDBMsgReadingSettings" xml:space="preserve">
-    <value>Deserializing your settings file. It might take a couple of minutes, please wait patiently.</value>
+    <value>Now preparing data to write, please WAIT for a couple of minutes, and do not exit.</value>
   </data>
   <data name="UpdateDBMsgUpdatingDatabase" xml:space="preserve">
     <value>Updating database...... Please do not exit.</value>
@@ -596,9 +596,6 @@
   </data>
   <data name="UpdateMusicLibrary" xml:space="preserve">
     <value>Updating your music library......</value>
-  </data>
-  <data name="Updating" xml:space="preserve">
-    <value>We are updating your data, please wait patiently. If you exit unexpectedly, please go to "Settings" and try "Update Music Library".</value>
   </data>
   <data name="VoiceAssistantAudiblePrompt" xml:space="preserve">
     <value>How can I help you?</value>

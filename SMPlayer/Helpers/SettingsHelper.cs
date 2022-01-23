@@ -59,7 +59,7 @@ namespace SMPlayer.Helpers
 
         public static async Task LoadSettingsAndInsertToDb()
         {
-            MainPage.Instance.Loader.SetMessage("UpdateDBMsgReadingSettings");
+            await MainPage.Instance.Loader.SetMessageAsync("UpdateDBMsgPreparing");
             string json = await JsonFileHelper.ReadAsync(JsonFilename);
             if (string.IsNullOrEmpty(json))
             {
@@ -68,8 +68,6 @@ namespace SMPlayer.Helpers
             }
             var jsonObject = JsonFileHelper.FromJson<JObject>(json);
             List<Music> songs = FlattenFolderTreeInJson(jsonObject["Tree"]);
-            await MainPage.Instance.Loader.SetMessageAsync("UpdateDBMsgPreparing");
-            List<Music> nowPlayingSongs = await JsonFileHelper.ReadObjectAsync<List<Music>>(MusicPlayer.JsonFilename);
             UpdateLog updateLog = await JsonFileHelper.ReadObjectAsync<UpdateLog>("UpdateLogger") ?? new UpdateLog();
             Settings.settings.LastReleaseNotesVersion = updateLog.LastReleaseNotesVersion;
             List<MusicDAO> list = new List<MusicDAO>();

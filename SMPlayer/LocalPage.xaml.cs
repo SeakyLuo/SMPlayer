@@ -169,12 +169,7 @@ namespace SMPlayer
             foreach (var item in tree.Trees)
                 GridItems.Add(new GridViewFolder(Settings.FindFolder(item.Id)));
             foreach (var item in tree.Songs)
-            {
-                GridItems.Add(new GridViewMusic(item)
-                {
-                    IsPlaying = MusicPlayer.CurrentMusic == item
-                });
-            }
+                GridItems.Add(new GridViewMusic(item));
         }
 
         private void SetHeader(FolderTree tree)
@@ -206,7 +201,7 @@ namespace SMPlayer
 
         private void SetLocalCommandBar(FolderTree tree)
         {
-            if (tree != null || !string.IsNullOrEmpty(tree.Path))
+            if (tree != null && !string.IsNullOrEmpty(tree.Path))
             {
                 NewFolderButton.IsEnabled = true;
                 RefreshButton.IsEnabled = true;

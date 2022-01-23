@@ -444,6 +444,9 @@
   <data name="Repeat: Enabled" xml:space="preserve">
     <value>循环播放：打开</value>
   </data>
+  <data name="ResyncData" xml:space="preserve">
+    <value>正在同步数据……</value>
+  </data>
   <data name="Reverse Playlist" xml:space="preserve">
     <value>使播放列表倒序</value>
   </data>
@@ -580,13 +583,10 @@
     <value>未知歌手</value>
   </data>
   <data name="UpdateDBMsgInitDatabase" xml:space="preserve">
-    <value>正在初始化数据库……</value>
+    <value>正在初始化数据库......</value>
   </data>
   <data name="UpdateDBMsgPreparing" xml:space="preserve">
-    <value>正在准备数据……</value>
-  </data>
-  <data name="UpdateDBMsgReadingSettings" xml:space="preserve">
-    <value>正在读取设置文件，耗时可能长达几分钟，请稍候……</value>
+    <value>正在准备数据以写入数据，请稍等几分钟，不要退出……</value>
   </data>
   <data name="UpdateDBMsgUpdatingDatabase" xml:space="preserve">
     <value>正在更新数据库，请勿退出</value>
@@ -596,9 +596,6 @@
   </data>
   <data name="UpdateMusicLibrary" xml:space="preserve">
     <value>正在更新音乐库……</value>
-  </data>
-  <data name="Updating" xml:space="preserve">
-    <value>正在更新你的数据，请稍等。如果你意外退出了，请到“设置-&gt;更新音乐库”重新执行该操作。</value>
   </data>
   <data name="VoiceAssistantAudiblePrompt" xml:space="preserve">
     <value>请问需要什么帮助？</value>

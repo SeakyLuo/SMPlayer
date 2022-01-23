@@ -43,6 +43,7 @@ namespace SMPlayer.Models.VO
             Type = StorageType.File;
             Thumbnail = MusicImage.DefaultImage;
             Source = music;
+            IsPlaying = MusicPlayer.CurrentMusic == music;
         }
         public override async Task LoadThumbnailAsync()
         {
