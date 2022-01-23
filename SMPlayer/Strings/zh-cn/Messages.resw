@@ -183,6 +183,9 @@
   <data name="CheckNewMusicResultNoChange" xml:space="preserve">
     <value>没有检查到变化</value>
   </data>
+  <data name="ClearExpiredData" xml:space="preserve">
+    <value>正在清除过期数据……</value>
+  </data>
   <data name="ClearPlayHistory" xml:space="preserve">
     <value>你想清空播放历史吗？</value>
   </data>

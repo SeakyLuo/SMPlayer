@@ -24,6 +24,14 @@ namespace SMPlayer
 {
     public static class ClassHelper
     {
+        public static void InsertWithOrder<T>(this ObservableCollection<T> list, T comparable) where T : IComparable
+        {
+            list.Insert(FindSortedListInsertIndex(list, comparable), comparable);
+        }
+        public static void InsertWithOrder<T>(this List<T> list, T comparable) where T : IComparable
+        {
+            list.Insert(FindSortedListInsertIndex(list, comparable), comparable);
+        }
         public static int FindSortedListInsertIndex<T>(this IEnumerable<T> list, T comparable) where T : IComparable
         {
             int count = list.Count();

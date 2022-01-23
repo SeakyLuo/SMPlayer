@@ -14,12 +14,6 @@ namespace SMPlayer.Helpers
     {
         private static volatile ExecutionStatus LoadingStatus = ExecutionStatus.Ready;
 
-        public static void NotifyLibraryChange(FolderTree folder)
-        {
-            foreach (var listener in Settings.StorageItemEventListeners)
-                listener.ExecuteFolderEvent(folder, new StorageItemEventArgs(StorageItemEventType.Update));
-        }
-
         public static async Task<bool> UpdateMusicLibrary(StorageFolder folder)
         {
             if (folder == null) return true;
@@ -30,24 +24,31 @@ namespace SMPlayer.Helpers
                 LoadingStatus = ExecutionStatus.Break;
             };
             LoadingStatus = ExecutionStatus.Running;
-            FolderTree tree = Settings.FindFullFolder(folder.Path) ?? new FolderTree();
+            FolderTree tree = Settings.FindFolder(folder.Path) ?? new FolderTree(folder.Path);
+            NotifyFolderEvent(Settings.settings.Tree, StorageItemEventType.BeforeReset);
             bool unbroken = await LoadFolder(folder, tree);
-            LoadingStatus = ExecutionStatus.Done;
+            MainPage.Instance.Loader.AllowBreak = false;
             await MainPage.Instance.Loader.ResetAsync("UpdateMusicLibrary");
             await ResetFolderData(tree);
+            if (Settings.settings.Tree.Id != 0 && !Settings.settings.Tree.Equals(tree))
+            {
+                await MainPage.Instance.Loader.ResetAsync("ClearExpiredData");
+                ClearOldTree(Settings.Root, tree);
+            }
             Helper.CurrentFolder = folder;
-            Settings.settings.Tree = Settings.FindFolderInfo(folder.Path);
+            Settings.settings.Tree = tree;
             Settings.settings.RootPath = folder.Path;
             await MainPage.Instance.Loader.ResetAsync();
             MainPage.Instance.Loader.Max = Settings.StorageItemEventListeners.Count;
             for (int i = 0; i < Settings.StorageItemEventListeners.Count; i++)
             {
                 var listener = Settings.StorageItemEventListeners[i];
-                listener.ExecuteFolderEvent(Settings.settings.Tree, new StorageItemEventArgs(StorageItemEventType.Update));
+                listener.ExecuteFolderEvent(Settings.settings.Tree, new StorageItemEventArgs(StorageItemEventType.Reset));
                 await MainPage.Instance.Loader.IncrementAsync();
             }
             MusicPlayer.RemoveBadMusic();
             App.Save();
+            LoadingStatus = ExecutionStatus.Done;
             MainPage.Instance.Loader.Hide();
             return true;
         }
@@ -59,10 +60,10 @@ namespace SMPlayer.Helpers
             foreach (var subFolder in await folder.GetFoldersAsync())
             {
                 if (LoadingStatus == ExecutionStatus.Break) return false;
-                var branch = tree.FindFolder(subFolder.Path) ?? new FolderTree();
+                var branch = Settings.FindFolder(subFolder.Path) ?? new FolderTree(subFolder.Path);
                 await LoadFolder(subFolder, branch);
                 newFolders.Add(subFolder.Path);
-                if (branch.Id == 0 && branch.IsNotEmpty)
+                if (branch.IsNotEmpty)
                 {
                     tree.Trees.Add(branch);
                 }
@@ -97,11 +98,6 @@ namespace SMPlayer.Helpers
                     file.State = ActiveState.Inactive;
                 }
             }
-            if (tree.IsEmpty)
-            {
-                return true;
-            }
-            tree.Path = folder.Path;
             return true;
         }
 
@@ -112,24 +108,12 @@ namespace SMPlayer.Helpers
         {
             if (folder.State.IsInactive())
             {
-                SQLHelper.Run(c => c.Update(folder.ToDAO()));
-                result?.RemoveFolder(folder.Path);
-                foreach (var item in folder.Trees)
-                {
-                    item.State = ActiveState.Inactive;
-                    await ResetFolderData(item, result);
-                }
-                foreach (var item in folder.Files)
-                {
-                    result?.RemoveFile(item.Path);
-                    Settings.settings.RemoveFile(item);
-                    Log.Info("file is deleted, path {0}", item.Path);
-                }
+                RemoveFolder(folder, result);
                 return;
             }
             SQLHelper.Run(c =>
             {
-                FolderTree existing = c.SelectFolderInfoByPath(folder.Path);
+                FolderTree existing = c.SelectAnyFolderInfo(folder.Path);
                 if (existing == null)
                 {
                     c.InsertFolder(folder);
@@ -138,12 +122,15 @@ namespace SMPlayer.Helpers
                 else
                 {
                     folder.Id = existing.Id;
+                    folder.Criterion = existing.Criterion;
+                    c.Update(folder.ToDAO());
                 }
             });
             foreach (var item in folder.Trees)
             {
-                item.ParentId = folder.Id;
-                await ResetFolderData(item, result);
+                FolderTree branch = Settings.FindFolder(item.Id) ?? item;
+                branch.ParentId = folder.Id;
+                await ResetFolderData(branch, result);
             }
             folder.Trees.RemoveAll(i => i.State.IsInactive());
             foreach (var item in folder.Files)
@@ -178,6 +165,64 @@ namespace SMPlayer.Helpers
             folder.Files.RemoveAll(i => i.State.IsInactive());
         }
 
+        private static void RemoveFolder(FolderTree folder, FolderUpdateResult result = null)
+        {
+            FolderDAO folderDAO = folder.ToDAO();
+            folderDAO.State = ActiveState.Inactive;
+            SQLHelper.Run(c => c.Update(folderDAO));
+            result?.RemoveFolder(folder.Path);
+            foreach (var item in folder.Trees)
+            {
+                RemoveFolder(Settings.FindFolder(item.Id), result);
+            }
+            foreach (var item in folder.Files)
+            {
+                RemoveFile(item, result);
+            }
+        }
+
+        private static void RemoveFile(FolderFile item, FolderUpdateResult result = null)
+        {
+            result?.RemoveFile(item.Path);
+            Settings.settings.RemoveFile(item);
+            Log.Info("file is deleted, path {0}", item.Path);
+        }
+
+        private static void ClearOldTree(FolderTree oldRoot, FolderTree newRoot)
+        {
+            // 如果oldRoot是newRoot的子文件夹，可以不删
+            if (oldRoot.Path.Contains(newRoot.Path))
+            {
+                return;
+            }
+            // 如果newRoot是oldRoot的子文件夹，删除其他分支的数据
+            if (newRoot.Path.Contains(oldRoot.Path))
+            {
+                foreach (var item in oldRoot.Trees)
+                {
+                    FolderTree branch = Settings.FindFolder(item.Id);
+                    if (newRoot.Path.Contains(item.Path))
+                    {
+                        ClearOldTree(branch, newRoot);
+                    }
+                    else
+                    {
+                        RemoveFolder(branch);
+                    }
+                }
+                foreach (var item in oldRoot.Files)
+                {
+                    RemoveFile(item);
+                }
+                return;
+            }
+            // 两者没有关系，清除全部数据
+            foreach (var item in oldRoot.Trees)
+            {
+                ClearOldTree(Settings.FindFolder(item.Id), newRoot);
+            }
+        }
+
         public static async void RefreshFolder(FolderTree tree)
         {
             MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
@@ -197,9 +242,8 @@ namespace SMPlayer.Helpers
                 return;
             }
             LoadingStatus = ExecutionStatus.Running;
-            FolderTree folderTree = Settings.FindFullFolder(tree.Id);
+            FolderTree folderTree = Settings.FindFolder(tree.Id);
             bool unbroken = await LoadFolder(storageFolder, folderTree);
-            LoadingStatus = ExecutionStatus.Done;
             if (!unbroken)
             {
                 ExitChecking("");
@@ -209,17 +253,24 @@ namespace SMPlayer.Helpers
             await ResetFolderData(folderTree, result);
             if (result.FilesAdded.IsNotEmpty() || result.FilesRemoved.IsNotEmpty())
             {
-                NotifyLibraryChange(folderTree);
+                NotifyFolderEvent(folderTree, StorageItemEventType.Update);
             }
-            MainPage.Instance?.Loader.Hide();
-            Helper.ShowNotificationRaw(result.ToDisplayMessage());
+            ExitChecking(result.ToDisplayMessage());
         }
 
         private static void ExitChecking(string message)
         {
+            LoadingStatus = ExecutionStatus.Done;
+            MainPage.Instance?.Loader.Hide();
             if (!string.IsNullOrEmpty(message))
                 MainPage.Instance.ShowNotification(message);
-            MainPage.Instance?.Loader.Hide();
+        }
+
+        public static void NotifyFolderEvent(FolderTree folder, StorageItemEventType type)
+        {
+            StorageItemEventArgs args = new StorageItemEventArgs(type);
+            foreach (var listener in Settings.StorageItemEventListeners)
+                listener.ExecuteFolderEvent(folder, args);
         }
     }
 

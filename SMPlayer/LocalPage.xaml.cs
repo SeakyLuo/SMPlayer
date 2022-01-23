@@ -679,6 +679,9 @@ namespace SMPlayer
                         FindNode(folder.Path).Content = Settings.FindFolderInfo(newPath);
                     }
                     break;
+                case StorageItemEventType.Reset:
+                    History.Clear();
+                    break;
                 case StorageItemEventType.Update:
                     if (MainPage.Instance?.CurrentPage != typeof(LocalPage))
                     {

@@ -19,13 +19,13 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class ArtistsPage : Page, IMusicEventListener, ISwitchMusicListener, IMenuFlyoutItemClickListener, IMultiSelectListener, IInitListener
+    public sealed partial class ArtistsPage : Page, IMusicEventListener, ISwitchMusicListener, IMenuFlyoutItemClickListener, IMultiSelectListener, IInitListener, IStorageItemEventListener
     {
         public static ArtistsPage Instance { get => MainPage.Instance.NavigationFrame.Content as ArtistsPage; }
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
         private List<string> SuggestionList = new List<string>();
         private ObservableCollection<string> Suggestions = new ObservableCollection<string>();
-        private bool IsProcessing = false;
+        private bool IsProcessing = false, IsFolderUpdated = false;
         private object targetArtist;
         private List<ListView> listViews = new List<ListView>();
         private IInitListener initListener;
@@ -55,13 +55,14 @@ namespace SMPlayer
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             Settings.AddMusicEventListener(this);
+            Settings.AddStorageItemEventListener(this);
             MusicPlayer.AddSwitchMusicListener(this);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (Artists.Count == 0) Setup(Settings.AllSongs);
+            if (Artists.IsEmpty()) Setup(Settings.AllSongs);
             targetArtist = e.Parameter;
         }
 
@@ -408,6 +409,7 @@ namespace SMPlayer
 
         void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
+            if (IsFolderUpdated) return;
             ArtistView artist = Artists.FirstOrDefault(a => a.Name == music.Artist);
             switch (args.EventType)
             {
@@ -419,7 +421,7 @@ namespace SMPlayer
                     else
                     {
                         artist = new ArtistView(music);
-                        Artists.Insert(Artists.FindSortedListInsertIndex(artist), artist);
+                        Artists.InsertWithOrder(artist);
                     }
                     break;
                 case MusicEventType.Remove:
@@ -460,6 +462,19 @@ namespace SMPlayer
                         Artists.Remove(artist);
                     }
                     break;
+            }
+        }
+
+        void IStorageItemEventListener.ExecuteFileEvent(FolderFile file, StorageItemEventArgs args)
+        {
+        }
+
+        void IStorageItemEventListener.ExecuteFolderEvent(FolderTree folder, StorageItemEventArgs args)
+        {
+            if (args.EventType == StorageItemEventType.BeforeReset)
+            {
+                IsFolderUpdated = true;
+                Artists.Clear();
             }
         }
     }

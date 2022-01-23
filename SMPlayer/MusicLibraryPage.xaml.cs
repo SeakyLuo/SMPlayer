@@ -154,8 +154,7 @@ namespace SMPlayer
             switch (args.EventType)
             {
                 case MusicEventType.Add:
-                    AllSongs.Add(music);
-                    SortAndSetAllSongs(AllSongs);
+                    AllSongs.InsertWithOrder(music);
                     break;
                 case MusicEventType.Remove:
                     AllSongs.Remove(music);

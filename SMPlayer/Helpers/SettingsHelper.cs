@@ -180,7 +180,7 @@ namespace SMPlayer.Helpers
         {
             foreach (PreferenceItem item in settings.PreferredFolders)
             {
-                if (c.SelectFolderInfoByPath(item.Id) is FolderTree result)
+                if (c.SelectFolderInfo(item.Id) is FolderTree result)
                 {
                     item.Id = result.Id.ToString();
                     c.InsertPreferenceItem(item, PreferType.Folder);

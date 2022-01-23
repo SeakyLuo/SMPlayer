@@ -20,11 +20,11 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class AlbumsPage : Page, IImageSavedListener, IMultiSelectListener, IMusicEventListener
+    public sealed partial class AlbumsPage : Page, IImageSavedListener, IMultiSelectListener, IMusicEventListener, IStorageItemEventListener
     {
         public const string JsonFilename = "AlbumInfo";
         private ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
-        private bool IsProcessing = false;
+        private bool IsProcessing = false, IsFolderUpdated = false;
         public static List<AlbumInfo> AlbumInfoList;
         public List<Music> SelectedSongs
         {
@@ -44,6 +44,8 @@ namespace SMPlayer
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             AlbumArtControl.ImageSavedListeners.Add(this);
+            Settings.AddMusicEventListener(this);
+            Settings.AddStorageItemEventListener(this);
         }
 
         public static async Task Init()
@@ -54,7 +56,7 @@ namespace SMPlayer
 
         public static void Save()
         {
-            if (AlbumInfoList?.Count == 0) return;
+            if (AlbumInfoList.IsEmpty()) return;
             JsonFileHelper.Save(JsonFilename, AlbumInfoList);
             JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, AlbumInfoList);
         }
@@ -66,33 +68,20 @@ namespace SMPlayer
             await Setup();
         }
 
+        // TODO: album不区分artist
         private async Task Setup()
         {
             if (IsProcessing) return;
-            if (Albums.IsNotEmpty()) return;
+            if (!IsFolderUpdated && Albums.IsNotEmpty()) return;
             AlbumPageProgressRing.Visibility = Visibility.Visible;
+            IsProcessing = true;
             if (AlbumInfoList.IsEmpty())
             {
-                await SetData(Settings.AllSongs);
-            }
-            else
-            {
-                Albums.SetTo(AlbumInfoList.Select(a => a.ToAlbumView()));
-            }
-            SetHeader();
-            MultiSelectButton.IsEnabled = Albums.IsNotEmpty();
-            AlbumPageProgressRing.Visibility = Visibility.Collapsed;
-        }
-
-        private async Task SetData(IEnumerable<Music> songs)
-        {
-            IsProcessing = true;
-            try
-            {
                 List<AlbumView> albums = new List<AlbumView>();
-                await Task.Run(() => // 加一个异步，主要是为了AlbumPageProgressRing能转起来
+                // 加一个异步，主要是为了AlbumPageProgressRing能转起来
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    foreach (var group in songs.GroupBy(m => m.Album))
+                    foreach (var group in Settings.AllSongs.GroupBy(m => m.Album))
                     {
                         foreach (var subgroup in group.GroupBy(m => m.Artist))
                         {
@@ -106,12 +95,17 @@ namespace SMPlayer
                 });
                 Albums.SetTo(albums);
             }
-            finally
+            else
             {
-                IsProcessing = false;
+                Albums.SetTo(AlbumInfoList.Select(a => a.ToAlbumView()));
             }
+            SetHeader();
+            MultiSelectButton.IsEnabled = Albums.IsNotEmpty();
+            IsProcessing = false;
+            IsFolderUpdated = false;
+            AlbumPageProgressRing.Visibility = Visibility.Collapsed;
         }
-
+        
         public void SetHeader()
         {
             if (Settings.settings.ShowCount)
@@ -271,6 +265,7 @@ namespace SMPlayer
 
         void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
+            if (IsFolderUpdated) return;
             AlbumView album = Albums.FirstOrDefault(a => a.Name == music.Album);
             switch (args.EventType)
             {
@@ -282,8 +277,18 @@ namespace SMPlayer
                     else
                     {
                         album = new AlbumView(music);
-                        Albums.Add(album);
-                        Albums.SetTo(Sort(Settings.settings.AlbumsCriterion, Albums));
+                        int index = Albums.FindSortedListInsertIndex(album, a =>
+                        {
+                            switch (Settings.settings.AlbumsCriterion)
+                            {
+                                case SortBy.Artist:
+                                    return a.Artist;
+                                default:
+                                    return a.Name;
+                            }
+                        });
+                        Albums.Insert(index, album);
+                        AlbumInfoList.Insert(index, album.ToAlbumInfo());
                     }
                     break;
                 case MusicEventType.Remove:
@@ -293,9 +298,24 @@ namespace SMPlayer
                         if (album.Songs.IsEmpty())
                         {
                             Albums.Remove(album);
+                            AlbumInfoList.Remove(album.ToAlbumInfo());
                         }
                     }
                     break;
+            }
+        }
+
+        void IStorageItemEventListener.ExecuteFileEvent(FolderFile file, StorageItemEventArgs args)
+        {
+        }
+
+        void IStorageItemEventListener.ExecuteFolderEvent(FolderTree folder, StorageItemEventArgs args)
+        {
+            if (args.EventType == StorageItemEventType.BeforeReset)
+            {
+                IsFolderUpdated = true;
+                Albums.Clear();
+                AlbumInfoList.Clear();
             }
         }
     }

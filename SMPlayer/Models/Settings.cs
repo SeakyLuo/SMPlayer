@@ -47,15 +47,19 @@ namespace SMPlayer.Models
         public static List<Music> FindPlaylistItems(long id) { return SQLHelper.Run(c => c.SelectPlaylistItems(id)); }
         public static FolderTree FindFolderInfo(long id)
         {
-            return SQLHelper.Run(c => c.SelectFolderInfoById(id));
+            return SQLHelper.Run(c => c.SelectFolderInfo(id));
         }
         public static FolderTree FindFolderInfo(string path)
         {
-            return SQLHelper.Run(c => c.SelectFolderInfoByPath(path));
+            return SQLHelper.Run(c => c.SelectFolderInfo(path));
         }
         public static FolderTree FindFolder(long id)
         {
             return SQLHelper.Run(c => c.SelectFolder(id));
+        }
+        public static FolderTree FindFolder(string path)
+        {
+            return SQLHelper.Run(c => c.SelectFolder(path));
         }
         public static FolderTree FindFullFolder(long id)
         {
@@ -249,23 +253,26 @@ namespace SMPlayer.Models
 
         public async void AddMusic(SQLiteConnection c, Music music)
         {
-            if (music.Id != 0)
+            MusicDAO musicDAO = c.Query<MusicDAO>("select * from Music where Path = ?", music.Path).FirstOrDefault();
+            if (musicDAO != null)
             {
-                MusicModified(c, music, music);
-                return;
+                music.Id = musicDAO.Id;
+                ActivateMusic(c, music, ActiveState.Active);
             }
-            SQLHelper.InsertMusic(c, music);
-            SQLHelper.InsertRecentAdded(c, music);
-            if (AutoLyrics)
+            else
             {
-                await Task.Run(async () =>
+                SQLHelper.InsertMusic(c, music);
+                if (AutoLyrics) // 默认上面那种情况有了
                 {
-                    string lyrics = await music.GetLyricsAsync();
-                    if (string.IsNullOrEmpty(lyrics))
+                    await Task.Run(async () =>
                     {
-                        await music.SaveLyricsAsync(await LyricsHelper.SearchLyrics(music));
-                    }
-                });
+                        string lyrics = await music.GetLyricsAsync();
+                        if (string.IsNullOrEmpty(lyrics))
+                        {
+                            await music.SaveLyricsAsync(await LyricsHelper.SearchLyrics(music));
+                        }
+                    });
+                }
             }
             foreach (var listener in MusicEventListeners)
                 listener?.Execute(music, new MusicEventArgs(MusicEventType.Add));
@@ -305,7 +312,6 @@ namespace SMPlayer.Models
             c.Execute("update Music set State = ? where Id = ?", state, music.Id);
             c.Execute("update File set State = ? where Path = ?", state, music.Path);
             c.Execute("update PlaylistItem set State = ? where ItemId = ?", state, music.Id);
-            UpdateRecentRecordState(c, RecentType.Add, music.Id.ToString(), state);
             UpdateRecentRecordState(c, RecentType.Play, music.Id.ToString(), state);
             c.Execute("update PreferenceItem set State = ? where Type = ? and ItemId = ? ", state, PreferType.Song, music.Id);
         }
@@ -780,7 +786,7 @@ namespace SMPlayer.Models
 
     public enum StorageItemEventType
     {
-        Add, Rename, Remove, Move, Update
+        Add, Rename, Remove, Move, Update, BeforeReset, Reset
     }
 
     public enum NamingError

@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMPlayer.Models.VO
 {
-    public class GridViewFolder : GridViewStorageItem
+    public class GridViewFolder : GridViewStorageItem, IComparable
     {
         public override long Id => Source.Id;
         public override string Name => Source.Name;
@@ -148,6 +148,11 @@ namespace SMPlayer.Models.VO
         public override int GetHashCode()
         {
             return Id.GetHashCode();
+        }
+
+        int IComparable.CompareTo(object other)
+        {
+            return Name.CompareTo((other as GridViewFolder).Name);
         }
     }
 }

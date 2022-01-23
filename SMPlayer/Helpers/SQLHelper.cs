@@ -134,7 +134,7 @@ namespace SMPlayer.Helpers
         {
             Settings settings = c.Query<SettingsDAO>("select * from Settings order by Id desc").FirstOrDefault()?.FromDAO();
             if (settings == null) return null;
-            settings.Tree = c.SelectFolderInfoByPath(settings.RootPath) ?? new FolderTree();
+            settings.Tree = c.SelectFolderInfo(settings.RootPath) ?? new FolderTree();
             return settings;
         }
 
@@ -261,7 +261,7 @@ namespace SMPlayer.Helpers
         }
         public static FolderTree SelectFolder(this SQLiteConnection c, long id)
         {
-            FolderTree root = c.SelectFolderInfoById(id);
+            FolderTree root = c.SelectFolderInfo(id);
             if (root == null) return null;
             root.Files = c.SelectSubFiles(root);
             root.Trees = c.SelectSubFolders(root);
@@ -269,21 +269,27 @@ namespace SMPlayer.Helpers
         }
         public static FolderTree SelectFolder(this SQLiteConnection c, string path)
         {
-            FolderTree root = c.SelectFolderInfoByPath(path);
+            FolderTree root = c.SelectFolderInfo(path);
             if (root == null) return null;
             root.Files = c.SelectSubFiles(root);
             root.Trees = c.SelectSubFolders(root);
             return root;
         }
 
-        public static FolderTree SelectFolderInfoById(this SQLiteConnection c, long id)
+        public static FolderTree SelectFolderInfo(this SQLiteConnection c, long id)
         {
             return c.Query<FolderDAO>("select * from Folder where Id = ? and State = ?", id, ActiveState.Active).FirstOrDefault()?.FromDAO();
         }
 
-        public static FolderTree SelectFolderInfoByPath(this SQLiteConnection c, string path)
+        public static FolderTree SelectFolderInfo(this SQLiteConnection c, string path)
         {
             return SelectFolderDAOByPath(c, path)?.FromDAO();
+        }
+
+
+        public static FolderTree SelectAnyFolderInfo(this SQLiteConnection c, string path)
+        {
+            return c.Query<FolderDAO>("select * from Folder where Path = ?", path).FirstOrDefault()?.FromDAO();
         }
 
         public static bool FolderExists(this SQLiteConnection c, string path)

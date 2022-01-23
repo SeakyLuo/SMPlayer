@@ -93,7 +93,7 @@ namespace SMPlayer.Models
         }
         public void AddMusic(Music music)
         {
-            Songs.Insert(Songs.FindSortedListInsertIndex(music), music);
+            Songs.InsertWithOrder(music);
         }
         public void RemoveMusic(Music music)
         {

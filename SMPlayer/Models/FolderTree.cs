@@ -27,11 +27,17 @@ namespace SMPlayer.Models
 
         public FolderTree() { }
 
+        public FolderTree(string path)
+        {
+            Path = path;
+        }
+
         public void CopyFrom(FolderTree tree)
         {
             Id = tree.Id;
             Trees = tree.Trees.ToList();
             Files = tree.Files.ToList();
+            ParentId = tree.ParentId;
             Path = tree.Path;
             Criterion = tree.Criterion;
         }

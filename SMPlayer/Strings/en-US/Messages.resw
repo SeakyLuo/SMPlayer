@@ -183,6 +183,9 @@
   <data name="CheckNewMusicResultNoChange" xml:space="preserve">
     <value>No changes have been found.</value>
   </data>
+  <data name="ClearExpiredData" xml:space="preserve">
+    <value>Clearing expired data......</value>
+  </data>
   <data name="ClearPlayHistory" xml:space="preserve">
     <value>Do you want to clear your play history?</value>
   </data>

@@ -32,6 +32,8 @@ Allow MainSearchBar to have a search history dropdown.
 
 Refresh folder show detail dialog.
 
+Albums allow multiple artists.
+
 # TO FIX
 Able to drag titlebar when loading, multi-select.
 
