@@ -247,12 +247,12 @@ namespace SMPlayer
                 item.Items.Add(GetMoveToFolderMenuFlyoutItem(folder, items, listener));
                 item.Items.Add(new MenuFlyoutSeparator());
             }
-            foreach (var branch in branches)
+            foreach (var branch in branches.OrderBy(i => i.Name))
             {
-                if (IsTargetFolder(branch, items))
-                {
-                    item.Items.Add(GetMoveToFolderMenuTree(branch, items, listener));
-                }
+                MenuFlyoutItemBase branchItem = GetMoveToFolderMenuTree(branch, items, listener);
+                if (branchItem is MenuFlyoutSubItem subItem && subItem.Items.IsEmpty()) continue;
+                else if (branchItem is MenuFlyoutItem && !IsTargetFolder(branch, items)) continue;
+                item.Items.Add(branchItem);
             }
             return item;
         }
@@ -281,7 +281,7 @@ namespace SMPlayer
                     }
                     else if (storageItem is FolderFile folderFile)
                     {
-                        await Settings.settings.MoveFileAsync(Settings.FindFile(folderFile.Id), folder);
+                        await Settings.settings.MoveFileAsync(Settings.FindFile(folderFile.Path), folder);
                     }
                 }
                 listener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.MoveToFolder));

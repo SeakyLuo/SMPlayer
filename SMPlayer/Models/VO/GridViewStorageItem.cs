@@ -53,7 +53,7 @@ namespace SMPlayer.Models.VO
         public StorageItem AsStorageItem()
         {
             return Type == StorageType.Folder ? (StorageItem) new FolderTree { Path = Path, Id = Id } :
-                                                (StorageItem) new FolderFile { Path = Path, Id = Id, };
+                                                (StorageItem) new FolderFile { Path = Path, };
         }
     }
 

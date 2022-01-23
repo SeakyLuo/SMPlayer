@@ -632,10 +632,11 @@ namespace SMPlayer
                 case StorageItemEventType.Move:
                     currentFolder.RemoveFile(file.Path);
                     GridItems.RemoveAll(i => i.Path == file.Path);
-                    if (GridItems.FirstOrDefault(i => i.Equals(args.Folder)) is GridViewFolder folder)
+                    if (GridItems.FirstOrDefault(i => i.Path.Equals(args.Folder.Path)) is GridViewFolder folder)
                     {
                         folder.AddFile(file);
                     }
+                    LocalTreeView.RootNodes.RemoveAll(n => (n.Content as StorageItem).Path == file.Path);
                     break;
             }
             SetNavText(currentFolder);
@@ -654,7 +655,7 @@ namespace SMPlayer
                         GridViewFolder gridViewFolder = new GridViewFolder(folder);
                         int index = GridItems.FindSortedListInsertIndex(gridViewFolder, i => i.Name);
                         GridItems.Insert(index, gridViewFolder);
-                        SetupTreeView(currentFolder);
+                        LocalTreeView.RootNodes.Insert(index, new TreeViewNode() { Content = folder });
                     }
                     break;
                 case StorageItemEventType.Remove:
