@@ -20,6 +20,8 @@ namespace SMPlayer
         public object Data { get; set; }
         public string DefaultPlaylistName { get; set; } = "";
         public string CurrentPlaylistName { get; set; } = "";
+        public object SelectedItems { get; set; }
+
         public static string NowPlaying = Helper.Localize("Now Playing"), MyFavorites = Helper.Localize("My Favorites");
         public static bool IsBadNewPlaylistName(string name) { return name == NowPlaying || name == MyFavorites; }
         public MenuFlyout GetAddToMenuFlyout(IMenuFlyoutItemClickListener listener = null)
@@ -998,6 +1000,7 @@ namespace SMPlayer
             MenuFlyoutHelper helper = new MenuFlyoutHelper()
             {
                 Data = FindMusic(data),
+                SelectedItems = data,
                 DefaultPlaylistName = Settings.settings.FindNextPlaylistName(FindPlaylistName(data))
             };
             buildListener?.OnBuild(helper);
@@ -1015,13 +1018,10 @@ namespace SMPlayer
             else if (obj is ArtistView artist) return artist.Songs;
             else if (obj is AlbumView album) return album.Songs;
             else if (obj is Playlist playlist) return playlist.Songs;
-            else if (obj is GridViewFolder folder) return folder.Songs;
+            else if (obj is GridViewFolder gridFolder) return gridFolder.Songs;
+            else if (obj is TreeViewFolder treeFolder) return Settings.FindFolder(treeFolder.Id).Songs;
             else if (obj is GridViewMusic gridMusic) return gridMusic.Source;
-            else if (obj is TreeViewNode node)
-            {
-                if (node.Content is FolderTree tree) return tree.Songs;
-                return Settings.FindMusic((node.Content as TreeViewFolderFile).FileId);
-            }
+            else if (obj is TreeViewFile treeMusic) return Settings.FindMusic(treeMusic.FileId);
             return null;
         }
 
@@ -1030,8 +1030,8 @@ namespace SMPlayer
             if (obj is ArtistView artist) return artist.Name;
             else if (obj is AlbumView album) return album.Name;
             else if (obj is Playlist playlist) return playlist.Name;
-            else if (obj is GridViewFolder folder) return folder.Name;
-            else if (obj is TreeViewNode node && node.Content is FolderTree tree) return tree.Name;
+            else if (obj is GridViewFolder gridFolder) return gridFolder.Name;
+            else if (obj is TreeViewNode node && node.Content is TreeViewFolder treeFolder) return treeFolder.Name;
             return "";
         }
     }

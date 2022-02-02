@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SMPlayer.Models.VO
 {
-    public class TreeViewFolderFile : StorageItem, IFolderFile
+    public class TreeViewFile : TreeViewStorageItem, IFolderFile
     {
         public string Icon { get; set; }
         public string Creator { get; set; }
@@ -14,9 +14,9 @@ namespace SMPlayer.Models.VO
         public long FileId { get; set; }
         public FileType FileType { get; set; }
 
-        public TreeViewFolderFile() { }
+        public TreeViewFile() { }
 
-        public TreeViewFolderFile(FolderFile source)
+        public TreeViewFile(FolderFile source)
         {
             Id = source.Id;
             FileId = source.FileId;

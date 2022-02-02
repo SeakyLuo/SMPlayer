@@ -534,15 +534,38 @@ namespace SMPlayer.Models
             StorageFolder folder = await original.GetStorageFolderAsync();
             await folder.RenameAsync(newName);
             string newPath = folder.Path;
-            original.Rename(newPath);
+            FolderTree originalTree = FindFolderInfo(original.Id);
             SQLHelper.Run(c =>
             {
-                c.Update(original.ToDAO());
+                RenameFolder(c, originalTree, originalTree.Path, newPath);
                 c.Execute("update PreferenceItem set ItemName = ? where ItemId = ?", newName, original.Id);
             });
             foreach (var listener in StorageItemEventListeners)
                 listener.ExecuteFolderEvent(original, new StorageItemEventArgs(StorageItemEventType.Rename) { Path = newPath });
             original.Rename(newPath);
+        }
+
+
+        private void RenameFolder(SQLiteConnection c, FolderTree folder, string oldPath, string newPath)
+        {
+            folder.Rename(oldPath, newPath);
+            c.Update(folder.ToDAO());
+            foreach (var item in c.SelectSubFolders(folder))
+            {
+                RenameFolder(c, item, oldPath, newPath);
+            }
+            foreach (var item in c.SelectSubFiles(folder))
+            {
+                item.RenameFolder(oldPath, newPath);
+                c.Update(item.ToDAO());
+                if (item.IsMusicFile())
+                {
+                    Music music = FindMusic(item.FileId);
+                    Music old = music.Copy();
+                    music.RenameFolder(oldPath, newPath);
+                    MusicModified(old, music);
+                }
+            }
         }
 
         public void DeleteFolder(FolderTree target)

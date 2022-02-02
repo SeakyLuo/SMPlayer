@@ -297,6 +297,11 @@ namespace SMPlayer.Models
             return new MediaPlaybackItem(source);
         }
 
+        public string RenameFolder(string oldPath, string newPath)
+        {
+            return Path = Path.Replace(oldPath, newPath);
+        }
+
         public string MoveToFolder(string newPath)
         {
             return Path = FileHelper.MoveToPath(Path, newPath);

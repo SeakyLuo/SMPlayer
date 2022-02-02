@@ -266,6 +266,7 @@ namespace SMPlayer
 
         public static void ShuffleAndPlay(IEnumerable<Music> playlist)
         {
+            if (playlist.IsEmpty()) return;
             SetPlaylist(ShufflePlaylist(playlist));
             Play();
         }
@@ -462,16 +463,27 @@ namespace SMPlayer
                 music.IsPlaying = music.Index >= 0 ? IsMusicPlaying(music) : music.Equals(playing);
         }
 
-        public static async void RemoveBadMusic()
+        public static void RemoveBadMusic()
         {
-            if (CurrentMusic != null && await CurrentMusic.GetStorageFileAsync() == null)
+            if (CurrentMusic != null && Settings.FindMusic(CurrentMusic.Id) == null)
                 CurrentMusic = null;
+            CurrentPlaylist.RemoveAll(i => Settings.FindMusic(i.Id) == null);
+            PlaybackList.Items.RemoveAll(i => Settings.FindMusic(i.GetMusic().Id) == null);
         }
 
         private static void MusicModified(Music before, Music after)
         {
             if (CurrentMusic == before)
                 CurrentMusic?.CopyFrom(after);
+            foreach (var music in CurrentPlaylist)
+                if (music == before)
+                    music.CopyFrom(after);
+            foreach (var item in PlaybackList.Items)
+            {
+                Music music = item.GetMusic();
+                if (music == before)
+                    music.CopyFrom(after);
+            }
         }
 
         void IMusicEventListener.Execute(Music music, MusicEventArgs args)

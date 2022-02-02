@@ -287,7 +287,9 @@
     <Compile Include="Models\VO\PreferLevelView.cs" />
     <Compile Include="Models\VO\GridViewStorageItem.cs" />
     <Compile Include="Models\VO\PreferenceItemView.cs" />
-    <Compile Include="Models\VO\TreeViewFolderFile.cs" />
+    <Compile Include="Models\VO\TreeViewFile.cs" />
+    <Compile Include="Models\VO\TreeViewFolder.cs" />
+    <Compile Include="Models\VO\TreeViewStorageItem.cs" />
     <Compile Include="PreferenceSettingsPage.xaml.cs">
       <DependentUpon>PreferenceSettingsPage.xaml</DependentUpon>
     </Compile>

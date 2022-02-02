@@ -29,6 +29,7 @@ namespace SMPlayer
     {
         private Stack<FolderTree> History = new Stack<FolderTree>();
         private readonly ObservableCollection<GridViewStorageItem> GridItems = new ObservableCollection<GridViewStorageItem>();
+        private readonly ObservableCollection<TreeViewStorageItem> TreeItems = new ObservableCollection<TreeViewStorageItem>();
         private bool IsProcessing = false, folderUpdated = false;
         private FolderTree CurrentFolder { get => History.IsEmpty() ? null : History.Peek(); }
         public List<Music> SelectedSongs
@@ -41,11 +42,11 @@ namespace SMPlayer
                     case LocalPageViewMode.List:
                         foreach (var node in LocalTreeView.SelectedNodes)
                         {
-                            if (node.Content is FolderTree tree)
+                            if (node.Content is TreeViewFolder tree)
                             {
                                 list.AddRange(tree.Flatten());
                             }
-                            else if (node.Content is TreeViewFolderFile file)
+                            else if (node.Content is TreeViewFile file)
                             {
                                 list.Add(Settings.FindMusic(file.FileId));
                             }
@@ -156,11 +157,9 @@ namespace SMPlayer
 
         private void SetupTreeView(FolderTree tree)
         {
-            LocalTreeView.RootNodes.Clear();
-            foreach (var item in tree.Trees)
-                LocalTreeView.RootNodes.Add(new TreeViewNode() { Content = item });
-            foreach (var item in tree.Files)
-                LocalTreeView.RootNodes.Add(new TreeViewNode() { Content = new TreeViewFolderFile(item) });
+            TreeItems.Clear();
+            TreeItems.AddRange(tree.Trees.Select(i => new TreeViewFolder(i)));
+            TreeItems.AddRange(tree.Files.Select(i => new TreeViewFile(i)));
         }
 
         private void SetupGridView(FolderTree tree)
@@ -174,8 +173,8 @@ namespace SMPlayer
 
         private void SetHeader(FolderTree tree)
         {
-            MainPage.Instance.SetHeaderText(tree == null || string.IsNullOrEmpty(tree.Info.Directory) ?
-                                            Helper.LocalizeMessage("No Music") : tree.Info.Directory);
+            MainPage.Instance.SetHeaderText(tree == null || string.IsNullOrEmpty(tree.Path) ?
+                                            Helper.LocalizeMessage("No Music") : tree.Name);
         }
 
         private void SetBackButtonIsEnabled()
@@ -252,7 +251,7 @@ namespace SMPlayer
                     siblings.Insert(originalIndex, node);
                 }
             }
-            else if (!(node.Parent.Content is FolderTree))
+            else if (!(node.Parent.Content is TreeViewFolder))
             {
                 // 如果移动到非文件夹节点，恢复拖动前的位置
                 MoveBackNode(node);
@@ -261,16 +260,16 @@ namespace SMPlayer
             {
                 FolderTree currentFolder = CurrentFolder;
                 object content = node.Content;
-                FolderTree newParent = node.Parent.Content == null ? currentFolder : node.Parent.Content as FolderTree;
-                if (content is FolderTree folder)
+                FolderTree newParent = node.Parent.Content == null ? currentFolder : (node.Parent.Content as TreeViewFolder).Source;
+                if (content is TreeViewFolder folder)
                 {
                     // 文件夹没有移动成功的话，就把节点移动回去
-                    if (!await Settings.settings.MoveFolderAsync(folder, newParent))
+                    if (!await Settings.settings.MoveFolderAsync(folder.Source, newParent))
                     {
                         MoveBackNode(node);
                     }
                 }
-                else if (content is TreeViewFolderFile file)
+                else if (content is TreeViewFile file)
                 {
                     // 文件没有移动成功的话，就把节点移动回去
                     if (!await Settings.settings.MoveFileAsync(file.ToFolderFile(), newParent))
@@ -300,8 +299,8 @@ namespace SMPlayer
         {
             var flyout = sender as MenuFlyout;
             FolderTree folder = null;
-            if (flyout.Target.DataContext is GridViewFolder gridFolderView) folder = gridFolderView.Source;
-            else if (flyout.Target.DataContext is TreeViewNode node) folder = node.Content as FolderTree;
+            if (flyout.Target.DataContext is GridViewFolder gridFolder) folder = gridFolder.Source;
+            else if (flyout.Target.DataContext is TreeViewFolder treeFolder) folder = treeFolder.Source;
             MenuFlyoutHelper.SetFolderMenu(sender, folder, this, this, new MenuFlyoutOption
             {
                 MultiSelectOption = MultiSelectOption
@@ -329,17 +328,11 @@ namespace SMPlayer
         {
             if (PleaseExitMultiSelectMode()) return;
             object dataContext = (e.OriginalSource as FrameworkElement).DataContext;
-            if (dataContext == null)
-            {
-                // why is null?
-                return;
-            }
-            object content = (dataContext as TreeViewNode).Content;
-            if (content is FolderTree tree)
+            if (dataContext is TreeViewFolder tree)
             {
                 SetPage(Settings.FindFolder(tree.Id));
             }
-            else if (content is TreeViewFolderFile file)
+            else if (dataContext is TreeViewFile file)
             {
                 Music music = new Music() { Id = file.FileId };
                 MusicPlayer.SetMusicAndPlay(CurrentFolder.Songs, music);
@@ -464,13 +457,13 @@ namespace SMPlayer
 
         private void CreatorHyperLinkButton_Click(object sender, RoutedEventArgs e)
         {
-            TreeViewFolderFile file = ((TreeViewNode)((FrameworkElement)sender).DataContext).Content as TreeViewFolderFile;
+            TreeViewFile file = ((FrameworkElement)sender).DataContext as TreeViewFile;
             MainPage.Instance.NavigateToPage(typeof(ArtistsPage), file.Creator);
         }
 
         private void CollectionHyperLinkButton_Click(object sender, RoutedEventArgs e)
         {
-            TreeViewFolderFile file = ((TreeViewNode)((FrameworkElement)sender).DataContext).Content as TreeViewFolderFile;
+            TreeViewFile file = ((FrameworkElement)sender).DataContext as TreeViewFile;
             MainPage.Instance.NavigateToPage(typeof(AlbumPage), Settings.FindAlbum(file.Collection, file.Creator));
         }
 
@@ -602,7 +595,7 @@ namespace SMPlayer
                         case LocalPageViewMode.List:
                             items.AddRange(LocalTreeView.SelectedNodes.Select(i =>
                             {
-                                if (i.Content is TreeViewFolderFile file) return file.ToFolderFile();
+                                if (i.Content is TreeViewFile file) return file.ToFolderFile();
                                 else return i.Content as StorageItem;
                             }).ToList());
                             break;
@@ -655,7 +648,7 @@ namespace SMPlayer
                     {
                         currentFolder.RemoveBranch(folder.Path);
                         GridItems.RemoveAll(i => i.Path == folder.Path);
-                        LocalTreeView.RootNodes.RemoveAll(i => i.Content is FolderTree tree && tree.Path == folder.Path);
+                        LocalTreeView.RootNodes.RemoveAll(i => i.Content is TreeViewFolder tree && tree.Path == folder.Path);
                     }
                     break;
                 case StorageItemEventType.Move:
@@ -671,13 +664,13 @@ namespace SMPlayer
                     History.Clear();
                     break;
                 case StorageItemEventType.Rename:
-                    if (GridItems.FirstOrDefault(i => i.Path == args.Path) is GridViewFolder renameGridItem)
+                    if (GridItems.FirstOrDefault(i => i.Path == folder.Path) is GridViewFolder renameGridItem)
                     {
                         renameGridItem.Rename(args.Path);
                     }
-                    if (FindNode(folder.Path) is TreeViewNode renameNode)
+                    if (TreeItems.FirstOrDefault(i => i.Path == folder.Path) is TreeViewFolder renameTreeItem)
                     {
-                        (renameNode.Content as FolderTree).Rename(args.Path);
+                        renameTreeItem.Rename(args.Path);
                     }
                     break;
                 case StorageItemEventType.Update:
@@ -708,7 +701,18 @@ namespace SMPlayer
 
         void IMenuFlyoutHelperBuildListener.OnBuild(MenuFlyoutHelper helper)
         {
-            helper.DefaultPlaylistName = CurrentFolder.Name;
+            if (helper.SelectedItems is TreeViewStorageItem treeViewItem)
+            {
+                helper.DefaultPlaylistName = treeViewItem.Name;
+            }
+            else if (helper.SelectedItems is GridViewFolder gridViewItem)
+            {
+                helper.DefaultPlaylistName = gridViewItem.Name;
+            }
+            else
+            {
+                helper.DefaultPlaylistName = CurrentFolder.Name;
+            }
         }
 
         async void ISwitchMusicListener.MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
@@ -736,7 +740,7 @@ namespace SMPlayer
                 case MusicEventType.Remove:
                     currentFolder.RemoveFile(music.Path);
                     GridItems.RemoveAll(i => i.Path == music.Path);
-                    LocalTreeView.RootNodes.RemoveAll(i => i.Content is TreeViewFolderFile file && file.Path == music.Path);
+                    LocalTreeView.RootNodes.RemoveAll(i => i.Content is TreeViewFile file && file.Path == music.Path);
                     break;
                 case MusicEventType.Like:
                     break;

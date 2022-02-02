@@ -202,7 +202,7 @@ namespace SMPlayer.Models
         }
     }
 
-    public struct TreeInfo
+    public class TreeInfo
     {
         public string Directory { get; set; }
         public int Folders { get; set; }
