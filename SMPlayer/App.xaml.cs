@@ -159,7 +159,6 @@ namespace SMPlayer
             SettingsHelper.Save();
             MusicPlayer.Save();
             AlbumsPage.Save();
-            RecentPage.Save();
             await Helper.ClearBackups(10);
         }
 

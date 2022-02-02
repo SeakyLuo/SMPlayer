@@ -140,7 +140,7 @@ namespace SMPlayer.Helpers
                 if (item.Id == 0)
                 {
                     item.ParentId = folder.Id;
-                    Settings.settings.AddFile(item);
+                    await Settings.settings.AddFile(item);
                     result?.AddFile(item.Path);
                     Log.Debug("file is added, path {0}", item.Path);
                     await MainPage.Instance.Loader.IncrementAsync();
@@ -156,7 +156,7 @@ namespace SMPlayer.Helpers
                 }
             }
             folder.Files.RemoveAll(i => i.State.IsInactive());
-            if (folder.IsEmpty)
+            if (folder.ParentId > 0 && folder.IsEmpty)
             {
                 RemoveFolder(folder, result);
             }

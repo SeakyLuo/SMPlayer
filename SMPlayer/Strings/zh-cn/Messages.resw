@@ -574,7 +574,7 @@
     <value>没有权限访问路径{0}！</value>
   </data>
   <data name="UndoPreferItem" xml:space="preserve">
-    <value>已取消设置“{0}”为偏好！</value>
+    <value>已取消“{0}”的偏好设置！</value>
   </data>
   <data name="UnknownAlbum" xml:space="preserve">
     <value>未知专辑</value>
@@ -586,7 +586,7 @@
     <value>正在初始化数据库......</value>
   </data>
   <data name="UpdateDBMsgPreparing" xml:space="preserve">
-    <value>正在准备数据以写入数据，请稍等几分钟，不要退出……</value>
+    <value>正在准备数据以写入，请稍等几分钟，不要退出……</value>
   </data>
   <data name="UpdateDBMsgUpdatingDatabase" xml:space="preserve">
     <value>正在更新数据库，请勿退出</value>

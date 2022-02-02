@@ -63,6 +63,11 @@ namespace SMPlayer.Models
             return new RecentTimeLine(list?.OrderByDescending(m => m.DateAdded).Take(MAX_RECENT_TIMELINE_ITEMS));
         }
 
+        public static RecentTimeLine FromAllSongs()
+        {
+            return FromMusicList(Settings.AllSongs);
+        }
+
         public static string Categorize(DateTimeOffset dateAdded)
         {
             DateTime now = DateTime.Now;

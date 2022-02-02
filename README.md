@@ -22,11 +22,7 @@ Album properties.
 
 Album art in NowPlayingFull.
 
-Search multiple lyrics choose one. Lyrics priority in notification.
-
-If there is no playlist, change dropdown to add button.
-
-Search in lryics.
+Search multiple lyrics choose one. Lyrics priority in notification. Search in lryics.
 
 Allow MainSearchBar to have a search history dropdown.
 

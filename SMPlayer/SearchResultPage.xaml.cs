@@ -215,6 +215,34 @@ namespace SMPlayer
             }
         }
 
+        private List<Music> GetSelectItems()
+        {
+            List<Music> list = new List<Music>();
+            foreach (AlbumView item in AlbumsGridView.SelectedItems)
+                list.AddRange(item.Songs);
+            foreach (Music item in SearchMusicView.SelectedItems)
+                list.Add(item);
+            foreach (AlbumView item in PlaylistsGridView.SelectedItems)
+                list.AddRange(item.Songs);
+            foreach (GridViewFolder item in FoldersGridView.SelectedItems)
+                list.AddRange(item.Songs);
+            foreach (Playlist item in ArtistsGridView.SelectedItems)
+                list.AddRange(item.Songs);
+            return list;
+        }
+
+        private void SortButton_Click(object sender, RoutedEventArgs e)
+        {
+            MenuFlyoutHelper.ShowSortByMenu(sender, SettingsCriterion, Criteria, item => SettingsCriterion = item);
+        }
+
+        private void OpenFolderMenuFlyout(object sender, object e)
+        {
+            var flyout = sender as MenuFlyout;
+            GridViewFolder folder = flyout.Target.DataContext as GridViewFolder;
+            MenuFlyoutHelper.SetSimpleFolderMenu(sender, folder.Source);
+        }
+
 
         void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
         {
@@ -256,27 +284,6 @@ namespace SMPlayer
                     ArtistsGridView.ReverseSelections();
                     break;
             }
-        }
-
-        private List<Music> GetSelectItems()
-        {
-            List<Music> list = new List<Music>();
-            foreach (AlbumView item in AlbumsGridView.SelectedItems)
-                list.AddRange(item.Songs);
-            foreach (Music item in SearchMusicView.SelectedItems)
-                list.Add(item);
-            foreach (AlbumView item in PlaylistsGridView.SelectedItems)
-                list.AddRange(item.Songs);
-            foreach (GridViewFolder item in FoldersGridView.SelectedItems)
-                list.AddRange(item.Songs);
-            foreach (Playlist item in ArtistsGridView.SelectedItems)
-                list.AddRange(item.Songs);
-            return list;
-        }
-
-        private void SortButton_Click(object sender, RoutedEventArgs e)
-        {
-            MenuFlyoutHelper.ShowSortByMenu(sender, SettingsCriterion, Criteria, item => SettingsCriterion = item);
         }
     }
 }

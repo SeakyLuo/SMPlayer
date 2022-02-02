@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SMPlayer.Helpers.Enums;
+using SMPlayer.Models.VO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -8,131 +10,69 @@ using System.Threading.Tasks;
 namespace SMPlayer.Models
 {
     [Serializable]
-    public class PreferenceItem
+    public class PreferenceItem : IPreferable
     {
-        public long ItemId { get; set; } // id of this record
+        public List<PreferLevel> levels;
+        public long ThisId { get; set; } // id of this record
         public string Id { get; set; } // Preferred Item's Id
         public long LongId { get => long.Parse(Id); }
         public string Name { get; set; }
         public bool IsEnabled { get; set; }
-        public PreferLevel Level { get; set; } = PreferLevel.Normal;
+        public PreferLevel Level { get; set; }
+        public EntityType Type { get; set; }
 
         public PreferenceItem()
         {
             IsEnabled = false;
+            Level = PreferLevel.Normal;
         }
 
-        public PreferenceItem(string Id, string Name)
+        public PreferenceItem(string Id, string Name, EntityType preferType)
         {
             this.Id = Id;
             this.Name = Name;
             this.IsEnabled = true;
+            this.Type = preferType;
         }
 
         public PreferenceItemView AsView()
         {
             return new PreferenceItemView()
             {
-                Id = Id,
+                Id = ThisId,
+                ItemId = Id,
                 Name = Name,
                 IsEnabled = IsEnabled,
-                Level = Level
-            };
-        }
-    }
-
-    public class PreferenceItemView : INotifyPropertyChanged
-    {
-        public string Id { get; set; }
-        public long LongId { get => long.Parse(Id); }
-        public string Name
-        {
-            get => name;
-            set
-            {
-                if (name != value)
-                {
-                    name = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        private string name;
-        public bool IsEnabled
-        {
-            get => isEnabled;
-            set
-            {
-                if (isEnabled != value)
-                {
-                    isEnabled = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        private bool isEnabled = true;
-        public bool IsValid
-        {
-            get => isValid;
-            set
-            {
-                if (isValid != value)
-                {
-                    isValid = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public bool ShowRemove { get; set; } = true;
-
-        private bool isValid = true;
-        public string ToolTip { get; set; }
-        public PreferType PreferType { get; set; }
-        public PreferLevel Level { get; set; }
-
-        public PreferenceItem AsModel()
-        {
-            return new PreferenceItem()
-            {
-                Id = Id,
-                Name = Name,
-                IsEnabled = IsEnabled,
-                Level = Level
+                Level = Level,
+                PreferType = Type,
             };
         }
 
-        public PreferenceItemView() { }
-        public PreferenceItemView(string Id, string Name, string ToolTip, PreferType PreferType)
+        PreferenceItem IPreferable.AsPreferenceItem()
         {
-            this.Id = Id;
-            this.Name = Name;
-            this.ToolTip = ToolTip;
-            this.PreferType = PreferType;
+            return this;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
-
-        public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
-        {
-            // Raise the PropertyChanged event, passing the name of the property whose value has changed.
-            this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    public enum PreferType
-    {
-        Song, Artist, Album, Playlist, Folder, RecentAdded, MyFavorites, MostPlayed, LeastPlayed
     }
 
     public enum PreferLevel
     {
-        Low = 1, Normal = 2, High = 3, Higher = 4
+        [EnumDescription("PreferLevelDoNotAppear", "PreferLevelDoNotAppearToolTip"), EnumOrder(-1)]
+        DoNotAppear = 0,
+        [EnumDescription("PreferLevelDislike", "PreferLevelDislikeToolTip"), EnumOrder(0)]
+        Dislike = -1,
+        [EnumDescription("PreferLevelNormal", "PreferLevelNormalToolTip")]
+        Normal = 1,
+        [EnumDescription("PreferLevelHigh", "PreferLevelHighToolTip")]
+        High = 2,
+        [EnumDescription("PreferLevelHigher", "PreferLevelHigherToolTip")]
+        Higher = 3,
+        [EnumDescription("PreferLevelVeryHigh", "PreferLevelVeryHighToolTip")]
+        VeryHigh = 4,
+
     }
 
     public interface IPreferable
     {
         PreferenceItem AsPreferenceItem();
-        PreferenceItemView AsPreferenceItemView();
     }
 }

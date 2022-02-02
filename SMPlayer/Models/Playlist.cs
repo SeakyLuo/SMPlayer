@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Helpers;
+using SMPlayer.Models.VO;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -146,16 +147,25 @@ namespace SMPlayer.Models
             {
                 Songs = Songs,
                 ThumbnailSource = DisplayItem?.Source.Path,
+                EntityType = EntityType.Playlist,
+                OriginalItemId = Id,
             };
         }
 
-        public AlbumView ToSearchAlbumView()
+        public AlbumView ToSearchAlbumView(EntityType? entityType = null)
         {
             return new AlbumView(Name, SongCountConverter.GetSongCount(Count))
             {
                 Songs = Songs,
                 ThumbnailSource = DisplayItem?.Source?.Path,
+                EntityType = entityType ?? EntityType.Playlist,
+                OriginalItemId = Id,
             };
+        }
+
+        public ArtistView ToArtistView()
+        {
+            return new ArtistView(Name);
         }
 
         public void CopyFrom(Playlist playlist)
@@ -217,12 +227,8 @@ namespace SMPlayer.Models
 
         PreferenceItem IPreferable.AsPreferenceItem()
         {
-            return new PreferenceItem(Id.ToString(), Name);
-        }
-
-        PreferenceItemView IPreferable.AsPreferenceItemView()
-        {
-            return new PreferenceItemView(Id.ToString(), Name, Name, PreferType.Playlist);
+            return new PreferenceItem(Id.ToString(), Name,
+                                      Settings.settings.MyFavoritesId == Id ? EntityType.MyFavorites : EntityType.Playlist);
         }
     }
 }

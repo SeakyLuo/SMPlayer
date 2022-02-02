@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Helpers;
 using SMPlayer.Models.DAO;
+using SMPlayer.Models.VO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -197,12 +198,7 @@ namespace SMPlayer.Models
 
         PreferenceItem IPreferable.AsPreferenceItem()
         {
-            return new PreferenceItem(Id.ToString(), Name);
-        }
-
-        PreferenceItemView IPreferable.AsPreferenceItemView()
-        {
-            return new PreferenceItemView(Id.ToString(), Name, Path, PreferType.Folder);
+            return new PreferenceItem(Id.ToString(), Name, EntityType.Folder);
         }
     }
 

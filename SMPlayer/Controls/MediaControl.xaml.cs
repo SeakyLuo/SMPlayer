@@ -1009,8 +1009,7 @@ namespace SMPlayer
                     foreach (var item in propertyItems.Reverse())
                         flyout.Items.Insert(0, item);
                 }
-                var setAsPreferredItem = MenuFlyoutHelper.GetPreferItem(MusicPlayer.CurrentMusic);
-                flyout.Items.Insert(1, setAsPreferredItem);
+                flyout.Items.Insert(1, MenuFlyoutHelper.GetPreferItem(MusicPlayer.CurrentMusic));
             }
         }
 

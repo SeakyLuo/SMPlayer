@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:SMPlayer"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:models="using:SMPlayer.Models"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:models="using:SMPlayer.Models" xmlns:vo="using:SMPlayer.Models.VO"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -90,7 +90,7 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
-        <DataTemplate x:Name="PreferenceItemTemplate" x:DataType="models:PreferenceItemView">
+        <DataTemplate x:Name="PreferenceItemTemplate" x:DataType="vo:PreferenceItemView">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -128,14 +128,18 @@
                 <ComboBox
                     x:Uid="PreferLevelComboBox"
                     Grid.Column="2"
-                    Margin="6,0"
-                    Style="{StaticResource PreferLevelComboBoxStyle}"
-                    Loaded="PreferLevelComboBox_Loaded"
+                    Margin="0,0,6,0"
+                    Width="{x:Bind LevelWidth}"
+                    BorderThickness="1"
+                    VerticalAlignment="Center"
+                    SelectedItem="{x:Bind LevelView, Mode=TwoWay}"
+                    ItemsSource="{x:Bind Levels}"
                     SelectionChanged="PreferLevelComboBox_SelectionChanged" >
-                    <ComboBoxItem x:Uid="PreferLevelLowComboItem" Content="Low" />
-                    <ComboBoxItem x:Uid="PreferLevelNormalComboItem" Content="Normal" />
-                    <ComboBoxItem x:Uid="PreferLevelHighComboItem" Content="High" />
-                    <ComboBoxItem x:Uid="PreferLevelHigherComboItem" Content="Higher"/>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="vo:PreferLevelView">
+                            <TextBlock Text="{x:Bind LevelName}" ToolTipService.ToolTip="{x:Bind ToolTip}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
                 </ComboBox>
                 <Button
                     x:Name="RemoveButton"
@@ -147,12 +151,6 @@
                     Click="RemoveButton_Click" />
             </Grid>
         </DataTemplate>
-
-        <Style TargetType="ComboBox" x:Name="PreferLevelComboBoxStyle">
-            <Setter Property="MinWidth" Value="80" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-        </Style>
 
         <Style TargetType="ListView" x:Name="PreferenceListViewStyle">
             <Setter Property="HorizontalAlignment" Value="Stretch" />

@@ -474,12 +474,6 @@
   <data name="Least Played" xml:space="preserve">
     <value>最少播放</value>
   </data>
-  <data name="LeastPlayedPreferenceCheckBox.Content" xml:space="preserve">
-    <value>最少播放</value>
-  </data>
-  <data name="LeastPlayedPreferenceCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>最少播放的歌曲会有更高的概率出现在【快速播放】。</value>
-  </data>
   <data name="ListViewItem.Label" xml:space="preserve">
     <value>列表模式</value>
   </data>
@@ -549,12 +543,6 @@
   <data name="Most Played" xml:space="preserve">
     <value>最常播放</value>
   </data>
-  <data name="MostPlayedPreferenceCheckBox.Content" xml:space="preserve">
-    <value>最常播放</value>
-  </data>
-  <data name="MostPlayedPreferenceCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>最常播放的歌曲会有更高的概率出现在【快速播放】。</value>
-  </data>
   <data name="MultiSelect" xml:space="preserve">
     <value>多选</value>
   </data>
@@ -596,12 +584,6 @@
   </data>
   <data name="My Favorites" xml:space="preserve">
     <value>我喜欢</value>
-  </data>
-  <data name="MyFavoritePreferenceCheckBox.Content" xml:space="preserve">
-    <value>我喜欢</value>
-  </data>
-  <data name="MyFavoritePreferenceCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>我喜欢的歌曲会有更高的概率出现在【快速播放】。</value>
   </data>
   <data name="MyFavoritesItem.Content" xml:space="preserve">
     <value>我喜欢</value>
@@ -781,22 +763,22 @@
     <value>偏好设置</value>
   </data>
   <data name="PreferenceSettingsInfoTextBlock.Text" xml:space="preserve">
-    <value>偏好的项目会有更高的概率出现在【随机播放】-&gt;【快速播放】。</value>
+    <value>偏好的项目会根据偏好程度以更高或更低的概率出现在【随机播放】-&gt;【快速播放】中。</value>
   </data>
   <data name="PreferredAlbumsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>偏好专辑中的歌曲会有更高的概率出现在【快速播放】。</value>
+    <value>偏好专辑中的歌曲会有更高或更低的概率出现在【快速播放】。</value>
   </data>
   <data name="PreferredArtistsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>偏好歌手的歌曲会有更高的概率出现在【快速播放】。</value>
+    <value>偏好歌手的歌曲会有更高或更低的概率出现在【快速播放】。</value>
   </data>
   <data name="PreferredFoldersCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>偏好文件夹的歌曲（不包含子文件夹）会有更高的概率出现在【快速播放】。</value>
+    <value>偏好文件夹的歌曲（不包含子文件夹）会有更高或更低的概率出现在【快速播放】。</value>
   </data>
   <data name="PreferredPlaylistsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>偏好播放列表的歌曲会有更高的概率出现在【快速播放】。</value>
+    <value>偏好播放列表的歌曲会有更高或更低的概率出现在【快速播放】。</value>
   </data>
   <data name="PreferredSongsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>偏好的歌曲会有更高的概率出现在【快速播放】。</value>
+    <value>偏好的歌曲会有更高或更低的概率出现在【快速播放】。</value>
   </data>
   <data name="PrevButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>前一首</value>
@@ -833,12 +815,6 @@
   </data>
   <data name="RecentAddedItem.Header" xml:space="preserve">
     <value>最近添加</value>
-  </data>
-  <data name="RecentAddedPreferenceCheckBox.Content" xml:space="preserve">
-    <value>最近添加</value>
-  </data>
-  <data name="RecentAddedPreferenceCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>最近添加的歌曲会有更高的概率出现在【快速播放】。</value>
   </data>
   <data name="RecentItem.Content" xml:space="preserve">
     <value>最近</value>
@@ -1071,9 +1047,6 @@
   <data name="Settings" xml:space="preserve">
     <value>设置</value>
   </data>
-  <data name="Show In Explorer" xml:space="preserve">
-    <value>在本地中显示</value>
-  </data>
   <data name="Show Lyrics" xml:space="preserve">
     <value>显示歌词</value>
   </data>
@@ -1217,7 +1190,7 @@
     <value>高</value>
   </data>
   <data name="PreferLevelHigherComboItem.Content" xml:space="preserve">
-    <value>很高</value>
+    <value>较高</value>
   </data>
   <data name="PreferLevelLowComboItem.Content" xml:space="preserve">
     <value>低</value>
@@ -1226,7 +1199,7 @@
     <value>正常</value>
   </data>
   <data name="PreferLevelComboBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>表示该项目在随机播放中出现的概率</value>
+    <value>表示该项目在快速播放中出现的概率</value>
   </data>
   <data name="ReleaseNotesPreferenceSettingsPreferenceLevelAdded.Text" xml:space="preserve">
     <value>偏好设置支持选择偏好项目出现的概率。</value>
@@ -1269,5 +1242,11 @@
   </data>
   <data name="AlbumSearchBar.PlaceholderText" xml:space="preserve">
     <value>搜索专辑</value>
+  </data>
+  <data name="ReleaseNotesFixedPreferenceSettings.Text" xml:space="preserve">
+    <value>修复了偏好设置不起作用的问题</value>
+  </data>
+  <data name="ReleaseNotesPreferenceSettingsDislikedAndDoNotAppear.Text" xml:space="preserve">
+    <value>优化了偏好设置（支持不喜欢、不出现）并修复了几个问题。</value>
   </data>
 </root>

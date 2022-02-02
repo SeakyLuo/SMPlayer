@@ -159,6 +159,14 @@ namespace SMPlayer
         {
             Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
         }
+
+        private void OpenFolderMenuFlyout(object sender, object e)
+        {
+            var flyout = sender as MenuFlyout;
+            GridViewFolder folder = flyout.Target.DataContext as GridViewFolder;
+            MenuFlyoutHelper.SetSimpleFolderMenu(sender, folder.Source);
+        }
+
         private void SearchPlaylistView_ItemClick(object sender, ItemClickEventArgs e)
         {
             AlbumView playlist = (AlbumView)e.ClickedItem;
@@ -309,7 +317,7 @@ namespace SMPlayer
         public string Text { get; set; }
         public FolderTree Folder { get; set; }
         public IEnumerable<Music> Songs { get; set; } = Settings.AllSongs;
-        public IEnumerable<Playlist> Playlists { get; set; } = Settings.AllPlaylists;
+        public IEnumerable<Playlist> Playlists { get; set; } = Settings.AllPlaylistsWithSongs;
         public IEnumerable<FolderTree> Folders { get; set; } = Settings.AllFolders;
     }
     public class SearchArgs

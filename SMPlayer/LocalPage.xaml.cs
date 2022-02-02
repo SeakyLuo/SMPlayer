@@ -94,9 +94,9 @@ namespace SMPlayer
             {
                 folder = gridViewFolder.Source;
             }
-            else if (e.Parameter is FolderTree)
+            else if (e.Parameter is FolderTree folderTree)
             {
-                folder = (FolderTree)e.Parameter;
+                folder = folderTree;
             }
             else if (e.NavigationMode == NavigationMode.Back)
             {
@@ -142,8 +142,8 @@ namespace SMPlayer
                         SetupTreeView(tree);
                         break;
                 }
-                if (GridItems.IsNotEmpty())
-                    History.Push(tree);
+                //if (GridItems.IsNotEmpty())
+                History.Push(tree);
             });
             SetHeader(tree);
             SetNavText(tree);
@@ -299,33 +299,13 @@ namespace SMPlayer
         private void OpenPlaylistFlyout(object sender, object e)
         {
             var flyout = sender as MenuFlyout;
-            MenuFlyoutHelper.SetPlaylistMenu(sender, this, this, new MenuFlyoutOption
-            {
-                MultiSelectOption = MultiSelectOption
-            });
             FolderTree folder = null;
             if (flyout.Target.DataContext is GridViewFolder gridFolderView) folder = gridFolderView.Source;
             else if (flyout.Target.DataContext is TreeViewNode node) folder = node.Content as FolderTree;
-            flyout.Items.Add(MenuFlyoutHelper.GetPreferItem(folder));
-            flyout.Items.Add(MenuFlyoutHelper.GetShowInExplorerItem(folder.Path, StorageItemTypes.Folder));
-            flyout.Items.Add(MenuFlyoutHelper.GetRefreshDirectoryItem(folder));
-            flyout.Items.Add(MenuFlyoutHelper.GetDeleteFolderItem(folder));
-            flyout.Items.Add(MenuFlyoutHelper.GetRenameFolderItem(folder,
-                async (newName) => await Settings.ValidateFolderName(folder.ParentPath, newName),
-                async (newName) =>
-                {
-                    await Settings.settings.RenameFolder(folder, newName);
-                    string newPath = folder.Path;
-                    if (GridItems.FirstOrDefault(i => i.Path == newPath) is GridViewFolder gridViewFolder)
-                    {
-                        gridViewFolder.Rename(newPath);
-                    }
-                    if (FindNode(folder.Path) is TreeViewNode node)
-                    {
-                        (node.Content as FolderTree).Rename(newPath);
-                    }
-                }));
-            flyout.Items.Add(MenuFlyoutHelper.GetSearchDirectoryItem(folder));
+            MenuFlyoutHelper.SetFolderMenu(sender, folder, this, this, new MenuFlyoutOption
+            {
+                MultiSelectOption = MultiSelectOption
+            });
         }
 
         private TreeViewNode FindNode(string path)
@@ -480,6 +460,18 @@ namespace SMPlayer
                     });
                     LocalProgressRing.Visibility = Visibility.Collapsed;
                 });
+        }
+
+        private void CreatorHyperLinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            TreeViewFolderFile file = ((TreeViewNode)((FrameworkElement)sender).DataContext).Content as TreeViewFolderFile;
+            MainPage.Instance.NavigateToPage(typeof(ArtistsPage), file.Creator);
+        }
+
+        private void CollectionHyperLinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            TreeViewFolderFile file = ((TreeViewNode)((FrameworkElement)sender).DataContext).Content as TreeViewFolderFile;
+            MainPage.Instance.NavigateToPage(typeof(AlbumPage), Settings.FindAlbum(file.Collection, file.Creator));
         }
 
         private bool PleaseExitMultiSelectMode()
@@ -677,6 +669,16 @@ namespace SMPlayer
                     break;
                 case StorageItemEventType.Reset:
                     History.Clear();
+                    break;
+                case StorageItemEventType.Rename:
+                    if (GridItems.FirstOrDefault(i => i.Path == args.Path) is GridViewFolder renameGridItem)
+                    {
+                        renameGridItem.Rename(args.Path);
+                    }
+                    if (FindNode(folder.Path) is TreeViewNode renameNode)
+                    {
+                        (renameNode.Content as FolderTree).Rename(args.Path);
+                    }
                     break;
                 case StorageItemEventType.Update:
                     if (MainPage.Instance?.CurrentPage != typeof(LocalPage))

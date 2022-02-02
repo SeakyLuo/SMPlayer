@@ -66,8 +66,7 @@
                     <local:DropShadowControl
                         DataContext="{Binding}"
                         DataContextChanged="DropShadowControl_DataContextChanged"
-                        EffectiveViewportChanged="DropShadowControl_EffectiveViewportChanged"
-                        MenuFlyoutOpeningAction="MenuFlyout_Opening" />
+                        EffectiveViewportChanged="DropShadowControl_EffectiveViewportChanged" />
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SMPlayer.Helpers;
+using SMPlayer.Models.DAO;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -10,12 +12,22 @@ namespace SMPlayer.Models
     [Serializable]
     public class PreferenceSettings
     {
-        public const int MaxPreferredSongs = 30,
-                         MaxPreferredArtists = 20,
-                         MaxPreferredAlbums = 25,
-                         MaxPreferredPlaylists = 15,
-                         MaxPreferredFolders = 10;
+        public static PreferenceSettings settings = new PreferenceSettings();
 
+        public const int MaxPreferredSongs = 100,
+                         MaxPreferredArtists = 50,
+                         MaxPreferredAlbums = 50,
+                         MaxPreferredPlaylists = 30,
+                         MaxPreferredFolders = 30;
+
+        public static PreferenceItem GetPreferenceItem(IPreferable preferable)
+        {
+            PreferenceItem item = preferable.AsPreferenceItem();
+            if (item.Type == EntityType.MyFavorites) return FindMyFavorites;
+            return SQLHelper.Run(c => c.SelectPreferenceItem(item.Type, item.Id)?.FromDAO());
+        }
+
+        public long Id { get; set; }
         public List<PreferenceItem> PreferredSongs { get; set; } = new List<PreferenceItem>();
         public List<PreferenceItem> PreferredArtists { get; set; } = new List<PreferenceItem>();
         public List<PreferenceItem> PreferredAlbums { get; set; } = new List<PreferenceItem>();
@@ -31,100 +43,116 @@ namespace SMPlayer.Models
         public PreferenceItem MostPlayed { get; set; } = new PreferenceItem();
         public PreferenceItem LeastPlayed { get; set; } = new PreferenceItem();
 
-        [Newtonsoft.Json.JsonIgnore]
-        public List<PreferenceItem> EnabledPreferredSongs
+        public static List<PreferenceItem> FindPreferredSongs => FindPreferredItems(EntityType.Song);
+        public static List<PreferenceItem> FindPreferredArtists => FindPreferredItems(EntityType.Artist);
+        public static List<PreferenceItem> FindPreferredAlbums => FindPreferredItems(EntityType.Album);
+        public static List<PreferenceItem> FindPreferredPlaylists => FindPreferredItems(EntityType.Playlist);
+        public static List<PreferenceItem> FindPreferredFolders => FindPreferredItems(EntityType.Folder);
+        public static PreferenceItem FindRecentAdded => FindPreferredItems(EntityType.RecentAdded).First();
+        public static PreferenceItem FindMyFavorites => FindPreferredItems(EntityType.MyFavorites).First();
+        public static PreferenceItem FindMostPlayed => FindPreferredItems(EntityType.MostPlayed).First();
+        public static PreferenceItem FindLeastPlayed => FindPreferredItems(EntityType.LeastPlayed).First();
+        public static List<PreferenceItem> EnabledPreferredSongs => FindEnabledPreferredItems(EntityType.Song);
+        public static List<PreferenceItem> EnabledPreferredArtists => FindEnabledPreferredItems(EntityType.Artist);
+        public static List<PreferenceItem> EnabledPreferredAlbums => FindEnabledPreferredItems(EntityType.Album);
+        public static List<PreferenceItem> EnabledPreferredPlaylists => FindEnabledPreferredItems(EntityType.Playlist);
+        public static List<PreferenceItem> EnabledPreferredFolders => FindEnabledPreferredItems(EntityType.Folder);
+        private static List<PreferenceItem> FindPreferredItems(EntityType preferType)
         {
-            get => PreferredSongs.Where(i => i.IsEnabled).ToList();
+            return SQLHelper.Run(c => c.SelectPreferenceItems(preferType));
+        }
+        private static List<PreferenceItem> FindEnabledPreferredItems(EntityType preferType)
+        {
+            return SQLHelper.Run(c => c.SelectPreferenceItems(preferType)).Where(i => i.IsEnabled).ToList();
+        }
+        public static List<PreferenceItem> FindDislikedItems() => FindEnabledByLevel(PreferLevel.Dislike);
+        public static List<PreferenceItem> GetDoNotAppearItems() => FindEnabledByLevel(PreferLevel.DoNotAppear);
+        public static List<PreferenceItem> FindEnabledByLevel(PreferLevel level)
+        {
+            return SQLHelper.Run(c => c.Query<PreferenceItemDAO>("select * from PreferenceItem where Level = ? and IsEnabled = 1", level).Select(i => i.FromDAO()).ToList());
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public List<PreferenceItem> EnabledPreferredArtists
+        public bool Prefer(PreferenceItem item, PreferLevel level)
         {
-            get => PreferredArtists.Where(i => i.IsEnabled).ToList();
+            item.Level = level;
+            EntityType preferType = item.Type;
+            if (preferType == EntityType.MyFavorites)
+            {
+                item.IsEnabled = true;
+            }
+            else
+            {
+                List<PreferenceItem> items = FindPreferredItems(preferType);
+                if (items.Count >= GetMaxPreferenceItems(preferType))
+                {
+                    return false;
+                }
+            }
+            if (item.ThisId == 0)
+            {
+                SQLHelper.Run(c => c.InsertPreferenceItem(item));
+            }
+            else
+            {
+                UpdatePreference(item);
+            }
+            return true;
         }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public List<PreferenceItem> EnabledPreferredAlbums
+        public static void UpdatePreference(PreferenceItem item)
         {
-            get => PreferredAlbums.Where(i => i.IsEnabled).ToList();
-        }
-
-        [Newtonsoft.Json.JsonIgnore]
-        public List<PreferenceItem> EnabledPreferredPlaylists
-        {
-            get => PreferredPlaylists.Where(i => i.IsEnabled).ToList();
-        }
-
-        [Newtonsoft.Json.JsonIgnore]
-        public List<PreferenceItem> EnabledPreferredFolders
-        {
-            get => PreferredFolders.Where(i => i.IsEnabled).ToList();
+            SQLHelper.Run(c => c.Update(item.ToDAO()));
         }
 
         public bool Prefer(IPreferable preferable)
         {
-            PreferType preferType = preferable.AsPreferenceItemView().PreferType;
-            List<PreferenceItem> items = GetPreferenceItems(preferType);
+            EntityType preferType = preferable.AsPreferenceItem().Type;
+            List<PreferenceItem> items = FindPreferredItems(preferType);
             if (items.Count >= GetMaxPreferenceItems(preferType))
             {
                 return false;
             }
-            items.Add(preferable.AsPreferenceItem());
+            SQLHelper.Run(c => c.InsertPreferenceItem(preferable.AsPreferenceItem(), preferType));
             return true;
         }
 
         public void UndoPrefer(IPreferable preferable)
         {
-            string preferId = preferable.AsPreferenceItem().Id;
-            PreferType preferType = preferable.AsPreferenceItemView().PreferType;
-            List<PreferenceItem> items = GetPreferenceItems(preferType);
-            int index = items.FindIndex(i => i.Id.Equals(preferId));
-            if (index != -1)
+            PreferenceItem item = preferable.AsPreferenceItem();
+            PreferenceItemDAO dao = item.ToDAO();
+            if (dao.Type == EntityType.MyFavorites)
             {
-                items.RemoveAt(index);
+                dao.IsEnabled = false;
             }
+            else
+            {
+                dao.State = ActiveState.Inactive;
+            }
+            SQLHelper.Run(c => c.Update(dao));
         }
 
         public bool IsPreferred(IPreferable preferable)
         {
-            PreferType preferType = preferable.AsPreferenceItemView().PreferType;
-            List<PreferenceItem> items = GetPreferenceItems(preferType);
-            string preferId = preferable.AsPreferenceItem().Id;
+            PreferenceItem item = preferable.AsPreferenceItem();
+            EntityType preferType = item.Type;
+            List<PreferenceItem> items = FindPreferredItems(preferType);
+            string preferId = item.Id;
             return items.Any(i => i.Id.Equals(preferId));
         }
 
-        private List<PreferenceItem> GetPreferenceItems(PreferType type)
+        public static int GetMaxPreferenceItems(EntityType type)
         {
             switch (type)
             {
-                case PreferType.Song:
-                    return PreferredSongs;
-                case PreferType.Artist:
-                    return PreferredArtists;
-                case PreferType.Album:
-                    return PreferredAlbums;
-                case PreferType.Playlist:
-                    return PreferredPlaylists;
-                case PreferType.Folder:
-                    return PreferredFolders;
-                default:
-                    return new List<PreferenceItem>();
-            }
-        }
-
-        public static int GetMaxPreferenceItems(PreferType type)
-        {
-            switch (type)
-            {
-                case PreferType.Song:
+                case EntityType.Song:
                     return MaxPreferredSongs;
-                case PreferType.Artist:
+                case EntityType.Artist:
                     return MaxPreferredArtists;
-                case PreferType.Album:
+                case EntityType.Album:
                     return MaxPreferredAlbums;
-                case PreferType.Playlist:
+                case EntityType.Playlist:
                     return MaxPreferredPlaylists;
-                case PreferType.Folder:
+                case EntityType.Folder:
                     return MaxPreferredFolders;
                 default:
                     return 0;

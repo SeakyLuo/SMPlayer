@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using SMPlayer.Helpers;
+using SMPlayer.Models.VO;
 
 namespace SMPlayer.Models
 {
@@ -29,6 +30,8 @@ namespace SMPlayer.Models
         public bool ThumbnailLoaded { get; private set; } = false;
         public bool IsThumbnailLoading { get; private set; } = false;
         public bool DontLoad { get => ThumbnailLoaded || IsThumbnailLoading; }
+        public EntityType EntityType { get; set; } = EntityType.Album;
+        public long OriginalItemId;
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -108,7 +111,8 @@ namespace SMPlayer.Models
         {
             return new Playlist(Name, Songs)
             {
-                Artist = Artist
+                Id = Settings.FindPlaylist(Name)?.Id ?? 0,
+                Artist = Artist,
             };
         }
         public AlbumInfo ToAlbumInfo()
@@ -140,13 +144,7 @@ namespace SMPlayer.Models
 
         PreferenceItem IPreferable.AsPreferenceItem()
         {
-            return new PreferenceItem(GetAlbumKey(), ConcatNameAndArtist());
-        }
-
-        PreferenceItemView IPreferable.AsPreferenceItemView()
-        {
-            string name = ConcatNameAndArtist();
-            return new PreferenceItemView(GetAlbumKey(), name, name, PreferType.Album);
+            return new PreferenceItem(GetAlbumKey(), ConcatNameAndArtist(), EntityType.Album);
         }
 
         private string GetAlbumKey()

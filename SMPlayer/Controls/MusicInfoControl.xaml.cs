@@ -90,7 +90,7 @@ namespace SMPlayer.Controls
             {
                 PlayCountTextBlock.Text = music.PlayCount.ToString();
                 ClearPlayCountButton.Visibility = Visibility.Visible;
-                string times = Helper.CurrentLanguage.DisplayName.Contains("en") ? MusicDurationConverter.TryPlural("time", music.PlayCount) : "";
+                string times = Helper.CurrentLanguage.LanguageTag == Helper.Language_EN ? MusicDurationConverter.TryPlural("time", music.PlayCount) : "";
                 PlayCountTextBlock.SetToolTip(Helper.LocalizeMessage("HasBeenPlayed", music.Name, music.PlayCount, times), false);
             }
         }
@@ -159,16 +159,10 @@ namespace SMPlayer.Controls
         {
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
-        public void MusicModified(Music before, Music after)
-        {
-            if (before != CurrentMusic) return;
-            SetPlayCount(after);
-            CurrentMusic.PlayCount = after.PlayCount;
-        }
 
-        public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
+        public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
                 if (!AllowMusicSwitching) return;
                 // if modified but not saved

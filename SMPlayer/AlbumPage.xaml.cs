@@ -47,8 +47,10 @@ namespace SMPlayer
             {
                 playlist = album.ToPlaylist();
             }
-            else if (targetAlbum is Playlist)
-                playlist = (Playlist)targetAlbum;
+            else if (targetAlbum is Playlist albumPlaylist)
+            {
+                playlist = albumPlaylist;
+            }
             else if (targetAlbum is string albumText)
             {
                 int index = albumText.IndexOf(TileHelper.StringConcatenationFlag);

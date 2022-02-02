@@ -15,60 +15,64 @@ namespace SMPlayer.Helpers
         public static List<Music> GetPlaylist(int randomLimit)
         {
             //HashSet<Music> songs = Helper.Timer(() => Settings.AllSongs.RandItems(randomLimit * 2).ToHashSet(), "AllSongs.RandItems");
-            //PreferenceSettings preference = Settings.settings.Preference;
+            //PreferenceSettings preference = PreferenceSettings.settings;
             //Helper.Timer(() => HandlePreferredSongs(songs, preference), "HandlePreferredSongs");
             //Helper.Timer(() => HandlePreferredArtists(songs, preference), "HandlePreferredArtists");
             //Helper.Timer(() => HandlePreferredAlbums(songs, preference), "HandlePreferredAlbums");
             //Helper.Timer(() => HandlePreferredPlaylists(songs, preference), "HandlePreferredPlaylists");
             //Helper.Timer(() => HandlePreferredFolders(songs, preference), "HandlePreferredFolders");
-            //Helper.Timer(() => HandledRecentAdded(songs, preference), "HandledRecentAdded");
-            //Helper.Timer(() => HandledMyFavorites(songs, preference), "HandledMyFavorites");
-            //Helper.Timer(() => HandledMostPlayed(songs, preference, randomLimit), "HandledMostPlayed");
-            //Helper.Timer(() => HandledLeastPlayed(songs, preference, randomLimit), "HandledLeastPlayed");
+            //Helper.Timer(() => HandleRecentAdded(songs), "HandledRecentAdded");
+            //Helper.Timer(() => HandleMyFavorites(songs), "HandledMyFavorites");
+            //Helper.Timer(() => HandleMostPlayed(songs, randomLimit), "HandledMostPlayed");
+            //Helper.Timer(() => HandleLeastPlayed(songs, randomLimit), "HandledLeastPlayed");
+            //Helper.Timer(() => HandleDislikedItems(songs), "HandleDislikedItems");
+            //Helper.Timer(() => HandleDoNotAppearItems(songs), "HandleDoNotAppearItems");
             //return Helper.Timer(() => songs.RandItems(randomLimit).ToList(), "Final RandItems");
             HashSet<Music> songs = Settings.AllSongs.RandItems(randomLimit * 2).ToHashSet();
-            PreferenceSettings preference = Settings.settings.Preference;
+            PreferenceSettings preference = PreferenceSettings.settings;
             HandlePreferredSongs(songs, preference);
             HandlePreferredArtists(songs, preference);
             HandlePreferredAlbums(songs, preference);
             HandlePreferredPlaylists(songs, preference);
             HandlePreferredFolders(songs, preference);
-            HandledRecentAdded(songs, preference);
-            HandledMyFavorites(songs, preference);
-            HandledMostPlayed(songs, preference, randomLimit);
-            HandledLeastPlayed(songs, preference, randomLimit);
+            HandleRecentAdded(songs);
+            HandleMyFavorites(songs);
+            HandleMostPlayed(songs, randomLimit);
+            HandleLeastPlayed(songs, randomLimit);
+            HandleDislikedItems(songs);
+            HandleDoNotAppearItems(songs);
             return songs.RandItems(randomLimit).ToList();
         }
 
         private static void HandlePreferredSongs(HashSet<Music> songs, PreferenceSettings preference)
         {
             if (!preference.Songs) return;
-            IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredSongs);
+            IEnumerable<PreferenceItem> items = GetPreferenceItems(PreferenceSettings.EnabledPreferredSongs);
             songs.AddRange(items.Select(i => Settings.FindMusic(i.LongId)));
         }
 
         private static void HandlePreferredArtists(HashSet<Music> songs, PreferenceSettings preference)
         {
             if (!preference.Artists) return;
-            IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredArtists);
+            IEnumerable<PreferenceItem> items = GetPreferenceItems(PreferenceSettings.EnabledPreferredArtists);
             songs.AddRange(items.SelectMany(i => Settings.AllSongs.Where(m => i.Id == m.Artist)
-                                                                          .RandItems(GetRandomPreferredItems(i.Level))
+                                                                  .RandItems(GetRandomPreferredItems(i.Level))
                                 .RandItems(randomItems)));
         }
 
         private static void HandlePreferredAlbums(HashSet<Music> songs, PreferenceSettings preference)
         {
             if (!preference.Albums) return;
-            IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredArtists);
+            IEnumerable<PreferenceItem> items = GetPreferenceItems(PreferenceSettings.EnabledPreferredAlbums);
             songs.AddRange(items.SelectMany(i => Settings.AllSongs.Where(m => i.Id == m.Album)
-                                                                .RandItems(GetRandomPreferredItems(i.Level))
+                                                                  .RandItems(GetRandomPreferredItems(i.Level))
                                 .RandItems(randomItems)));
         }
 
         private static void HandlePreferredPlaylists(HashSet<Music> songs, PreferenceSettings preference)
         {
             if (!preference.Playlists) return;
-            IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredPlaylists);
+            IEnumerable<PreferenceItem> items = GetPreferenceItems(PreferenceSettings.EnabledPreferredPlaylists);
             songs.AddRange(items.SelectMany(i => Settings.FindPlaylist(i.LongId)
                                                          .Songs.RandItems(GetRandomPreferredItems(i.Level)).ToList())
                                 .RandItems(randomItems).ToList());
@@ -77,7 +81,7 @@ namespace SMPlayer.Helpers
         private static void HandlePreferredFolders(HashSet<Music> songs, PreferenceSettings preference)
         {
             if (!preference.Folders) return;
-            IEnumerable<PreferenceItem> items = GetPreferenceItems(preference.EnabledPreferredFolders);
+            IEnumerable<PreferenceItem> items = GetPreferenceItems(PreferenceSettings.EnabledPreferredFolders);
             songs.AddRange(items.Select(i => new { Folder = Settings.FindFolder(i.LongId), i.Level })
                                 .Where(i => i.Folder != null && i.Folder.IsNotEmpty)
                                 .SelectMany(i => i.Folder.Songs.RandItems(GetRandomPreferredItems(i.Level)))
@@ -90,11 +94,12 @@ namespace SMPlayer.Helpers
             if (items.Count == 1) return items;
             return items.SelectMany(item =>
             {
+                if (item.Level <= 0) return new List<PreferenceItem>();
                 int max = GetRandomPreferredItems(item.Level);
                 List<PreferenceItem> ret = new List<PreferenceItem>();
                 for (int i = 0; i < max; i++)
                 {
-                    if (random.Next(2) == 1)
+                    if (Toss())
                     {
                         ret.Add(item);
                     }
@@ -103,30 +108,30 @@ namespace SMPlayer.Helpers
             });
         }
 
-        private static void HandledRecentAdded(HashSet<Music> songs, PreferenceSettings preference)
+        private static void HandleRecentAdded(HashSet<Music> songs)
         {
-            int count = GetPreferenceItems(preference.RecentAdded);
+            int count = GetPreferenceItems(PreferenceSettings.FindRecentAdded);
             if (count == 0) return;
             songs.AddRange(RecentPage.RecentAdded.TimeLine.RandItems(count));
         }
 
-        private static void HandledMyFavorites(HashSet<Music> songs, PreferenceSettings preference)
+        private static void HandleMyFavorites(HashSet<Music> songs)
         {
-            int count = GetPreferenceItems(preference.MyFavorites);
+            int count = GetPreferenceItems(PreferenceSettings.FindMyFavorites);
             if (count == 0) return;
             songs.AddRange(Settings.settings.MyFavorites.Songs.RandItems(count));
         }
 
-        private static void HandledMostPlayed(HashSet<Music> songs, PreferenceSettings preference, int randomLimit)
+        private static void HandleMostPlayed(HashSet<Music> songs, int randomLimit)
         {
-            int count = GetPreferenceItems(preference.MostPlayed);
+            int count = GetPreferenceItems(PreferenceSettings.FindMostPlayed);
             if (count == 0) return;
             songs.AddRange(Settings.settings.GetMostPlayed(randomLimit));
         }
 
-        private static void HandledLeastPlayed(HashSet<Music> songs, PreferenceSettings preference, int randomLimit)
+        private static void HandleLeastPlayed(HashSet<Music> songs, int randomLimit)
         {
-            int count = GetPreferenceItems(preference.LeastPlayed);
+            int count = GetPreferenceItems(PreferenceSettings.FindLeastPlayed);
             if (count == 0) return;
             songs.AddRange(Settings.settings.GetLeastPlayed(randomLimit));
         }
@@ -140,6 +145,57 @@ namespace SMPlayer.Helpers
         {
             int min = (int)level + 1;
             return random.Next(min, min * 3);
+        }
+
+        private static void HandleDislikedItems(HashSet<Music> songs)
+        {
+            HandleRemoveMusic(songs, PreferLevel.Dislike);
+        }
+
+        private static void HandleDoNotAppearItems(HashSet<Music> songs)
+        {
+            HandleRemoveMusic(songs, PreferLevel.DoNotAppear);
+        }
+
+        private static void HandleRemoveMusic(HashSet<Music> songs, PreferLevel level)
+        {
+            int probability = level == PreferLevel.DoNotAppear ? 1 : 2;
+            foreach (var group in PreferenceSettings.FindEnabledByLevel(level).GroupBy(i => i.Type))
+            {
+                switch (group.Key)
+                {
+                    case EntityType.Song:
+                        HashSet<long> ids = group.Select(i => long.Parse(i.Id)).ToHashSet();
+                        songs.RemoveWhere(i => Toss(probability) && ids.Contains(i.Id));
+                        break;
+                    case EntityType.Artist:
+                        HashSet<string> artists = group.Select(i => i.Id).ToHashSet();
+                        songs.RemoveWhere(i => Toss(probability) && artists.Contains(i.Artist));
+                        break;
+                    case EntityType.Album:
+                        HashSet<string> albums = group.Select(i => i.Id).ToHashSet();
+                        songs.RemoveWhere(i => Toss(probability) && albums.Contains(i.Album));
+                        break;
+                    case EntityType.Playlist:
+                        HashSet<long> playlistItems = group.Select(i => long.Parse(i.Id))
+                                                           .SelectMany(id => Settings.FindPlaylistItems(id))
+                                                           .Select(i => i.Id).ToHashSet();
+                        songs.RemoveWhere(i => Toss(probability) && playlistItems.Contains(i.Id));
+                        break;
+                    case EntityType.Folder:
+                        HashSet<string> folders = group.AsParallel()
+                                                       .Select(i => Settings.FindFolderInfo(long.Parse(i.Id)))
+                                                       .Where(i => i != null).Select(i => i.Path).ToHashSet();
+                        songs.RemoveWhere(i => Toss(probability) && folders.Any(f => i.Path.StartsWith(f)));
+                        break;
+                }
+            }
+        }
+
+        private static bool Toss(int probability = 2)
+        {
+            if (probability <= 1) return true;
+            return random.Next(probability) == 0;
         }
     }
 }

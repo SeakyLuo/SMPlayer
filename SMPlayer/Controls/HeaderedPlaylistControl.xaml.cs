@@ -90,11 +90,6 @@ namespace SMPlayer
                     ClearButton.Visibility = Visibility.Collapsed;
                     break;
             }
-            bool isPreferred = IsPlaylist ? Settings.settings.Preference.IsPreferred(playlist) :
-                                            IsMyFavorites ? Settings.settings.Preference.MyFavorites.IsEnabled :
-                                                            Settings.settings.Preference.IsPreferred(playlist.ToAlbumView());
-            SetAsPreferredButton.Visibility = isPreferred ? Visibility.Collapsed : Visibility.Visible;
-            UndoPreferButton.Visibility = isPreferred ? Visibility.Visible : Visibility.Collapsed;
             SetPinState(Windows.UI.StartScreen.SecondaryTile.Exists(TileHelper.FormatTileId(playlist, IsPlaylist)));
             if (MusicDisplayItem.IsNullOrEmpty(playlist.DisplayItem))
             {
@@ -274,6 +269,22 @@ namespace SMPlayer
                 HeaderedPlaylist.CurrentPlaylist = CurrentPlaylist.Songs;
             });
         }
+
+        private void SetAsPreferredButton_Click(object sender, RoutedEventArgs e)
+        {
+            IPreferable preferable;
+            if (IsPlaylist || IsMyFavorites)
+            {
+                preferable = CurrentPlaylist;
+            }
+            else
+            {
+                preferable = CurrentPlaylist.ToAlbumView();
+            }
+            MenuFlyoutSubItem subItem = MenuFlyoutHelper.GetPreferItem(preferable);
+            subItem.ToMenuFlyout().ShowAt(sender as FrameworkElement);
+        }
+
         void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
         {
             switch (args.Event)
@@ -283,48 +294,6 @@ namespace SMPlayer
                     args.FlyoutHelper.CurrentPlaylistName = CurrentPlaylist.Name;
                     break;
             }
-        }
-
-        private void SetAsPreferredButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (IsPlaylist)
-            {
-                Settings.settings.Preference.Prefer(CurrentPlaylist);
-            }
-            else
-            {
-                if (IsMyFavorites)
-                {
-                    Settings.settings.Preference.MyFavorites.IsEnabled = true;
-                }
-                else
-                {
-                    Settings.settings.Preference.Prefer(CurrentPlaylist.ToAlbumView());
-                }
-            }
-            (sender as AppBarButton).Visibility = Visibility.Collapsed;
-            UndoPreferButton.Visibility = Visibility.Visible;
-        }
-
-        private void UndoPreferButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (IsPlaylist)
-            {
-                Settings.settings.Preference.UndoPrefer(CurrentPlaylist);
-            }
-            else
-            {
-                if (IsMyFavorites)
-                {
-                    Settings.settings.Preference.MyFavorites.IsEnabled = false;
-                }
-                else
-                {
-                    Settings.settings.Preference.UndoPrefer(CurrentPlaylist.ToAlbumView());
-                }
-            }
-            (sender as AppBarButton).Visibility = Visibility.Collapsed;
-            SetAsPreferredButton.Visibility = Visibility.Visible;
         }
 
         void IPlaylistEventListener.Added(Playlist playlist) { }

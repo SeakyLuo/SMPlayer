@@ -324,8 +324,9 @@ namespace SMPlayer
             var item = new MenuFlyoutItem()
             {
                 Icon = new FontIcon() { Glyph = "\uE838" },
-                Text = Helper.Localize("Show In Explorer")
+                Text = Helper.LocalizeText("ShowInExplorer")
             };
+            item.SetToolTip(Helper.LocalizeText("ShowInExplorerToolTip", path), false);
             item.Click += async (s, args) =>
             {
                 if (path.Contains(".") && await FileHelper.FileNotExist(path))
@@ -875,35 +876,98 @@ namespace SMPlayer
             }
             return parent;
         }
-        public static MenuFlyoutItem GetPreferItem(IPreferable data)
+
+        public static MenuFlyout SetFolderMenu(object sender, FolderTree folder, IMenuFlyoutItemClickListener clickListener = null, IMenuFlyoutHelperBuildListener buildListener = null, MenuFlyoutOption option = null)
         {
-            bool isPreferred = Settings.settings.Preference.IsPreferred(data);
-            MenuFlyoutItem item = new MenuFlyoutItem()
+            MenuFlyout flyout = SetMenu(helper => helper.GetPlaylistMenuFlyout(clickListener, option), sender, buildListener);
+            flyout.Items.Add(GetPreferItem(folder));
+            flyout.Items.Add(GetShowInExplorerItem(folder.Path, StorageItemTypes.Folder));
+            flyout.Items.Add(GetRefreshDirectoryItem(folder));
+            flyout.Items.Add(GetDeleteFolderItem(folder));
+            flyout.Items.Add(GetRenameFolderItem(folder,
+                                                async newName => await Settings.ValidateFolderName(folder.ParentPath, newName),
+                                                async newName => await Settings.settings.RenameFolder(folder, newName)));
+            flyout.Items.Add(GetSearchDirectoryItem(folder));
+            return flyout;
+        }
+
+        public static MenuFlyout SetSimpleFolderMenu(object sender, FolderTree folder, IMenuFlyoutItemClickListener clickListener = null, IMenuFlyoutHelperBuildListener buildListener = null, MenuFlyoutOption option = null)
+        {
+            MenuFlyout flyout = SetMenu(helper => helper.GetPlaylistMenuFlyout(clickListener, option), sender, buildListener);
+            flyout.Items.Add(GetPreferItem(folder));
+            flyout.Items.Add(GetShowInExplorerItem(folder.Path, StorageItemTypes.Folder));
+            flyout.Items.Add(GetSearchDirectoryItem(folder));
+            return flyout;
+        }
+
+        public static MenuFlyout SetAlbumMenu(object sender, AlbumView album, IMenuFlyoutItemClickListener clickListener = null, IMenuFlyoutHelperBuildListener buildListener = null, MenuFlyoutOption option = null)
+        {
+            MenuFlyout flyout = SetMenu(helper => helper.GetPlaylistMenuFlyout(clickListener, option), sender, buildListener);
+            flyout.Items.Add(GetPreferItem(album));
+            MenuFlyoutItem albumArtItem = new MenuFlyoutItem()
             {
-                Icon = new SymbolIcon(isPreferred ? Symbol.UnFavorite : Symbol.Favorite),
-                Text = Helper.LocalizeText(isPreferred ? "UndoPrefer" : "SetAsPreferred")
+                Icon = new SymbolIcon(Symbol.Pictures),
+                Text = Helper.Localize("See Album Art")
             };
-            item.Click += (sender, args) =>
+            albumArtItem.Click += async (s, args) =>
             {
-                string name = data.AsPreferenceItem().Name;
-                if (isPreferred)
+                await new AlbumDialog(AlbumDialogOption.AlbumArt, album).ShowAsync();
+            };
+            flyout.Items.Add(albumArtItem);
+            return flyout;
+        }
+
+        public static MenuFlyoutSubItem GetPreferItem(IPreferable data)
+        {
+            MenuFlyoutSubItem parent = new MenuFlyoutSubItem()
+            {
+                Icon = new SymbolIcon(Symbol.Favorite),
+                Text = Helper.LocalizeText("PreferenceSettings")
+            };
+            PreferenceItem preferenceItem = PreferenceSettings.GetPreferenceItem(data);
+            string name;
+            if (preferenceItem == null)
+            {
+                preferenceItem = data.AsPreferenceItem();
+                name = preferenceItem.Name;
+            }
+            else if (preferenceItem.Type == EntityType.MyFavorites && !preferenceItem.IsEnabled)
+            {
+                name = preferenceItem.Name;
+            }
+            else
+            {
+                name = preferenceItem.Name;
+                MenuFlyoutItem undoPrefer = new MenuFlyoutItem()
                 {
-                    Settings.settings.Preference.UndoPrefer(data);
+                    Text = Helper.LocalizeText("UndoPrefer"),
+                };
+                undoPrefer.Click += (sender, args) =>
+                {
+                    PreferenceSettings.settings.UndoPrefer(preferenceItem);
                     Helper.ShowNotificationRaw(Helper.LocalizeMessage("UndoPreferItem", name));
-                }
-                else
+                };
+                parent.Items.Add(undoPrefer);
+                parent.Items.Add(new MenuFlyoutSeparator());
+            }
+            foreach (PreferLevel level in EnumHelper.GetOrderedValues(typeof(PreferLevel)))
+            {
+                MenuFlyoutItem item = new ToggleMenuFlyoutItem()
                 {
-                    if (Settings.settings.Preference.Prefer(data))
+                    Text = Helper.LocalizeText(level.GetDescription()),
+                    IsChecked = preferenceItem.ThisId > 0 && preferenceItem.Level == level,
+                };
+                item.SetToolTip(level.GetToolTip());
+                item.Click += (sender, args) =>
+                {
+                    if (!PreferenceSettings.settings.Prefer(preferenceItem, level))
                     {
-                        Helper.ShowNotificationRaw(Helper.LocalizeMessage("SetItemAsPreferred", name));
+                        Helper.ShowNotification("SetAsPreferredFailed", 4000);
                     }
-                    else
-                    {
-                        Helper.ShowNotification("SetAsPreferredFailed");
-                    }
-                }
-            };
-            return item;
+                };
+                parent.Items.Add(item);
+            }
+            return parent;
         }
         public static MenuFlyout SetPlaylistMenu(object sender, IMenuFlyoutItemClickListener clickListener = null, IMenuFlyoutHelperBuildListener buildListener = null, MenuFlyoutOption option = null)
         {

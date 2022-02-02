@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Models;
+using SMPlayer.Models.VO;
 using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -28,7 +29,25 @@ namespace SMPlayer
 
         private void MenuFlyout_Opening(object sender, object e)
         {
-            MenuFlyoutHelper.SetPlaylistMenu(sender);
+            MenuFlyout menuFlyout = sender as MenuFlyout;
+            AlbumView albumView = menuFlyout.Target.DataContext as AlbumView;
+            switch (albumView.EntityType)
+            {
+                case EntityType.NowPlaying:
+                    MenuFlyoutHelper.SetPlaylistMenu(sender);
+                    break;
+                case EntityType.Playlist:
+                    MenuFlyoutHelper.SetPlaylistMenu(sender);
+                    menuFlyout.Items.Add(MenuFlyoutHelper.GetPreferItem(albumView.ToPlaylist()));
+                    break;
+                case EntityType.MyFavorites:
+                    MenuFlyoutHelper.SetPlaylistMenu(sender);
+                    menuFlyout.Items.Add(MenuFlyoutHelper.GetPreferItem(albumView.ToPlaylist()));
+                    break;
+                case EntityType.Album:
+                    MenuFlyoutHelper.SetAlbumMenu(sender, albumView);
+                    break;
+            }
             MenuFlyoutOpeningAction?.Invoke(sender, e);
         }
         private void PlayAllButton_Click(object sender, RoutedEventArgs e)

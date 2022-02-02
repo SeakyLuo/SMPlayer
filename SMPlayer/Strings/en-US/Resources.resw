@@ -480,12 +480,6 @@
   <data name="Least Played" xml:space="preserve">
     <value>Least Played</value>
   </data>
-  <data name="LeastPlayedPreferenceCheckBox.Content" xml:space="preserve">
-    <value>Least Played</value>
-  </data>
-  <data name="LeastPlayedPreferenceCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Your least-played songs will have a higher probability appearing in "Quick Play".</value>
-  </data>
   <data name="ListViewItem.Label" xml:space="preserve">
     <value>List View</value>
   </data>
@@ -555,12 +549,6 @@
   <data name="Most Played" xml:space="preserve">
     <value>Most Played</value>
   </data>
-  <data name="MostPlayedPreferenceCheckBox.Content" xml:space="preserve">
-    <value>Most Played</value>
-  </data>
-  <data name="MostPlayedPreferenceCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Your most-played songs will have a higher probability appearing in "Quick Play".</value>
-  </data>
   <data name="MultiSelect" xml:space="preserve">
     <value>Multi Select</value>
   </data>
@@ -602,12 +590,6 @@
   </data>
   <data name="My Favorites" xml:space="preserve">
     <value>My Favorites</value>
-  </data>
-  <data name="MyFavoritePreferenceCheckBox.Content" xml:space="preserve">
-    <value>My Favorites</value>
-  </data>
-  <data name="MyFavoritePreferenceCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>My favorites will have a higher probability appearing in "Quick Play".</value>
   </data>
   <data name="MyFavoritesItem.Content" xml:space="preserve">
     <value>My Favorites</value>
@@ -787,22 +769,22 @@
     <value>Preference Settings</value>
   </data>
   <data name="PreferenceSettingsInfoTextBlock.Text" xml:space="preserve">
-    <value>Your preferences will have a higher probability appearing in "Random Play" -&gt; "Quick Play".</value>
+    <value>Your preferences will have distinctive probabilities appearing in "Random Play" -&gt; "Quick Play" according to their preferred levels.</value>
   </data>
   <data name="PreferredAlbumsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Songs in preferred albums will have a higher probability appearing in "Quick Play".</value>
+    <value>Songs in preferred albums will have distinctive probabilities appearing in "Quick Play".</value>
   </data>
   <data name="PreferredArtistsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Songs by preferred artists will have a higher probability appearing in "Quick Play".</value>
+    <value>Songs by preferred artists will have distinctive probabilities appearing in "Quick Play".</value>
   </data>
   <data name="PreferredFoldersCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Songs under preferred folders (exclude sub-folders) will have a higher probability appearing in "Quick Play".</value>
+    <value>Songs under preferred folders (exclude sub-folders) will have distinctive probabilities appearing in "Quick Play".</value>
   </data>
   <data name="PreferredPlaylistsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Songs in preferred playlists will have a higher probability appearing in "Quick Play".</value>
+    <value>Songs in preferred playlists will have distinctive probabilities appearing in "Quick Play".</value>
   </data>
   <data name="PreferredSongsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Preferred songs will have a higher probability appearing in "Quick Play".</value>
+    <value>Preferred songs will have distinctive probabilities appearing in "Quick Play".</value>
   </data>
   <data name="PrevButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Previous</value>
@@ -839,12 +821,6 @@
   </data>
   <data name="RecentAddedItem.Header" xml:space="preserve">
     <value>Recently Added</value>
-  </data>
-  <data name="RecentAddedPreferenceCheckBox.Content" xml:space="preserve">
-    <value>Recent Added</value>
-  </data>
-  <data name="RecentAddedPreferenceCheckBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Recent added songs will have a higher probability appearing in "Quick Play".</value>
   </data>
   <data name="RecentItem.Content" xml:space="preserve">
     <value>Recent</value>
@@ -1080,9 +1056,6 @@
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
-  <data name="Show In Explorer" xml:space="preserve">
-    <value>Show In Explorer</value>
-  </data>
   <data name="Show Lyrics" xml:space="preserve">
     <value>Show Lyrics</value>
   </data>
@@ -1235,7 +1208,7 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
     <value>Normal</value>
   </data>
   <data name="PreferLevelComboBox.ToolTipService.ToolTip" xml:space="preserve">
-    <value>This means the probability of this item being randomly played.</value>
+    <value>This means the probability of this item appreaing in "Quick Play"</value>
   </data>
   <data name="ReleaseNotesPreferenceSettingsPreferenceLevelAdded.Text" xml:space="preserve">
     <value>You can now set the probability of preferred items in Preference Settings </value>
@@ -1278,5 +1251,11 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   </data>
   <data name="AlbumSearchBar.PlaceholderText" xml:space="preserve">
     <value>Search Album</value>
+  </data>
+  <data name="ReleaseNotesFixedPreferenceSettings.Text" xml:space="preserve">
+    <value>Fix the bug that preference settings are not working.</value>
+  </data>
+  <data name="ReleaseNotesPreferenceSettingsDislikedAndDoNotAppear.Text" xml:space="preserve">
+    <value>Now supports Do-Not-Appear and Dislike for Preference Settings, and fixed some bugs.</value>
   </data>
 </root>

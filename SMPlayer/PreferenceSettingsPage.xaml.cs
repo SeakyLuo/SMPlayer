@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Dialogs;
 using SMPlayer.Models;
+using SMPlayer.Models.VO;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -55,23 +56,24 @@ namespace SMPlayer
         public PreferenceSettingsPage()
         {
             this.InitializeComponent();
+            PreferenceSettings settings = PreferenceSettings.settings;
             MainPage.Instance?.SetHeaderText("PreferenceSettings");
-            PreferredSongsCheckBox.IsChecked = Settings.settings.Preference.Songs;
-            PreferredArtistsCheckBox.IsChecked = Settings.settings.Preference.Artists;
-            PreferredAlbumsCheckBox.IsChecked = Settings.settings.Preference.Albums;
-            PreferredPlaylistsCheckBox.IsChecked = Settings.settings.Preference.Playlists;
-            PreferredFoldersCheckBox.IsChecked = Settings.settings.Preference.Folders;
+            PreferredSongsCheckBox.IsChecked = settings.Songs;
+            PreferredArtistsCheckBox.IsChecked = settings.Artists;
+            PreferredAlbumsCheckBox.IsChecked = settings.Albums;
+            PreferredPlaylistsCheckBox.IsChecked = settings.Playlists;
+            PreferredFoldersCheckBox.IsChecked = settings.Folders;
 
-            PreferredOthers.Add(BuildView(Settings.settings.Preference.RecentAdded, PreferType.RecentAdded));
-            PreferredOthers.Add(BuildView(Settings.settings.Preference.MyFavorites, PreferType.MyFavorites));
-            PreferredOthers.Add(BuildView(Settings.settings.Preference.MostPlayed, PreferType.MostPlayed));
-            PreferredOthers.Add(BuildView(Settings.settings.Preference.LeastPlayed, PreferType.LeastPlayed));
+            PreferredOthers.Add(BuildView(PreferenceSettings.FindRecentAdded, EntityType.RecentAdded));
+            PreferredOthers.Add(BuildView(PreferenceSettings.FindMyFavorites, EntityType.MyFavorites));
+            PreferredOthers.Add(BuildView(PreferenceSettings.FindMostPlayed, EntityType.MostPlayed));
+            PreferredOthers.Add(BuildView(PreferenceSettings.FindLeastPlayed, EntityType.LeastPlayed));
 
-            PreferredSongs = ConvertToViews(Settings.settings.Preference.PreferredSongs, PreferType.Song);
-            PreferredArtists = ConvertToViews(Settings.settings.Preference.PreferredArtists, PreferType.Artist);
-            PreferredAlbums = ConvertToViews(Settings.settings.Preference.PreferredAlbums, PreferType.Album);
-            PreferredPlaylists = ConvertToViews(Settings.settings.Preference.PreferredPlaylists, PreferType.Playlist);
-            PreferredFolders = ConvertToViews(Settings.settings.Preference.PreferredFolders, PreferType.Folder);
+            PreferredSongs = ConvertToViews(PreferenceSettings.FindPreferredSongs, EntityType.Song);
+            PreferredArtists = ConvertToViews(PreferenceSettings.FindPreferredArtists, EntityType.Artist);
+            PreferredAlbums = ConvertToViews(PreferenceSettings.FindPreferredAlbums, EntityType.Album);
+            PreferredPlaylists = ConvertToViews(PreferenceSettings.FindPreferredPlaylists, EntityType.Playlist);
+            PreferredFolders = ConvertToViews(PreferenceSettings.FindPreferredFolders, EntityType.Folder);
 
             LimitedPreferredSongs = new ObservableCollection<PreferenceItemView>(PreferredSongs.Take(MaxLimitedPreferredSongs));
             LimitedPreferredArtists = new ObservableCollection<PreferenceItemView>(PreferredArtists.Take(MaxLimitedPreferredArtists));
@@ -101,28 +103,27 @@ namespace SMPlayer
                                              = Helper.LocalizeText("ExpandList");
         }
 
-        private void SetExpandButtonVisibility(PreferType type)
+        private void SetExpandButtonVisibility(EntityType type)
         {
             GetExpandButton(type).Visibility = GetPreferenceViewByType(type).Count > GetLimitedPreferenceViewByType(type).Count ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        private void SetClearInvalidButtonVisibility(PreferType type)
+        private void SetClearInvalidButtonVisibility(EntityType type)
         {
             GetClearInvalidButton(type).Visibility = GetPreferenceViewByType(type).Any(i => !i.IsValid) ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        private ObservableCollection<PreferenceItemView> ConvertToViews(List<PreferenceItem> items, PreferType type)
+        private ObservableCollection<PreferenceItemView> ConvertToViews(List<PreferenceItem> items, EntityType type)
         {
-            return new ObservableCollection<PreferenceItemView>(items.AsParallel().AsOrdered().Select(i => BuildView(i, type)));
+            return new ObservableCollection<PreferenceItemView>(items.AsParallel().Select(i => BuildView(i, type)).OrderByDescending(i => i.Id));
         }
 
-        private PreferenceItemView BuildView(PreferenceItem item, PreferType type)
+        private PreferenceItemView BuildView(PreferenceItem item, EntityType type)
         {
             PreferenceItemView view = item.AsView();
-            view.PreferType = type;
             switch (type)
             {
-                case PreferType.Song:
+                case EntityType.Song:
                     Music music = Settings.FindMusic(item.LongId);
                     if (music == null)
                     {
@@ -134,13 +135,13 @@ namespace SMPlayer
                         view.ToolTip = music.Path;
                     }
                     break;
-                case PreferType.Artist:
-                    view.ToolTip = view.Name = view.Id;
-                    view.IsValid = Settings.AllSongs.Any(i => i.Artist == view.Id);
+                case EntityType.Artist:
+                    view.ToolTip = view.Name = view.ItemId;
+                    view.IsValid = Settings.AllSongs.Any(i => i.Artist == view.ItemId);
                     break;
-                case PreferType.Album:
+                case EntityType.Album:
                     view.ToolTip = view.Name;
-                    string[] albumId = view.Id.Split(Helpers.TileHelper.StringConcatenationFlag);
+                    string[] albumId = view.ItemId.Split(Helpers.TileHelper.StringConcatenationFlag);
                     if (albumId.Length > 1)
                     {
                         string album = albumId[0], artist = albumId[1];
@@ -151,12 +152,12 @@ namespace SMPlayer
                         view.IsValid = false;
                     }
                     break;
-                case PreferType.Playlist:
+                case EntityType.Playlist:
                     Playlist playlist = Settings.FindPlaylist(item.LongId);
                     view.ToolTip = view.Name = playlist?.Name;
                     view.IsValid = playlist != null;
                     break;
-                case PreferType.Folder:
+                case EntityType.Folder:
                     FolderTree tree = Settings.FindFolderInfo(item.LongId);
                     if (tree == null)
                     {
@@ -168,19 +169,19 @@ namespace SMPlayer
                         view.ToolTip = tree.Path;
                     }
                     break;
-                case PreferType.RecentAdded:
+                case EntityType.RecentAdded:
                     view.Name = Helper.LocalizeText("RecentAdded");
                     view.ShowRemove = false;
                     break;
-                case PreferType.MyFavorites:
+                case EntityType.MyFavorites:
                     view.Name = Helper.LocalizeText("MyFavorites");
                     view.ShowRemove = false;
                     break;
-                case PreferType.MostPlayed:
+                case EntityType.MostPlayed:
                     view.Name = Helper.LocalizeText("MostPlayed");
                     view.ShowRemove = false;
                     break;
-                case PreferType.LeastPlayed:
+                case EntityType.LeastPlayed:
                     view.Name = Helper.LocalizeText("LeastPlayed");
                     view.ShowRemove = false;
                     break;
@@ -244,86 +245,86 @@ namespace SMPlayer
 
         private void PreferredSongsCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.Songs = true;
+            PreferenceSettings.settings.Songs = true;
         }
 
         private void PreferredSongsCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.Songs = false;
+            PreferenceSettings.settings.Songs = false;
         }
 
         private void PreferredArtistsCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.Artists = true;
+            PreferenceSettings.settings.Artists = true;
         }
 
         private void PreferredArtistsCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.Artists = false;
+            PreferenceSettings.settings.Artists = false;
         }
 
         private void PreferredAlbumsCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.Albums = true;
+            PreferenceSettings.settings.Albums = true;
         }
 
         private void PreferredAlbumsCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.Albums = false;
+            PreferenceSettings.settings.Albums = false;
         }
 
         private void PreferredPlaylistsCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.Playlists = true;
+            PreferenceSettings.settings.Playlists = true;
         }
 
         private void PreferredPlaylistsCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.Playlists = false;
+            PreferenceSettings.settings.Playlists = false;
         }
 
         private void PreferredFoldersCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.Folders = true;
+            PreferenceSettings.settings.Folders = true;
         }
 
         private void PreferredFoldersCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            Settings.settings.Preference.Folders = false;
+            PreferenceSettings.settings.Folders = false;
         }
 
         private void ClearInvalidPreferredSongsButton_Click(object sender, RoutedEventArgs e)
         {
-            ClearInvalid(PreferType.Song);
+            ClearInvalid(EntityType.Song);
         }
 
         private void ClearInvalidPreferredArtistsButton_Click(object sender, RoutedEventArgs e)
         {
-            ClearInvalid(PreferType.Artist);
+            ClearInvalid(EntityType.Artist);
         }
 
         private void ClearInvalidPreferredAlbumsButton_Click(object sender, RoutedEventArgs e)
         {
-            ClearInvalid(PreferType.Album);
+            ClearInvalid(EntityType.Album);
         }
 
         private void ClearInvalidPreferredPlaylistsButton_Click(object sender, RoutedEventArgs e)
         {
-            ClearInvalid(PreferType.Playlist);
+            ClearInvalid(EntityType.Playlist);
         }
 
         private void ClearInvalidPreferredFoldersButton_Click(object sender, RoutedEventArgs e)
         {
-            ClearInvalid(PreferType.Folder);
+            ClearInvalid(EntityType.Folder);
         }
 
-        private void ClearInvalid(PreferType type)
+        private void ClearInvalid(EntityType type)
         {
             ObservableCollection<PreferenceItemView> views = GetPreferenceViewByType(type);
             
             List<PreferenceItem> models = GetPreferenceByType(type);
-            HashSet<string> invalidIds = views.Where(i => !i.IsValid).Select(i => i.Id).ToHashSet();
-            views.RemoveAll(i => invalidIds.Contains(i.Id));
+            HashSet<string> invalidIds = views.Where(i => !i.IsValid).Select(i => i.ItemId).ToHashSet();
+            views.RemoveAll(i => invalidIds.Contains(i.ItemId));
             models.RemoveAll(i => invalidIds.Contains(i.Id));
 
             ObservableCollection<PreferenceItemView> limitedViews = GetLimitedPreferenceViewByType(type);
@@ -354,14 +355,14 @@ namespace SMPlayer
 
         private void RemovePreference(PreferenceItemView view)
         {
-            PreferType type = view.PreferType;
-            GetPreferenceByType(type).RemoveAll(i => i.Id == view.Id);
+            PreferenceSettings.settings.UndoPrefer(view);
+            EntityType type = view.PreferType;
             ObservableCollection<PreferenceItemView> views = GetPreferenceViewByType(type);
-            views.RemoveAll(i => i.Id == view.Id);
+            views.RemoveAll(i => i.ItemId == view.ItemId);
             // 写成下面这样而不是注释中这样，是为了更好的UI动画效果
             // GetLimitedPreferenceViewByType(type).SetTo(views.Take(GetMaxLimitedPreferenceViewByType(type)));
             ObservableCollection<PreferenceItemView> limitedViews = GetLimitedPreferenceViewByType(type);
-            int index = limitedViews.FindIndex(i => i.Id == view.Id);
+            int index = limitedViews.FindIndex(i => i.ItemId == view.ItemId);
             limitedViews.RemoveAt(index);
             limitedViews.AddRange(views.GetRange(limitedViews.Count, GetMaxLimitedPreferenceViewByType(type)));
 
@@ -383,19 +384,19 @@ namespace SMPlayer
         private void PreferredArtistsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             PreferredListView_ItemClick(sender, e,
-                                        view => MainPage.Instance.NavigateToPage(typeof(ArtistsPage), view.Id));
+                                        view => MainPage.Instance.NavigateToPage(typeof(ArtistsPage), view.ItemId));
         }
 
         private void PreferredAlbumsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             PreferredListView_ItemClick(sender, e,
-                                        view => MainPage.Instance.NavigateToPage(typeof(AlbumPage), view.Id));
+                                        view => MainPage.Instance.NavigateToPage(typeof(AlbumPage), view.ItemId));
         }
 
         private void PreferredPlaylistsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             PreferredListView_ItemClick(sender, e,
-                                        view => MainPage.Instance.NavigateToPage(typeof(PlaylistsPage), view.Id));
+                                        view => MainPage.Instance.NavigateToPage(typeof(PlaylistsPage), view.ItemId));
         }
 
         private void PreferredFoldersListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -419,7 +420,7 @@ namespace SMPlayer
             }
         }
 
-        private void ExpandButton_Click(object sender, PreferType type)
+        private void ExpandButton_Click(object sender, EntityType type)
         {
             // 开始动画
             GetExpandAnimationByType(type).Begin();
@@ -443,27 +444,27 @@ namespace SMPlayer
 
         private void ExpandPreferredSongsButton_Click(object sender, RoutedEventArgs e)
         {
-            ExpandButton_Click(sender, PreferType.Song);
+            ExpandButton_Click(sender, EntityType.Song);
         }
 
         private void ExpandPreferredArtistsButton_Click(object sender, RoutedEventArgs e)
         {
-            ExpandButton_Click(sender, PreferType.Artist);
+            ExpandButton_Click(sender, EntityType.Artist);
         }
 
         private void ExpandPreferredAlbumsButton_Click(object sender, RoutedEventArgs e)
         {
-            ExpandButton_Click(sender, PreferType.Album);
+            ExpandButton_Click(sender, EntityType.Album);
         }
 
         private void ExpandPreferredPlaylistsButton_Click(object sender, RoutedEventArgs e)
         {
-            ExpandButton_Click(sender, PreferType.Playlist);
+            ExpandButton_Click(sender, EntityType.Playlist);
         }
 
         private void ExpandPreferredFoldersButton_Click(object sender, RoutedEventArgs e)
         {
-            ExpandButton_Click(sender, PreferType.Folder);
+            ExpandButton_Click(sender, EntityType.Folder);
         }
 
         private void IsEnabledToggleSwitch_Toggled(object sender, RoutedEventArgs e)
@@ -472,14 +473,8 @@ namespace SMPlayer
             toggleSwitch.SetToolTip(toggleSwitch.IsOn ? "IsEnabledToggleSwitchOnToolTip" : "IsEnabledToggleSwitchOffToolTip");
             if (toggleSwitch.DataContext is PreferenceItemView view)
             {
-                if (GetOthersPreferenceByType(view.PreferType) is PreferenceItem other)
-                {
-                    other.IsEnabled = !other.IsEnabled;
-                }
-                else
-                {
-                    GetPreferenceByType(view.PreferType).Find(i => i.Id == view.Id).IsEnabled = view.IsEnabled = !view.IsEnabled;
-                }
+                view.IsEnabled = toggleSwitch.IsOn;
+                PreferenceSettings.UpdatePreference(view.AsPreferenceItem());
             }
         }
 
@@ -488,7 +483,7 @@ namespace SMPlayer
             args.ItemContainer.Background = GetRowBackground(args.ItemIndex);
         }
 
-        private void AlternateRowBackgroud(PreferType type, int start, int end)
+        private void AlternateRowBackgroud(EntityType type, int start, int end)
         {
             ListView listView = GetPreferredListViewByType(type);
             for (int i = start; i < end; i++)
@@ -496,33 +491,13 @@ namespace SMPlayer
                     container.Background = GetRowBackground(i);
         }
 
-        private List<PreferLevel> preferLevels = new List<PreferLevel>() { PreferLevel.Low, PreferLevel.Normal, PreferLevel.High, PreferLevel.Higher };
         private void PreferLevelComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox comboBox = (sender as ComboBox);
-             PreferLevel preferLevel = preferLevels[comboBox.SelectedIndex];
-
-            PreferenceItemView item = comboBox.DataContext as PreferenceItemView;
-            item.Level = preferLevel;
-
-            switch (item.PreferType)
+            if (comboBox.DataContext is PreferenceItemView item)
             {
-                case PreferType.RecentAdded:
-                case PreferType.MyFavorites:
-                case PreferType.MostPlayed:
-                case PreferType.LeastPlayed:
-                    GetOthersPreferenceByType(item.PreferType).Level = preferLevel;
-                    break;
-                default:
-                    GetPreferenceByType(item.PreferType).Find(i => i.Id == item.Id).Level = preferLevel;
-                    break;
+                PreferenceSettings.UpdatePreference(item.AsPreferenceItem());
             }
-        }
-
-        private void PreferLevelComboBox_Loaded(object sender, RoutedEventArgs e)
-        {
-            ComboBox comboBox = (sender as ComboBox);
-            comboBox.SelectedIndex = preferLevels.IndexOf((comboBox.DataContext as PreferenceItemView).Level);
         }
 
         public static Brush GetRowBackground(int index)
@@ -535,181 +510,181 @@ namespace SMPlayer
             PreferenceItemView view = e.ClickedItem as PreferenceItemView;
             switch (view.PreferType)
             {
-                case PreferType.RecentAdded:
+                case EntityType.RecentAdded:
                     MainPage.Instance.NavigateToPage(typeof(RecentPage), "RecentAdded");
                     break;
-                case PreferType.MyFavorites:
+                case EntityType.MyFavorites:
                     MainPage.Instance.NavigateToPage(typeof(MyFavoritesPage));
                     break;
-                case PreferType.MostPlayed:
-                case PreferType.LeastPlayed:
+                case EntityType.MostPlayed:
+                case EntityType.LeastPlayed:
                     break;
             }
         }
 
-        private ObservableCollection<PreferenceItemView> GetPreferenceViewByType(PreferType type)
+        private ObservableCollection<PreferenceItemView> GetPreferenceViewByType(EntityType type)
         {
             switch (type)
             {
-                case PreferType.Song:
+                case EntityType.Song:
                     return PreferredSongs;
-                case PreferType.Artist:
+                case EntityType.Artist:
                     return PreferredArtists;
-                case PreferType.Album:
+                case EntityType.Album:
                     return PreferredAlbums;
-                case PreferType.Playlist:
+                case EntityType.Playlist:
                     return PreferredPlaylists;
-                case PreferType.Folder:
+                case EntityType.Folder:
                     return PreferredFolders;
                 default:
                     return new ObservableCollection<PreferenceItemView>();
             }
         }
 
-        private ObservableCollection<PreferenceItemView> GetLimitedPreferenceViewByType(PreferType type)
+        private ObservableCollection<PreferenceItemView> GetLimitedPreferenceViewByType(EntityType type)
         {
             switch (type)
             {
-                case PreferType.Song:
+                case EntityType.Song:
                     return LimitedPreferredSongs;
-                case PreferType.Artist:
+                case EntityType.Artist:
                     return LimitedPreferredArtists;
-                case PreferType.Album:
+                case EntityType.Album:
                     return LimitedPreferredAlbums;
-                case PreferType.Playlist:
+                case EntityType.Playlist:
                     return LimitedPreferredPlaylists;
-                case PreferType.Folder:
+                case EntityType.Folder:
                     return LimitedPreferredFolders;
                 default:
                     return new ObservableCollection<PreferenceItemView>();
             }
         }
 
-        private List<PreferenceItem> GetPreferenceByType(PreferType type)
+        private List<PreferenceItem> GetPreferenceByType(EntityType type)
         {
             switch (type)
             {
-                case PreferType.Song:
-                    return Settings.settings.Preference.PreferredSongs;
-                case PreferType.Artist:
-                    return Settings.settings.Preference.PreferredArtists;
-                case PreferType.Album:
-                    return Settings.settings.Preference.PreferredAlbums;
-                case PreferType.Playlist:
-                    return Settings.settings.Preference.PreferredPlaylists;
-                case PreferType.Folder:
-                    return Settings.settings.Preference.PreferredFolders;
+                case EntityType.Song:
+                    return PreferenceSettings.FindPreferredSongs;
+                case EntityType.Artist:
+                    return PreferenceSettings.FindPreferredArtists;
+                case EntityType.Album:
+                    return PreferenceSettings.FindPreferredAlbums;
+                case EntityType.Playlist:
+                    return PreferenceSettings.FindPreferredPlaylists;
+                case EntityType.Folder:
+                    return PreferenceSettings.FindPreferredFolders;
                 default:
                     return new List<PreferenceItem>();
             }
         }
 
-        private PreferenceItem GetOthersPreferenceByType(PreferType type)
+        private PreferenceItem GetOthersPreferenceByType(EntityType type)
         {
             switch (type)
             {
-                case PreferType.RecentAdded:
-                    return Settings.settings.Preference.RecentAdded;
-                case PreferType.MyFavorites:
-                    return Settings.settings.Preference.MyFavorites;
-                case PreferType.MostPlayed:
-                    return Settings.settings.Preference.MostPlayed;
-                case PreferType.LeastPlayed:
-                    return Settings.settings.Preference.LeastPlayed;
+                case EntityType.RecentAdded:
+                    return PreferenceSettings.FindRecentAdded;
+                case EntityType.MyFavorites:
+                    return PreferenceSettings.FindMyFavorites;
+                case EntityType.MostPlayed:
+                    return PreferenceSettings.FindMostPlayed;
+                case EntityType.LeastPlayed:
+                    return PreferenceSettings.FindLeastPlayed;
                 default:
                     return null;
             }
         }
 
-        private AppBarButton GetExpandButton(PreferType type)
+        private AppBarButton GetExpandButton(EntityType type)
         {
             switch (type)
             {
-                case PreferType.Song:
+                case EntityType.Song:
                     return ExpandPreferredSongsButton;
-                case PreferType.Artist:
+                case EntityType.Artist:
                     return ExpandPreferredArtistsButton;
-                case PreferType.Album:
+                case EntityType.Album:
                     return ExpandPreferredAlbumsButton;
-                case PreferType.Playlist:
+                case EntityType.Playlist:
                     return ExpandPreferredPlaylistsButton;
-                case PreferType.Folder:
+                case EntityType.Folder:
                     return ExpandPreferredFoldersButton;
                 default:
                     return null;
             }
         }
 
-        private Storyboard GetExpandAnimationByType(PreferType type)
+        private Storyboard GetExpandAnimationByType(EntityType type)
         {
             switch (type)
             {
-                case PreferType.Song:
+                case EntityType.Song:
                     return ExpandSongsSpinArrowAnimation;
-                case PreferType.Artist:
+                case EntityType.Artist:
                     return ExpandArtistsSpinArrowAnimation;
-                case PreferType.Album:
+                case EntityType.Album:
                     return ExpandAlbumsSpinArrowAnimation;
-                case PreferType.Playlist:
+                case EntityType.Playlist:
                     return ExpandPlaylistsSpinArrowAnimation;
-                case PreferType.Folder:
+                case EntityType.Folder:
                     return ExpandFoldersSpinArrowAnimation;
                 default:
                     return null;
             }
         }
 
-        private AppBarButton GetClearInvalidButton(PreferType type)
+        private AppBarButton GetClearInvalidButton(EntityType type)
         {
             switch (type)
             {
-                case PreferType.Song:
+                case EntityType.Song:
                     return ClearInvalidPreferredSongsButton;
-                case PreferType.Artist:
+                case EntityType.Artist:
                     return ClearInvalidPreferredArtistsButton;
-                case PreferType.Album:
+                case EntityType.Album:
                     return ClearInvalidPreferredAlbumsButton;
-                case PreferType.Playlist:
+                case EntityType.Playlist:
                     return ClearInvalidPreferredPlaylistsButton;
-                case PreferType.Folder:
+                case EntityType.Folder:
                     return ClearInvalidPreferredFoldersButton;
                 default:
                     return null;
             }
         }
 
-        private ListView GetPreferredListViewByType(PreferType type)
+        private ListView GetPreferredListViewByType(EntityType type)
         {
             switch (type)
             {
-                case PreferType.Song:
+                case EntityType.Song:
                     return PreferredSongsListView;
-                case PreferType.Artist:
+                case EntityType.Artist:
                     return PreferredArtistsListView;
-                case PreferType.Album:
+                case EntityType.Album:
                     return PreferredAlbumsListView;
-                case PreferType.Playlist:
+                case EntityType.Playlist:
                     return PreferredPlaylistsListView;
-                case PreferType.Folder:
+                case EntityType.Folder:
                     return PreferredFoldersListView;
                 default:
                     return null;
             }
         }
 
-        private int GetMaxLimitedPreferenceViewByType(PreferType type)
+        private int GetMaxLimitedPreferenceViewByType(EntityType type)
         {
             switch (type)
             {
-                case PreferType.Song:
+                case EntityType.Song:
                     return MaxLimitedPreferredSongs;
-                case PreferType.Artist:
+                case EntityType.Artist:
                     return MaxLimitedPreferredArtists;
-                case PreferType.Album:
+                case EntityType.Album:
                     return MaxLimitedPreferredAlbums;
-                case PreferType.Playlist:
+                case EntityType.Playlist:
                     return MaxLimitedPreferredPlaylists;
-                case PreferType.Folder:
+                case EntityType.Folder:
                     return MaxLimitedPreferredFolders;
                 default:
                     return 0;

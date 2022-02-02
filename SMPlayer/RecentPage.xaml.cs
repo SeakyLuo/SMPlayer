@@ -26,7 +26,12 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class RecentPage : Page, IMultiSelectListener, IMenuFlyoutHelperBuildListener, IMusicEventListener, IRecentEventListener
     {
-        public static RecentTimeLine RecentAdded;
+        public static RecentTimeLine RecentAdded
+        {
+            get => recentTimeLine ?? (recentTimeLine = RecentTimeLine.FromAllSongs());
+            set => recentTimeLine = value;
+        }
+        private static RecentTimeLine recentTimeLine;
         private const string JsonFileName = "RecentAddedTimeLine";
         private static bool AddedModified = true, PlayedModifed = true, SearchModified = true;
         private readonly ObservableCollection<string> RecentSearches = new ObservableCollection<string>();
@@ -61,31 +66,28 @@ namespace SMPlayer
             };
         }
 
-        public static void Save()
+        public static void Init()
         {
+            RecentAdded = RecentTimeLine.FromAllSongs();
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (RecentAdded == null)
+            RecentAdded.CollectionChanged += (args) =>
             {
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                if (args.Type == MusicEventType.Add)
                 {
-                    RecentAdded = RecentTimeLine.FromMusicList(Settings.AllSongs);
-                    RecentAdded.CollectionChanged += (args) =>
-                    {
-                        if (args.Type == MusicEventType.Add)
-                        {
-                            AddedMusicView.AddOrMoveToTheFirst(args.Item);
-                        }
-                        else
-                        {
-                            AddedMusicView.RemoveMusic(args.Item);
-                        }
-                    };
-                    SetupAdded();
-                });
-            }
+                    AddedMusicView.AddOrMoveToTheFirst(args.Item);
+                }
+                else
+                {
+                    AddedMusicView.RemoveMusic(args.Item);
+                }
+            };
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                SetupAdded();
+            });
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

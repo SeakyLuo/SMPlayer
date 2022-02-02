@@ -28,6 +28,7 @@ namespace SMPlayer.Helpers
             if (settings == null)
             {
                 Settings.settings = new Settings();
+                PreferenceSettings.settings = new PreferenceSettings();
             }
             else
             {
@@ -44,6 +45,7 @@ namespace SMPlayer.Helpers
                 return;
             }
             await Init(Settings.settings = SQLHelper.Run(c => c.SelectSettings()));
+            PreferenceSettings.settings = SQLHelper.Run(c => c.SelectPreferenceSettings()) ?? new PreferenceSettings();
             Inited = true;
         }
 
@@ -63,7 +65,11 @@ namespace SMPlayer.Helpers
             string json = await JsonFileHelper.ReadAsync(JsonFilename);
             if (string.IsNullOrEmpty(json))
             {
-                SQLHelper.Run(c => InsertMyFavoritesAndSettings(c));
+                SQLHelper.Run(c =>
+                {
+                    InsertMyFavoritesAndSettings(c);
+                    InsertPreferenceSettings(c, PreferenceSettings.settings = new PreferenceSettings());
+                });
                 return;
             }
             var jsonObject = JsonFileHelper.FromJson<JObject>(json);
@@ -105,6 +111,7 @@ namespace SMPlayer.Helpers
             if (Settings.settings == null) return;
             Settings.settings.MusicProgress = MusicPlayer.Position;
             SQLHelper.Run(c => c.Update(Settings.settings.ToDAO()));
+            SQLHelper.Run(c => c.UpdatePreferenceSettings(PreferenceSettings.settings));
         }
 
         private static async Task Init(Settings settings)
@@ -181,7 +188,7 @@ namespace SMPlayer.Helpers
                 if (c.SelectFolderInfo(item.Id) is FolderTree result)
                 {
                     item.Id = result.Id.ToString();
-                    c.InsertPreferenceItem(item, PreferType.Folder);
+                    c.InsertPreferenceItem(item, EntityType.Folder);
                 }
             }
             foreach (PreferenceItem item in settings.PreferredSongs)
@@ -189,7 +196,7 @@ namespace SMPlayer.Helpers
                 if (c.SelectMusicByPath(item.Id) is Music result)
                 {
                     item.Id = result.Id.ToString();
-                    c.InsertPreferenceItem(item, PreferType.Song);
+                    c.InsertPreferenceItem(item, EntityType.Song);
                 }
             }
             foreach (PreferenceItem item in settings.PreferredPlaylists)
@@ -197,23 +204,24 @@ namespace SMPlayer.Helpers
                 if (c.SelectPlaylistByName(item.Id) is Playlist result)
                 {
                     item.Id = result.Id.ToString();
-                    c.InsertPreferenceItem(item, PreferType.Playlist);
+                    c.InsertPreferenceItem(item, EntityType.Playlist);
                 }
             }
             foreach (PreferenceItem item in settings.PreferredAlbums)
             {
-                c.InsertPreferenceItem(item, PreferType.Album);
+                c.InsertPreferenceItem(item, EntityType.Album);
             }
             foreach (PreferenceItem item in settings.PreferredArtists)
             {
-                c.InsertPreferenceItem(item, PreferType.Artist);
+                c.InsertPreferenceItem(item, EntityType.Artist);
             }
             PreferenceSettingsDAO dao = settings.ToDAO();
-            dao.MostPlayedId = c.InsertPreferenceItem(settings.MostPlayed, PreferType.MostPlayed).Id;
-            dao.LeastPlayedId = c.InsertPreferenceItem(settings.LeastPlayed, PreferType.LeastPlayed).Id;
-            dao.RecentAddedId = c.InsertPreferenceItem(settings.RecentAdded, PreferType.RecentAdded).Id;
-            dao.MyFavoritesId = c.InsertPreferenceItem(settings.MyFavorites, PreferType.MyFavorites).Id;
+            dao.MostPlayedId = c.InsertPreferenceItem(settings.MostPlayed, EntityType.MostPlayed).Id;
+            dao.LeastPlayedId = c.InsertPreferenceItem(settings.LeastPlayed, EntityType.LeastPlayed).Id;
+            dao.RecentAddedId = c.InsertPreferenceItem(settings.RecentAdded, EntityType.RecentAdded).Id;
+            dao.MyFavoritesId = c.InsertPreferenceItem(settings.MyFavorites, EntityType.MyFavorites).Id;
             c.Insert(dao);
+            PreferenceSettings.settings = settings;
         }
 
         private static void InsertRecentPlayed(SQLiteConnection c, Settings settings)

@@ -21,7 +21,11 @@ namespace SMPlayer
         public static double Position
         {
             get => Player.PlaybackSession.Position.TotalSeconds;
-            set => Player.PlaybackSession.Position = TimeSpan.FromSeconds(value);
+            set {
+                Log.Debug("MusicPlayer Position Set");
+                Player.PlaybackSession.Position = TimeSpan.FromSeconds(value);
+
+            }
         }
         public static double Progress
         {

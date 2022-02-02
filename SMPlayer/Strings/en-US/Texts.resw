@@ -282,6 +282,42 @@
   <data name="PreferenceSettings" xml:space="preserve">
     <value>Preference Settings</value>
   </data>
+  <data name="PreferLevelDislike" xml:space="preserve">
+    <value>Dislike</value>
+  </data>
+  <data name="PreferLevelDislikeToolTip" xml:space="preserve">
+    <value>Disliked items will appear less in Quick Play.</value>
+  </data>
+  <data name="PreferLevelDoNotAppear" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
+  <data name="PreferLevelDoNotAppearToolTip" xml:space="preserve">
+    <value>This item will not appear in Quick Play.</value>
+  </data>
+  <data name="PreferLevelHigh" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="PreferLevelHigher" xml:space="preserve">
+    <value>Higher</value>
+  </data>
+  <data name="PreferLevelHigherToolTip" xml:space="preserve">
+    <value>Higher-Level items will have higher probabilities appearing in Quick Play.</value>
+  </data>
+  <data name="PreferLevelHighToolTip" xml:space="preserve">
+    <value>High-Level items will have very normal probabilities appearing in Quick Play.</value>
+  </data>
+  <data name="PreferLevelNormal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="PreferLevelNormalToolTip" xml:space="preserve">
+    <value>Normal-Level items will have very normal probabilities appearing in Quick Play.</value>
+  </data>
+  <data name="PreferLevelVeryHigh" xml:space="preserve">
+    <value>Very High</value>
+  </data>
+  <data name="PreferLevelVeryHighToolTip" xml:space="preserve">
+    <value>Very-High-Level items will have very high probabilities appearing in Quick Play.</value>
+  </data>
   <data name="PreferredAlbums" xml:space="preserve">
     <value>Preferred Albums</value>
   </data>
@@ -350,6 +386,12 @@
   </data>
   <data name="ShareFeedbacks" xml:space="preserve">
     <value>Feedbacks about SMPlayer</value>
+  </data>
+  <data name="ShowInExplorer" xml:space="preserve">
+    <value>Show In Explorer</value>
+  </data>
+  <data name="ShowInExplorerToolTip" xml:space="preserve">
+    <value>Show "{0}" in explorer</value>
   </data>
   <data name="ShuffleAndPlay" xml:space="preserve">
     <value>Shuffle and play</value>

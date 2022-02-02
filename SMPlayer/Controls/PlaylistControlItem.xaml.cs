@@ -35,14 +35,7 @@ namespace SMPlayer.Controls
         private void Album_Click(object sender, RoutedEventArgs e)
         {
             if (NowPlayingFullPage.Instance != null) NowPlayingFullPage.Instance.GoBack();
-            var playlist = new System.Collections.ObjectModel.ObservableCollection<Music>();
-            foreach (var music in Settings.AllSongs)
-                if (music.Album == Data.Album)
-                    playlist.Add(music);
-            MainPage.Instance.NavigateToPage(typeof(AlbumPage), new AlbumView(Data.Album, Data.Artist)
-            {
-                Songs = playlist,
-            });
+            MainPage.Instance.NavigateToPage(typeof(AlbumPage), Settings.FindAlbum(Data.Album, Data.Artist));
         }
         private void Artist_Click(object sender, RoutedEventArgs e)
         {

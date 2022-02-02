@@ -117,23 +117,6 @@ namespace SMPlayer
             Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
         }
 
-        private void MenuFlyout_Opening(object sender, object e)
-        {
-            MenuFlyout flyout = sender as MenuFlyout;
-            AlbumView album = flyout.Target.DataContext as AlbumView;
-            flyout.Items.Add(MenuFlyoutHelper.GetPreferItem(album));
-            MenuFlyoutItem albumArtItem = new MenuFlyoutItem()
-            {
-                Icon = new SymbolIcon(Symbol.Pictures),
-                Text = Helper.Localize("See Album Art")
-            };
-            albumArtItem.Click += async (s, args) =>
-            {
-                await new AlbumDialog(AlbumDialogOption.AlbumArt, album).ShowAsync();
-            };
-            flyout.Items.Add(albumArtItem);
-        }
-
         public void SaveAlbum(AlbumView album, BitmapImage image)
         {
             if (Suggestions.FirstOrDefault(a => a.Equals(album)) is AlbumView albumView)

@@ -282,6 +282,42 @@
   <data name="PreferenceSettings" xml:space="preserve">
     <value>偏好设置</value>
   </data>
+  <data name="PreferLevelDislike" xml:space="preserve">
+    <value>不喜欢</value>
+  </data>
+  <data name="PreferLevelDislikeToolTip" xml:space="preserve">
+    <value>不喜欢的项目会更少地出现在快速播放中</value>
+  </data>
+  <data name="PreferLevelDoNotAppear" xml:space="preserve">
+    <value>不出现</value>
+  </data>
+  <data name="PreferLevelDoNotAppearToolTip" xml:space="preserve">
+    <value>该项目不会出现在快速播放中</value>
+  </data>
+  <data name="PreferLevelHigh" xml:space="preserve">
+    <value>高</value>
+  </data>
+  <data name="PreferLevelHigher" xml:space="preserve">
+    <value>很高</value>
+  </data>
+  <data name="PreferLevelHigherToolTip" xml:space="preserve">
+    <value>偏好程度很高的项目会有很高的概率出现在快速播放中</value>
+  </data>
+  <data name="PreferLevelHighToolTip" xml:space="preserve">
+    <value>偏好程度高的项目会有高概率出现在快速播放中</value>
+  </data>
+  <data name="PreferLevelNormal" xml:space="preserve">
+    <value>正常</value>
+  </data>
+  <data name="PreferLevelNormalToolTip" xml:space="preserve">
+    <value>偏好程度正常的项目会有一定概率出现在快速播放中</value>
+  </data>
+  <data name="PreferLevelVeryHigh" xml:space="preserve">
+    <value>非常高</value>
+  </data>
+  <data name="PreferLevelVeryHighToolTip" xml:space="preserve">
+    <value>偏好程度非常高的项目会有非常高的概率出现在快速播放中</value>
+  </data>
   <data name="PreferredAlbums" xml:space="preserve">
     <value>偏好专辑</value>
   </data>
@@ -351,6 +387,12 @@
   <data name="ShareFeedbacks" xml:space="preserve">
     <value>对简音播放器的反馈</value>
   </data>
+  <data name="ShowInExplorer" xml:space="preserve">
+    <value>在本地显示</value>
+  </data>
+  <data name="ShowInExplorerToolTip" xml:space="preserve">
+    <value>在本地显示“{0}”</value>
+  </data>
   <data name="ShuffleAndPlay" xml:space="preserve">
     <value>随机播放</value>
   </data>
@@ -373,7 +415,7 @@
     <value>从我喜欢中移除</value>
   </data>
   <data name="UndoPrefer" xml:space="preserve">
-    <value>取消偏好</value>
+    <value>取消偏好设置</value>
   </data>
   <data name="UnPinToolTip" xml:space="preserve">
     <value>解除固定播放列表</value>

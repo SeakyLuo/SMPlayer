@@ -51,7 +51,7 @@ namespace SMPlayer
                 return page != null && (page == typeof(AlbumPage) || page == typeof(MyFavoritesPage));
             }
         }
-        private static bool switchPage = true;
+        private static bool switchPage = true, firstLoaded = true;
         public Type CurrentPage => NaviFrame.CurrentSourcePageType;
         public Frame NavigationFrame => NaviFrame;
         private InAppNotification Notification => BottomMultiSelectCommandBar.IsVisible ? Row2ShowResultInAppNotification : ShowResultInAppNotification;
@@ -123,18 +123,22 @@ namespace SMPlayer
             Window.Current.SetTitleBar(AppTitleBar);
             UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar);
 
-            foreach (var listener in MainPageLoadedListeners) listener.Invoke();
-            foreach (var listener in MainPageLoadedAsyncListeners) await listener.Invoke();
+            if (firstLoaded)
+            {
+                foreach (var listener in MainPageLoadedListeners) listener.Invoke();
+                foreach (var listener in MainPageLoadedAsyncListeners) await listener.Invoke();
 
-            if (switchPage)
-            {
-                SwitchPage(Settings.settings.LastPage);
-                switchPage = false;
-            }
-            if (!string.IsNullOrEmpty(Settings.settings.LastReleaseNotesVersion) &&
-                Settings.settings.LastReleaseNotesVersion != Helper.AppVersion)
-            {
-                SettingsPage.ShowReleaseNotes();
+                if (switchPage)
+                {
+                    SwitchPage(Settings.settings.LastPage);
+                    switchPage = false;
+                }
+                if (!string.IsNullOrEmpty(Settings.settings.LastReleaseNotesVersion) &&
+                    Settings.settings.LastReleaseNotesVersion != Helper.AppVersion)
+                {
+                    SettingsPage.ShowReleaseNotes();
+                }
+                firstLoaded = false;
             }
         }
 

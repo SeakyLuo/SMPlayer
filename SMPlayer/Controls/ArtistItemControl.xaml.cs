@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using SMPlayer.Models;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 
@@ -24,7 +25,10 @@ namespace SMPlayer
 
         private void MenuFlyout_Opening(object sender, object e)
         {
+            MenuFlyout flyout = sender as MenuFlyout;
+            var playlist = flyout.Target.DataContext as Playlist;
             MenuFlyoutHelper.SetPlaylistMenu(sender);
+            flyout.Items.Add(MenuFlyoutHelper.GetPreferItem(playlist.ToArtistView()));
         }
 
         private void PlayAllButton_Click(object sender, RoutedEventArgs e)

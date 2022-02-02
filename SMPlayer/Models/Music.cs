@@ -367,12 +367,7 @@ namespace SMPlayer.Models
 
         PreferenceItem IPreferable.AsPreferenceItem()
         {
-            return new PreferenceItem(Id.ToString(), Name);
-        }
-
-        PreferenceItemView IPreferable.AsPreferenceItemView()
-        {
-            return new PreferenceItemView(Id.ToString(), Name, Path, PreferType.Song);
+            return new PreferenceItem(Id.ToString(), Name, EntityType.Song);
         }
 
         public FolderFile ToFolderFile()

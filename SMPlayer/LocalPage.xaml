@@ -311,7 +311,7 @@
                 <templateselector:TreeViewStorageItemTemplateSelector>
                     <templateselector:TreeViewStorageItemTemplateSelector.FileTemplate>
                         <DataTemplate x:DataType="TreeViewNode">
-                            <Grid Background="Transparent" ToolTipService.ToolTip="{Binding Content.Path, Mode=OneWay}">
+                            <Grid Background="Transparent">
                                 <Grid.ContextFlyout>
                                     <MenuFlyout Opening="OpenMusicFlyout" />
                                 </Grid.ContextFlyout>
@@ -325,15 +325,25 @@
                                 <TextBlock
                                     Grid.Column="1"
                                     Margin="10,0"
-                                    Text="{Binding Content.Name, Mode=OneWay}" />
-                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Content.Name, Mode=OneWay}"
+                                    ToolTipService.ToolTip="{Binding Content.Path, Mode=OneWay}"/>
+                                <HyperlinkButton
+                                    x:Name="CreatorHyperLinkButton"
                                     Grid.Column="2"
                                     Margin="10,0"
-                                    Text="{Binding Content.Creator, Mode=OneWay}" />
-                                <TextBlock
+                                    Click="CreatorHyperLinkButton_Click"
+                                    Style="{StaticResource TextBlockButtonStyle}"
+                                    Foreground="Black"
+                                    Content="{Binding Content.Creator, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist, Mode=OneWay}" />
+                                <HyperlinkButton
+                                    x:Name="CollectionHyperLinkButton"
                                     Grid.Column="3"
                                     Margin="10,0"
-                                    Text="{Binding Content.Collection, Mode=OneWay}" />
+                                    Click="CollectionHyperLinkButton_Click"
+                                    Foreground="Black"
+                                    Style="{StaticResource TextBlockButtonStyle}"
+                                    Content="{Binding Content.Collection, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownAlbum, Mode=OneWay}" />
                             </Grid>
                         </DataTemplate>
                     </templateselector:TreeViewStorageItemTemplateSelector.FileTemplate>
@@ -351,7 +361,7 @@
                                 <TextBlock
                                     Grid.Column="1"
                                     Margin="10,0"
-                                    Text="{Binding Content.Name, Mode=OneWay}" />
+                                    Text="{Binding Content.Name, Mode=OneWay}"/>
                             </Grid>
                         </DataTemplate>
                     </templateselector:TreeViewStorageItemTemplateSelector.FolderTemplate>

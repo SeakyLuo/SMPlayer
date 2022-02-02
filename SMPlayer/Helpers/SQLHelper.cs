@@ -25,13 +25,14 @@ namespace SMPlayer.Helpers
         public static async Task<bool> Initialized()
         {
             if (Inited) return true;
-            return Inited = await FileHelper.FileExists(BuildDBPath());
+            return await FileHelper.FileExists(BuildDBPath());
         }
 
         public async static Task Init()
         {
             if (await Initialized())
             {
+                Run(c => c.CreateTable<PreferenceSettingsDAO>(CreateFlags.AllImplicit | CreateFlags.AutoIncPK));
                 return;
             }
             MainPage.AddMainPageLoadedListener(async () =>
@@ -138,6 +139,33 @@ namespace SMPlayer.Helpers
             return settings;
         }
 
+        public static PreferenceSettings SelectPreferenceSettings(this SQLiteConnection c)
+        {
+            PreferenceSettingsDAO dao;
+            try
+            {
+                dao = c.Query<PreferenceSettingsDAO>("select * from PreferenceSetting order by Id desc").FirstOrDefault() ??
+                      c.Query<PreferenceSettingsDAO>("select * from PreferenceSettings limit 1").FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Log.Warn("query PreferenceSetting failed {0}", e);
+                return null;
+            }
+            if (dao == null) return null;
+            PreferenceSettings settings = dao.FromDAO();
+            settings.RecentAdded = c.SelectPreferenceItem(dao.RecentAddedId).FromDAO();
+            settings.MyFavorites = c.SelectPreferenceItem(dao.MyFavoritesId).FromDAO();
+            settings.MostPlayed = c.SelectPreferenceItem(dao.MostPlayedId).FromDAO();
+            settings.LeastPlayed = c.SelectPreferenceItem(dao.LeastPlayedId).FromDAO();
+            return settings;
+        }
+
+        public static void UpdatePreferenceSettings(this SQLiteConnection c, PreferenceSettings settings)
+        {
+            c.Update(settings.ToDAO());
+        }
+
         public static MusicDAO InsertMusic(this SQLiteConnection c, Music src)
         {
             MusicDAO dao = src.ToDAO();
@@ -189,10 +217,19 @@ namespace SMPlayer.Helpers
             c.InsertAll(songs.Select(i => i.ToPlaylistItemDAO(id)));
         }
 
-        public static PreferenceItemDAO InsertPreferenceItem(this SQLiteConnection c, PreferenceItem src, PreferType type)
+        public static PreferenceItemDAO InsertPreferenceItem(this SQLiteConnection c, PreferenceItem src, EntityType type)
         {
             PreferenceItemDAO dao = src.ToDAO(type);
             c.Insert(dao);
+            src.ThisId = dao.Id;
+            return dao;
+        }
+
+        public static PreferenceItemDAO InsertPreferenceItem(this SQLiteConnection c, PreferenceItem src)
+        {
+            PreferenceItemDAO dao = src.ToDAO();
+            c.Insert(dao);
+            src.ThisId = dao.Id;
             return dao;
         }
 
@@ -343,7 +380,7 @@ namespace SMPlayer.Helpers
 
         public static Playlist SelectPlaylistByName(this SQLiteConnection c, string name)
         {
-            return c.Query<PlaylistDAO>("select * from Playlist where Name = ? and State = ?", name, ActiveState.Active).FirstOrDefault().FromDAO();
+            return c.Query<PlaylistDAO>("select * from Playlist where Name = ? and State = ?", name, ActiveState.Active).FirstOrDefault()?.FromDAO();
         }
 
         public static Playlist SelectPlaylistById(this SQLiteConnection c, long id)
@@ -360,7 +397,17 @@ namespace SMPlayer.Helpers
             return SelectMusicByIds(c, items.Select(i => i.ItemId));
         }
 
-        public static PreferenceItemDAO SelectPreferenceItem(this SQLiteConnection c, PreferType preferType, string itemId)
+        public static List<PreferenceItem> SelectPreferenceItems(this SQLiteConnection c, EntityType preferType)
+        {
+            return c.Query<PreferenceItemDAO>("select * from PreferenceItem where Type = ? and State = ?", preferType, ActiveState.Active).Select(i => i.FromDAO()).ToList();
+        }
+
+        public static PreferenceItemDAO SelectPreferenceItem(this SQLiteConnection c, long id)
+        {
+            return c.Query<PreferenceItemDAO>("select * from PreferenceItem where Id = ?", id, ActiveState.Active).FirstOrDefault();
+        }
+
+        public static PreferenceItemDAO SelectPreferenceItem(this SQLiteConnection c, EntityType preferType, string itemId)
         {
             return c.Query<PreferenceItemDAO>("select * from PreferenceItem where Type = ? and ItemId = ? and State = ?", preferType, itemId, ActiveState.Active).FirstOrDefault();
         }

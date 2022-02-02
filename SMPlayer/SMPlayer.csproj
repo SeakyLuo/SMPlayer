@@ -22,11 +22,12 @@
     <GenerateTestArtifacts>False</GenerateTestArtifacts>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm|arm64</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>A6824248C47BA68BA3246C6E77C7BAC6C11DDF28</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>
+    </PackageCertificateThumbprint>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
-    <PackageCertificateKeyFile />
+    <PackageCertificateKeyFile>SMPlayer_TemporaryKey.pfx</PackageCertificateKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -230,6 +231,8 @@
     <Compile Include="Helpers\ClassHelper.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\DAOHelper.cs" />
+    <Compile Include="Helpers\Enums\EnumDescription.cs" />
+    <Compile Include="Helpers\Enums\EnumHelper.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\Log.cs" />
@@ -254,6 +257,7 @@
     <Compile Include="Models\DAO\PreferenceSettingsDAO.cs" />
     <Compile Include="Models\DAO\RecentRecordDAO.cs" />
     <Compile Include="Models\DAO\SettingsDAO.cs" />
+    <Compile Include="Models\Enums\EntityType.cs" />
     <Compile Include="Models\FolderFile.cs" />
     <Compile Include="DataStructure\FullyObservableCollection.cs" />
     <Compile Include="DataStructure\LoadingCache.cs" />
@@ -273,7 +277,9 @@
     <Compile Include="Models\PreferenceSetting.cs" />
     <Compile Include="Models\RecentTimeLine.cs" />
     <Compile Include="Models\StorageItem.cs" />
+    <Compile Include="Models\VO\PreferLevelView.cs" />
     <Compile Include="Models\VO\GridViewStorageItem.cs" />
+    <Compile Include="Models\VO\PreferenceItemView.cs" />
     <Compile Include="Models\VO\TreeViewFolderFile.cs" />
     <Compile Include="PreferenceSettingsPage.xaml.cs">
       <DependentUpon>PreferenceSettingsPage.xaml</DependentUpon>

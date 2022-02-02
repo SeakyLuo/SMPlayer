@@ -26,10 +26,19 @@ namespace SMPlayer.Models
         private static readonly List<IRecentEventListener> RecentEventListeners = new List<IRecentEventListener>();
         public static IEnumerable<Music> AllSongs { get => SQLHelper.Run(c => c.SelectAllMusic()); }
         public static Playlist MyFavoritesPlaylist { get => FindPlaylist(settings.MyFavoritesId); }
-        public static IEnumerable<Music> MyFavoriteSongs { get => SQLHelper.Run(c => c.SelectPlaylistItems(settings.MyFavoritesId)); }
         public static List<Playlist> AllPlaylists
         {
-            get => SQLHelper.Run(c => c.SelectAllPlaylists(i => i.Id != settings.MyFavoritesId).ToList());
+            get => SQLHelper.Run(c => c.SelectAllPlaylists(i => i.Id != settings.MyFavoritesId));
+        }
+        public static List<Playlist> AllPlaylistsWithSongs
+        {
+            get => SQLHelper.Run(c => c.SelectAllPlaylists(i => i.Id != settings.MyFavoritesId))
+                             .AsParallel().AsOrdered()
+                             .Select(i =>
+                             {
+                                 i.Songs = new ObservableCollection<Music>(SQLHelper.Run(c => c.SelectPlaylistItems(i.Id)));
+                                 return i;
+                             }).ToList();
         }
         public static FolderTree Root { get => FindFolder(settings.Tree.Id) ?? new FolderTree(); }
         public static List<FolderTree> AllFolders { get => SQLHelper.Run(c => c.Query<FolderDAO>("select * from Folder where State = ?", ActiveState.Active))
@@ -43,7 +52,7 @@ namespace SMPlayer.Models
         public static Music FindMusic(long id) { return SQLHelper.Run(c => c.SelectMusicById(id)); }
         public static List<Music> FindMusicList(IEnumerable<long> ids) { return ids.IsEmpty() ? new List<Music>() : SQLHelper.Run(c => c.SelectMusicByIds(ids)); }
         public static Playlist FindPlaylist(long id) { return SQLHelper.Run(c => c.SelectPlaylistById(id)); }
-        public static Playlist FindPlaylist(Playlist playlist) { return FindPlaylist(playlist.Id); }
+        public static Playlist FindPlaylist(string name) { return SQLHelper.Run(c => c.SelectPlaylistByName(name)); }
         public static List<Music> FindPlaylistItems(long id) { return SQLHelper.Run(c => c.SelectPlaylistItems(id)); }
         public static FolderTree FindFolderInfo(long id)
         {
@@ -81,7 +90,6 @@ namespace SMPlayer.Models
         {
             return SQLHelper.Run(c => c.SelectFileByPath(path));
         }
-
         public static List<Music> RecentPlay
         {
             get => SQLHelper.Run(c => c.SelectRecentRecords(RecentType.Play)
@@ -89,13 +97,19 @@ namespace SMPlayer.Models
                                        .Select(i => c.SelectMusicById(long.Parse(i)))
                                        .ToList());
         }
-
         public static List<string> RecentSearch
         {
             get => SQLHelper.Run(c => c.SelectRecentRecords(RecentType.Search)
                                        .Select(r => r.ItemId)
                                        .ToList());
         }
+        public static AlbumView FindAlbum(string album, string artist)
+        {
+            return new AlbumView(album, artist)
+            {
+                Songs = new ObservableCollection<Music>(AllSongs.Where(music => music.Album == album)),
+            };
+        } 
 
         public long Id { get; set; }
         public string RootPath { get; set; } = "";
@@ -251,7 +265,7 @@ namespace SMPlayer.Models
             });
         }
 
-        public async void AddFile(FolderFile item)
+        public async Task AddFile(FolderFile item)
         {
             if (item.IsMusicFile())
             {
@@ -331,7 +345,7 @@ namespace SMPlayer.Models
             c.Execute("update File set State = ? where Path = ?", state, music.Path);
             c.Execute("update PlaylistItem set State = ? where ItemId = ?", state, music.Id);
             UpdateRecentRecordState(c, RecentType.Play, music.Id.ToString(), state);
-            c.Execute("update PreferenceItem set State = ? where Type = ? and ItemId = ? ", state, PreferType.Song, music.Id);
+            c.Execute("update PreferenceItem set State = ? where Type = ? and ItemId = ? ", state, EntityType.Song, music.Id);
         }
 
         public void Played(Music music)
@@ -451,7 +465,7 @@ namespace SMPlayer.Models
                 }
                 target.Name = newName;
                 c.UpdatePlaylist(playlist);
-                PreferenceItemDAO item = c.SelectPreferenceItem(PreferType.Playlist, playlist.Id.ToString());
+                PreferenceItemDAO item = c.SelectPreferenceItem(EntityType.Playlist, playlist.Id.ToString());
                 if (item != null)
                 {
                     item.ItemName = newName;

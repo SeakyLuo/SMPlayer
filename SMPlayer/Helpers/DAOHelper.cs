@@ -72,28 +72,33 @@ namespace SMPlayer.Helpers
 
         public static PreferenceItem FromDAO(this PreferenceItemDAO src)
         {
-            return new PreferenceItem()
+            return new PreferenceItem
             {
-                ItemId = src.Id,
+                ThisId = src.Id,
                 Id = src.ItemId,
                 Name = src.ItemName,
                 IsEnabled = src.IsEnabled,
-                Level = src.Level
+                Level = src.Level,
+                Type = src.Type,
             };
         }
 
-        public static PreferenceItemDAO ToDAO(this PreferenceItem src, PreferType preferType)
+        public static PreferenceItemDAO ToDAO(this PreferenceItem src, EntityType preferType)
         {
             return new PreferenceItemDAO()
             {
-                Id = src.ItemId,
+                Id = src.ThisId,
                 ItemId = src.Id,
                 ItemName = src.Name,
                 IsEnabled = src.IsEnabled,
                 Level = src.Level,
                 Type = preferType,
-
             };
+        }
+
+        public static PreferenceItemDAO ToDAO(this PreferenceItem src)
+        {
+            return ToDAO(src, src.Type);
         }
 
         public static FolderFile FromDAO(this FileDAO src)
@@ -152,6 +157,7 @@ namespace SMPlayer.Helpers
         {
             return new PreferenceSettings()
             {
+                Id = src.Id,
                 Songs = src.Songs,
                 Artists = src.Artists,
                 Albums = src.Albums,
@@ -164,6 +170,7 @@ namespace SMPlayer.Helpers
         {
             return new PreferenceSettingsDAO()
             {
+                Id = src.Id,
                 Songs = src.Songs,
                 Artists = src.Artists,
                 Albums = src.Albums,

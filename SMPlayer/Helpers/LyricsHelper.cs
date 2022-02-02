@@ -65,19 +65,13 @@ namespace SMPlayer.Helpers
                 if (string.IsNullOrEmpty(lyrics))
                 {
                     lyrics = await music.GetLyricsAsync();
-                    lock (CurrentLyrics)
-                    {
-                        SetLyrics(music, lyrics);
-                        IsLrc = LyricsList != null && LyricsList.Take(4).All(l => l.StartsWith("["));
-                    }
+                    SetLyrics(music, lyrics);
+                    IsLrc = LyricsList != null && LyricsList.Take(4).All(l => l.StartsWith("["));
                 }
                 else
                 {
-                    lock (CurrentLyrics)
-                    {
-                        SetLyrics(music, lyrics);
-                        IsLrc = true;
-                    }
+                    SetLyrics(music, lyrics);
+                    IsLrc = true;
                 }
             }
         }

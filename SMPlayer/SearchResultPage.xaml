@@ -114,7 +114,11 @@
             Visibility="{x:Bind Folders.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="vo:GridViewFolder">
-                    <controls:GridFolderControl />
+                    <controls:GridFolderControl>
+                        <controls:GridFolderControl.ContextFlyout>
+                            <MenuFlyout Opening="OpenFolderMenuFlyout" />
+                        </controls:GridFolderControl.ContextFlyout>
+                    </controls:GridFolderControl>
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>

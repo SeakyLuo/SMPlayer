@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace SMPlayer.Models.DAO
 {
-    [Table("PreferenceSettings")]
+    [Table("PreferenceSetting")]
     public class PreferenceSettingsDAO
     {
+        [PrimaryKey, AutoIncrement]
+        public long Id { get; set; }
         public bool Songs { get; set; } = false;
         public bool Artists { get; set; } = false;
         public bool Albums { get; set; } = false;

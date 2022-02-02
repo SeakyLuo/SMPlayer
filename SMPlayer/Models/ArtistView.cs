@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMPlayer.Models.VO;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -126,12 +127,7 @@ namespace SMPlayer.Models
 
         PreferenceItem IPreferable.AsPreferenceItem()
         {
-            return new PreferenceItem(Name, Name);
-        }
-
-        PreferenceItemView IPreferable.AsPreferenceItemView()
-        {
-            return new PreferenceItemView(Name, Name, Name, PreferType.Artist);
+            return new PreferenceItem(Name, Name, EntityType.Artist);
         }
 
         public int CompareTo(object obj)
