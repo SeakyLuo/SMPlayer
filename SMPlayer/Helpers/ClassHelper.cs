@@ -104,6 +104,10 @@ namespace SMPlayer
         {
             return $"[{string.Join(", ", list.Select(i => i.ToString()))}]";
         }
+        public static string Join<T>(this IEnumerable<T> list, string joiner)
+        {
+            return string.Join(joiner, list.Select(i => i.ToString()));
+        }
         public static void AddOrMoveToTheFirst<T>(this Collection<T> list, T item)
         {
             if (item.Equals(list.ElementAtOrDefault(0)))

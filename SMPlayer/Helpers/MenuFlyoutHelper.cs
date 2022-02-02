@@ -79,54 +79,57 @@ namespace SMPlayer
                 };
                 addToItem.Items.Add(nowPlayingItem);
             }
-            if (CurrentPlaylistName != MyFavorites && ((Data is IMusicable m && !Settings.settings.MyFavorites.Contains(m.ToMusic())) ||
-                                                       (Data is IEnumerable<IMusicable> list &&
-                                                        list.Any(music => !Settings.settings.MyFavorites.Contains(music.ToMusic())))))
+            if (CurrentPlaylistName != MyFavorites)
             {
-                var favItem = new MenuFlyoutItem()
+                Playlist myFavorites = Settings.MyFavoritesPlaylist;
+                if ((Data is IMusicable m && !myFavorites.Contains(m.ToMusic())) ||
+                    (Data is IEnumerable<IMusicable> list && list.Any(music => !myFavorites.Contains(music.ToMusic()))))
                 {
-                    Icon = new FontIcon() { Glyph = "\uEB51" },
-                    Text = MyFavorites
-                };
-                favItem.Click += async (sender, args) =>
-                {
-                    if (Data is IMusicable musicable)
+                    var favItem = new MenuFlyoutItem()
                     {
-                        Music music = musicable.ToMusic();
-                        if (await FileHelper.FileNotExist(music.Path))
+                        Icon = new FontIcon() { Glyph = "\uEB51" },
+                        Text = MyFavorites
+                    };
+                    favItem.Click += async (sender, args) =>
+                    {
+                        if (Data is IMusicable musicable)
                         {
-                            Helper.ShowMusicNotFoundNotification(music.Name);
+                            Music music = musicable.ToMusic();
+                            if (await FileHelper.FileNotExist(music.Path))
+                            {
+                                Helper.ShowMusicNotFoundNotification(music.Name);
+                                return;
+                            }
+                            Settings.settings.LikeMusic(music);
+                            Helper.ShowCancelableNotificationRaw(Helper.LocalizeMessage("SongAddedTo", music.Name, MyFavorites), () =>
+                            {
+                                Settings.settings.DislikeMusic(music);
+                            });
+                        }
+                        else if (Data is IEnumerable<IMusicable> songs)
+                        {
+                            Settings.settings.LikeMusic(songs);
+                            string message = songs.Count() == 1 ? Helper.LocalizeMessage("SongAddedTo", songs.ElementAt(0).ToMusic().Name, MyFavorites) :
+                                                                  Helper.LocalizeMessage("SongsAddedTo", songs.Count(), MyFavorites);
+                            Helper.ShowCancelableNotificationRaw(message, () =>
+                            {
+                                foreach (var song in songs)
+                                    Settings.settings.DislikeMusic(song.ToMusic());
+                            });
+                        }
+                        else
+                        {
                             return;
                         }
-                        Settings.settings.LikeMusic(music);
-                        Helper.ShowCancelableNotificationRaw(Helper.LocalizeMessage("SongAddedTo", music.Name, MyFavorites), () =>
+                        listener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.Favorite)
                         {
-                            Settings.settings.DislikeMusic(music);
+                            Data = Data
                         });
-                    }
-                    else if (Data is IEnumerable<IMusicable> songs)
-                    {
-                        Settings.settings.LikeMusic(songs);
-                        string message = songs.Count() == 1 ? Helper.LocalizeMessage("SongAddedTo", songs.ElementAt(0).ToMusic().Name, MyFavorites) :
-                                                              Helper.LocalizeMessage("SongsAddedTo", songs.Count(), MyFavorites);
-                        Helper.ShowCancelableNotificationRaw(message, () => 
-                        {
-                            foreach(var song in songs)
-                                Settings.settings.DislikeMusic(song.ToMusic());
-                        });
-                    }
-                    else
-                    {
-                        return;
-                    }
-                    listener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.Favorite)
-                    {
-                        Data = Data
-                    });
-                };
-                addToItem.Items.Add(favItem);
+                    };
+                    addToItem.Items.Add(favItem);
+                }
             }
-            if (addToItem.Items.Count > 0) addToItem.Items.Add(new MenuFlyoutSeparator());
+            if (addToItem.Items.IsNotEmpty()) addToItem.Items.Add(new MenuFlyoutSeparator());
             foreach (var item in GetAddToPlaylistsMenuFlyout(listener).Items)
                 addToItem.Items.Add(item);
             return addToItem;

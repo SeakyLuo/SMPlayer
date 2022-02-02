@@ -159,23 +159,17 @@
   <data name="CheckNewMusicResult1Added" xml:space="preserve">
     <value>添加了《{0}》</value>
   </data>
-  <data name="CheckNewMusicResult1Added1Removed" xml:space="preserve">
-    <value>添加了《{0}》，移除了《{1}》</value>
+  <data name="CheckNewMusicResult1Moved" xml:space="preserve">
+    <value>移动了《{0}》</value>
   </data>
   <data name="CheckNewMusicResult1Removed" xml:space="preserve">
     <value>移除了《{0}》</value>
   </data>
-  <data name="CheckNewMusicResult2Added" xml:space="preserve">
-    <value>添加了《{0}》和《{1}》</value>
-  </data>
-  <data name="CheckNewMusicResult2Removed" xml:space="preserve">
-    <value>移除了《{0}》和《{1}》</value>
-  </data>
-  <data name="CheckNewMusicResultChange" xml:space="preserve">
-    <value>添加了{0}首歌，移除了{1}首歌</value>
-  </data>
   <data name="CheckNewMusicResultMultipleAdded" xml:space="preserve">
     <value>添加了{0}首歌</value>
+  </data>
+  <data name="CheckNewMusicResultMultipleMoved" xml:space="preserve">
+    <value>移动了{0}首歌</value>
   </data>
   <data name="CheckNewMusicResultMultipleRemoved" xml:space="preserve">
     <value>移除了{0}首歌</value>

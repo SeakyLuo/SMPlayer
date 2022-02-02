@@ -1,4 +1,5 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Dialogs;
+using SMPlayer.Models;
 using SMPlayer.Models.DAO;
 using SQLite;
 using System;
@@ -247,13 +248,26 @@ namespace SMPlayer.Helpers
                 ExitChecking("");
                 return;
             }
-            var result = new FolderUpdateResult();
+            var result = new FolderUpdateResult(folderTree.Path);
             await ResetFolderData(folderTree, result);
             if (result.FilesAdded.IsNotEmpty() || result.FilesRemoved.IsNotEmpty())
             {
                 NotifyFolderEvent(folderTree, StorageItemEventType.Update);
             }
-            ExitChecking(result.ToDisplayMessage());
+            result.Finish();
+            LoadingStatus = ExecutionStatus.Done;
+            if (result.HasChange)
+            {
+                MainPage.Instance?.ShowButtonedNotification(result.ToDisplayMessage(),
+                                                            Helper.LocalizeText("Detail"),
+                                                            async () => { await new FolderUpdateResultDialog().ShowAsync(result); },
+                                                            5000);
+            }
+            else
+            {
+                MainPage.Instance?.ShowLocalizedNotification("CheckNewMusicResultNoChange");
+            }
+            MainPage.Instance?.Loader.Hide();
         }
 
         private static void ExitChecking(string message)
@@ -275,81 +289,5 @@ namespace SMPlayer.Helpers
     public class UpdateLog
     {
         public string LastReleaseNotesVersion { get; set; }
-    }
-
-    class FolderUpdateResult
-    {
-        public List<string> FilesAdded { get; set; } = new List<string>();
-        public List<string> FilesRemoved { get; set; } = new List<string>();
-        public List<string> FoldersAdded { get; set; } = new List<string>();
-        public List<string> FoldersRemoved { get; set; } = new List<string>();
-
-        public string FirstFileAdded { get => System.IO.Path.GetFileNameWithoutExtension(FilesAdded[0]); }
-        public string SecondFileAdded { get => System.IO.Path.GetFileNameWithoutExtension(FilesAdded[1]); }
-        public string FirstFileRemoved { get => System.IO.Path.GetFileNameWithoutExtension(FilesRemoved[0]); }
-        public string SecondFileRemoved { get => System.IO.Path.GetFileNameWithoutExtension(FilesRemoved[1]); }
-
-        public void AddFile(string path)
-        {
-            FilesAdded.Add(path);
-        }
-        public void RemoveFile(string path) 
-        {
-            FilesRemoved.Add(path);
-        }
-        public void AddFolder(string path)
-        {
-            FoldersAdded.Add(path);
-        }
-        public void RemoveFolder(string path)
-        {
-            FoldersRemoved.Add(path);
-        }
-
-        public string ToDisplayMessage()
-        {
-            if (FilesAdded.IsNotEmpty() && FilesRemoved.IsNotEmpty())
-            {
-                if (FilesAdded.Count == 1 && FilesRemoved.Count == 1)
-                {
-                    return Helper.LocalizeMessage("CheckNewMusicResult1Added1Removed", FirstFileAdded, FirstFileRemoved);
-                }
-                else
-                {
-                    return Helper.LocalizeMessage("CheckNewMusicResultChange", FilesAdded.Count, FilesRemoved.Count);
-                }
-            }
-            if (FilesRemoved.IsNotEmpty())
-            {
-                if (FilesRemoved.Count == 1)
-                {
-                    return Helper.LocalizeMessage("CheckNewMusicResult1Removed", FirstFileRemoved);
-                }
-                else if (FilesRemoved.Count == 2)
-                {
-                    return Helper.LocalizeMessage("CheckNewMusicResult2Removed", FirstFileRemoved, SecondFileRemoved);
-                }
-                else
-                {
-                    return Helper.LocalizeMessage("CheckNewMusicResultMultipleRemoved", FilesRemoved.Count);
-                }
-            }
-            if (FilesAdded.IsNotEmpty())
-            {
-                if (FilesAdded.Count == 1)
-                {
-                    return Helper.LocalizeMessage("CheckNewMusicResult1Added", FirstFileAdded);
-                }
-                else if (FilesAdded.Count == 2)
-                {
-                    return Helper.LocalizeMessage("CheckNewMusicResult2Added", FirstFileAdded, SecondFileAdded);
-                }
-                else
-                {
-                    return Helper.LocalizeMessage("CheckNewMusicResultMultipleAdded", FilesAdded.Count);
-                }
-            }
-            return Helper.LocalizeMessage("CheckNewMusicResultNoChange");
-        }
     }
 }

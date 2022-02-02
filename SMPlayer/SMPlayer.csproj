@@ -154,6 +154,9 @@
     <Compile Include="Controls\GridViewMusicItemControl.xaml.cs">
       <DependentUpon>GridViewMusicItemControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\InAppNotificationWithButton.xaml.cs">
+      <DependentUpon>InAppNotificationWithButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MusicGridViewControl.xaml.cs">
       <DependentUpon>MusicGridViewControl.xaml</DependentUpon>
     </Compile>
@@ -180,6 +183,9 @@
     </Compile>
     <Compile Include="Dialogs\AlbumDialog.xaml.cs">
       <DependentUpon>AlbumDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\FolderUpdateResultDialog.xaml.cs">
+      <DependentUpon>FolderUpdateResultDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\MusicDialog.xaml.cs">
       <DependentUpon>MusicDialog.xaml</DependentUpon>
@@ -269,6 +275,7 @@
       <DependentUpon>MiniModePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\AlbumInfo.cs" />
+    <Compile Include="Models\FolderUpdateResult.cs" />
     <Compile Include="Models\MenuFlyoutOption.cs" />
     <Compile Include="Models\MultiSelectCommandBarOption.cs" />
     <Compile Include="Models\MusicDisplayItem.cs" />
@@ -456,6 +463,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\InAppNotificationWithButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\MusicGridViewControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -489,6 +500,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\AlbumDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\FolderUpdateResultDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

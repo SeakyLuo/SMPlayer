@@ -13,30 +13,6 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <Style x:Key="InAppNotificationStyle" TargetType="controls:InAppNotification">
-            <Setter Property="AnimationDuration" Value="0:0:0.1" />
-            <Setter Property="ShowDismissButton" Value="True" />
-            <Setter Property="ShowDismissButton" Value="True" />
-            <Setter Property="StackMode" Value="Replace" />
-        </Style>
-        <DataTemplate x:Key="UndoInAppNotificationDataTemplate">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    VerticalAlignment="Center"
-                    Text="{Binding ElementName=UndoInAppNotification, Path=Content}"
-                    TextTrimming="CharacterEllipsis"
-                    TextWrapping="WrapWholeWords" />
-                <Button
-                    x:Uid="UndoButton"
-                    Grid.Column="1"
-                    Click="UndoButton_Click" />
-            </Grid>
-        </DataTemplate>
-
         <Style x:Key="FakeToggleButtonStyle" TargetType="Button">
             <Setter Property="FontSize" Value="16" />
             <Setter Property="FontFamily" Value="{StaticResource SymbolThemeFontFamily}" />
@@ -287,20 +263,16 @@
             x:Name="ShowResultInAppNotification"
             Grid.Row="1"
             Style="{StaticResource InAppNotificationStyle}" />
-        <controls:InAppNotification
-            x:Name="UndoInAppNotification"
-            Grid.Row="1"
-            ContentTemplate="{StaticResource UndoInAppNotificationDataTemplate}"
-            Style="{StaticResource InAppNotificationStyle}" />
+        <localControls:InAppNotificationWithButton
+            x:Name="ButtonedInAppNotification"
+            Grid.Row="1" />
         <controls:InAppNotification
             x:Name="Row2ShowResultInAppNotification"
             Grid.Row="2"
             Style="{StaticResource InAppNotificationStyle}" />
-        <controls:InAppNotification
-            x:Name="Row2UndoInAppNotification"
-            Grid.Row="2"
-            ContentTemplate="{StaticResource UndoInAppNotificationDataTemplate}"
-            Style="{StaticResource InAppNotificationStyle}" />
+        <localControls:InAppNotificationWithButton
+            x:Name="Row2ButtonedInAppNotification"
+            Grid.Row="2" />
         <MediaElement x:Name="mediaElement" Grid.Row="1"/>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WindowWidthChange">

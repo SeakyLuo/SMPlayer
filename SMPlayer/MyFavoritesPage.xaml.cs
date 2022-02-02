@@ -39,7 +39,7 @@ namespace SMPlayer
                 case MusicEventType.Remove:
                     break;
                 case MusicEventType.Like:
-                    await MyFavoritesPlaylistControl.SetPlaylist(Settings.settings.MyFavorites);
+                    await MyFavoritesPlaylistControl.SetPlaylist(Settings.MyFavoritesPlaylist);
                     break;
                 case MusicEventType.Modify:
                     break;

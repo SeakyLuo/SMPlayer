@@ -55,7 +55,7 @@ namespace SMPlayer
         public Type CurrentPage => NaviFrame.CurrentSourcePageType;
         public Frame NavigationFrame => NaviFrame;
         private InAppNotification Notification => BottomMultiSelectCommandBar.IsVisible ? Row2ShowResultInAppNotification : ShowResultInAppNotification;
-        private InAppNotification UndoableNotification => BottomMultiSelectCommandBar.IsVisible ? ShowResultInAppNotification : UndoInAppNotification;
+        private InAppNotificationWithButton ButtonedNotification => BottomMultiSelectCommandBar.IsVisible ? Row2ButtonedInAppNotification : ButtonedInAppNotification;
 
         public static List<IWindowResizeListener> WindowResizeListeners = new List<IWindowResizeListener>();
         private static List<Func<Task>> MainPageLoadedAsyncListeners = new List<Func<Task>>();
@@ -441,27 +441,21 @@ namespace SMPlayer
 
         public void ShowNotification(string message, int duration = 2000)
         {
-            Notification.Content = message;
-            Notification.Show(duration);
+            Notification.Show(message, duration);
         }
-
-        private Action undo;
 
         public void ShowUndoableNotification(string message, Action undo, int duration = 5000)
         {
-            UndoableNotification.Content = message;
-            this.undo = undo;
-            UndoableNotification.Show(duration);
+            ShowButtonedNotification(message, Helper.LocalizeText("Undo"), undo, duration);
         }
         public void ShowLocalizedNotification(string message, int duration = 2000)
         {
             ShowNotification(Helper.LocalizeMessage(message), duration);
         }
 
-        private void UndoButton_Click(object sender, RoutedEventArgs e)
+        public void ShowButtonedNotification(string message, string buttonText, Action buttonAction, int duration = 5000)
         {
-            undo?.Invoke();
-            UndoableNotification.Dismiss();
+            ButtonedInAppNotification.Show(message, buttonText, buttonAction, duration);
         }
 
         public void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option = null)

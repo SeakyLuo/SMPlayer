@@ -179,7 +179,7 @@ namespace SMPlayer
 
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            args.ItemContainer.Background = args.ItemIndex % 2 == 0 ? ColorHelper.WhiteSmokeBrush : ColorHelper.WhiteBrush;
+            args.ItemContainer.Background = PlaylistControl.GetRowBackground(args.ItemIndex);
         }
 
         private void FindMusicAndSetPlaying(Music target)
@@ -452,7 +452,7 @@ namespace SMPlayer
                         SuggestionList.Insert(index, after.Artist);
                         Artists.Insert(index, new ArtistView(after));
                     }
-                    if (before.Artist != after.Artist && artist.Songs.Count == 1)
+                    if (before.Artist != after.Artist && artist.Songs.IsEmpty())
                     {
                         SuggestionList.Remove(artist.Name);
                         Artists.Remove(artist);

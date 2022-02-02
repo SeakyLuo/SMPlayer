@@ -1258,4 +1258,7 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="ReleaseNotesPreferenceSettingsDislikedAndDoNotAppear.Text" xml:space="preserve">
     <value>Now supports Do-Not-Appear and Dislike for Preference Settings, and fixed some bugs.</value>
   </data>
+  <data name="DetailButton.Text" xml:space="preserve">
+    <value>Detail</value>
+  </data>
 </root>

@@ -165,8 +165,20 @@
   <data name="DeleteFolder" xml:space="preserve">
     <value>删除文件夹</value>
   </data>
+  <data name="Detail" xml:space="preserve">
+    <value>详情</value>
+  </data>
   <data name="ExpandList" xml:space="preserve">
     <value>展开列表</value>
+  </data>
+  <data name="FilesAddedWithCount" xml:space="preserve">
+    <value>新增的项目（{0}）</value>
+  </data>
+  <data name="FilesMovedWithCount" xml:space="preserve">
+    <value>移动的项目（{0}）</value>
+  </data>
+  <data name="FilesRemovedWithCount" xml:space="preserve">
+    <value>移除的项目（{0}）</value>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>文件夹</value>
@@ -411,6 +423,9 @@
   <data name="Today" xml:space="preserve">
     <value>今日</value>
   </data>
+  <data name="Undo" xml:space="preserve">
+    <value>撤销</value>
+  </data>
   <data name="UndoLikeMusicToolTip" xml:space="preserve">
     <value>从我喜欢中移除</value>
   </data>
@@ -419,6 +434,9 @@
   </data>
   <data name="UnPinToolTip" xml:space="preserve">
     <value>解除固定播放列表</value>
+  </data>
+  <data name="UpdateResultOfFolder" xml:space="preserve">
+    <value>"{0}"的更新结果</value>
   </data>
   <data name="ViaEmail" xml:space="preserve">
     <value>通过邮件</value>

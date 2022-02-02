@@ -1249,4 +1249,7 @@
   <data name="ReleaseNotesPreferenceSettingsDislikedAndDoNotAppear.Text" xml:space="preserve">
     <value>优化了偏好设置（支持不喜欢、不出现）并修复了几个问题。</value>
   </data>
+  <data name="DetailButton.Text" xml:space="preserve">
+    <value>详情</value>
+  </data>
 </root>

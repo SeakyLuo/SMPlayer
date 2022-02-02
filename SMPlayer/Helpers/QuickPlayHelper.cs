@@ -119,7 +119,7 @@ namespace SMPlayer.Helpers
         {
             int count = GetPreferenceItems(PreferenceSettings.FindMyFavorites);
             if (count == 0) return;
-            songs.AddRange(Settings.settings.MyFavorites.Songs.RandItems(count));
+            songs.AddRange(Settings.MyFavoritesPlaylist.Songs.RandItems(count));
         }
 
         private static void HandleMostPlayed(HashSet<Music> songs, int randomLimit)
