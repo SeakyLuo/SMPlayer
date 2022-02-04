@@ -386,5 +386,29 @@ namespace SMPlayer
         {
             return fileType == FileType.Music;
         }
+
+        public static bool ScrollToIndex(this ListViewBase listViewBase, int index)
+        {
+            if (listViewBase.ContainerFromIndex(index) is ListViewItem item)
+            {
+                //listViewBase.ScrollIntoView(item, ScrollIntoViewAlignment.Default);
+                item.Locate();
+                return true;
+            }
+            return false;
+        }
+
+        public static bool ScrollToTop(this ListViewBase listViewBase)
+        {
+            return ScrollToIndex(listViewBase, 0);
+        }
+
+        public static void RemoveAfter<T>(this ObservableCollection<T> collection, int index)
+        {
+            while (collection.Count > index)
+            {
+                collection.RemoveAt(index);
+            }
+        }
     }
 }

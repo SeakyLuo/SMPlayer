@@ -55,6 +55,7 @@ namespace SMPlayer.Helpers
 
         private static async Task<bool> LoadFolder(StorageFolder folder, FolderTree tree)
         {
+            MainPage.Instance.Loader.SetMessage("CheckingFolder", folder.Name);
             HashSet<string> existingFolders = tree.Trees.Select(i => i.Path).ToHashSet();
             HashSet<string> newFolders = new HashSet<string>();
             List<FolderTree> newBranches = new List<FolderTree>();

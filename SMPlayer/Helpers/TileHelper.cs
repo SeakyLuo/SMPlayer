@@ -22,7 +22,7 @@ namespace SMPlayer.Helpers
 
         public static string BuildAlbumNavigationFlag(string albumName, string artist)
         {
-            return albumName + StringConcatenationFlag + artist;
+            return albumName;
         }
 
         public static async Task UpdateTile(StorageItemThumbnail itemThumbnail, Music music)
@@ -173,13 +173,13 @@ namespace SMPlayer.Helpers
             return SecondaryTileFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("SecondaryTiles", CreationCollisionOption.OpenIfExists);
         }
 
-        public static async Task<bool> PinToStartAsync(Playlist playlist, bool isPlaylist)
+        public static async Task<bool> PinToStartAsync(Playlist playlist)
         {
             var tilename = playlist.Name;
-            var tileid = FormatTileId(playlist, isPlaylist);
+            var tileid = FormatTileId(playlist);
             var filename = tileid + ".png";
             var uri = MusicImage.DefaultImagePath;
-            if (playlist.DisplayItem.Source != null)
+            if (playlist?.DisplayItem?.Source != null)
             {
                 if (await (await GetSecondaryTileFolder()).Contains(filename))
                 {
@@ -199,17 +199,16 @@ namespace SMPlayer.Helpers
                     }
                 }
             }
-            var tile = new SecondaryTile(tileid, tilename, isPlaylist.ToString(), new Uri(uri), Windows.UI.StartScreen.TileSize.Default);
+            var tile = new SecondaryTile(tileid, tilename, playlist.EntityType.ToString(), new Uri(uri), Windows.UI.StartScreen.TileSize.Default);
             tile.VisualElements.ShowNameOnSquare150x150Logo = tile.VisualElements.ShowNameOnSquare310x310Logo = tile.VisualElements.ShowNameOnWide310x150Logo = true;
             if (SecondaryTile.Exists(tileid)) await tile.RequestDeleteAsync();
             else await tile.RequestCreateAsync();
             return SecondaryTile.Exists(tileid);
         }
 
-        public static string FormatTileId(Playlist playlist, bool isPlaylist)
+        public static string FormatTileId(Playlist playlist)
         {
-            if (isPlaylist && !playlist.IsMyFavorite) return playlist.Id.ToString();
-            return playlist.Name + StringConcatenationFlag + playlist.Artist;
+            return playlist.EntityType == EntityType.Album ? playlist.Name : playlist.Id.ToString();
         }
     }
 }

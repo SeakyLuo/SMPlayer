@@ -90,7 +90,7 @@ namespace SMPlayer
                     ClearButton.Visibility = Visibility.Collapsed;
                     break;
             }
-            SetPinState(Windows.UI.StartScreen.SecondaryTile.Exists(TileHelper.FormatTileId(playlist, IsPlaylist)));
+            SetPinState(Windows.UI.StartScreen.SecondaryTile.Exists(TileHelper.FormatTileId(playlist)));
             if (MusicDisplayItem.IsNullOrEmpty(playlist.DisplayItem))
             {
                 await playlist.LoadDisplayItemAsync();
@@ -185,7 +185,7 @@ namespace SMPlayer
 
         private async void PinToStart_Click(object sender, RoutedEventArgs e)
         {
-            SetPinState(await TileHelper.PinToStartAsync(CurrentPlaylist, IsPlaylist));
+            SetPinState(await TileHelper.PinToStartAsync(CurrentPlaylist));
         }
 
         public void SetPinState(bool isPinned)
@@ -263,7 +263,7 @@ namespace SMPlayer
         private void SortButton_Click(object sender, RoutedEventArgs e)
         {
             SortBy[] criteria = new SortBy[] { SortBy.Reverse, SortBy.Title, SortBy.Artist, SortBy.Album, SortBy.Duration, SortBy.PlayCount, SortBy.DateAdded };
-            MenuFlyoutHelper.ShowSortByMenu(sender, CurrentPlaylist.Criterion, criteria, (criterion) =>
+            MenuFlyoutHelper.SetSortByMenu(sender, CurrentPlaylist.Criterion, criteria, (criterion) =>
             {
                 Settings.settings.SortPlaylist(CurrentPlaylist, criterion);
                 HeaderedPlaylist.CurrentPlaylist = CurrentPlaylist.Songs;

@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Helpers;
 using SMPlayer.Models.DAO;
+using SMPlayer.Services;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -25,21 +26,6 @@ namespace SMPlayer.Models
         public static void AddRecentEventListener(IRecentEventListener listener) { RecentEventListeners.Add(listener); }
         private static readonly List<IRecentEventListener> RecentEventListeners = new List<IRecentEventListener>();
         public static IEnumerable<Music> AllSongs { get => SQLHelper.Run(c => c.SelectAllMusic()); }
-        public static Playlist MyFavoritesPlaylist { get => FindPlaylist(settings.MyFavoritesId); }
-        public static List<Playlist> AllPlaylists
-        {
-            get => SQLHelper.Run(c => c.SelectAllPlaylists(i => i.Id != settings.MyFavoritesId));
-        }
-        public static List<Playlist> AllPlaylistsWithSongs
-        {
-            get => SQLHelper.Run(c => c.SelectAllPlaylists(i => i.Id != settings.MyFavoritesId))
-                             .AsParallel().AsOrdered()
-                             .Select(i =>
-                             {
-                                 i.Songs = new ObservableCollection<Music>(SQLHelper.Run(c => c.SelectPlaylistItems(i.Id)));
-                                 return i;
-                             }).ToList();
-        }
         public static FolderTree Root { get => FindFolder(settings.Tree.Id) ?? new FolderTree(); }
         public static List<FolderTree> AllFolders { get => SQLHelper.Run(c => c.Query<FolderDAO>("select * from Folder where State = ?", ActiveState.Active))
                                                                   .Select(i => i.FromDAO()).ToList(); }
@@ -51,9 +37,6 @@ namespace SMPlayer.Models
         public static Music FindMusic(string target) { return SQLHelper.Run(c => c.SelectMusicByPath(target)); }
         public static Music FindMusic(long id) { return SQLHelper.Run(c => c.SelectMusicById(id)); }
         public static List<Music> FindMusicList(IEnumerable<long> ids) { return ids.IsEmpty() ? new List<Music>() : SQLHelper.Run(c => c.SelectMusicByIds(ids)); }
-        public static Playlist FindPlaylist(long id) { return SQLHelper.Run(c => c.SelectPlaylistById(id)); }
-        public static Playlist FindPlaylist(string name) { return SQLHelper.Run(c => c.SelectPlaylistByName(name)); }
-        public static List<Music> FindPlaylistItems(long id) { return SQLHelper.Run(c => c.SelectPlaylistItems(id)); }
         public static FolderTree FindFolderInfo(long id)
         {
             return SQLHelper.Run(c => c.SelectFolderInfo(id));
@@ -160,7 +143,7 @@ namespace SMPlayer.Models
         {
             if (!string.IsNullOrEmpty(Name))
             {
-                var siblings = AllPlaylists.FindAll(p => p.Name.StartsWith(Name)).Select(p => p.Name).ToHashSet();
+                var siblings = PlaylistService.AllPlaylists.FindAll(p => p.Name.StartsWith(Name)).Select(p => p.Name).ToHashSet();
                 for (int i = 1; i <= siblings.Count; i++)
                     if (!siblings.Contains(Helper.GetNextName(Name, i)))
                         return i;
@@ -312,7 +295,7 @@ namespace SMPlayer.Models
 
         public async Task DeleteFile(FolderFile file)
         {
-            await FileHelper.DeleteFile(file.Path);
+            await StorageHelper.DeleteFile(file.Path);
             RemoveFile(file);
         }
 
@@ -409,9 +392,9 @@ namespace SMPlayer.Models
                 return NamingError.EmptyOrWhiteSpace;
             if (newName.Length > 50)
                 return NamingError.TooLong;
-            if (newName == Constants.NowPlaying || newName == Constants.MyFavorites || AllPlaylists.Any(p => p.Name == newName))
+            if (newName == Constants.NowPlaying || newName == Constants.MyFavorites || PlaylistService.AllPlaylists.Any(p => p.Name == newName))
                 return NamingError.Used;
-            if (newName.Contains(TileHelper.StringConcatenationFlag) || newName.Contains("{0}"))
+            if (newName.Contains(TileHelper.StringConcatenationFlag) || newName.Contains("{0}") || newName.Contains("{1}"))
                 return NamingError.Special;
             return NamingError.Good;
         }
@@ -422,7 +405,7 @@ namespace SMPlayer.Models
                 return NamingError.EmptyOrWhiteSpace;
             if (newName.Length > 50)
                 return NamingError.TooLong;
-            if (await FileHelper.FolderExists(Path.Combine(root, newName)))
+            if (await StorageHelper.FolderExists(Path.Combine(root, newName)))
                 return NamingError.Used;
             return NamingError.Good;
         }
@@ -644,7 +627,7 @@ namespace SMPlayer.Models
 
         public async Task<bool> MoveFileAsync(FolderFile file, FolderTree newParent)
         {
-            if (await FileHelper.FileExists(Path.Combine(newParent.Path, file.NameWithExtension)))
+            if (await StorageHelper.FileExists(Path.Combine(newParent.Path, file.NameWithExtension)))
             {
                 string message = Helper.LocalizeMessage("DuplicateFoundWhenMovingFile", file.Name, newParent.Name);
                 bool moved = true;
@@ -664,8 +647,8 @@ namespace SMPlayer.Models
 
         private async Task MoveFile(FolderFile file, FolderTree folder)
         {
-            StorageFile localFile = await FileHelper.LoadFileAsync(file.Path);
-            StorageFolder targetFolder = await FileHelper.LoadFolderAsync(folder.Path);
+            StorageFile localFile = await StorageHelper.LoadFileAsync(file.Path);
+            StorageFolder targetFolder = await StorageHelper.LoadFolderAsync(folder.Path);
             await localFile.MoveAsync(targetFolder);
             SQLHelper.Run(c => MoveFile(c, file, folder));
             foreach (var listener in StorageItemEventListeners)
@@ -681,7 +664,7 @@ namespace SMPlayer.Models
         private async Task MoveAndKeepBothFile(FolderFile file, FolderTree newParent)
         {
             StorageFile localFile = await file.GetStorageFileAsync();
-            StorageFolder localFolder = await FileHelper.LoadFolderAsync(newParent.Path);
+            StorageFolder localFolder = await StorageHelper.LoadFolderAsync(newParent.Path);
             HashSet<string> filenames = (await localFolder.GetFilesAsync()).Select(i => i.Name).ToHashSet();
             string newFilename;
             int index = 1;

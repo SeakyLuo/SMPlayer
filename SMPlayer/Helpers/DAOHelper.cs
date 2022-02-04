@@ -176,6 +176,10 @@ namespace SMPlayer.Helpers
                 Albums = src.Albums,
                 Playlists = src.Playlists,
                 Folders = src.Folders,
+                RecentAddedId = src.RecentAdded.ThisId,
+                MyFavoritesId = src.MyFavorites.ThisId,
+                MostPlayedId = src.MostPlayed.ThisId,
+                LeastPlayedId = src.LeastPlayed.ThisId,
             };
         }
 

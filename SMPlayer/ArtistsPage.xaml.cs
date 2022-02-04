@@ -465,6 +465,15 @@ namespace SMPlayer
         {
         }
 
+        private void SongsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListViewBase listViewBase = (sender as ListViewBase);
+            if (listViewBase.SelectionMode == ListViewSelectionMode.Multiple)
+            {
+                Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(listViewBase.SelectedItems.Count);
+            }
+        }
+
         void IStorageItemEventListener.ExecuteFolderEvent(FolderTree folder, StorageItemEventArgs args)
         {
             if (args.EventType == StorageItemEventType.BeforeReset)

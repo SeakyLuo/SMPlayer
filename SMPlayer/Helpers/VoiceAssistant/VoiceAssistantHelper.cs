@@ -1,6 +1,7 @@
 ﻿using SMPlayer.Helpers.VoiceAssistant;
 using SMPlayer.Models;
 using SMPlayer.Models.VO;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -333,7 +334,7 @@ namespace SMPlayer.Helpers
                 return;
             }
             IEnumerable<Playlist> list = SearchHelper.SearchArtists(Settings.AllSongs, text, SortBy.Default);
-            if (list.Count() == 0)
+            if (list.IsEmpty())
             {
                 SpeakNoResults(text);
                 return;
@@ -364,7 +365,7 @@ namespace SMPlayer.Helpers
                 RandomPlayHelper.PlayPlaylist();
                 return;
             }
-            IEnumerable<AlbumView> list = SearchHelper.SearchPlaylists(Settings.AllPlaylists, text, SortBy.Default);
+            IEnumerable<AlbumView> list = SearchHelper.SearchPlaylists(PlaylistService.AllPlaylistsWithSongs, text, SortBy.Default);
             if (list.Count() == 0)
             {
                 SpeakNoResults(text);

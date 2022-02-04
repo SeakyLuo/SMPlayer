@@ -304,7 +304,7 @@ namespace SMPlayer.Models
 
         public string MoveToFolder(string newPath)
         {
-            return Path = FileHelper.MoveToPath(Path, newPath);
+            return Path = StorageHelper.MoveToPath(Path, newPath);
         }
 
         public string GetToastText()

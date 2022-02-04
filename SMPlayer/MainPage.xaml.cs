@@ -52,7 +52,7 @@ namespace SMPlayer
             }
         }
         private static bool switchPage = true, firstLoaded = true;
-        public Type CurrentPage => NaviFrame.CurrentSourcePageType;
+        public Type CurrentPage => NaviFrame?.CurrentSourcePageType;
         public Frame NavigationFrame => NaviFrame;
         private InAppNotification Notification => BottomMultiSelectCommandBar.IsVisible ? Row2ShowResultInAppNotification : ShowResultInAppNotification;
         private InAppNotificationWithButton ButtonedNotification => BottomMultiSelectCommandBar.IsVisible ? Row2ButtonedInAppNotification : ButtonedInAppNotification;
@@ -88,6 +88,7 @@ namespace SMPlayer
             if (CurrentPage == null) return;
             bool collapsed = (CurrentPage == typeof(NowPlayingPage) && isMinimal) ||
                               CurrentPage == typeof(PlaylistsPage) ||
+                              CurrentPage == typeof(LocalPage) ||
                               (CurrentPage == typeof(RecentPage) && !isMinimal) || 
                               (isTitleBarColorful && !isMinimal);
             AppTitleBorder.Background = isMinimal ? ColorHelper.TransparentBrush : ColorHelper.MainNavigationViewBackground;
@@ -192,7 +193,7 @@ namespace SMPlayer
 
         private void SetFakeTogglePaneButtonBackground()
         {
-            FakeTogglePaneButton.Background = NaviFrame.CurrentSourcePageType.Name.StartsWith("Playlists") ? ColorHelper.TransparentBrush : TitleBarBackground;
+            FakeTogglePaneButton.Background = CurrentPage is Type page && page.Name.StartsWith("Playlists") ? ColorHelper.TransparentBrush : TitleBarBackground;
         }
 
         private void SetBackButtonVisible(bool visible)
@@ -359,7 +360,6 @@ namespace SMPlayer
             }
             else if (page == typeof(AlbumPage))
             {
-                SetHeaderText("Album");
                 HeaderGrid.Visibility = MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal ? Visibility.Visible : Visibility.Collapsed;
                 MainNavigationView.SelectedItem = null;
             }
@@ -382,7 +382,8 @@ namespace SMPlayer
             }
             else if (page == typeof(LocalPage))
             {
-                HeaderGrid.Visibility = Visibility.Visible;
+                SetHeaderText("");
+                HeaderGrid.Visibility = Visibility.Collapsed;
                 MainNavigationView.SelectedItem = LocalItem;
             }
             else if (page == typeof(PlaylistsPage))
@@ -455,7 +456,7 @@ namespace SMPlayer
 
         public void ShowButtonedNotification(string message, string buttonText, Action buttonAction, int duration = 5000)
         {
-            ButtonedInAppNotification.Show(message, buttonText, buttonAction, duration);
+            ButtonedNotification.Show(message, buttonText, buttonAction, duration);
         }
 
         public void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option = null)

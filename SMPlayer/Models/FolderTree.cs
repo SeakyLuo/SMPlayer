@@ -136,7 +136,7 @@ namespace SMPlayer.Models
 
         public async Task<StorageFolder> GetStorageFolderAsync()
         {
-            return await FileHelper.LoadFolderAsync(Path);
+            return await StorageHelper.LoadFolderAsync(Path);
         }
 
         public void Rename(string newPath)

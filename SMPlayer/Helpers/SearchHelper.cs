@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Models;
 using SMPlayer.Models.VO;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,7 +29,7 @@ namespace SMPlayer.Helpers
                              .Select(group =>
                              {
                                  Music music = group.ElementAt(0);
-                                 return new AlbumView(music.Album, music.Artist, group.OrderBy(m => m.Name).ThenBy(m => m.Artist), false);
+                                 return new AlbumView(music.Album, group, false);
                              });
             return SortAlbums(list, keyword, criterion);
         }
@@ -52,7 +53,7 @@ namespace SMPlayer.Helpers
             var list = source.Where(i => IsTargetFolder(i, keyword))
                              .AsParallel().Select(tree => new GridViewFolder(tree)).ToList();
             var pathSet = list.Select(i => i.Path).ToHashSet();
-            list.AddRange(songs.Where(i => IsTargetMusic(i, keyword)).Select(i => FileHelper.GetParentPath(i.Path))
+            list.AddRange(songs.Where(i => IsTargetMusic(i, keyword)).Select(i => StorageHelper.GetParentPath(i.Path))
                                .Distinct().Where(i => !pathSet.Contains(i))
                                .AsParallel().Select(i => Settings.FindFolderInfo(i))
                                .Where(i => i != null).Select(tree => new GridViewFolder(tree)).ToList());
@@ -161,7 +162,7 @@ namespace SMPlayer.Helpers
         public static IEnumerable<AlbumView> SortPlaylists(IEnumerable<AlbumView> src, string keyword, SortBy criterion)
         {
             var nowPlaying = MusicPlayer.NowPlaying;
-            Playlist myFavorites = Settings.MyFavoritesPlaylist;
+            Playlist myFavorites = PlaylistService.MyFavorites;
             bool isNowPlayingTarget = IsTargetPlaylist(nowPlaying, keyword),
                  isFavoriteTarget = IsTargetPlaylist(myFavorites, keyword);
             List<AlbumView> list;
@@ -240,7 +241,7 @@ namespace SMPlayer.Helpers
             Music music = (await Task.Run(() => SearchSongs(allSongs, keyword, SortBy.Default)))?.FirstOrDefault();
             Playlist artist = (await Task.Run(() => SearchArtists(allSongs, keyword, SortBy.Default)))?.FirstOrDefault();
             AlbumView album = (await Task.Run(() => SearchAlbums(allSongs, keyword, SortBy.Default)))?.FirstOrDefault();
-            AlbumView playlist = (await Task.Run(() => SearchPlaylists(Settings.AllPlaylists, keyword, SortBy.Default)))?.FirstOrDefault();
+            AlbumView playlist = (await Task.Run(() => SearchPlaylists(PlaylistService.AllPlaylistsWithSongs, keyword, SortBy.Default)))?.FirstOrDefault();
             GridViewFolder folder = (await Task.Run(() => SearchFolders(Settings.AllFolders, keyword, SortBy.Default)))?.FirstOrDefault();
             return MergeSearchResult(keyword, music, artist, album, playlist, folder);
         }
@@ -268,7 +269,7 @@ namespace SMPlayer.Helpers
 
         public static async Task<SearchResult> SearchPlaylistMusic(string playlistName, string keyword)
         {
-            AlbumView playlist = (await Task.Run(() => SearchPlaylists(Settings.AllPlaylists, playlistName, SortBy.Default)))?.FirstOrDefault();
+            AlbumView playlist = (await Task.Run(() => SearchPlaylists(PlaylistService.AllPlaylistsWithSongs, playlistName, SortBy.Default)))?.FirstOrDefault();
             return SearchMusicInCollection(playlist?.Songs, keyword);
         }
 

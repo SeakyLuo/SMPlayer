@@ -46,6 +46,11 @@ namespace SMPlayer.Controls
             CommandBarContainer.IsOpen = true;
         }
 
+        public void CountSelections(int selections)
+        {
+            CountSelectionTextBlock.Text = selections == 0 ? "" : Helper.LocalizeText("ItemsSelected", selections);
+        }
+
         public void Hide()
         {
             Cancel();

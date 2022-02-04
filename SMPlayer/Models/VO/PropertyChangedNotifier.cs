@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SMPlayer.Models.VO
 {
-    public abstract class TreeViewStorageItem : StorageItem, INotifyPropertyChanged
+    public class PropertyChangedNotifier : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
@@ -16,10 +16,5 @@ namespace SMPlayer.Models.VO
             this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public StorageItem AsStorageItem()
-        {
-            return this is TreeViewFolder folder ? folder.Source :
-                                                   (StorageItem)(this as TreeViewFile).ToFolderFile() ;
-        }
     }
 }

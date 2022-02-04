@@ -14,7 +14,7 @@ namespace SMPlayer.Models
         public static async Task<string> ReadAsync(string filename)
         {
             if (!filename.EndsWith(extension)) filename += extension;
-            return await FileHelper.ReadFileAsync(Helper.LocalFolder, filename);
+            return await StorageHelper.ReadFileAsync(Helper.LocalFolder, filename);
         }
 
         public static async Task<T> ReadObjectAsync<T>(string filename) where T : class
@@ -40,7 +40,7 @@ namespace SMPlayer.Models
                     return;
                 }
             }
-            await FileHelper.WriteFileAsync(folder, filename, json);
+            await StorageHelper.WriteFileAsync(folder, filename, json);
         }
 
         public static void Save<T>(string filename, T data)
@@ -51,7 +51,7 @@ namespace SMPlayer.Models
         public static async Task DeleteFile(string filename)
         {
             if (!filename.EndsWith(extension)) filename += extension;
-            await FileHelper.DeleteLocalFile(filename);
+            await StorageHelper.DeleteLocalFile(filename);
         }
 
         public static T FromJson<T>(string json) where T : class

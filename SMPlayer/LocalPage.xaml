@@ -7,206 +7,31 @@
     xmlns:local="using:SMPlayer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:templateselector="using:SMPlayer.TemplateSelector"
-    xmlns:controls="using:SMPlayer.Controls"
+    xmlns:controls="using:SMPlayer.Controls" xmlns:models="using:SMPlayer.Models"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
 
     <Page.Resources>
-        <x:Double x:Key="IconSize">20</x:Double>
+        <x:Double x:Key="IconSize">24</x:Double>
+        <Thickness x:Key="TreeViewPadding">12,0,4,0</Thickness>
+        <x:Double x:Key="TreeViewFontSize">15</x:Double>
         <x:Double x:Key="AppBarButtonWidth">40</x:Double>
-        <Style
-            x:Key="StretchTreeViewItemStyle"
-            BasedOn="{StaticResource ListViewItemRevealStyle}"
-            TargetType="TreeViewItem">
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="Background" Value="{ThemeResource TreeViewItemBackground}" />
-            <Setter Property="BorderBrush" Value="{ThemeResource TreeViewItemBorderBrush}" />
-            <Setter Property="BorderThickness" Value="{ThemeResource TreeViewItemBorderThemeThickness}" />
-            <Setter Property="GlyphBrush" Value="{ThemeResource TreeViewItemForeground}" />
-            <Setter Property="MinHeight" Value="{ThemeResource TreeViewItemMinHeight}" />
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="TreeViewItem">
-                        <Grid
-                            x:Name="ContentPresenterGrid"
-                            Margin="0,0,0,0"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{TemplateBinding CornerRadius}">
-                            <Grid x:Name="MultiSelectGrid" Padding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TreeViewItemTemplateSettings.Indentation}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-
-                                <Grid Grid.Column="0">
-                                    <CheckBox
-                                        x:Name="MultiSelectCheckBox"
-                                        Width="32"
-                                        MinWidth="32"
-                                        Margin="12,0,0,0"
-                                        VerticalAlignment="Center"
-                                        AutomationProperties.AccessibilityView="Raw"
-                                        IsTabStop="False"
-                                        Visibility="Collapsed" />
-                                    <Border
-                                        x:Name="MultiArrangeOverlayTextBorder"
-                                        Height="20"
-                                        MinWidth="20"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Background="{ThemeResource SystemControlBackgroundAccentBrush}"
-                                        BorderBrush="{ThemeResource SystemControlBackgroundChromeWhiteBrush}"
-                                        BorderThickness="1"
-                                        IsHitTestVisible="False"
-                                        Visibility="Collapsed">
-                                        <TextBlock
-                                            x:Name="MultiArrangeOverlayText"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            AutomationProperties.AccessibilityView="Raw"
-                                            Foreground="{ThemeResource SystemControlForegroundChromeWhiteBrush}"
-                                            IsHitTestVisible="False"
-                                            Style="{ThemeResource CaptionTextBlockStyle}"
-                                            Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TreeViewItemTemplateSettings.DragItemsCount}" />
-                                    </Border>
-                                </Grid>
-
-                                <Grid
-                                    x:Name="ExpandCollapseChevron"
-                                    Grid.Column="1"
-                                    Width="Auto"
-                                    Padding="12,0,12,0"
-                                    Background="Transparent"
-                                    Opacity="{TemplateBinding GlyphOpacity}">
-                                    <TextBlock
-                                        Width="12"
-                                        Height="12"
-                                        VerticalAlignment="Center"
-                                        AutomationProperties.AccessibilityView="Raw"
-                                        FontFamily="{StaticResource SymbolThemeFontFamily}"
-                                        FontSize="{TemplateBinding GlyphSize}"
-                                        Foreground="{TemplateBinding GlyphBrush}"
-                                        Text="{TemplateBinding CollapsedGlyph}"
-                                        Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TreeViewItemTemplateSettings.CollapsedGlyphVisibility}" />
-                                    <TextBlock
-                                        Width="12"
-                                        Height="12"
-                                        VerticalAlignment="Center"
-                                        AutomationProperties.AccessibilityView="Raw"
-                                        FontFamily="{StaticResource SymbolThemeFontFamily}"
-                                        FontSize="{TemplateBinding GlyphSize}"
-                                        Foreground="{TemplateBinding GlyphBrush}"
-                                        Text="{TemplateBinding ExpandedGlyph}"
-                                        Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TreeViewItemTemplateSettings.ExpandedGlyphVisibility}" />
-                                </Grid>
-
-                                <ContentPresenter
-                                    x:Name="ContentPresenter"
-                                    Grid.Column="2"
-                                    Margin="{TemplateBinding Padding}"
-                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                    Content="{TemplateBinding Content}"
-                                    ContentTemplate="{TemplateBinding ContentTemplate}"
-                                    ContentTransitions="{TemplateBinding ContentTransitions}" />
-                            </Grid>
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="CommonStates">
-                                    <VisualState x:Name="Normal" />
-                                    <VisualState x:Name="PointerOver">
-                                        <VisualState.Setters>
-                                            <Setter Target="ContentPresenterGrid.(RevealBrush.State)" Value="PointerOver" />
-                                            <Setter Target="ContentPresenterGrid.Background" Value="{ThemeResource TreeViewItemBackgroundPointerOver}" />
-                                            <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource TreeViewItemForegroundPointerOver}" />
-                                            <Setter Target="ContentPresenterGrid.BorderBrush" Value="{ThemeResource TreeViewItemBorderBrushPointerOver}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                    <VisualState x:Name="Pressed">
-                                        <VisualState.Setters>
-                                            <Setter Target="ContentPresenterGrid.(RevealBrush.State)" Value="Pressed" />
-                                            <Setter Target="ContentPresenterGrid.Background" Value="{ThemeResource TreeViewItemBackgroundPressed}" />
-                                            <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource TreeViewItemForegroundPressed}" />
-                                            <Setter Target="ContentPresenterGrid.BorderBrush" Value="{ThemeResource TreeViewItemBorderBrushPressed}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                    <VisualState x:Name="Selected">
-                                        <VisualState.Setters>
-                                            <Setter Target="ContentPresenterGrid.Background" Value="{ThemeResource TreeViewItemBackgroundSelected}" />
-                                            <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource TreeViewItemForegroundSelected}" />
-                                            <Setter Target="ContentPresenterGrid.BorderBrush" Value="{ThemeResource TreeViewItemBorderBrushSelected}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                    <VisualState x:Name="Disabled">
-                                        <VisualState.Setters>
-                                            <Setter Target="ContentPresenterGrid.Background" Value="{ThemeResource TreeViewItemBackgroundDisabled}" />
-                                            <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource TreeViewItemForegroundDisabled}" />
-                                            <Setter Target="ContentPresenterGrid.BorderBrush" Value="{ThemeResource TreeViewItemBorderBrushDisabled}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                    <VisualState x:Name="PointerOverSelected">
-                                        <VisualState.Setters>
-                                            <Setter Target="ContentPresenterGrid.(RevealBrush.State)" Value="PointerOver" />
-                                            <Setter Target="ContentPresenterGrid.Background" Value="{ThemeResource TreeViewItemBackgroundSelectedPointerOver}" />
-                                            <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource TreeViewItemForegroundSelectedPointerOver}" />
-                                            <Setter Target="ContentPresenterGrid.BorderBrush" Value="{ThemeResource TreeViewItemBorderBrushSelectedPointerOver}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                    <VisualState x:Name="PressedSelected">
-                                        <VisualState.Setters>
-                                            <Setter Target="ContentPresenterGrid.(RevealBrush.State)" Value="Pressed" />
-                                            <Setter Target="ContentPresenterGrid.Background" Value="{ThemeResource TreeViewItemBackgroundSelectedPressed}" />
-                                            <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource TreeViewItemForegroundSelectedPressed}" />
-                                            <Setter Target="ContentPresenterGrid.BorderBrush" Value="{ThemeResource TreeViewItemBorderBrushSelectedPressed}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                    <VisualState x:Name="SelectedDisabled">
-                                        <VisualState.Setters>
-                                            <Setter Target="ContentPresenterGrid.Background" Value="{ThemeResource TreeViewItemBackgroundSelectedDisabled}" />
-                                            <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource TreeViewItemForegroundSelectedDisabled}" />
-                                            <Setter Target="ContentPresenterGrid.BorderBrush" Value="{ThemeResource TreeViewItemBorderBrushSelectedDisabled}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                    <VisualState x:Name="ReorderedPlaceholder">
-                                        <Storyboard>
-                                            <FadeOutThemeAnimation TargetName="MultiSelectGrid" />
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                                <VisualStateGroup x:Name="TreeViewMultiSelectStates">
-                                    <VisualState x:Name="TreeViewMultiSelectDisabled" />
-                                    <VisualState x:Name="TreeViewMultiSelectEnabledUnselected">
-                                        <VisualState.Setters>
-                                            <Setter Target="MultiSelectCheckBox.Visibility" Value="Visible" />
-                                            <Setter Target="ExpandCollapseChevron.Padding" Value="0,0,12,0" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                    <VisualState x:Name="TreeViewMultiSelectEnabledSelected">
-                                        <VisualState.Setters>
-                                            <Setter Target="MultiSelectCheckBox.Visibility" Value="Visible" />
-                                            <Setter Target="MultiSelectGrid.Background" Value="{ThemeResource TreeViewItemBackgroundSelected}" />
-                                            <Setter Target="ExpandCollapseChevron.Padding" Value="0,0,12,0" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                </VisualStateGroup>
-                                <VisualStateGroup x:Name="DragStates">
-                                    <VisualState x:Name="NotDragging" />
-                                    <VisualState x:Name="MultipleDraggingPrimary">
-                                        <VisualState.Setters>
-                                            <Setter Target="MultiSelectCheckBox.Opacity" Value="0" />
-                                            <Setter Target="MultiArrangeOverlayTextBorder.Visibility" Value="Visible" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        <Style x:Key="FolderChainButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0.5" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+        </Style>
+        <Storyboard x:Name="FolderPathItemArrowAnimation">
+            <DoubleAnimation
+                By="90"
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                Duration="0:0:0.25" />
+        </Storyboard>
+        <Style x:Key="TitleTextBlock" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="SemiBold" />
         </Style>
     </Page.Resources>
 
@@ -215,39 +40,130 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <Grid x:Name="TitleGrid" Margin="12,4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid 
+                x:Name="CurrentPathGrid"
+                Height="40"
+                Margin="0,0,12,0"
+                Visibility="{Binding ElementName=FolderChainListView, Path=Visibility, Mode=OneWay}">
+                <TextBlock
+                    x:Name="CurrentPathTextBlock"
+                    x:Uid="CurrentPathTextBlock"
+                    Text="Current Path"
+                    Style="{StaticResource TitleTextBlock}" />
+            </Grid>
+            <Grid
+                x:Name="NoMusicGrid"
+                Grid.Column="1"
+                Height="40"
+                Margin="0,0,12,0"
+                Background="Transparent"
+                Visibility="{x:Bind FolderChain.Count, Converter={StaticResource InvertedVisibilityConverter}, Mode=OneWay}">
+                <TextBlock Style="{StaticResource TitleTextBlock}">
+                    <Run x:Uid="LocalPageNoMusicRun" />
+                    <Hyperlink UnderlineStyle="None" Click="GoToSettingsHyperlink_Click">
+                        <Run x:Uid="LocalPageGoToSettingsRun" />
+                    </Hyperlink>
+                </TextBlock>
+            </Grid>
+            <ListView
+                x:Name="FolderChainListView"
+                Grid.Column="1"
+                BorderThickness="1"
+                BorderBrush="LightGray"
+                Margin="0,0"
+                Height="40"
+                ItemClick="FolderChainListView_ItemClick"
+                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                ItemsSource="{x:Bind FolderChain, Mode=OneWay}"
+                Visibility="{x:Bind FolderChain.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
+                ItemContainerStyle="{StaticResource StretchListViewItemStyle}"
+                Style="{StaticResource HorizontalListViewStyle}">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="data:FolderChainItem">
+                        <StackPanel Orientation="Horizontal" AllowDrop="True">
+                            <StackPanel.ContextFlyout>
+                                <MenuFlyout Opening="OpenPlaylistFlyout" />
+                            </StackPanel.ContextFlyout>
+                            <Button
+                                HorizontalContentAlignment="Stretch"
+                                HorizontalAlignment="Stretch"
+                                x:Uid="FolderChainItemPathButton"
+                                Content="{x:Bind Name}"
+                                FontWeight="SemiBold"
+                                Style="{StaticResource FolderChainButtonStyle}"
+                                Click="PathItemButton_Click" />
+                            <Button
+                                x:Uid="FolderChainItemDropDownButton"
+                                Name="{x:Bind Id, Converter={StaticResource FolderChainDropdownButtonNameConverter}}"
+                                Grid.Column="1"
+                                Width="30"
+                                Click="PathItemDropDownButton_Click"
+                                Style="{StaticResource FolderChainButtonStyle}"
+                                Content="&#xE974;"
+                                FontFamily="Segoe MDL2 Assets"
+                                RenderTransformOrigin=".5,.5"
+                                Visibility="{x:Bind HasChildren, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                                <Button.RenderTransform>
+                                    <RotateTransform />
+                                </Button.RenderTransform>
+                                <Button.Flyout>
+                                    <Flyout>
+                                        <ListView 
+                                        ItemContainerStyle="{StaticResource StretchListViewItemStyle}"
+                                        ItemsSource="{x:Bind Children, Mode=OneWay}">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate x:DataType="data:FolderChainItem">
+                                                    <TextBlock
+                                                    Margin="4,0"
+                                                    VerticalAlignment="Center"
+                                                    Text="{x:Bind Name}"
+                                                    FontWeight="{x:Bind IsHighlighted, Converter={StaticResource FolderChainItemTextBlockFontWeightConverter}, Mode=OneWay}"
+                                                    ToolTipService.ToolTip="{x:Bind Path}" />
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </Flyout>
+                                </Button.Flyout>
+                            </Button>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
         <CommandBar
+            Grid.Row="1"
             x:Name="LocalCommandBar"
             Background="Transparent"
             DefaultLabelPosition="Right"
-            IsDynamicOverflowEnabled="False"
-            OverflowButtonVisibility="Collapsed">
+            IsDynamicOverflowEnabled="True"
+            Margin="0,4,0,0"
+            Style="{StaticResource StretchingContentCommandBar}"
+            OverflowButtonVisibility="Auto">
             <CommandBar.Content>
-                <StackPanel Orientation="Horizontal">
-                    <AppBarButton
-                        x:Name="BackButton"
-                        Background="Transparent"
-                        Icon="Back"
-                        Width="40"
-                        Height="40"
-                        Click="BackButton_Click"
-                        BorderThickness="0" />
+                <StackPanel Orientation="Horizontal" Height="{Binding ElementName=LocalCommandBar, Path=ActualHeight}">
+                    <ProgressRing
+                        x:Name="LocalProgressRing"
+                        Margin="8,0,-4,0"
+                        IsActive="True"
+                        Visibility="Collapsed"/>
                     <TextBlock
                         x:Name="FolderInfoTextBlock"
-                        VerticalAlignment="Center"
-                        Margin="8,0"
-                        FontSize="14" />
-                    <ProgressRing x:Name="LocalProgressRing" Visibility="Collapsed" />
+                        Margin="16,0"
+                        VerticalAlignment="Center" />
                 </StackPanel>
             </CommandBar.Content>
             <AppBarButton
-                x:Name="NewFolderButton"
-                x:Uid="NewFolderItem"
-                Label="New Folder"
-                Icon="Add"
-                Click="NewFolderButton_Click">
-            </AppBarButton>
+                x:Name="ShuffleButton"
+                x:Uid="ShuffleItem"
+                Label="Shuffle"
+                Icon="Shuffle"
+                Click="ShuffleButton_Click" />
             <AppBarButton
                 x:Name="RefreshButton"
                 x:Uid="RefreshItem"
@@ -255,11 +171,18 @@
                 Icon="Refresh"
                 Click="RefreshButton_Click" />
             <AppBarButton
-                x:Name="ShuffleButton"
-                x:Uid="ShuffleItem"
-                Label="Shuffle"
-                Icon="Shuffle"
-                Click="ShuffleButton_Click" />
+                x:Name="SortAppButton"
+                x:Uid="SortAppButton"
+                Label="Sort"
+                Icon="Sort"
+                Click="SortAppButton_Click"/>
+            <AppBarButton
+                x:Name="NewFolderButton"
+                x:Uid="NewFolderItem"
+                Label="New Folder"
+                Icon="NewFolder"
+                Click="NewFolderButton_Click">
+            </AppBarButton>
             <AppBarButton
                 x:Name="ViewModeAppButton"
                 x:Uid="ViewModeAppButton"
@@ -289,165 +212,114 @@
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE762;" />
                 </AppBarButton.Icon>
             </AppBarButton>
-            <AppBarButton
-                x:Name="SortAppButton"
-                x:Uid="SortAppButton"
-                Label="Sort"
-                Icon="Sort"
-                Click="SortAppButton_Click"/>
         </CommandBar>
-        <CommandBar
-            Grid.Row="1"
-            x:Name="TestLocalCommandBar"
-            Background="Transparent"
-            DefaultLabelPosition="Collapsed"
-            IsDynamicOverflowEnabled="False"
-            OverflowButtonVisibility="Collapsed">
-            <CommandBar.Content>
-                <StackPanel Orientation="Horizontal">
-                    <AppBarButton
-                        x:Name="TestBackButton"
-                        Background="Transparent"
-                        Icon="Back"
-                        Width="40"
-                        Height="40"
-                        Click="BackButton_Click"
-                        BorderThickness="0" />
-                    <TextBlock
-                        x:Name="TestFolderInfoTextBlock"
-                        VerticalAlignment="Center"
-                        Margin="8,0"
-                        FontSize="14" />
-                    <ProgressRing x:Name="TestLocalProgressRing" Visibility="Collapsed" />
-                </StackPanel>
-            </CommandBar.Content>
-            <AppBarButton
-                x:Name="TestNewFolderButton"
-                x:Uid="NewFolderItem"
-                Label="New Folder"
-                Icon="Add"
-                Width="{StaticResource AppBarButtonWidth}"
-                Click="NewFolderButton_Click">
-            </AppBarButton>
-            <AppBarButton
-                x:Name="TestRefreshButton"
-                x:Uid="RefreshItem"
-                Label="Refresh"
-                Icon="Refresh"
-                Width="{StaticResource AppBarButtonWidth}"
-                Click="RefreshButton_Click" />
-            <AppBarButton
-                x:Name="TestShuffleButton"
-                x:Uid="ShuffleItem"
-                Label="Shuffle"
-                Icon="Shuffle"
-                Width="{StaticResource AppBarButtonWidth}"
-                Click="ShuffleButton_Click" />
-            <AppBarButton
-                x:Name="TestViewModeAppButton"
-                x:Uid="ViewModeAppButton"
-                Label="View Mode"
-                Icon="View"
-                Width="{StaticResource AppBarButtonWidth}"
-                />
-            <AppBarButton
-                x:Name="TestMultiSelectAppButton"
-                x:Uid="MultiSelectAppButton"
-                Label="MultiSelect"
-                Width="{StaticResource AppBarButtonWidth}"
-                Click="MultiSelectAppButton_Click">
-                <AppBarButton.Icon>
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE762;" />
-                </AppBarButton.Icon>
-            </AppBarButton>
-            <AppBarButton
-                x:Name="TestSortAppButton"
-                x:Uid="SortAppButton"
-                Label="Sort"
-                Icon="Sort"
-                Width="{StaticResource AppBarButtonWidth}"
-                Click="SortAppButton_Click"/>
-        </CommandBar>
-        <TreeView
+        <ListView
             x:Name="LocalTreeView"
             Grid.Row="2"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            HorizontalContentAlignment="Stretch"
-            SelectionMode="None"
-            ItemContainerStyle="{StaticResource StretchTreeViewItemStyle}"
+            SelectionMode="Single"
+            ItemContainerStyle="{StaticResource StretchListViewItemStyle}"
             ItemsSource="{x:Bind TreeItems, Mode=OneWay}"
             CanDragItems="True"
-            DoubleTapped="LocalTreeView_DoubleTapped"
-            IsDoubleTapEnabled="True"
+            AllowDrop="True"
+            DragEnter="LocalTreeView_DragEnter"
             DragItemsStarting="LocalTreeView_DragItemsStarting"
-            DragItemsCompleted="LocalTreeView_DragItemsCompleted"
+            DoubleTapped="LocalTreeView_DoubleTapped"
+            SelectionChanged="LocalListView_SelectionChanged"
+            IsDoubleTapEnabled="True"
             Visibility="Collapsed" >
-            <TreeView.ItemTemplateSelector>
+            <ListView.ItemTemplateSelector>
                 <templateselector:TreeViewStorageItemTemplateSelector>
                     <templateselector:TreeViewStorageItemTemplateSelector.FileTemplate>
                         <DataTemplate x:DataType="data:TreeViewFile">
-                            <Grid Background="Transparent">
+                            <Grid Padding="{StaticResource TreeViewPadding}">
                                 <Grid.ContextFlyout>
                                     <MenuFlyout Opening="OpenMusicFlyout" />
                                 </Grid.ContextFlyout>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition x:Name="ThumbnailColumnDefinition" Width="Auto" />
-                                    <ColumnDefinition x:Name="TitleColumnDefinition" Width="6*" />
-                                    <ColumnDefinition x:Name="ArtistColumnDefinition" Width="3*" />
-                                    <ColumnDefinition x:Name="AlbumColumnDefinition" Width="5*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="6*" />
+                                    <ColumnDefinition Width="3*" />
+                                    <ColumnDefinition Width="5*" />
                                 </Grid.ColumnDefinitions>
-                                <Image Width="{StaticResource IconSize}" Source="{x:Bind Icon}" />
+                                <FontIcon
+                                    x:Name="PlayingIcon"
+                                    FontFamily="Segoe MDL2 Assets"
+                                    Width="{StaticResource IconSize}"
+                                    Foreground="{StaticResource SystemColorHighlightColor}"
+                                    Glyph="&#xE767;"
+                                    Visibility="{x:Bind IsPlaying, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
+                                <Image
+                                    Width="{StaticResource IconSize}"
+                                    Source="{x:Bind Icon}"
+                                    Visibility="{x:Bind IsPlaying, Converter={StaticResource InvertedVisibilityConverter}, Mode=OneWay}"/>
                                 <TextBlock
                                     Grid.Column="1"
                                     Margin="10,0"
                                     VerticalAlignment="Center"
                                     Text="{x:Bind Name, Mode=OneWay}"
+                                    Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
+                                    FontSize="{StaticResource TreeViewFontSize}"
                                     ToolTipService.ToolTip="{x:Bind Path, Mode=OneWay}"/>
                                 <HyperlinkButton
                                     x:Name="CreatorHyperLinkButton"
                                     Grid.Column="2"
                                     Margin="10,0"
+                                    FontSize="{StaticResource TreeViewFontSize}"
                                     Click="CreatorHyperLinkButton_Click"
                                     Style="{StaticResource TextBlockButtonStyle}"
-                                    Foreground="Black"
-                                    Content="{x:Bind Creator, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist, Mode=OneWay}" />
+                                    Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
+                                    Content="{x:Bind Creator, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist, Mode=OneWay}"
+                                    ToolTipService.ToolTip="{Binding ElementName=CreatorHyperLinkButton, Path=Content, Mode=OneWay}" />
                                 <HyperlinkButton
                                     x:Name="CollectionHyperLinkButton"
                                     Grid.Column="3"
                                     Margin="10,0"
+                                    FontSize="{StaticResource TreeViewFontSize}"
                                     Click="CollectionHyperLinkButton_Click"
-                                    Foreground="Black"
+                                    Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
                                     Style="{StaticResource TextBlockButtonStyle}"
-                                    Content="{x:Bind Collection, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownAlbum, Mode=OneWay}" />
+                                    Content="{x:Bind Collection, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownAlbum, Mode=OneWay}" 
+                                    ToolTipService.ToolTip="{Binding ElementName=CollectionHyperLinkButton, Path=Content, Mode=OneWay}" />
                             </Grid>
                         </DataTemplate>
                     </templateselector:TreeViewStorageItemTemplateSelector.FileTemplate>
                     <templateselector:TreeViewStorageItemTemplateSelector.FolderTemplate>
                         <DataTemplate x:DataType="data:TreeViewFolder">
-                            <Grid Background="Transparent" ToolTipService.ToolTip="{x:Bind Path, Mode=OneWay}">
+                            <Grid
+                                Drop="LocalTreeViewFolder_Drop"
+                                Padding="{StaticResource TreeViewPadding}"
+                                ToolTipService.ToolTip="{x:Bind Path, Mode=OneWay}"
+                                AllowDrop="True">
                                 <Grid.ContextFlyout>
                                     <MenuFlyout Opening="OpenPlaylistFlyout" />
                                 </Grid.ContextFlyout>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Image Width="{StaticResource IconSize}" Source="Assets/folder.png" />
+                                <Image
+                                    Width="{StaticResource IconSize}"
+                                    Source="Assets/folder.png" />
                                 <TextBlock
                                     Grid.Column="1"
                                     Margin="10,0"
-                                    Text="{x:Bind Name, Mode=OneWay}"/>
+                                    VerticalAlignment="Center"
+                                    FontSize="{StaticResource TreeViewFontSize}"
+                                    Text="{x:Bind Name, Mode=OneWay}"
+                                    ToolTipService.ToolTip="{x:Bind Path, Mode=OneWay}"/>
                             </Grid>
                         </DataTemplate>
                     </templateselector:TreeViewStorageItemTemplateSelector.FolderTemplate>
                 </templateselector:TreeViewStorageItemTemplateSelector>
-            </TreeView.ItemTemplateSelector>
-        </TreeView>
+            </ListView.ItemTemplateSelector>
+        </ListView>
         <GridView
             x:Name="LocalGridView"
-            Grid.Row="1"
+            Grid.Row="2"
             IsItemClickEnabled="True"
+            CanDragItems="True"
+            AllowDrop="True"
+            SelectionChanged="LocalListView_SelectionChanged"
             ItemClick="LocalGridView_ItemClick"
             ItemContainerStyle="{StaticResource DropShadowGridViewItemStyle}"
             ItemsSource="{x:Bind GridItems, Mode=OneWay}"
@@ -456,7 +328,7 @@
                 <templateselector:GridViewStorageItemTemplateSelector>
                     <templateselector:GridViewStorageItemTemplateSelector.FileTemplate>
                         <DataTemplate x:DataType="data:GridViewMusic">
-                            <controls:GridFolderControl>
+                            <controls:GridFolderControl AllowDrop="True">
                                 <controls:GridFolderControl.ContextFlyout>
                                     <MenuFlyout Opening="OpenMusicFlyout" />
                                 </controls:GridFolderControl.ContextFlyout>
@@ -465,7 +337,7 @@
                     </templateselector:GridViewStorageItemTemplateSelector.FileTemplate>
                     <templateselector:GridViewStorageItemTemplateSelector.FolderTemplate>
                         <DataTemplate x:DataType="data:GridViewFolder">
-                            <controls:GridFolderControl>
+                            <controls:GridFolderControl AllowDrop="True">
                                 <controls:GridFolderControl.ContextFlyout>
                                     <MenuFlyout Opening="OpenPlaylistFlyout" />
                                 </controls:GridFolderControl.ContextFlyout>
@@ -475,15 +347,11 @@
                 </templateselector:GridViewStorageItemTemplateSelector>
             </GridView.ItemTemplateSelector>
         </GridView>
-        <StackPanel Orientation="Horizontal" Grid.Row="4" Height="40">
-            <TextBlock Text="Hello" />
-            <TextBlock Text="Selected" />
-        </StackPanel>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WidthChange">
                 <VisualState x:Name="Wide">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="{StaticResource CollapsedNavigationViewWindowWidth}" />
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource MinimalNavigationViewWindowWidth}" />
                     </VisualState.StateTriggers>
                 </VisualState>
                 <VisualState x:Name="Narrow">
@@ -491,7 +359,14 @@
                         <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="LocalCommandBar.DefaultLabelPosition" Value="Collapsed" />
+                        <Setter Target="FolderChainListView.BorderThickness" Value="0" />
+                        <Setter Target="FolderChainListView.Background" Value="LightGray" />
+                        <Setter Target="CurrentPathGrid.Margin" Value="0" />
+                        <Setter Target="NoMusicGrid.Margin" Value="0" />
+                        <Setter Target="TitleGrid.Margin" Value="40,0,0,0" />
+                        <Setter Target="NoMusicGrid.Background" Value="LightGray" />
+                        <Setter Target="CurrentPathTextBlock.Visibility" Value="Collapsed" />
+                        <Setter Target="LocalCommandBar.Margin" Value="0" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

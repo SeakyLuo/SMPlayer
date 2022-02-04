@@ -264,6 +264,14 @@ namespace SMPlayer
             }
         }
 
+        private void MusicGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListViewBase listViewBase = (sender as ListViewBase);
+            if (listViewBase.SelectionMode == ListViewSelectionMode.Multiple)
+            {
+                Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(listViewBase.SelectedItems.Count);
+            }
+        }
     }
 
     public class MusicPath : IMusicable

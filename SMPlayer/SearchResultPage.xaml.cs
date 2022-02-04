@@ -233,7 +233,7 @@ namespace SMPlayer
 
         private void SortButton_Click(object sender, RoutedEventArgs e)
         {
-            MenuFlyoutHelper.ShowSortByMenu(sender, SettingsCriterion, Criteria, item => SettingsCriterion = item);
+            MenuFlyoutHelper.SetSortByMenu(sender, SettingsCriterion, Criteria, item => SettingsCriterion = item);
         }
 
         private void OpenFolderMenuFlyout(object sender, object e)

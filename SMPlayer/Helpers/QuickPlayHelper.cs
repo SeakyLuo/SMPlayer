@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,8 +74,8 @@ namespace SMPlayer.Helpers
         {
             if (!preference.Playlists) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(PreferenceSettings.EnabledPreferredPlaylists);
-            songs.AddRange(items.SelectMany(i => Settings.FindPlaylist(i.LongId)
-                                                         .Songs.RandItems(GetRandomPreferredItems(i.Level)).ToList())
+            songs.AddRange(items.SelectMany(i => PlaylistService.FindPlaylist(i.LongId).Songs
+                                                                .RandItems(GetRandomPreferredItems(i.Level)).ToList())
                                 .RandItems(randomItems).ToList());
         }
 
@@ -119,7 +120,7 @@ namespace SMPlayer.Helpers
         {
             int count = GetPreferenceItems(PreferenceSettings.FindMyFavorites);
             if (count == 0) return;
-            songs.AddRange(Settings.MyFavoritesPlaylist.Songs.RandItems(count));
+            songs.AddRange(PlaylistService.MyFavoriteSongs.RandItems(count));
         }
 
         private static void HandleMostPlayed(HashSet<Music> songs, int randomLimit)
@@ -178,7 +179,7 @@ namespace SMPlayer.Helpers
                         break;
                     case EntityType.Playlist:
                         HashSet<long> playlistItems = group.Select(i => long.Parse(i.Id))
-                                                           .SelectMany(id => Settings.FindPlaylistItems(id))
+                                                           .SelectMany(id => PlaylistService.FindPlaylistItems(id))
                                                            .Select(i => i.Id).ToHashSet();
                         songs.RemoveWhere(i => Toss(probability) && playlistItems.Contains(i.Id));
                         break;

@@ -201,7 +201,7 @@ namespace SMPlayer
             if (folder == null) return;
             MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
             Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-            StorageFile dbFile = await FileHelper.LoadFileAsync(Path.Combine(Helper.LocalFolder.Path, SQLHelper.DBFileName));
+            StorageFile dbFile = await StorageHelper.LoadFileAsync(Path.Combine(Helper.LocalFolder.Path, SQLHelper.DBFileName));
             await dbFile.CopyAsync(folder);
             MainPage.Instance.Loader.Hide();
             MainPage.Instance.ShowLocalizedNotification("DataExported");

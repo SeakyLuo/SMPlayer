@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.Globalization.DateTimeFormatting;
+using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
@@ -347,6 +348,38 @@ namespace SMPlayer
             EntityType type = (EntityType)Enum.Parse(typeof(EntityType), parameter.ToString());
             string resource = $"Preferred{parameter}s";
             return count == 0 ? Helper.LocalizeText(resource) : Helper.LocalizeText($"{resource}WithCount", count, PreferenceSettings.GetMaxPreferenceItems(type));
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
+
+    class FolderChainItemTextBlockFontWeightConverter : IValueConverter
+    {
+
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return (bool)value ? FontWeights.Bold : FontWeights.Normal;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
+
+    class FolderChainDropdownButtonNameConverter : IValueConverter
+    {
+        public static string BuildName(long id)
+        {
+            return "FolderChainItemDropdownButton" + id;
+        }
+
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return BuildName((long)value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

@@ -156,6 +156,9 @@
   <data name="ChangesSaved" xml:space="preserve">
     <value>已保存！</value>
   </data>
+  <data name="CheckingFolder" xml:space="preserve">
+    <value>正在检查文件夹"{0}"……</value>
+  </data>
   <data name="CheckNewMusicResult1Added" xml:space="preserve">
     <value>添加了《{0}》</value>
   </data>
@@ -317,9 +320,6 @@
   </data>
   <data name="No" xml:space="preserve">
     <value>否</value>
-  </data>
-  <data name="No Music" xml:space="preserve">
-    <value>没有音乐</value>
   </data>
   <data name="No Playlist" xml:space="preserve">
     <value>没有播放列表</value>

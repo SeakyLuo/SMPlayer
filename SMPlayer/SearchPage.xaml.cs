@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Navigation;
 using System;
 using SMPlayer.Helpers;
 using System.Threading.Tasks;
+using SMPlayer.Services;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -190,7 +191,7 @@ namespace SMPlayer
 
         private void SortSongsButton_Click(object sender, RoutedEventArgs e)
         {
-            MenuFlyoutHelper.ShowSortByMenu(sender, Settings.settings.SearchSongsCriterion, SongsCriteria,
+            MenuFlyoutHelper.SetSortByMenu(sender, Settings.settings.SearchSongsCriterion, SongsCriteria,
                                                    async item =>
                                                    {
                                                        Settings.settings.SearchSongsCriterion = item;
@@ -203,7 +204,7 @@ namespace SMPlayer
 
         private void SortFoldersButton_Click(object sender, RoutedEventArgs e)
         {
-            MenuFlyoutHelper.ShowSortByMenu(sender, Settings.settings.SearchFoldersCriterion, FoldersCriteria,
+            MenuFlyoutHelper.SetSortByMenu(sender, Settings.settings.SearchFoldersCriterion, FoldersCriteria,
                                                    async item =>
                                                    {
                                                        Settings.settings.SearchFoldersCriterion = item;
@@ -216,7 +217,7 @@ namespace SMPlayer
 
         private void SortPlaylistsButton_Click(object sender, RoutedEventArgs e)
         {
-            MenuFlyoutHelper.ShowSortByMenu(sender, Settings.settings.SearchPlaylistsCriterion, PlaylistsCriteria,
+            MenuFlyoutHelper.SetSortByMenu(sender, Settings.settings.SearchPlaylistsCriterion, PlaylistsCriteria,
                                                    async item =>
                                                    {
                                                        Settings.settings.SearchPlaylistsCriterion = item;
@@ -233,7 +234,7 @@ namespace SMPlayer
 
         private void SortArtistsButton_Click(object sender, RoutedEventArgs e)
         {
-            MenuFlyoutHelper.ShowSortByMenu(sender, Settings.settings.SearchArtistsCriterion, ArtistsCriteria,
+            MenuFlyoutHelper.SetSortByMenu(sender, Settings.settings.SearchArtistsCriterion, ArtistsCriteria,
                                                    async item =>
                                                    {
                                                        Settings.settings.SearchArtistsCriterion = item;
@@ -246,7 +247,7 @@ namespace SMPlayer
 
         private void SortAlbumsButton_Click(object sender, RoutedEventArgs e)
         {
-            MenuFlyoutHelper.ShowSortByMenu(sender, Settings.settings.SearchAlbumsCriterion, AlbumsCriteria,
+            MenuFlyoutHelper.SetSortByMenu(sender, Settings.settings.SearchAlbumsCriterion, AlbumsCriteria,
                                                    async item =>
                                                    {  
                                                        Settings.settings.SearchAlbumsCriterion = item;
@@ -317,7 +318,7 @@ namespace SMPlayer
         public string Text { get; set; }
         public FolderTree Folder { get; set; }
         public IEnumerable<Music> Songs { get; set; } = Settings.AllSongs;
-        public IEnumerable<Playlist> Playlists { get; set; } = Settings.AllPlaylistsWithSongs;
+        public IEnumerable<Playlist> Playlists { get; set; } = PlaylistService.AllPlaylistsWithSongs;
         public IEnumerable<FolderTree> Folders { get; set; } = Settings.AllFolders;
     }
     public class SearchArgs

@@ -35,7 +35,7 @@ namespace SMPlayer.Controls
         private void Album_Click(object sender, RoutedEventArgs e)
         {
             if (NowPlayingFullPage.Instance != null) NowPlayingFullPage.Instance.GoBack();
-            MainPage.Instance.NavigateToPage(typeof(AlbumPage), Settings.FindAlbum(Data.Album, Data.Artist));
+            MainPage.Instance.NavigateToPage(typeof(AlbumPage), Data.Album);
         }
         private void Artist_Click(object sender, RoutedEventArgs e)
         {

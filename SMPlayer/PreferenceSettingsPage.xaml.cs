@@ -1,6 +1,7 @@
 ﻿using SMPlayer.Dialogs;
 using SMPlayer.Models;
 using SMPlayer.Models.VO;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -137,15 +138,15 @@ namespace SMPlayer
                     break;
                 case EntityType.Artist:
                     view.ToolTip = view.Name = view.ItemId;
-                    view.IsValid = Settings.AllSongs.Any(i => i.Artist == view.ItemId);
+                    view.IsValid = MusicService.SelectByArtist(Name).IsNotEmpty();
                     break;
                 case EntityType.Album:
                     view.ToolTip = view.Name;
                     string[] albumId = view.ItemId.Split(Helpers.TileHelper.StringConcatenationFlag);
                     if (albumId.Length > 1)
                     {
-                        string album = albumId[0], artist = albumId[1];
-                        view.IsValid = Settings.AllSongs.Any(i => i.Album == album && i.Artist == artist);
+                        string album = albumId[0];
+                        view.IsValid = MusicService.SelectByAlbum(album).IsNotEmpty();
                     }
                     else
                     {
@@ -153,7 +154,7 @@ namespace SMPlayer
                     }
                     break;
                 case EntityType.Playlist:
-                    Playlist playlist = Settings.FindPlaylist(item.LongId);
+                    Playlist playlist = PlaylistService.FindPlaylist(item.LongId);
                     view.ToolTip = view.Name = playlist?.Name;
                     view.IsValid = playlist != null;
                     break;

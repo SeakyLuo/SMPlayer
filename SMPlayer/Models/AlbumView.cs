@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System;
 using SMPlayer.Helpers;
 using SMPlayer.Models.VO;
+using SMPlayer.Services;
 
 namespace SMPlayer.Models
 {
@@ -62,6 +63,21 @@ namespace SMPlayer.Models
             Songs = new ObservableCollection<Music>(songs);
             if (setThumbnail) SetThumbnail();
         }
+        public AlbumView(string name, IEnumerable<Music> songs, bool setThumbnail = true)
+        {
+            Name = name;
+            Songs = new ObservableCollection<Music>(songs);
+            List<string> artists = songs.GroupBy(m => m.Artist).OrderByDescending(i => i.Count()).Select(i => i.Key).ToList();
+            if (artists.Count() >= 3)
+            {
+                Artist = Helper.LocalizeText("ArtistsAndSoOn", artists[0], artists[1], artists.Count());
+            }
+            else
+            {
+                Artist = string.Join(Helper.LocalizeText("ArtistSeperator"), artists);
+            }
+            if (setThumbnail) SetThumbnail();
+        }
         private async void SetThumbnail()
         {
             if (ThumbnailSource == null)
@@ -109,15 +125,22 @@ namespace SMPlayer.Models
 
         public Playlist ToPlaylist()
         {
-            return new Playlist(Name, Songs)
+            if (EntityType == EntityType.Album)
             {
-                Id = Settings.FindPlaylist(Name)?.Id ?? 0,
-                Artist = Artist,
-            };
-        }
-        public AlbumInfo ToAlbumInfo()
-        {
-            return new AlbumInfo(Name, Artist, ThumbnailSource);
+                return new Playlist(Name, Songs.OrderBy(i => i.Artist).ThenBy(i => i.Name))
+                {
+                    Artist = Artist,
+                    EntityType = EntityType.Album,
+                };
+            }
+            else
+            {
+                return new Playlist(Name, Songs)
+                {
+                    Id = PlaylistService.FindPlaylist(Name)?.Id ?? 0,
+                    Artist = Artist,
+                };
+            }
         }
 
         public bool Contains(Music music)
@@ -133,8 +156,7 @@ namespace SMPlayer.Models
 
         public override bool Equals(object obj)
         {
-            return (obj is AlbumView album && Name == album.Name && Artist == album.Artist) ||
-                   (obj is AlbumInfo info && Name == info.Name && Artist == info.Artist);
+            return obj is AlbumView album && Name == album.Name;
         }
 
         public override int GetHashCode()
@@ -149,7 +171,7 @@ namespace SMPlayer.Models
 
         private string GetAlbumKey()
         {
-            return TileHelper.BuildAlbumNavigationFlag(Name, Artist);
+            return Name;
         }
 
         private string ConcatNameAndArtist()

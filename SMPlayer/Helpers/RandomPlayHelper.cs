@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,27 +15,27 @@ namespace SMPlayer.Helpers
             MusicPlayer.SetPlaylistAndPlay(Settings.AllSongs.RandItems(randomLimit));
         }
 
-        public static IGrouping<string, Music> PlayArtist(int randomLimit = 100)
+        public static string PlayArtist(int randomLimit = 100)
         {
-            var rArtist = Settings.AllSongs.GroupBy(m => m.Artist).RandItem();
-            MusicPlayer.SetPlaylistAndPlay(rArtist.RandItems(randomLimit));
-            return rArtist;
+            var artist = MusicService.SelectAllArtists().RandItem();
+            MusicPlayer.SetPlaylistAndPlay(MusicService.SelectByArtist(artist).RandItems(randomLimit));
+            return artist;
         }
 
-        public static AlbumInfo PlayAlbum(int randomLimit = 100)
+        public static string PlayAlbum(int randomLimit = 100)
         {
-            var album = AlbumsPage.AlbumInfoList.RandItem();
-            // 没有检查Artist，不过无所谓
-            MusicPlayer.SetPlaylistAndPlay(Settings.AllSongs.Where(i => i.Album == album.Name).RandItems(randomLimit));
+            var album = MusicService.SelectAllAlbums().RandItem();
+            MusicPlayer.SetPlaylistAndPlay(MusicService.SelectByAlbum(album).RandItems(randomLimit));
             return album;
         }
         public static Playlist PlayPlaylist(int randomLimit = 100)
         {
-            List<Playlist> allPlaylists = Settings.AllPlaylists;
+            List<Playlist> allPlaylists = PlaylistService.AllPlaylists;
             Playlist playlist;
             do
             {
                 playlist = allPlaylists.RandItem();
+                playlist.Songs = new System.Collections.ObjectModel.ObservableCollection<Music>(PlaylistService.FindPlaylistItems(playlist.Id));
             } while (playlist.IsEmpty);
             MusicPlayer.SetPlaylistAndPlay(playlist.Songs.RandItems(randomLimit));
             return playlist;

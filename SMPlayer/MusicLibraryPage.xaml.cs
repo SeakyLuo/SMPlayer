@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using SMPlayer.Helpers;
 using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -105,7 +106,7 @@ namespace SMPlayer
         {
             if (songs == null) return;
             AllSongs.Clear();
-            var favSet = Settings.MyFavoritesPlaylist.Songs.Select(i => i.Id).ToHashSet();
+            var favSet = PlaylistService.MyFavorites.Songs.Select(i => i.Id).ToHashSet();
             foreach (var item in songs)
             {
                 Music music = item.Copy();

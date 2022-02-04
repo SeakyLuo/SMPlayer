@@ -25,16 +25,16 @@
                 <AutoSuggestBox
                     x:Name="AlbumSearchBar"
                     x:Uid="AlbumSearchBar"
-                    MinWidth="120"
-                    Margin="6,4"
+                    Width="360"
+                    BorderThickness="0.5"
+                    Margin="12,4"
                     TextChanged="AlbumSearchBar_TextChanged"
                     Style="{StaticResource BorderlessAutoSuggestBoxStyle}" />
             </CommandBar.Content>
             <AppBarButton
                 x:Name="MultiSelectButton"
                 x:Uid="MultiSelectAppButton"
-                Click="MultiSelectButton_Click"
-                IsEnabled="False">
+                Click="MultiSelectButton_Click">
                 <AppBarButton.Icon>
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE762;" />
                 </AppBarButton.Icon>
@@ -51,7 +51,8 @@
             Width="1000"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            IsIndeterminate="True" />
+            IsIndeterminate="True"
+            Visibility="Collapsed"/>
         <GridView
             x:Name="AlbumsGridView"
             Grid.Row="2"
@@ -60,6 +61,7 @@
             ItemClick="GridView_ItemClick"
             ItemContainerStyle="{StaticResource DropShadowGridViewItemStyle}"
             ItemsSource="{x:Bind Suggestions, Mode=OneWay}"
+            SelectionChanged="AlbumsGridView_SelectionChanged"
             SelectionMode="None">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="data:AlbumView">

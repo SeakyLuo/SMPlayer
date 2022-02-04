@@ -25,7 +25,7 @@ namespace SMPlayer.Helpers
         public static async Task<bool> Initialized()
         {
             if (Inited) return true;
-            return await FileHelper.FileExists(BuildDBPath());
+            return await StorageHelper.FileExists(BuildDBPath());
         }
 
         public async static Task Init()

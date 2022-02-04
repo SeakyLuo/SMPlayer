@@ -92,7 +92,7 @@ namespace SMPlayer
         public static async Task Init()
         {
             var initDefaultImage = MusicImage.DefaultImage; // 静态资源只有在用到的时候才会被加载，所以做一个无用的声明强行用到
-            TempFolder = await FileHelper.CreateFolder("Temp");
+            TempFolder = await StorageHelper.CreateFolder("Temp");
             await ClearBackups();
         }
 
@@ -149,7 +149,7 @@ namespace SMPlayer
         }
         public static void ShowPathNotFoundNotification(string path, int duration = 5000)
         {
-            GetMainPageContainer()?.ShowNotification(LocalizeMessage("PathNotFound", FileHelper.GetParentPath(path)), duration);
+            GetMainPageContainer()?.ShowNotification(LocalizeMessage("PathNotFound", StorageHelper.GetParentPath(path)), duration);
         }
         public static void ShowAddMusicResultNotification(AddMusicResult result, Music target = null)
         {

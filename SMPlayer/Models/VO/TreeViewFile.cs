@@ -8,6 +8,16 @@ namespace SMPlayer.Models.VO
 {
     public class TreeViewFile : TreeViewStorageItem, IFolderFile
     {
+        public bool IsPlaying
+        {
+            get => isPlaying;
+            set
+            {
+                isPlaying = value;
+                OnPropertyChanged();
+            }
+        }
+        private bool isPlaying;
         public string Icon { get; set; }
         public string Creator { get; set; }
         public string Collection { get; set; } // 从属的集合

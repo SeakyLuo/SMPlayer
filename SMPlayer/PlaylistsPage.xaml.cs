@@ -2,6 +2,7 @@
 using Microsoft.UI.Xaml.Controls;
 using SMPlayer.Dialogs;
 using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -32,7 +33,7 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            Playlists.SetTo(Settings.AllPlaylists);
+            Playlists.SetTo(PlaylistService.AllPlaylists);
             SelectPlaylist(Settings.settings.LastPlaylistId);
             Settings.AddPlaylistEventListener(this);
         }
@@ -40,19 +41,24 @@ namespace SMPlayer
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (e.Parameter is Playlist playlist)
+            NavigateToPlaylist(e.Parameter);
+        }
+
+        public void NavigateToPlaylist(object parameter)
+        {
+            if (parameter is Playlist playlist)
             {
                 SelectPlaylist(playlist.Id);
             }
-            else if (e.Parameter is string playlistName)
+            else if (parameter is string playlistName)
             {
                 SelectPlaylist(playlistName);
             }
-            else if (e.Parameter is AlbumView albumView)
+            else if (parameter is AlbumView albumView)
             {
                 SelectPlaylist(albumView.Name);
             }
-            else if (e.Parameter is long id)
+            else if (parameter is long id)
             {
                 SelectPlaylist(id);
             }
@@ -78,7 +84,7 @@ namespace SMPlayer
         private async void LoadPlaylistSongs(Playlist playlist)
         {
             if (playlist == null) return;
-            playlist.Songs.SetTo(Settings.FindPlaylistItems(playlist.Id));
+            playlist.Songs.SetTo(PlaylistService.FindPlaylistItems(playlist.Id));
             playlist.Sort();
             foreach (var music in playlist.Songs)
                 music.IsPlaying = music.Equals(MusicPlayer.CurrentMusic);

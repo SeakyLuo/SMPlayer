@@ -57,8 +57,10 @@ namespace SMPlayer.Models
             foreach (var item in FilesAdded)
             {
                 string filename = Path.GetFileName(item);
-                if (FilesRemoved.RemoveAll(i => i.EndsWith(filename)) == 1)
+                if (FilesRemoved.Count(i => i.EndsWith(filename)) == 1 &&
+                    FilesAdded.Count(i => i.EndsWith(filename)) == 1)
                 {
+                    FilesRemoved.RemoveAll(i => i.EndsWith(filename));
                     FilesMoved.Add(item);
                 }
             }

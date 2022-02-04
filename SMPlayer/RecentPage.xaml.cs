@@ -462,6 +462,15 @@ namespace SMPlayer
             BuildMenuFlyoutHelper(helper);
         }
 
+        private void SearchHistoryListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListViewBase listViewBase = (sender as ListViewBase);
+            if (listViewBase.SelectionMode == ListViewSelectionMode.Multiple)
+            {
+                Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(listViewBase.SelectedItems.Count);
+            }
+        }
+
         void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
             switch (args.EventType)

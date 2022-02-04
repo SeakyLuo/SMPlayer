@@ -62,7 +62,7 @@
                             SelectionMode="None">
                             <ListView.ItemTemplate>
                                 <DataTemplate x:DataType="models:FolderUpdateResultGroupItem">
-                                    <Grid Height="24">
+                                    <Grid Padding="6,0">
                                         <TextBlock
                                             Text="{x:Bind Name}" 
                                             FontSize="16"

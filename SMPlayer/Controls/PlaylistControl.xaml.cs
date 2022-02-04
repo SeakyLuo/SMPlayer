@@ -294,7 +294,7 @@ namespace SMPlayer
 
         public void ScrollToTop()
         {
-            ScrollToIndex(0);
+            SongsListView.ScrollToTop();
         }
 
         private int ScrollToMusicRequestedWhenUnloaded = -1;
@@ -313,7 +313,7 @@ namespace SMPlayer
             int index = IsNowPlaying ? music.Index : CurrentPlaylist.IndexOf(music);
             if (SongsListView.IsLoaded)
             {
-                if (!ScrollToIndex(index))
+                if (!SongsListView.ScrollToIndex(index))
                 {
                     if (showNotification) Helper.ShowNotification("UnableToLocateMusic");
                     return false;
@@ -326,21 +326,10 @@ namespace SMPlayer
             return true;
         }
 
-        private bool ScrollToIndex(int index)
-        {
-            if (SongsListView.ContainerFromIndex(index) is ListViewItem item)
-            {
-                //SongsListView.ScrollIntoView(item, ScrollIntoViewAlignment.Leading);
-                item.Locate();
-                return true;
-            }
-            return false;
-        }
-
         private void SwipeControl_Loaded(object sender, RoutedEventArgs e)
         {
             if (!Removable) (sender as SwipeControl).RightItems = null;
-            if (ScrollToMusicRequestedWhenUnloaded != -1 && ScrollToIndex(ScrollToMusicRequestedWhenUnloaded))
+            if (ScrollToMusicRequestedWhenUnloaded != -1 && SongsListView.ScrollToIndex(ScrollToMusicRequestedWhenUnloaded))
             {
                 ScrollToMusicRequestedWhenUnloaded = -1;
             }
@@ -479,6 +468,15 @@ namespace SMPlayer
         {
             if (IsNowPlaying)
                 CurrentPlaylist.Insert(index, music);
+        }
+
+        private void SongsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListViewBase listViewBase = (sender as ListViewBase);
+            if (listViewBase.SelectionMode == ListViewSelectionMode.Multiple)
+            {
+                Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(listViewBase.SelectedItems.Count);
+            }
         }
 
         void ICurrentPlaylistChangedListener.RemoveMusic(Music music)

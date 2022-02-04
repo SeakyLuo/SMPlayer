@@ -147,6 +147,12 @@
   <data name="Artists" xml:space="preserve">
     <value>Artists</value>
   </data>
+  <data name="ArtistsAndSoOn" xml:space="preserve">
+    <value>{0}, {1}, etc.</value>
+  </data>
+  <data name="ArtistSeperator" xml:space="preserve">
+    <value>; </value>
+  </data>
   <data name="ArtistsWithCount" xml:space="preserve">
     <value>Artists ({0})</value>
   </data>
@@ -200,6 +206,9 @@
   </data>
   <data name="IsEnabledToggleSwitchOnToolTip" xml:space="preserve">
     <value>If you disable, this item will not have a higher play probability.</value>
+  </data>
+  <data name="ItemsSelected" xml:space="preserve">
+    <value>Items Selected: {0}</value>
   </data>
   <data name="KeepBoth" xml:space="preserve">
     <value>Keep Both</value>
@@ -257,6 +266,9 @@
   </data>
   <data name="MyFavorites" xml:space="preserve">
     <value>My Favorites</value>
+  </data>
+  <data name="NewFolder" xml:space="preserve">
+    <value>New Folder</value>
   </data>
   <data name="NewFolderName" xml:space="preserve">
     <value>New Folder</value>
@@ -416,6 +428,9 @@
   </data>
   <data name="SongsWithCount" xml:space="preserve">
     <value>Songs ({0})</value>
+  </data>
+  <data name="Sort" xml:space="preserve">
+    <value>Sort</value>
   </data>
   <data name="ThisMonth" xml:space="preserve">
     <value>This Month</value>

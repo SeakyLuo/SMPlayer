@@ -35,6 +35,8 @@ namespace SMPlayer.Models
         public int Count { get => Songs.Count; }
         public bool IsMyFavorite { get => Name == Constants.MyFavorites; }
         public bool IsEmpty { get => Songs.IsEmpty(); }
+        public EntityType EntityType { get; set; } = EntityType.Playlist;
+
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
