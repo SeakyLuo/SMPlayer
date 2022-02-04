@@ -294,9 +294,10 @@ namespace SMPlayer
             e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move;
         }
 
+        private TreeViewStorageItem draggingTreeViewStorageItem;
         private void LocalTreeView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
         {
-            TreeViewStorageItem storageItem = e.Items[0] as TreeViewStorageItem;
+            draggingTreeViewStorageItem = e.Items[0] as TreeViewStorageItem;
         }
 
 
