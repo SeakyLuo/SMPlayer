@@ -1,6 +1,7 @@
 ﻿using SMPlayer.Dialogs;
 using SMPlayer.Models;
 using SMPlayer.Models.DAO;
+using SMPlayer.Services;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace SMPlayer.Helpers
                 LoadingStatus = ExecutionStatus.Break;
             };
             LoadingStatus = ExecutionStatus.Running;
-            FolderTree tree = Settings.FindFolder(folder.Path) ?? new FolderTree(folder.Path);
+            FolderTree tree = StorageService.FindFolder(folder.Path) ?? new FolderTree(folder.Path);
             NotifyFolderEvent(Settings.settings.Tree, StorageItemEventType.BeforeReset);
             bool unbroken = await LoadFolder(folder, tree);
             MainPage.Instance.Loader.AllowBreak = false;
@@ -34,7 +35,7 @@ namespace SMPlayer.Helpers
             if (Settings.settings.Tree.Id != 0 && !Settings.settings.Tree.Equals(tree))
             {
                 await MainPage.Instance.Loader.ResetAsync("ClearExpiredData");
-                ClearOldTree(Settings.Root, tree);
+                ClearOldTree(StorageService.Root, tree);
             }
             Helper.CurrentFolder = folder;
             Settings.settings.Tree = tree;
@@ -62,7 +63,7 @@ namespace SMPlayer.Helpers
             foreach (var subFolder in await folder.GetFoldersAsync())
             {
                 if (LoadingStatus == ExecutionStatus.Break) return false;
-                var branch = Settings.FindFolder(subFolder.Path) ?? new FolderTree(subFolder.Path);
+                var branch = StorageService.FindFolder(subFolder.Path) ?? new FolderTree(subFolder.Path);
                 await LoadFolder(subFolder, branch);
                 newFolders.Add(subFolder.Path);
                 if (branch.IsNotEmpty)
@@ -74,7 +75,7 @@ namespace SMPlayer.Helpers
             {
                 if (!newFolders.Contains(branch.Path))
                 {
-                    FolderTree folderTree = Settings.FindFullFolder(branch.Id);
+                    FolderTree folderTree = StorageService.FindFullFolder(branch.Id);
                     folderTree.State = ActiveState.Inactive;
                     newBranches.Add(folderTree);
                 }
@@ -173,7 +174,7 @@ namespace SMPlayer.Helpers
             result?.RemoveFolder(folder.Path);
             foreach (var item in folder.Trees)
             {
-                RemoveFolder(Settings.FindFolder(item.Id), result);
+                RemoveFolder(StorageService.FindFolder(item.Id), result);
             }
             foreach (var item in folder.Files)
             {
@@ -200,7 +201,7 @@ namespace SMPlayer.Helpers
             {
                 foreach (var item in oldRoot.Trees)
                 {
-                    FolderTree branch = Settings.FindFolder(item.Id);
+                    FolderTree branch = StorageService.FindFolder(item.Id);
                     if (newRoot.Path.Contains(item.Path))
                     {
                         ClearOldTree(branch, newRoot);
@@ -219,7 +220,7 @@ namespace SMPlayer.Helpers
             // 两者没有关系，清除全部数据
             foreach (var item in oldRoot.Trees)
             {
-                ClearOldTree(Settings.FindFolder(item.Id), newRoot);
+                ClearOldTree(StorageService.FindFolder(item.Id), newRoot);
             }
         }
 
@@ -242,7 +243,7 @@ namespace SMPlayer.Helpers
                 return;
             }
             LoadingStatus = ExecutionStatus.Running;
-            FolderTree folderTree = Settings.FindFolder(tree.Id);
+            FolderTree folderTree = StorageService.FindFolder(tree.Id);
             bool unbroken = await LoadFolder(storageFolder, folderTree);
             if (!unbroken)
             {

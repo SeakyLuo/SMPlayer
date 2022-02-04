@@ -55,11 +55,11 @@ namespace SMPlayer.Helpers
             var pathSet = list.Select(i => i.Path).ToHashSet();
             list.AddRange(songs.Where(i => IsTargetMusic(i, keyword)).Select(i => StorageHelper.GetParentPath(i.Path))
                                .Distinct().Where(i => !pathSet.Contains(i))
-                               .AsParallel().Select(i => Settings.FindFolderInfo(i))
+                               .AsParallel().Select(i => StorageService.FindFolderInfo(i))
                                .Where(i => i != null).Select(tree => new GridViewFolder(tree)).ToList());
             return SortFolders(list.AsParallel().Select(i =>
             {
-                i.Source = Settings.FindFullFolder(i.Source.Id);
+                i.Source = StorageService.FindFullFolder(i.Source.Id);
                 return i;
             }), keyword, criterion);
         }
@@ -242,7 +242,7 @@ namespace SMPlayer.Helpers
             Playlist artist = (await Task.Run(() => SearchArtists(allSongs, keyword, SortBy.Default)))?.FirstOrDefault();
             AlbumView album = (await Task.Run(() => SearchAlbums(allSongs, keyword, SortBy.Default)))?.FirstOrDefault();
             AlbumView playlist = (await Task.Run(() => SearchPlaylists(PlaylistService.AllPlaylistsWithSongs, keyword, SortBy.Default)))?.FirstOrDefault();
-            GridViewFolder folder = (await Task.Run(() => SearchFolders(Settings.AllFolders, keyword, SortBy.Default)))?.FirstOrDefault();
+            GridViewFolder folder = (await Task.Run(() => SearchFolders(StorageService.AllFolders, keyword, SortBy.Default)))?.FirstOrDefault();
             return MergeSearchResult(keyword, music, artist, album, playlist, folder);
         }
 
@@ -275,9 +275,9 @@ namespace SMPlayer.Helpers
 
         public static async Task<SearchResult> SearchFolderMusic(string folderName, string keyword)
         {
-            GridViewFolder folder = (await Task.Run(() => SearchFolders(Settings.AllFolders, folderName, SortBy.Default)))?.FirstOrDefault();
+            GridViewFolder folder = (await Task.Run(() => SearchFolders(StorageService.AllFolders, folderName, SortBy.Default)))?.FirstOrDefault();
             if (folder == null) return null;
-            folder.Source = Settings.FindFolder(folder.Id);
+            folder.Source = StorageService.FindFolder(folder.Id);
             return SearchMusicInCollection(folder.Songs, keyword);
         }
 

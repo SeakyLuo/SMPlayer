@@ -1,11 +1,8 @@
 ﻿using SMPlayer.Helpers;
 using SMPlayer.Models.DAO;
-using SMPlayer.Models.VO;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -17,9 +14,9 @@ namespace SMPlayer.Models
     {
         public List<FolderTree> Trees { get; set; } = new List<FolderTree>();
         public List<FolderFile> Files { get; set; } = new List<FolderFile>();
-        public List<Music> Songs { get => Settings.FindMusicList(Files.Select(i => i.FileId)); }
+        public List<Music> Songs { get => MusicService.FindMusicList(Files.Select(i => i.FileId)); }
         public SortBy Criterion { get; set; } = SortBy.Title;
-        public TreeInfo Info { get => new TreeInfo(Name, Trees.Count, Files.Count); }
+        public string Info => GetFolderInfo(Trees.Count, Files.Count);
         public bool IsEmpty { get => Files.IsEmpty() && Trees.All(tree => tree.IsEmpty); }
         public bool IsNotEmpty { get => !IsEmpty; }
         public int FileCount { get => Trees.Sum(t => t.FileCount) + Files.Count; }
@@ -31,6 +28,11 @@ namespace SMPlayer.Models
         public FolderTree(string path)
         {
             Path = path;
+        }
+
+        public FolderTree(FolderTree src)
+        {
+            CopyFrom(src);
         }
 
         public void CopyFrom(FolderTree tree)
@@ -64,7 +66,7 @@ namespace SMPlayer.Models
         {
             if (IsEmpty)
             {
-                CopyFrom(Settings.FindFolder(Id));
+                CopyFrom(StorageService.FindFolder(Id));
             }
             List<Music> list = new List<Music>();
             foreach (var branch in Trees)
@@ -76,7 +78,7 @@ namespace SMPlayer.Models
         public void SortFiles(SortBy? criterion = null)
         {
             if (criterion != null) Criterion = (SortBy)criterion;
-            Files = Files.Select(f => new { File = f, Music = Settings.FindMusic(f.FileId) })
+            Files = Files.Select(f => new { File = f, Music = MusicService.FindMusic(f.FileId) })
                          .Where(i => i.Music != null)
                          .OrderBy(i =>
                          {
@@ -182,6 +184,11 @@ namespace SMPlayer.Models
                    (Trees.FirstOrDefault(t => path.StartsWith(t.Path)) is FolderTree tree && tree.RemoveFile(path));
         }
 
+        public bool IsParentOf(string path)
+        {
+            return StorageHelper.IsParentDirectory(path, Path);
+        }
+
         public override bool Equals(object obj)
         {
             return obj is FolderTree tree && Path == tree.Path;
@@ -200,23 +207,11 @@ namespace SMPlayer.Models
         {
             return new PreferenceItem(Id.ToString(), Name, EntityType.Folder);
         }
-    }
 
-    public class TreeInfo
-    {
-        public string Directory { get; set; }
-        public int Folders { get; set; }
-        public int Songs { get; set; }
-        public TreeInfo(string Directory, int Folders, int Songs)
+        public static string GetFolderInfo(int folders, int files)
         {
-            this.Directory = Directory;
-            this.Folders = Folders;
-            this.Songs = Songs;
-        }
-        public override string ToString()
-        {
-            string info = Helper.LocalizeMessage("Songs:") + Songs;
-            if (Folders > 0) info = Helper.LocalizeMessage("Folders:") + Folders + " • " + info;
+            string info = Helper.LocalizeMessage("Songs:") + files;
+            if (folders > 0) info = Helper.LocalizeMessage("Folders:") + folders + " • " + info;
             return info;
         }
     }

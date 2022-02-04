@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMPlayer.Services;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -12,16 +13,16 @@ namespace SMPlayer.Models.VO
         public long Id { get; set; }
         public string Name { get; set; }
         public string Path { get; set; }
-        public bool HasChildren
+        public bool IsLastItem
         {
-            get => _hasChildren;
+            get => _isLastItem;
             set
             {
-                _hasChildren = value;
+                _isLastItem = value;
                 OnPropertyChanged();
             }
         }
-        private bool _hasChildren;
+        private bool _isLastItem;
         public bool IsHighlighted
         {
             get => _isHighlighted;
@@ -33,17 +34,18 @@ namespace SMPlayer.Models.VO
         }
         private bool _isHighlighted;
         public SortBy Criterion { get; set; } = SortBy.Title;
-        public ObservableCollection<FolderChainItem> Children { get; set; } = new ObservableCollection<FolderChainItem>();
-
+        public ObservableCollection<FolderChainItem> Children 
+        {
+            get => _children.SetTo(StorageService.FindSubFolders(new FolderTree { Id = Id }).Select(i => new FolderChainItem(i)));
+        }
+        private ObservableCollection<FolderChainItem> _children = new ObservableCollection<FolderChainItem>();
         public FolderChainItem(FolderTree folder)
         {
             Id = folder.Id;
             Name = folder.Name;
             Path = folder.Path;
             Criterion = folder.Criterion;
-            Children.SetTo(Settings.FindSubFolders(new FolderTree() { Id = Id })
-                                   .Select(i => new FolderChainItem(i)));
-            HasChildren = Children.IsNotEmpty();
+            IsLastItem = folder.Trees.IsNotEmpty();
         }
 
         public FolderTree ToFolderTree()

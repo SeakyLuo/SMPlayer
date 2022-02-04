@@ -18,6 +18,8 @@ namespace SMPlayer.Models.VO
         public abstract string PlayButtonToolTip { get; }
         public abstract bool IsPlaying { get; set; }
         public abstract string TypeIcon { get; }
+        public abstract bool ShowTypeIcon { get; }
+        public LocalPageViewMode ViewMode { get; set; }
         public BitmapImage Thumbnail
         {
             get => thumbnail;
@@ -52,7 +54,7 @@ namespace SMPlayer.Models.VO
 
         public StorageItem AsStorageItem()
         {
-            return Type == StorageType.Folder ? (StorageItem) new FolderTree { Path = Path, Id = Id } :
+            return Type == StorageType.Folder ? new FolderTree { Path = Path, Id = Id } :
                                                 (StorageItem) new FolderFile { Path = Path, };
         }
     }

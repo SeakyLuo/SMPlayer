@@ -22,6 +22,7 @@ namespace SMPlayer.Models.VO
             set { }
         }
         public override string TypeIcon => "ms-appx:///Assets/folder.png";
+        public override bool ShowTypeIcon => true;
 
         public BitmapImage First
         {
@@ -71,6 +72,10 @@ namespace SMPlayer.Models.VO
         }
         private FolderTree source { get; set; }
         public List<Music> Songs { get => Source.Flatten(); }
+        private bool HasNoThumbnail
+        {
+            get => (thumbnail == null || thumbnail == MusicImage.NotFound) && first == null;
+        }
 
         public GridViewFolder(FolderTree folder)
         {
@@ -133,7 +138,17 @@ namespace SMPlayer.Models.VO
         public async void AddFile(FolderFile file)
         {
             Source.Files.Add(file);
-            if (Source.Files.Count == 1)
+            if (HasNoThumbnail)
+            {
+                await LoadThumbnailAsync();
+            }
+            OnPropertyChanged("Info");
+        }
+
+        public async void AddFolder(FolderTree folder)
+        {
+            Source.Trees.Add(folder);
+            if (HasNoThumbnail)
             {
                 await LoadThumbnailAsync();
             }

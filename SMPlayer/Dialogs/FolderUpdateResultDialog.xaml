@@ -66,6 +66,7 @@
                                         <TextBlock
                                             Text="{x:Bind Name}" 
                                             FontSize="16"
+                                            VerticalAlignment="Center"
                                             ToolTipService.ToolTip="{x:Bind Path}" />
                                     </Grid>
                                 </DataTemplate>

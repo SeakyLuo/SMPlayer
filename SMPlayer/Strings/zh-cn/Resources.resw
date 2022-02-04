@@ -1262,7 +1262,7 @@
     <value>当前路径</value>
   </data>
   <data name="LocalPageGoToSettingsRun.Text" xml:space="preserve">
-    <value>去设置 &gt;</value>
+    <value>去设置音乐文件夹 &gt;</value>
   </data>
   <data name="LocalPageNoMusicRun.Text" xml:space="preserve">
     <value>没有音乐，</value>
@@ -1272,5 +1272,8 @@
   </data>
   <data name="ReleaseNotesIncompatibleTile.Text" xml:space="preserve">
     <value>【重要】如果你之前固定了一些播放列表磁贴到开始菜单，请重新固定一次，之前的磁贴从此以后不再兼容。</value>
+  </data>
+  <data name="ReleaseNotesImprovedLocalPageDragAndDrop.Text" xml:space="preserve">
+    <value>增强了本地页面的拖拽功能，可以把文件、文件夹拖动到其它文件夹或者路径下了。</value>
   </data>
 </root>

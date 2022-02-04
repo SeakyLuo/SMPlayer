@@ -83,10 +83,6 @@ namespace SMPlayer
             return list.ElementAt(Helper.RandRange(list.Count()));
         }
 
-        public static IEnumerable<Music> ToMusicList(this IEnumerable<string> paths)
-        {
-            return paths.Select(path => Settings.FindMusic(path));
-        }
         public static string RemoveBraces(this string str, char left, char right)
         {
             int start = str.IndexOf(left), end = str.IndexOf(right);

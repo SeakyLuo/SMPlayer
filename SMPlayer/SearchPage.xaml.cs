@@ -318,8 +318,8 @@ namespace SMPlayer
         public string Text { get; set; }
         public FolderTree Folder { get; set; }
         public IEnumerable<Music> Songs { get; set; } = Settings.AllSongs;
-        public IEnumerable<Playlist> Playlists { get; set; } = PlaylistService.AllPlaylistsWithSongs;
-        public IEnumerable<FolderTree> Folders { get; set; } = Settings.AllFolders;
+        public IEnumerable<Playlist> Playlists { get; set; } = PlaylistService.AllPlaylists;
+        public IEnumerable<FolderTree> Folders { get; set; } = StorageService.AllFolders;
     }
     public class SearchArgs
     {

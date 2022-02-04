@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Helpers;
 using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -91,7 +92,7 @@ namespace SMPlayer
                 {
                     if (settings.LastMusicIndex == -1)
                         settings.LastMusicIndex = 0;
-                    SetPlaylist(Settings.FindMusicList(playlist));
+                    SetPlaylist(MusicService.FindMusicList(playlist));
                     if (settings.LastMusicIndex < CurrentPlaylist.Count)
                         CurrentMusic = CurrentPlaylist[settings.LastMusicIndex];
                 }
@@ -465,10 +466,10 @@ namespace SMPlayer
 
         public static void RemoveBadMusic()
         {
-            if (CurrentMusic != null && Settings.FindMusic(CurrentMusic.Id) == null)
+            if (CurrentMusic != null && MusicService.FindMusic(CurrentMusic.Id) == null)
                 CurrentMusic = null;
-            CurrentPlaylist.RemoveAll(i => Settings.FindMusic(i.Id) == null);
-            PlaybackList.Items.RemoveAll(i => Settings.FindMusic(i.GetMusic().Id) == null);
+            CurrentPlaylist.RemoveAll(i => MusicService.FindMusic(i.Id) == null);
+            PlaybackList.Items.RemoveAll(i => MusicService.FindMusic(i.GetMusic().Id) == null);
         }
 
         private static void MusicModified(Music before, Music after)

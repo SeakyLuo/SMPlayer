@@ -26,9 +26,6 @@ namespace SMPlayer.Models
         public static void AddRecentEventListener(IRecentEventListener listener) { RecentEventListeners.Add(listener); }
         private static readonly List<IRecentEventListener> RecentEventListeners = new List<IRecentEventListener>();
         public static IEnumerable<Music> AllSongs { get => SQLHelper.Run(c => c.SelectAllMusic()); }
-        public static FolderTree Root { get => FindFolder(settings.Tree.Id) ?? new FolderTree(); }
-        public static List<FolderTree> AllFolders { get => SQLHelper.Run(c => c.Query<FolderDAO>("select * from Folder where State = ?", ActiveState.Active))
-                                                                  .Select(i => i.FromDAO()).ToList(); }
         public static Music FindMusic(Music target)
         {
             if (target == null) return null;
@@ -37,42 +34,6 @@ namespace SMPlayer.Models
         public static Music FindMusic(string target) { return SQLHelper.Run(c => c.SelectMusicByPath(target)); }
         public static Music FindMusic(long id) { return SQLHelper.Run(c => c.SelectMusicById(id)); }
         public static List<Music> FindMusicList(IEnumerable<long> ids) { return ids.IsEmpty() ? new List<Music>() : SQLHelper.Run(c => c.SelectMusicByIds(ids)); }
-        public static FolderTree FindFolderInfo(long id)
-        {
-            return SQLHelper.Run(c => c.SelectFolderInfo(id));
-        }
-        public static FolderTree FindFolderInfo(string path)
-        {
-            return SQLHelper.Run(c => c.SelectFolderInfo(path));
-        }
-        public static FolderTree FindFolder(long id)
-        {
-            return SQLHelper.Run(c => c.SelectFolder(id));
-        }
-        public static FolderTree FindFolder(string path)
-        {
-            return SQLHelper.Run(c => c.SelectFolder(path));
-        }
-        public static FolderTree FindFullFolder(long id)
-        {
-            return SQLHelper.Run(c => c.SelectFullFolder(id));
-        }
-        public static FolderTree FindFullFolder(string path)
-        {
-            return SQLHelper.Run(c => c.SelectFullFolder(path));
-        }
-        public static List<FolderTree> FindSubFolders(FolderTree folder)
-        {
-            return SQLHelper.Run(c => c.SelectSubFolders(folder));
-        }
-        public static FolderFile FindFile(long id)
-        {
-            return SQLHelper.Run(c => c.SelectFile(id));
-        }
-        public static FolderFile FindFile(string path)
-        {
-            return SQLHelper.Run(c => c.SelectFileByPath(path));
-        }
         public static List<Music> RecentPlay
         {
             get => SQLHelper.Run(c => c.SelectRecentRecords(RecentType.Play)
@@ -517,7 +478,7 @@ namespace SMPlayer.Models
             StorageFolder folder = await original.GetStorageFolderAsync();
             await folder.RenameAsync(newName);
             string newPath = folder.Path;
-            FolderTree originalTree = FindFolderInfo(original.Id);
+            FolderTree originalTree = StorageService.FindFolderInfo(original.Id);
             SQLHelper.Run(c =>
             {
                 RenameFolder(c, originalTree, originalTree.Path, newPath);
@@ -588,7 +549,7 @@ namespace SMPlayer.Models
 
         public async Task<bool> MoveFolderAsync(FolderTree folder, FolderTree target)
         {
-            bool moved = await MoveFolder(folder, target);
+            bool moved = await MoveFolder(new FolderTree(folder), target);
             foreach (var listener in StorageItemEventListeners)
                 listener.ExecuteFolderEvent(folder, new StorageItemEventArgs(StorageItemEventType.Move) { Folder = target });
             return moved;
@@ -599,7 +560,7 @@ namespace SMPlayer.Models
             StorageFolder localFolder = await folder.GetStorageFolderAsync();
             StorageFolder localTarget = await target.GetStorageFolderAsync();
             StorageFolder newFolder = await localTarget.CreateFolderAsync(folder.Name, CreationCollisionOption.OpenIfExists);
-            FolderTree duplicate = FindFolderInfo(newFolder.Path);
+            FolderTree duplicate = StorageService.FindFolderInfo(newFolder.Path);
             if (duplicate == null)
             {
                 folder.MoveToFolder(target);
@@ -657,7 +618,7 @@ namespace SMPlayer.Models
 
         private async Task MoveAndReplaceFile(FolderFile file, FolderTree newParent)
         {
-            await DeleteFile(FindFile(Path.Combine(newParent.Path, file.NameWithExtension)));
+            await DeleteFile(StorageService.FindFile(Path.Combine(newParent.Path, file.NameWithExtension)));
             await MoveFile(file, newParent);
         }
 

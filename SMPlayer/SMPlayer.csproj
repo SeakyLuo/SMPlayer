@@ -148,8 +148,8 @@
     <Compile Include="Controls\DropShadowControl.xaml.cs">
       <DependentUpon>DropShadowControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\GridViewFolderItemControl.xaml.cs">
-      <DependentUpon>GridViewFolderItemControl.xaml</DependentUpon>
+    <Compile Include="Controls\LocalGridViewStorageItemControl.xaml.cs">
+      <DependentUpon>LocalGridViewStorageItemControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\GridViewMusicItemControl.xaml.cs">
       <DependentUpon>GridViewMusicItemControl.xaml</DependentUpon>
@@ -299,6 +299,7 @@
     </Compile>
     <Compile Include="Services\MusicService.cs" />
     <Compile Include="Services\PlaylistService.cs" />
+    <Compile Include="Services\StorageService.cs" />
     <Compile Include="TemplateSelector\GridViewStorageItemTemplateSelector.cs" />
     <Compile Include="TemplateSelector\TreeViewStorageItemTemplateSelector.cs" />
     <Compile Include="Helpers\MenuFlyoutHelper.cs" />
@@ -460,7 +461,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\GridViewFolderItemControl.xaml">
+    <Page Include="Controls\LocalGridViewStorageItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

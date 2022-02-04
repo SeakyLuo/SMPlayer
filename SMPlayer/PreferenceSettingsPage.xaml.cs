@@ -125,7 +125,7 @@ namespace SMPlayer
             switch (type)
             {
                 case EntityType.Song:
-                    Music music = Settings.FindMusic(item.LongId);
+                    Music music = MusicService.FindMusic(item.LongId);
                     if (music == null)
                     {
                         view.IsValid = false;
@@ -159,7 +159,7 @@ namespace SMPlayer
                     view.IsValid = playlist != null;
                     break;
                 case EntityType.Folder:
-                    FolderTree tree = Settings.FindFolderInfo(item.LongId);
+                    FolderTree tree = StorageService.FindFolderInfo(item.LongId);
                     if (tree == null)
                     {
                         view.IsValid = false;
@@ -377,7 +377,7 @@ namespace SMPlayer
             PreferredListView_ItemClick(sender, e,
                                         async (view) =>
                                         {
-                                            MusicDialog dialog = new MusicDialog(MusicDialogOption.Properties, Settings.FindMusic(view.LongId));
+                                            MusicDialog dialog = new MusicDialog(MusicDialogOption.Properties, MusicService.FindMusic(view.LongId));
                                             await dialog.ShowAsync();
                                         });
         }
@@ -403,7 +403,7 @@ namespace SMPlayer
         private void PreferredFoldersListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             PreferredListView_ItemClick(sender, e,
-                                        view => MainPage.Instance.NavigateToPage(typeof(LocalPage), Settings.FindFolderInfo(view.LongId)));
+                                        view => MainPage.Instance.NavigateToPage(typeof(LocalPage), StorageService.FindFolderInfo(view.LongId)));
         }
 
         private void PreferredListView_ItemClick(object sender, ItemClickEventArgs e, Action<PreferenceItemView> action)

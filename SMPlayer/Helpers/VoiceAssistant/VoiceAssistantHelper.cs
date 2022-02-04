@@ -381,13 +381,13 @@ namespace SMPlayer.Helpers
                 RandomPlayHelper.PlayFolder();
                 return;
             }
-            IEnumerable<GridViewFolder> list = SearchHelper.SearchFolders(Settings.AllFolders, text, SortBy.Default);
+            IEnumerable<GridViewFolder> list = SearchHelper.SearchFolders(StorageService.AllFolders, text, SortBy.Default);
             if (list.IsEmpty())
             {
                 SpeakNoResults(text);
                 return;
             }
-            MusicPlayer.ShuffleAndPlay(Settings.FindFolder(list.ElementAt(0).Id).Flatten());
+            MusicPlayer.ShuffleAndPlay(StorageService.FindFolder(list.ElementAt(0).Id).Flatten());
         }
 
         private static async void PlayByArtistOrMusic(ByArtistRequest request)

@@ -43,11 +43,11 @@ namespace SMPlayer.Helpers
 
         public static FolderTree PlayFolder(int randomLimit = 100)
         {
-            List<FolderTree> allFolders = Settings.AllFolders;
+            List<FolderTree> allFolders = StorageService.AllFolders;
             FolderTree folder;
             do
             {
-                folder = Settings.FindFolder(allFolders.RandItem().Id);
+                folder = StorageService.FindFolder(allFolders.RandItem().Id);
             } while (folder.IsEmpty);
             MusicPlayer.SetMusicAndPlay(folder.Songs.RandItems(randomLimit));
             return folder;

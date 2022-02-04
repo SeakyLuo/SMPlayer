@@ -240,7 +240,7 @@ namespace SMPlayer
 
         private static MenuFlyoutItemBase GetMoveToFolderMenuTree(FolderTree folder, List<StorageItem> items, IMenuFlyoutItemClickListener listener = null)
         {
-            List<FolderTree> branches = Settings.FindSubFolders(folder);
+            List<FolderTree> branches = StorageService.FindSubFolders(folder);
             if (branches.IsEmpty())
             {
                 return GetMoveToFolderMenuFlyoutItem(folder, items, listener);
@@ -289,7 +289,7 @@ namespace SMPlayer
                     }
                     else if (storageItem is FolderFile folderFile)
                     {
-                        await Settings.settings.MoveFileAsync(Settings.FindFile(folderFile.Path), folder);
+                        await Settings.settings.MoveFileAsync(StorageService.FindFile(folderFile.Path), folder);
                     }
                 }
                 listener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.MoveToFolder));
@@ -1051,9 +1051,9 @@ namespace SMPlayer
             else if (obj is AlbumView album) return album.Songs;
             else if (obj is Playlist playlist) return playlist.Songs;
             else if (obj is GridViewFolder gridFolder) return gridFolder.Songs;
-            else if (obj is TreeViewFolder treeFolder) return Settings.FindFolder(treeFolder.Id).Songs;
+            else if (obj is TreeViewFolder treeFolder) return StorageService.FindFolder(treeFolder.Id).Songs;
             else if (obj is GridViewMusic gridMusic) return gridMusic.Source;
-            else if (obj is TreeViewFile treeMusic) return Settings.FindMusic(treeMusic.FileId);
+            else if (obj is TreeViewFile treeMusic) return MusicService.FindMusic(treeMusic.FileId);
             return null;
         }
 

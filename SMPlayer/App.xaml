@@ -178,6 +178,7 @@
             <local:PreferenceCountConverter x:Key="PreferenceCountConverter" />
             <local:FolderChainDropdownButtonNameConverter x:Key="FolderChainDropdownButtonNameConverter" />
             <local:FolderChainItemTextBlockFontWeightConverter x:Key="FolderChainItemTextBlockFontWeightConverter" />
+            <local:InvertedBoolConverter x:Key="InvertedBoolConverter" />
             <AcrylicBrush
                 x:Key="MediaControlPlayButtonBorderBrush"
                 BackgroundSource="Backdrop"

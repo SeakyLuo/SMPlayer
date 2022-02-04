@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Helpers;
 using SMPlayer.Models.VO;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -109,17 +110,6 @@ namespace SMPlayer.Models
         {
             Songs.Remove(music);
             Sort();
-        }
-
-        public void Remove(int index)
-        {
-            Songs.RemoveAt(index);
-            Sort();
-        }
-
-        public void RemoveAll(Func<Music, bool> predicate)
-        {
-            Songs.RemoveAll(i => predicate.Invoke(Settings.FindMusic(i)));
         }
 
         public bool Contains(Music music)

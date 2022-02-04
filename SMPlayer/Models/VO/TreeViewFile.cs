@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMPlayer.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,7 +37,7 @@ namespace SMPlayer.Models.VO
             {
                 return;
             }
-            Music music = Settings.FindMusic(source.FileId);
+            Music music = MusicService.FindMusic(source.FileId);
             Icon = "Assets/colorful_no_bg.png";
             Creator = music.Artist;
             Collection = music.Album;

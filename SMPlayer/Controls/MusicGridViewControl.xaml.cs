@@ -1,6 +1,7 @@
 ﻿using SMPlayer.Controls;
 using SMPlayer.Models;
 using SMPlayer.Models.VO;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -284,7 +285,7 @@ namespace SMPlayer
 
         Music IMusicable.ToMusic()
         {
-            return Settings.FindMusic(Id);
+            return MusicService.FindMusic(Id);
         }
     }
 }

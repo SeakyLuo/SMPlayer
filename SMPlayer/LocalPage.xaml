@@ -78,6 +78,8 @@
                 BorderBrush="LightGray"
                 Margin="0,0"
                 Height="40"
+                AllowDrop="True"
+                DragEnter="LocalListView_DragEnter"
                 ItemClick="FolderChainListView_ItemClick"
                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                 ItemsSource="{x:Bind FolderChain, Mode=OneWay}"
@@ -86,7 +88,10 @@
                 Style="{StaticResource HorizontalListViewStyle}">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="data:FolderChainItem">
-                        <StackPanel Orientation="Horizontal" AllowDrop="True">
+                        <StackPanel
+                            Orientation="Horizontal" 
+                            AllowDrop="{x:Bind IsLastItem, Mode=OneWay}"
+                            Drop="LocalListViewFolder_Drop">
                             <StackPanel.ContextFlyout>
                                 <MenuFlyout Opening="OpenPlaylistFlyout" />
                             </StackPanel.ContextFlyout>
@@ -108,23 +113,31 @@
                                 Content="&#xE974;"
                                 FontFamily="Segoe MDL2 Assets"
                                 RenderTransformOrigin=".5,.5"
-                                Visibility="{x:Bind HasChildren, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                                Visibility="{x:Bind IsLastItem, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                                 <Button.RenderTransform>
                                     <RotateTransform />
                                 </Button.RenderTransform>
                                 <Button.Flyout>
-                                    <Flyout>
+                                    <Flyout Opened="FolderChainItemFlyout_Opened">
                                         <ListView 
-                                        ItemContainerStyle="{StaticResource StretchListViewItemStyle}"
-                                        ItemsSource="{x:Bind Children, Mode=OneWay}">
+                                            ItemContainerStyle="{StaticResource StretchListViewItemStyle}"
+                                            ItemsSource="{x:Bind Children, Mode=OneWay}">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate x:DataType="data:FolderChainItem">
-                                                    <TextBlock
-                                                    Margin="4,0"
-                                                    VerticalAlignment="Center"
-                                                    Text="{x:Bind Name}"
-                                                    FontWeight="{x:Bind IsHighlighted, Converter={StaticResource FolderChainItemTextBlockFontWeightConverter}, Mode=OneWay}"
-                                                    ToolTipService.ToolTip="{x:Bind Path}" />
+                                                    <Button
+                                                        Background="Transparent"
+                                                        BorderThickness="0"
+                                                        HorizontalAlignment="Stretch"
+                                                        HorizontalContentAlignment="Left"
+                                                        VerticalAlignment="Stretch"
+                                                        Content="{x:Bind Name}"
+                                                        Click="FolderChainItemButton_Click"
+                                                        FontWeight="{x:Bind IsHighlighted, Converter={StaticResource FolderChainItemTextBlockFontWeightConverter}, Mode=OneWay}"
+                                                        ToolTipService.ToolTip="{x:Bind Path}">
+                                                        <Button.ContextFlyout>
+                                                            <MenuFlyout Opening="OpenPlaylistFlyout" />
+                                                        </Button.ContextFlyout>
+                                                    </Button>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
                                         </ListView>
@@ -218,11 +231,11 @@
             Grid.Row="2"
             SelectionMode="Single"
             ItemContainerStyle="{StaticResource StretchListViewItemStyle}"
-            ItemsSource="{x:Bind TreeItems, Mode=OneWay}"
+            ItemsSource="{x:Bind GridItems, Mode=OneWay}"
             CanDragItems="True"
             AllowDrop="True"
-            DragEnter="LocalTreeView_DragEnter"
-            DragItemsStarting="LocalTreeView_DragItemsStarting"
+            DragEnter="LocalListView_DragEnter"
+            DragItemsStarting="LocalListView_DragItemsStarting"
             DoubleTapped="LocalTreeView_DoubleTapped"
             SelectionChanged="LocalListView_SelectionChanged"
             IsDoubleTapEnabled="True"
@@ -230,7 +243,7 @@
             <ListView.ItemTemplateSelector>
                 <templateselector:TreeViewStorageItemTemplateSelector>
                     <templateselector:TreeViewStorageItemTemplateSelector.FileTemplate>
-                        <DataTemplate x:DataType="data:TreeViewFile">
+                        <DataTemplate x:DataType="data:GridViewMusic">
                             <Grid Padding="{StaticResource TreeViewPadding}">
                                 <Grid.ContextFlyout>
                                     <MenuFlyout Opening="OpenMusicFlyout" />
@@ -250,7 +263,7 @@
                                     Visibility="{x:Bind IsPlaying, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
                                 <Image
                                     Width="{StaticResource IconSize}"
-                                    Source="{x:Bind Icon}"
+                                    Source="{x:Bind TypeIcon}"
                                     Visibility="{x:Bind IsPlaying, Converter={StaticResource InvertedVisibilityConverter}, Mode=OneWay}"/>
                                 <TextBlock
                                     Grid.Column="1"
@@ -268,7 +281,7 @@
                                     Click="CreatorHyperLinkButton_Click"
                                     Style="{StaticResource TextBlockButtonStyle}"
                                     Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
-                                    Content="{x:Bind Creator, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist, Mode=OneWay}"
+                                    Content="{x:Bind Artist, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist, Mode=OneWay}"
                                     ToolTipService.ToolTip="{Binding ElementName=CreatorHyperLinkButton, Path=Content, Mode=OneWay}" />
                                 <HyperlinkButton
                                     x:Name="CollectionHyperLinkButton"
@@ -278,18 +291,18 @@
                                     Click="CollectionHyperLinkButton_Click"
                                     Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
                                     Style="{StaticResource TextBlockButtonStyle}"
-                                    Content="{x:Bind Collection, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownAlbum, Mode=OneWay}" 
+                                    Content="{x:Bind Album, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownAlbum, Mode=OneWay}" 
                                     ToolTipService.ToolTip="{Binding ElementName=CollectionHyperLinkButton, Path=Content, Mode=OneWay}" />
                             </Grid>
                         </DataTemplate>
                     </templateselector:TreeViewStorageItemTemplateSelector.FileTemplate>
                     <templateselector:TreeViewStorageItemTemplateSelector.FolderTemplate>
-                        <DataTemplate x:DataType="data:TreeViewFolder">
+                        <DataTemplate x:DataType="data:GridViewFolder">
                             <Grid
-                                Drop="LocalTreeViewFolder_Drop"
+                                Drop="LocalListViewFolder_Drop"
+                                AllowDrop="True"
                                 Padding="{StaticResource TreeViewPadding}"
-                                ToolTipService.ToolTip="{x:Bind Path, Mode=OneWay}"
-                                AllowDrop="True">
+                                ToolTipService.ToolTip="{x:Bind Path, Mode=OneWay}">
                                 <Grid.ContextFlyout>
                                     <MenuFlyout Opening="OpenPlaylistFlyout" />
                                 </Grid.ContextFlyout>
@@ -319,6 +332,8 @@
             IsItemClickEnabled="True"
             CanDragItems="True"
             AllowDrop="True"
+            DragEnter="LocalListView_DragEnter"
+            DragItemsStarting="LocalListView_DragItemsStarting"
             SelectionChanged="LocalListView_SelectionChanged"
             ItemClick="LocalGridView_ItemClick"
             ItemContainerStyle="{StaticResource DropShadowGridViewItemStyle}"
@@ -328,7 +343,7 @@
                 <templateselector:GridViewStorageItemTemplateSelector>
                     <templateselector:GridViewStorageItemTemplateSelector.FileTemplate>
                         <DataTemplate x:DataType="data:GridViewMusic">
-                            <controls:GridFolderControl AllowDrop="True">
+                            <controls:GridFolderControl>
                                 <controls:GridFolderControl.ContextFlyout>
                                     <MenuFlyout Opening="OpenMusicFlyout" />
                                 </controls:GridFolderControl.ContextFlyout>
@@ -337,7 +352,9 @@
                     </templateselector:GridViewStorageItemTemplateSelector.FileTemplate>
                     <templateselector:GridViewStorageItemTemplateSelector.FolderTemplate>
                         <DataTemplate x:DataType="data:GridViewFolder">
-                            <controls:GridFolderControl AllowDrop="True">
+                            <controls:GridFolderControl
+                                Drop="LocalListViewFolder_Drop"
+                                AllowDrop="True">
                                 <controls:GridFolderControl.ContextFlyout>
                                     <MenuFlyout Opening="OpenPlaylistFlyout" />
                                 </controls:GridFolderControl.ContextFlyout>
