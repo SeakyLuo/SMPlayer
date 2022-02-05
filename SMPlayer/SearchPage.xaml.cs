@@ -93,8 +93,8 @@ namespace SMPlayer
             await SearchArtists(keyword.Songs, modifiedKeyowrd, Settings.settings.SearchArtistsCriterion);
             await SearchAlbums(keyword.Songs, modifiedKeyowrd, Settings.settings.SearchAlbumsCriterion);
             await SearchSongs(keyword.Songs, modifiedKeyowrd, Settings.settings.SearchSongsCriterion);
-            await SearchPlaylists(keyword.Playlists, modifiedKeyowrd, Settings.settings.SearchPlaylistsCriterion);
-            await SearchFolders(keyword.Songs, keyword.Folders, modifiedKeyowrd, Settings.settings.SearchFoldersCriterion);
+            await SearchPlaylists(AllSongs, keyword.Playlists, modifiedKeyowrd, Settings.settings.SearchPlaylistsCriterion);
+            await SearchFolders(AllSongs, keyword.Folders, modifiedKeyowrd, Settings.settings.SearchFoldersCriterion);
             NoResultTextBlock.Visibility = Artists.Count == 0 && Albums.Count == 0 && Songs.Count == 0 && Playlists.Count == 0 && Folders.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
             LoadingProgress.Visibility = Visibility.Collapsed;
             IsSearching = false;
@@ -127,9 +127,9 @@ namespace SMPlayer
             SortSongsButton.Visibility = Songs.Count < 2 ? Visibility.Collapsed : Visibility.Visible;
         }
 
-        public async Task SearchPlaylists(IEnumerable<Playlist> source, string keyword, SortBy criterion)
+        public async Task SearchPlaylists(IEnumerable<Music> songs, IEnumerable<Playlist> source, string keyword, SortBy criterion)
         {
-            AllPlaylists.SetTo(await Task.Run(() => SearchHelper.SearchPlaylists(source, keyword, criterion)));
+            AllPlaylists.SetTo(await Task.Run(() => SearchHelper.SearchPlaylists(songs, source, keyword, criterion)));
             Playlists.SetTo(AllPlaylists.Take(PlaylistLimit));
             PlaylistsTextBlock.Text = Settings.settings.ShowCount ? Helper.LocalizeText("PlaylistsWithCount", AllPlaylists.Count) : Helper.LocalizeText("Playlists");
             PlaylistsViewAllButton.Visibility = AllPlaylists.Count > PlaylistLimit ? Visibility.Visible : Visibility.Collapsed;

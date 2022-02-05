@@ -365,7 +365,7 @@ namespace SMPlayer.Helpers
                 RandomPlayHelper.PlayPlaylist();
                 return;
             }
-            IEnumerable<AlbumView> list = SearchHelper.SearchPlaylists(PlaylistService.AllPlaylistsWithSongs, text, SortBy.Default);
+            IEnumerable<AlbumView> list = SearchHelper.SearchPlaylists(PlaylistService.AllPlaylists, text, SortBy.Default);
             if (list.Count() == 0)
             {
                 SpeakNoResults(text);

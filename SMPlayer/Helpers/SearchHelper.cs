@@ -43,6 +43,17 @@ namespace SMPlayer.Helpers
             var list = source.Where(i => IsTargetPlaylist(i, keyword)).Select(i => i.ToSearchAlbumView());
             return SortPlaylists(list, keyword, criterion);
         }
+        public static IEnumerable<AlbumView> SearchPlaylists(IEnumerable<Music> songs, IEnumerable<Playlist> source, string keyword, SortBy criterion)
+        {
+            var list = source.Where(i => IsTargetPlaylist(i, keyword))
+                             .Select(i => { i.Songs.SetTo(PlaylistService.FindPlaylistItems(i.Id)); return i; })
+                             .ToList();
+            var playlistIds = list.Select(i => i.Id).ToHashSet();
+            list.AddRange(PlaylistService.FindPlaylistIdsByItems(songs.Select(i => i.Id))
+                                         .Where(i => playlistIds.Contains(i)).AsParallel()
+                                         .Select(i => PlaylistService.FindPlaylist(i)));
+            return SortPlaylists(list.Select(i => i.ToSearchAlbumView()), keyword, criterion);
+        }
         public static IEnumerable<GridViewFolder> SearchFolders(IEnumerable<FolderTree> source, string keyword, SortBy criterion)
         {
             var list = source.Where(i => IsTargetFolder(i, keyword)).Select(tree => new GridViewFolder(tree));
@@ -50,10 +61,9 @@ namespace SMPlayer.Helpers
         }
         public static IEnumerable<GridViewFolder> SearchFolders(IEnumerable<Music> songs, IEnumerable<FolderTree> source, string keyword, SortBy criterion)
         {
-            var list = source.Where(i => IsTargetFolder(i, keyword))
-                             .AsParallel().Select(tree => new GridViewFolder(tree)).ToList();
+            var list = source.Where(i => IsTargetFolder(i, keyword)).Select(tree => new GridViewFolder(tree)).ToList();
             var pathSet = list.Select(i => i.Path).ToHashSet();
-            list.AddRange(songs.Where(i => IsTargetMusic(i, keyword)).Select(i => StorageHelper.GetParentPath(i.Path))
+            list.AddRange(songs.Select(i => StorageHelper.GetParentPath(i.Path))
                                .Distinct().Where(i => !pathSet.Contains(i))
                                .AsParallel().Select(i => StorageService.FindFolderInfo(i))
                                .Where(i => i != null).Select(tree => new GridViewFolder(tree)).ToList());
@@ -241,7 +251,7 @@ namespace SMPlayer.Helpers
             Music music = (await Task.Run(() => SearchSongs(allSongs, keyword, SortBy.Default)))?.FirstOrDefault();
             Playlist artist = (await Task.Run(() => SearchArtists(allSongs, keyword, SortBy.Default)))?.FirstOrDefault();
             AlbumView album = (await Task.Run(() => SearchAlbums(allSongs, keyword, SortBy.Default)))?.FirstOrDefault();
-            AlbumView playlist = (await Task.Run(() => SearchPlaylists(PlaylistService.AllPlaylistsWithSongs, keyword, SortBy.Default)))?.FirstOrDefault();
+            AlbumView playlist = (await Task.Run(() => SearchPlaylists(PlaylistService.AllPlaylists, keyword, SortBy.Default)))?.FirstOrDefault();
             GridViewFolder folder = (await Task.Run(() => SearchFolders(StorageService.AllFolders, keyword, SortBy.Default)))?.FirstOrDefault();
             return MergeSearchResult(keyword, music, artist, album, playlist, folder);
         }
@@ -269,7 +279,7 @@ namespace SMPlayer.Helpers
 
         public static async Task<SearchResult> SearchPlaylistMusic(string playlistName, string keyword)
         {
-            AlbumView playlist = (await Task.Run(() => SearchPlaylists(PlaylistService.AllPlaylistsWithSongs, playlistName, SortBy.Default)))?.FirstOrDefault();
+            AlbumView playlist = (await Task.Run(() => SearchPlaylists(PlaylistService.AllPlaylists, playlistName, SortBy.Default)))?.FirstOrDefault();
             return SearchMusicInCollection(playlist?.Songs, keyword);
         }
 

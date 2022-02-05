@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Helpers;
 using SMPlayer.Models;
+using SMPlayer.Models.DAO;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,19 +29,14 @@ namespace SMPlayer.Services
         {
             get => SQLHelper.Run(c => c.SelectAllPlaylists(i => i.Id != Settings.settings.MyFavoritesId));
         }
-        public static List<Playlist> AllPlaylistsWithSongs
-        {
-            get => SQLHelper.Run(c => c.SelectAllPlaylists(i => i.Id != Settings.settings.MyFavoritesId))
-                             .AsParallel().AsOrdered()
-                             .Select(i =>
-                             {
-                                 i.Songs = new ObservableCollection<Music>(SQLHelper.Run(c => c.SelectPlaylistItems(i.Id)));
-                                 return i;
-                             }).ToList();
-        }
 
         public static Playlist FindPlaylist(long id) { return SQLHelper.Run(c => c.SelectPlaylistById(id)); }
         public static Playlist FindPlaylist(string name) { return SQLHelper.Run(c => c.SelectPlaylistByName(name)); }
         public static List<Music> FindPlaylistItems(long id) { return SQLHelper.Run(c => c.SelectPlaylistItems(id)); }
+
+        public static List<long> FindPlaylistIdsByItems(IEnumerable<long> itemIds)
+        {
+            return SQLHelper.Run(c => c.Query<long>("select distinct PlaylistId from PlaylistItem where ItemId in (?) and State = ?", string.Join(",", itemIds), ActiveState.Active));
+        }
     }
 }
