@@ -505,7 +505,7 @@
     <value>已将“{0}”设为偏好！</value>
   </data>
   <data name="SetPlayNext" xml:space="preserve">
-    <value>《{0}》已被设为下一首播放的歌曲</value>
+    <value>已将《{0}》设为下一首播放的歌曲</value>
   </data>
   <data name="SetRootFolder" xml:space="preserve">
     <value>请先设置你的音乐文件夹！</value>
@@ -517,7 +517,7 @@
     <value>随机播放：打开</value>
   </data>
   <data name="SongAddedTo" xml:space="preserve">
-    <value>《{0}》已添加到”{1}“</value>
+    <value>已将《{0}》添加到”{1}“</value>
   </data>
   <data name="Songs" xml:space="preserve">
     <value>歌曲（{0}）</value>
@@ -526,7 +526,7 @@
     <value>歌曲：</value>
   </data>
   <data name="SongsAddedTo" xml:space="preserve">
-    <value>{0}首歌已添加到”{1}“</value>
+    <value>已添加{0}首歌到”{1}“</value>
   </data>
   <data name="Sort By Album" xml:space="preserve">
     <value>根据专辑排序</value>

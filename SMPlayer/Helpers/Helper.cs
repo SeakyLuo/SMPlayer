@@ -135,11 +135,11 @@ namespace SMPlayer
         {
             GetMainPageContainer()?.ShowNotification(LocalizeMessage(message), duration);
         }
-        public static void ShowCancelableNotification(string message, Action cancel, int duration = 5000)
+        public static void ShowUndoableNotification(string message, Action cancel, int duration = 5000)
         {
             GetMainPageContainer()?.ShowUndoableNotification(LocalizeMessage(message), cancel, duration);
         }
-        public static void ShowCancelableNotificationRaw(string message, Action cancel, int duration = 5000)
+        public static void ShowUndoableNotificationRaw(string message, Action cancel, int duration = 5000)
         {
             GetMainPageContainer()?.ShowUndoableNotification(message, cancel, duration);
         }

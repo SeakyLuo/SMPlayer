@@ -272,7 +272,7 @@ namespace SMPlayer
         {
             RemoveMusicAndNotifyListeners(music, true);
             if (showNotification)
-                Helper.ShowCancelableNotification(Helper.LocalizeMessage("MusicRemoved", music.Name), () => CancelMusicRemoval(removedMusicIndex, music));
+                Helper.ShowUndoableNotification(Helper.LocalizeMessage("MusicRemoved", music.Name), () => CancelMusicRemoval(removedMusicIndex, music));
         }
 
         private void RemoveMusic(IEnumerable<Music> playlist)

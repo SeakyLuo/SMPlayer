@@ -194,7 +194,7 @@ namespace SMPlayer
             ShuffleEnabled = mode == PlayMode.Shuffle;
         }
 
-        public static void AddMusic(IMusicable source, int index)
+        public static int AddMusic(IMusicable source, int index)
         {
             Music music = source.ToMusic().Copy();
             music.IsPlaying = IsMusicPlaying(music);
@@ -208,6 +208,7 @@ namespace SMPlayer
             }
             foreach (var listener in CurrentPlaylistChangedListeners)
                 listener.AddMusic(music, index);
+            return index;
         }
 
         public static bool IsMusicPlaying(Music music)
@@ -222,9 +223,9 @@ namespace SMPlayer
             Play();
         }
 
-        public static void AddMusic(IMusicable source)
+        public static int AddMusic(IMusicable source)
         {
-            AddMusic(source, CurrentPlaylist.Count);
+            return AddMusic(source, CurrentPlaylist.Count);
         }
 
         public static void SetPlaylist(IEnumerable<IMusicable> playlist, Music target = null)

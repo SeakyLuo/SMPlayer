@@ -461,6 +461,7 @@ namespace SMPlayer
 
         public void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option = null)
         {
+            //TestCommandBar.Show();
             BottomMultiSelectCommandBar.Show(option);
         }
 

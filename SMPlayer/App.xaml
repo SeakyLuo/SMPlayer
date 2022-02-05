@@ -38,6 +38,8 @@
                 <ResourceDictionary Source="Dictionaries/StretchTitleContentDialog.xaml" />
                 <ResourceDictionary Source="Dictionaries/HorizontalListView.xaml" />
                 <ResourceDictionary Source="Dictionaries/StretchingContentCommandBar.xaml" />
+                <ResourceDictionary Source="Dictionaries/FakeToggleButton.xaml" />
+                <ResourceDictionary Source="Dictionaries/MultiSelectCommandBar.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush
                 x:Key="PointerOverHighlightBackgroundBrush"

@@ -479,6 +479,7 @@ namespace SMPlayer
 
         async void IMenuFlyoutItemClickListener.Execute(MenuFlyoutEventArgs args)
         {
+            folderChainItemFlyout?.Hide();
             switch (args.Event)
             {
                 case MenuFlyoutEvent.AddTo:
