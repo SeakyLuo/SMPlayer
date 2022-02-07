@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Controls;
 using SMPlayer.Dialogs;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using SMPlayer.Models.DAO;
 using SMPlayer.Models.VO;
@@ -120,13 +121,13 @@ namespace SMPlayer
         {
             if (RecentAdded == null) return;
             RecentAddedProgressRing.IsActive = true;
-            ObservableCollection<Music> list = RecentAdded.TimeLine;
+            ObservableCollection<MusicView> list = RecentAdded.TimeLine;
             SetupAddedButtonState(list);
             AddedMusicView.Setup(list);
             RecentAddedProgressRing.IsActive = false;
         }
 
-        private void SetupAddedButtonState(ObservableCollection<Music> list)
+        private void SetupAddedButtonState(ObservableCollection<MusicView> list)
         {
             RecentAddedMultiSelectAppButton.IsEnabled = list.IsNotEmpty();
         }
@@ -135,13 +136,13 @@ namespace SMPlayer
         {
             if (!PlayedModifed) return;
             RecentPlayedProgressRing.IsActive = true;
-            IEnumerable<Music> list = Settings.RecentPlay;
+            IEnumerable<MusicView> list = Settings.RecentPlay.Select(i => i.ToVO());
             SetupPlayedButtonState(list);
             PlayedMusicView.Setup(list);
             RecentPlayedProgressRing.IsActive = PlayedModifed = false;
         }
 
-        private void SetupPlayedButtonState(IEnumerable<Music> list)
+        private void SetupPlayedButtonState(IEnumerable<MusicView> list)
         {
             RecentPlayedMultiSelectAppButton.IsEnabled = list.IsNotEmpty();
             ClearPlayHistoryAppButton.IsEnabled = list.IsNotEmpty();
@@ -471,7 +472,7 @@ namespace SMPlayer
             }
         }
 
-        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
+        void IMusicEventListener.Execute(MusicView music, MusicEventArgs args)
         {
             switch (args.EventType)
             {
@@ -494,7 +495,7 @@ namespace SMPlayer
             SearchModified = true;
         }
 
-        void IRecentEventListener.Played(Music music)
+        void IRecentEventListener.Played(MusicView music)
         {
             if (MainPage.Instance?.CurrentPage == typeof(RecentPage) &&
                 RecentPivot.SelectedItem == RecentPlayedItem)

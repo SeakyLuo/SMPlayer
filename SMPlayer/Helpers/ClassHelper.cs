@@ -172,13 +172,20 @@ namespace SMPlayer
         }
         public static bool IsMusicFile(this StorageFile file)
         {
-            return file.FileType.EndsWith(".mp3");
+            return MusicHelper.SupportedFileTypes.Any(i => file.FileType.EndsWith(i));
         }
-        public static async Task<int> CountFilesAsync(this StorageFolder folder)
+        public static async Task<int> CountFoldersAsync(this StorageFolder folder)
         {
-            int count = (await folder.GetFilesAsync()).Count(f => f.IsMusicFile());
+            int count = 0;
             foreach (var sub in await folder.GetFoldersAsync())
-                count += await CountFilesAsync(sub);
+                count += 1 + await CountFoldersAsync(sub);
+            return count;
+        }
+        public static async Task<int> CountItemsAsync(this StorageFolder folder)
+        {
+            int count = 1 + (await folder.GetFilesAsync()).Count(f => f.IsMusicFile());
+            foreach (var sub in await folder.GetFoldersAsync())
+                count += 1 + await CountItemsAsync(sub);
             return count;
         }
         public static string GetLyrics(this StorageFile file)
@@ -364,6 +371,11 @@ namespace SMPlayer
         public static Music GetMusic(this MediaPlaybackItem item)
         {
             return item.Source.CustomProperties["Source"] as Music;
+        }
+
+        public static void SetMusic(this MediaPlaybackItem item, Music music)
+        {
+            item.Source.CustomProperties["Source"] = music;
         }
 
         public static IEnumerable<T> RandItems<T>(this IEnumerable<T> enumerable, int count) where T : class

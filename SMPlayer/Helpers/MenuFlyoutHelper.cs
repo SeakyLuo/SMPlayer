@@ -48,7 +48,7 @@ namespace SMPlayer
                 {
                     if (Data is IMusicable musicable)
                     {
-                        Music music = musicable.ToMusic();
+                        MusicView music = musicable.ToMusic();
                         if (await StorageHelper.FileNotExist(music.Path))
                         {
                             Helper.ShowMusicNotFoundNotification(music.Name);
@@ -84,7 +84,7 @@ namespace SMPlayer
             }
             if (CurrentPlaylistName != MyFavorites)
             {
-                Playlist myFavorites = PlaylistService.MyFavorites;
+                PlaylistView myFavorites = PlaylistService.MyFavoritesView;
                 if ((Data is IMusicable m && !myFavorites.Contains(m.ToMusic())) ||
                     (Data is IEnumerable<IMusicable> list && list.Any(music => !myFavorites.Contains(music.ToMusic()))))
                 {
@@ -97,7 +97,7 @@ namespace SMPlayer
                     {
                         if (Data is IMusicable musicable)
                         {
-                            Music music = musicable.ToMusic();
+                            MusicView music = musicable.ToMusic();
                             if (await StorageHelper.FileNotExist(music.Path))
                             {
                                 Helper.ShowMusicNotFoundNotification(music.Name);
@@ -150,7 +150,7 @@ namespace SMPlayer
             {
                 if (Data is IMusicable musicable)
                 {
-                    Music music = musicable.ToMusic();
+                    MusicView music = musicable.ToMusic();
                     if (await StorageHelper.FileNotExist(music.Path))
                     {
                         Helper.ShowMusicNotFoundNotification(music.Name);
@@ -170,10 +170,10 @@ namespace SMPlayer
             };
             newPlaylistItem.SetToolTip("NewPlaylistToolTip");
             flyout.Items.Add(newPlaylistItem);
-            foreach (var playlist in PlaylistService.AllPlaylists)
+            foreach (var playlist in PlaylistService.AllPlaylistViews)
             {
                 if (playlist.Name == CurrentPlaylistName ||
-                    Data is IMusicable m && PlaylistService.FindPlaylistItems(playlist.Id).Contains(m.ToMusic()))
+                    Data is IMusicable m && PlaylistService.FindPlaylistItemViews(playlist.Id).Contains(m.ToMusic()))
                 {
                     continue;
                 }
@@ -186,7 +186,7 @@ namespace SMPlayer
                 {
                     if (Data is IMusicable musicable)
                     {
-                        Music music = musicable.ToMusic();
+                        MusicView music = musicable.ToMusic();
                         if (await StorageHelper.FileNotExist(music.Path))
                         {
                             Helper.ShowMusicNotFoundNotification(music.Name);
@@ -319,7 +319,7 @@ namespace SMPlayer
             shuffleItem.SetToolTip("ShuffleAndPlay");
             shuffleItem.Click += (s, args) =>
             {
-                MusicPlayer.ShuffleAndPlay(Data as IEnumerable<Music>);
+                MusicPlayer.ShuffleAndPlay(Data as IEnumerable<MusicView>);
                 listener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.Shuffle));
             };
             flyout.Items.Add(shuffleItem);
@@ -491,7 +491,7 @@ namespace SMPlayer
                         MainPage.Instance.Search(new SearchKeyword()
                         {
                             Text = inputText,
-                            Songs = tree.Flatten(),
+                            Songs = tree.Flatten().Select(i => i.FromVO()),
                             Folder = tree
                         });
                     }
@@ -502,7 +502,7 @@ namespace SMPlayer
         public MenuFlyout GetMusicMenuFlyout(IMenuFlyoutItemClickListener listener = null, MenuFlyoutOption option = null)
         {
             if (option == null) option = new MenuFlyoutOption();
-            Music music = (Data as IMusicable).ToMusic();
+            MusicView music = (Data as IMusicable).ToMusic();
             var flyout = new MenuFlyout();
             if (!MusicPlayer.IsPlaying || MusicPlayer.CurrentMusic != music)
             {
@@ -583,7 +583,7 @@ namespace SMPlayer
                 clickListener?.Execute(args);
         }
 
-        public static MenuFlyoutItem GetSeeAlbumFlyout(Music music)
+        public static MenuFlyoutItem GetSeeAlbumFlyout(MusicView music)
         {
             var albumItem = new MenuFlyoutItem()
             {
@@ -685,7 +685,7 @@ namespace SMPlayer
             return flyout;
         }
 
-        public static MenuFlyoutItem GetRemovableMenuFlyoutItem(Music music, IMenuFlyoutItemClickListener listener = null)
+        public static MenuFlyoutItem GetRemovableMenuFlyoutItem(MusicView music, IMenuFlyoutItemClickListener listener = null)
         {
             var removeItem = new MenuFlyoutItem
             {
@@ -805,7 +805,7 @@ namespace SMPlayer
                 callback?.Invoke();
             };
             flyout.Items.Add(album);
-            if (PlaylistService.AllPlaylists.IsNotEmpty())
+            if (PlaylistService.AllPlaylistViews.IsNotEmpty())
             {
                 var playlist = new MenuFlyoutItem()
                 {
@@ -828,7 +828,7 @@ namespace SMPlayer
                 localFolder.Click += (sender, args) =>
                 {
                     var rLocalFolder = RandomPlayHelper.PlayFolder(randomLimit);
-                    Helper.ShowNotificationRaw(Helper.LocalizeMessage("PlayRandomLocalFolder", rLocalFolder.Name));
+                    Helper.ShowNotificationRaw(Helper.LocalizeMessage("PlayRandomLocalFolder", rLocalFolder));
                     callback?.Invoke();
                 };
                 flyout.Items.Add(localFolder);
@@ -885,7 +885,7 @@ namespace SMPlayer
             }
             return flyout;
         }
-        public static MenuFlyoutSubItem AppendRecentAddedItem(MenuFlyoutSubItem parent, object title, List<Music> songs, int limit)
+        public static MenuFlyoutSubItem AppendRecentAddedItem(MenuFlyoutSubItem parent, object title, List<MusicView> songs, int limit)
         {
             if (songs.Count > 0)
             {
@@ -1050,11 +1050,11 @@ namespace SMPlayer
 
         private static object FindMusic(object obj)
         {
-            if (obj is Music || obj is IEnumerable<Music>) return obj;
+            if (obj is MusicView || obj is IEnumerable<MusicView>) return obj;
             else if (obj is IMusicable || obj is IEnumerable<IMusicable>) return obj;
             else if (obj is ArtistView artist) return artist.Songs;
             else if (obj is AlbumView album) return album.Songs;
-            else if (obj is Playlist playlist) return playlist.Songs;
+            else if (obj is PlaylistView playlist) return playlist.Songs;
             else if (obj is GridViewFolder gridFolder) return gridFolder.Songs;
             else if (obj is GridViewMusic gridMusic) return gridMusic.Source;
             else if (obj is FolderChainItem folderChainItem) return StorageService.FindFolder(folderChainItem.Id).Songs;
@@ -1065,7 +1065,7 @@ namespace SMPlayer
         {
             if (obj is ArtistView artist) return artist.Name;
             else if (obj is AlbumView album) return album.Name;
-            else if (obj is Playlist playlist) return playlist.Name;
+            else if (obj is PlaylistView playlist) return playlist.Name;
             else if (obj is GridViewFolder gridFolder) return gridFolder.Name;
             else if (obj is TreeViewFolder treeFolder) return treeFolder.Name;
             return "";
@@ -1087,7 +1087,7 @@ namespace SMPlayer
     {
         public MenuFlyoutEvent Event { get; set; }
         public object Data { get; set; }
-        public Music Music { get => (Music)Data; }
+        public MusicView Music { get => (MusicView)Data; }
 
         public MenuFlyoutEventArgs() { }
 

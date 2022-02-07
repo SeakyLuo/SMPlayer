@@ -404,7 +404,7 @@ namespace SMPlayer
             }
         }
 
-        private Music CurrentMusic = null;
+        private MusicView CurrentMusic = null;
         private bool ShouldUpdate = true, SliderClicked = false;
         private static List<IMusicRequestListener> MusicRequestListeners = new List<IMusicRequestListener>();
         private static bool inited = false;
@@ -492,7 +492,7 @@ namespace SMPlayer
             }
         }
 
-        public async void UpdateMusic(Music music)
+        public async void UpdateMusic(MusicView music)
         {
             CurrentMusic = music;
             if (music == null)
@@ -518,7 +518,7 @@ namespace SMPlayer
             });
         }
 
-        public async void SetThumbnail(Music music)
+        public async void SetThumbnail(MusicView music)
         {
             using (var thumbnail = await ImageHelper.LoadThumbnail(music))
             {
@@ -553,7 +553,7 @@ namespace SMPlayer
             }
         }
 
-        public void SetMusic(Music music)
+        public void SetMusic(MusicView music)
         {
             if (CurrentMusic == music) return;
             UpdateMusic(music);
@@ -938,7 +938,7 @@ namespace SMPlayer
             }
         }
 
-        public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
+        public async void MusicSwitching(MusicView current, MusicView next, MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
             {
@@ -1073,7 +1073,7 @@ namespace SMPlayer
             }
         }
 
-        public void MusicLiked(Music music, bool isFavorite)
+        public void MusicLiked(MusicView music, bool isFavorite)
         {
             if (music == MusicPlayer.CurrentMusic)
             {
@@ -1112,7 +1112,7 @@ namespace SMPlayer
             });
         }
 
-        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
+        void IMusicEventListener.Execute(MusicView music, MusicEventArgs args)
         {
             switch (args.EventType)
             {
@@ -1123,8 +1123,14 @@ namespace SMPlayer
             }
         }
 
-        void ICurrentPlaylistChangedListener.AddMusic(Music music, int index) { }
-        void ICurrentPlaylistChangedListener.RemoveMusic(Music music) { }
+        void ICurrentPlaylistChangedListener.AddMusic(MusicView music, int index) { }
+        void ICurrentPlaylistChangedListener.RemoveMusic(MusicView music)
+        {
+            if (MusicPlayer.CurrentMusic == null)
+            {
+                UpdateMusic(null);
+            }
+        }
         void ICurrentPlaylistChangedListener.Cleared()
         {
             ClearMusic();
@@ -1133,8 +1139,8 @@ namespace SMPlayer
 
     public interface IMusicRequestListener
     {
-        void PlaylistRequested(ICollection<Music> playlist);
-        void MusicInfoRequested(Music music);
-        void LyricsRequested(Music music);
+        void PlaylistRequested(ICollection<MusicView> playlist);
+        void MusicInfoRequested(MusicView music);
+        void LyricsRequested(MusicView music);
     }
 }

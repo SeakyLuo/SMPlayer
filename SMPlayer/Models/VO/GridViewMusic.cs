@@ -27,7 +27,7 @@ namespace SMPlayer.Models.VO
         public string Artist { get => Source.Artist; }
         public string Album { get => Source.Album; }
         private FolderFile SourceFile;
-        public Music Source
+        public MusicView Source
         {
             get => source;
             set
@@ -39,7 +39,7 @@ namespace SMPlayer.Models.VO
                 OnPropertyChanged("Artist");
             }
         }
-        private Music source;
+        private MusicView source;
         public override bool ShowTypeIcon => false;
         
         public GridViewMusic(FolderFile file)
@@ -49,12 +49,12 @@ namespace SMPlayer.Models.VO
             Type = StorageType.File;
             SourceFile = file;
             Thumbnail = MusicImage.DefaultImage;
-            Music music = MusicService.FindMusic(file.FileId);
+            MusicView music = MusicService.FindMusic(file.FileId);
             Source = music;
             IsPlaying = MusicPlayer.CurrentMusic == music;
         }
 
-        public GridViewMusic(Music music)
+        public GridViewMusic(MusicView music)
         {
             Path = music.Path;
             Type = StorageType.File;
@@ -77,7 +77,7 @@ namespace SMPlayer.Models.VO
             return SourceFile;
         }
 
-        Music IMusicable.ToMusic()
+        MusicView IMusicable.ToMusic()
         {
             return source;
         }

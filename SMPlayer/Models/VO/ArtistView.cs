@@ -36,12 +36,12 @@ namespace SMPlayer.Models
             }
         }
         private string info = "";
-        public List<Music> Songs { get => Albums.SelectMany(i => i.Songs).ToList(); }
+        public List<MusicView> Songs { get => Albums.SelectMany(i => i.Songs).ToList(); }
         public ArtistView(string Name)
         {
             this.Name = Name;
         }
-        public ArtistView(Music music)
+        public ArtistView(MusicView music)
         {
             Name = music.Artist;
             Albums.Add(new AlbumView(music, true));
@@ -74,7 +74,7 @@ namespace SMPlayer.Models
             NotLoaded = false;
         }
 
-        public void AddMusic(Music music)
+        public void AddMusic(MusicView music)
         {
             if (Albums.FirstOrDefault(i => i.Name == music.Album) is AlbumView album)
             {
@@ -86,7 +86,7 @@ namespace SMPlayer.Models
             }
         }
 
-        public void RemoveMusic(Music music)
+        public void RemoveMusic(MusicView music)
         {
             if (Albums.FirstOrDefault(i => i.Name == music.Album) is AlbumView album)
             {
@@ -95,17 +95,17 @@ namespace SMPlayer.Models
             }
         }
 
-        public void CopySongs(IEnumerable<Music> songs)
+        public void CopySongs(IEnumerable<MusicView> songs)
         {
             Albums.Clear();
             foreach (var group in songs.GroupBy(m => m.Album).OrderBy(g => g.Key))
                 Albums.Add(new AlbumView(group.Key, Name, group.OrderBy(m => m.Name), false));
         }
 
-        public void CopyFrom(Playlist playlist)
+        public void CopyFrom(PlaylistView playlist)
         {
             NotLoaded = true;
-            Name = playlist.Artist;
+            Name = playlist.Name;
             CopySongs(playlist.Songs);
             NotLoaded = false;
         }

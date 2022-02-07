@@ -49,16 +49,16 @@
                             Text="Artists" />
                     </CommandBar.Content>
                     <AppBarButton
-                        x:Name="SortArtistsButton"
-                        x:Uid="SortAppButton"
-                        Click="SortArtistsButton_Click"
-                        Icon="Sort" />
-                    <AppBarButton
                         x:Name="ArtistsViewAllButton"
                         x:Uid="ViewAllButton"
                         Click="ArtistsViewAllButton_Click"
                         Icon="ViewAll"
                         Style="{StaticResource ViewAllButtonStyle}" />
+                    <AppBarButton
+                        x:Name="SortArtistsButton"
+                        x:Uid="SortAppButton"
+                        Click="SortArtistsButton_Click"
+                        Icon="Sort" />
                 </CommandBar>
                 <ListView
                     x:Name="SearchArtistView"
@@ -81,16 +81,16 @@
                             Text="Albums" />
                     </CommandBar.Content>
                     <AppBarButton
-                        x:Name="SortAlbumsButton"
-                        x:Uid="SortAppButton"
-                        Click="SortAlbumsButton_Click"
-                        Icon="Sort" />
-                    <AppBarButton
                         x:Name="AlbumsViewAllButton"
                         x:Uid="ViewAllButton"
                         Click="AlbumsViewAllButton_Click"
                         Icon="ViewAll"
                         Style="{StaticResource ViewAllButtonStyle}" />
+                    <AppBarButton
+                        x:Name="SortAlbumsButton"
+                        x:Uid="SortAppButton"
+                        Click="SortAlbumsButton_Click"
+                        Icon="Sort" />
                 </CommandBar>
                 <ListView
                     x:Name="SearchAlbumView"
@@ -113,16 +113,16 @@
                             Text="Songs" />
                     </CommandBar.Content>
                     <AppBarButton
-                        x:Name="SortSongsButton"
-                        x:Uid="SortAppButton"
-                        Click="SortSongsButton_Click"
-                        Icon="Sort" />
-                    <AppBarButton
                         x:Name="SongsViewAllButton"
                         x:Uid="ViewAllButton"
                         Click="SongsViewAllButton_Click"
                         Icon="ViewAll"
                         Style="{StaticResource ViewAllButtonStyle}" />
+                    <AppBarButton
+                        x:Name="SortSongsButton"
+                        x:Uid="SortAppButton"
+                        Click="SortSongsButton_Click"
+                        Icon="Sort" />
                 </CommandBar>
                 <local:PlaylistControl
                     x:Name="SearchMusicView"
@@ -141,16 +141,16 @@
                             Text="Playlists" />
                     </CommandBar.Content>
                     <AppBarButton
-                        x:Name="SortPlaylistsButton"
-                        x:Uid="SortAppButton"
-                        Click="SortPlaylistsButton_Click"
-                        Icon="Sort" />
-                    <AppBarButton
                         x:Name="PlaylistsViewAllButton"
                         x:Uid="ViewAllButton"
                         Click="PlaylistsViewAllButton_Click"
                         Icon="ViewAll"
                         Style="{StaticResource ViewAllButtonStyle}" />
+                    <AppBarButton
+                        x:Name="SortPlaylistsButton"
+                        x:Uid="SortAppButton"
+                        Click="SortPlaylistsButton_Click"
+                        Icon="Sort" />
                 </CommandBar>
                 <ListView
                     x:Name="SearchPlaylistView"
@@ -173,16 +173,16 @@
                             Text="Folders" />
                     </CommandBar.Content>
                     <AppBarButton
-                        x:Name="SortFoldersButton"
-                        x:Uid="SortAppButton"
-                        Click="SortFoldersButton_Click"
-                        Icon="Sort" />
-                    <AppBarButton
                         x:Name="FoldersViewAllButton"
                         x:Uid="ViewAllButton"
                         Click="FoldersViewAllButton_Click"
                         Icon="ViewAll"
                         Style="{StaticResource ViewAllButtonStyle}" />
+                    <AppBarButton
+                        x:Name="SortFoldersButton"
+                        x:Uid="SortAppButton"
+                        Click="SortFoldersButton_Click"
+                        Icon="Sort" />
                 </CommandBar>
                 <ListView
                     x:Name="SearchFolderView"

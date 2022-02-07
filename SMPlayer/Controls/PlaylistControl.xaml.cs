@@ -33,12 +33,12 @@ namespace SMPlayer
         }
         public static readonly DependencyProperty IsNowPlayingProperty = DependencyProperty.Register("SelectableProperty", typeof(bool), typeof(PlaylistControl), new PropertyMetadata(false));
 
-        public ObservableCollection<Music> CurrentPlaylist
+        public ObservableCollection<MusicView> CurrentPlaylist
         {
             get => currentPlaylist;
             set => currentPlaylist.SetTo(value);
         }
-        private ObservableCollection<Music> currentPlaylist = new ObservableCollection<Music>();
+        private ObservableCollection<MusicView> currentPlaylist = new ObservableCollection<MusicView>();
         private static List<IMusicRequestListener> MusicRequestListeners = new List<IMusicRequestListener>();
         public bool AlternatingRowColor { get; set; }
         public IPlaylistScrollListener ScrollListener { get; set; }
@@ -62,7 +62,7 @@ namespace SMPlayer
         }
         public static readonly DependencyProperty FooterProperty = DependencyProperty.Register("Footer", typeof(object), typeof(PlaylistControl), new PropertyMetadata(null));
 
-        public ObservableCollection<Music> ItemsSource
+        public ObservableCollection<MusicView> ItemsSource
         {
             get => currentPlaylist;
             set => currentPlaylist = value;
@@ -102,9 +102,9 @@ namespace SMPlayer
             get => SongsListView.SelectionMode;
             set => SongsListView.SelectionMode = value;
         }
-        public List<Music> SelectedItems
+        public List<MusicView> SelectedItems
         {
-            get => SongsListView.SelectedItems.Select(m => (Music)m).ToList();
+            get => SongsListView.SelectedItems.Select(m => (MusicView)m).ToList();
         }
         public int SelectedItemsCount
         {
@@ -114,7 +114,7 @@ namespace SMPlayer
         public List<IRemoveMusicListener> RemoveListeners = new List<IRemoveMusicListener>();
         private Dialogs.RemoveDialog dialog;
         private int dragIndex, dropIndex, removedMusicIndex = -1;
-        private Music removedMusic = null;
+        private MusicView removedMusic = null;
 
         public PlaylistControl()
         {
@@ -126,7 +126,7 @@ namespace SMPlayer
         private void PlaylistController_Loaded(object sender, RoutedEventArgs e)
         {
             if (IsNowPlaying) CurrentPlaylist.SetTo(MusicPlayer.CurrentPlaylist.Select(i => i.Copy()));
-            Helper.GetMainPageContainer().SetMultiSelectListener(this);
+            Helper.GetMainPageContainer()?.SetMultiSelectListener(this);
         }
 
         private bool ViewChangedUnadded = true;
@@ -177,7 +177,7 @@ namespace SMPlayer
         private void SongsListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             if (SelectionMode != ListViewSelectionMode.None) return;
-            Music music = (Music)e.ClickedItem;
+            MusicView music = (MusicView)e.ClickedItem;
             if (MusicPlayer.CurrentMusic == music && MusicPlayer.CurrentPlaylist.SameAs(CurrentPlaylist))
             {
                 if (!MusicPlayer.IsPlaying)
@@ -191,12 +191,12 @@ namespace SMPlayer
             }
         }
 
-        public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
+        public async void MusicSwitching(MusicView current, MusicView next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => MusicPlayer.SetMusicPlaying(CurrentPlaylist, next));
         }
 
-        public void CancelMusicRemoval(int index, Music music)
+        public void CancelMusicRemoval(int index, MusicView music)
         {
             if (IsNowPlaying)
             {
@@ -212,7 +212,7 @@ namespace SMPlayer
         private void SongsListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
             if (!AllowReorder) return;
-            Music music = args.Items[0] as Music;
+            MusicView music = args.Items[0] as MusicView;
             dropIndex = CurrentPlaylist.FindIndex(m => m == music && m.Index == music.Index);
             if (dragIndex == dropIndex) return;
             if (IsNowPlaying) MusicPlayer.MoveMusic(dragIndex, dropIndex, false);
@@ -221,7 +221,7 @@ namespace SMPlayer
         private void OpenMusicMenuFlyout(object sender, object e)
         {
             var flyout = sender as MenuFlyout;
-            Music music = flyout.Target.DataContext as Music;
+            MusicView music = flyout.Target.DataContext as MusicView;
             MenuFlyoutHelper.SetMusicMenu(sender, this, null, new MenuFlyoutOption
             {
                 ShowSelect = Selectable,
@@ -233,10 +233,10 @@ namespace SMPlayer
 
         private void RemoveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
         {
-            AskRemoveMusic(args.SwipeControl.DataContext as Music);
+            AskRemoveMusic(args.SwipeControl.DataContext as MusicView);
         }
 
-        public async void AskRemoveMusic(Music music)
+        public async void AskRemoveMusic(MusicView music)
         {
             if (dialog == null) dialog = new Dialogs.RemoveDialog();
             if (dialog.IsChecked)
@@ -251,14 +251,14 @@ namespace SMPlayer
             }
         }
 
-        private void RemoveMusicAndNotifyListeners(Music music, bool alternateRowBackgroud = true)
+        private void RemoveMusicAndNotifyListeners(MusicView music, bool alternateRowBackgroud = true)
         {
             if (!RemoveMusic(music)) return;
             if (IsNowPlaying) MusicPlayer.RemoveMusic(music);
             foreach (var listener in RemoveListeners) listener.MusicRemoved(removedMusicIndex, music, CurrentPlaylist);
         }
 
-        private bool RemoveMusic(Music music, bool alternateRowBackgroud = true)
+        private bool RemoveMusic(MusicView music, bool alternateRowBackgroud = true)
         {
             removedMusicIndex = IsNowPlaying ? music.Index : CurrentPlaylist.IndexOf(music);
             if (removedMusicIndex == -1) return false;
@@ -268,14 +268,14 @@ namespace SMPlayer
             return true;
         }
 
-        private void RemoveMusicAndNotifyUser(Music music, bool showNotification)
+        private void RemoveMusicAndNotifyUser(MusicView music, bool showNotification)
         {
             RemoveMusicAndNotifyListeners(music, true);
             if (showNotification)
                 Helper.ShowUndoableNotification(Helper.LocalizeMessage("MusicRemoved", music.Name), () => CancelMusicRemoval(removedMusicIndex, music));
         }
 
-        private void RemoveMusic(IEnumerable<Music> playlist)
+        private void RemoveMusic(IEnumerable<MusicView> playlist)
         {
             foreach (var music in playlist)
             {
@@ -287,7 +287,7 @@ namespace SMPlayer
 
         private void FavoriteItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
         {
-            var music = args.SwipeControl.DataContext as Music;
+            var music = args.SwipeControl.DataContext as MusicView;
             if (music.Favorite) Settings.settings.DislikeMusic(music);
             else Settings.settings.LikeMusic(music);
         }
@@ -307,7 +307,7 @@ namespace SMPlayer
                 ScrollToMusic(MusicPlayer.CurrentMusic, showNotification);
             }
         }
-        public bool ScrollToMusic(Music music, bool showNotification = false)
+        public bool ScrollToMusic(MusicView music, bool showNotification = false)
         {
             if (music == null) return false;
             int index = IsNowPlaying ? music.Index : CurrentPlaylist.IndexOf(music);
@@ -364,7 +364,7 @@ namespace SMPlayer
 
         private void SongsListView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
         {
-            dragIndex = (e.Items[0] as Music).Index;
+            dragIndex = (e.Items[0] as MusicView).Index;
         }
 
         public void SelectAll()
@@ -405,7 +405,7 @@ namespace SMPlayer
                     }
                     if (SelectedItemsCount == 1)
                     {
-                        AskRemoveMusic(SongsListView.SelectedItems[0] as Music);
+                        AskRemoveMusic(SongsListView.SelectedItems[0] as MusicView);
                     }
                     else
                     {
@@ -437,7 +437,7 @@ namespace SMPlayer
             MultiSelectListener?.Execute(commandBar, args);
         }
 
-        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
+        void IMusicEventListener.Execute(MusicView music, MusicEventArgs args)
         {
             switch (args.EventType)
             {
@@ -451,7 +451,7 @@ namespace SMPlayer
                     RemoveMusicAndNotifyListeners(music);
                     break;
                 case MusicEventType.Like:
-                    MusicModified(music, new Music(music) { Favorite = args.IsFavorite });
+                    MusicModified(music, new MusicView(music) { Favorite = args.IsFavorite });
                     break;
                 case MusicEventType.Modify:
                     MusicModified(music, args.ModifiedMusic);
@@ -459,12 +459,12 @@ namespace SMPlayer
             }
         }
 
-        private void MusicModified(Music before, Music after)
+        private void MusicModified(MusicView before, MusicView after)
         {
             CurrentPlaylist.FirstOrDefault(m => m == before)?.CopyFrom(after);
         }
 
-        void ICurrentPlaylistChangedListener.AddMusic(Music music, int index)
+        void ICurrentPlaylistChangedListener.AddMusic(MusicView music, int index)
         {
             if (IsNowPlaying)
                 CurrentPlaylist.Insert(index, music);
@@ -479,7 +479,7 @@ namespace SMPlayer
             }
         }
 
-        void ICurrentPlaylistChangedListener.RemoveMusic(Music music)
+        void ICurrentPlaylistChangedListener.RemoveMusic(MusicView music)
         {
             if (IsNowPlaying)
                 RemoveMusic(music);

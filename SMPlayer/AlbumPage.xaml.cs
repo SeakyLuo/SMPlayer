@@ -43,12 +43,12 @@ namespace SMPlayer
 
         public async void LoadAlbum(object targetAlbum)
         {
-            Playlist playlist = null;
+            PlaylistView playlist = null;
             if (targetAlbum is AlbumView album)
             {
                 playlist = album.ToPlaylist();
             }
-            else if (targetAlbum is Playlist albumPlaylist)
+            else if (targetAlbum is PlaylistView albumPlaylist)
             {
                 playlist = albumPlaylist;
             }

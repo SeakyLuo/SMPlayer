@@ -24,9 +24,9 @@ namespace SMPlayer.Controls
             get => SaveProgress.Foreground;
             set => SaveProgress.Foreground = value;
         }
-        private Music CurrentMusic;
+        private MusicView CurrentMusic;
         private MusicProperties Properties;
-        public static List<Action<Music, Music>> MusicModifiedListeners = new List<Action<Music, Music>>();
+        public static List<Action<MusicView, MusicView>> MusicModifiedListeners = new List<Action<MusicView, MusicView>>();
         public bool IsProcessing { get; private set; } = false;
         public bool IsCurrentMusic
         {
@@ -59,7 +59,7 @@ namespace SMPlayer.Controls
                 SetPlayButtonVisibility(IsCurrentMusic && MusicPlayer.IsPlaying);
             }
         }
-        public async void SetMusicInfo(Music music)
+        public async void SetMusicInfo(MusicView music)
         {
             if (music == null) return;
             SaveProgress.Visibility = Visibility.Visible;
@@ -72,13 +72,13 @@ namespace SMPlayer.Controls
         }
         private void ClearPlayCountButton_Click(object sender, RoutedEventArgs e)
         {
-            Music oldMusic = CurrentMusic.Copy();
+            MusicView oldMusic = CurrentMusic.Copy();
             CurrentMusic.PlayCount = 0;
             SetPlayCount(CurrentMusic);
             Settings.settings.MusicModified(oldMusic, CurrentMusic);
         }
 
-        public void SetPlayCount(Music music)
+        public void SetPlayCount(MusicView music)
         {
             if (music.PlayCount == 0)
             {
@@ -160,7 +160,7 @@ namespace SMPlayer.Controls
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
 
-        public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
+        public async void MusicSwitching(MusicView current, MusicView next, MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {

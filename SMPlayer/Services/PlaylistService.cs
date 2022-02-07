@@ -12,27 +12,25 @@ namespace SMPlayer.Services
 {
     public class PlaylistService
     {
-        public static Playlist MyFavorites 
+        public static PlaylistView MyFavoritesView 
         {
             get
             {
-                Playlist playlist = FindPlaylist(Settings.settings.MyFavoritesId);
+                PlaylistView playlist = FindPlaylistView(Settings.settings.MyFavoritesId);
                 playlist.EntityType = EntityType.MyFavorites;
                 return playlist;
             }
         }
-        public static List<Music> MyFavoriteSongs
-        {
-            get => FindPlaylistItems(Settings.settings.MyFavoritesId);
-        }
-        public static List<Playlist> AllPlaylists
-        {
-            get => SQLHelper.Run(c => c.SelectAllPlaylists(i => i.Id != Settings.settings.MyFavoritesId));
-        }
-
-        public static Playlist FindPlaylist(long id) { return SQLHelper.Run(c => c.SelectPlaylistById(id)); }
+        public static Playlist MyFavorites => FindPlaylist(Settings.settings.MyFavoritesId);
+        public static List<MusicView> MyFavoriteSongs => FindPlaylistItemViews(Settings.settings.MyFavoritesId);
+        public static List<PlaylistView> AllPlaylistViews => AllPlaylists.Select(i => i.ToVO()).ToList();
+        public static List<Playlist> AllPlaylists => SQLHelper.Run(c => c.SelectAllPlaylists(i => i.Id != Settings.settings.MyFavoritesId));
+        public static PlaylistView FindPlaylistView(long id) { return SQLHelper.Run(c => c.SelectPlaylistById(id))?.ToVO(); }
         public static Playlist FindPlaylist(string name) { return SQLHelper.Run(c => c.SelectPlaylistByName(name)); }
-        public static List<Music> FindPlaylistItems(long id) { return SQLHelper.Run(c => c.SelectPlaylistItems(id)); }
+        public static List<MusicView> FindPlaylistItemViews(long id) { return FindPlaylistItems(id).Select(i => i.ToVO()).ToList(); }
+        public static Playlist FindPlaylist(long id) => SQLHelper.Run(c => c.SelectPlaylistById(id));
+
+        public static List<Music> FindPlaylistItems(long id) => SQLHelper.Run(c => c.SelectPlaylistItems(id));
 
         public static List<long> FindPlaylistIdsByItems(IEnumerable<long> itemIds)
         {

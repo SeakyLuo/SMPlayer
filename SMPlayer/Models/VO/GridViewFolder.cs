@@ -71,7 +71,7 @@ namespace SMPlayer.Models.VO
             }
         }
         private FolderTree source { get; set; }
-        public List<Music> Songs { get => Source.Flatten(); }
+        public List<MusicView> Songs { get => Source.Flatten(); }
         private bool HasNoThumbnail
         {
             get => (thumbnail == null || thumbnail == MusicImage.NotFound) && first == null;
@@ -111,7 +111,7 @@ namespace SMPlayer.Models.VO
             IsThumbnailLoading = false;
         }
 
-        private async Task<bool> AddThumbnail(List<BitmapImage> thumbnails, List<Music> src)
+        private async Task<bool> AddThumbnail(List<BitmapImage> thumbnails, List<MusicView> src)
         {
             foreach (var group in src.GroupBy(m => m.Album))
             {

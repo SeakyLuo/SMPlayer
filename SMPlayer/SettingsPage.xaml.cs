@@ -114,9 +114,9 @@ namespace SMPlayer
             }
             string paren = Helper.LocalizeMessage("PostParenthesis");
             HyperlinkButton button = (HyperlinkButton)sender;
-            List<Music> skipped = new List<Music>();
+            List<MusicView> skipped = new List<MusicView>();
             int count = Settings.AllSongs.Count(), counter = 0;
-            foreach (Music music in Settings.AllSongs)
+            foreach (MusicView music in Settings.AllSongs)
             {
                 if (addLyricsClickCounter == 0)
                 {
@@ -142,7 +142,7 @@ namespace SMPlayer
             }
             while (skipped.Count > 0)
             {
-                foreach (Music music in skipped.ToList())
+                foreach (MusicView music in skipped.ToList())
                 {
                     if (addLyricsClickCounter == 0)
                     {

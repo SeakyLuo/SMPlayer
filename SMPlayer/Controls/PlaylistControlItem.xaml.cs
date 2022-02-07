@@ -25,7 +25,7 @@ namespace SMPlayer.Controls
         }
         public static readonly DependencyProperty ShowAlbumTextProperty = DependencyProperty.Register("ShowAlbumText", typeof(bool), typeof(PlaylistControlItem), new PropertyMetadata(true));
 
-        public Music Data { get; set; }
+        public MusicView Data { get; set; }
         public PlaylistControlItem()
         {
             this.InitializeComponent();
@@ -44,7 +44,7 @@ namespace SMPlayer.Controls
         }
 
         private bool TextColorChanged = true;
-        public void SetTextColor(Music music)
+        public void SetTextColor(MusicView music)
         {
             if (Data == null) return;
             if (Data.Index == -1 ? Data == music : MusicPlayer.IsMusicPlaying(Data))
@@ -72,7 +72,7 @@ namespace SMPlayer.Controls
             }
         }
 
-        public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
+        public async void MusicSwitching(MusicView current, MusicView next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => SetTextColor(next));
         }

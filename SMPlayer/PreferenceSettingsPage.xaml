@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:models="using:SMPlayer.Models" xmlns:vo="using:SMPlayer.Models.VO"
     mc:Ignorable="d"
+    Loaded="Page_Loaded"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
@@ -61,7 +62,6 @@
         </Style>
 
         <Style TargetType="AppBarButton" x:Name="ClearInvalidButtonStyle" BasedOn="{StaticResource PreferenceAppBarButtonStyle}">
-            <Setter Property="Label" Value="Clear Invalid" />
         </Style>
 
         <Style TargetType="FontIcon" x:Key="RotateDropDownIcon">
@@ -289,7 +289,7 @@
                     </AppBarButton>
                     <AppBarButton 
                         x:Name="ClearInvalidPreferredAlbumsButton" 
-                        x:Uid="ClearAppBarButton"
+                        x:Uid="ClearInvalidAppBarButton"
                         Icon="Clear"
                         Style="{StaticResource ClearInvalidButtonStyle}"
                         Click="ClearInvalidPreferredAlbumsButton_Click"/>

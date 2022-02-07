@@ -30,14 +30,14 @@ namespace SMPlayer
         private List<ListView> listViews = new List<ListView>();
         private IInitListener initListener;
         private ArtistView SelectedArtist => ArtistMasterDetailsView.SelectedItem as ArtistView;
-        private List<Music> SelectedItems
+        private List<MusicView> SelectedItems
         {
             get
             {
-                List<Music> playlist = new List<Music>();
+                List<MusicView> playlist = new List<MusicView>();
                 foreach (ListView listView in listViews)
                 {
-                    foreach (Music music in listView.SelectedItems)
+                    foreach (MusicView music in listView.SelectedItems)
                     {
                         playlist.Add(music);
                     }
@@ -84,10 +84,10 @@ namespace SMPlayer
             {
                 artist = FindAndLoadArtist(artistName);
             }
-            else if (targetArtist is Playlist playlist)
+            else if (targetArtist is PlaylistView playlist)
             {
-                artist = Artists.FirstOrDefault(a => a.Name == playlist.Artist);
-                if (artist.NotLoaded || !MusicLibraryPage.IsLibraryUnchangedAfterChecking)
+                artist = Artists.FirstOrDefault(a => a.Name == playlist.Name);
+                if (artist.NotLoaded)
                     artist.CopyFrom(playlist);
             }
             ArtistMasterDetailsView.SelectedItem = artist;
@@ -116,7 +116,7 @@ namespace SMPlayer
             }
         }
 
-        private async void Setup(IEnumerable<Music> songs)
+        private async void Setup(IEnumerable<MusicView> songs)
         {
             if (IsProcessing) return;
             LoadingProgress.Visibility = Visibility.Visible;
@@ -124,7 +124,7 @@ namespace SMPlayer
             LoadingProgress.Visibility = Visibility.Collapsed;
         }
 
-        private async Task SetData(IEnumerable<Music> songs)
+        private async Task SetData(IEnumerable<MusicView> songs)
         {
             IsProcessing = true;
             List<ArtistView> artists = new List<ArtistView>();
@@ -173,8 +173,8 @@ namespace SMPlayer
         {
             ListView listView = (ListView)sender;
             if (listView.SelectionMode != ListViewSelectionMode.None) return;
-            Music music = (Music)e.ClickedItem;
-            MusicPlayer.SetMusicAndPlay(listView.ItemsSource as ObservableCollection<Music>, music);
+            MusicView music = (MusicView)e.ClickedItem;
+            MusicPlayer.SetMusicAndPlay(listView.ItemsSource as ObservableCollection<MusicView>, music);
         }
 
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
@@ -182,7 +182,7 @@ namespace SMPlayer
             args.ItemContainer.Background = PlaylistControl.GetRowBackground(args.ItemIndex);
         }
 
-        private void FindMusicAndSetPlaying(Music target)
+        private void FindMusicAndSetPlaying(MusicView target)
         {
             foreach (var artist in Artists)
                 foreach (var album in artist.Albums)
@@ -190,7 +190,7 @@ namespace SMPlayer
                         music.IsPlaying = music.Equals(target);
         }
 
-        public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
+        public async void MusicSwitching(MusicView current, MusicView next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () => FindMusicAndSetPlaying(next));
         }
@@ -256,7 +256,8 @@ namespace SMPlayer
 
         private void ArtistSearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
-            Suggestions.SetTo(SuggestionList.Where(s => SearchHelper.IsTargetArtist(s, sender.Text)));
+            Suggestions.SetTo(SearchHelper.SearchAndSortByDefault(SuggestionList.Select(i => new Artist() { Name = i }), sender.Text)
+                                          .Select(i => i.Name));
         }
 
         private void ArtistSearchBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
@@ -282,7 +283,7 @@ namespace SMPlayer
 
         private async void LoadArtist(ArtistView artist)
         {
-            if (artist.NotLoaded || !MusicLibraryPage.IsLibraryUnchangedAfterChecking)
+            if (artist.NotLoaded)
                 await artist.LoadAsync();
         }
 
@@ -316,7 +317,7 @@ namespace SMPlayer
                     args.FlyoutHelper.DefaultPlaylistName = SelectedArtist.Name;
                     break;
                 case MultiSelectEvent.Play:
-                    List<Music> selectedItems = SelectedItems;
+                    List<MusicView> selectedItems = SelectedItems;
                     if (selectedItems.Count == 0) return;
                     MusicPlayer.SetPlaylistAndPlay(SelectedItems);
                     break;
@@ -367,7 +368,7 @@ namespace SMPlayer
             {
                 return;
             }
-            if (args.Data is Music music)
+            if (args.Data is MusicView music)
             {
                 foreach (var listView in listViews)
                 {
@@ -403,7 +404,7 @@ namespace SMPlayer
             SelectArtist(targetArtist);
         }
 
-        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
+        void IMusicEventListener.Execute(MusicView music, MusicEventArgs args)
         {
             if (IsFolderUpdated) return;
             ArtistView artist = Artists.FirstOrDefault(a => a.Name == music.Artist);
@@ -431,7 +432,7 @@ namespace SMPlayer
                     }
                     break;
                 case MusicEventType.Modify:
-                    Music before = music, after = args.ModifiedMusic;
+                    MusicView before = music, after = args.ModifiedMusic;
                     if (artist.Equals(ArtistMasterDetailsView.SelectedItem) || !artist.NotLoaded) artist.Load();
                     if (SuggestionList.Contains(after.Artist))
                     {

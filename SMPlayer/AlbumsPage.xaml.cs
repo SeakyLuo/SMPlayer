@@ -27,8 +27,8 @@ namespace SMPlayer
         public const string JsonFilename = "AlbumInfo";
         private ObservableCollection<AlbumView> Suggestions = new ObservableCollection<AlbumView>();
         private List<AlbumView> Albums = new List<AlbumView>();
-        private bool IsProcessing = false, IsFolderUpdated = false;
-        public List<Music> SelectedSongs => AlbumsGridView.SelectedItems.SelectMany(a => (a as AlbumView).Songs).ToList();
+        private bool IsProcessing = false, IsFolderUpdated = false, IsSearching = false;
+        public List<MusicView> SelectedSongs => AlbumsGridView.SelectedItems.SelectMany(a => (a as AlbumView).Songs).ToList();
 
         public AlbumsPage()
         {
@@ -97,7 +97,7 @@ namespace SMPlayer
                 albumView.Thumbnail = image ?? MusicImage.DefaultImage;
         }
 
-        public void SaveMusic(Music music, BitmapImage image)
+        public void SaveMusic(MusicView music, BitmapImage image)
         {
             if (Suggestions.FirstOrDefault(a => a.Name.Equals(music.Album)) is AlbumView albumView && albumView.Songs.Count == 1)
                 albumView.Thumbnail = image ?? MusicImage.DefaultImage;
@@ -119,7 +119,6 @@ namespace SMPlayer
 
         private async void LoadThumbnail(AlbumView album)
         {
-            string before = album.ThumbnailSource;
             if (album.Songs == null)
                 album.SetSongs(MusicService.SelectByAlbum(album.Name));
             await album.SetThumbnailAsync();
@@ -143,12 +142,11 @@ namespace SMPlayer
                                                AlbumPageProgressRing.Visibility = Visibility.Visible;
                                                if (criterion == SortBy.Reverse)
                                                {
-                                                   Albums.Reverse();
-                                                   Suggestions.SetTo(Albums);
+                                                   Suggestions.SetTo(Suggestions.Reverse().ToList());
                                                }
                                                else
                                                {
-                                                   Suggestions.SetTo(Albums = await Task.Run(() => Sort(criterion, Suggestions)));
+                                                   Suggestions.SetTo(await Task.Run(() => Sort(criterion, Suggestions)));
                                                }
                                                AlbumPageProgressRing.Visibility = Visibility.Collapsed;
                                            });
@@ -166,7 +164,6 @@ namespace SMPlayer
                 case SortBy.Artist:
                     list = albums.OrderBy(a => a.Artist).ToList();
                     break;
-                case SortBy.Default:
                 default:
                     list = albums.OrderBy(a => a.Name).ThenBy(a => a.Artist).ToList();
                     break;
@@ -174,20 +171,24 @@ namespace SMPlayer
             return list;
         }
 
-        private void AlbumSearchBar_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        private async void AlbumSearchBar_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             string keyword = sender.Text.Trim();
             if (keyword.Length > 0)
             {
-                IEnumerable<AlbumView> albums = SearchHelper.SortAlbums(Albums.Where(i => SearchHelper.IsTargetAlbum(i, keyword)), keyword, SortBy.Default);
-                Suggestions.SetTo(albums);
+                if (IsSearching) return;
+                AlbumPageProgressRing.Visibility = Visibility.Visible;
+                IsSearching = true;
+                Suggestions.SetTo(await Task.Run(() => SearchHelper.SearchAndSortByDefault(Albums, keyword)));
+                IsSearching = false;
+                AlbumPageProgressRing.Visibility = Visibility.Collapsed;
             }
             else
             {
                 Suggestions.SetTo(Albums);
             }
+            SetHeader();
         }
-
 
         void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
         {
@@ -214,7 +215,7 @@ namespace SMPlayer
             }
         }
 
-        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
+        void IMusicEventListener.Execute(MusicView music, MusicEventArgs args)
         {
             if (IsFolderUpdated) return;
             AlbumView album = Albums.FirstOrDefault(a => a.Name == music.Album);
@@ -238,8 +239,13 @@ namespace SMPlayer
                                     return a.Name;
                             }
                         });
-                        Suggestions.Insert(index, album);
+                        // 如果没有搜索内容才更新Suggestions
+                        if (AlbumSearchBar.Text.Length == 0)
+                        {
+                            Suggestions.Insert(index, album);
+                        }
                         Albums.Insert(index, album);
+                        SetHeader();
                     }
                     break;
                 case MusicEventType.Remove:
@@ -250,6 +256,7 @@ namespace SMPlayer
                         {
                             Suggestions.Remove(album);
                             Albums.Remove(album);
+                            SetHeader();
                         }
                     }
                     break;

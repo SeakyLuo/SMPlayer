@@ -25,8 +25,7 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class MusicLibraryPage : Page, ISwitchMusicListener, IMusicEventListener, IMenuFlyoutHelperBuildListener
     {
-        public ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
-        public static bool IsLibraryUnchangedAfterChecking = true;
+        public ObservableCollection<MusicView> AllSongs = new ObservableCollection<MusicView>();
 
         public MusicLibraryPage()
         {
@@ -64,7 +63,7 @@ namespace SMPlayer
 
         private void MusicLibraryDataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
-            var music = (Music)MusicLibraryDataGrid.SelectedItem;
+            var music = (MusicView)MusicLibraryDataGrid.SelectedItem;
             if (music == null) return;
             MusicPlayer.AddMusicAndPlay(music);
         }
@@ -77,11 +76,11 @@ namespace SMPlayer
                 MenuFlyoutHelper.SetMusicMenu(sender, null, null, new MenuFlyoutOption() { ShowSelect = false });
         }
 
-        public static IEnumerable<Music> SortPlaylist(IEnumerable<Music> playlist, SortBy criterion)
+        public static IEnumerable<MusicView> SortPlaylist(IEnumerable<MusicView> playlist, SortBy criterion)
         {
             return playlist.OrderBy(SortByConverter.GetKeySelector(criterion));
         }
-        public void SortAndSetAllSongs(IEnumerable<Music> list)
+        public void SortAndSetAllSongs(IEnumerable<MusicView> list)
         {
             SetAllSongs(SortPlaylist(list, Settings.settings.MusicLibraryCriterion));
         }
@@ -89,7 +88,7 @@ namespace SMPlayer
         private void MusicLibraryDataGrid_Sorting(object sender, DataGridColumnEventArgs e)
         {
             string header = e.Column.Tag?.ToString();
-            IEnumerable<Music> temp = SortPlaylist(AllSongs, Settings.settings.MusicLibraryCriterion = SortByConverter.FromStr(header));
+            IEnumerable<MusicView> temp = SortPlaylist(AllSongs, Settings.settings.MusicLibraryCriterion = SortByConverter.FromStr(header));
             foreach (var column in MusicLibraryDataGrid.Columns)
                 if (column.Tag?.ToString() != header)
                     column.SortDirection = null;
@@ -102,21 +101,21 @@ namespace SMPlayer
             SetAllSongs(temp.ToList());
         }
 
-        public void SetAllSongs(IEnumerable<Music> songs)
+        public void SetAllSongs(IEnumerable<MusicView> songs)
         {
             if (songs == null) return;
             AllSongs.Clear();
             var favSet = PlaylistService.MyFavorites.Songs.Select(i => i.Id).ToHashSet();
             foreach (var item in songs)
             {
-                Music music = item.Copy();
+                MusicView music = item.Copy();
                 music.Favorite = favSet.Contains(item.Id);
                 AllSongs.Add(music);
             }
             SetHeader();
         }
 
-        public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
+        public async void MusicSwitching(MusicView current, MusicView next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
@@ -126,8 +125,8 @@ namespace SMPlayer
 
         public void OnBuild(MenuFlyoutHelper helper)
         {
-            var list = new List<Music>();
-            foreach (Music item in MusicLibraryDataGrid.SelectedItems)
+            var list = new List<MusicView>();
+            foreach (MusicView item in MusicLibraryDataGrid.SelectedItems)
             {
                 list.Add(item);
             }
@@ -150,7 +149,7 @@ namespace SMPlayer
             }
         }
 
-        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
+        void IMusicEventListener.Execute(MusicView music, MusicEventArgs args)
         {
             switch (args.EventType)
             {
@@ -162,7 +161,7 @@ namespace SMPlayer
                     SetHeader();
                     break;
                 case MusicEventType.Like:
-                    if (AllSongs.FirstOrDefault(m => m == music) is Music target)
+                    if (AllSongs.FirstOrDefault(m => m == music) is MusicView target)
                     {
                         target.Favorite = args.IsFavorite;
                     }

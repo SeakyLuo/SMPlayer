@@ -28,29 +28,31 @@ namespace SMPlayer.Helpers
             MusicPlayer.SetPlaylistAndPlay(MusicService.SelectByAlbum(album).RandItems(randomLimit));
             return album;
         }
-        public static Playlist PlayPlaylist(int randomLimit = 100)
+        public static PlaylistView PlayPlaylist(int randomLimit = 100)
         {
-            List<Playlist> allPlaylists = PlaylistService.AllPlaylists;
-            Playlist playlist;
+            List<PlaylistView> allPlaylists = PlaylistService.AllPlaylistViews;
+            PlaylistView playlist;
             do
             {
                 playlist = allPlaylists.RandItem();
-                playlist.Songs = new System.Collections.ObjectModel.ObservableCollection<Music>(PlaylistService.FindPlaylistItems(playlist.Id));
+                playlist.Songs = new System.Collections.ObjectModel.ObservableCollection<MusicView>(PlaylistService.FindPlaylistItemViews(playlist.Id));
             } while (playlist.IsEmpty);
             MusicPlayer.SetPlaylistAndPlay(playlist.Songs.RandItems(randomLimit));
             return playlist;
         }
 
-        public static FolderTree PlayFolder(int randomLimit = 100)
+        public static string PlayFolder(int randomLimit = 100)
         {
             List<FolderTree> allFolders = StorageService.AllFolders;
             FolderTree folder;
+            List<Music> songs;
             do
             {
-                folder = StorageService.FindFolder(allFolders.RandItem().Id);
-            } while (folder.IsEmpty);
-            MusicPlayer.SetMusicAndPlay(folder.Songs.RandItems(randomLimit));
-            return folder;
+                folder = allFolders.RandItem();
+                songs = StorageService.FindSubSongs(folder);
+            } while (songs.IsEmpty());
+            MusicPlayer.SetMusicAndPlay(songs.RandItems(randomLimit));
+            return folder.Name;
         }
     }
 }

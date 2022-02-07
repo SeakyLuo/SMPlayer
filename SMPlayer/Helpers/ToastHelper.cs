@@ -33,7 +33,7 @@ namespace SMPlayer.Helpers
             Timer.Start();
         }
 
-        public static async Task ShowToast(Music music, MediaPlaybackState state)
+        public static async Task ShowToast(MusicView music, MediaPlaybackState state)
         {
             if (!App.Inited) return;
             if (music == null ||
@@ -88,7 +88,7 @@ namespace SMPlayer.Helpers
             Notifier.Update(data, ToastTagPaused, ToastGroup);
         }
 
-        private static bool IsToastActive(Music music, MediaPlaybackState state)
+        private static bool IsToastActive(MusicView music, MediaPlaybackState state)
         {
             lock (CurrentToastMap)
             {
@@ -122,7 +122,7 @@ namespace SMPlayer.Helpers
             };
         }
 
-        private static ToastContent BuildToastContent(Music music, MediaPlaybackState state, NotificationDisplayMode display)
+        private static ToastContent BuildToastContent(MusicView music, MediaPlaybackState state, NotificationDisplayMode display)
         {
             ToastButton controlButton = null;
             switch (state)
@@ -168,7 +168,7 @@ namespace SMPlayer.Helpers
             return toastContent;
         }
 
-        private static async Task<ToastNotification> BuildToast(Music music, MediaPlaybackState state, NotificationDisplayMode display)
+        private static async Task<ToastNotification> BuildToast(MusicView music, MediaPlaybackState state, NotificationDisplayMode display)
         {
             string toastTag = null;
             switch (state)
@@ -208,7 +208,7 @@ namespace SMPlayer.Helpers
 
     class ToastKey
     {
-        public Music Music { get; set; }
+        public MusicView Music { get; set; }
         public MediaPlaybackState State { get; set; }
 
         public override bool Equals(object obj)
@@ -220,7 +220,7 @@ namespace SMPlayer.Helpers
         public override int GetHashCode()
         {
             int hashCode = 1763106858;
-            hashCode = hashCode * -1521134295 + EqualityComparer<Music>.Default.GetHashCode(Music);
+            hashCode = hashCode * -1521134295 + EqualityComparer<MusicView>.Default.GetHashCode(Music);
             hashCode = hashCode * -1521134295 + State.GetHashCode();
             return hashCode;
         }

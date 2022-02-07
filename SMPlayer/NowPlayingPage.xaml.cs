@@ -75,7 +75,7 @@ namespace SMPlayer
             MainPage.Instance.NavigateToPage(typeof(PreferenceSettingsPage));
         }
 
-        async void ISwitchMusicListener.MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
+        async void ISwitchMusicListener.MusicSwitching(MusicView current, MusicView next, MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
             {

@@ -26,12 +26,12 @@ namespace SMPlayer
         {
             base.OnNavigatedTo(e);
             if (e.NavigationMode != NavigationMode.Back)
-                await MyFavoritesPlaylistControl.SetPlaylist(PlaylistService.MyFavorites);
+                await MyFavoritesPlaylistControl.SetPlaylist(PlaylistService.MyFavoritesView);
             MainPage.Instance.TitleBarBackground = MyFavoritesPlaylistControl.HeaderBackground;
             MainPage.Instance.TitleBarForeground = MainPage.Instance.IsMinimal ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
         }
 
-        async void IMusicEventListener.Execute(Music music, MusicEventArgs args)
+        async void IMusicEventListener.Execute(MusicView music, MusicEventArgs args)
         {
             switch (args.EventType)
             {
@@ -40,7 +40,7 @@ namespace SMPlayer
                 case MusicEventType.Remove:
                     break;
                 case MusicEventType.Like:
-                    await MyFavoritesPlaylistControl.SetPlaylist(PlaylistService.MyFavorites);
+                    await MyFavoritesPlaylistControl.SetPlaylist(PlaylistService.MyFavoritesView);
                     break;
                 case MusicEventType.Modify:
                     break;

@@ -166,7 +166,7 @@ namespace SMPlayer.Helpers
             c.Update(settings.ToDAO());
         }
 
-        public static MusicDAO InsertMusic(this SQLiteConnection c, Music src)
+        public static MusicDAO InsertMusic(this SQLiteConnection c, MusicView src)
         {
             MusicDAO dao = src.ToDAO();
             c.Insert(dao);
@@ -195,26 +195,20 @@ namespace SMPlayer.Helpers
             src.Id = dao.Id;
             return dao;
         }
-        public static PlaylistDAO InsertPlaylist(this SQLiteConnection c, Playlist src)
+        public static PlaylistDAO InsertPlaylist(this SQLiteConnection c, PlaylistView src)
         {
-            PlaylistDAO dao = src.ToDAO();
+            PlaylistDAO dao = src.ToPlaylist().ToDAO();
             c.Insert(dao);
             c.InsertAll(dao.Songs.Select(i => { i.PlaylistId = dao.Id; return i; }));
             src.Id = dao.Id;
             return dao;
         }
 
-        public static PlaylistDAO UpdatePlaylist(this SQLiteConnection c, Playlist src)
+        public static PlaylistDAO UpdatePlaylist(this SQLiteConnection c, PlaylistView src)
         {
-            PlaylistDAO dao = src.ToDAO();
+            PlaylistDAO dao = src.ToPlaylist().ToDAO();
             c.Update(dao);
             return dao;
-        }
-
-        public static void UpdatePlaylistItems(this SQLiteConnection c, long id, IEnumerable<Music> songs)
-        {
-            c.Execute("delete from PlaylistItem where PlaylistId = ?", id);
-            c.InsertAll(songs.Select(i => i.ToPlaylistItemDAO(id)));
         }
 
         public static PreferenceItemDAO InsertPreferenceItem(this SQLiteConnection c, PreferenceItem src, EntityType type)
@@ -233,7 +227,7 @@ namespace SMPlayer.Helpers
             return dao;
         }
 
-        public static void InsertRecentAdded(this SQLiteConnection c, Music src)
+        public static void InsertRecentAdded(this SQLiteConnection c, MusicView src)
         {
             c.Insert(new RecentRecordDAO()
             {
@@ -286,14 +280,14 @@ namespace SMPlayer.Helpers
         {
             FolderTree root = c.SelectFolder(id);
             if (root == null) return null;
-            root.Trees = root.Trees.AsParallel().AsOrdered().Select(i => c.SelectFullFolder(i.Id)).ToList();
+            root.Trees = root.Trees.AsParallel().Select(i => c.SelectFullFolder(i.Id)).ToList();
             return root;
         }
         public static FolderTree SelectFullFolder(this SQLiteConnection c, string path)
         {
             FolderTree root = c.SelectFolder(path);
             if (root == null) return null;
-            root.Trees = root.Trees.AsParallel().AsOrdered().Select(i => c.SelectFullFolder(i.Id)).ToList();
+            root.Trees = root.Trees.AsParallel().Select(i => c.SelectFullFolder(i.Id)).ToList();
             return root;
         }
         public static FolderTree SelectFolder(this SQLiteConnection c, long id)
@@ -387,14 +381,14 @@ namespace SMPlayer.Helpers
         {
             Playlist playlist = c.Query<PlaylistDAO>("select * from Playlist where Id = ? and State = ?", id, ActiveState.Active).FirstOrDefault().FromDAO();
             if (playlist == null) return null;
-            playlist.Songs.SetTo(SelectPlaylistItems(c, id));
+            playlist.Songs = SelectPlaylistItems(c, id);
             return playlist;
         }
 
         public static List<Music> SelectPlaylistItems(this SQLiteConnection c, long id)
         {
             List<PlaylistItemDAO> items = c.Query<PlaylistItemDAO>("select * from PlaylistItem where PlaylistId = ? and State = ?", id, ActiveState.Active);
-            return SelectMusicByIds(c, items.Select(i => i.ItemId));
+            return SelectMusicByIds(c, items.Select(i => i.ItemId)).ToList();
         }
 
         public static List<PreferenceItem> SelectPreferenceItems(this SQLiteConnection c, EntityType preferType)

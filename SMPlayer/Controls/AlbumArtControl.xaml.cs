@@ -22,7 +22,7 @@ namespace SMPlayer.Controls
         public bool ShowHeader { get; set; } = false;
         public volatile bool IsProcessing = false;
         public static List<IImageSavedListener> ImageSavedListeners = new List<IImageSavedListener>();
-        private Music CurrentMusic;
+        private MusicView CurrentMusic;
         private AlbumView CurrentAlbum;
         private IPicture[] sourcePics = null;
 
@@ -49,7 +49,7 @@ namespace SMPlayer.Controls
             AlbumArt.Visibility = Visibility.Collapsed;
         }
 
-        public async void SetAlbumArt(Music music)
+        public async void SetAlbumArt(MusicView music)
         {
             CurrentMusic = music;
             RemoveAlbumArtWarningTextBlock.Text = Helper.LocalizeMessage("RemoveAlbumArt", CurrentMusic.Name);
@@ -102,7 +102,7 @@ namespace SMPlayer.Controls
             IsProcessing = false;
         }
 
-        private async Task SaveAlbumArt(Music music, IPicture[] source)
+        private async Task SaveAlbumArt(MusicView music, IPicture[] source)
         {
             using (var tagFile = await music.GetTagFileAsync())
             {
@@ -126,7 +126,9 @@ namespace SMPlayer.Controls
                 {
                     SuggestedStartLocation = PickerLocationId.PicturesLibrary
                 };
-                foreach (var item in new string[] { ".jpg", ".png", ".jpeg", ".mp3" })
+                List<string> fileTypes = new List<string>() { ".jpg", ".png", ".jpeg" };
+                fileTypes.AddRange(MusicHelper.SupportedFileTypes);
+                foreach (var item in fileTypes)
                     picker.FileTypeFilter.Add(item);
                 var file = await picker.PickSingleFileAsync();
                 if (file == null) goto Finally;
@@ -211,6 +213,6 @@ namespace SMPlayer.Controls
     public interface IImageSavedListener
     {
         void SaveAlbum(AlbumView album, BitmapImage image);
-        void SaveMusic(Music music, BitmapImage image);
+        void SaveMusic(MusicView music, BitmapImage image);
     }
 }

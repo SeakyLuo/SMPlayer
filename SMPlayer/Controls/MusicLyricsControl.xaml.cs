@@ -28,7 +28,7 @@ namespace SMPlayer.Controls
             set => SaveProgress.Foreground = value;
         }
         private string Lyrics = "";
-        private Music CurrentMusic;
+        private MusicView CurrentMusic;
         public bool IsProcessing { get; private set; } = false;
         public MusicLyricsControl()
         {
@@ -115,7 +115,7 @@ namespace SMPlayer.Controls
             }
         }
 
-        public async void SetLyrics(Music music)
+        public async void SetLyrics(MusicView music)
         {
             if (music == null) return;
             IsProcessing = true;
@@ -133,7 +133,7 @@ namespace SMPlayer.Controls
             IsProcessing = false;
         }
 
-        public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
+        public async void MusicSwitching(MusicView current, MusicView next, MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
             {
@@ -152,7 +152,7 @@ namespace SMPlayer.Controls
             };
             picker.FileTypeFilter.Add(".lrc");
             picker.FileTypeFilter.Add(".txt");
-            picker.FileTypeFilter.Add(".mp3");
+            picker.FileTypeFilter.AddRange(MusicHelper.SupportedFileTypes);
             StorageFile file = await picker.PickSingleFileAsync();
             if (file == null) return;
             IsProcessing = true;

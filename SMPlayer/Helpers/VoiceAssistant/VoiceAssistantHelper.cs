@@ -34,10 +34,10 @@ namespace SMPlayer.Helpers
             switch (hint)
             {
                 case Hint_PlaySomeonesMusic:
-                    string artist = Settings.AllSongs.RandItem().Artist;
+                    string artist = MusicService.AllSongs.RandItem().Artist;
                     if (string.IsNullOrEmpty(artist) || artist.Length > 30)
                     {
-                        artist = Settings.AllSongs.RandItem().Artist;
+                        artist = MusicService.AllSongs.RandItem().Artist;
                     }
                     if (string.IsNullOrEmpty(artist) || artist.Length > 30)
                     {
@@ -48,10 +48,10 @@ namespace SMPlayer.Helpers
                         return Helper.LocalizeText(Hint_PlaySomeonesMusic, artist);
                     }
                 case Hint_PlayMusicInAlbum:
-                    string album = Settings.AllSongs.RandItem().Album;
+                    string album = MusicService.AllSongs.RandItem().Album;
                     if (string.IsNullOrEmpty(album) || album.Length > 30)
                     {
-                        album = Settings.AllSongs.RandItem().Album;
+                        album = MusicService.AllSongs.RandItem().Album;
                     }
                     if (string.IsNullOrEmpty(album) || album.Length > 30)
                     {
@@ -317,13 +317,13 @@ namespace SMPlayer.Helpers
                 MusicPlayer.QuickPlay();
                 return;
             }
-            IEnumerable<Music> list = SearchHelper.SearchSongs(Settings.AllSongs, text, SortBy.Default);
-            if (list.Count() == 0)
+            var list = SearchHelper.SearchSongs(MusicService.AllSongs, text);
+            if (list.IsEmpty())
             {
                 SpeakNoResults(text);
                 return;
             }
-            MusicPlayer.SetMusicAndPlay(list.ElementAt(0));
+            MusicPlayer.SetMusicAndPlay(list.First().Entity);
         }
 
         private static void PlayArtist(string text)
@@ -333,13 +333,13 @@ namespace SMPlayer.Helpers
                 RandomPlayHelper.PlayArtist();
                 return;
             }
-            IEnumerable<Playlist> list = SearchHelper.SearchArtists(Settings.AllSongs, text, SortBy.Default);
+            var list = SearchHelper.SearchArtists(MusicService.AllSongs, text);
             if (list.IsEmpty())
             {
                 SpeakNoResults(text);
                 return;
             }
-            MusicPlayer.ShuffleAndPlay(list.ElementAt(0).Songs);
+            MusicPlayer.ShuffleAndPlay(list.First().Entity.Songs);
         }
 
         private static void PlayAlbum(string text)
@@ -349,13 +349,13 @@ namespace SMPlayer.Helpers
                 RandomPlayHelper.PlayAlbum();
                 return;
             }
-            IEnumerable<AlbumView> list = SearchHelper.SearchAlbums(Settings.AllSongs, text, SortBy.Default);
-            if (list.Count() == 0)
+            var list = SearchHelper.SearchAlbums(MusicService.AllSongs, text);
+            if (list.IsEmpty())
             {
                 SpeakNoResults(text);
                 return;
             }
-            MusicPlayer.ShuffleAndPlay(list.ElementAt(0).Songs);
+            MusicPlayer.ShuffleAndPlay(list.First().Entity.Songs);
         }
 
         private static void PlayPlaylist(string text)
@@ -365,13 +365,13 @@ namespace SMPlayer.Helpers
                 RandomPlayHelper.PlayPlaylist();
                 return;
             }
-            IEnumerable<AlbumView> list = SearchHelper.SearchPlaylists(PlaylistService.AllPlaylists, text, SortBy.Default);
-            if (list.Count() == 0)
+            var list = SearchHelper.SearchPlaylists(PlaylistService.AllPlaylists, text);
+            if (list.IsEmpty())
             {
                 SpeakNoResults(text);
                 return;
             }
-            MusicPlayer.ShuffleAndPlay(list.ElementAt(0).Songs);
+            MusicPlayer.ShuffleAndPlay(list.First().Entity.Songs);
         }
 
         private static void PlayFolder(string text)
@@ -381,18 +381,18 @@ namespace SMPlayer.Helpers
                 RandomPlayHelper.PlayFolder();
                 return;
             }
-            IEnumerable<GridViewFolder> list = SearchHelper.SearchFolders(StorageService.AllFolders, text, SortBy.Default);
+            var list = SearchHelper.SearchFolders(StorageService.AllFolders, text);
             if (list.IsEmpty())
             {
                 SpeakNoResults(text);
                 return;
             }
-            MusicPlayer.ShuffleAndPlay(StorageService.FindFolder(list.ElementAt(0).Id).Flatten());
+            MusicPlayer.ShuffleAndPlay(StorageService.FindFolder(list.First().Entity.Id).Songs);
         }
 
         private static async void PlayByArtistOrMusic(ByArtistRequest request)
         {
-            var byArtistResult = SearchHelper.SearchArtists(Settings.AllSongs, request.Artist, SortBy.Default);
+            var byArtistResult = SearchHelper.SearchArtists(MusicService.AllSongs, request.Artist);
             var originalResult = await SearchHelper.Search(request.Original);
             if (byArtistResult.IsEmpty() && originalResult == null)
             {
@@ -401,7 +401,7 @@ namespace SMPlayer.Helpers
             }
             if (byArtistResult.IsNotEmpty())
             {
-                MusicPlayer.ShuffleAndPlay(byArtistResult.ElementAt(0).Songs);
+                MusicPlayer.ShuffleAndPlay(byArtistResult.First().Entity.Songs);
             }
             if (originalResult != null)
             {
@@ -409,7 +409,7 @@ namespace SMPlayer.Helpers
             }
         }
 
-        private static async void PlayByArtist(ByArtistRequest request, SearchResult byArtistResult)
+        private static async void PlayByArtist(ByArtistRequest request, EvaluateResult byArtistResult)
         {
             var originalResult = await SearchHelper.Search(request.Original);
             if (byArtistResult == null && originalResult == null)
@@ -417,8 +417,8 @@ namespace SMPlayer.Helpers
                 SpeakNoResults(request.Original);
                 return;
             }
-            int byArtistScore = byArtistResult == null ? 0 : byArtistResult.Score;
-            int originalScore = originalResult == null ? 0 : originalResult.Score;
+            double byArtistScore = byArtistResult == null ? 0 : byArtistResult.Score;
+            double originalScore = originalResult == null ? 0 : originalResult.Score;
             if (byArtistScore >= originalScore)
             {
                 PlayBySearch(byArtistResult, request.Item);
@@ -476,49 +476,49 @@ namespace SMPlayer.Helpers
             PlayBySearch(result, text);
         }
 
-        private static bool IsBadSearch(string expected, string given, SearchResult result)
+        private static bool IsBadSearch(string expected, string given, EvaluateResult result)
         {
             return expected != given && result.Score < 80;
         }
 
-        private static void PlayBySearch(SearchResult result, string text)
+        private static void PlayBySearch(EvaluateResult result, string text)
         {
             switch (result.SearchType)
             {
-                case SearchType.Artists:
-                    Playlist artist = result.Result as Playlist;
+                case EntityType.Artist:
+                    Artist artist = result.Entity as Artist;
                     MusicPlayer.ShuffleAndPlay(artist.Songs);
                     if (IsBadSearch(text, artist.Name, result))
                     {
                         Speak("SearchResultArtist", artist.Name);
                     }
                     break;
-                case SearchType.Albums:
-                    AlbumView album = result.Result as AlbumView;
+                case EntityType.Album:
+                    Album album = result.Entity as Album;
                     MusicPlayer.ShuffleAndPlay(album.Songs);
                     if (IsBadSearch(text, album.Name, result))
                     {
                         Speak("SearchResultAlbum", album.Name);
                     }
                     break;
-                case SearchType.Playlists:
-                    AlbumView playlist = result.Result as AlbumView;
+                case EntityType.Playlist:
+                    AlbumView playlist = result.Entity as AlbumView;
                     MusicPlayer.ShuffleAndPlay(playlist.Songs);
                     if (IsBadSearch(text, playlist.Name, result))
                     {
                         Speak("SearchResultPlaylist", playlist.Name);
                     }
                     break;
-                case SearchType.Folders:
-                    GridViewFolder folder = result.Result as GridViewFolder;
+                case EntityType.Folder:
+                    GridViewFolder folder = result.Entity as GridViewFolder;
                     MusicPlayer.ShuffleAndPlay(folder.Songs);
                     if (IsBadSearch(text, folder.Name, result))
                     {
                         Speak("SearchResultFolder", folder.Name);
                     }
                     break;
-                case SearchType.Songs:
-                    Music music = result.Result as Music;
+                case EntityType.Song:
+                    MusicView music = result.Entity as MusicView;
                     MusicPlayer.SetMusicAndPlay(music);
                     if (IsBadSearch(text, music.Name, result))
                     {

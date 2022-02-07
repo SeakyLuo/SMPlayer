@@ -48,9 +48,9 @@ namespace SMPlayer
                 return folder;
             }
         }
-        private List<Music> CurrentSongs => GridItems.Where(i => i is GridViewMusic)
-                                                    .Select(i => (i as GridViewMusic).Source)
-                                                    .ToList();
+        private List<MusicView> CurrentSongs => GridItems.Where(i => i is GridViewMusic)
+                                                     .Select(i => (i as GridViewMusic).Source)
+                                                     .ToList();
 
         public ListViewBase CurrentListView
         {
@@ -67,11 +67,11 @@ namespace SMPlayer
                 }
             }
         }
-        public List<Music> SelectedSongs
+        public List<MusicView> SelectedSongs
         {
             get
             {
-                List<Music> list = new List<Music>();
+                List<MusicView> list = new List<MusicView>();
                 foreach (var item in CurrentListView.SelectedItems)
                 {
                     if (item is GridViewFolder folder)
@@ -131,7 +131,7 @@ namespace SMPlayer
             MainPage.Instance.SetMultiSelectListener(this);
         }
 
-        public async void SetPage(FolderTree tree)
+        public void SetPage(FolderTree tree)
         {
             if (!folderUpdated)
             {
@@ -141,12 +141,9 @@ namespace SMPlayer
             IsProcessing = true;
             LocalProgressRing.Visibility = Visibility.Visible;
             ClearMultiSelectStatus();
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                tree.SortFiles();
-                SetupGridView(tree);
-                ResetFolderChain(tree.Path);
-            });
+            tree.SortFiles();
+            SetupGridView(tree);
+            ResetFolderChain(tree.Path);
             SetNavText(tree);
             LocalCommandBar.IsEnabled = !string.IsNullOrEmpty(tree.Path);
             LocalProgressRing.Visibility = Visibility.Collapsed;
@@ -330,7 +327,7 @@ namespace SMPlayer
 
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
-            List<Music> songs = CurrentSongs;
+            List<MusicView> songs = CurrentSongs;
             if (songs.IsEmpty())
             {
                 Helper.ShowNotification("NoMusicUnderCurrentFolder");
@@ -554,8 +551,7 @@ namespace SMPlayer
 
         void IStorageItemEventListener.ExecuteFileEvent(FolderFile file, StorageItemEventArgs args)
         {
-            FolderTree currentFolder = CurrentFolderInfo;
-            if (currentFolder == null) return;
+            if (CurrentFolderInfo == null) return;
             switch (args.EventType)
             {
                 case StorageItemEventType.Move:
@@ -644,7 +640,7 @@ namespace SMPlayer
             }
         }
 
-        async void ISwitchMusicListener.MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
+        async void ISwitchMusicListener.MusicSwitching(MusicView current, MusicView next, MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
@@ -658,21 +654,20 @@ namespace SMPlayer
             });
         }
 
-        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
+        void IMusicEventListener.Execute(MusicView music, MusicEventArgs args)
         {
-            FolderTree currentFolder = CurrentFolderInfo;
-            if (currentFolder == null) return;
+            if (CurrentFolderInfo == null) return;
             switch (args.EventType)
             {
                 case MusicEventType.Add:
                     break;
                 case MusicEventType.Remove:
-                    currentFolder.RemoveFile(music.Path);
                     GridItems.RemoveAll(i => i.Path == music.Path);
                     break;
                 case MusicEventType.Modify:
                     break;
             }
+            SetNavText(CurrentFolder);
         }
     }
 }

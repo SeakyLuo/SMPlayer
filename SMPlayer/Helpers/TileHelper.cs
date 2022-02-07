@@ -25,7 +25,7 @@ namespace SMPlayer.Helpers
             return albumName;
         }
 
-        public static async Task UpdateTile(StorageItemThumbnail itemThumbnail, Music music)
+        public static async Task UpdateTile(StorageItemThumbnail itemThumbnail, MusicView music)
         {
             if (music == null) return;
             string uri = MusicImage.DefaultImagePath;
@@ -173,7 +173,7 @@ namespace SMPlayer.Helpers
             return SecondaryTileFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("SecondaryTiles", CreationCollisionOption.OpenIfExists);
         }
 
-        public static async Task<bool> PinToStartAsync(Playlist playlist)
+        public static async Task<bool> PinToStartAsync(PlaylistView playlist)
         {
             var tilename = playlist.Name;
             var tileid = FormatTileId(playlist);
@@ -206,7 +206,7 @@ namespace SMPlayer.Helpers
             return SecondaryTile.Exists(tileid);
         }
 
-        public static string FormatTileId(Playlist playlist)
+        public static string FormatTileId(PlaylistView playlist)
         {
             return playlist.EntityType == EntityType.Album ? playlist.Name : playlist.Id.ToString();
         }

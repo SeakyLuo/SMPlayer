@@ -30,7 +30,7 @@ namespace SMPlayer
             return ToTime((double)seconds);
         }
 
-        public static string ToTime(ICollection<Music> list)
+        public static string ToTime(ICollection<MusicView> list)
         {
             int total_seconds = list.Sum((music) => music.Duration);
             if (total_seconds == 0) return "";
@@ -230,7 +230,7 @@ namespace SMPlayer
     {
         public static string ToStr(object value)
         {
-            if (value is ICollection<Music> list)
+            if (value is ICollection<MusicView> list)
             {
                 int count = list.Count();
                 string countStr = GetSongCount(count);
@@ -261,7 +261,7 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is IEnumerable<Music> collection)
+            if (value is IEnumerable<MusicView> collection)
                 return collection.IsNotEmpty();
             if (value is int count)
                 return count > 0;
@@ -289,7 +289,7 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            Music music = value as Music;
+            MusicView music = value as MusicView;
             return $"{music.Artist} • {music.Album}";
         }
 

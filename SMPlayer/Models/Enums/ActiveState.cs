@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SMPlayer.Models.DAO
+namespace SMPlayer.Models
 {
     public enum ActiveState
     {

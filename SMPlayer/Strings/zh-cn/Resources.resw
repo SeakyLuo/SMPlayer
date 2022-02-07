@@ -1276,4 +1276,16 @@
   <data name="ReleaseNotesImprovedLocalPageDragAndDrop.Text" xml:space="preserve">
     <value>增强了本地页面的拖拽功能，可以把文件、文件夹拖动到其它文件夹或者路径下了。</value>
   </data>
+  <data name="ReleaseNotesUpdateFolderResult.Text" xml:space="preserve">
+    <value>更新目录支持查看更新结果的详情了</value>
+  </data>
+  <data name="ReleaseNotesFixPreferenceSettingsCrash.Text" xml:space="preserve">
+    <value>修复了进入偏好设置页面会闪退的问题</value>
+  </data>
+  <data name="ReleaseNotesFixSearchResultPageSort.Text" xml:space="preserve">
+    <value>修复了搜索详情页面的排序问题</value>
+  </data>
+  <data name="ReleaseNotesSupportsOtherMusicFormat.Text" xml:space="preserve">
+    <value>支持了更多格式的音乐文件：flac, aac, alac, wma</value>
+  </data>
 </root>

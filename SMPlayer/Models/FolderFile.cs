@@ -21,7 +21,7 @@ namespace SMPlayer.Models
 
         public FolderFile() { }
 
-        public FolderFile(Music music)
+        public FolderFile(MusicView music)
         {
             FileId = music.Id;
             FileType = FileType.Music;

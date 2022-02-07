@@ -20,7 +20,7 @@ namespace SMPlayer.Helpers
         {
             if (folder == null) return true;
             MainPage.Instance.Loader.ShowDeterminant("LoadMusicLibrary", true);
-            MainPage.Instance.Loader.Max = await folder.CountFilesAsync();
+            MainPage.Instance.Loader.Max = await folder.CountItemsAsync();
             MainPage.Instance.Loader.BreakLoadingListener = () =>
             {
                 LoadingStatus = ExecutionStatus.Break;
@@ -29,8 +29,8 @@ namespace SMPlayer.Helpers
             FolderTree tree = StorageService.FindFolder(folder.Path) ?? new FolderTree(folder.Path);
             NotifyFolderEvent(Settings.settings.Tree, StorageItemEventType.BeforeReset);
             bool unbroken = await LoadFolder(folder, tree);
-            MainPage.Instance.Loader.AllowBreak = false;
             await MainPage.Instance.Loader.ResetAsync("UpdateMusicLibrary");
+            MainPage.Instance.Loader.AllowBreak = false;
             await ResetFolderData(tree);
             if (Settings.settings.Tree.Id != 0 && !Settings.settings.Tree.Equals(tree))
             {
@@ -56,7 +56,7 @@ namespace SMPlayer.Helpers
 
         private static async Task<bool> LoadFolder(StorageFolder folder, FolderTree tree)
         {
-            MainPage.Instance.Loader.SetMessage("CheckingFolder", folder.Name);
+            MainPage.Instance.Loader.Increment(Helper.LocalizeMessage("CheckingFolder", folder.Name));
             HashSet<string> existingFolders = tree.Trees.Select(i => i.Path).ToHashSet();
             HashSet<string> newFolders = new HashSet<string>();
             List<FolderTree> newBranches = new List<FolderTree>();
@@ -91,7 +91,7 @@ namespace SMPlayer.Helpers
                     newFiles.Add(file.Path);
                     if (!existingFiles.Contains(file.Path))
                     {
-                        Music music = await Music.LoadFromFileAsync(file);
+                        MusicView music = await MusicView.LoadFromFileAsync(file);
                         tree.Files.Add(music.ToFolderFile());
                         MainPage.Instance.Loader.Increment(file.Name);
                     }
@@ -226,7 +226,6 @@ namespace SMPlayer.Helpers
 
         public static async void RefreshFolder(FolderTree tree)
         {
-            MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
             StorageFolder storageFolder;
             try
             {
@@ -242,6 +241,7 @@ namespace SMPlayer.Helpers
                 ExitChecking(Helper.LocalizeMessage("UnauthorizedAccessException", tree.Path));
                 return;
             }
+            MainPage.Instance?.Loader.ShowDeterminant("ProcessRequest", true, await storageFolder.CountFoldersAsync());
             LoadingStatus = ExecutionStatus.Running;
             FolderTree folderTree = StorageService.FindFolder(tree.Id);
             bool unbroken = await LoadFolder(storageFolder, folderTree);
@@ -250,6 +250,8 @@ namespace SMPlayer.Helpers
                 ExitChecking("");
                 return;
             }
+            await MainPage.Instance.Loader.SetMessageAsync("UpdateMusicLibrary");
+            MainPage.Instance.Loader.AllowBreak = false;
             var result = new FolderUpdateResult(folderTree.Path);
             await ResetFolderData(folderTree, result);
             if (result.FilesAdded.IsNotEmpty() || result.FilesRemoved.IsNotEmpty())
@@ -263,7 +265,7 @@ namespace SMPlayer.Helpers
                 MainPage.Instance?.ShowButtonedNotification(result.ToDisplayMessage(),
                                                             Helper.LocalizeText("Detail"),
                                                             async () => { await new FolderUpdateResultDialog().ShowAsync(result); },
-                                                            5000);
+                                                            8000);
             }
             else
             {

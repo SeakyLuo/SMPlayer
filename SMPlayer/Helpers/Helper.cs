@@ -61,7 +61,7 @@ namespace SMPlayer
             }
         }
 
-        private static List<Music> NotFoundHistory = new List<Music>();
+        private static List<MusicView> NotFoundHistory = new List<MusicView>();
         private static readonly Random random = new Random();
 
         public static T Timer<T>(Func<T> action, string funcName = null)
@@ -151,24 +151,7 @@ namespace SMPlayer
         {
             GetMainPageContainer()?.ShowNotification(LocalizeMessage("PathNotFound", StorageHelper.GetParentPath(path)), duration);
         }
-        public static void ShowAddMusicResultNotification(AddMusicResult result, Music target = null)
-        {
-            if (result.IsFailed)
-            {
-                IMainPageContainer container = GetMainPageContainer();
-                int duration = 5000;
-                if (result.FailCount > 1) container?.ShowNotification(LocalizeMessage("MusicsNotFound", result.FailCount), duration);
-                else
-                {
-                    if (target == null || !result.Failed.Contains(target)) target = result.Failed[0];
-                    if (!NotFoundHistory.Contains(target))
-                    {
-                        NotFoundHistory.Add(target);
-                        container?.ShowNotification(LocalizeMessage("MusicNotFound", target.Name), duration);
-                    }
-                }
-            }
-        }
+
         public static void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option)
         {
             GetMainPageContainer()?.ShowMultiSelectCommandBar(option);
@@ -232,7 +215,7 @@ namespace SMPlayer
             }
             return null;
         }
-        public static async Task<StorageItemThumbnail> GetStorageItemThumbnailAsync(Music music, uint size = 300)
+        public static async Task<StorageItemThumbnail> GetStorageItemThumbnailAsync(MusicView music, uint size = 300)
         {
             return await GetStorageItemThumbnailAsync(music.Path, size);
         }

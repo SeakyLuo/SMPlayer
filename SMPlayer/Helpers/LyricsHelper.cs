@@ -13,7 +13,7 @@ namespace SMPlayer.Helpers
 {
     public static class LyricsHelper
     {
-        private static Music CurrentMusic;
+        private static MusicView CurrentMusic;
 
         private static string CurrentLyrics = "";
 
@@ -51,7 +51,7 @@ namespace SMPlayer.Helpers
             }
         }
 
-        private static async Task SetLyrics(Music music)
+        private static async Task SetLyrics(MusicView music)
         {
             if (CurrentMusic == music && !string.IsNullOrEmpty(CurrentLyrics))
                 return;
@@ -76,7 +76,7 @@ namespace SMPlayer.Helpers
             }
         }
 
-        private static void SetLyrics(Music music, string lyrics)
+        private static void SetLyrics(MusicView music, string lyrics)
         {
             CurrentMusic = music;
             CurrentLyrics = lyrics;
@@ -141,7 +141,7 @@ namespace SMPlayer.Helpers
             return lyric.Substring(lyric.LastIndexOf("]") + 1);
         }
 
-        public static async Task<string> SearchLyrics(Music music)
+        public static async Task<string> SearchLyrics(MusicView music)
         {
             return await ImproveSearch(music, SearchLyrics);
         }
@@ -168,7 +168,7 @@ namespace SMPlayer.Helpers
             return lyrics.Replace("<em>", "").Replace("</em>", "").Replace("\\n", "\n");
         }
 
-        public static async Task<string> SearchLrcLyrics(Music music)
+        public static async Task<string> SearchLrcLyrics(MusicView music)
         {
             string songmid = await GetSongMid(music);
             if (string.IsNullOrEmpty(songmid)) return "";
@@ -185,7 +185,7 @@ namespace SMPlayer.Helpers
             }
         }
 
-        public static async Task<string> GetSongMid(Music music)
+        public static async Task<string> GetSongMid(MusicView music)
         {
             return await ImproveSearch(music, GetSongMid);
         }
@@ -205,7 +205,7 @@ namespace SMPlayer.Helpers
             }
         }
 
-        private static async Task<string> ImproveSearch(Music music, Func<string, Task<string>> search)
+        private static async Task<string> ImproveSearch(MusicView music, Func<string, Task<string>> search)
         {
             string ret = await search.Invoke(music.Name + " " + music.Artist);
             if (string.IsNullOrEmpty(ret))

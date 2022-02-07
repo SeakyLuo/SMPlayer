@@ -10,16 +10,16 @@ namespace SMPlayer.Services
 {
     public class MusicService
     {
-        public static Music FindMusic(string target) { return SQLHelper.Run(c => c.SelectMusicByPath(target)); }
-        public static Music FindMusic(long id) { return SQLHelper.Run(c => c.SelectMusicById(id)); }
-        public static List<Music> FindMusicList(IEnumerable<long> ids) { return ids.IsEmpty() ? new List<Music>() : SQLHelper.Run(c => c.SelectMusicByIds(ids)); }
+        public static IEnumerable<Music> AllSongs => SQLHelper.Run(c => c.SelectAllMusic());
+        public static MusicView FindMusic(long id) { return SQLHelper.Run(c => c.SelectMusicById(id)).ToVO(); }
+        public static List<MusicView> FindMusicList(IEnumerable<long> ids) { return ids.IsEmpty() ? new List<MusicView>() : SQLHelper.Run(c => c.SelectMusicByIds(ids)).Select(i => i.ToVO()).ToList(); }
 
-        public static IEnumerable<Music> SelectByAlbum(string album)
+        public static IEnumerable<MusicView> SelectByAlbum(string album)
         {
             return Settings.AllSongs.Where(m => m.Album == album);
         }
 
-        public static IEnumerable<Music> SelectByArtist(string artist)
+        public static IEnumerable<MusicView> SelectByArtist(string artist)
         {
             return Settings.AllSongs.Where(m => m.Artist == artist);
         }

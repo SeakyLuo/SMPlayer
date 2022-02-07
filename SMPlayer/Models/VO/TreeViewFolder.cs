@@ -25,7 +25,7 @@ namespace SMPlayer.Models.VO
             OnPropertyChanged("Name");
         }
 
-        public List<Music> Flatten()
+        public List<MusicView> Flatten()
         {
             return Source.Flatten();
         }

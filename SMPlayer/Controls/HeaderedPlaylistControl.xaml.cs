@@ -24,7 +24,7 @@ namespace SMPlayer
     public sealed partial class HeaderedPlaylistControl : UserControl, IRemoveMusicListener, IImageSavedListener, IMultiSelectListener, IPlaylistEventListener
     {
         public PlaylistControl HeaderedPlaylist { get => HeaderedPlaylistController; }
-        public Playlist CurrentPlaylist { get; private set; }
+        public PlaylistView CurrentPlaylist { get; private set; }
         public Brush HeaderBackground
         {
             get => headerBackground;
@@ -52,7 +52,7 @@ namespace SMPlayer
             AlbumArtControl.ImageSavedListeners.Add(this);
         }
 
-        public async Task SetPlaylist(Playlist playlist)
+        public async Task SetPlaylist(PlaylistView playlist)
         {
             HidePlaylistCover();
             MusicPlayer.SetMusicPlaying(playlist.Songs, MusicPlayer.CurrentMusic);
@@ -148,7 +148,7 @@ namespace SMPlayer
             DeletePlaylist(CurrentPlaylist);
         }
 
-        public async void DeletePlaylist(Playlist playlist)
+        public async void DeletePlaylist(PlaylistView playlist)
         {
             if (removeDialog == null)
             {
@@ -165,7 +165,7 @@ namespace SMPlayer
                 await removeDialog.ShowAsync();
             }
         }
-        private void ExecutePlaylistDeletion(Playlist playlist)
+        private void ExecutePlaylistDeletion(PlaylistView playlist)
         {
             Settings.settings.RemovePlaylist(playlist);
             MainPage.Instance.ShowUndoableNotification(Helper.LocalizeMessage("PlaylistRemoved", playlist.Name), () =>
@@ -174,7 +174,7 @@ namespace SMPlayer
             });
         }
 
-        public void MusicRemoved(int index, Music music, IEnumerable<Music> newCollection)
+        public void MusicRemoved(int index, MusicView music, IEnumerable<MusicView> newCollection)
         {
             SetPlaylistInfo(SongCountConverter.ToStr(newCollection));
             if (IsPlaylist)
@@ -232,7 +232,7 @@ namespace SMPlayer
             HeaderedPlaylistController.ScrollToTop();
         }
 
-        public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
+        public async void MusicSwitching(MusicView current, MusicView next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
@@ -250,7 +250,7 @@ namespace SMPlayer
             }
         }
 
-        public async void SaveMusic(Music music, BitmapImage image)
+        public async void SaveMusic(MusicView music, BitmapImage image)
         {
             // IsAlbum
             if (!IsPlaylist && CurrentPlaylist.Name == music.Album && CurrentPlaylist.Count == 1)
@@ -296,13 +296,13 @@ namespace SMPlayer
             }
         }
 
-        void IPlaylistEventListener.Added(Playlist playlist) { }
-        void IPlaylistEventListener.Renamed(Playlist playlist)
+        void IPlaylistEventListener.Added(PlaylistView playlist) { }
+        void IPlaylistEventListener.Renamed(PlaylistView playlist)
         {
             Confirmed(playlist.Name);
         }
-        void IPlaylistEventListener.Removed(Playlist playlist) { }
-        void IPlaylistEventListener.Sorted(Playlist playlist, SortBy criterion) { }
+        void IPlaylistEventListener.Removed(PlaylistView playlist) { }
+        void IPlaylistEventListener.Sorted(PlaylistView playlist, SortBy criterion) { }
 
         CompositionPropertySet _props;
         CompositionPropertySet _scrollerPropertySet;

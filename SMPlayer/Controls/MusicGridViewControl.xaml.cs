@@ -22,7 +22,7 @@ namespace SMPlayer
         public object Header { get => MusicGridView.Header; set => MusicGridView.Header = value; }
         public ListViewSelectionMode SelectionMode { get => MusicGridView.SelectionMode; set => MusicGridView.SelectionMode = value; }
         public ObservableCollection<GridViewMusic> GridMusicCollection = new ObservableCollection<GridViewMusic>();
-        public List<Music> MusicCollection = new List<Music>();
+        public List<MusicView> MusicCollection = new List<MusicView>();
         private volatile bool IsProcessing = false;
         public event ItemClickEventHandler GridItemClickedListener;
         public IMultiSelectListener MultiSelectListener { get; set; }
@@ -70,12 +70,12 @@ namespace SMPlayer
             Clear();
             foreach (var item in collection)
             {
-                Music music = item.ToMusic();
+                MusicView music = item.ToMusic();
                 AddMusic(music);
             }      
             IsProcessing = false;
         }
-        public void AddMusic(Music music, int index = -1)
+        public void AddMusic(MusicView music, int index = -1)
         {
             var copy = music.Copy();
             copy.IsPlaying = copy.Equals(MusicPlayer.CurrentMusic);
@@ -138,13 +138,13 @@ namespace SMPlayer
             MenuFlyoutHelper.SetMusicMenu(sender, this, MenuFlyoutHelperBuildListener, MenuFlyoutOpeningOption);
         }
 
-        public void UndoDelete(Music music)
+        public void UndoDelete(MusicView music)
         {
             MusicCollection.Insert(removedItemIndex, music);
             GridMusicCollection.Insert(removedItemIndex, new GridViewMusic(music));
         }
 
-        public bool RemoveMusic(Music music)
+        public bool RemoveMusic(MusicView music)
         {
             removedItemIndex = MusicCollection.IndexOf(music);
             if (removedItemIndex > -1)
@@ -156,7 +156,7 @@ namespace SMPlayer
             return removedItemIndex > -1;
         }
 
-        public void AddOrMoveToTheFirst(Music music)
+        public void AddOrMoveToTheFirst(MusicView music)
         {
             int removedItemIndex = MusicCollection.IndexOf(music);
             if (removedItemIndex > -1)
@@ -191,7 +191,7 @@ namespace SMPlayer
             }
         }
 
-        async void ISwitchMusicListener.MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
+        async void ISwitchMusicListener.MusicSwitching(MusicView current, MusicView next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
@@ -251,7 +251,7 @@ namespace SMPlayer
             MultiSelectListener?.Execute(commandBar, args);
         }
 
-        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
+        void IMusicEventListener.Execute(MusicView music, MusicEventArgs args)
         {
             switch (args.EventType)
             {
@@ -283,7 +283,7 @@ namespace SMPlayer
             this.Id = Id;
         }
 
-        Music IMusicable.ToMusic()
+        MusicView IMusicable.ToMusic()
         {
             return MusicService.FindMusic(Id);
         }

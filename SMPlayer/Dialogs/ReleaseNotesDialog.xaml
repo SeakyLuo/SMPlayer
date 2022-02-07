@@ -25,11 +25,16 @@
 
     <ScrollViewer>
         <TextBlock TextWrapping="WrapWholeWords">
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.6.1</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesFixSearchResultPageSort"/><LineBreak />
+            2. <Run x:Uid="ReleaseNotesFixPreferenceSettingsCrash"/><LineBreak />
+            3. <Run x:Uid="ReleaseNotesSupportsOtherMusicFormat"/><LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.6.0</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesRedesignLocalPagePathBox"/><LineBreak />
             2. <Run x:Uid="ReleaseNotesAdjustAlbumGroupingLogic"/><LineBreak />
             3. <Run x:Uid="ReleaseNotesIncompatibleTile"/><LineBreak />
             4. <Run x:Uid="ReleaseNotesImprovedLocalPageDragAndDrop"/><LineBreak />
+            5. <Run x:Uid="ReleaseNotesUpdateFolderResult"/><LineBreak />
             <LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.5.8</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesPreferenceSettingsDislikedAndDoNotAppear"/><LineBreak />

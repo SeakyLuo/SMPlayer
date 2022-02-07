@@ -53,7 +53,7 @@
             TabNavigation="Cycle"
             TabWidthBehavior="Actual">
             <controls:TabView.ItemHeaderTemplate>
-                <DataTemplate x:DataType="data:Playlist">
+                <DataTemplate x:DataType="data:PlaylistView">
                     <StackPanel
                         Background="Transparent"
                         Orientation="Horizontal"
@@ -87,7 +87,7 @@
                 </DataTemplate>
             </controls:TabView.ItemHeaderTemplate>
             <controls:TabView.ItemTemplate>
-                <DataTemplate x:DataType="data:Playlist">
+                <DataTemplate>
                     <local:HeaderedPlaylistControl
                         PlaylistType="Playlist"
                         Loaded="HeaderedPlaylistControl_Loaded" />

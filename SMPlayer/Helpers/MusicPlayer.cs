@@ -16,8 +16,8 @@ namespace SMPlayer
     public class MusicPlayer : IMusicEventListener
     {
         public static bool ShuffleEnabled;
-        public static Music CurrentMusic;
-        public static List<Music> CurrentPlaylist = new List<Music>();
+        public static MusicView CurrentMusic;
+        public static List<MusicView> CurrentPlaylist = new List<MusicView>();
 
         public static double Position
         {
@@ -58,7 +58,7 @@ namespace SMPlayer
                 return _PlaybackList;
             }
         }
-        public static Playlist NowPlaying { get => new Playlist(MenuFlyoutHelper.NowPlaying, CurrentPlaylist); }
+        public static Playlist NowPlaying { get => new Playlist(MenuFlyoutHelper.NowPlaying, CurrentPlaylist.Select(i => i.FromVO())); }
         private static MediaPlaybackList _PlaybackList = new MediaPlaybackList() { MaxPlayedItemsToKeepOpen = 1 };
         private static MediaPlaybackList PendingPlaybackList = null;
         public static MediaPlayer Player = new MediaPlayer() { Source = PlaybackList };
@@ -74,7 +74,7 @@ namespace SMPlayer
 
         public MusicPlayer() { Settings.AddMusicEventListener(this); }
 
-        public static void Init(Music music = null)
+        public static void Init(MusicView music = null)
         {
             MainPage.AddMainPageLoadedListener(async () =>
             {
@@ -82,7 +82,7 @@ namespace SMPlayer
             });
         }
 
-        public static async Task InitWithMusic(Music music = null)
+        public static async Task InitWithMusic(MusicView music = null)
         {
             var settings = Settings.settings;
             if (music == null)
@@ -127,7 +127,7 @@ namespace SMPlayer
                 lock (CurrentPlaylist)
                 {
                     if (PlaybackList.CurrentItemIndex >= CurrentPlaylist.Count) return;
-                    Music current = CurrentMusic?.Copy(), next = args.NewItem.GetMusic();
+                    MusicView current = CurrentMusic?.Copy(), next = args.NewItem.GetMusic();
                     try
                     {
                         foreach (var listener in SwitchMusicListeners)
@@ -196,7 +196,7 @@ namespace SMPlayer
 
         public static int AddMusic(IMusicable source, int index)
         {
-            Music music = source.ToMusic().Copy();
+            MusicView music = source.ToMusic();
             music.IsPlaying = IsMusicPlaying(music);
             music.Index = index;
             CurrentPlaylist.Insert(index, music);
@@ -211,7 +211,7 @@ namespace SMPlayer
             return index;
         }
 
-        public static bool IsMusicPlaying(Music music)
+        public static bool IsMusicPlaying(MusicView music)
         {
             return music.IndexedEquals(CurrentMusic);
         }
@@ -228,27 +228,34 @@ namespace SMPlayer
             return AddMusic(source, CurrentPlaylist.Count);
         }
 
-        public static void SetPlaylist(IEnumerable<IMusicable> playlist, Music target = null)
+        public static void SetPlaylist(IEnumerable<IMusicable> playlist, MusicView target = null)
         {
             Clear();
             foreach (var music in playlist) AddMusic(music);
             if (target != null) MoveToMusic(target);
         }
 
-        public static void SetPlaylistAndPlay(IEnumerable<IMusicable> playlist, Music target = null)
+        public static void SetPlaylistAndPlay(IEnumerable<IMusicable> playlist, MusicView target = null)
         {
             SetPlaylist(playlist, target);
             Play();
         }
 
-        public static void SetMusicAndPlay(Music music)
+        public static void SetMusicAndPlay(MusicView music)
         {
             Clear();
             AddMusic(music);
             Play();
         }
 
-        public static void SetMusicAndPlay(IEnumerable<IMusicable> playlist, Music music)
+        public static void SetMusicAndPlay(Music music)
+        {
+            Clear();
+            AddMusic(music.ToVO());
+            Play();
+        }
+
+        public static void SetMusicAndPlay(IEnumerable<IMusicable> playlist, MusicView music)
         {
             if (playlist.SameAs(CurrentPlaylist))
                 MoveToMusic(music);
@@ -266,7 +273,7 @@ namespace SMPlayer
             Play();
         }
 
-        public static void ShuffleAndPlay(IEnumerable<Music> playlist)
+        public static void ShuffleAndPlay(IEnumerable<IMusicable> playlist)
         {
             if (playlist.IsEmpty()) return;
             SetPlaylist(ShufflePlaylist(playlist));
@@ -285,7 +292,7 @@ namespace SMPlayer
 
         public static void ShuffleOthers()
         {
-            if (CurrentPlaylist.Count == 0) return;
+            if (CurrentPlaylist.IsEmpty()) return;
             // Creating a new MediaPlaybackList here is because removing old music
             // somehow restarts the current playing music.
             PendingPlaybackList = new MediaPlaybackList();
@@ -306,7 +313,7 @@ namespace SMPlayer
             }
             return list;
         }
-        public static bool MoveToMusic(Music music)
+        public static bool MoveToMusic(MusicView music)
         {
             if (music != null)
             {
@@ -427,7 +434,7 @@ namespace SMPlayer
             PlaybackList.Items.Insert(to, item);
         }
 
-        public static bool RemoveMusic(Music music)
+        public static bool RemoveMusic(MusicView music)
         {
             if (music == null || music.Index < 0) return false;
             try
@@ -435,7 +442,17 @@ namespace SMPlayer
                 CurrentPlaylist.RemoveAt(music.Index);
                 PlaybackList.Items.RemoveAt(music.Index);
                 for (int i = music.Index; i < CurrentPlaylist.Count; i++) CurrentPlaylist[i].Index = i;
-                if (music.Index == CurrentMusic.Index) MoveNext();
+                if (music.Index == CurrentMusic.Index)
+                {
+                    if (CurrentPlaylist.IsEmpty())
+                    {
+                        CurrentMusic = null;
+                    }
+                    else
+                    {
+                        MoveNext();
+                    }
+                }
                 foreach (var listener in CurrentPlaylistChangedListeners)
                     listener.RemoveMusic(music);
                 return true;
@@ -458,7 +475,7 @@ namespace SMPlayer
                 listener.Cleared();
         }
 
-        public static void SetMusicPlaying(IEnumerable<Music> playlist, Music playing)
+        public static void SetMusicPlaying(IEnumerable<MusicView> playlist, MusicView playing)
         {
             if (playlist.IsEmpty()) return;
             foreach (var music in playlist)
@@ -473,7 +490,7 @@ namespace SMPlayer
             PlaybackList.Items.RemoveAll(i => MusicService.FindMusic(i.GetMusic().Id) == null);
         }
 
-        private static void MusicModified(Music before, Music after)
+        private static void MusicModified(MusicView before, MusicView after)
         {
             if (CurrentMusic == before)
                 CurrentMusic?.CopyFrom(after);
@@ -482,13 +499,13 @@ namespace SMPlayer
                     music.CopyFrom(after);
             foreach (var item in PlaybackList.Items)
             {
-                Music music = item.GetMusic();
+                MusicView music = item.GetMusic();
                 if (music == before)
                     music.CopyFrom(after);
             }
         }
 
-        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
+        void IMusicEventListener.Execute(MusicView music, MusicEventArgs args)
         {
             switch (args.EventType)
             {
@@ -498,7 +515,7 @@ namespace SMPlayer
                     RemoveMusic(music);
                     break;
                 case MusicEventType.Like:
-                    MusicModified(music, new Music(music) { Favorite = args.IsFavorite });
+                    MusicModified(music, new MusicView(music) { Favorite = args.IsFavorite });
                     break;
                 case MusicEventType.Modify:
                     MusicModified(music, args.ModifiedMusic);
@@ -509,19 +526,19 @@ namespace SMPlayer
 
     public interface ICurrentPlaylistChangedListener
     {
-        void AddMusic(Music music, int index);
-        void RemoveMusic(Music music);
+        void AddMusic(MusicView music, int index);
+        void RemoveMusic(MusicView music);
         void Cleared();
     }
 
     public interface IRemoveMusicListener
     {
-        void MusicRemoved(int index, Music music, IEnumerable<Music> newCollection);
+        void MusicRemoved(int index, MusicView music, IEnumerable<MusicView> newCollection);
     }
 
     public interface ISwitchMusicListener
     {
-        void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason);
+        void MusicSwitching(MusicView current, MusicView next, MediaPlaybackItemChangedReason reason);
     }
 
     public interface IMediaControlListener
@@ -543,7 +560,7 @@ namespace SMPlayer
     public class AddMusicResult
     {
         public AddMusicStatus Status = AddMusicStatus.Successful;
-        public List<Music> Failed = new List<Music>();
+        public List<MusicView> Failed = new List<MusicView>();
         public bool IsFailed { get => Status == AddMusicStatus.Failed; }
         public int FailCount { get => Failed.Count; }
 

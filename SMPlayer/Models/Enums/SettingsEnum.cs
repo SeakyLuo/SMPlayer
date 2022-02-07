@@ -8,15 +8,6 @@ namespace SMPlayer.Models
         public static NotificationSendMode[] NotificationSendModes = { NotificationSendMode.MusicChanged, NotificationSendMode.Never };
     }
 
-    public enum SearchType 
-    {
-        Artists = 0,
-        Albums = 1,
-        Songs = 2,
-        Playlists = 3,
-        Folders = 4
-    }
-
     public enum PlayMode
     {
         Once = 0,
@@ -120,7 +111,7 @@ namespace SMPlayer.Models
             }
         }
 
-        public static Func<Music, IComparable> GetKeySelector(SortBy criterion)
+        public static Func<MusicView, IComparable> GetKeySelector(SortBy criterion)
         {
             switch (criterion)
             {

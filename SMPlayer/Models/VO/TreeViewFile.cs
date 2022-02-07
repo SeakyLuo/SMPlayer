@@ -37,7 +37,7 @@ namespace SMPlayer.Models.VO
             {
                 return;
             }
-            Music music = MusicService.FindMusic(source.FileId);
+            MusicView music = MusicService.FindMusic(source.FileId);
             Icon = "Assets/colorful_no_bg.png";
             Creator = music.Artist;
             Collection = music.Album;

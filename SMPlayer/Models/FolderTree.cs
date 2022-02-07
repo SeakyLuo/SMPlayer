@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
 using SMPlayer.Models.DAO;
 using SMPlayer.Services;
 using System;
@@ -10,11 +11,11 @@ using Windows.Storage;
 namespace SMPlayer.Models
 {
     [Serializable]
-    public class FolderTree : StorageItem, IPreferable
+    public class FolderTree : StorageItem, IPreferable, ISearchEvaluator
     {
         public List<FolderTree> Trees { get; set; } = new List<FolderTree>();
         public List<FolderFile> Files { get; set; } = new List<FolderFile>();
-        public List<Music> Songs { get => MusicService.FindMusicList(Files.Select(i => i.FileId)); }
+        public List<MusicView> Songs { get => MusicService.FindMusicList(Files.Select(i => i.FileId)); }
         public SortBy Criterion { get; set; } = SortBy.Title;
         public string Info => GetFolderInfo(Trees.Count, Files.Count);
         public bool IsEmpty { get => Files.IsEmpty() && Trees.All(tree => tree.IsEmpty); }
@@ -62,13 +63,13 @@ namespace SMPlayer.Models
             return FindFile(path) != null;
         }
 
-        public List<Music> Flatten()
+        public List<MusicView> Flatten()
         {
             if (IsEmpty)
             {
                 CopyFrom(StorageService.FindFolder(Id));
             }
-            List<Music> list = new List<Music>();
+            List<MusicView> list = new List<MusicView>();
             foreach (var branch in Trees)
                 list.AddRange(branch.Flatten());
             list.AddRange(Songs);
@@ -94,7 +95,7 @@ namespace SMPlayer.Models
                          }).Select(i => i.File).ToList();
         }
 
-        public List<Music> Reverse()
+        public List<MusicView> Reverse()
         {
             Files.Reverse();
             return Songs;
@@ -213,6 +214,15 @@ namespace SMPlayer.Models
             string info = Helper.LocalizeMessage("Songs:") + files;
             if (folders > 0) info = Helper.LocalizeMessage("Folders:") + folders + " • " + info;
             return info;
+        }
+        public double Evaluate(string keyword)
+        {
+            return SearchHelper.EvaluateString(Name, keyword, -3);
+        }
+
+        public double Match(string keyword)
+        {
+            return SearchHelper.EvaluateString(Name, keyword);
         }
     }
 }

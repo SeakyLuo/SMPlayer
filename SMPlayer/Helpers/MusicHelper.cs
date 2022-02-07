@@ -11,6 +11,11 @@ namespace SMPlayer
 {
     public static class MusicHelper
     {
+        public static List<string> SupportedFileTypes = new List<string>()
+        {
+            ".mp3", ".flac", ".aac", ".flac", ".wma"
+        };
+
         public static void ReadTags(TagLib.File.IFileAbstraction fileAbstraction)
         {
             using (var tagFile = TagLib.File.Create(fileAbstraction, TagLib.ReadStyle.Average))

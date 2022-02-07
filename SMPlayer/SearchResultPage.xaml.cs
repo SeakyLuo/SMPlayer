@@ -8,6 +8,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using System;
 using SMPlayer.Controls;
+using SMPlayer.Interfaces;
+using SMPlayer.Helpers;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -19,13 +21,14 @@ namespace SMPlayer
     public sealed partial class SearchResultPage : Page, IMultiSelectListener
     {
         public static Stack<SearchKeyword> History = new Stack<SearchKeyword>();
-        public ObservableCollection<Playlist> Artists = new ObservableCollection<Playlist>();
+        public ObservableCollection<PlaylistView> Artists = new ObservableCollection<PlaylistView>();
         public ObservableCollection<AlbumView> Albums = new ObservableCollection<AlbumView>();
-        public ObservableCollection<Music> Songs = new ObservableCollection<Music>();
+        public ObservableCollection<MusicView> Songs = new ObservableCollection<MusicView>();
         public ObservableCollection<AlbumView> Playlists = new ObservableCollection<AlbumView>();
         public ObservableCollection<GridViewFolder> Folders = new ObservableCollection<GridViewFolder>();
+        private object OriginalSearchResult;
         private SortBy[] Criteria;
-        private SearchType searchType;
+        private EntityType searchType;
         private SearchKeyword CurrentKeyword;
         private SortBy SettingsCriterion
         {
@@ -33,15 +36,15 @@ namespace SMPlayer
             {
                 switch (searchType)
                 {
-                    case SearchType.Artists:
+                    case EntityType.Artist:
                         return Settings.settings.SearchArtistsCriterion;
-                    case SearchType.Albums:
+                    case EntityType.Album:
                         return Settings.settings.SearchAlbumsCriterion;
-                    case SearchType.Songs:
+                    case EntityType.Song:
                         return Settings.settings.SearchSongsCriterion;
-                    case SearchType.Playlists:
+                    case EntityType.Playlist:
                         return Settings.settings.SearchPlaylistsCriterion;
-                    case SearchType.Folders:
+                    case EntityType.Folder:
                         return Settings.settings.SearchFoldersCriterion;
                     default:
                         return Settings.settings.SearchSongsCriterion;
@@ -51,19 +54,19 @@ namespace SMPlayer
             {
                 switch (searchType)
                 {
-                    case SearchType.Artists:
+                    case EntityType.Artist:
                         Settings.settings.SearchArtistsCriterion = value;
                         break;
-                    case SearchType.Albums:
+                    case EntityType.Album:
                         Settings.settings.SearchAlbumsCriterion = value;
                         break;
-                    case SearchType.Songs:
+                    case EntityType.Song:
                         Settings.settings.SearchSongsCriterion = value;
                         break;
-                    case SearchType.Playlists:
+                    case EntityType.Playlist:
                         Settings.settings.SearchPlaylistsCriterion = value;
                         break;
-                    case SearchType.Folders:
+                    case EntityType.Folder:
                         Settings.settings.SearchFoldersCriterion = value;
                         break;
                 }
@@ -84,24 +87,24 @@ namespace SMPlayer
             base.OnNavigatedTo(e);
             SearchArgs searchArgs = (SearchArgs)e.Parameter;
             searchType = searchArgs.Type;
-            object list = searchArgs.Collection;
+            OriginalSearchResult = searchArgs.Collection;
             ResultTextBlock.Text = searchArgs.Summary;
             SearchKeyword keyword = SearchPage.History.Peek();
             switch (searchType)
             {
-                case SearchType.Artists:
+                case EntityType.Artist:
                     Criteria = SearchPage.ArtistsCriteria;
                     break;
-                case SearchType.Albums:
+                case EntityType.Album:
                     Criteria = SearchPage.AlbumsCriteria;
                     break;
-                case SearchType.Songs:
+                case EntityType.Song:
                     Criteria = SearchPage.SongsCriteria;
                     break;
-                case SearchType.Playlists:
+                case EntityType.Playlist:
                     Criteria = SearchPage.PlaylistsCriteria;
                     break;
-                case SearchType.Folders:
+                case EntityType.Folder:
                     Criteria = SearchPage.FoldersCriteria;
                     break;
             }
@@ -110,11 +113,11 @@ namespace SMPlayer
             {
                 case NavigationMode.New:
                     History.Push(keyword);
-                    Search(searchType, keyword, list);
+                    Search(searchType, keyword, OriginalSearchResult);
                     break;
                 case NavigationMode.Back:
                     if (CurrentKeyword != keyword)
-                        Search(searchType, keyword, list);
+                        Search(searchType, keyword, OriginalSearchResult);
                     break;
             }
         }
@@ -126,9 +129,9 @@ namespace SMPlayer
                 History.Pop();
         }
 
-        private void Search(SearchType searchType, SearchKeyword keyword, object list)
+        private void Search(EntityType searchType, SearchKeyword keyword, object list)
         {
-            LoadingProgress.IsActive = true;
+            LoadingProgress.Visibility = Visibility.Visible;
             CurrentKeyword = keyword;
             Artists.Clear();
             Albums.Clear();
@@ -137,23 +140,48 @@ namespace SMPlayer
             Folders.Clear();
             switch (searchType)
             {
-                case SearchType.Artists:
-                    Artists.SetTo(list as ObservableCollection<Playlist>);
+                case EntityType.Artist:
+                    SetArtists(list as List<MatchResult<Artist>>);
                     break;
-                case SearchType.Albums:
-                    Albums.SetTo(list as ObservableCollection<AlbumView>);
+                case EntityType.Album:
+                    SetAlbums(list as List<MatchResult<Album>>);
                     break;
-                case SearchType.Songs:
-                    Songs.SetTo(list as ObservableCollection<Music>);
+                case EntityType.Song:
+                    SetSongs(list as List<MatchResult<Music>>);
                     break;
-                case SearchType.Playlists:
-                    Playlists.SetTo(list as ObservableCollection<AlbumView>);
+                case EntityType.Playlist:
+                    SetPlaylists(list as List<MatchResult<Playlist>>);
                     break;
-                case SearchType.Folders:
-                    Folders.SetTo(list as ObservableCollection<GridViewFolder>);
+                case EntityType.Folder:
+                    SetFolders(list as List<MatchResult<FolderTree>>);
                     break;
             }
-            LoadingProgress.IsActive = false;
+            LoadingProgress.Visibility = Visibility.Collapsed;
+        }
+
+        private void SetArtists(IEnumerable<MatchResult<Artist>> list)
+        {
+            Artists.SetTo(list.Select(i => new PlaylistView(i.Entity)));
+        }
+
+        private void SetAlbums(IEnumerable<MatchResult<Album>> list)
+        {
+            Albums.SetTo(list.Select(i => i.Entity.ToVO()));
+        }
+
+        private void SetSongs(IEnumerable<MatchResult<Music>> list)
+        {
+            Songs.SetTo(list.Select(i => i.Entity.ToVO()));
+        }
+
+        private void SetPlaylists(IEnumerable<MatchResult<Playlist>> list)
+        {
+            Playlists.SetTo(list.Select(i => i.Entity.ToVO().ToSearchAlbumView()));
+        }
+
+        private void SetFolders(IEnumerable<MatchResult<FolderTree>> list)
+        {
+            Folders.SetTo(list.Select(i => new GridViewFolder(i.Entity)));
         }
 
         private void ArtistsGridView_ItemClick(object sender, ItemClickEventArgs e)
@@ -205,7 +233,7 @@ namespace SMPlayer
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (searchType == SearchType.Songs)
+            if (searchType == EntityType.Song)
             {
                 MainPage.Instance.SetMultiSelectListener(SearchMusicView);
             }
@@ -215,25 +243,48 @@ namespace SMPlayer
             }
         }
 
-        private List<Music> GetSelectItems()
+        private List<MusicView> GetSelectItems()
         {
-            List<Music> list = new List<Music>();
+            List<MusicView> list = new List<MusicView>();
             foreach (AlbumView item in AlbumsGridView.SelectedItems)
                 list.AddRange(item.Songs);
-            foreach (Music item in SearchMusicView.SelectedItems)
+            foreach (MusicView item in SearchMusicView.SelectedItems)
                 list.Add(item);
             foreach (AlbumView item in PlaylistsGridView.SelectedItems)
                 list.AddRange(item.Songs);
             foreach (GridViewFolder item in FoldersGridView.SelectedItems)
                 list.AddRange(item.Songs);
-            foreach (Playlist item in ArtistsGridView.SelectedItems)
+            foreach (PlaylistView item in ArtistsGridView.SelectedItems)
                 list.AddRange(item.Songs);
             return list;
         }
 
         private void SortButton_Click(object sender, RoutedEventArgs e)
         {
-            MenuFlyoutHelper.SetSortByMenu(sender, SettingsCriterion, Criteria, item => SettingsCriterion = item);
+            MenuFlyoutHelper.SetSortByMenu(sender, SettingsCriterion, Criteria, item =>
+            {
+                LoadingProgress.Visibility = Visibility.Visible;
+                SettingsCriterion = item;
+                switch (searchType)
+                {
+                    case EntityType.Artist:
+                        SetArtists(SearchHelper.SortArtists(OriginalSearchResult as List<MatchResult<Artist>>, item));
+                        break;
+                    case EntityType.Album:
+                        SetAlbums(SearchHelper.SortAlbums(OriginalSearchResult as List<MatchResult<Album>>, item));
+                        break;
+                    case EntityType.Song:
+                        SetSongs(SearchHelper.SortSongs(OriginalSearchResult as List<MatchResult<Music>>, item));
+                        break;
+                    case EntityType.Playlist:
+                        SetPlaylists(SearchHelper.SortPlaylists(OriginalSearchResult as List<MatchResult<Playlist>>, item));
+                        break;
+                    case EntityType.Folder:
+                        SetFolders(SearchHelper.SortFolders(OriginalSearchResult as List<MatchResult<FolderTree>>, item));
+                        break;
+                }
+                LoadingProgress.Visibility = Visibility.Collapsed;
+            });
         }
 
         private void OpenFolderMenuFlyout(object sender, object e)
@@ -242,7 +293,6 @@ namespace SMPlayer
             GridViewFolder folder = flyout.Target.DataContext as GridViewFolder;
             MenuFlyoutHelper.SetSimpleFolderMenu(sender, folder.Source);
         }
-
 
         void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
         {

@@ -35,7 +35,7 @@
         SelectionChanged="SongsListView_SelectionChanged"
         SelectionMode="None">
         <ListView.ItemTemplate>
-            <DataTemplate x:DataType="data:Music">
+            <DataTemplate x:DataType="data:MusicView">
                 <SwipeControl Loaded="SwipeControl_Loaded">
                     <SwipeControl.ContextFlyout>
                         <MenuFlyout Opening="OpenMusicMenuFlyout" />

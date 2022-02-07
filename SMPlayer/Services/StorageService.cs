@@ -43,7 +43,11 @@ namespace SMPlayer.Services
         }
         public static List<FolderTree> FindSubFolders(FolderTree folder)
         {
-            return SQLHelper.Run(c => c.SelectSubFolders(folder)).OrderBy(i => i.Name).ToList();
+            return SQLHelper.Run(c => c.SelectSubFolders(folder)).Select(i => i).OrderBy(i => i.Name).ToList();
+        }
+        public static List<FolderFile> FindSubFiles(FolderTree folder)
+        {
+            return SQLHelper.Run(c => c.SelectSubFiles(folder));
         }
         public static FolderFile FindFile(long id)
         {
@@ -52,6 +56,13 @@ namespace SMPlayer.Services
         public static FolderFile FindFile(string path)
         {
             return SQLHelper.Run(c => c.SelectFileByPath(path));
+        }
+        public static List<Music> FindSubSongs(FolderTree folder)
+        {
+            return SQLHelper.Run(c =>
+            {
+                return c.SelectMusicByIds(c.SelectSubFiles(folder).Select(i => i.FileId)).ToList();
+            });
         }
     }
 }
