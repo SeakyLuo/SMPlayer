@@ -194,7 +194,7 @@ namespace SMPlayer
         {
             Clear();
             foreach (var music in playlist) AddMusic(music);
-            if (target != null) MoveToMusic(target);
+            MoveToMusic(target);
         }
 
         // 跟SetMusicAndPlay的区别是不需要Shuffle
@@ -216,8 +216,8 @@ namespace SMPlayer
             if (playlist.SameAs(CurrentPlaylist))
                 PlaybackList.MoveTo(0);
             else
-                SetPlaylist(ShuffleEnabled ? ShufflePlaylist(playlist) : playlist);
-            if (music != null) MoveToMusic(music);
+                SetPlaylist(ShuffleEnabled ? ShufflePlaylist(playlist, music) : playlist);
+            MoveToMusic(music);
             Play();
         }
 
