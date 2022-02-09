@@ -119,6 +119,7 @@ namespace SMPlayer.Controls
         private void ClearSelectionAppButton_Click(object sender, RoutedEventArgs e)
         {
             MultiSelectListener?.Execute(this, new MultiSelectEventArgs(MultiSelectEvent.ClearSelections));
+            CountSelections(0);
         }
 
         private void DeleteAppButton_Click(object sender, RoutedEventArgs e)

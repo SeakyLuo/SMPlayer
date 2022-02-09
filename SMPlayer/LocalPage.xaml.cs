@@ -1,6 +1,7 @@
 ﻿using SMPlayer.Controls;
 using SMPlayer.Dialogs;
 using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
 using SMPlayer.Models;
 using SMPlayer.Models.DAO;
 using SMPlayer.Models.VO;
@@ -27,7 +28,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LocalPage : Page, IStorageItemEventListener, IMenuFlyoutItemClickListener, IMenuFlyoutHelperBuildListener, IMultiSelectListener, ISwitchMusicListener, IMusicEventListener
+    public sealed partial class LocalPage : Page, IStorageItemEventListener, IMenuFlyoutItemClickListener, IMenuFlyoutHelperBuildListener, IMultiSelectListener, IMusicPlayerEventListener, IMusicEventListener
     {
         private readonly ObservableCollection<FolderChainItem> FolderChain = new ObservableCollection<FolderChainItem>();
         private readonly ObservableCollection<GridViewStorageItem> GridItems = new ObservableCollection<GridViewStorageItem>();
@@ -67,11 +68,11 @@ namespace SMPlayer
                 }
             }
         }
-        public List<MusicView> SelectedSongs
+        public List<Music> SelectedSongs
         {
             get
             {
-                List<MusicView> list = new List<MusicView>();
+                List<Music> list = new List<Music>();
                 foreach (var item in CurrentListView.SelectedItems)
                 {
                     if (item is GridViewFolder folder)
@@ -80,7 +81,7 @@ namespace SMPlayer
                     }
                     else if (item is GridViewMusic music)
                     {
-                        list.Add(music.Source);
+                        list.Add(music.Source.FromVO());
                     }
                 }
                 return list;
@@ -98,9 +99,9 @@ namespace SMPlayer
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             SwitchViewMode(Settings.settings.LocalViewMode);
-            Settings.AddStorageItemEventListener(this);
-            Settings.AddMusicEventListener(this);
-            MusicPlayer.AddSwitchMusicListener(this);
+            StorageService.AddStorageItemEventListener(this);
+            MusicService.AddMusicEventListener(this);
+            MusicPlayer.AddMusicPlayerEventListener(this);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -248,7 +249,7 @@ namespace SMPlayer
             else if (draggingItem is GridViewFolder folder)
             {
                 // 文件夹没有移动成功的话，就把节点移动回去
-                if (!await Settings.settings.MoveFolderAsync(folder.Source, newParent))
+                if (!await StorageService.MoveFolderAsync(folder.Source, newParent))
                 {
                     CancelDrop(e);
                 }
@@ -256,7 +257,7 @@ namespace SMPlayer
             else if (draggingItem is GridViewMusic file)
             {
                 // 文件没有移动成功的话，就把节点移动回去
-                if (!await Settings.settings.MoveFileAsync(file.ToFolderFile(), newParent))
+                if (!await StorageService.MoveFileAsync(file.ToFolderFile(), newParent))
                 {
                     CancelDrop(e);
                 }
@@ -499,7 +500,7 @@ namespace SMPlayer
                         else
                         {
                             currentFolder.SortFiles(criterion);
-                            Settings.settings.UpdateFolder(currentFolder);
+                            StorageService.UpdateFolder(currentFolder);
                         }
                         SetupGridView(currentFolder);
                     });
@@ -537,9 +538,11 @@ namespace SMPlayer
                     break;
                 case MultiSelectEvent.ReverseSelections:
                     CurrentListView.ReverseSelections();
+                    Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(SelectedSongs.Count);
                     break;
                 case MultiSelectEvent.ClearSelections:
                     CurrentListView.ClearSelections();
+                    Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(SelectedSongs.Count);
                     break;
                 case MultiSelectEvent.MoveToFolder:
                     args.FlyoutHelper.Data = CurrentListView.SelectedItems
@@ -626,11 +629,7 @@ namespace SMPlayer
 
         void IMenuFlyoutHelperBuildListener.OnBuild(MenuFlyoutHelper helper)
         {
-            if (helper.SelectedItems is TreeViewStorageItem treeViewItem)
-            {
-                helper.DefaultPlaylistName = treeViewItem.Name;
-            }
-            else if (helper.SelectedItems is GridViewFolder gridViewItem)
+            if (helper.SelectedItems is GridViewFolder gridViewItem)
             {
                 helper.DefaultPlaylistName = gridViewItem.Name;
             }
@@ -639,22 +638,26 @@ namespace SMPlayer
                 helper.DefaultPlaylistName = CurrentFolderInfo.Name;
             }
         }
-
-        async void ISwitchMusicListener.MusicSwitching(MusicView current, MusicView next, MediaPlaybackItemChangedReason reason)
+        async void IMusicPlayerEventListener.Execute(MusicPlayerEventArgs args)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            switch (args.EventType)
             {
-                foreach (var item in GridItems)
-                {
-                    if (item is GridViewMusic music)
+                case MusicPlayerEventType.Switch:
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
-                        music.IsPlaying = music.Source == next;
-                    }
-                }
-            });
+                        foreach (var item in GridItems)
+                        {
+                            if (item is GridViewMusic music)
+                            {
+                                music.IsPlaying = music.Source.Equals(args.Music);
+                            }
+                        }
+                    });
+                    break;
+            }
         }
 
-        void IMusicEventListener.Execute(MusicView music, MusicEventArgs args)
+        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
             if (CurrentFolderInfo == null) return;
             switch (args.EventType)

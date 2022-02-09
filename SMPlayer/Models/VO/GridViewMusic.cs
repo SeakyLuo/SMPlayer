@@ -1,4 +1,5 @@
-﻿using SMPlayer.Models.VO;
+﻿using SMPlayer.Helpers;
+using SMPlayer.Models.VO;
 using SMPlayer.Services;
 using System;
 using System.ComponentModel;
@@ -49,9 +50,9 @@ namespace SMPlayer.Models.VO
             Type = StorageType.File;
             SourceFile = file;
             Thumbnail = MusicImage.DefaultImage;
-            MusicView music = MusicService.FindMusic(file.FileId);
+            MusicView music = MusicService.FindMusic(file.FileId).ToVO();
             Source = music;
-            IsPlaying = MusicPlayer.CurrentMusic == music;
+            IsPlaying = music.Equals(MusicPlayer.CurrentMusic);
         }
 
         public GridViewMusic(MusicView music)
@@ -60,7 +61,7 @@ namespace SMPlayer.Models.VO
             Type = StorageType.File;
             Thumbnail = MusicImage.DefaultImage;
             Source = music;
-            IsPlaying = MusicPlayer.CurrentMusic == music;
+            IsPlaying = music.Equals(MusicPlayer.CurrentMusic);
         }
         public override async Task LoadThumbnailAsync()
         {
@@ -77,9 +78,9 @@ namespace SMPlayer.Models.VO
             return SourceFile;
         }
 
-        MusicView IMusicable.ToMusic()
+        Music IMusicable.ToMusic()
         {
-            return source;
+            return source.FromVO();
         }
     }
 }

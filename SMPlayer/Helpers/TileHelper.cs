@@ -187,7 +187,7 @@ namespace SMPlayer.Helpers
                 }
                 else
                 {
-                    var thumbnail = await ImageHelper.LoadThumbnail(playlist.DisplayItem.Source);
+                    var thumbnail = await ImageHelper.LoadThumbnail(playlist.DisplayItem.Path);
                     if (thumbnail.IsThumbnail())
                     {
                         await thumbnail.SaveAsync(SecondaryTileFolder, tileid);

@@ -42,7 +42,7 @@ namespace SMPlayer
             OnLaunched(e, null);
         }
 
-        private async void OnLaunched(LaunchActivatedEventArgs e, MusicView music)
+        private async void OnLaunched(LaunchActivatedEventArgs e, Music music)
         {
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -210,7 +210,7 @@ namespace SMPlayer
         protected override async void OnFileActivated(FileActivatedEventArgs args)
         {
             base.OnFileActivated(args);
-            MusicView music = await MusicView.LoadFromPathAsync(args.Files[0].Path);
+            Music music = await Music.LoadFromPathAsync(args.Files[0].Path);
             if (args.PreviousExecutionState == ApplicationExecutionState.Running)
             {
                 MusicPlayer.SetMusicAndPlay(music);

@@ -34,8 +34,6 @@ namespace SMPlayer.Models
         public ObservableCollection<MusicView> Songs { get; set; } = new ObservableCollection<MusicView>();
         public int Priority { get; set; }
         public int Count { get => Songs.Count; }
-        public bool IsMyFavorite { get => Name == Constants.MyFavorites; }
-        public bool IsEmpty { get => Songs.IsEmpty(); }
         public EntityType EntityType { get; set; } = EntityType.Playlist;
 
 
@@ -76,7 +74,7 @@ namespace SMPlayer.Models
         {
             if (item is IMusicable musicable)
             {
-                MusicView music = musicable.ToMusic();
+                MusicView music = musicable.ToMusic().ToVO();
                 if (Contains(music))
                 {
                     return;
@@ -89,7 +87,7 @@ namespace SMPlayer.Models
                 bool neverAdded = true;
                 foreach (var song in songs)
                 {
-                    MusicView music = song.ToMusic();
+                    MusicView music = song.ToMusic().ToVO();
                     if (!set.Contains(music.Id))
                     {
                         Songs.Add(music);
@@ -108,15 +106,9 @@ namespace SMPlayer.Models
         public void Remove(IEnumerable<IMusicable> musicables)
         {
             foreach (var music in musicables)
-                Songs.Remove(music.ToMusic());
-            Sort();
+                Songs.Remove(music.ToMusic().ToVO());
         }
 
-        public void Remove(MusicView music)
-        {
-            Songs.Remove(music);
-            Sort();
-        }
 
         public bool Contains(MusicView music)
         {
@@ -144,7 +136,7 @@ namespace SMPlayer.Models
             return new AlbumView(Name, Artist)
             {
                 Songs = Songs,
-                ThumbnailSource = DisplayItem?.Source.Path,
+                ThumbnailSource = DisplayItem?.Path,
                 EntityType = EntityType.Playlist,
                 OriginalItemId = Id,
             };
@@ -155,7 +147,7 @@ namespace SMPlayer.Models
             return new AlbumView(Name, SongCountConverter.GetSongCount(Count))
             {
                 Songs = Songs,
-                ThumbnailSource = DisplayItem?.Source?.Path,
+                ThumbnailSource = DisplayItem?.Path,
                 EntityType = entityType ?? EntityType.Playlist,
                 OriginalItemId = Id,
             };
@@ -216,15 +208,6 @@ namespace SMPlayer.Models
                     return;
             }
             Songs.SetTo(list.ToList());
-        }
-
-        public Playlist ToPlaylist()
-        {
-            return new Playlist
-            {
-                Name = Name,
-                Songs = Songs.Select(i => i.FromVO()).ToList(),
-            };
         }
 
         public void Reverse()

@@ -8,14 +8,14 @@ namespace SMPlayer.Models
 {
     public class MusicDisplayItem
     {
-        public MusicView Source { get; private set; }
-        public string Path { get => Source.Path; }
+        public IMusicable Source { get; private set; }
+        public string Path => Source.ToMusic().Path;
         public Brush Color { get; private set; }
         public bool IsDefault { get; private set; }
 
         public static MusicDisplayItem DefaultItem = new MusicDisplayItem(ColorHelper.HighlightBrush);
 
-        public MusicDisplayItem(Brush color, MusicView music)
+        public MusicDisplayItem(Brush color, IMusicable music)
         {
             Color = color;
             Source = music;

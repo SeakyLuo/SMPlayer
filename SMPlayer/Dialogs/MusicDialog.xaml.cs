@@ -8,7 +8,7 @@ namespace SMPlayer.Dialogs
 {
     public sealed partial class MusicDialog : ContentDialog
     {
-        public MusicDialog(MusicDialogOption option, MusicView music)
+        public MusicDialog(MusicDialogOption option, Music music)
         {
             this.InitializeComponent();
             switch (option)

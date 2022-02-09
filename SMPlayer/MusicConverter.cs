@@ -30,9 +30,9 @@ namespace SMPlayer
             return ToTime((double)seconds);
         }
 
-        public static string ToTime(ICollection<MusicView> list)
+        public static string ToTime(IEnumerable<IMusicable> list)
         {
-            int total_seconds = list.Sum((music) => music.Duration);
+            int total_seconds = list.Sum(music => music.ToMusic().Duration);
             if (total_seconds == 0) return "";
             var time = TimeSpan.FromSeconds(total_seconds);
             int seconds = time.Seconds,
@@ -230,7 +230,7 @@ namespace SMPlayer
     {
         public static string ToStr(object value)
         {
-            if (value is ICollection<MusicView> list)
+            if (value is IEnumerable<IMusicable> list)
             {
                 int count = list.Count();
                 string countStr = GetSongCount(count);

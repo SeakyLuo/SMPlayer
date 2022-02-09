@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Dialogs;
 using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,14 +20,14 @@ namespace SMPlayer.Helpers
         public static async Task AddFolder(FolderTree folder)
         {
             string path = folder.Path;
-            string defaultName = Settings.settings.FindNextFolderName(folder, Helper.LocalizeText("NewFolderName"));
+            string defaultName = StorageService.FindNextFolderName(folder, Helper.LocalizeText("NewFolderName"));
             RenameDialog renameDialog = new RenameDialog(RenameOption.Create, RenameTarget.Folder, defaultName)
             {
-                ValidateAsync = async (newName) => await Settings.ValidateFolderName(path, newName),
+                ValidateAsync = async (newName) => await StorageService.ValidateFolderName(path, newName),
                 Confirmed = async (newName) =>
                 {
                     FolderTree tree = new FolderTree() { Path = Path.Combine(path, newName) };
-                    await Settings.settings.AddFolder(tree, folder);
+                    await StorageService.AddFolder(tree, folder);
                 }
             };
             await renameDialog.ShowAsync();

@@ -2,6 +2,7 @@
 using SMPlayer.Controls;
 using SMPlayer.Helpers;
 using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -254,7 +255,7 @@ namespace SMPlayer
 
         public void Search(SearchKeyword keyword)
         {
-            Settings.settings.Search(keyword.Text);
+            SettingsService.Search(keyword.Text);
             NaviFrame.Navigate(typeof(SearchPage), keyword);
             SetBackButtonVisible(true);
             if (MainNavigationView.DisplayMode != NavigationViewDisplayMode.Expanded)

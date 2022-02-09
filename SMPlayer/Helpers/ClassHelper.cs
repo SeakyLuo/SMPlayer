@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
 using SMPlayer.Models;
 using SMPlayer.Models.VO;
 using System;
@@ -24,6 +25,14 @@ namespace SMPlayer
 {
     public static class ClassHelper
     {
+        public static void Sort<T>(this List<T> list, SortBy criterion) where T : ISortable
+        {
+            list.Sort((m1, m2) => m1.GetComparable(criterion).CompareTo(m2.GetComparable(criterion)));
+        }
+        public static void InsertWithOrder<T>(this ObservableCollection<T> list, T sortable, SortBy criterion = SortBy.Default) where T : ISortable
+        {
+            list.Insert(FindSortedListInsertIndex(list, sortable, criterion), sortable);
+        }
         public static void InsertWithOrder<T>(this ObservableCollection<T> list, T comparable) where T : IComparable
         {
             list.Insert(FindSortedListInsertIndex(list, comparable), comparable);
@@ -31,6 +40,16 @@ namespace SMPlayer
         public static void InsertWithOrder<T>(this List<T> list, T comparable) where T : IComparable
         {
             list.Insert(FindSortedListInsertIndex(list, comparable), comparable);
+        }
+        public static int FindSortedListInsertIndex<T>(this IEnumerable<T> list, T sortable, SortBy criterion) where T : ISortable
+        {
+            IComparable comparable = sortable.GetComparable(criterion);
+            int count = list.Count();
+            for (int i = 0; i < count - 1; i++)
+                if (0 < comparable.CompareTo(list.ElementAt(i).GetComparable(criterion)) &&
+                    comparable.CompareTo(list.ElementAt(i + 1).GetComparable(criterion)) < 0)
+                    return i;
+            return count;
         }
         public static int FindSortedListInsertIndex<T>(this IEnumerable<T> list, T comparable) where T : IComparable
         {
@@ -106,8 +125,13 @@ namespace SMPlayer
         }
         public static void AddOrMoveToTheFirst<T>(this Collection<T> list, T item)
         {
-            if (item.Equals(list.ElementAtOrDefault(0)))
+            if (item == null) return;
+            if (list.IsEmpty())
+            {
+                list.Add(item);
                 return;
+            }
+            if (item.Equals(list.First())) return;
             list.Remove(item);
             list.Insert(0, item);
         }
@@ -370,7 +394,7 @@ namespace SMPlayer
 
         public static Music GetMusic(this MediaPlaybackItem item)
         {
-            return item.Source.CustomProperties["Source"] as Music;
+            return item?.Source.CustomProperties["Source"] as Music;
         }
 
         public static void SetMusic(this MediaPlaybackItem item, Music music)

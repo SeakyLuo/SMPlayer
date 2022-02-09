@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
 using SMPlayer.Models.VO;
 using System;
 using System.ComponentModel;
@@ -15,7 +16,7 @@ using Windows.UI.Xaml.Media;
 
 namespace SMPlayer.Models
 {
-    public class MusicView : IComparable, INotifyPropertyChanged, IMusicable, IPreferable, IFolderFile
+    public class MusicView : IComparable, INotifyPropertyChanged, IMusicable, IPreferable, IFolderFile, ISortable
     {
         public long Id { get; set; }
         public string Path { get; set; }
@@ -247,18 +248,6 @@ namespace SMPlayer.Models
             return file.GetLyrics();
         }
 
-        public async Task<string> GetLrcLyricsAsync()
-        {
-            try
-            {
-                var file = await StorageFile.GetFileFromPathAsync(Path.Substring(0, Path.LastIndexOf(".")) + ".lrc");
-                return await FileIO.ReadTextAsync(file);
-            }
-            catch (Exception)
-            {
-                return await LyricsHelper.SearchLrcLyrics(this);
-            }
-        }
 
         public async Task<bool> SaveLyricsAsync(string lyrics)
         {
@@ -289,13 +278,6 @@ namespace SMPlayer.Models
                 return new MusicDisplayItem(color, this);
             }
             return MusicDisplayItem.DefaultItem;
-        }
-
-        public MediaPlaybackItem GetMediaPlaybackItem()
-        {
-            var source = MediaSource.CreateFromStreamReference(new MusicStream(Path), "audio/mpeg");
-            source.CustomProperties.Add("Source", this);
-            return new MediaPlaybackItem(source);
         }
 
         public string RenameFolder(string oldPath, string newPath)
@@ -338,22 +320,9 @@ namespace SMPlayer.Models
             return !(music1 == music2);
         }
 
-        /**
-         * 不知道为啥obj is Music music && Id == music.Id不行……obj变成了music后值变成null
-         */
         public override bool Equals(object obj)
         {
-            return obj is MusicView && Id == (obj as MusicView).Id;
-        }
-
-        public bool IndexedEquals(MusicView music)
-        {
-            return this == music && Index == music.Index;
-        }
-
-        public bool PossiblyEquals(MusicView music)
-        {
-            return Name == music.Name && Artist == music.Artist && Album == music.Album && Duration == music.Duration;
+            return obj is IMusicable && Id == (obj as IMusicable).ToMusic().Id;
         }
 
         public override int GetHashCode()
@@ -385,6 +354,11 @@ namespace SMPlayer.Models
                 Path = Path,
                 Source = this
             };
+        }
+
+        IComparable ISortable.GetComparable(SortBy criterion)
+        {
+            return VOConverter.FromVO(this).GetComparable(criterion);
         }
     }
 

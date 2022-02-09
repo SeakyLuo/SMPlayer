@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SMPlayer
+namespace SMPlayer.Interfaces
 {
-    public interface IRecentEventListener
+    public interface ISortable
     {
-        void Search(string keyword);
-        void Played(Music music);
+        IComparable GetComparable(SortBy criterion);
     }
 }

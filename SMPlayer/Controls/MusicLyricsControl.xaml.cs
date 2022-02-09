@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace SMPlayer.Controls
 {
-    public sealed partial class MusicLyricsControl : UserControl, ISwitchMusicListener
+    public sealed partial class MusicLyricsControl : UserControl, IMusicPlayerEventListener
     {
         public bool AllowMusicSwitching { get; set; }
         public bool ShowHeader { get; set; }
@@ -28,12 +29,12 @@ namespace SMPlayer.Controls
             set => SaveProgress.Foreground = value;
         }
         private string Lyrics = "";
-        private MusicView CurrentMusic;
+        private Music CurrentMusic;
         public bool IsProcessing { get; private set; } = false;
         public MusicLyricsControl()
         {
             this.InitializeComponent();
-            MusicPlayer.AddSwitchMusicListener(this);
+            MusicPlayer.AddMusicPlayerEventListener(this);
         }
         private void ResetLyricsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -115,7 +116,7 @@ namespace SMPlayer.Controls
             }
         }
 
-        public async void SetLyrics(MusicView music)
+        public async void SetLyrics(Music music)
         {
             if (music == null) return;
             IsProcessing = true;
@@ -131,17 +132,6 @@ namespace SMPlayer.Controls
             }
             Lyrics = LyricsTextBox.Text;
             IsProcessing = false;
-        }
-
-        public async void MusicSwitching(MusicView current, MusicView next, MediaPlaybackItemChangedReason reason)
-        {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
-            {
-                if (!AllowMusicSwitching) return;
-                if (Lyrics != LyricsTextBox.Text) return;
-                ScrollToTop();
-                SetLyrics(next);
-            });
         }
 
         private async void ImportLyricsButton_Click(object sender, RoutedEventArgs e)
@@ -170,6 +160,22 @@ namespace SMPlayer.Controls
             }
             SaveProgress.Visibility = Visibility.Collapsed;
             IsProcessing = false;
+        }
+
+        async void IMusicPlayerEventListener.Execute(MusicPlayerEventArgs args)
+        {
+            switch (args.EventType)
+            {
+                case MusicPlayerEventType.Switch:
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        if (!AllowMusicSwitching) return;
+                        if (Lyrics != LyricsTextBox.Text) return;
+                        ScrollToTop();
+                        SetLyrics(args.Music);
+                    });
+                    break;
+            }
         }
     }
 }

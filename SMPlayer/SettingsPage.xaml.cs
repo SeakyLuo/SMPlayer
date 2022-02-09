@@ -2,6 +2,7 @@
 using SMPlayer.Helpers;
 using SMPlayer.Models;
 using SMPlayer.Models.DAO;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -114,9 +115,9 @@ namespace SMPlayer
             }
             string paren = Helper.LocalizeMessage("PostParenthesis");
             HyperlinkButton button = (HyperlinkButton)sender;
-            List<MusicView> skipped = new List<MusicView>();
-            int count = Settings.AllSongs.Count(), counter = 0;
-            foreach (MusicView music in Settings.AllSongs)
+            List<Music> skipped = new List<Music>();
+            int count = MusicService.AllSongs.Count(), counter = 0;
+            foreach (Music music in MusicService.AllSongs)
             {
                 if (addLyricsClickCounter == 0)
                 {
@@ -142,7 +143,7 @@ namespace SMPlayer
             }
             while (skipped.Count > 0)
             {
-                foreach (MusicView music in skipped.ToList())
+                foreach (Music music in skipped.ToList())
                 {
                     if (addLyricsClickCounter == 0)
                     {

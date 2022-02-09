@@ -195,18 +195,19 @@ namespace SMPlayer.Helpers
             src.Id = dao.Id;
             return dao;
         }
-        public static PlaylistDAO InsertPlaylist(this SQLiteConnection c, PlaylistView src)
+        public static PlaylistDAO InsertPlaylist(this SQLiteConnection c, Playlist src)
         {
-            PlaylistDAO dao = src.ToPlaylist().ToDAO();
+            src.Priority = c.SelectAllPlaylists().Count;
+            PlaylistDAO dao = src.ToDAO();
             c.Insert(dao);
             c.InsertAll(dao.Songs.Select(i => { i.PlaylistId = dao.Id; return i; }));
             src.Id = dao.Id;
             return dao;
         }
 
-        public static PlaylistDAO UpdatePlaylist(this SQLiteConnection c, PlaylistView src)
+        public static PlaylistDAO UpdatePlaylist(this SQLiteConnection c, Playlist src)
         {
-            PlaylistDAO dao = src.ToPlaylist().ToDAO();
+            PlaylistDAO dao = src.ToDAO();
             c.Update(dao);
             return dao;
         }
@@ -365,9 +366,8 @@ namespace SMPlayer.Helpers
 
         public static List<Playlist> SelectAllPlaylists(this SQLiteConnection c, Func<Playlist, bool> predicate = null)
         {
-            return c.Query<PlaylistDAO>("select * from Playlist where State = ?", ActiveState.Active)
+            return c.Query<PlaylistDAO>("select * from Playlist where Id != ? and State = ?", Settings.settings.MyFavoritesId, ActiveState.Active)
                     .Select(i => i.FromDAO())
-                    .Where(i => predicate == null || predicate.Invoke(i))
                     .OrderBy(i => i.Priority)
                     .ToList();
         }

@@ -1,6 +1,8 @@
 ﻿using SMPlayer.Controls;
 using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
 using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +21,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class ArtistsPage : Page, IMusicEventListener, ISwitchMusicListener, IMenuFlyoutItemClickListener, IMultiSelectListener, IInitListener, IStorageItemEventListener
+    public sealed partial class ArtistsPage : Page, IMusicEventListener, IMusicPlayerEventListener, IMenuFlyoutItemClickListener, IMultiSelectListener, IInitListener, IStorageItemEventListener
     {
         public static ArtistsPage Instance { get => MainPage.Instance.NavigationFrame.Content as ArtistsPage; }
         private ObservableCollection<ArtistView> Artists = new ObservableCollection<ArtistView>();
@@ -50,15 +52,15 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            Settings.AddMusicEventListener(this);
-            Settings.AddStorageItemEventListener(this);
-            MusicPlayer.AddSwitchMusicListener(this);
+            MusicService.AddMusicEventListener(this);
+            StorageService.AddStorageItemEventListener(this);
+            MusicPlayer.AddMusicPlayerEventListener(this);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (Artists.IsEmpty()) Setup(Settings.AllSongs);
+            if (Artists.IsEmpty()) Setup(MusicService.AllSongs);
             targetArtist = e.Parameter;
         }
 
@@ -116,17 +118,10 @@ namespace SMPlayer
             }
         }
 
-        private async void Setup(IEnumerable<MusicView> songs)
+        private async void Setup(IEnumerable<Music> songs)
         {
             if (IsProcessing) return;
-            LoadingProgress.Visibility = Visibility.Visible;
-            await SetData(songs);
-            LoadingProgress.Visibility = Visibility.Collapsed;
-        }
-
-        private async Task SetData(IEnumerable<MusicView> songs)
-        {
-            IsProcessing = true;
+            LoadingProgress.Visibility = Visibility.Visible; IsProcessing = true;
             List<ArtistView> artists = new List<ArtistView>();
             await Task.Run(() =>
             {
@@ -147,6 +142,7 @@ namespace SMPlayer
             SetHeader();
             initListener?.Inited();
             IsProcessing = false;
+            LoadingProgress.Visibility = Visibility.Collapsed;
         }
 
         public void SetHeader()
@@ -182,17 +178,12 @@ namespace SMPlayer
             args.ItemContainer.Background = PlaylistControl.GetRowBackground(args.ItemIndex);
         }
 
-        private void FindMusicAndSetPlaying(MusicView target)
+        private void FindMusicAndSetPlaying(Music target)
         {
             foreach (var artist in Artists)
                 foreach (var album in artist.Albums)
                     foreach (var music in album.Songs)
                         music.IsPlaying = music.Equals(target);
-        }
-
-        public async void MusicSwitching(MusicView current, MusicView next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
-        {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () => FindMusicAndSetPlaying(next));
         }
 
         private void ArtistMenuFlyout_Opening(object sender, object e)
@@ -238,7 +229,7 @@ namespace SMPlayer
             MenuFlyout flyout = sender as MenuFlyout;
             var album = flyout.Target.DataContext as AlbumView;
             flyout.Items.Add(MenuFlyoutHelper.GetPreferItem(album));
-            flyout.Items.Add(MenuFlyoutHelper.GetSeeAlbumFlyout(album.Songs[0]));
+            flyout.Items.Add(MenuFlyoutHelper.GetSeeAlbumFlyout(album.Songs[0].FromVO()));
         }
         private void OpenMusicMenuFlyout(object sender, object e)
         {
@@ -319,7 +310,7 @@ namespace SMPlayer
                 case MultiSelectEvent.Play:
                     List<MusicView> selectedItems = SelectedItems;
                     if (selectedItems.Count == 0) return;
-                    MusicPlayer.SetPlaylistAndPlay(SelectedItems);
+                    MusicPlayer.SetMusicAndPlay(SelectedItems);
                     break;
                 case MultiSelectEvent.SelectAll:
                     foreach (var listView in listViews)
@@ -333,6 +324,7 @@ namespace SMPlayer
                             // NotSupportException 没有加载完成导致部分ListView.SelectionMode还是None
                         }
                     }
+                    Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(SelectedItems.Count);
                     break;
                 case MultiSelectEvent.ReverseSelections:
                     foreach (var listView in listViews)
@@ -346,6 +338,7 @@ namespace SMPlayer
 
                         }
                     }
+                    Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(SelectedItems.Count);
                     break;
                 case MultiSelectEvent.ClearSelections:
                     foreach (var listView in listViews)
@@ -404,7 +397,7 @@ namespace SMPlayer
             SelectArtist(targetArtist);
         }
 
-        void IMusicEventListener.Execute(MusicView music, MusicEventArgs args)
+        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
             if (IsFolderUpdated) return;
             ArtistView artist = Artists.FirstOrDefault(a => a.Name == music.Artist);
@@ -413,18 +406,18 @@ namespace SMPlayer
                 case MusicEventType.Add:
                     if (artist != null)
                     {
-                        artist.AddMusic(music);
+                        artist.AddMusic(music.ToVO());
                     }
                     else
                     {
-                        artist = new ArtistView(music);
+                        artist = new ArtistView(music.ToVO());
                         Artists.InsertWithOrder(artist);
                     }
                     break;
                 case MusicEventType.Remove:
                     if (artist != null)
                     {
-                        artist.RemoveMusic(music);
+                        artist.RemoveMusic(music.ToVO());
                         if (artist.Songs.IsEmpty())
                         {
                             Artists.Remove(artist);
@@ -432,7 +425,7 @@ namespace SMPlayer
                     }
                     break;
                 case MusicEventType.Modify:
-                    MusicView before = music, after = args.ModifiedMusic;
+                    Music before = music, after = args.ModifiedMusic;
                     if (artist.Equals(ArtistMasterDetailsView.SelectedItem) || !artist.NotLoaded) artist.Load();
                     if (SuggestionList.Contains(after.Artist))
                     {
@@ -451,7 +444,7 @@ namespace SMPlayer
                     {
                         int index = SuggestionList.FindSortedListInsertIndex(after.Artist);
                         SuggestionList.Insert(index, after.Artist);
-                        Artists.Insert(index, new ArtistView(after));
+                        Artists.Insert(index, new ArtistView(after.ToVO()));
                     }
                     if (before.Artist != after.Artist && artist.Songs.IsEmpty())
                     {
@@ -462,10 +455,6 @@ namespace SMPlayer
             }
         }
 
-        void IStorageItemEventListener.ExecuteFileEvent(FolderFile file, StorageItemEventArgs args)
-        {
-        }
-
         private void SongsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListViewBase listViewBase = (sender as ListViewBase);
@@ -473,6 +462,20 @@ namespace SMPlayer
             {
                 Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(listViewBase.SelectedItems.Count);
             }
+        }
+
+        async void IMusicPlayerEventListener.Execute(MusicPlayerEventArgs args)
+        {
+            switch (args.EventType)
+            {
+                case MusicPlayerEventType.Switch:
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.High, () => FindMusicAndSetPlaying(args.Music));
+                    break;
+            }
+        }
+
+        void IStorageItemEventListener.ExecuteFileEvent(FolderFile file, StorageItemEventArgs args)
+        {
         }
 
         void IStorageItemEventListener.ExecuteFolderEvent(FolderTree folder, StorageItemEventArgs args)

@@ -71,11 +71,6 @@ namespace SMPlayer
             PreferredPlaylistsCheckBox.IsChecked = settings.Playlists;
             PreferredFoldersCheckBox.IsChecked = settings.Folders;
 
-            PreferredOthers.Add(BuildView(PreferenceSettings.FindRecentAdded, EntityType.RecentAdded));
-            PreferredOthers.Add(BuildView(PreferenceSettings.FindMyFavorites, EntityType.MyFavorites));
-            PreferredOthers.Add(BuildView(PreferenceSettings.FindMostPlayed, EntityType.MostPlayed));
-            PreferredOthers.Add(BuildView(PreferenceSettings.FindLeastPlayed, EntityType.LeastPlayed));
-
             PreferredSongs.SetTo(ConvertToViews(PreferenceSettings.FindPreferredSongs, EntityType.Song));
             PreferredArtists.SetTo(ConvertToViews(PreferenceSettings.FindPreferredArtists, EntityType.Artist));
             PreferredAlbums.SetTo(ConvertToViews(PreferenceSettings.FindPreferredAlbums, EntityType.Album));
@@ -108,6 +103,12 @@ namespace SMPlayer
             ExpandPreferredSongsButton.Label = ExpandPreferredArtistsButton.Label = ExpandPreferredAlbumsButton.Label
                                              = ExpandPreferredPlaylistsButton.Label = ExpandPreferredFoldersButton.Label
                                              = Helper.LocalizeText("ExpandList");
+
+            PreferredOthers.Clear();
+            PreferredOthers.Add(BuildView(PreferenceSettings.FindRecentAdded, EntityType.RecentAdded));
+            PreferredOthers.Add(BuildView(PreferenceSettings.FindMyFavorites, EntityType.MyFavorites));
+            PreferredOthers.Add(BuildView(PreferenceSettings.FindMostPlayed, EntityType.MostPlayed));
+            PreferredOthers.Add(BuildView(PreferenceSettings.FindLeastPlayed, EntityType.LeastPlayed));
         }
 
         private void SetExpandButtonVisibility(EntityType type)
@@ -131,7 +132,7 @@ namespace SMPlayer
             switch (type)
             {
                 case EntityType.Song:
-                    MusicView music = MusicService.FindMusic(item.LongId);
+                    Music music = MusicService.FindMusic(item.LongId);
                     if (music == null)
                     {
                         view.IsValid = false;
@@ -156,7 +157,7 @@ namespace SMPlayer
                     view.IsValid = MusicService.SelectByAlbum(view.ItemId).IsNotEmpty();
                     break;
                 case EntityType.Playlist:
-                    PlaylistView playlist = PlaylistService.FindPlaylistView(item.LongId);
+                    Playlist playlist = PlaylistService.FindPlaylist(item.LongId);
                     view.ToolTip = view.Name = playlist?.Name;
                     view.IsValid = playlist != null;
                     break;
@@ -405,7 +406,7 @@ namespace SMPlayer
         private void PreferredFoldersListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             PreferredListView_ItemClick(sender, e,
-                                        view => MainPage.Instance.NavigateToPage(typeof(LocalPage), StorageService.FindFolderInfo(view.LongId)));
+                                        view => MainPage.Instance.NavigateToPage(typeof(LocalPage), StorageService.FindFolder(view.LongId)));
         }
 
         private void PreferredListView_ItemClick(object sender, ItemClickEventArgs e, Action<PreferenceItemView> action)

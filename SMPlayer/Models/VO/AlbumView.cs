@@ -64,10 +64,10 @@ namespace SMPlayer.Models
             Songs = new ObservableCollection<MusicView>(songs);
             if (setThumbnail) SetThumbnail();
         }
-        public AlbumView(string name, IEnumerable<MusicView> songs, bool setThumbnail = true)
+        public AlbumView(string name, IEnumerable<Music> songs, bool setThumbnail = true)
         {
             Name = name;
-            Songs = new ObservableCollection<MusicView>(songs);
+            Songs = new ObservableCollection<MusicView>(songs.Select(i => i.ToVO()));
             List<string> artists = songs.GroupBy(m => m.Artist).OrderByDescending(i => i.Count()).Select(i => i.Key).ToList();
             if (artists.Count() >= 3)
             {
@@ -120,9 +120,9 @@ namespace SMPlayer.Models
         {
             Songs.Remove(music);
         }
-        public void SetSongs(IEnumerable<MusicView> music)
+        public void SetSongs(IEnumerable<Music> music)
         {
-            Songs = new ObservableCollection<MusicView>(music);
+            Songs = new ObservableCollection<MusicView>(music.Select(i => i.ToVO()));
         }
 
         public PlaylistView ToPlaylist()

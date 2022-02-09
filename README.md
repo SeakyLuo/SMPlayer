@@ -16,8 +16,6 @@ Go to Settings and set the Root Folder of your music files.
 # TO DO
 Improve editing album art by selecting a song in a dropdown with searching.
 
-Page shows no music hint.
-
 Album properties.
 
 Album art in NowPlayingFull.
@@ -33,20 +31,14 @@ Dark thumb in the mini mode.
 
 MultiSelectCommandBar is too high.
 
-RecentPivot loses header after switching back.
-
-PlayFirst has wrong order when there are identical songs.
+MediaControl has update latency.
 
 # MIGHT DO
-Improve path header display (like Windows).
-
 Save SearchKeyword instead of a string.
 
 Mini mode media control fade in/out.
 
 Shuffle after one round of playing.
-
-If a playlist contains this music collection, skip it in the MenuFlyout.
 
 Disallow dialog closing when processing request.
 

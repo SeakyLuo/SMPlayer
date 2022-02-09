@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using System.Collections.Specialized;
 using SMPlayer.Helpers;
 using SMPlayer.Services;
+using SMPlayer.Interfaces;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -35,8 +36,8 @@ namespace SMPlayer
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             AlbumArtControl.ImageSavedListeners.Add(this);
-            Settings.AddMusicEventListener(this);
-            Settings.AddStorageItemEventListener(this);
+            MusicService.AddMusicEventListener(this);
+            StorageService.AddStorageItemEventListener(this);
         }
 
 
@@ -56,7 +57,7 @@ namespace SMPlayer
             // 加一个异步，主要是为了AlbumPageProgressRing能转起来
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                foreach (var group in Settings.AllSongs.GroupBy(m => m.Album))
+                foreach (var group in MusicService.AllSongs.GroupBy(m => m.Album))
                 {
                     Albums.Add(new AlbumView(group.Key, group, false));
                 }
@@ -205,9 +206,11 @@ namespace SMPlayer
                     break;
                 case MultiSelectEvent.SelectAll:
                     AlbumsGridView.SelectAll();
+                    Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(AlbumsGridView.SelectedItems.Count);
                     break;
                 case MultiSelectEvent.ReverseSelections:
                     AlbumsGridView.ReverseSelections();
+                    Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(AlbumsGridView.SelectedItems.Count);
                     break;
                 case MultiSelectEvent.ClearSelections:
                     AlbumsGridView.ClearSelections();
@@ -215,7 +218,7 @@ namespace SMPlayer
             }
         }
 
-        void IMusicEventListener.Execute(MusicView music, MusicEventArgs args)
+        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
             if (IsFolderUpdated) return;
             AlbumView album = Albums.FirstOrDefault(a => a.Name == music.Album);
@@ -224,11 +227,11 @@ namespace SMPlayer
                 case MusicEventType.Add:
                     if (album != null)
                     {
-                        album.AddMusic(music);
+                        album.AddMusic(music.ToVO());
                     }
                     else
                     {
-                        album = new AlbumView(music);
+                        album = new AlbumView(music.ToVO());
                         int index = Albums.FindSortedListInsertIndex(album, a =>
                         {
                             switch (Settings.settings.AlbumsCriterion)
@@ -251,7 +254,7 @@ namespace SMPlayer
                 case MusicEventType.Remove:
                     if (album != null)
                     {
-                        album.RemoveMusic(music);
+                        album.RemoveMusic(music.ToVO());
                         if (album.Songs.IsEmpty())
                         {
                             Suggestions.Remove(album);

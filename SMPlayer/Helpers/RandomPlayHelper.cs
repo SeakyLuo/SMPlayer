@@ -12,7 +12,7 @@ namespace SMPlayer.Helpers
     {
         public static void PlayMusic(int randomLimit = 100)
         {
-            MusicPlayer.SetPlaylistAndPlay(Settings.AllSongs.RandItems(randomLimit));
+            MusicPlayer.SetPlaylistAndPlay(MusicService.AllSongs.RandItems(randomLimit));
         }
 
         public static string PlayArtist(int randomLimit = 100)
@@ -28,17 +28,18 @@ namespace SMPlayer.Helpers
             MusicPlayer.SetPlaylistAndPlay(MusicService.SelectByAlbum(album).RandItems(randomLimit));
             return album;
         }
-        public static PlaylistView PlayPlaylist(int randomLimit = 100)
+
+        public static string PlayPlaylist(int randomLimit = 100)
         {
-            List<PlaylistView> allPlaylists = PlaylistService.AllPlaylistViews;
-            PlaylistView playlist;
+            List<Playlist> allPlaylists = PlaylistService.AllPlaylists;
+            Playlist playlist;
             do
             {
                 playlist = allPlaylists.RandItem();
-                playlist.Songs = new System.Collections.ObjectModel.ObservableCollection<MusicView>(PlaylistService.FindPlaylistItemViews(playlist.Id));
+                playlist.Songs = PlaylistService.FindPlaylistItems(playlist.Id);
             } while (playlist.IsEmpty);
             MusicPlayer.SetPlaylistAndPlay(playlist.Songs.RandItems(randomLimit));
-            return playlist;
+            return playlist.Name;
         }
 
         public static string PlayFolder(int randomLimit = 100)

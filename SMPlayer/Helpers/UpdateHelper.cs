@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Dialogs;
+using SMPlayer.Interfaces;
 using SMPlayer.Models;
 using SMPlayer.Models.DAO;
 using SMPlayer.Services;
@@ -40,14 +41,13 @@ namespace SMPlayer.Helpers
             Helper.CurrentFolder = folder;
             Settings.settings.Tree = tree;
             Settings.settings.RootPath = folder.Path;
-            await MainPage.Instance.Loader.ResetAsync("ResyncData", Settings.StorageItemEventListeners.Count);
-            for (int i = 0; i < Settings.StorageItemEventListeners.Count; i++)
+            await MainPage.Instance.Loader.ResetAsync("ResyncData", StorageService.StorageItemEventListeners.Count);
+            for (int i = 0; i < StorageService.StorageItemEventListeners.Count; i++)
             {
-                var listener = Settings.StorageItemEventListeners[i];
+                var listener = StorageService.StorageItemEventListeners[i];
                 listener.ExecuteFolderEvent(Settings.settings.Tree, new StorageItemEventArgs(StorageItemEventType.Reset));
                 await MainPage.Instance.Loader.IncrementAsync();
             }
-            MusicPlayer.RemoveBadMusic();
             App.Save();
             LoadingStatus = ExecutionStatus.Done;
             MainPage.Instance.Loader.Hide();
@@ -143,7 +143,7 @@ namespace SMPlayer.Helpers
                 if (item.Id == 0)
                 {
                     item.ParentId = folder.Id;
-                    await Settings.settings.AddFile(item);
+                    await StorageService.AddFile(item);
                     result?.AddFile(item.Path);
                     Log.Debug("file is added, path {0}", item.Path);
                     await MainPage.Instance.Loader.IncrementAsync();
@@ -153,7 +153,7 @@ namespace SMPlayer.Helpers
                     if (item.State.IsInactive())
                     {
                         result?.RemoveFile(item.Path);
-                        Settings.settings.RemoveFile(item);
+                        StorageService.RemoveFile(item);
                         Log.Info("file is deleted, path {0}", item.Path);
                     }
                 }
@@ -185,7 +185,7 @@ namespace SMPlayer.Helpers
         private static void RemoveFile(FolderFile item, FolderUpdateResult result = null)
         {
             result?.RemoveFile(item.Path);
-            Settings.settings.RemoveFile(item);
+            StorageService.RemoveFile(item);
             Log.Info("file is deleted, path {0}", item.Path);
         }
 
@@ -285,7 +285,7 @@ namespace SMPlayer.Helpers
         public static void NotifyFolderEvent(FolderTree folder, StorageItemEventType type)
         {
             StorageItemEventArgs args = new StorageItemEventArgs(type);
-            foreach (var listener in Settings.StorageItemEventListeners)
+            foreach (var listener in StorageService.StorageItemEventListeners)
                 listener.ExecuteFolderEvent(folder, args);
         }
     }

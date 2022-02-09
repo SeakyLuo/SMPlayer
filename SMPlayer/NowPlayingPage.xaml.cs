@@ -1,4 +1,6 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Interfaces;
+using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Threading.Tasks;
 using Windows.Media.Playback;
@@ -13,13 +15,13 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class NowPlayingPage : Page, ISwitchMusicListener
+    public sealed partial class NowPlayingPage : Page, IMusicPlayerEventListener
     {
         public NowPlayingPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MusicPlayer.AddSwitchMusicListener(this);
+            MusicPlayer.AddMusicPlayerEventListener(this);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -32,13 +34,13 @@ namespace SMPlayer
         {
             LocateCurrentButton.Visibility = SaveToButton.Visibility = ClearButton.Visibility = PlayModeButton.Visibility = 
                                             MusicPlayer.CurrentPlaylist.IsEmpty() ? Visibility.Collapsed : Visibility.Visible;
-            RandomPlayButton.Visibility = Settings.AllSongs.IsEmpty() ? Visibility.Collapsed : Visibility.Visible;
+            RandomPlayButton.Visibility = MusicService.AllSongs.IsEmpty() ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void SaveToButton_Click(object sender, RoutedEventArgs e)
         {
             var name = Helper.Localize("Now Playing") + " - " + DateTime.Now.ToString("yy/MM/dd");
-            int index = Settings.settings.FindNextPlaylistNameIndex(name);
+            int index = PlaylistService.FindNextPlaylistNameIndex(name);
             var defaultName = index == 0 ? name : Helper.GetNextName(name, index);
             var helper = new MenuFlyoutHelper
             {
@@ -75,7 +77,7 @@ namespace SMPlayer
             MainPage.Instance.NavigateToPage(typeof(PreferenceSettingsPage));
         }
 
-        async void ISwitchMusicListener.MusicSwitching(MusicView current, MusicView next, MediaPlaybackItemChangedReason reason)
+        async void IMusicPlayerEventListener.Execute(MusicPlayerEventArgs args)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
             {

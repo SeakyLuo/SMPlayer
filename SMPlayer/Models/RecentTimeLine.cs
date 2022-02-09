@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SMPlayer.Helpers;
+using SMPlayer.Services;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -58,14 +60,14 @@ namespace SMPlayer.Models
             TimeLine.RemoveAll(i => i.Path.StartsWith(path));
         }
 
-        public static RecentTimeLine FromMusicList(IEnumerable<MusicView> list)
+        public static RecentTimeLine FromMusicList(IEnumerable<Music> list)
         {
-            return new RecentTimeLine(list?.OrderByDescending(m => m.DateAdded).Take(MAX_RECENT_TIMELINE_ITEMS));
+            return new RecentTimeLine(list?.OrderByDescending(m => m.DateAdded).Take(MAX_RECENT_TIMELINE_ITEMS).Select(i => i.ToVO()));
         }
 
         public static RecentTimeLine FromAllSongs()
         {
-            return FromMusicList(Settings.AllSongs);
+            return FromMusicList(MusicService.AllSongs);
         }
 
         public static string Categorize(DateTimeOffset dateAdded)
@@ -81,7 +83,7 @@ namespace SMPlayer.Models
             {
                 return "Yesterday";
             }
-            if (formatedDateAdded == now.AddDays(-7).ToString(dateFormat))
+            if (dateAdded > now.AddDays(-7))
             {
                 return "Recent7Days";
             }
@@ -89,7 +91,7 @@ namespace SMPlayer.Models
             {
                 return "ThisMonth";
             }
-            if (formatedDateAdded == now.AddDays(-30).ToString(dateFormat))
+            if (dateAdded > now.AddDays(-30))
             {
                 return "Recent30Days";
             }

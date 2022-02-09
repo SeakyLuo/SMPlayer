@@ -10,6 +10,7 @@ using System;
 using SMPlayer.Controls;
 using SMPlayer.Interfaces;
 using SMPlayer.Helpers;
+using SMPlayer.Services;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -76,10 +77,6 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
-            SearchMusicView.MultiSelectOption = new MultiSelectCommandBarOption
-            {
-                ShowRemove = false
-            };
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -243,19 +240,19 @@ namespace SMPlayer
             }
         }
 
-        private List<MusicView> GetSelectItems()
+        private List<Music> GetSelectItems()
         {
-            List<MusicView> list = new List<MusicView>();
+            List<Music> list = new List<Music>();
             foreach (AlbumView item in AlbumsGridView.SelectedItems)
-                list.AddRange(item.Songs);
+                list.AddRange(item.Songs.Select(i => i.FromVO()));
             foreach (MusicView item in SearchMusicView.SelectedItems)
-                list.Add(item);
+                list.Add(item.FromVO());
             foreach (AlbumView item in PlaylistsGridView.SelectedItems)
-                list.AddRange(item.Songs);
+                list.AddRange(item.Songs.Select(i => i.FromVO()));
             foreach (GridViewFolder item in FoldersGridView.SelectedItems)
                 list.AddRange(item.Songs);
             foreach (PlaylistView item in ArtistsGridView.SelectedItems)
-                list.AddRange(item.Songs);
+                list.AddRange(item.Songs.Select(i => i.FromVO()));
             return list;
         }
 
@@ -306,7 +303,7 @@ namespace SMPlayer
                     FoldersGridView.SelectionMode = ListViewSelectionMode.None;
                     break;
                 case MultiSelectEvent.AddTo:
-                    args.FlyoutHelper.DefaultPlaylistName = Settings.settings.FindNextPlaylistName(CurrentKeyword.Text);
+                    args.FlyoutHelper.DefaultPlaylistName = PlaylistService.FindNextPlaylistName(CurrentKeyword.Text);
                     args.FlyoutHelper.Data = GetSelectItems();
                     break;
                 case MultiSelectEvent.Play:

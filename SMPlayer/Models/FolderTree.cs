@@ -15,7 +15,7 @@ namespace SMPlayer.Models
     {
         public List<FolderTree> Trees { get; set; } = new List<FolderTree>();
         public List<FolderFile> Files { get; set; } = new List<FolderFile>();
-        public List<MusicView> Songs { get => MusicService.FindMusicList(Files.Select(i => i.FileId)); }
+        public List<Music> Songs { get => MusicService.FindMusicList(Files.Select(i => i.FileId)); }
         public SortBy Criterion { get; set; } = SortBy.Title;
         public string Info => GetFolderInfo(Trees.Count, Files.Count);
         public bool IsEmpty { get => Files.IsEmpty() && Trees.All(tree => tree.IsEmpty); }
@@ -52,24 +52,18 @@ namespace SMPlayer.Models
             Trees.Sort((t1, t2) => t1.Name.CompareTo(t2.Name));
         }
 
-        public void AddFile(FolderFile file)
-        {
-            Files.Add(file);
-            SortFiles();
-        }
-
         public bool ContainsFile(string path)
         {
             return FindFile(path) != null;
         }
 
-        public List<MusicView> Flatten()
+        public List<Music> Flatten()
         {
             if (IsEmpty)
             {
                 CopyFrom(StorageService.FindFolder(Id));
             }
-            List<MusicView> list = new List<MusicView>();
+            List<Music> list = new List<Music>();
             foreach (var branch in Trees)
                 list.AddRange(branch.Flatten());
             list.AddRange(Songs);
@@ -81,21 +75,10 @@ namespace SMPlayer.Models
             if (criterion != null) Criterion = (SortBy)criterion;
             Files = Files.Select(f => new { File = f, Music = MusicService.FindMusic(f.FileId) })
                          .Where(i => i.Music != null)
-                         .OrderBy(i =>
-                         {
-                             switch (Criterion)
-                             {
-                                 case SortBy.Artist:
-                                     return i.Music.Artist;
-                                 case SortBy.Album:
-                                     return i.Music.Album;
-                                 default:
-                                     return i.Music.Name;
-                             }
-                         }).Select(i => i.File).ToList();
+                         .OrderBy(i => i.Music.GetComparable(Criterion)).Select(i => i.File).ToList();
         }
 
-        public List<MusicView> Reverse()
+        public List<Music> Reverse()
         {
             Files.Reverse();
             return Songs;

@@ -257,7 +257,13 @@
     <Compile Include="Helpers\VoiceAssistant\VoiceAssistantChineseHelper.cs" />
     <Compile Include="Helpers\VoiceAssistant\VoiceAssistantEnglishHelper.cs" />
     <Compile Include="Helpers\VoiceAssistant\VoiceAssistantHelper.cs" />
+    <Compile Include="Interfaces\IMusicEventListener.cs" />
+    <Compile Include="Interfaces\IMusicPlayerEventListener.cs" />
+    <Compile Include="Interfaces\IPlaylistEventListener.cs" />
+    <Compile Include="Interfaces\IRecentEventListener.cs" />
     <Compile Include="Interfaces\ISearchEvaluator.cs" />
+    <Compile Include="Interfaces\ISortable.cs" />
+    <Compile Include="Interfaces\IStorageItemEventListener.cs" />
     <Compile Include="Models\Album.cs" />
     <Compile Include="Models\Artist.cs" />
     <Compile Include="Models\Enums\ActiveState.cs" />
@@ -297,9 +303,6 @@
     <Compile Include="Models\VO\GridViewStorageItem.cs" />
     <Compile Include="Models\VO\PreferenceItemView.cs" />
     <Compile Include="Models\VO\PropertyChangedNotifier.cs" />
-    <Compile Include="Models\VO\TreeViewFile.cs" />
-    <Compile Include="Models\VO\TreeViewFolder.cs" />
-    <Compile Include="Models\VO\TreeViewStorageItem.cs" />
     <Compile Include="PreferenceSettingsPage.xaml.cs">
       <DependentUpon>PreferenceSettingsPage.xaml</DependentUpon>
     </Compile>
@@ -309,6 +312,7 @@
     <Compile Include="Services\MusicService.cs" />
     <Compile Include="Services\PlaylistService.cs" />
     <Compile Include="Services\PreferenceService.cs" />
+    <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Services\StorageService.cs" />
     <Compile Include="TemplateSelector\GridViewStorageItemTemplateSelector.cs" />
     <Compile Include="TemplateSelector\TreeViewStorageItemTemplateSelector.cs" />

@@ -1,4 +1,5 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Helpers;
+using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -49,11 +50,11 @@ namespace SMPlayer.Controls
             AlbumArt.Visibility = Visibility.Collapsed;
         }
 
-        public async void SetAlbumArt(MusicView music)
+        public async void SetAlbumArt(Music music)
         {
-            CurrentMusic = music;
+            CurrentMusic = music.ToVO();
             RemoveAlbumArtWarningTextBlock.Text = Helper.LocalizeMessage("RemoveAlbumArt", CurrentMusic.Name);
-            var thumbnail = await Helper.GetStorageItemThumbnailAsync(music, 1024);
+            var thumbnail = await Helper.GetStorageItemThumbnailAsync(music.ToVO(), 1024);
             if (thumbnail.IsThumbnail())
             {
                 AlbumArt.Source = thumbnail.ToBitmapImage();

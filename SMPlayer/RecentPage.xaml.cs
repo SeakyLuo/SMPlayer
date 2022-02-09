@@ -4,6 +4,7 @@ using SMPlayer.Helpers;
 using SMPlayer.Models;
 using SMPlayer.Models.DAO;
 using SMPlayer.Models.VO;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,8 +34,7 @@ namespace SMPlayer
             set => recentTimeLine = value;
         }
         private static RecentTimeLine recentTimeLine;
-        private const string JsonFileName = "RecentAddedTimeLine";
-        private static bool AddedModified = true, PlayedModifed = true, SearchModified = true;
+        private static bool PlayedModifed = true, SearchModified = true;
         private readonly ObservableCollection<string> RecentSearches = new ObservableCollection<string>();
         private RemoveDialog recentPlayedRemoveDialog, recentSearchesRemoveDialog;
         private string CurrentCategory;
@@ -44,8 +44,8 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            Settings.AddRecentEventListener(this);
-            Settings.AddMusicEventListener(this);
+            SettingsService.AddRecentEventListener(this);
+            MusicService.AddMusicEventListener(this);
 
             AddedMusicView.TopItemEffectiveViewportChanged += (sender, args) =>
             {
@@ -67,28 +67,9 @@ namespace SMPlayer
             };
         }
 
-        public static void Init()
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            RecentAdded = RecentTimeLine.FromAllSongs();
-        }
-
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            RecentAdded.CollectionChanged += (args) =>
-            {
-                if (args.Type == MusicEventType.Add)
-                {
-                    AddedMusicView.AddOrMoveToTheFirst(args.Item);
-                }
-                else
-                {
-                    AddedMusicView.RemoveMusic(args.Item);
-                }
-            };
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            {
-                SetupAdded();
-            });
+            SetupAdded();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -122,6 +103,17 @@ namespace SMPlayer
             if (RecentAdded == null) return;
             RecentAddedProgressRing.IsActive = true;
             ObservableCollection<MusicView> list = RecentAdded.TimeLine;
+            RecentAdded.CollectionChanged += (args) =>
+            {
+                if (args.Type == MusicEventType.Add)
+                {
+                    AddedMusicView.AddOrMoveToTheFirst(args.Item);
+                }
+                else
+                {
+                    AddedMusicView.RemoveMusic(args.Item);
+                }
+            };
             SetupAddedButtonState(list);
             AddedMusicView.Setup(list);
             RecentAddedProgressRing.IsActive = false;
@@ -136,13 +128,13 @@ namespace SMPlayer
         {
             if (!PlayedModifed) return;
             RecentPlayedProgressRing.IsActive = true;
-            IEnumerable<MusicView> list = Settings.RecentPlay.Select(i => i.ToVO());
+            IEnumerable<MusicView> list = SettingsService.RecentPlayed.Select(i => i.ToVO());
             SetupPlayedButtonState(list);
             PlayedMusicView.Setup(list);
             RecentPlayedProgressRing.IsActive = PlayedModifed = false;
         }
 
-        private void SetupPlayedButtonState(IEnumerable<MusicView> list)
+        private void SetupPlayedButtonState(IEnumerable<IMusicable> list)
         {
             RecentPlayedMultiSelectAppButton.IsEnabled = list.IsNotEmpty();
             ClearPlayHistoryAppButton.IsEnabled = list.IsNotEmpty();
@@ -159,7 +151,7 @@ namespace SMPlayer
         {
             if (!SearchModified) return;
             ResetSearchHistoryRowColor();
-            IEnumerable<string> list = Settings.RecentSearch;
+            IEnumerable<string> list = SettingsService.RecentSearch;
             RecentSearches.SetTo(list);
             SetupSearchedButtonState(list);
             SearchModified = false;
@@ -266,12 +258,12 @@ namespace SMPlayer
         private void RemoveRecentPlayed(GridViewMusic item)
         {
             PlayedMusicView.RemoveMusic(item.Source);
-            Settings.settings.RemoveRecentPlayed(item.Source);
-            SetupPlayedButtonState(PlayedMusicView.MusicCollection);
+            SettingsService.RemoveRecentPlayed(item.Source);
+            SetupPlayedButtonState(PlayedMusicView.GridMusicCollection);
             MainPage.Instance.ShowUndoableNotification(Helper.LocalizeMessage("ItemRemoved", item.Name), () =>
             {
                 PlayedMusicView.UndoDelete(item.Source);
-                Settings.settings.UndoRemoveRecentPlayed(item.Source);
+                SettingsService.UndoRemoveRecentPlayed(item.Source);
             });
         }
 
@@ -280,13 +272,13 @@ namespace SMPlayer
             int index = RecentSearches.IndexOf(item);
             RecentSearches.RemoveAt(index);
             ResetSearchHistoryRowColor(index);
-            Settings.settings.RemoveSearchHistory(item);
+            SettingsService.RemoveSearchHistory(item);
             SetupSearchedButtonState(RecentSearches);
             MainPage.Instance.ShowUndoableNotification(Helper.LocalizeMessage("ItemRemoved", item), () =>
             {
                 RecentSearches.Insert(index, item);
                 ResetSearchHistoryRowColor(index);
-                Settings.settings.UndoRemoveSearchHistory(item);
+                SettingsService.UndoRemoveSearchHistory(item);
                 SetupSearchedButtonState(RecentSearches);
             });
         }
@@ -354,7 +346,7 @@ namespace SMPlayer
         {
             await Helper.ShowYesNoDialog("ClearPlayHistory", () =>
             {
-                Settings.settings.RemoveRecentPlayed();
+                SettingsService.RemoveRecentPlayed();
                 PlayedModifed = true;
                 SetupPlayed();
             });
@@ -364,7 +356,7 @@ namespace SMPlayer
         {
             await Helper.ShowYesNoDialog("ClearSearchHistory", () =>
             {
-                Settings.settings.RemoveSearchHistory();
+                SettingsService.RemoveSearchHistory();
                 SearchModified = true;
                 SetupSearched();
             });
@@ -397,15 +389,23 @@ namespace SMPlayer
                     break;
                 case MultiSelectEvent.SelectAll:
                     if (CurrentMultiSelectItem == RecentType.Search)
+                    {
                         SearchHistoryListView.SelectAll();
+                        Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(SearchHistoryListView.SelectedItems.Count);
+                    }
                     break;
                 case MultiSelectEvent.ClearSelections:
                     if (CurrentMultiSelectItem == RecentType.Search)
+                    {
                         SearchHistoryListView.ClearSelections();
+                    }
                     break;
                 case MultiSelectEvent.ReverseSelections:
                     if (CurrentMultiSelectItem == RecentType.Search)
+                    {
                         SearchHistoryListView.ReverseSelections();
+                        Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(SearchHistoryListView.SelectedItems.Count);
+                    }
                     break;
             }
         }
@@ -416,9 +416,9 @@ namespace SMPlayer
             foreach (GridViewMusic item in selected)
             {
                 PlayedMusicView.RemoveMusic(item.Source);
-                Settings.settings.RemoveRecentPlayed(item.Source);
+                SettingsService.RemoveRecentPlayed(item.Source);
             }
-            SetupPlayedButtonState(PlayedMusicView.MusicCollection);
+            SetupPlayedButtonState(PlayedMusicView.GridMusicCollection);
             MainPage.Instance.ShowNotification(Helper.LocalizeMessage("ItemsRemoved", selected.Count));
         }
 
@@ -428,7 +428,7 @@ namespace SMPlayer
             foreach (string item in selected)
             {
                 RecentSearches.Remove(item);
-                Settings.settings.RemoveSearchHistory(item);
+                SettingsService.RemoveSearchHistory(item);
             }
             ResetSearchHistoryRowColor();
             SetupSearchedButtonState(RecentSearches);
@@ -450,7 +450,7 @@ namespace SMPlayer
             {
                 return;
             }
-            helper.DefaultPlaylistName = Settings.settings.FindNextPlaylistName(playlistName);
+            helper.DefaultPlaylistName = PlaylistService.FindNextPlaylistName(playlistName);
         }
 
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
@@ -472,40 +472,44 @@ namespace SMPlayer
             }
         }
 
-        void IMusicEventListener.Execute(MusicView music, MusicEventArgs args)
+        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
             switch (args.EventType)
             {
                 case MusicEventType.Add:
-                    RecentAdded.Add(music);
+                    RecentAdded.Add(music.ToVO());
                     break;
                 case MusicEventType.Remove:
-                    RecentAdded.Remove(music);
+                    RecentAdded.Remove(music.ToVO());
                     break;
                 case MusicEventType.Like:
                     break;
                 case MusicEventType.Modify:
-                    RecentAdded.TimeLine.FirstOrDefault(i => i == music)?.CopyFrom(music);
+                    RecentAdded.TimeLine.FirstOrDefault(i => i.Equals(music))?.CopyFrom(music.ToVO());
                     break;
             }
         }
 
         void IRecentEventListener.Search(string keyword)
         {
-            SearchModified = true;
+            // 因为搜索一定会跳走页面，就不实时更新了
+            SearchModified = true; 
         }
 
-        void IRecentEventListener.Played(MusicView music)
+        async void IRecentEventListener.Played(Music music)
         {
-            if (MainPage.Instance?.CurrentPage == typeof(RecentPage) &&
-                RecentPivot.SelectedItem == RecentPlayedItem)
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
-                PlayedMusicView.AddOrMoveToTheFirst(music);
-            }
-            else
-            {
-                PlayedModifed = true;
-            }
+                if (MainPage.Instance?.CurrentPage == typeof(RecentPage) &&
+                    RecentPivot.SelectedItem == RecentPlayedItem)
+                {
+                    PlayedMusicView.AddOrMoveToTheFirst(music);
+                }
+                else
+                {
+                    PlayedModifed = true;
+                }
+            });
         }
     }
 
