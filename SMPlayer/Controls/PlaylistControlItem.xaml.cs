@@ -2,12 +2,13 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using System;
+using SMPlayer.Interfaces;
 
 //https://go.microsoft.com/fwlink/?LinkId=234236 上介绍了“用户控件”项模板
 
 namespace SMPlayer.Controls
 {
-    public sealed partial class PlaylistControlItem : UserControl, ISwitchMusicListener
+    public sealed partial class PlaylistControlItem : UserControl, IMusicPlayerEventListener
     {
         public bool ShowAlbumText
         {
@@ -25,17 +26,17 @@ namespace SMPlayer.Controls
         }
         public static readonly DependencyProperty ShowAlbumTextProperty = DependencyProperty.Register("ShowAlbumText", typeof(bool), typeof(PlaylistControlItem), new PropertyMetadata(true));
 
-        public Music Data { get; set; }
+        public MusicView Data { get; set; }
         public PlaylistControlItem()
         {
             this.InitializeComponent();
-            MusicPlayer.AddSwitchMusicListener(this);
+            MusicPlayer.AddMusicPlayerEventListener(this);
         }
 
         private void Album_Click(object sender, RoutedEventArgs e)
         {
             if (NowPlayingFullPage.Instance != null) NowPlayingFullPage.Instance.GoBack();
-            MainPage.Instance.NavigateToPage(typeof(AlbumPage), Settings.FindAlbum(Data.Album, Data.Artist));
+            MainPage.Instance.NavigateToPage(typeof(AlbumPage), Data.Album);
         }
         private void Artist_Click(object sender, RoutedEventArgs e)
         {
@@ -47,7 +48,7 @@ namespace SMPlayer.Controls
         public void SetTextColor(Music music)
         {
             if (Data == null) return;
-            if (Data.Index == -1 ? Data == music : MusicPlayer.IsMusicPlaying(Data))
+            if (Data.Index == -1 ? Data.Equals(music) : Data.Index == MusicPlayer.CurrentIndex)
             {
                 PlayingIcon.Visibility = Visibility.Visible;
                 TitleTextBlock.Foreground = ArtistTextButton.Foreground = AlbumTextButton.Foreground = DurationTextBlock.Foreground =
@@ -72,14 +73,19 @@ namespace SMPlayer.Controls
             }
         }
 
-        public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
-        {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => SetTextColor(next));
-        }
-
         private void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
             SetTextColor(MusicPlayer.CurrentMusic);
+        }
+
+        async void IMusicPlayerEventListener.Execute(MusicPlayerEventArgs args)
+        {
+            switch (args.EventType)
+            {
+                case MusicPlayerEventType.Switch:
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => SetTextColor(args.Music));
+                    break;
+            }
         }
     }
 }

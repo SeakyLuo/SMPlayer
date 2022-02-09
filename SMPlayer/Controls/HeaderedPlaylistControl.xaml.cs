@@ -3,7 +3,9 @@ using Microsoft.Graphics.Canvas.Effects;
 using SMPlayer.Controls;
 using SMPlayer.Dialogs;
 using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
 using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,51 +23,44 @@ using EF = ExpressionBuilder.ExpressionFunctions;
 
 namespace SMPlayer
 {
-    public sealed partial class HeaderedPlaylistControl : UserControl, IRemoveMusicListener, IImageSavedListener, IMultiSelectListener, IPlaylistEventListener
+    public sealed partial class HeaderedPlaylistControl : UserControl, IImageSavedListener, IMultiSelectListener, IPlaylistEventListener
     {
         public PlaylistControl HeaderedPlaylist { get => HeaderedPlaylistController; }
-        public Playlist CurrentPlaylist { get; private set; }
+        public PlaylistView CurrentPlaylist { get; private set; }
         public Brush HeaderBackground
         {
             get => headerBackground;
             set => OverlayRectangle.Fill = headerBackground = value;
         }
         private Brush headerBackground = ColorHelper.HighlightBrush;
-        private bool IsPlaylist 
-        {
-            get => PlaylistType == HeaderedPlaylistType.Playlist;
-        }
-        private bool IsMyFavorites
-        {
-            get => PlaylistType == HeaderedPlaylistType.MyFavorites;
-        }
+        private bool IsPlaylist => PlaylistType == HeaderedPlaylistType.Playlist;
+        private bool IsMyFavorites => PlaylistType == HeaderedPlaylistType.MyFavorites;
         public HeaderedPlaylistType PlaylistType { get; set; } = HeaderedPlaylistType.Playlist;
 
         private static RenameDialog dialog;
         private static RemoveDialog removeDialog;
+        private bool doNotListenToPlaylistEvent = false;
         public HeaderedPlaylistControl()
         {
             this.InitializeComponent();
-            HeaderedPlaylistController.RemoveListeners.Add(this);
+            HeaderedPlaylistController.PlaylistEventListener = this;
             HeaderedPlaylistController.MultiSelectListener = this;
-            Settings.AddPlaylistEventListener(this);
+            PlaylistService.AddPlaylistEventListener(this);
             AlbumArtControl.ImageSavedListeners.Add(this);
         }
 
-        public async Task SetPlaylist(Playlist playlist)
+        public async Task SetPlaylist(PlaylistView playlist)
         {
             HidePlaylistCover();
             MusicPlayer.SetMusicPlaying(playlist.Songs, MusicPlayer.CurrentMusic);
             CurrentPlaylist = playlist;
+            playlist.Sort();
             HeaderedPlaylist.CurrentPlaylist = playlist.Songs;
-            PlaylistNameTextBlock.Text = string.IsNullOrEmpty(playlist.Name) && !IsPlaylist ? Helper.LocalizeMessage("UnknownAlbum") : playlist.Name;
-            SetPlaylistInfo(SongCountConverter.ToStr(playlist.Songs));
-            ShuffleButton.IsEnabled = !playlist.IsEmpty;
-            MultiSelectButton.IsEnabled = !playlist.IsEmpty;
-            ClearButton.Visibility = playlist.IsEmpty ? Visibility.Collapsed : Visibility.Visible;
+            SetPlaylistInfo(playlist.Songs);
             switch (PlaylistType)
             {
                 case HeaderedPlaylistType.Playlist:
+                    PlaylistNameTextBlock.Text = playlist.Name;
                     HeaderedPlaylistController.ShowAlbumText = true;
                     HeaderedPlaylistController.Removable = true;
                     RenameButton.Visibility = Visibility.Visible;
@@ -74,6 +69,7 @@ namespace SMPlayer
                     ClearButton.Visibility = Visibility.Visible;
                     break;
                 case HeaderedPlaylistType.MyFavorites:
+                    PlaylistNameTextBlock.Text = playlist.Name;
                     HeaderedPlaylistController.ShowAlbumText = true;
                     HeaderedPlaylistController.Removable = true;
                     RenameButton.Visibility = Visibility.Collapsed;
@@ -82,6 +78,7 @@ namespace SMPlayer
                     ClearButton.Visibility = Visibility.Visible;
                     break;
                 case HeaderedPlaylistType.Album:
+                    PlaylistNameTextBlock.Text = string.IsNullOrEmpty(playlist.Name) ? Helper.LocalizeMessage("UnknownAlbum") : playlist.Name;
                     HeaderedPlaylistController.ShowAlbumText = false;
                     HeaderedPlaylistController.Removable = false;
                     RenameButton.Visibility = Visibility.Collapsed;
@@ -90,7 +87,7 @@ namespace SMPlayer
                     ClearButton.Visibility = Visibility.Collapsed;
                     break;
             }
-            SetPinState(Windows.UI.StartScreen.SecondaryTile.Exists(TileHelper.FormatTileId(playlist, IsPlaylist)));
+            SetPinState(Windows.UI.StartScreen.SecondaryTile.Exists(TileHelper.FormatTileId(playlist)));
             if (MusicDisplayItem.IsNullOrEmpty(playlist.DisplayItem))
             {
                 await playlist.LoadDisplayItemAsync();
@@ -113,13 +110,23 @@ namespace SMPlayer
 
         public async Task SetMusicDisplayItem(MusicDisplayItem item)
         {
-            HeaderBackground = item == null ? MusicDisplayItem.DefaultItem.Color : item.Color;
-            PlaylistCover.Source = await item.GetThumbnailAsync();
+            if (item == null)
+            {
+                HeaderBackground = MusicDisplayItem.DefaultItem.Color;
+            }
+            else
+            {
+                HeaderBackground = item.Color;
+                PlaylistCover.Source = await item.GetThumbnailAsync();
+            }
         }
 
-        public void SetPlaylistInfo(string info)
+        public void SetPlaylistInfo(IEnumerable<IMusicable> songs)
         {
-            PlaylistInfoTextBlock.Text = info;
+            PlaylistInfoTextBlock.Text = SongCountConverter.ToStr(songs);
+            ShuffleButton.IsEnabled = !songs.IsEmpty();
+            MultiSelectButton.IsEnabled = !songs.IsEmpty();
+            ClearButton.Visibility = songs.IsEmpty() ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void Shuffle_Click(object sender, RoutedEventArgs e)
@@ -131,7 +138,7 @@ namespace SMPlayer
         {
             dialog = new RenameDialog(RenameOption.Rename, RenameTarget.Playlist, CurrentPlaylist.Name)
             {
-                Validate = Settings.settings.ValidatePlaylistName,
+                Validate = PlaylistService.ValidatePlaylistName,
                 Confirmed = Confirmed
             };
             await dialog.ShowAsync();
@@ -140,7 +147,7 @@ namespace SMPlayer
         public void Confirmed(string newName)
         {
             PlaylistNameTextBlock.Text = newName;
-            Settings.settings.RenamePlaylist(CurrentPlaylist, newName);
+            PlaylistService.RenamePlaylist(CurrentPlaylist, newName);
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
@@ -148,7 +155,7 @@ namespace SMPlayer
             DeletePlaylist(CurrentPlaylist);
         }
 
-        public async void DeletePlaylist(Playlist playlist)
+        public async void DeletePlaylist(PlaylistView playlist)
         {
             if (removeDialog == null)
             {
@@ -165,27 +172,18 @@ namespace SMPlayer
                 await removeDialog.ShowAsync();
             }
         }
-        private void ExecutePlaylistDeletion(Playlist playlist)
+        private void ExecutePlaylistDeletion(PlaylistView playlist)
         {
-            Settings.settings.RemovePlaylist(playlist);
+            PlaylistService.RemovePlaylist(playlist.FromVO());
             MainPage.Instance.ShowUndoableNotification(Helper.LocalizeMessage("PlaylistRemoved", playlist.Name), () =>
             {
-                Settings.settings.AddPlaylist(playlist);
+                PlaylistService.AddPlaylist(playlist.FromVO());
             });
-        }
-
-        public void MusicRemoved(int index, Music music, IEnumerable<Music> newCollection)
-        {
-            SetPlaylistInfo(SongCountConverter.ToStr(newCollection));
-            if (IsPlaylist)
-            {
-                Settings.settings.RemoveMusicFromPlaylist(CurrentPlaylist, music);
-            }
         }
 
         private async void PinToStart_Click(object sender, RoutedEventArgs e)
         {
-            SetPinState(await TileHelper.PinToStartAsync(CurrentPlaylist, IsPlaylist));
+            SetPinState(await TileHelper.PinToStartAsync(CurrentPlaylist));
         }
 
         public void SetPinState(bool isPinned)
@@ -210,8 +208,9 @@ namespace SMPlayer
             removeDialog.Message = Helper.LocalizeMessage("ClearPlaylist", CurrentPlaylist.Name);
             removeDialog.Confirm = () =>
             {
-                CurrentPlaylist.Clear();
-                SetPlaylistInfo(SongCountConverter.ToStr(CurrentPlaylist.Songs));
+                PlaylistService.ClearPlaylist(CurrentPlaylist);
+                HeaderedPlaylistController.CurrentPlaylist.Clear();
+                SetPlaylistInfo(CurrentPlaylist.Songs);
             };
             await removeDialog.ShowAsync();
         }
@@ -232,13 +231,6 @@ namespace SMPlayer
             HeaderedPlaylistController.ScrollToTop();
         }
 
-        public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
-        {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            {
-                MusicPlayer.SetMusicPlaying(CurrentPlaylist.Songs, next);
-            });
-        }
 
         public async void SaveAlbum(AlbumView album, BitmapImage image)
         {
@@ -250,7 +242,7 @@ namespace SMPlayer
             }
         }
 
-        public async void SaveMusic(Music music, BitmapImage image)
+        public async void SaveMusic(MusicView music, BitmapImage image)
         {
             // IsAlbum
             if (!IsPlaylist && CurrentPlaylist.Name == music.Album && CurrentPlaylist.Count == 1)
@@ -263,9 +255,9 @@ namespace SMPlayer
         private void SortButton_Click(object sender, RoutedEventArgs e)
         {
             SortBy[] criteria = new SortBy[] { SortBy.Reverse, SortBy.Title, SortBy.Artist, SortBy.Album, SortBy.Duration, SortBy.PlayCount, SortBy.DateAdded };
-            MenuFlyoutHelper.ShowSortByMenu(sender, CurrentPlaylist.Criterion, criteria, (criterion) =>
+            MenuFlyoutHelper.SetSortByMenu(sender, CurrentPlaylist.Criterion, criteria, (criterion) =>
             {
-                Settings.settings.SortPlaylist(CurrentPlaylist, criterion);
+                PlaylistService.SortPlaylist(CurrentPlaylist, criterion);
                 HeaderedPlaylist.CurrentPlaylist = CurrentPlaylist.Songs;
             });
         }
@@ -285,24 +277,77 @@ namespace SMPlayer
             subItem.ToMenuFlyout().ShowAt(sender as FrameworkElement);
         }
 
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (CurrentPlaylist == null) return;
+            if (CurrentPlaylist.DisplayItem == null || CurrentPlaylist.DisplayItem.IsDefault)
+            {
+                HidePlaylistCover();
+                await CurrentPlaylist.LoadDisplayItemAsync();
+                await SetMusicDisplayItem(CurrentPlaylist.DisplayItem);
+                ShowPlaylistCover();
+            }
+        }
+
+        public void AddMusic(Music music)
+        {
+            CurrentPlaylist.Add(music.ToVO());
+            HeaderedPlaylistController.CurrentPlaylist.SetTo(CurrentPlaylist.Songs);
+        }
+
+        public void RemoveMusic(Music music)
+        {
+            HeaderedPlaylistController.CurrentPlaylist.Remove(music.ToVO());
+        }
+
         void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
         {
             switch (args.Event)
             {
                 case MultiSelectEvent.AddTo:
-                    args.FlyoutHelper.DefaultPlaylistName = MenuFlyoutHelper.IsBadNewPlaylistName(CurrentPlaylist.Name) ? "" : Settings.settings.FindNextPlaylistName(CurrentPlaylist.Name);
+                    args.FlyoutHelper.DefaultPlaylistName = MenuFlyoutHelper.IsBadNewPlaylistName(CurrentPlaylist.Name) ? "" : PlaylistService.FindNextPlaylistName(CurrentPlaylist.Name);
                     args.FlyoutHelper.CurrentPlaylistName = CurrentPlaylist.Name;
+                    args.FlyoutHelper.OriginalData = CurrentPlaylist;
                     break;
             }
         }
 
-        void IPlaylistEventListener.Added(Playlist playlist) { }
-        void IPlaylistEventListener.Renamed(Playlist playlist)
+        void IPlaylistEventListener.Execute(Playlist playlist, PlaylistEventArgs args)
         {
-            Confirmed(playlist.Name);
+            if (doNotListenToPlaylistEvent || (playlist != null && CurrentPlaylist.Id != playlist.Id)) return;
+            switch (args.EventType)
+            {
+                case PlaylistEventType.AddMusic:
+                    if (playlist == null)
+                    {
+                        doNotListenToPlaylistEvent = true;
+                        PlaylistService.AddMusic(CurrentPlaylist.FromVO(), args.Music);
+                        doNotListenToPlaylistEvent = false;
+                    }
+                    else
+                    {
+                        HeaderedPlaylistController.AddMusic(args.Music, CurrentPlaylist.Criterion);
+                    }
+                    SetPlaylistInfo(HeaderedPlaylistController.CurrentPlaylist);
+                    break;
+                case PlaylistEventType.RemoveMusic:
+                    if (playlist == null)
+                    {
+                        doNotListenToPlaylistEvent = true;
+                        PlaylistService.RemoveMusic(CurrentPlaylist.FromVO(), args.Music);
+                        doNotListenToPlaylistEvent = false;
+                    }
+                    else
+                    {
+                        HeaderedPlaylistController.RemoveMusic(args.Music);
+                    }
+                    SetPlaylistInfo(HeaderedPlaylistController.CurrentPlaylist);
+                    break;
+                case PlaylistEventType.Rename:
+                    Confirmed(playlist.Name);
+                    break;
+            }
         }
-        void IPlaylistEventListener.Removed(Playlist playlist) { }
-        void IPlaylistEventListener.Sorted(Playlist playlist, SortBy criterion) { }
 
         CompositionPropertySet _props;
         CompositionPropertySet _scrollerPropertySet;
@@ -433,18 +478,6 @@ namespace SMPlayer
             if (_blurredBackgroundImageVisual != null)
             {
                 _blurredBackgroundImageVisual.Size = new Vector2((float)OverlayRectangle.ActualWidth, (float)OverlayRectangle.ActualHeight);
-            }
-        }
-
-        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (CurrentPlaylist == null) return;
-            if (CurrentPlaylist.DisplayItem == null || CurrentPlaylist.DisplayItem.IsDefault)
-            {
-                HidePlaylistCover();
-                await CurrentPlaylist.LoadDisplayItemAsync();
-                await SetMusicDisplayItem(CurrentPlaylist.DisplayItem);
-                ShowPlaylistCover();
             }
         }
     }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.Globalization.DateTimeFormatting;
+using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
@@ -29,9 +30,9 @@ namespace SMPlayer
             return ToTime((double)seconds);
         }
 
-        public static string ToTime(ICollection<Music> list)
+        public static string ToTime(IEnumerable<IMusicable> list)
         {
-            int total_seconds = list.Sum((music) => music.Duration);
+            int total_seconds = list.Sum(music => music.ToMusic().Duration);
             if (total_seconds == 0) return "";
             var time = TimeSpan.FromSeconds(total_seconds);
             int seconds = time.Seconds,
@@ -229,7 +230,7 @@ namespace SMPlayer
     {
         public static string ToStr(object value)
         {
-            if (value is ICollection<Music> list)
+            if (value is IEnumerable<IMusicable> list)
             {
                 int count = list.Count();
                 string countStr = GetSongCount(count);
@@ -260,8 +261,8 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is IEnumerable<Music> collection)
-                return collection.Count() > 0;
+            if (value is IEnumerable<MusicView> collection)
+                return collection.IsNotEmpty();
             if (value is int count)
                 return count > 0;
             return false;
@@ -288,7 +289,7 @@ namespace SMPlayer
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            Music music = value as Music;
+            MusicView music = value as MusicView;
             return $"{music.Artist} • {music.Album}";
         }
 
@@ -347,6 +348,51 @@ namespace SMPlayer
             EntityType type = (EntityType)Enum.Parse(typeof(EntityType), parameter.ToString());
             string resource = $"Preferred{parameter}s";
             return count == 0 ? Helper.LocalizeText(resource) : Helper.LocalizeText($"{resource}WithCount", count, PreferenceSettings.GetMaxPreferenceItems(type));
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
+
+    class FolderChainItemTextBlockFontWeightConverter : IValueConverter
+    {
+
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return (bool)value ? FontWeights.Bold : FontWeights.Normal;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
+
+    class FolderChainDropdownButtonNameConverter : IValueConverter
+    {
+        public static string BuildName(long id)
+        {
+            return "FolderChainItemDropdownButton" + id;
+        }
+
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return BuildName((long)value);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return null;
+        }
+    }
+
+    class InvertedBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return !(bool)value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

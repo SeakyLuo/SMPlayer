@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace SMPlayer.Controls
 {
-    public sealed partial class MusicLyricsControl : UserControl, ISwitchMusicListener
+    public sealed partial class MusicLyricsControl : UserControl, IMusicPlayerEventListener
     {
         public bool AllowMusicSwitching { get; set; }
         public bool ShowHeader { get; set; }
@@ -33,7 +34,7 @@ namespace SMPlayer.Controls
         public MusicLyricsControl()
         {
             this.InitializeComponent();
-            MusicPlayer.AddSwitchMusicListener(this);
+            MusicPlayer.AddMusicPlayerEventListener(this);
         }
         private void ResetLyricsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -133,17 +134,6 @@ namespace SMPlayer.Controls
             IsProcessing = false;
         }
 
-        public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
-        {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
-            {
-                if (!AllowMusicSwitching) return;
-                if (Lyrics != LyricsTextBox.Text) return;
-                ScrollToTop();
-                SetLyrics(next);
-            });
-        }
-
         private async void ImportLyricsButton_Click(object sender, RoutedEventArgs e)
         {
             FileOpenPicker picker = new FileOpenPicker
@@ -152,7 +142,7 @@ namespace SMPlayer.Controls
             };
             picker.FileTypeFilter.Add(".lrc");
             picker.FileTypeFilter.Add(".txt");
-            picker.FileTypeFilter.Add(".mp3");
+            picker.FileTypeFilter.AddRange(MusicHelper.SupportedFileTypes);
             StorageFile file = await picker.PickSingleFileAsync();
             if (file == null) return;
             IsProcessing = true;
@@ -170,6 +160,22 @@ namespace SMPlayer.Controls
             }
             SaveProgress.Visibility = Visibility.Collapsed;
             IsProcessing = false;
+        }
+
+        async void IMusicPlayerEventListener.Execute(MusicPlayerEventArgs args)
+        {
+            switch (args.EventType)
+            {
+                case MusicPlayerEventType.Switch:
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        if (!AllowMusicSwitching) return;
+                        if (Lyrics != LyricsTextBox.Text) return;
+                        ScrollToTop();
+                        SetLyrics(args.Music);
+                    });
+                    break;
+            }
         }
     }
 }

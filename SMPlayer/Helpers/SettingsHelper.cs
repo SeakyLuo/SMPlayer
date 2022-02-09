@@ -73,7 +73,7 @@ namespace SMPlayer.Helpers
                 return;
             }
             var jsonObject = JsonFileHelper.FromJson<JObject>(json);
-            List<Music> songs = FlattenFolderTreeInJson(jsonObject["Tree"]);
+            List<MusicView> songs = FlattenFolderTreeInJson(jsonObject["Tree"]);
             UpdateLog updateLog = await JsonFileHelper.ReadObjectAsync<UpdateLog>("UpdateLogger") ?? new UpdateLog();
             Settings.settings.LastReleaseNotesVersion = updateLog.LastReleaseNotesVersion;
             List<MusicDAO> list = new List<MusicDAO>();
@@ -101,7 +101,7 @@ namespace SMPlayer.Helpers
 
         private static void InsertMyFavoritesAndSettings(SQLiteConnection c)
         {
-            InsertPlaylist(c, Settings.settings.MyFavorites);
+            InsertPlaylist(c, Settings.settings.MyFavorites.FromVO());
             Settings.settings.MyFavoritesId = Settings.settings.MyFavorites.Id;
             c.InsertSettings(Settings.settings);
         }
@@ -138,9 +138,9 @@ namespace SMPlayer.Helpers
                     await item.DeleteAsync();
         }
 
-        private static List<Music> FlattenFolderTreeInJson(JToken tree)
+        private static List<MusicView> FlattenFolderTreeInJson(JToken tree)
         {
-            List<Music> songs = tree["Files"].Select(i => i.ToObject<Music>()).ToList();
+            List<MusicView> songs = tree["Files"].Select(i => i.ToObject<MusicView>()).ToList();
             songs.AddRange(tree["Trees"].SelectMany(t => FlattenFolderTreeInJson(t)));
             return songs;
         }
@@ -162,13 +162,13 @@ namespace SMPlayer.Helpers
             }
         }
         
-        private static void InsertPlaylists(SQLiteConnection c, List<Playlist> playlists)
+        private static void InsertPlaylists(SQLiteConnection c, List<PlaylistView> playlists)
         {
             for (int i = 0; i < playlists.Count; i++)
             {
-                Playlist playlist = playlists[i];
+                PlaylistView playlist = playlists[i];
                 playlist.Priority = i;
-                InsertPlaylist(c, playlist);
+                InsertPlaylist(c, playlist.FromVO());
             }
         }
 

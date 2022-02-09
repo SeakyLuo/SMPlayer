@@ -1,6 +1,8 @@
 ﻿using SMPlayer.Dialogs;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using SMPlayer.Models.VO;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -40,22 +42,27 @@ namespace SMPlayer
                             ShowAddPreferredPlaylistsToolTip = true,
                             ShowAddPreferredFoldersToolTip = true;
 
-        private readonly ObservableCollection<PreferenceItemView> LimitedPreferredSongs;
-        private readonly ObservableCollection<PreferenceItemView> LimitedPreferredArtists;
-        private readonly ObservableCollection<PreferenceItemView> LimitedPreferredAlbums;
-        private readonly ObservableCollection<PreferenceItemView> LimitedPreferredPlaylists;
-        private readonly ObservableCollection<PreferenceItemView> LimitedPreferredFolders;
-        private readonly ObservableCollection<PreferenceItemView> PreferredSongs;
-        private readonly ObservableCollection<PreferenceItemView> PreferredArtists;
-        private readonly ObservableCollection<PreferenceItemView> PreferredAlbums;
-        private readonly ObservableCollection<PreferenceItemView> PreferredPlaylists;
-        private readonly ObservableCollection<PreferenceItemView> PreferredFolders;
+        private readonly ObservableCollection<PreferenceItemView> LimitedPreferredSongs = new ObservableCollection<PreferenceItemView>();
+        private readonly ObservableCollection<PreferenceItemView> LimitedPreferredArtists = new ObservableCollection<PreferenceItemView>();
+        private readonly ObservableCollection<PreferenceItemView> LimitedPreferredAlbums = new ObservableCollection<PreferenceItemView>();
+        private readonly ObservableCollection<PreferenceItemView> LimitedPreferredPlaylists = new ObservableCollection<PreferenceItemView>();
+        private readonly ObservableCollection<PreferenceItemView> LimitedPreferredFolders = new ObservableCollection<PreferenceItemView>();
+        private readonly ObservableCollection<PreferenceItemView> PreferredSongs = new ObservableCollection<PreferenceItemView>();
+        private readonly ObservableCollection<PreferenceItemView> PreferredArtists = new ObservableCollection<PreferenceItemView>();
+        private readonly ObservableCollection<PreferenceItemView> PreferredAlbums = new ObservableCollection<PreferenceItemView>();
+        private readonly ObservableCollection<PreferenceItemView> PreferredPlaylists = new ObservableCollection<PreferenceItemView>();
+        private readonly ObservableCollection<PreferenceItemView> PreferredFolders = new ObservableCollection<PreferenceItemView>();
         private readonly ObservableCollection<PreferenceItemView> PreferredOthers = new ObservableCollection<PreferenceItemView>();
         private static RemoveDialog removeDialog;
 
         public PreferenceSettingsPage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
             PreferenceSettings settings = PreferenceSettings.settings;
             MainPage.Instance?.SetHeaderText("PreferenceSettings");
             PreferredSongsCheckBox.IsChecked = settings.Songs;
@@ -64,22 +71,17 @@ namespace SMPlayer
             PreferredPlaylistsCheckBox.IsChecked = settings.Playlists;
             PreferredFoldersCheckBox.IsChecked = settings.Folders;
 
-            PreferredOthers.Add(BuildView(PreferenceSettings.FindRecentAdded, EntityType.RecentAdded));
-            PreferredOthers.Add(BuildView(PreferenceSettings.FindMyFavorites, EntityType.MyFavorites));
-            PreferredOthers.Add(BuildView(PreferenceSettings.FindMostPlayed, EntityType.MostPlayed));
-            PreferredOthers.Add(BuildView(PreferenceSettings.FindLeastPlayed, EntityType.LeastPlayed));
+            PreferredSongs.SetTo(ConvertToViews(PreferenceSettings.FindPreferredSongs, EntityType.Song));
+            PreferredArtists.SetTo(ConvertToViews(PreferenceSettings.FindPreferredArtists, EntityType.Artist));
+            PreferredAlbums.SetTo(ConvertToViews(PreferenceSettings.FindPreferredAlbums, EntityType.Album));
+            PreferredPlaylists.SetTo(ConvertToViews(PreferenceSettings.FindPreferredPlaylists, EntityType.Playlist));
+            PreferredFolders.SetTo(ConvertToViews(PreferenceSettings.FindPreferredFolders, EntityType.Folder));
 
-            PreferredSongs = ConvertToViews(PreferenceSettings.FindPreferredSongs, EntityType.Song);
-            PreferredArtists = ConvertToViews(PreferenceSettings.FindPreferredArtists, EntityType.Artist);
-            PreferredAlbums = ConvertToViews(PreferenceSettings.FindPreferredAlbums, EntityType.Album);
-            PreferredPlaylists = ConvertToViews(PreferenceSettings.FindPreferredPlaylists, EntityType.Playlist);
-            PreferredFolders = ConvertToViews(PreferenceSettings.FindPreferredFolders, EntityType.Folder);
-
-            LimitedPreferredSongs = new ObservableCollection<PreferenceItemView>(PreferredSongs.Take(MaxLimitedPreferredSongs));
-            LimitedPreferredArtists = new ObservableCollection<PreferenceItemView>(PreferredArtists.Take(MaxLimitedPreferredArtists));
-            LimitedPreferredAlbums = new ObservableCollection<PreferenceItemView>(PreferredAlbums.Take(MaxLimitedPreferredAlbums));
-            LimitedPreferredPlaylists = new ObservableCollection<PreferenceItemView>(PreferredPlaylists.Take(MaxLimitedPreferredPlaylists));
-            LimitedPreferredFolders = new ObservableCollection<PreferenceItemView>(PreferredFolders.Take(MaxLimitedPreferredFolders));
+            LimitedPreferredSongs.SetTo(PreferredSongs.Take(MaxLimitedPreferredSongs));
+            LimitedPreferredArtists.SetTo(PreferredArtists.Take(MaxLimitedPreferredArtists));
+            LimitedPreferredAlbums.SetTo(PreferredAlbums.Take(MaxLimitedPreferredAlbums));
+            LimitedPreferredPlaylists.SetTo(PreferredPlaylists.Take(MaxLimitedPreferredPlaylists));
+            LimitedPreferredFolders.SetTo(PreferredFolders.Take(MaxLimitedPreferredFolders));
 
             GoToAddPreferredSongsButton.SetToolTip(Helper.LocalizeMessage("AddPreferredSongsToolTip"), false);
             GoToAddPreferredArtistsButton.SetToolTip(Helper.LocalizeMessage("AddPreferredArtistsToolTip"), false);
@@ -101,6 +103,12 @@ namespace SMPlayer
             ExpandPreferredSongsButton.Label = ExpandPreferredArtistsButton.Label = ExpandPreferredAlbumsButton.Label
                                              = ExpandPreferredPlaylistsButton.Label = ExpandPreferredFoldersButton.Label
                                              = Helper.LocalizeText("ExpandList");
+
+            PreferredOthers.Clear();
+            PreferredOthers.Add(BuildView(PreferenceSettings.FindRecentAdded, EntityType.RecentAdded));
+            PreferredOthers.Add(BuildView(PreferenceSettings.FindMyFavorites, EntityType.MyFavorites));
+            PreferredOthers.Add(BuildView(PreferenceSettings.FindMostPlayed, EntityType.MostPlayed));
+            PreferredOthers.Add(BuildView(PreferenceSettings.FindLeastPlayed, EntityType.LeastPlayed));
         }
 
         private void SetExpandButtonVisibility(EntityType type)
@@ -115,7 +123,7 @@ namespace SMPlayer
 
         private ObservableCollection<PreferenceItemView> ConvertToViews(List<PreferenceItem> items, EntityType type)
         {
-            return new ObservableCollection<PreferenceItemView>(items.AsParallel().Select(i => BuildView(i, type)).OrderByDescending(i => i.Id));
+            return new ObservableCollection<PreferenceItemView>(items.Select(i => BuildView(i, type)).OrderByDescending(i => i.Id));
         }
 
         private PreferenceItemView BuildView(PreferenceItem item, EntityType type)
@@ -124,7 +132,7 @@ namespace SMPlayer
             switch (type)
             {
                 case EntityType.Song:
-                    Music music = Settings.FindMusic(item.LongId);
+                    Music music = MusicService.FindMusic(item.LongId);
                     if (music == null)
                     {
                         view.IsValid = false;
@@ -137,28 +145,24 @@ namespace SMPlayer
                     break;
                 case EntityType.Artist:
                     view.ToolTip = view.Name = view.ItemId;
-                    view.IsValid = Settings.AllSongs.Any(i => i.Artist == view.ItemId);
+                    view.IsValid = MusicService.SelectByArtist(view.Name).IsNotEmpty();
                     break;
                 case EntityType.Album:
                     view.ToolTip = view.Name;
-                    string[] albumId = view.ItemId.Split(Helpers.TileHelper.StringConcatenationFlag);
-                    if (albumId.Length > 1)
+                    if (view.ItemId.Contains(TileHelper.StringConcatenationFlag))
                     {
-                        string album = albumId[0], artist = albumId[1];
-                        view.IsValid = Settings.AllSongs.Any(i => i.Album == album && i.Artist == artist);
+                        item.Id = view.ItemId = view.ItemId.Split(TileHelper.StringConcatenationFlag)[0];
+                        PreferenceSettings.UpdatePreference(item);
                     }
-                    else
-                    {
-                        view.IsValid = false;
-                    }
+                    view.IsValid = MusicService.SelectByAlbum(view.ItemId).IsNotEmpty();
                     break;
                 case EntityType.Playlist:
-                    Playlist playlist = Settings.FindPlaylist(item.LongId);
+                    Playlist playlist = PlaylistService.FindPlaylist(item.LongId);
                     view.ToolTip = view.Name = playlist?.Name;
                     view.IsValid = playlist != null;
                     break;
                 case EntityType.Folder:
-                    FolderTree tree = Settings.FindFolderInfo(item.LongId);
+                    FolderTree tree = StorageService.FindFolderInfo(item.LongId);
                     if (tree == null)
                     {
                         view.IsValid = false;
@@ -322,16 +326,16 @@ namespace SMPlayer
         {
             ObservableCollection<PreferenceItemView> views = GetPreferenceViewByType(type);
             
-            List<PreferenceItem> models = GetPreferenceByType(type);
             HashSet<string> invalidIds = views.Where(i => !i.IsValid).Select(i => i.ItemId).ToHashSet();
             views.RemoveAll(i => invalidIds.Contains(i.ItemId));
-            models.RemoveAll(i => invalidIds.Contains(i.Id));
+            PreferenceService.RemovePreferences(type, invalidIds);
 
             ObservableCollection<PreferenceItemView> limitedViews = GetLimitedPreferenceViewByType(type);
             limitedViews.SetTo(views.Take(GetMaxLimitedPreferenceViewByType(type)));
 
             AlternateRowBackgroud(type, 0, limitedViews.Count);
             SetExpandButtonVisibility(type);
+            SetClearInvalidButtonVisibility(type);
         }
 
         private async void RemoveButton_Click(object sender, RoutedEventArgs e)
@@ -376,7 +380,7 @@ namespace SMPlayer
             PreferredListView_ItemClick(sender, e,
                                         async (view) =>
                                         {
-                                            MusicDialog dialog = new MusicDialog(MusicDialogOption.Properties, Settings.FindMusic(view.LongId));
+                                            MusicDialog dialog = new MusicDialog(MusicDialogOption.Properties, MusicService.FindMusic(view.LongId));
                                             await dialog.ShowAsync();
                                         });
         }
@@ -402,7 +406,7 @@ namespace SMPlayer
         private void PreferredFoldersListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             PreferredListView_ItemClick(sender, e,
-                                        view => MainPage.Instance.NavigateToPage(typeof(LocalPage), Settings.FindFolderInfo(view.LongId)));
+                                        view => MainPage.Instance.NavigateToPage(typeof(LocalPage), StorageService.FindFolder(view.LongId)));
         }
 
         private void PreferredListView_ItemClick(object sender, ItemClickEventArgs e, Action<PreferenceItemView> action)

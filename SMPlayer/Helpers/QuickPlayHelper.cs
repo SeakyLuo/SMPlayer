@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace SMPlayer.Helpers
             //Helper.Timer(() => HandleDislikedItems(songs), "HandleDislikedItems");
             //Helper.Timer(() => HandleDoNotAppearItems(songs), "HandleDoNotAppearItems");
             //return Helper.Timer(() => songs.RandItems(randomLimit).ToList(), "Final RandItems");
-            HashSet<Music> songs = Settings.AllSongs.RandItems(randomLimit * 2).ToHashSet();
+            HashSet<Music> songs = MusicService.AllSongs.RandItems(randomLimit * 2).ToHashSet();
             PreferenceSettings preference = PreferenceSettings.settings;
             HandlePreferredSongs(songs, preference);
             HandlePreferredArtists(songs, preference);
@@ -48,15 +49,15 @@ namespace SMPlayer.Helpers
         {
             if (!preference.Songs) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(PreferenceSettings.EnabledPreferredSongs);
-            songs.AddRange(items.Select(i => Settings.FindMusic(i.LongId)));
+            songs.AddRange(items.Select(i => MusicService.FindMusic(i.LongId)));
         }
 
         private static void HandlePreferredArtists(HashSet<Music> songs, PreferenceSettings preference)
         {
             if (!preference.Artists) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(PreferenceSettings.EnabledPreferredArtists);
-            songs.AddRange(items.SelectMany(i => Settings.AllSongs.Where(m => i.Id == m.Artist)
-                                                                  .RandItems(GetRandomPreferredItems(i.Level))
+            songs.AddRange(items.SelectMany(i => MusicService.AllSongs.Where(m => i.Id == m.Artist)
+                                                             .RandItems(GetRandomPreferredItems(i.Level))
                                 .RandItems(randomItems)));
         }
 
@@ -64,8 +65,8 @@ namespace SMPlayer.Helpers
         {
             if (!preference.Albums) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(PreferenceSettings.EnabledPreferredAlbums);
-            songs.AddRange(items.SelectMany(i => Settings.AllSongs.Where(m => i.Id == m.Album)
-                                                                  .RandItems(GetRandomPreferredItems(i.Level))
+            songs.AddRange(items.SelectMany(i => MusicService.AllSongs.Where(m => i.Id == m.Album)
+                                                             .RandItems(GetRandomPreferredItems(i.Level))
                                 .RandItems(randomItems)));
         }
 
@@ -73,8 +74,8 @@ namespace SMPlayer.Helpers
         {
             if (!preference.Playlists) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(PreferenceSettings.EnabledPreferredPlaylists);
-            songs.AddRange(items.SelectMany(i => Settings.FindPlaylist(i.LongId)
-                                                         .Songs.RandItems(GetRandomPreferredItems(i.Level)).ToList())
+            songs.AddRange(items.SelectMany(i => PlaylistService.FindPlaylistItems(i.LongId)
+                                                                .RandItems(GetRandomPreferredItems(i.Level)).ToList())
                                 .RandItems(randomItems).ToList());
         }
 
@@ -82,7 +83,7 @@ namespace SMPlayer.Helpers
         {
             if (!preference.Folders) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(PreferenceSettings.EnabledPreferredFolders);
-            songs.AddRange(items.Select(i => new { Folder = Settings.FindFolder(i.LongId), i.Level })
+            songs.AddRange(items.Select(i => new { Folder = StorageService.FindFolder(i.LongId), i.Level })
                                 .Where(i => i.Folder != null && i.Folder.IsNotEmpty)
                                 .SelectMany(i => i.Folder.Songs.RandItems(GetRandomPreferredItems(i.Level)))
                                 .RandItems(randomItems).ToList());
@@ -112,28 +113,28 @@ namespace SMPlayer.Helpers
         {
             int count = GetPreferenceItems(PreferenceSettings.FindRecentAdded);
             if (count == 0) return;
-            songs.AddRange(RecentPage.RecentAdded.TimeLine.RandItems(count));
+            songs.AddRange(RecentPage.RecentAdded.TimeLine.RandItems(count).Select(i => i.FromVO()));
         }
 
         private static void HandleMyFavorites(HashSet<Music> songs)
         {
             int count = GetPreferenceItems(PreferenceSettings.FindMyFavorites);
             if (count == 0) return;
-            songs.AddRange(Settings.MyFavoritesPlaylist.Songs.RandItems(count));
+            songs.AddRange(PlaylistService.MyFavoriteSongs.RandItems(count));
         }
 
         private static void HandleMostPlayed(HashSet<Music> songs, int randomLimit)
         {
             int count = GetPreferenceItems(PreferenceSettings.FindMostPlayed);
             if (count == 0) return;
-            songs.AddRange(Settings.settings.GetMostPlayed(randomLimit));
+            songs.AddRange(MusicService.GetMostPlayed(randomLimit));
         }
 
         private static void HandleLeastPlayed(HashSet<Music> songs, int randomLimit)
         {
             int count = GetPreferenceItems(PreferenceSettings.FindLeastPlayed);
             if (count == 0) return;
-            songs.AddRange(Settings.settings.GetLeastPlayed(randomLimit));
+            songs.AddRange(MusicService.GetLeastPlayed(randomLimit));
         }
 
         private static int GetPreferenceItems(PreferenceItem item)
@@ -178,13 +179,13 @@ namespace SMPlayer.Helpers
                         break;
                     case EntityType.Playlist:
                         HashSet<long> playlistItems = group.Select(i => long.Parse(i.Id))
-                                                           .SelectMany(id => Settings.FindPlaylistItems(id))
+                                                           .SelectMany(id => PlaylistService.FindPlaylistItems(id))
                                                            .Select(i => i.Id).ToHashSet();
                         songs.RemoveWhere(i => Toss(probability) && playlistItems.Contains(i.Id));
                         break;
                     case EntityType.Folder:
                         HashSet<string> folders = group.AsParallel()
-                                                       .Select(i => Settings.FindFolderInfo(long.Parse(i.Id)))
+                                                       .Select(i => StorageService.FindFolderInfo(long.Parse(i.Id)))
                                                        .Where(i => i != null).Select(i => i.Path).ToHashSet();
                         songs.RemoveWhere(i => Toss(probability) && folders.Any(f => i.Path.StartsWith(f)));
                         break;

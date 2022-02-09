@@ -1,7 +1,10 @@
 ﻿using Microsoft.Toolkit.Uwp.UI.Controls;
 using Microsoft.UI.Xaml.Controls;
 using SMPlayer.Dialogs;
+using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
 using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,62 +26,67 @@ namespace SMPlayer
     public sealed partial class PlaylistsPage : Page, IPlaylistEventListener
     {
         public static PlaylistsPage Instance { get => MainPage.Instance.NavigationFrame.Content as PlaylistsPage; }
-        private ObservableCollection<Playlist> Playlists = new ObservableCollection<Playlist>();
-        public Playlist CurrentPlaylist { get => PlaylistTabView.SelectedItem as Playlist; }
-        private Playlist PreviousPlaylist;
+        private ObservableCollection<PlaylistView> Playlists = new ObservableCollection<PlaylistView>();
+        public PlaylistView CurrentPlaylist { get => PlaylistTabView.SelectedItem as PlaylistView; }
+        private PlaylistView PreviousPlaylist;
         private HeaderedPlaylistControl PlaylistController;
         private RenameDialog dialog;
         public PlaylistsPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            Playlists.SetTo(Settings.AllPlaylists);
+            Playlists.SetTo(PlaylistService.AllPlaylists.Select(i => i.ToVO()));
             SelectPlaylist(Settings.settings.LastPlaylistId);
-            Settings.AddPlaylistEventListener(this);
+            PlaylistService.AddPlaylistEventListener(this);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (e.Parameter is Playlist playlist)
+            NavigateToPlaylist(e.Parameter);
+        }
+
+        public void NavigateToPlaylist(object parameter)
+        {
+            if (parameter is PlaylistView playlist)
             {
                 SelectPlaylist(playlist.Id);
             }
-            else if (e.Parameter is string playlistName)
+            else if (parameter is string playlistName)
             {
                 SelectPlaylist(playlistName);
             }
-            else if (e.Parameter is AlbumView albumView)
+            else if (parameter is AlbumView albumView)
             {
                 SelectPlaylist(albumView.Name);
             }
-            else if (e.Parameter is long id)
+            else if (parameter is long id)
             {
                 SelectPlaylist(id);
             }
         }
 
-        private Playlist SelectPlaylistById(long id)
+        private PlaylistView SelectPlaylistById(long id)
         {
             return Playlists.FirstOrDefault(p => p.Id == id);
         }
 
         private void SelectPlaylist(long id)
         {
-            Playlist selected = SelectPlaylistById(id);
+            PlaylistView selected = SelectPlaylistById(id);
             PlaylistTabView.SelectedItem = selected;
         }
 
         private void SelectPlaylist(string target)
         {
-            Playlist selected = Playlists.FirstOrDefault(p => p.Name == target);
+            PlaylistView selected = Playlists.FirstOrDefault(p => p.Name == target);
             PlaylistTabView.SelectedItem = selected;
         }
 
-        private async void LoadPlaylistSongs(Playlist playlist)
+        private async void LoadPlaylistSongs(PlaylistView playlist)
         {
             if (playlist == null) return;
-            playlist.Songs.SetTo(Settings.FindPlaylistItems(playlist.Id));
+            playlist.Songs.SetTo(PlaylistService.FindPlaylistItems(playlist.Id).Select(i => i.ToVO()));
             playlist.Sort();
             foreach (var music in playlist.Songs)
                 music.IsPlaying = music.Equals(MusicPlayer.CurrentMusic);
@@ -101,56 +109,56 @@ namespace SMPlayer
                 if (Playlists.IsNotEmpty()) tabview.SelectedIndex = Playlists.Count - 1;
                 return;
             }
-            var playlist = tabview.SelectedItem as Playlist;
+            var playlist = tabview.SelectedItem as PlaylistView;
             Settings.settings.LastPlaylistId = playlist.Id;
             LoadPlaylistSongs(playlist);
         }
 
         private void DeleteClick(object sender, RoutedEventArgs e)
         {
-            var playlist = (sender as MenuFlyoutItem).DataContext as Playlist;
+            var playlist = (sender as MenuFlyoutItem).DataContext as PlaylistView;
             RemovePlaylist(playlist);
         }
 
         private async void RenameClick(object sender, RoutedEventArgs e)
         {
             var flyoutItem = sender as MenuFlyoutItem;
-            var playlist = flyoutItem.DataContext as Playlist;
+            var playlist = flyoutItem.DataContext as PlaylistView;
             dialog = new RenameDialog(RenameOption.Rename, RenameTarget.Playlist, playlist.Name)
             {
-                Validate = Settings.settings.ValidatePlaylistName,
-                Confirmed = (newName) => Settings.settings.RenamePlaylist(playlist, newName)
+                Validate = PlaylistService.ValidatePlaylistName,
+                Confirmed = (newName) => PlaylistService.RenamePlaylist(playlist, newName)
             };
             await dialog.ShowAsync();
         }
 
         private void DuplicateClick(object sender, RoutedEventArgs e)
         {
-            var target = (sender as MenuFlyoutItem).DataContext as Playlist;
-            int next = Settings.settings.FindNextPlaylistNameIndex(target.Name);
+            var target = (sender as MenuFlyoutItem).DataContext as PlaylistView;
+            int next = PlaylistService.FindNextPlaylistNameIndex(target.Name);
             string name = Helper.GetNextName(target.Name, next);
             var duplicate = target.Duplicate(name);
-            Settings.settings.AddPlaylist(duplicate);
+            PlaylistService.AddPlaylist(duplicate.FromVO());
             Playlists.Add(duplicate);
             PlaylistTabView.SelectedItem = duplicate;
         }
 
         private void PlaylistTabView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
-            ObservableCollection<Playlist> playlists = PlaylistTabView.ItemsSource as ObservableCollection<Playlist>;
+            ObservableCollection<PlaylistView> playlists = PlaylistTabView.ItemsSource as ObservableCollection<PlaylistView>;
             for (int i = 0; i < playlists.Count; i++)
                 playlists[i].Priority = i;
-            Settings.settings.UpdatePlaylists(playlists);
+            PlaylistService.UpdatePlaylists(playlists);
         }
 
         private void PlaylistTabView_TabClosing(object sender, TabClosingEventArgs e)
         {
-            var playlist = (Playlist)e.Item;
+            var playlist = (PlaylistView)e.Item;
             e.Cancel = true;
             RemovePlaylist(playlist);
         }
 
-        public void RemovePlaylist(Playlist playlist)
+        public void RemovePlaylist(PlaylistView playlist)
         {
             PlaylistController.DeletePlaylist(playlist);
         }
@@ -158,10 +166,10 @@ namespace SMPlayer
         private async void CreateNewPlaylist()
         {
             string name = Helper.Localize("Playlist");
-            dialog = new RenameDialog(RenameOption.Create, RenameTarget.Playlist, Settings.settings.FindNextPlaylistName(name))
+            dialog = new RenameDialog(RenameOption.Create, RenameTarget.Playlist, PlaylistService.FindNextPlaylistName(name))
             {
-                Validate = Settings.settings.ValidatePlaylistName,
-                Confirmed = (newName) => Settings.settings.AddPlaylist(newName)
+                Validate = PlaylistService.ValidatePlaylistName,
+                Confirmed = (newName) => PlaylistService.AddPlaylist(newName)
             };
             await dialog.ShowAsync();
         }
@@ -226,7 +234,7 @@ namespace SMPlayer
         private async void HeaderedPlaylistControl_Loaded(object sender, RoutedEventArgs e)
         {
             PlaylistController = sender as HeaderedPlaylistControl;
-            await PlaylistController.SetPlaylist(PlaylistTabView.SelectedItem as Playlist);
+            await PlaylistController.SetPlaylist(PlaylistTabView.SelectedItem as PlaylistView);
         }
 
         private void TabHeader_Tapped(object sender, TappedRoutedEventArgs e)
@@ -243,26 +251,26 @@ namespace SMPlayer
             CreateNewPlaylist();
         }
 
-        void IPlaylistEventListener.Added(Playlist playlist)
+        void IPlaylistEventListener.Execute(Playlist playlist, PlaylistEventArgs args)
         {
-            Playlists.Add(playlist);
-            PlaylistTabView.SelectedItem = playlist;
-            BringSelectedTabIntoView();
-        }
-
-        void IPlaylistEventListener.Renamed(Playlist playlist)
-        {
-            SelectPlaylistById(playlist.Id)?.CopyFrom(playlist);
-        }
-
-        void IPlaylistEventListener.Removed(Playlist playlist)
-        {
-            Playlists.Remove(playlist);
-        }
-
-        void IPlaylistEventListener.Sorted(Playlist playlist, SortBy criterion)
-        {
-            LoadPlaylistSongs(playlist);
+            switch (args.EventType)
+            {
+                case PlaylistEventType.Add:
+                    PlaylistView vo = playlist.ToVO();
+                    Playlists.Add(vo);
+                    PlaylistTabView.SelectedItem = vo;
+                    BringSelectedTabIntoView();
+                    break;
+                case PlaylistEventType.Rename:
+                    SelectPlaylistById(playlist.Id)?.CopyFrom(playlist.ToVO());
+                    break;
+                case PlaylistEventType.Remove:
+                    Playlists.RemoveAll(i => i.Id == playlist.Id);
+                    break;
+                case PlaylistEventType.Sort:
+                    LoadPlaylistSongs(playlist.ToVO());
+                    break;
+            }
         }
     }
 }

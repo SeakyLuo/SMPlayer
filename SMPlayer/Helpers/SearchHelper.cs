@@ -1,5 +1,7 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Interfaces;
+using SMPlayer.Models;
 using SMPlayer.Models.VO;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,390 +13,325 @@ namespace SMPlayer.Helpers
 {
     public static class SearchHelper
     {
-        private const StringComparison Comparison = StringComparison.CurrentCultureIgnoreCase;
+        public const StringComparison Comparison = StringComparison.CurrentCultureIgnoreCase;
 
-        public static IEnumerable<Playlist> SearchArtists(IEnumerable<Music> source, string keyword, SortBy criterion)
+        public static int EvaluateString(string str, string keyword, int offset = 0)
         {
-            var list = source.Where(m => IsTargetArtist(m, keyword))
+            if (str == keyword) return 100 + offset;
+            if (str.Equals(keyword, Comparison)) return 95 + offset;
+            if (str.StartsWith(keyword)) return 90 + offset;
+            if (str.StartsWith(keyword, Comparison)) return 85 + offset;
+            if (str.Contains(keyword)) return 80 + offset;
+            if (str.Contains(keyword, Comparison)) return 75 + offset;
+            return 0;
+        }
+
+        public static bool Matches(string str, string keyword)
+        {
+            return str.Contains(keyword, Comparison);
+        }
+
+        public static IEnumerable<MatchResult<Artist>> SearchArtists(IEnumerable<Music> source, string keyword, SortBy criterion = SortBy.Default)
+        {
+            var list = source.Where(m => HasTargetArtist(m, keyword))
                              .GroupBy(m => m.Artist)
-                             .Select(group => new Playlist(group.Key, group) { Artist = group.Key });
-            return SortArtists(list, keyword, criterion);
+                             .Select(group => new Artist(group.Key, group))
+                             .Select(i => new MatchResult<Artist>(i, keyword));
+            return SortArtists(list, criterion);
         }
 
-        public static IEnumerable<AlbumView> SearchAlbums(IEnumerable<Music> source, string keyword, SortBy criterion)
+        public static bool HasTargetArtist(Music music, string keyword)
         {
-            var list = source.Where(m => IsTargetAlbum(m, keyword))
+            return Matches(music.Artist, keyword);
+        }
+
+        public static IEnumerable<MatchResult<Album>> SearchAlbums(IEnumerable<Music> source, string keyword, SortBy criterion = SortBy.Default)
+        {
+            var list = source.Where(m => HasTargetAlbum(m, keyword))
                              .GroupBy(m => m.Album)
-                             .Select(group =>
-                             {
-                                 Music music = group.ElementAt(0);
-                                 return new AlbumView(music.Album, music.Artist, group.OrderBy(m => m.Name).ThenBy(m => m.Artist), false);
-                             });
-            return SortAlbums(list, keyword, criterion);
+                             .Select(group => new Album(group.Key, group))
+                             .Select(i => new MatchResult<Album>(i, keyword));
+            return SortAlbums(list, criterion);
         }
-        public static IEnumerable<Music> SearchSongs(IEnumerable<Music> source, string keyword, SortBy criterion)
+        public static bool HasTargetAlbum(Music music, string keyword)
         {
-            var list = source.Where(m => IsTargetMusic(m, keyword));
-            return SortSongs(list, keyword, criterion);
+            return Matches(music.Album, keyword) || Matches(music.Artist, keyword);
         }
-        public static IEnumerable<AlbumView> SearchPlaylists(IEnumerable<Playlist> source, string keyword, SortBy criterion)
+
+        public static IEnumerable<MatchResult<Music>> SearchSongs(IEnumerable<Music> source, string keyword, SortBy criterion = SortBy.Default)
         {
-            var list = source.Where(i => IsTargetPlaylist(i, keyword)).Select(i => i.ToSearchAlbumView());
-            return SortPlaylists(list, keyword, criterion);
+            var list = source.Select(i => new MatchResult<Music>(i, keyword)).Where(i => i.Matches);
+            return SortSongs(list, criterion);
         }
-        public static IEnumerable<GridViewFolder> SearchFolders(IEnumerable<FolderTree> source, string keyword, SortBy criterion)
+        public static IEnumerable<MatchResult<Playlist>> SearchPlaylists(IEnumerable<Playlist> source, string keyword, SortBy criterion = SortBy.Default)
         {
-            var list = source.Where(i => IsTargetFolder(i, keyword)).Select(tree => new GridViewFolder(tree));
-            return SortFolders(list, keyword, criterion);
+            var list = source.Select(i => new MatchResult<Playlist>(i, keyword)).Where(i => i.Matches);
+            return SortPlaylists(list, criterion);
         }
-        public static IEnumerable<GridViewFolder> SearchFolders(IEnumerable<Music> songs, IEnumerable<FolderTree> source, string keyword, SortBy criterion)
+
+        public static IEnumerable<MatchResult<Playlist>> SearchPlaylists(IEnumerable<Music> songs, IEnumerable<Playlist> source, string keyword, SortBy criterion = SortBy.Default)
         {
-            var list = source.Where(i => IsTargetFolder(i, keyword))
-                             .AsParallel().Select(tree => new GridViewFolder(tree)).ToList();
-            var pathSet = list.Select(i => i.Path).ToHashSet();
-            list.AddRange(songs.Where(i => IsTargetMusic(i, keyword)).Select(i => FileHelper.GetParentPath(i.Path))
+            var list = source.Select(i => new MatchResult<Playlist>(i, keyword)).Where(i => i.Matches)
+                             .Select(i => { i.Entity.Songs = PlaylistService.FindPlaylistItems(i.Entity.Id); return i; })
+                             .ToList();
+            var playlistIds = list.Select(i => i.Entity.Id).ToHashSet();
+            list.AddRange(PlaylistService.FindPlaylistIdsByItems(songs.Select(i => i.Id))
+                                         .Where(i => !playlistIds.Contains(i)).AsParallel()
+                                         .Select(i => new MatchResult<Playlist>(PlaylistService.FindPlaylist(i), keyword)));
+            var nowPlaying = new MatchResult<Playlist>(MusicPlayer.NowPlaying, keyword);
+            if (nowPlaying.Matches) list.Add(nowPlaying);
+            var myFavorites = new MatchResult<Playlist>(PlaylistService.MyFavorites, keyword);
+            if (myFavorites.Matches) list.Add(myFavorites);
+            return SortPlaylists(list, criterion);
+        }
+        public static IEnumerable<MatchResult<FolderTree>> SearchFolders(IEnumerable<FolderTree> source, string keyword, SortBy criterion = SortBy.Default)
+        {
+            var list = source.Select(i => new MatchResult<FolderTree>(i, keyword)).Where(i => i.Matches);
+            return SortFolders(list, criterion);
+        }
+        public static IEnumerable<MatchResult<FolderTree>> SearchFolders(IEnumerable<Music> songs, IEnumerable<FolderTree> source, string keyword, SortBy criterion = SortBy.Default)
+        {
+            var list = source.Select(i => new MatchResult<FolderTree>(i, keyword))
+                             .Where(i => i.Matches)
+                             .AsParallel().Select(i => { i.Entity = StorageService.FindFolder(i.Entity.Id); return i; })
+                             .ToList();
+            var pathSet = list.Select(i => i.Entity.Path).ToHashSet();
+            list.AddRange(songs.Select(i => StorageHelper.GetParentPath(i.Path))
                                .Distinct().Where(i => !pathSet.Contains(i))
-                               .AsParallel().Select(i => Settings.FindFolderInfo(i))
-                               .Where(i => i != null).Select(tree => new GridViewFolder(tree)).ToList());
-            return SortFolders(list.AsParallel().Select(i =>
-            {
-                i.Source = Settings.FindFullFolder(i.Source.Id);
-                return i;
-            }), keyword, criterion);
-        }
-        public static bool IsTargetArtist(Music music, string keyword)
-        {
-            return IsTargetArtist(music.Artist, keyword);
-        }
-        public static bool IsTargetArtist(string artist, string keyword)
-        {
-            return artist.Contains(keyword, Comparison);
+                               .AsParallel().Select(i => StorageService.FindFolder(i))
+                               .Where(i => i != null)
+                               .Select(i => new MatchResult<FolderTree>(i, keyword)));
+            return SortFolders(list, criterion);
         }
 
-        public static IEnumerable<Playlist> SortArtists(IEnumerable<Playlist> list, string keyword, SortBy criterion)
+        private static IEnumerable<MatchResult<T>> SortByDefault<T>(IEnumerable<MatchResult<T>> list) where T : ISearchEvaluator
+        {
+            return list.OrderByDescending(i => i.Score);
+        }
+
+        public static IEnumerable<T> SearchAndSortByDefault<T>(IEnumerable<T> list, string keyword) where T : ISearchEvaluator
+        {
+            return SortByDefault(list.Select(i => new MatchResult<T>(i, keyword)).Where(i => i.Matches)).Select(i => i.Entity);
+        }
+
+        public static IEnumerable<MatchResult<Artist>> SortArtists(IEnumerable<MatchResult<Artist>> list, SortBy criterion)
         {
             switch (criterion)
             {
                 case SortBy.Default:
-                    return DefaultSort(list.OrderBy(i => i.Name), keyword, i => i.Name);
+                    return SortByDefault(list);
                 case SortBy.Name:
-                    return list.OrderBy(a => a.Name).ToList();
+                    return list.OrderBy(i => i.Entity.Name);
                 case SortBy.Album:
-                    return list.Select(i => new { data = i, count = i.Songs.Select(m => m.Album).Distinct().Count() })
+                    return list.Select(i => new { data = i, count = i.Entity.Songs.Select(m => m.Album).Distinct().Count() })
                                .OrderByDescending(p => p.count).Select(i => i.data);
                 case SortBy.PlayCount:
-                    return list.Select(i => new { data = i, count = i.Songs.Select(m => m.PlayCount).Sum() })
+                    return list.Select(i => new { data = i, count = i.Entity.Songs.Select(m => m.PlayCount).Sum() })
                                .OrderByDescending(p => p.count).Select(i => i.data);
                 case SortBy.Duration:
-                    return list.Select(i => new { data = i, count = i.Songs.Select(m => m.Duration).Sum() })
+                    return list.Select(i => new { data = i, count = i.Entity.Songs.Select(m => m.Duration).Sum() })
                                .OrderByDescending(p => p.count).Select(i => i.data);
                 default:
-                    return null;
+                    return list;
             }
         }
-        public static bool IsTargetAlbum(Music music, string keyword)
-        {
-            return music.Album.Contains(keyword, Comparison) || music.Artist.Contains(keyword, Comparison);
-        }
 
-        public static bool IsTargetAlbum(AlbumView album, string keyword)
-        {
-            return album.Name.Contains(keyword, Comparison) || album.Artist.Contains(keyword, Comparison);
-        }
-
-        public static IEnumerable<AlbumView> SortAlbums(IEnumerable<AlbumView> list, string keyword, SortBy criterion)
+        public static IEnumerable<MatchResult<Album>> SortAlbums(IEnumerable<MatchResult<Album>> list, SortBy criterion)
         {
             switch (criterion)
             {
                 case SortBy.Default:
-                    return DefaultSort(list.OrderBy(i => i.Name), keyword, i => i.Name);
+                    return SortByDefault(list);
                 case SortBy.Name:
-                    return list.OrderBy(i => i.Name);
+                    return list.OrderBy(i => i.Entity.Name);
                 case SortBy.PlayCount:
-                    return list.Select(i => new { data = i, count = i.Songs.Select(m => m.PlayCount).Sum() })
+                    return list.Select(i => new { data = i, count = i.Entity.Songs.Select(m => m.PlayCount).Sum() })
                                .OrderByDescending(p => p.count).Select(i => i.data);
                 case SortBy.Duration:
-                    return list.Select(i => new { data = i, count = i.Songs.Select(m => m.Duration).Sum() })
+                    return list.Select(i => new { data = i, count = i.Entity.Songs.Select(m => m.Duration).Sum() })
                                .OrderByDescending(p => p.count).Select(i => i.data);
                 default:
-                    return null;
+                    return list;
             }
         }
-        public static bool IsTargetMusic(Music music, string keyword)
-        {
-            return music.Name.Contains(keyword, Comparison) ||
-                   music.Album.Contains(keyword, Comparison) ||
-                   music.Artist.Contains(keyword, Comparison);
-        }
 
-        public static IEnumerable<Music> SortSongs(IEnumerable<Music> list, string keyword, SortBy criterion)
+        public static IEnumerable<MatchResult<Music>> SortSongs(IEnumerable<MatchResult<Music>> list, SortBy criterion)
         {
             switch (criterion)
             {
                 case SortBy.Default:
-                    return DefaultSort(list.OrderBy(i => i.Name)
-                                           .ThenByDescending(i => i.PlayCount)
-                                           .ThenBy(i => i.Artist)
-                                           .ThenBy(i => i.Album), keyword, m => m.Name);
+                    return SortByDefault(list);
                 case SortBy.Title:
-                    return list.OrderBy(i => i.Name).ThenByDescending(i => i.PlayCount);
+                    return list.OrderBy(i => i.Entity.Name).ThenByDescending(i => i.Entity.PlayCount);
                 case SortBy.Artist:
-                    return list.OrderBy(i => i.Artist).ThenByDescending(i => i.PlayCount);
+                    return list.OrderBy(i => i.Entity.Artist).ThenByDescending(i => i.Entity.PlayCount);
                 case SortBy.Album:
-                    return list.OrderBy(i => i.Album).ThenByDescending(i => i.PlayCount);
+                    return list.OrderBy(i => i.Entity.Album).ThenByDescending(i => i.Entity.PlayCount);
                 case SortBy.PlayCount:
-                    return list.OrderByDescending(i => i.PlayCount);
+                    return list.OrderByDescending(i => i.Entity.PlayCount);
                 case SortBy.Duration:
-                    return list.OrderBy(i => i.Duration).ThenByDescending(i => i.PlayCount);
+                    return list.OrderBy(i => i.Entity.Duration).ThenByDescending(i => i.Entity.PlayCount);
                 case SortBy.DateAdded:
-                    return list.OrderBy(i => i.DateAdded).ThenByDescending(i => i.PlayCount);
+                    return list.OrderBy(i => i.Entity.DateAdded).ThenByDescending(i => i.Entity.PlayCount);
                 default:
-                    return null;
+                    return list;
             }
-        }
-        public static bool IsTargetPlaylist(Playlist playlist, string keyword)
-        {
-            return playlist.Name.Contains(keyword, Comparison) || 
-                   (!playlist.IsEmpty && playlist.Songs.Any(m => IsTargetMusic(m, keyword)));
         }
 
-        public static IEnumerable<AlbumView> SortPlaylists(IEnumerable<AlbumView> src, string keyword, SortBy criterion)
+        public static IEnumerable<MatchResult<Playlist>> SortPlaylists(IEnumerable<MatchResult<Playlist>> list, SortBy criterion)
         {
-            var nowPlaying = MusicPlayer.NowPlaying;
-            Playlist myFavorites = Settings.MyFavoritesPlaylist;
-            bool isNowPlayingTarget = IsTargetPlaylist(nowPlaying, keyword),
-                 isFavoriteTarget = IsTargetPlaylist(myFavorites, keyword);
-            List<AlbumView> list;
-            if (criterion == SortBy.Default)
+            switch (criterion)
             {
-                string defaultSelector(AlbumView i) => i.Name;
-                list = DefaultSort(src, keyword, defaultSelector).ToList();
-                int insert = list.Count > 0 && IsExact(list[0], keyword, defaultSelector) ? 1 : 0;
-                if (isNowPlayingTarget) list.Insert(insert, nowPlaying.ToSearchAlbumView(EntityType.NowPlaying));
-                if (isFavoriteTarget) list.Insert(isNowPlayingTarget ? ++insert : insert, myFavorites.ToSearchAlbumView(EntityType.MyFavorites));
+                case SortBy.Default:
+                    return SortByDefault(list);
+                case SortBy.PlayCount:
+                    return list.Select(i => new { data = i, count = i.Entity.Songs.Select(m => m.PlayCount).Sum() })
+                               .OrderByDescending(p => p.count).Select(i => i.data);
+                case SortBy.Duration:
+                    return list.Select(i => new { data = i, count = i.Entity.Songs.Select(m => m.Duration).Sum() })
+                               .OrderByDescending(p => p.count).Select(i => i.data);
+                default:
+                    return list;
             }
-            else
-            {
-                list = src.ToList();
-                if (isNowPlayingTarget) list.Add(nowPlaying.ToSearchAlbumView(EntityType.NowPlaying));
-                if (isFavoriteTarget) list.Add(myFavorites.ToSearchAlbumView(EntityType.MyFavorites));
-                switch (criterion)
-                {
-                    case SortBy.Name:
-                        return list.OrderBy(a => a.Name);
-                    case SortBy.PlayCount:
-                        return list.Select(i => new { data = i, count = i.Songs.Select(m => m.PlayCount).Sum() })
-                                   .OrderByDescending(p => p.count).Select(i => i.data);
-                    case SortBy.Duration:
-                        return list.Select(i => new { data = i, count = i.Songs.Select(m => m.Duration).Sum() })
-                                   .OrderByDescending(p => p.count).Select(i => i.data);
-                }
-            }
-            return list;
-        }
-        public static bool IsTargetFolder(FolderTree tree, string keyword)
-        {
-            return tree.Name.Contains(keyword, Comparison);
-        }
-        public static IEnumerable<GridViewFolder> SortFolders(IEnumerable<GridViewFolder> src, string keyword, SortBy criterion)
-        {
-            List<GridViewFolder> list;
-            if (criterion == SortBy.Default)
-            {
-                list = DefaultSort(src, keyword, i => i.Name).ToList();
-            }
-            else
-            {
-                list = src.ToList();
-                switch (criterion)
-                {
-                    case SortBy.Name:
-                        return src.OrderBy(a => a.Name);
-                }
-            }
-            return list;
-        }
-        public static ObservableCollection<T> DefaultSort<T>(IEnumerable<T> collection, string keyword, Func<T, string> selector)
-        {
-            ObservableCollection<T> list = new ObservableCollection<T>(collection);
-            List<int> startswith = new List<int>();
-            for (int i = 0; i < list.Count; i++)
-                if (selector(list.ElementAt(i)).StartsWith(keyword))
-                    startswith.Add(i);
-            for (int i = 0; i < startswith.Count; i++)
-                if (startswith[i] != i)
-                    list.Move(startswith[i], i);
-            int exact = list.FindIndex(m => IsExact(m, keyword, selector));
-            if (exact > 0) list.Move(exact, 0);
-            return list;
         }
 
-        public static bool IsExact<T>(T item, string keyword, Func<T, string> selector)
+        public static IEnumerable<MatchResult<FolderTree>> SortFolders(IEnumerable<MatchResult<FolderTree>> list, SortBy criterion)
         {
-            return keyword.Equals(selector(item), Comparison);
+            switch (criterion)
+            {
+                case SortBy.Default:
+                    return SortByDefault(list);
+                case SortBy.Name:
+                    return list.OrderBy(a => a.Entity.Name);
+                default:
+                    return list;
+            }
         }
 
-        public static async Task<SearchResult> Search(string keyword)
+        public static async Task<EvaluateResult> Search(string keyword)
         {
-            IEnumerable<Music> allSongs = Settings.AllSongs;
-            Music music = (await Task.Run(() => SearchSongs(allSongs, keyword, SortBy.Default)))?.FirstOrDefault();
-            Playlist artist = (await Task.Run(() => SearchArtists(allSongs, keyword, SortBy.Default)))?.FirstOrDefault();
-            AlbumView album = (await Task.Run(() => SearchAlbums(allSongs, keyword, SortBy.Default)))?.FirstOrDefault();
-            AlbumView playlist = (await Task.Run(() => SearchPlaylists(Settings.AllPlaylists, keyword, SortBy.Default)))?.FirstOrDefault();
-            GridViewFolder folder = (await Task.Run(() => SearchFolders(Settings.AllFolders, keyword, SortBy.Default)))?.FirstOrDefault();
+            IEnumerable<Music> allSongs = MusicService.AllSongs;
+            Music music = await Task.Run(() => SearchSongs(allSongs, keyword)?.FirstOrDefault()?.Entity);
+            Artist artist = await Task.Run(() => SearchArtists(allSongs, keyword)?.FirstOrDefault()?.Entity);
+            Album album = await Task.Run(() => SearchAlbums(allSongs, keyword)?.FirstOrDefault()?.Entity);
+            Playlist playlist = await Task.Run(() => SearchPlaylists(PlaylistService.AllPlaylists, keyword)?.FirstOrDefault()?.Entity);
+            FolderTree folder = await Task.Run(() => SearchFolders(StorageService.AllFolders, keyword)?.FirstOrDefault()?.Entity);
             return MergeSearchResult(keyword, music, artist, album, playlist, folder);
         }
 
-        public static async Task<SearchResult> SearchByArtist(string artist, string keyword)
+        public static async Task<EvaluateResult> SearchByArtist(string artist, string keyword)
         {
             return await SearchByArtist(artist, keyword, null);
         }
 
-        public static async Task<SearchResult> SearchByArtistMusic(string artist, string keyword)
+        public static async Task<EvaluateResult> SearchByArtistMusic(string artist, string keyword)
         {
-            return await SearchByArtist(artist, keyword, SearchType.Songs);
+            return await SearchByArtist(artist, keyword, EntityType.Song);
         }
 
-        public static async Task<SearchResult> SearchByArtistAlbum(string artist, string keyword)
+        public static async Task<EvaluateResult> SearchByArtistAlbum(string artist, string keyword)
         {
-            return await SearchByArtist(artist, keyword, SearchType.Albums);
+            return await SearchByArtist(artist, keyword, EntityType.Album);
         }
 
-        public static async Task<SearchResult> SearchAlbumMusic(string albumName, string keyword)
+        public static async Task<EvaluateResult> SearchAlbumMusic(string albumName, string keyword)
         {
-            AlbumView album = (await Task.Run(() => SearchAlbums(Settings.AllSongs, albumName, SortBy.Default)))?.FirstOrDefault();
+            Album album = await Task.Run(() => SearchAlbums(MusicService.AllSongs, albumName)?.FirstOrDefault()?.Entity);
             return SearchMusicInCollection(album?.Songs, keyword);
         }
 
-        public static async Task<SearchResult> SearchPlaylistMusic(string playlistName, string keyword)
+        public static async Task<EvaluateResult> SearchPlaylistMusic(string playlistName, string keyword)
         {
-            AlbumView playlist = (await Task.Run(() => SearchPlaylists(Settings.AllPlaylists, playlistName, SortBy.Default)))?.FirstOrDefault();
+            Playlist playlist = await Task.Run(() => SearchPlaylists(PlaylistService.AllPlaylists, playlistName)?.FirstOrDefault()?.Entity);
             return SearchMusicInCollection(playlist?.Songs, keyword);
         }
 
-        public static async Task<SearchResult> SearchFolderMusic(string folderName, string keyword)
+        public static async Task<EvaluateResult> SearchFolderMusic(string folderName, string keyword)
         {
-            GridViewFolder folder = (await Task.Run(() => SearchFolders(Settings.AllFolders, folderName, SortBy.Default)))?.FirstOrDefault();
+            FolderTree folder = await Task.Run(() => SearchFolders(StorageService.AllFolders, folderName)?.FirstOrDefault()?.Entity);
             if (folder == null) return null;
-            folder.Source = Settings.FindFolder(folder.Id);
-            return SearchMusicInCollection(folder.Songs, keyword);
+            return SearchMusicInCollection(StorageService.FindSubSongs(folder), keyword);
         }
 
-        private static SearchResult SearchMusicInCollection(IEnumerable<Music> list, string keyword)
+        private static EvaluateResult SearchMusicInCollection(IEnumerable<Music> list, string keyword)
         {
             if (list == null) return null;
-            var music = SearchSongs(list, keyword, SortBy.Default).FirstOrDefault();
-            return new SearchResult(SearchType.Songs, music, EvaluateMusic(music, keyword));
+            var music = SearchSongs(list, keyword)?.FirstOrDefault()?.Entity;
+            return new EvaluateResult(EntityType.Song, music, keyword);
         }
 
-        private static async Task<SearchResult> SearchByArtist(string artist, string keyword, SearchType? searchType)
+        private static async Task<EvaluateResult> SearchByArtist(string artist, string keyword, EntityType? searchType)
         {
-            IEnumerable<Music> artistMusic = Settings.AllSongs.Where(i => IsTargetArtist(i, artist));
+            IEnumerable<Music> artistMusic = MusicService.AllSongs.Where(i => HasTargetArtist(i, artist));
             Music music = null;
-            AlbumView album = null;
+            Album album = null;
             if (!string.IsNullOrEmpty(keyword))
             {
-                if (searchType == null || searchType == SearchType.Songs)
+                if (searchType == null || searchType == EntityType.Song)
                 {
-                    music = (await Task.Run(() => SearchSongs(artistMusic, keyword, SortBy.Default)))?.FirstOrDefault();
+                    music = await Task.Run(() => SearchSongs(artistMusic, keyword)?.FirstOrDefault()?.Entity);
                 }
-                if (searchType == null || searchType == SearchType.Albums)
+                if (searchType == null || searchType == EntityType.Album)
                 {
-                    album = (await Task.Run(() => SearchAlbums(artistMusic, keyword, SortBy.Default)))?.FirstOrDefault();
+                    album = await Task.Run(() => SearchAlbums(artistMusic, keyword)?.FirstOrDefault()?.Entity);
                 }
             }
             return MergeSearchResult(keyword, music, null, album, null, null);
         }
 
-        private static SearchResult MergeSearchResult(string keyword, Music music, Playlist artist, AlbumView album, AlbumView playlist, GridViewFolder folder)
+        private static EvaluateResult MergeSearchResult(string keyword, Music music, Artist artist, Album album, Playlist playlist, FolderTree folder)
         {
-            List<SearchResult> results = new List<SearchResult>();
+            List<EvaluateResult> results = new List<EvaluateResult>();
             if (music != null)
             {
-                results.Add(new SearchResult(SearchType.Songs, music, EvaluateMusic(music, keyword)));
+                results.Add(new EvaluateResult(EntityType.Song, music, keyword));
             }
             if (artist != null)
             {
-                results.Add(new SearchResult(SearchType.Artists, artist, EvaluateArtist(artist, keyword)));
+                results.Add(new EvaluateResult(EntityType.Artist, artist, keyword));
             }
             if (album != null)
             {
-                results.Add(new SearchResult(SearchType.Albums, album, EvaluateAlbum(album, keyword)));
+                results.Add(new EvaluateResult(EntityType.Album, album, keyword));
             }
             if (folder != null)
             {
-                results.Add(new SearchResult(SearchType.Folders, folder, EvaluateFolder(folder, keyword)));
+                results.Add(new EvaluateResult(EntityType.Folder, folder, keyword));
             }
             if (playlist != null)
             {
-                results.Add(new SearchResult(SearchType.Playlists, playlist, EvaluatePlaylist(playlist, keyword)));
+                results.Add(new EvaluateResult(EntityType.Playlist, playlist, keyword));
             }
-            if (results.Count == 0)
-            {
-                return null;
-            }
-            results.Sort((r1, r2) => r2.Score - r1.Score);
-            return results[0];
-        }
-
-        public static int EvaluateArtist(Playlist item, string keyword)
-        {
-            if (item == null) return 0;
-            if (item.Name == keyword) return 98;
-            if (item.Name.Equals(keyword, Comparison)) return 93;
-            if (item.Name.Contains(keyword)) return 88;
-            if (item.Name.Contains(keyword, Comparison)) return 83;
-            return 0;
-        }
-        public static int EvaluateMusic(Music item, string keyword)
-        {
-            if (item == null) return 0;
-            if (item.Name == keyword) return 95;
-            if (item.Name.Equals(keyword, Comparison)) return 90;
-            if (item.Name.Contains(keyword)) return 85;
-            if (item.Name.Contains(keyword, Comparison)) return 80;
-            return 0;
-        }
-        public static int EvaluateAlbum(AlbumView item, string keyword)
-        {
-            if (item == null) return 0;
-            if (item.Name == keyword) return 99;
-            if (item.Name.Equals(keyword, Comparison)) return 94;
-            if (item.Name.Contains(keyword)) return 89;
-            if (item.Name.Contains(keyword, Comparison)) return 84;
-            return 0;
-        }
-        public static int EvaluateFolder(GridViewFolder item, string keyword)
-        {
-            if (item == null) return 0;
-            if (item.Name == keyword) return 97;
-            if (item.Name.Equals(keyword, Comparison)) return 92;
-            if (item.Name.Contains(keyword)) return 87;
-            if (item.Name.Contains(keyword, Comparison)) return 82;
-            return 0;
-        }
-        public static int EvaluatePlaylist(AlbumView item, string keyword)
-        {
-            if (item == null) return 0;
-            if (item.Name == keyword) return 96;
-            if (item.Name.Equals(keyword, Comparison)) return 91;
-            if (item.Name.Contains(keyword)) return 86;
-            if (item.Name.Contains(keyword, Comparison)) return 81;
-            return 0;
+            return results.OrderByDescending(i => i.Score).FirstOrDefault();
         }
     }
 
-    public class SearchResult
+    public class EvaluateResult
     {
-        public SearchType SearchType { get; set; }
-        public object Result { get; set; }
-        public int Score { get; set; }
+        public EntityType SearchType { get; set; }
+        public object Entity { get; set; }
+        public double Score { get; set; }
 
-        public SearchResult(SearchType type, object result, int score)
+        public EvaluateResult(EntityType type, ISearchEvaluator entity, string keyword)
         {
             SearchType = type;
-            Result = result;
-            Score = score;
+            Entity = entity;
+            Score = entity.Evaluate(keyword);
+        }
+    }
+
+    public class MatchResult<T> where T : ISearchEvaluator
+    {
+        public T Entity { get; set; }
+        public double Score { get; set; }
+        public bool Matches => Score > 0;
+
+        public MatchResult() { }
+
+        public MatchResult(T entity, string keyword)
+        {
+            Entity = entity;
+            Score = entity.Match(keyword);
         }
     }
 }

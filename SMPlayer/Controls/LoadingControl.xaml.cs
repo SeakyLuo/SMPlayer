@@ -88,7 +88,7 @@ namespace SMPlayer
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => SetMessage(text, args));
         } 
 
-        public void ShowDeterminant(string text, bool allowBreak = false, int max = 0, Action action = null)
+        public void ShowDeterminant(string text, bool allowBreak = false, int max = 0)
         { 
             SetMessage(text);
             IsDeterminant = true;
@@ -96,11 +96,6 @@ namespace SMPlayer
             Max = max;
             AllowBreak = allowBreak;
             this.Visibility = Visibility.Visible;
-            if (action != null)
-            {
-                action.Invoke();
-                Hide();
-            }
         }
 
         public void ShowIndeterminant(string text, bool allowBreak = false, Action action = null)

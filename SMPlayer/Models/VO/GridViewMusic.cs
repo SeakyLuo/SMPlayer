@@ -1,4 +1,6 @@
-﻿using SMPlayer.Models.VO;
+﻿using SMPlayer.Helpers;
+using SMPlayer.Models.VO;
+using SMPlayer.Services;
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -8,7 +10,8 @@ namespace SMPlayer.Models.VO
 {
     public class GridViewMusic : GridViewStorageItem, IMusicable
     {
-        public override long Id => Source.Id;
+        public override long Id => id;
+        private long id;
         public override string Name => Source.Name;
         public override string Info => Source.Artist;
         public override string PlayButtonToolTip => Helper.LocalizeText("GridViewMusicPlayInfo", Name);
@@ -21,9 +24,11 @@ namespace SMPlayer.Models.VO
                 OnPropertyChanged("IsPlaying");
             }
         }
-        public override string TypeIcon => "";
+        public override string TypeIcon => "Assets/colorful_no_bg.png";
         public string Artist { get => Source.Artist; }
-        public Music Source
+        public string Album { get => Source.Album; }
+        private FolderFile SourceFile;
+        public MusicView Source
         {
             get => source;
             set
@@ -35,15 +40,28 @@ namespace SMPlayer.Models.VO
                 OnPropertyChanged("Artist");
             }
         }
-        private Music source;
+        private MusicView source;
+        public override bool ShowTypeIcon => false;
+        
+        public GridViewMusic(FolderFile file)
+        {
+            id = file.Id;
+            Path = file.Path;
+            Type = StorageType.File;
+            SourceFile = file;
+            Thumbnail = MusicImage.DefaultImage;
+            MusicView music = MusicService.FindMusic(file.FileId).ToVO();
+            Source = music;
+            IsPlaying = music.Equals(MusicPlayer.CurrentMusic);
+        }
 
-        public GridViewMusic(Music music)
+        public GridViewMusic(MusicView music)
         {
             Path = music.Path;
             Type = StorageType.File;
             Thumbnail = MusicImage.DefaultImage;
             Source = music;
-            IsPlaying = MusicPlayer.CurrentMusic == music;
+            IsPlaying = music.Equals(MusicPlayer.CurrentMusic);
         }
         public override async Task LoadThumbnailAsync()
         {
@@ -55,9 +73,14 @@ namespace SMPlayer.Models.VO
             IsThumbnailLoading = false;
         }
 
+        public FolderFile ToFolderFile()
+        {
+            return SourceFile;
+        }
+
         Music IMusicable.ToMusic()
         {
-            return source;
+            return source.FromVO();
         }
     }
 }

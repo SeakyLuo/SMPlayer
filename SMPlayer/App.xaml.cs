@@ -89,10 +89,29 @@ namespace SMPlayer
                 if (e != null && e.TileId != "App")
                 {
                     var tileId = System.Net.WebUtility.UrlDecode(e.TileId);
-                    Type page = bool.Parse(e.Arguments) ? typeof(PlaylistsPage) :
-                                                          tileId.StartsWith(Helper.Localize(MenuFlyoutHelper.MyFavorites)) ? typeof(MyFavoritesPage) :
-                                                                                                                             typeof(AlbumPage);
-                    MainPage.Instance.NavigateToPage(page, tileId);
+                    if (Enum.TryParse(typeof(EntityType), e.Arguments, out object value) && value is EntityType entityType)
+                    {
+                        switch (entityType)
+                        {
+                            case EntityType.Album:
+                                MainPage.Instance.NavigateToPage(typeof(AlbumPage), tileId);
+                                break;
+                            case EntityType.MyFavorites:
+                                MainPage.Instance.NavigateToPage(typeof(MyFavoritesPage));
+                                break;
+                            default:
+                                long playlistId = long.Parse(tileId);
+                                if (MainPage.Instance.CurrentPage == typeof(PlaylistsPage))
+                                {
+                                    PlaylistsPage.Instance.NavigateToPlaylist(playlistId);
+                                }
+                                else
+                                {
+                                    MainPage.Instance.NavigateToPage(typeof(PlaylistsPage), playlistId);
+                                }
+                                break;
+                        }
+                    }
                 }
             }
             if (Inited)
@@ -158,7 +177,6 @@ namespace SMPlayer
         {
             SettingsHelper.Save();
             MusicPlayer.Save();
-            AlbumsPage.Save();
             await Helper.ClearBackups(10);
         }
 

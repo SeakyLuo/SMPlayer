@@ -1,6 +1,9 @@
 ﻿using SMPlayer.Controls;
+using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
 using SMPlayer.Models;
 using SMPlayer.Models.VO;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,17 +19,15 @@ using Windows.UI.Xaml.Input;
 
 namespace SMPlayer
 {
-    public sealed partial class MusicGridViewControl : UserControl, IMusicEventListener, ISwitchMusicListener, IMenuFlyoutItemClickListener, IMultiSelectListener
+    public sealed partial class MusicGridViewControl : UserControl, IMusicEventListener, IMusicPlayerEventListener, IMenuFlyoutItemClickListener, IMultiSelectListener
     {
         public object Header { get => MusicGridView.Header; set => MusicGridView.Header = value; }
         public ListViewSelectionMode SelectionMode { get => MusicGridView.SelectionMode; set => MusicGridView.SelectionMode = value; }
         public ObservableCollection<GridViewMusic> GridMusicCollection = new ObservableCollection<GridViewMusic>();
-        public List<Music> MusicCollection = new List<Music>();
-        private volatile bool IsProcessing = false;
+        private bool IsProcessing = false;
         public event ItemClickEventHandler GridItemClickedListener;
         public IMultiSelectListener MultiSelectListener { get; set; }
         public IMenuFlyoutHelperBuildListener MenuFlyoutHelperBuildListener { get; set; }
-        public List<IRemoveMusicListener> RemoveListeners = new List<IRemoveMusicListener>();
         public MenuFlyoutOption MenuFlyoutOpeningOption { get; set; }
         public event TypedEventHandler<FrameworkElement, EffectiveViewportChangedEventArgs> TopItemEffectiveViewportChanged;
 
@@ -37,8 +38,8 @@ namespace SMPlayer
         public MusicGridViewControl()
         {
             this.InitializeComponent();
-            MusicPlayer.AddSwitchMusicListener(this);
-            Settings.AddMusicEventListener(this);
+            MusicPlayer.AddMusicPlayerEventListener(this);
+            MusicService.AddMusicEventListener(this);
         }
 
         private void MusicGridView_ItemClick(object sender, ItemClickEventArgs e)
@@ -50,7 +51,7 @@ namespace SMPlayer
             var item = (GridViewMusic)e.ClickedItem;
             if (GridItemClickedListener == null)
             {
-                MusicPlayer.SetMusicAndPlay(MusicCollection, item.Source);
+                MusicPlayer.SetMusicAndPlay(GridMusicCollection, item.Source);
             }
             else
             {
@@ -58,78 +59,34 @@ namespace SMPlayer
             }
         }
 
-        public void Setup(IEnumerable<long> collection)
-        {
-            Setup(collection.Select(i => new MusicPath(i)));
-        }
-
         public void Setup(IEnumerable<IMusicable> collection)
         {
+            if (IsProcessing) return;
             IsProcessing = true;
             Clear();
             foreach (var item in collection)
             {
-                Music music = item.ToMusic();
-                AddMusic(music);
+                AddMusic(item.ToMusic().ToVO());
             }      
             IsProcessing = false;
         }
-        public void AddMusic(Music music, int index = -1)
+        public void AddMusic(MusicView music, int index = -1)
         {
             var copy = music.Copy();
             copy.IsPlaying = copy.Equals(MusicPlayer.CurrentMusic);
             GridViewMusic gridMusicView = new GridViewMusic(copy);
             if (index == -1)
             {
-                MusicCollection.Add(copy);
                 GridMusicCollection.Add(gridMusicView);
             }
             else
             {
-                MusicCollection.Insert(index, copy);
                 GridMusicCollection.Insert(index, gridMusicView);
             }
         }
         public void Clear()
         {
-            MusicCollection.Clear();
             GridMusicCollection.Clear();
-        }
-        public void Reverse()
-        {
-            if (IsProcessing) Helper.ShowNotification("NowLoading");
-            else
-            {
-                MusicCollection.Reverse();
-                GridMusicCollection.SetTo(GridMusicCollection.Reverse());
-            }
-        }
-        public void SortByTitle()
-        {
-            if (IsProcessing) Helper.ShowNotification("NowLoading");
-            else
-            {
-                MusicCollection = MusicCollection.OrderBy(m => m.Name).ToList();
-                GridMusicCollection.SetTo(GridMusicCollection.ToList().OrderBy(m => m.Name));
-            }
-        }
-        public void SortByArtist()
-        {
-            if (IsProcessing) Helper.ShowNotification("NowLoading");
-            else
-            {
-                MusicCollection = MusicCollection.OrderBy(m => m.Artist).ToList();
-                GridMusicCollection.SetTo(GridMusicCollection.ToList().OrderBy(m => m.Artist));
-            }
-        }
-        public void SortByAlbum()
-        {
-            if (IsProcessing) Helper.ShowNotification("NowLoading");
-            else
-            {
-                MusicCollection = MusicCollection.OrderBy(m => m.Album).ToList();
-                GridMusicCollection.SetTo(GridMusicCollection.ToList().OrderBy(m => m.Source.Album));
-            }
         }
 
         private void MenuFlyout_Opening(object sender, object e)
@@ -137,33 +94,32 @@ namespace SMPlayer
             MenuFlyoutHelper.SetMusicMenu(sender, this, MenuFlyoutHelperBuildListener, MenuFlyoutOpeningOption);
         }
 
-        public void UndoDelete(Music music)
+        public void UndoDelete(MusicView music)
         {
-            MusicCollection.Insert(removedItemIndex, music);
             GridMusicCollection.Insert(removedItemIndex, new GridViewMusic(music));
         }
 
-        public bool RemoveMusic(Music music)
+        public bool RemoveMusic(MusicView music)
         {
-            removedItemIndex = MusicCollection.IndexOf(music);
+            removedItemIndex = GridMusicCollection.FindIndex(i => i.Source == music);
             if (removedItemIndex > -1)
             {
-                MusicCollection.RemoveAt(removedItemIndex);
                 GridMusicCollection.RemoveAt(removedItemIndex);
-                foreach (var listener in RemoveListeners) listener.MusicRemoved(removedItemIndex, music, MusicCollection);
             }
             return removedItemIndex > -1;
         }
 
-        public void AddOrMoveToTheFirst(Music music)
+        public void AddOrMoveToTheFirst(IMusicable music)
         {
-            int removedItemIndex = MusicCollection.IndexOf(music);
-            if (removedItemIndex > -1)
+            GridViewMusic gridViewMusic = GridMusicCollection.FirstOrDefault(i => i.Source.Equals(music.ToMusic()));
+            if (gridViewMusic == null)
             {
-                MusicCollection.RemoveAt(removedItemIndex);
-                GridMusicCollection.RemoveAt(removedItemIndex);
+                GridMusicCollection.Insert(0, new GridViewMusic(music.ToMusic().ToVO()));
             }
-            AddMusic(music, 0);
+            else
+            {
+                GridMusicCollection.AddOrMoveToTheFirst(gridViewMusic);
+            }
         }
 
         private async void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
@@ -190,14 +146,18 @@ namespace SMPlayer
             }
         }
 
-        async void ISwitchMusicListener.MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
+        async void IMusicPlayerEventListener.Execute(MusicPlayerEventArgs args)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            switch (args.EventType)
             {
-                MusicPlayer.SetMusicPlaying(MusicCollection, next);
-                foreach (var item in GridMusicCollection)
-                    item.IsPlaying = item.Source.Equals(next);
-            });
+                case MusicPlayerEventType.Switch:
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        foreach (var item in GridMusicCollection)
+                            item.IsPlaying = item.Source.Equals(args.Music);
+                    });
+                    break;
+            }
         }
 
         void IMenuFlyoutItemClickListener.Execute(MenuFlyoutEventArgs args)
@@ -206,10 +166,7 @@ namespace SMPlayer
             {
                 case MenuFlyoutEvent.Remove:
                 case MenuFlyoutEvent.Delete:
-                    RemoveMusic(args.Music);
-                    break;
-                case MenuFlyoutEvent.UndoDelete:
-                    UndoDelete(args.Music);
+                    RemoveMusic(args.MusicView);
                     break;
                 case MenuFlyoutEvent.Select:
                     MusicGridView.SelectionMode = ListViewSelectionMode.Multiple;
@@ -237,9 +194,11 @@ namespace SMPlayer
                     break;
                 case MultiSelectEvent.SelectAll:
                     MusicGridView.SelectAll();
+                    Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(SelectedItemsCount);
                     break;
                 case MultiSelectEvent.ReverseSelections:
                     MusicGridView.ReverseSelections();
+                    Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(SelectedItemsCount);
                     break;
                 case MultiSelectEvent.ClearSelections:
                     MusicGridView.ClearSelections();
@@ -250,33 +209,30 @@ namespace SMPlayer
             MultiSelectListener?.Execute(commandBar, args);
         }
 
-        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
+        async void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
             switch (args.EventType)
             {
                 case MusicEventType.Modify:
-                    int index = MusicCollection.IndexOf(music);
+                    int index = GridMusicCollection.FindIndex(i => i.Source.Equals(music.ToVO()));
                     if (index > -1)
                     {
-                        GridMusicCollection[index].Source = MusicCollection[index] = args.ModifiedMusic;
+                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                        {
+                            GridMusicCollection[index].Source = args.ModifiedMusic.ToVO();
+                        });
                     }
                     break;
             }
         }
 
-    }
-
-    public class MusicPath : IMusicable
-    {
-        public long Id { get; set; }
-        public MusicPath(long Id)
+        private void MusicGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.Id = Id;
-        }
-
-        Music IMusicable.ToMusic()
-        {
-            return Settings.FindMusic(Id);
+            ListViewBase listViewBase = sender as ListViewBase;
+            if (listViewBase.SelectionMode == ListViewSelectionMode.Multiple)
+            {
+                Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(listViewBase.SelectedItems.Count);
+            }
         }
     }
 }

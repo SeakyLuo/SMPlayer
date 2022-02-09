@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SMPlayer.Helpers;
+using SMPlayer.Services;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -14,7 +16,7 @@ namespace SMPlayer.Models
     public class RecentTimeLine
     {
         public const int MAX_RECENT_TIMELINE_ITEMS = 500;
-        public ObservableCollection<Music> TimeLine { get; private set; }
+        public ObservableCollection<MusicView> TimeLine { get; private set; }
         public int Count { get => TimeLine.Count; }
         public NotifyRecentTimeLineChangedEventHandler CollectionChanged;
         private int justRemovedIndex = -1;
@@ -22,15 +24,15 @@ namespace SMPlayer.Models
 
         public RecentTimeLine() 
         {
-            TimeLine = new ObservableCollection<Music>();
+            TimeLine = new ObservableCollection<MusicView>();
         }
 
-        public RecentTimeLine(IEnumerable<Music> songs)
+        public RecentTimeLine(IEnumerable<MusicView> songs)
         {
-            TimeLine = songs == null ? new ObservableCollection<Music>() : new ObservableCollection<Music>(songs);
+            TimeLine = songs == null ? new ObservableCollection<MusicView>() : new ObservableCollection<MusicView>(songs);
         }
 
-        public void Add(Music music)
+        public void Add(MusicView music)
         {
             if (Count >= MAX_RECENT_TIMELINE_ITEMS)
             {
@@ -40,7 +42,7 @@ namespace SMPlayer.Models
             CollectionChanged?.Invoke(new RecentTimeLineChangedEventArgs() { Item = music, Type = MusicEventType.Add });
         }
 
-        public bool Remove(Music music)
+        public bool Remove(MusicView music)
         {
             justRemovedIndex = TimeLine.IndexOf(music);
             if (justRemovedIndex >= 0)
@@ -60,12 +62,12 @@ namespace SMPlayer.Models
 
         public static RecentTimeLine FromMusicList(IEnumerable<Music> list)
         {
-            return new RecentTimeLine(list?.OrderByDescending(m => m.DateAdded).Take(MAX_RECENT_TIMELINE_ITEMS));
+            return new RecentTimeLine(list?.OrderByDescending(m => m.DateAdded).Take(MAX_RECENT_TIMELINE_ITEMS).Select(i => i.ToVO()));
         }
 
         public static RecentTimeLine FromAllSongs()
         {
-            return FromMusicList(Settings.AllSongs);
+            return FromMusicList(MusicService.AllSongs);
         }
 
         public static string Categorize(DateTimeOffset dateAdded)
@@ -81,7 +83,7 @@ namespace SMPlayer.Models
             {
                 return "Yesterday";
             }
-            if (formatedDateAdded == now.AddDays(-7).ToString(dateFormat))
+            if (dateAdded > now.AddDays(-7))
             {
                 return "Recent7Days";
             }
@@ -89,7 +91,7 @@ namespace SMPlayer.Models
             {
                 return "ThisMonth";
             }
-            if (formatedDateAdded == now.AddDays(-30).ToString(dateFormat))
+            if (dateAdded > now.AddDays(-30))
             {
                 return "Recent30Days";
             }
@@ -103,7 +105,7 @@ namespace SMPlayer.Models
 
     public class RecentTimeLineChangedEventArgs
     {
-        public Music Item { get; set; }
+        public MusicView Item { get; set; }
         public MusicEventType Type { get; set; }
     }
 }

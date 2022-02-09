@@ -156,6 +156,9 @@
   <data name="ChangesSaved" xml:space="preserve">
     <value>Changes has been saved.</value>
   </data>
+  <data name="CheckingFolder" xml:space="preserve">
+    <value>Now checking folder "{0}"......</value>
+  </data>
   <data name="CheckNewMusicResult1Added" xml:space="preserve">
     <value>"{0}" is added</value>
   </data>
@@ -317,9 +320,6 @@
   </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
-  </data>
-  <data name="No Music" xml:space="preserve">
-    <value>No Music</value>
   </data>
   <data name="No Playlist" xml:space="preserve">
     <value>No Playlist</value>

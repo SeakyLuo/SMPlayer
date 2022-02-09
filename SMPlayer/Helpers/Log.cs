@@ -19,7 +19,7 @@ namespace SMPlayer
 
         public static async Task Init()
         {
-            LogFolder = await FileHelper.CreateFolder("Logs");
+            LogFolder = await StorageHelper.CreateFolder("Logs");
         }
 
         public static async Task ClearLogFiles(int maxBackups = 5)

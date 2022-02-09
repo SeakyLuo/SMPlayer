@@ -1,4 +1,7 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
+using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +17,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace SMPlayer.Controls
 {
-    public sealed partial class MusicInfoControl : UserControl, ISwitchMusicListener, IMediaPlayerStateChangedListener
+    public sealed partial class MusicInfoControl : UserControl, IMusicPlayerEventListener
     {
         public bool AllowMusicSwitching { get; set; }
         public bool ShowHeader { get; set; }
@@ -28,15 +31,16 @@ namespace SMPlayer.Controls
         private MusicProperties Properties;
         public static List<Action<Music, Music>> MusicModifiedListeners = new List<Action<Music, Music>>();
         public bool IsProcessing { get; private set; } = false;
-        public bool IsCurrentMusic
-        {
-            get => CurrentMusic == MusicPlayer.CurrentMusic;
-        }
+        public bool IsCurrentMusic => CurrentMusic.Equals(MusicPlayer.CurrentMusic);
         public MusicInfoControl()
         {
             this.InitializeComponent();
-            MusicPlayer.AddSwitchMusicListener(this);
-            MusicPlayer.MediaPlayerStateChangedListeners.Add(this);
+            MusicPlayer.AddMusicPlayerEventListener(this);
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            SetPlayButtonVisibility(MusicPlayer.IsPlaying);
         }
 
         public void SetMusicProperties(MusicProperties properties)
@@ -75,7 +79,7 @@ namespace SMPlayer.Controls
             Music oldMusic = CurrentMusic.Copy();
             CurrentMusic.PlayCount = 0;
             SetPlayCount(CurrentMusic);
-            Settings.settings.MusicModified(oldMusic, CurrentMusic);
+            MusicService.MusicModified(oldMusic, CurrentMusic);
         }
 
         public void SetPlayCount(Music music)
@@ -134,7 +138,7 @@ namespace SMPlayer.Controls
                 {
                     await Properties.SavePropertiesAsync();
                 });
-                Settings.settings.MusicModified(CurrentMusic, newMusic);
+                MusicService.MusicModified(CurrentMusic, newMusic);
                 CurrentMusic.CopyFrom(newMusic);
                 SaveProgress.Visibility = Visibility.Collapsed;
             }
@@ -158,17 +162,6 @@ namespace SMPlayer.Controls
         private void CheckIfDigit(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
-        }
-
-        public async void MusicSwitching(Music current, Music next, MediaPlaybackItemChangedReason reason)
-        {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
-            {
-                if (!AllowMusicSwitching) return;
-                // if modified but not saved
-                if (!IsPropertiesModified)
-                    SetMusicInfo(next);
-            });
         }
 
         private bool IsPropertiesModified
@@ -222,13 +215,28 @@ namespace SMPlayer.Controls
             }
         }
 
-        async void IMediaPlayerStateChangedListener.StateChanged(MediaPlaybackState state)
+        async void IMusicPlayerEventListener.Execute(MusicPlayerEventArgs args)
         {
-            // For F3 Support
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            switch (args.EventType)
             {
-                SetPlayButtonVisibility(state == MediaPlaybackState.Playing);
-            });
+                case MusicPlayerEventType.Switch:
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        if (!AllowMusicSwitching) return;
+                        // if modified but not saved
+                        if (!IsPropertiesModified)
+                            SetMusicInfo(args.Music);
+                    });
+                    break;
+                case MusicPlayerEventType.StateChanged:
+                    MediaPlaybackState state = (args as MusicPlayerStateChangedEventArgs).State;
+                    // For F3 Support
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        SetPlayButtonVisibility(state == MediaPlaybackState.Playing);
+                    });
+                    break;
+            }
         }
     }
 }

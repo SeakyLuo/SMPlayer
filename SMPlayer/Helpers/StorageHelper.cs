@@ -1,4 +1,6 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Dialogs;
+using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,13 +11,32 @@ using Windows.Storage;
 
 namespace SMPlayer.Helpers
 {
-    public static class FileHelper
+    public static class StorageHelper
     {
-        private const string PathJoiner = "\\";
+        public static bool IsParentDirectory(string child, string parent)
+        {
+            return GetParentPath(child) == parent;
+        }
+        public static async Task AddFolder(FolderTree folder)
+        {
+            string path = folder.Path;
+            string defaultName = StorageService.FindNextFolderName(folder, Helper.LocalizeText("NewFolderName"));
+            RenameDialog renameDialog = new RenameDialog(RenameOption.Create, RenameTarget.Folder, defaultName)
+            {
+                ValidateAsync = async (newName) => await StorageService.ValidateFolderName(path, newName),
+                Confirmed = async (newName) =>
+                {
+                    FolderTree tree = new FolderTree() { Path = Path.Combine(path, newName) };
+                    await StorageService.AddFolder(tree, folder);
+                }
+            };
+            await renameDialog.ShowAsync();
+        }
 
         public static string GetParentPath(string path)
         {
-            int index = path.LastIndexOf(PathJoiner);
+            int endIndex = path.EndsWith(Path.DirectorySeparatorChar) ? path.Length - 1 : path.Length;
+            int index = path.Substring(0, endIndex).LastIndexOf(Path.DirectorySeparatorChar);
             return index == -1 ? "" : path.Substring(0, index);
         }
 

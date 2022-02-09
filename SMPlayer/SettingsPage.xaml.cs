@@ -2,6 +2,7 @@
 using SMPlayer.Helpers;
 using SMPlayer.Models;
 using SMPlayer.Models.DAO;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -115,8 +116,8 @@ namespace SMPlayer
             string paren = Helper.LocalizeMessage("PostParenthesis");
             HyperlinkButton button = (HyperlinkButton)sender;
             List<Music> skipped = new List<Music>();
-            int count = Settings.AllSongs.Count(), counter = 0;
-            foreach (Music music in Settings.AllSongs)
+            int count = MusicService.AllSongs.Count(), counter = 0;
+            foreach (Music music in MusicService.AllSongs)
             {
                 if (addLyricsClickCounter == 0)
                 {
@@ -201,7 +202,7 @@ namespace SMPlayer
             if (folder == null) return;
             MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
             Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-            StorageFile dbFile = await FileHelper.LoadFileAsync(Path.Combine(Helper.LocalFolder.Path, SQLHelper.DBFileName));
+            StorageFile dbFile = await StorageHelper.LoadFileAsync(Path.Combine(Helper.LocalFolder.Path, SQLHelper.DBFileName));
             await dbFile.CopyAsync(folder);
             MainPage.Instance.Loader.Hide();
             MainPage.Instance.ShowLocalizedNotification("DataExported");

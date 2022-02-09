@@ -147,6 +147,12 @@
   <data name="Artists" xml:space="preserve">
     <value>歌手</value>
   </data>
+  <data name="ArtistsAndSoOn" xml:space="preserve">
+    <value>{0}，{1}等歌手</value>
+  </data>
+  <data name="ArtistSeperator" xml:space="preserve">
+    <value>；</value>
+  </data>
   <data name="ArtistsWithCount" xml:space="preserve">
     <value>歌手（{0}）</value>
   </data>
@@ -200,6 +206,9 @@
   </data>
   <data name="IsEnabledToggleSwitchOnToolTip" xml:space="preserve">
     <value>停用后，该项目不会有更高的随机播放概率</value>
+  </data>
+  <data name="ItemsSelected" xml:space="preserve">
+    <value>已选择{0}项</value>
   </data>
   <data name="KeepBoth" xml:space="preserve">
     <value>保留两者</value>
@@ -257,6 +266,9 @@
   </data>
   <data name="MyFavorites" xml:space="preserve">
     <value>我喜欢</value>
+  </data>
+  <data name="NewFolder" xml:space="preserve">
+    <value>新建文件夹</value>
   </data>
   <data name="NewFolderName" xml:space="preserve">
     <value>新建文件夹</value>
@@ -416,6 +428,9 @@
   </data>
   <data name="SongsWithCount" xml:space="preserve">
     <value>歌曲（{0}）</value>
+  </data>
+  <data name="Sort" xml:space="preserve">
+    <value>排序</value>
   </data>
   <data name="ThisMonth" xml:space="preserve">
     <value>本月</value>

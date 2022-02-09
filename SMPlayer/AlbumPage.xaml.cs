@@ -1,6 +1,7 @@
 ﻿using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarSymbols;
 using SMPlayer.Helpers;
 using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -42,33 +43,25 @@ namespace SMPlayer
 
         public async void LoadAlbum(object targetAlbum)
         {
-            Playlist playlist = null;
+            PlaylistView playlist = null;
             if (targetAlbum is AlbumView album)
             {
                 playlist = album.ToPlaylist();
             }
-            else if (targetAlbum is Playlist albumPlaylist)
+            else if (targetAlbum is PlaylistView albumPlaylist)
             {
                 playlist = albumPlaylist;
             }
             else if (targetAlbum is string albumText)
             {
                 int index = albumText.IndexOf(TileHelper.StringConcatenationFlag);
-                string albumName = albumText.Substring(0, index), albumArtist = albumText.Substring(index + TileHelper.StringConcatenationFlag.Length);
-                playlist = new Playlist(albumName, SearchAlbumSongs(albumName, albumArtist))
-                {
-                    Artist = albumArtist
-                };
-                AlbumPlaylistControl.SetPlaylistInfo(albumArtist);
+                string albumName = index == -1 ? albumText : albumText.Substring(0, index);
+                AlbumView albumView = new AlbumView(albumName, MusicService.SelectByAlbum(albumName), false);
+                playlist = albumView.ToPlaylist();
             }
             await AlbumPlaylistControl.SetPlaylist(playlist);
             MainPage.Instance.TitleBarBackground = AlbumPlaylistControl.HeaderBackground;
             MainPage.Instance.TitleBarForeground = MainPage.Instance.IsMinimal ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
-        }
-
-        public static IEnumerable<Music> SearchAlbumSongs(string albumName, string albumArtist)
-        {
-            return Settings.AllSongs.Where(m => m.Album == albumName && m.Artist == albumArtist);
         }
     }
 }

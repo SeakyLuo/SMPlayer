@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
 using SMPlayer.Models;
 using SMPlayer.Models.VO;
 using System;
@@ -24,6 +25,14 @@ namespace SMPlayer
 {
     public static class ClassHelper
     {
+        public static void Sort<T>(this List<T> list, SortBy criterion) where T : ISortable
+        {
+            list.Sort((m1, m2) => m1.GetComparable(criterion).CompareTo(m2.GetComparable(criterion)));
+        }
+        public static void InsertWithOrder<T>(this ObservableCollection<T> list, T sortable, SortBy criterion = SortBy.Default) where T : ISortable
+        {
+            list.Insert(FindSortedListInsertIndex(list, sortable, criterion), sortable);
+        }
         public static void InsertWithOrder<T>(this ObservableCollection<T> list, T comparable) where T : IComparable
         {
             list.Insert(FindSortedListInsertIndex(list, comparable), comparable);
@@ -31,6 +40,16 @@ namespace SMPlayer
         public static void InsertWithOrder<T>(this List<T> list, T comparable) where T : IComparable
         {
             list.Insert(FindSortedListInsertIndex(list, comparable), comparable);
+        }
+        public static int FindSortedListInsertIndex<T>(this IEnumerable<T> list, T sortable, SortBy criterion) where T : ISortable
+        {
+            IComparable comparable = sortable.GetComparable(criterion);
+            int count = list.Count();
+            for (int i = 0; i < count - 1; i++)
+                if (0 < comparable.CompareTo(list.ElementAt(i).GetComparable(criterion)) &&
+                    comparable.CompareTo(list.ElementAt(i + 1).GetComparable(criterion)) < 0)
+                    return i;
+            return count;
         }
         public static int FindSortedListInsertIndex<T>(this IEnumerable<T> list, T comparable) where T : IComparable
         {
@@ -83,10 +102,6 @@ namespace SMPlayer
             return list.ElementAt(Helper.RandRange(list.Count()));
         }
 
-        public static IEnumerable<Music> ToMusicList(this IEnumerable<string> paths)
-        {
-            return paths.Select(path => Settings.FindMusic(path));
-        }
         public static string RemoveBraces(this string str, char left, char right)
         {
             int start = str.IndexOf(left), end = str.IndexOf(right);
@@ -110,8 +125,13 @@ namespace SMPlayer
         }
         public static void AddOrMoveToTheFirst<T>(this Collection<T> list, T item)
         {
-            if (item.Equals(list.ElementAtOrDefault(0)))
+            if (item == null) return;
+            if (list.IsEmpty())
+            {
+                list.Add(item);
                 return;
+            }
+            if (item.Equals(list.First())) return;
             list.Remove(item);
             list.Insert(0, item);
         }
@@ -176,13 +196,20 @@ namespace SMPlayer
         }
         public static bool IsMusicFile(this StorageFile file)
         {
-            return file.FileType.EndsWith(".mp3");
+            return MusicHelper.SupportedFileTypes.Any(i => file.FileType.EndsWith(i));
         }
-        public static async Task<int> CountFilesAsync(this StorageFolder folder)
+        public static async Task<int> CountFoldersAsync(this StorageFolder folder)
         {
-            int count = (await folder.GetFilesAsync()).Count(f => f.IsMusicFile());
+            int count = 0;
             foreach (var sub in await folder.GetFoldersAsync())
-                count += await CountFilesAsync(sub);
+                count += 1 + await CountFoldersAsync(sub);
+            return count;
+        }
+        public static async Task<int> CountItemsAsync(this StorageFolder folder)
+        {
+            int count = 1 + (await folder.GetFilesAsync()).Count(f => f.IsMusicFile());
+            foreach (var sub in await folder.GetFoldersAsync())
+                count += 1 + await CountItemsAsync(sub);
             return count;
         }
         public static string GetLyrics(this StorageFile file)
@@ -367,7 +394,12 @@ namespace SMPlayer
 
         public static Music GetMusic(this MediaPlaybackItem item)
         {
-            return item.Source.CustomProperties["Source"] as Music;
+            return item?.Source.CustomProperties["Source"] as Music;
+        }
+
+        public static void SetMusic(this MediaPlaybackItem item, Music music)
+        {
+            item.Source.CustomProperties["Source"] = music;
         }
 
         public static IEnumerable<T> RandItems<T>(this IEnumerable<T> enumerable, int count) where T : class
@@ -385,6 +417,30 @@ namespace SMPlayer
         public static bool IsMusic(this FileType fileType)
         {
             return fileType == FileType.Music;
+        }
+
+        public static bool ScrollToIndex(this ListViewBase listViewBase, int index)
+        {
+            if (listViewBase.ContainerFromIndex(index) is ListViewItem item)
+            {
+                //listViewBase.ScrollIntoView(item, ScrollIntoViewAlignment.Default);
+                item.Locate();
+                return true;
+            }
+            return false;
+        }
+
+        public static bool ScrollToTop(this ListViewBase listViewBase)
+        {
+            return ScrollToIndex(listViewBase, 0);
+        }
+
+        public static void RemoveAfter<T>(this ObservableCollection<T> collection, int index)
+        {
+            while (collection.Count > index)
+            {
+                collection.RemoveAt(index);
+            }
         }
     }
 }

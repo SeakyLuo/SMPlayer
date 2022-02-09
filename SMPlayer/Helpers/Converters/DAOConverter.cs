@@ -10,7 +10,7 @@ using Windows.UI;
 
 namespace SMPlayer.Helpers
 {
-    public static class DAOHelper
+    public static class DAOConverter
     {
         public static Music FromDAO(this MusicDAO src)
         {
@@ -23,7 +23,23 @@ namespace SMPlayer.Helpers
                 Album = src.Album,
                 Duration = src.Duration,
                 PlayCount = src.PlayCount,
-                DateAdded = src.DateAdded
+                DateAdded = src.DateAdded,
+                State = src.State,
+            };
+        }
+
+        public static MusicDAO ToDAO(this MusicView src)
+        {
+            return new MusicDAO()
+            {
+                Id = src.Id,
+                Path = src.Path,
+                Name = src.Name,
+                Artist = src.Artist,
+                Album = src.Album,
+                Duration = src.Duration,
+                PlayCount = src.PlayCount,
+                DateAdded = src.DateAdded,
             };
         }
 
@@ -38,7 +54,8 @@ namespace SMPlayer.Helpers
                 Album = src.Album,
                 Duration = src.Duration,
                 PlayCount = src.PlayCount,
-                DateAdded = src.DateAdded
+                DateAdded = src.DateAdded,
+                State = src.State,
             };
         }
 
@@ -176,6 +193,10 @@ namespace SMPlayer.Helpers
                 Albums = src.Albums,
                 Playlists = src.Playlists,
                 Folders = src.Folders,
+                RecentAddedId = src.RecentAdded.ThisId,
+                MyFavoritesId = src.MyFavorites.ThisId,
+                MostPlayedId = src.MostPlayed.ThisId,
+                LeastPlayedId = src.LeastPlayed.ThisId,
             };
         }
 

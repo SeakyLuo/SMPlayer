@@ -7,14 +7,16 @@ using System.Threading.Tasks;
 using System;
 using SMPlayer.Helpers;
 using SMPlayer.Models.VO;
+using SMPlayer.Services;
+using SMPlayer.Interfaces;
 
 namespace SMPlayer.Models
 {
-    public class AlbumView : INotifyPropertyChanged, IPreferable
+    public class AlbumView : INotifyPropertyChanged, IPreferable, ISearchEvaluator
     {
         public string Name { get; set; }
         public string Artist { get; set; }
-        public ObservableCollection<Music> Songs { get; set; }
+        public ObservableCollection<MusicView> Songs { get; set; }
         public BitmapImage Thumbnail
         {
             get => thumbnail;
@@ -36,18 +38,18 @@ namespace SMPlayer.Models
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public AlbumView() { }
-        public AlbumView(Music music, bool setThumbnail = true)
+        public AlbumView(MusicView music, bool setThumbnail = true)
         {
             Name = music.Album;
             Artist = music.Artist;
-            Songs = new ObservableCollection<Music>() { music };
+            Songs = new ObservableCollection<MusicView>() { music };
             if (setThumbnail) SetThumbnail();
         }
         public AlbumView(string name, string artist)
         {
             Name = name;
             Artist = artist;
-            Songs = new ObservableCollection<Music>();
+            Songs = new ObservableCollection<MusicView>();
         }
         public AlbumView(string name, string artist, string thumbnail)
         {
@@ -55,13 +57,29 @@ namespace SMPlayer.Models
             Artist = artist;
             ThumbnailSource = thumbnail;
         }
-        public AlbumView(string name, string artist, IEnumerable<Music> songs, bool setThumbnail = true)
+        public AlbumView(string name, string artist, IEnumerable<MusicView> songs, bool setThumbnail = true)
         {
             Name = name;
             Artist = artist;
-            Songs = new ObservableCollection<Music>(songs);
+            Songs = new ObservableCollection<MusicView>(songs);
             if (setThumbnail) SetThumbnail();
         }
+        public AlbumView(string name, IEnumerable<Music> songs, bool setThumbnail = true)
+        {
+            Name = name;
+            Songs = new ObservableCollection<MusicView>(songs.Select(i => i.ToVO()));
+            List<string> artists = songs.GroupBy(m => m.Artist).OrderByDescending(i => i.Count()).Select(i => i.Key).ToList();
+            if (artists.Count() >= 3)
+            {
+                Artist = Helper.LocalizeText("ArtistsAndSoOn", artists[0], artists[1], artists.Count());
+            }
+            else
+            {
+                Artist = string.Join(Helper.LocalizeText("ArtistSeperator"), artists);
+            }
+            if (setThumbnail) SetThumbnail();
+        }
+
         private async void SetThumbnail()
         {
             if (ThumbnailSource == null)
@@ -87,40 +105,47 @@ namespace SMPlayer.Models
             }
             IsThumbnailLoading = false;
         }
-        public static async Task<MusicImage> GetAlbumCoverAsync(IEnumerable<Music> songs)
+        public static async Task<MusicImage> GetAlbumCoverAsync(IEnumerable<MusicView> songs)
         {
             foreach (var music in songs)
                 if (await ImageHelper.LoadImage(music) is BitmapImage image)
                     return new MusicImage(music.Path, image);
             return MusicImage.Default;
         }
-        public void AddMusic(Music music)
+        public void AddMusic(MusicView music)
         {
             Songs.InsertWithOrder(music);
         }
-        public void RemoveMusic(Music music)
+        public void RemoveMusic(MusicView music)
         {
             Songs.Remove(music);
         }
         public void SetSongs(IEnumerable<Music> music)
         {
-            Songs = new ObservableCollection<Music>(music);
+            Songs = new ObservableCollection<MusicView>(music.Select(i => i.ToVO()));
         }
 
-        public Playlist ToPlaylist()
+        public PlaylistView ToPlaylist()
         {
-            return new Playlist(Name, Songs)
+            if (EntityType == EntityType.Album)
             {
-                Id = Settings.FindPlaylist(Name)?.Id ?? 0,
-                Artist = Artist,
-            };
-        }
-        public AlbumInfo ToAlbumInfo()
-        {
-            return new AlbumInfo(Name, Artist, ThumbnailSource);
+                return new PlaylistView(Name, Songs.OrderBy(i => i.Artist).ThenBy(i => i.Name))
+                {
+                    Artist = Artist,
+                    EntityType = EntityType.Album,
+                };
+            }
+            else
+            {
+                return new PlaylistView(Name, Songs)
+                {
+                    Id = PlaylistService.FindPlaylist(Name)?.Id ?? 0,
+                    Artist = Artist,
+                };
+            }
         }
 
-        public bool Contains(Music music)
+        public bool Contains(MusicView music)
         {
             return Songs.Contains(music);
         }
@@ -133,8 +158,7 @@ namespace SMPlayer.Models
 
         public override bool Equals(object obj)
         {
-            return (obj is AlbumView album && Name == album.Name && Artist == album.Artist) ||
-                   (obj is AlbumInfo info && Name == info.Name && Artist == info.Artist);
+            return obj is AlbumView album && Name == album.Name;
         }
 
         public override int GetHashCode()
@@ -149,12 +173,22 @@ namespace SMPlayer.Models
 
         private string GetAlbumKey()
         {
-            return TileHelper.BuildAlbumNavigationFlag(Name, Artist);
+            return Name;
         }
 
         private string ConcatNameAndArtist()
         {
             return (string.IsNullOrEmpty(Name) ? Helper.LocalizeMessage("UnknownAlbum") : Name) + " - " + Artist;
+        }
+
+        double ISearchEvaluator.Match(string keyword)
+        {
+            return VOConverter.FromVO(this).Match(keyword);
+        }
+
+        double ISearchEvaluator.Evaluate(string keyword)
+        {
+            return VOConverter.FromVO(this).Evaluate(keyword);
         }
     }
 }

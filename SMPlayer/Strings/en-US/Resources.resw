@@ -1261,4 +1261,40 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="DetailButton.Text" xml:space="preserve">
     <value>Detail</value>
   </data>
+  <data name="FolderChainItemPathButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Check out this directory.</value>
+  </data>
+  <data name="ReleaseNotesRedesignLocalPagePathBox.Text" xml:space="preserve">
+    <value>Resigned the interaction of Local Page.</value>
+  </data>
+  <data name="CurrentPathTextBlock.Text" xml:space="preserve">
+    <value>Current Path</value>
+  </data>
+  <data name="LocalPageGoToSettingsRun.Text" xml:space="preserve">
+    <value>Go to Settings and set Music Folder &gt;</value>
+  </data>
+  <data name="LocalPageNoMusicRun.Text" xml:space="preserve">
+    <value>No music, </value>
+  </data>
+  <data name="ReleaseNotesAdjustAlbumGroupingLogic.Text" xml:space="preserve">
+    <value>Adjust the logic of grouping albums to their names only.</value>
+  </data>
+  <data name="ReleaseNotesIncompatibleTile.Text" xml:space="preserve">
+    <value>【Important】If you have pinned some playlists to the start menu before, you need to pin them again as they are incompatible from now on.</value>
+  </data>
+  <data name="ReleaseNotesImprovedLocalPageDragAndDrop.Text" xml:space="preserve">
+    <value>You can now drag and drop items in the Local Page to any other folder or directory.</value>
+  </data>
+  <data name="ReleaseNotesUpdateFolderResult.Text" xml:space="preserve">
+    <value>You can see the detailed result of refreshing directory.</value>
+  </data>
+  <data name="ReleaseNotesFixPreferenceSettingsCrash.Text" xml:space="preserve">
+    <value>Fix the crash when going to the Preference Page.</value>
+  </data>
+  <data name="ReleaseNotesFixSearchResultPageSort.Text" xml:space="preserve">
+    <value>Fix the bug that sort does not work in Search Detail Page.</value>
+  </data>
+  <data name="ReleaseNotesSupportsOtherMusicFormat.Text" xml:space="preserve">
+    <value>Supports more music format including flac, alac, aac, wma.</value>
+  </data>
 </root>

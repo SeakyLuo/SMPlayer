@@ -11,8 +11,8 @@ namespace SMPlayer.TemplateSelector
         public DataTemplate FileTemplate { get; set; }
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
-            if (item is TreeViewFolder) return FolderTemplate;
-            if (item is TreeViewFile) return FileTemplate;
+            if (item is GridViewFolder) return FolderTemplate;
+            if (item is GridViewMusic) return FileTemplate;
             return null;
         }
     }

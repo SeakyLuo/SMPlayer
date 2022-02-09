@@ -36,6 +36,10 @@
                 <ResourceDictionary Source="Dictionaries/SearchAppBarButton.xaml" />
                 <ResourceDictionary Source="Dictionaries/SearchTextBlockButton.xaml" />
                 <ResourceDictionary Source="Dictionaries/StretchTitleContentDialog.xaml" />
+                <ResourceDictionary Source="Dictionaries/HorizontalListView.xaml" />
+                <ResourceDictionary Source="Dictionaries/StretchingContentCommandBar.xaml" />
+                <ResourceDictionary Source="Dictionaries/FakeToggleButton.xaml" />
+                <ResourceDictionary Source="Dictionaries/MultiSelectCommandBar.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush
                 x:Key="PointerOverHighlightBackgroundBrush"
@@ -65,8 +69,12 @@
                 <Setter Property="OverflowButtonVisibility" Value="Collapsed" />
                 <Setter Property="Margin" Value="0,5" />
             </Style>
-            <Style x:Key="StretchListViewItemStyle" TargetType="ListViewItem">
+            <Style x:Key="StretchListViewItemStyle" TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemRevealStyle}">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="VerticalAlignment" Value="Stretch" />
+                <Setter Property="VerticalContentAlignment" Value="Stretch" />
             </Style>
             <Style x:Key="TitleBarHeaderStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="40" />
@@ -170,6 +178,9 @@
             <local:HorizontalAlignmentConverter x:Key="HorizontalAlignmentConverter" />
             <local:EmptyStringConverter x:Key="EmptyStringConverter" />
             <local:PreferenceCountConverter x:Key="PreferenceCountConverter" />
+            <local:FolderChainDropdownButtonNameConverter x:Key="FolderChainDropdownButtonNameConverter" />
+            <local:FolderChainItemTextBlockFontWeightConverter x:Key="FolderChainItemTextBlockFontWeightConverter" />
+            <local:InvertedBoolConverter x:Key="InvertedBoolConverter" />
             <AcrylicBrush
                 x:Key="MediaControlPlayButtonBorderBrush"
                 BackgroundSource="Backdrop"

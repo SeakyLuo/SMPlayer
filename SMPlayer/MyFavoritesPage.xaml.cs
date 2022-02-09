@@ -1,4 +1,6 @@
-﻿using SMPlayer.Models;
+﻿using SMPlayer.Helpers;
+using SMPlayer.Models;
+using SMPlayer.Services;
 using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -18,19 +20,21 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            Settings.AddMusicEventListener(this);
+            MusicService.AddMusicEventListener(this);
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
             if (e.NavigationMode != NavigationMode.Back)
-                await MyFavoritesPlaylistControl.SetPlaylist(Settings.MyFavoritesPlaylist);
+            {
+                await MyFavoritesPlaylistControl.SetPlaylist(PlaylistService.MyFavorites.ToVO(EntityType.MyFavorites));
+            }
             MainPage.Instance.TitleBarBackground = MyFavoritesPlaylistControl.HeaderBackground;
             MainPage.Instance.TitleBarForeground = MainPage.Instance.IsMinimal ? ColorHelper.WhiteBrush : ColorHelper.BlackBrush;
         }
 
-        async void IMusicEventListener.Execute(Music music, MusicEventArgs args)
+        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
             switch (args.EventType)
             {
@@ -39,7 +43,14 @@ namespace SMPlayer
                 case MusicEventType.Remove:
                     break;
                 case MusicEventType.Like:
-                    await MyFavoritesPlaylistControl.SetPlaylist(Settings.MyFavoritesPlaylist);
+                    if (args.IsFavorite)
+                    {
+                        MyFavoritesPlaylistControl.AddMusic(music);
+                    }
+                    else
+                    {
+                        MyFavoritesPlaylistControl.RemoveMusic(music);
+                    }
                     break;
                 case MusicEventType.Modify:
                     break;

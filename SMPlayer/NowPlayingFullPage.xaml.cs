@@ -70,7 +70,7 @@ namespace SMPlayer
             ShowNotification(Helper.LocalizeMessage(message), duration);
         }
 
-        public void PlaylistRequested(ICollection<Music> playlist)
+        public void PlaylistRequested(IEnumerable<Music> playlist)
         {
             PlaylistBladeItem.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true });
             FullPlaylistControl.ScrollToCurrentMusic();

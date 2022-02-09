@@ -26,19 +26,19 @@ namespace SMPlayer
         private void MenuFlyout_Opening(object sender, object e)
         {
             MenuFlyout flyout = sender as MenuFlyout;
-            var playlist = flyout.Target.DataContext as Playlist;
+            var playlist = flyout.Target.DataContext as PlaylistView;
             MenuFlyoutHelper.SetPlaylistMenu(sender);
             flyout.Items.Add(MenuFlyoutHelper.GetPreferItem(playlist.ToArtistView()));
         }
 
         private void PlayAllButton_Click(object sender, RoutedEventArgs e)
         {
-            var data = (sender as Button).DataContext as Models.Playlist;
+            var data = (sender as Button).DataContext as Models.PlaylistView;
             MusicPlayer.ShuffleAndPlay(data.Songs);
         }
         private void AddToButton_Click(object sender, RoutedEventArgs e)
         {
-            var data = (sender as Button).DataContext as Models.Playlist;
+            var data = (sender as Button).DataContext as Models.PlaylistView;
             var helper = new MenuFlyoutHelper() { Data = data.Songs, DefaultPlaylistName = data.Name };
             helper.GetAddToPlaylistsMenuFlyout().ShowAt(sender as FrameworkElement);
         }

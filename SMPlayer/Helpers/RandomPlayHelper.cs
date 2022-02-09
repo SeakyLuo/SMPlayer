@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,45 +12,48 @@ namespace SMPlayer.Helpers
     {
         public static void PlayMusic(int randomLimit = 100)
         {
-            MusicPlayer.SetPlaylistAndPlay(Settings.AllSongs.RandItems(randomLimit));
+            MusicPlayer.SetPlaylistAndPlay(MusicService.AllSongs.RandItems(randomLimit));
         }
 
-        public static IGrouping<string, Music> PlayArtist(int randomLimit = 100)
+        public static string PlayArtist(int randomLimit = 100)
         {
-            var rArtist = Settings.AllSongs.GroupBy(m => m.Artist).RandItem();
-            MusicPlayer.SetPlaylistAndPlay(rArtist.RandItems(randomLimit));
-            return rArtist;
+            var artist = MusicService.SelectAllArtists().RandItem();
+            MusicPlayer.SetPlaylistAndPlay(MusicService.SelectByArtist(artist).RandItems(randomLimit));
+            return artist;
         }
 
-        public static AlbumInfo PlayAlbum(int randomLimit = 100)
+        public static string PlayAlbum(int randomLimit = 100)
         {
-            var album = AlbumsPage.AlbumInfoList.RandItem();
-            // 没有检查Artist，不过无所谓
-            MusicPlayer.SetPlaylistAndPlay(Settings.AllSongs.Where(i => i.Album == album.Name).RandItems(randomLimit));
+            var album = MusicService.SelectAllAlbums().RandItem();
+            MusicPlayer.SetPlaylistAndPlay(MusicService.SelectByAlbum(album).RandItems(randomLimit));
             return album;
         }
-        public static Playlist PlayPlaylist(int randomLimit = 100)
+
+        public static string PlayPlaylist(int randomLimit = 100)
         {
-            List<Playlist> allPlaylists = Settings.AllPlaylists;
+            List<Playlist> allPlaylists = PlaylistService.AllPlaylists;
             Playlist playlist;
             do
             {
                 playlist = allPlaylists.RandItem();
+                playlist.Songs = PlaylistService.FindPlaylistItems(playlist.Id);
             } while (playlist.IsEmpty);
             MusicPlayer.SetPlaylistAndPlay(playlist.Songs.RandItems(randomLimit));
-            return playlist;
+            return playlist.Name;
         }
 
-        public static FolderTree PlayFolder(int randomLimit = 100)
+        public static string PlayFolder(int randomLimit = 100)
         {
-            List<FolderTree> allFolders = Settings.AllFolders;
+            List<FolderTree> allFolders = StorageService.AllFolders;
             FolderTree folder;
+            List<Music> songs;
             do
             {
-                folder = Settings.FindFolder(allFolders.RandItem().Id);
-            } while (folder.IsEmpty);
-            MusicPlayer.SetMusicAndPlay(folder.Songs.RandItems(randomLimit));
-            return folder;
+                folder = allFolders.RandItem();
+                songs = StorageService.FindSubSongs(folder);
+            } while (songs.IsEmpty());
+            MusicPlayer.SetMusicAndPlay(songs.RandItems(randomLimit));
+            return folder.Name;
         }
     }
 }

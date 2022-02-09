@@ -9,7 +9,7 @@
     DataContextChanged="UserControl_DataContextChanged"
     mc:Ignorable="d">
 
-    <Grid x:Name="ContentGrid" Height="30">
+    <Grid x:Name="ContentGrid" Height="30" Padding="12,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="TitleColumnDefinition" Width="{x:Bind ShowAlbumText, Converter={StaticResource ShowAlbumTextConverter}, Mode=OneWay}" />
             <ColumnDefinition x:Name="ArtistColumnDefinition" Width="3*" />
@@ -128,7 +128,7 @@
                         <Setter Target="AlbumTextButton.Visibility" Value="Collapsed" />
                         <Setter Target="LongArtistAlbumPanel.Visibility" Value="Visible" />
                         <Setter Target="DurationTextBlock.(Grid.RowSpan)" Value="2" />
-                        <Setter Target="ContentGrid.Padding" Value="5,5" />
+                        <Setter Target="ContentGrid.Padding" Value="12,5" />
                         <Setter Target="ContentGrid.Height" Value="Auto" />
                     </VisualState.Setters>
                 </VisualState>

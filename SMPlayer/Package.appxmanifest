@@ -11,7 +11,7 @@
   <Identity
     Name="23778SeakyTheLoner.SMPlayer"
     Publisher="CN=CFBE922A-0341-4A7E-B15B-A6DEF6C9E3AF"
-    Version="2.5.9.0" />
+    Version="2.6.3.0" />
 
   <mp:PhoneIdentity PhoneProductId="cc323160-1166-40e8-bb50-eaf5dc6fc12d" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
@@ -53,6 +53,9 @@
           <uap:FileTypeAssociation Name="music_player">
             <uap:SupportedFileTypes>
               <uap:FileType ContentType="audio/mpeg">.mp3</uap:FileType>
+              <uap:FileType ContentType="audio/mpeg">.flac</uap:FileType>
+              <uap:FileType ContentType="audio/mpeg">.wma</uap:FileType>
+              <uap:FileType ContentType="audio/mpeg">.alac</uap:FileType>
             </uap:SupportedFileTypes>
             <uap:DisplayName>.mp3</uap:DisplayName>
             <uap:Logo>Assets\monotone_no_bg.png</uap:Logo>
@@ -62,6 +65,7 @@
         <uap:Extension Category="windows.mediaPlayback">
           <uap:MediaPlayback>
             <uap:Codec Name="mp3"/>
+            <uap:Codec Name="flac"/>
           </uap:MediaPlayback>
         </uap:Extension>
       </Extensions>

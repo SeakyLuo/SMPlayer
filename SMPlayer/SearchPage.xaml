@@ -17,117 +17,6 @@
             <Setter Property="FontSize" Value="18" />
             <Setter Property="Margin" Value="0,4,4,0" />
         </Style>
-        <Style x:Key="HorizontalListViewStyle" TargetType="ListView">
-            <Setter Property="IsItemClickEnabled" Value="True" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="ItemsPanel" Value="{StaticResource HorizontalPanel}" />
-            <Setter Property="SelectionMode" Value="None" />
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
-            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Enabled" />
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
-            <Setter Property="ScrollViewer.VerticalScrollMode" Value="Disabled" />
-            <Setter Property="ItemContainerStyle">
-                <Setter.Value>
-                    <Style BasedOn="{StaticResource ListViewItemRevealStyle}" TargetType="ListViewItem">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ListViewItem">
-                                    <ListViewItemPresenter
-                                        x:Name="Root"
-                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                        CheckBoxBrush="{ThemeResource ListViewItemCheckBoxBrush}"
-                                        CheckBrush="{ThemeResource ListViewItemCheckBrush}"
-                                        CheckMode="{ThemeResource ListViewItemCheckMode}"
-                                        ContentMargin="{TemplateBinding Padding}"
-                                        ContentTransitions="{TemplateBinding ContentTransitions}"
-                                        Control.IsTemplateFocusTarget="True"
-                                        DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}"
-                                        DragBackground="{ThemeResource ListViewItemDragBackground}"
-                                        DragForeground="{ThemeResource ListViewItemDragForeground}"
-                                        DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}"
-                                        FocusBorderBrush="{ThemeResource ListViewItemFocusBorderBrush}"
-                                        FocusSecondaryBorderBrush="{ThemeResource ListViewItemFocusSecondaryBorderBrush}"
-                                        FocusVisualMargin="{TemplateBinding FocusVisualMargin}"
-                                        PlaceholderBackground="{ThemeResource ListViewItemPlaceholderBackground}"
-                                        PointerOverBackground="Transparent"
-                                        PointerOverForeground="{ThemeResource ListViewItemForegroundPointerOver}"
-                                        PressedBackground="Transparent"
-                                        ReorderHintOffset="{ThemeResource ListViewItemReorderHintThemeOffset}"
-                                        RevealBackground="{ThemeResource ListViewItemRevealBackground}"
-                                        RevealBorderBrush="{ThemeResource ListViewItemRevealBorderBrush}"
-                                        RevealBorderThickness="{ThemeResource ListViewItemRevealBorderThemeThickness}"
-                                        SelectedBackground="{ThemeResource ListViewItemBackgroundSelected}"
-                                        SelectedForeground="{ThemeResource ListViewItemForegroundSelected}"
-                                        SelectedPointerOverBackground="{ThemeResource ListViewItemBackgroundSelectedPointerOver}"
-                                        SelectedPressedBackground="{ThemeResource ListViewItemBackgroundSelectedPressed}"
-                                        SelectionCheckMarkVisualEnabled="{ThemeResource ListViewItemSelectionCheckMarkVisualEnabled}">
-                                        <VisualStateManager.VisualStateGroups>
-                                            <VisualStateGroup x:Name="CommonStates">
-                                                <VisualState x:Name="Normal" />
-                                                <VisualState x:Name="Selected" />
-
-                                                <VisualState x:Name="PointerOver">
-                                                    <VisualState.Setters>
-                                                        <Setter Target="Root.(RevealBrush.State)" Value="PointerOver" />
-                                                        <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPointerOver}" />
-                                                    </VisualState.Setters>
-                                                </VisualState>
-
-                                                <VisualState x:Name="PointerOverSelected">
-                                                    <VisualState.Setters>
-                                                        <Setter Target="Root.(RevealBrush.State)" Value="PointerOver" />
-                                                        <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPointerOver}" />
-                                                    </VisualState.Setters>
-                                                </VisualState>
-                                                <VisualState x:Name="PointerOverPressed">
-                                                    <VisualState.Setters>
-                                                        <Setter Target="Root.(RevealBrush.State)" Value="Pressed" />
-                                                        <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPressed}" />
-                                                    </VisualState.Setters>
-                                                </VisualState>
-
-                                                <VisualState x:Name="Pressed">
-                                                    <VisualState.Setters>
-                                                        <Setter Target="Root.(RevealBrush.State)" Value="Pressed" />
-                                                        <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPressed}" />
-                                                    </VisualState.Setters>
-                                                </VisualState>
-
-                                                <VisualState x:Name="PressedSelected">
-                                                    <VisualState.Setters>
-                                                        <Setter Target="Root.(RevealBrush.State)" Value="Pressed" />
-                                                        <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPressed}" />
-                                                    </VisualState.Setters>
-                                                </VisualState>
-
-                                            </VisualStateGroup>
-
-                                            <VisualStateGroup x:Name="DisabledStates">
-                                                <VisualState x:Name="Enabled" />
-
-                                                <VisualState x:Name="Disabled">
-                                                    <VisualState.Setters>
-                                                        <Setter Target="Root.RevealBorderThickness" Value="0" />
-                                                    </VisualState.Setters>
-                                                </VisualState>
-
-                                            </VisualStateGroup>
-
-                                        </VisualStateManager.VisualStateGroups>
-                                    </ListViewItemPresenter>
-
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-
-                    </Style>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <ItemsPanelTemplate x:Key="HorizontalPanel">
-            <StackPanel Style="{StaticResource CommandBarContentHorizontalStackPanel}" />
-        </ItemsPanelTemplate>
         <Style
             x:Key="ViewAllButtonStyle"
             BasedOn="{StaticResource SearchAppBarButtonStyle}"
@@ -160,16 +49,16 @@
                             Text="Artists" />
                     </CommandBar.Content>
                     <AppBarButton
-                        x:Name="SortArtistsButton"
-                        x:Uid="SortAppButton"
-                        Click="SortArtistsButton_Click"
-                        Icon="Sort" />
-                    <AppBarButton
                         x:Name="ArtistsViewAllButton"
                         x:Uid="ViewAllButton"
                         Click="ArtistsViewAllButton_Click"
                         Icon="ViewAll"
                         Style="{StaticResource ViewAllButtonStyle}" />
+                    <AppBarButton
+                        x:Name="SortArtistsButton"
+                        x:Uid="SortAppButton"
+                        Click="SortArtistsButton_Click"
+                        Icon="Sort" />
                 </CommandBar>
                 <ListView
                     x:Name="SearchArtistView"
@@ -192,16 +81,16 @@
                             Text="Albums" />
                     </CommandBar.Content>
                     <AppBarButton
-                        x:Name="SortAlbumsButton"
-                        x:Uid="SortAppButton"
-                        Click="SortAlbumsButton_Click"
-                        Icon="Sort" />
-                    <AppBarButton
                         x:Name="AlbumsViewAllButton"
                         x:Uid="ViewAllButton"
                         Click="AlbumsViewAllButton_Click"
                         Icon="ViewAll"
                         Style="{StaticResource ViewAllButtonStyle}" />
+                    <AppBarButton
+                        x:Name="SortAlbumsButton"
+                        x:Uid="SortAppButton"
+                        Click="SortAlbumsButton_Click"
+                        Icon="Sort" />
                 </CommandBar>
                 <ListView
                     x:Name="SearchAlbumView"
@@ -224,16 +113,16 @@
                             Text="Songs" />
                     </CommandBar.Content>
                     <AppBarButton
-                        x:Name="SortSongsButton"
-                        x:Uid="SortAppButton"
-                        Click="SortSongsButton_Click"
-                        Icon="Sort" />
-                    <AppBarButton
                         x:Name="SongsViewAllButton"
                         x:Uid="ViewAllButton"
                         Click="SongsViewAllButton_Click"
                         Icon="ViewAll"
                         Style="{StaticResource ViewAllButtonStyle}" />
+                    <AppBarButton
+                        x:Name="SortSongsButton"
+                        x:Uid="SortAppButton"
+                        Click="SortSongsButton_Click"
+                        Icon="Sort" />
                 </CommandBar>
                 <local:PlaylistControl
                     x:Name="SearchMusicView"
@@ -252,16 +141,16 @@
                             Text="Playlists" />
                     </CommandBar.Content>
                     <AppBarButton
-                        x:Name="SortPlaylistsButton"
-                        x:Uid="SortAppButton"
-                        Click="SortPlaylistsButton_Click"
-                        Icon="Sort" />
-                    <AppBarButton
                         x:Name="PlaylistsViewAllButton"
                         x:Uid="ViewAllButton"
                         Click="PlaylistsViewAllButton_Click"
                         Icon="ViewAll"
                         Style="{StaticResource ViewAllButtonStyle}" />
+                    <AppBarButton
+                        x:Name="SortPlaylistsButton"
+                        x:Uid="SortAppButton"
+                        Click="SortPlaylistsButton_Click"
+                        Icon="Sort" />
                 </CommandBar>
                 <ListView
                     x:Name="SearchPlaylistView"
@@ -284,16 +173,16 @@
                             Text="Folders" />
                     </CommandBar.Content>
                     <AppBarButton
-                        x:Name="SortFoldersButton"
-                        x:Uid="SortAppButton"
-                        Click="SortFoldersButton_Click"
-                        Icon="Sort" />
-                    <AppBarButton
                         x:Name="FoldersViewAllButton"
                         x:Uid="ViewAllButton"
                         Click="FoldersViewAllButton_Click"
                         Icon="ViewAll"
                         Style="{StaticResource ViewAllButtonStyle}" />
+                    <AppBarButton
+                        x:Name="SortFoldersButton"
+                        x:Uid="SortAppButton"
+                        Click="SortFoldersButton_Click"
+                        Icon="Sort" />
                 </CommandBar>
                 <ListView
                     x:Name="SearchFolderView"

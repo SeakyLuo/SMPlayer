@@ -60,7 +60,7 @@
                     Grid.Column="1"
                     Margin="60,60,0,0"
                     Background="White"
-                    Visibility="{Binding TypeIcon, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                    Visibility="{Binding ShowTypeIcon, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                     <Image Source="{Binding TypeIcon}" />
                 </Grid>
                 <StackPanel
@@ -93,10 +93,10 @@
                 MaxLines="1"
                 Foreground="{Binding IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
                 Text="{Binding Name, Mode=OneWay}"
-                ToolTipService.ToolTip="{Binding Path, Mode=OneWay}"
+                ToolTipService.ToolTip="{Binding Name, Mode=OneWay}"
                 RelativePanel.AlignLeftWithPanel="True"
                 RelativePanel.AlignVerticalCenterWithPanel="True"
-                TextWrapping="Wrap" />
+                TextWrapping="NoWrap" />
             <FontIcon
                 x:Name="PlayingIcon"
                 Foreground="{ThemeResource SystemColorHighlightColor}"

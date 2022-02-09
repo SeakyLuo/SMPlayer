@@ -1,7 +1,9 @@
 ﻿using Microsoft.Toolkit.Uwp.UI.Controls;
 using Newtonsoft.Json.Linq;
 using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
 using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,17 +24,16 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MusicLibraryPage : Page, ISwitchMusicListener, IMusicEventListener, IMenuFlyoutHelperBuildListener
+    public sealed partial class MusicLibraryPage : Page, IMusicPlayerEventListener, IMusicEventListener, IMenuFlyoutHelperBuildListener
     {
-        public ObservableCollection<Music> AllSongs = new ObservableCollection<Music>();
-        public static bool IsLibraryUnchangedAfterChecking = true;
+        public ObservableCollection<MusicView> AllSongs = new ObservableCollection<MusicView>();
 
         public MusicLibraryPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            Settings.AddMusicEventListener(this);
-            MusicPlayer.AddSwitchMusicListener(this);
+            MusicService.AddMusicEventListener(this);
+            MusicPlayer.AddMusicPlayerEventListener(this);
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -44,26 +45,16 @@ namespace SMPlayer
             {
                 if (AllSongs.IsEmpty())
                 {
-                    SortAndSetAllSongs(Settings.AllSongs);
+                    SortAndSetAllSongs(MusicService.AllSongs.Select(i => i.ToVO()));
                 }
                 MusicPlayer.SetMusicPlaying(AllSongs, MusicPlayer.CurrentMusic);
                 LoadingProgress.Visibility = Visibility.Collapsed;
             });
         }
 
-        //public void CheckLibrary()
-        //{
-        //    if (Helper.CurrentFolder == null) return;
-        //    UpdateHelper.RefreshFolder(Settings.settings.Tree, (folder) =>
-        //    {
-        //        IsLibraryUnchangedAfterChecking = true;
-        //        SortAndSetAllSongs(Settings.AllSongs);
-        //    });
-        //}
-
         private void MusicLibraryDataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
-            var music = (Music)MusicLibraryDataGrid.SelectedItem;
+            var music = (MusicView)MusicLibraryDataGrid.SelectedItem;
             if (music == null) return;
             MusicPlayer.AddMusicAndPlay(music);
         }
@@ -76,11 +67,11 @@ namespace SMPlayer
                 MenuFlyoutHelper.SetMusicMenu(sender, null, null, new MenuFlyoutOption() { ShowSelect = false });
         }
 
-        public static IEnumerable<Music> SortPlaylist(IEnumerable<Music> playlist, SortBy criterion)
+        public static IEnumerable<MusicView> SortPlaylist(IEnumerable<MusicView> playlist, SortBy criterion)
         {
-            return playlist.OrderBy(SortByConverter.GetKeySelector(criterion));
+            return playlist.OrderBy(i => i.FromVO().GetComparable(criterion));
         }
-        public void SortAndSetAllSongs(IEnumerable<Music> list)
+        public void SortAndSetAllSongs(IEnumerable<MusicView> list)
         {
             SetAllSongs(SortPlaylist(list, Settings.settings.MusicLibraryCriterion));
         }
@@ -88,7 +79,7 @@ namespace SMPlayer
         private void MusicLibraryDataGrid_Sorting(object sender, DataGridColumnEventArgs e)
         {
             string header = e.Column.Tag?.ToString();
-            IEnumerable<Music> temp = SortPlaylist(AllSongs, Settings.settings.MusicLibraryCriterion = SortByConverter.FromStr(header));
+            IEnumerable<MusicView> temp = SortPlaylist(AllSongs, Settings.settings.MusicLibraryCriterion = SortByConverter.FromStr(header));
             foreach (var column in MusicLibraryDataGrid.Columns)
                 if (column.Tag?.ToString() != header)
                     column.SortDirection = null;
@@ -101,32 +92,24 @@ namespace SMPlayer
             SetAllSongs(temp.ToList());
         }
 
-        public void SetAllSongs(IEnumerable<Music> songs)
+        public void SetAllSongs(IEnumerable<MusicView> songs)
         {
             if (songs == null) return;
             AllSongs.Clear();
-            var favSet = Settings.MyFavoritesPlaylist.Songs.Select(i => i.Id).ToHashSet();
+            var favSet = PlaylistService.MyFavorites.Songs.Select(i => i.Id).ToHashSet();
             foreach (var item in songs)
             {
-                Music music = item.Copy();
+                MusicView music = item.Copy();
                 music.Favorite = favSet.Contains(item.Id);
                 AllSongs.Add(music);
             }
             SetHeader();
         }
 
-        public async void MusicSwitching(Music current, Music next, Windows.Media.Playback.MediaPlaybackItemChangedReason reason)
-        {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                MusicPlayer.SetMusicPlaying(AllSongs, next);
-            });
-        }
-
         public void OnBuild(MenuFlyoutHelper helper)
         {
-            var list = new List<Music>();
-            foreach (Music item in MusicLibraryDataGrid.SelectedItems)
+            var list = new List<MusicView>();
+            foreach (MusicView item in MusicLibraryDataGrid.SelectedItems)
             {
                 list.Add(item);
             }
@@ -154,20 +137,30 @@ namespace SMPlayer
             switch (args.EventType)
             {
                 case MusicEventType.Add:
-                    AllSongs.InsertWithOrder(music);
+                    AllSongs.InsertWithOrder(music.ToVO());
                     break;
                 case MusicEventType.Remove:
-                    AllSongs.Remove(music);
+                    AllSongs.Remove(music.ToVO());
                     SetHeader();
                     break;
                 case MusicEventType.Like:
-                    if (AllSongs.FirstOrDefault(m => m == music) is Music target)
+                    if (AllSongs.FirstOrDefault(m => m.Equals(music)) is MusicView target)
                     {
                         target.Favorite = args.IsFavorite;
                     }
                     break;
                 case MusicEventType.Modify:
-                    AllSongs.FirstOrDefault(m => m == music)?.CopyFrom(args.ModifiedMusic);
+                    AllSongs.FirstOrDefault(m => m.Equals(music))?.CopyFrom(args.ModifiedMusic.ToVO());
+                    break;
+            }
+        }
+
+        async void IMusicPlayerEventListener.Execute(MusicPlayerEventArgs args)
+        {
+            switch (args.EventType)
+            {
+                case MusicPlayerEventType.Switch:
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => MusicPlayer.SetMusicPlaying(AllSongs, args.Music));
                     break;
             }
         }

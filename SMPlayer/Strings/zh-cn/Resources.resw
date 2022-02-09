@@ -1252,4 +1252,40 @@
   <data name="DetailButton.Text" xml:space="preserve">
     <value>详情</value>
   </data>
+  <data name="FolderChainItemPathButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>查看该目录</value>
+  </data>
+  <data name="ReleaseNotesRedesignLocalPagePathBox.Text" xml:space="preserve">
+    <value>重新设计了本地页面的路径交互</value>
+  </data>
+  <data name="CurrentPathTextBlock.Text" xml:space="preserve">
+    <value>当前路径</value>
+  </data>
+  <data name="LocalPageGoToSettingsRun.Text" xml:space="preserve">
+    <value>去设置音乐文件夹 &gt;</value>
+  </data>
+  <data name="LocalPageNoMusicRun.Text" xml:space="preserve">
+    <value>没有音乐，</value>
+  </data>
+  <data name="ReleaseNotesAdjustAlbumGroupingLogic.Text" xml:space="preserve">
+    <value>调整了专辑页面的分组策略，现在只按照专辑名称进行分组了</value>
+  </data>
+  <data name="ReleaseNotesIncompatibleTile.Text" xml:space="preserve">
+    <value>【重要】如果你之前固定了一些播放列表磁贴到开始菜单，请重新固定一次，之前的磁贴从此以后不再兼容。</value>
+  </data>
+  <data name="ReleaseNotesImprovedLocalPageDragAndDrop.Text" xml:space="preserve">
+    <value>增强了本地页面的拖拽功能，可以把文件、文件夹拖动到其它文件夹或者路径下了。</value>
+  </data>
+  <data name="ReleaseNotesUpdateFolderResult.Text" xml:space="preserve">
+    <value>更新目录支持查看更新结果的详情了</value>
+  </data>
+  <data name="ReleaseNotesFixPreferenceSettingsCrash.Text" xml:space="preserve">
+    <value>修复了进入偏好设置页面会闪退的问题</value>
+  </data>
+  <data name="ReleaseNotesFixSearchResultPageSort.Text" xml:space="preserve">
+    <value>修复了搜索详情页面的排序问题</value>
+  </data>
+  <data name="ReleaseNotesSupportsOtherMusicFormat.Text" xml:space="preserve">
+    <value>支持了更多格式的音乐文件：flac, aac, alac, wma</value>
+  </data>
 </root>

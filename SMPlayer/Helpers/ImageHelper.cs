@@ -31,9 +31,9 @@ namespace SMPlayer
             return image;
         }
 
-        public static async Task<BitmapImage> LoadImage(Music music)
+        public static async Task<BitmapImage> LoadImage(IMusicable music)
         {
-            return await LoadImage(music.Path);
+            return await LoadImage(music.ToMusic().Path);
         }
 
         public static async Task<StorageItemThumbnail> LoadThumbnail(string path)
@@ -42,7 +42,7 @@ namespace SMPlayer
             return thumbnail.IsThumbnail() ? thumbnail : null;
         }
 
-        public static async Task<StorageItemThumbnail> LoadThumbnail(Music music)
+        public static async Task<StorageItemThumbnail> LoadThumbnail(MusicView music)
         {
             return await LoadThumbnail(music.Path);
         }

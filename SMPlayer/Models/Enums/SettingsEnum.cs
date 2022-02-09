@@ -8,15 +8,6 @@ namespace SMPlayer.Models
         public static NotificationSendMode[] NotificationSendModes = { NotificationSendMode.MusicChanged, NotificationSendMode.Never };
     }
 
-    public enum SearchType 
-    {
-        Artists = 0,
-        Albums = 1,
-        Songs = 2,
-        Playlists = 3,
-        Folders = 4
-    }
-
     public enum PlayMode
     {
         Once = 0,
@@ -117,28 +108,6 @@ namespace SMPlayer.Models
                     return SortBy.DateAdded;
                 default:
                     return SortBy.Default;
-            }
-        }
-
-        public static Func<Music, IComparable> GetKeySelector(SortBy criterion)
-        {
-            switch (criterion)
-            {
-                case SortBy.Title:
-                    return music => music.Name;
-                case SortBy.Artist:
-                    return music => music.Artist;
-                case SortBy.Album:
-                    return music => music.Album;
-                case SortBy.Duration:
-                    return music => music.Duration;
-                case SortBy.PlayCount:
-                    return music => music.PlayCount;
-                case SortBy.DateAdded:
-                    return music => music.DateAdded;
-                case SortBy.Default:
-                default:
-                    return music => music.Name;
             }
         }
     }

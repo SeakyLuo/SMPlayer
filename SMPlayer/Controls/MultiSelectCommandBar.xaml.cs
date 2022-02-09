@@ -46,6 +46,11 @@ namespace SMPlayer.Controls
             CommandBarContainer.IsOpen = true;
         }
 
+        public void CountSelections(int selections)
+        {
+            CountSelectionTextBlock.Text = selections == 0 ? "" : Helper.LocalizeText("ItemsSelected", selections);
+        }
+
         public void Hide()
         {
             Cancel();
@@ -114,6 +119,7 @@ namespace SMPlayer.Controls
         private void ClearSelectionAppButton_Click(object sender, RoutedEventArgs e)
         {
             MultiSelectListener?.Execute(this, new MultiSelectEventArgs(MultiSelectEvent.ClearSelections));
+            CountSelections(0);
         }
 
         private void DeleteAppButton_Click(object sender, RoutedEventArgs e)

@@ -53,7 +53,7 @@
             TabNavigation="Cycle"
             TabWidthBehavior="Actual">
             <controls:TabView.ItemHeaderTemplate>
-                <DataTemplate x:DataType="data:Playlist">
+                <DataTemplate x:DataType="data:PlaylistView">
                     <StackPanel
                         Background="Transparent"
                         Orientation="Horizontal"
@@ -87,7 +87,7 @@
                 </DataTemplate>
             </controls:TabView.ItemHeaderTemplate>
             <controls:TabView.ItemTemplate>
-                <DataTemplate x:DataType="data:Playlist">
+                <DataTemplate>
                     <local:HeaderedPlaylistControl
                         PlaylistType="Playlist"
                         Loaded="HeaderedPlaylistControl_Loaded" />
@@ -108,7 +108,8 @@
                         x:Uid="PlaylistDropdownButton"
                         Content="&#xE70D;"
                         Visibility="{x:Bind Playlists.Count, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
-                        Style="{ThemeResource HeaderButtonStyle}" >
+                        Style="{ThemeResource HeaderButtonStyle}"
+                        RenderTransformOrigin=".5,.5">
                         <Button.Flyout>
                             <MenuFlyout Closed="ClosePlaylistsFlyout" Opening="OpenPlaylistsFlyout" />
                         </Button.Flyout>

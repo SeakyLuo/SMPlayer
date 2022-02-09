@@ -21,7 +21,7 @@ namespace SMPlayer.Models
 
         public FolderFile() { }
 
-        public FolderFile(Music music)
+        public FolderFile(MusicView music)
         {
             FileId = music.Id;
             FileType = FileType.Music;
@@ -51,7 +51,7 @@ namespace SMPlayer.Models
             ParentId = folder.Id;
             if (string.IsNullOrEmpty(newFilename))
             {
-                Path = FileHelper.MoveToPath(Path, folder.Path);
+                Path = StorageHelper.MoveToPath(Path, folder.Path);
             }
             else
             {
@@ -76,7 +76,7 @@ namespace SMPlayer.Models
 
         public async Task<StorageFile> GetStorageFileAsync()
         {
-            return await FileHelper.LoadFileAsync(Path);
+            return await StorageHelper.LoadFileAsync(Path);
         }
     }
 

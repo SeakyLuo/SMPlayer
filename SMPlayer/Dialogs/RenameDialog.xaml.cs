@@ -113,4 +113,24 @@ namespace SMPlayer.Dialogs
             NamingErrorTextBox.Visibility = Visibility.Collapsed;
         }
     }
+
+    public static class NamingErrorConverter
+    {
+        public static string ToStr(this NamingError error)
+        {
+            switch (error)
+            {
+                case NamingError.EmptyOrWhiteSpace:
+                    return "NamingErrorEmptyOrWhiteSpace";
+                case NamingError.Used:
+                    return "NamingErrorUsed";
+                case NamingError.Special:
+                    return "NamingErrorSpecial";
+                case NamingError.TooLong:
+                    return "NamingErrorTooLong";
+                default:
+                    return "";
+            }
+        }
+    }
 }

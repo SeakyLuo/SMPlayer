@@ -13,6 +13,8 @@ using SMPlayer.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Collections.Specialized;
 using SMPlayer.Helpers;
+using SMPlayer.Services;
+using SMPlayer.Interfaces;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -26,31 +28,18 @@ namespace SMPlayer
         public const string JsonFilename = "AlbumInfo";
         private ObservableCollection<AlbumView> Suggestions = new ObservableCollection<AlbumView>();
         private List<AlbumView> Albums = new List<AlbumView>();
-        private bool IsProcessing = false, IsFolderUpdated = false;
-        public static List<AlbumInfo> AlbumInfoList;
-        public List<Music> SelectedSongs => AlbumsGridView.SelectedItems.SelectMany(a => (a as AlbumView).Songs).ToList();
+        private bool IsProcessing = false, IsFolderUpdated = false, IsSearching = false;
+        public List<MusicView> SelectedSongs => AlbumsGridView.SelectedItems.SelectMany(a => (a as AlbumView).Songs).ToList();
 
         public AlbumsPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             AlbumArtControl.ImageSavedListeners.Add(this);
-            Settings.AddMusicEventListener(this);
-            Settings.AddStorageItemEventListener(this);
+            MusicService.AddMusicEventListener(this);
+            StorageService.AddStorageItemEventListener(this);
         }
 
-        public static async Task Init()
-        {
-            if (AlbumInfoList != null) return;
-            AlbumInfoList = await JsonFileHelper.ReadObjectAsync<List<AlbumInfo>>(JsonFilename) ?? new List<AlbumInfo>();
-        }
-
-        public static void Save()
-        {
-            if (AlbumInfoList.IsEmpty()) return;
-            JsonFileHelper.Save(JsonFilename, AlbumInfoList);
-            JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, AlbumInfoList);
-        }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -59,38 +48,24 @@ namespace SMPlayer
             await Setup();
         }
 
-        // TODO: album不区分artist
         private async Task Setup()
         {
             if (IsProcessing) return;
-            if (!IsFolderUpdated && Suggestions.IsNotEmpty()) return;
+            if (!IsFolderUpdated && Albums.IsNotEmpty()) return;
             AlbumPageProgressRing.Visibility = Visibility.Visible;
             IsProcessing = true;
-            if (AlbumInfoList.IsEmpty())
+            // 加一个异步，主要是为了AlbumPageProgressRing能转起来
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                // 加一个异步，主要是为了AlbumPageProgressRing能转起来
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                foreach (var group in MusicService.AllSongs.GroupBy(m => m.Album))
                 {
-                    foreach (var group in Settings.AllSongs.GroupBy(m => m.Album))
-                    {
-                        foreach (var subgroup in group.GroupBy(m => m.Artist))
-                        {
-                            Music music = subgroup.ElementAt(0);
-                            Albums.Add(new AlbumView(music.Album, music.Artist, subgroup.OrderBy(m => m.Name), false));
-                        }
-                    }
-                    Albums = Sort(Settings.settings.AlbumsCriterion, Albums);
-                    BuildAlbumInfoList(Albums);
-                    Save();
-                });
-                Suggestions.SetTo(Albums);
-            }
-            else
-            {
-                Suggestions.SetTo(Albums = AlbumInfoList.Select(a => a.ToAlbumView()).ToList());
-            }
+                    Albums.Add(new AlbumView(group.Key, group, false));
+                }
+                Albums = Sort(Settings.settings.AlbumsCriterion, Albums);
+            });
+            Suggestions.SetTo(Albums);
             SetHeader();
-            MultiSelectButton.IsEnabled = Albums.IsNotEmpty();
+            AlbumsCommandBar.IsEnabled = Albums.IsNotEmpty();
             IsProcessing = false;
             IsFolderUpdated = false;
             AlbumPageProgressRing.Visibility = Visibility.Collapsed;
@@ -113,7 +88,7 @@ namespace SMPlayer
             if (AlbumsGridView.SelectionMode != ListViewSelectionMode.None) return;
             AlbumView album = (AlbumView)e.ClickedItem;
             if (album.Songs == null)
-                album.SetSongs(AlbumPage.SearchAlbumSongs(album.Name, album.Artist));
+                album.SetSongs(MusicService.SelectByAlbum(album.Name));
             Frame.Navigate(typeof(AlbumPage), e.ClickedItem);
         }
 
@@ -123,7 +98,7 @@ namespace SMPlayer
                 albumView.Thumbnail = image ?? MusicImage.DefaultImage;
         }
 
-        public void SaveMusic(Music music, BitmapImage image)
+        public void SaveMusic(MusicView music, BitmapImage image)
         {
             if (Suggestions.FirstOrDefault(a => a.Name.Equals(music.Album)) is AlbumView albumView && albumView.Songs.Count == 1)
                 albumView.Thumbnail = image ?? MusicImage.DefaultImage;
@@ -145,12 +120,9 @@ namespace SMPlayer
 
         private async void LoadThumbnail(AlbumView album)
         {
-            string before = album.ThumbnailSource;
             if (album.Songs == null)
-                album.SetSongs(AlbumPage.SearchAlbumSongs(album.Name, album.Artist));
+                album.SetSongs(MusicService.SelectByAlbum(album.Name));
             await album.SetThumbnailAsync();
-            if (album.ThumbnailSource != before && AlbumInfoList.FirstOrDefault(a => a.Equals(album)) is AlbumInfo albumInfo)
-                albumInfo.Thumbnail = album.ThumbnailSource;
         }
 
         private void MultiSelectButton_Click(object sender, RoutedEventArgs e)
@@ -165,18 +137,17 @@ namespace SMPlayer
         private void SortButton_Click(object sender, RoutedEventArgs e)
         {
             SortBy[] SortByCriteria = { SortBy.Reverse, SortBy.Default, SortBy.Name, SortBy.Artist };
-            MenuFlyoutHelper.ShowSortByMenu(sender, Settings.settings.AlbumsCriterion, SortByCriteria,
+            MenuFlyoutHelper.SetSortByMenu(sender, Settings.settings.AlbumsCriterion, SortByCriteria,
                                            async criterion => 
                                            {
                                                AlbumPageProgressRing.Visibility = Visibility.Visible;
                                                if (criterion == SortBy.Reverse)
                                                {
-                                                   Albums.Reverse();
-                                                   Suggestions.SetTo(Albums);
+                                                   Suggestions.SetTo(Suggestions.Reverse().ToList());
                                                }
                                                else
                                                {
-                                                   Suggestions.SetTo(Albums = await Task.Run(() => Sort(criterion, Suggestions)));
+                                                   Suggestions.SetTo(await Task.Run(() => Sort(criterion, Suggestions)));
                                                }
                                                AlbumPageProgressRing.Visibility = Visibility.Collapsed;
                                            });
@@ -194,34 +165,31 @@ namespace SMPlayer
                 case SortBy.Artist:
                     list = albums.OrderBy(a => a.Artist).ToList();
                     break;
-                case SortBy.Default:
                 default:
                     list = albums.OrderBy(a => a.Name).ThenBy(a => a.Artist).ToList();
                     break;
             }
-            BuildAlbumInfoList(list);
             return list;
         }
 
-        private void BuildAlbumInfoList(IEnumerable<AlbumView> albums)
-        {
-            AlbumInfoList = albums.Select(a => a.ToAlbumInfo()).ToList();
-        }
-
-        private void AlbumSearchBar_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        private async void AlbumSearchBar_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             string keyword = sender.Text.Trim();
             if (keyword.Length > 0)
             {
-                IEnumerable<AlbumView> albums = SearchHelper.SortAlbums(Albums.Where(i => SearchHelper.IsTargetAlbum(i, keyword)), keyword, SortBy.Default);
-                Suggestions.SetTo(albums);
+                if (IsSearching) return;
+                AlbumPageProgressRing.Visibility = Visibility.Visible;
+                IsSearching = true;
+                Suggestions.SetTo(await Task.Run(() => SearchHelper.SearchAndSortByDefault(Albums, keyword)));
+                IsSearching = false;
+                AlbumPageProgressRing.Visibility = Visibility.Collapsed;
             }
             else
             {
                 Suggestions.SetTo(Albums);
             }
+            SetHeader();
         }
-
 
         void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
         {
@@ -238,9 +206,11 @@ namespace SMPlayer
                     break;
                 case MultiSelectEvent.SelectAll:
                     AlbumsGridView.SelectAll();
+                    Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(AlbumsGridView.SelectedItems.Count);
                     break;
                 case MultiSelectEvent.ReverseSelections:
                     AlbumsGridView.ReverseSelections();
+                    Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(AlbumsGridView.SelectedItems.Count);
                     break;
                 case MultiSelectEvent.ClearSelections:
                     AlbumsGridView.ClearSelections();
@@ -257,11 +227,11 @@ namespace SMPlayer
                 case MusicEventType.Add:
                     if (album != null)
                     {
-                        album.AddMusic(music);
+                        album.AddMusic(music.ToVO());
                     }
                     else
                     {
-                        album = new AlbumView(music);
+                        album = new AlbumView(music.ToVO());
                         int index = Albums.FindSortedListInsertIndex(album, a =>
                         {
                             switch (Settings.settings.AlbumsCriterion)
@@ -272,20 +242,24 @@ namespace SMPlayer
                                     return a.Name;
                             }
                         });
-                        Suggestions.Insert(index, album);
+                        // 如果没有搜索内容才更新Suggestions
+                        if (AlbumSearchBar.Text.Length == 0)
+                        {
+                            Suggestions.Insert(index, album);
+                        }
                         Albums.Insert(index, album);
-                        AlbumInfoList.Insert(index, album.ToAlbumInfo());
+                        SetHeader();
                     }
                     break;
                 case MusicEventType.Remove:
                     if (album != null)
                     {
-                        album.RemoveMusic(music);
+                        album.RemoveMusic(music.ToVO());
                         if (album.Songs.IsEmpty())
                         {
                             Suggestions.Remove(album);
                             Albums.Remove(album);
-                            AlbumInfoList.Remove(album.ToAlbumInfo());
+                            SetHeader();
                         }
                     }
                     break;
@@ -296,6 +270,15 @@ namespace SMPlayer
         {
         }
 
+        private void AlbumsGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListViewBase listViewBase = (sender as ListViewBase);
+            if (listViewBase.SelectionMode == ListViewSelectionMode.Multiple)
+            {
+                Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(listViewBase.SelectedItems.Count);
+            }
+        }
+
         void IStorageItemEventListener.ExecuteFolderEvent(FolderTree folder, StorageItemEventArgs args)
         {
             if (args.EventType == StorageItemEventType.BeforeReset)
@@ -303,7 +286,6 @@ namespace SMPlayer
                 IsFolderUpdated = true;
                 Suggestions.Clear();
                 Albums.Clear();
-                AlbumInfoList.Clear();
             }
         }
     }
