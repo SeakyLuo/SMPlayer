@@ -25,7 +25,7 @@ namespace SMPlayer.Helpers
             return albumName;
         }
 
-        public static async Task UpdateTile(StorageItemThumbnail itemThumbnail, MusicView music)
+        public static async Task UpdateTile(StorageItemThumbnail itemThumbnail, Music music)
         {
             if (music == null) return;
             string uri = MusicImage.DefaultImagePath;

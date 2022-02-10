@@ -211,6 +211,7 @@ namespace SMPlayer
         {
             base.OnFileActivated(args);
             Music music = await Music.LoadFromPathAsync(args.Files[0].Path);
+            if (music == null) return;
             if (args.PreviousExecutionState == ApplicationExecutionState.Running)
             {
                 MusicPlayer.SetMusicAndPlay(music);

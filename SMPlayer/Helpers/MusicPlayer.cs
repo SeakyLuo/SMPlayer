@@ -213,9 +213,7 @@ namespace SMPlayer
 
         public static void SetMusicAndPlay(IEnumerable<IMusicable> playlist, IMusicable music = null)
         {
-            if (playlist.SameAs(CurrentPlaylist))
-                PlaybackList.MoveTo(0);
-            else
+            if (!playlist.SameAs(CurrentPlaylist))
                 SetPlaylist(ShuffleEnabled ? ShufflePlaylist(playlist, music) : playlist);
             MoveToMusic(music);
             Play();

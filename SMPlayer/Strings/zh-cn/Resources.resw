@@ -1288,4 +1288,10 @@
   <data name="ReleaseNotesSupportsOtherMusicFormat.Text" xml:space="preserve">
     <value>支持了更多格式的音乐文件：flac, aac, alac, wma</value>
   </data>
+  <data name="ReleaseNotesFixCrashOfRefreshingDirectory.Text" xml:space="preserve">
+    <value>修复了本地页面更新目录的闪退问题</value>
+  </data>
+  <data name="ReleaseNotesImproveLocalPageDropdown.Text" xml:space="preserve">
+    <value>优化了本地页面路径下拉菜单的动画效果</value>
+  </data>
 </root>

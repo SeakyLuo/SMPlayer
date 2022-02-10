@@ -57,7 +57,7 @@ namespace SMPlayer.Services
                 listener?.Execute(before, args);
         }
 
-        public static async Task<bool> AddMusic(MusicView music)
+        public static async Task<bool> AddMusic(Music music)
         {
             bool isNew = SQLHelper.Run(c =>
             {
@@ -69,7 +69,7 @@ namespace SMPlayer.Services
                 else
                 {
                     music.Id = musicDAO.Id;
-                    ActivateMusic(c, music.FromVO(), ActiveState.Active);
+                    ActivateMusic(c, music, ActiveState.Active);
                 }
                 return musicDAO == null;
             });
@@ -80,12 +80,12 @@ namespace SMPlayer.Services
                     string lyrics = await music.GetLyricsAsync();
                     if (string.IsNullOrEmpty(lyrics))
                     {
-                        await music.SaveLyricsAsync(await LyricsHelper.SearchLyrics(music.FromVO()));
+                        await music.SaveLyricsAsync(await LyricsHelper.SearchLyrics(music));
                     }
                 });
             }
             foreach (var listener in MusicEventListeners)
-                listener?.Execute(music.FromVO(), new MusicEventArgs(MusicEventType.Add));
+                listener?.Execute(music, new MusicEventArgs(MusicEventType.Add));
             return isNew;
         }
 

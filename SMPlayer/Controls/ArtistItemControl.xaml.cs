@@ -36,6 +36,7 @@ namespace SMPlayer
             var data = (sender as Button).DataContext as Models.PlaylistView;
             MusicPlayer.ShuffleAndPlay(data.Songs);
         }
+
         private void AddToButton_Click(object sender, RoutedEventArgs e)
         {
             var data = (sender as Button).DataContext as Models.PlaylistView;

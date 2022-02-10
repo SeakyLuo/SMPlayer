@@ -89,7 +89,9 @@ namespace SMPlayer.Models
 
         public static async Task<Music> LoadFromFileAsync(StorageFile file)
         {
-            return new Music(file, await file.Properties.GetMusicPropertiesAsync());
+            MusicProperties properties = await file.Properties.GetMusicPropertiesAsync();
+            if (properties == null) return null;
+            return new Music(file, properties);
             //using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(file), TagLib.ReadStyle.Average))
             //{
             //    return new Music(file.Path, await file.Properties.GetMusicPropertiesAsync(), tagFile.Tag);

@@ -797,7 +797,7 @@ namespace SMPlayer
                 };
                 recentPlayed.Click += (sender, args) =>
                 {
-                    MusicPlayer.SetMusicAndPlay(SettingsService.RecentPlayed);
+                    MusicPlayer.ShuffleAndPlay(SettingsService.RecentPlayed);
                     callback?.Invoke();
                 };
                 flyout.Items.Add(recentPlayed);

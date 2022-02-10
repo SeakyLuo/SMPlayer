@@ -437,16 +437,26 @@ namespace SMPlayer
 
         private void PathItemDropDownButton_Click(object sender, RoutedEventArgs e)
         {
+            FolderPathItemArrowAnimation.Stop();
             FrameworkElement fe = sender as FrameworkElement;
             FolderChainItem folderChainItem = fe.DataContext as FolderChainItem;
-            //Storyboard.SetTargetName(FolderPathItemArrowAnimation, fe.Name);
-            //FolderPathItemArrowAnimation.Begin();
+            Storyboard.SetTarget(FolderPathItemArrowAnimation, fe);
+            FolderPathItemArrowAnimation.Begin();
             string path = CurrentFolderInfo.Path;
             foreach (var child in folderChainItem.Children)
             {
                 child.IsHighlighted = path.StartsWith(child.Path);
             }
         }
+
+        private void FolderChainItemFlyout_Closed(object sender, object e)
+        {
+            FolderPathItemArrowResumeAnimation.Stop();
+            Flyout flyout = sender as Flyout;
+            Storyboard.SetTarget(FolderPathItemArrowResumeAnimation, flyout.Target);
+            FolderPathItemArrowResumeAnimation.Begin();
+        }
+
 
         private void GoToSettingsHyperlink_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
         {

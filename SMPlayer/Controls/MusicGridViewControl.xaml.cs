@@ -51,7 +51,7 @@ namespace SMPlayer
             var item = (GridViewMusic)e.ClickedItem;
             if (GridItemClickedListener == null)
             {
-                MusicPlayer.SetPlaylistAndPlay(GridMusicCollection, item.Source);
+                MusicPlayer.SetMusicAndPlay(GridMusicCollection, item.Source);
             }
             else
             {

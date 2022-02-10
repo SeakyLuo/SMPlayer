@@ -166,7 +166,7 @@ namespace SMPlayer.Helpers
             c.Update(settings.ToDAO());
         }
 
-        public static MusicDAO InsertMusic(this SQLiteConnection c, MusicView src)
+        public static MusicDAO InsertMusic(this SQLiteConnection c, Music src)
         {
             MusicDAO dao = src.ToDAO();
             c.Insert(dao);

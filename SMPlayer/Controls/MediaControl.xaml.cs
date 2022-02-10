@@ -514,6 +514,7 @@ namespace SMPlayer
                 MediaSlider.IsEnabled = true;
                 TitleTextBlock.Text = music.Name;
                 ArtistTextBlock.Text = music.Artist;
+                
                 MediaSlider.Value = MusicPlayer.Progress;
                 MediaSlider.Maximum = music.Duration;
                 if (RightTimeTextBlock != null) RightTimeTextBlock.Text = MusicDurationConverter.ToTime(music.Duration);
@@ -523,13 +524,13 @@ namespace SMPlayer
                     if (CurrentMusic.Favorite = PlaylistService.IsFavorite(music)) LikeMusic();
                     else DislikeMusic();
                 }
-                SetThumbnail(CurrentMusic);
+                SetThumbnail(music);
             });
         }
 
-        public async void SetThumbnail(MusicView music)
+        public async void SetThumbnail(Music music)
         {
-            using (var thumbnail = await ImageHelper.LoadThumbnail(music))
+            using (var thumbnail = await ImageHelper.LoadThumbnail(music.Path))
             {
                 AlbumCover.Source = thumbnail.ToBitmapImage() ?? MusicImage.DefaultImage;
                 switch (Mode)
@@ -928,12 +929,12 @@ namespace SMPlayer
 
         private void PlayAlbumItem_Click(object sender, RoutedEventArgs e)
         {
-            MusicPlayer.SetMusicAndPlay(MusicService.SelectByAlbum(MusicPlayer.CurrentMusic.Album));
+            MusicPlayer.ShuffleAndPlay(MusicService.SelectByAlbum(MusicPlayer.CurrentMusic.Album));
         }
 
         private void PlayArtistItem_Click(object sender, RoutedEventArgs e)
         {
-            MusicPlayer.SetMusicAndPlay(MusicService.SelectByAlbum(MusicPlayer.CurrentMusic.Artist));
+            MusicPlayer.ShuffleAndPlay(MusicService.SelectByAlbum(MusicPlayer.CurrentMusic.Artist));
         }
 
         public void ClearMusic()

@@ -42,11 +42,6 @@ namespace SMPlayer
             return thumbnail.IsThumbnail() ? thumbnail : null;
         }
 
-        public static async Task<StorageItemThumbnail> LoadThumbnail(MusicView music)
-        {
-            return await LoadThumbnail(music.Path);
-        }
-
         public static void CacheImage(string path, BitmapImage item)
         {
             imageCache.Put(path, item);

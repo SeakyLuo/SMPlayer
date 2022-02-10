@@ -1297,4 +1297,10 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="ReleaseNotesSupportsOtherMusicFormat.Text" xml:space="preserve">
     <value>Supports more music format including flac, alac, aac, wma.</value>
   </data>
+  <data name="ReleaseNotesFixCrashOfRefreshingDirectory.Text" xml:space="preserve">
+    <value>Fix the crash when refreshing directory.</value>
+  </data>
+  <data name="ReleaseNotesImproveLocalPageDropdown.Text" xml:space="preserve">
+    <value>Improved the animation when click the dropdown button in local page.</value>
+  </data>
 </root>

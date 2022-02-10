@@ -91,8 +91,11 @@ namespace SMPlayer.Helpers
                     newFiles.Add(file.Path);
                     if (!existingFiles.Contains(file.Path))
                     {
-                        MusicView music = await MusicView.LoadFromFileAsync(file);
-                        tree.Files.Add(music.ToFolderFile());
+                        Music music = await Music.LoadFromFileAsync(file);
+                        if (music != null)
+                        {
+                            tree.Files.Add(music.ToFolderFile());
+                        }
                         MainPage.Instance.Loader.Increment(file.Name);
                     }
                 }

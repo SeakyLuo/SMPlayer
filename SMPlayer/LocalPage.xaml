@@ -28,6 +28,12 @@
                 Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
                 Duration="0:0:0.25" />
         </Storyboard>
+        <Storyboard x:Name="FolderPathItemArrowResumeAnimation">
+            <DoubleAnimation
+                By="270"
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                Duration="0:0:0.25" />
+        </Storyboard>
         <Style x:Key="TitleTextBlock" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="FontSize" Value="16" />
@@ -118,7 +124,7 @@
                                     <RotateTransform />
                                 </Button.RenderTransform>
                                 <Button.Flyout>
-                                    <Flyout Opened="FolderChainItemFlyout_Opened">
+                                    <Flyout Opened="FolderChainItemFlyout_Opened" Closed="FolderChainItemFlyout_Closed">
                                         <ListView 
                                             ItemContainerStyle="{StaticResource StretchListViewItemStyle}"
                                             ItemsSource="{x:Bind Children, Mode=OneWay}">

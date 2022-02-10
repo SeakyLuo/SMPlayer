@@ -25,7 +25,11 @@
 
     <ScrollViewer>
         <TextBlock TextWrapping="WrapWholeWords">
-            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.6.4</Run><LineBreak />
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.6.7</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesFixCrashOfRefreshingDirectory"/><LineBreak />
+            2. <Run x:Uid="ReleaseNotesImproveLocalPageDropdown"/><LineBreak />
+            <LineBreak />
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.6.6</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesBugFixes"/><LineBreak />
             <LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.6.1</Run><LineBreak />

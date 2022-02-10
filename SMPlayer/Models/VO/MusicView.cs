@@ -205,26 +205,6 @@ namespace SMPlayer.Models
             }
         }
 
-        public async Task<MusicProperties> GetMusicPropertiesAsync()
-        {
-            var file = await GetStorageFileAsync();
-            return await file.Properties.GetMusicPropertiesAsync();
-        }
-
-        public static async Task<MusicView> LoadFromPathAsync(string path)
-        {
-            return await LoadFromFileAsync(await StorageFile.GetFileFromPathAsync(path));
-        }
-
-        public static async Task<MusicView> LoadFromFileAsync(StorageFile file)
-        {
-            return new MusicView(file, await file.Properties.GetMusicPropertiesAsync());
-            //using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(file), TagLib.ReadStyle.Average))
-            //{
-            //    return new Music(file.Path, await file.Properties.GetMusicPropertiesAsync(), tagFile.Tag);
-            //}
-        }
-
         public async Task<StorageFile> GetStorageFileAsync()
         {
             try

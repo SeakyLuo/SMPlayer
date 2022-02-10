@@ -93,7 +93,7 @@ namespace SMPlayer.Services
         {
             if (item.IsMusicFile())
             {
-                MusicView music = (MusicView)item.Source;
+                Music music = (Music)item.Source;
                 await MusicService.AddMusic(music);
                 item.FileId = music.Id;
                 SQLHelper.Run(c => c.InsertFile(item));

@@ -52,7 +52,7 @@ namespace SMPlayer.Helpers
                 folder = allFolders.RandItem();
                 songs = StorageService.FindSubSongs(folder);
             } while (songs.IsEmpty());
-            MusicPlayer.SetMusicAndPlay(songs.RandItems(randomLimit));
+            MusicPlayer.SetPlaylistAndPlay(songs.RandItems(randomLimit));
             return folder.Name;
         }
     }
