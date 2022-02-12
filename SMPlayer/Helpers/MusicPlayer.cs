@@ -111,6 +111,7 @@ namespace SMPlayer
                 Music next = args.NewItem.GetMusic();
                 try
                 {
+                    Log.Info("Next Music {0}", next?.Path);
                     var switchArgs = new MusicPlayerMusicSwitchEventArgs(args.Reason) { Music = next  };
                     foreach (var listener in MusicPlayerEventListeners)
                         listener.Execute(switchArgs);

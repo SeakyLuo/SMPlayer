@@ -89,8 +89,15 @@ namespace SMPlayer
 
         private void AppendText(string filename, string message)
         {
-            string filePath = Path.Combine(LogFolder.Path, $"{filename}_{DateTime.Now:yyyy-MM-dd}.log");
-            File.AppendAllText(filePath, message + Environment.NewLine);
+            try
+            {
+                string filePath = Path.Combine(LogFolder.Path, $"{filename}_{DateTime.Now:yyyy-MM-dd}.log");
+                File.AppendAllText(filePath, message + Environment.NewLine);
+            }
+            catch (Exception)
+            {
+                // 可能文件被占用
+            }
         }
     }
 

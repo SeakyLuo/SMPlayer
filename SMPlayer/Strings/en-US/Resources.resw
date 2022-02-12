@@ -1303,4 +1303,7 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="ReleaseNotesImproveLocalPageDropdown.Text" xml:space="preserve">
     <value>Improved the animation when click the dropdown button in local page.</value>
   </data>
+  <data name="ReleaseNotesUnableToAddNewMusic.Text" xml:space="preserve">
+    <value>Fix a bug that new music file cannot be added.</value>
+  </data>
 </root>

@@ -25,7 +25,7 @@ namespace SMPlayer.Models
         public int Duration { get; set; }
         public int PlayCount { get; set; }
         public DateTimeOffset DateAdded { get; set; }
-        public ActiveState State { get; set; }
+        public ActiveState State { get; set; } = ActiveState.Active;
 
         public Music() { }
 

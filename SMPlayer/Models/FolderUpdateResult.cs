@@ -9,7 +9,7 @@ namespace SMPlayer.Models
 {
     public class FolderUpdateResult
     {
-        public string FolderPath { get; set; }
+        public string Path { get; set; }
 
         public List<string> FilesAdded { get; set; } = new List<string>();
         public List<string> FilesRemoved { get; set; } = new List<string>();
@@ -18,9 +18,11 @@ namespace SMPlayer.Models
         public List<string> FoldersRemoved { get; set; } = new List<string>();
         public bool HasChange => FilesAdded.IsNotEmpty() || FilesRemoved.IsNotEmpty() || FilesMoved.IsNotEmpty();
 
+        public FolderUpdateResult() { }
+
         public FolderUpdateResult(string folderPath)
         {
-            FolderPath = folderPath;
+            Path = folderPath;
         }
 
         public void AddFile(string path)
@@ -56,7 +58,7 @@ namespace SMPlayer.Models
         {
             foreach (var item in FilesAdded)
             {
-                string filename = Path.GetFileName(item);
+                string filename = System.IO.Path.GetFileName(item);
                 if (FilesRemoved.Count(i => i.EndsWith(filename)) == 1 &&
                     FilesAdded.Count(i => i.EndsWith(filename)) == 1)
                 {
@@ -75,7 +77,7 @@ namespace SMPlayer.Models
                 string filesAddedMsg;
                 if (FilesAdded.Count == 1)
                 {
-                    string firstFileAdded = Path.GetFileNameWithoutExtension(FilesAdded[0]);
+                    string firstFileAdded = System.IO.Path.GetFileNameWithoutExtension(FilesAdded[0]);
                     filesAddedMsg = Helper.LocalizeMessage("CheckNewMusicResult1Added", firstFileAdded);
                 }
                 else
@@ -89,7 +91,7 @@ namespace SMPlayer.Models
                 string filesRemovedMsg;
                 if (FilesRemoved.Count == 1)
                 {
-                    string firstFileRemoved = Path.GetFileNameWithoutExtension(FilesRemoved[0]);
+                    string firstFileRemoved = System.IO.Path.GetFileNameWithoutExtension(FilesRemoved[0]);
                     filesRemovedMsg = Helper.LocalizeMessage("CheckNewMusicResult1Removed", firstFileRemoved);
                 }
                 else
@@ -103,7 +105,7 @@ namespace SMPlayer.Models
                 string filesMovedMsg;
                 if (FilesRemoved.Count == 1)
                 {
-                    string firstFileMoved = Path.GetFileNameWithoutExtension(FilesMoved[0]);
+                    string firstFileMoved = System.IO.Path.GetFileNameWithoutExtension(FilesMoved[0]);
                     filesMovedMsg = Helper.LocalizeMessage("CheckNewMusicResult1Moved", firstFileMoved);
                 }
                 else

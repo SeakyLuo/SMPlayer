@@ -31,7 +31,7 @@ namespace SMPlayer.Dialogs
 
         public async Task ShowAsync(FolderUpdateResult result)
         {
-            FolderUpdateResultTextBlock.Text = Helper.LocalizeText("UpdateResultOfFolder", Path.GetFileName(result.FolderPath));
+            FolderUpdateResultTextBlock.Text = string.IsNullOrEmpty(result.Path) ? "" : Helper.LocalizeText("UpdateResultOfFolder", Path.GetFileName(result.Path));
             Groups.AddRange(result.ToGroups());
             await ShowAsync();
         }

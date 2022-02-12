@@ -110,8 +110,17 @@ namespace SMPlayer.Services
         {
             if (file.IsMusicFile())
             {
-                MusicService.RemoveMusic(MusicService.FindMusic(file.FileId));
+                Music music = MusicService.FindMusic(file.FileId);
+                if (music == null)
+                {
+                    SQLHelper.Run(c => c.Execute("update File set State = ? where Id = ?", ActiveState.Inactive, file.Id));
+                }
+                else
+                {
+                    MusicService.RemoveMusic(music);
+                }
             }
+            Log.Info("file is deleted, path {0}", file.Path);
         }
 
         public static async Task<NamingError> ValidateFolderName(string root, string newName)
@@ -327,6 +336,12 @@ namespace SMPlayer.Services
             Music oldMusic = music.Copy();
             music.MoveToFolder(newPath);
             MusicService.MusicModified(c, oldMusic, music);
+        }
+
+        public static List<FolderFile> FindInvalidFiles()
+        {
+            return SQLHelper.Run(c => c.Query<FileDAO>("select f.* from File f where State = ? and not exists (select 0 from Music m where m.Id = f.FileId)", ActiveState.Active)
+                                       .Select(i => i.FromDAO()).ToList());
         }
     }
 }

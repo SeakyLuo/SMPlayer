@@ -1,5 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.UI.Controls;
 using SMPlayer.Controls;
+using SMPlayer.Dialogs;
 using SMPlayer.Helpers;
 using SMPlayer.Models;
 using SMPlayer.Services;
@@ -141,6 +142,21 @@ namespace SMPlayer
                     SettingsPage.ShowReleaseNotes();
                 }
                 firstLoaded = false;
+
+                await Task.Run(() =>
+                {
+                    List<FolderFile> badFiles = StorageService.FindInvalidFiles();
+                    if (badFiles.IsEmpty()) return;
+                    FolderUpdateResult result = new FolderUpdateResult();
+                    foreach (var file in badFiles)
+                    {
+                        StorageService.RemoveFile(file);
+                        result.RemoveFile(file.Path);
+                    }
+                    ShowDetailNotification(Helper.LocalizeMessage("FindInvalidFiles", badFiles.Count),
+                                           async () => { await new FolderUpdateResultDialog().ShowAsync(result); },
+                                           10000);
+                });
             }
         }
 
@@ -453,6 +469,11 @@ namespace SMPlayer
         public void ShowLocalizedNotification(string message, int duration = 2000)
         {
             ShowNotification(Helper.LocalizeMessage(message), duration);
+        }
+
+        public void ShowDetailNotification(string message, Action showDetail, int duration = 5000)
+        {
+            ShowButtonedNotification(message, Helper.LocalizeText("Detail"), showDetail, duration);
         }
 
         public void ShowButtonedNotification(string message, string buttonText, Action buttonAction, int duration = 5000)

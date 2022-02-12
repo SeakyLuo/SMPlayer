@@ -1294,4 +1294,7 @@
   <data name="ReleaseNotesImproveLocalPageDropdown.Text" xml:space="preserve">
     <value>优化了本地页面路径下拉菜单的动画效果</value>
   </data>
+  <data name="ReleaseNotesUnableToAddNewMusic.Text" xml:space="preserve">
+    <value>修复了无法添加新音乐文件的问题</value>
+  </data>
 </root>

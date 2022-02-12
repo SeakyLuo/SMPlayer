@@ -783,13 +783,13 @@ namespace SMPlayer
         {
             MusicPlayer.Position = MediaSlider.Value;
             ShouldUpdate = true;
-            Log.Info("MediaSlider_ManipulationCompleted");
+            Log.Debug("MediaSlider_ManipulationCompleted");
         }
 
         private void MediaSlider_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
             ShouldUpdate = false;
-            Log.Info("MediaSlider_ManipulationStarted");
+            Log.Debug("MediaSlider_ManipulationStarted");
         }
         private void MediaSlider_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e)
         {

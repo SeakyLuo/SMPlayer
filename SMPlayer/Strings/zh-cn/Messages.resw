@@ -228,6 +228,9 @@
   <data name="FailToOpenBrowser" xml:space="preserve">
     <value>无法打开浏览器，链接已复制到剪贴板</value>
   </data>
+  <data name="FindInvalidFiles" xml:space="preserve">
+    <value>检测到{0}项失效文件，已自动删除</value>
+  </data>
   <data name="FolderIsDeleted" xml:space="preserve">
     <value>文件夹“{0}”已被删除！</value>
   </data>

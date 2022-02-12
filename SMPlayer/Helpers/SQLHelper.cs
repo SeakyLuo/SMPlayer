@@ -32,7 +32,10 @@ namespace SMPlayer.Helpers
         {
             if (await Initialized())
             {
-                Run(c => c.CreateTable<PreferenceSettingsDAO>(CreateFlags.AllImplicit | CreateFlags.AutoIncPK));
+                Run(c =>
+                {
+                    c.CreateTable<PreferenceSettingsDAO>(CreateFlags.AllImplicit | CreateFlags.AutoIncPK);
+                });
                 return;
             }
             MainPage.AddMainPageLoadedListener(async () =>

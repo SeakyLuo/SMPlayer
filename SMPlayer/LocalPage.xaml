@@ -113,16 +113,22 @@
                                 x:Uid="FolderChainItemDropDownButton"
                                 Name="{x:Bind Id, Converter={StaticResource FolderChainDropdownButtonNameConverter}}"
                                 Grid.Column="1"
-                                Width="30"
+                                Width="20"
+                                Padding="-10"
                                 Click="PathItemDropDownButton_Click"
                                 Style="{StaticResource FolderChainButtonStyle}"
-                                Content="&#xE974;"
-                                FontFamily="Segoe MDL2 Assets"
-                                RenderTransformOrigin=".5,.5"
                                 Visibility="{x:Bind IsLastItem, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
-                                <Button.RenderTransform>
-                                    <RotateTransform />
-                                </Button.RenderTransform>
+                                <Button.Content>
+                                    <FontIcon
+                                        RenderTransformOrigin=".5,.5"
+                                        FontSize="11"
+                                        FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                        Glyph="&#xE974;">
+                                        <FontIcon.RenderTransform>
+                                            <RotateTransform />
+                                        </FontIcon.RenderTransform>
+                                    </FontIcon>
+                                </Button.Content>
                                 <Button.Flyout>
                                     <Flyout Opened="FolderChainItemFlyout_Opened" Closed="FolderChainItemFlyout_Closed">
                                         <ListView 

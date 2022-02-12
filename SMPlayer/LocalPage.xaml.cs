@@ -438,9 +438,9 @@ namespace SMPlayer
         private void PathItemDropDownButton_Click(object sender, RoutedEventArgs e)
         {
             FolderPathItemArrowAnimation.Stop();
-            FrameworkElement fe = sender as FrameworkElement;
+            Button fe = sender as Button;
             FolderChainItem folderChainItem = fe.DataContext as FolderChainItem;
-            Storyboard.SetTarget(FolderPathItemArrowAnimation, fe);
+            Storyboard.SetTarget(FolderPathItemArrowAnimation, fe.Content as FontIcon);
             FolderPathItemArrowAnimation.Begin();
             string path = CurrentFolderInfo.Path;
             foreach (var child in folderChainItem.Children)
@@ -453,7 +453,7 @@ namespace SMPlayer
         {
             FolderPathItemArrowResumeAnimation.Stop();
             Flyout flyout = sender as Flyout;
-            Storyboard.SetTarget(FolderPathItemArrowResumeAnimation, flyout.Target);
+            Storyboard.SetTarget(FolderPathItemArrowResumeAnimation, (flyout.Target as Button).Content as FontIcon);
             FolderPathItemArrowResumeAnimation.Begin();
         }
 

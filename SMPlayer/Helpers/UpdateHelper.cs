@@ -157,7 +157,6 @@ namespace SMPlayer.Helpers
                     {
                         result?.RemoveFile(item.Path);
                         StorageService.RemoveFile(item);
-                        Log.Info("file is deleted, path {0}", item.Path);
                     }
                 }
             }
@@ -189,7 +188,6 @@ namespace SMPlayer.Helpers
         {
             result?.RemoveFile(item.Path);
             StorageService.RemoveFile(item);
-            Log.Info("file is deleted, path {0}", item.Path);
         }
 
         private static void ClearOldTree(FolderTree oldRoot, FolderTree newRoot)
@@ -265,10 +263,9 @@ namespace SMPlayer.Helpers
             LoadingStatus = ExecutionStatus.Done;
             if (result.HasChange)
             {
-                MainPage.Instance?.ShowButtonedNotification(result.ToDisplayMessage(),
-                                                            Helper.LocalizeText("Detail"),
-                                                            async () => { await new FolderUpdateResultDialog().ShowAsync(result); },
-                                                            8000);
+                MainPage.Instance?.ShowDetailNotification(result.ToDisplayMessage(),
+                                                          async () => { await new FolderUpdateResultDialog().ShowAsync(result); },
+                                                          8000);
             }
             else
             {
