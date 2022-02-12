@@ -242,7 +242,7 @@ namespace SMPlayer.Helpers
                 ExitChecking(Helper.LocalizeMessage("UnauthorizedAccessException", tree.Path));
                 return;
             }
-            MainPage.Instance?.Loader.ShowDeterminant("ProcessRequest", true, await storageFolder.CountFoldersAsync());
+            MainPage.Instance?.Loader.ShowDeterminant("ProcessRequest", true, await storageFolder.CountFoldersAsync() + 1);
             LoadingStatus = ExecutionStatus.Running;
             FolderTree folderTree = StorageService.FindFolder(tree.Id);
             bool unbroken = await LoadFolder(storageFolder, folderTree);
@@ -251,7 +251,7 @@ namespace SMPlayer.Helpers
                 ExitChecking("");
                 return;
             }
-            await MainPage.Instance.Loader.SetMessageAsync("UpdateMusicLibrary");
+            await MainPage.Instance.Loader.IncrementAsync("UpdateMusicLibrary");
             MainPage.Instance.Loader.AllowBreak = false;
             var result = new FolderUpdateResult(folderTree.Path);
             await ResetFolderData(folderTree, result);

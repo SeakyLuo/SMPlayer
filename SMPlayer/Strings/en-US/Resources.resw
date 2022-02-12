@@ -1306,4 +1306,7 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="ReleaseNotesUnableToAddNewMusic.Text" xml:space="preserve">
     <value>Fix a bug that new music file cannot be added.</value>
   </data>
+  <data name="ReleaseNotesFixFolderSortMakesFolderInvisible.Text" xml:space="preserve">
+    <value>Fix a bug that makes a folder invisible after sorting it.</value>
+  </data>
 </root>

@@ -343,5 +343,11 @@ namespace SMPlayer.Services
             return SQLHelper.Run(c => c.Query<FileDAO>("select f.* from File f where State = ? and not exists (select 0 from Music m where m.Id = f.FileId)", ActiveState.Active)
                                        .Select(i => i.FromDAO()).ToList());
         }
+
+        public static List<FolderTree> FindNoParentFolders()
+        {
+            return SQLHelper.Run(c => c.Query<FolderDAO>("select * from Folder where Id != ? and ParentId = 0 and State = ?", Settings.settings.Tree.Id, ActiveState.Active))
+                            .Select(i => i.FromDAO()).ToList();
+        }
     }
 }

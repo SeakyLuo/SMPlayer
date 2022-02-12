@@ -558,6 +558,9 @@
   <data name="StopAddingLyrics" xml:space="preserve">
     <value>正在尝试中止添加歌词……</value>
   </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
   <data name="UnableToChangeAlbumArt" xml:space="preserve">
     <value>无法更改专辑插图</value>
   </data>

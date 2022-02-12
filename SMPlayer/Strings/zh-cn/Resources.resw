@@ -1297,4 +1297,7 @@
   <data name="ReleaseNotesUnableToAddNewMusic.Text" xml:space="preserve">
     <value>修复了无法添加新音乐文件的问题</value>
   </data>
+  <data name="ReleaseNotesFixFolderSortMakesFolderInvisible.Text" xml:space="preserve">
+    <value>修复了文件夹排序会导致文件夹不可见的问题</value>
+  </data>
 </root>

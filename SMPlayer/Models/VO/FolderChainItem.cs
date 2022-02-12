@@ -13,6 +13,7 @@ namespace SMPlayer.Models.VO
         public long Id { get; set; }
         public string Name { get; set; }
         public string Path { get; set; }
+        public long ParentId { get; set; }
         public bool IsLastItem
         {
             get => _isLastItem;
@@ -44,6 +45,7 @@ namespace SMPlayer.Models.VO
             Id = folder.Id;
             Name = folder.Name;
             Path = folder.Path;
+            ParentId = folder.ParentId;
             Criterion = folder.Criterion;
             IsLastItem = folder.Trees.IsNotEmpty();
         }
@@ -54,6 +56,7 @@ namespace SMPlayer.Models.VO
             {
                 Id = Id,
                 Path = Path,
+                ParentId = ParentId,
                 Criterion = Criterion,
             };
         }

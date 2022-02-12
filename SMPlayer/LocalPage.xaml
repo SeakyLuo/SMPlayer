@@ -137,6 +137,7 @@
                                             <ListView.ItemTemplate>
                                                 <DataTemplate x:DataType="data:FolderChainItem">
                                                     <Button
+                                                        Padding="4,0"
                                                         Background="Transparent"
                                                         BorderThickness="0"
                                                         HorizontalAlignment="Stretch"
