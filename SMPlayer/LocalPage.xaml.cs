@@ -142,6 +142,7 @@ namespace SMPlayer
             IsProcessing = true;
             LocalProgressRing.Visibility = Visibility.Visible;
             ClearMultiSelectStatus();
+            tree.SortFolders();
             tree.SortFiles();
             SetupGridView(tree);
             ResetFolderChain(tree.Path);
@@ -226,7 +227,6 @@ namespace SMPlayer
 
         private async void LocalListViewFolder_Drop(object sender, DragEventArgs e)
         {
-            MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
             object dataContext = ((FrameworkElement)sender).DataContext;
             FolderTree newParent;
             if (dataContext is GridViewFolder gridViewFolder)
@@ -241,7 +241,8 @@ namespace SMPlayer
             {
                 return;
             }
-            if (newParent.IsParentOf(draggingItem.Path))
+            MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
+            if (newParent.IsParentOf(draggingItem.Path) || newParent.Path == draggingItem.Path)
             {
                 // 相当于没移动
                 CancelDrop(e);
@@ -275,7 +276,8 @@ namespace SMPlayer
         {
             MenuFlyoutHelper.SetMusicMenu(sender, this, this, new MenuFlyoutOption
             {
-                MultiSelectOption = MultiSelectOption
+                MultiSelectOption = MultiSelectOption,
+                ShowMoveToFolder = true,
             });
         }
 
@@ -288,7 +290,8 @@ namespace SMPlayer
                 FolderTree folder = gridFolder.Source;
                 MenuFlyoutHelper.SetFolderMenu(sender, folder, this, this, new MenuFlyoutOption
                 {
-                    MultiSelectOption = MultiSelectOption
+                    MultiSelectOption = MultiSelectOption,
+                    ShowMoveToFolder = true,
                 });
             }
             else if (dataContext is FolderChainItem folderChainItem)
@@ -678,6 +681,8 @@ namespace SMPlayer
                     GridItems.RemoveAll(i => i.Path == music.Path);
                     break;
                 case MusicEventType.Modify:
+                    if (GridItems.FirstOrDefault(i => i.Path == music.Path) is GridViewMusic gridViewMusic)
+                        gridViewMusic.Source = music.ToVO();
                     break;
             }
             SetNavText(CurrentFolder);

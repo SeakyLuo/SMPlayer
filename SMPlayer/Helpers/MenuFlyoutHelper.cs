@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Dialogs;
 using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
 using SMPlayer.Models;
 using SMPlayer.Models.VO;
 using SMPlayer.Services;
@@ -209,10 +210,17 @@ namespace SMPlayer
             return flyout;
         }
 
-        public MenuFlyout GetMoveToFolderFlyout(IMenuFlyoutItemClickListener listener = null)
+        public MenuFlyoutSubItem GetGetMoveToFolderSubItem(List<ILocalStorageItem> storageItems = null, IMenuFlyoutItemClickListener listener = null)
+        {
+            return GetMoveToFolderFlyout(storageItems, listener).ToSubItem("MoveToFolder", new SymbolIcon(Symbol.MoveToFolder));
+        }
+
+        public MenuFlyout GetMoveToFolderFlyout(List<ILocalStorageItem> storageItems = null, IMenuFlyoutItemClickListener listener = null)
         {
             MenuFlyout flyout = new MenuFlyout();
-            MenuFlyoutItemBase itemBase = GetMoveToFolderMenuTree(Settings.settings.Tree, (List<StorageItem>)Data, listener);
+            List<StorageItem> data = storageItems?.Select(i => i.AsStorageItem()).ToList() ?? (List<StorageItem>)Data;
+            if (data.IsEmpty()) return flyout;
+            MenuFlyoutItemBase itemBase = GetMoveToFolderMenuTree(Settings.settings.Tree, data, listener);
             if (itemBase is MenuFlyoutItem item)
             {
                 flyout.Items.Add(item);
@@ -286,10 +294,8 @@ namespace SMPlayer
 
         public static MenuFlyoutSubItem GetShuffleSubItem()
         {
-            MenuFlyoutSubItem subItem = GetShuffleMenu().ToSubItem();
+            MenuFlyoutSubItem subItem = GetShuffleMenu().ToSubItem("RandomPlay", new SymbolIcon(Symbol.Shuffle));
             subItem.Name = ShuffleSubItemName;
-            subItem.Text = Helper.Localize("RandomPlay");
-            subItem.Icon = new SymbolIcon(Symbol.Shuffle);
             return subItem;
         }
         public MenuFlyout GetPlaylistMenuFlyout(IMenuFlyoutItemClickListener listener = null, MenuFlyoutOption option = null)
@@ -312,6 +318,7 @@ namespace SMPlayer
             flyout.Items.Add(GetAddToMenuFlyoutSubItem(listener));
             if (option.ShowMultiSelect) flyout.Items.Add(GetMultiSelectItem(listener, option.MultiSelectOption));
             else if (option.ShowSelect) flyout.Items.Add(GetSelectItem(listener, option.MultiSelectOption));
+            if (option.ShowMoveToFolder) flyout.Items.Add(GetGetMoveToFolderSubItem(new List<ILocalStorageItem>() { OriginalData as ILocalStorageItem }, listener));
             return flyout;
         }
         public static MenuFlyoutItem GetShowInExplorerItem(string path, StorageItemTypes type, IMenuFlyoutItemClickListener clickListener = null)
@@ -492,6 +499,24 @@ namespace SMPlayer
             int index = Data is MusicView musicView ? musicView.Index : -1;
             int currentIndex = MusicPlayer.CurrentIndex;
             var flyout = new MenuFlyout();
+            var playItem = new MenuFlyoutItem()
+            {
+                Text = Helper.LocalizeText("Play"),
+                Icon = new SymbolIcon(Symbol.Play)
+            };
+            playItem.SetToolTip(Helper.LocalizeText("PlayMusicOfName", music.Name));
+            playItem.Click += (s, e) =>
+            {
+                if (index >= 0)
+                {
+                    MusicPlayer.MoveToMusic(index);
+                }
+                else
+                {
+                    MusicPlayer.SetMusicAndPlay(music);
+                }
+            };
+            flyout.Items.Add(playItem);
             if (currentIndex != -1 && currentIndex != index && currentIndex != index - 1)
             {
                 var playNextItem = new MenuFlyoutItem()
@@ -517,6 +542,7 @@ namespace SMPlayer
             if (option.ShowRemove) flyout.Items.Add(GetRemovableMenuFlyoutItem(music, index, listener));
             if (option.ShowSelect || option.MultiSelectOption != null) flyout.Items.Add(GetSelectItem(listener, option.MultiSelectOption));
             flyout.Items.Add(GetPreferItem(music));
+            if (option.ShowMoveToFolder) flyout.Items.Add(GetGetMoveToFolderSubItem(new List<ILocalStorageItem>() { OriginalData as ILocalStorageItem }, listener));
             flyout.Items.Add(GetShowInExplorerItem(music.Path, StorageItemTypes.File));
             var deleteItem = new MenuFlyoutItem()
             {

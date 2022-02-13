@@ -24,6 +24,8 @@ Search multiple lyrics choose one. Lyrics priority in notification. Search in lr
 
 Allow MainSearchBar to have a search history dropdown.
 
+Recent played artist, album, playlist.
+
 # TO FIX
 Able to drag titlebar when loading, multi-select.
 

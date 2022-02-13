@@ -45,6 +45,18 @@ namespace SMPlayer.Models
             DateAdded = file.DateCreated;
         }
 
+        //public Music(string path, MusicProperties properties, TagLib.Tag tag)
+        //{
+        //    Path = path;
+        //    Name = tag.Title;
+        //    Artist = tag.JoinedPerformers;
+        //    Album = tag.Album;
+        //    Duration = (int)properties.Duration.TotalSeconds;
+        //    Favorite = false;
+        //    PlayCount = 0;
+        //    IsPlaying = false;
+        //}
+
         public Music Copy()
         {
             return new Music(this);
@@ -72,7 +84,7 @@ namespace SMPlayer.Models
         public MediaPlaybackItem GetMediaPlaybackItem()
         {
             var source = MediaSource.CreateFromStreamReference(new MusicStream(Path), "audio/mpeg");
-            source.CustomProperties.Add("Source", this);
+            source.CustomProperties["Source"] = this;
             return new MediaPlaybackItem(source);
         }
 

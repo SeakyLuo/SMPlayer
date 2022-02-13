@@ -21,8 +21,8 @@
             Grid.Row="1"
             Background="Transparent"
             DefaultLabelPosition="Right"
-            IsOpen="False"
-            OverflowButtonVisibility="Collapsed">
+            IsOpen="True"
+            OverflowButtonVisibility="Auto">
             <CommandBar.Content>
                 <TextBlock
                     x:Name="CommandBarHeaderTextBlock"
@@ -70,11 +70,14 @@
                 Icon="PreviewLink"
                 Label="Play Mode" />
             <AppBarButton
-                x:Name="PreferenceSettingsButton"
-                x:Uid="PreferenceSettingsButton"
-                Click="PreferenceSettingsButton_Click"
-                Icon="Setting"
-                Label="PreferenceSettings" />
+                x:Name="MultiSelectAppButton"
+                x:Uid="MultiSelectAppButton"
+                Label="MultiSelect"
+                Click="MultiSelectAppButton_Click">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE762;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
         </CommandBar>
         <local:PlaylistControl
             x:Name="NowPlayingPlaylistControl"

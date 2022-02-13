@@ -63,7 +63,7 @@ namespace SMPlayer.Controls
                 SetPlayButtonVisibility(IsCurrentMusic && MusicPlayer.IsPlaying);
             }
         }
-        public async void SetMusicInfo(Music music)
+        public async Task SetMusicInfo(Music music)
         {
             if (music == null) return;
             SaveProgress.Visibility = Visibility.Visible;
@@ -220,12 +220,11 @@ namespace SMPlayer.Controls
             switch (args.EventType)
             {
                 case MusicPlayerEventType.Switch:
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    if (!AllowMusicSwitching) return;
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                     {
-                        if (!AllowMusicSwitching) return;
-                        // if modified but not saved
-                        if (!IsPropertiesModified)
-                            SetMusicInfo(args.Music);
+                        // IsPropertiesModified不能放到外面
+                        if (!IsPropertiesModified) await SetMusicInfo(args.Music);
                     });
                     break;
                 case MusicPlayerEventType.StateChanged:

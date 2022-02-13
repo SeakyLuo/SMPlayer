@@ -1,7 +1,10 @@
-﻿using SMPlayer.Interfaces;
+﻿using SMPlayer.Controls;
+using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
 using SMPlayer.Models;
 using SMPlayer.Services;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Media.Playback;
 using Windows.UI.Xaml;
@@ -15,8 +18,18 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class NowPlayingPage : Page, IMusicPlayerEventListener
+    public sealed partial class NowPlayingPage : Page, IMusicPlayerEventListener, IMultiSelectListener
     {
+        private string DefaultNewPlaylistName
+        {
+            get
+            {
+                var name = Constants.NowPlaying + " - " + DateTime.Now.ToString("yy/MM/dd");
+                int index = PlaylistService.FindNextPlaylistNameIndex(name);
+                return index == 0 ? name : Helper.GetNextName(name, index);
+            }
+        }
+        private List<MusicView> SelectedItems => NowPlayingPlaylistControl.SelectedItems;
         public NowPlayingPage()
         {
             this.InitializeComponent();
@@ -28,6 +41,7 @@ namespace SMPlayer
         {
             SetEnabled();
             NowPlayingPlaylistControl.ScrollToCurrentMusic();
+            MainPage.Instance.SetMultiSelectListener(this);
         }
 
         private void SetEnabled()
@@ -39,14 +53,11 @@ namespace SMPlayer
 
         private void SaveToButton_Click(object sender, RoutedEventArgs e)
         {
-            var name = Helper.Localize("Now Playing") + " - " + DateTime.Now.ToString("yy/MM/dd");
-            int index = PlaylistService.FindNextPlaylistNameIndex(name);
-            var defaultName = index == 0 ? name : Helper.GetNextName(name, index);
             var helper = new MenuFlyoutHelper
             {
                 Data = MusicPlayer.CurrentPlaylist,
-                DefaultPlaylistName = defaultName,
-                CurrentPlaylistName = MenuFlyoutHelper.NowPlaying
+                DefaultPlaylistName = DefaultNewPlaylistName,
+                CurrentPlaylistName = Constants.NowPlaying
             };
             helper.GetAddToMenuFlyout().ShowAt(sender as FrameworkElement);
         }
@@ -72,9 +83,10 @@ namespace SMPlayer
             (Window.Current.Content as Frame).Navigate(typeof(NowPlayingFullPage));
         }
 
-        private void PreferenceSettingsButton_Click(object sender, RoutedEventArgs e)
+        private void MultiSelectAppButton_Click(object sender, RoutedEventArgs e)
         {
-            MainPage.Instance.NavigateToPage(typeof(PreferenceSettingsPage));
+            NowPlayingPlaylistControl.SelectionMode = ListViewSelectionMode.Multiple;
+            MainPage.Instance.ShowMultiSelectCommandBar(new MultiSelectCommandBarOption());
         }
 
         async void IMusicPlayerEventListener.Execute(MusicPlayerEventArgs args)
@@ -86,6 +98,39 @@ namespace SMPlayer
                     SetEnabled();
                 }
             });
+        }
+
+        void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
+        {
+            switch (args.Event)
+            {
+                case MultiSelectEvent.Cancel:
+                    NowPlayingPlaylistControl.SelectionMode = ListViewSelectionMode.None;
+                    break;
+                case MultiSelectEvent.AddTo:
+                    args.FlyoutHelper.Data = SelectedItems;
+                    args.FlyoutHelper.DefaultPlaylistName = DefaultNewPlaylistName;
+                    args.FlyoutHelper.CurrentPlaylistName = Constants.NowPlaying;
+                    break;
+                case MultiSelectEvent.Play:
+                    MusicPlayer.SetMusicAndPlay(SelectedItems);
+                    break;
+                case MultiSelectEvent.Remove:
+                    foreach (var item in SelectedItems)
+                        MusicPlayer.RemoveMusic(item.Index);
+                    break;
+                case MultiSelectEvent.SelectAll:
+                    NowPlayingPlaylistControl.SelectAll();
+                    break;
+                case MultiSelectEvent.ReverseSelections:
+                    NowPlayingPlaylistControl.ReverseSelections();
+                    Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(SelectedItems.Count);
+                    break;
+                case MultiSelectEvent.ClearSelections:
+                    NowPlayingPlaylistControl.ClearSelections();
+                    Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(SelectedItems.Count);
+                    break;
+            }
         }
     }
 }

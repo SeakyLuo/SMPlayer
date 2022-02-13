@@ -687,9 +687,6 @@
   <data name="Pin To Start" xml:space="preserve">
     <value>Pin To Start</value>
   </data>
-  <data name="Play" xml:space="preserve">
-    <value>Play</value>
-  </data>
   <data name="PlayAlbumItem.Text" xml:space="preserve">
     <value>Play Album</value>
   </data>
@@ -765,7 +762,7 @@
   <data name="PlayTextBlock.Text" xml:space="preserve">
     <value>Play</value>
   </data>
-  <data name="PreferenceSettingsButton.Label" xml:space="preserve">
+  <data name="PreferenceSettingsButton.Content" xml:space="preserve">
     <value>Preference Settings</value>
   </data>
   <data name="PreferenceSettingsInfoTextBlock.Text" xml:space="preserve">
@@ -1308,5 +1305,17 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   </data>
   <data name="ReleaseNotesFixFolderSortMakesFolderInvisible.Text" xml:space="preserve">
     <value>Fix a bug that makes a folder invisible after sorting it.</value>
+  </data>
+  <data name="ReleaseNotesFixSearchCrash.Text" xml:space="preserve">
+    <value>Fix a crash when searching.</value>
+  </data>
+  <data name="ReleaseNotesMovePreferenceSettings.Text" xml:space="preserve">
+    <value>Preference Settings has been move to the Settings page.</value>
+  </data>
+  <data name="ReleaseNotesNowPlayingSupportsMultiSelect.Text" xml:space="preserve">
+    <value>Now Playing page supports multi-select.</value>
+  </data>
+  <data name="PreferenceSettingsButton.Label" xml:space="preserve">
+    <value>Preference Settings</value>
   </data>
 </root>

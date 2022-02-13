@@ -263,6 +263,7 @@
     <Compile Include="Interfaces\IRecentEventListener.cs" />
     <Compile Include="Interfaces\ISearchEvaluator.cs" />
     <Compile Include="Interfaces\ISortable.cs" />
+    <Compile Include="Interfaces\ILocalStorageItem.cs" />
     <Compile Include="Interfaces\IStorageItemEventListener.cs" />
     <Compile Include="Models\Album.cs" />
     <Compile Include="Models\Artist.cs" />

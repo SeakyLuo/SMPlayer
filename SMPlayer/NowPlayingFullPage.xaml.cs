@@ -44,9 +44,9 @@ namespace SMPlayer
             AppTitleBar.Height = coreTitleBar.Height;
         }
 
-        public void SetMusic(Music music)
+        public async void SetMusic(Music music)
         {
-            MusicInfoController.SetMusicInfo(music);
+            await MusicInfoController.SetMusicInfo(music);
             MusicLyricsController.SetLyrics(music);
         }
 
@@ -75,9 +75,9 @@ namespace SMPlayer
             PlaylistBladeItem.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true });
             FullPlaylistControl.ScrollToCurrentMusic();
         }
-        public void MusicInfoRequested(Music music)
+        public async void MusicInfoRequested(Music music)
         {
-            MusicInfoController.SetMusicInfo(music);
+            await MusicInfoController.SetMusicInfo(music);
             MusicPropertyBladeItem.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true });
         }
 

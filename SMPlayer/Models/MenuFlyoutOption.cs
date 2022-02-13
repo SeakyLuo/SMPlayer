@@ -13,6 +13,7 @@ namespace SMPlayer.Models
         public bool ShowSelect { get; set; } = true;
         public bool ShowMultiSelect { get; set; } = false;
         public bool ShowMoveToTop { get; set; } = false;
+        public bool ShowMoveToFolder { get; set; } = false;
         public MultiSelectCommandBarOption MultiSelectOption { get; set; }
     }
 }

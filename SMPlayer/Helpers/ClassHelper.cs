@@ -68,9 +68,14 @@ namespace SMPlayer
                     return i;
             return count;
         }
-        public static MenuFlyoutSubItem ToSubItem(this MenuFlyout flyout)
+        public static MenuFlyoutSubItem ToSubItem(this MenuFlyout flyout, string text, IconElement icon = null, string tooltip = null)
         {
-            MenuFlyoutSubItem subItem = new MenuFlyoutSubItem();
+            MenuFlyoutSubItem subItem = new MenuFlyoutSubItem
+            {
+                Text = Helper.LocalizeText(text),
+                Icon = icon,
+            };
+            if (!string.IsNullOrEmpty(tooltip)) subItem.SetToolTip(Helper.LocalizeText(tooltip));
             foreach (var item in flyout.Items)
                 subItem.Items.Add(item);
             return subItem;
@@ -399,7 +404,8 @@ namespace SMPlayer
 
         public static void SetMusic(this MediaPlaybackItem item, Music music)
         {
-            item.Source.CustomProperties["Source"] = music;
+            item.Source.CustomProperties.Clear();
+            item.Source.CustomProperties.AddRange(music.GetMediaPlaybackItem().Source.CustomProperties);
         }
 
         public static IEnumerable<T> RandItems<T>(this IEnumerable<T> enumerable, int count) where T : class

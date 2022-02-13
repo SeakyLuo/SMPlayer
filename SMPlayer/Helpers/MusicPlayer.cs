@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation.Collections;
+using Windows.Media;
 using Windows.Media.Playback;
 using Windows.UI.Xaml;
 
@@ -30,27 +31,8 @@ namespace SMPlayer
         public static double Progress => CurrentMusic == null ? 0d : Position / CurrentMusic.Duration;
         public static MediaPlaybackState PlaybackState => Player.PlaybackSession.PlaybackState;
         public static bool IsPlaying => PlaybackState == MediaPlaybackState.Playing;
-        public static MediaPlaybackList PlaybackList
-        {
-            get
-            {
-                if (PendingPlaybackList != null)
-                {
-                    // Use this for AddMusic
-                    if (PendingPlaybackList.Items.Count < _PlaybackList.Items.Count)
-                        return PendingPlaybackList;
-                    _PlaybackList.Items.Clear();
-                    foreach (var item in PendingPlaybackList.Items)
-                        _PlaybackList.Items.Add(item);
-                    PendingPlaybackList = null;
-                    _PlaybackList.MoveTo(1);
-                }
-                return _PlaybackList;
-            }
-        }
         public static Playlist NowPlaying => new Playlist(MenuFlyoutHelper.NowPlaying, CurrentPlaylist);
-        private static MediaPlaybackList _PlaybackList = new MediaPlaybackList() { MaxPlayedItemsToKeepOpen = 3 };
-        private static MediaPlaybackList PendingPlaybackList = null;
+        private static MediaPlaybackList PlaybackList = new MediaPlaybackList() { MaxPlayedItemsToKeepOpen = 1 };
         public static MediaPlayer Player = new MediaPlayer() { Source = PlaybackList };
         private static List<IMusicPlayerEventListener> MusicPlayerEventListeners = new List<IMusicPlayerEventListener>();
         public static void AddMusicPlayerEventListener(IMusicPlayerEventListener listener) { MusicPlayerEventListeners.Add(listener); }
@@ -98,12 +80,11 @@ namespace SMPlayer
             }
             Player.Volume = settings.Volume;
             // 如果非文件启动，并保存播放进度且有音乐
-            if (music == null && settings.SaveMusicProgress && CurrentMusic != null) Position = settings.MusicProgress;
+            if (music == null && settings.SaveMusicProgress && CurrentPlaylist.IsNotEmpty()) Position = settings.MusicProgress;
             SetMode(settings.Mode);
 
             PlaybackList.CurrentItemChanged += (sender, args) =>
             {
-                if (PlaybackList.CurrentItemIndex >= CurrentPlaylistCount) return;
                 if (args.Reason == MediaPlaybackItemChangedReason.EndOfStream)
                 {
                     SettingsService.Played(CurrentMusic);
@@ -112,9 +93,19 @@ namespace SMPlayer
                 try
                 {
                     Log.Info("Next Music {0}", next?.Path);
+                    UpdateUniversalVolumeControl(next);
                     var switchArgs = new MusicPlayerMusicSwitchEventArgs(args.Reason) { Music = next  };
                     foreach (var listener in MusicPlayerEventListeners)
-                        listener.Execute(switchArgs);
+                    {
+                        try
+                        {
+                            listener?.Execute(switchArgs);
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Warn("MusicPlayerEventListeners Exception {0}", e);
+                        }
+                    }
                 }
                 catch (InvalidOperationException)
                 {
@@ -146,25 +137,39 @@ namespace SMPlayer
             JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, ids);
         }
 
+        private static async void UpdateUniversalVolumeControl(Music music)
+        {
+            SystemMediaTransportControlsDisplayUpdater updater = Player.SystemMediaTransportControls.DisplayUpdater;
+            if (music == null)
+            {
+                updater.ClearAll();
+            }
+            else
+            {
+                await updater.CopyFromFileAsync(MediaPlaybackType.Music, await music.GetStorageFileAsync());
+            }
+            updater.Update();
+        }
+
         public static void SetMode(PlayMode mode)
         {
             switch (mode)
             {
                 case PlayMode.Once:
                     Player.IsLoopingEnabled = false;
-                    _PlaybackList.AutoRepeatEnabled = false;
+                    PlaybackList.AutoRepeatEnabled = false;
                     break;
                 case PlayMode.Repeat:
                     Player.IsLoopingEnabled = false;
-                    _PlaybackList.AutoRepeatEnabled = true;
+                    PlaybackList.AutoRepeatEnabled = true;
                     break;
                 case PlayMode.RepeatOne:
                     Player.IsLoopingEnabled = true;
-                    _PlaybackList.AutoRepeatEnabled = false;
+                    PlaybackList.AutoRepeatEnabled = false;
                     break;
                 case PlayMode.Shuffle:
                     Player.IsLoopingEnabled = false;
-                    _PlaybackList.AutoRepeatEnabled = true;
+                    PlaybackList.AutoRepeatEnabled = true;
                     break;
             }
             Settings.settings.Mode = mode;
@@ -240,16 +245,29 @@ namespace SMPlayer
 
         public static void ShuffleOthers()
         {
-            if (CurrentPlaylistCount == 0) return;
+            int currentPlaylistCount = CurrentPlaylistCount;
+            if (currentPlaylistCount == 0) return;
             // Creating a new MediaPlaybackList here is because removing old music
-            // somehow restarts the current playing music.
-            PendingPlaybackList = new MediaPlaybackList();
             var playlist = ShufflePlaylist(CurrentPlaylist, CurrentMusic);
-            foreach (var music in playlist)
+            int currentIndex = CurrentIndex;
+            // 删掉前面的
+            for (int i = 0; i < currentIndex; i++)
+            {
+                RemoveMusic(0);
+            }
+            // 加到后面
+            foreach (var music in playlist.Skip(1))
+            {
                 AddMusic(music);
+            }
+            // 删掉后面的
+            for (int i = 1; i < currentPlaylistCount - currentIndex; i++)
+            {
+                RemoveMusic(1);
+            }
         }
 
-        public static List<IMusicable> ShufflePlaylist(IEnumerable<IMusicable> playlist, IMusicable start = null)
+        public static IEnumerable<IMusicable> ShufflePlaylist(IEnumerable<IMusicable> playlist, IMusicable start = null)
         {
             var list = playlist.Shuffle();
             if (start != null)
@@ -323,9 +341,10 @@ namespace SMPlayer
                 {
                     PlaybackList.MovePrevious();
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     // 无效索引
+                    Log.Warn("MovePrevious Exception {0}", e);
                 }
             }
         }
@@ -342,16 +361,16 @@ namespace SMPlayer
                 {
                     PlaybackList.MoveNext();
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     // 无效索引
+                    Log.Warn("MovePrevious Exception {0}", e);
                 }
-
             }
         }
         private static void PrintPlaybackList(int from, int to)
         {
-            Log.Info("PrintPlaybackList:");
+            Log.Debug("PrintPlaybackList:");
             for (int k = from; k <= to; k++)
                 Debug.Write(GetMusicAt(k).Name + " ");
             Debug.Write("\n");

@@ -8,6 +8,7 @@ namespace SMPlayer.Dialogs
 {
     public sealed partial class MusicDialog : ContentDialog
     {
+        private Music CurrentMusic;
         public MusicDialog(MusicDialogOption option, Music music)
         {
             this.InitializeComponent();
@@ -23,9 +24,7 @@ namespace SMPlayer.Dialogs
                     MusicDialogPivot.SelectedItem = AlbumArtItem;
                     break;
             }
-            MusicInfoController.SetMusicInfo(music);
-            MusicLyricsController.SetLyrics(music);
-            AlbumArtController.SetAlbumArt(music);
+            this.CurrentMusic = music;
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -36,6 +35,13 @@ namespace SMPlayer.Dialogs
             //    return;
             //}
             this.Hide();
+        }
+
+        private async void ContentDialog_Loaded(object sender, RoutedEventArgs e)
+        {
+            await MusicInfoController.SetMusicInfo(CurrentMusic);
+            MusicLyricsController.SetLyrics(CurrentMusic);
+            AlbumArtController.SetAlbumArt(CurrentMusic);
         }
     }
 

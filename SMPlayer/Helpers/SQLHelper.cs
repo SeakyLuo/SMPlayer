@@ -382,7 +382,7 @@ namespace SMPlayer.Helpers
 
         public static Playlist SelectPlaylistById(this SQLiteConnection c, long id)
         {
-            Playlist playlist = c.Query<PlaylistDAO>("select * from Playlist where Id = ? and State = ?", id, ActiveState.Active).FirstOrDefault().FromDAO();
+            Playlist playlist = c.Query<PlaylistDAO>("select * from Playlist where Id = ? and State = ?", id, ActiveState.Active).FirstOrDefault()?.FromDAO();
             if (playlist == null) return null;
             playlist.Songs = SelectPlaylistItems(c, id);
             return playlist;

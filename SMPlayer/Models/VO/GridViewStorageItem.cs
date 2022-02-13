@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMPlayer.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -8,7 +9,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace SMPlayer.Models.VO
 {
-    public abstract class GridViewStorageItem : INotifyPropertyChanged
+    public abstract class GridViewStorageItem : ILocalStorageItem, INotifyPropertyChanged
     {
         public string Path { get; set; }
         public StorageType Type { get; protected set; }
@@ -19,7 +20,6 @@ namespace SMPlayer.Models.VO
         public abstract bool IsPlaying { get; set; }
         public abstract string TypeIcon { get; }
         public abstract bool ShowTypeIcon { get; }
-        public LocalPageViewMode ViewMode { get; set; }
         public BitmapImage Thumbnail
         {
             get => thumbnail;

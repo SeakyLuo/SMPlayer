@@ -77,7 +77,8 @@ namespace SMPlayer.Helpers
             var playlistIds = list.Select(i => i.Entity.Id).ToHashSet();
             list.AddRange(PlaylistService.FindPlaylistIdsByItems(songs.Select(i => i.Id))
                                          .Where(i => !playlistIds.Contains(i)).AsParallel()
-                                         .Select(i => new MatchResult<Playlist>(PlaylistService.FindPlaylist(i), keyword)));
+                                         .Select(i => PlaylistService.FindPlaylist(i)).Where(i => i != null)
+                                         .Select(i => new MatchResult<Playlist>(i, keyword)));
             var nowPlaying = new MatchResult<Playlist>(MusicPlayer.NowPlaying, keyword);
             if (nowPlaying.Matches) list.Add(nowPlaying);
             var myFavorites = new MatchResult<Playlist>(PlaylistService.MyFavorites, keyword);

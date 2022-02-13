@@ -26,13 +26,13 @@
             <DoubleAnimation
                 By="90"
                 Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
-                Duration="0:0:0.25" />
+                Duration="0:0:0.15" />
         </Storyboard>
         <Storyboard x:Name="FolderPathItemArrowResumeAnimation">
             <DoubleAnimation
                 By="270"
                 Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
-                Duration="0:0:0.25" />
+                Duration="0:0:0.15" />
         </Storyboard>
         <Style x:Key="TitleTextBlock" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -111,7 +111,6 @@
                                 Click="PathItemButton_Click" />
                             <Button
                                 x:Uid="FolderChainItemDropDownButton"
-                                Name="{x:Bind Id, Converter={StaticResource FolderChainDropdownButtonNameConverter}}"
                                 Grid.Column="1"
                                 Width="20"
                                 Padding="-10"
@@ -130,27 +129,42 @@
                                     </FontIcon>
                                 </Button.Content>
                                 <Button.Flyout>
-                                    <Flyout Opened="FolderChainItemFlyout_Opened" Closed="FolderChainItemFlyout_Closed">
-                                        <ListView 
-                                            ItemContainerStyle="{StaticResource StretchListViewItemStyle}"
+                                    <Flyout
+                                        Opened="FolderChainItemFlyout_Opened"
+                                        Closed="FolderChainItemFlyout_Closed">
+                                        <Flyout.FlyoutPresenterStyle>
+                                            <Style TargetType="FlyoutPresenter">
+                                                <Setter Property="Padding" Value="0,4" />
+                                            </Style>
+                                        </Flyout.FlyoutPresenterStyle>
+                                        <ListView
                                             ItemsSource="{x:Bind Children, Mode=OneWay}">
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="ListViewItem" BasedOn="{StaticResource StretchListViewItemStyle}">
+                                                    <Setter Property="Height" Value="32" />
+                                                    <Setter Property="MinHeight" Value="32" />
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
                                             <ListView.ItemTemplate>
                                                 <DataTemplate x:DataType="data:FolderChainItem">
-                                                    <Button
-                                                        Padding="4,0"
-                                                        Background="Transparent"
-                                                        BorderThickness="0"
-                                                        HorizontalAlignment="Stretch"
-                                                        HorizontalContentAlignment="Left"
-                                                        VerticalAlignment="Stretch"
-                                                        Content="{x:Bind Name}"
-                                                        Click="FolderChainItemButton_Click"
-                                                        FontWeight="{x:Bind IsHighlighted, Converter={StaticResource FolderChainItemTextBlockFontWeightConverter}, Mode=OneWay}"
-                                                        ToolTipService.ToolTip="{x:Bind Path}">
-                                                        <Button.ContextFlyout>
-                                                            <MenuFlyout Opening="OpenPlaylistFlyout" />
-                                                        </Button.ContextFlyout>
-                                                    </Button>
+                                                    <Grid>
+                                                        <Button
+                                                            Padding="12,0"
+                                                            Background="Transparent"
+                                                            BorderThickness="0"
+                                                            HorizontalAlignment="Stretch"
+                                                            HorizontalContentAlignment="Left"
+                                                            VerticalAlignment="Stretch"
+                                                            Content="{x:Bind Name}"
+                                                            Click="FolderChainItemButton_Click"
+                                                            Style="{StaticResource ButtonRevealStyle}"
+                                                            FontWeight="{x:Bind IsHighlighted, Converter={StaticResource FolderChainItemTextBlockFontWeightConverter}, Mode=OneWay}"
+                                                            ToolTipService.ToolTip="{x:Bind Path}">
+                                                            <Button.ContextFlyout>
+                                                                <MenuFlyout Opening="OpenPlaylistFlyout" />
+                                                            </Button.ContextFlyout>
+                                                        </Button>
+                                                    </Grid>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
                                         </ListView>

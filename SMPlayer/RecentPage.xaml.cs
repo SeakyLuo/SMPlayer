@@ -290,7 +290,7 @@ namespace SMPlayer
 
         private void RemoveItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
         {
-            AskRemoveSearchHistory(args.SwipeControl.DataContext.ToString());
+            RemoveSearchHistory(args.SwipeControl.DataContext.ToString());
         }
 
         private void RecentPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)

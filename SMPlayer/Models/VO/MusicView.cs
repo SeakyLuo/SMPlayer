@@ -128,17 +128,6 @@ namespace SMPlayer.Models
             IsPlaying = false;
             DateAdded = file.DateCreated;
         }
-        //public Music(string path, MusicProperties properties, TagLib.Tag tag)
-        //{
-        //    Path = path;
-        //    Name = tag.Title;
-        //    Artist = tag.JoinedPerformers;
-        //    Album = tag.Album;
-        //    Duration = (int)properties.Duration.TotalSeconds;
-        //    Favorite = false;
-        //    PlayCount = 0;
-        //    IsPlaying = false;
-        //}
 
         public void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
@@ -229,24 +218,6 @@ namespace SMPlayer.Models
         }
 
 
-        public async Task<bool> SaveLyricsAsync(string lyrics)
-        {
-            var music = await GetStorageFileAsync();
-            try
-            {
-                using (var file = TagLib.File.Create(new MusicFileAbstraction(music), TagLib.ReadStyle.Average))
-                {
-                    file.Tag.Lyrics = lyrics;
-                    file.Save();
-                }
-                return true;
-            }
-            catch (Exception exception)
-            {
-                Log.Info($"Saving lyrics for {Name} Exception {exception}");
-                return false;
-            }
-        }
 
         public async Task<MusicDisplayItem> GetMusicDisplayItemAsync()
         {
@@ -260,20 +231,9 @@ namespace SMPlayer.Models
             return MusicDisplayItem.DefaultItem;
         }
 
-        public string RenameFolder(string oldPath, string newPath)
+        public bool IsPlayingMusic(Music music)
         {
-            return Path = Path.Replace(oldPath, newPath);
-        }
-
-        public string MoveToFolder(string newPath)
-        {
-            return Path = StorageHelper.MoveToPath(Path, newPath);
-        }
-
-        public string GetToastText()
-        {
-            return string.IsNullOrEmpty(Artist) ? string.IsNullOrEmpty(Album) ? Name : string.Format("{0} - {1}", Name, Album) :
-                                                  string.Format("{0} - {1}", Name, string.IsNullOrEmpty(Artist) ? Album : Artist);
+            return Equals(music) && (Index == -1 || Index == MusicPlayer.CurrentIndex);
         }
 
         int IComparable.CompareTo(object obj)
@@ -284,11 +244,6 @@ namespace SMPlayer.Models
             if (result != 0) result = Album.CompareTo(m.Album);
             if (result != 0) result = Path.CompareTo(m.Path);
             return result;
-        }
-
-        public bool IsDifferent(MusicView music)
-        {
-            return !Equals(music) || Index != music.Index;
         }
 
         public static bool operator ==(MusicView music1, MusicView music2)

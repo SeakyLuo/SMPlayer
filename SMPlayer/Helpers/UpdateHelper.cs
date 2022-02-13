@@ -251,7 +251,7 @@ namespace SMPlayer.Helpers
                 ExitChecking("");
                 return;
             }
-            await MainPage.Instance.Loader.IncrementAsync("UpdateMusicLibrary");
+            await MainPage.Instance.Loader.IncrementAsync(Helper.LocalizeMessage("UpdateMusicLibrary"));
             MainPage.Instance.Loader.AllowBreak = false;
             var result = new FolderUpdateResult(folderTree.Path);
             await ResetFolderData(folderTree, result);
@@ -265,7 +265,7 @@ namespace SMPlayer.Helpers
             {
                 MainPage.Instance?.ShowDetailNotification(result.ToDisplayMessage(),
                                                           async () => { await new FolderUpdateResultDialog().ShowAsync(result); },
-                                                          8000);
+                                                          10000);
             }
             else
             {

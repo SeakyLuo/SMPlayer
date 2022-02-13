@@ -261,6 +261,9 @@
   <data name="MoveAndReplace" xml:space="preserve">
     <value>Move and Replace</value>
   </data>
+  <data name="MoveToFolder" xml:space="preserve">
+    <value>Move To Folder</value>
+  </data>
   <data name="MoveToFolderOfPath" xml:space="preserve">
     <value>Move to {0}</value>
   </data>
@@ -299,6 +302,9 @@
   </data>
   <data name="PlaylistsWithCount" xml:space="preserve">
     <value>Playlists ({0})</value>
+  </data>
+  <data name="PlayMusicOfName" xml:space="preserve">
+    <value>Play "{0}"</value>
   </data>
   <data name="PlayNext" xml:space="preserve">
     <value>Play Next</value>
@@ -377,6 +383,9 @@
   </data>
   <data name="QuickPlayToolTip" xml:space="preserve">
     <value>Play music with randomness and preferences</value>
+  </data>
+  <data name="RandomPlay" xml:space="preserve">
+    <value>Random Play</value>
   </data>
   <data name="Recent" xml:space="preserve">
     <value>Recent</value>

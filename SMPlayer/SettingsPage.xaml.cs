@@ -379,5 +379,10 @@ namespace SMPlayer
             Settings.settings.VoiceAssistantPreferredLanguage = language;
             VoiceAssistantHelper.SetLanguage(language);
         }
+
+        private void PreferenceSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainPage.Instance.NavigateToPage(typeof(PreferenceSettingsPage));
+        }
     }
 }

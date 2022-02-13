@@ -45,10 +45,10 @@ namespace SMPlayer.Controls
         }
 
         private bool TextColorChanged = true;
-        public void SetTextColor(Music music)
+        private void SetTextColor(Music music)
         {
             if (Data == null) return;
-            if (Data.Index == -1 ? Data.Equals(music) : Data.Index == MusicPlayer.CurrentIndex)
+            if (Data.IsPlayingMusic(music))
             {
                 PlayingIcon.Visibility = Visibility.Visible;
                 TitleTextBlock.Foreground = ArtistTextButton.Foreground = AlbumTextButton.Foreground = DurationTextBlock.Foreground =

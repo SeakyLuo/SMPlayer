@@ -25,6 +25,7 @@ namespace SMPlayer.Helpers
                 PlayCount = src.PlayCount,
                 DateAdded = src.DateAdded,
                 Index = index,
+                IsPlaying = false,
             };
         }
 

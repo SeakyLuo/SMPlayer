@@ -43,13 +43,12 @@ namespace SMPlayer.Helpers
             if (Window.Current.Visible && (display == NotificationDisplayMode.Normal || display == NotificationDisplayMode.Quick))
                 return;
             if (IsToastActive(music, state)) return;
-            Log.Info("show toast");
             ToastNotification toast;
             try
             {
                 toast = await BuildToast(music, state, display);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.Warn("Exception {0}", e);
                 return;
@@ -60,11 +59,8 @@ namespace SMPlayer.Helpers
                 CurrentToastMap.TryAdd(new ToastKey { Music = music, State = state }, toast);
                 try
                 {
-                    lock (Notifier)
-                    {
-                        Notifier.Show(toast);
-                        Log.Info("show toast, music: {0}, state: {1}", music.Name, state);
-                    }
+                    Notifier.Show(toast);
+                    Log.Info("show toast, music: {0}, state: {1}", music.Name, state);
                 }
                 catch (Exception)
                 {
@@ -98,7 +94,6 @@ namespace SMPlayer.Helpers
 
         public static void HideToast()
         {
-            Log.Info("hide toast");
             foreach (var e in CurrentToastMap)
             {
                 try

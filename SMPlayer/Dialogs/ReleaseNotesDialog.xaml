@@ -25,9 +25,15 @@
 
     <ScrollViewer>
         <TextBlock TextWrapping="WrapWholeWords">
-            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.6.9</Run><LineBreak />
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.6.14</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesMovePreferenceSettings"/><LineBreak />
+            2. <Run x:Uid="ReleaseNotesNowPlayingSupportsMultiSelect"/><LineBreak />
+            3. <Run x:Uid="ReleaseNotesBugFixes"/><LineBreak />
+            <LineBreak />
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.6.11</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesUnableToAddNewMusic"/><LineBreak />
-            1. <Run x:Uid="ReleaseNotesFixFolderSortMakesFolderInvisible"/><LineBreak />
+            2. <Run x:Uid="ReleaseNotesFixFolderSortMakesFolderInvisible"/><LineBreak />
+            3. <Run x:Uid="ReleaseNotesFixSearchCrash"/><LineBreak />
             <LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.6.7</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesFixCrashOfRefreshingDirectory"/><LineBreak />

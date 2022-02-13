@@ -54,7 +54,16 @@ namespace SMPlayer.Services
         {
             MusicEventArgs args = new MusicEventArgs(MusicEventType.Modify) { ModifiedMusic = after };
             foreach (var listener in MusicEventListeners)
-                listener?.Execute(before, args);
+            {
+                try
+                {
+                    listener?.Execute(before, args);
+                }
+                catch (Exception e)
+                {
+                    Log.Warn("NotifyMusicModified Exception {0}", e);
+                }
+            }
         }
 
         public static async Task<bool> AddMusic(Music music)

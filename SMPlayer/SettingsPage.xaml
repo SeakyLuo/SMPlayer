@@ -299,20 +299,29 @@
                         IsOn="False"/>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    x:Name="PlayTextBlock"
-                    x:Uid="PlayTextBlock"
-                    Style="{StaticResource SettingLabelStyle}"
-                    Text="Play" />
-                <ToggleSwitch
-                    x:Name="AutoPlayToggleSwitch"
-                    x:Uid="AutoPlayToggleSwitch"
-                    Style="{StaticResource SettingToggleSwitchStyle}"
-                    Toggled="AutoPlayToggleSwitch_Toggled"
-                    OnContent="Auto Play"
-                    OffContent="Auto Play"
-                    IsOn="False"/>
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        x:Name="PlayTextBlock"
+                        x:Uid="PlayTextBlock"
+                        Style="{StaticResource SettingLabelStyle}"
+                        Text="Play" />
+                    <ToggleSwitch
+                        x:Name="AutoPlayToggleSwitch"
+                        x:Uid="AutoPlayToggleSwitch"
+                        Style="{StaticResource SettingToggleSwitchStyle}"
+                        Toggled="AutoPlayToggleSwitch_Toggled"
+                        OnContent="Auto Play"
+                        OffContent="Auto Play"
+                        IsOn="False"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <Button
+                        x:Uid="PreferenceSettingsButton"
+                        Click="PreferenceSettingsButton_Click"
+                        Style="{StaticResource TextBlockButtonStyle}" />
+                </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">

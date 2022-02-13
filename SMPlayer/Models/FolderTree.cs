@@ -70,6 +70,11 @@ namespace SMPlayer.Models
             return list;
         }
 
+        public void SortFolders()
+        {
+            Trees.Sort((t1, t2) => t1.Name.CompareTo(t2.Name));
+        }
+
         public void SortFiles(SortBy? criterion = null)
         {
             if (criterion != null) Criterion = (SortBy)criterion;
