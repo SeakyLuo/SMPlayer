@@ -51,7 +51,7 @@ namespace SMPlayer
             {
                 if (sender.DataContext is GridViewMusic music)
                 {
-                    string category = RecentTimeLine.Categorize(music.Source.DateAdded);
+                    string category = RecentTimeLine.Categorize(music.Source.DateAdded.LocalDateTime);
                     if (category != CurrentCategory)
                     {
                         CurrentCategory = category;
@@ -159,8 +159,8 @@ namespace SMPlayer
 
         private void SetupSearchedButtonState(IEnumerable<string> list)
         {
-            RecentPlayedMultiSelectAppButton.IsEnabled = list.IsNotEmpty();
-            ClearPlayHistoryAppButton.IsEnabled = list.IsNotEmpty();
+            RecentSearchesMultiSelectAppButton.IsEnabled = list.IsNotEmpty();
+            ClearSearchHistoryAppButton.IsEnabled = list.IsNotEmpty();
         }
 
         private void SearchHistoryListView_ItemClick(object sender, ItemClickEventArgs e)

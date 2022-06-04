@@ -177,6 +177,9 @@
   <data name="ExpandList" xml:space="preserve">
     <value>展开列表</value>
   </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>反馈</value>
+  </data>
   <data name="FilesAddedWithCount" xml:space="preserve">
     <value>新增的项目（{0}）</value>
   </data>
@@ -458,6 +461,9 @@
   </data>
   <data name="UnPinToolTip" xml:space="preserve">
     <value>解除固定播放列表</value>
+  </data>
+  <data name="UpdateMusicLibraryFailed" xml:space="preserve">
+    <value>更新音乐库失败</value>
   </data>
   <data name="UpdateResultOfFolder" xml:space="preserve">
     <value>"{0}"的更新结果</value>

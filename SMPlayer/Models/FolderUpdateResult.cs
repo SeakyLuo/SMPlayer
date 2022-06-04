@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMPlayer.Models.VO;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -46,11 +47,11 @@ namespace SMPlayer.Models
         {
             List<FolderUpdateResultGroup> groups = new List<FolderUpdateResultGroup>();
             if (FilesAdded.IsNotEmpty())
-                groups.Add(new FolderUpdateResultGroup("FilesAddedWithCount", FilesAdded));
+                groups.Add(new FolderUpdateResultGroup(Path, "FilesAddedWithCount", FilesAdded, true));
             if (FilesRemoved.IsNotEmpty())
-                groups.Add(new FolderUpdateResultGroup("FilesRemovedWithCount", FilesRemoved));
+                groups.Add(new FolderUpdateResultGroup(Path, "FilesRemovedWithCount", FilesRemoved, false));
             if (FilesMoved.IsNotEmpty())
-                groups.Add(new FolderUpdateResultGroup("FilesMovedWithCount", FilesMoved));
+                groups.Add(new FolderUpdateResultGroup(Path, "FilesMovedWithCount", FilesMoved, true));
             return groups;
         }
 
@@ -122,10 +123,11 @@ namespace SMPlayer.Models
     {
         public string Tag { get; set; }
         public List<FolderUpdateResultGroupItem> Items { get; set; }
-        public FolderUpdateResultGroup(string tag, List<string> items)
+        public bool IsClickable { get; set; }
+        public FolderUpdateResultGroup(string parentPath, string tag, List<string> items, bool isClickable)
         {
             Tag = Helper.LocalizeText(tag, items.Count());
-            Items = items.Select(i => new FolderUpdateResultGroupItem(i)).ToList();
+            Items = items.Select(i => new FolderUpdateResultGroupItem(parentPath, i, isClickable)).ToList();
             foreach (var group in Items.GroupBy(i => i.Name))
             {
                 if (group.Count() <= 1) continue;
@@ -134,17 +136,31 @@ namespace SMPlayer.Models
                     item.Name = item.Path;
                 }
             }
+            IsClickable = isClickable;
         }
     }
 
-    public class FolderUpdateResultGroupItem
+    public class FolderUpdateResultGroupItem : PropertyChangedNotifier
     {
         public string Name { get; set; }
         public string Path { get; set; }
-        public FolderUpdateResultGroupItem(string path)
+        public bool ShowFlyout { get; set; }
+        public bool IsPlaying
         {
-            Name = System.IO.Path.GetFileNameWithoutExtension(path);
+            get => isPlaying;
+            set
+            {
+                isPlaying = value;
+                OnPropertyChanged("IsPlaying");
+            }
+        }
+        private bool isPlaying;
+        public FolderUpdateResultGroupItem(string parentPath, string path, bool showFlyout)
+        {
+            string simplePath = path.Substring(parentPath.Length + 1);  // RootPath不以/结尾
+            Name = simplePath.Substring(0, simplePath.LastIndexOf("."));
             Path = path;
+            ShowFlyout = showFlyout;
         }
     }
 }

@@ -27,30 +27,45 @@ namespace SMPlayer.Helpers
                 LoadingStatus = ExecutionStatus.Break;
             };
             LoadingStatus = ExecutionStatus.Running;
-            FolderTree tree = StorageService.FindFolder(folder.Path) ?? new FolderTree(folder.Path);
-            NotifyFolderEvent(Settings.settings.Tree, StorageItemEventType.BeforeReset);
-            bool unbroken = await LoadFolder(folder, tree);
-            await MainPage.Instance.Loader.ResetAsync("UpdateMusicLibrary");
-            MainPage.Instance.Loader.AllowBreak = false;
-            await ResetFolderData(tree);
-            if (Settings.settings.Tree.Id != 0 && !Settings.settings.Tree.Equals(tree))
+            try
             {
-                await MainPage.Instance.Loader.ResetAsync("ClearExpiredData");
-                ClearOldTree(StorageService.Root, tree);
+                FolderTree tree = StorageService.FindFolder(folder.Path) ?? new FolderTree(folder.Path);
+                NotifyFolderEvent(Settings.settings.Tree, StorageItemEventType.BeforeReset);
+                bool unbroken = await LoadFolder(folder, tree);
+                await MainPage.Instance.Loader.ResetAsync("UpdateMusicLibrary");
+                MainPage.Instance.Loader.AllowBreak = false;
+                await ResetFolderData(tree);
+                if (Settings.settings.Tree.Id != 0 && !Settings.settings.Tree.Equals(tree))
+                {
+                    await MainPage.Instance.Loader.ResetAsync("ClearExpiredData");
+                    ClearOldTree(StorageService.Root, tree);
+                }
+                Helper.CurrentFolder = folder;
+                Settings.settings.Tree = tree;
+                Settings.settings.RootPath = folder.Path;
+                await MainPage.Instance.Loader.ResetAsync("ResyncData", StorageService.StorageItemEventListeners.Count);
+                for (int i = 0; i < StorageService.StorageItemEventListeners.Count; i++)
+                {
+                    var listener = StorageService.StorageItemEventListeners[i];
+                    listener.ExecuteFolderEvent(Settings.settings.Tree, new StorageItemEventArgs(StorageItemEventType.Reset));
+                    await MainPage.Instance.Loader.IncrementAsync();
+                }
+                App.Save();
             }
-            Helper.CurrentFolder = folder;
-            Settings.settings.Tree = tree;
-            Settings.settings.RootPath = folder.Path;
-            await MainPage.Instance.Loader.ResetAsync("ResyncData", StorageService.StorageItemEventListeners.Count);
-            for (int i = 0; i < StorageService.StorageItemEventListeners.Count; i++)
+            catch (Exception e)
             {
-                var listener = StorageService.StorageItemEventListeners[i];
-                listener.ExecuteFolderEvent(Settings.settings.Tree, new StorageItemEventArgs(StorageItemEventType.Reset));
-                await MainPage.Instance.Loader.IncrementAsync();
+                Log.Error("update music library failed", e);
+                MainPage.Instance.ShowButtonedNotification(Helper.LocalizeMessage("ExecutionFailed"), Helper.LocalizeText("Feedback"), async () =>
+                {
+                    await Helper.SendEmailToDeveloper(Helper.LocalizeText("UpdateMusicLibraryFailed"), e.ToString());
+                }, 10000);
+                return false;
             }
-            App.Save();
-            LoadingStatus = ExecutionStatus.Done;
-            MainPage.Instance.Loader.Hide();
+            finally
+            {
+                LoadingStatus = ExecutionStatus.Done;
+                MainPage.Instance.Loader.Hide();
+            }
             return true;
         }
 

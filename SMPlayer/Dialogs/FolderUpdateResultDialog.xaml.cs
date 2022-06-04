@@ -1,5 +1,7 @@
 ﻿using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
 using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,12 +23,13 @@ using Windows.UI.Xaml.Navigation;
 
 namespace SMPlayer.Dialogs
 {
-    public sealed partial class FolderUpdateResultDialog : ContentDialog
+    public sealed partial class FolderUpdateResultDialog : ContentDialog, IMusicPlayerEventListener
     {
         private readonly ObservableCollection<FolderUpdateResultGroup> Groups = new ObservableCollection<FolderUpdateResultGroup>();
         public FolderUpdateResultDialog()
         {
             this.InitializeComponent();
+            MusicPlayer.AddMusicPlayerEventListener(this);
         }
 
         public async Task ShowAsync(FolderUpdateResult result)
@@ -41,9 +44,54 @@ namespace SMPlayer.Dialogs
             Hide();
         }
 
+        async void IMusicPlayerEventListener.Execute(MusicPlayerEventArgs args)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                switch (args.EventType)
+                {
+                    case MusicPlayerEventType.Switch:
+                        if (args.Music == null) return;
+                        foreach (var group in Groups)
+                        {
+                            foreach (var item in group.Items)
+                            {
+                                item.IsPlaying = args.Music.Path == item.Path;
+                            }
+                        }
+                        break;
+                }
+            });
+        }
+
         private void ListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
             args.ItemContainer.Background = PlaylistControl.GetRowBackground(args.ItemIndex);
+        }
+
+        private void Grid_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            FolderUpdateResultGroupItem item = (sender as FrameworkElement).DataContext as FolderUpdateResultGroupItem;
+            Music music = MusicService.FindMusic(item.Path);
+            if (!MusicPlayer.MoveToMusic(music))
+            {
+                MusicPlayer.AddMusicAndPlay(music);
+            }
+        }
+
+
+        private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            FolderUpdateResultGroupItem item = (sender as FrameworkElement).DataContext as FolderUpdateResultGroupItem;
+            if (item.ShowFlyout)
+            {
+                MenuFlyoutHelper.SetMusicMenu(sender, option: new MenuFlyoutOption
+                {
+                    ShowMusicProperties = false,
+                    ShowSelect = false,
+                    ShowDelete = false,
+                }).ShowAt(sender as FrameworkElement);
+            }
         }
     }
 }

@@ -248,18 +248,6 @@ namespace SMPlayer
             await dialog.ShowAsync();
         }
 
-        private static async Task ComposeEmail(string receiver, string subject, string messageBody)
-        {
-            var emailMessage = new EmailMessage
-            {
-                Subject = subject,
-                Body = messageBody
-            };
-
-            emailMessage.To.Add(new EmailRecipient(receiver));
-            await EmailManager.ShowComposeNewEmailAsync(emailMessage);
-        }
-
         private void FeedbackButton_Click(object sender, RoutedEventArgs e)
         {
             MenuFlyout flyout = new MenuFlyout();
@@ -280,7 +268,7 @@ namespace SMPlayer
 
         private async void ViaEmailMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            await ComposeEmail("luokiss9@qq.com", Helper.LocalizeText("ShareFeedBacks"), "");
+            await Helper.SendEmailToDeveloper("ShareFeedBacks", "");
         }
 
         private bool IsProcessing = false;
@@ -383,6 +371,12 @@ namespace SMPlayer
         private void PreferenceSettingsButton_Click(object sender, RoutedEventArgs e)
         {
             MainPage.Instance.NavigateToPage(typeof(PreferenceSettingsPage));
+        }
+
+        private async void SystemLogButton_Click(object sender, RoutedEventArgs e)
+        {
+            string path = Path.Combine(ApplicationData.Current.LocalFolder.Path, "Logs");
+            await Helper.ShowInExplorer(path, StorageItemTypes.Folder);
         }
     }
 }

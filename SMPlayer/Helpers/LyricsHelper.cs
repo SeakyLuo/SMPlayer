@@ -168,6 +168,8 @@ namespace SMPlayer.Helpers
             return lyrics.Replace("<em>", "").Replace("</em>", "").Replace("\\n", "\n");
         }
 
+        private const string NoLyricsText = "此歌曲为没有填词的纯音乐，请您欣赏";
+
         public static async Task<string> SearchLrcLyrics(Music music)
         {
             string songmid = await GetSongMid(music);
@@ -177,7 +179,13 @@ namespace SMPlayer.Helpers
             {
                 JsonObject json = await GetQQMusicResponse(uri);
                 var lyrics = json.GetNamedString("lyric");
-                return string.IsNullOrEmpty(lyrics) ? "" : System.Web.HttpUtility.HtmlDecode(lyrics);
+                if (string.IsNullOrEmpty(lyrics)) return "";
+                string decoded = System.Web.HttpUtility.HtmlDecode(lyrics);
+                if (decoded.Contains(NoLyricsText))
+                {
+                    return Helper.LocalizeMessage("NoMatchingLyrics");
+                }
+                return decoded;
             }
             catch (Exception)
             {

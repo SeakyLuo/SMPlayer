@@ -148,7 +148,14 @@ namespace SMPlayer
             {
                 await updater.CopyFromFileAsync(MediaPlaybackType.Music, await music.GetStorageFileAsync());
             }
-            updater.Update();
+            try
+            {
+                updater.Update();
+            }
+            catch (Exception)
+            {
+                // 参数错误。未提供用于复制媒体元数据的 StorageFile。
+            }
         }
 
         public static void SetMode(PlayMode mode)

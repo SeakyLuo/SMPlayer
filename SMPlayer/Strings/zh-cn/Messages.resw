@@ -222,6 +222,9 @@
   <data name="Error" xml:space="preserve">
     <value>发生了错误</value>
   </data>
+  <data name="ExecutionFailed" xml:space="preserve">
+    <value>抱歉，操作执行失败，请邮件反馈给开发者！</value>
+  </data>
   <data name="FailToGetThumbnail" xml:space="preserve">
     <value>无法获取专辑插图！</value>
   </data>
@@ -329,6 +332,9 @@
   </data>
   <data name="NoLyricsAvailable" xml:space="preserve">
     <value>没有歌词</value>
+  </data>
+  <data name="NoMatchingLyrics" xml:space="preserve">
+    <value>没有匹配的歌词</value>
   </data>
   <data name="NoMusicUnderCurrentFolder" xml:space="preserve">
     <value>当前目录下没有音乐！</value>

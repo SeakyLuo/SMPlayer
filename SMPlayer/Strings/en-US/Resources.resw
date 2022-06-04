@@ -762,7 +762,7 @@
   <data name="PlayTextBlock.Text" xml:space="preserve">
     <value>Play</value>
   </data>
-  <data name="PreferenceSettingsButton.Content" xml:space="preserve">
+  <data name="PreferenceSettingsDetailButton.Content" xml:space="preserve">
     <value>Preference Settings</value>
   </data>
   <data name="PreferenceSettingsInfoTextBlock.Text" xml:space="preserve">
@@ -838,16 +838,16 @@
     <value>Recent</value>
   </data>
   <data name="Refresh Directory" xml:space="preserve">
-    <value>Refresh Directory</value>
+    <value>Refresh Folder</value>
   </data>
   <data name="RefreshArtist" xml:space="preserve">
     <value>Reload</value>
   </data>
   <data name="RefreshItem.Label" xml:space="preserve">
-    <value>Refresh Directory</value>
+    <value>Refresh Folder</value>
   </data>
   <data name="RefreshItem.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Update current directory</value>
+    <value>Update current folder</value>
   </data>
   <data name="ReleaseNotesBugFixes.Text" xml:space="preserve">
     <value>Bug fixes and various improvements.</value>
@@ -1317,5 +1317,23 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   </data>
   <data name="PreferenceSettingsButton.Label" xml:space="preserve">
     <value>Preference Settings</value>
+  </data>
+  <data name="ReleaseNotesFixSettingsPageCrash.Text" xml:space="preserve">
+    <value>Fix a crash when entering Settings page.</value>
+  </data>
+  <data name="ReleaseNotesFixPlaylistControlNoUpdate.Text" xml:space="preserve">
+    <value>Fix a problem that Playlist Control does not update real time.</value>
+  </data>
+  <data name="ReleaseNotesSystemLog.Text" xml:space="preserve">
+    <value>You can see some system logs and send it to the developer.</value>
+  </data>
+  <data name="SystemLogButton.Content" xml:space="preserve">
+    <value>System Logs</value>
+  </data>
+  <data name="ReleaseNotesFixDuplicateMusicWhenReAdded.Text" xml:space="preserve">
+    <value>Fix a bug that causes extra duplicate music file when deleting a music file and then adding it back.</value>
+  </data>
+  <data name="ReleaseNotesUpdateDialogWithItemClick.Text" xml:space="preserve">
+    <value>New music files in the update result can now be clicked and played.</value>
   </data>
 </root>

@@ -101,8 +101,10 @@ namespace SMPlayer.Helpers
 
         private static void InsertMyFavoritesAndSettings(SQLiteConnection c)
         {
-            InsertPlaylist(c, Settings.settings.MyFavorites.FromVO());
-            Settings.settings.MyFavoritesId = Settings.settings.MyFavorites.Id;
+            PlaylistView myFavoritesVO = Settings.settings.MyFavorites;
+            Playlist myFavorites = myFavoritesVO.FromVO();
+            InsertPlaylist(c, myFavorites);
+            Settings.settings.MyFavoritesId = Settings.settings.MyFavorites.Id = myFavorites.Id;
             c.InsertSettings(Settings.settings);
         }
 
@@ -166,9 +168,11 @@ namespace SMPlayer.Helpers
         {
             for (int i = 0; i < playlists.Count; i++)
             {
-                PlaylistView playlist = playlists[i];
-                playlist.Priority = i;
-                InsertPlaylist(c, playlist.FromVO());
+                PlaylistView view = playlists[i];
+                view.Priority = i;
+                Playlist playlist = view.FromVO();
+                InsertPlaylist(c, playlist);
+                view.Id = playlist.Id;
             }
         }
 

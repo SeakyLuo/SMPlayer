@@ -756,7 +756,7 @@
   <data name="PlayTextBlock.Text" xml:space="preserve">
     <value>播放</value>
   </data>
-  <data name="PreferenceSettingsButton.Content" xml:space="preserve">
+  <data name="PreferenceSettingsDetailButton.Content" xml:space="preserve">
     <value>偏好设置</value>
   </data>
   <data name="PreferenceSettingsInfoTextBlock.Text" xml:space="preserve">
@@ -832,16 +832,16 @@
     <value>最近</value>
   </data>
   <data name="Refresh Directory" xml:space="preserve">
-    <value>更新目录</value>
+    <value>更新文件夹</value>
   </data>
   <data name="RefreshArtist" xml:space="preserve">
     <value>重新载入</value>
   </data>
   <data name="RefreshItem.Label" xml:space="preserve">
-    <value>更新目录</value>
+    <value>更新文件夹</value>
   </data>
   <data name="RefreshItem.ToolTipService.ToolTip" xml:space="preserve">
-    <value>更新当前目录</value>
+    <value>更新当前文件夹</value>
   </data>
   <data name="ReleaseNotesBugFixes.Text" xml:space="preserve">
     <value>问题修复和优化。</value>
@@ -1308,5 +1308,23 @@
   </data>
   <data name="PreferenceSettingsButton.Label" xml:space="preserve">
     <value>偏好设置</value>
+  </data>
+  <data name="ReleaseNotesFixSettingsPageCrash.Text" xml:space="preserve">
+    <value>修复了进入设置页面闪退的问题</value>
+  </data>
+  <data name="ReleaseNotesFixPlaylistControlNoUpdate.Text" xml:space="preserve">
+    <value>修复播放列表控件没有实时更新的问题</value>
+  </data>
+  <data name="ReleaseNotesSystemLog.Text" xml:space="preserve">
+    <value>可以在设置页面查看系统日志并反馈给开发者</value>
+  </data>
+  <data name="SystemLogButton.Content" xml:space="preserve">
+    <value>系统日志</value>
+  </data>
+  <data name="ReleaseNotesFixDuplicateMusicWhenReAdded.Text" xml:space="preserve">
+    <value>修复了音乐被删除又添加后，出现重复音乐的问题</value>
+  </data>
+  <data name="ReleaseNotesUpdateDialogWithItemClick.Text" xml:space="preserve">
+    <value>更新详情里的音乐支持点击播放了</value>
   </data>
 </root>

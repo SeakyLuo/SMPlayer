@@ -177,6 +177,9 @@
   <data name="ExpandList" xml:space="preserve">
     <value>Expand</value>
   </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>Feedback</value>
+  </data>
   <data name="FilesAddedWithCount" xml:space="preserve">
     <value>Items Added ({0})</value>
   </data>
@@ -458,6 +461,9 @@
   </data>
   <data name="UnPinToolTip" xml:space="preserve">
     <value>UnPin Playlist</value>
+  </data>
+  <data name="UpdateMusicLibraryFailed" xml:space="preserve">
+    <value>Update Music Library Failed</value>
   </data>
   <data name="UpdateResultOfFolder" xml:space="preserve">
     <value>Update Result of "{0}"</value>

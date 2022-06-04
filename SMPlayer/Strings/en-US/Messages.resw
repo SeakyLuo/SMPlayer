@@ -222,6 +222,9 @@
   <data name="Error" xml:space="preserve">
     <value>Error occurs</value>
   </data>
+  <data name="ExecutionFailed" xml:space="preserve">
+    <value>Sorry, something wrong happens during execution. Please send an email to report this failure.</value>
+  </data>
   <data name="FailToGetThumbnail" xml:space="preserve">
     <value>Fail to get album art!</value>
   </data>
@@ -329,6 +332,9 @@
   </data>
   <data name="NoLyricsAvailable" xml:space="preserve">
     <value>No Lyrics Available</value>
+  </data>
+  <data name="NoMatchingLyrics" xml:space="preserve">
+    <value>No matching lyrics.</value>
   </data>
   <data name="NoMusicUnderCurrentFolder" xml:space="preserve">
     <value>There is no music file found under the current folder!</value>

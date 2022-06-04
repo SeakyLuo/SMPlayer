@@ -318,7 +318,7 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource SettingLabelStyle}" />
                     <Button
-                        x:Uid="PreferenceSettingsButton"
+                        x:Uid="PreferenceSettingsDetailButton"
                         Click="PreferenceSettingsButton_Click"
                         Style="{StaticResource TextBlockButtonStyle}" />
                 </StackPanel>
@@ -411,6 +411,14 @@
                         x:Uid="FeedbackButton"
                         Content="Feedback"
                         Click="FeedbackButton_Click"
+                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <HyperlinkButton
+                        x:Uid="SystemLogButton"
+                        Content="System Log"
+                        Click="SystemLogButton_Click"
                         Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 </StackPanel>
             </StackPanel>

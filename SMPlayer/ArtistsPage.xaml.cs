@@ -397,62 +397,65 @@ namespace SMPlayer
             SelectArtist(targetArtist);
         }
 
-        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
+        async void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
             if (IsFolderUpdated) return;
             ArtistView artist = Artists.FirstOrDefault(a => a.Name == music.Artist);
-            switch (args.EventType)
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                case MusicEventType.Add:
-                    if (artist != null)
-                    {
-                        artist.AddMusic(music.ToVO());
-                    }
-                    else
-                    {
-                        artist = new ArtistView(music.ToVO());
-                        Artists.InsertWithOrder(artist);
-                    }
-                    break;
-                case MusicEventType.Remove:
-                    if (artist != null)
-                    {
-                        artist.RemoveMusic(music.ToVO());
-                        if (artist.Songs.IsEmpty())
+                switch (args.EventType)
+                {
+                    case MusicEventType.Add:
+                        if (artist != null)
                         {
+                            artist.AddMusic(music.ToVO());
+                        }
+                        else
+                        {
+                            artist = new ArtistView(music.ToVO());
+                            Artists.InsertWithOrder(artist);
+                        }
+                        break;
+                    case MusicEventType.Remove:
+                        if (artist != null)
+                        {
+                            artist.RemoveMusic(music.ToVO());
+                            if (artist.Songs.IsEmpty())
+                            {
+                                Artists.Remove(artist);
+                            }
+                        }
+                        break;
+                    case MusicEventType.Modify:
+                        Music before = music, after = args.ModifiedMusic;
+                        if (artist.Equals(ArtistMasterDetailsView.SelectedItem) || !artist.NotLoaded) artist.Load();
+                        if (SuggestionList.Contains(after.Artist))
+                        {
+                            if (before.Artist != after.Artist)
+                            {
+                                var newArtist = Artists.First(a => a.Name == after.Artist);
+                                if (newArtist.Equals(ArtistMasterDetailsView.SelectedItem))
+                                {
+                                    newArtist.Load();
+                                    FindMusicAndSetPlaying(after);
+                                }
+                                else if (!newArtist.NotLoaded) newArtist.Load();
+                            }
+                        }
+                        else
+                        {
+                            int index = SuggestionList.FindSortedListInsertIndex(after.Artist);
+                            SuggestionList.Insert(index, after.Artist);
+                            Artists.Insert(index, new ArtistView(after.ToVO()));
+                        }
+                        if (before.Artist != after.Artist && artist.Songs.IsEmpty())
+                        {
+                            SuggestionList.Remove(artist.Name);
                             Artists.Remove(artist);
                         }
-                    }
-                    break;
-                case MusicEventType.Modify:
-                    Music before = music, after = args.ModifiedMusic;
-                    if (artist.Equals(ArtistMasterDetailsView.SelectedItem) || !artist.NotLoaded) artist.Load();
-                    if (SuggestionList.Contains(after.Artist))
-                    {
-                        if (before.Artist != after.Artist)
-                        {
-                            var newArtist = Artists.First(a => a.Name == after.Artist);
-                            if (newArtist.Equals(ArtistMasterDetailsView.SelectedItem))
-                            {
-                                newArtist.Load();
-                                FindMusicAndSetPlaying(after);
-                            }
-                            else if (!newArtist.NotLoaded) newArtist.Load();
-                        }
-                    }
-                    else
-                    {
-                        int index = SuggestionList.FindSortedListInsertIndex(after.Artist);
-                        SuggestionList.Insert(index, after.Artist);
-                        Artists.Insert(index, new ArtistView(after.ToVO()));
-                    }
-                    if (before.Artist != after.Artist && artist.Songs.IsEmpty())
-                    {
-                        SuggestionList.Remove(artist.Name);
-                        Artists.Remove(artist);
-                    }
-                    break;
-            }
+                        break;
+                }
+            });
         }
 
         private void SongsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -191,7 +191,7 @@ namespace SMPlayer.Models
         {
             int basePoints = new List<int> { SearchHelper.EvaluateString(Name, keyword), SearchHelper.EvaluateString(Artist, keyword) - 10,
                                              SearchHelper.EvaluateString(Album, keyword) - 20, 0}.Max();
-            return basePoints == 0 ? 0 : basePoints + PlayCount / 10;
+            return basePoints == 0 ? 0 : basePoints + Math.Min(PlayCount / 10, 10);
         }
 
         public Music ToMusic()

@@ -145,7 +145,7 @@ namespace SMPlayer
 
         private void SetSongs(IEnumerable<MatchResult<Music>> list)
         {
-            Songs.SetTo(list.Take(SongLimit).Select(i => i.Entity.ToVO()));
+            Songs.SetTo(list.Take(SongLimit).AsParallel().AsOrdered().Select(i => i.Entity.ToVO(isFavorite: PlaylistService.IsFavorite(i.Entity))));
         }
 
         public async Task SearchPlaylists(IEnumerable<Music> songs, IEnumerable<Playlist> source, string keyword, SortBy criterion)

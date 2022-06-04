@@ -25,7 +25,20 @@
 
     <ScrollViewer>
         <TextBlock TextWrapping="WrapWholeWords">
-            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.6.14</Run><LineBreak />
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.7.0</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesUpdateDialogWithItemClick"/><LineBreak />
+            2. <Run x:Uid="ReleaseNotesFixDuplicateMusicWhenReAdded"/><LineBreak />
+            <LineBreak />
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.6.19</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesSystemLog"/><LineBreak />
+            <LineBreak />
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.6.18</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesFixPlaylistControlNoUpdate"/><LineBreak />
+            <LineBreak />
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.6.17</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesFixSettingsPageCrash"/><LineBreak />
+            <LineBreak />
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.6.15</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesMovePreferenceSettings"/><LineBreak />
             2. <Run x:Uid="ReleaseNotesNowPlayingSupportsMultiSelect"/><LineBreak />
             3. <Run x:Uid="ReleaseNotesBugFixes"/><LineBreak />

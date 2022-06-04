@@ -959,32 +959,17 @@ namespace SMPlayer
         private void MainMoreMenuFlyout_Opening(object sender, object e)
         {
             var flyout = sender as MenuFlyout;
-            if (MusicPlayer.CurrentMusic == null)
-            {
-                if (flyout.Items[0].Name == MenuFlyoutHelper.AddToSubItemName)
-                {
-                    for (int i = 0; i < 3; i++) // HardCoded 3
-                        flyout.Items.RemoveAt(0);
-                }
-            }
-            else
+            flyout.Items.PopToSize(3);
+            if (MusicPlayer.CurrentMusic != null)
             {
                 var helper = new MenuFlyoutHelper() { Data = MusicPlayer.CurrentMusic };
-                var addToItem = helper.GetAddToMenuFlyoutSubItem();
                 var propertyItems = helper.GetMusicPropertiesMenuFlyout().Items;
-                propertyItems.Insert(0, addToItem);
-                if (flyout.Items[0].Name == MenuFlyoutHelper.AddToSubItemName)
-                {
-                    for (int i = 0; i < propertyItems.Count; i++)
-                        flyout.Items[i] = propertyItems[i];
-                }
-                else
-                {
-                    foreach (var item in propertyItems.Reverse())
-                        flyout.Items.Insert(0, item);
-                }
-                flyout.Items.Insert(1, MenuFlyoutHelper.GetPreferItem(MusicPlayer.CurrentMusic.ToVO()));
+                foreach (var item in propertyItems)
+                    flyout.Items.AddToFirst(item);
+                flyout.Items.AddToFirst(MenuFlyoutHelper.GetPreferItem(MusicPlayer.CurrentMusic.ToVO()));
+                flyout.Items.AddToFirst(helper.GetAddToMenuFlyoutSubItem());
             }
+            flyout.Items.AddToFirst(MenuFlyoutHelper.GetQuickPlayItem(showIcon: true));
         }
 
         private void MainMusicInfoGrid_PointerEntered(object sender, PointerRoutedEventArgs e)
@@ -1019,9 +1004,9 @@ namespace SMPlayer
         private void FullMoreMenuFlyout_Opening(object sender, object e)
         {
             MenuFlyout flyout = sender as MenuFlyout;
-            if (flyout.Items.Last().Name == MenuFlyoutHelper.ShuffleSubItemName)
-                flyout.Items.RemoveAt(flyout.Items.Count - 1);
+            flyout.Items.RemoveAll(item => item.Name == MenuFlyoutHelper.ShuffleSubItemName);
             flyout.Items.Add(MenuFlyoutHelper.GetShuffleSubItem());
+            flyout.Items.RemoveAll(item => item.Name == MenuFlyoutHelper.PreferItemName);
             flyout.Items.Add(MenuFlyoutHelper.GetPreferItem(MusicPlayer.CurrentMusic));
         }
 

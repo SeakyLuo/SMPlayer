@@ -118,11 +118,11 @@ namespace SMPlayer
             }
             else if (e.NavigationMode == NavigationMode.Back)
             {
-                folder = CurrentFolderInfo;
+                folder = CurrentFolder;
             }
             else
             {
-                folder = CurrentFolderInfo ?? StorageService.Root;
+                folder = CurrentFolder ?? StorageService.Root;
             }
             SetPage(folder);
         }
@@ -222,6 +222,11 @@ namespace SMPlayer
 
         private void LocalListView_DragEnter(object sender, DragEventArgs e)
         {
+            if (draggingItem == null)
+            {
+                CancelDrop(e);
+                return;
+            }
             e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move;
         }
 
@@ -537,7 +542,8 @@ namespace SMPlayer
             switch (args.Event)
             {
                 case MultiSelectEvent.Cancel:
-                    CurrentListView.SelectionMode = ListViewSelectionMode.Single;
+                    CurrentListView.SelectionMode = CurrentListView is ListView ? ListViewSelectionMode.Single :
+                                                                                  ListViewSelectionMode.None;
                     break;
                 case MultiSelectEvent.AddTo:
                     args.FlyoutHelper.Data = SelectedSongs;
@@ -670,7 +676,7 @@ namespace SMPlayer
             }
         }
 
-        void IMusicEventListener.Execute(Music music, MusicEventArgs args)
+        async void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
             if (CurrentFolderInfo == null) return;
             switch (args.EventType)
@@ -685,7 +691,10 @@ namespace SMPlayer
                         gridViewMusic.Source = music.ToVO();
                     break;
             }
-            SetNavText(CurrentFolder);
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                SetNavText(CurrentFolder);
+            });
         }
     }
 }

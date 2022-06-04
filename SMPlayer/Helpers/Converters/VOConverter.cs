@@ -12,7 +12,7 @@ namespace SMPlayer.Helpers
 {
     public static class VOConverter
     {
-        public static MusicView ToVO(this Music src, int index = -1)
+        public static MusicView ToVO(this Music src, int index = -1, bool isFavorite = false)
         {
             return new MusicView
             {
@@ -26,6 +26,7 @@ namespace SMPlayer.Helpers
                 DateAdded = src.DateAdded,
                 Index = index,
                 IsPlaying = false,
+                Favorite = isFavorite,
             };
         }
 

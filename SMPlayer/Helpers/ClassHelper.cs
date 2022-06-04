@@ -25,6 +25,18 @@ namespace SMPlayer
 {
     public static class ClassHelper
     {
+        public static T AddToFirst<T>(this IList<T> list, T item)
+        {
+            list.Insert(0, item);
+            return item;
+        }
+        public static void PopToSize<T>(this IList<T> list, int size)
+        {
+            while (list.Count() > size)
+            {
+                list.RemoveAt(0);
+            }
+        }
         public static void Sort<T>(this List<T> list, SortBy criterion) where T : ISortable
         {
             list.Sort((m1, m2) => m1.GetComparable(criterion).CompareTo(m2.GetComparable(criterion)));
@@ -399,7 +411,9 @@ namespace SMPlayer
 
         public static Music GetMusic(this MediaPlaybackItem item)
         {
-            return item?.Source.CustomProperties["Source"] as Music;
+            object music = null;
+            item?.Source.CustomProperties.TryGetValue("Source", out music);
+            return (Music)music;
         }
 
         public static void SetMusic(this MediaPlaybackItem item, Music music)

@@ -72,6 +72,7 @@ namespace SMPlayer
         public PlaylistControl()
         {
             this.InitializeComponent();
+            MusicService.AddMusicEventListener(this);
             MusicPlayer.AddMusicPlayerEventListener(this);
         }
 
@@ -417,7 +418,7 @@ namespace SMPlayer
             switch (args.EventType)
             {
                 case MusicEventType.Add:
-                    if (removedMusic.Equals(music))
+                    if (removedMusic != null && removedMusic.Equals(music))
                     {
                         CurrentPlaylist.Insert(removedMusicIndex, music.ToVO());
                     }
@@ -440,7 +441,7 @@ namespace SMPlayer
             switch (args.EventType)
             {
                 case MusicPlayerEventType.Add:
-                    CurrentPlaylist.Insert(args.Index, args.Music.ToVO());
+                    CurrentPlaylist.Insert(args.Index, args.Music.ToVO(args.Index));
                     ResetIndex(args.Index);
                     break;
                 case MusicPlayerEventType.Remove:

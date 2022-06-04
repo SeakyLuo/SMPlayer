@@ -414,8 +414,7 @@
                     Height="36"
                     Content="&#xE712;"
                     FontSize="16"
-                    Style="{StaticResource MediaControlButtonStyle}"
-                    ToolTipService.ToolTip="More">
+                    Style="{StaticResource MediaControlButtonStyle}" >
                     <Button.Flyout>
                         <MenuFlyout Opening="MainMoreMenuFlyout_Opening">
                             <MenuFlyoutItem

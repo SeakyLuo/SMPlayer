@@ -51,6 +51,7 @@ namespace SMPlayer
 
         public async Task SetPlaylist(PlaylistView playlist)
         {
+            if (playlist == null) return;
             HidePlaylistCover();
             MusicPlayer.SetMusicPlaying(playlist.Songs, MusicPlayer.CurrentMusic);
             CurrentPlaylist = playlist;

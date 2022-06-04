@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
+using Windows.ApplicationModel.Email;
 using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.Globalization;
@@ -63,6 +64,45 @@ namespace SMPlayer
 
         private static List<MusicView> NotFoundHistory = new List<MusicView>();
         private static readonly Random random = new Random();
+
+        public static async Task ShowInExplorer(string path, StorageItemTypes type)
+        {
+            var options = new Windows.System.FolderLauncherOptions();
+            StorageFolder folder;
+            switch (type)
+            {
+                case StorageItemTypes.File:
+                    var file = await StorageFile.GetFileFromPathAsync(path);
+                    options.ItemsToSelect.Add(file);
+                    folder = await file.GetParentAsync();
+                    break;
+                case StorageItemTypes.Folder:
+                    folder = await StorageFolder.GetFolderFromPathAsync(path);
+                    options.ItemsToSelect.Add(folder);
+                    break;
+                case StorageItemTypes.None:
+                default:
+                    return;
+            }
+            await Windows.System.Launcher.LaunchFolderAsync(folder, options);
+        }
+
+        public static async Task SendEmailToDeveloper(string subject, string messageBody)
+        {
+            await ComposeEmail("luokiss9@qq.com", LocalizeText(subject), messageBody);
+        }
+
+        public static async Task ComposeEmail(string receiver, string subject, string messageBody)
+        {
+            var emailMessage = new EmailMessage
+            {
+                Subject = subject,
+                Body = messageBody
+            };
+
+            emailMessage.To.Add(new EmailRecipient(receiver));
+            await EmailManager.ShowComposeNewEmailAsync(emailMessage);
+        }
 
         public static T Timer<T>(Func<T> action, string funcName = null)
         {
