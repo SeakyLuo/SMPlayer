@@ -128,10 +128,21 @@ namespace SMPlayer
         {
             if (!PlayedModifed) return;
             RecentPlayedProgressRing.IsActive = true;
-            IEnumerable<MusicView> list = SettingsService.RecentPlayed.Select(i => i.ToVO());
-            SetupPlayedButtonState(list);
-            PlayedMusicView.Setup(list);
-            RecentPlayedProgressRing.IsActive = PlayedModifed = false;
+            try
+            {
+                IEnumerable<MusicView> list = SettingsService.RecentPlayed.Select(i => i.ToVO());
+                SetupPlayedButtonState(list);
+                PlayedMusicView.Setup(list);
+                PlayedModifed = false;
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"SetupPlayed failed, Exception {e}");
+            }
+            finally
+            {
+                RecentPlayedProgressRing.IsActive = false;
+            }
         }
 
         private void SetupPlayedButtonState(IEnumerable<IMusicable> list)

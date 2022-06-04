@@ -100,7 +100,15 @@ namespace SMPlayer.Helpers
         {
             using (SQLiteConnection connection = new SQLiteConnection(BuildDBPath()))
             {
-                return connectionHandler.Invoke(connection);
+                try
+                {
+                    return connectionHandler.Invoke(connection);
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Run SQL failed, Exception {e}");
+                    throw e;
+                }
             }
         }
 

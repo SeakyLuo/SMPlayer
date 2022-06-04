@@ -63,12 +63,22 @@ namespace SMPlayer
         {
             if (IsProcessing) return;
             IsProcessing = true;
-            Clear();
-            foreach (var item in collection)
+            try
             {
-                AddMusic(item.ToMusic().ToVO());
-            }      
-            IsProcessing = false;
+                Clear();
+                foreach (var item in collection)
+                {
+                    AddMusic(item.ToMusic().ToVO());
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Setup music collection failed, Exception {e}");
+            }
+            finally
+            {
+                IsProcessing = false;
+            }
         }
         public void AddMusic(MusicView music, int index = -1)
         {
