@@ -17,11 +17,13 @@
         <Grid Margin="0,10">
             <StackPanel HorizontalAlignment="{x:Bind ShowHeader, Converter={StaticResource HorizontalAlignmentConverter}}" Orientation="Horizontal">
                 <Button
+                    x:Name="ChangeAlbumArtButton"
                     x:Uid="ChangeAlbumArtButton"
                     Click="ChangeAlbumArtButton_Click"
                     Content="&#xE70F;"
                     Style="{StaticResource MusicScrollHeaderButtonStyle}" />
                 <Button
+                    x:Name="SaveAlbumArtButton"
                     x:Uid="SaveAlbumArtButton"
                     Click="SaveAlbumArtButton_Click"
                     Content="&#xE74E;"
@@ -31,6 +33,7 @@
                     </Button.KeyboardAccelerators>
                 </Button>
                 <Button
+                    x:Name="DeleteAlbumArtButton"
                     x:Uid="DeleteAlbumArtButton"
                     Click="DeleteAlbumArtButton_Click"
                     Content="&#xE74D;"

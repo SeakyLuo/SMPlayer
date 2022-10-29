@@ -25,6 +25,12 @@
 
     <ScrollViewer>
         <TextBlock TextWrapping="WrapWholeWords">
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.7.4</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesLocalPageDisplayWhenHoverButton"/><LineBreak />
+            <LineBreak />
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.7.3</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesBugFixForLyrics"/><LineBreak />
+            <LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.7.1</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesBugFixes"/><LineBreak />
             <LineBreak />

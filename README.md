@@ -26,6 +26,8 @@ Allow MainSearchBar to have a search history dropdown.
 
 Recent played artist, album, playlist.
 
+Scrolling lyrics and desktop lyrics.
+
 # TO FIX
 Able to drag titlebar when loading, multi-select.
 
@@ -51,3 +53,5 @@ Grid Mode for PlaylistPage.
 Improve shy header.
 
 Batch delete music file.
+
+Lock-Screen wall paper like Groove.

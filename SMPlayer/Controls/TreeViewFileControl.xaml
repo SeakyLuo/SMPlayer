@@ -1,0 +1,112 @@
+﻿<UserControl
+    x:Class="SMPlayer.Controls.TreeViewFileControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SMPlayer.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    PointerEntered="GridViewFolder_PointerEntered"
+    PointerExited="GridViewFolder_PointerExited"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <x:Double x:Key="IconSize">24</x:Double>
+        <Thickness x:Key="TreeViewPadding">12,0,4,0</Thickness>
+        <x:Double x:Key="TreeViewFontSize">15</x:Double>
+    </UserControl.Resources>
+
+    <Grid
+        Background="Transparent"
+        Padding="{StaticResource TreeViewPadding}"
+        ToolTipService.ToolTip="{Binding Path, Mode=OneWay}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="6*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="5*" />
+        </Grid.ColumnDefinitions>
+        <FontIcon
+            x:Name="PlayingIcon"
+            FontFamily="Segoe MDL2 Assets"
+            Width="{StaticResource IconSize}"
+            Foreground="{StaticResource SystemColorHighlightColor}"
+            Glyph="&#xE767;"
+            Visibility="{Binding IsPlaying, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
+        <Image
+            Width="{StaticResource IconSize}"
+            Source="{Binding TypeIcon}"
+            Visibility="{Binding IsPlaying, Converter={StaticResource InvertedVisibilityConverter}, Mode=OneWay}"/>
+        <Grid
+            Margin="5,0"
+            Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock
+                Margin="5,0"
+                VerticalAlignment="Center"
+                Text="{Binding Name, Mode=OneWay}"
+                Foreground="{Binding IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
+                FontSize="{StaticResource TreeViewFontSize}"
+                ToolTipService.ToolTip="{Binding Path, Mode=OneWay}"/>
+            <Button
+                Grid.Column="1"
+                x:Name="AddToButton"
+                x:Uid="AddToButton"
+                Click="AddToButton_Click"
+                Style="{StaticResource DisplayWhenHoverButtonStyle}">
+                <Button.Content>
+                    <FontIcon FontSize="17" Glyph="&#xE710;" />
+                </Button.Content>
+            </Button>
+            <Button
+                Grid.Column="2"
+                x:Name="PlayNextButton"
+                x:Uid="PlayNextButton"
+                Click="PlayNextButton_Click"
+                Style="{StaticResource DisplayWhenHoverButtonStyle}">
+                <Button.Content>
+                    <FontIcon FontSize="17" Glyph="&#xE11C;" />
+                </Button.Content>
+            </Button>
+        </Grid>
+        <HyperlinkButton
+            x:Name="CreatorHyperLinkButton"
+            Grid.Column="2"
+            Margin="10,0"
+            FontSize="{StaticResource TreeViewFontSize}"
+            Click="CreatorHyperLinkButton_Click"
+            Style="{StaticResource TextBlockButtonStyle}"
+            Foreground="{Binding IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
+            Content="{Binding Artist, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist, Mode=OneWay}"
+            ToolTipService.ToolTip="{Binding ElementName=CreatorHyperLinkButton, Path=Content, Mode=OneWay}" />
+        <HyperlinkButton
+            x:Name="CollectionHyperLinkButton"
+            Grid.Column="3"
+            Margin="10,0"
+            FontSize="{StaticResource TreeViewFontSize}"
+            Click="CollectionHyperLinkButton_Click"
+            Foreground="{Binding IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
+            Style="{StaticResource TextBlockButtonStyle}"
+            Content="{Binding Album, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownAlbum, Mode=OneWay}" 
+            ToolTipService.ToolTip="{Binding ElementName=CollectionHyperLinkButton, Path=Content, Mode=OneWay}" />
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal" />
+                <VisualState x:Name="PointerOver">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="AddToButton" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PlayNextButton" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+</UserControl>

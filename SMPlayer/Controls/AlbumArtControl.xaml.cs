@@ -77,6 +77,7 @@ namespace SMPlayer.Controls
             SaveProgress.Visibility = Visibility.Visible;
             if (sourcePics != null)
             {
+                SetButtonEnability(false);
                 BitmapImage image = await BytesToBitmapImage(sourcePics[0].Data.ToArray());
                 if (CurrentMusic == null)
                 {
@@ -97,10 +98,17 @@ namespace SMPlayer.Controls
                     foreach (var listener in ImageSavedListeners)
                         listener.SaveMusic(CurrentMusic, image);
                 }
+                SetButtonEnability(true);
             }
             Helper.ShowNotification("AlbumArtSaved");
             SaveProgress.Visibility = Visibility.Collapsed;
             IsProcessing = false;
+        }
+
+        private void SetButtonEnability(bool isEnabled)
+        {
+            ChangeAlbumArtButton.IsEnabled = SaveAlbumArtButton.IsEnabled = DeleteAlbumArtButton.IsEnabled = isEnabled;
+
         }
 
         private async Task SaveAlbumArt(MusicView music, IPicture[] source)

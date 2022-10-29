@@ -184,6 +184,12 @@
     <Compile Include="Controls\TestControl.xaml.cs">
       <DependentUpon>TestControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TreeViewFileControl.xaml.cs">
+      <DependentUpon>TreeViewFileControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TreeViewFolderControl.xaml.cs">
+      <DependentUpon>TreeViewFolderControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\AlbumDialog.xaml.cs">
       <DependentUpon>AlbumDialog.xaml</DependentUpon>
     </Compile>
@@ -306,6 +312,9 @@
     <Compile Include="Models\VO\PropertyChangedNotifier.cs" />
     <Compile Include="PreferenceSettingsPage.xaml.cs">
       <DependentUpon>PreferenceSettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RemotePlayPage.xaml.cs">
+      <DependentUpon>RemotePlayPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="SearchResultPage.xaml.cs">
       <DependentUpon>SearchResultPage.xaml</DependentUpon>
@@ -524,6 +533,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\TreeViewFileControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TreeViewFolderControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\AlbumDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -673,6 +690,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PreferenceSettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RemotePlayPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -24,7 +24,7 @@ namespace SMPlayer.Models.VO
                 OnPropertyChanged("IsPlaying");
             }
         }
-        public override string TypeIcon => "Assets/colorful_no_bg.png";
+        public override string TypeIcon => "ms-appx:///Assets/colorful_no_bg.png";
         public string Artist { get => Source.Artist; }
         public string Album { get => Source.Album; }
         private FolderFile SourceFile;

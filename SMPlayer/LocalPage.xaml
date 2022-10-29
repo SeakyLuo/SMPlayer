@@ -271,83 +271,20 @@
                 <templateselector:TreeViewStorageItemTemplateSelector>
                     <templateselector:TreeViewStorageItemTemplateSelector.FileTemplate>
                         <DataTemplate x:DataType="data:GridViewMusic">
-                            <Grid Padding="{StaticResource TreeViewPadding}">
-                                <Grid.ContextFlyout>
+                            <controls:TreeViewFileControl>
+                                <controls:TreeViewFileControl.ContextFlyout>
                                     <MenuFlyout Opening="OpenMusicFlyout" />
-                                </Grid.ContextFlyout>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="6*" />
-                                    <ColumnDefinition Width="3*" />
-                                    <ColumnDefinition Width="5*" />
-                                </Grid.ColumnDefinitions>
-                                <FontIcon
-                                    x:Name="PlayingIcon"
-                                    FontFamily="Segoe MDL2 Assets"
-                                    Width="{StaticResource IconSize}"
-                                    Foreground="{StaticResource SystemColorHighlightColor}"
-                                    Glyph="&#xE767;"
-                                    Visibility="{x:Bind IsPlaying, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
-                                <Image
-                                    Width="{StaticResource IconSize}"
-                                    Source="{x:Bind TypeIcon}"
-                                    Visibility="{x:Bind IsPlaying, Converter={StaticResource InvertedVisibilityConverter}, Mode=OneWay}"/>
-                                <TextBlock
-                                    Grid.Column="1"
-                                    Margin="10,0"
-                                    VerticalAlignment="Center"
-                                    Text="{x:Bind Name, Mode=OneWay}"
-                                    Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
-                                    FontSize="{StaticResource TreeViewFontSize}"
-                                    ToolTipService.ToolTip="{x:Bind Path, Mode=OneWay}"/>
-                                <HyperlinkButton
-                                    x:Name="CreatorHyperLinkButton"
-                                    Grid.Column="2"
-                                    Margin="10,0"
-                                    FontSize="{StaticResource TreeViewFontSize}"
-                                    Click="CreatorHyperLinkButton_Click"
-                                    Style="{StaticResource TextBlockButtonStyle}"
-                                    Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
-                                    Content="{x:Bind Artist, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownArtist, Mode=OneWay}"
-                                    ToolTipService.ToolTip="{Binding ElementName=CreatorHyperLinkButton, Path=Content, Mode=OneWay}" />
-                                <HyperlinkButton
-                                    x:Name="CollectionHyperLinkButton"
-                                    Grid.Column="3"
-                                    Margin="10,0"
-                                    FontSize="{StaticResource TreeViewFontSize}"
-                                    Click="CollectionHyperLinkButton_Click"
-                                    Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
-                                    Style="{StaticResource TextBlockButtonStyle}"
-                                    Content="{x:Bind Album, Converter={StaticResource EmptyStringConverter}, ConverterParameter=UnknownAlbum, Mode=OneWay}" 
-                                    ToolTipService.ToolTip="{Binding ElementName=CollectionHyperLinkButton, Path=Content, Mode=OneWay}" />
-                            </Grid>
+                                </controls:TreeViewFileControl.ContextFlyout>
+                            </controls:TreeViewFileControl>
                         </DataTemplate>
                     </templateselector:TreeViewStorageItemTemplateSelector.FileTemplate>
                     <templateselector:TreeViewStorageItemTemplateSelector.FolderTemplate>
                         <DataTemplate x:DataType="data:GridViewFolder">
-                            <Grid
-                                Drop="LocalListViewFolder_Drop"
-                                AllowDrop="True"
-                                Padding="{StaticResource TreeViewPadding}"
-                                ToolTipService.ToolTip="{x:Bind Path, Mode=OneWay}">
-                                <Grid.ContextFlyout>
+                            <controls:TreeViewFolderControl Drop="LocalListViewFolder_Drop">
+                                <controls:TreeViewFolderControl.ContextFlyout>
                                     <MenuFlyout Opening="OpenPlaylistFlyout" />
-                                </Grid.ContextFlyout>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Image
-                                    Width="{StaticResource IconSize}"
-                                    Source="Assets/folder.png" />
-                                <TextBlock
-                                    Grid.Column="1"
-                                    Margin="10,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="{StaticResource TreeViewFontSize}"
-                                    Text="{x:Bind Name, Mode=OneWay}"
-                                    ToolTipService.ToolTip="{x:Bind Path, Mode=OneWay}"/>
-                            </Grid>
+                                </controls:TreeViewFolderControl.ContextFlyout>
+                            </controls:TreeViewFolderControl>
                         </DataTemplate>
                     </templateselector:TreeViewStorageItemTemplateSelector.FolderTemplate>
                 </templateselector:TreeViewStorageItemTemplateSelector>

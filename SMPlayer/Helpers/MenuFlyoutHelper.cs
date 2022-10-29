@@ -327,7 +327,7 @@ namespace SMPlayer
         {
             var item = new MenuFlyoutItem()
             {
-                Icon = new FontIcon() { Glyph = "\uE838" },
+                Icon = new SymbolIcon(Symbol.OpenLocal),
                 Text = Helper.LocalizeText("ShowInExplorer")
             };
             item.SetToolTip(Helper.LocalizeText("ShowInExplorerToolTip", path), false);
@@ -456,20 +456,7 @@ namespace SMPlayer
             item.Click += async (s, args) =>
             {
                 clickListener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.ShowInExplorer));
-                await new InputDialog()
-                {
-                    Title = Helper.LocalizeMessage("Search"),
-                    PlaceholderText = Helper.LocalizeMessage("SearchDirectoryHint", tree.Name),
-                    Confirm = (inputText) =>
-                    {
-                        MainPage.Instance.Search(new SearchKeyword()
-                        {
-                            Text = inputText,
-                            Songs = tree.Flatten(),
-                            Folder = tree
-                        });
-                    }
-                }.ShowAsync();
+                await new InputDialog(tree).ShowAsync();
             };
             return item;
         }
@@ -841,8 +828,11 @@ namespace SMPlayer
             var item = new MenuFlyoutItem()
             {
                 Text = Helper.LocalizeText(showIcon ? "ShuffleAndPlay" : "QuickPlay"),
-                Icon = new SymbolIcon(Symbol.Shuffle),
             };
+            if (showIcon)
+            {
+                item.Icon = new SymbolIcon(Symbol.Shuffle);
+            }
             item.Click += (sender, args) =>
             {
                 MusicPlayer.QuickPlay(randomLimit);

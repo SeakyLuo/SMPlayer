@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMPlayer.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -40,6 +41,22 @@ namespace SMPlayer.Dialogs
         public InputDialog()
         {
             this.InitializeComponent();
+        }
+
+        public InputDialog(FolderTree tree)
+        {
+            this.InitializeComponent();
+            Title = Helper.LocalizeMessage("Search");
+            PlaceholderText = Helper.LocalizeMessage("SearchDirectoryHint", tree.Name);
+            Confirm = (inputText) =>
+            {
+                MainPage.Instance.Search(new SearchKeyword()
+                {
+                    Text = inputText,
+                    Songs = tree.Flatten(),
+                    Folder = tree
+                });
+            };
         }
 
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)

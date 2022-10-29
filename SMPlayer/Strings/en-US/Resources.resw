@@ -838,7 +838,7 @@
     <value>Recent</value>
   </data>
   <data name="Refresh Directory" xml:space="preserve">
-    <value>Refresh Folder</value>
+    <value>Refresh folder</value>
   </data>
   <data name="RefreshArtist" xml:space="preserve">
     <value>Reload</value>
@@ -1069,10 +1069,10 @@
     <value>Show Count</value>
   </data>
   <data name="ShowInExplorerButton.Content" xml:space="preserve">
-    <value>Check out</value>
+    <value>Open Local</value>
   </data>
   <data name="ShowInExplorerButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Show In Explorer</value>
+    <value>Locate item on your local computer.</value>
   </data>
   <data name="ShowLyricsInNotificationInfo.ToolTipService.ToolTip" xml:space="preserve">
     <value>Supports showing lrc-format lyrics with hundred-millisecond precision.
@@ -1335,5 +1335,29 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   </data>
   <data name="ReleaseNotesUpdateDialogWithItemClick.Text" xml:space="preserve">
     <value>New music files in the update result can now be clicked and played.</value>
+  </data>
+  <data name="ReleaseNotesBugFixForLyrics.Text" xml:space="preserve">
+    <value>Fix a problem that lyrics cannot be displayed.</value>
+  </data>
+  <data name="PlayNextButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Play next</value>
+  </data>
+  <data name="PlayNowButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Play now</value>
+  </data>
+  <data name="ReleaseNotesLocalPageDisplayWhenHoverButton.Text" xml:space="preserve">
+    <value>Add some buttons to the list mode of Local Page.</value>
+  </data>
+  <data name="OpenLocalButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Open local</value>
+  </data>
+  <data name="RefreshFolderButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Refresh folder</value>
+  </data>
+  <data name="SearchFolderButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Search in folder</value>
+  </data>
+  <data name="NavigationRemotePlayItem.Content" xml:space="preserve">
+    <value>Remote Play</value>
   </data>
 </root>

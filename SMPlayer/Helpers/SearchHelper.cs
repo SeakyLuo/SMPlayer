@@ -23,7 +23,53 @@ namespace SMPlayer.Helpers
             if (str.StartsWith(keyword, Comparison)) return 85 + offset;
             if (str.Contains(keyword)) return 80 + offset;
             if (str.Contains(keyword, Comparison)) return 75 + offset;
+            int editDistance = GetEditDistance(str, keyword);
+            int ratio = editDistance * 100 / Math.Max(str.Length, keyword.Length);
+            if (ratio <= 60) return 100 - editDistance + offset;
             return 0;
+        }
+
+        private static int GetEditDistance(string target, string given)
+        {
+            int n = target.Length;
+            int m = given.Length;
+
+            // 有一个字符串为空串
+            if (n * m == 0)
+            {
+                return n + m;
+            }
+            // init
+            List<List<int>> dp = new List<List<int>>();
+            for (int i = 0; i < n + 1; i++) 
+            {
+                List<int> list = new List<int>(m) { i };
+                if (i == 0)
+                {
+                    for (int j = 1; j < m + 1; j++) list.Add(j);
+                }
+                else
+                {
+                    for (int j = 1; j < m + 1; j++) list.Add(0);
+                }
+                dp.Add(list);
+            }
+            
+            for (int i = 1; i < n + 1; i++)
+            {
+                for (int j = 1; j < m + 1; j++)
+                {
+                    int left = dp[i - 1][j] + 1;
+                    int down = dp[i][j - 1] + 1;
+                    int left_down = dp[i - 1][j - 1];
+                    if (target[i - 1] != given[j - 1])
+                    {
+                        left_down += 1;
+                    }
+                    dp[i][j] = Math.Min(Math.Min(left, down), left_down);
+                }
+            }
+            return dp[n][m];
         }
 
         public static bool Matches(string str, string keyword)

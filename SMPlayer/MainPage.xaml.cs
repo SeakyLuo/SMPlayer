@@ -345,6 +345,9 @@ namespace SMPlayer
                 case "MyFavorites":
                     NaviFrame.Navigate(typeof(MyFavoritesPage));
                     break;
+                case "RemotePlay":
+                    NaviFrame.Navigate(typeof(RemotePlayPage));
+                    break;
                 case "MusicLibrary":
                 default:
                     NaviFrame.Navigate(typeof(MusicLibraryPage));
@@ -439,6 +442,12 @@ namespace SMPlayer
             {
                 HeaderGrid.Visibility = Visibility.Visible;
                 MainNavigationView.SelectedItem = null;
+            }
+            else if (page == typeof(RemotePlayPage))
+            {
+                SetHeaderText("RemotePlay");
+                HeaderGrid.Visibility = Visibility.Visible;
+                MainNavigationView.SelectedItem = RemotePlayItem;
             }
             else if (page == typeof(SettingsPage))
             {

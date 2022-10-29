@@ -398,18 +398,6 @@ namespace SMPlayer
             MenuFlyoutHelper.GetFolderSortByMenu(CurrentFolderInfo, this).ToMenuFlyout().ShowAt(sender as FrameworkElement);
         }
 
-        private void CreatorHyperLinkButton_Click(object sender, RoutedEventArgs e)
-        {
-            GridViewMusic music = ((FrameworkElement)sender).DataContext as GridViewMusic;
-            MainPage.Instance.NavigateToPage(typeof(ArtistsPage), music.Artist);
-        }
-
-        private void CollectionHyperLinkButton_Click(object sender, RoutedEventArgs e)
-        {
-            GridViewMusic music = ((FrameworkElement)sender).DataContext as GridViewMusic;
-            MainPage.Instance.NavigateToPage(typeof(AlbumPage), music.Album);
-        }
-
         private void LocalListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListViewBase listViewBase = (sender as ListViewBase);

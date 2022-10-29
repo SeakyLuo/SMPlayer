@@ -102,21 +102,31 @@ namespace SMPlayer
         {
             if (RecentAdded == null) return;
             RecentAddedProgressRing.IsActive = true;
-            ObservableCollection<MusicView> list = RecentAdded.TimeLine;
-            RecentAdded.CollectionChanged += (args) =>
+            try
             {
-                if (args.Type == MusicEventType.Add)
+                ObservableCollection<MusicView> list = RecentAdded.TimeLine;
+                RecentAdded.CollectionChanged += (args) =>
                 {
-                    AddedMusicView.AddOrMoveToTheFirst(args.Item);
-                }
-                else
-                {
-                    AddedMusicView.RemoveMusic(args.Item);
-                }
-            };
-            SetupAddedButtonState(list);
-            AddedMusicView.Setup(list);
-            RecentAddedProgressRing.IsActive = false;
+                    if (args.Type == MusicEventType.Add)
+                    {
+                        AddedMusicView.AddOrMoveToTheFirst(args.Item);
+                    }
+                    else
+                    {
+                        AddedMusicView.RemoveMusic(args.Item);
+                    }
+                };
+                SetupAddedButtonState(list);
+                AddedMusicView.Setup(list);
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"SetupAdded failed, Exception {e}");
+            }
+            finally
+            {
+                RecentAddedProgressRing.IsActive = false;
+            }
         }
 
         private void SetupAddedButtonState(ObservableCollection<MusicView> list)
@@ -161,11 +171,18 @@ namespace SMPlayer
         public void SetupSearched()
         {
             if (!SearchModified) return;
-            ResetSearchHistoryRowColor();
-            IEnumerable<string> list = SettingsService.RecentSearch;
-            RecentSearches.SetTo(list);
-            SetupSearchedButtonState(list);
-            SearchModified = false;
+            try
+            {
+                ResetSearchHistoryRowColor();
+                IEnumerable<string> list = SettingsService.RecentSearch;
+                RecentSearches.SetTo(list);
+                SetupSearchedButtonState(list);
+                SearchModified = false;
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"SetupSearched failed, Exception {e}");
+            }
         }
 
         private void SetupSearchedButtonState(IEnumerable<string> list)

@@ -153,6 +153,13 @@
             <Style x:Key="EmptyRemoveButtonStyle" TargetType="TextBlock">
                 <Setter Property="MinWidth" Value="60" />
             </Style>
+            <Style x:Key="DisplayWhenHoverButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Visibility" Value="Collapsed" />
+                <Setter Property="Height" Value="40" />
+                <Setter Property="Width" Value="40" />
+            </Style>
             <Style x:Key="InAppNotificationStyle" TargetType="mtuc:InAppNotification">
                 <Setter Property="AnimationDuration" Value="0:0:0.1" />
                 <Setter Property="ShowDismissButton" Value="True" />

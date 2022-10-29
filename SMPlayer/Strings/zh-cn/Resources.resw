@@ -1327,4 +1327,28 @@
   <data name="ReleaseNotesUpdateDialogWithItemClick.Text" xml:space="preserve">
     <value>更新详情里的音乐支持点击播放了</value>
   </data>
+  <data name="ReleaseNotesBugFixForLyrics.Text" xml:space="preserve">
+    <value>修复了歌词无法展示的问题</value>
+  </data>
+  <data name="PlayNextButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>下一首播放</value>
+  </data>
+  <data name="PlayNowButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>立刻播放</value>
+  </data>
+  <data name="ReleaseNotesLocalPageDisplayWhenHoverButton.Text" xml:space="preserve">
+    <value>本地页面的列表模式增加了一些按钮。</value>
+  </data>
+  <data name="OpenLocalButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>在本地打开</value>
+  </data>
+  <data name="RefreshFolderButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>更新文件夹</value>
+  </data>
+  <data name="SearchFolderButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>在文件夹中搜索</value>
+  </data>
+  <data name="NavigationRemotePlayItem.Content" xml:space="preserve">
+    <value>远程播放</value>
+  </data>
 </root>
