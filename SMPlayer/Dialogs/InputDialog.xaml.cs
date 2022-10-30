@@ -39,10 +39,12 @@ namespace SMPlayer.Dialogs
         public Action<string> Confirm { get; set; }
         public Func<string, string> Validation { get; set; }
         public Action Cancel { get; set; }
+        public bool SelectAllText { get; set; } = false;
 
         public InputDialog()
         {
             this.InitializeComponent();
+            if (SelectAllText) InputTextBox.SelectAll();
         }
 
         public InputDialog(FolderTree tree)
@@ -59,12 +61,7 @@ namespace SMPlayer.Dialogs
                     Folder = tree
                 });
             };
-        }
-
-        public async Task<ContentDialogResult> ShowAsyncAndSelectAllText()
-        {
-            InputTextBox.SelectAll();
-            return await ShowAsync();
+            if (SelectAllText) InputTextBox.SelectAll();
         }
 
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)

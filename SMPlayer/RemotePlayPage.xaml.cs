@@ -52,8 +52,8 @@ namespace SMPlayer
 
         private static string GenRandomPassword()
         {
-            string password = "";
             char[] possibleChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
+            string password = "";
             for (int i = 0; i < 20; i++)
             {
                 password += possibleChars[Helper.RandRange(possibleChars.Length)]; 
@@ -110,7 +110,7 @@ namespace SMPlayer
                     return "PasswordValidation";
                 },
                 Confirm = UpdatePassword,
-            }.ShowAsyncAndSelectAllText();
+            }.ShowAsync();
         }
 
         private void UpdatePassword(string password)
