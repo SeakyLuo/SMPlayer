@@ -47,8 +47,6 @@ namespace SMPlayer
         private void FillSettings(Settings settings)
         {
             PathBox.Text = settings.RootPath;
-            int notificationSend = (int)settings.NotificationSend;
-            int notificationDisplay = (int)settings.NotificationDisplay;
             NotificationSendComboBox.SelectedIndex = (int)settings.NotificationSend;
             NotificationModeComboBox.SelectedIndex = (int)settings.NotificationDisplay;
             ThemeColorPicker.Color = settings.ThemeColor;
@@ -287,12 +285,7 @@ namespace SMPlayer
             }
             else
             {
-                DataPackage dataPackage = new DataPackage()
-                {
-                    RequestedOperation = DataPackageOperation.Copy
-                };
-                dataPackage.SetText(uri);
-                Clipboard.SetContent(dataPackage);
+                Helper.CopyStringToClipboard(uri);
                 MainPage.Instance.ShowNotification(Helper.LocalizeMessage("FailToOpenBrowser"));
             }
             IsProcessing = false;

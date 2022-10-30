@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Email;
 using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
@@ -62,8 +63,17 @@ namespace SMPlayer
             }
         }
 
-        private static List<MusicView> NotFoundHistory = new List<MusicView>();
         private static readonly Random random = new Random();
+        
+        public static void CopyStringToClipboard(string str)
+        {
+            DataPackage dataPackage = new DataPackage()
+            {
+                RequestedOperation = DataPackageOperation.Copy
+            };
+            dataPackage.SetText(str);
+            Clipboard.SetContent(dataPackage);
+        }
 
         public static async Task ShowInExplorer(string path, StorageItemTypes type)
         {

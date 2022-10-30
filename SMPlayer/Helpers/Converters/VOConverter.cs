@@ -79,5 +79,33 @@ namespace SMPlayer.Helpers
         {
             return new AlbumView(src.Name, src.Songs, false);
         }
+        public static AuthorizedDevice FromVO(this AuthorizedDeviceView src)
+        {
+            if (src == null) return null;
+            return new AuthorizedDevice
+            {
+                Id = src.Id,
+                Ip = src.Ip,
+                DeviceName = src.DeviceName,
+                State = src.State,
+                Auth = src.Auth,
+                CreateTime = src.CreateTime,
+                UpdateTime = src.UpdateTime,
+            };
+        }
+        public static AuthorizedDeviceView ToVO(this AuthorizedDevice src)
+        {
+            if (src == null) return null;
+            return new AuthorizedDeviceView
+            {
+                Id = src.Id,
+                Ip = src.Ip,
+                DeviceName = src.DeviceName,
+                State = src.State,
+                Auth = src.Auth,
+                CreateTime = src.CreateTime,
+                UpdateTime = src.UpdateTime,
+            };
+        }
     }
 }

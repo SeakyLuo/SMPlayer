@@ -97,6 +97,19 @@ namespace SMPlayer.Services
             }
         }
 
+        public static void UpdateRemotePlayPassword(string password)
+        {
+            UpdateField("RemotePlayPassword", password);
+        }
+
+        public static void UpdateField(string fieldName, object value)
+        {
+            SQLHelper.Run(c =>
+            {
+                c.Execute($"update Settings set {fieldName} = ?", value);
+            });
+        }
+
         public static void Search(string keyword)
         {
             if (string.IsNullOrWhiteSpace(keyword))

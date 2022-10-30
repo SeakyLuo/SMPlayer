@@ -156,6 +156,9 @@
   <data name="ArtistsWithCount" xml:space="preserve">
     <value>Artists ({0})</value>
   </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
   <data name="CollapseList" xml:space="preserve">
     <value>Collapse</value>
   </data>
@@ -173,6 +176,9 @@
   </data>
   <data name="Detail" xml:space="preserve">
     <value>Detail</value>
+  </data>
+  <data name="DeviceAuthorizations" xml:space="preserve">
+    <value>Device Authorizations</value>
   </data>
   <data name="ExpandList" xml:space="preserve">
     <value>Expand</value>
@@ -290,6 +296,9 @@
   </data>
   <data name="NowPlaying" xml:space="preserve">
     <value>Now Playing</value>
+  </data>
+  <data name="PasswordValidation" xml:space="preserve">
+    <value>Password should have a length between 4 and 30, and consistent of letters A-Za-z or numbers 0-9.</value>
   </data>
   <data name="Pause" xml:space="preserve">
     <value>Pause</value>

@@ -54,6 +54,33 @@
             <x:Double x:Key="CollapsedNavigationViewWindowWidth">1200</x:Double>
             <x:Double x:Key="PlaylistFooterHeight">30</x:Double>
             <x:Double x:Key="NavigationViewButtonWidth">40</x:Double>
+
+            <Style
+                x:Key="MusicPropertyTextBoxStyle"
+                BasedOn="{StaticResource BorderlessTextBoxStyle}"
+                TargetType="TextBox">
+                <Setter Property="Height" Value="30" />
+                <Setter Property="Margin" Value="20,5" />
+                <Setter Property="Background" Value="{ThemeResource MusicInfoTextBoxBackground}" />
+            </Style>
+            <Style x:Key="MusicPropertyBaseTextBlockStyle" TargetType="TextBlock">
+                <Setter Property="Height" Value="30" />
+                <Setter Property="Padding" Value="0,5" />
+            </Style>
+            <Style
+                x:Key="MusicPropertyTextBlockStyle"
+                BasedOn="{StaticResource MusicPropertyBaseTextBlockStyle}"
+                TargetType="TextBlock">
+                <Setter Property="Margin" Value="20,5" />
+                <Setter Property="TextAlignment" Value="Left" />
+            </Style>
+            <Style
+                x:Key="MusicPropertyLabelStyle"
+                BasedOn="{StaticResource MusicPropertyBaseTextBlockStyle}"
+                TargetType="TextBlock">
+                <Setter Property="Margin" Value="0,5" />
+                <Setter Property="TextAlignment" Value="Right" />
+            </Style>
             <Style x:Key="SemiBoldTitleTextBlockStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="24" />
                 <Setter Property="FontWeight" Value="SemiBold" />

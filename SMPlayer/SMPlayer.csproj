@@ -139,11 +139,17 @@
     <Compile Include="ArtistsPage.xaml.cs">
       <DependentUpon>ArtistsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AuthorizedDevicePage.xaml.cs">
+      <DependentUpon>AuthorizedDevicePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\AlbumArtControl.xaml.cs">
       <DependentUpon>AlbumArtControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ArtistItemControl.xaml.cs">
       <DependentUpon>ArtistItemControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AuthorizedDeviceListViewControl.xaml.cs">
+      <DependentUpon>AuthorizedDeviceListViewControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\DropShadowControl.xaml.cs">
       <DependentUpon>DropShadowControl.xaml</DependentUpon>
@@ -195,6 +201,9 @@
     </Compile>
     <Compile Include="Dialogs\FolderUpdateResultDialog.xaml.cs">
       <DependentUpon>FolderUpdateResultDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\AuthorizedDeviceDetailDialog.xaml.cs">
+      <DependentUpon>AuthorizedDeviceDetailDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\MusicDialog.xaml.cs">
       <DependentUpon>MusicDialog.xaml</DependentUpon>
@@ -248,6 +257,7 @@
     <Compile Include="Helpers\Converters\DAOConverter.cs" />
     <Compile Include="Helpers\Enums\EnumDescription.cs" />
     <Compile Include="Helpers\Enums\EnumHelper.cs" />
+    <Compile Include="Helpers\LockHelper.cs" />
     <Compile Include="Helpers\StorageHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\Log.cs" />
@@ -273,6 +283,8 @@
     <Compile Include="Interfaces\IStorageItemEventListener.cs" />
     <Compile Include="Models\Album.cs" />
     <Compile Include="Models\Artist.cs" />
+    <Compile Include="Models\AuthorizedDevice.cs" />
+    <Compile Include="Models\DAO\AuthorizedDeviceDAO.cs" />
     <Compile Include="Models\Enums\ActiveState.cs" />
     <Compile Include="Models\DAO\FileDAO.cs" />
     <Compile Include="Models\DAO\FolderDAO.cs" />
@@ -283,6 +295,7 @@
     <Compile Include="Models\DAO\PreferenceSettingsDAO.cs" />
     <Compile Include="Models\DAO\RecentRecordDAO.cs" />
     <Compile Include="Models\DAO\SettingsDAO.cs" />
+    <Compile Include="Models\Enums\AuthorizationLevel.cs" />
     <Compile Include="Models\Enums\EntityType.cs" />
     <Compile Include="Models\FolderFile.cs" />
     <Compile Include="DataStructure\FullyObservableCollection.cs" />
@@ -305,6 +318,7 @@
     <Compile Include="Models\PreferenceSetting.cs" />
     <Compile Include="Models\RecentTimeLine.cs" />
     <Compile Include="Models\StorageItem.cs" />
+    <Compile Include="Models\VO\AuthorizedDeviceView.cs" />
     <Compile Include="Models\VO\FolderChainItem.cs" />
     <Compile Include="Models\VO\PreferLevelView.cs" />
     <Compile Include="Models\VO\GridViewStorageItem.cs" />
@@ -319,6 +333,7 @@
     <Compile Include="SearchResultPage.xaml.cs">
       <DependentUpon>SearchResultPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\AuthorizedDeviceService.cs" />
     <Compile Include="Services\MusicService.cs" />
     <Compile Include="Services\PlaylistService.cs" />
     <Compile Include="Services\PreferenceService.cs" />
@@ -473,11 +488,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="AuthorizedDevicePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\AlbumArtControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ArtistItemControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\AuthorizedDeviceListViewControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -548,6 +571,10 @@
     <Page Include="Dialogs\FolderUpdateResultDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\AuthorizedDeviceDetailDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Dialogs\MusicDialog.xaml">
       <SubType>Designer</SubType>

@@ -1,6 +1,9 @@
 ﻿using SkiaSharp;
 using SkiaSharp.QrCode;
 using SkiaSharp.QrCode.Image;
+using SMPlayer.Dialogs;
+using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,11 +12,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Imaging;
+using Windows.Security.ExchangeActiveSyncProvisioning;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml;
@@ -39,6 +44,21 @@ namespace SMPlayer
         public RemotePlayPage()
         {
             this.InitializeComponent();
+            if (string.IsNullOrEmpty(Settings.settings.RemotePlayPassword))
+            {
+                UpdatePassword(GenRandomPassword());
+            }
+        }
+
+        private static string GenRandomPassword()
+        {
+            string password = "";
+            char[] possibleChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
+            for (int i = 0; i < 20; i++)
+            {
+                password += possibleChars[Helper.RandRange(possibleChars.Length)]; 
+            }
+            return password;
         }
 
         private async void LocalServiceToggleSwitch_Toggled(object sender, RoutedEventArgs e)
@@ -48,12 +68,18 @@ namespace SMPlayer
                 int port = 0823;
                 string address = GetLocalServerAddress(port);
                 UrlTextBox.Text = address;
-                //LaunchLocalServer(port);
-                QRCodeImage.Source = await ImageHelper.GenQRCode(address);
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                {
+                    //LaunchLocalServer(port);
+                    QRCodeImage.Source = await ImageHelper.GenQRCode(address);
+                });
             } 
             else
             {
-                //ShutdownLocalServer();
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    //ShutdownLocalServer();
+                });
             }
         }
 
@@ -68,22 +94,40 @@ namespace SMPlayer
             return $"http://{GetIp()}:{port}";
         }
 
-        private void ChangePassword_Click(object sender, RoutedEventArgs e)
+        private async void ChangePassword_Click(object sender, RoutedEventArgs e)
         {
+            EasClientDeviceInformation deviceInfo = new EasClientDeviceInformation();
+            string deviceName = deviceInfo.FriendlyName;
+            await new InputDialog()
+            {
+                Title = Helper.LocalizeText("ChangePassword"),
+                PlaceholderText = Helper.LocalizeText("PasswordValidation"),
+                InputText = Settings.settings.RemotePlayPassword,
+                Validation = (password) =>
+                {
+                    Regex regex = new Regex(@"[a-zA-Z0-9]{4,30}");
+                    if (regex.IsMatch(password)) return null;
+                    return "PasswordValidation";
+                },
+                Confirm = UpdatePassword,
+            }.ShowAsyncAndSelectAllText();
+        }
 
+        private void UpdatePassword(string password)
+        {
+            Settings.settings.RemotePlayPassword = password;
+            SettingsService.UpdateRemotePlayPassword(password);
         }
 
         private void AuthorizedDevicesButton_Click(object sender, RoutedEventArgs e)
         {
-
+            MainPage.Instance.SetHeaderText("DeviceAuthorizations");
+            MainPage.Instance.NavigateToPage(typeof(AuthorizedDevicePage));
         }
 
         private void CopyToClipBoardButton_Click(object sender, RoutedEventArgs e)
         {
-            DataPackage dataPackage = new DataPackage();
-            dataPackage.SetText(UrlTextBox.Text);
-            Clipboard.SetContent(dataPackage);
-
+            Helper.CopyStringToClipboard(UrlTextBox.Text);
             Helper.ShowNotification("CopySuccessful");
         }
 

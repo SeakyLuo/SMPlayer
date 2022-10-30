@@ -46,6 +46,7 @@ namespace SMPlayer.Models.DAO
         public SortBy SearchPlaylistsCriterion { get; set; }
         public SortBy SearchFoldersCriterion { get; set; }
         public string LastReleaseNotesVersion { get; set; }
+        public string RemotePlayPassword { get; set; }
 
     }
 }

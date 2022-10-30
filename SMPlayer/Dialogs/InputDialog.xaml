@@ -17,7 +17,7 @@
         <TextBox
             x:Name="InputTextBox"
             Grid.ColumnSpan="2"
-            Width="400"
+            Width="480"
             Height="40"
             Margin="20"
             Background="WhiteSmoke"
@@ -25,7 +25,7 @@
             PlaceholderText="PlaceHolder"
             Style="{StaticResource DialogBorderlessTextBoxStyle}" />
         <TextBlock
-            x:Name="NamingErrorTextBox"
+            x:Name="ErrorTextBox"
             Margin="20,-10,20,10"
             Foreground="Red"
             TextWrapping="WrapWholeWords"

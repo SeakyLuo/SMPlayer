@@ -28,6 +28,8 @@ Recent played artist, album, playlist.
 
 Scrolling lyrics and desktop lyrics.
 
+Add paging.
+
 # TO FIX
 Able to drag titlebar when loading, multi-select.
 

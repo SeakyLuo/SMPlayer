@@ -210,6 +210,9 @@
   <data name="DataImported" xml:space="preserve">
     <value>数据已导入！</value>
   </data>
+  <data name="DeleteAuthorizedDeviceHint" xml:space="preserve">
+    <value>删除授权仍然会允许该设备的再次请求，如果需要阻止请求，请使用黑名单功能。</value>
+  </data>
   <data name="DeleteFolder" xml:space="preserve">
     <value>你将要删除文件夹“{0}”，此操作还会删除该文件夹下所有的文件夹和音乐，且不可撤销，是否确认？</value>
   </data>

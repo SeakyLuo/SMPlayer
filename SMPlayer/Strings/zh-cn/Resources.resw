@@ -1352,7 +1352,7 @@
     <value>远程播放</value>
   </data>
   <data name="AuthorizedDevicesButton.Content" xml:space="preserve">
-    <value>查看所有已授权设备</value>
+    <value>查看设备授权情况</value>
   </data>
   <data name="ChangeRemotePlayPasswordButton.Content" xml:space="preserve">
     <value>修改密码</value>
@@ -1373,6 +1373,24 @@
     <value>你可以在其他设备上访问下方链接或扫描下方二维码来远程播放本机音乐</value>
   </data>
   <data name="UsageOfRemotePlayTextBlock.Text" xml:space="preserve">
-    <value>“远程播放”使得你可以在其他设备远程访问本机音乐文件，你必须保证“简音播放器”运行且接入互联网才能使用该功能。另外为了保证信息安全，你必须设置密码来授权其他设备的访问。一旦密码修改，已有的授权将失效。</value>
+    <value>“远程播放”使得你可以在其他设备远程访问本机音乐文件，你必须保证“简音播放器”运行且接入互联网才能使用该功能。另外，为了保证信息安全，你必须设置密码来授权其他设备的访问。一旦密码修改，已有的授权将失效。</value>
+  </data>
+  <data name="DeviceNameTextBlock.Text" xml:space="preserve">
+    <value>设备名称</value>
+  </data>
+  <data name="IpTextBlock.Text" xml:space="preserve">
+    <value>IP地址</value>
+  </data>
+  <data name="DeviceNameErrorTextBlock.Text" xml:space="preserve">
+    <value>设备名称的长度必须在2到50之间</value>
+  </data>
+  <data name="RemotePlayBlackListTextBlock.Text" xml:space="preserve">
+    <value>黑名单</value>
+  </data>
+  <data name="RemotePlayBlackListToggleSwitch.OffContent" xml:space="preserve">
+    <value>目前允许来自该设备的所有请求</value>
+  </data>
+  <data name="RemotePlayBlackListToggleSwitch.OnContent" xml:space="preserve">
+    <value>已阻止来该设备的所有请求</value>
   </data>
 </root>

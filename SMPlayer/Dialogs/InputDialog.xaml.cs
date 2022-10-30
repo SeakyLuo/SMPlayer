@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -36,6 +37,7 @@ namespace SMPlayer.Dialogs
             set => InputTextBox.Text = value;
         }
         public Action<string> Confirm { get; set; }
+        public Func<string, string> Validation { get; set; }
         public Action Cancel { get; set; }
 
         public InputDialog()
@@ -59,10 +61,26 @@ namespace SMPlayer.Dialogs
             };
         }
 
+        public async Task<ContentDialogResult> ShowAsyncAndSelectAllText()
+        {
+            InputTextBox.SelectAll();
+            return await ShowAsync();
+        }
+
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
-            Confirm?.Invoke(InputText);
-            this.Hide();
+            string result = Validation?.Invoke(InputText);
+            if (string.IsNullOrEmpty(result))
+            {
+                ErrorTextBox.Visibility = Visibility.Collapsed;
+                Confirm?.Invoke(InputText);
+                this.Hide();
+            }
+            else
+            {
+                ErrorTextBox.Visibility = Visibility.Visible;
+                ErrorTextBox.Text = Helper.LocalizeText(result);
+            }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

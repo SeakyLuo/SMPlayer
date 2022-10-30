@@ -1361,7 +1361,7 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
     <value>Remote Play</value>
   </data>
   <data name="AuthorizedDevicesButton.Content" xml:space="preserve">
-    <value>See all authorized devices</value>
+    <value>Device authorizations</value>
   </data>
   <data name="ChangeRemotePlayPasswordButton.Content" xml:space="preserve">
     <value>Change password</value>
@@ -1382,6 +1382,24 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
     <value>You may access local music files from other devices by visiting the website or scanning the qr code below.</value>
   </data>
   <data name="UsageOfRemotePlayTextBlock.Text" xml:space="preserve">
-    <value>Remote Play allows you to access your local music file from remote devices. You must keep SMPlayer running and this device connected the the network to use this feature. For your safety, you need to set a password to authorize the accessing devices. Once the password is changed, existing authorizations will expire.</value>
+    <value>Remote Play allows you to access your local music file from remote devices. You must keep SMPlayer running and this device connected the the network to use this feature. For the safety of your device, you need to set a password to authorize any accessing devices. Once the password is changed, all existing authorizations will be invalidated.</value>
+  </data>
+  <data name="DeviceNameTextBlock.Text" xml:space="preserve">
+    <value>Device Name</value>
+  </data>
+  <data name="IpTextBlock.Text" xml:space="preserve">
+    <value>IP Address</value>
+  </data>
+  <data name="DeviceNameErrorTextBlock.Text" xml:space="preserve">
+    <value>Device name should have a length between 2 and 50.</value>
+  </data>
+  <data name="RemotePlayBlackListTextBlock.Text" xml:space="preserve">
+    <value>Blacklist</value>
+  </data>
+  <data name="RemotePlayBlackListToggleSwitch.OffContent" xml:space="preserve">
+    <value>Requests from this device are allowed</value>
+  </data>
+  <data name="RemotePlayBlackListToggleSwitch.OnContent" xml:space="preserve">
+    <value>Blocked all requests from this device</value>
   </data>
 </root>

@@ -235,6 +235,7 @@ namespace SMPlayer.Helpers
                 SearchPlaylistsCriterion = src.SearchPlaylistsCriterion,
                 SearchFoldersCriterion = src.SearchFoldersCriterion,
                 LastReleaseNotesVersion = src.LastReleaseNotesVersion,
+                RemotePlayPassword = src.RemotePlayPassword,
             };
         }
 
@@ -273,6 +274,36 @@ namespace SMPlayer.Helpers
                 SearchPlaylistsCriterion = src.SearchPlaylistsCriterion,
                 SearchFoldersCriterion = src.SearchFoldersCriterion,
                 LastReleaseNotesVersion = src.LastReleaseNotesVersion,
+                RemotePlayPassword = src.RemotePlayPassword,
+            };
+        }
+
+        public static AuthorizedDevice FromDao(this AuthorizedDeviceDAO src)
+        {
+            if (src == null) return null;
+            return new AuthorizedDevice
+            {
+                Id = src.Id,
+                Ip = src.Ip,
+                DeviceName = src.DeviceName,
+                State = src.State,
+                Auth = src.Auth,
+                CreateTime = src.CreateTime,
+                UpdateTime = src.UpdateTime,
+            };
+        }
+        public static AuthorizedDeviceDAO ToDao(this AuthorizedDevice src)
+        {
+            if (src == null) return null;
+            return new AuthorizedDeviceDAO
+            {
+                Id = src.Id,
+                Ip = src.Ip,
+                DeviceName = src.DeviceName,
+                State = src.State,
+                Auth = src.Auth,
+                CreateTime = src.CreateTime,
+                UpdateTime = src.UpdateTime,
             };
         }
     }

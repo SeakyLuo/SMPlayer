@@ -56,6 +56,7 @@ namespace SMPlayer.Models
         public SortBy SearchFoldersCriterion { get; set; } = SortBy.Default;
         public PreferenceSettings Preference { get; set; } = new PreferenceSettings();
         public string LastReleaseNotesVersion { get; set; }
+        public string RemotePlayPassword { get; set; }
         public Settings() { }
     }
 

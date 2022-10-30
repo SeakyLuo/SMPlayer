@@ -35,6 +35,8 @@ namespace SMPlayer.Helpers
                 Run(c =>
                 {
                     c.CreateTable<PreferenceSettingsDAO>(CreateFlags.AllImplicit | CreateFlags.AutoIncPK);
+                    c.CreateTable<AuthorizedDeviceDAO>(CreateFlags.AllImplicit | CreateFlags.AutoIncPK);
+                    c.AlterTableAddColumn("Settings", "RemotePlayPassword VARCHAR(50) DEFAULT ''");
                 });
                 return;
             }
@@ -86,6 +88,19 @@ namespace SMPlayer.Helpers
                 }
                 MainPage.Instance.Loader.Hide();
             });
+        }
+
+        private static void AlterTableAddColumn(this SQLiteConnection c, string tableName, string column)
+        {
+            string sql = $"Alter Table {tableName} Add Column {column}";
+            try
+            {
+                c.Execute(sql);
+            }
+            catch (SQLiteException ex)
+            {
+                Log.Warn($"execute sql {sql} Exception {ex}");
+            }
         }
 
         public static void Run(Action<SQLiteConnection> connectionHandler)
@@ -223,6 +238,12 @@ namespace SMPlayer.Helpers
             return dao;
         }
 
+        public static void UpdateAuthorizedDevice(this SQLiteConnection c, AuthorizedDevice src)
+        {
+            src.UpdateTime = DateTime.Now;
+            c.Update(src.ToDao());
+        }
+
         public static PreferenceItemDAO InsertPreferenceItem(this SQLiteConnection c, PreferenceItem src, EntityType type)
         {
             PreferenceItemDAO dao = src.ToDAO(type);
@@ -267,6 +288,15 @@ namespace SMPlayer.Helpers
                 ItemId = src,
                 Time = DateTimeOffset.Now,
             });
+        }
+
+        public static void InsertAuthorizedDevice(this SQLiteConnection c, AuthorizedDevice src)
+        {
+            src.CreateTime = DateTime.Now;
+            src.UpdateTime = DateTime.Now;
+            AuthorizedDeviceDAO dao = src.ToDao();
+            c.Insert(dao);
+            src.Id = dao.Id;
         }
 
         public static IEnumerable<Music> SelectAllMusic(this SQLiteConnection c)
@@ -419,7 +449,12 @@ namespace SMPlayer.Helpers
 
         public static List<RecentRecordDAO> SelectRecentRecords(this SQLiteConnection c, RecentType recentType)
         {
-            return c.Query<RecentRecordDAO>("select * from RecentRecord where Type = ? and State order by Id desc", recentType, ActiveState.Active);
+            return c.Query<RecentRecordDAO>("select * from RecentRecord where Type = ? and State = ? order by Id desc", recentType, ActiveState.Active);
+        }
+        public static List<AuthorizedDevice> SelectAuthorizedDevices(this SQLiteConnection c, ActiveState state)
+        {
+            return c.Query<AuthorizedDeviceDAO>("select * from AuthorizedDevice where State = ? order by Id desc", state)
+                    .Select(i => i.FromDao()).ToList();
         }
     }
 
