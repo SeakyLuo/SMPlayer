@@ -1351,4 +1351,28 @@
   <data name="NavigationRemotePlayItem.Content" xml:space="preserve">
     <value>远程播放</value>
   </data>
+  <data name="AuthorizedDevicesButton.Content" xml:space="preserve">
+    <value>查看所有已授权设备</value>
+  </data>
+  <data name="ChangeRemotePlayPasswordButton.Content" xml:space="preserve">
+    <value>修改密码</value>
+  </data>
+  <data name="CopyToClipBoardButton.Content" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="LocalServiceToggleSwitch.OffContent" xml:space="preserve">
+    <value>远程播放已关闭，启动后其他设备才能远程访问本机音乐文件。</value>
+  </data>
+  <data name="LocalServiceToggleSwitch.OnContent" xml:space="preserve">
+    <value>远程播放已启用，关闭后其他设备将无法远程访问本机音乐文件。</value>
+  </data>
+  <data name="OpenWebBroserButton.Content" xml:space="preserve">
+    <value>访问</value>
+  </data>
+  <data name="RemotePlayConnectTextBlock.Text" xml:space="preserve">
+    <value>你可以在其他设备上访问下方链接或扫描下方二维码来远程播放本机音乐</value>
+  </data>
+  <data name="UsageOfRemotePlayTextBlock.Text" xml:space="preserve">
+    <value>“远程播放”使得你可以在其他设备远程访问本机音乐文件，你必须保证“简音播放器”运行且接入互联网才能使用该功能。另外为了保证信息安全，你必须设置密码来授权其他设备的访问。一旦密码修改，已有的授权将失效。</value>
+  </data>
 </root>

@@ -201,6 +201,9 @@
   <data name="Comma" xml:space="preserve">
     <value>，</value>
   </data>
+  <data name="CopySuccessful" xml:space="preserve">
+    <value>复制成功</value>
+  </data>
   <data name="DataExported" xml:space="preserve">
     <value>数据已导出！</value>
   </data>

@@ -8,7 +8,62 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <StackPanel Margin="16,8">
 
-    </Grid>
+        <TextBlock 
+            x:Uid="UsageOfRemotePlayTextBlock"
+            TextWrapping="WrapWholeWords"
+            Margin="8,0,8,16"/>
+
+        <ToggleSwitch
+            x:Uid="LocalServiceToggleSwitch"
+            x:Name="LocalServiceToggleSwitch"
+            Toggled="LocalServiceToggleSwitch_Toggled"/>
+
+        <HyperlinkButton
+            x:Uid="ChangeRemotePlayPasswordButton"
+            Style="{StaticResource TextBlockButtonStyle}"
+            Click="ChangePassword_Click"
+            Margin="0,8"/>
+
+        <HyperlinkButton
+            x:Uid="AuthorizedDevicesButton"
+            Style="{StaticResource TextBlockButtonStyle}"
+            Click="AuthorizedDevicesButton_Click"
+            Margin="0,0" />
+
+        <TextBlock 
+            HorizontalAlignment="Center"
+            Margin="0,16,0,0"
+            x:Uid="RemotePlayConnectTextBlock" 
+            Visibility="{x:Bind LocalServiceToggleSwitch.IsOn, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"  />
+
+        <Image 
+            x:Name="QRCodeImage" 
+            Visibility="{x:Bind LocalServiceToggleSwitch.IsOn, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+            Width="256"
+            Height="256" />
+
+        <StackPanel 
+            HorizontalAlignment="Center"
+            Orientation="Horizontal"
+            Visibility="{x:Bind LocalServiceToggleSwitch.IsOn, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" >
+            <TextBox
+                x:Name="UrlTextBox"
+                IsEnabled="False"
+                Style="{StaticResource BorderlessTextBoxStyle}"
+                MinWidth="250"/>
+            <HyperlinkButton
+                x:Uid="CopyToClipBoardButton"
+                Margin="8,0"
+                Style="{StaticResource TextBlockButtonStyle}"
+                Click="CopyToClipBoardButton_Click" />
+            <HyperlinkButton
+                x:Uid="OpenWebBroserButton"
+                Margin="8,0"
+                Style="{StaticResource TextBlockButtonStyle}"
+                Click="OpenWebBroserButton_Click" />
+        </StackPanel>
+
+    </StackPanel>
 </Page>

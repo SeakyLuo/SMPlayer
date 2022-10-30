@@ -1360,4 +1360,28 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="NavigationRemotePlayItem.Content" xml:space="preserve">
     <value>Remote Play</value>
   </data>
+  <data name="AuthorizedDevicesButton.Content" xml:space="preserve">
+    <value>See all authorized devices</value>
+  </data>
+  <data name="ChangeRemotePlayPasswordButton.Content" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="CopyToClipBoardButton.Content" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="LocalServiceToggleSwitch.OffContent" xml:space="preserve">
+    <value>Remoe Play is off. If you turn it on, you may access your local music files from remote devices.</value>
+  </data>
+  <data name="LocalServiceToggleSwitch.OnContent" xml:space="preserve">
+    <value>Remote Play is on. If you turn it off, you may not access your local music files from remote devices.</value>
+  </data>
+  <data name="OpenWebBroserButton.Content" xml:space="preserve">
+    <value>Visit</value>
+  </data>
+  <data name="RemotePlayConnectTextBlock.Text" xml:space="preserve">
+    <value>You may access local music files from other devices by visiting the website or scanning the qr code below.</value>
+  </data>
+  <data name="UsageOfRemotePlayTextBlock.Text" xml:space="preserve">
+    <value>Remote Play allows you to access your local music file from remote devices. You must keep SMPlayer running and this device connected the the network to use this feature. For your safety, you need to set a password to authorize the accessing devices. Once the password is changed, existing authorizations will expire.</value>
+  </data>
 </root>

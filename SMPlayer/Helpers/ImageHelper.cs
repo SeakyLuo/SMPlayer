@@ -1,8 +1,14 @@
-﻿using SMPlayer.Models;
+﻿using SkiaSharp;
+using SkiaSharp.QrCode.Image;
+using SMPlayer.Models;
+using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.Storage.FileProperties;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -55,6 +61,23 @@ namespace SMPlayer
         public static bool DeleteImageCache(string path)
         {
             return imageCache.Delete(path);
+        }
+
+        public static async Task<BitmapImage> GenQRCode(string str)
+        {
+            var qrCode = new QrCode(str, new Vector2Slim(512, 512), SKEncodedImageFormat.Png);
+            string filename = Path.Combine(Helper.TempFolder.Path, $"QRCode_{Helper.TimeStamp}.png");
+            using (var output = new FileStream(filename, FileMode.OpenOrCreate))
+            {
+                qrCode.GenerateImage(output);
+            };
+            StorageFile file = await StorageFile.GetFileFromPathAsync(filename);
+            using (IRandomAccessStreamWithContentType ras = await file.OpenReadAsync())
+            {
+                BitmapImage dst = new BitmapImage();
+                await dst.SetSourceAsync(ras);
+                return dst;
+            };
         }
     }
 }

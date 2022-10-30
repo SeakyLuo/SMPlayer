@@ -405,6 +405,9 @@
   <data name="RecentPlayed" xml:space="preserve">
     <value>最近播放</value>
   </data>
+  <data name="RemotePlay" xml:space="preserve">
+    <value>远程播放</value>
+  </data>
   <data name="Rename" xml:space="preserve">
     <value>重命名</value>
   </data>

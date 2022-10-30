@@ -405,6 +405,9 @@
   <data name="RecentPlayed" xml:space="preserve">
     <value>Recent Played</value>
   </data>
+  <data name="RemotePlay" xml:space="preserve">
+    <value>Remote Play</value>
+  </data>
   <data name="Rename" xml:space="preserve">
     <value>Rename</value>
   </data>
