@@ -321,10 +321,10 @@
   <data name="DeleteAppButton.Label" xml:space="preserve">
     <value>Delete From Disk</value>
   </data>
-  <data name="DeleteButton.Label" xml:space="preserve">
+  <data name="DeleteButton.Content" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="DeleteButton.ToolTipService.ToolTip" xml:space="preserve">
+  <data name="DeleteAppBarButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Delete Playlist</value>
   </data>
   <data name="DeleteItem.Text" xml:space="preserve">
@@ -1401,5 +1401,11 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   </data>
   <data name="RemotePlayBlackListToggleSwitch.OnContent" xml:space="preserve">
     <value>Blocked all requests from this device</value>
+  </data>
+  <data name="DeleteAuthorizedDeviceHintTextBlock.Text" xml:space="preserve">
+    <value>Deleting this authorization still allows future access from this device. If you want to block all requests from this device, please use blacklist.</value>
+  </data>
+  <data name="DeleteAppBarButton.Label" xml:space="preserve">
+    <value>Delete</value>
   </data>
 </root>

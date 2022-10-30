@@ -12,7 +12,7 @@
 
     <Grid>
         <ListView
-            x:Name="ActiveAuthoziedDeviceListView"
+            x:Name="ActiveAuthorziedDeviceListView"
             Margin="12"
             ContainerContentChanging="ActiveAuthoziedDeviceListView_ContainerContentChanging"
             IsItemClickEnabled="True"

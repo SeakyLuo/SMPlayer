@@ -315,10 +315,10 @@
   <data name="DeleteAppButton.Label" xml:space="preserve">
     <value>从本地删除</value>
   </data>
-  <data name="DeleteButton.Label" xml:space="preserve">
+  <data name="DeleteAppBarButton.Label" xml:space="preserve">
     <value>删除</value>
   </data>
-  <data name="DeleteButton.ToolTipService.ToolTip" xml:space="preserve">
+  <data name="DeleteAppBarButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>删除播放列表</value>
   </data>
   <data name="DeleteItem.Text" xml:space="preserve">
@@ -1392,5 +1392,11 @@
   </data>
   <data name="RemotePlayBlackListToggleSwitch.OnContent" xml:space="preserve">
     <value>已阻止来该设备的所有请求</value>
+  </data>
+  <data name="DeleteAuthorizedDeviceHintTextBlock.Text" xml:space="preserve">
+    <value>删除本条授权仍然会允许来自该设备的再次请求。如果想要阻止请求，请使用黑名单功能。</value>
+  </data>
+  <data name="DeleteButton.Content" xml:space="preserve">
+    <value>删除</value>
   </data>
 </root>

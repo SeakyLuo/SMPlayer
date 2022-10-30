@@ -22,9 +22,48 @@
 
             <Button
                 x:Uid="DeleteAuthorizedDeviceButton"
-                Click="DeleteButton_Click"
                 Content="&#xE107;"
-                Style="{StaticResource MusicScrollHeaderButtonStyle}" />
+                Style="{StaticResource MusicScrollHeaderButtonStyle}" >
+                <Button.Flyout>
+                    <Flyout x:Name="DeleteFlyout">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock 
+                                Margin="4,8,4,16"
+                                x:Uid="DeleteAuthorizedDeviceHintTextBlock"
+                                Width="320"
+                                TextWrapping="WrapWholeWords"
+                                Grid.ColumnSpan="2"/>
+                            <Button 
+                                Content="删除"
+                                Background="{ThemeResource SystemColorHighlightColor}"
+                                BorderThickness="0"
+                                Foreground="White"
+                                HorizontalAlignment="Center"
+                                Margin="0,4"
+                                Click="DeleteButton_Click"
+                                Grid.Row="1" />
+                            <Button 
+                                x:Uid="CancelButton"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="0,4"
+                                Background="Transparent"
+                                HorizontalAlignment="Center"
+                                BorderThickness="0"
+                                Click="CancelButton_Click"
+                                Foreground="{ThemeResource SystemColorHighlightColor}" />
+                        </Grid>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
 
             <Button
                 Click="CloseButton_Click"

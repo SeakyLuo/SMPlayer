@@ -210,9 +210,6 @@
   <data name="DataImported" xml:space="preserve">
     <value>Data imported!</value>
   </data>
-  <data name="DeleteAuthorizedDeviceHint" xml:space="preserve">
-    <value>Delete authorization still allows future access from this device. If you want to block all requests from this device, please use blacklist.</value>
-  </data>
   <data name="DeleteFolder" xml:space="preserve">
     <value>You are deleting folder "{0}". This operation will also delete everything under this folder and is irrevertible. Are you sure?</value>
   </data>

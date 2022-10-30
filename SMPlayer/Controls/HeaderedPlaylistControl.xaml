@@ -126,7 +126,7 @@
                                 Visibility="Collapsed" />
                             <AppBarButton
                                 x:Name="DeleteButton"
-                                x:Uid="DeleteButton"
+                                x:Uid="DeleteAppBarButton"
                                 Click="Delete_Click"
                                 Icon="Delete"
                                 Style="{ThemeResource PlaylistAppBarButtonStyle}" />

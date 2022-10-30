@@ -1,4 +1,5 @@
-﻿using SMPlayer.Helpers;
+﻿using System;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using SMPlayer.Models.VO;
 using SMPlayer.Services;
@@ -45,15 +46,15 @@ namespace SMPlayer.Dialogs
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            RemoveDialog dialog = new RemoveDialog(Helper.LocalizeMessage("DeleteAuthorizedDeviceHint"))
-            {
-                CheckBoxVisibility = Visibility.Collapsed,
-                Confirm = () =>
-                {
-                    AuthorizedDeviceService.DeleteAuthorization(Device.FromVO());
-                }
-            };
+            AuthorizedDeviceService.DeleteAuthorization(Device.FromVO());
+            DeleteFlyout.Hide();
+            this.Hide();
         }
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteFlyout.Hide();
+        }
+
 
         private void RemotePlayBlackListToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {

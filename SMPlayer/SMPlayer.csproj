@@ -273,6 +273,7 @@
     <Compile Include="Helpers\VoiceAssistant\VoiceAssistantChineseHelper.cs" />
     <Compile Include="Helpers\VoiceAssistant\VoiceAssistantEnglishHelper.cs" />
     <Compile Include="Helpers\VoiceAssistant\VoiceAssistantHelper.cs" />
+    <Compile Include="Interfaces\IDeviceAuthorizationListener.cs" />
     <Compile Include="Interfaces\IMusicEventListener.cs" />
     <Compile Include="Interfaces\IMusicPlayerEventListener.cs" />
     <Compile Include="Interfaces\IPlaylistEventListener.cs" />

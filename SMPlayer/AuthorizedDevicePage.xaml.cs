@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
 using SMPlayer.Models;
 using SMPlayer.Models.VO;
 using SMPlayer.Services;
@@ -25,13 +26,14 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class AuthorizedDevicePage : Page
+    public sealed partial class AuthorizedDevicePage : Page, IDeviceAuthorizationListener
     {
         private readonly ObservableCollection<AuthorizedDeviceView> ActiveAuthorizedDevices = new ObservableCollection<AuthorizedDeviceView>();
 
         public AuthorizedDevicePage()
         {
             this.InitializeComponent();
+            AuthorizedDeviceService.AddAuthorizationListener(this);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -57,6 +59,25 @@ namespace SMPlayer
             AuthorizedDeviceView view = (sender as FrameworkElement).DataContext as AuthorizedDeviceView;
             AuthorizedDeviceService.DeleteAuthorization(view.FromVO());
             ActiveAuthorizedDevices.Remove(view);
+        }
+
+        void IDeviceAuthorizationListener.Execute(AuthorizedDevice device, DeviceAuthorizationEventArgs args)
+        {
+            switch (args.EventType)
+            {
+                case DeviceAuthorizationEventType.Delete:
+                    int index = ActiveAuthorizedDevices.FindIndex(i => i.Id == device.Id);
+                    if (index == -1) return;
+                    ActiveAuthorizedDevices.RemoveAt(index);
+                    AlternateRowBackgroud(index, ActiveAuthorizedDevices.Count);
+                    break;
+            }
+        }
+        private void AlternateRowBackgroud(int start, int end)
+        {
+            for (int i = start; i < end; i++)
+                if (ActiveAuthorziedDeviceListView.ContainerFromIndex(i) is ListViewItem container)
+                    container.Background = PlaylistControl.GetRowBackground(i);
         }
     }
 }

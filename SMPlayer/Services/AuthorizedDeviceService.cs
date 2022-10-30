@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Helpers;
+using SMPlayer.Interfaces;
 using SMPlayer.Models;
 using SMPlayer.Models.DAO;
 using SMPlayer.Models.Enums;
@@ -12,6 +13,13 @@ namespace SMPlayer.Services
 {
     public class AuthorizedDeviceService
     {
+        private static readonly List<IDeviceAuthorizationListener> AuthorizationListeners = new List<IDeviceAuthorizationListener>();
+
+        public static void AddAuthorizationListener(IDeviceAuthorizationListener listener)
+        {
+            AuthorizationListeners.Add(listener);
+        }
+
         public static AuthorizationLevel IsAuthorized(string ip, string password)
         {
             if (Settings.settings.RemotePlayPassword != password) return AuthorizationLevel.WrongPassword;
@@ -27,28 +35,46 @@ namespace SMPlayer.Services
 
         public static AuthorizationLevel AddAuthorization(AuthorizedDevice device)
         {
-            if (!LockHelper.Lock(device.Ip)) return AuthorizationLevel.Locked;
-            AuthorizationLevel auth = GetIpAuth(device.Ip);
-            if (auth == AuthorizationLevel.Blacklisted || auth == AuthorizationLevel.Allowed) return auth;
-            SQLHelper.Run(c => c.InsertAuthorizedDevice(device));
-            return AuthorizationLevel.Allowed;
+            string ip = device.Ip;
+            if (!LockHelper.Lock(ip)) return AuthorizationLevel.Locked;
+            try
+            {
+                AuthorizationLevel auth = GetIpAuth(device.Ip);
+                if (auth == AuthorizationLevel.Blacklisted || auth == AuthorizationLevel.Allowed) return auth;
+                SQLHelper.Run(c => c.InsertAuthorizedDevice(device));
+                return AuthorizationLevel.Allowed;
+            }
+            finally
+            {
+                LockHelper.Unlock(ip);
+            }
         }
 
         public static AuthorizedDevice SelectByIp(string ip)
         {
-            return SQLHelper.Run(c => c.Query<AuthorizedDeviceDAO>("select * from AuthorizedDevice where Ip = ?", ip))
+            return SQLHelper.Run(c => c.Query<AuthorizedDeviceDAO>("select * from AuthorizedDevice where Ip = ? and State", ip, ActiveState.Active))
                                        .Select(i => i.FromDao()).FirstOrDefault();
         }
 
         public static List<AuthorizedDevice> GetActiveAuthorizedDevice()
         {
-            return new List<AuthorizedDevice>() {  new AuthorizedDevice
+            return new List<AuthorizedDevice>() {
+                new AuthorizedDevice
+            {
+                Id = 3,
+                Ip = "127.0.0.1",
+                CreateTime = DateTime.Now,
+                UpdateTime = DateTime.Now,
+                Auth = AuthorizationLevel.Blacklisted,
+                State = ActiveState.Active
+            },
+                new AuthorizedDevice
             {
                 Id = 2,
                 Ip = "123.123.123.123",
                 CreateTime = DateTime.Now,
                 UpdateTime = DateTime.Now,
-                Auth = Models.Enums.AuthorizationLevel.Allowed,
+                Auth = AuthorizationLevel.Allowed,
                 State = ActiveState.Active
             },
             new AuthorizedDevice
@@ -74,8 +100,9 @@ namespace SMPlayer.Services
         {
             device.State = ActiveState.Inactive;
             UpdateAuthorization(device);
+            foreach (var listener in AuthorizationListeners)
+                listener.Execute(device, new DeviceAuthorizationEventArgs { EventType = DeviceAuthorizationEventType.Delete });
         }
-
 
     }
 }
