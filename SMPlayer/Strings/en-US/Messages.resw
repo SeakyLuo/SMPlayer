@@ -273,6 +273,9 @@
   <data name="ItemsRemoved" xml:space="preserve">
     <value>{0} items have been removed!</value>
   </data>
+  <data name="LaunchLocalServerFailed" xml:space="preserve">
+    <value>Local server cannot be started!</value>
+  </data>
   <data name="LoadMusicLibrary" xml:space="preserve">
     <value>Loading music library...</value>
   </data>

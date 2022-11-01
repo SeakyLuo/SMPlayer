@@ -273,6 +273,9 @@
   <data name="ItemsRemoved" xml:space="preserve">
     <value>{0}个项目已被移除！</value>
   </data>
+  <data name="LaunchLocalServerFailed" xml:space="preserve">
+    <value>无法启动本地服务！</value>
+  </data>
   <data name="LoadMusicLibrary" xml:space="preserve">
     <value>正在加载音乐库……</value>
   </data>
