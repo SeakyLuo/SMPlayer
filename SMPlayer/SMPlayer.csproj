@@ -110,6 +110,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
+    <WarningLevel>3</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -142,6 +143,7 @@
     <Compile Include="AuthorizedDevicePage.xaml.cs">
       <DependentUpon>AuthorizedDevicePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Server\Controllers\MusicController.cs" />
     <Compile Include="Controls\AlbumArtControl.xaml.cs">
       <DependentUpon>AlbumArtControl.xaml</DependentUpon>
     </Compile>
@@ -762,6 +764,12 @@
     <PackageReference Include="Microsoft.AppCenter.Crashes">
       <Version>4.5.3</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core">
+      <Version>2.2.5</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
+      <Version>6.0.10</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Data.Sqlite">
       <Version>6.0.1</Version>
     </PackageReference>
@@ -805,7 +813,9 @@
   <ItemGroup>
     <None Include="app.manifest" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Web\" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

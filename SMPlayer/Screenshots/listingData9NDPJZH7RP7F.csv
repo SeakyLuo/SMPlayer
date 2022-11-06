@@ -149,7 +149,7 @@ SearchTerm1,900,文本,,音乐,Music,Music
 SearchTerm2,901,文本,,播放器,Player,Player
 SearchTerm3,902,文本,,简音,SM,SM
 SearchTerm4,903,文本,,简音播放器,SMPlayer,SMplayer
-SearchTerm5,904,文本,,,,
+SearchTerm5,904,文本,,SMPlayer,播放器,播放器
 SearchTerm6,905,文本,,,,
 SearchTerm7,906,文本,,,,
 TrailerToPlayAtTopOfListing,999,相对路径(或指向合作伙伴中心文件的 URL),,,,

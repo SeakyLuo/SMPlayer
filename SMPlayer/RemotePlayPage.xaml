@@ -35,19 +35,21 @@
         <TextBlock 
             HorizontalAlignment="Center"
             Margin="0,16,0,0"
+            x:Name="RemotePlayConnectTextBlock" 
             x:Uid="RemotePlayConnectTextBlock" 
-            Visibility="{x:Bind LocalServiceToggleSwitch.IsOn, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"  />
+            Visibility="Collapsed"  />
 
         <Image 
             x:Name="QRCodeImage" 
-            Visibility="{x:Bind LocalServiceToggleSwitch.IsOn, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+            Visibility="Collapsed"
             Width="256"
             Height="256" />
 
         <StackPanel 
+            x:Name="UrlStackPanel"
             HorizontalAlignment="Center"
             Orientation="Horizontal"
-            Visibility="{x:Bind LocalServiceToggleSwitch.IsOn, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" >
+            Visibility="Collapsed" >
             <TextBox
                 x:Name="UrlTextBox"
                 IsEnabled="False"

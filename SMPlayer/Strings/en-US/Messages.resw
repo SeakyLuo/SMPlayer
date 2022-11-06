@@ -282,6 +282,15 @@
   <data name="LoadSettingsAndInsertToDbFailed" xml:space="preserve">
     <value>Cannot write data into database. To avoid problems for your future use, please go to settings page and click "Feedback" to report this error.</value>
   </data>
+  <data name="LocalServiceToggleSwitchLaunchExceptional" xml:space="preserve">
+    <value>Remote Play cannot be turned on. Reason: {0}</value>
+  </data>
+  <data name="LocalServiceToggleSwitchLaunchExceptionalNotification" xml:space="preserve">
+    <value>Remote Play cannot be turned on, please retry later.</value>
+  </data>
+  <data name="LocalServiceToggleSwitchLaunchSuccessful" xml:space="preserve">
+    <value>Remote Play is on. If you turn it off, you may not access your local music files from remote devices.</value>
+  </data>
   <data name="Lyrics" xml:space="preserve">
     <value>lryics</value>
   </data>

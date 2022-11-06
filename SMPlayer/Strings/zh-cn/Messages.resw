@@ -282,6 +282,15 @@
   <data name="LoadSettingsAndInsertToDbFailed" xml:space="preserve">
     <value>数据库写入失败，为避免影响后续使用，请在设置页面点击“提供反馈”并反馈问题。</value>
   </data>
+  <data name="LocalServiceToggleSwitchLaunchExceptional" xml:space="preserve">
+    <value>远程播放启动失败，原因：{0}</value>
+  </data>
+  <data name="LocalServiceToggleSwitchLaunchExceptionalNotification" xml:space="preserve">
+    <value>远程播放启动失败，请稍后重试</value>
+  </data>
+  <data name="LocalServiceToggleSwitchLaunchSuccessful" xml:space="preserve">
+    <value>远程播放已启用，关闭后其他设备将无法远程访问本机音乐文件。</value>
+  </data>
   <data name="Lyrics" xml:space="preserve">
     <value>歌词</value>
   </data>

@@ -1,0 +1,1901 @@
+﻿{
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Dependency Analysis",
+          "semanticVersion": "0.4.346202",
+          "informationUri": "https://docs.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview",
+          "rules": [
+            {
+              "id": "UA105",
+              "name": "PackageToBeDeleted",
+              "fullDescription": {
+                "text": "Packages that need to be deleted in order to upgrade the project to chosen TFM"
+              },
+              "helpUri": "https://docs.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview"
+            },
+            {
+              "id": "UA106",
+              "name": "PackageToBeAdded",
+              "fullDescription": {
+                "text": "Packages that need to be added in order to upgrade the project to chosen TFM"
+              },
+              "helpUri": "https://docs.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview"
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "UA105",
+          "message": {
+            "text": "Package Microsoft.AppCenter.Crashes, Version=4.5.3 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/SMPlayer.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "message": {
+            "text": "Package Microsoft.NETCore.UniversalWindowsPlatform, Version=6.2.13 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/SMPlayer.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "message": {
+            "text": "Package Microsoft.UI.Xaml, Version=2.7.0 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/SMPlayer.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA105",
+          "message": {
+            "text": "Package Microsoft.Toolkit.Uwp.Notifications, Version=7.1.2 needs to be deleted."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/SMPlayer.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA106",
+          "message": {
+            "text": "Package Microsoft.WindowsAppSDK, Version=1.1.0 needs to be added."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/SMPlayer.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA106",
+          "message": {
+            "text": "Package Microsoft.Graphics.Win2D, Version=1.0.0.30 needs to be added."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/SMPlayer.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA106",
+          "message": {
+            "text": "Package Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers, Version=0.4.346202 needs to be added."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/SMPlayer.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA106",
+          "message": {
+            "text": "Package Microsoft.Windows.Compatibility, Version=6.0.1 needs to be added."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/SMPlayer.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA106",
+          "message": {
+            "text": "Package CommunityToolkit.WinUI.Notifications, Version=7.1.2 needs to be added."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/SMPlayer.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA106",
+          "message": {
+            "text": "Package Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers, Version=0.4.346202 needs to be added."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayerWeb/SMPlayerWeb.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA106",
+          "message": {
+            "text": "Package Microsoft.AspNetCore.Mvc.NewtonsoftJson, Version=6.0.10 needs to be added."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayerWeb/SMPlayerWeb.csproj"
+                },
+                "region": {}
+              }
+            }
+          ]
+        }
+      ],
+      "columnKind": "utf16CodeUnits"
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "API Upgradability",
+          "semanticVersion": "0.4.346202",
+          "informationUri": "https://docs.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview"
+        }
+      },
+      "results": [],
+      "columnKind": "utf16CodeUnits"
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "Component Analysis",
+          "semanticVersion": "0.4.346202",
+          "informationUri": "https://docs.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview",
+          "rules": [
+            {
+              "id": "UA301",
+              "name": "Microsoft.DotNet.UpgradeAssistant.Extensions.Windows.WinUINamespaceUpdater",
+              "fullDescription": {
+                "text": "Update WinUI namespaces"
+              },
+              "helpUri": "about:blank"
+            },
+            {
+              "id": "UA304",
+              "name": "Microsoft.DotNet.UpgradeAssistant.Extensions.Windows.WinUIPackageAppxmanifestUpdater",
+              "fullDescription": {
+                "text": "Update package.appxmanifest"
+              },
+              "helpUri": "about:blank"
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/AlbumPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/AlbumsPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/App.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/App.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ArtistsPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/AuthorizedDevicePage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/AlbumArtControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/ArtistItemControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/AuthorizedDeviceListViewControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/DropShadowControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/LocalGridViewStorageItemControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/GridViewMusicItemControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/InAppNotificationWithButton.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/MusicGridViewControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/IconTextButton.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/MultiSelectCommandBar.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/MusicInfoControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/MusicLyricsControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/PlaylistControlItem.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/HeaderedPlaylistControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/HeaderedPlaylistControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/ScrollingTextBlock.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/TestControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/TreeViewFileControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/TreeViewFolderControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Dialogs/AlbumDialog.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Dialogs/FolderUpdateResultDialog.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Dialogs/AuthorizedDeviceDetailDialog.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Dialogs/MusicDialog.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Dialogs/ReleaseNotesDialog.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Dialogs/RemoveDialog.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Dialogs/InputDialog.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Dialogs/VoiceAssistantHelpDialog.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ExpressionBuilder/ExpressionBuilder.CompositionExtensions.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ExpressionBuilder/ExpressionNodes/ExpressionBuilder.ExpressionNode.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ExpressionBuilder/ReferenceNodes/ExpressionBuilder.AmbientLightReferenceNode.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ExpressionBuilder/ReferenceNodes/ExpressionBuilder.ColorBrushReferenceNode.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ExpressionBuilder/ReferenceNodes/ExpressionBuilder.DistantLightReferenceNode.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ExpressionBuilder/ReferenceNodes/ExpressionBuilder.DropShadowReferenceNode.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ExpressionBuilder/ReferenceNodes/ExpressionBuilder.InsetClipReferenceNode.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ExpressionBuilder/ReferenceNodes/ExpressionBuilder.InteractionTrackerReferenceNode.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ExpressionBuilder/ReferenceNodes/ExpressionBuilder.ManipulationPropertySetReferenceNode.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ExpressionBuilder/ReferenceNodes/ExpressionBuilder.NineGridBrushReferenceNode.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ExpressionBuilder/ReferenceNodes/ExpressionBuilder.PointerPositionPropertySet.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ExpressionBuilder/ReferenceNodes/ExpressionBuilder.PointLightReferenceNode.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ExpressionBuilder/ReferenceNodes/ExpressionBuilder.PropertySetReferenceNode.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ExpressionBuilder/ReferenceNodes/ExpressionBuilder.ReferenceNode.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ExpressionBuilder/ReferenceNodes/ExpressionBuilder.SpotLightReferenceNode.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ExpressionBuilder/ReferenceNodes/ExpressionBuilder.SurfaceBrushReferenceNode.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/ExpressionBuilder/ReferenceNodes/ExpressionBuilder.VisualReferenceNode.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Helpers/ClassHelper.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Helpers/Converters/DAOConverter.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Helpers/ImageHelper.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Helpers/ToastHelper.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Helpers/ToastHelper.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Helpers/VoiceAssistant/VoiceAssistantChineseHelper.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Helpers/VoiceAssistant/VoiceAssistantHelper.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Helpers/VoiceAssistant/VoiceAssistantHelper.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Helpers/VisualTreeHelperExtensions.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Helpers/VisualTreeHelperExtensions.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/MiniModePage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/MiniModePage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Models/Music.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Models/MusicDisplayItem.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Models/MusicImage.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Models/VO/GridViewStorageItem.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/PreferenceSettingsPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/RemotePlayPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/SearchResultPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/TemplateSelector/GridViewStorageItemTemplateSelector.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/TemplateSelector/TreeViewStorageItemTemplateSelector.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Helpers/MenuFlyoutHelper.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Helpers/ColorHelper.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/LoadingControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Helpers/TitleBarHelper.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/LocalPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Helpers/Helper.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Helpers/Helper.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/MediaControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/MediaControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Helpers/MusicPlayer.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Models/VO/AlbumView.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Models/VO/GridViewFolder.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Models/VO/GridViewMusic.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/NowPlayingFullPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/NowPlayingFullPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Controls/PlaylistControl.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/RecentPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/MainPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/MainPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Models/VO/MusicView.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Models/Settings.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/MusicLibraryPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/MusicConverter.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/MyFavoritesPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/NowPlayingPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/NowPlayingPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/PlaylistsPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Dialogs/RenameDialog.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/SearchPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/SettingsPage.xaml.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA301",
+          "message": {
+            "text": "Namespaces need to be updated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Triggers/ControlSizeTrigger.cs"
+                },
+                "region": {}
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "UA304",
+          "message": {
+            "text": "The package.appxmanifest file needs to be updated with the new Windows App SDK format"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Users/Seaky/source/repos/SMPlayer/SMPlayer/Package.appxmanifest"
+                },
+                "region": {}
+              }
+            }
+          ]
+        }
+      ],
+      "columnKind": "utf16CodeUnits"
+    }
+  ]
+}

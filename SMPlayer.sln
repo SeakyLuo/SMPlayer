@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMPlayer", "SMPlayer\SMPlayer.csproj", "{E5DC3F61-4BD9-449B-A835-91F9A94506E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMPlayerWeb", "SMPlayerWeb\SMPlayerWeb.csproj", "{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,26 +49,6 @@ Global
 		{E5DC3F61-4BD9-449B-A835-91F9A94506E0}.Release|x86.ActiveCfg = Release|x86
 		{E5DC3F61-4BD9-449B-A835-91F9A94506E0}.Release|x86.Build.0 = Release|x86
 		{E5DC3F61-4BD9-449B-A835-91F9A94506E0}.Release|x86.Deploy.0 = Release|x86
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Debug|ARM.Build.0 = Debug|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Debug|ARM64.ActiveCfg = Debug|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Debug|ARM64.Build.0 = Debug|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Debug|x64.Build.0 = Debug|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Debug|x86.Build.0 = Debug|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Release|ARM.ActiveCfg = Release|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Release|ARM.Build.0 = Release|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Release|ARM64.ActiveCfg = Release|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Release|ARM64.Build.0 = Release|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Release|x64.ActiveCfg = Release|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Release|x64.Build.0 = Release|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Release|x86.ActiveCfg = Release|Any CPU
-		{E8A6962F-52EB-4B2C-8F6F-5F486FF194EA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1372,9 +1372,6 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="LocalServiceToggleSwitch.OffContent" xml:space="preserve">
     <value>Remoe Play is off. If you turn it on, you may access your local music files from remote devices.</value>
   </data>
-  <data name="LocalServiceToggleSwitch.OnContent" xml:space="preserve">
-    <value>Remote Play is on. If you turn it off, you may not access your local music files from remote devices.</value>
-  </data>
   <data name="OpenWebBroserButton.Content" xml:space="preserve">
     <value>Visit</value>
   </data>
