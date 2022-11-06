@@ -71,27 +71,28 @@ namespace SMPlayer
             if (LocalServiceToggleSwitch.IsOn)
             {
                 int port = 8023;
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                try
                 {
-                    try
-                    {
-                        string address = GetLocalServerAddress(port);
-                        UrlTextBox.Text = address;
-                        ShutdownLocalServer();
-                        LaunchLocalServer(port);
-                        QRCodeImage.Source = await ImageHelper.GenQRCode(address);
+                    string address = GetLocalServerAddress(port);
+                    UrlTextBox.Text = address;
+                    ShutdownLocalServer();
+                    LaunchLocalServer(port);
+                    QRCodeImage.Source = await ImageHelper.GenQRCode(address);
 
-                        LocalServiceToggleSwitch.OnContent = Helper.LocalizeMessage("LocalServiceToggleSwitchLaunchSuccessful");
-                        SetUrlPanelVisibility(Visibility.Visible);
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Warn($"turn on local server failed {ex}");
-                        LocalServiceToggleSwitch.OnContent = Helper.LocalizeMessage("LocalServiceToggleSwitchLaunchExceptional", ex);
-                        SetUrlPanelVisibility(Visibility.Collapsed);
-                        Helper.ShowNotification("LocalServiceToggleSwitchLaunchExceptionalNotification");
-                    }
-                });
+                    LocalServiceToggleSwitch.OnContent = Helper.LocalizeMessage("LocalServiceToggleSwitchLaunchSuccessful");
+                    SetUrlPanelVisibility(Visibility.Visible);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warn($"turn on local server failed {ex}");
+                    LocalServiceToggleSwitch.OnContent = Helper.LocalizeMessage("LocalServiceToggleSwitchLaunchExceptional", ex);
+                    SetUrlPanelVisibility(Visibility.Collapsed);
+                    Helper.ShowNotification("LocalServiceToggleSwitchLaunchExceptionalNotification");
+                }
+                //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                //{
+
+                //});
             } 
             else
             {
@@ -197,7 +198,49 @@ namespace SMPlayer
             httpListener = new HttpListener();
             httpListener.Prefixes.Add($"http://127.0.0.1:{port}/");
             httpListener.Start();
-            httpListener.BeginGetContext(new AsyncCallback(GetContextCallBack), httpListener);
+            ListenToRequests();
+        }
+
+        private async void ListenToRequests()
+        {
+            while (true)
+            {
+                try
+                {
+                    HttpListenerContext context = await httpListener.GetContextAsync();
+                    HttpListenerResponse response = context.Response;
+                    response.StatusCode = (int)HttpStatusCode.OK;
+                    response.ContentType = "application/json;charset=UTF-8";
+                    //response.ContentType = "text/html; Charset=UTF-8";
+                    response.ContentEncoding = Encoding.UTF8;
+                    response.AppendHeader("Content-Type", "application/json;charset=UTF-8");
+
+                    //模拟返回的数据：Json格式
+                    //string responseBody = "<HTML><BODY> Hello world!</BODY></HTML>";
+                    var abcOject = new
+                    {
+                        code = "200",
+                        description = "success",
+                        data = "time=" + DateTime.Now
+                    };
+                    string responseString = JsonConvert.SerializeObject(abcOject,
+                        new JsonSerializerSettings()
+                        {
+                            StringEscapeHandling = StringEscapeHandling.EscapeNonAscii
+                        });
+
+                    using (StreamWriter writer = new StreamWriter(response.OutputStream, Encoding.UTF8))
+                    {
+                        writer.Write(responseString);
+                        writer.Close();
+                        response.Close();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Warn($"ListenToRequests failed {e}");
+                }
+            }
         }
 
         private void GetContextCallBack(IAsyncResult ar)
