@@ -17,7 +17,7 @@ namespace SMPlayer.Models
         public List<FolderFile> Files { get; set; } = new List<FolderFile>();
         public List<Music> Songs { get => MusicService.FindMusicList(Files.Select(i => i.FileId)); }
         public SortBy Criterion { get; set; } = SortBy.Title;
-        public string Info => GetFolderInfo(Trees.Count, Files.Count);
+        public string Info => GetFolderInfo(Trees?.Count, Files?.Count);
         public bool IsEmpty { get => Files.IsEmpty() && Trees.All(tree => tree.IsEmpty); }
         public bool IsNotEmpty { get => !IsEmpty; }
         public int FileCount { get => Trees.Sum(t => t.FileCount) + Files.Count; }
@@ -197,7 +197,7 @@ namespace SMPlayer.Models
             return new PreferenceItem(Id.ToString(), Name, EntityType.Folder);
         }
 
-        public static string GetFolderInfo(int folders, int files)
+        public static string GetFolderInfo(int? folders, int? files)
         {
             string info = Helper.LocalizeMessage("Songs:") + files;
             if (folders > 0) info = Helper.LocalizeMessage("Folders:") + folders + " • " + info;
