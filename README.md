@@ -39,6 +39,8 @@ MultiSelectCommandBar is too high.
 
 MediaControl has update latency.
 
+Move music in the Now Playing.
+
 # MIGHT DO
 Save SearchKeyword instead of a string.
 

@@ -25,7 +25,7 @@ namespace SMPlayer.Helpers
             if (str.Contains(keyword, Comparison)) return 75 + offset;
             int editDistance = GetEditDistance(str, keyword);
             int ratio = editDistance * 100 / Math.Max(str.Length, keyword.Length);
-            if (ratio <= 60) return 100 - editDistance + offset;
+            if (ratio <= 60) return 75 - ratio + offset;
             return 0;
         }
 

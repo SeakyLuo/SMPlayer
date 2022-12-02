@@ -55,7 +55,7 @@ namespace SMPlayer
             AlbumPageProgressRing.Visibility = Visibility.Visible;
             IsProcessing = true;
             // 加一个异步，主要是为了AlbumPageProgressRing能转起来
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await Helper.RunInMainUIThread(Dispatcher, () =>
             {
                 foreach (var group in MusicService.AllSongs.GroupBy(m => m.Album))
                 {

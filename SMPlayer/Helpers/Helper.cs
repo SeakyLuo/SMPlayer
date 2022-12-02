@@ -18,6 +18,7 @@ using Windows.Globalization;
 using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
+using Windows.UI.Core;
 using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.UI.StartScreen;
@@ -65,6 +66,21 @@ namespace SMPlayer
 
         private static readonly Random random = new Random();
         
+        public static async Task RunInMainUIThread(CoreDispatcher dispatcher, Action action)
+        {
+            await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    try
+                    {
+                        action.Invoke();
+                    } 
+                    catch(Exception e)
+                    {
+                        Log.Warn($"RunInMainUIThread failed {e}");
+                    }
+                });
+        }
+
         public static void CopyStringToClipboard(string str)
         {
             DataPackage dataPackage = new DataPackage()

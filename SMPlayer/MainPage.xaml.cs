@@ -443,12 +443,12 @@ namespace SMPlayer
                 HeaderGrid.Visibility = Visibility.Visible;
                 MainNavigationView.SelectedItem = null;
             }
-            else if (page == typeof(RemotePlayPage))
-            {
-                SetHeaderText("RemotePlay");
-                HeaderGrid.Visibility = Visibility.Visible;
-                MainNavigationView.SelectedItem = RemotePlayItem;
-            }
+            //else if (page == typeof(RemotePlayPage))
+            //{
+            //    SetHeaderText("RemotePlay");
+            //    HeaderGrid.Visibility = Visibility.Visible;
+            //    MainNavigationView.SelectedItem = RemotePlayItem;
+            //}
             else if (page == typeof(SettingsPage))
             {
                 SetHeaderText("Settings");

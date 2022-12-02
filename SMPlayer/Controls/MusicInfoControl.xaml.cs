@@ -221,7 +221,7 @@ namespace SMPlayer.Controls
             {
                 case MusicPlayerEventType.Switch:
                     if (!AllowMusicSwitching) return;
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                    await Helper.RunInMainUIThread(Dispatcher, async () =>
                     {
                         // IsPropertiesModified不能放到外面
                         if (!IsPropertiesModified) await SetMusicInfo(args.Music);
@@ -230,7 +230,7 @@ namespace SMPlayer.Controls
                 case MusicPlayerEventType.StateChanged:
                     MediaPlaybackState state = (args as MusicPlayerStateChangedEventArgs).State;
                     // For F3 Support
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    await Helper.RunInMainUIThread(Dispatcher, () =>
                     {
                         SetPlayButtonVisibility(state == MediaPlaybackState.Playing);
                     });

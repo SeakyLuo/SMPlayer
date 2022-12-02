@@ -66,7 +66,7 @@ namespace SMPlayer.Helpers
             }
             catch (Exception e)
             {
-                Log.Info("LoadFileAsync Exception {0}", e);
+                Log.Info($"LoadFileAsync Exception {e}");
                 return null;
             }
         }

@@ -101,6 +101,7 @@ namespace SMPlayer.Models
 
         public static async Task<Music> LoadFromFileAsync(StorageFile file)
         {
+            if (file == null) return null;
             MusicProperties properties = await file.Properties.GetMusicPropertiesAsync();
             if (properties == null) return null;
             return new Music(file, properties);

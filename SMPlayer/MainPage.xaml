@@ -112,11 +112,11 @@
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEB51;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Name="RemotePlayItem" x:Uid="NavigationRemotePlayItem">
+                <!--<NavigationViewItem x:Name="RemotePlayItem" x:Uid="NavigationRemotePlayItem">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE975;" />
                     </NavigationViewItem.Icon>
-                </NavigationViewItem>
+                </NavigationViewItem>-->
             </NavigationView.MenuItems>
             <Grid>
                 <Grid.RowDefinitions>

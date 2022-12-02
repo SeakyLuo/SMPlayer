@@ -41,7 +41,7 @@ namespace SMPlayer
             SetHeader();
             if (string.IsNullOrEmpty(Settings.settings.RootPath)) return;
             LoadingProgress.Visibility = Visibility.Visible;
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await Helper.RunInMainUIThread(Dispatcher, () =>
             {
                 if (AllSongs.IsEmpty())
                 {
@@ -160,7 +160,7 @@ namespace SMPlayer
             switch (args.EventType)
             {
                 case MusicPlayerEventType.Switch:
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => MusicPlayer.SetMusicPlaying(AllSongs, args.Music));
+                    await Helper.RunInMainUIThread(Dispatcher, () => MusicPlayer.SetMusicPlaying(AllSongs, args.Music));
                     break;
             }
         }

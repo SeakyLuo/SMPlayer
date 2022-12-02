@@ -281,7 +281,6 @@ namespace SMPlayer
                     if (storageItem is FolderTree folderTree)
                     {
                         await StorageService.MoveFolderAsync(folderTree, folder);
-                        await StorageService.MoveFolderAsync(folderTree, folder);
                     }
                     else if (storageItem is FolderFile folderFile)
                     {

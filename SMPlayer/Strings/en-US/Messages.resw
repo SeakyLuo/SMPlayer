@@ -153,6 +153,9 @@
   <data name="AuthorizeSuccessful" xml:space="preserve">
     <value>Authorzation is successful!</value>
   </data>
+  <data name="CannotReadLocalMusicFile" xml:space="preserve">
+    <value>This music file cannot be accessed. You might need to move this music file to your music folder.</value>
+  </data>
   <data name="ChangesSaved" xml:space="preserve">
     <value>Changes has been saved.</value>
   </data>

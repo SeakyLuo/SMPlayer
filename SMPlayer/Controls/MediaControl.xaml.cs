@@ -445,7 +445,7 @@ namespace SMPlayer
 
             VoiceAssistantHelper.StateChangedListeners.Add(async (sender, args) =>
             {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                await Helper.RunInMainUIThread(Dispatcher, () =>
                 {
                     switch (args.State)
                     {
@@ -509,7 +509,7 @@ namespace SMPlayer
                 return;
             }
             CurrentMusic = music.ToVO();
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await Helper.RunInMainUIThread(Dispatcher, () =>
             {
                 MediaSlider.IsEnabled = true;
                 TitleTextBlock.Text = music.Name;
@@ -1079,7 +1079,7 @@ namespace SMPlayer
                     ToastHelper.HideToast();
                     break;
                 case MusicPlayerEventType.Switch:
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                    await Helper.RunInMainUIThread(Dispatcher, async () =>
                     {
                         Music next = args.Music;
                         if (CurrentMusic == null || !CurrentMusic.Equals(next)) UpdateMusic(next);
@@ -1095,7 +1095,7 @@ namespace SMPlayer
                 case MusicPlayerEventType.StateChanged:
                     MediaPlaybackState state = (args as MusicPlayerStateChangedEventArgs).State;
                     // For F3 Support
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                    await Helper.RunInMainUIThread(Dispatcher, async () =>
                     {
                         switch (state)
                         {

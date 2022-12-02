@@ -495,7 +495,7 @@ namespace SMPlayer
                 case MenuFlyoutEvent.Sort:
                     if (PleaseExitMultiSelectMode()) return;
                     LocalProgressRing.Visibility = Visibility.Visible;
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    await Helper.RunInMainUIThread(Dispatcher, () =>
                     {
                         FolderTree currentFolder = CurrentFolder;
                         SortBy criterion = (SortBy)args.Data;
@@ -650,7 +650,7 @@ namespace SMPlayer
             switch (args.EventType)
             {
                 case MusicPlayerEventType.Switch:
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    await Helper.RunInMainUIThread(Dispatcher, () =>
                     {
                         foreach (var item in GridItems)
                         {
@@ -667,20 +667,20 @@ namespace SMPlayer
         async void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
             if (CurrentFolderInfo == null) return;
-            switch (args.EventType)
+            await Helper.RunInMainUIThread(Dispatcher, () =>
             {
-                case MusicEventType.Add:
-                    break;
-                case MusicEventType.Remove:
-                    GridItems.RemoveAll(i => i.Path == music.Path);
-                    break;
-                case MusicEventType.Modify:
-                    if (GridItems.FirstOrDefault(i => i.Path == music.Path) is GridViewMusic gridViewMusic)
-                        gridViewMusic.Source = music.ToVO();
-                    break;
-            }
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
+                switch (args.EventType)
+                {
+                    case MusicEventType.Add:
+                        break;
+                    case MusicEventType.Remove:
+                        GridItems.RemoveAll(i => i.Path == music.Path);
+                        break;
+                    case MusicEventType.Modify:
+                        if (GridItems.FirstOrDefault(i => i.Path == music.Path) is GridViewMusic gridViewMusic)
+                            gridViewMusic.Source = music.ToVO();
+                        break;
+                }
                 SetNavText(CurrentFolder);
             });
         }
