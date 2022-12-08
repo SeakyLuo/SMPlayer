@@ -57,6 +57,7 @@ namespace SMPlayer.Models
         public PreferenceSettings Preference { get; set; } = new PreferenceSettings();
         public string LastReleaseNotesVersion { get; set; }
         public string RemotePlayPassword { get; set; }
+        public bool UseFilenameNotMusicName { get; set; } = false;
         public Settings() { }
     }
 

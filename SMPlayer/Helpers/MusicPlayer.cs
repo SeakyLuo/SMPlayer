@@ -28,7 +28,14 @@ namespace SMPlayer
             get => Player.PlaybackSession.Position.TotalSeconds;
             set => Player.PlaybackSession.Position = TimeSpan.FromSeconds(value);
         }
-        public static double Progress => CurrentMusic == null ? 0d : Position / CurrentMusic.Duration;
+        public static double Progress
+        {
+            get
+            {
+                Music music = CurrentMusic;
+                return music == null ? 0d : Position / music.Duration;
+            }
+        }
         public static MediaPlaybackState PlaybackState => Player.PlaybackSession.PlaybackState;
         public static bool IsPlaying => PlaybackState == MediaPlaybackState.Playing;
         public static Playlist NowPlaying => new Playlist(MenuFlyoutHelper.NowPlaying, CurrentPlaylist);
@@ -116,14 +123,34 @@ namespace SMPlayer
             };
             Player.PlaybackSession.PlaybackStateChanged += (sender, args) =>
             {
-                foreach (var listener in MusicPlayerEventListeners)
-                    listener.Execute(new MusicPlayerStateChangedEventArgs(sender.PlaybackState));
+                try
+                {
+                    lock (MusicPlayerEventListeners)
+                    {
+                        foreach (var listener in MusicPlayerEventListeners)
+                            listener.Execute(new MusicPlayerStateChangedEventArgs(sender.PlaybackState));
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Warn($"Player.PlaybackSession.PlaybackStateChanged failed {e}");
+                }
             };
             Player.MediaEnded += (sender, args) =>
             {
-                SettingsService.Played(CurrentMusic);
-                foreach (var listener in MusicPlayerEventListeners)
-                    listener.Execute(new MusicPlayerEventArgs(MusicPlayerEventType.MediaEnded));
+                try
+                {
+                    SettingsService.Played(CurrentMusic);
+                    lock (MusicPlayerEventListeners)
+                    {
+                        foreach (var listener in MusicPlayerEventListeners)
+                            listener.Execute(new MusicPlayerEventArgs(MusicPlayerEventType.MediaEnded));
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Warn($"Player.MediaEnded failed {e}");
+                }
             };
             foreach (var listener in InitFinishedListeners)
                 listener.Invoke();

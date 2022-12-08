@@ -152,6 +152,17 @@
                         Content="Add Lyrics"
                         Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <ToggleSwitch
+                        x:Name="LoadMusicNameOptionToggleSwitch"
+                        x:Uid="LoadMusicNameOptionToggleSwitch"
+                        Style="{StaticResource SettingToggleSwitchStyle}"
+                        Toggled="LoadMusicNameOptionToggleSwitch_Toggled"
+                        OnContent="Load music using filename Instead Of Music Name"
+                        OffContent="Load music using music name instead Of filename"
+                        IsOn="False"/>
+                </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">

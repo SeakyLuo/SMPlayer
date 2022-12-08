@@ -1399,4 +1399,13 @@
   <data name="DeleteButton.Content" xml:space="preserve">
     <value>删除</value>
   </data>
+  <data name="LoadMusicNameOptionToggleSwitch.OffContent" xml:space="preserve">
+    <value>加载音乐时使用文件名称而非音乐名称</value>
+  </data>
+  <data name="LoadMusicNameOptionToggleSwitch.OnContent" xml:space="preserve">
+    <value>加载音乐时使用文件名称而非音乐名称</value>
+  </data>
+  <data name="ReleaseNotesUseFilenameInsteadOfMusicName.Text" xml:space="preserve">
+    <value>设置页面添加了开关，支持加载歌曲时使用文件名称而非音乐名称</value>
+  </data>
 </root>

@@ -69,8 +69,10 @@ namespace SMPlayer
             StorageFolder folder = await picker.PickSingleFolderAsync();
             if (folder == null) return;
             Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-            await UpdateHelper.UpdateMusicLibrary(folder);
-            PathBox.Text = folder.Path;
+            if (await UpdateHelper.UpdateMusicLibrary(folder))
+            {
+                PathBox.Text = folder.Path;
+            }
         }
 
         private void ConfirmColorButton_Click(object sender, RoutedEventArgs e)
@@ -370,6 +372,11 @@ namespace SMPlayer
         {
             string path = Path.Combine(ApplicationData.Current.LocalFolder.Path, "Logs");
             await Helper.ShowInExplorer(path, StorageItemTypes.Folder);
+        }
+
+        private void LoadMusicNameOptionToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.UseFilenameNotMusicName = (sender as ToggleSwitch).IsOn;
         }
     }
 }

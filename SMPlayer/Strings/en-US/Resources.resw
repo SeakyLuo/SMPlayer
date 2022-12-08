@@ -1405,4 +1405,13 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="DeleteAppBarButton.Label" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="LoadMusicNameOptionToggleSwitch.OffContent" xml:space="preserve">
+    <value>Use filename instead of music name when loading a music file.</value>
+  </data>
+  <data name="LoadMusicNameOptionToggleSwitch.OnContent" xml:space="preserve">
+    <value>Use filename instead of music name when loading a music file.</value>
+  </data>
+  <data name="ReleaseNotesUseFilenameInsteadOfMusicName.Text" xml:space="preserve">
+    <value>A new setting is added which allows you to use filename instead of music name when loading a music file.</value>
+  </data>
 </root>

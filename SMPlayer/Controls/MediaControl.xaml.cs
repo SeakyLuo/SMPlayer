@@ -513,7 +513,7 @@ namespace SMPlayer
             {
                 MediaSlider.IsEnabled = true;
                 TitleTextBlock.Text = music.Name;
-                ArtistTextBlock.Text = music.Artist;
+                ArtistTextBlock.Text = string.IsNullOrWhiteSpace(music.Artist) ? Helper.LocalizeMessage("UnknownArtist") : music.Artist;
                 
                 MediaSlider.Value = MusicPlayer.Progress;
                 MediaSlider.Maximum = music.Duration;

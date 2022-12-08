@@ -13,7 +13,7 @@ namespace SMPlayer
     {
         public static List<string> SupportedFileTypes = new List<string>()
         {
-            ".mp3", ".flac", ".aac", ".alac", ".wma"
+            ".mp3", ".flac", ".aac", ".alac", ".wma", ".wav"
         };
 
         public static void ReadTags(TagLib.File.IFileAbstraction fileAbstraction)

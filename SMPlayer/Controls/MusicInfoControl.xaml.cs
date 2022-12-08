@@ -118,32 +118,39 @@ namespace SMPlayer.Controls
                 return;
             }
             IsProcessing = true;
-            if (IsPropertiesModified)
+            try
             {
-                SaveProgress.Visibility = Visibility.Visible;
-                var newMusic = CurrentMusic.Copy();
-                Properties.Title = newMusic.Name = TitleTextBox.Text;
-                Properties.Subtitle = SubtitleTextBox.Text;
-                Properties.Artist = newMusic.Artist = ArtistTextBox.Text;
-                Properties.Album = newMusic.Album = AlbumTextBox.Text;
-                Properties.AlbumArtist = AlbumArtistTextBox.Text;
-                if (int.TryParse(PlayCountTextBlock.Text, out int PlayCount))
-                    newMusic.PlayCount = PlayCount;
-                Properties.Publisher = PublisherTextBox.Text;
-                if (uint.TryParse(TrackNumberTextBox.Text, out uint TrackNumber))
-                    Properties.TrackNumber = TrackNumber;
-                if (uint.TryParse(YearTextBox.Text, out uint Year))
-                    Properties.Year = Year;
-                await Task.Run(async () =>
+                if (IsPropertiesModified)
                 {
+                    SaveProgress.Visibility = Visibility.Visible;
+                    var newMusic = CurrentMusic.Copy();
+                    Properties.Title = newMusic.Name = TitleTextBox.Text;
+                    Properties.Subtitle = SubtitleTextBox.Text;
+                    Properties.Artist = newMusic.Artist = ArtistTextBox.Text;
+                    Properties.Album = newMusic.Album = AlbumTextBox.Text;
+                    Properties.AlbumArtist = AlbumArtistTextBox.Text;
+                    if (int.TryParse(PlayCountTextBlock.Text, out int PlayCount))
+                        newMusic.PlayCount = PlayCount;
+                    Properties.Publisher = PublisherTextBox.Text;
+                    if (uint.TryParse(TrackNumberTextBox.Text, out uint TrackNumber))
+                        Properties.TrackNumber = TrackNumber;
+                    if (uint.TryParse(YearTextBox.Text, out uint Year))
+                        Properties.Year = Year;
                     await Properties.SavePropertiesAsync();
-                });
-                MusicService.MusicModified(CurrentMusic, newMusic);
-                CurrentMusic.CopyFrom(newMusic);
-                SaveProgress.Visibility = Visibility.Collapsed;
+                    MusicService.MusicModified(CurrentMusic, newMusic);
+                    CurrentMusic.CopyFrom(newMusic);
+                    SaveProgress.Visibility = Visibility.Collapsed;
+                }
             }
-            IsProcessing = false;
-            Helper.ShowNotification("PropertiesUpdated");
+            catch (Exception ex)
+            {
+                Log.Warn($"SaveMusicPropertiesButton_Click failed {ex}");
+            }
+            finally
+            {
+                IsProcessing = false;
+                Helper.ShowNotification("PropertiesUpdated");
+            }
         }
 
         private void ShowInExplorerButton_Click(object sender, RoutedEventArgs e)

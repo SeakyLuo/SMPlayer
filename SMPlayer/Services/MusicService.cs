@@ -95,7 +95,16 @@ namespace SMPlayer.Services
                 });
             }
             foreach (var listener in MusicEventListeners)
-                listener?.Execute(music, new MusicEventArgs(MusicEventType.Add));
+            {
+                try
+                {
+                    listener?.Execute(music, new MusicEventArgs(MusicEventType.Add));
+                }
+                catch (Exception e)
+                {
+                    Log.Warn($"listener Execute AddMusic failed {e}");
+                }
+            }
             return isNew;
         }
 
@@ -104,14 +113,32 @@ namespace SMPlayer.Services
             if (music == null) return;
             SQLHelper.Run(c => ActivateMusic(c, music, ActiveState.Inactive));
             foreach (var listener in MusicEventListeners)
-                listener?.Execute(music, new MusicEventArgs(MusicEventType.Remove));
+            {
+                try
+                {
+                    listener?.Execute(music, new MusicEventArgs(MusicEventType.Remove));
+                }
+                catch (Exception e)
+                {
+                    Log.Warn($"listener RemoveMusic failed {e}");
+                }
+            }
         }
 
         public static void UndoRemoveMusic(Music music)
         {
             SQLHelper.Run(c => ActivateMusic(c, music, ActiveState.Active));
             foreach (var listener in MusicEventListeners)
-                listener?.Execute(music, new MusicEventArgs(MusicEventType.Add));
+            {
+                try
+                {
+                    listener?.Execute(music, new MusicEventArgs(MusicEventType.Add));
+                }
+                catch (Exception e)
+                {
+                    Log.Warn($"listener UndoRemoveMusic failed {e}");
+                }
+            }
         }
 
         private static void ActivateMusic(SQLiteConnection c, Music music, ActiveState state)

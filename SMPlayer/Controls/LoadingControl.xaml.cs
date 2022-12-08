@@ -139,7 +139,8 @@ namespace SMPlayer
 
         public async Task ResetAsync(string message = null, int max = 0)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => Reset(message, max));
+            Log.Info($"ResetAsync {message}");
+            await Helper.RunInMainUIThread(Dispatcher, () => Reset(message, max));
         }
 
         public void Reset(string message = null, int max = 0)

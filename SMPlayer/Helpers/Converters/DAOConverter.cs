@@ -236,6 +236,7 @@ namespace SMPlayer.Helpers
                 SearchFoldersCriterion = src.SearchFoldersCriterion,
                 LastReleaseNotesVersion = src.LastReleaseNotesVersion,
                 RemotePlayPassword = src.RemotePlayPassword,
+                UseFilenameNotMusicName = src.UseFilenameNotMusicName,
             };
         }
 
@@ -275,6 +276,7 @@ namespace SMPlayer.Helpers
                 SearchFoldersCriterion = src.SearchFoldersCriterion,
                 LastReleaseNotesVersion = src.LastReleaseNotesVersion,
                 RemotePlayPassword = src.RemotePlayPassword,
+                UseFilenameNotMusicName = src.UseFilenameNotMusicName,
             };
         }
 

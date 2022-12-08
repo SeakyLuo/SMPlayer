@@ -54,7 +54,7 @@ namespace SMPlayer.Helpers
             }
             catch (Exception e)
             {
-                Log.Error("update music library failed", e);
+                Log.Error($"update music library failed {e}");
                 MainPage.Instance.ShowButtonedNotification(Helper.LocalizeMessage("ExecutionFailed"), Helper.LocalizeText("Feedback"), async () =>
                 {
                     await Helper.SendEmailToDeveloper(Helper.LocalizeText("UpdateMusicLibraryFailed"), $"AppVersion:{Helper.AppVersion}\n{e}");
@@ -140,6 +140,7 @@ namespace SMPlayer.Helpers
                 RemoveFolder(folder, result);
                 return;
             }
+            Log.Info($"add folder {folder.Path} to db");
             SQLHelper.Run(c =>
             {
                 FolderTree existing = c.SelectAnyFolderInfo(folder.Path);
@@ -159,33 +160,46 @@ namespace SMPlayer.Helpers
             {
                 foreach (var item in folder.Trees)
                 {
+                    if (item == null) continue;
                     item.ParentId = folder.Id;
                     await ResetFolderData(item, result);
                 }
-                folder.Trees.RemoveAll(i => i.State.IsInactive() || i.IsEmpty);
+                folder.Trees.RemoveAll(i => i == null || i.State.IsInactive() || i.IsEmpty);
             }
             if (folder.Files.IsNotEmpty())
             {
+                Log.Info($"reset folder {folder.Path} files");
                 foreach (var item in folder.Files)
                 {
-                    if (item.Id == 0)
+                    if (item == null) continue;
+                    try
                     {
-                        item.ParentId = folder.Id;
-                        await StorageService.AddFile(item);
-                        result?.AddFile(item.Path);
-                        Log.Debug("file is added, path {0}", item.Path);
-                        await MainPage.Instance.Loader.IncrementAsync();
-                    }
-                    else
-                    {
-                        if (item.State.IsInactive())
+                        if (item.Id == 0)
                         {
-                            result?.RemoveFile(item.Path);
-                            StorageService.RemoveFile(item);
+                            item.ParentId = folder.Id;
+                            if (!await StorageService.AddFile(item))
+                            {
+                                Log.Info($"add item failed {item}");
+                            }
+                            result?.AddFile(item.Path);
+                            Log.Debug($"file is added, path {item.Path}");
+                            await MainPage.Instance.Loader.IncrementAsync();
                         }
+                        else
+                        {
+                            if (item.State.IsInactive())
+                            {
+                                StorageService.RemoveFile(item);
+                                result?.RemoveFile(item.Path);
+                            }
+                        }
+                    } 
+                    catch (Exception e)
+                    {
+                        Log.Warn($"reset file {item.Path} failed {e}");
                     }
                 }
-                folder.Files.RemoveAll(i => i.State.IsInactive());
+                folder.Files.RemoveAll(i => i == null || i.State.IsInactive());
             }
             if (folder.ParentId > 0 && folder.IsEmpty)
             {
@@ -196,7 +210,7 @@ namespace SMPlayer.Helpers
         private static void RemoveFolder(FolderTree folder, FolderUpdateResult result = null)
         {
             if (folder == null) return;
-            Log.Info("folder is deleted, path {0}", folder.Path);
+            Log.Info($"folder is deleted, path {folder.Path}");
             FolderDAO folderDAO = folder.ToDAO();
             folderDAO.State = ActiveState.Inactive;
             SQLHelper.Run(c => c.Update(folderDAO));

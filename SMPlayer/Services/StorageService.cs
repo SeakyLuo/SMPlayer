@@ -89,18 +89,21 @@ namespace SMPlayer.Services
             return index == 0 ? Name : Helper.GetNextName(Name, index);
         }
 
-        public static async Task AddFile(FolderFile item)
+        public static async Task<bool> AddFile(FolderFile item)
         {
             if (item.IsMusicFile())
             {
                 Music music = (Music)item.Source;
+                if (music == null) return false;
                 bool isNew = await MusicService.AddMusic(music);
                 item.FileId = music.Id;
                 if (isNew)
                 {
                     SQLHelper.Run(c => c.InsertFile(item));
                 }
+                return true;
             }
+            return false;
         }
 
         public static async Task DeleteFile(FolderFile file)
@@ -123,7 +126,7 @@ namespace SMPlayer.Services
                     MusicService.RemoveMusic(music);
                 }
             }
-            Log.Info("file is deleted, path {0}", file.Path);
+            Log.Info($"file is deleted, path {file.Path}");
         }
 
         public static async Task<NamingError> ValidateFolderName(string root, string newName)

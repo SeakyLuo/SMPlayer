@@ -37,6 +37,7 @@ namespace SMPlayer.Helpers
                     c.CreateTable<PreferenceSettingsDAO>(CreateFlags.AllImplicit | CreateFlags.AutoIncPK);
                     c.CreateTable<AuthorizedDeviceDAO>(CreateFlags.AllImplicit | CreateFlags.AutoIncPK);
                     c.AlterTableAddColumn("Settings", "RemotePlayPassword VARCHAR(50) DEFAULT ''");
+                    c.AlterTableAddColumn("Settings", "UseFilenameNotMusicName INTEGER DEFAULT ''");
                 });
                 return;
             }

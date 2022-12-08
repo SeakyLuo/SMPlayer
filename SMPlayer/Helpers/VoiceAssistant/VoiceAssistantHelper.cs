@@ -80,7 +80,17 @@ namespace SMPlayer.Helpers
             {
                 Log.Info("state: " + args.State);
                 VoiceAssistantEventArgs a = new VoiceAssistantEventArgs { State = args.State };
-                foreach (var listener in StateChangedListeners) listener.Invoke(sender, a);
+                foreach (var listener in StateChangedListeners)
+                {
+                    try
+                    {
+                        listener.Invoke(sender, a);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Warn($"SetLanguage invoide StateChangedListeners failed {e}");
+                    }
+                }
             };
             Recognizer.UIOptions.IsReadBackEnabled = false;
             await Recognizer.CompileConstraintsAsync();

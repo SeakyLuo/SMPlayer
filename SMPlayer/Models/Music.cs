@@ -37,7 +37,8 @@ namespace SMPlayer.Models
         public Music(StorageFile file, MusicProperties properties)
         {
             Path = file.Path;
-            Name = properties.Title;
+            Name = string.IsNullOrWhiteSpace(properties.Title) || Settings.settings.UseFilenameNotMusicName ? 
+                   file.DisplayName : properties.Title;
             Artist = properties.Artist;
             Album = properties.Album;
             Duration = (int)properties.Duration.TotalSeconds;
@@ -102,7 +103,7 @@ namespace SMPlayer.Models
         public static async Task<Music> LoadFromFileAsync(StorageFile file)
         {
             if (file == null) return null;
-            MusicProperties properties = await file.Properties.GetMusicPropertiesAsync();
+            MusicProperties properties = await file.Properties?.GetMusicPropertiesAsync();
             if (properties == null) return null;
             return new Music(file, properties);
             //using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(file), TagLib.ReadStyle.Average))
@@ -139,6 +140,10 @@ namespace SMPlayer.Models
         public async Task<bool> SaveLyricsAsync(string lyrics)
         {
             var music = await GetStorageFileAsync();
+            if (music == null)
+            {
+                return false;
+            }
             try
             {
                 using (var file = TagLib.File.Create(new MusicFileAbstraction(music), TagLib.ReadStyle.Average))
