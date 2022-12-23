@@ -1,5 +1,6 @@
 ﻿using SMPlayer.Helpers;
 using SMPlayer.Models.DAO;
+using SMPlayer.Models.Enums;
 using SMPlayer.Services;
 using SQLite;
 using System;
@@ -58,6 +59,7 @@ namespace SMPlayer.Models
         public string LastReleaseNotesVersion { get; set; }
         public string RemotePlayPassword { get; set; }
         public bool UseFilenameNotMusicName { get; set; } = false;
+        public LyricsSource NotificationLyricsSource { get; set; } = LyricsSource.Internet;
         public Settings() { }
     }
 

@@ -48,6 +48,7 @@ namespace SMPlayer.Models.DAO
         public string LastReleaseNotesVersion { get; set; }
         public string RemotePlayPassword { get; set; }
         public bool UseFilenameNotMusicName { get; set; }
+        public LyricsSource NotificationLyricsSource { get; set; } = LyricsSource.Internet;
 
     }
 }

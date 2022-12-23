@@ -208,6 +208,20 @@
                         IsOn="False"/>
                     <FontIcon x:Uid="ShowLyricsInNotificationInfo" FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;" />
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <StackPanel Orientation="Horizontal" Style="{ThemeResource SettingsMarginSetter}">
+                        <TextBlock x:Uid="NotificationLyricsSourceComboBoxTextBlock" Style="{StaticResource ComboBoxLabelStyle}"/>
+                        <ComboBox
+                            x:Name="NotificationLyricsSourceComboBox"
+                            SelectionChanged="NotificationLyricsSourceComboBox_SelectionChanged"
+                            Style="{StaticResource SettingsMarginSetter}">
+                            <ComboBoxItem x:Uid="LyricsSourceInternetComboItem" Content="Internet" />
+                            <ComboBoxItem x:Uid="LyricsSourceLrcFileComboItem" Content="Lrc file" />
+                            <ComboBoxItem x:Uid="LyricsSourceMusicFileComboBoxItem" Content="Music self" />
+                        </ComboBox>
+                    </StackPanel>
+                </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">

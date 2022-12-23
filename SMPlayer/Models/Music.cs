@@ -118,57 +118,6 @@ namespace SMPlayer.Models
             return TagLib.File.Create(new MusicFileAbstraction(await GetStorageFileAsync()), TagLib.ReadStyle.Average);
         }
 
-        public async Task<string> GetLyricsAsync()
-        {
-            var file = await GetStorageFileAsync();
-            return file.GetLyrics();
-        }
-
-        public async Task<string> GetLrcLyricsAsync()
-        {
-            try
-            {
-                var file = await StorageFile.GetFileFromPathAsync(Path.Substring(0, Path.LastIndexOf(".")) + ".lrc");
-                return await FileIO.ReadTextAsync(file);
-            }
-            catch (Exception)
-            {
-                return await LyricsHelper.SearchLrcLyrics(this);
-            }
-        }
-
-        public async Task<bool> FindLyricsIfEmpty()
-        {
-            if (string.IsNullOrEmpty(await GetLyricsAsync()))
-            {
-                return await SaveLyricsAsync(await LyricsHelper.SearchLyrics(this));
-            }
-            return true;
-        }
-
-        public async Task<bool> SaveLyricsAsync(string lyrics)
-        {
-            var music = await GetStorageFileAsync();
-            if (music == null)
-            {
-                return false;
-            }
-            try
-            {
-                using (var file = TagLib.File.Create(new MusicFileAbstraction(music), TagLib.ReadStyle.Average))
-                {
-                    file.Tag.Lyrics = lyrics;
-                    file.Save();
-                }
-                return true;
-            }
-            catch (Exception exception)
-            {
-                Log.Info($"Saving lyrics for {Name} Exception {exception}");
-                return false;
-            }
-        }
-
         public async Task<MusicDisplayItem> GetMusicDisplayItemAsync()
         {
             var thumbnail = await ImageHelper.LoadThumbnail(Path);

@@ -459,6 +459,24 @@
   <data name="ThisMonth" xml:space="preserve">
     <value>本月</value>
   </data>
+  <data name="ToastHelperNext" xml:space="preserve">
+    <value>下一首</value>
+  </data>
+  <data name="ToastHelperPause" xml:space="preserve">
+    <value>暂停</value>
+  </data>
+  <data name="ToastHelperPlay" xml:space="preserve">
+    <value>播放</value>
+  </data>
+  <data name="ToastHelperSwitchLyricsSourceToInternet" xml:space="preserve">
+    <value>用网络歌词</value>
+  </data>
+  <data name="ToastHelperSwitchLyricsSourceToLrcFile" xml:space="preserve">
+    <value>用lrc歌词</value>
+  </data>
+  <data name="ToastHelperSwitchLyricsSourceToMusic" xml:space="preserve">
+    <value>用歌曲歌词</value>
+  </data>
   <data name="Today" xml:space="preserve">
     <value>今日</value>
   </data>

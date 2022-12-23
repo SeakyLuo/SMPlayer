@@ -7,14 +7,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Windows.Storage;
 
 namespace SMPlayer.Services
 {
-    public class MusicService
+    public static class MusicService
     {
         public static void AddMusicEventListener(IMusicEventListener listener) { MusicEventListeners.Add(listener); }
         private static readonly List<IMusicEventListener> MusicEventListeners = new List<IMusicEventListener>();
-
+        private static readonly LoadingCache<string, string> LyricsCache = new LoadingCache<string, string>(1, TimeUnit.Day);
+        private static readonly LoadingCache<string, string> LrcLyricsCache = new LoadingCache<string, string>(1, TimeUnit.Day);
         public static IEnumerable<Music> AllSongs => SQLHelper.Run(c => c.SelectAllMusic());
         public static Music FindMusic(long id) { return SQLHelper.Run(c => c.SelectMusicById(id)); }
         public static Music FindMusic(string path) { return SQLHelper.Run(c => c.SelectMusicByPath(path)); }
@@ -187,6 +190,109 @@ namespace SMPlayer.Services
                 list.AddRange(group);
             }
             return list;
+        }
+
+        public static async Task<bool> HasLyrics(Music music)
+        {
+            if (music == null)
+            {
+                return false;
+            }
+            string key = music.Path;
+            if (!LyricsCache.ContainsKey(key))
+            {
+                await GetLyricsAsync(music);
+            }
+            string result = LyricsCache.Get(key, "false");
+            return bool.Parse(result);
+        }
+
+        public static async Task<bool> HasLrcLyrics(Music music)
+        {
+            if (music == null)
+            {
+                return false;
+            }
+            string key = music.Path;
+            if (!LrcLyricsCache.ContainsKey(key))
+            {
+                await GetLrcLyricsAsync(music);
+            }
+            string result = LrcLyricsCache.Get(key, "false");
+            return bool.Parse(result);
+        }
+
+        public static async Task<bool> FindLyricsIfEmpty(this Music music)
+        {
+            if (await HasLyrics(music))
+            {
+                return true;
+            }
+            return await music.SaveLyricsAsync(await LyricsHelper.SearchLyrics(music));
+        }
+
+
+        public static async Task<bool> SaveLyricsAsync(this Music music, string lyrics)
+        {
+            var storageFile = await music.GetStorageFileAsync();
+            if (storageFile == null)
+            {
+                return false;
+            }
+            try
+            {
+                using (var file = TagLib.File.Create(new MusicFileAbstraction(storageFile), TagLib.ReadStyle.Average))
+                {
+                    file.Tag.Lyrics = lyrics;
+                    file.Save();
+                    PutLyricsCache(music, lyrics);
+                }
+                return true;
+            }
+            catch (Exception exception)
+            {
+                Log.Info($"Saving lyrics for {music.Path} Exception {exception}");
+                return false;
+            }
+        }
+
+        public static async Task<string> GetLyricsAsync(this Music music)
+        {
+            var file = await music.GetStorageFileAsync();
+            var lyrics = file.GetLyrics();
+            PutLyricsCache(music, lyrics);
+            return lyrics;
+        }
+
+        public static async Task<string> GetLrcLyricsAsync(this Music music)
+        {
+            try
+            {
+                string path = music.Path.Substring(0, music.Path.LastIndexOf(".")) + ".lrc";
+                var file = await StorageFile.GetFileFromPathAsync(path);
+                string lyrics = await FileIO.ReadTextAsync(file);
+                PutLrcLyricsCache(music, lyrics);
+                return lyrics;
+            }
+            catch (Exception e)
+            {
+                PutLrcLyricsCache(music, null);
+                return await LyricsHelper.SearchLrcLyrics(music);
+            }
+        }
+
+        private static bool PutLyricsCache(Music music, string lyrics)
+        {
+            bool hasLyrics = !string.IsNullOrWhiteSpace(lyrics);
+            LyricsCache.Put(music.Path, hasLyrics.ToString());
+            return hasLyrics;
+        }
+
+        private static bool PutLrcLyricsCache(Music music, string lyrics)
+        {
+            bool hasLyrics = !string.IsNullOrWhiteSpace(lyrics);
+            LrcLyricsCache.Put(music.Path, hasLyrics.ToString());
+            return hasLyrics;
         }
     }
 }

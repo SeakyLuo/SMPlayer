@@ -459,6 +459,24 @@
   <data name="ThisMonth" xml:space="preserve">
     <value>This Month</value>
   </data>
+  <data name="ToastHelperNext" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="ToastHelperPause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="ToastHelperPlay" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="ToastHelperSwitchLyricsSourceToInternet" xml:space="preserve">
+    <value>To web lyrics</value>
+  </data>
+  <data name="ToastHelperSwitchLyricsSourceToLrcFile" xml:space="preserve">
+    <value>To lrc lryics</value>
+  </data>
+  <data name="ToastHelperSwitchLyricsSourceToMusic" xml:space="preserve">
+    <value>To music lyrics</value>
+  </data>
   <data name="Today" xml:space="preserve">
     <value>Today</value>
   </data>

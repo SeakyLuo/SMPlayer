@@ -1,5 +1,7 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using SMPlayer.Models;
+using SMPlayer.Models.Enums;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,9 +25,11 @@ namespace SMPlayer.Helpers
         };
         private static Dictionary<ToastKey, ToastNotification> CurrentToastMap = new Dictionary<ToastKey, ToastNotification>();
         private static ToastNotifier Notifier = ToastNotificationManager.CreateToastNotifier();
+        private static LyricsSource CurrentLyricsSource = LyricsSource.Internet;
 
         public static void Init()
         {
+            CurrentLyricsSource = Settings.settings.NotificationLyricsSource;
             Timer.Tick += (sender, e) =>
             {
                 UpdateToast();
@@ -33,24 +37,53 @@ namespace SMPlayer.Helpers
             Timer.Start();
         }
 
+        public static async Task SwitchLyricsSource(LyricsSource source)
+        {
+            Music currentMusic = MusicPlayer.CurrentMusic;
+            if (currentMusic != null)
+            {
+                string lyrics;
+                switch (source)
+                {
+                    case LyricsSource.Music:
+                        lyrics = await currentMusic.GetLyricsAsync();
+                        break;
+                    case LyricsSource.LrcFile:
+                        lyrics = await currentMusic.GetLrcLyricsAsync();
+                        break;
+                    default:
+                        lyrics = await LyricsHelper.SearchLyrics(currentMusic);
+                        break;
+                }
+                LyricsHelper.SetLyrics(currentMusic, lyrics);
+            }
+            await ShowToast(currentMusic, MusicPlayer.PlaybackState, source);
+        }
+
         public static async Task ShowToast(Music music, MediaPlaybackState state)
+        {
+            await ShowToast(music, state, Settings.settings.NotificationLyricsSource);
+        }
+
+        public static async Task ShowToast(Music music, MediaPlaybackState state, LyricsSource lyricsSource)
         {
             if (!App.Inited) return;
             if (music == null ||
-                Settings.settings.NotificationSend == NotificationSendMode.Never || 
+                Settings.settings.NotificationSend == NotificationSendMode.Never ||
                 (state != MediaPlaybackState.Playing && state != MediaPlaybackState.Paused)) return;
             NotificationDisplayMode display = Settings.settings.NotificationDisplay;
             if (Window.Current.Visible && (display == NotificationDisplayMode.Normal || display == NotificationDisplayMode.Quick))
                 return;
-            if (IsToastActive(music, state)) return;
+            if (IsToastActive(music, state) && CurrentLyricsSource == lyricsSource) return;
+            CurrentLyricsSource = lyricsSource;
             ToastNotification toast;
             try
             {
-                toast = await BuildToast(music, state, display);
+                toast = await BuildToast(music, state, display, lyricsSource);
             }
             catch (Exception e)
             {
-                Log.Warn("Exception {0}", e);
+                Log.Warn($"ShowToast.BuildToast Failed {e}");
                 return;
             }
             lock (CurrentToastMap)
@@ -60,7 +93,7 @@ namespace SMPlayer.Helpers
                 try
                 {
                     Notifier.Show(toast);
-                    Log.Info("show toast, music: {0}, state: {1}", music.Name, state);
+                    Log.Debug($"show toast, music: {music.Name}, state: {state}");
                 }
                 catch (Exception)
                 {
@@ -99,7 +132,7 @@ namespace SMPlayer.Helpers
                 try
                 {
                     Notifier.Hide(e.Value);
-                    Log.Info("hide toast, music: {0}, state: {1}", e.Key.Music.Name, e.Key.State);
+                    Log.Info($"hide toast, music: {e.Key.Music.Name}, state: {e.Key.State}");
                 }
                 catch (Exception)
                 {
@@ -109,25 +142,55 @@ namespace SMPlayer.Helpers
             CurrentToastMap.Clear();
         }
 
-        private static ToastButton BuildToastButton(string text)
+        private static ToastButton BuildToastButton(ToastButtonEnum button)
         {
-            return new ToastButton(Helper.LocalizeMessage(text), text)
+            return new ToastButton(Helper.LocalizeText("ToastHelper" + button), button.ToString())
             {
                 ActivationType = ToastActivationType.Background
             };
         }
 
-        private static ToastContent BuildToastContent(Music music, MediaPlaybackState state, NotificationDisplayMode display)
+        private static async Task<ToastContent> BuildToastContent(Music music, MediaPlaybackState state, NotificationDisplayMode display, LyricsSource lyricsSource)
         {
-            ToastButton controlButton = null;
+            ToastActionsCustom custom = new ToastActionsCustom() { Buttons = {} };
             switch (state)
             {
                 case MediaPlaybackState.Paused:
-                    controlButton = BuildToastButton("Play");
+                    custom.Buttons.Add(BuildToastButton(ToastButtonEnum.Play));
                     break;
                 case MediaPlaybackState.Playing:
-                    controlButton = BuildToastButton("Pause");
+                    custom.Buttons.Add(BuildToastButton(ToastButtonEnum.Pause));
                     break;
+            }
+            custom.Buttons.Add(BuildToastButton(ToastButtonEnum.Next));
+            if (Settings.settings.ShowLyricsInNotification)
+            {
+                switch (lyricsSource)
+                {
+                    case LyricsSource.Internet:
+                        if (await MusicService.HasLrcLyrics(music))
+                        {
+                            custom.Buttons.Add(BuildToastButton(ToastButtonEnum.SwitchLyricsSourceToLrcFile));
+                        }
+                        else if (await MusicService.HasLyrics(music))
+                        {
+                            custom.Buttons.Add(BuildToastButton(ToastButtonEnum.SwitchLyricsSourceToMusic));
+                        }
+                        break;
+                    case LyricsSource.LrcFile:
+                        if (await MusicService.HasLyrics(music))
+                        {
+                            custom.Buttons.Add(BuildToastButton(ToastButtonEnum.SwitchLyricsSourceToMusic));
+                        }
+                        else
+                        {
+                            custom.Buttons.Add(BuildToastButton(ToastButtonEnum.SwitchLyricsSourceToInternet));
+                        }
+                        break;
+                    case LyricsSource.Music:
+                        custom.Buttons.Add(BuildToastButton(ToastButtonEnum.SwitchLyricsSourceToInternet));
+                        break;
+                }
             }
             var toastContent = new ToastContent()
             {
@@ -148,13 +211,7 @@ namespace SMPlayer.Helpers
                         }
                     }
                 },
-                Actions = new ToastActionsCustom()
-                {
-                    Buttons =
-                    {
-                        controlButton, BuildToastButton("Next")
-                    }
-                },
+                Actions = custom,
                 ActivationType = ToastActivationType.Background,
                 Launch = "Launch",
                 Audio = SlientToast,
@@ -163,7 +220,7 @@ namespace SMPlayer.Helpers
             return toastContent;
         }
 
-        private static async Task<ToastNotification> BuildToast(Music music, MediaPlaybackState state, NotificationDisplayMode display)
+        private static async Task<ToastNotification> BuildToast(Music music, MediaPlaybackState state, NotificationDisplayMode display, LyricsSource lyricsSource)
         {
             string toastTag = null;
             switch (state)
@@ -176,7 +233,7 @@ namespace SMPlayer.Helpers
                     break;
             }
 
-            var toastContent = BuildToastContent(music, state, display);
+            var toastContent = await BuildToastContent(music, state, display, lyricsSource);
             // Create the toast notification
             ToastNotification toast = new ToastNotification(toastContent.GetXml())
             {
@@ -205,6 +262,8 @@ namespace SMPlayer.Helpers
     {
         public Music Music { get; set; }
         public MediaPlaybackState State { get; set; }
+        public LyricsSource LyricsSource { get; set; } = LyricsSource.Internet;
+        
 
         public override bool Equals(object obj)
         {
@@ -224,5 +283,10 @@ namespace SMPlayer.Helpers
         {
             return $"ToastKey[Music={Music?.Name},State={State}]";
         }
+    }
+
+    public enum ToastButtonEnum
+    {
+        Play, Pause, Next, SwitchLyricsSourceToMusic, SwitchLyricsSourceToLrcFile, SwitchLyricsSourceToInternet
     }
 }

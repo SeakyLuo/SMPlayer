@@ -2,6 +2,7 @@
 using SMPlayer.Helpers;
 using SMPlayer.Models;
 using SMPlayer.Models.DAO;
+using SMPlayer.Models.Enums;
 using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
@@ -27,9 +28,10 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
-        public static NotificationSendMode[] NotificationOptions = { NotificationSendMode.MusicChanged, NotificationSendMode.Never };
+        public static List<NotificationSendMode> NotificationOptions = EnumHelper.Values<NotificationSendMode>(typeof(NotificationSendMode));
         private static readonly int[] LimitedRecentPlayedItems = { -1, 100, 200, 500, 1000 };
-        private static readonly VoiceAssistantLanguage[] VoiceAssistantPreferredLanguanges = { VoiceAssistantLanguage.English, VoiceAssistantLanguage.Chinese };
+        private static readonly List<VoiceAssistantLanguage> VoiceAssistantPreferredLanguanges = EnumHelper.Values<VoiceAssistantLanguage>(typeof(VoiceAssistantLanguage));
+        private static readonly List<LyricsSource> LyricsSources = EnumHelper.Values<LyricsSource>(typeof(LyricsSource));
         private volatile int addLyricsClickCounter = 0;
         private readonly string addLyricsContent = Helper.Localize("AddLyrics");
 
@@ -57,6 +59,7 @@ namespace SMPlayer
             HideMultiSelectCommandBarToggleSwitch.IsOn = settings.HideMultiSelectCommandBarAfterOperation;
             ShowLyricsInNotificationToggleSwitch.IsOn = settings.ShowLyricsInNotification;
             VoiceAssistantLanguageComboBox.SelectedIndex = (int)settings.VoiceAssistantPreferredLanguage;
+            NotificationLyricsSourceComboBox.SelectedIndex = (int)settings.NotificationLyricsSource;
         }
 
         private async void PathBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
@@ -384,6 +387,11 @@ namespace SMPlayer
         private void LoadMusicNameOptionToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {
             Settings.settings.UseFilenameNotMusicName = (sender as ToggleSwitch).IsOn;
+        }
+
+        private void NotificationLyricsSourceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Settings.settings.NotificationLyricsSource = LyricsSources[(sender as ComboBox).SelectedIndex];
         }
     }
 }

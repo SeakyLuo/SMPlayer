@@ -180,7 +180,7 @@ namespace SMPlayer.Controls
                 Helper.ShowNotification("Error");
             }
         Finally:
-            SetButtonEnability(false);
+            SetButtonEnability(true);
             SaveProgress.Visibility = Visibility.Collapsed;
             IsProcessing = false;
         }

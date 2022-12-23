@@ -7,6 +7,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.VoiceCommands;
+using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -180,7 +181,7 @@ namespace SMPlayer
             await Helper.ClearBackups(10);
         }
 
-        protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
+        protected override async void OnBackgroundActivated(BackgroundActivatedEventArgs args)
         {
             var deferral = args.TaskInstance.GetDeferral();
             switch (args.TaskInstance.Task.Name)
@@ -189,16 +190,25 @@ namespace SMPlayer
                     if (args.TaskInstance.TriggerDetails is Windows.UI.Notifications.ToastNotificationActionTriggerDetail details)
                     {
                         // Perform tasks
-                        switch (details.Argument)
+                        switch (Enum.Parse(typeof(ToastButtonEnum), details.Argument))
                         {
-                            case "Next":
+                            case ToastButtonEnum.Next:
                                 MusicPlayer.MoveNext();
                                 break;
-                            case "Pause":
+                            case ToastButtonEnum.Pause:
                                 MusicPlayer.Pause();
                                 break;
-                            case "Play":
+                            case ToastButtonEnum.Play:
                                 MusicPlayer.Play();
+                                break;
+                            case ToastButtonEnum.SwitchLyricsSourceToMusic:
+                                await ToastHelper.SwitchLyricsSource(LyricsSource.Music);
+                                break;
+                            case ToastButtonEnum.SwitchLyricsSourceToLrcFile:
+                                await ToastHelper.SwitchLyricsSource(LyricsSource.LrcFile);
+                                break;
+                            case ToastButtonEnum.SwitchLyricsSourceToInternet:
+                                await ToastHelper.SwitchLyricsSource(LyricsSource.Internet);
                                 break;
                         }
                     }

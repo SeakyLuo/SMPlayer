@@ -237,6 +237,7 @@ namespace SMPlayer.Helpers
                 LastReleaseNotesVersion = src.LastReleaseNotesVersion,
                 RemotePlayPassword = src.RemotePlayPassword,
                 UseFilenameNotMusicName = src.UseFilenameNotMusicName,
+                NotificationLyricsSource = src.NotificationLyricsSource,
             };
         }
 
@@ -277,6 +278,7 @@ namespace SMPlayer.Helpers
                 LastReleaseNotesVersion = src.LastReleaseNotesVersion,
                 RemotePlayPassword = src.RemotePlayPassword,
                 UseFilenameNotMusicName = src.UseFilenameNotMusicName,
+                NotificationLyricsSource = src.NotificationLyricsSource,
             };
         }
 

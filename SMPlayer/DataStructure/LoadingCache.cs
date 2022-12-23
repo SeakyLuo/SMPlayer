@@ -93,14 +93,14 @@ namespace SMPlayer
             }
         }
 
-        public V Get(K key)
+        public V Get(K key, V defaultValue = null)
         {
             CacheValue<V> cachedValue = dict.GetValueOrDefault(key, null);
             if (cachedValue == null)
             {
                 if (Load == null)
                 {
-                    return null;
+                    return defaultValue;
                 }
                 cachedValue = new CacheValue<V>(Load.Invoke(key));
             }

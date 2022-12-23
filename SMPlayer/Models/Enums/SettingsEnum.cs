@@ -58,6 +58,12 @@ namespace SMPlayer.Models
     {
         Grid, List
     }
+
+    public enum LyricsSource
+    {
+        Internet = 0, LrcFile = 1, Music = 2
+    }
+
     public static class SortByConverter
     {
         public static string ToStr(this SortBy criterion)

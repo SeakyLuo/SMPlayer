@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Models;
+using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -43,11 +44,11 @@ namespace SMPlayer.Helpers
             catch (ArgumentException e)
             {
                 // Value cannot be null. ?????????
-                Log.Warn("SetLyrics.ArgumentException {0}", e);
+                Log.Warn($"SetLyrics.ArgumentException {e}");
             }
             catch (Exception e)
             {
-                Log.Warn("SetLyrics.Exception {0}", e);
+                Log.Warn($"SetLyrics.Exception {e}");
             }
         }
 
@@ -76,7 +77,7 @@ namespace SMPlayer.Helpers
             }
         }
 
-        private static void SetLyrics(Music music, string lyrics)
+        public static void SetLyrics(Music music, string lyrics)
         {
             CurrentMusic = music;
             CurrentLyrics = lyrics;
@@ -103,7 +104,7 @@ namespace SMPlayer.Helpers
             }
             catch (Exception e)
             {
-                Log.Warn("Exception {0}", e);
+                Log.Warn($"GetLyrics Exception {e}");
             }
             return DisplayLine;
         }

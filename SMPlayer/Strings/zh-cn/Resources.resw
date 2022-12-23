@@ -1408,4 +1408,22 @@
   <data name="ReleaseNotesUseFilenameInsteadOfMusicName.Text" xml:space="preserve">
     <value>设置页面添加了开关，支持加载歌曲时使用文件名称而非音乐名称</value>
   </data>
+  <data name="ReleaseNotesNotificationLyricsSource.Text" xml:space="preserve">
+    <value>你可以选择通知中歌词默认的来源，也可以直接在通知中切换。歌词来源包括网络歌词、lrc文件歌词、音乐文件本身的歌词。</value>
+  </data>
+  <data name="ReleaseNotesUseHideFolder.Text" xml:space="preserve">
+    <value>你现在可以通过在本地页面，右键一个文件夹来隐藏音乐文件了，这个文件的内容将不会呈现在简音播放器里。你可以通过本地页面恢复它。</value>
+  </data>
+  <data name="LyricsSourceInternetComboItem.Content" xml:space="preserve">
+    <value>网络歌词</value>
+  </data>
+  <data name="LyricsSourceLrcFileComboItem.Content" xml:space="preserve">
+    <value>Lrc文件歌词</value>
+  </data>
+  <data name="LyricsSourceMusicFileComboBoxItem.Content" xml:space="preserve">
+    <value>音乐文件歌词</value>
+  </data>
+  <data name="NotificationLyricsSourceComboBoxTextBlock.Text" xml:space="preserve">
+    <value>通知中的默认音乐歌词来源：</value>
+  </data>
 </root>

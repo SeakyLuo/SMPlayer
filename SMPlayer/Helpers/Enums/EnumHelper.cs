@@ -55,5 +55,10 @@ namespace SMPlayer.Helpers
         {
             return Enum.GetValues(enumType).OfType<Enum>().OrderBy(i => i.GetOrder()).ToList();
         }
+
+        public static List<T> Values<T>(Type enumType) where T : Enum
+        {
+            return Enum.GetValues(enumType).OfType<T>().ToList();
+        }
     }
 }
