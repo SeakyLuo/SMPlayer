@@ -2,6 +2,7 @@
 using SMPlayer.Interfaces;
 using SMPlayer.Models;
 using SMPlayer.Services;
+using SQLitePCL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,11 +70,22 @@ namespace SMPlayer.Controls
             SaveProgress.Visibility = Visibility.Visible;
             IsProcessing = true;
             CurrentMusic = music;
-            SetBasicProperties(await music.GetStorageFileAsync());
-            SetMusicProperties(Properties = await music.GetMusicPropertiesAsync());
-            IsProcessing = false;
-            SaveProgress.Visibility = Visibility.Collapsed;
+            try
+            {
+                SetBasicProperties(await music.GetStorageFileAsync());
+                SetMusicProperties(Properties = await music.GetMusicPropertiesAsync());
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"SetMusicInfo failed {e}");
+            }
+            finally
+            {
+                IsProcessing = false;
+                SaveProgress.Visibility = Visibility.Collapsed;
+            }
         }
+
         private void ClearPlayCountButton_Click(object sender, RoutedEventArgs e)
         {
             Music oldMusic = CurrentMusic.Copy();
@@ -122,6 +134,7 @@ namespace SMPlayer.Controls
             {
                 if (IsPropertiesModified)
                 {
+                    SetControlEnability(false);
                     SaveProgress.Visibility = Visibility.Visible;
                     var newMusic = CurrentMusic.Copy();
                     Properties.Title = newMusic.Name = TitleTextBox.Text;
@@ -139,18 +152,29 @@ namespace SMPlayer.Controls
                     await Properties.SavePropertiesAsync();
                     MusicService.MusicModified(CurrentMusic, newMusic);
                     CurrentMusic.CopyFrom(newMusic);
-                    SaveProgress.Visibility = Visibility.Collapsed;
                 }
+                Helper.ShowNotification("PropertiesUpdated");
             }
             catch (Exception ex)
             {
                 Log.Warn($"SaveMusicPropertiesButton_Click failed {ex}");
+                Helper.ShowNotificationRaw(Helper.LocalizeMessage("UpdateFailed", ex.Message), 5000);
             }
             finally
             {
+                SetControlEnability(true);
+                SaveProgress.Visibility = Visibility.Collapsed;
                 IsProcessing = false;
-                Helper.ShowNotification("PropertiesUpdated");
             }
+        }
+
+        private void SetControlEnability(bool isEnabled)
+        {
+            SaveMusicPropertiesButton.IsEnabled = ResetMusicPropertiesButton.IsEnabled 
+                = TitleTextBox.IsEnabled = SubtitleTextBox.IsEnabled = ArtistTextBox.IsEnabled
+                = AlbumTextBox.IsEnabled = AlbumArtistTextBox.IsEnabled
+                = PublisherTextBox.IsEnabled
+                = isEnabled;
         }
 
         private void ShowInExplorerButton_Click(object sender, RoutedEventArgs e)

@@ -85,14 +85,7 @@ namespace SMPlayer.Services
             });
             if (isNew && Settings.settings.AutoLyrics) // 默认上面那种情况有了
             {
-                await Task.Run(async () =>
-                {
-                    string lyrics = await music.GetLyricsAsync();
-                    if (string.IsNullOrEmpty(lyrics))
-                    {
-                        await music.SaveLyricsAsync(await LyricsHelper.SearchLyrics(music));
-                    }
-                });
+                await Task.Run(async () => await music.FindLyricsIfEmpty());
             }
             foreach (var listener in MusicEventListeners)
             {

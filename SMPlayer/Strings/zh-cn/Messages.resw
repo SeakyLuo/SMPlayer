@@ -378,6 +378,9 @@
   <data name="OpenSettingsFailed" xml:space="preserve">
     <value>无法打开系统设置</value>
   </data>
+  <data name="OperationFailed" xml:space="preserve">
+    <value>操作失败：{0}</value>
+  </data>
   <data name="PathNotFound" xml:space="preserve">
     <value>路径{0}不存在！</value>
   </data>
@@ -615,6 +618,9 @@
   <data name="UpdateDBMsgUpdatingDatabase" xml:space="preserve">
     <value>正在更新数据库，请勿退出</value>
   </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>更新失败：{0}</value>
+  </data>
   <data name="UpdateFinished" xml:space="preserve">
     <value>数据更新完成！</value>
   </data>
@@ -635,6 +641,9 @@
   </data>
   <data name="VoiceAssistantNoSearchResults" xml:space="preserve">
     <value>不好意思，找不到“{0}”相关的结果</value>
+  </data>
+  <data name="VoiceAssistantSetLanguageFailed" xml:space="preserve">
+    <value>无法设置语言</value>
   </data>
   <data name="VoiceAssitantError" xml:space="preserve">
     <value>不好意思，出现了一些问题。</value>

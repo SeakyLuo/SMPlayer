@@ -137,6 +137,15 @@ namespace SMPlayer.Models
             }
         }
 
+        public async Task<bool> FindLyricsIfEmpty()
+        {
+            if (string.IsNullOrEmpty(await GetLyricsAsync()))
+            {
+                return await SaveLyricsAsync(await LyricsHelper.SearchLyrics(this));
+            }
+            return true;
+        }
+
         public async Task<bool> SaveLyricsAsync(string lyrics)
         {
             var music = await GetStorageFileAsync();

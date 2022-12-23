@@ -38,6 +38,7 @@ namespace SMPlayer.Models.VO
                 OnPropertyChanged("Info");
                 OnPropertyChanged("PlayButtonToolTip");
                 OnPropertyChanged("Artist");
+                OnPropertyChanged("Album");
             }
         }
         private MusicView source;

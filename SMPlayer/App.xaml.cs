@@ -218,7 +218,7 @@ namespace SMPlayer
             }
             if (args.PreviousExecutionState == ApplicationExecutionState.Running)
             {
-                MusicPlayer.AddMusicAndPlay(music);
+                MusicPlayer.AddMusicAndPlay(music, MusicPlayer.CurrentIndex + 1);
             }
             else
             {

@@ -44,10 +44,10 @@ namespace SMPlayer.Controls
                 return;
             }
             SaveProgress.Visibility = Visibility.Visible;
-            LyricsTextBox.IsEnabled = false;
+            SetControlEnablility(false);
             LyricsTextBox.Text = Lyrics;
             SaveProgress.Visibility = Visibility.Collapsed;
-            LyricsTextBox.IsEnabled = true;
+            SetControlEnablility(true);
             Helper.ShowNotification("LyricsReset");
         }
 
@@ -64,21 +64,31 @@ namespace SMPlayer.Controls
                 return;
             }
             IsProcessing = true;
-            string lyrics = LyricsTextBox.Text;
-            if (Lyrics != lyrics)
+            try
             {
-                SaveProgress.Visibility = Visibility.Visible;
-                LyricsTextBox.IsEnabled = false;
-                await Task.Run(async () =>
+                string lyrics = LyricsTextBox.Text;
+                if (Lyrics != lyrics)
                 {
-                    await CurrentMusic.SaveLyricsAsync(lyrics);
-                    Lyrics = lyrics;
-                });
-                SaveProgress.Visibility = Visibility.Collapsed;
-                LyricsTextBox.IsEnabled = true;
+                    SaveProgress.Visibility = Visibility.Visible;
+                    SetControlEnablility(false);
+                    await Task.Run(async () =>
+                    {
+                        await CurrentMusic.SaveLyricsAsync(lyrics);
+                        Lyrics = lyrics;
+                    });
+                }
+                Helper.ShowNotificationRaw(Helper.LocalizeMessage("LyricsUpdated", CurrentMusic.Name));
             }
-            IsProcessing = false;
-            Helper.ShowNotificationRaw(Helper.LocalizeMessage("LyricsUpdated", CurrentMusic.Name));
+            catch (Exception ex)
+            {
+                Helper.ShowNotificationRaw(Helper.LocalizeMessage("UpdateFailed", ex.Message), 5000);
+            }
+            finally
+            {
+                SaveProgress.Visibility = Visibility.Collapsed;
+                SetControlEnablility(true);
+                IsProcessing = false;
+            }
         }
         private async void SearchLyricsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -88,7 +98,7 @@ namespace SMPlayer.Controls
                 return;
             }
             SaveProgress.Visibility = Visibility.Visible;
-            LyricsTextBox.IsEnabled = false;
+            SetControlEnablility(false);
             string notification = "";
             try
             {
@@ -110,9 +120,17 @@ namespace SMPlayer.Controls
                 Log.Warn($"search lryics failed {ex}");
                 notification = await OpenBrowser(CurrentMusic);
             }
-            LyricsTextBox.IsEnabled = true;
+            SetControlEnablility(true);
             SaveProgress.Visibility = Visibility.Collapsed;
             Helper.ShowNotification(notification);
+        }
+
+        private void SetControlEnablility(bool isEnabled)
+        {
+            LyricsTextBox.IsEnabled 
+                = SearchLyricsButton.IsEnabled = ImportLyricsButton.IsEnabled 
+                = SaveLyricsButton.IsEnabled = ResetLyricsButton.IsEnabled
+                = isEnabled;
         }
 
         private async Task<string> OpenBrowser(Music music)
@@ -134,8 +152,9 @@ namespace SMPlayer.Controls
                 var lyrics = await music.GetLyricsAsync();
                 LyricsTextBox.Text = string.IsNullOrEmpty(lyrics) ? "" : lyrics;
             }
-            catch (IOException)
+            catch (IOException e)
             {
+                Log.Warn($"GetLyrics Failed {e}");
                 Helper.ShowNotification("GetLyricsFailed");
             }
             Lyrics = LyricsTextBox.Text;
@@ -155,6 +174,7 @@ namespace SMPlayer.Controls
             if (file == null) return;
             IsProcessing = true;
             SaveProgress.Visibility = Visibility.Visible;
+            SetControlEnablility(false);
             string lyrics;
             try
             {
@@ -167,6 +187,7 @@ namespace SMPlayer.Controls
                 Helper.ShowNotification("ImportLyricsFailed");
             }
             SaveProgress.Visibility = Visibility.Collapsed;
+            SetControlEnablility(true);
             IsProcessing = false;
         }
 

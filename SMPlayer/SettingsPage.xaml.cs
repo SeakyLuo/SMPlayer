@@ -113,37 +113,13 @@ namespace SMPlayer
                 MainPage.Instance.Loader.ShowIndeterminant("StopAddingLyrics");
                 return;
             }
-            string paren = Helper.LocalizeMessage("PostParenthesis");
-            HyperlinkButton button = (HyperlinkButton)sender;
-            List<Music> skipped = new List<Music>();
-            int count = MusicService.AllSongs.Count(), counter = 0;
-            foreach (Music music in MusicService.AllSongs)
+            try
             {
-                if (addLyricsClickCounter == 0)
-                {
-                    Helper.ShowNotification("AddingLyricsStopped");
-                    MainPage.Instance.Loader.Hide();
-                    goto Done;
-                }
-                string lyrics = await music.GetLyricsAsync();
-                if (string.IsNullOrEmpty(lyrics))
-                {
-                    if (music == MusicPlayer.CurrentMusic)
-                    {
-                        skipped.Add(music);
-                        continue;
-                    }
-                    await Task.Run(async () =>
-                    {
-                        lyrics = await LyricsHelper.SearchLyrics(music);
-                        await music.SaveLyricsAsync(lyrics);
-                    });
-                }
-                button.Content = string.Format(paren, addLyricsContent, ++counter + "/" + count);
-            }
-            while (skipped.Count > 0)
-            {
-                foreach (Music music in skipped.ToList())
+                string paren = Helper.LocalizeMessage("PostParenthesis");
+                HyperlinkButton button = (HyperlinkButton)sender;
+                List<Music> skipped = new List<Music>();
+                int count = MusicService.AllSongs.Count(), counter = 0;
+                foreach (Music music in MusicService.AllSongs)
                 {
                     if (addLyricsClickCounter == 0)
                     {
@@ -151,20 +127,47 @@ namespace SMPlayer
                         MainPage.Instance.Loader.Hide();
                         goto Done;
                     }
-                    if (music == MusicPlayer.CurrentMusic && skipped.Count > 1) continue;
-                    await Task.Run(async () =>
+                    string lyrics = await music.GetLyricsAsync();
+                    if (string.IsNullOrEmpty(lyrics))
                     {
-                        string lyrics = await LyricsHelper.SearchLyrics(music);
-                        await music.SaveLyricsAsync(lyrics);
-                    });
-                    skipped.Remove(music);
+                        if (music == MusicPlayer.CurrentMusic)
+                        {
+                            skipped.Add(music);
+                            continue;
+                        }
+                        await Task.Run(async () => await music.FindLyricsIfEmpty());
+                    }
                     button.Content = string.Format(paren, addLyricsContent, ++counter + "/" + count);
                 }
-            }
-            Helper.ShowNotification("SearchLyricsDone");
+                while (skipped.Count > 0)
+                {
+                    foreach (Music music in skipped.ToList())
+                    {
+                        if (addLyricsClickCounter == 0)
+                        {
+                            Helper.ShowNotification("AddingLyricsStopped");
+                            MainPage.Instance.Loader.Hide();
+                            goto Done;
+                        }
+                        if (music == MusicPlayer.CurrentMusic && skipped.Count > 1) continue;
+                        await Task.Run(async () => await music.FindLyricsIfEmpty());
+                        skipped.Remove(music);
+                        button.Content = string.Format(paren, addLyricsContent, ++counter + "/" + count);
+                    }
+                }
             Done:
-            button.Content = addLyricsContent;
-            addLyricsClickCounter = 0;
+                button.Content = addLyricsContent;
+                Helper.ShowNotification("SearchLyricsDone");
+            }
+            catch (Exception ex)
+            {
+                Log.Warn($"AddLyrics_Click failed {ex}");
+                Helper.ShowNotificationRaw(Helper.LocalizeMessage("OperationFailed", ex.Message), 5000);
+            }
+            finally
+            {
+                addLyricsClickCounter = 0;
+            }
         }
 
         private async void Reauthorize_Click(object sender, RoutedEventArgs e)
@@ -356,11 +359,15 @@ namespace SMPlayer
             await voiceAssistantHelpDialog.ShowAsync();
         }
 
-        private void VoiceAssistantLanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void VoiceAssistantLanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             VoiceAssistantLanguage language = VoiceAssistantPreferredLanguanges[(sender as ComboBox).SelectedIndex];
             Settings.settings.VoiceAssistantPreferredLanguage = language;
-            VoiceAssistantHelper.SetLanguage(language);
+
+            if (!await VoiceAssistantHelper.SetLanguage(language))
+            {
+                Helper.ShowNotification("VoiceAssistantSetLanguageFailed");
+            }
         }
 
         private void PreferenceSettingsButton_Click(object sender, RoutedEventArgs e)

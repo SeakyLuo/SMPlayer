@@ -73,11 +73,15 @@ namespace SMPlayer.Controls
                 Helper.ShowNotification("ProcessingRequest");
                 return;
             }
+            if (sourcePics == null)
+            {
+                return;
+            }
             IsProcessing = true;
             SaveProgress.Visibility = Visibility.Visible;
-            if (sourcePics != null)
+            SetButtonEnability(false);
+            try
             {
-                SetButtonEnability(false);
                 BitmapImage image = await BytesToBitmapImage(sourcePics[0].Data.ToArray());
                 if (CurrentMusic == null)
                 {
@@ -98,17 +102,23 @@ namespace SMPlayer.Controls
                     foreach (var listener in ImageSavedListeners)
                         listener.SaveMusic(CurrentMusic, image);
                 }
-                SetButtonEnability(true);
+                Helper.ShowNotification("AlbumArtSaved");
             }
-            Helper.ShowNotification("AlbumArtSaved");
-            SaveProgress.Visibility = Visibility.Collapsed;
-            IsProcessing = false;
+            catch (Exception ex)
+            {
+                Helper.ShowNotificationRaw(Helper.LocalizeMessage("UpdateFailed", ex.Message), 5000);
+            }
+            finally
+            {
+                SetButtonEnability(true);
+                SaveProgress.Visibility = Visibility.Collapsed;
+                IsProcessing = false;
+            }
         }
 
         private void SetButtonEnability(bool isEnabled)
         {
             ChangeAlbumArtButton.IsEnabled = SaveAlbumArtButton.IsEnabled = DeleteAlbumArtButton.IsEnabled = isEnabled;
-
         }
 
         private async Task SaveAlbumArt(MusicView music, IPicture[] source)
@@ -127,10 +137,11 @@ namespace SMPlayer.Controls
                 Helper.ShowNotification("ProcessingRequest");
                 return;
             }
+            IsProcessing = true;
+            SaveProgress.Visibility = Visibility.Visible;
+            SetButtonEnability(false);
             try
             {
-                IsProcessing = true;
-                SaveProgress.Visibility = Visibility.Visible;
                 FileOpenPicker picker = new FileOpenPicker
                 {
                     SuggestedStartLocation = PickerLocationId.PicturesLibrary
@@ -165,10 +176,11 @@ namespace SMPlayer.Controls
             }
             catch (Exception exception)
             {
-                System.Diagnostics.Debug.WriteLine("Error in AlbumArtControl: " + exception);
+                Log.Warn($"ChangeAlbumArtButton_Click Failed {exception}");
                 Helper.ShowNotification("Error");
             }
         Finally:
+            SetButtonEnability(false);
             SaveProgress.Visibility = Visibility.Collapsed;
             IsProcessing = false;
         }
@@ -196,22 +208,34 @@ namespace SMPlayer.Controls
                 return;
             }
             IsProcessing = true;
-            if (CurrentMusic == null)
+            SetButtonEnability(false);
+            try
             {
-                foreach (var music in CurrentAlbum.Songs)
-                    await SaveAlbumArt(music, null);
-                foreach (var listener in ImageSavedListeners)
-                    listener.SaveAlbum(CurrentAlbum, null);
+                if (CurrentMusic == null)
+                {
+                    foreach (var music in CurrentAlbum.Songs)
+                        await SaveAlbumArt(music, null);
+                    foreach (var listener in ImageSavedListeners)
+                        listener.SaveAlbum(CurrentAlbum, null);
+                }
+                else
+                {
+                    await SaveAlbumArt(CurrentMusic, null);
+                    foreach (var listener in ImageSavedListeners)
+                        listener.SaveMusic(CurrentMusic, null);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await SaveAlbumArt(CurrentMusic, null);
-                foreach (var listener in ImageSavedListeners)
-                    listener.SaveMusic(CurrentMusic, null);
+                Log.Warn($"ConfirmButton_Click failed {ex}");
+                Helper.ShowNotificationRaw(Helper.LocalizeMessage("UpdateFailed", ex.Message), 5000);
             }
-            AlbumArt.Visibility = Visibility.Collapsed;
-            RemoveAlbumArtWarningPanel.Visibility = Visibility.Collapsed;
-            IsProcessing = false;
+            finally
+            {
+                AlbumArt.Visibility = Visibility.Collapsed;
+                RemoveAlbumArtWarningPanel.Visibility = Visibility.Collapsed;
+                IsProcessing = false;
+            }
         }
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {

@@ -219,6 +219,12 @@ namespace SMPlayer
             return index;
         }
 
+        public static void AddMusicAndPlay(IMusicable source, int index)
+        {
+            MoveToMusic(AddMusic(source, index));
+            Play();
+        }
+
         public static void AddMusicAndPlay(IMusicable source)
         {
             MoveToMusic(AddMusic(source));

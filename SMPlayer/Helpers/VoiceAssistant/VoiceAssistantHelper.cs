@@ -65,36 +65,43 @@ namespace SMPlayer.Helpers
             return Helper.LocalizeText(Hint_QuickPlay);
         }
 
-        public static void Init()
+        public static async void Init()
         {
-            SetLanguage(Settings.settings.VoiceAssistantPreferredLanguage);
+            await SetLanguage(Settings.settings.VoiceAssistantPreferredLanguage);
             //https://www.cnblogs.com/Aran-Wang/p/4816313.html
             //StorageFile commandSet = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///VoiceAssistantCommandSet.xml"));
             //await VoiceCommandDefinitionManager.InstallCommandDefinitionsFromStorageFileAsync(commandSet);
         }
 
-        public static async void SetLanguage(VoiceAssistantLanguage language)
+        public static async Task<bool> SetLanguage(VoiceAssistantLanguage language)
         {
-            Recognizer = new SpeechRecognizer(ConvertLanguage(language));
-            Recognizer.StateChanged += (sender, args) =>
+            try
             {
-                Log.Info("state: " + args.State);
-                VoiceAssistantEventArgs a = new VoiceAssistantEventArgs { State = args.State };
-                foreach (var listener in StateChangedListeners)
+                Recognizer = new SpeechRecognizer(ConvertLanguage(language));
+                Recognizer.UIOptions.IsReadBackEnabled = false;
+                Recognizer.StateChanged += (sender, args) =>
                 {
-                    try
+                    Log.Info("state: " + args.State);
+                    VoiceAssistantEventArgs a = new VoiceAssistantEventArgs { State = args.State };
+                    foreach (var listener in StateChangedListeners)
                     {
-                        listener.Invoke(sender, a);
+                        try
+                        {
+                            listener.Invoke(sender, a);
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Warn($"SetLanguage invoide StateChangedListeners failed {e}");
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        Log.Warn($"SetLanguage invoide StateChangedListeners failed {e}");
-                    }
-                }
-            };
-            Recognizer.UIOptions.IsReadBackEnabled = false;
-            await Recognizer.CompileConstraintsAsync();
-
+                };
+                await Recognizer.CompileConstraintsAsync();
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"set languange failed {e}");
+                return false;
+            }
             switch (language)
             {
                 case VoiceAssistantLanguage.Chinese:
@@ -104,6 +111,7 @@ namespace SMPlayer.Helpers
                     CommandHandler = new VoiceAssistantEnglishHelper();
                     break;
             }
+            return true;
         }
 
         private static Language ConvertLanguage(VoiceAssistantLanguage language)
