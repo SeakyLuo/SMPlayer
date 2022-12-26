@@ -52,10 +52,10 @@ namespace SMPlayer.Helpers
                         lyrics = await currentMusic.GetLrcLyricsAsync();
                         break;
                     default:
-                        lyrics = await LyricsHelper.SearchLyrics(currentMusic);
+                        lyrics = await LyricsHelper.SearchLrcLyrics(currentMusic);
                         break;
                 }
-                LyricsHelper.SetLyrics(currentMusic, lyrics);
+                LyricsHelper.SetLyrics(currentMusic, lyrics, source);
             }
             await ShowToast(currentMusic, MusicPlayer.PlaybackState, source);
         }
@@ -111,7 +111,7 @@ namespace SMPlayer.Helpers
             var data = new NotificationData { SequenceNumber = 0 };
             data.Values["MediaControlPosition"] = MusicPlayer.Progress.ToString();
             data.Values["MediaControlPositionTime"] = MusicDurationConverter.ToTime(MusicPlayer.Position);
-            data.Values["Lyrics"] = Settings.settings.ShowLyricsInNotification ? LyricsHelper.GetLyrics() : "";
+            data.Values["Lyrics"] = Settings.settings.ShowLyricsInNotification ? LyricsHelper.GetCurrentLyricsLine() : "";
 
             // Update the existing notification's data by using tag/group
             Notifier.Update(data, ToastTagPaused, ToastGroup);
@@ -132,7 +132,7 @@ namespace SMPlayer.Helpers
                 try
                 {
                     Notifier.Hide(e.Value);
-                    Log.Info($"hide toast, music: {e.Key.Music.Name}, state: {e.Key.State}");
+                    Log.Debug($"hide toast, music: {e.Key.Music.Name}, state: {e.Key.State}");
                 }
                 catch (Exception)
                 {
@@ -165,31 +165,27 @@ namespace SMPlayer.Helpers
             custom.Buttons.Add(BuildToastButton(ToastButtonEnum.Next));
             if (Settings.settings.ShowLyricsInNotification)
             {
-                switch (lyricsSource)
+                foreach (LyricsSource ls in EnumHelper.Values<LyricsSource>(typeof(LyricsSource)).OrderBy(i => i == lyricsSource))
                 {
-                    case LyricsSource.Internet:
-                        if (await MusicService.HasLrcLyrics(music))
-                        {
-                            custom.Buttons.Add(BuildToastButton(ToastButtonEnum.SwitchLyricsSourceToLrcFile));
-                        }
-                        else if (await MusicService.HasLyrics(music))
-                        {
-                            custom.Buttons.Add(BuildToastButton(ToastButtonEnum.SwitchLyricsSourceToMusic));
-                        }
+                    LyricsSource currentLyricsSource = LyricsHelper.Source;
+                    if (currentLyricsSource != LyricsSource.LrcFile && await MusicService.HasLrcLyrics(music))
+                    {
+                        Log.Debug($"display {lyricsSource} current {currentLyricsSource} button LyricsSource.LrcFile");
+                        custom.Buttons.Add(BuildToastButton(ToastButtonEnum.SwitchLyricsSourceToLrcFile));
                         break;
-                    case LyricsSource.LrcFile:
-                        if (await MusicService.HasLyrics(music))
-                        {
-                            custom.Buttons.Add(BuildToastButton(ToastButtonEnum.SwitchLyricsSourceToMusic));
-                        }
-                        else
-                        {
-                            custom.Buttons.Add(BuildToastButton(ToastButtonEnum.SwitchLyricsSourceToInternet));
-                        }
+                    }
+                    else if (currentLyricsSource != LyricsSource.Music && await MusicService.HasLyrics(music))
+                    {
+                        Log.Debug($"display {lyricsSource} current {currentLyricsSource} button LyricsSource.Music");
+                        custom.Buttons.Add(BuildToastButton(ToastButtonEnum.SwitchLyricsSourceToMusic));
                         break;
-                    case LyricsSource.Music:
+                    }
+                    else if (currentLyricsSource != LyricsSource.Internet)
+                    {
+                        Log.Debug($"display {lyricsSource} current {currentLyricsSource} button LyricsSource.Internet");
                         custom.Buttons.Add(BuildToastButton(ToastButtonEnum.SwitchLyricsSourceToInternet));
                         break;
+                    }
                 }
             }
             var toastContent = new ToastContent()
@@ -245,7 +241,7 @@ namespace SMPlayer.Helpers
             if (Settings.settings.ShowLyricsInNotification)
             {
                 await LyricsHelper.SetLyrics();
-                toast.Data.Values["Lyrics"] = LyricsHelper.GetLyrics();
+                toast.Data.Values["Lyrics"] = LyricsHelper.GetCurrentLyricsLine();
             }
             if (display == NotificationDisplayMode.Quick)
             {

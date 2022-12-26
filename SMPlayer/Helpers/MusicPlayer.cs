@@ -36,6 +36,45 @@ namespace SMPlayer
                 return music == null ? 0d : Position / music.Duration;
             }
         }
+        public static PlayMode PlayMode
+        {
+            get
+            {
+                if (Player.IsLoopingEnabled)
+                {
+                    return PlayMode.RepeatOne;
+                }
+                if (!PlaybackList.AutoRepeatEnabled)
+                {
+                    return PlayMode.Once;
+                }
+                return ShuffleEnabled ? PlayMode.Shuffle : PlayMode.Repeat;
+            }
+            set
+            {
+                switch (value)
+                {
+                    case PlayMode.Once:
+                        Player.IsLoopingEnabled = false;
+                        PlaybackList.AutoRepeatEnabled = false;
+                        break;
+                    case PlayMode.Repeat:
+                        Player.IsLoopingEnabled = false;
+                        PlaybackList.AutoRepeatEnabled = true;
+                        break;
+                    case PlayMode.RepeatOne:
+                        Player.IsLoopingEnabled = true;
+                        PlaybackList.AutoRepeatEnabled = false;
+                        break;
+                    case PlayMode.Shuffle:
+                        Player.IsLoopingEnabled = false;
+                        PlaybackList.AutoRepeatEnabled = true;
+                        break;
+                }
+                Settings.settings.Mode = value;
+                ShuffleEnabled = value == PlayMode.Shuffle;
+            }
+        }
         public static MediaPlaybackState PlaybackState => Player.PlaybackSession.PlaybackState;
         public static bool IsPlaying => PlaybackState == MediaPlaybackState.Playing;
         public static Playlist NowPlaying => new Playlist(MenuFlyoutHelper.NowPlaying, CurrentPlaylist);
@@ -88,7 +127,7 @@ namespace SMPlayer
             Player.Volume = settings.Volume;
             // 如果非文件启动，并保存播放进度且有音乐
             if (music == null && settings.SaveMusicProgress && CurrentPlaylist.IsNotEmpty()) Position = settings.MusicProgress;
-            SetMode(settings.Mode);
+            PlayMode = settings.Mode;
 
             PlaybackList.CurrentItemChanged += (sender, args) =>
             {
@@ -183,31 +222,6 @@ namespace SMPlayer
             {
                 // 参数错误。未提供用于复制媒体元数据的 StorageFile。
             }
-        }
-
-        public static void SetMode(PlayMode mode)
-        {
-            switch (mode)
-            {
-                case PlayMode.Once:
-                    Player.IsLoopingEnabled = false;
-                    PlaybackList.AutoRepeatEnabled = false;
-                    break;
-                case PlayMode.Repeat:
-                    Player.IsLoopingEnabled = false;
-                    PlaybackList.AutoRepeatEnabled = true;
-                    break;
-                case PlayMode.RepeatOne:
-                    Player.IsLoopingEnabled = true;
-                    PlaybackList.AutoRepeatEnabled = false;
-                    break;
-                case PlayMode.Shuffle:
-                    Player.IsLoopingEnabled = false;
-                    PlaybackList.AutoRepeatEnabled = true;
-                    break;
-            }
-            Settings.settings.Mode = mode;
-            ShuffleEnabled = mode == PlayMode.Shuffle;
         }
 
         public static int AddMusic(IMusicable source, int index)
@@ -404,7 +418,7 @@ namespace SMPlayer
                 catch (Exception e)
                 {
                     // 无效索引
-                    Log.Warn("MovePrevious Exception {0}", e);
+                    Log.Warn($"MovePrevious Exception {e}");
                 }
             }
         }

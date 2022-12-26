@@ -355,5 +355,29 @@ namespace SMPlayer.Services
             return SQLHelper.Run(c => c.Query<FolderDAO>("select * from Folder where Id != ? and ParentId = 0 and State = ?", Settings.settings.Tree.Id, ActiveState.Active))
                             .Select(i => i.FromDAO()).ToList();
         }
+
+        public static List<FolderTree> FindHiddenFolders()
+        {
+            return SQLHelper.Run(c => c.Query<FolderDAO>("select f.* from Folder f where State = ?)", ActiveState.Hidden)
+                                       .Select(i => i.FromDAO()).ToList());
+        }
+
+        public static void HideFolder(FolderTree folder)
+        {
+            folder.State = ActiveState.Hidden;
+            SQLHelper.Run(c =>
+            {
+                c.Update(folder.ToDAO());
+                List<FolderFile> subFiles = c.SelectSubFiles(folder);
+                c.SelectMusicByIds(c.SelectSubFiles(folder).Select(i => i.FileId)).ToList();
+            });
+        }
+
+        public static void ResumeFolder(FolderTree folder)
+        {
+            folder.State = ActiveState.Active;
+            UpdateFolder(folder);
+
+        }
     }
 }

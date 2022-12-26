@@ -8,7 +8,7 @@ namespace SMPlayer.Models
 {
     public enum ActiveState
     {
-        Inactive = 0, Active = 1,
+        Inactive = 0, Active = 1, Hidden = -1, ParentHidden = -2
     }
 
     public static class ActiveStateExtensions

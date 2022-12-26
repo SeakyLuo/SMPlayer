@@ -459,6 +459,21 @@ namespace SMPlayer
             };
             return item;
         }
+        public static MenuFlyoutItem GetHideFolderItem(FolderTree tree, IMenuFlyoutItemClickListener clickListener = null)
+        {
+            var item = new MenuFlyoutItem()
+            {
+                Icon = new SymbolIcon(Symbol.Find),
+                Text = Helper.LocalizeText("HideFolder")
+            };
+            item.SetToolTip("HideFolderToolTip");
+            item.Click += (s, args) =>
+            {
+                StorageService.HideFolder(tree);
+                clickListener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.HideFolder));
+            };
+            return item;
+        }
         public MenuFlyout GetMusicMenuFlyout(IMenuFlyoutItemClickListener listener = null, MenuFlyoutOption option = null)
         {
             if (option == null) option = new MenuFlyoutOption();
@@ -871,6 +886,7 @@ namespace SMPlayer
                                                 async newName => await StorageService.RenameFolder(folder, newName)));
             flyout.Items.Add(GetFolderSortByMenu(folder, clickListener));
             flyout.Items.Add(GetSearchDirectoryItem(folder, clickListener));
+            flyout.Items.Add(GetHideFolderItem(folder, clickListener));
             return flyout;
         }
 
@@ -1060,7 +1076,8 @@ namespace SMPlayer
     public enum MenuFlyoutEvent
     {
         AddTo, Favorite, Delete, Remove, Select, MoveToFolder,
-        Sort, Shuffle, Prefer, UndoPrefer, ShowInExplorer, SearchDirectory
+        Sort, Shuffle, Prefer, UndoPrefer, ShowInExplorer, SearchDirectory,
+        HideFolder
     }
 
     public class MenuFlyoutEventArgs

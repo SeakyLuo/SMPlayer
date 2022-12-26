@@ -276,8 +276,7 @@ namespace SMPlayer.Services
             }
             catch (Exception e)
             {
-                PutLrcLyricsCache(music, null);
-                return await LyricsHelper.SearchLrcLyrics(music);
+                return "";
             }
         }
 

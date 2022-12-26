@@ -1432,4 +1432,10 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="NotificationLyricsSourceComboBoxTextBlock.Text" xml:space="preserve">
     <value>Default lyrics source of notifications: </value>
   </data>
+  <data name="HiddenFoldersListButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>See all hidden folders</value>
+  </data>
+  <data name="HiddenFolderIntroductionTextBlock.Text" xml:space="preserve">
+    <value>Below are the hidden folders, whose sub folders and files will not be displayed and scanned.</value>
+  </data>
 </root>

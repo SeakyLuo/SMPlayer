@@ -7,8 +7,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Data.Json;
+using Windows.UI.Xaml.Media;
 
 namespace SMPlayer.Helpers
 {
@@ -22,9 +24,19 @@ namespace SMPlayer.Helpers
 
         private static string DisplayLine = "";
 
-        private static string[] LyricsList;
+        private static List<string> LyricsList;
+        public static LyricsSource Source { get; private set; }
 
         private static bool IsLrc = false;
+        private static long LyricOffset = 0; // millseconds
+        private static readonly string QQMusicSearchUrl = "https://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg?cv=4747474&ct=24&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=1&g_tk_new_20200303=1383304704&g_tk=1383304704&hostUin=0&is_xml=0&key={0}";
+
+        private static readonly Regex TiRegex = new Regex("\\[ti:(.*)\\]"),
+            ArRegex = new Regex("\\[ar:(.*)\\]"),
+            AlRegex = new Regex("\\[al:(.*)\\]"),
+            ByRegex = new Regex("\\[by:(.*)\\]"),
+            OffsetRegex = new Regex("\\[offset:(.*)\\]"),
+            TimeRegex = new Regex("\\[(.+):(.+)\\.(.+)\\].+");
 
         public static void ClearLyrics()
         {
@@ -59,34 +71,117 @@ namespace SMPlayer.Helpers
             if (music == null)
             {
                 ClearLyrics();
+                return;
             }
-            else
+            string lyrics = await music.GetLrcLyricsAsync();
+            if (string.IsNullOrEmpty(lyrics))
             {
-                string lyrics = await music.GetLrcLyricsAsync();
+                lyrics = await SearchLrcLyrics(music);
                 if (string.IsNullOrEmpty(lyrics))
                 {
                     lyrics = await music.GetLyricsAsync();
-                    SetLyrics(music, lyrics);
-                    IsLrc = LyricsList != null && LyricsList.Take(4).All(l => l.StartsWith("["));
+                    Source = LyricsSource.Music;
                 }
                 else
                 {
-                    SetLyrics(music, lyrics);
-                    IsLrc = true;
+                    Source = LyricsSource.Internet;
                 }
             }
+            else
+            {
+                Source = LyricsSource.LrcFile;
+            }
+            SetLyrics(music, lyrics, Source);
         }
 
-        public static void SetLyrics(Music music, string lyrics)
+        public static void SetLyrics(Music music, string lyrics, LyricsSource source)
         {
             CurrentMusic = music;
             CurrentLyrics = lyrics;
             CurrentLine = null;
             DisplayLine = "";
-            LyricsList = lyrics?.Split('\n', '\r');
+            Source = source;
+            LyricsList = GenLyricsList(lyrics);
+            IsLrc = LyricsList != null && LyricsList.Take(4).All(l => l.StartsWith("["));
         }
 
-        public static string GetLyrics()
+        // 改写，方便展示
+        private static List<string> GenLyricsList(string lyrics)
+        {
+            if (string.IsNullOrWhiteSpace(lyrics)) return new List<string>();
+            var lines = lyrics.Split('\n', '\r').Where(i => !string.IsNullOrWhiteSpace(i)).ToList();
+            if (lines.IsEmpty()) return new List<string>();
+            try
+            {
+                if (GetFromRegex(TiRegex, lines[0]) is string title)
+                {
+                    lines[0] = $"[00:00.00]{title}";
+
+                    string artist = GetFromRegex(ArRegex, lines[1]);
+                    string album = GetFromRegex(AlRegex, lines[2]);
+                    string by = GetFromRegex(ByRegex, lines[3]);
+                    long.TryParse(GetFromRegex(OffsetRegex, lines[4]), out LyricOffset);
+                    long tagTime = (GetMillisecondsOfLine(lines[5]) + LyricOffset) / 4;
+
+                    if (!string.IsNullOrEmpty(artist))
+                    {
+                        lines[1] = $"[{MillisecondsToString(tagTime)}]{Helper.LocalizeText("LrcLyricsAr")}{artist}";
+                    }
+                    if (!string.IsNullOrEmpty(album))
+                    {
+                        lines[2] = $"[{MillisecondsToString(tagTime * 2)}]{Helper.LocalizeText("LrcLyricsAl")}{album}";
+                    }
+                    if (!string.IsNullOrEmpty(by))
+                    {
+                        lines[3] = $"[{MillisecondsToString(tagTime * 3)}]{Helper.LocalizeText("LrcLyricsBy")}{by}";
+                    }
+                }
+                else
+                {
+                    LyricOffset = 0;
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"GenLyricsList failed {e}");
+                LyricOffset = 0;
+            }
+            return lines;
+        }
+
+        private static long GetMillisecondsOfLine(string line)
+        {
+            MatchCollection matchCollection = TimeRegex.Matches(line);
+            GroupCollection groups = matchCollection[0].Groups;
+            return long.Parse(groups[1].Value) * 60000 + long.Parse(groups[2].Value) * 1000 + long.Parse(groups[3].Value);
+        }
+
+        private static string MillisecondsToString(long time)
+        {
+            long ms = time % 1000;
+            long seconds = time / 1000;
+            long minutes = seconds / 60;
+            return $"{minutes:00}:{seconds % 60:00}.{ms}";
+        }
+
+        private static string GetFromRegex(Regex regex, string str)
+        {
+            MatchCollection mc = regex.Matches(str);
+            try
+            {
+                if (mc.IsNotEmpty())
+                {
+                    return mc[0].Groups[1].Value;
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"GetFromRegex Exception {e}");
+            }
+            return null;
+        }
+
+        public static string GetCurrentLyricsLine()
         {
             if (string.IsNullOrEmpty(CurrentLyrics)) return "";
             try
@@ -94,7 +189,7 @@ namespace SMPlayer.Helpers
                 string lyric = IsLrc ? GetLrcLyrics() : null;
                 if (lyric == null)
                 {
-                    int index = Math.Min(LyricsList.Length - 1, (int)(LyricsList.Length * MusicPlayer.Progress));
+                    int index = Math.Min(LyricsList.Count - 1, (int)(LyricsList.Count * MusicPlayer.Progress));
                     lyric = CurrentLine = LyricsList[index];
                 }
                 if (!string.IsNullOrWhiteSpace(lyric))
@@ -111,10 +206,10 @@ namespace SMPlayer.Helpers
 
         private static string GetLrcLyrics()
         {
-            double position = MusicPlayer.Position;
+            double position = MusicPlayer.Position + LyricOffset;
             string time = ToTime(position);
             if (CurrentLine != null && CurrentLine.Contains(time)) return DisplayLine;
-            if (LyricsList.Length == 1)
+            if (LyricsList.Count == 1)
             {
                 CurrentLine = LyricsList[0];
                 return TrimTag(CurrentLine);
@@ -163,16 +258,17 @@ namespace SMPlayer.Helpers
             string lyrics = await GetLrcLyrics(music);
             if (lyrics.Contains(NoLyricsText))
             {
-                return Helper.LocalizeMessage("NoMatchingLyrics");
+                return "";
+                //return Helper.LocalizeMessage("NoMatchingLyrics");
             }
             return lyrics;
         }
 
         private static async Task<string> GetLrcLyrics(Music music)
         {
-            return await ImproveSearch(music, async (keyword, artist) =>
+            return await ImproveSearch(music, async (keyword, artist, album) =>
             {
-                string songmid = await GetSongMid(keyword, artist);
+                string songmid = await GetSongMid(keyword, artist, album);
                 if (string.IsNullOrEmpty(songmid)) return "";
                 string uri = $"https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?songmid={songmid}&format=json&nobase64=1";
                 try
@@ -196,76 +292,140 @@ namespace SMPlayer.Helpers
             return await ImproveSearch(music, GetSongMid);
         }
 
-        private static async Task<string> GetSongMid(string keyword, string artist)
+        private static async Task<string> GetSongMid(string title, string artist, string album)
         {
-            string uri = $"https://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg?cv=4747474&ct=24&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=1&g_tk_new_20200303=1383304704&g_tk=1383304704&hostUin=0&is_xml=0&key={Uri.EscapeUriString(keyword)}";
             try
             {
-                JsonObject json = await GetQQMusicResponse(uri);
-                var data = json.GetNamedObject("data");
-                if (data == null)
+                if (string.IsNullOrEmpty(album))
                 {
-                    Log.Info($"[GetSongMid] data is null, keyword {keyword} artist {artist}");
-                    return "";
+                    return await SearchByTitle(title, artist, album);
                 }
-                var song = data.GetNamedObject("song");
-                if (song == null)
+                string searchAlbumUrl = string.Format(QQMusicSearchUrl, Uri.EscapeUriString(album));
+                JsonObject albumResponse = await GetQQMusicResponse(searchAlbumUrl);
+                var albumData = albumResponse.GetNamedObject("data");
+                if (albumData == null)
                 {
-                    Log.Info($"[GetSongMid] song is null, keyword {keyword} artist {artist}");
-                    return "";
+                    Log.Info($"[SearchByAlbum] data is null, title {title} artist {artist} album {album}");
+                    return await SearchByTitle(title, artist, album);
                 }
-                var list = song.GetNamedArray("itemlist");
-                if (list.IsEmpty())
+                var albumJson = albumData.GetNamedObject("album");
+                if (albumJson == null)
                 {
-                    Log.Info($"[GetSongMid] itemlist is empty, keyword {keyword} artist {artist}");
-                    return "";
+                    Log.Info($"[SearchByAlbum] album is null, title {title} artist {artist} album {album}");
+                    return await SearchByTitle(title, artist, album);
                 }
-                uint index = 0;
-                if (!string.IsNullOrEmpty(artist))
+                else
                 {
-                    int points = 0;
-                    for (uint i = 0; i < list.Count; i++)
+                    var albumList = albumJson.GetNamedArray("itemlist");
+                    if (albumList.IsEmpty())
                     {
-                        var item = list.GetObjectAt(i);
-                        string singer = item.GetNamedString("singer");
-                        if (singer == null) continue;
-                        int eval = SearchHelper.EvaluateString(artist, singer);
-                        if (eval > points) index = i;
+                        Log.Info($"[SearchByAlbum] itemlist is empty, title {title} artist {artist} album {album}");
+                        return await SearchByTitle(title, artist, album);
                     }
+                    uint albumIndex = FindNearestItem(albumList, "singer", artist);
+                    string albumMid = albumList.GetObjectAt(albumIndex).GetNamedString("mid");
+                    string albumDetailUrl = $"https://c.y.qq.com/v8/fcg-bin/musicmall.fcg?cv=4747474&ct=24&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=1&g_tk_new_20200303=1383304704&g_tk=1383304704&cmd=get_album_buy_page&albummid={albumMid}";
+                    JsonObject albumDetailResponse = await GetQQMusicResponse(albumDetailUrl);
+                    JsonObject albumDetailData = albumDetailResponse.GetNamedObject("data");
+                    if (albumDetailData == null)
+                    {
+                        Log.Info($"[GetAlbumDetail] data is null, title {title} artist {artist} album {album}");
+                        return await SearchByTitle(title, artist, album);
+                    }
+                    JsonArray albumSongs = albumDetailData.GetNamedArray("songlist");
+                    if (albumSongs.IsEmpty())
+                    {
+                        Log.Info($"[GetAlbumDetail] itemlist is empty, title {title} artist {artist} album {album}");
+                        return await SearchByTitle(title, artist, album);
+                    }
+                    uint songIndex = FindNearestItem(albumSongs, "songname", title);
+                    return albumSongs.GetObjectAt(songIndex).GetNamedString("songmid");
                 }
-                return list.GetObjectAt(index).GetNamedString("mid");
             }
             catch (Exception e)
             {
-                Log.Warn($"get song mid failed for keyword {keyword} artist {artist}, Exception {e}");
-                return "";
+                Log.Warn($"get song mid failed for keyword {title} artist {artist} album {album}, Exception {e}");
+                return await SearchByTitle(title, artist, album);
             }
         }
 
-        private static async Task<string> ImproveSearch(Music music, Func<string, string, Task<string>> search)
+        private static async Task<string> SearchByTitle(string title, string artist, string album)
         {
-            string ret = await search.Invoke(music.Name + " " + music.Artist, music.Artist);
+            JsonObject response = await GetQQMusicResponse(string.Format(QQMusicSearchUrl, Uri.EscapeUriString(title)));
+            var data = response.GetNamedObject("data");
+            if (data == null)
+            {
+                Log.Info($"[SearchByTitle] data is null, title {title} artist {artist} album {album}");
+                return "";
+            }
+            var song = data.GetNamedObject("song");
+            if (song == null)
+            {
+                Log.Info($"[SearchByTitle] song is null, title {title} artist {artist} album {album}");
+                return "";
+            }
+            var list = song.GetNamedArray("itemlist");
+            if (list.IsEmpty())
+            {
+                Log.Info($"[SearchByTitle] itemlist is empty, title {title} artist {artist} album {album}");
+                return "";
+            }
+            uint index = FindNearestItem(list, "singer", artist);
+            return list.GetObjectAt(index).GetNamedString("mid");
+        }
+
+        private static uint FindNearestItem(JsonArray list, string field, string target)
+        {
+            uint index = 0;
+            if (string.IsNullOrEmpty(target))
+            {
+                return index;
+            }
+            int points = 0;
+            for (uint i = 0; i < list.Count; i++)
+            {
+                var item = list.GetObjectAt(i);
+                string str = item.GetNamedString(field);
+                if (str == null) continue;
+                int eval = SearchHelper.EvaluateString(target, str);
+                if (eval == 100)
+                {
+                    index = i;
+                    break;
+                }
+                if (eval > points)
+                {
+                    points = eval;
+                    index = i;
+                }
+            }
+            return index;
+        }
+
+        private static async Task<string> ImproveSearch(Music music, Func<string, string, string, Task<string>> search)
+        {
+            string ret = await search.Invoke(music.Name + " " + music.Artist, music.Artist, music.Album);
             if (!string.IsNullOrEmpty(ret)) return ret;
-            ret = await search.Invoke(music.Name + "-" + music.Album, music.Artist);
+            ret = await search.Invoke(music.Name + "-" + music.Album, music.Artist, music.Album);
             if (!string.IsNullOrEmpty(ret)) return ret;
-            ret = await search.Invoke(music.Name, music.Artist);
+            ret = await search.Invoke(music.Name, music.Artist, music.Album);
             if (!string.IsNullOrEmpty(ret)) return ret;
 
             string simpleName = RemoveBraces(music.Name);
             string simpleArtist = RemoveBraces(music.Artist);
             string simpleAlbum = RemoveBraces(music.Album);
             bool diffName = simpleName != music.Name, diffArtist = simpleArtist != music.Artist, diffAlbum = simpleAlbum != music.Album;
-            if (diffName) ret = await search.Invoke(simpleName + " " + music.Artist, music.Artist);
+            if (diffName) ret = await search.Invoke(simpleName + " " + music.Artist, music.Artist, music.Album);
             if (!string.IsNullOrEmpty(ret)) return ret;
-            if (diffArtist) ret = await search.Invoke(music.Name + " " + simpleArtist, simpleArtist);
+            if (diffArtist) ret = await search.Invoke(music.Name + " " + simpleArtist, simpleArtist, music.Album);
             if (!string.IsNullOrEmpty(ret)) return ret;
-            if (diffName || diffArtist) ret = await search.Invoke(simpleName + " " + simpleArtist, simpleArtist);
+            if (diffName || diffArtist) ret = await search.Invoke(simpleName + " " + simpleArtist, simpleArtist, music.Album);
             if (!string.IsNullOrEmpty(ret)) return ret;
-            if (diffName || diffArtist || diffAlbum) ret = await search.Invoke(simpleName + "-" + simpleAlbum, simpleArtist);
+            if (diffName || diffArtist || diffAlbum) ret = await search.Invoke(simpleName, simpleArtist, simpleAlbum);
             if (!string.IsNullOrEmpty(ret)) return ret;
-            if (diffName) ret = await search.Invoke(simpleName, music.Artist);
+            if (diffName) ret = await search.Invoke(simpleName, music.Artist, music.Album);
             if (!string.IsNullOrEmpty(ret)) return ret;
-            if (diffName || diffArtist) ret = await search.Invoke(simpleName, simpleArtist);
+            if (diffName || diffArtist) ret = await search.Invoke(simpleName, simpleArtist, music.Album);
             if (!string.IsNullOrEmpty(ret)) return ret;
             return "";
         }
@@ -273,7 +433,7 @@ namespace SMPlayer.Helpers
         private static string RemoveBraces(string text)
         {
             return text.RemoveBraces('(', ')').RemoveBraces('（', '）')
-                       .RemoveBraces('《', '》').RemoveBraces('<', '>')
+                       .RemoveBraces('<', '>')
                        .RemoveBraces('[', ']').RemoveBraces('【', '】');
         }
 

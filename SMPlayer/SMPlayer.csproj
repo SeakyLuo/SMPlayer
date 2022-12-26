@@ -143,6 +143,9 @@
     <Compile Include="AuthorizedDevicePage.xaml.cs">
       <DependentUpon>AuthorizedDevicePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HiddenFoldersPage.xaml.cs">
+      <DependentUpon>HiddenFoldersPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Server\Controllers\MusicController.cs" />
     <Compile Include="Controls\AlbumArtControl.xaml.cs">
       <DependentUpon>AlbumArtControl.xaml</DependentUpon>
@@ -684,6 +687,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dictionaries\StretchTreeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HiddenFoldersPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

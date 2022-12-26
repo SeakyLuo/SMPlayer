@@ -207,6 +207,12 @@
   <data name="GridViewMusicPlayInfo" xml:space="preserve">
     <value>优先播放《{0}》</value>
   </data>
+  <data name="HideFolder" xml:space="preserve">
+    <value>隐藏文件夹</value>
+  </data>
+  <data name="HideFolderToolTip" xml:space="preserve">
+    <value>在文件夹被隐藏后，其子文件夹和子文件都无法查询和更新。隐藏的文件夹可通过本地页面恢复。</value>
+  </data>
   <data name="InvalidItemToolTip" xml:space="preserve">
     <value>“{0}”已经失效或无法被找到</value>
   </data>
@@ -227,6 +233,15 @@
   </data>
   <data name="LikeMusicToolTip" xml:space="preserve">
     <value>设为我喜欢</value>
+  </data>
+  <data name="LrcLyricsAl" xml:space="preserve">
+    <value>专辑：</value>
+  </data>
+  <data name="LrcLyricsAr" xml:space="preserve">
+    <value>歌手：</value>
+  </data>
+  <data name="LrcLyricsBy" xml:space="preserve">
+    <value>词：</value>
   </data>
   <data name="Month1" xml:space="preserve">
     <value>1月</value>

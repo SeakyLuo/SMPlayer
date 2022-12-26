@@ -455,6 +455,10 @@ namespace SMPlayer
                 HeaderGrid.Visibility = Visibility.Visible;
                 MainNavigationView.SelectedItem = MainNavigationView.SettingsItem;
             }
+            else
+            {
+                HeaderGrid.Visibility = Visibility.Collapsed;
+            }
             if (IsTitleBarColorful)
             {
                 TitleBarHelper.SetDarkTitleBar();

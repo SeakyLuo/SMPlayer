@@ -1,0 +1,13 @@
+﻿<Page
+    x:Class="SMPlayer.HiddenFoldersPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SMPlayer"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:models="using:SMPlayer.Models"
+    mc:Ignorable="d"
+    Loaded="Page_Loaded"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>        <Grid.RowDefinitions>            <RowDefinition Height="Auto" />            <RowDefinition Height="*" />        </Grid.RowDefinitions>        <TextBlock             x:Uid="HiddenFolderIntroductionTextBlock"            FontSize="16"            TextWrapping="WrapWholeWords"            Margin="20,10" />        <ListView            x:Name="HiddenFoldersView"            Grid.Row="1"            SelectionMode="None"            ItemContainerStyle="{StaticResource StretchListViewItemStyle}"            ItemsSource="{x:Bind HiddenFolders, Mode=OneWay}"            ContainerContentChanging="HiddenFoldersView_ContainerContentChanging">            <ListView.ItemTemplate>                <DataTemplate x:DataType="models:FolderTree">                    <Grid>                        <Grid.ColumnDefinitions>                            <ColumnDefinition Width="*" />                            <ColumnDefinition Width="Auto" />                        </Grid.ColumnDefinitions>                    </Grid>                </DataTemplate>            </ListView.ItemTemplate>        </ListView>    </Grid>
+</Page>

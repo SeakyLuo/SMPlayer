@@ -615,7 +615,7 @@ namespace SMPlayer
             MoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
             MoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
             var mode = isChecked ? PlayMode.Shuffle : PlayMode.Once;
-            if (mode != Settings.settings.Mode) MusicPlayer.SetMode(mode);
+            if (mode != Settings.settings.Mode) MusicPlayer.PlayMode = mode;
         }
         private void RepeatButton_Click(object sender, RoutedEventArgs e)
         {
@@ -637,7 +637,7 @@ namespace SMPlayer
             MoreRepeatButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
             MoreRepeatOneButton.IconBackground = ColorHelper.TransparentBrush;
             var mode = isChecked ? PlayMode.Repeat : PlayMode.Once;
-            if (mode != Settings.settings.Mode) MusicPlayer.SetMode(mode);
+            if (mode != Settings.settings.Mode) MusicPlayer.PlayMode = mode;
         }
 
         private void RepeatOneButton_Click(object sender, RoutedEventArgs e)
@@ -660,7 +660,7 @@ namespace SMPlayer
             MoreRepeatButton.IconBackground = ColorHelper.TransparentBrush;
             MoreRepeatOneButton.IconBackground = isChecked ? ColorHelper.GrayBrush : ColorHelper.TransparentBrush;
             var mode = isChecked ? PlayMode.RepeatOne : PlayMode.Once;
-            if (mode != Settings.settings.Mode) MusicPlayer.SetMode(mode);
+            if (mode != Settings.settings.Mode) MusicPlayer.PlayMode = mode;
         }
 
         public void PlayMusic()

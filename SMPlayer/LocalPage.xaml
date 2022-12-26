@@ -51,6 +51,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid 
                 x:Name="CurrentPathGrid"
@@ -175,6 +176,16 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <Button 
+                x:Name="HiddenFoldersListButton"
+                x:Uid="HiddenFoldersListButton"
+                Click="HiddenFoldersListButton_Click"
+                Height="40"
+                Background="Transparent" 
+                BorderThickness="0"
+                Grid.Column="2">
+                <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xF588;" />
+            </Button>
         </Grid>
         <CommandBar
             Grid.Row="1"

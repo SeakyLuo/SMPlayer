@@ -664,6 +664,11 @@ namespace SMPlayer
             }
         }
 
+        private void HiddenFoldersListButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainPage.Instance.NavigateToPage(typeof(HiddenFoldersPage));
+        }
+
         async void IMusicEventListener.Execute(Music music, MusicEventArgs args)
         {
             if (CurrentFolderInfo == null) return;

@@ -1426,4 +1426,10 @@
   <data name="NotificationLyricsSourceComboBoxTextBlock.Text" xml:space="preserve">
     <value>通知中的默认音乐歌词来源：</value>
   </data>
+  <data name="HiddenFoldersListButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>查看所有隐藏的文件夹</value>
+  </data>
+  <data name="HiddenFolderIntroductionTextBlock.Text" xml:space="preserve">
+    <value>下面是已隐藏的文件夹列表，被隐藏的文件夹下的歌曲和文件不会被扫描和展示。</value>
+  </data>
 </root>

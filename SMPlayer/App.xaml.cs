@@ -190,26 +190,35 @@ namespace SMPlayer
                     if (args.TaskInstance.TriggerDetails is Windows.UI.Notifications.ToastNotificationActionTriggerDetail details)
                     {
                         // Perform tasks
-                        switch (Enum.Parse(typeof(ToastButtonEnum), details.Argument))
+                        if (Enum.TryParse(typeof(ToastButtonEnum), details.Argument, out object toastButton))
                         {
-                            case ToastButtonEnum.Next:
-                                MusicPlayer.MoveNext();
-                                break;
-                            case ToastButtonEnum.Pause:
-                                MusicPlayer.Pause();
-                                break;
-                            case ToastButtonEnum.Play:
-                                MusicPlayer.Play();
-                                break;
-                            case ToastButtonEnum.SwitchLyricsSourceToMusic:
-                                await ToastHelper.SwitchLyricsSource(LyricsSource.Music);
-                                break;
-                            case ToastButtonEnum.SwitchLyricsSourceToLrcFile:
-                                await ToastHelper.SwitchLyricsSource(LyricsSource.LrcFile);
-                                break;
-                            case ToastButtonEnum.SwitchLyricsSourceToInternet:
-                                await ToastHelper.SwitchLyricsSource(LyricsSource.Internet);
-                                break;
+                            switch (toastButton)
+                            {
+                                case ToastButtonEnum.Next:
+                                    MusicPlayer.MoveNext();
+                                    if (MusicPlayer.PlayMode == PlayMode.RepeatOne)
+                                    {
+                                        // 强制单曲循环的时候点击下一首Toast出现
+                                        ToastHelper.HideToast();
+                                        await ToastHelper.ShowToast(MusicPlayer.CurrentMusic, MusicPlayer.PlaybackState);
+                                    }
+                                    break;
+                                case ToastButtonEnum.Pause:
+                                    MusicPlayer.Pause();
+                                    break;
+                                case ToastButtonEnum.Play:
+                                    MusicPlayer.Play();
+                                    break;
+                                case ToastButtonEnum.SwitchLyricsSourceToMusic:
+                                    await ToastHelper.SwitchLyricsSource(LyricsSource.Music);
+                                    break;
+                                case ToastButtonEnum.SwitchLyricsSourceToLrcFile:
+                                    await ToastHelper.SwitchLyricsSource(LyricsSource.LrcFile);
+                                    break;
+                                case ToastButtonEnum.SwitchLyricsSourceToInternet:
+                                    await ToastHelper.SwitchLyricsSource(LyricsSource.Internet);
+                                    break;
+                            }
                         }
                     }
                     break;

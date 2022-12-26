@@ -207,6 +207,12 @@
   <data name="GridViewMusicPlayInfo" xml:space="preserve">
     <value>Play "{0}" first</value>
   </data>
+  <data name="HideFolder" xml:space="preserve">
+    <value>Hide Folder</value>
+  </data>
+  <data name="HideFolderToolTip" xml:space="preserve">
+    <value>Folders and files that are in the hidden folder cannot be updated and displayed. You can see all the hidden folders in the Local page.</value>
+  </data>
   <data name="InvalidItemToolTip" xml:space="preserve">
     <value>{0} is invalid or cannot be found</value>
   </data>
@@ -227,6 +233,15 @@
   </data>
   <data name="LikeMusicToolTip" xml:space="preserve">
     <value>Set As My Favorite</value>
+  </data>
+  <data name="LrcLyricsAl" xml:space="preserve">
+    <value>Album: </value>
+  </data>
+  <data name="LrcLyricsAr" xml:space="preserve">
+    <value>Artist: </value>
+  </data>
+  <data name="LrcLyricsBy" xml:space="preserve">
+    <value>Lyrics: </value>
   </data>
   <data name="Month1" xml:space="preserve">
     <value>January</value>
