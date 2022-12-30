@@ -13,6 +13,7 @@ namespace SMPlayer.Models
 
     public static class ActiveStateExtensions
     {
+        public static bool IsHidden(this ActiveState state) { return state == ActiveState.Hidden; }
         public static bool IsActive(this ActiveState state) { return state == ActiveState.Active; }
         public static bool IsInactive(this ActiveState state) { return state == ActiveState.Inactive; }
 

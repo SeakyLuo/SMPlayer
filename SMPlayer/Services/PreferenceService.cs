@@ -13,7 +13,7 @@ namespace SMPlayer.Services
     {
         public static void RemovePreferences(EntityType type, IEnumerable<string> itemIds)
         {
-            SQLHelper.Run(c => c.Execute("update PreferenceItem set State = ? where Type = ? and ItemId in (?)", ActiveState.Inactive, type, string.Join(",", itemIds)));
+            SQLHelper.Run(c => c.Execute("update PreferenceItem set State = ? where Type = ? and ItemId in (?)", ActiveState.Inactive, type, itemIds.JoinIntoString()));
         }
     }
 }

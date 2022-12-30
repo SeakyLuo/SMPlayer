@@ -28,6 +28,7 @@
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.8.0</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesNotificationLyricsSource"/><LineBreak />
             2. <Run x:Uid="ReleaseNotesUseHideFolder"/><LineBreak />
+            3. <Run x:Uid="ReleaseNotesBugFixes"/><LineBreak />
             <LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.7.11</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesUseFilenameInsteadOfMusicName"/><LineBreak />

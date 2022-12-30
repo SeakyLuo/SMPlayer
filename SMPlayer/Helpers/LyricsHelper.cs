@@ -266,9 +266,9 @@ namespace SMPlayer.Helpers
 
         private static async Task<string> GetLrcLyrics(Music music)
         {
-            return await ImproveSearch(music, async (keyword, artist, album) =>
+            return await ImproveSearch(music, async (keyword, title, artist, album) =>
             {
-                string songmid = await GetSongMid(keyword, artist, album);
+                string songmid = await GetSongMid(keyword, title, artist, album);
                 if (string.IsNullOrEmpty(songmid)) return "";
                 string uri = $"https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?songmid={songmid}&format=json&nobase64=1";
                 try
@@ -292,13 +292,13 @@ namespace SMPlayer.Helpers
             return await ImproveSearch(music, GetSongMid);
         }
 
-        private static async Task<string> GetSongMid(string title, string artist, string album)
+        private static async Task<string> GetSongMid(string keyword, string title, string artist, string album)
         {
             try
             {
                 if (string.IsNullOrEmpty(album))
                 {
-                    return await SearchByTitle(title, artist, album);
+                    return await SearchByKeyword(keyword, title, artist, album);
                 }
                 string searchAlbumUrl = string.Format(QQMusicSearchUrl, Uri.EscapeUriString(album));
                 JsonObject albumResponse = await GetQQMusicResponse(searchAlbumUrl);
@@ -306,13 +306,13 @@ namespace SMPlayer.Helpers
                 if (albumData == null)
                 {
                     Log.Info($"[SearchByAlbum] data is null, title {title} artist {artist} album {album}");
-                    return await SearchByTitle(title, artist, album);
+                    return await SearchByKeyword(keyword, title, artist, album);
                 }
                 var albumJson = albumData.GetNamedObject("album");
                 if (albumJson == null)
                 {
                     Log.Info($"[SearchByAlbum] album is null, title {title} artist {artist} album {album}");
-                    return await SearchByTitle(title, artist, album);
+                    return await SearchByKeyword(keyword, title, artist, album);
                 }
                 else
                 {
@@ -320,7 +320,7 @@ namespace SMPlayer.Helpers
                     if (albumList.IsEmpty())
                     {
                         Log.Info($"[SearchByAlbum] itemlist is empty, title {title} artist {artist} album {album}");
-                        return await SearchByTitle(title, artist, album);
+                        return await SearchByKeyword(keyword, title, artist, album);
                     }
                     uint albumIndex = FindNearestItem(albumList, "singer", artist);
                     string albumMid = albumList.GetObjectAt(albumIndex).GetNamedString("mid");
@@ -330,13 +330,13 @@ namespace SMPlayer.Helpers
                     if (albumDetailData == null)
                     {
                         Log.Info($"[GetAlbumDetail] data is null, title {title} artist {artist} album {album}");
-                        return await SearchByTitle(title, artist, album);
+                        return await SearchByKeyword(keyword, title, artist, album);
                     }
                     JsonArray albumSongs = albumDetailData.GetNamedArray("songlist");
                     if (albumSongs.IsEmpty())
                     {
                         Log.Info($"[GetAlbumDetail] itemlist is empty, title {title} artist {artist} album {album}");
-                        return await SearchByTitle(title, artist, album);
+                        return await SearchByKeyword(keyword, title, artist, album);
                     }
                     uint songIndex = FindNearestItem(albumSongs, "songname", title);
                     return albumSongs.GetObjectAt(songIndex).GetNamedString("songmid");
@@ -344,30 +344,30 @@ namespace SMPlayer.Helpers
             }
             catch (Exception e)
             {
-                Log.Warn($"get song mid failed for keyword {title} artist {artist} album {album}, Exception {e}");
-                return await SearchByTitle(title, artist, album);
+                Log.Warn($"get song mid failed for title {title} artist {artist} album {album}, Exception {e}");
+                return await SearchByKeyword(keyword, title, artist, album);
             }
         }
 
-        private static async Task<string> SearchByTitle(string title, string artist, string album)
+        private static async Task<string> SearchByKeyword(string keyword, string title, string artist, string album)
         {
-            JsonObject response = await GetQQMusicResponse(string.Format(QQMusicSearchUrl, Uri.EscapeUriString(title)));
+            JsonObject response = await GetQQMusicResponse(string.Format(QQMusicSearchUrl, Uri.EscapeUriString(keyword)));
             var data = response.GetNamedObject("data");
             if (data == null)
             {
-                Log.Info($"[SearchByTitle] data is null, title {title} artist {artist} album {album}");
+                Log.Info($"[SearchByTitle] data is null, keyword {keyword} title {title} artist {artist} album {album}");
                 return "";
             }
             var song = data.GetNamedObject("song");
             if (song == null)
             {
-                Log.Info($"[SearchByTitle] song is null, title {title} artist {artist} album {album}");
+                Log.Info($"[SearchByTitle] song is null, keyword {keyword} title {title} artist {artist} album {album}");
                 return "";
             }
             var list = song.GetNamedArray("itemlist");
             if (list.IsEmpty())
             {
-                Log.Info($"[SearchByTitle] itemlist is empty, title {title} artist {artist} album {album}");
+                Log.Info($"[SearchByTitle] itemlist is empty, keyword {keyword} title {title} artist {artist} album {album}");
                 return "";
             }
             uint index = FindNearestItem(list, "singer", artist);
@@ -402,30 +402,28 @@ namespace SMPlayer.Helpers
             return index;
         }
 
-        private static async Task<string> ImproveSearch(Music music, Func<string, string, string, Task<string>> search)
+        private static async Task<string> ImproveSearch(Music music, Func<string, string, string, string, Task<string>> search)
         {
-            string ret = await search.Invoke(music.Name + " " + music.Artist, music.Artist, music.Album);
+            string ret = await search.Invoke(music.Name + " " + music.Artist, music.Name, music.Artist, music.Album);
             if (!string.IsNullOrEmpty(ret)) return ret;
-            ret = await search.Invoke(music.Name + "-" + music.Album, music.Artist, music.Album);
-            if (!string.IsNullOrEmpty(ret)) return ret;
-            ret = await search.Invoke(music.Name, music.Artist, music.Album);
+            ret = await search.Invoke(music.Name, music.Name, music.Artist, music.Album);
             if (!string.IsNullOrEmpty(ret)) return ret;
 
             string simpleName = RemoveBraces(music.Name);
             string simpleArtist = RemoveBraces(music.Artist);
             string simpleAlbum = RemoveBraces(music.Album);
             bool diffName = simpleName != music.Name, diffArtist = simpleArtist != music.Artist, diffAlbum = simpleAlbum != music.Album;
-            if (diffName) ret = await search.Invoke(simpleName + " " + music.Artist, music.Artist, music.Album);
+            if (diffName) ret = await search.Invoke(simpleName + " " + music.Artist, simpleName, music.Artist, music.Album);
             if (!string.IsNullOrEmpty(ret)) return ret;
-            if (diffArtist) ret = await search.Invoke(music.Name + " " + simpleArtist, simpleArtist, music.Album);
+            if (diffArtist) ret = await search.Invoke(music.Name + " " + simpleArtist, music.Name, simpleArtist, music.Album);
             if (!string.IsNullOrEmpty(ret)) return ret;
-            if (diffName || diffArtist) ret = await search.Invoke(simpleName + " " + simpleArtist, simpleArtist, music.Album);
+            if (diffName || diffArtist) ret = await search.Invoke(simpleName + " " + simpleArtist, simpleName, simpleArtist, music.Album);
             if (!string.IsNullOrEmpty(ret)) return ret;
-            if (diffName || diffArtist || diffAlbum) ret = await search.Invoke(simpleName, simpleArtist, simpleAlbum);
+            if (diffName || diffArtist || diffAlbum) ret = await search.Invoke(simpleName, simpleName, simpleArtist, simpleAlbum);
             if (!string.IsNullOrEmpty(ret)) return ret;
-            if (diffName) ret = await search.Invoke(simpleName, music.Artist, music.Album);
+            if (diffName) ret = await search.Invoke(simpleName, simpleName, music.Artist, music.Album);
             if (!string.IsNullOrEmpty(ret)) return ret;
-            if (diffName || diffArtist) ret = await search.Invoke(simpleName, simpleArtist, music.Album);
+            if (diffName || diffArtist) ret = await search.Invoke(simpleName, simpleName, simpleArtist, music.Album);
             if (!string.IsNullOrEmpty(ret)) return ret;
             return "";
         }

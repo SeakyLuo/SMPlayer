@@ -1418,7 +1418,7 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
     <value>You can choose a default lyrics source option or switch lyrics source for notifications. Lyrics may come from the Internet, lrc file, or the music file itself.</value>
   </data>
   <data name="ReleaseNotesUseHideFolder.Text" xml:space="preserve">
-    <value>You can now hide a folder in the local page by right-clicking one. This folder and its content will not display in SMPlayer. You can resume it in the local page.</value>
+    <value>You can now hide a folder or a file in the local page by right-clicking one and select "Hide Folder" or "Hide File". The hidden file or hidden folder and its content will not display in SMPlayer. You can resume it in the local page.</value>
   </data>
   <data name="LyricsSourceInternetComboItem.Content" xml:space="preserve">
     <value>Internet</value>
@@ -1437,5 +1437,8 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   </data>
   <data name="HiddenFolderIntroductionTextBlock.Text" xml:space="preserve">
     <value>Below are the hidden folders, whose sub folders and files will not be displayed and scanned.</value>
+  </data>
+  <data name="ResumeButton.Content" xml:space="preserve">
+    <value>Resume</value>
   </data>
 </root>

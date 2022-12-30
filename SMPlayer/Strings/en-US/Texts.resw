@@ -207,6 +207,9 @@
   <data name="GridViewMusicPlayInfo" xml:space="preserve">
     <value>Play "{0}" first</value>
   </data>
+  <data name="HideFile" xml:space="preserve">
+    <value>Hide File</value>
+  </data>
   <data name="HideFolder" xml:space="preserve">
     <value>Hide Folder</value>
   </data>

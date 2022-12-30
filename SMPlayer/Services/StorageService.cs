@@ -40,6 +40,10 @@ namespace SMPlayer.Services
         {
             return SQLHelper.Run(c => c.SelectFolder(path));
         }
+        public static FolderTree FindFolderIncludingHidden(string path)
+        {
+            return SQLHelper.Run(c => c.SelectFolderIncludingHidden(path));
+        }
         public static FolderTree FindFullFolder(long id)
         {
             return SQLHelper.Run(c => c.SelectFullFolder(id));
@@ -358,26 +362,107 @@ namespace SMPlayer.Services
 
         public static List<FolderTree> FindHiddenFolders()
         {
-            return SQLHelper.Run(c => c.Query<FolderDAO>("select f.* from Folder f where State = ?)", ActiveState.Hidden)
+            return SQLHelper.Run(c => c.Query<FolderDAO>("select * from Folder where State = ?", ActiveState.Hidden)
+                                       .Select(i => i.FromDAO()).ToList());
+        }
+        public static List<FolderFile> FindHiddenFiles()
+        {
+            return SQLHelper.Run(c => c.Query<FileDAO>("select * from File where State = ?", ActiveState.Hidden)
                                        .Select(i => i.FromDAO()).ToList());
         }
 
         public static void HideFolder(FolderTree folder)
         {
-            folder.State = ActiveState.Hidden;
-            SQLHelper.Run(c =>
+            try
             {
-                c.Update(folder.ToDAO());
-                List<FolderFile> subFiles = c.SelectSubFiles(folder);
-                c.SelectMusicByIds(c.SelectSubFiles(folder).Select(i => i.FileId)).ToList();
+                folder.State = ActiveState.Hidden;
+                SQLHelper.Run(c =>
+                {
+                    c.Update(folder.ToDAO());
+                    SetFolderContentStatus(folder, c, ActiveState.ParentHidden);
+                });
+                foreach (var listener in StorageItemEventListeners)
+                    listener.ExecuteFolderEvent(folder, new StorageItemEventArgs(StorageItemEventType.HideFolder));
+            }
+            catch(Exception e)
+            {
+                Log.Warn($"HideFolder failed {e}");
+            }
+        }
+
+        public static void HideMusic(Music music)
+        {
+            try
+            {
+                FolderFile file = SetFileStatus(music, ActiveState.Hidden);
+                foreach (var listener in StorageItemEventListeners)
+                    listener.ExecuteFileEvent(file, new StorageItemEventArgs(StorageItemEventType.HideFile));
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"HideMusic failed {e}");
+            }
+        }
+
+        public static void ResumeMusic(Music music)
+        {
+            try
+            {
+                FolderFile file = SetFileStatus(music, ActiveState.Hidden);
+                foreach (var listener in StorageItemEventListeners)
+                    listener.ExecuteFileEvent(file, new StorageItemEventArgs(StorageItemEventType.ResumeFile));
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"ResumeMusic failed {e}");
+            }
+        }
+
+        private static FolderFile SetFileStatus(Music music, ActiveState state)
+        {
+            return SQLHelper.Run(c =>
+            {
+                FolderFile file = c.SelectFileByPath(music.Path);
+                file.State = state;
+                c.Update(file.ToDAO());
+                music.State = state;
+                c.Update(music);
+                return file;
             });
+        }
+
+        private static void SetFolderContentStatus(FolderTree folder, SQLiteConnection c, ActiveState state)
+        {
+            List<FolderFile> subFiles = c.SelectSubFiles(folder);
+            foreach (var sub in subFiles)
+            {
+                sub.State = state;
+                c.Update(sub.ToDAO());
+            }
+            foreach (var sub in c.SelectMusicByIds(subFiles.Select(i => i.FileId)))
+            {
+                sub.State = state;
+                c.Update(sub.ToDAO());
+            }
+            List<FolderTree> subTrees = c.SelectSubFolders(folder);
+            foreach (var sub in subTrees)
+            {
+                sub.State = state;
+                c.Update(sub.ToDAO());
+                SetFolderContentStatus(sub, c, state);
+            }
         }
 
         public static void ResumeFolder(FolderTree folder)
         {
             folder.State = ActiveState.Active;
-            UpdateFolder(folder);
-
+            SQLHelper.Run(c =>
+            {
+                c.Update(folder.ToDAO());
+                SetFolderContentStatus(folder, c, ActiveState.Active);
+            });
+            foreach (var listener in StorageItemEventListeners)
+                listener.ExecuteFolderEvent(folder, new StorageItemEventArgs(StorageItemEventType.ResumeFolder));
         }
     }
 }

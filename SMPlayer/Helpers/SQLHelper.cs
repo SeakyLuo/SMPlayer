@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Microsoft.AppCenter.Utils.Synchronization;
+using Microsoft.Data.Sqlite;
 using SMPlayer.Models;
 using SMPlayer.Models.DAO;
 using SQLite;
@@ -344,10 +345,20 @@ namespace SMPlayer.Helpers
         }
         public static FolderTree SelectFolder(this SQLiteConnection c, string path)
         {
-            FolderTree root = c.SelectFolderInfo(path);
+            FolderTree root = c.SelectFolderInfoOfStates(path, ActiveState.Active);
             if (root == null) return null;
             root.Files = c.SelectSubFiles(root);
             root.Trees = c.SelectSubFolders(root);
+            return root;
+        }
+
+        public static FolderTree SelectFolderIncludingHidden(this SQLiteConnection c, string path)
+        {
+            ActiveState[] states = { ActiveState.Active, ActiveState.Hidden, ActiveState.ParentHidden };
+            FolderTree root = c.SelectFolderInfoOfStates(path, states);
+            if (root == null) return null;
+            root.Files = c.SelectSubFilesOfStates(root, states);
+            root.Trees = c.SelectSubFoldersOfStates(root, states);
             return root;
         }
 
@@ -361,10 +372,15 @@ namespace SMPlayer.Helpers
             return SelectFolderDAOByPath(c, path)?.FromDAO();
         }
 
-
         public static FolderTree SelectAnyFolderInfo(this SQLiteConnection c, string path)
         {
             return c.Query<FolderDAO>("select * from Folder where Path = ?", path).FirstOrDefault()?.FromDAO();
+        }
+
+        public static FolderTree SelectFolderInfoOfStates(this SQLiteConnection c, string path, params ActiveState[] activeStates)
+        {
+            string states = string.Join(",", activeStates.Select(i => (int)i));
+            return c.Query<FolderDAO>($"select * from Folder where Path = ? and State in ({states})", path).FirstOrDefault()?.FromDAO();
         }
 
         public static bool FolderExists(this SQLiteConnection c, string path)
@@ -380,6 +396,12 @@ namespace SMPlayer.Helpers
         public static List<FolderTree> SelectSubFolders(this SQLiteConnection c, FolderTree folder)
         {
             return c.Query<FolderDAO>("select * from Folder where ParentId = ? and State = ?", folder.Id, ActiveState.Active).Select(i => i.FromDAO()).ToList();
+        }
+
+        public static List<FolderTree> SelectSubFoldersOfStates(this SQLiteConnection c, FolderTree folder, params ActiveState[] activeStates)
+        {
+            string states = string.Join(",", activeStates.Select(i => (int)i));
+            return c.Query<FolderDAO>($"select * from Folder where ParentId = ? and State in ({states})", folder.Id).Select(i => i.FromDAO()).ToList();
         }
 
         public static FolderFile SelectFile(this SQLiteConnection c, long Id)
@@ -405,6 +427,12 @@ namespace SMPlayer.Helpers
         public static List<FolderFile> SelectSubFiles(this SQLiteConnection c, FolderTree folder)
         {
             return c.Query<FileDAO>("select * from File where ParentId = ? and State = ?", folder.Id, ActiveState.Active).Select(i => i.FromDAO()).ToList();
+        }
+
+        public static List<FolderFile> SelectSubFilesOfStates(this SQLiteConnection c, FolderTree folder, params ActiveState[] activeStates)
+        {
+            string states = string.Join(",", activeStates.Select(i => (int)i));
+            return c.Query<FileDAO>($"select * from File where ParentId = ? and State in ({states})", folder.Id, states).Select(i => i.FromDAO()).ToList();
         }
 
         public static List<Playlist> SelectAllPlaylists(this SQLiteConnection c, Func<Playlist, bool> predicate = null)

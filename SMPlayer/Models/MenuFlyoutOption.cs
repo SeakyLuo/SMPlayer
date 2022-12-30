@@ -16,6 +16,7 @@ namespace SMPlayer.Models
         public bool ShowMoveToTop { get; set; } = false;
         public bool ShowMoveToFolder { get; set; } = false;
         public bool ShowDelete { get; set; } = true;
+        public bool ShowHideFile { get; set; } = false;
         public MultiSelectCommandBarOption MultiSelectOption { get; set; }
     }
 }

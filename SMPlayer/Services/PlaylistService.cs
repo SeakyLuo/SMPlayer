@@ -33,7 +33,7 @@ namespace SMPlayer.Services
         }
         public static List<long> FindPlaylistIdsByItems(IEnumerable<long> itemIds)
         {
-            return SQLHelper.Run(c => c.Query<PlaylistItemDAO>("select * from PlaylistItem where ItemId in (?) and State = ?", string.Join(",", itemIds), ActiveState.Active))
+            return SQLHelper.Run(c => c.Query<PlaylistItemDAO>("select * from PlaylistItem where ItemId in (?) and State = ?", itemIds.JoinIntoString(), ActiveState.Active))
                             .Select(i => i.PlaylistId).Distinct().ToList();
         }
         public static bool IsFavorite(IMusicable music)

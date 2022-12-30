@@ -222,6 +222,13 @@ namespace SMPlayer
             if (index == -1) return index;
             removedMusic = music;
             CurrentPlaylist.RemoveAt(index);
+            if (IsNowPlaying)
+            {
+                for (int i = index; i < CurrentPlaylist.Count; i++)
+                {
+                    CurrentPlaylist[i].Index = i;
+                } 
+            }
             if (alternateRowBackgroud) AlternateRowBackgroud(index);
             return index;
         }

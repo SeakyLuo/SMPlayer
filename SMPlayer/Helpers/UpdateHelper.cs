@@ -29,7 +29,7 @@ namespace SMPlayer.Helpers
             LoadingStatus = ExecutionStatus.Running;
             try
             {
-                FolderTree tree = StorageService.FindFolder(folder.Path) ?? new FolderTree(folder.Path);
+                FolderTree tree = StorageService.FindFolderIncludingHidden(folder.Path) ?? new FolderTree(folder.Path);
                 NotifyFolderEvent(Settings.settings.Tree, StorageItemEventType.BeforeReset);
                 bool unbroken = await LoadFolder(folder, tree);
                 await MainPage.Instance.Loader.ResetAsync("UpdateMusicLibrary");
@@ -78,20 +78,25 @@ namespace SMPlayer.Helpers
             foreach (var subFolder in await folder.GetFoldersAsync())
             {
                 if (LoadingStatus == ExecutionStatus.Break) return false;
-                var branch = StorageService.FindFolder(subFolder.Path) ?? new FolderTree(subFolder.Path);
-                await LoadFolder(subFolder, branch);
-                newFolders.Add(subFolder.Path);
-                if (branch.IsNotEmpty)
+                var branch = StorageService.FindFolderIncludingHidden(subFolder.Path) ?? new FolderTree(subFolder.Path);
+                if (branch.State.IsActive())
                 {
-                    newBranches.Add(branch);
+                    await LoadFolder(subFolder, branch);
+                    if (branch.IsNotEmpty)
+                    {
+                        newBranches.Add(branch);
+                    }
                 }
+                newFolders.Add(subFolder.Path);
             }
             foreach (var branch in tree.Trees)
             {
                 if (!newFolders.Contains(branch.Path))
                 {
                     FolderTree folderTree = StorageService.FindFullFolder(branch.Id);
+                    if (folderTree == null) continue;
                     folderTree.State = ActiveState.Inactive;
+                    // 先塞进来，后面会删掉
                     newBranches.Add(folderTree);
                 }
             }
@@ -177,11 +182,14 @@ namespace SMPlayer.Helpers
                         if (item.Id == 0)
                         {
                             item.ParentId = folder.Id;
-                            if (!await StorageService.AddFile(item))
+                            if (await StorageService.AddFile(item))
+                            {
+                                result?.AddFile(item.Path);
+                            }
+                            else
                             {
                                 Log.Info($"add item failed {item}");
                             }
-                            result?.AddFile(item.Path);
                             Log.Debug($"file is added, path {item.Path}");
                             await MainPage.Instance.Loader.IncrementAsync();
                         }
@@ -286,7 +294,7 @@ namespace SMPlayer.Helpers
             }
             MainPage.Instance?.Loader.ShowDeterminant("ProcessRequest", true, await storageFolder.CountFoldersAsync() + 1);
             LoadingStatus = ExecutionStatus.Running;
-            FolderTree folderTree = StorageService.FindFolder(tree.Id);
+            FolderTree folderTree = StorageService.FindFolderIncludingHidden(tree.Path);
             bool unbroken = await LoadFolder(storageFolder, folderTree);
             if (!unbroken)
             {

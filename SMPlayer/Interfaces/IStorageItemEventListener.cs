@@ -26,6 +26,7 @@ namespace SMPlayer.Interfaces
 
     public enum StorageItemEventType
     {
-        Add, Rename, Remove, Move, Update, BeforeReset, Reset
+        Add, Rename, Remove, Move, Update, BeforeReset, Reset, 
+        HideFolder, ResumeFolder, HideFile, ResumeFile
     }
 }

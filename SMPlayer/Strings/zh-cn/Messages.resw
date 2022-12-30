@@ -261,6 +261,9 @@
   <data name="HasBeenPlayed" xml:space="preserve">
     <value>《{0}》已经播放了{1}次。{2}</value>
   </data>
+  <data name="HideStorageItemNotification" xml:space="preserve">
+    <value>“{0}”已隐藏。</value>
+  </data>
   <data name="ImportDataCancelled" xml:space="preserve">
     <value>你已取消数据导入</value>
   </data>

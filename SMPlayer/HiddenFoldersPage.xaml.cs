@@ -30,33 +30,64 @@ namespace SMPlayer
     /// </summary>
     public sealed partial class HiddenFoldersPage : Page, IStorageItemEventListener
     {
-        private readonly ObservableCollection<FolderTree> HiddenFolders = new ObservableCollection<FolderTree>();
+        private readonly ObservableCollection<GridViewStorageItem> HiddenStorageItems = new ObservableCollection<GridViewStorageItem>();
 
         public HiddenFoldersPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            StorageService.AddStorageItemEventListener(this);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-
+            HiddenStorageItems.Clear();
+            HiddenStorageItems.AddRange(StorageService.FindHiddenFolders().Select(i => new GridViewFolder(i)));
+            HiddenStorageItems.AddRange(StorageService.FindHiddenFiles().Select(i => new GridViewMusic(i)));
         }
 
-        void IStorageItemEventListener.ExecuteFileEvent(FolderFile file, StorageItemEventArgs args)
+        async void IStorageItemEventListener.ExecuteFileEvent(FolderFile file, StorageItemEventArgs args)
         {
-            throw new NotImplementedException();
+            switch (args.EventType)
+            {
+                case StorageItemEventType.ResumeFile:
+                    await Helper.RunInMainUIThread(Dispatcher, () =>
+                    {
+                        HiddenStorageItems.RemoveAll(i => i.Path == file.Path);
+                    });
+                    break;
+            }
         }
 
-        void IStorageItemEventListener.ExecuteFolderEvent(FolderTree folder, StorageItemEventArgs args)
+        async void IStorageItemEventListener.ExecuteFolderEvent(FolderTree folder, StorageItemEventArgs args)
         {
-            throw new NotImplementedException();
+            switch (args.EventType)
+            {
+                case StorageItemEventType.ResumeFolder:
+                    await Helper.RunInMainUIThread(Dispatcher, () =>
+                    {
+                        HiddenStorageItems.RemoveAll(i => i.Path == folder.Path);
+                    });
+                    break;
+            }
         }
 
         private void HiddenFoldersView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-
+            args.ItemContainer.Background = PlaylistControl.GetRowBackground(args.ItemIndex);
         }
 
+        private void ResumeButton_Click(object sender, RoutedEventArgs e)
+        {
+            GridViewStorageItem storageItem = (sender as FrameworkElement).DataContext as GridViewStorageItem;
+            if (storageItem is GridViewFolder f)
+            {
+                StorageService.ResumeFolder(f.Source);
+            }
+            else if (storageItem is GridViewMusic m)
+            {
+                StorageService.ResumeMusic(m.Source.FromVO());
+            }
+        }
     }
 }

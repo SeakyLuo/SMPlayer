@@ -1412,7 +1412,7 @@
     <value>你可以选择通知中歌词默认的来源，也可以直接在通知中切换。歌词来源包括网络歌词、lrc文件歌词、音乐文件本身的歌词。</value>
   </data>
   <data name="ReleaseNotesUseHideFolder.Text" xml:space="preserve">
-    <value>你现在可以通过在本地页面，右键一个文件夹来隐藏音乐文件了，这个文件的内容将不会呈现在简音播放器里。你可以通过本地页面恢复它。</value>
+    <value>你现在可以隐藏文件夹或者音乐文件了，在本地页面的右键菜单中选择“隐藏文件夹”或者“隐藏文件”，该文件夹或文件将不会出现在简音播放器中。你可以通过本地页面恢复它。</value>
   </data>
   <data name="LyricsSourceInternetComboItem.Content" xml:space="preserve">
     <value>网络歌词</value>
@@ -1430,6 +1430,9 @@
     <value>查看所有隐藏的文件夹</value>
   </data>
   <data name="HiddenFolderIntroductionTextBlock.Text" xml:space="preserve">
-    <value>下面是已隐藏的文件夹列表，被隐藏的文件夹下的歌曲和文件不会被扫描和展示。</value>
+    <value>下面是已隐藏的文件夹列表，被隐藏的文件夹下的歌曲和文件夹不会被扫描和展示。</value>
+  </data>
+  <data name="ResumeButton.Content" xml:space="preserve">
+    <value>恢复</value>
   </data>
 </root>

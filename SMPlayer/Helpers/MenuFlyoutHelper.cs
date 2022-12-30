@@ -463,14 +463,20 @@ namespace SMPlayer
         {
             var item = new MenuFlyoutItem()
             {
-                Icon = new SymbolIcon(Symbol.Find),
                 Text = Helper.LocalizeText("HideFolder")
             };
             item.SetToolTip("HideFolderToolTip");
             item.Click += (s, args) =>
             {
+                MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
                 StorageService.HideFolder(tree);
-                clickListener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.HideFolder));
+                MainPage.Instance.Loader.Hide();
+                Helper.ShowUndoableNotificationRaw(Helper.LocalizeMessage("HideStorageItemNotification", tree.Name), () =>
+                {
+                    MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
+                    StorageService.ResumeFolder(tree);
+                    MainPage.Instance.Loader.Hide();
+                });
             };
             return item;
         }
@@ -550,6 +556,22 @@ namespace SMPlayer
                 };
                 deleteItem.SetToolTip(Helper.LocalizeMessage("DeleteMusic", music.Name), false);
                 flyout.Items.Add(deleteItem);
+            }
+            if (option.ShowHideFile)
+            {
+                var hideFile = new MenuFlyoutItem()
+                {
+                    Text = Helper.LocalizeText("HideFile")
+                };
+                hideFile.Click += (s, args) =>
+                {
+                    StorageService.HideMusic(music);
+                    Helper.ShowUndoableNotification(Helper.LocalizeMessage("HideStorageItemNotification", music.Name), () =>
+                    {
+                        StorageService.ResumeMusic(music);
+                    });
+                };
+                flyout.Items.Add(hideFile);
             }
             if (option.ShowMusicProperties)
             {
@@ -1077,7 +1099,6 @@ namespace SMPlayer
     {
         AddTo, Favorite, Delete, Remove, Select, MoveToFolder,
         Sort, Shuffle, Prefer, UndoPrefer, ShowInExplorer, SearchDirectory,
-        HideFolder
     }
 
     public class MenuFlyoutEventArgs

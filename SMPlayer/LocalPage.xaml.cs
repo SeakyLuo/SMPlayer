@@ -217,7 +217,14 @@ namespace SMPlayer
         private GridViewStorageItem draggingItem;
         private void LocalListView_DragItemsStarting(object sender, DragItemsStartingEventArgs e)
         {
-            draggingItem = e.Items[0] as GridViewStorageItem;
+            try
+            {
+                draggingItem = e.Items[0] as GridViewStorageItem;
+            }
+            catch (Exception ex)
+            {
+                // System.Runtime.InteropServices.COMException:“Error HRESULT E_FAIL has been returned from a call to a COM component.”
+            }
         }
 
         private void LocalListView_DragEnter(object sender, DragEventArgs e)
@@ -283,6 +290,7 @@ namespace SMPlayer
             {
                 MultiSelectOption = MultiSelectOption,
                 ShowMoveToFolder = true,
+                ShowHideFile = true,
             });
         }
 
@@ -564,6 +572,13 @@ namespace SMPlayer
             if (CurrentFolderInfo == null) return;
             switch (args.EventType)
             {
+                case StorageItemEventType.HideFile:
+                    if (file.ParentPath != CurrentFolder.Path) return;
+                    GridItems.RemoveAll(i => i.Path == file.Path);
+                    break;
+                case StorageItemEventType.ResumeFile:
+                    if (file.ParentPath != CurrentFolder.Path) return;
+                    break;
                 case StorageItemEventType.Move:
                     GridItems.RemoveAll(i => i.Path == file.Path);
                     if (GridItems.FirstOrDefault(i => i.Path.Equals(args.Folder.Path)) is GridViewFolder folder)
@@ -575,6 +590,21 @@ namespace SMPlayer
             SetNavText(CurrentFolder);
         }
 
+        private void InsertFolder(FolderTree folder)
+        {
+            GridViewFolder newFolder = new GridViewFolder(folder);
+            int firstMusic = GridItems.FindIndex(i => i is GridViewMusic);
+            if (firstMusic == -1)
+            {
+                GridItems.Add(newFolder);
+            }
+            else
+            {
+                int index = GridItems.Take(firstMusic).FindSortedListInsertIndex(newFolder, i => i.Name);
+                GridItems.Insert(index, newFolder);
+            }
+        }
+
         void IStorageItemEventListener.ExecuteFolderEvent(FolderTree folder, StorageItemEventArgs args)
         {
             FolderTree currentFolder = CurrentFolderInfo;
@@ -583,19 +613,14 @@ namespace SMPlayer
             {
                 case StorageItemEventType.Add:
                     if (!args.Folder.Equals(currentFolder)) return;
-                    GridViewFolder newFolder = new GridViewFolder(folder);
-                    int firstMusic = GridItems.FindIndex(i => i is GridViewMusic);
-                    if (firstMusic == -1)
-                    {
-                        GridItems.Add(newFolder);
-                    }
-                    else
-                    {
-                        int index = GridItems.Take(firstMusic).FindSortedListInsertIndex(newFolder, i => i.Name);
-                        GridItems.Insert(index, newFolder);
-                    }
+                    InsertFolder(folder);
+                    break;
+                case StorageItemEventType.ResumeFolder:
+                    if (folder.ParentPath != CurrentFolder.Path) return;
+                    InsertFolder(folder);
                     break;
                 case StorageItemEventType.Remove:
+                case StorageItemEventType.HideFolder:
                     GridItems.RemoveAll(i => i.Path == folder.Path);
                     break;
                 case StorageItemEventType.Move:
