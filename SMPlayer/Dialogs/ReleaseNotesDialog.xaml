@@ -25,6 +25,13 @@
 
     <ScrollViewer>
         <TextBlock TextWrapping="WrapWholeWords">
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.8.6</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesBugFixForNowPlayingPlaylist"/><LineBreak />
+            <LineBreak />
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.8.5</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesBugFixForResumeFile"/><LineBreak />
+            2. <Run x:Uid="ReleaseNotesBugFixForSelectingPlayedNowPlayingMusic"/><LineBreak />
+            <LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.8.0</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesNotificationLyricsSource"/><LineBreak />
             2. <Run x:Uid="ReleaseNotesUseHideFolder"/><LineBreak />

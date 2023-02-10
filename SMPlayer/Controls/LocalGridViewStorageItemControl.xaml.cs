@@ -36,7 +36,7 @@ namespace SMPlayer.Controls
             }
             else if (data is GridViewMusic music)
             {
-                MusicPlayer.AddMusicAndPlay(music.Source);
+                MusicPlayer.AddNextAndPlay(music.Source);
             }
         }
         private void AddToButton_Click(object sender, RoutedEventArgs e)

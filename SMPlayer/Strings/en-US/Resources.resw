@@ -1436,9 +1436,18 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
     <value>See all hidden folders</value>
   </data>
   <data name="HiddenFolderIntroductionTextBlock.Text" xml:space="preserve">
-    <value>Below are the hidden folders, whose sub folders and files will not be displayed and scanned.</value>
+    <value>Below are the hidden items, which will not be displayed and scanned.</value>
   </data>
   <data name="ResumeButton.Content" xml:space="preserve">
     <value>Resume</value>
+  </data>
+  <data name="ReleaseNotesBugFixForResumeFile.Text" xml:space="preserve">
+    <value>Fix a bug that files cannot be resumed if it is hidden</value>
+  </data>
+  <data name="ReleaseNotesBugFixForSelectingPlayedNowPlayingMusic.Text" xml:space="preserve">
+    <value>Fix a bug that played music in the Now Playing cannot be clicked.</value>
+  </data>
+  <data name="ReleaseNotesBugFixForNowPlayingPlaylist.Text" xml:space="preserve">
+    <value>Fix some bugs of the Now Playing playlist.</value>
   </data>
 </root>

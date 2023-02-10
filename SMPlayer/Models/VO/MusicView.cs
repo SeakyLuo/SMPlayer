@@ -145,38 +145,27 @@ namespace SMPlayer.Models
             Id = src.Id;
             Path = src.Path;
             Index = src.Index;
-            CopyMusicProperties(src, notifyPropertyChange);
             if (notifyPropertyChange)
             {
+                Name = src.Name;
+                Artist = src.Artist;
+                Album = src.Album;
                 Favorite = src.Favorite;
                 PlayCount = src.PlayCount;
                 IsPlaying = src.IsPlaying;
             }
             else
             {
+                name = src.Name;
+                artist = src.Artist;
+                album = src.Album;
                 isFavorite = src.Favorite;
                 playCount = src.PlayCount;
                 isPlaying = src.IsPlaying;
             }
-            return src;
-        }
-
-        public void CopyMusicProperties(MusicView src, bool notifyPropertyChange = true)
-        {
-            if (notifyPropertyChange)
-            {
-                Name = src.Name;
-                Artist = src.Artist;
-                Album = src.Album;
-            }
-            else
-            {
-                name = src.Name;
-                artist = src.Artist;
-                album = src.Album;
-            }
             Duration = src.Duration;
             DateAdded = src.DateAdded;
+            return src;
         }
 
         public void Played()
@@ -216,8 +205,6 @@ namespace SMPlayer.Models
             var file = await GetStorageFileAsync();
             return file.GetLyrics();
         }
-
-
 
         public async Task<MusicDisplayItem> GetMusicDisplayItemAsync()
         {

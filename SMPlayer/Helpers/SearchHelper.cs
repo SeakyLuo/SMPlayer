@@ -17,6 +17,7 @@ namespace SMPlayer.Helpers
 
         public static int EvaluateString(string str, string keyword, int offset = 0)
         {
+            if (string.IsNullOrEmpty(str)) return 0;
             if (str == keyword) return 100 + offset;
             if (str.Equals(keyword, Comparison)) return 95 + offset;
             if (str.StartsWith(keyword)) return 90 + offset;

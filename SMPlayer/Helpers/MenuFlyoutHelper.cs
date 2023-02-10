@@ -429,19 +429,7 @@ namespace SMPlayer
             };
             item.Click += async (s, args) =>
             {
-                await new RemoveDialog()
-                {
-                    Message = Helper.LocalizeMessage("DeleteFolder", tree.Name),
-                    CheckBoxVisibility = Visibility.Collapsed,
-                    Confirm = async () =>
-                    {
-                        StorageFolder folder = await tree.GetStorageFolderAsync();
-                        if (folder != null) await folder.DeleteAsync();
-                        StorageService.DeleteFolder(tree);
-                        afterTreeDeleted?.Invoke(tree);
-                        Helper.ShowNotificationRaw(Helper.LocalizeMessage("FolderIsDeleted", tree.Name));
-                    }
-                }.ShowAsync();
+                await RemoveDialog.BuildDeleteFolderDialog(tree, afterTreeDeleted).ShowAsync();
             };
             return item;
         }
@@ -493,17 +481,7 @@ namespace SMPlayer
                 Icon = new SymbolIcon(Symbol.Play)
             };
             playItem.SetToolTip(Helper.LocalizeText("PlayMusicOfName", music.Name));
-            playItem.Click += (s, e) =>
-            {
-                if (index >= 0)
-                {
-                    MusicPlayer.MoveToMusic(index);
-                }
-                else
-                {
-                    MusicPlayer.SetMusicAndPlay(music);
-                }
-            };
+            playItem.Click += (s, e) => MusicPlayer.MoveToMusicOrPlay(music, index);
             flyout.Items.Add(playItem);
             if (currentIndex != -1 && currentIndex != index && currentIndex != index - 1)
             {
@@ -514,14 +492,7 @@ namespace SMPlayer
                 };
                 playNextItem.Click += (s, args) =>
                 {
-                    if (index >= 0)
-                    {
-                        MusicPlayer.MoveMusic(index, currentIndex);
-                    }
-                    else
-                    {
-                        MusicPlayer.AddMusic(music, currentIndex + 1);
-                    }
+                    MusicPlayer.PlayNext(music, index);
                     Helper.ShowNotificationRaw(Helper.LocalizeMessage("SetPlayNext", music.Name));
                 };
                 flyout.Items.Add(playNextItem);
@@ -541,18 +512,10 @@ namespace SMPlayer
                 };
                 deleteItem.Click += async (s, args) =>
                 {
-                    await new RemoveDialog()
+                    await RemoveDialog.BuildDeleteMusicDialog(music, m =>
                     {
-                        Message = Helper.LocalizeMessage("DeleteMusicMessage", music.Name),
-                        Confirm = async () =>
-                        {
-                            MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
-                            listener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.Delete) { Data = music });
-                            await StorageService.DeleteFile(music.ToFolderFile());
-                            MainPage.Instance?.Loader.Hide();
-                            Helper.ShowNotification(Helper.LocalizeMessage("MusicDeleted", music.Name));
-                        }
-                    }.ShowAsync();
+                        listener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.Delete) { Data = m });
+                    }).ShowAsync();
                 };
                 deleteItem.SetToolTip(Helper.LocalizeMessage("DeleteMusic", music.Name), false);
                 flyout.Items.Add(deleteItem);

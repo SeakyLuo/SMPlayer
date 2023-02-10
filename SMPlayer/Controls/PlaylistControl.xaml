@@ -24,7 +24,6 @@
         CanReorderItems="False"
         ContainerContentChanging="SongsListView_ContainerContentChanging"
         DragItemsCompleted="SongsListView_DragItemsCompleted"
-        DragItemsStarting="SongsListView_DragItemsStarting"
         IsItemClickEnabled="True"
         ItemClick="SongsListView_ItemClick"
         ItemsSource="{x:Bind CurrentPlaylist, Mode=OneWay}"

@@ -51,7 +51,7 @@ namespace SMPlayer
 
         private void ActiveAuthoziedDeviceListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            args.ItemContainer.Background = PlaylistControl.GetRowBackground(args.ItemIndex);
+            args.ItemContainer.Background = ColorHelper.GetRowBackground(args.ItemIndex);
         }
 
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
@@ -77,7 +77,7 @@ namespace SMPlayer
         {
             for (int i = start; i < end; i++)
                 if (ActiveAuthorziedDeviceListView.ContainerFromIndex(i) is ListViewItem container)
-                    container.Background = PlaylistControl.GetRowBackground(i);
+                    container.Background = ColorHelper.GetRowBackground(i);
         }
     }
 }

@@ -322,8 +322,13 @@ namespace SMPlayer.Helpers
                         Log.Info($"[SearchByAlbum] itemlist is empty, title {title} artist {artist} album {album}");
                         return await SearchByKeyword(keyword, title, artist, album);
                     }
-                    uint albumIndex = FindNearestItem(albumList, "singer", artist);
-                    string albumMid = albumList.GetObjectAt(albumIndex).GetNamedString("mid");
+                    int albumIndex = FindNearestItem(albumList, "singer", artist);
+                    if (albumIndex == -1)
+                    {
+                        Log.Info($"[SearchByAlbum] no matching artist {artist} for album {album}");
+                        return await SearchByKeyword(keyword, title, artist, album);
+                    }
+                    string albumMid = albumList.GetObjectAt((uint) albumIndex).GetNamedString("mid");
                     string albumDetailUrl = $"https://c.y.qq.com/v8/fcg-bin/musicmall.fcg?cv=4747474&ct=24&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=1&g_tk_new_20200303=1383304704&g_tk=1383304704&cmd=get_album_buy_page&albummid={albumMid}";
                     JsonObject albumDetailResponse = await GetQQMusicResponse(albumDetailUrl);
                     JsonObject albumDetailData = albumDetailResponse.GetNamedObject("data");
@@ -338,8 +343,13 @@ namespace SMPlayer.Helpers
                         Log.Info($"[GetAlbumDetail] itemlist is empty, title {title} artist {artist} album {album}");
                         return await SearchByKeyword(keyword, title, artist, album);
                     }
-                    uint songIndex = FindNearestItem(albumSongs, "songname", title);
-                    return albumSongs.GetObjectAt(songIndex).GetNamedString("songmid");
+                    int songIndex = FindNearestItem(albumSongs, "songname", title);
+                    if (songIndex == -1)
+                    {
+                        Log.Info($"[GetAlbumDetail] no matching music of title {title} for album {album}");
+                        return await SearchByKeyword(keyword, title, artist, album);
+                    }
+                    return albumSongs.GetObjectAt((uint) songIndex).GetNamedString("songmid");
                 }
             }
             catch (Exception e)
@@ -355,32 +365,37 @@ namespace SMPlayer.Helpers
             var data = response.GetNamedObject("data");
             if (data == null)
             {
-                Log.Info($"[SearchByTitle] data is null, keyword {keyword} title {title} artist {artist} album {album}");
+                Log.Info($"[SearchByKeyword] data is null, keyword {keyword} title {title} artist {artist} album {album}");
                 return "";
             }
             var song = data.GetNamedObject("song");
             if (song == null)
             {
-                Log.Info($"[SearchByTitle] song is null, keyword {keyword} title {title} artist {artist} album {album}");
+                Log.Info($"[SearchByKeyword] song is null, keyword {keyword} title {title} artist {artist} album {album}");
                 return "";
             }
             var list = song.GetNamedArray("itemlist");
             if (list.IsEmpty())
             {
-                Log.Info($"[SearchByTitle] itemlist is empty, keyword {keyword} title {title} artist {artist} album {album}");
+                Log.Info($"[SearchByKeyword] itemlist is empty, keyword {keyword} title {title} artist {artist} album {album}");
                 return "";
             }
-            uint index = FindNearestItem(list, "singer", artist);
-            return list.GetObjectAt(index).GetNamedString("mid");
+            int index = FindNearestItem(list, "singer", artist);
+            if (index == -1)
+            {
+                Log.Info($"[SearchByKeyword] no matching singer {artist} for keyword {keyword}");
+                return "";
+            }
+            return list.GetObjectAt((uint) index).GetNamedString("mid");
         }
 
-        private static uint FindNearestItem(JsonArray list, string field, string target)
+        private static int FindNearestItem(JsonArray list, string field, string target)
         {
-            uint index = 0;
             if (string.IsNullOrEmpty(target))
             {
-                return index;
+                return 0;
             }
+            uint index = 0;
             int points = 0;
             for (uint i = 0; i < list.Count; i++)
             {
@@ -390,8 +405,7 @@ namespace SMPlayer.Helpers
                 int eval = SearchHelper.EvaluateString(target, str);
                 if (eval == 100)
                 {
-                    index = i;
-                    break;
+                    return (int) i;
                 }
                 if (eval > points)
                 {
@@ -399,7 +413,7 @@ namespace SMPlayer.Helpers
                     index = i;
                 }
             }
-            return index;
+            return points == 0 ? -1 : (int) index;
         }
 
         private static async Task<string> ImproveSearch(Music music, Func<string, string, string, string, Task<string>> search)

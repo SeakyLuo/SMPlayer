@@ -21,6 +21,7 @@ namespace SMPlayer.Services
         public static IEnumerable<Music> AllSongs => SQLHelper.Run(c => c.SelectAllMusic());
         public static Music FindMusic(long id) { return SQLHelper.Run(c => c.SelectMusicById(id)); }
         public static Music FindMusic(string path) { return SQLHelper.Run(c => c.SelectMusicByPath(path)); }
+        public static Music FindMusicIncludeHidden(long id) { return SQLHelper.Run(c => c.SelectMusicByIdIncludeHidden(id)); }
         public static List<Music> FindMusicList(IEnumerable<long> ids) { return ids.IsEmpty() ? new List<Music>() : SQLHelper.Run(c => c.SelectMusicByIds(ids)).ToList(); }
 
         public static IEnumerable<Music> SelectByAlbum(string album)

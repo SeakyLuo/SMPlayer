@@ -480,8 +480,8 @@ namespace SMPlayer
             UpdateMusic(MusicPlayer.CurrentMusic);
             MediaSlider.Value = MusicPlayer.Position;
 
-            if (MusicPlayer.IsPlaying) PlayMusic();
-            else PauseMusic();
+            if (MusicPlayer.IsPlaying) SetButtonPlaying();
+            else SetMusicPause();
 
             double volume = Settings.settings.Volume * 100;
             VolumeButton.Content = Helper.GetVolumeIcon(volume);
@@ -508,9 +508,9 @@ namespace SMPlayer
                 ClearMusic();
                 return;
             }
-            CurrentMusic = music.ToVO();
             await Helper.RunInMainUIThread(Dispatcher, () =>
             {
+                MusicView musicView = music.ToVO();
                 MediaSlider.IsEnabled = true;
                 TitleTextBlock.Text = music.Name;
                 ArtistTextBlock.Text = string.IsNullOrWhiteSpace(music.Artist) ? Helper.LocalizeMessage("UnknownArtist") : music.Artist;
@@ -521,10 +521,11 @@ namespace SMPlayer
                 if (LikeToggleButton != null)
                 {
                     LikeToggleButton.IsEnabled = true;
-                    if (CurrentMusic.Favorite = PlaylistService.IsFavorite(music)) LikeMusic();
+                    if (musicView.Favorite = PlaylistService.IsFavorite(music)) LikeMusic();
                     else DislikeMusic();
                 }
                 SetThumbnail(music);
+                CurrentMusic = musicView;
             });
         }
 
@@ -663,13 +664,13 @@ namespace SMPlayer
             if (mode != Settings.settings.Mode) MusicPlayer.PlayMode = mode;
         }
 
-        public void PlayMusic()
+        public void SetButtonPlaying()
         {
             PlayButton.Content = "\uE769";
             PlayButton.SetToolTip("Pause");
         }
 
-        public void PauseMusic()
+        public void SetMusicPause()
         {
             PlayButton.Content = "\uE768";
             PlayButton.SetToolTip("Play");
@@ -677,16 +678,13 @@ namespace SMPlayer
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = (Button)sender;
-            if (button.Content.ToString() == "\uE768")
+            if (MusicPlayer.IsPlaying)
             {
-                if (MusicPlayer.CurrentMusic == null || MusicPlayer.CurrentPlaylistCount == 0)
-                    return;
-                MusicPlayer.Play();
+                MusicPlayer.Pause();
             }
             else
             {
-                MusicPlayer.Pause();
+                MusicPlayer.Play();
             }
         }
 
@@ -939,7 +937,7 @@ namespace SMPlayer
 
         public void ClearMusic()
         {
-            PauseMusic();
+            SetMusicPause();
             CurrentMusic = null;
             AlbumCover.Source = MusicImage.DefaultImage;
             MainMediaControlGrid.Background = ColorHelper.HighlightBrush;
@@ -1067,7 +1065,7 @@ namespace SMPlayer
             switch (args.EventType)
             {
                 case MusicPlayerEventType.Remove:
-                    if (MusicPlayer.CurrentMusic == null)
+                    if (MusicPlayer.CurrentPlaylistCount == 0)
                     {
                         ClearMusic();
                     }
@@ -1100,10 +1098,10 @@ namespace SMPlayer
                         switch (state)
                         {
                             case MediaPlaybackState.Playing:
-                                PlayMusic();
+                                SetButtonPlaying();
                                 break;
                             case MediaPlaybackState.Paused:
-                                PauseMusic();
+                                SetMusicPause();
                                 break;
                         }
                         await ToastHelper.ShowToast(MusicPlayer.CurrentMusic, state);

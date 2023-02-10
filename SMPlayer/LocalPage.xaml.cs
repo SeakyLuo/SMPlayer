@@ -88,10 +88,16 @@ namespace SMPlayer
             }
         }
 
+        public List<GridViewStorageItem> SelectedItems
+        {
+            get => CurrentListView.SelectedItems.Select(i => i as GridViewStorageItem).ToList();
+        }
+
         private MultiSelectCommandBarOption MultiSelectOption => new MultiSelectCommandBarOption
         {
             ShowRemove = false,
             ShowMoveToFolder = true,
+            ShowDelete = true,
         };
 
         public LocalPage()
@@ -397,6 +403,10 @@ namespace SMPlayer
 
         private void MultiSelectAppButton_Click(object sender, RoutedEventArgs e)
         {
+            if (CurrentListView.SelectionMode == ListViewSelectionMode.Multiple)
+            {
+                return;
+            }
             CurrentListView.SelectionMode = ListViewSelectionMode.Multiple;
             MainPage.Instance.ShowMultiSelectCommandBar(MultiSelectOption);
         }
@@ -533,7 +543,7 @@ namespace SMPlayer
             return false;
         }
 
-        void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
+        async void IMultiSelectListener.Execute(MultiSelectCommandBar commandBar, MultiSelectEventArgs args)
         {
             switch (args.Event)
             {
@@ -547,6 +557,15 @@ namespace SMPlayer
                     break;
                 case MultiSelectEvent.Play:
                     MusicPlayer.SetMusicAndPlay(SelectedSongs);
+                    break;
+                case MultiSelectEvent.Delete:
+                    List<GridViewStorageItem> selectedItems = SelectedItems;
+                    await RemoveDialog.BuildDeleteGridViewStorageItemsDialog(selectedItems, items =>
+                    {
+                        HashSet<string> paths = items.Select(i => i.Path).ToHashSet();
+                        GridItems.RemoveAll(i => paths.Contains(i.Path));
+                        commandBar.HideAfterOperation();
+                    }).ShowAsync();
                     break;
                 case MultiSelectEvent.SelectAll:
                     CurrentListView.SelectAll();

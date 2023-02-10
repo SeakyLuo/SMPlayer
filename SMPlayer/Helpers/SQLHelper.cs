@@ -307,6 +307,13 @@ namespace SMPlayer.Helpers
             return c.Query<MusicDAO>("select * from Music where State = ?", ActiveState.Active).Select(i => i.FromDAO());
         }
 
+        public static Music SelectMusicByIdIncludeHidden(this SQLiteConnection c, long id)
+        {
+            ActiveState[] activeStates = { ActiveState.Active, ActiveState.Hidden, ActiveState.ParentHidden };
+            string states = string.Join(",", activeStates.Select(i => (int)i));
+            return c.Query<MusicDAO>($"select * from Music where Id = ? and State in ({states})", id, ActiveState.Active).FirstOrDefault()?.FromDAO();
+        }
+
         public static Music SelectMusicById(this SQLiteConnection c, long id)
         {
             return c.Query<MusicDAO>("select * from Music where Id = ? and State = ?", id, ActiveState.Active).FirstOrDefault()?.FromDAO();
@@ -406,12 +413,23 @@ namespace SMPlayer.Helpers
 
         public static FolderFile SelectFile(this SQLiteConnection c, long Id)
         {
-            return c.Query<FileDAO>("select * from File where Id = ? and State = ?", Id, ActiveState.Active).FirstOrDefault()?.FromDAO();
+            return c.Query<FileDAO>("select * from File where Id = ?", Id).FirstOrDefault()?.FromDAO();
+        }
+
+        public static FolderFile SelectFileOfState(this SQLiteConnection c, long Id, ActiveState state = ActiveState.Active)
+        {
+            return c.Query<FileDAO>("select * from File where Id = ? and State = ?", Id, state).FirstOrDefault()?.FromDAO();
         }
 
         public static FolderFile SelectFileByPath(this SQLiteConnection c, string path)
         {
             return SelectFileDAOByPath(c, path)?.FromDAO();
+        }
+        
+        public static FolderFile SelectFileByPathIncludingHidden(this SQLiteConnection c, string path)
+        {
+            ActiveState[] states = { ActiveState.Active, ActiveState.Hidden, ActiveState.ParentHidden };
+            return SelectFileDAOByPathOfStates(c, path, states)?.FromDAO();
         }
 
         public static bool FileExists(this SQLiteConnection c, string path)
@@ -422,6 +440,12 @@ namespace SMPlayer.Helpers
         private static FileDAO SelectFileDAOByPath(this SQLiteConnection c, string path)
         {
             return c.Query<FileDAO>("select * from File where Path = ? and State = ?", path, ActiveState.Active).FirstOrDefault();
+        }
+
+        private static FileDAO SelectFileDAOByPathOfStates(this SQLiteConnection c, string path, params ActiveState[] activeStates)
+        {
+            string states = string.Join(",", activeStates.Select(i => (int)i));
+            return c.Query<FileDAO>($"select * from File where Path = ? and State in ({states})", path).FirstOrDefault();
         }
 
         public static List<FolderFile> SelectSubFiles(this SQLiteConnection c, FolderTree folder)

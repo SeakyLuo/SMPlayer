@@ -168,7 +168,7 @@ namespace SMPlayer
 
         private void SetSongs(IEnumerable<MatchResult<Music>> list)
         {
-            Songs.SetTo(list.Select(i => i.Entity.ToVO()));
+            Songs.SetTo(list.AsParallel().AsOrdered().Select(i => i.Entity.ToVO(isFavorite: PlaylistService.IsFavorite(i.Entity))));
         }
 
         private void SetPlaylists(IEnumerable<MatchResult<Playlist>> list)

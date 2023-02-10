@@ -49,7 +49,7 @@ namespace SMPlayer.Helpers
         {
             if (!preference.Songs) return;
             IEnumerable<PreferenceItem> items = GetPreferenceItems(PreferenceSettings.EnabledPreferredSongs);
-            songs.AddRange(items.Select(i => MusicService.FindMusic(i.LongId)));
+            songs.AddRange(items.Select(i => MusicService.FindMusic(i.LongId)).Where(i => i != null));
         }
 
         private static void HandlePreferredArtists(HashSet<Music> songs, PreferenceSettings preference)
@@ -186,7 +186,8 @@ namespace SMPlayer.Helpers
                     case EntityType.Folder:
                         HashSet<string> folders = group.AsParallel()
                                                        .Select(i => StorageService.FindFolderInfo(long.Parse(i.Id)))
-                                                       .Where(i => i != null).Select(i => i.Path).ToHashSet();
+                                                       .Where(i => i != null)
+                                                       .Select(i => i.Path).ToHashSet();
                         songs.RemoveWhere(i => Toss(probability) && folders.Any(f => i.Path.StartsWith(f)));
                         break;
                 }

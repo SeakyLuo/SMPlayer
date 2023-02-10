@@ -66,17 +66,14 @@ namespace SMPlayer.Dialogs
 
         private void ListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            args.ItemContainer.Background = PlaylistControl.GetRowBackground(args.ItemIndex);
+            args.ItemContainer.Background = ColorHelper.GetRowBackground(args.ItemIndex);
         }
 
         private void Grid_Tapped(object sender, TappedRoutedEventArgs e)
         {
             FolderUpdateResultGroupItem item = (sender as FrameworkElement).DataContext as FolderUpdateResultGroupItem;
             Music music = MusicService.FindMusic(item.Path);
-            if (!MusicPlayer.MoveToMusic(music))
-            {
-                MusicPlayer.AddMusicAndPlay(music);
-            }
+            MusicPlayer.AddNextAndPlay(music);
         }
 
 

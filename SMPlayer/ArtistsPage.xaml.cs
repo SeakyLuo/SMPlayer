@@ -175,7 +175,7 @@ namespace SMPlayer
 
         private void SongsListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            args.ItemContainer.Background = PlaylistControl.GetRowBackground(args.ItemIndex);
+            args.ItemContainer.Background = ColorHelper.GetRowBackground(args.ItemIndex);
         }
 
         private void FindMusicAndSetPlaying(Music target)

@@ -62,7 +62,7 @@ namespace SMPlayer.Services
         }
         public static FolderFile FindFile(long id)
         {
-            return SQLHelper.Run(c => c.SelectFile(id));
+            return SQLHelper.Run(c => c.SelectFileOfState(id));
         }
         public static FolderFile FindFile(string path)
         {
@@ -201,18 +201,13 @@ namespace SMPlayer.Services
             }
         }
 
-        public static void DeleteFolder(FolderTree target)
+        public static async Task DeleteFolder(FolderTree target)
         {
+            StorageFolder folder = await target.GetStorageFolderAsync();
+            if (folder != null) await folder.DeleteAsync();
             SQLHelper.Run(c =>
             {
                 DeleteFolder(c, target);
-                foreach (var music in c.SelectAllMusic())
-                {
-                    if (music.Path.StartsWith(target.Path))
-                    {
-                        MusicService.RemoveMusic(music);
-                    }
-                }
             });
             foreach (var listener in StorageItemEventListeners)
                 listener.ExecuteFolderEvent(target, new StorageItemEventArgs(StorageItemEventType.Remove));
@@ -230,9 +225,7 @@ namespace SMPlayer.Services
             }
             foreach (var item in c.SelectSubFiles(target))
             {
-                FileDAO dao = item.ToDAO();
-                dao.State = ActiveState.Inactive;
-                c.Update(dao);
+                RemoveFile(item);
             }
         }
 
@@ -408,7 +401,7 @@ namespace SMPlayer.Services
         {
             try
             {
-                FolderFile file = SetFileStatus(music, ActiveState.Hidden);
+                FolderFile file = SetFileStatus(music, ActiveState.Active);
                 foreach (var listener in StorageItemEventListeners)
                     listener.ExecuteFileEvent(file, new StorageItemEventArgs(StorageItemEventType.ResumeFile));
             }
@@ -422,11 +415,11 @@ namespace SMPlayer.Services
         {
             return SQLHelper.Run(c =>
             {
-                FolderFile file = c.SelectFileByPath(music.Path);
+                FolderFile file = c.SelectFileByPathIncludingHidden(music.Path);
                 file.State = state;
                 c.Update(file.ToDAO());
                 music.State = state;
-                c.Update(music);
+                c.Update(music.ToDAO());
                 return file;
             });
         }

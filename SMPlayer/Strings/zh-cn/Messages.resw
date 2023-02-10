@@ -216,11 +216,14 @@
   <data name="DeleteFolder" xml:space="preserve">
     <value>你将要删除文件夹“{0}”，此操作还会删除该文件夹下所有的文件夹和音乐，且不可撤销，是否确认？</value>
   </data>
+  <data name="DeleteItem" xml:space="preserve">
+    <value>你将要删除《{0}》。该操作无法撤销，是否要继续？</value>
+  </data>
+  <data name="DeleteItems" xml:space="preserve">
+    <value>你将要删除{0}个项目。该操作无法撤销，是否要继续？</value>
+  </data>
   <data name="DeleteMusic" xml:space="preserve">
     <value>删除《{0}》</value>
-  </data>
-  <data name="DeleteMusicMessage" xml:space="preserve">
-    <value>你将要删除《{0}》。该项操作无法完全撤销，是否要继续？</value>
   </data>
   <data name="DuplicateFoundWhenMovingFile" xml:space="preserve">
     <value>文件夹“{1}”已经包含文件“{0}”，是否继续？</value>
@@ -273,8 +276,14 @@
   <data name="ImportLyricsFailed" xml:space="preserve">
     <value>导入歌词失败</value>
   </data>
+  <data name="ItemDeleted" xml:space="preserve">
+    <value>《{0}》已被删除！</value>
+  </data>
   <data name="ItemRemoved" xml:space="preserve">
     <value>“{0}”已移除</value>
+  </data>
+  <data name="ItemsDeleted" xml:space="preserve">
+    <value>{0}个项目被删除！</value>
   </data>
   <data name="ItemsRemoved" xml:space="preserve">
     <value>{0}个项目已被移除！</value>
@@ -308,9 +317,6 @@
   </data>
   <data name="MiniModeFailed" xml:space="preserve">
     <value>无法进入迷你模式！</value>
-  </data>
-  <data name="MusicDeleted" xml:space="preserve">
-    <value>《{0}》已被删除！</value>
   </data>
   <data name="MusicName" xml:space="preserve">
     <value>《{0}》</value>

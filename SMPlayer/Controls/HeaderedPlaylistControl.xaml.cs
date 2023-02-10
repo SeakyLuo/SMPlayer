@@ -340,7 +340,8 @@ namespace SMPlayer
                     }
                     else
                     {
-                        HeaderedPlaylistController.RemoveMusic(args.Music);
+                        // 如果通知监听器会导致无限递归
+                        HeaderedPlaylistController.RemoveMusic(args.Music.ToVO(), notifyListener: false);
                     }
                     SetPlaylistInfo(HeaderedPlaylistController.CurrentPlaylist);
                     break;

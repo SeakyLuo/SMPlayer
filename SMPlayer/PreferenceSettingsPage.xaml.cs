@@ -484,7 +484,7 @@ namespace SMPlayer
 
         private void PreferenceListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            args.ItemContainer.Background = GetRowBackground(args.ItemIndex);
+            args.ItemContainer.Background = ColorHelper.GetRowBackground(args.ItemIndex);
         }
 
         private void AlternateRowBackgroud(EntityType type, int start, int end)
@@ -492,7 +492,7 @@ namespace SMPlayer
             ListView listView = GetPreferredListViewByType(type);
             for (int i = start; i < end; i++)
                 if (listView.ContainerFromIndex(i) is ListViewItem container)
-                    container.Background = GetRowBackground(i);
+                    container.Background = ColorHelper.GetRowBackground(i);
         }
 
         private void PreferLevelComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -502,11 +502,6 @@ namespace SMPlayer
             {
                 PreferenceSettings.UpdatePreference(item.AsPreferenceItem());
             }
-        }
-
-        public static Brush GetRowBackground(int index)
-        {
-            return index % 2 == 0 ? ColorHelper.WhiteSmokeBrush : ColorHelper.WhiteBrush;
         }
 
         private void PreferredOthersListView_ItemClick(object sender, ItemClickEventArgs e)

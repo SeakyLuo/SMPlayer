@@ -43,7 +43,9 @@ namespace SMPlayer
         {
             HiddenStorageItems.Clear();
             HiddenStorageItems.AddRange(StorageService.FindHiddenFolders().Select(i => new GridViewFolder(i)));
-            HiddenStorageItems.AddRange(StorageService.FindHiddenFiles().Select(i => new GridViewMusic(i)));
+            HiddenStorageItems.AddRange(StorageService.FindHiddenFiles()    
+                                                      .Select(i => MusicService.FindMusicIncludeHidden(i.FileId))
+                                                      .Select(i => new GridViewMusic(i.ToVO())));
         }
 
         async void IStorageItemEventListener.ExecuteFileEvent(FolderFile file, StorageItemEventArgs args)
@@ -74,7 +76,7 @@ namespace SMPlayer
 
         private void HiddenFoldersView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            args.ItemContainer.Background = PlaylistControl.GetRowBackground(args.ItemIndex);
+            args.ItemContainer.Background = ColorHelper.GetRowBackground(args.ItemIndex);
         }
 
         private void ResumeButton_Click(object sender, RoutedEventArgs e)

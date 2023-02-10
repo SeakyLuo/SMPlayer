@@ -54,9 +54,7 @@ namespace SMPlayer
 
         private void MusicLibraryDataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
-            var music = (MusicView)MusicLibraryDataGrid.SelectedItem;
-            if (music == null) return;
-            MusicPlayer.AddMusicAndPlay(music);
+            MusicPlayer.AddNextAndPlay((MusicView) MusicLibraryDataGrid.SelectedItem);
         }
 
         private void MenuFlyout_Opening(object sender, object e)

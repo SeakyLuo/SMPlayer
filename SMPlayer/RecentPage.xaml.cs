@@ -165,7 +165,7 @@ namespace SMPlayer
         {
             for (int i = start; i < RecentSearches.Count; i++)
                 if (SearchHistoryListView.ContainerFromIndex(i) is ListViewItem container)
-                    container.Background = PlaylistControl.GetRowBackground(i);
+                    container.Background = ColorHelper.GetRowBackground(i);
         }
 
         public void SetupSearched()
@@ -201,7 +201,7 @@ namespace SMPlayer
 
         private void SearchHistoryListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            args.ItemContainer.Background = PlaylistControl.GetRowBackground(args.ItemIndex);
+            args.ItemContainer.Background = ColorHelper.GetRowBackground(args.ItemIndex);
         }
 
         private async void AskRemoveRecentPlayed(object item)

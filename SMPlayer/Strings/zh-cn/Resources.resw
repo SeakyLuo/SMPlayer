@@ -1430,9 +1430,18 @@
     <value>查看所有隐藏的文件夹</value>
   </data>
   <data name="HiddenFolderIntroductionTextBlock.Text" xml:space="preserve">
-    <value>下面是已隐藏的文件夹列表，被隐藏的文件夹下的歌曲和文件夹不会被扫描和展示。</value>
+    <value>下面是已隐藏的项目列表，被隐藏的歌曲、被隐藏的文件夹下的歌曲和文件夹不会被扫描和展示。</value>
   </data>
   <data name="ResumeButton.Content" xml:space="preserve">
     <value>恢复</value>
+  </data>
+  <data name="ReleaseNotesBugFixForResumeFile.Text" xml:space="preserve">
+    <value>修复了无法恢复文件展示的问题</value>
+  </data>
+  <data name="ReleaseNotesBugFixForSelectingPlayedNowPlayingMusic.Text" xml:space="preserve">
+    <value>修复了无法点击正在播放列表无法点击播放过的歌曲的问题</value>
+  </data>
+  <data name="ReleaseNotesBugFixForNowPlayingPlaylist.Text" xml:space="preserve">
+    <value>修复了正在播放列表的一些问题</value>
   </data>
 </root>

@@ -43,12 +43,28 @@ namespace SMPlayer.Controls
             MoveToFolderAppButton.Visibility = VisibilityConverter.BoolToVisibility(option.ShowMoveToFolder);
             DeleteAppButton.Visibility = VisibilityConverter.BoolToVisibility(option.ShowDelete);
             ReverseSelectionAppButton.Visibility = VisibilityConverter.BoolToVisibility(option.ShowReverseSelection);
+            SetButtonEnablity(false);
             CommandBarContainer.IsOpen = true;
         }
 
         public void CountSelections(int selections)
         {
-            CountSelectionTextBlock.Text = selections == 0 ? "" : Helper.LocalizeText("ItemsSelected", selections);
+            if (selections == 0)
+            {
+                CountSelectionTextBlock.Text = "";
+                SetButtonEnablity(false);
+            }
+            else
+            {
+                CountSelectionTextBlock.Text = Helper.LocalizeText("ItemsSelected", selections);
+                SetButtonEnablity(true);
+            }
+        }
+
+        private void SetButtonEnablity(bool isEnabled)
+        {
+            PlayAppButton.IsEnabled = AddToAppButton.IsEnabled = RemoveAppButton.IsEnabled
+                = MoveToFolderAppButton.IsEnabled = DeleteAppButton.IsEnabled = isEnabled;
         }
 
         public void Hide()
@@ -125,7 +141,6 @@ namespace SMPlayer.Controls
         private void DeleteAppButton_Click(object sender, RoutedEventArgs e)
         {
             MultiSelectListener?.Execute(this, new MultiSelectEventArgs(MultiSelectEvent.Delete));
-            HideAfterOperation();
         }
 
         void IMenuFlyoutItemClickListener.Execute(MenuFlyoutEventArgs args)

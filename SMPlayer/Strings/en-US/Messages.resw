@@ -216,11 +216,14 @@
   <data name="DeleteFolder" xml:space="preserve">
     <value>You are deleting folder "{0}". This operation will also delete everything under this folder and is irrevertible. Are you sure?</value>
   </data>
+  <data name="DeleteItem" xml:space="preserve">
+    <value>You are deleting "{0}" from your device.\nThis operation is irrevertible.\nDo you want to continue?</value>
+  </data>
+  <data name="DeleteItems" xml:space="preserve">
+    <value>You are about to delete {0} items from your device.\nThis operation is irrevertible.\nDo you want to continue?</value>
+  </data>
   <data name="DeleteMusic" xml:space="preserve">
     <value>Delete "{0}"</value>
-  </data>
-  <data name="DeleteMusicMessage" xml:space="preserve">
-    <value>You are deleting "{0}" from your device.\nThis operation is not fully revertible.\nDo you want to continue?</value>
   </data>
   <data name="DuplicateFoundWhenMovingFile" xml:space="preserve">
     <value>File "{0}" already exists in folder "{1}". Continue?</value>
@@ -273,8 +276,14 @@
   <data name="ImportLyricsFailed" xml:space="preserve">
     <value>Import lyrics failed.</value>
   </data>
+  <data name="ItemDeleted" xml:space="preserve">
+    <value>"{0}" is deleted!</value>
+  </data>
   <data name="ItemRemoved" xml:space="preserve">
     <value>"{0}" is removed</value>
+  </data>
+  <data name="ItemsDeleted" xml:space="preserve">
+    <value>{0} items are deleted!</value>
   </data>
   <data name="ItemsRemoved" xml:space="preserve">
     <value>{0} items have been removed!</value>
@@ -308,9 +317,6 @@
   </data>
   <data name="MiniModeFailed" xml:space="preserve">
     <value>Fail to enter mini mode!</value>
-  </data>
-  <data name="MusicDeleted" xml:space="preserve">
-    <value>"{0}" is deleted!</value>
   </data>
   <data name="MusicName" xml:space="preserve">
     <value> "{0}"</value>

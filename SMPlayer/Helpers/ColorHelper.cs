@@ -49,6 +49,11 @@ namespace SMPlayer
         private const int MIN_VALUE = 10;
         private const int MAX_VALUE = 205;
 
+        public static Brush GetRowBackground(int index)
+        {
+            return index % 2 == 0 ? ColorHelper.WhiteSmokeBrush : ColorHelper.WhiteBrush;
+        }
+
         private static async Task<byte[]> GetPixelData(this BitmapDecoder decoder, uint x, uint y)
         {
             var data = await decoder.GetPixelDataAsync(BitmapPixelFormat.Bgra8,

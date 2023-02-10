@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Windows.Foundation.Collections;
 using Windows.Media;
@@ -21,7 +22,7 @@ namespace SMPlayer
         public static Music CurrentMusic => PlaybackList.CurrentItem.GetMusic();
         public static IEnumerable<Music> CurrentPlaylist => PlaybackList.Items.Select(i => i.GetMusic()).ToList();
         public static int CurrentPlaylistCount => PlaybackList.Items.Count;
-        public static int CurrentIndex { get; private set; } = -1;
+        public static int CurrentIndex => CurrentPlaylistCount > 0 ? (int) PlaybackList.CurrentItemIndex : -1;
 
         public static double Position
         {
@@ -97,100 +98,26 @@ namespace SMPlayer
         private static async Task InitWithMusic(Music music = null)
         {
             var settings = Settings.settings;
+            var playlist = await JsonFileHelper.ReadObjectAsync<List<long>>(JsonFilename);
+            if (playlist.IsNotEmpty())
+            {
+                SetPlaylist(MusicService.FindMusicList(playlist));
+            }
             if (music == null)
             {
-                var playlist = await JsonFileHelper.ReadObjectAsync<List<long>>(JsonFilename);
-                if (playlist.IsNotEmpty())
-                {
-                    if (settings.LastMusicIndex == -1)
-                        settings.LastMusicIndex = 0;
-                    SetPlaylist(MusicService.FindMusicList(playlist));
-                    if (settings.LastMusicIndex < CurrentPlaylistCount)
-                        CurrentIndex = settings.LastMusicIndex;
-                }
+                MoveToMusic(settings.LastMusicIndex);
             }
-            if (music != null)
+            else
             {
-                AddMusic(music);
-            }
-            else if (CurrentIndex != -1)
-            {
-                try
-                {
-                    PlaybackList.MoveTo(Convert.ToUInt32(CurrentIndex));
-                }
-                catch (Exception)
-                {
-                    // 无效索引
-                }
+                AddMusic(music, 0);
             }
             Player.Volume = settings.Volume;
             // 如果非文件启动，并保存播放进度且有音乐
             if (music == null && settings.SaveMusicProgress && CurrentPlaylist.IsNotEmpty()) Position = settings.MusicProgress;
             PlayMode = settings.Mode;
-
-            PlaybackList.CurrentItemChanged += (sender, args) =>
-            {
-                if (args.Reason == MediaPlaybackItemChangedReason.EndOfStream)
-                {
-                    SettingsService.Played(CurrentMusic);
-                }
-                Music next = args.NewItem.GetMusic();
-                try
-                {
-                    Log.Info("Next Music {0}", next?.Path);
-                    UpdateUniversalVolumeControl(next);
-                    var switchArgs = new MusicPlayerMusicSwitchEventArgs(args.Reason) { Music = next  };
-                    foreach (var listener in MusicPlayerEventListeners)
-                    {
-                        try
-                        {
-                            listener?.Execute(switchArgs);
-                        }
-                        catch (Exception e)
-                        {
-                            Log.Warn("MusicPlayerEventListeners Exception {0}", e);
-                        }
-                    }
-                }
-                catch (InvalidOperationException)
-                {
-                    // Collection was modified; enumeration operation may not execute.
-                }
-                CurrentIndex = Settings.settings.LastMusicIndex = (int)PlaybackList.CurrentItemIndex;
-                App.Save();
-            };
-            Player.PlaybackSession.PlaybackStateChanged += (sender, args) =>
-            {
-                try
-                {
-                    lock (MusicPlayerEventListeners)
-                    {
-                        foreach (var listener in MusicPlayerEventListeners)
-                            listener.Execute(new MusicPlayerStateChangedEventArgs(sender.PlaybackState));
-                    }
-                }
-                catch (Exception e)
-                {
-                    Log.Warn($"Player.PlaybackSession.PlaybackStateChanged failed {e}");
-                }
-            };
-            Player.MediaEnded += (sender, args) =>
-            {
-                try
-                {
-                    SettingsService.Played(CurrentMusic);
-                    lock (MusicPlayerEventListeners)
-                    {
-                        foreach (var listener in MusicPlayerEventListeners)
-                            listener.Execute(new MusicPlayerEventArgs(MusicPlayerEventType.MediaEnded));
-                    }
-                }
-                catch (Exception e)
-                {
-                    Log.Warn($"Player.MediaEnded failed {e}");
-                }
-            };
+            PlaybackList.CurrentItemChanged += OnMusicChanged;
+            Player.PlaybackSession.PlaybackStateChanged += OnPlaybackStateChanged;
+            Player.MediaEnded += OnMediaEnded;
             foreach (var listener in InitFinishedListeners)
                 listener.Invoke();
             if (settings.AutoPlay || music != null) Play();
@@ -201,6 +128,70 @@ namespace SMPlayer
             var ids = CurrentPlaylist.Select(m => m.Id);
             JsonFileHelper.Save(JsonFilename, ids);
             JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, ids);
+        }
+
+        private static void OnMusicChanged(MediaPlaybackList sender, CurrentMediaPlaybackItemChangedEventArgs args)
+        {
+            if (args.Reason == MediaPlaybackItemChangedReason.EndOfStream)
+            {
+                SettingsService.Played(args.OldItem.GetMusic());
+            }
+            Music next = args.NewItem.GetMusic();
+            try
+            {
+                Log.Debug($"Next Music {next?.Path}");
+                UpdateUniversalVolumeControl(next);
+                NotifyListeners(new MusicPlayerMusicSwitchEventArgs(args.Reason) { Music = next });
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"OnMusicChanged failed {e}");
+            }
+            Settings.settings.LastMusicIndex = (int)PlaybackList.CurrentItemIndex;
+            App.Save();
+        }
+
+        private static void OnPlaybackStateChanged(MediaPlaybackSession sender, object args)
+        {
+            try
+            {
+                NotifyListeners(new MusicPlayerStateChangedEventArgs(sender.PlaybackState));
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"OnPlaybackStateChanged failed {e}");
+            }
+        }
+
+        private static void OnMediaEnded(MediaPlayer sender, object args)
+        {
+            try
+            {
+                SettingsService.Played(CurrentMusic);
+                NotifyListeners(new MusicPlayerEventArgs(MusicPlayerEventType.MediaEnded));
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"OnMediaEnded failed {e}");
+            }
+        }
+
+        private static void NotifyListeners(MusicPlayerEventArgs args)
+        {
+            lock (MusicPlayerEventListeners)
+            {
+                foreach (var listener in MusicPlayerEventListeners)
+                {
+                    try
+                    {
+                        listener?.Execute(args);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Warn($"MusicPlayerEventListener.Execute Exception {e}");
+                    }
+                }
+            }
         }
 
         private static async void UpdateUniversalVolumeControl(Music music)
@@ -224,6 +215,14 @@ namespace SMPlayer
             }
         }
 
+        public static void AddNextAndPlay(IMusicable source)
+        {
+            if (source == null) return;
+            if (MoveToMusic(source)) return;
+            MoveToMusic(AddMusic(source, CurrentIndex + 1));
+            Play();
+        }
+
         public static int AddMusic(IMusicable source, int index)
         {
             Music music = source.ToMusic();
@@ -231,18 +230,6 @@ namespace SMPlayer
             foreach (var listener in MusicPlayerEventListeners)
                 listener.Execute(new MusicPlayerEventArgs(MusicPlayerEventType.Add){ Index = index, Music = music});
             return index;
-        }
-
-        public static void AddMusicAndPlay(IMusicable source, int index)
-        {
-            MoveToMusic(AddMusic(source, index));
-            Play();
-        }
-
-        public static void AddMusicAndPlay(IMusicable source)
-        {
-            MoveToMusic(AddMusic(source));
-            Play();
         }
 
         public static int AddMusic(IMusicable source)
@@ -356,6 +343,18 @@ namespace SMPlayer
             return false;
         }
 
+        public static void MoveToMusicOrPlay(IMusicable musicable, int index)
+        {
+            if (index >= 0 && PlaybackList.Items[index].GetMusic() == musicable.ToMusic())
+            {
+                MoveToMusic(index);
+            }
+            else
+            {
+                SetMusicAndPlay(musicable);
+            }
+        }
+
         public static bool MoveToMusic(int index)
         {
             try
@@ -375,6 +374,7 @@ namespace SMPlayer
 
         public static void Play()
         {
+            if (CurrentPlaylistCount == 0) return;
             Player.Play();
         }
 
@@ -430,36 +430,42 @@ namespace SMPlayer
             Debug.Write("\n");
         }
 
+        public static void PlayNext(Music target, int index)
+        {
+            if (index >= 0 && PlaybackList.Items[index].GetMusic() == target)
+            {
+                int currentIndex = CurrentIndex;
+                MoveMusic(index, currentIndex + (index < currentIndex ? 0 : 1));
+            }
+            else
+            {
+                AddMusic(target, CurrentIndex + 1);
+            }
+        }
+
         public static void MoveMusic(int from, int to)
         {
             if (from == to) return;
-            MovePlaybackItem(from, to);
+            int currentIndex = CurrentIndex;
+            Log.Debug($"MoveMusic current {currentIndex} from {from} to {to}");
+            if (currentIndex == from)
+            {
+                // 避免当前的歌被暂停播放，所以移动其他歌曲
+                for (int i = 0; i < Math.Abs(from - to); i++)
+                {
+                    var item = PlaybackList.Items[to];
+                    PlaybackList.Items.RemoveAt(to);
+                    PlaybackList.Items.Insert(from, item);
+                }
+            }
+            else
+            {
+                var item = PlaybackList.Items[from];
+                PlaybackList.Items.RemoveAt(from);
+                PlaybackList.Items.Insert(to, item);
+            }
             foreach (var listener in MusicPlayerEventListeners)
                 listener.Execute(new MusicPlayerMoveEventArgs(from, to));
-        }
-
-        private static void MovePlaybackItem(int from, int to)
-        {
-            var item = PlaybackList.Items[from];
-            PlaybackList.Items.RemoveAt(from);
-            PlaybackList.Items.Insert(to, item);
-        }
-
-        public static bool RemoveMusic(Music music)
-        {
-            if (music == null) return false;
-            try
-            {
-                PlaybackList.Items.RemoveAll(i => i.GetMusic() == music);
-                foreach (var listener in MusicPlayerEventListeners)
-                    listener.Execute(new MusicPlayerEventArgs(MusicPlayerEventType.Remove) { Music = music });
-                return true;
-            }
-            catch (Exception e)
-            {
-                Log.Warn("RemoveMusic Exception {0}", e);
-                return false;
-            }
         }
 
         public static bool RemoveMusic(int index)
@@ -484,7 +490,6 @@ namespace SMPlayer
         {
             if (CurrentPlaylistCount == 0) return;
             Position = 0;
-            CurrentIndex = -1;
             PlaybackList.Items.Clear();
             foreach (var listener in MusicPlayerEventListeners)
                 listener.Execute(new MusicPlayerEventArgs(MusicPlayerEventType.Clear));
