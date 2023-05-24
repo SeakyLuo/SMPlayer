@@ -230,9 +230,13 @@ namespace SMPlayer
         {
             base.OnFileActivated(args);
             Music music = await Music.LoadFromPathAsync(args.Files[0].Path);
+            Log.Info("activate file " + args.Files[0].Path);
             if (music == null)
             {
-                Helper.ShowNotification("CannotReadLocalMusicFile");
+                Helper.ShowButtonedNotification("CannotReadLocalMusicFile", "Authorize", async (n) =>
+                {
+                    await StorageHelper.AuthorizeFolder();
+                });
                 return;
             }
             if (args.PreviousExecutionState == ApplicationExecutionState.Running)

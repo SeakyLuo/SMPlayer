@@ -34,9 +34,17 @@ namespace SMPlayer.Dialogs
 
         public async Task ShowAsync(FolderUpdateResult result)
         {
-            FolderUpdateResultTextBlock.Text = string.IsNullOrEmpty(result.Path) ? "" : Helper.LocalizeText("UpdateResultOfFolder", Path.GetFileName(result.Path));
-            Groups.AddRange(result.ToGroups());
-            await ShowAsync();
+            try
+            {
+                FolderUpdateResultTextBlock.Text = string.IsNullOrEmpty(result.Path) ? "" : Helper.LocalizeText("UpdateResultOfFolder", Path.GetFileName(result.Path));
+                Groups.AddRange(result.ToGroups());
+                await ShowAsync();
+            } 
+            catch (Exception e)
+            {
+                Log.Warn($"FolderUpdateResultDialog.ShowAsync failed {e}");
+                Helper.ShowNotificationRaw(Helper.LocalizeMessage("OperationFailed", e.Message), 5000);
+            }
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -46,7 +54,7 @@ namespace SMPlayer.Dialogs
 
         async void IMusicPlayerEventListener.Execute(MusicPlayerEventArgs args)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            await Helper.RunInMainUIThread(Dispatcher, () =>
             {
                 switch (args.EventType)
                 {

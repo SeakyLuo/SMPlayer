@@ -247,24 +247,37 @@ namespace SMPlayer.Services
             {
                 folder.MoveToFolder(target);
             }
-            foreach (var item in SQLHelper.Run(c => c.SelectSubFolders(folder)))
+            foreach (var item in await localFolder.GetFoldersAsync())
             {
-                await MoveFolder(item, duplicate ?? folder);
+                FolderTree folderTree = SQLHelper.Run(c => SQLHelper.SelectFolderInfo(c, item.Path));
+                if (folderTree == null)
+                {
+                    folderTree = new FolderTree(item.Path);
+                }
+                await MoveFolder(folderTree, duplicate ?? folder);
             }
             bool moved = true;
-            foreach (var item in SQLHelper.Run(c => c.SelectSubFiles(folder)))
+            foreach (var item in await localFolder.GetFilesAsync())
             {
-                moved &= await MoveFileAsync(item, duplicate ?? folder);
+                FolderFile folderFile = SQLHelper.Run(c => c.SelectFileByPath(item.Path));
+                if (folderFile == null)
+                {
+                    folderFile = new FolderFile() { Path = item.Path };
+                }
+                moved &= await MoveFileAsync(folderFile, duplicate ?? folder);
             }
             if ((await localFolder.GetFilesAsync()).IsEmpty())
             {
                 await localFolder.DeleteAsync();
             }
-            if (duplicate != null && moved)
+            if (folder.Id != 0)
             {
-                folder.State = ActiveState.Inactive;
+                if (duplicate != null && moved)
+                {
+                    folder.State = ActiveState.Inactive;
+                }
+                SQLHelper.Run(c => c.Update(folder.ToDAO()));
             }
-            SQLHelper.Run(c => c.Update(folder.ToDAO()));
             return moved;
         }
 
@@ -285,16 +298,17 @@ namespace SMPlayer.Services
             }
             else
             {
-                await MoveFile(file, newParent);
+                await DoMoveFile(file, newParent);
                 return true;
             }
         }
 
-        private static async Task MoveFile(FolderFile file, FolderTree folder)
+        private static async Task DoMoveFile(FolderFile file, FolderTree folder)
         {
             StorageFile localFile = await StorageHelper.LoadFileAsync(file.Path);
             StorageFolder targetFolder = await StorageHelper.LoadFolderAsync(folder.Path);
             await localFile.MoveAsync(targetFolder);
+            if (file.Id == 0) return;
             SQLHelper.Run(c => MoveFile(c, file, folder));
             foreach (var listener in StorageItemEventListeners)
                 listener.ExecuteFileEvent(file, new StorageItemEventArgs(StorageItemEventType.Move) { Folder = folder });
@@ -303,7 +317,7 @@ namespace SMPlayer.Services
         private static async Task MoveAndReplaceFile(FolderFile file, FolderTree newParent)
         {
             await DeleteFile(FindFile(Path.Combine(newParent.Path, file.NameWithExtension)));
-            await MoveFile(file, newParent);
+            await DoMoveFile(file, newParent);
         }
 
         private static async Task MoveAndKeepBothFile(FolderFile file, FolderTree newParent)

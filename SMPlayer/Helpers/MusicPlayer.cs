@@ -91,17 +91,24 @@ namespace SMPlayer
             MusicService.AddMusicEventListener(new MusicPlayer());
             MainPage.AddMainPageLoadedListener(async () =>
             {
-                await InitWithMusic(music);
+                try
+                {
+                    await InitWithMusic(music);
+                }
+                catch (Exception e)
+                {
+                    Log.Warn($"InitWithMusic failed {e}");
+                }
             });
         }
 
-        private static async Task InitWithMusic(Music music = null)
+        private static async Task LoadPlaylist(Music music = null)
         {
             var settings = Settings.settings;
-            var playlist = await JsonFileHelper.ReadObjectAsync<List<long>>(JsonFilename);
+            var playlist = await JsonFileHelper.ReadObjectAsync<List<string>>(JsonFilename);
             if (playlist.IsNotEmpty())
             {
-                SetPlaylist(MusicService.FindMusicList(playlist));
+                SetPlaylist(await MusicService.FindMusicList(playlist));
             }
             if (music == null)
             {
@@ -109,7 +116,21 @@ namespace SMPlayer
             }
             else
             {
-                AddMusic(music, 0);
+                Log.Info("InitWithMusic: " + music.Path);
+                AddMusic(music, CurrentIndex + 1);
+            }
+        }
+
+        private static async Task InitWithMusic(Music music = null)
+        {
+            var settings = Settings.settings;
+            try
+            {
+                await LoadPlaylist(music);
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"LoadPlaylist failed {e}");
             }
             Player.Volume = settings.Volume;
             // 如果非文件启动，并保存播放进度且有音乐
@@ -125,7 +146,7 @@ namespace SMPlayer
 
         public static void Save()
         {
-            var ids = CurrentPlaylist.Select(m => m.Id);
+            var ids = CurrentPlaylist.Select(m => m.Path);
             JsonFileHelper.Save(JsonFilename, ids);
             JsonFileHelper.SaveAsync(Helper.TempFolder, JsonFilename + Helper.TimeStamp, ids);
         }
@@ -321,24 +342,27 @@ namespace SMPlayer
 
         public static bool MoveToMusic(IMusicable musicable)
         {
+            if (musicable == null)
+            {
+                return false;
+            }
             try
             {
-                if (musicable != null)
+                Music music = musicable.ToMusic();
+                for (int i = 0; i < CurrentPlaylistCount; i++)
                 {
-                    Music music = musicable.ToMusic();
-                    for (int i = 0; i < CurrentPlaylistCount; i++)
+                    Music m = GetMusicAt(i);
+                    if (music == GetMusicAt(i))
                     {
-                        if (music == GetMusicAt(i))
-                        {
-                            PlaybackList.MoveTo(Convert.ToUInt32(i));
-                            return true;
-                        }
+                        PlaybackList.MoveTo(Convert.ToUInt32(i));
+                        return true;
                     }
                 }
             }
             catch (Exception e)
             {
                 // 无效索引
+                Log.Warn($"move to music exception {e}");
             }
             return false;
         }
@@ -351,7 +375,7 @@ namespace SMPlayer
             }
             else
             {
-                SetMusicAndPlay(musicable);
+                AddNextAndPlay(musicable);
             }
         }
 
@@ -368,6 +392,7 @@ namespace SMPlayer
             catch (Exception e)
             {
                 // 无效索引
+                Log.Warn($"move to music {index} exception {e}");
             }
             return false;
         }
@@ -385,43 +410,30 @@ namespace SMPlayer
 
         public static void MovePrev()
         {
-            if (Player.IsLoopingEnabled)
+            try
             {
-                Position = 0;
+                PlaybackList.MovePrevious();
             }
-            else
+            catch (Exception e)
             {
-                try
-                {
-                    PlaybackList.MovePrevious();
-                }
-                catch (Exception e)
-                {
-                    // 无效索引
-                    Log.Warn("MovePrevious Exception {0}", e);
-                }
+                // 无效索引
+                Log.Warn($"MovePrevious Exception {e}");
             }
         }
 
         public static void MoveNext()
         {
-            if (Player.IsLoopingEnabled)
+            try
             {
-                Position = 0;
+                PlaybackList.MoveNext();
             }
-            else
+            catch (Exception e)
             {
-                try
-                {
-                    PlaybackList.MoveNext();
-                }
-                catch (Exception e)
-                {
-                    // 无效索引
-                    Log.Warn($"MovePrevious Exception {e}");
-                }
+                // 无效索引
+                Log.Warn($"MoveNext Exception {e}");
             }
         }
+
         private static void PrintPlaybackList(int from, int to)
         {
             Log.Debug("PrintPlaybackList:");
@@ -475,13 +487,15 @@ namespace SMPlayer
             {
                 Music removed = GetMusicAt(index);
                 PlaybackList.Items.RemoveAt(index);
+                Settings.settings.LastMusicIndex = CurrentIndex;
+                MusicPlayerEventArgs args = new MusicPlayerEventArgs(MusicPlayerEventType.Remove) { Index = index, Music = removed };
                 foreach (var listener in MusicPlayerEventListeners)
-                    listener.Execute(new MusicPlayerEventArgs(MusicPlayerEventType.Remove) { Index = index, Music = removed});
+                    listener.Execute(args);
                 return true;
             }
             catch (Exception e)
             {
-                Log.Warn("RemoveMusic Exception {0}", e);
+                Log.Warn($"RemoveMusic Exception {e}");
                 return false;
             }
         }

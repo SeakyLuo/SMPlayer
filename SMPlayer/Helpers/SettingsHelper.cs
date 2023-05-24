@@ -127,7 +127,7 @@ namespace SMPlayer.Helpers
             {
                 App.LoadedListeners.Add(() =>
                 {
-                    MainPage.Instance.ShowLocalizedNotification("RootNotFound");
+                    Helper.ShowNotification("RootNotFound");
                     MainPage.Instance.NavigateToPage(typeof(SettingsPage));
                 });
             }

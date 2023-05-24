@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
+using Microsoft.Toolkit.Uwp.UI.Controls;
 using SMPlayer.Controls;
 using SMPlayer.Helpers;
 using SMPlayer.Models;
@@ -203,11 +204,18 @@ namespace SMPlayer
         }
         public static void ShowUndoableNotification(string message, Action cancel, int duration = 5000)
         {
-            GetMainPageContainer()?.ShowUndoableNotification(LocalizeMessage(message), cancel, duration);
+            ShowUndoableNotificationRaw(LocalizeMessage(message), cancel, duration);
         }
         public static void ShowUndoableNotificationRaw(string message, Action cancel, int duration = 5000)
         {
-            GetMainPageContainer()?.ShowUndoableNotification(message, cancel, duration);
+            GetMainPageContainer()?.ShowButtonedNotification(message, LocalizeText("Undo"), n => {
+                cancel.Invoke(); 
+                n.Dismiss();
+            }, duration);
+        }
+        public static void ShowButtonedNotification(string message, string button, Action<InAppNotificationWithButton> action, int duration = 5000)
+        {
+            GetMainPageContainer()?.ShowButtonedNotification(LocalizeMessage(message), LocalizeText(button), action, duration);
         }
         public static void ShowMusicNotFoundNotification(string music, int duration = 5000)
         {
@@ -370,8 +378,7 @@ namespace SMPlayer
     public interface IMainPageContainer
     {
         void ShowNotification(string message, int duration = 2000);
-        void ShowUndoableNotification(string message, Action undo, int duration = 5000);
-        void ShowLocalizedNotification(string message, int duration = 2000);
+        void ShowButtonedNotification(string message, string button, Action<InAppNotificationWithButton> action, int duration = 5000);
         void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option = null);
         void CancelMultiSelectCommandBar();
         void SetMultiSelectListener(IMultiSelectListener listener = null);

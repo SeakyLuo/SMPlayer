@@ -41,7 +41,7 @@ namespace SMPlayer.Controls
         }
         private string buttonText;
 
-        public Action ButtonAction { get; set; }
+        public Action<InAppNotificationWithButton> ButtonAction { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -58,16 +58,20 @@ namespace SMPlayer.Controls
 
         private void NotificationButton_Click(object sender, RoutedEventArgs e)
         {
-            ButtonAction.Invoke();
-            ButtonNotification.Dismiss();
+            ButtonAction.Invoke(this);
         }
 
-        public void Show(string message, string buttonText, Action buttonAction, int duration = 2000)
+        public void Show(string message, string buttonText, Action<InAppNotificationWithButton> buttonAction, int duration = 2000)
         {
             Message = message;
             ButtonText = buttonText;
             ButtonAction = buttonAction;
             ButtonNotification.Show(duration);
+        }
+
+        public void Dismiss()
+        {
+            ButtonNotification.Dismiss();
         }
     }
 }

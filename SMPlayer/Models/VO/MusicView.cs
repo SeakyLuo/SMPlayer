@@ -244,7 +244,11 @@ namespace SMPlayer.Models
 
         public override bool Equals(object obj)
         {
-            return obj is IMusicable && Id == (obj as IMusicable).ToMusic().Id;
+            if (obj is IMusicable musicable)
+            {
+                return ToMusic().Equals(musicable.ToMusic());
+            }
+            return false;
         }
 
         public override int GetHashCode()
@@ -257,7 +261,7 @@ namespace SMPlayer.Models
             return Path;
         }
 
-        Music IMusicable.ToMusic()
+        public Music ToMusic()
         {
             return VOConverter.FromVO(this);
         }

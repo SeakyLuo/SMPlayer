@@ -1,4 +1,5 @@
-﻿using SMPlayer.Helpers;
+﻿using Microsoft.Toolkit.Extensions;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using SMPlayer.Models.DAO;
 using SQLite;
@@ -19,10 +20,48 @@ namespace SMPlayer.Services
         private static readonly LoadingCache<string, string> LyricsCache = new LoadingCache<string, string>(1, TimeUnit.Day);
         private static readonly LoadingCache<string, string> LrcLyricsCache = new LoadingCache<string, string>(1, TimeUnit.Day);
         public static IEnumerable<Music> AllSongs => SQLHelper.Run(c => c.SelectAllMusic());
-        public static Music FindMusic(long id) { return SQLHelper.Run(c => c.SelectMusicById(id)); }
-        public static Music FindMusic(string path) { return SQLHelper.Run(c => c.SelectMusicByPath(path)); }
-        public static Music FindMusicIncludeHidden(long id) { return SQLHelper.Run(c => c.SelectMusicByIdIncludeHidden(id)); }
-        public static List<Music> FindMusicList(IEnumerable<long> ids) { return ids.IsEmpty() ? new List<Music>() : SQLHelper.Run(c => c.SelectMusicByIds(ids)).ToList(); }
+        public static Music FindMusic(long id)
+        { 
+            return SQLHelper.Run(c => c.SelectMusicById(id)); 
+        }
+        public static Music FindMusic(string path) 
+        { 
+            return SQLHelper.Run(c => c.SelectMusicByPath(path));
+        }
+        public static Music FindMusicIncludeHidden(long id) 
+        {
+            return SQLHelper.Run(c => c.SelectMusicByIdIncludeHidden(id));
+        }
+        public static List<Music> FindMusicList(IEnumerable<long> ids)
+        {
+            return ids.IsEmpty() ? new List<Music>() : SQLHelper.Run(c => c.SelectMusicByIds(ids)).ToList();
+        }
+        public static async Task<List<Music>> FindMusicList(IEnumerable<string> paths)
+        { 
+            if (paths.IsEmpty())
+            {
+                return new List<Music>();
+            }
+            if (paths.First().IsNumeric())
+            {
+                return FindMusicList(paths.Select(i => long.Parse(i)));
+            }
+            Dictionary<string, Music> dict = SQLHelper.Run(c => c.SelectMusicByPaths(paths)).ToDictionary(m => m.Path);
+            List<Music> musicList = new List<Music>();
+            foreach (string path in paths)
+            {
+                Music music = dict.GetValueOrDefault(path, null);
+                if (music == null)
+                {
+                    music = await Music.LoadFromPathAsync(path);
+                }
+                if (music != null)
+                {
+                    musicList.Add(music);
+                }
+            }
+            return musicList;
+        }
 
         public static IEnumerable<Music> SelectByAlbum(string album)
         {

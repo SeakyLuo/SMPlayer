@@ -154,7 +154,7 @@
     <value>Authorzation is successful!</value>
   </data>
   <data name="CannotReadLocalMusicFile" xml:space="preserve">
-    <value>This music file cannot be accessed. You might need to move this music file to your music folder.</value>
+    <value>This music file cannot be accessed. You might need to move this music file to your music folder, or you can click Authorize button and then retry.</value>
   </data>
   <data name="ChangesSaved" xml:space="preserve">
     <value>Changes has been saved.</value>
@@ -317,6 +317,9 @@
   </data>
   <data name="MiniModeFailed" xml:space="preserve">
     <value>Fail to enter mini mode!</value>
+  </data>
+  <data name="MusicMenuPlayLogicChange" xml:space="preserve">
+    <value />
   </data>
   <data name="MusicName" xml:space="preserve">
     <value> "{0}"</value>

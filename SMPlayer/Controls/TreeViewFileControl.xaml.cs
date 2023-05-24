@@ -49,6 +49,7 @@ namespace SMPlayer.Controls
         {
             GridViewMusic music = (sender as FrameworkElement).DataContext as GridViewMusic;
             MusicPlayer.AddMusic(music, MusicPlayer.CurrentIndex + 1);
+            Helper.ShowNotificationRaw(Helper.LocalizeMessage("SetPlayNext", music.Name));
         }
 
         private void GridViewFolder_PointerEntered(object sender, PointerRoutedEventArgs e)

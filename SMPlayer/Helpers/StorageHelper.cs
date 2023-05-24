@@ -8,11 +8,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.Storage.Pickers;
 
 namespace SMPlayer.Helpers
 {
     public static class StorageHelper
     {
+        public static async Task<StorageFolder> AuthorizeFolder()
+        {
+            StorageFolder folder = await PickFolder();
+            if (folder == null) return null;
+            //if (folder.Path == Settings.settings.RootPath)
+            //{
+            //    Helper.ShowNotification("AuthorizeSuccessful");
+            //}
+            //else
+            //{
+            //    Helper.ShowNotification("AuthorizeFolderFailed");
+            //}
+            return folder;
+        }
+        public static async Task<StorageFolder> PickFolder(PickerLocationId pickerLocation = PickerLocationId.MusicLibrary)
+        {
+            FolderPicker picker = new FolderPicker
+            {
+                SuggestedStartLocation = pickerLocation,
+            };
+            picker.FileTypeFilter.Add("*");
+            return await picker.PickSingleFolderAsync();
+        }
         public static bool IsParentDirectory(string child, string parent)
         {
             return GetParentPath(child) == parent;
@@ -140,10 +164,7 @@ namespace SMPlayer.Helpers
         public static async Task DeleteFile(string filePath)
         {
             StorageFile file = await LoadFileAsync(filePath);
-            if (file != null)
-            {
-                await file.DeleteAsync();
-            }
+            await file?.DeleteAsync();
         }
 
         public static async Task DeleteFile(StorageFolder folder, string filename)

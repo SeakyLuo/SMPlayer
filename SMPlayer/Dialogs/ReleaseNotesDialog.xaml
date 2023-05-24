@@ -25,6 +25,20 @@
 
     <ScrollViewer>
         <TextBlock TextWrapping="WrapWholeWords">
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.8.15</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesLoopModeMovePrevNextChange"/><LineBreak />
+            2. <Run x:Uid="ReleaseNotesRecentPlayedNotShow"/><LineBreak />
+            3. <Run x:Uid="ReleaseNotesBugFixes"/><LineBreak />
+            <LineBreak />
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.8.13</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesAddAuthorizeOtherFolder"/><LineBreak />
+            <LineBreak />
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.8.11</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesBugFixes"/><LineBreak />
+            <LineBreak />
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.8.8</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesBugFixesMovingFolderNotMovingAllFiles"/><LineBreak />
+            <LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.8.6</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesBugFixForNowPlayingPlaylist"/><LineBreak />
             <LineBreak />

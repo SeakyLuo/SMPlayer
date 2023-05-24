@@ -61,6 +61,7 @@
         <controls:BladeView
             x:Name="NowPlayingFullBladeView"
             Grid.Row="2"
+            ScrollViewer.HorizontalScrollMode="Disabled"
             BladeMode="Fullscreen">
             <controls:BladeItem x:Name="PlaylistBladeItem" Style="{StaticResource NowPlayingFullBladeItemStyle}">
                 <UserControl>
@@ -121,33 +122,9 @@
             ShowDismissButton="True"
             StackMode="Replace"
             VerticalOffset="100" />
-        <controls:InAppNotification
-            x:Name="UndoInAppNotification"
-            Grid.Row="2"
-            AnimationDuration="00:00:00.1"
-            HorizontalOffset="0"
-            StackMode="Replace"
-            VerticalOffset="100">
-            <controls:InAppNotification.ContentTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Text="{Binding ElementName=UndoInAppNotification, Path=Content}"
-                            TextTrimming="CharacterEllipsis"
-                            TextWrapping="WrapWholeWords" />
-                        <Button
-                            x:Uid="UndoButton"
-                            Grid.Column="1"
-                            Click="UndoButton_Click" />
-                    </Grid>
-                </DataTemplate>
-            </controls:InAppNotification.ContentTemplate>
-        </controls:InAppNotification>
+        <myControls:InAppNotificationWithButton
+            x:Name="ButtonedAppNotification"
+            Grid.Row="2" />
         <myControls:MultiSelectCommandBar x:Name="BottomMultiSelectCommandBar" Grid.Row="3" />
     </Grid>
 </Page>

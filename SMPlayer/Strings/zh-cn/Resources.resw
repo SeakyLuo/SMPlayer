@@ -1444,4 +1444,25 @@
   <data name="ReleaseNotesBugFixForNowPlayingPlaylist.Text" xml:space="preserve">
     <value>修复了正在播放列表的一些问题</value>
   </data>
+  <data name="ReleaseNotesBugFixesMovingFolderNotMovingAllFiles.Text" xml:space="preserve">
+    <value>修复了移动文件夹时没有移动全部文件夹子项目的问题</value>
+  </data>
+  <data name="ReleaseNotesMusicMenuPlayLogicChange.Text" xml:space="preserve">
+    <value>现在右键音乐选择播放歌曲，不会清空正在播放列表了，而是添加到下一首并播放。</value>
+  </data>
+  <data name="AuthorizeOtherFolderButton.Content" xml:space="preserve">
+    <value>授权其他文件夹</value>
+  </data>
+  <data name="AuthorizeOtherFolderButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Windows要求用户手动授权UWP应用可读取的文件夹，授权后，简音播放器才可以播放非音乐文件夹的音乐文件。注意，可能有些文件夹不支持授权，如桌面。</value>
+  </data>
+  <data name="ReleaseNotesAddAuthorizeOtherFolder.Text" xml:space="preserve">
+    <value>在设置页面增加了“授权其他文件夹”的功能</value>
+  </data>
+  <data name="ReleaseNotesLoopModeMovePrevNextChange.Text" xml:space="preserve">
+    <value>单曲循环模式时，点击上一首和下一首会切换到其他歌曲了</value>
+  </data>
+  <data name="ReleaseNotesRecentPlayedNotShow.Text" xml:space="preserve">
+    <value>修复最近播放列表不展示的问题</value>
+  </data>
 </root>

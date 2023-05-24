@@ -274,7 +274,7 @@ namespace SMPlayer
                 }
                 else
                 {
-                    ShowLocalizedNotification("SearchEmpty");
+                    Helper.ShowNotification("SearchEmpty");
                 }
                 return;
             }
@@ -491,21 +491,12 @@ namespace SMPlayer
             Notification.Show(message, duration);
         }
 
-        public void ShowUndoableNotification(string message, Action undo, int duration = 5000)
-        {
-            ShowButtonedNotification(message, Helper.LocalizeText("Undo"), undo, duration);
-        }
-        public void ShowLocalizedNotification(string message, int duration = 2000)
-        {
-            ShowNotification(Helper.LocalizeMessage(message), duration);
-        }
-
         public void ShowDetailNotification(string message, Action showDetail, int duration = 5000)
         {
-            ShowButtonedNotification(message, Helper.LocalizeText("Detail"), showDetail, duration);
+            ShowButtonedNotification(message, Helper.LocalizeText("Detail"), _ => showDetail.Invoke(), duration);
         }
 
-        public void ShowButtonedNotification(string message, string buttonText, Action buttonAction, int duration = 5000)
+        public void ShowButtonedNotification(string message, string buttonText, Action<InAppNotificationWithButton> buttonAction, int duration = 5000)
         {
             ButtonedNotification.Show(message, buttonText, buttonAction, duration);
         }

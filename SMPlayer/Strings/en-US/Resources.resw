@@ -1450,4 +1450,25 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="ReleaseNotesBugFixForNowPlayingPlaylist.Text" xml:space="preserve">
     <value>Fix some bugs of the Now Playing playlist.</value>
   </data>
+  <data name="ReleaseNotesBugFixesMovingFolderNotMovingAllFiles.Text" xml:space="preserve">
+    <value>Fixed a bug that moving a folder does not moving its all sub items.</value>
+  </data>
+  <data name="ReleaseNotesMusicMenuPlayLogicChange.Text" xml:space="preserve">
+    <value>When you right click a music and choose to play it, it no longer clears the Now Playing list. Instead, it will be added next and then play.</value>
+  </data>
+  <data name="AuthorizeOtherFolderButton.Content" xml:space="preserve">
+    <value>Authorize other folder</value>
+  </data>
+  <data name="AuthorizeOtherFolderButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Windows requires users to assign UWP apps read-folder permission manually. By clicking "Authorize other folder", SMPlayer can play music files outside the music folder. You also need to notice that Windows also disallows some folders to be read like Desktop.</value>
+  </data>
+  <data name="ReleaseNotesAddAuthorizeOtherFolder.Text" xml:space="preserve">
+    <value>Add "Authorize other folder" in the Settings page.</value>
+  </data>
+  <data name="ReleaseNotesLoopModeMovePrevNextChange.Text" xml:space="preserve">
+    <value>In the Repeat One mode, clicking Previous and Next will move to the corresponding music instead of staying the repeated one.</value>
+  </data>
+  <data name="ReleaseNotesRecentPlayedNotShow.Text" xml:space="preserve">
+    <value>Fix a problem that causes Recent Played list not showing its content.</value>
+  </data>
 </root>

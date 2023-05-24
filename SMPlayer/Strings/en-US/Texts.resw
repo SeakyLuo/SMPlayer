@@ -156,6 +156,9 @@
   <data name="ArtistsWithCount" xml:space="preserve">
     <value>Artists ({0})</value>
   </data>
+  <data name="Authorize" xml:space="preserve">
+    <value>Authorize</value>
+  </data>
   <data name="ChangePassword" xml:space="preserve">
     <value>Change Password</value>
   </data>

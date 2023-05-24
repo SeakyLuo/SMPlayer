@@ -60,6 +60,15 @@ namespace SMPlayer.Models
             NotLoaded = false;
             IsLoading = false;
         }
+
+        public void ReloadMusic(Music music)
+        {
+            if (Albums.FirstOrDefault(a => a.Name == music.Album) is AlbumView album)
+            {
+                album.Songs.FirstOrDefault(m => m.Path == music.Path)?.CopyFrom(music.ToVO());
+            }
+        }
+
         public async Task LoadAsync()
         {
             if (IsLoading) return;

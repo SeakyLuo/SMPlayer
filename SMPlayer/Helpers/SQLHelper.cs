@@ -310,7 +310,7 @@ namespace SMPlayer.Helpers
         public static Music SelectMusicByIdIncludeHidden(this SQLiteConnection c, long id)
         {
             ActiveState[] activeStates = { ActiveState.Active, ActiveState.Hidden, ActiveState.ParentHidden };
-            string states = string.Join(",", activeStates.Select(i => (int)i));
+            string states = activeStates.Select(i => (int)i).Join(",");
             return c.Query<MusicDAO>($"select * from Music where Id = ? and State in ({states})", id, ActiveState.Active).FirstOrDefault()?.FromDAO();
         }
 
@@ -320,12 +320,16 @@ namespace SMPlayer.Helpers
         }
         public static List<Music> SelectMusicByIds(this SQLiteConnection c, IEnumerable<long> Ids)
         {
-            return Ids.Select(id => c.SelectMusicById(id)).Where(i => i != null).ToList();
+            return c.Query<MusicDAO>($"select * from Music where Id in ({Ids.Join(",")}) and State = ?", ActiveState.Active).Select(i => i.FromDAO()).ToList();
         }
 
         public static Music SelectMusicByPath(this SQLiteConnection c, string path)
         {
             return c.Query<MusicDAO>("select * from Music where Path = ? and State = ?", path, ActiveState.Active).FirstOrDefault().FromDAO();
+        }
+        public static List<Music> SelectMusicByPaths(this SQLiteConnection c, IEnumerable<string> paths)
+        {
+            return c.Query<MusicDAO>($"select * from Music where Path in ({paths.Select(p => $"'{p}'").Join(",")}) and State = ?").Select(i => i.FromDAO()).ToList();
         }
 
         public static FolderTree SelectFullFolder(this SQLiteConnection c, long id)

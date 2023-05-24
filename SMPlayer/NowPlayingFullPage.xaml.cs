@@ -1,4 +1,5 @@
-﻿using SMPlayer.Controls;
+﻿using Microsoft.Toolkit.Uwp.UI.Controls;
+using SMPlayer.Controls;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
@@ -56,13 +57,9 @@ namespace SMPlayer
             ShowResultInAppNotification.Show(duration);
         }
 
-        private Action undo;
-
-        public void ShowUndoableNotification(string message, Action undo, int duration = 5000)
+        void IMainPageContainer.ShowButtonedNotification(string message, string button, Action<InAppNotificationWithButton> action, int duration)
         {
-            UndoInAppNotification.Content = message;
-            this.undo = undo;
-            UndoInAppNotification.Show(duration);
+            ButtonedAppNotification.Show(message, button, action, duration);
         }
 
         public void ShowLocalizedNotification(string message, int duration = 2000)
@@ -95,12 +92,6 @@ namespace SMPlayer
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             GoBack();
-        }
-
-        private void UndoButton_Click(object sender, RoutedEventArgs e)
-        {
-            undo.Invoke();
-            UndoInAppNotification.Dismiss();
         }
 
         public void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option = null)

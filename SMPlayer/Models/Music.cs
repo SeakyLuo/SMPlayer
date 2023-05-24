@@ -165,7 +165,18 @@ namespace SMPlayer.Models
 
         public override bool Equals(object obj)
         {
-            return obj is Music && Id == (obj as Music).Id;
+            if (obj is Music music)
+            {
+                if (Id == 0 || music.Id == 0)
+                {
+                    return Path == music.Path;
+                }
+                else
+                {
+                    return Id == music.Id;
+                }
+            }
+            return false;
         }
         public override int GetHashCode()
         {

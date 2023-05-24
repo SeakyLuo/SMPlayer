@@ -341,7 +341,7 @@ namespace SMPlayer.Helpers
                 SpeakNoResults(text);
                 return;
             }
-            MusicPlayer.SetMusicAndPlay(list.First().Entity);
+            MusicPlayer.AddNextAndPlay(list.First().Entity);
         }
 
         private static void PlayArtist(string text)
@@ -528,7 +528,7 @@ namespace SMPlayer.Helpers
                     }
                     break;
                 case EntityType.Folder:
-                    GridViewFolder folder = result.Entity as GridViewFolder;
+                    FolderTree folder = result.Entity as FolderTree;
                     MusicPlayer.ShuffleAndPlay(folder.Songs);
                     if (IsBadSearch(text, folder.Name, result))
                     {
@@ -536,8 +536,8 @@ namespace SMPlayer.Helpers
                     }
                     break;
                 case EntityType.Song:
-                    MusicView music = result.Entity as MusicView;
-                    MusicPlayer.SetMusicAndPlay(music);
+                    Music music = result.Entity as Music;
+                    MusicPlayer.AddNextAndPlay(music);
                     if (IsBadSearch(text, music.Name, result))
                     {
                         Speak("SearchResultMusic", music.Name);

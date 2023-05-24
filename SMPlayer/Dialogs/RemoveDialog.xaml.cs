@@ -39,7 +39,7 @@ namespace SMPlayer.Dialogs
         public Action Confirm { get; set; }
         public Action Cancel { get; set; }
 
-        public static RemoveDialog BuildDeleteMusicDialog(Music music, Action<Music> onDeleted = null)
+        public static RemoveDialog BuildDeleteMusicDialog(Music music, Action<Music> onDeletion = null)
         {
             return new RemoveDialog
             {
@@ -47,8 +47,8 @@ namespace SMPlayer.Dialogs
                 Confirm = async () =>
                 {
                     MainPage.Instance?.Loader.ShowIndeterminant("ProcessRequest");
+                    onDeletion?.Invoke(music);
                     await StorageService.DeleteFile(music.ToFolderFile());
-                    onDeleted?.Invoke(music);
                     MainPage.Instance?.Loader.Hide();
                     Helper.ShowNotification(Helper.LocalizeMessage("ItemDeleted", music.Name));
                 }

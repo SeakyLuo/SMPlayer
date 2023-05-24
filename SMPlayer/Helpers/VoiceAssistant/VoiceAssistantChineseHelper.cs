@@ -85,7 +85,7 @@ namespace SMPlayer.Helpers.VoiceAssistant
             return result;
         }
 
-        private bool IsPlayMusic(string text)
+        private static bool IsPlayMusic(string text)
         {
             return text.Contains("播放") || new Regex("(来|放)(一)?(首|个|点|下)(歌)?").IsMatch(text);
         }

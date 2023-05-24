@@ -156,6 +156,9 @@
   <data name="ArtistsWithCount" xml:space="preserve">
     <value>歌手（{0}）</value>
   </data>
+  <data name="Authorize" xml:space="preserve">
+    <value>授权</value>
+  </data>
   <data name="ChangePassword" xml:space="preserve">
     <value>修改密码</value>
   </data>

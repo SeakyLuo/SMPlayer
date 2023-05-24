@@ -19,9 +19,9 @@ namespace SMPlayer.Helpers
 
         public static async Task<bool> UpdateMusicLibrary(StorageFolder folder)
         {
-            if (folder == null) return true;
+            if (folder == null || LoadingStatus == ExecutionStatus.Running) return true;
             MainPage.Instance.Loader.ShowDeterminant("LoadMusicLibrary", true);
-            MainPage.Instance.Loader.Max = await folder.CountItemsAsync();
+            MainPage.Instance.Loader.Max = await folder.CountItemsAsync() + StorageService.StorageItemEventListeners.Count;
             MainPage.Instance.Loader.BreakLoadingListener = () =>
             {
                 LoadingStatus = ExecutionStatus.Break;
@@ -55,7 +55,7 @@ namespace SMPlayer.Helpers
             catch (Exception e)
             {
                 Log.Error($"update music library failed {e}");
-                MainPage.Instance.ShowButtonedNotification(Helper.LocalizeMessage("ExecutionFailed"), Helper.LocalizeText("Feedback"), async () =>
+                MainPage.Instance.ShowButtonedNotification(Helper.LocalizeMessage("ExecutionFailed"), Helper.LocalizeText("Feedback"), async (n) =>
                 {
                     await Helper.SendEmailToDeveloper(Helper.LocalizeText("UpdateMusicLibraryFailed"), $"AppVersion:{Helper.AppVersion}\n{e}");
                 }, 10000);
@@ -277,6 +277,7 @@ namespace SMPlayer.Helpers
 
         public static async void RefreshFolder(FolderTree tree)
         {
+            if (LoadingStatus == ExecutionStatus.Running) return;
             StorageFolder storageFolder;
             try
             {
@@ -319,7 +320,7 @@ namespace SMPlayer.Helpers
             }
             else
             {
-                MainPage.Instance?.ShowLocalizedNotification("CheckNewMusicResultNoChange");
+                Helper.ShowNotification("CheckNewMusicResultNoChange");
             }
             MainPage.Instance?.Loader.Hide();
         }

@@ -362,7 +362,7 @@ namespace SMPlayer
             switch (args.Event)
             {
                 case MenuFlyoutEvent.Delete:
-                    RemoveMusic(args.MusicView);
+                    DeleteMusic(args.MusicView.ToMusic());
                     break;
                 case MenuFlyoutEvent.Remove:
                     AskRemoveMusic(args.MusicView);

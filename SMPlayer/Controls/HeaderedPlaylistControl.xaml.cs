@@ -176,7 +176,7 @@ namespace SMPlayer
         private void ExecutePlaylistDeletion(PlaylistView playlist)
         {
             PlaylistService.RemovePlaylist(playlist.FromVO());
-            MainPage.Instance.ShowUndoableNotification(Helper.LocalizeMessage("PlaylistRemoved", playlist.Name), () =>
+            Helper.ShowUndoableNotificationRaw(Helper.LocalizeMessage("PlaylistRemoved", playlist.Name), () =>
             {
                 PlaylistService.AddPlaylist(playlist.FromVO());
             });

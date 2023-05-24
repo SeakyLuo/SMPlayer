@@ -140,7 +140,7 @@ namespace SMPlayer
             RecentPlayedProgressRing.IsActive = true;
             try
             {
-                IEnumerable<MusicView> list = SettingsService.RecentPlayed.Select(i => i.ToVO());
+                IEnumerable<MusicView> list = SettingsService.RecentPlayed.Select(i => i.ToVO()).Where(i => i != null);
                 SetupPlayedButtonState(list);
                 PlayedMusicView.Setup(list);
                 PlayedModifed = false;
@@ -288,7 +288,7 @@ namespace SMPlayer
             PlayedMusicView.RemoveMusic(item.Source);
             SettingsService.RemoveRecentPlayed(item.Source);
             SetupPlayedButtonState(PlayedMusicView.GridMusicCollection);
-            MainPage.Instance.ShowUndoableNotification(Helper.LocalizeMessage("ItemRemoved", item.Name), () =>
+            Helper.ShowUndoableNotificationRaw(Helper.LocalizeMessage("ItemRemoved", item.Name), () =>
             {
                 PlayedMusicView.UndoDelete(item.Source);
                 SettingsService.UndoRemoveRecentPlayed(item.Source);
@@ -302,7 +302,7 @@ namespace SMPlayer
             ResetSearchHistoryRowColor(index);
             SettingsService.RemoveSearchHistory(item);
             SetupSearchedButtonState(RecentSearches);
-            MainPage.Instance.ShowUndoableNotification(Helper.LocalizeMessage("ItemRemoved", item), () =>
+            Helper.ShowUndoableNotificationRaw(Helper.LocalizeMessage("ItemRemoved", item), () =>
             {
                 RecentSearches.Insert(index, item);
                 ResetSearchHistoryRowColor(index);

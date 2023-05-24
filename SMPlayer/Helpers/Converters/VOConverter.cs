@@ -14,6 +14,10 @@ namespace SMPlayer.Helpers
     {
         public static MusicView ToVO(this Music src, int index = -1, bool isFavorite = false)
         {
+            if (src == null)
+            {
+                return null;
+            }
             return new MusicView
             {
                 Id = src.Id,

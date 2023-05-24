@@ -223,7 +223,7 @@ namespace SMPlayer.Controls
             }
             else
             {
-                MusicPlayer.SetMusicAndPlay(CurrentMusic);
+                MusicPlayer.AddNextAndPlay(CurrentMusic);
             }
         }
 

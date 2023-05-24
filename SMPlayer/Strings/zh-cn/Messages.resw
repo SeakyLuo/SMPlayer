@@ -154,7 +154,7 @@
     <value>授权成功！</value>
   </data>
   <data name="CannotReadLocalMusicFile" xml:space="preserve">
-    <value>无法打开该本地音乐文件！你或许可以把它移动到音乐文件夹下后重试。</value>
+    <value>无法打开该本地音乐文件！你可以把它移动到音乐文件夹下后重试，或者点击“授权”后重试。</value>
   </data>
   <data name="ChangesSaved" xml:space="preserve">
     <value>已保存！</value>

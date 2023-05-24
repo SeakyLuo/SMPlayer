@@ -137,6 +137,11 @@
                         Click="Reauthorize_Click"
                         Content="Reauthorize"
                         Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
+                    <HyperlinkButton
+                        x:Uid="AuthorizeOtherFolderButton"
+                        Click="AuthorizeOtherFolderButton_Click"
+                        Content="Authorize other folder"
+                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical">

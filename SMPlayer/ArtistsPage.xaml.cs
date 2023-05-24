@@ -430,7 +430,9 @@ namespace SMPlayer
                             break;
                         case MusicEventType.Modify:
                             Music before = music, after = args.ModifiedMusic;
-                            if (artist.Equals(ArtistMasterDetailsView.SelectedItem) || !artist.NotLoaded) artist.Load();
+                            bool isSelected = artist.Equals(ArtistMasterDetailsView.SelectedItem);
+                            if (artist.Equals(ArtistMasterDetailsView.SelectedItem) || !artist.NotLoaded)
+                                artist.ReloadMusic(music);
                             if (SuggestionList.Contains(after.Artist))
                             {
                                 if (before.Artist != after.Artist)
@@ -441,7 +443,10 @@ namespace SMPlayer
                                         newArtist.Load();
                                         FindMusicAndSetPlaying(after);
                                     }
-                                    else if (!newArtist.NotLoaded) newArtist.Load();
+                                    else if (!newArtist.NotLoaded)
+                                    {
+                                        newArtist.Load();
+                                    }
                                 }
                             }
                             else

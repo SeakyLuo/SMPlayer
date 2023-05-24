@@ -5,6 +5,7 @@ using SMPlayer.Models;
 using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Media.Playback;
 using Windows.UI.Xaml;
@@ -116,7 +117,7 @@ namespace SMPlayer
                     MusicPlayer.SetMusicAndPlay(SelectedItems);
                     break;
                 case MultiSelectEvent.Remove:
-                    foreach (var item in SelectedItems)
+                    foreach (var item in SelectedItems.OrderByDescending(i => i.Index))
                         MusicPlayer.RemoveMusic(item.Index);
                     break;
                 case MultiSelectEvent.SelectAll:

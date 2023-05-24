@@ -514,7 +514,11 @@ namespace SMPlayer
                 {
                     await RemoveDialog.BuildDeleteMusicDialog(music, m =>
                     {
-                        listener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.Delete) { Data = m });
+                        listener?.Execute(new MenuFlyoutEventArgs(MenuFlyoutEvent.Delete) 
+                        {
+                            Data = m,
+                            Index = index,
+                        });
                     }).ShowAsync();
                 };
                 deleteItem.SetToolTip(Helper.LocalizeMessage("DeleteMusic", music.Name), false);

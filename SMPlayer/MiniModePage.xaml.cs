@@ -87,11 +87,7 @@ namespace SMPlayer
         {
         }
 
-        void IMainPageContainer.ShowUndoableNotification(string message, Action undo, int duration)
-        {
-        }
-
-        void IMainPageContainer.ShowLocalizedNotification(string message, int duration)
+        void IMainPageContainer.ShowButtonedNotification(string message, string button, Action<InAppNotificationWithButton> action, int duration)
         {
         }
 
@@ -117,7 +113,7 @@ namespace SMPlayer
             return null;
         }
 
-        public MediaControl GetMediaControl()
+        MediaControl IMainPageContainer.GetMediaControl()
         {
             return MiniMediaControl;
         }

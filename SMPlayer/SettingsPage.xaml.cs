@@ -64,12 +64,7 @@ namespace SMPlayer
 
         private async void PathBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            FolderPicker picker = new FolderPicker
-            {
-                SuggestedStartLocation = PickerLocationId.MusicLibrary
-            };
-            picker.FileTypeFilter.Add("*");
-            StorageFolder folder = await picker.PickSingleFolderAsync();
+            StorageFolder folder = await StorageHelper.PickFolder();
             if (folder == null) return;
             Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
             if (await UpdateHelper.UpdateMusicLibrary(folder))
@@ -82,7 +77,7 @@ namespace SMPlayer
         {
             Settings.settings.ThemeColor = ThemeColorPicker.Color;
             ThemeColorButton.Background = new SolidColorBrush(ThemeColorPicker.Color);
-            MainPage.Instance.ShowLocalizedNotification("NotImplemented");
+            Helper.ShowNotification("NotImplemented");
             ColorPickerFlyout.Hide();
         }
 
@@ -99,7 +94,7 @@ namespace SMPlayer
         private void SaveChanges_Click(object sender, RoutedEventArgs e)
         {
             App.Save();
-            MainPage.Instance.ShowLocalizedNotification("ChangesSaved");
+            Helper.ShowNotification("ChangesSaved");
         }
 
         private async void AddLyrics_Click(object sender, RoutedEventArgs e)
@@ -107,7 +102,7 @@ namespace SMPlayer
             ++addLyricsClickCounter;
             if (addLyricsClickCounter == 2)
             {
-                MainPage.Instance.ShowLocalizedNotification("ClickAgainToStopAddingLyrics");
+                Helper.ShowNotification("ClickAgainToStopAddingLyrics");
                 return;
             }
             else if (addLyricsClickCounter == 3)
@@ -175,21 +170,21 @@ namespace SMPlayer
 
         private async void Reauthorize_Click(object sender, RoutedEventArgs e)
         {
-            FolderPicker picker = new FolderPicker
-            {
-                SuggestedStartLocation = PickerLocationId.MusicLibrary
-            };
-            picker.FileTypeFilter.Add("*");
-            StorageFolder folder = await picker.PickSingleFolderAsync();
+            StorageFolder folder = await StorageHelper.PickFolder();
             if (folder == null) return;
             if (folder.Path == Settings.settings.RootPath)
             {
-                MainPage.Instance.ShowLocalizedNotification("AuthorizeSuccessful");
+                Helper.ShowNotification("AuthorizeSuccessful");
             }
             else
             {
-                MainPage.Instance.ShowLocalizedNotification("AuthorizeFolderFailed");
+                Helper.ShowNotification("AuthorizeFolderFailed");
             }
+        }
+
+        private async void AuthorizeOtherFolderButton_Click(object sender, RoutedEventArgs e)
+        {
+            await StorageHelper.AuthorizeFolder();
         }
 
         private void KeepRecentComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -211,7 +206,7 @@ namespace SMPlayer
             StorageFile dbFile = await StorageHelper.LoadFileAsync(Path.Combine(Helper.LocalFolder.Path, SQLHelper.DBFileName));
             await dbFile.CopyAsync(folder);
             MainPage.Instance.Loader.Hide();
-            MainPage.Instance.ShowLocalizedNotification("DataExported");
+            Helper.ShowNotification("DataExported");
         }
 
         private async void ImportData_Click(object sender, RoutedEventArgs e)
@@ -234,12 +229,12 @@ namespace SMPlayer
                     FillSettings(Settings.settings);
                 }
                 MainPage.Instance.Loader.Hide();
-                MainPage.Instance.ShowLocalizedNotification(successful ? "DataImported" : "ImportDataCancelled");
+                Helper.ShowNotification(successful ? "DataImported" : "ImportDataCancelled");
             }
             catch (Exception ex)
             {
                 MainPage.Instance.Loader.Hide();
-                MainPage.Instance.ShowLocalizedNotification("ImportDataFailed" + ex.Message);
+                Helper.ShowNotification("ImportDataFailed" + ex.Message);
             }
         }
 

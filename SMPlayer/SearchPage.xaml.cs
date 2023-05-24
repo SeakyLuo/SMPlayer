@@ -83,7 +83,7 @@ namespace SMPlayer
         {
             if (IsSearching)
             {
-                MainPage.Instance.ShowLocalizedNotification("ProcessingRequest");
+                Helper.ShowNotification("ProcessingRequest");
                 return;
             }
             IsSearching = true;

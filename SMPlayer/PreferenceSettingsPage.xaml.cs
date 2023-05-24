@@ -202,7 +202,7 @@ namespace SMPlayer
             MainPage.Instance.NavigateToPage(typeof(MusicLibraryPage));
             if (ShowAddPreferredSongsToolTip)
             {
-                MainPage.Instance.ShowLocalizedNotification("AddPreferredSongsToolTip", 5000);
+                Helper.ShowNotification("AddPreferredSongsToolTip", 5000);
                 ShowAddPreferredSongsToolTip = false;
             }
         }
@@ -212,7 +212,7 @@ namespace SMPlayer
             MainPage.Instance.NavigateToPage(typeof(ArtistsPage));
             if (ShowAddPreferredArtistsToolTip)
             {
-                MainPage.Instance.ShowLocalizedNotification("AddPreferredArtistsToolTip", 5000);
+                Helper.ShowNotification("AddPreferredArtistsToolTip", 5000);
                 ShowAddPreferredArtistsToolTip = false;
             }
         }
@@ -222,7 +222,7 @@ namespace SMPlayer
             MainPage.Instance.NavigateToPage(typeof(AlbumsPage));
             if (ShowAddPreferredAlbumsToolTip)
             {
-                MainPage.Instance.ShowLocalizedNotification("AddPreferredAlbumsToolTip", 5000);
+                Helper.ShowNotification("AddPreferredAlbumsToolTip", 5000);
                 ShowAddPreferredAlbumsToolTip = false;
             }
         }
@@ -232,7 +232,7 @@ namespace SMPlayer
             MainPage.Instance.NavigateToPage(typeof(PlaylistsPage));
             if (ShowAddPreferredPlaylistsToolTip)
             {
-                MainPage.Instance.ShowLocalizedNotification("AddPreferredPlaylistsToolTip", 5000);
+                Helper.ShowNotification("AddPreferredPlaylistsToolTip", 5000);
                 ShowAddPreferredPlaylistsToolTip = false;
             }
         }
@@ -242,7 +242,7 @@ namespace SMPlayer
             MainPage.Instance.NavigateToPage(typeof(LocalPage));
             if (ShowAddPreferredFoldersToolTip)
             {
-                MainPage.Instance.ShowLocalizedNotification("AddPreferredFoldersToolTip", 5000);
+                Helper.ShowNotification("AddPreferredFoldersToolTip", 5000);
                 ShowAddPreferredFoldersToolTip = true;
             }
         }

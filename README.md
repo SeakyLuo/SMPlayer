@@ -39,7 +39,9 @@ MultiSelectCommandBar is too high.
 
 MediaControl has update latency.
 
-Move music in the Now Playing.
+Artist detail page scrolls to top automatically when switching music.
+
+Moving folder fails when non music file detected.
 
 # MIGHT DO
 Save SearchKeyword instead of a string.
