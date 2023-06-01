@@ -171,7 +171,7 @@ namespace SMPlayer.Helpers
         {
             if (folder == null || string.IsNullOrEmpty(filename)) return;
             var file = await folder.GetFileAsync(filename);
-            if (file != null) await file.DeleteAsync();
+            file?.DeleteAsync();
         }
 
         public static async Task<string> ReadFileAsync(StorageFolder folder, string filename)
