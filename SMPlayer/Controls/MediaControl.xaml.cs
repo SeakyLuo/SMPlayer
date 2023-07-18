@@ -525,6 +525,7 @@ namespace SMPlayer
                     else DislikeMusic();
                 }
                 SetThumbnail(music);
+                MainMusicInfoGrid.SetToolTip(music.Name);
                 CurrentMusic = musicView;
             });
         }
@@ -758,10 +759,11 @@ namespace SMPlayer
         private void PrevButton_Click(object sender, RoutedEventArgs e)
         {
             MediaSlider.Value = 0;
-            if (MusicPlayer.Position > 5)
-                MusicPlayer.Position = 0;
-            else
-                MusicPlayer.MovePrev();
+            MusicPlayer.MovePrev();
+            //if (MusicPlayer.Position > 5)
+            //    MusicPlayer.Position = 0;
+            //else
+            //    MusicPlayer.MovePrev();
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
@@ -944,6 +946,7 @@ namespace SMPlayer
             TitleTextBlock.Text = "";
             ArtistTextBlock.Text = "";
             FullAlbumTextBlock.Text = "";
+            MainMusicInfoGrid.SetToolTip(null);
             if (RightTimeTextBlock != null) RightTimeTextBlock.Text = "0:00";
             if (LikeToggleButton != null)
             {

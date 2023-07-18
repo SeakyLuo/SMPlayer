@@ -371,6 +371,18 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource SettingLabelStyle}" />
+                    <ToggleSwitch
+                        x:Name="SaveLyricsImmediatelyToggleSwitch"
+                        x:Uid="SaveLyricsImmediatelyToggleSwitch"
+                        Style="{StaticResource SettingToggleSwitchStyle}"
+                        Toggled="SaveLyricsImmediatelyToggleSwitch_Toggled"
+                        OnContent="Save lyrics immediately"
+                        OffContent="Save lyrics immediately"
+                        IsOn="False"/>
+                    <FontIcon x:Uid="SaveLyricsImmediatelyInfo" FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource SettingLabelStyle}" />
                     <HyperlinkButton
                         x:Uid="SaveChangesButton"
                         Click="SaveChanges_Click"

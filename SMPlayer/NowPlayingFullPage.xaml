@@ -123,7 +123,7 @@
             StackMode="Replace"
             VerticalOffset="100" />
         <myControls:InAppNotificationWithButton
-            x:Name="ButtonedAppNotification"
+            x:Name="ButtonedNotification"
             Grid.Row="2" />
         <myControls:MultiSelectCommandBar x:Name="BottomMultiSelectCommandBar" Grid.Row="3" />
     </Grid>

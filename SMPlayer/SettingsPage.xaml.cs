@@ -388,5 +388,10 @@ namespace SMPlayer
         {
             Settings.settings.NotificationLyricsSource = LyricsSources[(sender as ComboBox).SelectedIndex];
         }
+
+        private void SaveLyricsImmediatelyToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            Settings.settings.SaveLyricsImmediately = (sender as ToggleSwitch).IsOn;
+        }
     }
 }

@@ -59,8 +59,14 @@ namespace SMPlayer
 
         void IMainPageContainer.ShowButtonedNotification(string message, string button, Action<InAppNotificationWithButton> action, int duration)
         {
-            ButtonedAppNotification.Show(message, button, action, duration);
+            ButtonedNotification.Show(message, button, action, duration);
         }
+
+        public void ShowButtonedNotification(string message, string button1, Action<InAppNotificationWithButton> action1, string button2, Action<InAppNotificationWithButton> action2, int duration = 5000)
+        {
+            ButtonedNotification.Show(message, button1, action1, button2, action2, duration);
+        }
+
 
         public void ShowLocalizedNotification(string message, int duration = 2000)
         {

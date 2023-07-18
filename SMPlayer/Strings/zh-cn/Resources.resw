@@ -1465,4 +1465,22 @@
   <data name="ReleaseNotesRecentPlayedNotShow.Text" xml:space="preserve">
     <value>修复最近播放列表不展示的问题</value>
   </data>
+  <data name="SaveLyricsImmediatelyInfo.ToolTipService.ToolTip" xml:space="preserve">
+    <value>在歌曲播放时保存歌词会导致歌曲中止播放，因此简音播放器会自动在歌曲切换时再保存歌词。你也可以修改为立即保存歌词。</value>
+  </data>
+  <data name="SaveLyricsImmediatelyToggleSwitch.OffContent" xml:space="preserve">
+    <value>立即保存歌词</value>
+  </data>
+  <data name="SaveLyricsImmediatelyToggleSwitch.OnContent" xml:space="preserve">
+    <value>立即保存歌词</value>
+  </data>
+  <data name="ReleaseNotesCancel5SecondsMovePrev.Text" xml:space="preserve">
+    <value>点击播放前一首时，已经播放超过5秒的歌曲不会再重头播放了</value>
+  </data>
+  <data name="ReleaseNotesLyricsCanBeSavedLater.Text" xml:space="preserve">
+    <value>优化了保存歌词的体验，避免保存正在播放歌曲的歌词时切换歌曲</value>
+  </data>
+  <data name="ReleaseNotesLocateMusicBugFix.Text" xml:space="preserve">
+    <value>（但愿）修复了列表项目过多时无法定位当前音乐的问题</value>
+  </data>
 </root>

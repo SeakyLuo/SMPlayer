@@ -217,6 +217,15 @@ namespace SMPlayer
         {
             GetMainPageContainer()?.ShowButtonedNotification(LocalizeMessage(message), LocalizeText(button), action, duration);
         }
+        public static void ShowButtonedNotificationRaw(string message, string button, Action<InAppNotificationWithButton> action, int duration = 5000)
+        {
+            GetMainPageContainer()?.ShowButtonedNotification(message, button, action, duration);
+        }
+        public static void ShowButtonedNotificationRaw(string message, string button1, Action<InAppNotificationWithButton> action1, 
+            string button2, Action<InAppNotificationWithButton> action2, int duration = 5000)
+        {
+            GetMainPageContainer()?.ShowButtonedNotification(message, button1, action1, button2, action2, duration);
+        }
         public static void ShowMusicNotFoundNotification(string music, int duration = 5000)
         {
             GetMainPageContainer()?.ShowNotification(LocalizeMessage("MusicNotFound", music), duration);
@@ -248,6 +257,7 @@ namespace SMPlayer
 
         private static string LocalizeWithLoader(ResourceLoader loader, string resource, params object[] args)
         {
+            if (resource == null) return null;
             var str = LocalizeHelper(resource, loader);
             try
             {
@@ -379,6 +389,8 @@ namespace SMPlayer
     {
         void ShowNotification(string message, int duration = 2000);
         void ShowButtonedNotification(string message, string button, Action<InAppNotificationWithButton> action, int duration = 5000);
+        void ShowButtonedNotification(string message, string button1, Action<InAppNotificationWithButton> action1, 
+                                                      string button2, Action<InAppNotificationWithButton> action2, int duration = 5000);
         void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option = null);
         void CancelMultiSelectCommandBar();
         void SetMultiSelectListener(IMultiSelectListener listener = null);

@@ -315,6 +315,9 @@
   <data name="LyricsUpdated" xml:space="preserve">
     <value>《{0}》的歌词已更新！</value>
   </data>
+  <data name="LyricsUpdatedAndRefreshed" xml:space="preserve">
+    <value>《{0}》的歌词已更新，现展示《{1}》歌词。</value>
+  </data>
   <data name="MiniModeFailed" xml:space="preserve">
     <value>无法进入迷你模式！</value>
   </data>
@@ -369,6 +372,9 @@
   <data name="NoResult" xml:space="preserve">
     <value>找不到结果</value>
   </data>
+  <data name="NothingChanged" xml:space="preserve">
+    <value>没有检测到变化</value>
+  </data>
   <data name="NotImplemented" xml:space="preserve">
     <value>暂时没有实现该功能！</value>
   </data>
@@ -395,6 +401,9 @@
   </data>
   <data name="Pause" xml:space="preserve">
     <value>暂停</value>
+  </data>
+  <data name="PendingSaveLyrics" xml:space="preserve">
+    <value>《{0}》的歌词更新了，但尚未保存</value>
   </data>
   <data name="Play" xml:space="preserve">
     <value>播放</value>
@@ -491,6 +500,9 @@
   </data>
   <data name="SameFolderAlreadyExists" xml:space="preserve">
     <value>同名文件夹已经存在！</value>
+  </data>
+  <data name="SaveLyricsLater" xml:space="preserve">
+    <value>《{0}》的歌词将在歌曲切换后更新，你可以在设置页面修改这个行为。</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>搜索</value>

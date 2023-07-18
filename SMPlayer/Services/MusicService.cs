@@ -274,7 +274,7 @@ namespace SMPlayer.Services
 
         public static async Task<bool> SaveLyricsAsync(this Music music, string lyrics)
         {
-            var storageFile = await music.GetStorageFileAsync();
+            var storageFile = await music?.GetStorageFileAsync();
             if (storageFile == null)
             {
                 return false;

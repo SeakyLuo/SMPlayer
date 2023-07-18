@@ -288,35 +288,23 @@ namespace SMPlayer
 
         public async void ScrollToCurrentMusic(bool showNotification = false)
         {
-            if (!ScrollToMusic(MusicPlayer.CurrentIndex, false))
-            {
-                await SongsListView.LoadMoreItemsAsync();
-                ScrollToMusic(MusicPlayer.CurrentIndex, showNotification);
-            }
-        }
-        private bool ScrollToMusic(int index, bool showNotification = false)
-        {
-            if (index < 0) return false;
+            int index = MusicPlayer.CurrentIndex;
             if (SongsListView.IsLoaded)
             {
-                if (!SongsListView.ScrollToIndex(index))
-                {
-                    if (showNotification) Helper.ShowNotification("UnableToLocateMusic");
-                    return false;
-                }
+                await SongsListView.ScrollToIndexAsync(index);
             }
             else
             {
                 ScrollToMusicRequestedWhenUnloaded = index;
             }
-            return true;
         }
 
-        private void SwipeControl_Loaded(object sender, RoutedEventArgs e)
+        private async void SwipeControl_Loaded(object sender, RoutedEventArgs e)
         {
             if (!Removable) (sender as SwipeControl).RightItems = null;
-            if (ScrollToMusicRequestedWhenUnloaded != -1 && SongsListView.ScrollToIndex(ScrollToMusicRequestedWhenUnloaded))
+            if (ScrollToMusicRequestedWhenUnloaded != -1)
             {
+                await SongsListView.ScrollToIndexAsync(ScrollToMusicRequestedWhenUnloaded);
                 ScrollToMusicRequestedWhenUnloaded = -1;
             }
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarFormats;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -30,18 +31,29 @@ namespace SMPlayer.Controls
             }
         }
         private string message;
-        public string ButtonText
+        public string Button1Text
         {
-            get => buttonText;
+            get => button1Text;
             set
             {
-                buttonText = value;
+                button1Text = value;
                 OnPropertyChanged();
             }
         }
-        private string buttonText;
+        private string button1Text;
+        public string Button2Text
+        {
+            get => button2Text;
+            set
+            {
+                button2Text = value;
+                OnPropertyChanged();
+            }
+        }
+        private string button2Text;
 
-        public Action<InAppNotificationWithButton> ButtonAction { get; set; }
+        public Action<InAppNotificationWithButton> Button1Action { get; set; }
+        public Action<InAppNotificationWithButton> Button2Action { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -56,16 +68,33 @@ namespace SMPlayer.Controls
             this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void NotificationButton_Click(object sender, RoutedEventArgs e)
+        private void Button1_Click(object sender, RoutedEventArgs e)
         {
-            ButtonAction.Invoke(this);
+            Button1Action?.Invoke(this);
+        }
+
+        private void Button2_Click(object sender, RoutedEventArgs e)
+        {
+            Button2Action?.Invoke(this);
         }
 
         public void Show(string message, string buttonText, Action<InAppNotificationWithButton> buttonAction, int duration = 2000)
         {
             Message = message;
-            ButtonText = buttonText;
-            ButtonAction = buttonAction;
+            Button1Text = buttonText;
+            Button1Action = buttonAction;
+            Button2Text = null;
+            Button2Action = null;
+            ButtonNotification.Show(duration);
+        }
+
+        public void Show(string message, string button1Text, Action<InAppNotificationWithButton> button1Action, string button2Text, Action<InAppNotificationWithButton> button2Action, int duration = 2000)
+        {
+            Message = message;
+            Button1Text = button1Text;
+            Button1Action = button1Action;
+            Button2Text = button2Text;
+            Button2Action = button2Action;
             ButtonNotification.Show(duration);
         }
 

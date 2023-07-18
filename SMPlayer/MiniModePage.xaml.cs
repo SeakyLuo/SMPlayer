@@ -91,6 +91,10 @@ namespace SMPlayer
         {
         }
 
+        void IMainPageContainer.ShowButtonedNotification(string message, string button1, Action<InAppNotificationWithButton> action1, string button2, Action<InAppNotificationWithButton> action2, int duration)
+        {
+        }
+
         void IMainPageContainer.ShowMultiSelectCommandBar(MultiSelectCommandBarOption option)
         {
         }

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Media.Playback;
 using Windows.Storage;
@@ -32,6 +33,8 @@ namespace SMPlayer.Controls
         private string Lyrics = "";
         private Music CurrentMusic;
         public bool IsProcessing { get; private set; } = false;
+        private string SaveLyricsSnapshotLyrics;
+        private Music SaveLyricsSnapshotMusic;
         public MusicLyricsControl()
         {
             this.InitializeComponent();
@@ -59,26 +62,53 @@ namespace SMPlayer.Controls
 
         private async void SaveLyricsButton_Click(object sender, RoutedEventArgs e)
         {
+            await SaveLyrics(CurrentMusic, LyricsTextBox.Text, false);
+        }
+
+        // 歌词控件展示的歌不是当前播放的
+        // 或者下一首播放的是当前播放的（待定）
+        private static bool ShouldSaveLyricsImmediately(Music music)
+        {
+            return MusicPlayer.CurrentMusic != music;
+            //return MusicPlayer.CurrentMusic != music || MusicPlayer.NextMusic == music;
+        }
+
+        private async Task SaveLyrics(Music music, string lyrics, bool SaveLyricsImmediately, bool RefreshLatestLyrics = false)
+        {
             if (IsProcessing)
             {
                 Helper.ShowNotification("ProcessingRequest");
                 return;
             }
             IsProcessing = true;
+            bool isLyricsSaved = false;
             try
             {
-                string lyrics = LyricsTextBox.Text;
-                if (Lyrics != lyrics)
+                if (Lyrics == lyrics)
                 {
-                    SaveProgress.Visibility = Visibility.Visible;
-                    SetControlEnablility(false);
-                    await Task.Run(async () =>
-                    {
-                        await CurrentMusic.SaveLyricsAsync(lyrics);
-                        Lyrics = lyrics;
-                    });
+                    Helper.ShowNotification("NothingChanged");
                 }
-                Helper.ShowNotificationRaw(Helper.LocalizeMessage("LyricsUpdated", CurrentMusic.Name));
+                else
+                {
+                    if (SaveLyricsImmediately || Settings.settings.SaveLyricsImmediately || ShouldSaveLyricsImmediately(music))
+                    {
+                        SaveProgress.Visibility = Visibility.Visible;
+                        SetControlEnablility(false);
+                        await Task.Run(async () =>
+                        {
+                            await music.SaveLyricsAsync(lyrics);
+                            isLyricsSaved = true;
+                        });
+                    }
+                    else
+                    {
+                        SaveLyricsSnapshotLyrics = lyrics;
+                        SaveLyricsSnapshotMusic = music;
+                        Helper.ShowButtonedNotificationRaw(Helper.LocalizeMessage("SaveLyricsLater", music.Name),
+                            Helper.LocalizeText("SaveImmediately"),
+                            async n => await SaveLyrics(music, lyrics, true));
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -86,11 +116,28 @@ namespace SMPlayer.Controls
             }
             finally
             {
+                if (isLyricsSaved)
+                {
+                    Lyrics = lyrics;
+                    SaveLyricsSnapshotLyrics = null;
+                    SaveLyricsSnapshotMusic = null;
+                    if (RefreshLatestLyrics)
+                    {
+                        Music currentMusic = MusicPlayer.CurrentMusic;
+                        Helper.ShowNotificationRaw(Helper.LocalizeMessage("LyricsUpdatedAndRefreshed", music.Name, currentMusic.Name), 5000);
+                        SetLyrics(currentMusic);
+                    }
+                    else
+                    {
+                        Helper.ShowNotificationRaw(Helper.LocalizeMessage("LyricsUpdated", music.Name));
+                    }
+                }
                 SaveProgress.Visibility = Visibility.Collapsed;
                 SetControlEnablility(true);
                 IsProcessing = false;
             }
         }
+
         private async void SearchLyricsButton_Click(object sender, RoutedEventArgs e)
         {
             if (IsProcessing)
@@ -111,9 +158,18 @@ namespace SMPlayer.Controls
                 }
                 else
                 {
+                    string before = LyricsTextBox.Text;
                     LyricsTextBox.Text = lyrics;
-                    notification = Helper.LocalizeMessage("SearchLyricsSuccessful");
-                    ScrollToTop();
+                    if (before == LyricsTextBox.Text)
+                    {
+                        // TextBox会把\n变成\r。。。所以检测赋值前后的变化
+                        notification = "NothingChanged";
+                    }
+                    else
+                    {
+                        notification = Helper.LocalizeMessage("SearchLyricsSuccessful");
+                        ScrollToTop();
+                    }
                 }
             }
             catch (Exception ex)
@@ -128,8 +184,8 @@ namespace SMPlayer.Controls
 
         private void SetControlEnablility(bool isEnabled)
         {
-            LyricsTextBox.IsEnabled 
-                = SearchLyricsButton.IsEnabled = ImportLyricsButton.IsEnabled 
+            LyricsTextBox.IsEnabled
+                = SearchLyricsButton.IsEnabled = ImportLyricsButton.IsEnabled
                 = SaveLyricsButton.IsEnabled = ResetLyricsButton.IsEnabled
                 = isEnabled;
         }
@@ -158,6 +214,7 @@ namespace SMPlayer.Controls
                 Log.Warn($"GetLyrics Failed {e}");
                 Helper.ShowNotification("GetLyricsFailed");
             }
+            ScrollToTop();
             Lyrics = LyricsTextBox.Text;
             IsProcessing = false;
         }
@@ -192,17 +249,66 @@ namespace SMPlayer.Controls
             IsProcessing = false;
         }
 
+        private void SwitchMusic(MusicPlayerEventArgs args)
+        {
+            if (!AllowMusicSwitching || args.Music == CurrentMusic)
+            {
+                return;
+            }
+            string lyrics = LyricsTextBox.Text;
+            // 如果歌词发生变化，且用户没点击保存或者点了保存后又有更新，则通知用户保存
+            if (Lyrics != lyrics && (SaveLyricsSnapshotMusic == null || lyrics != SaveLyricsSnapshotLyrics))
+            {
+                Helper.ShowButtonedNotificationRaw(Helper.LocalizeMessage("PendingSaveLyrics", CurrentMusic.Name),
+                    Helper.LocalizeText("SaveImmediately"),
+                    async n =>
+                    {
+                        await SaveLyrics(CurrentMusic, lyrics, true, true);
+                        n.Dismiss();
+                    },
+                    Helper.LocalizeText("DiscardChanges"),
+                    n =>
+                    {
+                        SetLyrics(MusicPlayer.CurrentMusic);
+                        n.Dismiss();
+                    });
+                return;
+            }
+            SetLyrics(args.Music);
+        }
+
+        private async Task SaveLyricsAndClearSnapshot()
+        {
+            if (SaveLyricsSnapshotMusic == null)
+            {
+                return;
+            }
+            // 异步执行，避免阻塞主线程UI
+            await Task.Run(async () =>
+            {
+                // 备份一下，省的其他地方处理太快，在睡着后把这个改了
+                Music music = SaveLyricsSnapshotMusic;
+                string lryics = SaveLyricsSnapshotLyrics;
+                // 睡一会，避免源文件的句柄在保存歌词的时候关闭了
+                Thread.Sleep(3000);
+                await music.SaveLyricsAsync(lryics);
+                if (music == SaveLyricsSnapshotMusic)
+                {
+                    SaveLyricsSnapshotLyrics = null;
+                    SaveLyricsSnapshotMusic = null;
+                }
+            });
+        }
+
         async void IMusicPlayerEventListener.Execute(MusicPlayerEventArgs args)
         {
             switch (args.EventType)
             {
                 case MusicPlayerEventType.Switch:
-                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    await Helper.RunInMainUIThread(Dispatcher, async () =>
                     {
-                        if (!AllowMusicSwitching) return;
-                        if (Lyrics != LyricsTextBox.Text) return;
-                        ScrollToTop();
-                        SetLyrics(args.Music);
+                        SwitchMusic(args);
+                        await SaveLyricsAndClearSnapshot();
                     });
                     break;
             }

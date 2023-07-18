@@ -1471,4 +1471,22 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="ReleaseNotesRecentPlayedNotShow.Text" xml:space="preserve">
     <value>Fix a problem that causes Recent Played list not showing its content.</value>
   </data>
+  <data name="SaveLyricsImmediatelyInfo.ToolTipService.ToolTip" xml:space="preserve">
+    <value>While a music file playing, saving its lyrics will stop it from being played. SMPlayer can save the target lyrics later on when the music is switched to another. You can switch off this behavior.</value>
+  </data>
+  <data name="SaveLyricsImmediatelyToggleSwitch.OffContent" xml:space="preserve">
+    <value>Save lyrics immediately</value>
+  </data>
+  <data name="SaveLyricsImmediatelyToggleSwitch.OnContent" xml:space="preserve">
+    <value>Save lyrics immediately</value>
+  </data>
+  <data name="ReleaseNotesCancel5SecondsMovePrev.Text" xml:space="preserve">
+    <value>When clicking the Previous button, it moves to the previous music directly, instead of moving the current music to its very beginning when it has been played for more than 5 seconds.</value>
+  </data>
+  <data name="ReleaseNotesLyricsCanBeSavedLater.Text" xml:space="preserve">
+    <value>Improve the experience for saving lyrics and avoid the current music from being cut off playing when saving its lyrics.</value>
+  </data>
+  <data name="ReleaseNotesLocateMusicBugFix.Text" xml:space="preserve">
+    <value>(Hopefully!) Fix a problem that current music cannot be located correctly.</value>
+  </data>
 </root>

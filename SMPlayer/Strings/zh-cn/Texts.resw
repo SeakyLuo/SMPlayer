@@ -183,6 +183,9 @@
   <data name="DeviceAuthorizations" xml:space="preserve">
     <value>设备授权</value>
   </data>
+  <data name="DiscardChanges" xml:space="preserve">
+    <value>丢弃变更</value>
+  </data>
   <data name="ExpandList" xml:space="preserve">
     <value>展开列表</value>
   </data>
@@ -446,6 +449,9 @@
   </data>
   <data name="RenamePlaylist" xml:space="preserve">
     <value>重命名播放列表</value>
+  </data>
+  <data name="SaveImmediately" xml:space="preserve">
+    <value>立即保存</value>
   </data>
   <data name="SetAsPreferred" xml:space="preserve">
     <value>设为偏好</value>

@@ -238,6 +238,7 @@ namespace SMPlayer.Helpers
                 RemotePlayPassword = src.RemotePlayPassword,
                 UseFilenameNotMusicName = src.UseFilenameNotMusicName,
                 NotificationLyricsSource = src.NotificationLyricsSource,
+                SaveLyricsImmediately = src.SaveLyricsImmediately,
             };
         }
 
@@ -279,6 +280,7 @@ namespace SMPlayer.Helpers
                 RemotePlayPassword = src.RemotePlayPassword,
                 UseFilenameNotMusicName = src.UseFilenameNotMusicName,
                 NotificationLyricsSource = src.NotificationLyricsSource,
+                SaveLyricsImmediately = src.SaveLyricsImmediately,
             };
         }
 

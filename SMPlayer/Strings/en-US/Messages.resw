@@ -313,7 +313,10 @@
     <value>Lyrics have been reset!</value>
   </data>
   <data name="LyricsUpdated" xml:space="preserve">
-    <value>Lyrics of "{0}" have been updated!</value>
+    <value>The lyrics of "{0}" have been updated!</value>
+  </data>
+  <data name="LyricsUpdatedAndRefreshed" xml:space="preserve">
+    <value>The lyrics of "{0}" have been updated. Now is showing the lyrics of "{1}".</value>
   </data>
   <data name="MiniModeFailed" xml:space="preserve">
     <value>Fail to enter mini mode!</value>
@@ -372,6 +375,9 @@
   <data name="NoResult" xml:space="preserve">
     <value>No result can be found!</value>
   </data>
+  <data name="NothingChanged" xml:space="preserve">
+    <value>No changes were detected.</value>
+  </data>
   <data name="NotImplemented" xml:space="preserve">
     <value>This feature is not implemented yet!</value>
   </data>
@@ -398,6 +404,9 @@
   </data>
   <data name="Pause" xml:space="preserve">
     <value>Pause</value>
+  </data>
+  <data name="PendingSaveLyrics" xml:space="preserve">
+    <value>The lyrics of "{0}" has been changed but not saved.</value>
   </data>
   <data name="Play" xml:space="preserve">
     <value>Play</value>
@@ -494,6 +503,9 @@
   </data>
   <data name="SameFolderAlreadyExists" xml:space="preserve">
     <value>Folder with the same name already exists!</value>
+  </data>
+  <data name="SaveLyricsLater" xml:space="preserve">
+    <value>The lyrics of "{0}" will be saved after music is switched. You can change this behavior in the Settings page.</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>

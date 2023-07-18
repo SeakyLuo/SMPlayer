@@ -17,6 +17,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <TextBlock
                         x:Name="MessageTextBlock"
@@ -26,8 +27,14 @@
                         TextWrapping="WrapWholeWords" />
                     <Button
                         Grid.Column="1"
-                        Content="{Binding ElementName=NotificationContainer, Path=ButtonText, Mode=OneWay}"
-                        Click="NotificationButton_Click" />
+                        Visibility="{Binding ElementName=NotificationContainer, Path=Button1Text, Mode=OneWay, Converter={StaticResource VisibilityConverter}}"
+                        Content="{Binding ElementName=NotificationContainer, Path=Button1Text, Mode=OneWay}"
+                        Click="Button1_Click" />
+                    <Button
+                        Grid.Column="2"
+                        Visibility="{Binding ElementName=NotificationContainer, Path=Button2Text, Mode=OneWay, Converter={StaticResource VisibilityConverter}}"
+                        Content="{Binding ElementName=NotificationContainer, Path=Button2Text, Mode=OneWay}"
+                        Click="Button2_Click" />
                 </Grid>
             </DataTemplate>
         </controls:InAppNotification.ContentTemplate>

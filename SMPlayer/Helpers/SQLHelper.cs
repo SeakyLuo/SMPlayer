@@ -40,6 +40,8 @@ namespace SMPlayer.Helpers
                     c.AlterTableAddColumn("Settings", "RemotePlayPassword VARCHAR(50) DEFAULT ''");
                     c.AlterTableAddColumn("Settings", "UseFilenameNotMusicName INTEGER DEFAULT ''");
                     c.AlterTableAddColumn("Settings", "NotificationLyricsSource INTEGER DEFAULT 0");
+                    c.AlterTableAddColumn("Settings", "NotificationLyricsSource INTEGER DEFAULT 0");
+                    c.AlterTableAddColumn("Settings", "SaveLyricsImmediately INTEGER DEFAULT 0");
                 });
                 return;
             }
@@ -329,7 +331,9 @@ namespace SMPlayer.Helpers
         }
         public static List<Music> SelectMusicByPaths(this SQLiteConnection c, IEnumerable<string> paths)
         {
-            return c.Query<MusicDAO>($"select * from Music where Path in ({paths.Select(p => $"'{p}'").Join(",")}) and State = ?").Select(i => i.FromDAO()).ToList();
+            return c.Query<MusicDAO>($"select * from Music where Path in ({paths.Select(p => $"'{p}'").Join(",")}) and State = ?", ActiveState.Active)
+                .Select(i => i.FromDAO())
+                .Where(i => i != null).ToList();
         }
 
         public static FolderTree SelectFullFolder(this SQLiteConnection c, long id)

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.UI.Controls;
+using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarFormats;
 using SMPlayer.Controls;
 using SMPlayer.Dialogs;
 using SMPlayer.Helpers;
@@ -501,6 +502,11 @@ namespace SMPlayer
             ButtonedNotification.Show(message, buttonText, buttonAction, duration);
         }
 
+        public void ShowButtonedNotification(string message, string button1, Action<InAppNotificationWithButton> action1, string button2, Action<InAppNotificationWithButton> action2, int duration = 5000)
+        {
+            ButtonedNotification.Show(message, button1, action1, button2, action2, duration);
+        }
+
         public void ShowMultiSelectCommandBar(MultiSelectCommandBarOption option = null)
         {
             //TestCommandBar.Show();
@@ -531,6 +537,7 @@ namespace SMPlayer
         {
             return MainMediaControl;
         }
+
     }
 
     public interface IWindowResizeListener

@@ -18,6 +18,7 @@ namespace SMPlayer
 {
     public class MusicPlayer : IMusicEventListener
     {
+        public const string JsonFilename = "NowPlaying";
         public static bool ShuffleEnabled { get; private set; }
         public static Music CurrentMusic => PlaybackList.CurrentItem.GetMusic();
         public static IEnumerable<Music> CurrentPlaylist => PlaybackList.Items.Select(i => i.GetMusic()).ToList();
@@ -84,7 +85,7 @@ namespace SMPlayer
         private static List<IMusicPlayerEventListener> MusicPlayerEventListeners = new List<IMusicPlayerEventListener>();
         public static void AddMusicPlayerEventListener(IMusicPlayerEventListener listener) { MusicPlayerEventListeners.Add(listener); }
         public static List<Action> InitFinishedListeners = new List<Action>();
-        public const string JsonFilename = "NowPlaying";
+        public static Music NextMusic => PlayMode == PlayMode.RepeatOne ? CurrentMusic : PlaybackList.Items[(CurrentIndex + 1) % CurrentPlaylistCount].GetMusic();
 
         public static void Init(Music music = null)
         {

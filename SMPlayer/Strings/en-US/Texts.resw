@@ -183,6 +183,9 @@
   <data name="DeviceAuthorizations" xml:space="preserve">
     <value>Device Authorizations</value>
   </data>
+  <data name="DiscardChanges" xml:space="preserve">
+    <value>Discard changes</value>
+  </data>
   <data name="ExpandList" xml:space="preserve">
     <value>Expand</value>
   </data>
@@ -446,6 +449,9 @@
   </data>
   <data name="RenamePlaylist" xml:space="preserve">
     <value>Rename Playlist</value>
+  </data>
+  <data name="SaveImmediately" xml:space="preserve">
+    <value>Save immediately</value>
   </data>
   <data name="SetAsPreferred" xml:space="preserve">
     <value>Set As Preferred</value>

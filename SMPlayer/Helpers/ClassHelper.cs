@@ -9,13 +9,16 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Graphics.Imaging;
 using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -439,20 +442,46 @@ namespace SMPlayer
             return fileType == FileType.Music;
         }
 
-        public static bool ScrollToIndex(this ListViewBase listViewBase, int index)
+        public static void ScrollToIndex(this ListViewBase listViewBase, int index)
         {
-            if (listViewBase.ContainerFromIndex(index) is ListViewItem item)
+            if (listViewBase?.ContainerFromIndex(index) is ListViewItem item)
             {
-                //listViewBase.ScrollIntoView(item, ScrollIntoViewAlignment.Default);
                 item.Locate();
-                return true;
             }
-            return false;
         }
 
-        public static bool ScrollToTop(this ListViewBase listViewBase)
+        public static async Task ScrollToIndexAsync(this ListViewBase listViewBase, int index)
         {
-            return ScrollToIndex(listViewBase, 0);
+            if (listViewBase?.ContainerFromIndex(index) is ListViewItem item)
+            {
+                // 动画更好，优先这个
+                item.Locate();
+                return;
+            }
+            // 确保 ListView 中的项已经加载并可用
+            await listViewBase.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                listViewBase.ScrollIntoView(listViewBase.Items[index], ScrollIntoViewAlignment.Default);
+            });
+            int tryLoadCount = 50;
+            // 等待滚动完成，不用while，避免死循环
+            for (int i = 0; i < tryLoadCount; i++)
+            {
+                if (listViewBase.ContainerFromIndex(index) == null)
+                {
+                    await Task.Delay(100); // 延迟一段时间等待项加载
+                } 
+                else
+                {
+                    return;
+                }
+            }
+            Log.Info($"{tryLoadCount}次都没加载到");
+        }
+
+        public static void ScrollToTop(this ListViewBase listViewBase)
+        {
+            ScrollToIndex(listViewBase, 0);
         }
 
         public static void RemoveAfter<T>(this ObservableCollection<T> collection, int index)
