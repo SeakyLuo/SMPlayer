@@ -452,6 +452,11 @@ namespace SMPlayer
 
         public static async Task ScrollToIndexAsync(this ListViewBase listViewBase, int index)
         {
+            if (index < 0 || index >= listViewBase.Items.Count)
+            {
+                Log.Warn($"bad index {index}, list count {listViewBase.Items.Count}");
+                return;
+            }
             if (listViewBase?.ContainerFromIndex(index) is ListViewItem item)
             {
                 // 动画更好，优先这个
@@ -459,7 +464,7 @@ namespace SMPlayer
                 return;
             }
             // 确保 ListView 中的项已经加载并可用
-            await listViewBase.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await Helper.RunInMainUIThread(listViewBase.Dispatcher, () =>
             {
                 listViewBase.ScrollIntoView(listViewBase.Items[index], ScrollIntoViewAlignment.Default);
             });
@@ -476,7 +481,7 @@ namespace SMPlayer
                     return;
                 }
             }
-            Log.Info($"{tryLoadCount}次都没加载到");
+            Log.Warn($"{tryLoadCount}次都没加载到");
         }
 
         public static void ScrollToTop(this ListViewBase listViewBase)
