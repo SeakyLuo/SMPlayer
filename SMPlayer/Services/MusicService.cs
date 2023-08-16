@@ -36,7 +36,7 @@ namespace SMPlayer.Services
         {
             return ids.IsEmpty() ? new List<Music>() : SQLHelper.Run(c => c.SelectMusicByIds(ids)).ToList();
         }
-        public static async Task<List<Music>> FindMusicList(IEnumerable<string> paths)
+        public static async Task<List<Music>> FindMusicList(List<string> paths)
         { 
             if (paths.IsEmpty())
             {
