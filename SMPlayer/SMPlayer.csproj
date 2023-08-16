@@ -386,7 +386,7 @@
     <Compile Include="MusicLibraryPage.xaml.cs">
       <DependentUpon>MusicLibraryPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MusicConverter.cs" />
+    <Compile Include="Helpers\MusicConverter.cs" />
     <Compile Include="MyFavoritesPage.xaml.cs">
       <DependentUpon>MyFavoritesPage.xaml</DependentUpon>
     </Compile>

@@ -25,6 +25,8 @@
 
     <ScrollViewer>
         <TextBlock TextWrapping="WrapWholeWords">
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.8.20</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesSupportOGG"/><LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.8.18</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesCancel5SecondsMovePrev"/><LineBreak />
             2. <Run x:Uid="ReleaseNotesLyricsCanBeSavedLater"/><LineBreak />

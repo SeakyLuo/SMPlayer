@@ -11,7 +11,7 @@
   <Identity
     Name="23778SeakyTheLoner.SMPlayer"
     Publisher="CN=CFBE922A-0341-4A7E-B15B-A6DEF6C9E3AF"
-    Version="2.8.19.0" />
+    Version="2.8.20.0" />
 
   <mp:PhoneIdentity PhoneProductId="cc323160-1166-40e8-bb50-eaf5dc6fc12d" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
@@ -71,6 +71,7 @@
             <uap:Codec Name="aac"/>
             <uap:Codec Name="wma"/>
             <uap:Codec Name="wav"/>
+            <uap:Codec Name="ogg"/>
           </uap:MediaPlayback>
         </uap:Extension>
       </Extensions>

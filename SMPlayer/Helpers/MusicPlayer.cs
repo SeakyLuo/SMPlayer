@@ -401,12 +401,26 @@ namespace SMPlayer
         public static void Play()
         {
             if (CurrentPlaylistCount == 0) return;
-            Player.Play();
+            try
+            {
+                Player.Play();
+            }
+            catch(Exception e)
+            {
+                Log.Warn($"Play exception {e}");
+            }
         }
 
         public static void Pause()
         {
-            Player.Pause();
+            try
+            {
+                Player.Pause();
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"Pause exception {e}");
+            }
         }
 
         public static void MovePrev()

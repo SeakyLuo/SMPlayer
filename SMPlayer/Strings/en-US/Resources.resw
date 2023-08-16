@@ -1489,4 +1489,7 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="ReleaseNotesLocateMusicBugFix.Text" xml:space="preserve">
     <value>(Hopefully!) Fix a problem that current music cannot be located correctly.</value>
   </data>
+  <data name="ReleaseNotesSupportOGG.Text" xml:space="preserve">
+    <value>Add play support for ogg file.</value>
+  </data>
 </root>

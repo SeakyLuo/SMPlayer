@@ -331,7 +331,7 @@ namespace SMPlayer.Helpers
         }
         public static List<Music> SelectMusicByPaths(this SQLiteConnection c, IEnumerable<string> paths)
         {
-            return c.Query<MusicDAO>($"select * from Music where Path in ({paths.Select(p => $"'{p}'").Join(",")}) and State = ?", ActiveState.Active)
+            return c.Query<MusicDAO>($"select * from Music where Path in ({paths.Select(p => "@" + p).Join(",")}) and State = ?", ActiveState.Active)
                 .Select(i => i.FromDAO())
                 .Where(i => i != null).ToList();
         }
@@ -467,7 +467,7 @@ namespace SMPlayer.Helpers
             return c.Query<FileDAO>($"select * from File where ParentId = ? and State in ({states})", folder.Id, states).Select(i => i.FromDAO()).ToList();
         }
 
-        public static List<Playlist> SelectAllPlaylists(this SQLiteConnection c, Func<Playlist, bool> predicate = null)
+        public static List<Playlist> SelectAllPlaylists(this SQLiteConnection c)
         {
             return c.Query<PlaylistDAO>("select * from Playlist where Id != ? and State = ?", Settings.settings.MyFavoritesId, ActiveState.Active)
                     .Select(i => i.FromDAO())

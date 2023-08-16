@@ -1483,4 +1483,7 @@
   <data name="ReleaseNotesLocateMusicBugFix.Text" xml:space="preserve">
     <value>（但愿）修复了列表项目过多时无法定位当前音乐的问题</value>
   </data>
+  <data name="ReleaseNotesSupportOGG.Text" xml:space="preserve">
+    <value>支持播放ogg格式的音乐文件。</value>
+  </data>
 </root>
