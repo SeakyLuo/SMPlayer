@@ -340,7 +340,10 @@
     <value>播放列表（{0}）</value>
   </data>
   <data name="PlayMusicOfName" xml:space="preserve">
-    <value>播放《{0}》</value>
+    <value>将《{0}》添加到播放列表并播放</value>
+  </data>
+  <data name="PlayMusicOfNameNext" xml:space="preserve">
+    <value>将《{0}》添加到正在播放列表，设置为下一首歌</value>
   </data>
   <data name="PlayNext" xml:space="preserve">
     <value>下一首播放</value>

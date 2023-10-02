@@ -34,6 +34,13 @@
                     Visibility="Collapsed" />
             </CommandBar.Content>
             <AppBarButton
+                x:Name="QuickPlayButton"
+                x:Uid="QuickPlayButton"
+                Icon="Play"
+                Label="Quick Play" 
+                Click="QuickPlayButton_Click"
+                />
+            <AppBarButton
                 x:Name="RandomPlayButton"
                 x:Uid="RandomPlayButton"
                 Icon="Shuffle"

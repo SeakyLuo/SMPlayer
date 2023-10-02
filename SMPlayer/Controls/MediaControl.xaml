@@ -315,7 +315,6 @@
                     ManipulationCompleted="MediaSlider_ManipulationCompleted"
                     ManipulationMode="All"
                     ManipulationStarted="MediaSlider_ManipulationStarted"
-                    ManipulationStarting="MediaSlider_ManipulationStarting"
                     Minimum="0"
                     Style="{StaticResource MediaProgressSliderStyle}"
                     ThumbToolTipValueConverter="{StaticResource MusicDurationConverter}"
@@ -527,7 +526,6 @@
                         ManipulationCompleted="MediaSlider_ManipulationCompleted"
                         ManipulationMode="All"
                         ManipulationStarted="MediaSlider_ManipulationStarted"
-                        ManipulationStarting="MediaSlider_ManipulationStarting"
                         Minimum="0"
                         RelativePanel.LeftOf="RightTimeTextBlock"
                         RelativePanel.RightOf="LeftTimeTextBlock"
@@ -972,7 +970,6 @@
                         ManipulationCompleted="MediaSlider_ManipulationCompleted"
                         ManipulationMode="All"
                         ManipulationStarted="MediaSlider_ManipulationStarted"
-                        ManipulationStarting="MediaSlider_ManipulationStarting"
                         Minimum="0"
                         Style="{StaticResource ThumblessMediaProgressSliderStyle}"
                         ValueChanged="MediaSlider_ValueChanged" />

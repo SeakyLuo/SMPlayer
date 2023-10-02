@@ -1486,4 +1486,19 @@
   <data name="ReleaseNotesSupportOGG.Text" xml:space="preserve">
     <value>支持播放ogg格式的音乐文件。</value>
   </data>
+  <data name="QuickPlayButton.Label" xml:space="preserve">
+    <value>快速播放</value>
+  </data>
+  <data name="QuickPlayButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>在随机播放歌曲的同时会有更高的概率播放偏好的歌曲</value>
+  </data>
+  <data name="ReleaseNotesLazyContent.Text" xml:space="preserve">
+    <value>猜猜我更新了啥~就是些小改动，懒得详细写了~</value>
+  </data>
+  <data name="ReleaseNotesAddPointerOverButtonsToMusicList.Text" xml:space="preserve">
+    <value>增加了一些音乐列表的快捷操作按钮</value>
+  </data>
+  <data name="ReleaseNotesBugFixForPlayInTheFlyoutMenu.Text" xml:space="preserve">
+    <value>修复了右键菜单中播放按钮不播放的问题</value>
+  </data>
 </root>

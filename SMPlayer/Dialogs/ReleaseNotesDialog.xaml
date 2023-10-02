@@ -25,6 +25,11 @@
 
     <ScrollViewer>
         <TextBlock TextWrapping="WrapWholeWords">
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.9.0</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesAddPointerOverButtonsToMusicList"/><LineBreak />
+            2. <Run x:Uid="ReleaseNotesBugFixForPlayInTheFlyoutMenu"/><LineBreak />
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.8.21</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesLazyContent"/><LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.8.20</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesSupportOGG"/><LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.8.18</Run><LineBreak />

@@ -407,7 +407,7 @@ namespace SMPlayer
         }
 
         private MusicView CurrentMusic = null;
-        private bool ShouldUpdate = true, SliderClicked = false;
+        private bool wasPlaying = false;
         private static List<IMusicRequestListener> MusicRequestListeners = new List<IMusicRequestListener>();
         private static bool inited = false;
         private bool IsMinimalMain { get => MainMediaControlMoreButton.Visibility == Visibility.Visible; }
@@ -467,10 +467,7 @@ namespace SMPlayer
 
             SliderTimer.Tick += (s, args) =>
             {
-                if (ShouldUpdate)
-                {
-                    MediaSlider.Value = MusicPlayer.Position;
-                }
+                MediaSlider.Value = MusicPlayer.Position;
             };
             SliderTimer.Start();
         }
@@ -760,10 +757,6 @@ namespace SMPlayer
         {
             MediaSlider.Value = 0;
             MusicPlayer.MovePrev();
-            //if (MusicPlayer.Position > 5)
-            //    MusicPlayer.Position = 0;
-            //else
-            //    MusicPlayer.MovePrev();
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
@@ -774,30 +767,23 @@ namespace SMPlayer
 
         private void MediaSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            int newValue = (int)e.NewValue, oldValue = (int)e.OldValue, diff = newValue - oldValue;
-            SliderClicked = diff != 1 && diff != 0;
+            int newValue = (int)e.NewValue, oldValue = (int)e.OldValue;
+            MusicPlayer.Position = e.NewValue;
             if (LeftTimeTextBlock != null) LeftTimeTextBlock.Text = MusicDurationConverter.ToTime(newValue);
         }
 
         private void MediaSlider_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
         {
-            MusicPlayer.Position = MediaSlider.Value;
-            ShouldUpdate = true;
-            Log.Debug("MediaSlider_ManipulationCompleted");
+            if (wasPlaying)
+            {
+                MusicPlayer.Play();
+            }
         }
 
         private void MediaSlider_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
-            ShouldUpdate = false;
-            Log.Debug("MediaSlider_ManipulationStarted");
-        }
-        private void MediaSlider_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e)
-        {
-            Log.Info("MediaSlider_ManipulationStarting");
-            if (SliderClicked)
-            {
-                MusicPlayer.Position = MediaSlider.Value;
-            }
+            wasPlaying = MusicPlayer.IsPlaying;
+            MusicPlayer.Pause();
         }
 
         private void MainMusicInfoGrid_Tapped(object sender, TappedRoutedEventArgs e)

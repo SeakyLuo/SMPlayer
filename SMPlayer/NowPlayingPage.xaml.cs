@@ -47,9 +47,10 @@ namespace SMPlayer
 
         private void SetEnabled()
         {
-            LocateCurrentButton.Visibility = SaveToButton.Visibility = ClearButton.Visibility = PlayModeButton.Visibility = 
+            LocateCurrentButton.Visibility = SaveToButton.Visibility = ClearButton.Visibility = PlayModeButton.Visibility = MultiSelectAppButton.Visibility =
                                             MusicPlayer.CurrentPlaylist.IsEmpty() ? Visibility.Collapsed : Visibility.Visible;
-            RandomPlayButton.Visibility = MusicService.AllSongs.IsEmpty() ? Visibility.Collapsed : Visibility.Visible;
+            RandomPlayButton.IsEnabled = MusicService.AllSongs.IsNotEmpty();
+            QuickPlayButton.IsEnabled = MusicService.AllSongs.IsNotEmpty();
         }
 
         private void SaveToButton_Click(object sender, RoutedEventArgs e)
@@ -88,6 +89,11 @@ namespace SMPlayer
         {
             NowPlayingPlaylistControl.SelectionMode = ListViewSelectionMode.Multiple;
             MainPage.Instance.ShowMultiSelectCommandBar(new MultiSelectCommandBarOption());
+        }
+
+        private void QuickPlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            MusicPlayer.QuickPlay(100);
         }
 
         async void IMusicPlayerEventListener.Execute(MusicPlayerEventArgs args)
@@ -133,5 +139,6 @@ namespace SMPlayer
                     break;
             }
         }
+
     }
 }

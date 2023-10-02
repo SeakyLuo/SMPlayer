@@ -340,7 +340,10 @@
     <value>Playlists ({0})</value>
   </data>
   <data name="PlayMusicOfName" xml:space="preserve">
-    <value>Play "{0}"</value>
+    <value>Add "{0}" to the Now Playing playlist and play immediately.</value>
+  </data>
+  <data name="PlayMusicOfNameNext" xml:space="preserve">
+    <value>Add "{0}" to the Now Playing playlist and make it the next one.</value>
   </data>
   <data name="PlayNext" xml:space="preserve">
     <value>Play Next</value>

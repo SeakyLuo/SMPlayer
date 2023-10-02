@@ -1,7 +1,9 @@
-﻿using SMPlayer.Helpers;
+﻿using Microsoft.Toolkit.Uwp.Notifications;
+using SMPlayer.Helpers;
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -12,6 +14,9 @@ using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Crashes;
+using Microsoft.AppCenter.Analytics;
 
 namespace SMPlayer
 {
@@ -30,7 +35,14 @@ namespace SMPlayer
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            this.Resuming += App_Resuming;
             this.UnhandledException += App_UnhandledException;
+            AppCenter.Start("8e3ac143-15c7-472c-b089-74707d7605c7", typeof(Analytics), typeof(Crashes));
+        }
+
+        private void App_Resuming(object sender, object e)
+        {
+            Debug.WriteLine($"sender {sender.GetType()} e {e}");
         }
 
         /// <summary>
@@ -166,10 +178,17 @@ namespace SMPlayer
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            TileHelper.ResumeTile();
-            ToastHelper.HideToast();
-            Save();
-            SQLHelper.ClearInactive();
+            try
+            {
+                TileHelper.ResumeTile();
+                ToastHelper.HideToast();
+                Save();
+                SQLHelper.ClearInactive();
+            }
+            catch (Exception ex)
+            {
+                Log.Warn($"OnSuspending exception {ex}");
+            }
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
         }
@@ -181,7 +200,7 @@ namespace SMPlayer
             await Helper.ClearBackups(10);
         }
 
-        protected override async void OnBackgroundActivated(BackgroundActivatedEventArgs args)
+        protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
         {
             var deferral = args.TaskInstance.GetDeferral();
             switch (args.TaskInstance.Task.Name)
@@ -192,38 +211,50 @@ namespace SMPlayer
                         // Perform tasks
                         if (Enum.TryParse(typeof(ToastButtonEnum), details.Argument, out object toastButton))
                         {
-                            switch (toastButton)
+                            try
                             {
-                                case ToastButtonEnum.Next:
-                                    MusicPlayer.MoveNext();
-                                    if (MusicPlayer.PlayMode == PlayMode.RepeatOne)
-                                    {
-                                        // 强制单曲循环的时候点击下一首Toast出现
-                                        ToastHelper.HideToast();
-                                        await ToastHelper.ShowToast(MusicPlayer.CurrentMusic, MusicPlayer.PlaybackState);
-                                    }
-                                    break;
-                                case ToastButtonEnum.Pause:
-                                    MusicPlayer.Pause();
-                                    break;
-                                case ToastButtonEnum.Play:
-                                    MusicPlayer.Play();
-                                    break;
-                                case ToastButtonEnum.SwitchLyricsSourceToMusic:
-                                    await ToastHelper.SwitchLyricsSource(LyricsSource.Music);
-                                    break;
-                                case ToastButtonEnum.SwitchLyricsSourceToLrcFile:
-                                    await ToastHelper.SwitchLyricsSource(LyricsSource.LrcFile);
-                                    break;
-                                case ToastButtonEnum.SwitchLyricsSourceToInternet:
-                                    await ToastHelper.SwitchLyricsSource(LyricsSource.Internet);
-                                    break;
+                                HandleBackgroundActivation((ToastButtonEnum)toastButton);
+                            }
+                            catch (Exception e)
+                            {
+                                Log.Warn($"HandleBackgroundActivation failed {e}");
                             }
                         }
                     }
                     break;
             }
             deferral.Complete();
+        }
+
+        private async void HandleBackgroundActivation(ToastButtonEnum toastButton)
+        {
+            switch (toastButton)
+            {
+                case ToastButtonEnum.Next:
+                    MusicPlayer.MoveNext();
+                    if (MusicPlayer.PlayMode == PlayMode.RepeatOne)
+                    {
+                        // 强制单曲循环的时候点击下一首Toast出现
+                        ToastHelper.HideToast();
+                        await ToastHelper.ShowToast(MusicPlayer.CurrentMusic, MusicPlayer.PlaybackState);
+                    }
+                    break;
+                case ToastButtonEnum.Pause:
+                    MusicPlayer.Pause();
+                    break;
+                case ToastButtonEnum.Play:
+                    MusicPlayer.Play();
+                    break;
+                case ToastButtonEnum.SwitchLyricsSourceToMusic:
+                    await ToastHelper.SwitchLyricsSource(LyricsSource.Music);
+                    break;
+                case ToastButtonEnum.SwitchLyricsSourceToLrcFile:
+                    await ToastHelper.SwitchLyricsSource(LyricsSource.LrcFile);
+                    break;
+                case ToastButtonEnum.SwitchLyricsSourceToInternet:
+                    await ToastHelper.SwitchLyricsSource(LyricsSource.Internet);
+                    break;
+            }
         }
 
         protected override async void OnFileActivated(FileActivatedEventArgs args)

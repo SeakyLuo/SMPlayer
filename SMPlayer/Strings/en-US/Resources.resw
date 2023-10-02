@@ -757,7 +757,7 @@
     <value>Playlists</value>
   </data>
   <data name="PlayModeAppButton.Label" xml:space="preserve">
-    <value>Play Mode</value>
+    <value>Play mode</value>
   </data>
   <data name="PlayTextBlock.Text" xml:space="preserve">
     <value>Play</value>
@@ -1491,5 +1491,20 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   </data>
   <data name="ReleaseNotesSupportOGG.Text" xml:space="preserve">
     <value>Add play support for ogg file.</value>
+  </data>
+  <data name="QuickPlayButton.Label" xml:space="preserve">
+    <value>Quick Play</value>
+  </data>
+  <data name="QuickPlayButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Play music with randomness and preferences</value>
+  </data>
+  <data name="ReleaseNotesLazyContent.Text" xml:space="preserve">
+    <value>Guess what's new! Just some minor updates and I am too lazy to write them down, haha.</value>
+  </data>
+  <data name="ReleaseNotesAddPointerOverButtonsToMusicList.Text" xml:space="preserve">
+    <value>Add some buttons to the music list item.</value>
+  </data>
+  <data name="ReleaseNotesBugFixForPlayInTheFlyoutMenu.Text" xml:space="preserve">
+    <value>Fix a bug that Play button in the right-click menu doesn't play.</value>
   </data>
 </root>

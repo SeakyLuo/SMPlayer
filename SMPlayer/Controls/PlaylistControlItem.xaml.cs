@@ -3,6 +3,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using System;
 using SMPlayer.Interfaces;
+using Windows.UI.Xaml.Input;
 
 //https://go.microsoft.com/fwlink/?LinkId=234236 上介绍了“用户控件”项模板
 
@@ -86,6 +87,37 @@ namespace SMPlayer.Controls
                     await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => SetTextColor(args.Music));
                     break;
             }
+        }
+
+        private void PlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (PlayButtonIcon.Symbol == Symbol.Pause)
+            {
+                MusicPlayer.Pause();
+                PlayButtonIcon.Symbol = Symbol.Play;
+            }
+            else
+            {
+                MusicPlayer.MoveToMusicOrPlay(Data, Data.Index);
+                PlayButtonIcon.Symbol = Symbol.Pause;
+            }
+        }
+
+        private void AddToButton_Click(object sender, RoutedEventArgs e)
+        {
+            var helper = new MenuFlyoutHelper() { Data = Data };
+            helper.GetAddToPlaylistsMenuFlyout().ShowAt(sender as FrameworkElement);
+        }
+
+        private void UserControl_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(sender as Control, "PointerOver", true);
+            PlayButtonIcon.Symbol = PlayingIcon.Visibility == Visibility.Visible && MusicPlayer.IsPlaying ? Symbol.Pause : Symbol.Play;
+        }
+
+        private void UserControl_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(sender as Control, "Normal", true);
         }
     }
 }

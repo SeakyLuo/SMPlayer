@@ -56,6 +56,7 @@
                 x:Name="AddToButton"
                 x:Uid="AddToButton"
                 Click="AddToButton_Click"
+                Height="40"
                 Style="{StaticResource DisplayWhenHoverButtonStyle}">
                 <Button.Content>
                     <FontIcon FontSize="17" Glyph="&#xE710;" />

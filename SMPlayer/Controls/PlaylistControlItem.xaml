@@ -7,7 +7,20 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:triggers="using:SMPlayer.Triggers"
     DataContextChanged="UserControl_DataContextChanged"
+    PointerEntered="UserControl_PointerEntered"
+    PointerExited="UserControl_PointerExited"
     mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <Style x:Key="DisplayWhenHoverButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Visibility" Value="Collapsed" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Margin" Value="0,-10,0,-10" />
+        </Style>
+    </UserControl.Resources>
 
     <Grid x:Name="ContentGrid" Height="30" Padding="12,0">
         <Grid.ColumnDefinitions>
@@ -20,13 +33,18 @@
             <RowDefinition x:Name="TitleRow" Height="Auto" />
             <RowDefinition x:Name="AlbumArtistRow" Height="Auto" />
         </Grid.RowDefinitions>
-        <StackPanel
+        <Grid
             x:Name="TitlePanel"
             Grid.Row="0"
             Grid.Column="0"
             Margin="0,0,10,0"
-            VerticalAlignment="Center"
-            Orientation="Horizontal">
+            VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
             <FontIcon
                 x:Name="PlayingIcon"
                 Margin="0,0,16,0"
@@ -36,10 +54,31 @@
                 Visibility="Collapsed" />
             <TextBlock
                 x:Name="TitleTextBlock"
+                Grid.Column="1"
                 Foreground="{ThemeResource PlaylistTitleTextBrush}"
                 Text="{Binding Name, Mode=OneWay}"
                 ToolTipService.ToolTip="{Binding ElementName=TitleTextBlock, Path=Text}" />
-        </StackPanel>
+            <Button
+                x:Name="PlayButton"
+                x:Uid="PlayButton"
+                Grid.Column="2"
+                Click="PlayButton_Click"
+                Style="{StaticResource DisplayWhenHoverButtonStyle}">
+                <Button.Content>
+                    <SymbolIcon x:Name="PlayButtonIcon" Symbol="Play" />
+                </Button.Content>
+            </Button>
+            <Button
+                x:Name="AddToButton"
+                x:Uid="AddToButton"
+                Grid.Column="3"
+                Click="AddToButton_Click"
+                Style="{StaticResource DisplayWhenHoverButtonStyle}">
+                <Button.Content>
+                    <SymbolIcon Symbol="Add" />
+                </Button.Content>
+            </Button>
+        </Grid>
         <HyperlinkButton
             x:Name="ArtistTextButton"
             Grid.Row="0"
@@ -131,6 +170,19 @@
                         <Setter Target="ContentGrid.Padding" Value="12,5" />
                         <Setter Target="ContentGrid.Height" Value="Auto" />
                     </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+            <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal" />
+                <VisualState x:Name="PointerOver">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PlayButton" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="AddToButton" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>

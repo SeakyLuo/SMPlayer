@@ -21,7 +21,7 @@ namespace SMPlayer
         public const string JsonFilename = "NowPlaying";
         public static bool ShuffleEnabled { get; private set; }
         public static Music CurrentMusic => PlaybackList.CurrentItem.GetMusic();
-        public static IEnumerable<Music> CurrentPlaylist => PlaybackList.Items.Select(i => i.GetMusic()).ToList();
+        public static IEnumerable<Music> CurrentPlaylist => PlaybackList.Items.Select(i => i.GetMusic());
         public static int CurrentPlaylistCount => PlaybackList.Items.Count;
         public static int CurrentIndex => CurrentPlaylistCount > 0 ? (int) PlaybackList.CurrentItemIndex : -1;
 
@@ -370,18 +370,37 @@ namespace SMPlayer
 
         public static void MoveToMusicOrPlay(IMusicable musicable, int index)
         {
-            if (index >= 0 && PlaybackList.Items[index].GetMusic() == musicable.ToMusic())
+            Music music = musicable.ToMusic();
+            if (index >= 0 && PlaybackList.Items[index].GetMusic() == music)
             {
                 MoveToMusic(index);
+                Play();
+                return;
+            }
+            if (CurrentMusic == music)
+            {
+                Play();
+                return;
+            }
+            int playlistIndex = CurrentPlaylist.FindIndex(i => i == music);
+            if (playlistIndex == -1)
+            {
+                AddNextAndPlay(musicable);
             }
             else
             {
-                AddNextAndPlay(musicable);
+                MoveToMusic(index);
+                Play();
+                return;
             }
         }
 
         public static bool MoveToMusic(int index)
         {
+            if (CurrentIndex == index)
+            {
+                return true;
+            }
             try
             {
                 if (-1 < index && index < CurrentPlaylistCount)

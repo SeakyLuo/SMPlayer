@@ -475,14 +475,27 @@ namespace SMPlayer
             int index = Data is MusicView musicView ? musicView.Index : -1;
             int currentIndex = MusicPlayer.CurrentIndex;
             var flyout = new MenuFlyout();
-            var playItem = new MenuFlyoutItem()
+            if (index > -1 && currentIndex == index && MusicPlayer.IsPlaying)
             {
-                Text = Helper.LocalizeText("Play"),
-                Icon = new SymbolIcon(Symbol.Play)
-            };
-            playItem.SetToolTip(Helper.LocalizeText("PlayMusicOfName", music.Name));
-            playItem.Click += (s, e) => MusicPlayer.MoveToMusicOrPlay(music, index);
-            flyout.Items.Add(playItem);
+                var pauseItem = new MenuFlyoutItem()
+                {
+                    Text = Helper.LocalizeText("Pause"),
+                    Icon = new SymbolIcon(Symbol.Pause)
+                };
+                pauseItem.Click += (s, e) => MusicPlayer.Pause();
+                flyout.Items.Add(pauseItem);
+            }
+            else
+            {
+                var playItem = new MenuFlyoutItem()
+                {
+                    Text = Helper.LocalizeText("Play"),
+                    Icon = new SymbolIcon(Symbol.Play)
+                };
+                playItem.SetToolTip(Helper.LocalizeText("PlayMusicOfName", music.Name));
+                playItem.Click += (s, e) => MusicPlayer.MoveToMusicOrPlay(music, index);
+                flyout.Items.Add(playItem);
+            }
             if (currentIndex != -1 && currentIndex != index && currentIndex != index - 1)
             {
                 var playNextItem = new MenuFlyoutItem()
@@ -495,6 +508,7 @@ namespace SMPlayer
                     MusicPlayer.PlayNext(music, index);
                     Helper.ShowNotificationRaw(Helper.LocalizeMessage("SetPlayNext", music.Name));
                 };
+                playNextItem.SetToolTip(Helper.LocalizeText("PlayMusicOfNameNext", music.Name));
                 flyout.Items.Add(playNextItem);
             }
             flyout.Items.Add(GetAddToMenuFlyoutSubItem(listener));

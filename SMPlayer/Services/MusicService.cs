@@ -50,12 +50,7 @@ namespace SMPlayer.Services
             List<Music> musicList = new List<Music>();
             foreach (string path in paths)
             {
-                Music music = dict.GetValueOrDefault(path, null);
-                if (music == null)
-                {
-                    music = await Music.LoadFromPathAsync(path);
-                }
-                if (music != null)
+                if (dict.GetValueOrDefault(path, await Music.LoadFromPathAsync(path)) is Music music)
                 {
                     musicList.Add(music);
                 }
