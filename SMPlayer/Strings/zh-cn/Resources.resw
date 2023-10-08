@@ -1501,4 +1501,7 @@
   <data name="ReleaseNotesBugFixForPlayInTheFlyoutMenu.Text" xml:space="preserve">
     <value>修复了右键菜单中播放按钮不播放的问题</value>
   </data>
+  <data name="ReleaseNotesCrashFixes.Text" xml:space="preserve">
+    <value>修复了一些闪退问题。</value>
+  </data>
 </root>

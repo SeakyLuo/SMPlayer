@@ -389,7 +389,7 @@ namespace SMPlayer
             }
             else
             {
-                MoveToMusic(index);
+                MoveToMusic(playlistIndex);
                 Play();
                 return;
             }

@@ -1507,4 +1507,7 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="ReleaseNotesBugFixForPlayInTheFlyoutMenu.Text" xml:space="preserve">
     <value>Fix a bug that Play button in the right-click menu doesn't play.</value>
   </data>
+  <data name="ReleaseNotesCrashFixes.Text" xml:space="preserve">
+    <value>Fixed some problems that caused crashes.</value>
+  </data>
 </root>

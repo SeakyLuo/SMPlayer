@@ -3,6 +3,7 @@ using SMPlayer.Interfaces;
 using SMPlayer.Models.DAO;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -37,7 +38,8 @@ namespace SMPlayer.Models
         public Music(StorageFile file, MusicProperties properties)
         {
             Path = file.Path;
-            Name = string.IsNullOrWhiteSpace(properties.Title) || Settings.settings.UseFilenameNotMusicName ? 
+            // Settings.settings可能为null，从日志上分析应该是通过文件启动播放器导致还没来得及加载
+            Name = string.IsNullOrWhiteSpace(properties.Title) || (Settings.settings != null && Settings.settings.UseFilenameNotMusicName) ? 
                    file.DisplayName : properties.Title;
             Artist = properties.Artist;
             Album = properties.Album;
@@ -105,7 +107,15 @@ namespace SMPlayer.Models
             if (file == null) return null;
             MusicProperties properties = await file.Properties?.GetMusicPropertiesAsync();
             if (properties == null) return null;
-            return new Music(file, properties);
+            try
+            {
+                return new Music(file, properties);
+            }
+            catch (Exception ex)
+            {
+                Log.Warn($"create music file failed {ex}");
+                return null;
+            }
             //using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(file), TagLib.ReadStyle.Average))
             //{
             //    return new Music(file.Path, await file.Properties.GetMusicPropertiesAsync(), tagFile.Tag);

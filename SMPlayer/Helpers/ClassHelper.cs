@@ -119,6 +119,7 @@ namespace SMPlayer
 
         public static T RandItem<T>(this IEnumerable<T> list)
         {
+            if (list.IsEmpty()) return default;
             return list.ElementAt(Helper.RandRange(list.Count()));
         }
 

@@ -396,6 +396,9 @@
   <data name="OperationFailed" xml:space="preserve">
     <value>操作失败：{0}</value>
   </data>
+  <data name="OperationFailedDueToEmptyMusicLibrary" xml:space="preserve">
+    <value>操作失败，你的音乐库没有任何歌曲！</value>
+  </data>
   <data name="PathNotFound" xml:space="preserve">
     <value>路径{0}不存在！</value>
   </data>

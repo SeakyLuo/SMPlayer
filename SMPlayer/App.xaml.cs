@@ -195,9 +195,16 @@ namespace SMPlayer
 
         public static async void Save()
         {
-            SettingsHelper.Save();
-            MusicPlayer.Save();
-            await Helper.ClearBackups(10);
+            try
+            {
+                SettingsHelper.Save();
+                MusicPlayer.Save();
+                await Helper.ClearBackups(10);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Save failed {ex}");
+            }
         }
 
         protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)

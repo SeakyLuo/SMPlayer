@@ -310,6 +310,11 @@ namespace SMPlayer.Helpers
             return c.Query<MusicDAO>("select * from Music where State = ?", ActiveState.Active).Select(i => i.FromDAO());
         }
 
+        public static int CountAllMusic(this SQLiteConnection c)
+        {
+            return c.ExecuteScalar<int>("select count(*) from Music where State = ?", ActiveState.Active);
+        }
+
         public static Music SelectMusicByIdIncludeHidden(this SQLiteConnection c, long id)
         {
             ActiveState[] activeStates = { ActiveState.Active, ActiveState.Hidden, ActiveState.ParentHidden };

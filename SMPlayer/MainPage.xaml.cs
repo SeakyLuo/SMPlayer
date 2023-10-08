@@ -246,7 +246,17 @@ namespace SMPlayer
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            if (NaviFrame.CanGoBack) NaviFrame.GoBack();
+            try
+            {
+                if (NaviFrame.CanGoBack)
+                {
+                    NaviFrame.GoBack();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"GoBack failed {ex}");
+            }
         }
 
         private void FakeTogglePaneButton_Click(object sender, RoutedEventArgs e)

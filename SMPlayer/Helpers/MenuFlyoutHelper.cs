@@ -726,6 +726,11 @@ namespace SMPlayer
                 callback?.Invoke();
             };
             flyout.Items.Add(nowPlaying);
+            int musicCount = MusicService.MusicCount;
+            if (musicCount == 0)
+            {
+                return flyout;
+            }
             flyout.Items.Add(new MenuFlyoutSeparator());
             var musicLibrary = new MenuFlyoutItem()
             {
@@ -744,6 +749,10 @@ namespace SMPlayer
             artist.Click += (sender, args) =>
             {
                 var rArtist = RandomPlayHelper.PlayArtist(randomLimit);
+                if (rArtist == null)
+                {
+                    return;
+                }
                 Helper.ShowNotificationRaw(Helper.LocalizeMessage("PlayRandomArtist", rArtist));
                 callback?.Invoke();
             };
@@ -755,6 +764,10 @@ namespace SMPlayer
             album.Click += (sender, args) =>
             {
                 var rAlbum = RandomPlayHelper.PlayAlbum(randomLimit);
+                if (rAlbum == null)
+                {
+                    return;
+                }
                 Helper.ShowNotificationRaw(Helper.LocalizeMessage("PlayRandomAlbum", rAlbum));
                 callback?.Invoke();
             };
@@ -768,6 +781,10 @@ namespace SMPlayer
                 playlist.Click += (sender, args) =>
                 {
                     var rPlaylist = RandomPlayHelper.PlayPlaylist(randomLimit);
+                    if (rPlaylist == null)
+                    {
+                        return;
+                    }
                     Helper.ShowNotificationRaw(Helper.LocalizeMessage("PlayRandomPlaylist", rPlaylist));
                     callback?.Invoke();
                 };
@@ -782,6 +799,10 @@ namespace SMPlayer
                 localFolder.Click += (sender, args) =>
                 {
                     var rLocalFolder = RandomPlayHelper.PlayFolder(randomLimit);
+                    if (rLocalFolder == null)
+                    {
+                        return;
+                    }
                     Helper.ShowNotificationRaw(Helper.LocalizeMessage("PlayRandomLocalFolder", rLocalFolder));
                     callback?.Invoke();
                 };
@@ -813,7 +834,7 @@ namespace SMPlayer
                 };
                 flyout.Items.Add(recentPlayed);
             }
-            if (MusicService.AllSongs.Count() > randomLimit)
+            if (musicCount > randomLimit)
             {
                 flyout.Items.Add(new MenuFlyoutSeparator());
                 var mostPlayed = new MenuFlyoutItem()

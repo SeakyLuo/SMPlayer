@@ -182,7 +182,17 @@ namespace SMPlayer
         {
             var targets = files.Where(f => f.Name.StartsWith(prefix)).OrderBy(f => f.DateCreated);
             foreach (var file in targets.Take(targets.Count() - maxBackups))
-                try { await file.DeleteAsync(); } catch (FileNotFoundException) { }
+            {
+                try 
+                {
+                    await file.DeleteAsync(); 
+                } 
+                catch (Exception)
+                {
+                    // System.Exception: 被调用的对象已与其客户端断开连接
+                    // FileNotFoundException
+                }
+            }
         }
 
         public static string ConvertBytes(ulong bytes)

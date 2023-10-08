@@ -20,6 +20,7 @@ namespace SMPlayer.Services
         private static readonly LoadingCache<string, string> LyricsCache = new LoadingCache<string, string>(1, TimeUnit.Day);
         private static readonly LoadingCache<string, string> LrcLyricsCache = new LoadingCache<string, string>(1, TimeUnit.Day);
         public static IEnumerable<Music> AllSongs => SQLHelper.Run(c => c.SelectAllMusic());
+        public static int MusicCount => SQLHelper.Run(c => c.CountAllMusic());
         public static Music FindMusic(long id)
         { 
             return SQLHelper.Run(c => c.SelectMusicById(id)); 

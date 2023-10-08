@@ -31,13 +31,20 @@ namespace SMPlayer.Helpers
         public static string GetRandomHint()
         {
             string hint = VoiceAssistantHints.RandItem();
+            IEnumerable<Music> allSongs;
             switch (hint)
             {
                 case Hint_PlaySomeonesMusic:
-                    string artist = MusicService.AllSongs.RandItem().Artist;
+
+                    allSongs = MusicService.AllSongs;
+                    if (allSongs.IsEmpty())
+                    {
+                        break;
+                    }
+                    string artist = allSongs.RandItem().Artist;
                     if (string.IsNullOrEmpty(artist) || artist.Length > 30)
                     {
-                        artist = MusicService.AllSongs.RandItem().Artist;
+                        artist = allSongs.RandItem().Artist;
                     }
                     if (string.IsNullOrEmpty(artist) || artist.Length > 30)
                     {
@@ -48,10 +55,15 @@ namespace SMPlayer.Helpers
                         return Helper.LocalizeText(Hint_PlaySomeonesMusic, artist);
                     }
                 case Hint_PlayMusicInAlbum:
-                    string album = MusicService.AllSongs.RandItem().Album;
+                    allSongs = MusicService.AllSongs;
+                    if (allSongs.IsEmpty())
+                    {
+                        break;
+                    }
+                    string album = allSongs.RandItem().Album;
                     if (string.IsNullOrEmpty(album) || album.Length > 30)
                     {
-                        album = MusicService.AllSongs.RandItem().Album;
+                        album = allSongs.RandItem().Album;
                     }
                     if (string.IsNullOrEmpty(album) || album.Length > 30)
                     {

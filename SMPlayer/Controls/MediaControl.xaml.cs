@@ -475,7 +475,6 @@ namespace SMPlayer
         private void AfterLoaded()
         {
             UpdateMusic(MusicPlayer.CurrentMusic);
-            MediaSlider.Value = MusicPlayer.Position;
 
             if (MusicPlayer.IsPlaying) SetButtonPlaying();
             else SetMusicPause();
@@ -511,9 +510,9 @@ namespace SMPlayer
                 MediaSlider.IsEnabled = true;
                 TitleTextBlock.Text = music.Name;
                 ArtistTextBlock.Text = string.IsNullOrWhiteSpace(music.Artist) ? Helper.LocalizeMessage("UnknownArtist") : music.Artist;
-                
-                MediaSlider.Value = MusicPlayer.Progress;
+
                 MediaSlider.Maximum = music.Duration;
+                MediaSlider.Value = MusicPlayer.Position;
                 if (RightTimeTextBlock != null) RightTimeTextBlock.Text = MusicDurationConverter.ToTime(music.Duration);
                 if (LikeToggleButton != null)
                 {
@@ -767,8 +766,13 @@ namespace SMPlayer
 
         private void MediaSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            int newValue = (int)e.NewValue, oldValue = (int)e.OldValue;
-            MusicPlayer.Position = e.NewValue;
+            double newValue = e.NewValue;
+            if (newValue == MusicPlayer.Position)
+            {
+                return;
+            }
+            Debug.WriteLine($"MusicPlayer.Position {MusicPlayer.Position} newValue {newValue}");
+            MusicPlayer.Position = newValue;
             if (LeftTimeTextBlock != null) LeftTimeTextBlock.Text = MusicDurationConverter.ToTime(newValue);
         }
 

@@ -12,12 +12,23 @@ namespace SMPlayer.Helpers
     {
         public static void PlayMusic(int randomLimit = 100)
         {
-            MusicPlayer.SetPlaylistAndPlay(MusicService.AllSongs.RandItems(randomLimit));
+            List<Music> allSongs = MusicService.AllSongs.ToList();
+            if (allSongs.IsEmpty())
+            {
+                Helper.ShowNotification("OperationFailedDueToEmptyMusicLibrary");
+                return;
+            }
+            MusicPlayer.SetPlaylistAndPlay(allSongs.RandItems(randomLimit));
         }
 
         public static string PlayArtist(int randomLimit = 100)
         {
             var artist = MusicService.SelectAllArtists().RandItem();
+            if (artist == null)
+            {
+                Helper.ShowNotification("OperationFailedDueToEmptyMusicLibrary");
+                return null;
+            }
             MusicPlayer.SetPlaylistAndPlay(MusicService.SelectByArtist(artist).RandItems(randomLimit));
             return artist;
         }
@@ -25,6 +36,11 @@ namespace SMPlayer.Helpers
         public static string PlayAlbum(int randomLimit = 100)
         {
             var album = MusicService.SelectAllAlbums().RandItem();
+            if (album == null)
+            {
+                Helper.ShowNotification("OperationFailedDueToEmptyMusicLibrary");
+                return null;
+            }
             MusicPlayer.SetPlaylistAndPlay(MusicService.SelectByAlbum(album).RandItems(randomLimit));
             return album;
         }
@@ -32,6 +48,11 @@ namespace SMPlayer.Helpers
         public static string PlayPlaylist(int randomLimit = 100)
         {
             List<Playlist> allPlaylists = PlaylistService.AllPlaylists;
+            if (allPlaylists.IsEmpty())
+            {
+                Helper.ShowNotification("OperationFailedDueToEmptyMusicLibrary");
+                return null;
+            }
             Playlist playlist;
             do
             {
@@ -45,6 +66,11 @@ namespace SMPlayer.Helpers
         public static string PlayFolder(int randomLimit = 100)
         {
             List<FolderTree> allFolders = StorageService.AllFolders;
+            if (allFolders.IsEmpty())
+            {
+                Helper.ShowNotification("OperationFailedDueToEmptyMusicLibrary");
+                return null;
+            }
             FolderTree folder;
             List<Music> songs;
             do
