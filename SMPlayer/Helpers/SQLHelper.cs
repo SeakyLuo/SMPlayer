@@ -1,5 +1,4 @@
-﻿using Microsoft.AppCenter.Utils.Synchronization;
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 using SMPlayer.Models;
 using SMPlayer.Models.DAO;
 using SQLite;

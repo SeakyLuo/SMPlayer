@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Navigation;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Crashes;
 using Microsoft.AppCenter.Analytics;
+using Windows.ApplicationModel.Core;
 
 namespace SMPlayer
 {
@@ -54,7 +55,7 @@ namespace SMPlayer
         {
             OnLaunched(e, null);
         }
-
+        
         private async void OnLaunched(LaunchActivatedEventArgs e, Music music)
         {
             Frame rootFrame = Window.Current.Content as Frame;

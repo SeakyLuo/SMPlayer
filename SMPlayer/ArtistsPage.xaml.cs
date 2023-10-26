@@ -85,12 +85,20 @@ namespace SMPlayer
             if (targetArtist is string artistName)
             {
                 artist = FindAndLoadArtist(artistName);
+                if (artist == null)
+                {
+                    Helper.ShowNotificationRaw(Helper.LocalizeMessage("ArtistNotFound", artistName));
+                }
             }
             else if (targetArtist is PlaylistView playlist)
             {
                 artist = Artists.FirstOrDefault(a => a.Name == playlist.Name);
                 if (artist.NotLoaded)
                     artist.CopyFrom(playlist);
+            }
+            if (artist == null)
+            {
+                return;
             }
             ArtistMasterDetailsView.SelectedItem = artist;
             ScrollToArtist(artist.Name);
@@ -267,9 +275,12 @@ namespace SMPlayer
 
         private ArtistView FindAndLoadArtist(string artistName)
         {
-            var artist = Artists.First(a => a.Name == artistName);
-            LoadArtist(artist);
-            return artist;
+            if (Artists.FirstOrDefault(a => a.Name == artistName) is ArtistView artist)
+            {
+                LoadArtist(artist);
+                return artist;
+            }
+            return null;
         }
 
         private async void LoadArtist(ArtistView artist)

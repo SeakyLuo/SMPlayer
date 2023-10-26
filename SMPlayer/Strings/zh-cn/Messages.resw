@@ -147,6 +147,9 @@
   <data name="AllArtists" xml:space="preserve">
     <value>歌手：{0}</value>
   </data>
+  <data name="ArtistNotFound" xml:space="preserve">
+    <value>找不到歌手“{0}”</value>
+  </data>
   <data name="AuthorizeFolderFailed" xml:space="preserve">
     <value>你选择的文件夹必须和你的音乐文件夹一致！</value>
   </data>

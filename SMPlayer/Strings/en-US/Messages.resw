@@ -147,6 +147,9 @@
   <data name="AllArtists" xml:space="preserve">
     <value>All Artists: {0}</value>
   </data>
+  <data name="ArtistNotFound" xml:space="preserve">
+    <value>Cannot find artist "{0}".</value>
+  </data>
   <data name="AuthorizeFolderFailed" xml:space="preserve">
     <value>Picked folder must be the same as your music folder!</value>
   </data>

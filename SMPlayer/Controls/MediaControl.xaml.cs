@@ -767,11 +767,12 @@ namespace SMPlayer
         private void MediaSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             double newValue = e.NewValue;
-            if (newValue == MusicPlayer.Position)
+            double position = MusicPlayer.Position;
+            if (newValue == position || position > MediaSlider.Maximum)
             {
                 return;
             }
-            Debug.WriteLine($"MusicPlayer.Position {MusicPlayer.Position} newValue {newValue}");
+            Debug.WriteLine($"MusicPlayer.Position {position} newValue {newValue}");
             MusicPlayer.Position = newValue;
             if (LeftTimeTextBlock != null) LeftTimeTextBlock.Text = MusicDurationConverter.ToTime(newValue);
         }
@@ -1040,14 +1041,14 @@ namespace SMPlayer
             switch (args.EventType)
             {
                 case MusicEventType.Like:
-                    if (CurrentMusic.Equals(music))
+                    if (CurrentMusic != null && CurrentMusic.Equals(music))
                     {
                         if (args.IsFavorite) LikeMusic();
                         else DislikeMusic();
                     }
                     break;
                 case MusicEventType.Modify:
-                    if (CurrentMusic.Equals(music))
+                    if (CurrentMusic != null && CurrentMusic.Equals(music))
                         UpdateMusic(args.ModifiedMusic);
                     break;
             }

@@ -81,10 +81,17 @@ namespace SMPlayer
 
         private string BuildMessageHeader(LogLevel level)
         {
-            StackFrame[] frames = new StackTrace().GetFrames();
-            StackFrame frame = frames[4];
-            MethodBase method = frame.GetMethod();
-            return string.Format($"{DateTime.Now:yyyy/MM/dd HH:mm:ss.fff} [{level}] ({method.DeclaringType.Name})");
+            try 
+            {
+                StackFrame[] frames = new StackTrace().GetFrames();
+                StackFrame frame = frames[4];
+                MethodBase method = frame.GetMethod();
+                return string.Format($"{DateTime.Now:yyyy/MM/dd HH:mm:ss.fff} [{level}] ({method.DeclaringType.Name})");
+            }
+            catch (Exception e)
+            {
+                return e.ToString();
+            }
         }
 
         private void AppendText(string filename, string message)
