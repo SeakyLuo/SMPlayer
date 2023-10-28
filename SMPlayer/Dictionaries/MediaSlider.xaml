@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:SMPlayer"
     xmlns:media="using:Microsoft.Toolkit.Uwp.UI.Media">
-    <!--<media:BackdropBlurBrush x:Key="SystemControlBackgroundAcrylicElementBrush" Amount="50" />-->
+    <media:BackdropBlurBrush x:Key="MediaSliderThumbFillBrush" Amount="50" />
     <AcrylicBrush
         x:Key="MediaSliderTrackRectBrush"
         BackgroundSource="Backdrop"
@@ -47,7 +47,7 @@
                                         <ControlTemplate TargetType="Thumb">
                                             <Ellipse
                                                 x:Name="ellipse"
-                                                Fill="{StaticResource SystemControlBackgroundAcrylicElementBrush}"
+                                                Fill="{StaticResource MediaSliderThumbFillBrush}"
                                                 Stroke="{TemplateBinding Foreground}"
                                                 StrokeThickness="3.2" />
                                         </ControlTemplate>
@@ -75,7 +75,7 @@
                                         <ControlTemplate TargetType="Thumb">
                                             <Ellipse
                                                 x:Name="ellipse"
-                                                Fill="{StaticResource SystemControlBackgroundAcrylicElementBrush}"
+                                                Fill="{StaticResource MediaSliderThumbFillBrush}"
                                                 Stroke="{StaticResource MedialSliderPointerOverThumbStrokeBrush}"
                                                 StrokeThickness="3.2" />
                                         </ControlTemplate>
@@ -380,7 +380,7 @@
                                         <ControlTemplate TargetType="Thumb">
                                             <Ellipse
                                                 x:Name="ellipse"
-                                                Fill="{StaticResource SystemControlBackgroundAcrylicElementBrush}"
+                                                Fill="{StaticResource MediaSliderThumbFillBrush}"
                                                 Stroke="{TemplateBinding Foreground}"
                                                 StrokeThickness="3.2" />
                                         </ControlTemplate>
@@ -408,7 +408,7 @@
                                         <ControlTemplate TargetType="Thumb">
                                             <Ellipse
                                                 x:Name="ellipse"
-                                                Fill="{StaticResource SystemControlBackgroundAcrylicElementBrush}"
+                                                Fill="{StaticResource MediaSliderThumbFillBrush}"
                                                 Stroke="{StaticResource MedialSliderPointerOverThumbStrokeBrush}"
                                                 StrokeThickness="3.2" />
                                         </ControlTemplate>
