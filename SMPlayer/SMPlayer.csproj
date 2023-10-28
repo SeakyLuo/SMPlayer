@@ -22,12 +22,11 @@
     <GenerateTestArtifacts>False</GenerateTestArtifacts>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm|arm64</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>CAF2D69496B0E66E2823B76F1231C7A5DB0C901A</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>57B26EDB375C9F87189B838EF272F6104041E4C7</PackageCertificateThumbprint>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
-    <PackageCertificateKeyFile>
-    </PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>SMPlayer_TemporaryKey.pfx</PackageCertificateKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -808,7 +807,7 @@
       <Version>2.0.1</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.1</Version>
+      <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="SkiaSharp.QrCode">
       <Version>0.6.0</Version>
