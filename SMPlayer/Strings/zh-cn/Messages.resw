@@ -228,6 +228,9 @@
   <data name="DeleteMusic" xml:space="preserve">
     <value>删除《{0}》</value>
   </data>
+  <data name="DifferentPathDetectedWhenImportingData" xml:space="preserve">
+    <value>检测到音乐文件夹路径发生变化，正在更新数据中</value>
+  </data>
   <data name="DuplicateFoundWhenMovingFile" xml:space="preserve">
     <value>文件夹“{1}”已经包含文件“{0}”，是否继续？</value>
   </data>
@@ -270,11 +273,17 @@
   <data name="HideStorageItemNotification" xml:space="preserve">
     <value>“{0}”已隐藏。</value>
   </data>
+  <data name="IllegalAccessMusicFolderWhenInit" xml:space="preserve">
+    <value>无法访问给定音乐文件夹，请尝试授权访问</value>
+  </data>
   <data name="ImportDataCancelled" xml:space="preserve">
     <value>你已取消数据导入</value>
   </data>
   <data name="ImportDataFailed" xml:space="preserve">
     <value>导入数据失败：</value>
+  </data>
+  <data name="ImportDataRequiresPickingMusicFolderFirst" xml:space="preserve">
+    <value>在导入数据前，需要先选择音乐文件夹</value>
   </data>
   <data name="ImportLyricsFailed" xml:space="preserve">
     <value>导入歌词失败</value>
@@ -503,6 +512,9 @@
   </data>
   <data name="RootNotFound" xml:space="preserve">
     <value>找不到音乐文件夹，请重新设置</value>
+  </data>
+  <data name="RootNotFoundAndPickNew" xml:space="preserve">
+    <value>无法找到音乐文件夹，请重新选择</value>
   </data>
   <data name="SameFolderAlreadyExists" xml:space="preserve">
     <value>同名文件夹已经存在！</value>

@@ -112,6 +112,10 @@ namespace SMPlayer.Services
 
         public static async Task DeleteFile(FolderFile file)
         {
+            if (file == null)
+            {
+                return;
+            }
             await StorageHelper.DeleteFile(file.Path);
             RemoveFile(file);
         }

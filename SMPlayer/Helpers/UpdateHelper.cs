@@ -40,7 +40,7 @@ namespace SMPlayer.Helpers
                     await MainPage.Instance.Loader.ResetAsync("ClearExpiredData");
                     ClearOldTree(StorageService.Root, tree);
                 }
-                Helper.CurrentFolder = folder;
+                Helper.MusicFolder = folder;
                 Settings.settings.Tree = tree;
                 Settings.settings.RootPath = folder.Path;
                 await MainPage.Instance.Loader.ResetAsync("ResyncData", StorageService.StorageItemEventListeners.Count);

@@ -513,7 +513,8 @@ namespace SMPlayer
                 case MusicEventType.Like:
                     break;
                 case MusicEventType.Modify:
-                    RecentAdded.TimeLine.FirstOrDefault(i => i.Equals(music))?.CopyFrom(music.ToVO());
+                    Music modifiedMusic = args.ModifiedMusic;
+                    RecentAdded.TimeLine.FirstOrDefault(i => i.Equals(modifiedMusic))?.CopyFrom(modifiedMusic.ToVO());
                     break;
             }
         }

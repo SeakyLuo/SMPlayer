@@ -35,7 +35,7 @@ namespace SMPlayer
         public static string TimeStamp { get => DateTime.Now.ToString("yyyyMMdd_HHmmss"); }
         public static string TimeStampInMills { get => DateTime.Now.ToString("yyyyMMdd_HHmmss.fff"); }
 
-        public static StorageFolder CurrentFolder, ThumbnailFolder, TempFolder;
+        public static StorageFolder MusicFolder, ThumbnailFolder, TempFolder;
         public static StorageFolder LocalFolder { get => ApplicationData.Current.LocalFolder; }
 
         public static ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();

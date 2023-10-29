@@ -1510,4 +1510,13 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="ReleaseNotesCrashFixes.Text" xml:space="preserve">
     <value>Fixed some problems that caused crashes.</value>
   </data>
+  <data name="ExportDataButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>By exporting data, you can back up the data or settings of SMPlayer (local music files are not included), and SMPlayer will generate a db file as backup. You can easily migrate your data to a new device by clicking import data.</value>
+  </data>
+  <data name="ImportDataButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>After exporting data, you should get a db file. You need to import that for restoring your data from another device(music files are not included).</value>
+  </data>
+  <data name="ReleaseNotesBugFixForImportData.Text" xml:space="preserve">
+    <value>Fix the bug that Import Data is unavailable.</value>
+  </data>
 </root>

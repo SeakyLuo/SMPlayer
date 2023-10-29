@@ -6,6 +6,7 @@ using SMPlayer.Models.Enums;
 using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -66,7 +67,6 @@ namespace SMPlayer
         {
             StorageFolder folder = await StorageHelper.PickFolder();
             if (folder == null) return;
-            Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
             if (await UpdateHelper.UpdateMusicLibrary(folder))
             {
                 PathBox.Text = folder.Path;
@@ -203,7 +203,7 @@ namespace SMPlayer
             if (folder == null) return;
             MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
             Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-            StorageFile dbFile = await StorageHelper.LoadFileAsync(Path.Combine(Helper.LocalFolder.Path, SQLHelper.DBFileName));
+            StorageFile dbFile = await StorageHelper.LoadFileAsync(SQLHelper.BuildDBPath());
             await dbFile.CopyAsync(folder);
             MainPage.Instance.Loader.Hide();
             Helper.ShowNotification("DataExported");
@@ -221,8 +221,19 @@ namespace SMPlayer
             MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
             try
             {
-                await SettingsHelper.InitWithFile(file);
-                bool successful = await UpdateHelper.UpdateMusicLibrary(Helper.CurrentFolder);
+                string originalPath = Settings.settings.RootPath;
+                if (!await SettingsHelper.InitWithFile(file))
+                {
+                    MainPage.Instance.Loader.Hide();
+                    return;
+                }
+                PathBox.Text = Settings.settings.RootPath;
+                if (originalPath != Settings.settings.RootPath)
+                {
+                    MainPage.Instance.Loader.ShowIndeterminant("DifferentPathDetectedWhenImportingData");
+                    SQLHelper.UpdatePath(originalPath, Settings.settings.RootPath);
+                }
+                bool successful = await UpdateHelper.UpdateMusicLibrary(Helper.MusicFolder);
                 if (successful)
                 {
                     App.Save();
@@ -234,7 +245,8 @@ namespace SMPlayer
             catch (Exception ex)
             {
                 MainPage.Instance.Loader.Hide();
-                Helper.ShowNotification("ImportDataFailed" + ex.Message);
+                Debug.WriteLine($"ImportData_Click {ex}");
+                Helper.ShowNotificationRaw(Helper.LocalizeMessage("ImportDataFailed") + ex.Message);
             }
         }
 

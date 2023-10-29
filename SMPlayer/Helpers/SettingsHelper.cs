@@ -4,6 +4,7 @@ using SMPlayer.Models.DAO;
 using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -38,25 +39,34 @@ namespace SMPlayer.Helpers
             Inited = true;
         }
 
-        public static async Task InitNew()
+        public static async Task<bool> InitNew()
         {
             if (!await SQLHelper.Initialized())
             {
-                return;
+                return false;
             }
-            await Init(Settings.settings = SQLHelper.Run(c => c.SelectSettings()));
             PreferenceSettings.settings = SQLHelper.Run(c => c.SelectPreferenceSettings()) ?? new PreferenceSettings();
+            if (!await Init(Settings.settings = SQLHelper.Run(c => c.SelectSettings())))
+            {
+                return false;
+            }
             Inited = true;
+            return true;
         }
 
-        public static async Task InitWithFile(StorageFile file)
+        public static async Task<bool> InitWithFile(StorageFile file)
         {
-            StorageFile newDbFile = await file.CopyAsync(Helper.CurrentFolder);
+            string filePath = SQLHelper.BuildDBPath();
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+            StorageFile newDbFile = await file.CopyAsync(Helper.LocalFolder);
             if (newDbFile.Name != SQLHelper.DBFileName)
             {
                 await newDbFile.RenameAsync(SQLHelper.DBFileName);
             }
-            await InitNew();
+            return await InitNew();
         }
 
         public static async Task LoadSettingsAndInsertToDb()
@@ -116,28 +126,55 @@ namespace SMPlayer.Helpers
             SQLHelper.Run(c => c.UpdatePreferenceSettings(PreferenceSettings.settings));
         }
 
-        private static async Task Init(Settings settings)
+        private static async Task<bool> Init(Settings settings)
         {
-            if (settings == null || string.IsNullOrEmpty(settings.RootPath)) return;
+            if (settings == null || string.IsNullOrEmpty(settings.RootPath))
+            {
+                return false;
+            }
+            bool isSuccessful = false;
             try
             {
-                Helper.CurrentFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
+                Helper.MusicFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
+                isSuccessful = true;
             }
-            catch (FileNotFoundException)
+            catch (Exception e)
             {
-                App.LoadedListeners.Add(() =>
+                Debug.WriteLine($"GetFolderFromPathAsync failed {e}");
+                if (App.Inited)
                 {
                     Helper.ShowNotification("RootNotFound");
-                    MainPage.Instance.NavigateToPage(typeof(SettingsPage));
-                });
+                    StorageFolder folder = await StorageHelper.PickFolder();
+                    if (folder == null)
+                    {
+                    }
+                    else
+                    {
+                        Helper.MusicFolder = folder;
+                        settings.RootPath = folder.Path;
+                        isSuccessful = true;
+                    }
+                }
+                else
+                {
+                    App.LoadedListeners.Add(() =>
+                    {
+                        Helper.ShowNotification("RootNotFound");
+                        MainPage.Instance.NavigateToPage(typeof(SettingsPage));
+                    });
+                }
+            }
+            try
+            {
+                foreach (var item in await Helper.LocalFolder.GetItemsAsync())
+                    if (item.Name.EndsWith(".TMP") || item.Name.EndsWith(".~tmp"))
+                        await item.DeleteAsync();
             }
             catch (Exception)
             {
 
             }
-            foreach (var item in await ApplicationData.Current.LocalFolder.GetItemsAsync())
-                if (item.Name.EndsWith(".TMP") || item.Name.EndsWith(".~tmp"))
-                    await item.DeleteAsync();
+            return isSuccessful;
         }
 
         private static List<MusicView> FlattenFolderTreeInJson(JToken tree)

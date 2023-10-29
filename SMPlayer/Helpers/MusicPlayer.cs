@@ -218,17 +218,17 @@ namespace SMPlayer
 
         private static async void UpdateUniversalVolumeControl(Music music)
         {
-            SystemMediaTransportControlsDisplayUpdater updater = Player.SystemMediaTransportControls.DisplayUpdater;
-            if (music == null)
-            {
-                updater.ClearAll();
-            }
-            else
-            {
-                await updater.CopyFromFileAsync(MediaPlaybackType.Music, await music.GetStorageFileAsync());
-            }
             try
             {
+                SystemMediaTransportControlsDisplayUpdater updater = Player.SystemMediaTransportControls.DisplayUpdater;
+                if (music == null)
+                {
+                    updater.ClearAll();
+                }
+                else
+                {
+                    await updater.CopyFromFileAsync(MediaPlaybackType.Music, await music.GetStorageFileAsync());
+                }
                 updater.Update();
             }
             catch (Exception)

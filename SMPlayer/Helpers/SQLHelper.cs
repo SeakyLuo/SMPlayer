@@ -18,7 +18,7 @@ namespace SMPlayer.Helpers
         public const string DBFileName = "SMPlayerSettings.db";
         private static bool Inited = false;
 
-        private static string BuildDBPath()
+        public static string BuildDBPath()
         {
             return Path.Combine(Helper.LocalFolder.Path, DBFileName);
         }
@@ -164,10 +164,23 @@ namespace SMPlayer.Helpers
 
         public static Settings SelectSettings(this SQLiteConnection c)
         {
-            Settings settings = c.Query<SettingsDAO>("select * from Settings order by Id desc").FirstOrDefault()?.FromDAO();
+            Settings settings;
+            try
+            {
+                settings = SelectSettingsDAO(c)?.FromDAO();
+            }
+            catch (Exception)
+            {
+                settings = null;
+            }
             if (settings == null) return null;
             settings.Tree = c.SelectFolderInfo(settings.RootPath) ?? new FolderTree();
             return settings;
+        }
+
+        private static SettingsDAO SelectSettingsDAO(this SQLiteConnection c)
+        {
+            return c.Query<SettingsDAO>("select * from Settings order by Id desc").FirstOrDefault();
         }
 
         public static PreferenceSettings SelectPreferenceSettings(this SQLiteConnection c)
@@ -532,6 +545,37 @@ namespace SMPlayer.Helpers
         {
             return c.Query<AuthorizedDeviceDAO>("select * from AuthorizedDevice where State = ? order by Id desc", state)
                     .Select(i => i.FromDao()).ToList();
+        }
+
+        public static void UpdatePath(string originalPath, string newPath)
+        {
+            if (originalPath == newPath || string.IsNullOrEmpty(originalPath))
+            {
+                return;
+            }
+            Run(c =>
+            {
+                if (c.SelectSettingsDAO() is SettingsDAO settingsDAO)
+                {
+                    settingsDAO.RootPath = settingsDAO.RootPath.Replace(originalPath, newPath);
+                    c.Update(settingsDAO);
+                }
+                foreach (var item in c.Query<MusicDAO>("select * from Music"))
+                {
+                    item.Path = item.Path.Replace(originalPath, newPath);
+                    c.Update(item);
+                }
+                foreach (var item in c.Query<FolderDAO>("select * from Folder"))
+                {
+                    item.Path = item.Path.Replace(originalPath, newPath);
+                    c.Update(item);
+                }
+                foreach (var item in c.Query<FileDAO>("select * from File"))
+                {
+                    item.Path = item.Path.Replace(originalPath, newPath);
+                    c.Update(item);
+                }
+            });
         }
     }
 

@@ -228,6 +228,9 @@
   <data name="DeleteMusic" xml:space="preserve">
     <value>Delete "{0}"</value>
   </data>
+  <data name="DifferentPathDetectedWhenImportingData" xml:space="preserve">
+    <value>A different music folder path detected. An update is being made to your database.</value>
+  </data>
   <data name="DuplicateFoundWhenMovingFile" xml:space="preserve">
     <value>File "{0}" already exists in folder "{1}". Continue?</value>
   </data>
@@ -270,11 +273,17 @@
   <data name="HideStorageItemNotification" xml:space="preserve">
     <value>"{0}" is hidden.</value>
   </data>
+  <data name="IllegalAccessMusicFolderWhenInit" xml:space="preserve">
+    <value>Given music folder cannot be accessed, please try to pick it up manually.</value>
+  </data>
   <data name="ImportDataCancelled" xml:space="preserve">
     <value>You have cancelled data import.</value>
   </data>
   <data name="ImportDataFailed" xml:space="preserve">
     <value>Import data failed: </value>
+  </data>
+  <data name="ImportDataRequiresPickingMusicFolderFirst" xml:space="preserve">
+    <value>You need to pick a music folder before importing data.</value>
   </data>
   <data name="ImportLyricsFailed" xml:space="preserve">
     <value>Import lyrics failed.</value>
@@ -506,6 +515,9 @@
   </data>
   <data name="RootNotFound" xml:space="preserve">
     <value>Cannot find music folder. Please reset it.</value>
+  </data>
+  <data name="RootNotFoundAndPickNew" xml:space="preserve">
+    <value>Music folder cannot be found, please pick a new one.</value>
   </data>
   <data name="SameFolderAlreadyExists" xml:space="preserve">
     <value>Folder with the same name already exists!</value>

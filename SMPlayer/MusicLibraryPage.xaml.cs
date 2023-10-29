@@ -24,7 +24,7 @@ namespace SMPlayer
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MusicLibraryPage : Page, IMusicPlayerEventListener, IMusicEventListener, IMenuFlyoutHelperBuildListener
+    public sealed partial class MusicLibraryPage : Page, IMusicPlayerEventListener, IMusicEventListener, IMenuFlyoutHelperBuildListener, IStorageItemEventListener
     {
         public ObservableCollection<MusicView> AllSongs = new ObservableCollection<MusicView>();
 
@@ -34,6 +34,7 @@ namespace SMPlayer
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             MusicService.AddMusicEventListener(this);
             MusicPlayer.AddMusicPlayerEventListener(this);
+            StorageService.AddStorageItemEventListener(this);
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -161,6 +162,23 @@ namespace SMPlayer
                     await Helper.RunInMainUIThread(Dispatcher, () => MusicPlayer.SetMusicPlaying(AllSongs, args.Music));
                     break;
             }
+        }
+
+        void IStorageItemEventListener.ExecuteFileEvent(FolderFile file, StorageItemEventArgs args)
+        {
+        }
+
+        async void IStorageItemEventListener.ExecuteFolderEvent(FolderTree folder, StorageItemEventArgs args)
+        {
+            await Helper.RunInMainUIThread(Dispatcher, () =>
+            {
+                switch (args.EventType)
+                {
+                    case StorageItemEventType.Reset:
+                        AllSongs.Clear();
+                        break;
+                }
+            });
         }
     }
 }

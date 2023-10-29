@@ -44,9 +44,9 @@ namespace SMPlayer.Controls
             SetPlayButtonVisibility(MusicPlayer.IsPlaying);
         }
 
-        public void SetMusicProperties(MusicProperties properties)
+        public void SetMusicProperties(Music music, MusicProperties properties)
         {
-            TitleTextBox.Text = properties.Title;
+            TitleTextBox.Text = string.IsNullOrEmpty(properties.Title) ? music.Name : properties.Title;
             SubtitleTextBox.Text = properties.Subtitle;
             ArtistTextBox.Text = properties.Artist;
             AlbumTextBox.Text = properties.Album;
@@ -73,7 +73,7 @@ namespace SMPlayer.Controls
             try
             {
                 SetBasicProperties(await music.GetStorageFileAsync());
-                SetMusicProperties(Properties = await music.GetMusicPropertiesAsync());
+                SetMusicProperties(music, Properties = await music.GetMusicPropertiesAsync());
             }
             catch (Exception e)
             {
@@ -118,7 +118,7 @@ namespace SMPlayer.Controls
                 Helper.ShowNotification("ProcessingRequest");
                 return;
             }
-            SetMusicProperties(Properties);
+            SetMusicProperties(CurrentMusic, Properties);
             Helper.ShowNotification("PropertiesReset");
         }
 
@@ -137,14 +137,14 @@ namespace SMPlayer.Controls
                     SetControlEnability(false);
                     SaveProgress.Visibility = Visibility.Visible;
                     var newMusic = CurrentMusic.Copy();
-                    Properties.Title = newMusic.Name = TitleTextBox.Text;
-                    Properties.Subtitle = SubtitleTextBox.Text;
-                    Properties.Artist = newMusic.Artist = ArtistTextBox.Text;
-                    Properties.Album = newMusic.Album = AlbumTextBox.Text;
-                    Properties.AlbumArtist = AlbumArtistTextBox.Text;
+                    Properties.Title = newMusic.Name = TitleTextBox.Text.Trim();
+                    Properties.Subtitle = SubtitleTextBox.Text.Trim();
+                    Properties.Artist = newMusic.Artist = ArtistTextBox.Text.Trim();
+                    Properties.Album = newMusic.Album = AlbumTextBox.Text.Trim();
+                    Properties.AlbumArtist = AlbumArtistTextBox.Text.Trim();
                     if (int.TryParse(PlayCountTextBlock.Text, out int PlayCount))
                         newMusic.PlayCount = PlayCount;
-                    Properties.Publisher = PublisherTextBox.Text;
+                    Properties.Publisher = PublisherTextBox.Text.Trim();
                     if (uint.TryParse(TrackNumberTextBox.Text, out uint TrackNumber))
                         Properties.TrackNumber = TrackNumber;
                     if (uint.TryParse(YearTextBox.Text, out uint Year))

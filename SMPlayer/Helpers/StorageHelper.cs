@@ -3,6 +3,7 @@ using SMPlayer.Models;
 using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -35,7 +36,13 @@ namespace SMPlayer.Helpers
                 SuggestedStartLocation = pickerLocation,
             };
             picker.FileTypeFilter.Add("*");
-            return await picker.PickSingleFolderAsync();
+            StorageFolder folder = await picker.PickSingleFolderAsync();
+            if (folder == null)
+            {
+                return null;
+            }
+            Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
+            return folder;
         }
         public static bool IsParentDirectory(string child, string parent)
         {
@@ -90,7 +97,7 @@ namespace SMPlayer.Helpers
             }
             catch (Exception e)
             {
-                Log.Info($"LoadFileAsync Exception {e}");
+                Log.Warn($"LoadFileAsync Exception {e}");
                 return null;
             }
         }
@@ -164,14 +171,30 @@ namespace SMPlayer.Helpers
         public static async Task DeleteFile(string filePath)
         {
             StorageFile file = await LoadFileAsync(filePath);
-            await file?.DeleteAsync();
+            await TryDeleteFile(file);
         }
 
         public static async Task DeleteFile(StorageFolder folder, string filename)
         {
             if (folder == null || string.IsNullOrEmpty(filename)) return;
             var file = await folder.GetFileAsync(filename);
-            file?.DeleteAsync();
+            await TryDeleteFile(file);
+        }
+
+        private static async Task TryDeleteFile(StorageFile file)
+        {
+            if (file == null)
+            {
+                return;
+            }
+            try
+            {
+                await file.DeleteAsync();
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"delete file failed {e}");
+            }
         }
 
         public static async Task<string> ReadFileAsync(StorageFolder folder, string filename)

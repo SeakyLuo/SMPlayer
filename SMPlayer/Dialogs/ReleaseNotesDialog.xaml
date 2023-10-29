@@ -25,6 +25,9 @@
 
     <ScrollViewer>
         <TextBlock TextWrapping="WrapWholeWords">
+            <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.9.8</Run><LineBreak />
+            1. <Run x:Uid="ReleaseNotesBugFixForImportData"/><LineBreak />
+            2. <Run x:Uid="ReleaseNotesCrashFixes"/><LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.9.6</Run><LineBreak />
             1. <Run x:Uid="ReleaseNotesCrashFixes"/><LineBreak />
             <Run FontWeight="SemiBold" FontSize="24" x:Uid="ReleaseNotesVersion" /><Run FontWeight="SemiBold" FontSize="24">2.9.2</Run><LineBreak />
