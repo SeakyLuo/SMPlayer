@@ -123,7 +123,7 @@ namespace SMPlayer.Models
         public async Task LoadDisplayItemAsync()
         {
             if (DisplayItem != null && !DisplayItem.IsDefault) return;
-            foreach (var song in Songs)
+            foreach (var song in Songs.ToList())
             {
                 DisplayItem = await song.GetMusicDisplayItemAsync();
                 if (!DisplayItem.IsDefault) return;

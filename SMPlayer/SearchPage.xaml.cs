@@ -210,7 +210,15 @@ namespace SMPlayer
         }
         private void SearchFolderView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            Frame.Navigate(typeof(LocalPage), e.ClickedItem);
+            try
+            {
+                Frame.Navigate(typeof(LocalPage), e.ClickedItem);
+            }
+            catch (Exception ex)
+            {
+                Log.Warn($"SearchFolderView_ItemClick failed {ex}");
+                Helper.ShowNotification("OperationFailed");
+            }
         }
 
         private async void Album_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)

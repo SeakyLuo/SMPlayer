@@ -32,12 +32,11 @@ namespace SMPlayer.Helpers
                 FolderTree tree = StorageService.FindFolderIncludingHidden(folder.Path) ?? new FolderTree(folder.Path);
                 NotifyFolderEvent(Settings.settings.Tree, StorageItemEventType.BeforeReset);
                 bool unbroken = await LoadFolder(folder, tree);
-                await MainPage.Instance.Loader.ResetAsync("UpdateMusicLibrary");
+                MainPage.Instance.Loader.Reset("UpdateMusicLibrary");
                 MainPage.Instance.Loader.AllowBreak = false;
                 await ResetFolderData(tree);
                 if (Settings.settings.Tree.Id != 0 && !Settings.settings.Tree.Equals(tree))
                 {
-                    await MainPage.Instance.Loader.ResetAsync("ClearExpiredData");
                     ClearOldTree(StorageService.Root, tree);
                 }
                 Helper.MusicFolder = folder;
@@ -233,15 +232,20 @@ namespace SMPlayer.Helpers
             }
         }
 
-        private static void RemoveFile(FolderFile item, FolderUpdateResult result = null)
+        private static async void RemoveFile(FolderFile item, FolderUpdateResult result = null)
         {
             if (item == null) return;
             result?.RemoveFile(item.Path);
             StorageService.RemoveFile(item);
+            await MainPage.Instance.Loader.SetMessageAsync("ClearExpiredData", item.Name);
         }
 
         private static void ClearOldTree(FolderTree oldRoot, FolderTree newRoot)
         {
+            if (oldRoot == null)
+            {
+                return;   
+            }
             // 如果oldRoot是newRoot的子文件夹，可以不删
             if (oldRoot.Path.Contains(newRoot.Path))
             {
@@ -271,7 +275,7 @@ namespace SMPlayer.Helpers
             // 两者没有关系，清除全部数据
             foreach (var item in oldRoot.Trees)
             {
-                ClearOldTree(StorageService.FindFolder(item.Id), newRoot);
+                RemoveFolder(StorageService.FindFolder(item.Id));
             }
         }
 

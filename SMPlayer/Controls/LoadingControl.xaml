@@ -34,7 +34,7 @@
                 Foreground="White"
                 IsActive="True"
                 Style="{StaticResource NormalProgressStyle}"
-                Visibility="{x:Bind LoadingProgressBar.Visibility, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
+                Visibility="{x:Bind IsDeterminant, Converter={StaticResource InvertedVisibilityConverter}, Mode=OneWay}" />
             <controls:RadialProgressBar
                 x:Name="LoadingProgressBar"
                 VerticalAlignment="Center"

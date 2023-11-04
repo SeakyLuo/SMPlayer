@@ -187,7 +187,7 @@
     <value>No changes are found.</value>
   </data>
   <data name="ClearExpiredData" xml:space="preserve">
-    <value>Clearing expired data......</value>
+    <value>Clearing expired data: "{0}"</value>
   </data>
   <data name="ClearPlayHistory" xml:space="preserve">
     <value>Do you want to clear your play history?</value>
@@ -304,7 +304,7 @@
     <value>Local server cannot be started!</value>
   </data>
   <data name="LoadMusicLibrary" xml:space="preserve">
-    <value>Loading music library...</value>
+    <value>Loading music library, not hang up, please wait patiently...</value>
   </data>
   <data name="LoadSettingsAndInsertToDbFailed" xml:space="preserve">
     <value>Cannot write data into database. To avoid problems for your future use, please go to settings page and click "Feedback" to report this error.</value>
@@ -514,10 +514,7 @@
     <value>Reverse List</value>
   </data>
   <data name="RootNotFound" xml:space="preserve">
-    <value>Cannot find music folder. Please reset it.</value>
-  </data>
-  <data name="RootNotFoundAndPickNew" xml:space="preserve">
-    <value>Music folder cannot be found, please pick a new one.</value>
+    <value>Cannot find the music folder or do not have the necessary access rights. Please pick a new one, or authorize access rights by picking the original one in the popup.</value>
   </data>
   <data name="SameFolderAlreadyExists" xml:space="preserve">
     <value>Folder with the same name already exists!</value>
@@ -664,7 +661,7 @@
     <value>Your data has been updated!</value>
   </data>
   <data name="UpdateMusicLibrary" xml:space="preserve">
-    <value>Updating your music library......</value>
+    <value>Updating your music library, please do not close the application! I didn't implement the progress bar......</value>
   </data>
   <data name="VoiceAssistantAudiblePrompt" xml:space="preserve">
     <value>How can I help you?</value>

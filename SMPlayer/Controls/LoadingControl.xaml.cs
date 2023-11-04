@@ -13,25 +13,25 @@ namespace SMPlayer
     {
         public string Message
         {
-            get => Message_;
+            get => _message;
             set
             {
-                Message_ = value;
+                _message = value;
                 OnPropertyChanged("Message");
             }
         }
-        private string Message_ = "";
+        private string _message = "";
 
         public double Progress
         {
-            get => Progress_;
+            get => _progress;
             set
             {
-                Progress_ = value;
+                _progress = value;
                 OnPropertyChanged("Progress");
             }
         }
-        private double Progress_ { get; set; } = 0;
+        private double _progress { get; set; } = 0;
 
 
         public bool IsDeterminant
@@ -45,25 +45,25 @@ namespace SMPlayer
                                                                                                     new PropertyMetadata(false));
         public double Max
         {
-            get => Max_;
+            get => _max;
             set
             {
-                Max_ = value;
+                _max = value;
                 OnPropertyChanged("Max");
             }
         }
-        private double Max_ { get; set; } = 0;
+        private double _max { get; set; } = 0;
 
         public bool AllowBreak
         {
-            get => AllowBreak_;
+            get => _allowBreak;
             set
             {
-                AllowBreak_ = value;
+                _allowBreak = value;
                 OnPropertyChanged("AllowBreak");
             }
         }
-        private bool AllowBreak_ = false;
+        private bool _allowBreak = false;
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -147,13 +147,13 @@ namespace SMPlayer
         {
             Progress = 0;
             Max = max;
-            if (max > 0)
-            {
-                IsDeterminant = true;
-            }
             if (!string.IsNullOrWhiteSpace(message))
             {
                 SetMessage(message);
+            }
+            if (max > 0)
+            {
+                IsDeterminant = true;
             }
         }
 

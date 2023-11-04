@@ -1508,7 +1508,7 @@
     <value>你可以通过导出数据来备份你在简音播放器的数据和设置（不包括本地音乐文件）。在导出后，简音播放器会生成一个db文件。你可以方便地通过导入数据将你的数据迁移到其他设备。</value>
   </data>
   <data name="ImportDataButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>在导出数据后，你会获得一个db备份文件。你需要导入他，来恢复你在其他设备上备份的简音播放器设置（不包括本地音乐文件）。</value>
+    <value>在导出数据后，你会获得一个db备份文件。你需要导入它，来恢复你在其他设备上备份的简音播放器设置（不包括本地音乐文件）。</value>
   </data>
   <data name="ReleaseNotesBugFixForImportData.Text" xml:space="preserve">
     <value>修复了导入数据不可用的问题。</value>

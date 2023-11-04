@@ -69,19 +69,27 @@ namespace SMPlayer
         public MainPage()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            MainNavigationView.IsPaneOpen = Settings.settings.IsNavigationCollapsed;
-            if (MainNavigationView.IsPaneOpen) MainNavigationView_PaneOpening(null, null);
-            else MainNavigationView_PaneClosing(null, null);
+            try
+            {
+                this.NavigationCacheMode = NavigationCacheMode.Enabled;
+                bool isPaneOpen = Settings.settings == null || Settings.settings.IsNavigationCollapsed;
+                MainNavigationView.IsPaneOpen = isPaneOpen;
+                if (isPaneOpen) MainNavigationView_PaneOpening(null, null);
+                else MainNavigationView_PaneClosing(null, null);
 
-            Window.Current.SizeChanged += Current_SizeChanged;
-            var coreTitleBar = Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar;
-            // Register a handler for when the size of the overlaid caption control changes.
-            // For example, when the app moves to a screen with a different DPI.
-            coreTitleBar.LayoutMetricsChanged += (sender, args) => UpdateTitleBarLayout(sender);
-            // Register a handler for when the title bar visibility changes.
-            // For example, when the title bar is invoked in full screen mode.
-            coreTitleBar.IsVisibleChanged += (sender, args) => AppTitleBar.Visibility = sender.IsVisible ? Visibility.Visible : Visibility.Collapsed;
+                Window.Current.SizeChanged += Current_SizeChanged;
+                var coreTitleBar = Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar;
+                // Register a handler for when the size of the overlaid caption control changes.
+                // For example, when the app moves to a screen with a different DPI.
+                coreTitleBar.LayoutMetricsChanged += (sender, args) => UpdateTitleBarLayout(sender);
+                // Register a handler for when the title bar visibility changes.
+                // For example, when the title bar is invoked in full screen mode.
+                coreTitleBar.IsVisibleChanged += (sender, args) => AppTitleBar.Visibility = sender.IsVisible ? Visibility.Visible : Visibility.Collapsed;
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"MainPage Init failed {e}");
+            }
         }
 
         private void Current_SizeChanged(object sender, WindowSizeChangedEventArgs e)

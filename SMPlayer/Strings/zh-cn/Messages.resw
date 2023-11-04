@@ -187,7 +187,7 @@
     <value>没有检查到变化</value>
   </data>
   <data name="ClearExpiredData" xml:space="preserve">
-    <value>正在清除过期数据……</value>
+    <value>正在清除过期数据：《{0}》</value>
   </data>
   <data name="ClearPlayHistory" xml:space="preserve">
     <value>你想清空播放历史吗？</value>
@@ -304,7 +304,7 @@
     <value>无法启动本地服务！</value>
   </data>
   <data name="LoadMusicLibrary" xml:space="preserve">
-    <value>正在加载音乐库……</value>
+    <value>正在加载音乐库，没有卡死，请稍候……</value>
   </data>
   <data name="LoadSettingsAndInsertToDbFailed" xml:space="preserve">
     <value>数据库写入失败，为避免影响后续使用，请在设置页面点击“提供反馈”并反馈问题。</value>
@@ -511,10 +511,7 @@
     <value>倒序排列</value>
   </data>
   <data name="RootNotFound" xml:space="preserve">
-    <value>找不到音乐文件夹，请重新设置</value>
-  </data>
-  <data name="RootNotFoundAndPickNew" xml:space="preserve">
-    <value>无法找到音乐文件夹，请重新选择</value>
+    <value>找不到音乐文件夹或者没有权限，请选择新的文件夹或者在弹窗中重新选择原音乐文件夹</value>
   </data>
   <data name="SameFolderAlreadyExists" xml:space="preserve">
     <value>同名文件夹已经存在！</value>
@@ -664,7 +661,7 @@
     <value>数据更新完成！</value>
   </data>
   <data name="UpdateMusicLibrary" xml:space="preserve">
-    <value>正在更新音乐库……</value>
+    <value>正在更新音乐库，请勿关闭简音播放器，没做进度条</value>
   </data>
   <data name="VoiceAssistantAudiblePrompt" xml:space="preserve">
     <value>请问需要什么帮助？</value>

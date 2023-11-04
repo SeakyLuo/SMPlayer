@@ -135,7 +135,8 @@ namespace SMPlayer.Helpers
             bool isSuccessful = false;
             try
             {
-                Helper.MusicFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
+                StorageFolder storageFolder = await StorageFolder.GetFolderFromPathAsync(settings.RootPath);
+                Helper.MusicFolder = storageFolder;
                 isSuccessful = true;
             }
             catch (Exception e)
@@ -143,7 +144,7 @@ namespace SMPlayer.Helpers
                 Debug.WriteLine($"GetFolderFromPathAsync failed {e}");
                 if (App.Inited)
                 {
-                    Helper.ShowNotification("RootNotFound");
+                    Helper.ShowNotification("RootNotFound", 4000);
                     StorageFolder folder = await StorageHelper.PickFolder();
                     if (folder == null)
                     {
