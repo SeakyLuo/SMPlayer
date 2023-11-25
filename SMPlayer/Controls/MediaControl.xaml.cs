@@ -727,14 +727,24 @@ namespace SMPlayer
 
         public void LikeMusic()
         {
-            LikeToggleButton.SetToolTip("UndoLikeMusicToolTip");
-            LikeToggleButton.IsChecked = true;
+            ToggleButton likeToggleButton = LikeToggleButton;
+            if (likeToggleButton == null)
+            {
+                return;
+            }
+            likeToggleButton.SetToolTip("UndoLikeMusicToolTip");
+            likeToggleButton.IsChecked = true;
         }
 
         public void DislikeMusic()
         {
-            LikeToggleButton.SetToolTip("LikeMusicToolTip");
-            LikeToggleButton.IsChecked = false;
+            ToggleButton likeToggleButton = LikeToggleButton;
+            if (likeToggleButton == null)
+            {
+                return;
+            }
+            likeToggleButton.SetToolTip("LikeMusicToolTip");
+            likeToggleButton.IsChecked = false;
         }
 
         private void LikeButton_Click(object sender, RoutedEventArgs e)

@@ -160,7 +160,7 @@ namespace SMPlayer
             catch (Exception ex)
             {
                 Log.Warn($"AddLyrics_Click failed {ex}");
-                Helper.ShowNotificationRaw(Helper.LocalizeMessage("OperationFailed", ex.Message), 5000);
+                Helper.ShowOperationFailedNotification(ex);
             }
             finally
             {
@@ -204,7 +204,14 @@ namespace SMPlayer
             MainPage.Instance.Loader.ShowIndeterminant("ProcessRequest");
             Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
             StorageFile dbFile = await StorageHelper.LoadFileAsync(SQLHelper.BuildDBPath());
-            await dbFile.CopyAsync(folder);
+            try
+            {
+                await dbFile.CopyAsync(folder);
+            }
+            catch (Exception ex)
+            {
+                Helper.ShowNotificationRaw(Helper.LocalizeMessage("OperationFailed", ex), 5000);
+            }
             MainPage.Instance.Loader.Hide();
             Helper.ShowNotification("DataExported");
         }

@@ -200,6 +200,7 @@ namespace SMPlayer.Controls
             get
             {
                 // Using multiple returns for easier debugging 
+                if (Properties == null) return false;
                 if (Properties.Title != TitleTextBox.Text) return true;
                 if (Properties.Subtitle != SubtitleTextBox.Text) return true;
                 if (Properties.Artist != ArtistTextBox.Text) return true;

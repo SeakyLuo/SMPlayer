@@ -218,7 +218,14 @@ namespace SMPlayer
 
         private async void EditAlbumArtButton_Click(object sender, RoutedEventArgs e)
         {
-            await new AlbumDialog(AlbumDialogOption.AlbumArt, CurrentPlaylist.ToAlbumView()).ShowAsync();
+            try
+            {
+                await new AlbumDialog(AlbumDialogOption.AlbumArt, CurrentPlaylist.ToAlbumView()).ShowAsync();
+            }
+            catch (Exception ex)
+            {
+                Helper.ShowNotificationRaw(Helper.LocalizeMessage("OperationFailed", ex), 5000);
+            }
         }
 
         private void MultiSelectButton_Click(object sender, RoutedEventArgs e)

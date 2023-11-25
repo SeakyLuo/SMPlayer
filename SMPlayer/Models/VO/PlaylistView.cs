@@ -135,7 +135,7 @@ namespace SMPlayer.Models
         {
             return new AlbumView(Name, Artist)
             {
-                Songs = Songs,
+                Songs = Songs ?? new ObservableCollection<MusicView>(),
                 ThumbnailSource = DisplayItem?.Path,
                 EntityType = EntityType.Playlist,
                 OriginalItemId = Id,

@@ -85,7 +85,14 @@ namespace SMPlayer.Controls
             Button1Action = buttonAction;
             Button2Text = null;
             Button2Action = null;
-            ButtonNotification.Show(duration);
+            try
+            {
+                ButtonNotification.Show(duration);
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         public void Show(string message, string button1Text, Action<InAppNotificationWithButton> button1Action, string button2Text, Action<InAppNotificationWithButton> button2Action, int duration = 2000)

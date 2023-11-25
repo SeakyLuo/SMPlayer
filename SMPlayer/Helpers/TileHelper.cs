@@ -2,6 +2,7 @@
 using SMPlayer.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -199,11 +200,20 @@ namespace SMPlayer.Helpers
                     }
                 }
             }
-            var tile = new SecondaryTile(tileid, tilename, playlist.EntityType.ToString(), new Uri(uri), Windows.UI.StartScreen.TileSize.Default);
-            tile.VisualElements.ShowNameOnSquare150x150Logo = tile.VisualElements.ShowNameOnSquare310x310Logo = tile.VisualElements.ShowNameOnWide310x150Logo = true;
-            if (SecondaryTile.Exists(tileid)) await tile.RequestDeleteAsync();
-            else await tile.RequestCreateAsync();
-            return SecondaryTile.Exists(tileid);
+            try
+            {
+                var tile = new SecondaryTile(tileid, tilename, playlist.EntityType.ToString(), new Uri(uri), Windows.UI.StartScreen.TileSize.Default);
+                tile.VisualElements.ShowNameOnSquare150x150Logo = tile.VisualElements.ShowNameOnSquare310x310Logo = tile.VisualElements.ShowNameOnWide310x150Logo = true;
+                if (SecondaryTile.Exists(tileid)) await tile.RequestDeleteAsync();
+                else await tile.RequestCreateAsync();
+                return SecondaryTile.Exists(tileid);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"PinToStart failed {ex}");
+                Helper.ShowOperationFailedNotification(ex);
+                return false;
+            }
         }
 
         public static string FormatTileId(PlaylistView playlist)

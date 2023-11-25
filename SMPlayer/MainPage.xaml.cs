@@ -341,39 +341,47 @@ namespace SMPlayer
             //{
             //    NaviFrame.Navigate(typeof(MusicLibraryPage));
             //}
-            switch (name)
+            try
             {
-                case "Albums":
-                    NaviFrame.Navigate(typeof(AlbumsPage));
-                    break;
-                case "Artists":
-                    NaviFrame.Navigate(typeof(ArtistsPage));
-                    break;
-                case "NowPlaying":
-                    NaviFrame.Navigate(typeof(NowPlayingPage));
-                    break;
-                case "Recent":
-                    NaviFrame.Navigate(typeof(RecentPage));
-                    break;
-                case "Local":
-                    NaviFrame.Navigate(typeof(LocalPage));
-                    break;
-                case "Playlists":
-                    NaviFrame.Navigate(typeof(PlaylistsPage));
-                    break;
-                case "MyFavorites":
-                    NaviFrame.Navigate(typeof(MyFavoritesPage));
-                    break;
-                case "RemotePlay":
-                    NaviFrame.Navigate(typeof(RemotePlayPage));
-                    break;
-                case "MusicLibrary":
-                default:
-                    NaviFrame.Navigate(typeof(MusicLibraryPage));
-                    break;
+
+                switch (name)
+                {
+                    case "Albums":
+                        NaviFrame.Navigate(typeof(AlbumsPage));
+                        break;
+                    case "Artists":
+                        NaviFrame.Navigate(typeof(ArtistsPage));
+                        break;
+                    case "NowPlaying":
+                        NaviFrame.Navigate(typeof(NowPlayingPage));
+                        break;
+                    case "Recent":
+                        NaviFrame.Navigate(typeof(RecentPage));
+                        break;
+                    case "Local":
+                        NaviFrame.Navigate(typeof(LocalPage));
+                        break;
+                    case "Playlists":
+                        NaviFrame.Navigate(typeof(PlaylistsPage));
+                        break;
+                    case "MyFavorites":
+                        NaviFrame.Navigate(typeof(MyFavoritesPage));
+                        break;
+                    case "RemotePlay":
+                        NaviFrame.Navigate(typeof(RemotePlayPage));
+                        break;
+                    case "MusicLibrary":
+                    default:
+                        NaviFrame.Navigate(typeof(MusicLibraryPage));
+                        break;
+                }
+                Settings.settings.LastPage = name;
+                App.Save();
             }
-            Settings.settings.LastPage = name;
-            App.Save();
+            catch (Exception e)
+            {
+                Helper.ShowOperationFailedNotification(e);
+            }
         }
         public void SetHeaderText(string header, params object[] args)
         {

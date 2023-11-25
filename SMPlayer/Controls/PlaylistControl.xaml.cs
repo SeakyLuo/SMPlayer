@@ -115,7 +115,8 @@ namespace SMPlayer
 
         private void AfterPlaylistModified(int from, int to)
         {
-            int start = Math.Min(from, to), end = Math.Max(from, to);
+            int start = Math.Max(0, Math.Min(from, to)),
+            end = Math.Min(CurrentPlaylist.Count - 1, Math.Max(from, to));
             AlternateRowBackgroud(start, end);
             ResetIndex(start, end);
         }
