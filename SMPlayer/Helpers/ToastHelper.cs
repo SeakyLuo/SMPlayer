@@ -127,19 +127,26 @@ namespace SMPlayer.Helpers
 
         public static void HideToast()
         {
-            foreach (var e in CurrentToastMap)
+            try
             {
-                try
+                foreach (var e in CurrentToastMap)
                 {
-                    Notifier.Hide(e.Value);
-                    Log.Debug($"hide toast, music: {e.Key.Music.Name}, state: {e.Key.State}");
+                    try
+                    {
+                        Notifier.Hide(e.Value);
+                        Log.Debug($"hide toast, music: {e.Key.Music.Name}, state: {e.Key.State}");
+                    }
+                    catch (Exception)
+                    {
+                        // 通知已经隐藏。
+                    }
                 }
-                catch (Exception)
-                {
-                    // 通知已经隐藏。
-                }
+                CurrentToastMap.Clear();
             }
-            CurrentToastMap.Clear();
+            catch (Exception)
+            {
+                // collection was modified
+            }
         }
 
         private static ToastButton BuildToastButton(ToastButtonEnum button)

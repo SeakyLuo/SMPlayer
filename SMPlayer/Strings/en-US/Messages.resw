@@ -246,6 +246,9 @@
   <data name="FailToOpenBrowser" xml:space="preserve">
     <value>Fail to open web browser. Link has been copied to the clipboard.</value>
   </data>
+  <data name="FileNotFound" xml:space="preserve">
+    <value>File not found: {0}</value>
+  </data>
   <data name="FindInvalidFiles" xml:space="preserve">
     <value>{0} items have been found invalid and removed.</value>
   </data>

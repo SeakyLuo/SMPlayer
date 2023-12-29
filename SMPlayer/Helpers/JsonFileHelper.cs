@@ -27,20 +27,15 @@ namespace SMPlayer.Models
         {
             if (folder == null || data == null) return;
             if (!filename.EndsWith(extension)) filename += extension;
-            string json;
-            lock (data)
+            try
             {
-                try
-                {
-                    json = ToJson(data);
-                }
-                catch (Exception e)
-                {
-                    Log.Warn("serialize json failed {0}", e);
-                    return;
-                }
+                string json = ToJson(data);
+                await StorageHelper.WriteFileAsync(folder, filename, json);
             }
-            await StorageHelper.WriteFileAsync(folder, filename, json);
+            catch (Exception e)
+            {
+                Log.Warn("serialize json failed {0}", e);
+            }
         }
 
         public static void Save<T>(string filename, T data)

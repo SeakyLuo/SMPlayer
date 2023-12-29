@@ -5,6 +5,7 @@ using SMPlayer.Services;
 using SQLitePCL;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Media.Playback;
@@ -184,11 +185,19 @@ namespace SMPlayer.Controls
 
         public async void SetBasicProperties(StorageFile file)
         {
-            var basicProperties = await file.GetBasicPropertiesAsync();
-            FileSizeTextBox.Text = Helper.ConvertBytes(basicProperties.Size); 
-            DateCreatedTextBox.Text = file.DateCreated.ToLocalTime().ToString();
-            DateModifiedTextBox.Text = basicProperties.DateModified.ToLocalTime().ToString();
-            PathTextBox.Text = file.Path;
+            try
+            {
+                var basicProperties = await file.GetBasicPropertiesAsync();
+                FileSizeTextBox.Text = Helper.ConvertBytes(basicProperties.Size);
+                DateCreatedTextBox.Text = file.DateCreated.ToLocalTime().ToString();
+                DateModifiedTextBox.Text = basicProperties.DateModified.ToLocalTime().ToString();
+                PathTextBox.Text = file.Path;
+            }
+            catch (Exception e)
+            {
+                Log.Warn($"SetBasicProperties failed {e}");
+                Helper.ShowOperationFailedNotification(e);
+            }
         }
         private void CheckIfDigit(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {

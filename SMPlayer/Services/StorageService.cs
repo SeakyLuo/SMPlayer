@@ -310,9 +310,22 @@ namespace SMPlayer.Services
         private static async Task DoMoveFile(FolderFile file, FolderTree folder)
         {
             StorageFile localFile = await StorageHelper.LoadFileAsync(file.Path);
+            if (localFile == null)
+            {
+                Helper.ShowNotificationRaw(Helper.LocalizeMessage("FileNotFound", file.Path));
+                return;
+            }
             StorageFolder targetFolder = await StorageHelper.LoadFolderAsync(folder.Path);
+            if (targetFolder == null)
+            {
+                Helper.ShowNotificationRaw(Helper.LocalizeMessage("FolderNotFound", folder.Path));
+                return;
+            }
             await localFile.MoveAsync(targetFolder);
-            if (file.Id == 0) return;
+            if (file.Id == 0)
+            {
+                return;
+            }
             SQLHelper.Run(c => MoveFile(c, file, folder));
             foreach (var listener in StorageItemEventListeners)
                 listener.ExecuteFileEvent(file, new StorageItemEventArgs(StorageItemEventType.Move) { Folder = folder });

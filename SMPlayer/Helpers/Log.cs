@@ -74,9 +74,19 @@ namespace SMPlayer
 
         private string PrintMessage(LogLevel level, string message, params object[] args)
         {
-            string finalMessage = string.Format($"{BuildMessageHeader(level)} {message}", args);
-            System.Diagnostics.Debug.WriteLine(finalMessage);
-            return finalMessage;
+            string finalMessage;
+            try
+            {
+                finalMessage = string.Format($"{BuildMessageHeader(level)} {message}", args);
+                System.Diagnostics.Debug.WriteLine(finalMessage);
+                return finalMessage;
+            }
+            catch (Exception)
+            {
+                finalMessage = $"{BuildMessageHeader(level)} {message}";
+                System.Diagnostics.Debug.WriteLine($"BuildMessage failed, message {finalMessage} args {args}");
+                return finalMessage;
+            }
         }
 
         private string BuildMessageHeader(LogLevel level)
