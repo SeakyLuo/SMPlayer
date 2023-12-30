@@ -227,7 +227,7 @@ namespace SMPlayer
             {
                 draggingItem = e.Items[0] as GridViewStorageItem;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // System.Runtime.InteropServices.COMException:“Error HRESULT E_FAIL has been returned from a call to a COM component.”
             }

@@ -246,6 +246,9 @@
   <data name="FailToOpenBrowser" xml:space="preserve">
     <value>Fail to open web browser. Link has been copied to the clipboard.</value>
   </data>
+  <data name="FileIsCorrupted" xml:space="preserve">
+    <value>File "{0}" is corrupted!</value>
+  </data>
   <data name="FileNotFound" xml:space="preserve">
     <value>File not found: {0}</value>
   </data>
@@ -412,7 +415,7 @@
     <value>Unable to open system settings!</value>
   </data>
   <data name="OperationFailed" xml:space="preserve">
-    <value>Operation was failed: {0}</value>
+    <value>Operation failed: {0}</value>
   </data>
   <data name="OperationFailedDueToEmptyMusicLibrary" xml:space="preserve">
     <value>Operation failed! You have an empty music library!</value>

@@ -197,13 +197,7 @@ namespace SMPlayer.Models
 
         public async Task<TagLib.File> GetTagFileAsync()
         {
-            return TagLib.File.Create(new MusicFileAbstraction(await GetStorageFileAsync()), TagLib.ReadStyle.Average);
-        }
-
-        public async Task<string> GetLyricsAsync()
-        {
-            var file = await GetStorageFileAsync();
-            return file.GetLyrics();
+            return (await GetStorageFileAsync()).CreateTagFile();
         }
 
         public async Task<MusicDisplayItem> GetMusicDisplayItemAsync()

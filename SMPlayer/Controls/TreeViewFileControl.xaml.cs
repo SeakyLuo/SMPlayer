@@ -62,5 +62,20 @@ namespace SMPlayer.Controls
             VisualStateManager.GoToState(sender as Control, "Normal", true);
         }
 
+        private void PlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (PlayButtonIcon.Symbol == Symbol.Pause)
+            {
+                MusicPlayer.Pause();
+                PlayButtonIcon.Symbol = Symbol.Play;
+            }
+            else
+            {
+                FrameworkElement frameworkElement = sender as FrameworkElement;
+                GridViewMusic music = frameworkElement.DataContext as GridViewMusic;
+                MusicPlayer.AddNextAndPlay(music);
+                PlayButtonIcon.Symbol = Symbol.Pause;
+            }
+        }
     }
 }

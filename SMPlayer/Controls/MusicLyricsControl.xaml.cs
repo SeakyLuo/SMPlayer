@@ -40,6 +40,8 @@ namespace SMPlayer.Controls
             this.InitializeComponent();
             MusicPlayer.AddMusicPlayerEventListener(this);
         }
+
+
         private void ResetLyricsButton_Click(object sender, RoutedEventArgs e)
         {
             if (IsProcessing)
@@ -312,6 +314,11 @@ namespace SMPlayer.Controls
                     });
                     break;
             }
+        }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            MusicPlayer.RemoveMusicPlayerEventListener(this);
         }
     }
 }

@@ -84,6 +84,7 @@ namespace SMPlayer
         public static MediaPlayer Player = new MediaPlayer() { Source = PlaybackList };
         private static List<IMusicPlayerEventListener> MusicPlayerEventListeners = new List<IMusicPlayerEventListener>();
         public static void AddMusicPlayerEventListener(IMusicPlayerEventListener listener) { MusicPlayerEventListeners.Add(listener); }
+        public static void RemoveMusicPlayerEventListener(IMusicPlayerEventListener listener) { MusicPlayerEventListeners.Remove(listener); }
         public static List<Action> InitFinishedListeners = new List<Action>();
         public static Music NextMusic => PlayMode == PlayMode.RepeatOne ? CurrentMusic : PlaybackList.Items[(CurrentIndex + 1) % CurrentPlaylistCount].GetMusic();
 
@@ -371,7 +372,7 @@ namespace SMPlayer
         public static void MoveToMusicOrPlay(IMusicable musicable, int index)
         {
             Music music = musicable.ToMusic();
-            if (index >= 0 && PlaybackList.Items[index].GetMusic() == music)
+            if (0 <= index && index < CurrentPlaylistCount && PlaybackList.Items[index].GetMusic() == music)
             {
                 MoveToMusic(index);
                 Play();

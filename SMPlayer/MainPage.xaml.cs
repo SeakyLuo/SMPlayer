@@ -343,7 +343,6 @@ namespace SMPlayer
             //}
             try
             {
-
                 switch (name)
                 {
                     case "Albums":

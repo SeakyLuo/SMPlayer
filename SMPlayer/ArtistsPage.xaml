@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:SMPlayer.Models"
     xmlns:local="using:SMPlayer"
+    xmlns:smpControls="using:SMPlayer.Controls" 
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loaded="Page_Loaded"
@@ -200,36 +201,11 @@
                                         SelectionMode="None">
                                         <ListView.ItemTemplate>
                                             <DataTemplate x:DataType="data:MusicView">
-                                                <Grid Margin="12,0,0,0" Background="Transparent">
-                                                    <Grid.ContextFlyout>
+                                                <smpControls:ArtistMusicControl>
+                                                    <smpControls:ArtistMusicControl.ContextFlyout>
                                                         <MenuFlyout Opening="OpenMusicMenuFlyout" />
-                                                    </Grid.ContextFlyout>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto" />
-                                                        <ColumnDefinition Width="*" />
-                                                        <ColumnDefinition Width="Auto" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <StackPanel x:Name="HeaderPanel" Orientation="Horizontal">
-                                                        <FontIcon
-                                                            x:Name="PlayingIcon"
-                                                            Margin="0,0,16,0"
-                                                            FontFamily="Segoe MDL2 Assets"
-                                                            Foreground="{StaticResource SystemColorHighlightColor}"
-                                                            Glyph="&#xE767;"
-                                                            RelativePanel.AlignLeftWithPanel="True"
-                                                            Visibility="{x:Bind IsPlaying, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
-                                                        <TextBlock
-                                                            x:Name="MusicNameTextBlcok"
-                                                            Grid.Column="1"
-                                                            Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
-                                                            Text="{x:Bind Name, Mode=OneWay}" />
-                                                    </StackPanel>
-                                                    <TextBlock
-                                                        Grid.Column="2"
-                                                        Margin="10,0,15,0"
-                                                        Foreground="{x:Bind IsPlaying, Converter={StaticResource RowColorConverter}, Mode=OneWay}"
-                                                        Text="{x:Bind Duration, Converter={StaticResource MusicDurationConverter}}" />
-                                                </Grid>
+                                                    </smpControls:ArtistMusicControl.ContextFlyout>
+                                                </smpControls:ArtistMusicControl>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
                                     </ListView>

@@ -79,6 +79,10 @@ namespace SMPlayer.Helpers
 
         public static async void Init()
         {
+            if (Settings.settings == null)
+            {
+                return;
+            }
             await SetLanguage(Settings.settings.VoiceAssistantPreferredLanguage);
             //https://www.cnblogs.com/Aran-Wang/p/4816313.html
             //StorageFile commandSet = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///VoiceAssistantCommandSet.xml"));

@@ -116,30 +116,10 @@ namespace SMPlayer.Models
                 Log.Warn($"create music file failed {ex}");
                 return null;
             }
-            //using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(file), TagLib.ReadStyle.Average))
-            //{
-            //    return new Music(file.Path, await file.Properties.GetMusicPropertiesAsync(), tagFile.Tag);
-            //}
         }
 
         public async Task<StorageFile> GetStorageFileAsync() => await StorageHelper.LoadFileAsync(Path);
-        public async Task<TagLib.File> GetTagFileAsync()
-        {
-            return TagLib.File.Create(new MusicFileAbstraction(await GetStorageFileAsync()), TagLib.ReadStyle.Average);
-        }
-
-        public async Task<MusicDisplayItem> GetMusicDisplayItemAsync()
-        {
-            var thumbnail = await ImageHelper.LoadThumbnail(Path);
-            if (thumbnail.IsThumbnail())
-            {
-                ImageHelper.CacheImage(Path, thumbnail);
-                Brush color = await thumbnail.GetDisplayColor();
-                return new MusicDisplayItem(color, this);
-            }
-            return MusicDisplayItem.DefaultItem;
-        }
-
+  
         public string RenameFolder(string oldPath, string newPath)
         {
             return Path = Path.Replace(oldPath, newPath);

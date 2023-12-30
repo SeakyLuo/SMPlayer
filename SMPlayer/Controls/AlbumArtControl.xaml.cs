@@ -156,8 +156,12 @@ namespace SMPlayer.Controls
                 {
                     if (file.IsMusicFile())
                     {
-                        using (var source = TagLib.File.Create(new MusicFileAbstraction(file), ReadStyle.Average))
+                        using (var source = file.CreateTagFile())
                         {
+                            if (source == null)
+                            {
+                                return;
+                            }
                             if (source.Tag.Pictures.Length == 0)
                             {
                                 Helper.ShowNotificationRaw(Helper.LocalizeMessage("MusicNoAlbumArt", file.DisplayName));

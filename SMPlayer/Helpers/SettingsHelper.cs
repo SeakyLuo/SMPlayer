@@ -43,11 +43,13 @@ namespace SMPlayer.Helpers
         {
             if (!await SQLHelper.Initialized())
             {
+                Settings.settings = new Settings();
                 return false;
             }
             PreferenceSettings.settings = SQLHelper.Run(c => c.SelectPreferenceSettings()) ?? new PreferenceSettings();
-            if (!await Init(Settings.settings = SQLHelper.Run(c => c.SelectSettings())))
+            if (!await Init(SQLHelper.Run(c => c.SelectSettings())))
             {
+                Settings.settings = new Settings();
                 return false;
             }
             Inited = true;
@@ -132,6 +134,7 @@ namespace SMPlayer.Helpers
             {
                 return false;
             }
+            Settings.settings = settings;
             bool isSuccessful = false;
             try
             {

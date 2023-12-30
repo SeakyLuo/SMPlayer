@@ -43,6 +43,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBlock
                 Margin="5,0"
@@ -52,7 +53,17 @@
                 FontSize="{StaticResource TreeViewFontSize}"
                 ToolTipService.ToolTip="{Binding Path, Mode=OneWay}"/>
             <Button
+                x:Name="PlayButton"
+                x:Uid="PlayButton"
                 Grid.Column="1"
+                Click="PlayButton_Click"
+                Style="{StaticResource DisplayWhenHoverButtonStyle}">
+                <Button.Content>
+                    <SymbolIcon x:Name="PlayButtonIcon" Symbol="Play" />
+                </Button.Content>
+            </Button>
+            <Button
+                Grid.Column="2"
                 x:Name="AddToButton"
                 x:Uid="AddToButton"
                 Click="AddToButton_Click"
@@ -63,7 +74,7 @@
                 </Button.Content>
             </Button>
             <Button
-                Grid.Column="2"
+                Grid.Column="3"
                 x:Name="PlayNextButton"
                 x:Uid="PlayNextButton"
                 Click="PlayNextButton_Click"
@@ -99,6 +110,9 @@
                 <VisualState x:Name="Normal" />
                 <VisualState x:Name="PointerOver">
                     <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PlayButton" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
+                        </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="AddToButton" Storyboard.TargetProperty="Visibility">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
                         </ObjectAnimationUsingKeyFrames>

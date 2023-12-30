@@ -782,8 +782,10 @@ namespace SMPlayer
             {
                 return;
             }
-            Debug.WriteLine($"MusicPlayer.Position {position} newValue {newValue}");
-            MusicPlayer.Position = newValue;
+            if (!MusicPlayer.IsPlaying)
+            {
+                MusicPlayer.Position = newValue;
+            }
             if (LeftTimeTextBlock != null) LeftTimeTextBlock.Text = MusicDurationConverter.ToTime(newValue);
         }
 

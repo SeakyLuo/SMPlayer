@@ -2,6 +2,7 @@
 using SMPlayer.Helpers;
 using SMPlayer.Interfaces;
 using SMPlayer.Models;
+using SMPlayer.Models.VO;
 using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
@@ -227,6 +228,7 @@ namespace SMPlayer
             };
             flyout.Items.Add(locateArtist);
         }
+
         private void AlbumMenuFlyout_Opening(object sender, object e)
         {
             MenuFlyoutHelper.SetPlaylistMenu(sender, this, null, new MenuFlyoutOption

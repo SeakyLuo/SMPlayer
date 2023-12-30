@@ -224,7 +224,7 @@ namespace SMPlayer
             }
             catch (Exception ex)
             {
-                Helper.ShowNotificationRaw(Helper.LocalizeMessage("OperationFailed", ex), 5000);
+                Helper.ShowOperationFailedNotification(ex);
             }
         }
 
@@ -272,6 +272,11 @@ namespace SMPlayer
 
         private void SetAsPreferredButton_Click(object sender, RoutedEventArgs e)
         {
+            if (CurrentPlaylist == null)
+            {
+                Helper.ShowOperationFailedNotification("");
+                return;
+            }
             IPreferable preferable;
             if (IsPlaylist || IsMyFavorites)
             {

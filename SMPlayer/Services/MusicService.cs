@@ -5,6 +5,7 @@ using SMPlayer.Models.DAO;
 using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -277,8 +278,12 @@ namespace SMPlayer.Services
             }
             try
             {
-                using (var file = TagLib.File.Create(new MusicFileAbstraction(storageFile), TagLib.ReadStyle.Average))
+                using (var file = storageFile.CreateTagFile())
                 {
+                    if (file == null)
+                    {
+                        return false;
+                    }
                     file.Tag.Lyrics = lyrics;
                     file.Save();
                     PutLyricsCache(music, lyrics);
@@ -312,6 +317,7 @@ namespace SMPlayer.Services
             }
             catch (Exception e)
             {
+                Debug.WriteLine($"Read Lyrics failed {e}");
                 return "";
             }
         }

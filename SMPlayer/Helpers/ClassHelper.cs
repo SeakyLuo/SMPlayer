@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using TagLib;
 using Windows.Graphics.Imaging;
 using Windows.Media.Playback;
 using Windows.Storage;
@@ -235,11 +236,32 @@ namespace SMPlayer
         }
         public static string GetLyrics(this StorageFile file)
         {
-            using (var tagFile = TagLib.File.Create(new MusicFileAbstraction(file), TagLib.ReadStyle.Average))
+            if (file == null)
             {
-                return tagFile.Tag.Lyrics;
+                return null;
+            }
+            using (var tagFile = file.CreateTagFile())
+            {
+                return tagFile?.Tag.Lyrics;
             }
         }
+        public static TagLib.File CreateTagFile(this StorageFile file)
+        {
+            try
+            {
+                return TagLib.File.Create(new MusicFileAbstraction(file), TagLib.ReadStyle.Average);
+            }
+            catch (CorruptFileException)
+            {
+                Helper.ShowNotificationRaw(Helper.LocalizeMessage("FileIsCorrupted", file.Name));
+            }
+            catch (Exception ex)
+            {
+                Helper.ShowOperationFailedNotification(ex);
+            }
+            return null;
+        }
+
         public static async Task<bool> Contains(this StorageFolder folder, string name)
         {
             try

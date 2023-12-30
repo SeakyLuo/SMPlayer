@@ -204,9 +204,13 @@ namespace SMPlayer
         {
             return (Window.Current?.Content as Frame)?.Content as IMainPageContainer;
         }
+        public static void ShowOperationFailedNotification(string message)
+        {
+            ShowNotificationRaw(LocalizeMessage("OperationFailed", message), 5000);
+        }
         public static void ShowOperationFailedNotification(Exception ex)
         {
-            ShowNotificationRaw(LocalizeMessage("OperationFailed", ex.Message), 5000);
+            ShowOperationFailedNotification(ex.Message);
         }
         public static void ShowNotificationRaw(string message, int duration = 2000)
         {

@@ -53,7 +53,14 @@ namespace SMPlayer
         /// <param name="e">有关启动请求和过程的详细信息。</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            OnLaunched(e, null);
+            try
+            {
+                OnLaunched(e, null);
+            }
+            catch (Exception ex)
+            {
+                Helper.ShowOperationFailedNotification(ex);
+            }
         }
         
         private async void OnLaunched(LaunchActivatedEventArgs e, Music music)

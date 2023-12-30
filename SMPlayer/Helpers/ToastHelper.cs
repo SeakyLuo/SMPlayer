@@ -29,7 +29,7 @@ namespace SMPlayer.Helpers
 
         public static void Init()
         {
-            CurrentLyricsSource = Settings.settings.NotificationLyricsSource;
+            CurrentLyricsSource = Settings.settings?.NotificationLyricsSource ?? LyricsSource.Internet;
             Timer.Tick += (sender, e) =>
             {
                 UpdateToast();
@@ -114,7 +114,14 @@ namespace SMPlayer.Helpers
             data.Values["Lyrics"] = Settings.settings.ShowLyricsInNotification ? LyricsHelper.GetCurrentLyricsLine() : "";
 
             // Update the existing notification's data by using tag/group
-            Notifier.Update(data, ToastTagPaused, ToastGroup);
+            try
+            {
+                Notifier.Update(data, ToastTagPaused, ToastGroup);
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         private static bool IsToastActive(Music music, MediaPlaybackState state)

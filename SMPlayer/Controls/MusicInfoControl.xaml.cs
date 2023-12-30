@@ -42,7 +42,7 @@ namespace SMPlayer.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            SetPlayButtonVisibility(MusicPlayer.IsPlaying);
+            SetPlayButtonVisibility(IsCurrentMusic && MusicPlayer.IsPlaying);
         }
 
         public void SetMusicProperties(Music music, MusicProperties properties)

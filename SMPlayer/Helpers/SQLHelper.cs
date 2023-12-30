@@ -4,6 +4,7 @@ using SMPlayer.Models.DAO;
 using SQLite;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -91,6 +92,7 @@ namespace SMPlayer.Helpers
                     });
                     Helper.ShowNotification("LoadSettingsAndInsertToDbFailed", 10000);
                 }
+                Inited = true;
                 MainPage.Instance.Loader.Hide();
             });
         }

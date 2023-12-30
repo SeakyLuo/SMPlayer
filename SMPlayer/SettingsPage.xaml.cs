@@ -234,13 +234,23 @@ namespace SMPlayer
                     MainPage.Instance.Loader.Hide();
                     return;
                 }
+                if (string.IsNullOrEmpty(originalPath) && SQLHelper.Run(c => c.SelectSettings()) is Settings tempSettings)
+                {
+                    // 这个场景适用于迁移到新设备时，直接通过导入获取老设备的路径，此时Settings.settings.RootPath在InitWithFile时已经更新为新的路径了，所以得再查一次SQL
+                    originalPath = tempSettings.RootPath;
+                }
                 PathBox.Text = Settings.settings.RootPath;
-                if (originalPath != Settings.settings.RootPath)
+                bool successful;
+                if (originalPath == Settings.settings.RootPath)
+                {
+                    successful = await UpdateHelper.UpdateMusicLibrary(Helper.MusicFolder);
+                }
+                else
                 {
                     MainPage.Instance.Loader.ShowIndeterminant("DifferentPathDetectedWhenImportingData");
                     SQLHelper.UpdatePath(originalPath, Settings.settings.RootPath);
+                    successful = true;
                 }
-                bool successful = await UpdateHelper.UpdateMusicLibrary(Helper.MusicFolder);
                 if (successful)
                 {
                     App.Save();
