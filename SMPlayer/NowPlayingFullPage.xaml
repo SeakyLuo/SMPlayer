@@ -112,6 +112,14 @@
                     RequestedTheme="Dark"
                     ShowHeader="True" />
             </controls:BladeItem>
+            <controls:BladeItem x:Name="AlbumArtBladeItem" Style="{StaticResource NowPlayingFullBladeItemStyle}">
+                <myControls:AlbumArtControl
+                    x:Name="AlbumArtController"
+                    Margin="20,0"
+                    AllowMusicSwitching="True"
+                    RequestedTheme="Dark"
+                    ShowHeader="True" />
+            </controls:BladeItem>
         </controls:BladeView>
         <MediaElement x:Name="mediaElement" />
         <controls:InAppNotification

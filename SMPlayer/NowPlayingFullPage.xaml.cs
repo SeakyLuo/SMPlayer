@@ -90,6 +90,12 @@ namespace SMPlayer
             LyricsBladeItem.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true });
         }
 
+        public void AlbumArtRequested(Music music)
+        {
+            AlbumArtController.SetAlbumArt(music);
+            AlbumArtBladeItem.StartBringIntoView(new BringIntoViewOptions() { AnimationDesired = true });
+        }
+
         public void GoBack()
         {
             if (Frame.CanGoBack) Frame.GoBack();

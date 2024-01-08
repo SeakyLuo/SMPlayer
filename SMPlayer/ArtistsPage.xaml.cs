@@ -68,7 +68,7 @@ namespace SMPlayer
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             SetHeader();
-            MainPage.Instance.SetMultiSelectListener(this);
+            MainPage.Instance?.SetMultiSelectListener(this);
             if (targetArtist == null) return;
             if (IsProcessing)
             {

@@ -908,6 +908,13 @@ namespace SMPlayer
                 listener.LyricsRequested(currentMusic);
         }
 
+        private void AlbumArtButton_Click(object sender, RoutedEventArgs e)
+        {
+            Music currentMusic = MusicPlayer.CurrentMusic;
+            foreach (var listener in MusicRequestListeners)
+                listener.AlbumArtRequested(currentMusic);
+        }
+
         private async void SavePlaylistItem_Click(object sender, RoutedEventArgs e)
         {
             var name = Helper.Localize("Now Playing") + " - " + DateTime.Now.ToString("yy/MM/dd");
@@ -1115,6 +1122,7 @@ namespace SMPlayer
                     break;
             }
         }
+
     }
 
     public interface IMusicRequestListener
@@ -1122,5 +1130,6 @@ namespace SMPlayer
         void PlaylistRequested(IEnumerable<Music> playlist);
         void MusicInfoRequested(Music music);
         void LyricsRequested(Music music);
+        void AlbumArtRequested(Music music);
     }
 }

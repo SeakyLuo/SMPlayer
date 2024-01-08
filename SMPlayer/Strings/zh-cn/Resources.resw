@@ -1513,4 +1513,13 @@
   <data name="ReleaseNotesBugFixForImportData.Text" xml:space="preserve">
     <value>修复了导入数据不可用的问题。</value>
   </data>
+  <data name="AlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>查看专辑插图</value>
+  </data>
+  <data name="AlbumArtTextBlock.Text" xml:space="preserve">
+    <value>专辑插图</value>
+  </data>
+  <data name="ReleaseNotesAddSeeAlbumArtToFullPage.Text" xml:space="preserve">
+    <value>你可以在沉浸模式中查看专辑插图了。</value>
+  </data>
 </root>

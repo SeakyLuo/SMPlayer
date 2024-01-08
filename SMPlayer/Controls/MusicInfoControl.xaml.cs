@@ -33,7 +33,7 @@ namespace SMPlayer.Controls
         private MusicProperties Properties;
         public static List<Action<Music, Music>> MusicModifiedListeners = new List<Action<Music, Music>>();
         public bool IsProcessing { get; private set; } = false;
-        public bool IsCurrentMusic => CurrentMusic.Equals(MusicPlayer.CurrentMusic);
+        public bool IsCurrentMusic => CurrentMusic != null && CurrentMusic.Equals(MusicPlayer.CurrentMusic);
         public MusicInfoControl()
         {
             this.InitializeComponent();

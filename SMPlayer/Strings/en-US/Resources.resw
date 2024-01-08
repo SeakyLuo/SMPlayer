@@ -757,7 +757,7 @@
     <value>Playlists</value>
   </data>
   <data name="PlayModeAppButton.Label" xml:space="preserve">
-    <value>Play mode</value>
+    <value>Immersive mode</value>
   </data>
   <data name="PlayTextBlock.Text" xml:space="preserve">
     <value>Play</value>
@@ -1521,5 +1521,14 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   </data>
   <data name="LocalServiceToggleSwitch.OnContent" xml:space="preserve">
     <value>Remote Play is on. If you turn it off, you will not be able to access your local music files from remote devices.</value>
+  </data>
+  <data name="AlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>See album art.</value>
+  </data>
+  <data name="AlbumArtTextBlock.Text" xml:space="preserve">
+    <value>Album art</value>
+  </data>
+  <data name="ReleaseNotesAddSeeAlbumArtToFullPage.Text" xml:space="preserve">
+    <value>You can see album art in the Immersive mode.</value>
   </data>
 </root>

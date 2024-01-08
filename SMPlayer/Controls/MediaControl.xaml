@@ -243,7 +243,7 @@
                                     Style="{StaticResource MediaControlIconTextButtonStyle}"
                                     Tapped="MainMediaControlMoreAlbumArtItem_Tapped">
                                     <local:IconTextButton.Icon>
-                                        <FontIcon Glyph="&#xEC42;" Style="{ThemeResource MediaControlIconTextButtonFontIconStyle}" />
+                                        <FontIcon Glyph="&#xE1A4;" Style="{ThemeResource MediaControlIconTextButtonFontIconStyle}" />
                                     </local:IconTextButton.Icon>
                                 </local:IconTextButton>
                                 <local:IconTextButton
@@ -762,6 +762,13 @@
                             Content="&#xEC42;"
                             Style="{StaticResource DarkMediaControlButtonStyle}"
                             Visibility="Visible" />
+                        <Button
+                          x:Name="AlbumArtButton"
+                          x:Uid="AlbumArtButton"
+                          Click="AlbumArtButton_Click"
+                          Content="&#xEB9F;"
+                          Style="{StaticResource DarkMediaControlButtonStyle}"
+                          Visibility="Visible" />
                         <Button
                             x:Name="FullScreenButton"
                             x:Uid="FullScreenButton"
