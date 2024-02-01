@@ -79,7 +79,7 @@ namespace SMPlayer
         }
         public static MediaPlaybackState PlaybackState => Player.PlaybackSession.PlaybackState;
         public static bool IsPlaying => PlaybackState == MediaPlaybackState.Playing;
-        public static Playlist NowPlaying => new Playlist(MenuFlyoutHelper.NowPlaying, CurrentPlaylist);
+        public static Playlist NowPlaying => new Playlist(MenuFlyoutHelper.NowPlayingPlaylistName, CurrentPlaylist);
         private static MediaPlaybackList PlaybackList = new MediaPlaybackList() { MaxPlayedItemsToKeepOpen = 1 };
         public static MediaPlayer Player = new MediaPlayer() { Source = PlaybackList };
         private static List<IMusicPlayerEventListener> MusicPlayerEventListeners = new List<IMusicPlayerEventListener>();
@@ -241,8 +241,10 @@ namespace SMPlayer
         public static void AddNextAndPlay(IMusicable source)
         {
             if (source == null) return;
-            if (MoveToMusic(source)) return;
-            MoveToMusic(AddMusic(source, CurrentIndex + 1));
+            if (!MoveToMusic(source))
+            {
+                MoveToMusic(AddMusic(source, CurrentIndex + 1));
+            }
             Play();
         }
 

@@ -9,7 +9,9 @@ using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Threading.Tasks;
 using Windows.UI.Composition;
 using Windows.UI.Xaml;
@@ -49,9 +51,14 @@ namespace SMPlayer
             AlbumArtControl.ImageSavedListeners.Add(this);
         }
 
+
         public async Task SetPlaylist(PlaylistView playlist)
         {
-            if (playlist == null) return;
+            if (playlist == null)
+            {
+                Helper.ShowEmailFeedbackNotification("LoadPlaylistFailed", "LoadPlaylistFailedEmailTitle", Helper.GetStackTraceMessage());
+                return;
+            }
             HidePlaylistCover();
             MusicPlayer.SetMusicPlaying(playlist.Songs, MusicPlayer.CurrentMusic);
             CurrentPlaylist = playlist;
@@ -272,11 +279,6 @@ namespace SMPlayer
 
         private void SetAsPreferredButton_Click(object sender, RoutedEventArgs e)
         {
-            if (CurrentPlaylist == null)
-            {
-                Helper.ShowOperationFailedNotification("");
-                return;
-            }
             IPreferable preferable;
             if (IsPlaylist || IsMyFavorites)
             {

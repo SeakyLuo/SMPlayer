@@ -25,8 +25,8 @@ namespace SMPlayer
         public object SelectedItems { get; set; }
         public object OriginalData { get; set; }
 
-        public static string NowPlaying = Helper.Localize("Now Playing"), MyFavorites = Helper.Localize("My Favorites");
-        public static bool IsBadNewPlaylistName(string name) { return name == NowPlaying || name == MyFavorites; }
+        public static string NowPlayingPlaylistName = Helper.Localize("Now Playing"), MyFavoritesPlaylistName = Helper.Localize("My Favorites");
+        public static bool IsBadNewPlaylistName(string name) { return name == NowPlayingPlaylistName || name == MyFavoritesPlaylistName; }
         public MenuFlyout GetAddToMenuFlyout(IMenuFlyoutItemClickListener listener = null)
         {
             return GetAddToMenuFlyoutSubItem(listener).ToMenuFlyout();
@@ -39,12 +39,12 @@ namespace SMPlayer
                 Name = AddToSubItemName
             };
             addToItem.SetToolTip("AddToToolTip");
-            if (CurrentPlaylistName != NowPlaying)
+            if (CurrentPlaylistName != NowPlayingPlaylistName)
             {
                 var nowPlayingItem = new MenuFlyoutItem()
                 {
                     Icon = new FontIcon() { Glyph = "\uEC4F" },
-                    Text = NowPlaying
+                    Text = NowPlayingPlaylistName
                 };
                 nowPlayingItem.Click += async (sender, args) =>
                 {
@@ -57,7 +57,7 @@ namespace SMPlayer
                             return;
                         }
                         int index = MusicPlayer.AddMusic(music);
-                        Helper.ShowUndoableNotificationRaw(Helper.LocalizeMessage("SongAddedTo", music.Name, NowPlaying), () =>
+                        Helper.ShowUndoableNotificationRaw(Helper.LocalizeMessage("SongAddedTo", music.Name, NowPlayingPlaylistName), () =>
                         {
                             MusicPlayer.RemoveMusic(index);
                         });
@@ -66,8 +66,8 @@ namespace SMPlayer
                     {
                         if (songs.IsEmpty()) return;
                         var indices = songs.ToDictionary(i => MusicPlayer.AddMusic(i)).OrderByDescending(i => i.Key);
-                        string message = songs.Count() == 1 ? Helper.LocalizeMessage("SongAddedTo", songs.ElementAt(0).ToMusic().Name, NowPlaying) :
-                                                              Helper.LocalizeMessage("SongsAddedTo", songs.Count(), NowPlaying);
+                        string message = songs.Count() == 1 ? Helper.LocalizeMessage("SongAddedTo", songs.ElementAt(0).ToMusic().Name, NowPlayingPlaylistName) :
+                                                              Helper.LocalizeMessage("SongsAddedTo", songs.Count(), NowPlayingPlaylistName);
                         Helper.ShowUndoableNotificationRaw(message, () =>
                         {
                             foreach (var pair in indices)
@@ -81,7 +81,7 @@ namespace SMPlayer
                 };
                 addToItem.Items.Add(nowPlayingItem);
             }
-            if (CurrentPlaylistName != MyFavorites)
+            if (CurrentPlaylistName != MyFavoritesPlaylistName)
             {
                 Playlist myFavorites = PlaylistService.MyFavorites;
                 if ((Data is IMusicable m && !myFavorites.Contains(m)) ||
@@ -90,7 +90,7 @@ namespace SMPlayer
                     var favItem = new MenuFlyoutItem()
                     {
                         Icon = new FontIcon() { Glyph = "\uEB51" },
-                        Text = MyFavorites
+                        Text = MyFavoritesPlaylistName
                     };
                     favItem.Click += async (sender, args) =>
                     {
@@ -103,7 +103,7 @@ namespace SMPlayer
                                 return;
                             }
                             MusicService.LikeMusic(music);
-                            Helper.ShowUndoableNotificationRaw(Helper.LocalizeMessage("SongAddedTo", music.Name, MyFavorites), () =>
+                            Helper.ShowUndoableNotificationRaw(Helper.LocalizeMessage("SongAddedTo", music.Name, MyFavoritesPlaylistName), () =>
                             {
                                 MusicService.DislikeMusic(music);
                             });
@@ -111,8 +111,8 @@ namespace SMPlayer
                         else if (Data is IEnumerable<IMusicable> songs)
                         {
                             MusicService.LikeMusic(songs);
-                            string message = songs.Count() == 1 ? Helper.LocalizeMessage("SongAddedTo", songs.First().ToMusic().Name, MyFavorites) :
-                                                                  Helper.LocalizeMessage("SongsAddedTo", songs.Count(), MyFavorites);
+                            string message = songs.Count() == 1 ? Helper.LocalizeMessage("SongAddedTo", songs.First().ToMusic().Name, MyFavoritesPlaylistName) :
+                                                                  Helper.LocalizeMessage("SongsAddedTo", songs.Count(), MyFavoritesPlaylistName);
                             Helper.ShowUndoableNotificationRaw(message, () =>
                             {
                                 foreach (var song in songs)
@@ -128,9 +128,14 @@ namespace SMPlayer
                     addToItem.Items.Add(favItem);
                 }
             }
-            if (addToItem.Items.IsNotEmpty()) addToItem.Items.Add(new MenuFlyoutSeparator());
+            if (addToItem.Items.IsNotEmpty())
+            {
+                addToItem.Items.Add(new MenuFlyoutSeparator());
+            }
             foreach (var item in GetAddToPlaylistsMenuFlyout(listener).Items)
+            {
                 addToItem.Items.Add(item);
+            }
             return addToItem;
         }
 

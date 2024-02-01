@@ -207,6 +207,9 @@
   <data name="FoldersWithCount" xml:space="preserve">
     <value>文件夹（{0}）</value>
   </data>
+  <data name="GetHelp" xml:space="preserve">
+    <value>获取帮助</value>
+  </data>
   <data name="GridViewFolderPlayInfo" xml:space="preserve">
     <value>随机播放“{0}”下所有歌曲</value>
   </data>
@@ -519,6 +522,9 @@
   <data name="UndoPrefer" xml:space="preserve">
     <value>取消偏好设置</value>
   </data>
+  <data name="UnknownExceptionOccurredEmailTitle" xml:space="preserve">
+    <value>出现未知异常</value>
+  </data>
   <data name="UnPinToolTip" xml:space="preserve">
     <value>解除固定播放列表</value>
   </data>
@@ -535,13 +541,13 @@
     <value>通过浏览器</value>
   </data>
   <data name="VoiceAssistantHints1" xml:space="preserve">
-    <value>你可以说：“播放{0}的歌”</value>
+    <value>你可以说：“播放{0}的歌”，或者</value>
   </data>
   <data name="VoiceAssistantHints2" xml:space="preserve">
-    <value>你可以说：“播放专辑《{0}》”</value>
+    <value>你可以说：“播放专辑《{0}》”，或者</value>
   </data>
   <data name="VoiceAssistantHints3" xml:space="preserve">
-    <value>你可以说：“快速播放”</value>
+    <value>你可以说：“快速播放”，或者</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>是</value>

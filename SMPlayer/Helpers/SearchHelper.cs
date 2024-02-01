@@ -358,8 +358,10 @@ namespace SMPlayer.Helpers
     public class EvaluateResult
     {
         public EntityType SearchType { get; set; }
-        public object Entity { get; set; }
+        public ISearchEvaluator Entity { get; set; }
         public double Score { get; set; }
+        public bool NeedOffset { get; set; } = false;
+        public int Offset { get; set; } = 0;
 
         public EvaluateResult(EntityType type, ISearchEvaluator entity, string keyword)
         {
@@ -367,6 +369,7 @@ namespace SMPlayer.Helpers
             Entity = entity;
             Score = entity.Evaluate(keyword);
         }
+
     }
 
     public class MatchResult<T> where T : ISearchEvaluator

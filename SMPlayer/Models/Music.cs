@@ -138,7 +138,7 @@ namespace SMPlayer.Models
 
         public double Evaluate(string keyword)
         {
-            return SearchHelper.EvaluateString(Name, keyword, -5);
+            return SearchHelper.EvaluateString(Name, keyword, 0);
         }
 
         public double Match(string keyword)

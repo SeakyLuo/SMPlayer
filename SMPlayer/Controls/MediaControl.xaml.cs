@@ -8,16 +8,20 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 using Windows.Foundation;
 using Windows.Media.Playback;
+using Windows.Media.SpeechRecognition;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
+using static SQLite.SQLite3;
 
 //https://go.microsoft.com/fwlink/?LinkId=234236 上介绍了“用户控件”项模板
 
@@ -286,60 +290,6 @@ namespace SMPlayer
             }
         }
 
-        public TextBlock VoiceAssistantTextBlock
-        {
-            get
-            {
-                switch (mode)
-                {
-                    case MediaControlMode.Main:
-                        return IsMinimalMain ? MainMediaControlVoiceAssistantTextBlock : MainVoiceAssistantTextBlock;
-                    case MediaControlMode.Full:
-                        return FullMediaControlVoiceAssistantTextBlock;
-                    case MediaControlMode.Mini:
-                        return MiniVoiceAssistantButtonTextBlock;
-                    default:
-                        return null;
-                }
-            }
-        }
-
-        public ProgressBar VoiceAssistantProgressBar
-        {
-            get
-            {
-                switch (mode)
-                {
-                    case MediaControlMode.Main:
-                        return IsMinimalMain ? MainMediaControlVoiceAssistantProgressBar : MainVoiceAssistantProgressBar;
-                    case MediaControlMode.Full:
-                        return FullMediaControlVoiceAssistantProgressBar;
-                    case MediaControlMode.Mini:
-                        return MiniVoiceAssistantButtonProgressBar;
-                    default:
-                        return null;
-                }
-            }
-        }
-
-        public Flyout VoiceAssistantButtonFlyout
-        {
-            get
-            {
-                switch (mode)
-                {
-                    case MediaControlMode.Main:
-                        return IsMinimalMain ? MainMediaControlVoiceAssistantButtonFlyout : MainVoiceAssistantButtonFlyout;
-                    case MediaControlMode.Full:
-                        return FullVoiceAssistantButtonFlyout;
-                    case MediaControlMode.Mini:
-                        return MiniVoiceAssistantButtonFlyout;
-                    default:
-                        return null;
-                }
-            }
-        }
-
         public Button MuteButton
         {
             get
@@ -413,7 +363,6 @@ namespace SMPlayer
         private bool IsMinimalMain { get => MainMediaControlMoreButton.Visibility == Visibility.Visible; }
         private double MinimalLayoutWidth { get => (double)Resources["MinimalLayoutWidth"]; }
         private DispatcherTimer SliderTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(500) };
-        private Timer VoiceAssistantFlyoutTimer = new Timer(5000);
 
         public MediaControl()
         {
@@ -442,29 +391,6 @@ namespace SMPlayer
             };
             KeyboardAccelerators.Add(right);
             KeyboardAcceleratorPlacementMode = KeyboardAcceleratorPlacementMode.Hidden;
-
-            VoiceAssistantHelper.StateChangedListeners.Add(async (sender, args) =>
-            {
-                await Helper.RunInMainUIThread(Dispatcher, () =>
-                {
-                    switch (args.State)
-                    {
-                        case Windows.Media.SpeechRecognition.SpeechRecognizerState.Processing:
-                            VoiceAssistantTextBlock.Visibility = Visibility.Collapsed;
-                            VoiceAssistantProgressBar.Visibility = Visibility.Visible;
-                            break;
-                    }
-                });
-            });
-
-            VoiceAssistantFlyoutTimer.Elapsed += async (s, args) =>
-            {
-                await Dispatcher.RunIdleAsync(a =>
-                {
-                    VoiceAssistantButtonFlyout.Hide();
-                });
-            };
-
             SliderTimer.Tick += (s, args) =>
             {
                 MediaSlider.Value = MusicPlayer.Position;
@@ -484,6 +410,7 @@ namespace SMPlayer
             SetMuted(Settings.settings.IsMuted);
             VolumeSlider.Value = volume;
             SetPlayMode(Settings.settings.Mode);
+            if (LeftTimeTextBlock != null) LeftTimeTextBlock.Text = MusicDurationConverter.ToTime(Settings.settings.MusicProgress);
 
             if (ApplicationView.GetForCurrentView().IsFullScreenMode) SetExitFullScreen();
             else SetFullScreen();
@@ -1029,30 +956,114 @@ namespace SMPlayer
 
         private async void VoiceAssistantButton_Click(object sender, RoutedEventArgs e)
         {
-            if (await VoiceAssistantHelper.Recognize() is Windows.Media.SpeechRecognition.SpeechRecognitionResult result)
+            string hint = VoiceAssistantHelper.GetRandomHint();
+
+            Flyout flyout = new Flyout();
+            StackPanel panel = new StackPanel();
+            TextBlock textBlock = new TextBlock();
+            Run hintTextBlockRun = new Run
             {
-                VoiceAssistantTextBlock.Text = result.Text;
-                VoiceAssistantProgressBar.Visibility = Visibility.Collapsed;
-                VoiceAssistantTextBlock.Visibility = Visibility.Visible;
-                await VoiceAssistantHelper.HandleCommand(result);
-                VoiceAssistantFlyoutTimer.Start();
-            } 
-            else
+                Text = hint
+            };
+            textBlock.Inlines.Add(hintTextBlockRun);
+            Hyperlink hyperlink = new Hyperlink()
             {
-                VoiceAssistantButtonFlyout.Hide();
+                UnderlineStyle = UnderlineStyle.None
+            };
+            hyperlink.Click += VoiceAssistantHelper_Click;
+            hyperlink.Inlines.Add(new Run
+            {
+                Text = Helper.LocalizeText("GetHelp")
+            });
+            textBlock.Inlines.Add(hyperlink);
+            panel.Children.Add(textBlock);
+            ProgressBar progressBar = new ProgressBar
+            {
+                Style = (Style)Resources["VoiceAssistantProgressBarStyle"],
+                Visibility = Visibility.Collapsed,
+            };
+            panel.Children.Add(progressBar);
+            bool breakLoop = true, wasProcessing = false, waitForResponse = true;
+            flyout.Closed += (s, a) => 
+            {
+                breakLoop = true;
+                VoiceAssistantHelper.StateChangedListeners.Remove(OnVoiceAssistantStateChanged);
+                VoiceAssistantHelper.StopRecognition();
+            };
+            flyout.Content = panel;
+            flyout.ShowAt(sender as FrameworkElement);
+            VoiceAssistantHelper.StateChangedListeners.Add(OnVoiceAssistantStateChanged);
+            while (breakLoop)
+            {
+                SpeechRecognitionResult result = await VoiceAssistantHelper.Recognize();
+                VoiceAssistantHelper.StopRecognition();
+                if (result == null)
+                {
+                    break;
+                }
+                if (string.IsNullOrEmpty(result.Text))
+                {
+                    await Task.Delay(200);
+                    continue;
+                }
+                textBlock.Text = result.Text;
+                textBlock.Visibility = Visibility.Visible;
+                progressBar.Visibility = Visibility.Collapsed;
+                if (!await VoiceAssistantHelper.HandleCommand(result, () => { waitForResponse = false; }))
+                {
+                    while (waitForResponse)
+                    {
+                        await Task.Delay(100);
+                    }
+                    continue;
+                }
+                Timer timer = new Timer(5000);
+                timer.Elapsed += async (s, args) =>
+                {
+                    await Dispatcher.RunIdleAsync(a =>
+                    {
+                        flyout.Hide();
+                        timer.Stop();
+                    });
+                };
+                timer.Start();
+                break;
+            }
+
+            async void OnVoiceAssistantStateChanged(SpeechRecognizer r, VoiceAssistantEventArgs args)
+            {
+                await Helper.RunInMainUIThread(Dispatcher, () =>
+                {
+                    switch (args.State)
+                    {
+                        case SpeechRecognizerState.Capturing:
+                            if (hintTextBlockRun.Text == hint)
+                            {
+                                break;
+                            }
+                            textBlock.Text = "正在听你说话…";
+                            break;
+                        case SpeechRecognizerState.Processing:
+                            textBlock.Visibility = Visibility.Collapsed;
+                            progressBar.Visibility = Visibility.Visible;
+                            wasProcessing = true;
+                            break;
+                        case SpeechRecognizerState.Idle:
+                            if (!wasProcessing)
+                            {
+                                textBlock.Visibility = Visibility.Visible;
+                                progressBar.Visibility = Visibility.Collapsed;
+                            }
+                            wasProcessing = false;
+                            break;
+                    }
+                });
             }
         }
 
-        private void VoiceAssistantButtonFlyout_Closed(object sender, object e)
+        private async void VoiceAssistantHelper_Click(Hyperlink sender, HyperlinkClickEventArgs args)
         {
-            VoiceAssistantHelper.StopRecognition();
-        }
-
-        private void VoiceAssistantButtonFlyout_Opened(object sender, object e)
-        {
-            VoiceAssistantTextBlock.Text = VoiceAssistantHelper.GetRandomHint();
-            VoiceAssistantTextBlock.Visibility = Visibility.Visible;
-            VoiceAssistantProgressBar.Visibility = Visibility.Collapsed;
+            await new VoiceAssistantHelpDialog().ShowAsync();
         }
 
         void IMusicEventListener.Execute(Music music, MusicEventArgs args)
@@ -1122,7 +1133,6 @@ namespace SMPlayer
                     break;
             }
         }
-
     }
 
     public interface IMusicRequestListener

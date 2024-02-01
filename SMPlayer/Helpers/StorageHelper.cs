@@ -36,13 +36,22 @@ namespace SMPlayer.Helpers
                 SuggestedStartLocation = pickerLocation,
             };
             picker.FileTypeFilter.Add("*");
-            StorageFolder folder = await picker.PickSingleFolderAsync();
-            if (folder == null)
+            try
             {
+                StorageFolder folder = await picker.PickSingleFolderAsync();
+                if (folder == null)
+                {
+                    return null;
+                }
+                Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
+                return folder;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"pick folder failed {ex}");
+                Helper.ShowOperationFailedNotification(ex);
                 return null;
             }
-            Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-            return folder;
         }
         public static bool IsParentDirectory(string child, string parent)
         {

@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Contacts;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Email;
+using Windows.ApplicationModel.Resources.Core;
+using Windows.Globalization;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.Popups;
@@ -31,7 +33,7 @@ namespace SMPlayer
     {
         public static List<NotificationSendMode> NotificationOptions = EnumHelper.Values<NotificationSendMode>(typeof(NotificationSendMode));
         private static readonly int[] LimitedRecentPlayedItems = { -1, 100, 200, 500, 1000 };
-        private static readonly List<VoiceAssistantLanguage> VoiceAssistantPreferredLanguanges = EnumHelper.Values<VoiceAssistantLanguage>(typeof(VoiceAssistantLanguage));
+        private static readonly List<SupportedLanguage> VoiceAssistantPreferredLanguanges = EnumHelper.Values<SupportedLanguage>(typeof(SupportedLanguage));
         private static readonly List<LyricsSource> LyricsSources = EnumHelper.Values<LyricsSource>(typeof(LyricsSource));
         private volatile int addLyricsClickCounter = 0;
         private readonly string addLyricsContent = Helper.Localize("AddLyrics");
@@ -59,7 +61,7 @@ namespace SMPlayer
             SaveProgressToggleSwitch.IsOn = settings.SaveMusicProgress;
             HideMultiSelectCommandBarToggleSwitch.IsOn = settings.HideMultiSelectCommandBarAfterOperation;
             ShowLyricsInNotificationToggleSwitch.IsOn = settings.ShowLyricsInNotification;
-            VoiceAssistantLanguageComboBox.SelectedIndex = (int)settings.VoiceAssistantPreferredLanguage;
+            LanguageComboBox.SelectedIndex = (int)settings.VoiceAssistantPreferredLanguage;
             NotificationLyricsSourceComboBox.SelectedIndex = (int)settings.NotificationLyricsSource;
         }
 
@@ -376,25 +378,36 @@ namespace SMPlayer
             Settings.settings.SaveMusicProgress = (sender as ToggleSwitch).IsOn;
         }
 
-        private VoiceAssistantHelpDialog voiceAssistantHelpDialog;
-        private async void HelpButton_Click(object sender, RoutedEventArgs e)
+        private async void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (voiceAssistantHelpDialog == null)
+            SupportedLanguage language = VoiceAssistantPreferredLanguanges[(sender as ComboBox).SelectedIndex];
+            if (Settings.settings.VoiceAssistantPreferredLanguage == language)
             {
-                voiceAssistantHelpDialog = new VoiceAssistantHelpDialog();
+                return;
             }
-            await voiceAssistantHelpDialog.ShowAsync();
-        }
-
-        private async void VoiceAssistantLanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            VoiceAssistantLanguage language = VoiceAssistantPreferredLanguanges[(sender as ComboBox).SelectedIndex];
             Settings.settings.VoiceAssistantPreferredLanguage = language;
-
-            if (!await VoiceAssistantHelper.SetLanguage(language))
+            string languageStr;
+            if (language == SupportedLanguage.Chinese)
             {
-                Helper.ShowNotification("VoiceAssistantSetLanguageFailed");
+                languageStr = Helper.Language_CN;
             }
+            else
+            {
+                languageStr = Helper.Language_EN;
+            }
+            ApplicationLanguages.PrimaryLanguageOverride = languageStr;
+            string message = Helper.LocalizeMessageWithLanguage("SwitchLanguageSuccessful", languageStr);
+            int time = 3000;
+            try
+            {
+                await VoiceAssistantHelper.SetLanguage(language);
+            }
+            catch (Exception ex)
+            {
+                message += Helper.LocalizeMessageWithLanguage("VoiceAssistantSetLanguageFailed", languageStr) + ex.Message;
+                time += 5000;
+            }
+            Helper.ShowNotificationRaw(message, time);
         }
 
         private void PreferenceSettingsButton_Click(object sender, RoutedEventArgs e)

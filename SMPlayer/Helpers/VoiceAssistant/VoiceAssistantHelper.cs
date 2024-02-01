@@ -83,44 +83,43 @@ namespace SMPlayer.Helpers
             {
                 return;
             }
-            await SetLanguage(Settings.settings.VoiceAssistantPreferredLanguage);
+            try
+            {
+                await SetLanguage(Settings.settings.VoiceAssistantPreferredLanguage, false);
+            }
+            catch (Exception)
+            {
+
+            }
             //https://www.cnblogs.com/Aran-Wang/p/4816313.html
             //StorageFile commandSet = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///VoiceAssistantCommandSet.xml"));
             //await VoiceCommandDefinitionManager.InstallCommandDefinitionsFromStorageFileAsync(commandSet);
         }
 
-        public static async Task<bool> SetLanguage(VoiceAssistantLanguage language)
+        public static async Task<bool> SetLanguage(SupportedLanguage language, bool showError = true)
         {
-            try
+            Recognizer = new SpeechRecognizer(ConvertLanguage(language));
+            Recognizer.UIOptions.IsReadBackEnabled = false;
+            Recognizer.StateChanged += (sender, args) =>
             {
-                Recognizer = new SpeechRecognizer(ConvertLanguage(language));
-                Recognizer.UIOptions.IsReadBackEnabled = false;
-                Recognizer.StateChanged += (sender, args) =>
+                Debug.WriteLine("state: " + args.State);
+                VoiceAssistantEventArgs a = new VoiceAssistantEventArgs { State = args.State };
+                foreach (var listener in StateChangedListeners)
                 {
-                    Log.Info("state: " + args.State);
-                    VoiceAssistantEventArgs a = new VoiceAssistantEventArgs { State = args.State };
-                    foreach (var listener in StateChangedListeners)
+                    try
                     {
-                        try
-                        {
-                            listener.Invoke(sender, a);
-                        }
-                        catch (Exception e)
-                        {
-                            Log.Warn($"SetLanguage invoide StateChangedListeners failed {e}");
-                        }
+                        listener.Invoke(sender, a);
                     }
-                };
-                await Recognizer.CompileConstraintsAsync();
-            }
-            catch (Exception e)
-            {
-                Log.Warn($"set languange failed {e}");
-                return false;
-            }
+                    catch (Exception e)
+                    {
+                        Log.Warn($"SetLanguage invoide StateChangedListeners failed {e}");
+                    }
+                }
+            };
+            await Recognizer.CompileConstraintsAsync();
             switch (language)
             {
-                case VoiceAssistantLanguage.Chinese:
+                case SupportedLanguage.Chinese:
                     CommandHandler = new VoiceAssistantChineseHelper();
                     break;
                 default:
@@ -130,25 +129,25 @@ namespace SMPlayer.Helpers
             return true;
         }
 
-        private static Language ConvertLanguage(VoiceAssistantLanguage language)
+        private static Language ConvertLanguage(SupportedLanguage language)
         {
             switch (language)
             {
-                case VoiceAssistantLanguage.Chinese:
+                case SupportedLanguage.Chinese:
                     return new Language(Helper.Language_CN);
                 default:
                     return new Language(Helper.Language_EN);
             }
         }
 
-        public static VoiceAssistantLanguage ConvertLanguage(Language language)
+        public static SupportedLanguage ConvertLanguage(Language language)
         {
             switch (language.LanguageTag)
             {
                 case Helper.Language_CN:
-                    return VoiceAssistantLanguage.Chinese;
+                    return SupportedLanguage.Chinese;
                 default:
-                    return VoiceAssistantLanguage.English;
+                    return SupportedLanguage.English;
             }
         }
 
@@ -156,10 +155,8 @@ namespace SMPlayer.Helpers
         {
             try
             {
-                if (Recognizer.State != SpeechRecognizerState.Idle)
-                {
-                    await Recognizer.StopRecognitionAsync();
-                }
+                await Recognizer.StopRecognitionAsync();
+                IsRecognizing = false;
             }
             catch (Exception e)
             {
@@ -181,7 +178,14 @@ namespace SMPlayer.Helpers
             catch (Exception e)
             {
                 Log.Warn("Recognize.RecognizeException {0}", e);
-                await ShowAcceptPrivacyDialog();
+                if (!string.IsNullOrEmpty(e.Message) && e.Message.Contains("speech privacy policy"))
+                {
+                    await ShowAcceptPrivacyDialog();
+                }
+                else
+                {
+                    Helper.ShowOperationFailedNotification(e);
+                }
                 return null;
             }
             finally
@@ -195,14 +199,14 @@ namespace SMPlayer.Helpers
             ContentDialog Dialog = new ContentDialog()
             {
                 Title = Helper.LocalizeMessage("UnacceptedSpeechPrivacyPolicy"),
-                Content = Helper.LocalizeMessage("OpenSettingsAndTurnOnSpeechInput"),
+                Content = Helper.LocalizeMessage(Helper.IsWindows10() ? "OpenSettingsAndTurnOnSpeechInputWindows10" : "OpenSettingsAndTurnOnSpeechInputWindows11"),
                 PrimaryButtonText = Helper.LocalizeMessage("NeverMind"),
                 SecondaryButtonText = Helper.LocalizeMessage("GoToSettings")
             };
             if (await Dialog.ShowAsync() == ContentDialogResult.Secondary)
             {
                 // https://stackoverflow.com/questions/42391526/exception-the-speech-privacy-policy-was-not-accepted-prior-to-attempting-a-spee
-                if (!await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-speechtyping")))
+                if (!await Windows.System.Launcher.LaunchUriAsync(new Uri(Helper.IsWindows10() ? "ms-settings:privacy-speechtyping" : "ms-settings:privacy-speech")))
                 {
                     await new ContentDialog()
                     {
@@ -219,7 +223,12 @@ namespace SMPlayer.Helpers
             SpeakRaw(Helper.LocalizeMessage(message, args));
         }
 
-        public static async void SpeakRaw(string message)
+        public static void Speak(string message, Action speechEnded)
+        {
+            SpeakRaw(Helper.LocalizeMessage(message), speechEnded);
+        }
+
+        public static async void SpeakRaw(string message, Action speechEnded = null)
         {
             // 创建一个文本转语音的流。
             var stream = await Synthesizer.SynthesizeTextToStreamAsync(message);
@@ -228,29 +237,39 @@ namespace SMPlayer.Helpers
             MediaElement mediaElement = Helper.GetMainPageContainer().GetMediaElement();
             mediaElement.SetSource(stream, stream.ContentType);
             mediaElement.Play();
+            if (speechEnded != null)
+            {
+                mediaElement.MediaEnded += (sender, e) =>
+                {
+                    speechEnded.Invoke();
+                };
+            }
         }
 
-        public static async Task HandleCommand(SpeechRecognitionResult result)
+
+        public static async Task<bool> HandleCommand(SpeechRecognitionResult result, Action failed)
         {
             try
             {
-                if (result != null)
+                if (result == null)
                 {
-                    await HandleCommand(result.Text);
+                   return true;
                 }
+                return await HandleCommand(result.Text, failed);
             }
             catch (Exception e)
             {
                 Log.Warn("Recognize.Exception {0}", e);
-                Speak("VoiceAssitantError");
+                Speak("VoiceAssitantError", failed);
+                return false;
             }
         }
 
-        private static async Task HandleCommand(string text)
+        private static async Task<bool> HandleCommand(string text, Action failed)
         {
             if (string.IsNullOrEmpty(text))
             {
-                return;
+                return true;
             }
             CommandResult result = CommandHandler.Handle(text);
             switch (result.Type)
@@ -301,8 +320,7 @@ namespace SMPlayer.Helpers
                     SearchAndPlay(result.Param as string);
                     break;
                 case MatchType.Search:
-                    Search(result.Param as string);
-                    break;
+                    return Search(result.Param as string, failed);
                 case MatchType.Pause:
                     MusicPlayer.Pause();
                     break;
@@ -329,9 +347,10 @@ namespace SMPlayer.Helpers
                 case MatchType.Nothing:
                     break;
                 case MatchType.MatchNone:
-                    SpeakNotUnderstand();
-                    break;
+                    SpeakNotUnderstand(failed);
+                    return false;
             }
+            return true;
         }
 
         public static void SpeakNoResults(string text)
@@ -339,9 +358,9 @@ namespace SMPlayer.Helpers
             Speak("VoiceAssistantNoSearchResults", text);
         }
 
-        public static void SpeakNotUnderstand()
+        public static void SpeakNotUnderstand(Action spoken)
         {
-            Speak("VoiceAssistantCannotUnderstand");
+            Speak("VoiceAssistantCannotUnderstand", spoken);
         }
 
         private static void PlayMusic(string text)
@@ -580,12 +599,12 @@ namespace SMPlayer.Helpers
             Speak("VoiceAssistantNewVolume", newVolume);
         }
 
-        private static void Search(string text)
+        private static bool Search(string text, Action failed)
         {
             if (string.IsNullOrEmpty(text))
             {
-                SpeakNotUnderstand();
-                return;
+                SpeakNotUnderstand(failed);
+                return false;
             }
             object page = (Window.Current.Content as Frame)?.Content;
             if (page is NowPlayingFullPage fullPage)
@@ -597,6 +616,7 @@ namespace SMPlayer.Helpers
                 MiniModePage.ExitMiniMode();
             }
             MainPage.Instance.Search(text);
+            return true;
         }
 
         public static double FractionToDouble(string fraction)

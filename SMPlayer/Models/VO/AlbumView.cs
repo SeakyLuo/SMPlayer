@@ -45,18 +45,6 @@ namespace SMPlayer.Models
             Songs = new ObservableCollection<MusicView>() { music };
             if (setThumbnail) SetThumbnail();
         }
-        public AlbumView(string name, string artist)
-        {
-            Name = name;
-            Artist = artist;
-            Songs = new ObservableCollection<MusicView>();
-        }
-        public AlbumView(string name, string artist, string thumbnail)
-        {
-            Name = name;
-            Artist = artist;
-            ThumbnailSource = thumbnail;
-        }
         public AlbumView(string name, string artist, IEnumerable<MusicView> songs, bool setThumbnail = true)
         {
             Name = name;

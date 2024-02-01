@@ -87,13 +87,22 @@ namespace SMPlayer.Models.VO
 
         public override async Task LoadThumbnailAsync()
         {
-            if (IsThumbnailLoading) return;
+            if (IsThumbnailLoading)
+            {
+                return;
+            }
             IsThumbnailLoading = true;
             List<BitmapImage> thumbnails = new List<BitmapImage>(4);
             if (!await AddThumbnail(thumbnails, Source.Songs))
-                foreach (var tree in Source.Trees)
+            {
+                foreach (var tree in Source.Trees.ToList())
+                {
                     if (await AddThumbnail(thumbnails, tree.Flatten()))
+                    {
                         break;
+                    }
+                }
+            }
             int count = thumbnails.Count;
             if (count == 0) Thumbnail = MusicImage.NotFound;
             else if (count <= 2) Thumbnail = thumbnails[0];

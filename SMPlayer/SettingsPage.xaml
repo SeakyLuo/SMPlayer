@@ -393,29 +393,16 @@
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
-                        x:Name="VoiceAssistantTextBlock"
-                        x:Uid="VoiceAssistantTextBlock"
+                        x:Uid="LanguageTextBlock"
                         Style="{StaticResource SettingLabelStyle}"
-                        Text="Voice Assistant" />
-                    <TextBlock
-                        x:Uid="VoiceAssistantPreferredLanguageTextBlock"
-                        Text="Preferred Language: "
-                        Style="{StaticResource ComboBoxLabelStyle}"/>
+                        Text="Language" />
                     <ComboBox 
-                        x:Name="VoiceAssistantLanguageComboBox"
-                        SelectionChanged="VoiceAssistantLanguageComboBox_SelectionChanged"
+                        x:Name="LanguageComboBox"
+                        SelectionChanged="LanguageComboBox_SelectionChanged"
                         Style="{StaticResource SettingsMarginSetter}">
                         <ComboBoxItem x:Uid="EnglishComboItem" Content="English" />
-                        <ComboBoxItem x:Uid="ChineseComboItem" Content="中文" />
+                        <ComboBoxItem x:Uid="ChineseComboItem" Content="简体中文" />
                     </ComboBox>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Style="{StaticResource SettingLabelStyle}"  />
-                    <HyperlinkButton
-                        x:Uid="HelpButton"
-                        Click="HelpButton_Click"
-                        Content="Help"
-                        Style="{ThemeResource SettingsHyperLinkButtonStyle}" />
                 </StackPanel>
             </StackPanel>
             <StackPanel>

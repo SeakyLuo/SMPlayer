@@ -133,8 +133,10 @@ namespace SMPlayer.Models
 
         public AlbumView ToAlbumView()
         {
-            return new AlbumView(Name, Artist)
+            return new AlbumView()
             {
+                Name = Name,
+                Artist = Artist,
                 Songs = Songs ?? new ObservableCollection<MusicView>(),
                 ThumbnailSource = DisplayItem?.Path,
                 EntityType = EntityType.Playlist,
@@ -144,9 +146,11 @@ namespace SMPlayer.Models
 
         public AlbumView ToSearchAlbumView(EntityType? entityType = null)
         {
-            return new AlbumView(Name, SongCountConverter.GetSongCount(Count))
+            return new AlbumView()
             {
-                Songs = Songs,
+                Name = Name,
+                Artist = SongCountConverter.GetSongCount(Count),
+                Songs = Songs ?? new ObservableCollection<MusicView>(),
                 ThumbnailSource = DisplayItem?.Path,
                 EntityType = entityType ?? EntityType.Playlist,
                 OriginalItemId = Id,

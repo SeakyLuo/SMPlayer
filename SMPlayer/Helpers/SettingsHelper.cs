@@ -113,11 +113,16 @@ namespace SMPlayer.Helpers
 
         private static void InsertMyFavoritesAndSettings(SQLiteConnection c)
         {
+            InsertMyFavorites(c);
+            c.InsertSettings(Settings.settings);
+        }
+
+        public static void InsertMyFavorites(SQLiteConnection c)
+        {
             PlaylistView myFavoritesVO = Settings.settings.MyFavorites;
             Playlist myFavorites = myFavoritesVO.FromVO();
             InsertPlaylist(c, myFavorites);
             Settings.settings.MyFavoritesId = Settings.settings.MyFavorites.Id = myFavorites.Id;
-            c.InsertSettings(Settings.settings);
         }
 
         public static void Save()

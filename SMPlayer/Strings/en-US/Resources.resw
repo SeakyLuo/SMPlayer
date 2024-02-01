@@ -1159,8 +1159,8 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="VoiceAssistantHelpTextBlock.Text" xml:space="preserve">
     <value>Voice Assistant Help</value>
   </data>
-  <data name="VoiceAssistantPreferredLanguageTextBlock.Text" xml:space="preserve">
-    <value>Preferred Languange: </value>
+  <data name="LanguageTextBlock.Text" xml:space="preserve">
+    <value>Languange</value>
   </data>
   <data name="VoiceAssistantNoticeCommandIntro.Text" xml:space="preserve">
     <value>In the command set, the punctuation "|" means "or", {} means "require any"，[] means a variable，() means optional.</value>
@@ -1530,5 +1530,11 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   </data>
   <data name="ReleaseNotesAddSeeAlbumArtToFullPage.Text" xml:space="preserve">
     <value>You can see album art in the Immersive mode.</value>
+  </data>
+  <data name="ReleaseNotesSwitchLanguageSupported.Text" xml:space="preserve">
+    <value>You can switch to another language in the settings now!</value>
+  </data>
+  <data name="ReleaseNotesImprovedVoiceAssistant.Text" xml:space="preserve">
+    <value>Voice assistant is improved a little.</value>
   </data>
 </root>

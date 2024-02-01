@@ -1150,8 +1150,8 @@
   <data name="VoiceAssistantHelpTextBlock.Text" xml:space="preserve">
     <value>语音助手帮助</value>
   </data>
-  <data name="VoiceAssistantPreferredLanguageTextBlock.Text" xml:space="preserve">
-    <value>偏好语言：</value>
+  <data name="LanguageTextBlock.Text" xml:space="preserve">
+    <value>语言</value>
   </data>
   <data name="VoiceAssistantNoticeCommandIntro.Text" xml:space="preserve">
     <value>在命令列表中，符号“|”表示“或"，{}表示任一必须项，[]表示”变量”，()表示可选。</value>
@@ -1160,7 +1160,7 @@
     <value>命令示例：播放歌手周杰伦，音量调高10%。</value>
   </data>
   <data name="VoiceAssistantNoticeSmartness.Text" xml:space="preserve">
-    <value>这个语音助手没有那么聪明，请尽量按照上面的列表给出简单的命令。</value>
+    <value>这个语音助手没有使用AI，仅识别关键字，不会那么聪明，请尽量按照上面的列表给出简单的命令。</value>
   </data>
   <data name="VoiceAssistantSupportedCommandsTextBlock.Text" xml:space="preserve">
     <value>支持的命令</value>
@@ -1521,5 +1521,14 @@
   </data>
   <data name="ReleaseNotesAddSeeAlbumArtToFullPage.Text" xml:space="preserve">
     <value>你可以在沉浸模式中查看专辑插图了。</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ReleaseNotesSwitchLanguageSupported.Text" xml:space="preserve">
+    <value>你可以切换语言了</value>
+  </data>
+  <data name="ReleaseNotesImprovedVoiceAssistant.Text" xml:space="preserve">
+    <value>稍微优化了语音助手</value>
   </data>
 </root>

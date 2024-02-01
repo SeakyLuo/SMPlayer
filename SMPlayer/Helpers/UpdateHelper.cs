@@ -54,10 +54,7 @@ namespace SMPlayer.Helpers
             catch (Exception e)
             {
                 Log.Error($"update music library failed {e}");
-                MainPage.Instance.ShowButtonedNotification(Helper.LocalizeMessage("ExecutionFailed"), Helper.LocalizeText("Feedback"), async (n) =>
-                {
-                    await Helper.SendEmailToDeveloper(Helper.LocalizeText("UpdateMusicLibraryFailed"), $"AppVersion:{Helper.AppVersion}\n{e}");
-                }, 10000);
+                Helper.ShowEmailFeedbackNotification("ExecutionFailed", "UpdateMusicLibraryFailed", $"AppVersion:{Helper.AppVersion}\n{e}");
                 return false;
             }
             finally

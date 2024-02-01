@@ -11,6 +11,8 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Appointments;
+using Windows.Media.Audio;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -151,38 +153,46 @@ namespace SMPlayer
                     SettingsPage.ShowReleaseNotes();
                 }
                 firstLoaded = false;
-
-                await Task.Run(() =>
-                {
-                    List<FolderFile> badFiles = StorageService.FindInvalidFiles();
-                    if (badFiles.IsEmpty()) return;
-                    FolderUpdateResult result = new FolderUpdateResult();
-                    foreach (var item in badFiles)
-                    {
-                        StorageService.RemoveFile(item);
-                        result.RemoveFile(item.Path);
-                    }
-                    ShowDetailNotification(Helper.LocalizeMessage("FindInvalidFiles", badFiles.Count),
-                                           async () => { await new FolderUpdateResultDialog().ShowAsync(result); },
-                                           10000);
-                });
-                await Task.Run(() =>
-                {
-                    List<FolderTree> badFolders = StorageService.FindNoParentFolders();
-                    if (badFolders.IsEmpty()) return;
-                    foreach (var item in badFolders)
-                    {
-                        FolderTree parent = StorageService.FindFolderInfo(item.ParentPath);
-                        if (parent == null)
-                        {
-                            Log.Warn("Cannot find parent for {0}", item.Path);
-                            continue;
-                        }
-                        item.ParentId = parent.Id;
-                        StorageService.UpdateFolder(item);
-                    }
-                });
+                CheckInvalidFiles();
             }
+        }
+
+        private async void CheckInvalidFiles()
+        {
+            while (!App.Inited)
+            {
+                await Task.Delay(100);
+            }
+            await Task.Run(() =>
+            {
+                List<FolderFile> badFiles = StorageService.FindInvalidFiles();
+                if (badFiles.IsEmpty()) return;
+                FolderUpdateResult result = new FolderUpdateResult();
+                foreach (var item in badFiles)
+                {
+                    StorageService.RemoveFile(item);
+                    result.RemoveFile(item.Path);
+                }
+                ShowDetailNotification(Helper.LocalizeMessage("FindInvalidFiles", badFiles.Count),
+                                       async () => { await new FolderUpdateResultDialog().ShowAsync(result); },
+                                       10000);
+            });
+            await Task.Run(() =>
+            {
+                List<FolderTree> badFolders = StorageService.FindNoParentFolders();
+                if (badFolders.IsEmpty()) return;
+                foreach (var item in badFolders)
+                {
+                    FolderTree parent = StorageService.FindFolderInfo(item.ParentPath);
+                    if (parent == null)
+                    {
+                        Log.Warn("Cannot find parent for {0}", item.Path);
+                        continue;
+                    }
+                    item.ParentId = parent.Id;
+                    StorageService.UpdateFolder(item);
+                }
+            });
         }
 
         private void UpdateTitleBarLayout(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar coreTitleBar)

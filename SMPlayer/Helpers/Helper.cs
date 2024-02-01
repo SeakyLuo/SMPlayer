@@ -9,16 +9,19 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Email;
 using Windows.ApplicationModel.Resources;
+using Windows.ApplicationModel.Resources.Core;
 using Windows.Foundation;
 using Windows.Globalization;
 using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
+using Windows.System.Profile;
 using Windows.UI.Core;
 using Windows.UI.Notifications;
 using Windows.UI.Popups;
@@ -244,6 +247,24 @@ namespace SMPlayer
         {
             GetMainPageContainer()?.ShowButtonedNotification(message, button1, action1, button2, action2, duration);
         }
+        public static void ShowEmailFeedbackNotification(string notificationMessage, string emailTitleText, string emailContent)
+        {
+            ShowButtonedNotification(LocalizeMessage(notificationMessage), LocalizeText("Feedback"), async (n) =>
+            {
+                await SendEmailToDeveloper(LocalizeText(emailTitleText), emailContent);
+            }, 10000);
+        }
+        public static string GetStackTraceMessage()
+        {
+            string message = "StackTrace:\n";
+            foreach (var frame in new StackTrace().GetFrames())
+            {
+                MethodBase method = frame.GetMethod();
+                string args = method.GetGenericArguments().Select(i => i.ToString()).Join(", ");
+                message += $"{method.DeclaringType.Name}({args})\n";
+            }
+            return message;
+        }
         public static void ShowMusicNotFoundNotification(string music, int duration = 5000)
         {
             GetMainPageContainer()?.ShowNotification(LocalizeMessage("MusicNotFound", music), duration);
@@ -257,7 +278,25 @@ namespace SMPlayer
         {
             GetMainPageContainer()?.ShowMultiSelectCommandBar(option);
         }
-
+        public static bool IsWindows11()
+        {
+            string deviceFamilyVersion = AnalyticsInfo.VersionInfo.DeviceFamilyVersion;
+            if (ulong.TryParse(deviceFamilyVersion, out ulong version))
+            {
+                // Windows 11 has version number 22000 or greater
+                return version >= 22000;
+            }
+            return false;
+        }
+        public static bool IsWindows10()
+        {
+            string deviceFamilyVersion = AnalyticsInfo.VersionInfo.DeviceFamilyVersion;
+            if (ulong.TryParse(deviceFamilyVersion, out ulong version))
+            {
+                return version < 22000;
+            }
+            return false;
+        }
         public static string Localize(string resource)
         {
             return LocalizeHelper(resource, resourceLoader);
@@ -266,6 +305,20 @@ namespace SMPlayer
         public static string LocalizeMessage(string resource, params object[] args)
         {
             return LocalizeWithLoader(MessageResourceLoader, resource, args);
+        }
+        public static string LocalizeMessageWithLanguage(string resourceName, string language)
+        {
+            // 创建一个ResourceContext对象
+            var context = new ResourceContext();
+
+            // 设置ResourceContext的语言
+            context.QualifierValues["Language"] = language;
+
+            // 获取应用的资源地图
+            var resourceMap = ResourceManager.Current.MainResourceMap.GetSubtree("Messages");
+
+            // 使用指定的语言和ResourceContext从资源地图中加载资源字符串
+            return resourceMap.GetValue(resourceName, context).ValueAsString;
         }
 
         public static string LocalizeText(string resource, params object[] args)

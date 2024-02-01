@@ -39,7 +39,7 @@ namespace SMPlayer.Models.DAO
         public bool HideMultiSelectCommandBarAfterOperation { get; set; }
         public bool ShowCount { get; set; }
         public bool ShowLyricsInNotification { get; set; }
-        public VoiceAssistantLanguage VoiceAssistantPreferredLanguage { get; set; }
+        public SupportedLanguage VoiceAssistantPreferredLanguage { get; set; }
         public SortBy SearchArtistsCriterion { get; set; }
         public SortBy SearchAlbumsCriterion { get; set; }
         public SortBy SearchSongsCriterion { get; set; }

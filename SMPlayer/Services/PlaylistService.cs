@@ -16,9 +16,18 @@ namespace SMPlayer.Services
     {
         public static void AddPlaylistEventListener(IPlaylistEventListener listener) { PlaylistEventListeners.Add(listener); }
         private static readonly List<IPlaylistEventListener> PlaylistEventListeners = new List<IPlaylistEventListener>();
-        public static Playlist MyFavorites => FindPlaylist(Settings.settings.MyFavoritesId);
+        public static Playlist MyFavorites => GetMyFavorites();
         public static List<Music> MyFavoriteSongs => FindPlaylistItems(Settings.settings.MyFavoritesId);
         public static List<Playlist> AllPlaylists => SQLHelper.Run(c => c.SelectAllPlaylists());
+        private static Playlist GetMyFavorites()
+        {
+            if (FindPlaylist(Settings.settings.MyFavoritesId) is Playlist p)
+            {
+                return p;
+            }
+            SQLHelper.Run(SettingsHelper.InsertMyFavorites);
+            return Settings.settings.MyFavorites.FromVO();
+        }
         public static Playlist FindPlaylist(string name)
         {
             return SQLHelper.Run(c => c.SelectPlaylistByName(name));

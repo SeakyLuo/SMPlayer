@@ -35,7 +35,7 @@ namespace SMPlayer.Models
         Quick = 2
     }
 
-    public enum VoiceAssistantLanguage
+    public enum SupportedLanguage
     {
         English = 0,
         Chinese = 1

@@ -312,6 +312,12 @@
   <data name="LoadMusicLibrary" xml:space="preserve">
     <value>正在加载音乐库，没有卡死，请稍候……</value>
   </data>
+  <data name="LoadPlaylistFailed" xml:space="preserve">
+    <value>加载播放列表失败！应用程序可能闪退！请通过邮件告知开发者您的使用场景，这样他才能尽快定位和修复！</value>
+  </data>
+  <data name="LoadPlaylistFailedEmailTitle" xml:space="preserve">
+    <value>加载播放列表失败</value>
+  </data>
   <data name="LoadSettingsAndInsertToDbFailed" xml:space="preserve">
     <value>数据库写入失败，为避免影响后续使用，请在设置页面点击“提供反馈”并反馈问题。</value>
   </data>
@@ -405,8 +411,11 @@
   <data name="OpenBrowserSuccessful" xml:space="preserve">
     <value>搜不到匹配歌词，已打开浏览器进行搜索</value>
   </data>
-  <data name="OpenSettingsAndTurnOnSpeechInput" xml:space="preserve">
-    <value>你需要打开设置，并且打开“开始了解你”下的开关</value>
+  <data name="OpenSettingsAndTurnOnSpeechInputWindows10" xml:space="preserve">
+    <value>你需要打开系统设置，并且打开“语音”标签页下“开始了解你”的开关</value>
+  </data>
+  <data name="OpenSettingsAndTurnOnSpeechInputWindows11" xml:space="preserve">
+    <value>你需要打开系统设置，并且打开“语音”标签页下的开关</value>
   </data>
   <data name="OpenSettingsFailed" xml:space="preserve">
     <value>无法打开系统设置</value>
@@ -627,8 +636,8 @@
   <data name="StopAddingLyrics" xml:space="preserve">
     <value>正在尝试中止添加歌词……</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value />
+  <data name="SwitchLanguageSuccessful" xml:space="preserve">
+    <value>切换语言成功，你需要重启应用后才能生效！</value>
   </data>
   <data name="UnableToChangeAlbumArt" xml:space="preserve">
     <value>无法更改专辑插图</value>
@@ -650,6 +659,9 @@
   </data>
   <data name="UnknownArtist" xml:space="preserve">
     <value>未知歌手</value>
+  </data>
+  <data name="UnknownExceptionOccurred" xml:space="preserve">
+    <value>出现了未知异常，为避免影响您后续正常使用，强烈建议请您反馈给开发者以修复这个问题</value>
   </data>
   <data name="UpdateDBMsgInitDatabase" xml:space="preserve">
     <value>正在初始化数据库......</value>
@@ -675,9 +687,6 @@
   <data name="VoiceAssistantCannotUnderstand" xml:space="preserve">
     <value>不好意思，我没听懂，可以再说一遍吗</value>
   </data>
-  <data name="VoiceAssistantExampleText" xml:space="preserve">
-    <value>你可以说“播放某某某”、“暂停”、“帮助”等等。</value>
-  </data>
   <data name="VoiceAssistantNewVolume" xml:space="preserve">
     <value>音量已调整至{0}</value>
   </data>
@@ -685,7 +694,7 @@
     <value>不好意思，找不到“{0}”相关的结果</value>
   </data>
   <data name="VoiceAssistantSetLanguageFailed" xml:space="preserve">
-    <value>无法设置语言</value>
+    <value>无法为语音助手设置语言，你可能需要在系统中安装对应的语言包。</value>
   </data>
   <data name="VoiceAssitantError" xml:space="preserve">
     <value>不好意思，出现了一些问题。</value>

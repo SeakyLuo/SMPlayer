@@ -18,6 +18,8 @@ using Microsoft.AppCenter;
 using Microsoft.AppCenter.Crashes;
 using Microsoft.AppCenter.Analytics;
 using Windows.ApplicationModel.Core;
+using SQLite;
+using Windows.UI.Xaml.Markup;
 
 namespace SMPlayer
 {
@@ -298,6 +300,12 @@ namespace SMPlayer
         private void App_UnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
         {
             Log.Error("App_UnhandledException {0}", e.Exception);
+            if (e.Exception is XamlParseException) 
+            {
+                return;
+            }
+            e.Handled = true;
+            Helper.ShowEmailFeedbackNotification("UnknownExceptionOccurred", "UnknownExceptionOccurredEmailTitle", Helper.GetStackTraceMessage());
         }
 
         protected override void OnActivated(IActivatedEventArgs args)

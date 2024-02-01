@@ -312,6 +312,12 @@
   <data name="LoadMusicLibrary" xml:space="preserve">
     <value>Loading music library, not hang up, please wait patiently...</value>
   </data>
+  <data name="LoadPlaylistFailed" xml:space="preserve">
+    <value>Failed to load playlist! The program might crash! Please email to the developer and write down your use case, so that he can locate and fix this as soon as possible.</value>
+  </data>
+  <data name="LoadPlaylistFailedEmailTitle" xml:space="preserve">
+    <value>Failed to load playlist</value>
+  </data>
   <data name="LoadSettingsAndInsertToDbFailed" xml:space="preserve">
     <value>Cannot write data into database. To avoid problems for your future use, please go to settings page and click "Feedback" to report this error.</value>
   </data>
@@ -408,8 +414,11 @@
   <data name="OpenBrowserSuccessful" xml:space="preserve">
     <value>Fail to find matching lyrics. Open a web browser instead.</value>
   </data>
-  <data name="OpenSettingsAndTurnOnSpeechInput" xml:space="preserve">
-    <value>You need to open the system settings, and then turn on a switch under 'Get to know me'.</value>
+  <data name="OpenSettingsAndTurnOnSpeechInputWindows10" xml:space="preserve">
+    <value>You need to open the system settings, and then click 'Get to know me' under the 'Speech' tab.</value>
+  </data>
+  <data name="OpenSettingsAndTurnOnSpeechInputWindows11" xml:space="preserve">
+    <value>You need to open the system settings, and then turn on the switch of speech recognition.</value>
   </data>
   <data name="OpenSettingsFailed" xml:space="preserve">
     <value>Unable to open system settings!</value>
@@ -630,6 +639,9 @@
   <data name="StopAddingLyrics" xml:space="preserve">
     <value>Trying to stop adding lyrics......</value>
   </data>
+  <data name="SwitchLanguageSuccessful" xml:space="preserve">
+    <value>SMPlayer is switched to English! You need to restart this app to make it work.</value>
+  </data>
   <data name="UnableToChangeAlbumArt" xml:space="preserve">
     <value>Unable to change album art!</value>
   </data>
@@ -650,6 +662,9 @@
   </data>
   <data name="UnknownArtist" xml:space="preserve">
     <value>Unknown Artist</value>
+  </data>
+  <data name="UnknownExceptionOccurred" xml:space="preserve">
+    <value>Something wrong happened!!! To avoid affecting your subsequent normal use, it is strongly recommended that you report this issue to the developer for resolution.</value>
   </data>
   <data name="UpdateDBMsgInitDatabase" xml:space="preserve">
     <value>Initializing database...... </value>
@@ -675,9 +690,6 @@
   <data name="VoiceAssistantCannotUnderstand" xml:space="preserve">
     <value>Sorry, I can't follow you. Could you please say that again?</value>
   </data>
-  <data name="VoiceAssistantExampleText" xml:space="preserve">
-    <value>You can say "play something", "pause", "help", e.t.c.</value>
-  </data>
   <data name="VoiceAssistantNewVolume" xml:space="preserve">
     <value>You have the volume to {0}.</value>
   </data>
@@ -685,7 +697,7 @@
     <value>Sorry, I can't find result for "{0}".</value>
   </data>
   <data name="VoiceAssistantSetLanguageFailed" xml:space="preserve">
-    <value>Failed to set languange.</value>
+    <value>Failed to set languange for the voice assistant, you might need to install the corresponding language pack.</value>
   </data>
   <data name="VoiceAssitantError" xml:space="preserve">
     <value>Sorry, something goes wrong.</value>

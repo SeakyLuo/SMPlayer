@@ -201,9 +201,9 @@ namespace SMPlayer
         private void SearchPlaylistView_ItemClick(object sender, ItemClickEventArgs e)
         {
             AlbumView playlist = (AlbumView)e.ClickedItem;
-            if (playlist.Name == MenuFlyoutHelper.NowPlaying)
+            if (playlist.Name == MenuFlyoutHelper.NowPlayingPlaylistName)
                 Frame.Navigate(typeof(NowPlayingPage));
-            else if (playlist.Name == MenuFlyoutHelper.MyFavorites)
+            else if (playlist.Name == MenuFlyoutHelper.MyFavoritesPlaylistName)
                 Frame.Navigate(typeof(MyFavoritesPage));
             else
                 Frame.Navigate(typeof(PlaylistsPage), e.ClickedItem);

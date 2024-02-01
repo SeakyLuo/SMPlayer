@@ -137,19 +137,7 @@
                     Click="VoiceAssistantButton_Click"  
                     Content="&#xE1D6;"
                     Style="{StaticResource MediaControlButtonStyle}"
-                    Visibility="Collapsed" >
-                    <Button.Flyout>
-                        <Flyout
-                            x:Name="MainMediaControlVoiceAssistantButtonFlyout" 
-                            Opened="VoiceAssistantButtonFlyout_Opened" 
-                            Closed="VoiceAssistantButtonFlyout_Closed">
-                            <StackPanel>
-                                <TextBlock x:Name="MainMediaControlVoiceAssistantTextBlock" />
-                                <ProgressBar x:Name="MainMediaControlVoiceAssistantProgressBar" Style="{StaticResource VoiceAssistantProgressBarStyle}" />
-                            </StackPanel>
-                        </Flyout>
-                    </Button.Flyout>
-                </Button>
+                    Visibility="Collapsed" />
                 <Button
                     x:Name="MainMediaControlMoreButton"
                     x:Uid="MoreButton"
@@ -394,19 +382,7 @@
                     x:Uid="VoiceAssistantButton"
                     Click="VoiceAssistantButton_Click"  
                     Content="&#xE1D6;"
-                    Style="{StaticResource MediaControlButtonStyle}" >
-                    <Button.Flyout>
-                        <Flyout
-                            x:Name="MainVoiceAssistantButtonFlyout"
-                            Opened="VoiceAssistantButtonFlyout_Opened"
-                            Closed="VoiceAssistantButtonFlyout_Closed">
-                            <StackPanel>
-                                <TextBlock x:Name="MainVoiceAssistantTextBlock" />
-                                <ProgressBar x:Name="MainVoiceAssistantProgressBar" Style="{StaticResource VoiceAssistantProgressBarStyle}" />
-                            </StackPanel>
-                        </Flyout>
-                    </Button.Flyout>
-                </Button>
+                    Style="{StaticResource MediaControlButtonStyle}" />
                 <Button
                     x:Uid="MoreButton"
                     Width="36"
@@ -640,19 +616,7 @@
                             x:Uid="VoiceAssistantButton"
                             Click="VoiceAssistantButton_Click"
                             Content="&#xE1D6;"
-                            Style="{StaticResource DarkMediaControlButtonStyle}">
-                            <Button.Flyout>
-                                <Flyout 
-                                    x:Name="FullVoiceAssistantButtonFlyout"
-                                    Opened="VoiceAssistantButtonFlyout_Opened"
-                                    Closed="VoiceAssistantButtonFlyout_Closed">
-                                    <StackPanel>
-                                        <TextBlock x:Name="FullMediaControlVoiceAssistantTextBlock" />
-                                        <ProgressBar x:Name="FullMediaControlVoiceAssistantProgressBar" Style="{StaticResource VoiceAssistantProgressBarStyle}" />
-                                    </StackPanel>
-                                </Flyout>
-                            </Button.Flyout>
-                        </Button>
+                            Style="{StaticResource DarkMediaControlButtonStyle}" />
                         <ToggleButton
                             x:Name="FullLikeToggleButton"
                             Click="LikeButton_Click"
@@ -870,19 +834,7 @@
                             x:Uid="VoiceAssistantButton"
                             Click="VoiceAssistantButton_Click"  
                             Content="&#xE1D6;"
-                            Style="{StaticResource DarkMediaControlButtonStyle}" >
-                            <Button.Flyout>
-                                <Flyout
-                                    x:Name="MiniVoiceAssistantButtonFlyout"
-                                    Opened="VoiceAssistantButtonFlyout_Opened" 
-                                    Closed="VoiceAssistantButtonFlyout_Closed">
-                                    <StackPanel>
-                                        <TextBlock x:Name="MiniVoiceAssistantButtonTextBlock" />
-                                        <ProgressBar x:Name="MiniVoiceAssistantButtonProgressBar" Style="{StaticResource VoiceAssistantProgressBarStyle}" />
-                                    </StackPanel>
-                                </Flyout>
-                            </Button.Flyout>
-                        </Button>
+                            Style="{StaticResource DarkMediaControlButtonStyle}" />
                         <Button
                             x:Uid="MoreButton"
                             Content="&#xE712;"

@@ -197,9 +197,9 @@ namespace SMPlayer
         {
             if (PlaylistsGridView.SelectionMode != ListViewSelectionMode.None) return;
             AlbumView album = (AlbumView)e.ClickedItem;
-            if (album.Name == MenuFlyoutHelper.NowPlaying)
+            if (album.Name == MenuFlyoutHelper.NowPlayingPlaylistName)
                 Frame.Navigate(typeof(NowPlayingPage));
-            else if (album.Name == MenuFlyoutHelper.MyFavorites)
+            else if (album.Name == MenuFlyoutHelper.MyFavoritesPlaylistName)
                 Frame.Navigate(typeof(MyFavoritesPage));
             else
                 Frame.Navigate(typeof(AlbumPage), album);
