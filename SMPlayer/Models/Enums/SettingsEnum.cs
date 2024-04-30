@@ -37,8 +37,9 @@ namespace SMPlayer.Models
 
     public enum SupportedLanguage
     {
-        English = 0,
-        Chinese = 1
+        FollowSystem,
+        English,
+        Chinese,
     }
 
     public enum SortBy

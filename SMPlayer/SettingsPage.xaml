@@ -400,6 +400,7 @@
                         x:Name="LanguageComboBox"
                         SelectionChanged="LanguageComboBox_SelectionChanged"
                         Style="{StaticResource SettingsMarginSetter}">
+                        <ComboBoxItem x:Uid="FollowSystemComboItem" />
                         <ComboBoxItem x:Uid="EnglishComboItem" Content="English" />
                         <ComboBoxItem x:Uid="ChineseComboItem" Content="简体中文" />
                     </ComboBox>

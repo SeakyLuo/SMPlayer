@@ -1531,4 +1531,7 @@
   <data name="ReleaseNotesImprovedVoiceAssistant.Text" xml:space="preserve">
     <value>稍微优化了语音助手</value>
   </data>
+  <data name="FollowSystemComboItem.Content" xml:space="preserve">
+    <value>跟随系统</value>
+  </data>
 </root>

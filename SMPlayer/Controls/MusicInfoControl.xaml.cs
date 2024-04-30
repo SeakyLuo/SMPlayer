@@ -107,7 +107,8 @@ namespace SMPlayer.Controls
             {
                 PlayCountTextBlock.Text = music.PlayCount.ToString();
                 ClearPlayCountButton.Visibility = Visibility.Visible;
-                string times = Settings.settings.Language == SupportedLanguage.English ? MusicDurationConverter.TryPlural("time", music.PlayCount) : "";
+                string times = Settings.settings.Language == SupportedLanguage.FollowSystem || Settings.settings.Language == SupportedLanguage.English ? 
+                    MusicDurationConverter.TryPlural("time", music.PlayCount) : "";
                 PlayCountTextBlock.SetToolTip(Helper.LocalizeMessage("HasBeenPlayed", music.Name, music.PlayCount, times), false);
             }
         }

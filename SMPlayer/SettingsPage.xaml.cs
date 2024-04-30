@@ -33,7 +33,7 @@ namespace SMPlayer
     {
         public static List<NotificationSendMode> NotificationOptions = EnumHelper.Values<NotificationSendMode>(typeof(NotificationSendMode));
         private static readonly int[] LimitedRecentPlayedItems = { -1, 100, 200, 500, 1000 };
-        private static readonly List<SupportedLanguage> VoiceAssistantPreferredLanguanges = EnumHelper.Values<SupportedLanguage>(typeof(SupportedLanguage));
+        private static readonly List<SupportedLanguage> PreferredLanguanges = EnumHelper.Values<SupportedLanguage>(typeof(SupportedLanguage));
         private static readonly List<LyricsSource> LyricsSources = EnumHelper.Values<LyricsSource>(typeof(LyricsSource));
         private volatile int addLyricsClickCounter = 0;
         private readonly string addLyricsContent = Helper.Localize("AddLyrics");
@@ -380,7 +380,7 @@ namespace SMPlayer
 
         private async void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SupportedLanguage language = VoiceAssistantPreferredLanguanges[(sender as ComboBox).SelectedIndex];
+            SupportedLanguage language = PreferredLanguanges[(sender as ComboBox).SelectedIndex];
             if (Settings.settings.Language == language)
             {
                 return;
