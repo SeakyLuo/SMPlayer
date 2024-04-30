@@ -52,14 +52,22 @@ namespace SMPlayer.Controls
             Helper.ShowNotificationRaw(Helper.LocalizeMessage("SetPlayNext", music.Name));
         }
 
-        private void GridViewFolder_PointerEntered(object sender, PointerRoutedEventArgs e)
+        private void TreeViewFileControl_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             VisualStateManager.GoToState(sender as Control, "PointerOver", true);
+            SetPlayButtonIcon(sender);
         }
 
-        private void GridViewFolder_PointerExited(object sender, PointerRoutedEventArgs e)
+        private void TreeViewFileControl_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             VisualStateManager.GoToState(sender as Control, "Normal", true);
+            SetPlayButtonIcon(sender);
+        }
+
+        private void SetPlayButtonIcon(object sender)
+        {
+            GridViewMusic music = (sender as FrameworkElement).DataContext as GridViewMusic;
+            PlayButtonIcon.Symbol = music.IsPlaying && MusicPlayer.IsPlaying ? Symbol.Pause : Symbol.Play;
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)

@@ -67,7 +67,7 @@ namespace SMPlayer.Models.VO
         }
         public List<PreferLevelView> Levels => PreferLevelView.Views;
 
-        public int LevelWidth { get => Helper.CurrentLanguage.LanguageTag == Helper.Language_CN ? 90 : 105; }
+        public int LevelWidth { get => Settings.settings.Language == SupportedLanguage.Chinese ? 90 : 105; }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 

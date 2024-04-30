@@ -61,7 +61,7 @@ namespace SMPlayer
             SaveProgressToggleSwitch.IsOn = settings.SaveMusicProgress;
             HideMultiSelectCommandBarToggleSwitch.IsOn = settings.HideMultiSelectCommandBarAfterOperation;
             ShowLyricsInNotificationToggleSwitch.IsOn = settings.ShowLyricsInNotification;
-            LanguageComboBox.SelectedIndex = (int)settings.VoiceAssistantPreferredLanguage;
+            LanguageComboBox.SelectedIndex = (int)settings.Language;
             NotificationLyricsSourceComboBox.SelectedIndex = (int)settings.NotificationLyricsSource;
         }
 
@@ -381,11 +381,11 @@ namespace SMPlayer
         private async void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SupportedLanguage language = VoiceAssistantPreferredLanguanges[(sender as ComboBox).SelectedIndex];
-            if (Settings.settings.VoiceAssistantPreferredLanguage == language)
+            if (Settings.settings.Language == language)
             {
                 return;
             }
-            Settings.settings.VoiceAssistantPreferredLanguage = language;
+            Settings.settings.Language = language;
             string languageStr;
             if (language == SupportedLanguage.Chinese)
             {

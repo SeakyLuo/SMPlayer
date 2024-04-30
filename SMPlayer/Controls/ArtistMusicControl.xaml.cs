@@ -1,4 +1,5 @@
 ﻿using SMPlayer.Models;
+using SMPlayer.Models.VO;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,11 +29,19 @@ namespace SMPlayer.Controls
         private void ArtistMusicControl_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             VisualStateManager.GoToState(sender as Control, "PointerOver", true);
+            SetPlayButtonIcon(sender);
         }
 
         private void ArtistMusicControl_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             VisualStateManager.GoToState(sender as Control, "Normal", true);
+            SetPlayButtonIcon(sender);
+        }
+
+        private void SetPlayButtonIcon(object sender)
+        {
+            MusicView music = (sender as FrameworkElement).DataContext as MusicView;
+            PlayButtonIcon.Symbol = music.IsPlaying && MusicPlayer.IsPlaying ? Symbol.Pause : Symbol.Play;
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)

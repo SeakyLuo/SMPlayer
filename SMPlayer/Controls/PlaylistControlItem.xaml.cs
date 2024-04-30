@@ -112,12 +112,18 @@ namespace SMPlayer.Controls
         private void UserControl_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             VisualStateManager.GoToState(sender as Control, "PointerOver", true);
-            PlayButtonIcon.Symbol = PlayingIcon.Visibility == Visibility.Visible && MusicPlayer.IsPlaying ? Symbol.Pause : Symbol.Play;
+            SetPlayButtonIcon(sender);
         }
 
         private void UserControl_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             VisualStateManager.GoToState(sender as Control, "Normal", true);
+            SetPlayButtonIcon(sender);
+        }
+
+        private void SetPlayButtonIcon(object sender)
+        {
+            PlayButtonIcon.Symbol = Data.IsPlaying && MusicPlayer.IsPlaying ? Symbol.Pause : Symbol.Play;
         }
     }
 }

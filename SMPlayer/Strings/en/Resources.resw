@@ -1,0 +1,1540 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Add To" xml:space="preserve">
+    <value>Add To</value>
+  </data>
+  <data name="AddAllAppButton.Label" xml:space="preserve">
+    <value>Add All To</value>
+  </data>
+  <data name="AddLyrics" xml:space="preserve">
+    <value>Add Lyrics</value>
+  </data>
+  <data name="AddLyricsButton.Content" xml:space="preserve">
+    <value>Add Lyrics</value>
+  </data>
+  <data name="AddLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Search and add lyrics for all music</value>
+  </data>
+  <data name="AddToAppButton.Label" xml:space="preserve">
+    <value>Add To</value>
+  </data>
+  <data name="AddToAppButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Add To Playlist</value>
+  </data>
+  <data name="AddToButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Add To</value>
+  </data>
+  <data name="Album" xml:space="preserve">
+    <value>Album</value>
+  </data>
+  <data name="AlbumArtistTextBlock.Text" xml:space="preserve">
+    <value>Album Artist</value>
+  </data>
+  <data name="AlbumArtItem.Label" xml:space="preserve">
+    <value>See Album Art</value>
+  </data>
+  <data name="AlbumArtPivotItem.Header" xml:space="preserve">
+    <value>Album Art</value>
+  </data>
+  <data name="AlbumHeader.Header" xml:space="preserve">
+    <value>Album</value>
+  </data>
+  <data name="AlbumPreferenceCheckBox.Content" xml:space="preserve">
+    <value>Preferred Albums</value>
+  </data>
+  <data name="Albums" xml:space="preserve">
+    <value>Albums</value>
+  </data>
+  <data name="AlbumsItem.Content" xml:space="preserve">
+    <value>Albums</value>
+  </data>
+  <data name="AlbumsItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Group By Album</value>
+  </data>
+  <data name="AlbumsTextBlock.Text" xml:space="preserve">
+    <value>Albums</value>
+  </data>
+  <data name="AlbumTextBlock.Text" xml:space="preserve">
+    <value>Album</value>
+  </data>
+  <data name="AllComboItem.Content" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="AppDisplayName" xml:space="preserve">
+    <value>SMPlayer</value>
+  </data>
+  <data name="AppTitle.Text" xml:space="preserve">
+    <value>SMPlayer</value>
+  </data>
+  <data name="Artist" xml:space="preserve">
+    <value>Artist</value>
+  </data>
+  <data name="ArtistHeader.Header" xml:space="preserve">
+    <value>Artist</value>
+  </data>
+  <data name="ArtistPreferenceCheckBox.Content" xml:space="preserve">
+    <value>Preferred Artists</value>
+  </data>
+  <data name="Artists" xml:space="preserve">
+    <value>Artists</value>
+  </data>
+  <data name="ArtistSearchBox.PlaceholderText" xml:space="preserve">
+    <value>Search Artists</value>
+  </data>
+  <data name="ArtistsItem.Content" xml:space="preserve">
+    <value>Artists</value>
+  </data>
+  <data name="ArtistsItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Group By Artist</value>
+  </data>
+  <data name="ArtistsTextBlock.Text" xml:space="preserve">
+    <value>Artists</value>
+  </data>
+  <data name="ArtistTextBlock.Text" xml:space="preserve">
+    <value>Artist</value>
+  </data>
+  <data name="AutoLyricsToggleSwitch.OffContent" xml:space="preserve">
+    <value>Automatically add lyrics  to recent added songs.</value>
+  </data>
+  <data name="AutoLyricsToggleSwitch.OnContent" xml:space="preserve">
+    <value>Automatically add lyrics  to recent added songs.</value>
+  </data>
+  <data name="AutoPlayToggleSwitch.OffContent" xml:space="preserve">
+    <value>Play music automatically after this App is launched.</value>
+  </data>
+  <data name="AutoPlayToggleSwitch.OnContent" xml:space="preserve">
+    <value>Play music automatically after this App is launched.</value>
+  </data>
+  <data name="AutoScrollLyricsCheckBox.Content" xml:space="preserve">
+    <value>Scroll lyrics automatically when playing music.</value>
+  </data>
+  <data name="BackButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="BitrateTextBlock.Text" xml:space="preserve">
+    <value>Bitrate</value>
+  </data>
+  <data name="BugReportButton.Content" xml:space="preserve">
+    <value>Bug Report</value>
+  </data>
+  <data name="CancelAppButton.Label" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CancelButton.Content" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ChangeAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Change Album Art</value>
+  </data>
+  <data name="ClearAllAppBarButton.Label" xml:space="preserve">
+    <value>Clear Invalid</value>
+  </data>
+  <data name="ClearAppButton.Label" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="ClearAppButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Clear Playlist</value>
+  </data>
+  <data name="ClearHistoryAppButton.Label" xml:space="preserve">
+    <value>Clear History</value>
+  </data>
+  <data name="ClearInvalidAppBarButton.Label" xml:space="preserve">
+    <value>Clear Invalid</value>
+  </data>
+  <data name="ClearInvalidAppBarButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Remove all invalid items.</value>
+  </data>
+  <data name="ClearNowPlayingAppButton.Label" xml:space="preserve">
+    <value>Clear All</value>
+  </data>
+  <data name="ClearNowPlayingAppButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Clear Now Playing</value>
+  </data>
+  <data name="ClearNowPlayingMenuItem.Text" xml:space="preserve">
+    <value>Clear Now Playing</value>
+  </data>
+  <data name="ClearNowPlayingMenuItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Clear Now Playing</value>
+  </data>
+  <data name="ClearPlayCountButton.Content" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="ClearPlayCountButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Clear Play Count</value>
+  </data>
+  <data name="ClearSelectionAppButton.Label" xml:space="preserve">
+    <value>Clear Selection</value>
+  </data>
+  <data name="ComposersTextBlock.Text" xml:space="preserve">
+    <value>Composers</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="ConfirmButton.Content" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Create New Playlist" xml:space="preserve">
+    <value>Create New Playlist</value>
+  </data>
+  <data name="DateAddedHeader.Header" xml:space="preserve">
+    <value>Date Added</value>
+  </data>
+  <data name="DateCreatedTextBlock.Text" xml:space="preserve">
+    <value>Date Created</value>
+  </data>
+  <data name="DateModifiedTextBlock.Text" xml:space="preserve">
+    <value>Date Modified</value>
+  </data>
+  <data name="day" xml:space="preserve">
+    <value>day</value>
+  </data>
+  <data name="days" xml:space="preserve">
+    <value>days</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Delete From Disk" xml:space="preserve">
+    <value>Delete From Disk</value>
+  </data>
+  <data name="DeleteAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Remove Album Art</value>
+  </data>
+  <data name="DeleteAppButton.Label" xml:space="preserve">
+    <value>Delete From Disk</value>
+  </data>
+  <data name="DeleteButton.Content" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteAppBarButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Delete Playlist</value>
+  </data>
+  <data name="DeleteItem.Text" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DisableAllAppBarButton.Label" xml:space="preserve">
+    <value>Disable All</value>
+  </data>
+  <data name="DisplayCheckBox.Content" xml:space="preserve">
+    <value>Don't show this next time</value>
+  </data>
+  <data name="DisplayTextBlock.Text" xml:space="preserve">
+    <value>Display</value>
+  </data>
+  <data name="DuplicateItem.Text" xml:space="preserve">
+    <value>Duplicate</value>
+  </data>
+  <data name="DurationHeader.Header" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="DurationTextBlock.Text" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="Edit Playlists" xml:space="preserve">
+    <value>Edit Playlists</value>
+  </data>
+  <data name="EditAlbumArtButton.Label" xml:space="preserve">
+    <value>Edit Album Art</value>
+  </data>
+  <data name="Enter Full Screen Mode" xml:space="preserve">
+    <value>Enter Full Screen Mode</value>
+  </data>
+  <data name="Exit Full Screen" xml:space="preserve">
+    <value>Exit Full Screen</value>
+  </data>
+  <data name="Exit Full Screen Mode" xml:space="preserve">
+    <value>Exit Full Screen Mode</value>
+  </data>
+  <data name="ExitFullScreenButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Exit Full Screen Mode</value>
+  </data>
+  <data name="ExitFullScreenIconTextButton.Label" xml:space="preserve">
+    <value>Exit Full Screen</value>
+  </data>
+  <data name="ExitFullScreenIconTextButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Exit Full Screen Mode</value>
+  </data>
+  <data name="ExitFullScreenItem.Text" xml:space="preserve">
+    <value>Exit Full Screen</value>
+  </data>
+  <data name="ExitFullScreenItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Exit Full Screen Mode</value>
+  </data>
+  <data name="ExitMiniModeItem.Label" xml:space="preserve">
+    <value>Exit Mini Mode</value>
+  </data>
+  <data name="ExportDataButton.Content" xml:space="preserve">
+    <value>Export Data</value>
+  </data>
+  <data name="FavoriteHeader.Header" xml:space="preserve">
+    <value>Favorite</value>
+  </data>
+  <data name="FavoriteSwipeItem.Text" xml:space="preserve">
+    <value>Favorite</value>
+  </data>
+  <data name="FeedBackButton.Content" xml:space="preserve">
+    <value>Share Feedbacks</value>
+  </data>
+  <data name="FileSizeTextBlock.Text" xml:space="preserve">
+    <value>File Size</value>
+  </data>
+  <data name="FileTypeTextBlock.Text" xml:space="preserve">
+    <value>File Type</value>
+  </data>
+  <data name="Finish Editing" xml:space="preserve">
+    <value>Finish Editing</value>
+  </data>
+  <data name="FoldersTextBlock.Text" xml:space="preserve">
+    <value>Folders</value>
+  </data>
+  <data name="Full Screen" xml:space="preserve">
+    <value>Full Screen</value>
+  </data>
+  <data name="FullScreenButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Enter Full Screen Mode</value>
+  </data>
+  <data name="FullScreenIconTextButton.Label" xml:space="preserve">
+    <value>Full Screen</value>
+  </data>
+  <data name="FullScreenIconTextButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Enter Full Screen Mode</value>
+  </data>
+  <data name="FullScreenItem.Text" xml:space="preserve">
+    <value>Full Screen</value>
+  </data>
+  <data name="FullScreenItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Enter Full Screen Mode</value>
+  </data>
+  <data name="GenreTextBlock.Text" xml:space="preserve">
+    <value>Genre</value>
+  </data>
+  <data name="GoToAddHyperlinkButton.Content" xml:space="preserve">
+    <value>Go to add &gt;</value>
+  </data>
+  <data name="GridViewItem.Label" xml:space="preserve">
+    <value>Grid View</value>
+  </data>
+  <data name="GridViewItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Change to Grid View</value>
+  </data>
+  <data name="HelpButton.Content" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="HelpCommandsTextBlock.Text" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="HelpTextBlock.Text" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="HideMultiSelectCommandBarToggleSwitch.OffContent" xml:space="preserve">
+    <value>Hide multi-select commandbar after operation</value>
+  </data>
+  <data name="HideMultiSelectCommandBarToggleSwitch.OnContent" xml:space="preserve">
+    <value>Hide multi-select commandbar after operation</value>
+  </data>
+  <data name="hour" xml:space="preserve">
+    <value>hour</value>
+  </data>
+  <data name="hours" xml:space="preserve">
+    <value>hours</value>
+  </data>
+  <data name="ImportDataButton.Content" xml:space="preserve">
+    <value>Import Data</value>
+  </data>
+  <data name="ImportLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Import lyrics</value>
+  </data>
+  <data name="InvalidTagTextBlock.Text" xml:space="preserve">
+    <value>Invalid</value>
+  </data>
+  <data name="IsEnabledAppBarToggleButton.Label" xml:space="preserve">
+    <value>Is Enabled</value>
+  </data>
+  <data name="IsEnabledToggleSwitch.OffContent" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="IsEnabledToggleSwitch.OnContent" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="KeepRecentCheckBox.Content" xml:space="preserve">
+    <value>Only keep 100 recently played items instead of all</value>
+  </data>
+  <data name="Least Played" xml:space="preserve">
+    <value>Least Played</value>
+  </data>
+  <data name="ListViewItem.Label" xml:space="preserve">
+    <value>List View</value>
+  </data>
+  <data name="ListViewItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Change to List View</value>
+  </data>
+  <data name="Local Folder" xml:space="preserve">
+    <value>Local Folder</value>
+  </data>
+  <data name="LocalItem.Content" xml:space="preserve">
+    <value>Local</value>
+  </data>
+  <data name="LocalItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Manage Local Music</value>
+  </data>
+  <data name="LocateArtist" xml:space="preserve">
+    <value>Locate Artist</value>
+  </data>
+  <data name="LocateCurrentButton.Label" xml:space="preserve">
+    <value>Current Music</value>
+  </data>
+  <data name="LocateCurrentButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Locate current music</value>
+  </data>
+  <data name="LyricsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Show Lyrics</value>
+  </data>
+  <data name="LyricsItem.Label" xml:space="preserve">
+    <value>Show Lyrics</value>
+  </data>
+  <data name="LyricsMenuItem.Text" xml:space="preserve">
+    <value>Show Lyrics</value>
+  </data>
+  <data name="LyricsModeComboItem.Content" xml:space="preserve">
+    <value>Lyrics Mode</value>
+  </data>
+  <data name="LyricsPivotItem.Header" xml:space="preserve">
+    <value>Lyrics</value>
+  </data>
+  <data name="LyricsTextBlock.Text" xml:space="preserve">
+    <value>Lyrics</value>
+  </data>
+  <data name="MiniModeButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Enter Mini Mode</value>
+  </data>
+  <data name="MiniModeItem.Label" xml:space="preserve">
+    <value>Mini Mode</value>
+  </data>
+  <data name="MiniModeItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Enter Mini Mode</value>
+  </data>
+  <data name="MiniModeMenuItem.Text" xml:space="preserve">
+    <value>Mini Mode</value>
+  </data>
+  <data name="MiniModeMenuItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Enter Mini Mode</value>
+  </data>
+  <data name="minute" xml:space="preserve">
+    <value>minute</value>
+  </data>
+  <data name="minutes" xml:space="preserve">
+    <value>minutes</value>
+  </data>
+  <data name="MoreButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>More</value>
+  </data>
+  <data name="Most Played" xml:space="preserve">
+    <value>Most Played</value>
+  </data>
+  <data name="MultiSelect" xml:space="preserve">
+    <value>Multi Select</value>
+  </data>
+  <data name="MultiSelectAppButton.Label" xml:space="preserve">
+    <value>Multi Select</value>
+  </data>
+  <data name="Music Library" xml:space="preserve">
+    <value>Music Library</value>
+  </data>
+  <data name="MusicChangedComboItem.Content" xml:space="preserve">
+    <value>Music Changed</value>
+  </data>
+  <data name="MusicFolderTextBlock.Text" xml:space="preserve">
+    <value>Music Folder</value>
+  </data>
+  <data name="MusicInfoButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Show Music Info</value>
+  </data>
+  <data name="MusicInfoItem.Label" xml:space="preserve">
+    <value>Show Music Info</value>
+  </data>
+  <data name="MusicInfoMenuItem.Text" xml:space="preserve">
+    <value>Show Music Info</value>
+  </data>
+  <data name="MusicLibraryItem.Content" xml:space="preserve">
+    <value>Music Library</value>
+  </data>
+  <data name="MusicLibraryItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>All Songs</value>
+  </data>
+  <data name="MusicLibraryTextBlock.Text" xml:space="preserve">
+    <value>Music Library</value>
+  </data>
+  <data name="MusicPreferenceCheckBox.Content" xml:space="preserve">
+    <value>Preferred Songs</value>
+  </data>
+  <data name="Mute" xml:space="preserve">
+    <value>Mute</value>
+  </data>
+  <data name="My Favorites" xml:space="preserve">
+    <value>My Favorites</value>
+  </data>
+  <data name="MyFavoritesItem.Content" xml:space="preserve">
+    <value>My Favorites</value>
+  </data>
+  <data name="MyFavoritesItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>My Favorite Songs</value>
+  </data>
+  <data name="NeverComboBoxItem.Content" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="New Playlist" xml:space="preserve">
+    <value>New Playlist</value>
+  </data>
+  <data name="NewPlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Create a New Playlist</value>
+  </data>
+  <data name="NewPlaylistNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>New Playlist Name</value>
+  </data>
+  <data name="NextButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="NoAlbumArtTextBlock.Text" xml:space="preserve">
+    <value>No Album Art</value>
+  </data>
+  <data name="NoItemsTextBlock.Text" xml:space="preserve">
+    <value>No item. </value>
+  </data>
+  <data name="NoResultTextBlock.Text" xml:space="preserve">
+    <value>No result is found. Please check your spelling.</value>
+  </data>
+  <data name="NoticeTextBlock.Text" xml:space="preserve">
+    <value>Notice</value>
+  </data>
+  <data name="NotificationModeComboBoxTextBlock.Text" xml:space="preserve">
+    <value>Notification Mode: </value>
+  </data>
+  <data name="NotificationModeNormalComboItem.Content" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="NotificationModeNormalComboItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Notifications are sent when window is not visible.</value>
+  </data>
+  <data name="NotificationModeQuickComboItem.Content" xml:space="preserve">
+    <value>Quick</value>
+  </data>
+  <data name="NotificationModeQuickComboItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Notifications are sent when window is not visible, and will disappear after a few seconds.</value>
+  </data>
+  <data name="NotificationModeReminderComboItem.Content" xml:space="preserve">
+    <value>Reminder</value>
+  </data>
+  <data name="NotificationModeReminderComboItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Always show notifications.</value>
+  </data>
+  <data name="NotificationSendComboBoxTextBlock.Text" xml:space="preserve">
+    <value>Send Notification: </value>
+  </data>
+  <data name="NotificationTextBlock.Text" xml:space="preserve">
+    <value>Notification</value>
+  </data>
+  <data name="Now Playing" xml:space="preserve">
+    <value>Now Playing</value>
+  </data>
+  <data name="NowPlaying" xml:space="preserve">
+    <value>Now Playing</value>
+  </data>
+  <data name="NowPlayingItem.Content" xml:space="preserve">
+    <value>Now Playing</value>
+  </data>
+  <data name="NowPlayingItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Now Playing</value>
+  </data>
+  <data name="NowPlayingTextBlock.Text" xml:space="preserve">
+    <value>Now Playing</value>
+  </data>
+  <data name="OpenFolderIcon.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Select Folder</value>
+  </data>
+  <data name="OthersTextBlock.Text" xml:space="preserve">
+    <value>Others</value>
+  </data>
+  <data name="PathBox.PlaceholderText" xml:space="preserve">
+    <value>The root folder path of your music library</value>
+  </data>
+  <data name="PathTextBlock.Text" xml:space="preserve">
+    <value>Path</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="PauseButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="Pin To Start" xml:space="preserve">
+    <value>Pin To Start</value>
+  </data>
+  <data name="PlayAlbumItem.Text" xml:space="preserve">
+    <value>Play Album</value>
+  </data>
+  <data name="PlayAlbumItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Play all music from this album</value>
+  </data>
+  <data name="PlayAllButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Shuffle and play all</value>
+  </data>
+  <data name="PlayAppButton.Label" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="PlayArtistItem.Text" xml:space="preserve">
+    <value>Play Artist</value>
+  </data>
+  <data name="PlayArtistItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Play all music from this artist</value>
+  </data>
+  <data name="PlayButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="PlayCommands1TextBlock.Text" xml:space="preserve">
+    <value>Play {music | artist | album | list | folder} [keyword]</value>
+  </data>
+  <data name="PlayCommands2TextBlock.Text" xml:space="preserve">
+    <value>Play [keyword]</value>
+  </data>
+  <data name="PlayCommands3TextBlock.Text" xml:space="preserve">
+    <value>Quick Play</value>
+  </data>
+  <data name="PlayControlCommandsTextBlock.Text" xml:space="preserve">
+    <value>Play | Pause | Continue | Resume | Next | Previous</value>
+  </data>
+  <data name="PlayControlTextBlock.Text" xml:space="preserve">
+    <value>Play Control</value>
+  </data>
+  <data name="PlayCountHeader.Header" xml:space="preserve">
+    <value>Play Count</value>
+  </data>
+  <data name="PlayCountTextBlock.Text" xml:space="preserve">
+    <value>Play Count</value>
+  </data>
+  <data name="Playlist" xml:space="preserve">
+    <value>Playlist</value>
+  </data>
+  <data name="PlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Show Now Playing Playlist</value>
+  </data>
+  <data name="PlaylistDropdownButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>See all playlists</value>
+  </data>
+  <data name="PlaylistMenuItem.Text" xml:space="preserve">
+    <value>Now Playing</value>
+  </data>
+  <data name="PlaylistMenuItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Show Now Playing Playlist</value>
+  </data>
+  <data name="PlaylistPreferenceCheckBox.Content" xml:space="preserve">
+    <value>Preferred Playlists</value>
+  </data>
+  <data name="PlaylistsItem.Content" xml:space="preserve">
+    <value>Playlists</value>
+  </data>
+  <data name="PlaylistsItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Show All Playlists</value>
+  </data>
+  <data name="PlaylistsTextBlock.Text" xml:space="preserve">
+    <value>Playlists</value>
+  </data>
+  <data name="PlayModeAppButton.Label" xml:space="preserve">
+    <value>Immersive mode</value>
+  </data>
+  <data name="PlayTextBlock.Text" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="PreferenceSettingsDetailButton.Content" xml:space="preserve">
+    <value>Preference Settings</value>
+  </data>
+  <data name="PreferenceSettingsInfoTextBlock.Text" xml:space="preserve">
+    <value>Your preferences will have distinctive probabilities appearing in "Random Play" -&gt; "Quick Play" according to their preferred levels.</value>
+  </data>
+  <data name="PreferredAlbumsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Songs in preferred albums will have distinctive probabilities appearing in "Quick Play".</value>
+  </data>
+  <data name="PreferredArtistsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Songs by preferred artists will have distinctive probabilities appearing in "Quick Play".</value>
+  </data>
+  <data name="PreferredFoldersCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Songs under preferred folders (exclude sub-folders) will have distinctive probabilities appearing in "Quick Play".</value>
+  </data>
+  <data name="PreferredPlaylistsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Songs in preferred playlists will have distinctive probabilities appearing in "Quick Play".</value>
+  </data>
+  <data name="PreferredSongsCheckBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Preferred songs will have distinctive probabilities appearing in "Quick Play".</value>
+  </data>
+  <data name="PrevButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="PropertiesPivotItem.Header" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="PropertiesTextBlock.Text" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="PublisherTextBlock.Text" xml:space="preserve">
+    <value>Publisher</value>
+  </data>
+  <data name="RandomPlay" xml:space="preserve">
+    <value>Random Play</value>
+  </data>
+  <data name="RandomPlayButton.Label" xml:space="preserve">
+    <value>Shuffle</value>
+  </data>
+  <data name="ReauthorizeButton.Content" xml:space="preserve">
+    <value>Reauthorize</value>
+  </data>
+  <data name="ReauthorizeButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>If you still keep the data of app after system reset, you need to reauthorize this app to access the original music folder.</value>
+  </data>
+  <data name="Recent" xml:space="preserve">
+    <value>Recent</value>
+  </data>
+  <data name="Recent Added" xml:space="preserve">
+    <value>Recent Added</value>
+  </data>
+  <data name="Recent Played" xml:space="preserve">
+    <value>Recent Played</value>
+  </data>
+  <data name="RecentAddedItem.Header" xml:space="preserve">
+    <value>Recently Added</value>
+  </data>
+  <data name="RecentItem.Content" xml:space="preserve">
+    <value>Recent</value>
+  </data>
+  <data name="RecentItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Recent</value>
+  </data>
+  <data name="RecentPlayedItem.Header" xml:space="preserve">
+    <value>Recently Played</value>
+  </data>
+  <data name="RecentPlayedItemTextBlock.Text" xml:space="preserve">
+    <value>The number of recently played songs to keep: </value>
+  </data>
+  <data name="RecentSearchesItem.Header" xml:space="preserve">
+    <value>Recent Searches</value>
+  </data>
+  <data name="RecentTextBlock.Text" xml:space="preserve">
+    <value>Recent</value>
+  </data>
+  <data name="Refresh Directory" xml:space="preserve">
+    <value>Refresh folder</value>
+  </data>
+  <data name="RefreshArtist" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="RefreshItem.Label" xml:space="preserve">
+    <value>Refresh Folder</value>
+  </data>
+  <data name="RefreshItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Update current folder</value>
+  </data>
+  <data name="ReleaseNotesBugFixes.Text" xml:space="preserve">
+    <value>Bug fixes and various improvements.</value>
+  </data>
+  <data name="ReleaseNotesBugFixesDragAndDrop.Text" xml:space="preserve">
+    <value>Drag-and-drop seems to work perfectly.</value>
+  </data>
+  <data name="ReleaseNotesButton.Content" xml:space="preserve">
+    <value>Release Notes</value>
+  </data>
+  <data name="ReleaseNotesCreateNewPlaylistButtonMoved.Text" xml:space="preserve">
+    <value>In the Playlist page, the Create New Playlist button is moved to the dropdown list, and the Add To button is removed.</value>
+  </data>
+  <data name="ReleaseNotesFeedbackViaEmail.Text" xml:space="preserve">
+    <value>Now you can share you feedbacks via email!</value>
+  </data>
+  <data name="ReleaseNotesHistoryUpdates.Text" xml:space="preserve">
+    <value>History Updates</value>
+  </data>
+  <data name="ReleaseNotesImportLyrics.Text" xml:space="preserve">
+    <value>Supports importing lyrics from a txt/lrc/mp3 file.</value>
+  </data>
+  <data name="ReleaseNotesImproveMultiSelect.Text" xml:space="preserve">
+    <value>Improved multi-select.</value>
+  </data>
+  <data name="ReleaseNotesImproveSearchPage.Text" xml:space="preserve">
+    <value>Search page is improved.</value>
+  </data>
+  <data name="ReleaseNotesIntroduceReleaseNotes.Text" xml:space="preserve">
+    <value>Release Notes dialog is introduced. You can find it in the Settings page.</value>
+  </data>
+  <data name="ReleaseNotesNowPlayingHighlight.Text" xml:space="preserve">
+    <value>Fix a highlighting problem when Now Playing playlist has duplicate songs.</value>
+  </data>
+  <data name="ReleaseNotesOpenWithSMPlayer.Text" xml:space="preserve">
+    <value>Now supports open music with SMPlayer.</value>
+  </data>
+  <data name="ReleaseNotesPlayNext.Text" xml:space="preserve">
+    <value>"Play Next" has been added to the right-click menu, while "Move to top" is removed.</value>
+  </data>
+  <data name="ReleaseNotesPlayWithSMPlayer.Text" xml:space="preserve">
+    <value>Now supports play music with SMPlayer.</value>
+  </data>
+  <data name="ReleaseNotesPreferenceSettingsAdded.Text" xml:space="preserve">
+    <value>【New Feature!!!】Preference Settings is added to the Now Playing page. Items the Preference List will have a high posibility of being played.</value>
+  </data>
+  <data name="ReleaseNotesSearchPageAddAllToButton.Text" xml:space="preserve">
+    <value>Search page now has an AddAllTo button.</value>
+  </data>
+  <data name="ReleaseNotesSettingsCheckBoxChanged.Text" xml:space="preserve">
+    <value>【Improvements】Some check boxes in the Settings page are changed to toggle switches.</value>
+  </data>
+  <data name="ReleaseNotesShowCount.Text" xml:space="preserve">
+    <value>Some pages now shows the number of items in a collection.</value>
+  </data>
+  <data name="ReleaseNotesShowInExplorerBugFix.Text" xml:space="preserve">
+    <value>【Bug Fix】When you click "Show In Explorer" or "Multi-Select" on a folder, the app no longer crashes; Albums page now shows correct albums.</value>
+  </data>
+  <data name="ReleaseNotesShowLyricsInNotifications.Text" xml:space="preserve">
+    <value>Now lyrics can be displayed in notifications.</value>
+  </data>
+  <data name="ReleaseNotesSortByDateAdded.Text" xml:space="preserve">
+    <value>Sort by date added.</value>
+  </data>
+  <data name="ReleaseNotesSupportsMultiSelect.Text" xml:space="preserve">
+    <value>Now supports multi-select.</value>
+  </data>
+  <data name="ReleaseNotesTextBlock.Text" xml:space="preserve">
+    <value>Release Notes</value>
+  </data>
+  <data name="ReleaseNotesVersion.Text" xml:space="preserve">
+    <value>Version: </value>
+  </data>
+  <data name="ReleaseNotesVoiceAssistant.Text" xml:space="preserve">
+    <value>You can now play music via voice assistant. Notice: you can only say "play music/artist/album/folder/playlist".</value>
+  </data>
+  <data name="ReleaseNotesVoiceAssistantImprovements.Text" xml:space="preserve">
+    <value>【Improvements】Voice assistant is a little little little bit smarter, and now supports some new commands. Check out Settings page for more information.</value>
+  </data>
+  <data name="ReminderComboItem.Content" xml:space="preserve">
+    <value>Reminder</value>
+  </data>
+  <data name="Remove From List" xml:space="preserve">
+    <value>Remove From List</value>
+  </data>
+  <data name="Remove From Playlist" xml:space="preserve">
+    <value>Remove From Playlist</value>
+  </data>
+  <data name="RemoveAppButton.Label" xml:space="preserve">
+    <value>Remove From List</value>
+  </data>
+  <data name="RemoveButton.Content" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="RemoveSwipeItem.Text" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="RenameButton.Label" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="RenameButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Rename Playlist</value>
+  </data>
+  <data name="RenameItem.Text" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="ResetButton.Content" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="ResetLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Reset Lyrics</value>
+  </data>
+  <data name="ResetMusicPropertiesButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Reset Properties</value>
+  </data>
+  <data name="ReverseSelectionAppButton.Label" xml:space="preserve">
+    <value>Reverse Selection</value>
+  </data>
+  <data name="SaveAlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Save album art</value>
+  </data>
+  <data name="SaveChangesButton.Content" xml:space="preserve">
+    <value>Save Changes</value>
+  </data>
+  <data name="SaveLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Save Lyrics</value>
+  </data>
+  <data name="SaveMusicPropertiesButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Save Properties</value>
+  </data>
+  <data name="SavePlaylistMenuItem.Text" xml:space="preserve">
+    <value>Save as a Playlist</value>
+  </data>
+  <data name="SavePlaylistMenuItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Save "Now Playing" as a Playlist</value>
+  </data>
+  <data name="SaveProgressToggleSwitch.OffContent" xml:space="preserve">
+    <value>Save music progress on exit.</value>
+  </data>
+  <data name="SaveProgressToggleSwitch.OnContent" xml:space="preserve">
+    <value>Save music progress on exit.</value>
+  </data>
+  <data name="SaveTextBlock.Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Search Directory" xml:space="preserve">
+    <value>Search Directory</value>
+  </data>
+  <data name="SearchBar.PlaceholderText" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchBar.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Search music, artist, album, playlist, folder</value>
+  </data>
+  <data name="SearchButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Search music, artist, album, playlist, folder</value>
+  </data>
+  <data name="SearchCommandsTextBlock.Text" xml:space="preserve">
+    <value>Search [keyword]</value>
+  </data>
+  <data name="SearchLyricsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Search Lyrics</value>
+  </data>
+  <data name="SearchTextBlock.Text" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="second" xml:space="preserve">
+    <value>second</value>
+  </data>
+  <data name="seconds" xml:space="preserve">
+    <value>seconds</value>
+  </data>
+  <data name="See Album" xml:space="preserve">
+    <value>See Album</value>
+  </data>
+  <data name="See Album Art" xml:space="preserve">
+    <value>See Album Art</value>
+  </data>
+  <data name="See Artist" xml:space="preserve">
+    <value>See Artist</value>
+  </data>
+  <data name="See Lyrics" xml:space="preserve">
+    <value>See Lyrics</value>
+  </data>
+  <data name="See Music Info" xml:space="preserve">
+    <value>See Music Info</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="SelectAllAppButton.Label" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="SelectArtistTextBlock.Text" xml:space="preserve">
+    <value>Select an artist on the left</value>
+  </data>
+  <data name="SetAsPreferredAppBarButton.Label" xml:space="preserve">
+    <value>Set As Preferred</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Show Lyrics" xml:space="preserve">
+    <value>Show Lyrics</value>
+  </data>
+  <data name="Show Music Info" xml:space="preserve">
+    <value>Show Music Info</value>
+  </data>
+  <data name="ShowAllPlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Show All Playlists</value>
+  </data>
+  <data name="ShowCountToggleSwitch.OffContent" xml:space="preserve">
+    <value>Show Count</value>
+  </data>
+  <data name="ShowCountToggleSwitch.OnContent" xml:space="preserve">
+    <value>Show Count</value>
+  </data>
+  <data name="ShowInExplorerButton.Content" xml:space="preserve">
+    <value>Open Local</value>
+  </data>
+  <data name="ShowInExplorerButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Locate item on your local computer.</value>
+  </data>
+  <data name="ShowLyricsInNotificationInfo.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Supports showing lrc-format lyrics with hundred-millisecond precision.
+Lrc lyrics will be read in this order: local lrc files, Internet sources, music built-in lyrics.</value>
+  </data>
+  <data name="ShowLyricsInNotificationToggleSwitch.OffContent" xml:space="preserve">
+    <value>Show lyrics in notification</value>
+  </data>
+  <data name="ShowLyricsInNotificationToggleSwitch.OnContent" xml:space="preserve">
+    <value>Show lyrics in notification</value>
+  </data>
+  <data name="Shuffle" xml:space="preserve">
+    <value>Shuffle</value>
+  </data>
+  <data name="ShuffleButton.Label" xml:space="preserve">
+    <value>Shuffle</value>
+  </data>
+  <data name="ShuffleButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Shuffle Playlist</value>
+  </data>
+  <data name="ShuffleItem.Label" xml:space="preserve">
+    <value>Shuffle</value>
+  </data>
+  <data name="ShuffleItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Shuffle and play all music under current directory</value>
+  </data>
+  <data name="SongsTextBlock.Text" xml:space="preserve">
+    <value>Songs</value>
+  </data>
+  <data name="Sort" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="SortAppButton.Label" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="StopButton.Content" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="SubtitleTextBlock.Text" xml:space="preserve">
+    <value>Subtitle</value>
+  </data>
+  <data name="ThemeColorButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Change theme color</value>
+  </data>
+  <data name="ThemeTextBlock.Text" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="TitleHeader.Header" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="TitleTextBlock.Text" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="TrackNumberTextBlock.Text" xml:space="preserve">
+    <value>Track Number</value>
+  </data>
+  <data name="Undo Mute" xml:space="preserve">
+    <value>Undo Mute</value>
+  </data>
+  <data name="UndoButton.Content" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="UndoPreferAppBarButton.Label" xml:space="preserve">
+    <value>Undo Prefer</value>
+  </data>
+  <data name="UnPin" xml:space="preserve">
+    <value>UnPin</value>
+  </data>
+  <data name="UpdateMusicLibraryButton.Content" xml:space="preserve">
+    <value>Reload Music Library</value>
+  </data>
+  <data name="ViaEmailMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Via Email</value>
+  </data>
+  <data name="ViaWebBrowserMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Via Web Browser</value>
+  </data>
+  <data name="ViewAllButton.Label" xml:space="preserve">
+    <value>View All</value>
+  </data>
+  <data name="VoiceAssistantButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Awake Voice Assistant</value>
+  </data>
+  <data name="VoiceAssistantHelpTextBlock.Text" xml:space="preserve">
+    <value>Voice Assistant Help</value>
+  </data>
+  <data name="LanguageTextBlock.Text" xml:space="preserve">
+    <value>Languange</value>
+  </data>
+  <data name="VoiceAssistantNoticeCommandIntro.Text" xml:space="preserve">
+    <value>In the command set, the punctuation "|" means "or", {} means "require any"，[] means a variable，() means optional.</value>
+  </data>
+  <data name="VoiceAssistantNoticeExample.Text" xml:space="preserve">
+    <value>Some example commands: Play artist Michael Jackson, Turn up the volume by 10%.</value>
+  </data>
+  <data name="VoiceAssistantNoticeSmartness.Text" xml:space="preserve">
+    <value>This voice assistant is not driven by AI. Please follow the instructions above and make your commands as simple as posible.</value>
+  </data>
+  <data name="VoiceAssistantSupportedCommandsTextBlock.Text" xml:space="preserve">
+    <value>Supported Commands</value>
+  </data>
+  <data name="VoiceAssistantTextBlock.Text" xml:space="preserve">
+    <value>Voice Assistant</value>
+  </data>
+  <data name="VolumeButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="VolumeCommands1TextBlock.Text" xml:space="preserve">
+    <value>Turn {up | down} (the volume) (to | by) [number | percentage]</value>
+  </data>
+  <data name="VolumeCommands2TextBlock.Text" xml:space="preserve">
+    <value>Mute | Unmute</value>
+  </data>
+  <data name="VolumeTextBlock.Text" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="YearTextBlock.Text" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="PreferLevelHighComboItem.Content" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="PreferLevelHigherComboItem.Content" xml:space="preserve">
+    <value>Higher</value>
+  </data>
+  <data name="PreferLevelLowComboItem.Content" xml:space="preserve">
+    <value>Low</value>
+  </data>
+  <data name="PreferLevelNormalComboItem.Content" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="PreferLevelComboBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>This means the probability of this item appreaing in "Quick Play"</value>
+  </data>
+  <data name="ReleaseNotesPreferenceSettingsPreferenceLevelAdded.Text" xml:space="preserve">
+    <value>You can now set the probability of preferred items in Preference Settings </value>
+  </data>
+  <data name="ReleaseNotesVoiceAssistantImprovements2.Text" xml:space="preserve">
+    <value>Minor improvements have made to Voice Assistant.</value>
+  </data>
+  <data name="NewFolderItem.Label" xml:space="preserve">
+    <value>New Folder</value>
+  </data>
+  <data name="NewFolderItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Create New Folder</value>
+  </data>
+  <data name="ReleaseNotesBugFixesForAddingPlaylistWhenNone.Text" xml:space="preserve">
+    <value>Fixed some bugs. The app no longer crashes when you try to add a playlist with no playlists.</value>
+  </data>
+  <data name="ReleaseNotesImportantNoteDataStructureChanged.Text" xml:space="preserve">
+    <value>【Important Note !!!】Data structure has changed! If you backed up before, please back up again.</value>
+  </data>
+  <data name="ReleaseNotesImprovedLocalManagement.Text" xml:space="preserve">
+    <value>You can now add/delete folder, move music file in SMPlayer.</value>
+  </data>
+  <data name="CreatePlaylistButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Add Playlist</value>
+  </data>
+  <data name="MoveToFolderAppButton.Label" xml:space="preserve">
+    <value>Move To Folder</value>
+  </data>
+  <data name="ViewModeAppButton.Label" xml:space="preserve">
+    <value>Display Mode</value>
+  </data>
+  <data name="ViewModel.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Change Display Mode</value>
+  </data>
+  <data name="GridViewFlyoutItem.Text" xml:space="preserve">
+    <value>Grid View</value>
+  </data>
+  <data name="ListViewFlyoutItem.Text" xml:space="preserve">
+    <value>List View</value>
+  </data>
+  <data name="AlbumSearchBar.PlaceholderText" xml:space="preserve">
+    <value>Search Album</value>
+  </data>
+  <data name="ReleaseNotesFixedPreferenceSettings.Text" xml:space="preserve">
+    <value>Fix the bug that preference settings are not working.</value>
+  </data>
+  <data name="ReleaseNotesPreferenceSettingsDislikedAndDoNotAppear.Text" xml:space="preserve">
+    <value>Now supports Do-Not-Appear and Dislike for Preference Settings, and fixed some bugs.</value>
+  </data>
+  <data name="DetailButton.Text" xml:space="preserve">
+    <value>Detail</value>
+  </data>
+  <data name="FolderChainItemPathButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Check out this directory.</value>
+  </data>
+  <data name="ReleaseNotesRedesignLocalPagePathBox.Text" xml:space="preserve">
+    <value>Resigned the interaction of Local Page.</value>
+  </data>
+  <data name="CurrentPathTextBlock.Text" xml:space="preserve">
+    <value>Current Path</value>
+  </data>
+  <data name="LocalPageGoToSettingsRun.Text" xml:space="preserve">
+    <value>Go to Settings and set Music Folder &gt;</value>
+  </data>
+  <data name="LocalPageNoMusicRun.Text" xml:space="preserve">
+    <value>No music, </value>
+  </data>
+  <data name="ReleaseNotesAdjustAlbumGroupingLogic.Text" xml:space="preserve">
+    <value>Adjust the logic of grouping albums to their names only.</value>
+  </data>
+  <data name="ReleaseNotesIncompatibleTile.Text" xml:space="preserve">
+    <value>【Important】If you have pinned some playlists to the start menu before, you need to pin them again as they are incompatible from now on.</value>
+  </data>
+  <data name="ReleaseNotesImprovedLocalPageDragAndDrop.Text" xml:space="preserve">
+    <value>You can now drag and drop items in the Local Page to any other folder or directory.</value>
+  </data>
+  <data name="ReleaseNotesUpdateFolderResult.Text" xml:space="preserve">
+    <value>You can see the detailed result of refreshing directory.</value>
+  </data>
+  <data name="ReleaseNotesFixPreferenceSettingsCrash.Text" xml:space="preserve">
+    <value>Fix the crash when going to the Preference Page.</value>
+  </data>
+  <data name="ReleaseNotesFixSearchResultPageSort.Text" xml:space="preserve">
+    <value>Fix the bug that sort does not work in Search Detail Page.</value>
+  </data>
+  <data name="ReleaseNotesSupportsOtherMusicFormat.Text" xml:space="preserve">
+    <value>Supports more music format including flac, alac, aac, wma.</value>
+  </data>
+  <data name="ReleaseNotesFixCrashOfRefreshingDirectory.Text" xml:space="preserve">
+    <value>Fix the crash when refreshing directory.</value>
+  </data>
+  <data name="ReleaseNotesImproveLocalPageDropdown.Text" xml:space="preserve">
+    <value>Improved the animation when click the dropdown button in local page.</value>
+  </data>
+  <data name="ReleaseNotesUnableToAddNewMusic.Text" xml:space="preserve">
+    <value>Fix a bug that new music file cannot be added.</value>
+  </data>
+  <data name="ReleaseNotesFixFolderSortMakesFolderInvisible.Text" xml:space="preserve">
+    <value>Fix a bug that makes a folder invisible after sorting it.</value>
+  </data>
+  <data name="ReleaseNotesFixSearchCrash.Text" xml:space="preserve">
+    <value>Fix a crash when searching.</value>
+  </data>
+  <data name="ReleaseNotesMovePreferenceSettings.Text" xml:space="preserve">
+    <value>Preference Settings has been move to the Settings page.</value>
+  </data>
+  <data name="ReleaseNotesNowPlayingSupportsMultiSelect.Text" xml:space="preserve">
+    <value>Now Playing page supports multi-select.</value>
+  </data>
+  <data name="PreferenceSettingsButton.Label" xml:space="preserve">
+    <value>Preference Settings</value>
+  </data>
+  <data name="ReleaseNotesFixSettingsPageCrash.Text" xml:space="preserve">
+    <value>Fix a crash when entering Settings page.</value>
+  </data>
+  <data name="ReleaseNotesFixPlaylistControlNoUpdate.Text" xml:space="preserve">
+    <value>Fix a problem that Playlist Control does not update real time.</value>
+  </data>
+  <data name="ReleaseNotesSystemLog.Text" xml:space="preserve">
+    <value>You can see some system logs and send it to the developer.</value>
+  </data>
+  <data name="SystemLogButton.Content" xml:space="preserve">
+    <value>System Logs</value>
+  </data>
+  <data name="ReleaseNotesFixDuplicateMusicWhenReAdded.Text" xml:space="preserve">
+    <value>Fix a bug that causes extra duplicate music file when deleting a music file and then adding it back.</value>
+  </data>
+  <data name="ReleaseNotesUpdateDialogWithItemClick.Text" xml:space="preserve">
+    <value>New music files in the update result can now be clicked and played.</value>
+  </data>
+  <data name="ReleaseNotesBugFixForLyrics.Text" xml:space="preserve">
+    <value>Fix a problem that lyrics cannot be displayed.</value>
+  </data>
+  <data name="PlayNextButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Play next</value>
+  </data>
+  <data name="PlayNowButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Play now</value>
+  </data>
+  <data name="ReleaseNotesLocalPageDisplayWhenHoverButton.Text" xml:space="preserve">
+    <value>Add some buttons to the list mode of Local Page.</value>
+  </data>
+  <data name="OpenLocalButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Open local</value>
+  </data>
+  <data name="RefreshFolderButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Refresh folder</value>
+  </data>
+  <data name="SearchFolderButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Search in folder</value>
+  </data>
+  <data name="NavigationRemotePlayItem.Content" xml:space="preserve">
+    <value>Remote Play</value>
+  </data>
+  <data name="AuthorizedDevicesButton.Content" xml:space="preserve">
+    <value>Device authorizations</value>
+  </data>
+  <data name="ChangeRemotePlayPasswordButton.Content" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="CopyToClipBoardButton.Content" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="LocalServiceToggleSwitch.OffContent" xml:space="preserve">
+    <value>Remote Play is off. If you turn it on, you may access your local music files from remote devices.</value>
+  </data>
+  <data name="OpenWebBroserButton.Content" xml:space="preserve">
+    <value>Visit</value>
+  </data>
+  <data name="RemotePlayConnectTextBlock.Text" xml:space="preserve">
+    <value>You may access local music files from other devices by visiting the website or scanning the qr code below.</value>
+  </data>
+  <data name="UsageOfRemotePlayTextBlock.Text" xml:space="preserve">
+    <value>Remote Play allows you to access your local music file from remote devices. You must keep SMPlayer running and this device connected the the network to use this feature. For the safety of your device, you need to set a password to authorize any accessing devices. Once the password is changed, all existing authorizations will be invalidated.</value>
+  </data>
+  <data name="DeviceNameTextBlock.Text" xml:space="preserve">
+    <value>Device Name</value>
+  </data>
+  <data name="IpTextBlock.Text" xml:space="preserve">
+    <value>IP Address</value>
+  </data>
+  <data name="DeviceNameErrorTextBlock.Text" xml:space="preserve">
+    <value>Device name should have a length between 2 and 50.</value>
+  </data>
+  <data name="RemotePlayBlackListTextBlock.Text" xml:space="preserve">
+    <value>Blacklist</value>
+  </data>
+  <data name="RemotePlayBlackListToggleSwitch.OffContent" xml:space="preserve">
+    <value>Requests from this device are allowed</value>
+  </data>
+  <data name="RemotePlayBlackListToggleSwitch.OnContent" xml:space="preserve">
+    <value>Blocked all requests from this device</value>
+  </data>
+  <data name="DeleteAuthorizedDeviceHintTextBlock.Text" xml:space="preserve">
+    <value>Deleting this authorization still allows future access from this device. If you want to block all requests from this device, please use blacklist.</value>
+  </data>
+  <data name="DeleteAppBarButton.Label" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="LoadMusicNameOptionToggleSwitch.OffContent" xml:space="preserve">
+    <value>Use filename instead of music name when loading a music file.</value>
+  </data>
+  <data name="LoadMusicNameOptionToggleSwitch.OnContent" xml:space="preserve">
+    <value>Use filename instead of music name when loading a music file.</value>
+  </data>
+  <data name="ReleaseNotesUseFilenameInsteadOfMusicName.Text" xml:space="preserve">
+    <value>A new setting is added which allows you to use filename instead of music name when loading a music file.</value>
+  </data>
+  <data name="ReleaseNotesNotificationLyricsSource.Text" xml:space="preserve">
+    <value>You can choose a default lyrics source option or switch lyrics source for notifications. Lyrics may come from the Internet, lrc file, or the music file itself.</value>
+  </data>
+  <data name="ReleaseNotesUseHideFolder.Text" xml:space="preserve">
+    <value>You can now hide a folder or a file in the local page by right-clicking one and select "Hide Folder" or "Hide File". The hidden file or hidden folder and its content will not display in SMPlayer. You can resume it in the local page.</value>
+  </data>
+  <data name="LyricsSourceInternetComboItem.Content" xml:space="preserve">
+    <value>Internet</value>
+  </data>
+  <data name="LyricsSourceLrcFileComboItem.Content" xml:space="preserve">
+    <value>Lrc file</value>
+  </data>
+  <data name="LyricsSourceMusicFileComboBoxItem.Content" xml:space="preserve">
+    <value>Music self</value>
+  </data>
+  <data name="NotificationLyricsSourceComboBoxTextBlock.Text" xml:space="preserve">
+    <value>Default lyrics source of notifications: </value>
+  </data>
+  <data name="HiddenFoldersListButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>See all hidden folders</value>
+  </data>
+  <data name="HiddenFolderIntroductionTextBlock.Text" xml:space="preserve">
+    <value>Below are the hidden items, which will not be displayed and scanned.</value>
+  </data>
+  <data name="ResumeButton.Content" xml:space="preserve">
+    <value>Resume</value>
+  </data>
+  <data name="ReleaseNotesBugFixForResumeFile.Text" xml:space="preserve">
+    <value>Fix a bug that files cannot be resumed if it is hidden</value>
+  </data>
+  <data name="ReleaseNotesBugFixForSelectingPlayedNowPlayingMusic.Text" xml:space="preserve">
+    <value>Fix a bug that played music in the Now Playing cannot be clicked.</value>
+  </data>
+  <data name="ReleaseNotesBugFixForNowPlayingPlaylist.Text" xml:space="preserve">
+    <value>Fix some bugs of the Now Playing playlist.</value>
+  </data>
+  <data name="ReleaseNotesBugFixesMovingFolderNotMovingAllFiles.Text" xml:space="preserve">
+    <value>Fixed a bug that moving a folder does not moving its all sub items.</value>
+  </data>
+  <data name="ReleaseNotesMusicMenuPlayLogicChange.Text" xml:space="preserve">
+    <value>When you right click a music and choose to play it, it no longer clears the Now Playing list. Instead, it will be added next and then play.</value>
+  </data>
+  <data name="AuthorizeOtherFolderButton.Content" xml:space="preserve">
+    <value>Authorize other folder</value>
+  </data>
+  <data name="AuthorizeOtherFolderButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Windows requires users to assign UWP apps read-folder permission manually. By clicking "Authorize other folder", SMPlayer can play music files outside the music folder. You also need to notice that Windows also disallows some folders to be read like Desktop.</value>
+  </data>
+  <data name="ReleaseNotesAddAuthorizeOtherFolder.Text" xml:space="preserve">
+    <value>Add "Authorize other folder" in the Settings page.</value>
+  </data>
+  <data name="ReleaseNotesLoopModeMovePrevNextChange.Text" xml:space="preserve">
+    <value>In the Repeat One mode, clicking Previous and Next will move to the corresponding music instead of staying the repeated one.</value>
+  </data>
+  <data name="ReleaseNotesRecentPlayedNotShow.Text" xml:space="preserve">
+    <value>Fix a problem that causes Recent Played list not showing its content.</value>
+  </data>
+  <data name="SaveLyricsImmediatelyInfo.ToolTipService.ToolTip" xml:space="preserve">
+    <value>While a music file playing, saving its lyrics will stop it from being played. SMPlayer can save the target lyrics later on when the music is switched to another. You can switch off this behavior.</value>
+  </data>
+  <data name="SaveLyricsImmediatelyToggleSwitch.OffContent" xml:space="preserve">
+    <value>Save lyrics immediately</value>
+  </data>
+  <data name="SaveLyricsImmediatelyToggleSwitch.OnContent" xml:space="preserve">
+    <value>Save lyrics immediately</value>
+  </data>
+  <data name="ReleaseNotesCancel5SecondsMovePrev.Text" xml:space="preserve">
+    <value>When clicking the Previous button, it moves to the previous music directly, instead of moving the current music to its very beginning when it has been played for more than 5 seconds.</value>
+  </data>
+  <data name="ReleaseNotesLyricsCanBeSavedLater.Text" xml:space="preserve">
+    <value>Improve the experience for saving lyrics and avoid the current music from being cut off playing when saving its lyrics.</value>
+  </data>
+  <data name="ReleaseNotesLocateMusicBugFix.Text" xml:space="preserve">
+    <value>(Hopefully!) Fix a problem that current music cannot be located correctly.</value>
+  </data>
+  <data name="ReleaseNotesSupportOGG.Text" xml:space="preserve">
+    <value>Add play support for ogg file.</value>
+  </data>
+  <data name="QuickPlayButton.Label" xml:space="preserve">
+    <value>Quick Play</value>
+  </data>
+  <data name="QuickPlayButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Play music with randomness and preferences</value>
+  </data>
+  <data name="ReleaseNotesLazyContent.Text" xml:space="preserve">
+    <value>Guess what's new! Just some minor updates and I am too lazy to write them down, haha.</value>
+  </data>
+  <data name="ReleaseNotesAddPointerOverButtonsToMusicList.Text" xml:space="preserve">
+    <value>Add some buttons to the music list item.</value>
+  </data>
+  <data name="ReleaseNotesBugFixForPlayInTheFlyoutMenu.Text" xml:space="preserve">
+    <value>Fix a bug that Play button in the right-click menu doesn't play.</value>
+  </data>
+  <data name="ReleaseNotesCrashFixes.Text" xml:space="preserve">
+    <value>Fixed some problems that caused crashes.</value>
+  </data>
+  <data name="ExportDataButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>By exporting data, you can back up the data or settings of SMPlayer (local music files are not included), and SMPlayer will generate a db file as backup. You can easily migrate your data to a new device by clicking import data.</value>
+  </data>
+  <data name="ImportDataButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>After exporting data, you should get a db file. You need to import that for restoring your data from another device(music files are not included).</value>
+  </data>
+  <data name="ReleaseNotesBugFixForImportData.Text" xml:space="preserve">
+    <value>Fix the bug that Import Data is unavailable.</value>
+  </data>
+  <data name="LocalServiceToggleSwitch.OnContent" xml:space="preserve">
+    <value>Remote Play is on. If you turn it off, you will not be able to access your local music files from remote devices.</value>
+  </data>
+  <data name="AlbumArtButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>See album art.</value>
+  </data>
+  <data name="AlbumArtTextBlock.Text" xml:space="preserve">
+    <value>Album art</value>
+  </data>
+  <data name="ReleaseNotesAddSeeAlbumArtToFullPage.Text" xml:space="preserve">
+    <value>You can see album art in the Immersive mode.</value>
+  </data>
+  <data name="ReleaseNotesSwitchLanguageSupported.Text" xml:space="preserve">
+    <value>You can switch to another language in the settings now!</value>
+  </data>
+  <data name="ReleaseNotesImprovedVoiceAssistant.Text" xml:space="preserve">
+    <value>Voice assistant is improved a little.</value>
+  </data>
+</root>

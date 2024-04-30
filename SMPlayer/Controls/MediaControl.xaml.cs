@@ -356,6 +356,16 @@ namespace SMPlayer
             }
         }
 
+        private double MusicProgress
+        {
+            set
+            {
+                MediaSliderTriggeredByCode = true;
+                MediaSlider.Value = value;
+                MediaSliderTriggeredByCode = false;
+            }
+        }
+
         private MusicView CurrentMusic = null;
         private bool wasPlaying = false;
         private static List<IMusicRequestListener> MusicRequestListeners = new List<IMusicRequestListener>();
@@ -363,6 +373,7 @@ namespace SMPlayer
         private bool IsMinimalMain { get => MainMediaControlMoreButton.Visibility == Visibility.Visible; }
         private double MinimalLayoutWidth { get => (double)Resources["MinimalLayoutWidth"]; }
         private DispatcherTimer SliderTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(500) };
+        private bool MediaSliderTriggeredByCode = false;
 
         public MediaControl()
         {
@@ -393,7 +404,10 @@ namespace SMPlayer
             KeyboardAcceleratorPlacementMode = KeyboardAcceleratorPlacementMode.Hidden;
             SliderTimer.Tick += (s, args) =>
             {
-                MediaSlider.Value = MusicPlayer.Position;
+                if (MusicPlayer.IsPlaying)
+                {
+                    MusicProgress = MusicPlayer.Position;
+                }
             };
             SliderTimer.Start();
         }
@@ -439,7 +453,7 @@ namespace SMPlayer
                 ArtistTextBlock.Text = string.IsNullOrWhiteSpace(music.Artist) ? Helper.LocalizeMessage("UnknownArtist") : music.Artist;
 
                 MediaSlider.Maximum = music.Duration;
-                MediaSlider.Value = MusicPlayer.Position;
+                MusicProgress = CurrentMusic == null ? MusicPlayer.Position : 0;
                 if (RightTimeTextBlock != null) RightTimeTextBlock.Text = MusicDurationConverter.ToTime(music.Duration);
                 if (LikeToggleButton != null)
                 {
@@ -691,27 +705,25 @@ namespace SMPlayer
 
         private void PrevButton_Click(object sender, RoutedEventArgs e)
         {
-            MediaSlider.Value = 0;
+            MusicProgress = 0;
             MusicPlayer.MovePrev();
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
-            MediaSlider.Value = 0;
+            MusicProgress = 0;
             MusicPlayer.MoveNext();
         }
 
         private void MediaSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             double newValue = e.NewValue;
-            double position = MusicPlayer.Position;
-            if (newValue == position || position > MediaSlider.Maximum)
+            if (MediaSliderTriggeredByCode)
             {
-                return;
             }
-            if (!MusicPlayer.IsPlaying)
+            else
             {
-                MusicPlayer.Position = newValue;
+                MusicPlayer.Position = Math.Clamp(newValue, 0, MediaSlider.Maximum);
             }
             if (LeftTimeTextBlock != null) LeftTimeTextBlock.Text = MusicDurationConverter.ToTime(newValue);
         }
@@ -890,7 +902,7 @@ namespace SMPlayer
                 LikeToggleButton.IsEnabled = false;
                 LikeToggleButton.IsChecked = false;
             }
-            MediaSlider.Value = 0;
+            MusicProgress = 0;
             MediaSlider.IsEnabled = false;
         }
 

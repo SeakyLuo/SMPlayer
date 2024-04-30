@@ -5,8 +5,8 @@
     xmlns:local="using:SMPlayer.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    PointerEntered="GridViewFolder_PointerEntered"
-    PointerExited="GridViewFolder_PointerExited"
+    PointerEntered="TreeViewFileControl_PointerEntered"
+    PointerExited="TreeViewFileControl_PointerExited"
     mc:Ignorable="d">
 
     <UserControl.Resources>

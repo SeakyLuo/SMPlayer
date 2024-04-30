@@ -245,7 +245,7 @@ namespace SMPlayer
             {
                 MoveToMusic(AddMusic(source, CurrentIndex + 1));
             }
-            Play();
+            Play(0);
         }
 
         public static int AddMusic(IMusicable source, int index)
@@ -273,14 +273,14 @@ namespace SMPlayer
         public static void SetPlaylistAndPlay(IEnumerable<IMusicable> playlist, IMusicable target = null)
         {
             SetPlaylist(playlist, target);
-            Play();
+            Play(0);
         }
 
         public static void SetMusicAndPlay(IMusicable music)
         {
             Clear();
             AddMusic(music);
-            Play();
+            Play(0);
         }
 
         public static void SetMusicAndPlay(IEnumerable<IMusicable> playlist, IMusicable music = null)
@@ -288,7 +288,7 @@ namespace SMPlayer
             if (!playlist.SameAs(CurrentPlaylist))
                 SetPlaylist(ShuffleEnabled ? ShufflePlaylist(playlist, music) : playlist);
             MoveToMusic(music);
-            Play();
+            Play(0);
         }
 
         // 跟SetMusicAndPlay的区别是强制Shuffle
@@ -296,7 +296,7 @@ namespace SMPlayer
         {
             if (playlist.IsEmpty()) return;
             SetPlaylist(ShufflePlaylist(playlist));
-            Play();
+            Play(0);
         }
 
         public static void ShuffleAndPlay()
@@ -377,12 +377,12 @@ namespace SMPlayer
             if (0 <= index && index < CurrentPlaylistCount && PlaybackList.Items[index].GetMusic() == music)
             {
                 MoveToMusic(index);
-                Play();
+                Play(0);
                 return;
             }
             if (CurrentMusic == music)
             {
-                Play();
+                Play(0);
                 return;
             }
             int playlistIndex = CurrentPlaylist.FindIndex(i => i == music);
@@ -393,7 +393,7 @@ namespace SMPlayer
             else
             {
                 MoveToMusic(playlistIndex);
-                Play();
+                Play(0);
                 return;
             }
         }
@@ -420,11 +420,15 @@ namespace SMPlayer
             return false;
         }
 
-        public static void Play()
+        public static void Play(int position = -1)
         {
             if (CurrentPlaylistCount == 0) return;
             try
             {
+                if (position >= 0)
+                {
+                    Position = position;
+                }
                 Player.Play();
             }
             catch(Exception e)

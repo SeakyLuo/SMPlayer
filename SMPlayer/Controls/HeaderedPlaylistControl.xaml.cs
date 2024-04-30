@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
+using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using Windows.UI.Composition;
 using Windows.UI.Xaml;
@@ -286,6 +287,11 @@ namespace SMPlayer
             }
             else
             {
+                if (CurrentPlaylist == null)
+                {
+                    Helper.ShowEmailFeedbackNotification(Helper.LocalizeMessage("OperationFailed", Helper.LocalizeText("PleaseWriteDownYourUseCaseWhyCurrentPlaylistIsNull")), "CurrentPlaylistIsNull", Helper.LocalizeMessage("PleaseWriteDownYourUseCaseWhyCurrentPlaylistIsNull"));
+                    return;
+                }
                 preferable = CurrentPlaylist.ToAlbumView();
             }
             MenuFlyoutSubItem subItem = MenuFlyoutHelper.GetPreferItem(preferable);

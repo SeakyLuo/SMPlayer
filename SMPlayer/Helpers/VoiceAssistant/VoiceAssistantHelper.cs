@@ -5,6 +5,7 @@ using SMPlayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -30,51 +31,60 @@ namespace SMPlayer.Helpers
 
         public static string GetRandomHint()
         {
-            string hint = VoiceAssistantHints.RandItem();
-            IEnumerable<Music> allSongs;
-            switch (hint)
+            try
             {
-                case Hint_PlaySomeonesMusic:
+                string hint = VoiceAssistantHints.RandItem();
+                IEnumerable<Music> allSongs;
+                switch (hint)
+                {
+                    case Hint_PlaySomeonesMusic:
 
-                    allSongs = MusicService.AllSongs;
-                    if (allSongs.IsEmpty())
-                    {
-                        break;
-                    }
-                    string artist = allSongs.RandItem().Artist;
-                    if (string.IsNullOrEmpty(artist) || artist.Length > 30)
-                    {
-                        artist = allSongs.RandItem().Artist;
-                    }
-                    if (string.IsNullOrEmpty(artist) || artist.Length > 30)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        return Helper.LocalizeText(Hint_PlaySomeonesMusic, artist);
-                    }
-                case Hint_PlayMusicInAlbum:
-                    allSongs = MusicService.AllSongs;
-                    if (allSongs.IsEmpty())
-                    {
-                        break;
-                    }
-                    string album = allSongs.RandItem().Album;
-                    if (string.IsNullOrEmpty(album) || album.Length > 30)
-                    {
-                        album = allSongs.RandItem().Album;
-                    }
-                    if (string.IsNullOrEmpty(album) || album.Length > 30)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        return Helper.LocalizeText(Hint_PlayMusicInAlbum, album);
-                    }
+                        allSongs = MusicService.AllSongs;
+                        if (allSongs.IsEmpty())
+                        {
+                            break;
+                        }
+                        string artist = allSongs.RandItem().Artist;
+                        if (string.IsNullOrEmpty(artist) || artist.Length > 30)
+                        {
+                            artist = allSongs.RandItem().Artist;
+                        }
+                        if (string.IsNullOrEmpty(artist) || artist.Length > 30)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            return Helper.LocalizeText(Hint_PlaySomeonesMusic, artist);
+                        }
+                    case Hint_PlayMusicInAlbum:
+                        allSongs = MusicService.AllSongs;
+                        if (allSongs.IsEmpty())
+                        {
+                            break;
+                        }
+                        string album = allSongs.RandItem().Album;
+                        if (string.IsNullOrEmpty(album) || album.Length > 30)
+                        {
+                            album = allSongs.RandItem().Album;
+                        }
+                        if (string.IsNullOrEmpty(album) || album.Length > 30)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            return Helper.LocalizeText(Hint_PlayMusicInAlbum, album);
+                        }
+                }
+                return Helper.LocalizeText(Hint_QuickPlay);
             }
-            return Helper.LocalizeText(Hint_QuickPlay);
+            catch (FileNotFoundException)
+            {
+                // ???
+                // System.IO.FileNotFoundException: The system cannot find the file specified.The system cannot find the file specified.
+                return "";
+            }
         }
 
         public static async void Init()
@@ -85,7 +95,7 @@ namespace SMPlayer.Helpers
             }
             try
             {
-                await SetLanguage(Settings.settings.VoiceAssistantPreferredLanguage, false);
+                await SetLanguage(Settings.settings.Language);
             }
             catch (Exception)
             {
@@ -96,7 +106,7 @@ namespace SMPlayer.Helpers
             //await VoiceCommandDefinitionManager.InstallCommandDefinitionsFromStorageFileAsync(commandSet);
         }
 
-        public static async Task<bool> SetLanguage(SupportedLanguage language, bool showError = true)
+        public static async Task<bool> SetLanguage(SupportedLanguage language)
         {
             Recognizer = new SpeechRecognizer(ConvertLanguage(language));
             Recognizer.UIOptions.IsReadBackEnabled = false;
@@ -136,18 +146,24 @@ namespace SMPlayer.Helpers
                 case SupportedLanguage.Chinese:
                     return new Language(Helper.Language_CN);
                 default:
-                    return new Language(Helper.Language_EN);
+                    Language currentLanguage = Helper.CurrentLanguage;
+                    if (currentLanguage.LanguageTag.StartsWith(Helper.Language_EN))
+                    {
+                        return currentLanguage;
+                    }
+                    return new Language(Helper.Language_US);
             }
         }
 
         public static SupportedLanguage ConvertLanguage(Language language)
         {
-            switch (language.LanguageTag)
+            if (language.LanguageTag.StartsWith(Helper.Language_ZH))
             {
-                case Helper.Language_CN:
-                    return SupportedLanguage.Chinese;
-                default:
-                    return SupportedLanguage.English;
+                return SupportedLanguage.Chinese;
+            }
+            else
+            {
+                return SupportedLanguage.English;
             }
         }
 

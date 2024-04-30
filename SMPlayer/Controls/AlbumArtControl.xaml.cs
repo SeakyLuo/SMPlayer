@@ -34,8 +34,16 @@ namespace SMPlayer.Controls
 
         public async void SetAlbumArt(AlbumView album)
         {
+            if (album == null) 
+            {
+                goto ExitSetAlbumArt;
+            }
             CurrentAlbum = album;
             RemoveAlbumArtWarningTextBlock.Text = Helper.LocalizeMessage("RemoveAlbumArt", string.IsNullOrEmpty(CurrentAlbum.Name) ? Helper.LocalizeMessage("UnknownAlbum") : CurrentAlbum.Name);
+            if (CurrentAlbum.Songs.IsEmpty())
+            {
+                goto ExitSetAlbumArt;
+            }
             foreach (var music in CurrentAlbum.Songs)
             {
                 var thumbnail = await Helper.GetStorageItemThumbnailAsync(music, 1024);
@@ -45,8 +53,8 @@ namespace SMPlayer.Controls
                     AlbumArt.Visibility = Visibility.Visible;
                     return;
                 }
-
             }
+            ExitSetAlbumArt:
             AlbumArt.Visibility = Visibility.Collapsed;
         }
 

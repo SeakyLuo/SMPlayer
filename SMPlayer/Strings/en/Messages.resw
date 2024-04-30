@@ -1,0 +1,711 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddingLyricsStopped" xml:space="preserve">
+    <value>Adding lyrics stopped!</value>
+  </data>
+  <data name="AddingLyricsTo" xml:space="preserve">
+    <value>Adding lyrics to "{0}"...</value>
+  </data>
+  <data name="AddPreferredAlbumsToolTip" xml:space="preserve">
+    <value>Right click on any album and then click "Set As Preferred" on the pop-up menu.</value>
+  </data>
+  <data name="AddPreferredArtistsToolTip" xml:space="preserve">
+    <value>Right click on any artist and then click "Set As Preferred" on the pop-up menu.</value>
+  </data>
+  <data name="AddPreferredFoldersToolTip" xml:space="preserve">
+    <value>Right click on any folder and then click "Set As Preferred" on the pop-up menu.</value>
+  </data>
+  <data name="AddPreferredPlaylistsToolTip" xml:space="preserve">
+    <value>Click "Set As Preferred" in any Playlist page.</value>
+  </data>
+  <data name="AddPreferredSongsToolTip" xml:space="preserve">
+    <value>Right click on any music and then click "Set As Preferred" on the pop-up menu.</value>
+  </data>
+  <data name="AlbumArtSaved" xml:space="preserve">
+    <value>New album art has been saved!</value>
+  </data>
+  <data name="Albums:" xml:space="preserve">
+    <value>Albums: </value>
+  </data>
+  <data name="AllArtists" xml:space="preserve">
+    <value>All Artists: {0}</value>
+  </data>
+  <data name="ArtistNotFound" xml:space="preserve">
+    <value>Cannot find artist "{0}".</value>
+  </data>
+  <data name="AuthorizeFolderFailed" xml:space="preserve">
+    <value>Picked folder must be the same as your music folder!</value>
+  </data>
+  <data name="AuthorizeSuccessful" xml:space="preserve">
+    <value>Authorzation is successful!</value>
+  </data>
+  <data name="CannotReadLocalMusicFile" xml:space="preserve">
+    <value>This music file cannot be accessed. You might need to move this music file to your music folder, or you can click Authorize button and then retry.</value>
+  </data>
+  <data name="ChangesSaved" xml:space="preserve">
+    <value>Changes has been saved.</value>
+  </data>
+  <data name="CheckingFolder" xml:space="preserve">
+    <value>Now checking folder "{0}"......</value>
+  </data>
+  <data name="CheckNewMusicResult1Added" xml:space="preserve">
+    <value>"{0}" is added</value>
+  </data>
+  <data name="CheckNewMusicResult1Moved" xml:space="preserve">
+    <value>"{0}" is moved</value>
+  </data>
+  <data name="CheckNewMusicResult1Removed" xml:space="preserve">
+    <value>"{0}" is removed</value>
+  </data>
+  <data name="CheckNewMusicResultMultipleAdded" xml:space="preserve">
+    <value>Music added: {0}</value>
+  </data>
+  <data name="CheckNewMusicResultMultipleMoved" xml:space="preserve">
+    <value>Music moved: {0}</value>
+  </data>
+  <data name="CheckNewMusicResultMultipleRemoved" xml:space="preserve">
+    <value>Music removed: {0}</value>
+  </data>
+  <data name="CheckNewMusicResultNoChange" xml:space="preserve">
+    <value>No changes are found.</value>
+  </data>
+  <data name="ClearExpiredData" xml:space="preserve">
+    <value>Clearing expired data: "{0}"</value>
+  </data>
+  <data name="ClearPlayHistory" xml:space="preserve">
+    <value>Do you want to clear your play history?</value>
+  </data>
+  <data name="ClearPlaylist" xml:space="preserve">
+    <value>Do you want to clear playlist "{0}"?</value>
+  </data>
+  <data name="ClearSearchHistory" xml:space="preserve">
+    <value>Do you want to clear your search history?</value>
+  </data>
+  <data name="ClickAgainToStopAddingLyrics" xml:space="preserve">
+    <value>Click again to stop adding lyrics</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Comma" xml:space="preserve">
+    <value>, </value>
+  </data>
+  <data name="CopySuccessful" xml:space="preserve">
+    <value>Copy was successful.</value>
+  </data>
+  <data name="DataExported" xml:space="preserve">
+    <value>Data exported</value>
+  </data>
+  <data name="DataImported" xml:space="preserve">
+    <value>Data imported!</value>
+  </data>
+  <data name="DeleteFolder" xml:space="preserve">
+    <value>You are deleting folder "{0}". This operation will also delete everything under this folder and is irrevertible. Are you sure?</value>
+  </data>
+  <data name="DeleteItem" xml:space="preserve">
+    <value>You are deleting "{0}" from your device.\nThis operation is irrevertible.\nDo you want to continue?</value>
+  </data>
+  <data name="DeleteItems" xml:space="preserve">
+    <value>You are about to delete {0} items from your device.\nThis operation is irrevertible.\nDo you want to continue?</value>
+  </data>
+  <data name="DeleteMusic" xml:space="preserve">
+    <value>Delete "{0}"</value>
+  </data>
+  <data name="DifferentPathDetectedWhenImportingData" xml:space="preserve">
+    <value>A different music folder path detected. An update is being made to your database.</value>
+  </data>
+  <data name="DuplicateFoundWhenMovingFile" xml:space="preserve">
+    <value>File "{0}" already exists in folder "{1}". Continue?</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error occurs</value>
+  </data>
+  <data name="ExecutionFailed" xml:space="preserve">
+    <value>Sorry, something wrong happens during execution. Please send an email to report this failure.</value>
+  </data>
+  <data name="FailToGetThumbnail" xml:space="preserve">
+    <value>Fail to get album art!</value>
+  </data>
+  <data name="FailToOpenBrowser" xml:space="preserve">
+    <value>Fail to open web browser. Link has been copied to the clipboard.</value>
+  </data>
+  <data name="FileIsCorrupted" xml:space="preserve">
+    <value>File "{0}" is corrupted!</value>
+  </data>
+  <data name="FileNotFound" xml:space="preserve">
+    <value>File not found: {0}</value>
+  </data>
+  <data name="FindInvalidFiles" xml:space="preserve">
+    <value>{0} items have been found invalid and removed.</value>
+  </data>
+  <data name="FolderIsDeleted" xml:space="preserve">
+    <value>Folder "{0}" is deleted!</value>
+  </data>
+  <data name="FolderNotFound" xml:space="preserve">
+    <value>Cannot find folder "{0}"!</value>
+  </data>
+  <data name="Folders" xml:space="preserve">
+    <value>Folders ({0})</value>
+  </data>
+  <data name="Folders:" xml:space="preserve">
+    <value>Folders: </value>
+  </data>
+  <data name="GetLyricsFailed" xml:space="preserve">
+    <value>Error getting lyrics, please try later</value>
+  </data>
+  <data name="GoToSettings" xml:space="preserve">
+    <value>Go to Settings</value>
+  </data>
+  <data name="HasBeenPlayed" xml:space="preserve">
+    <value>"{0}" has been played {1} {2}.</value>
+  </data>
+  <data name="HideStorageItemNotification" xml:space="preserve">
+    <value>"{0}" is hidden.</value>
+  </data>
+  <data name="IllegalAccessMusicFolderWhenInit" xml:space="preserve">
+    <value>Given music folder cannot be accessed, please try to pick it up manually.</value>
+  </data>
+  <data name="ImportDataCancelled" xml:space="preserve">
+    <value>You have cancelled data import.</value>
+  </data>
+  <data name="ImportDataFailed" xml:space="preserve">
+    <value>Import data failed: </value>
+  </data>
+  <data name="ImportDataRequiresPickingMusicFolderFirst" xml:space="preserve">
+    <value>You need to pick a music folder before importing data.</value>
+  </data>
+  <data name="ImportLyricsFailed" xml:space="preserve">
+    <value>Import lyrics failed.</value>
+  </data>
+  <data name="ItemDeleted" xml:space="preserve">
+    <value>"{0}" is deleted!</value>
+  </data>
+  <data name="ItemRemoved" xml:space="preserve">
+    <value>"{0}" is removed</value>
+  </data>
+  <data name="ItemsDeleted" xml:space="preserve">
+    <value>{0} items are deleted!</value>
+  </data>
+  <data name="ItemsRemoved" xml:space="preserve">
+    <value>{0} items have been removed!</value>
+  </data>
+  <data name="LaunchLocalServerFailed" xml:space="preserve">
+    <value>Local server cannot be started!</value>
+  </data>
+  <data name="LoadMusicLibrary" xml:space="preserve">
+    <value>Loading music library, not hang up, please wait patiently...</value>
+  </data>
+  <data name="LoadPlaylistFailed" xml:space="preserve">
+    <value>Failed to load playlist! The program might crash! Please email to the developer and write down your use case, so that he can locate and fix this as soon as possible.</value>
+  </data>
+  <data name="LoadPlaylistFailedEmailTitle" xml:space="preserve">
+    <value>Failed to load playlist</value>
+  </data>
+  <data name="LoadSettingsAndInsertToDbFailed" xml:space="preserve">
+    <value>Cannot write data into database. To avoid problems for your future use, please go to settings page and click "Feedback" to report this error.</value>
+  </data>
+  <data name="LocalServiceToggleSwitchLaunchExceptional" xml:space="preserve">
+    <value>Remote Play cannot be turned on. Reason: {0}</value>
+  </data>
+  <data name="LocalServiceToggleSwitchLaunchExceptionalNotification" xml:space="preserve">
+    <value>Remote Play cannot be turned on, please retry later.</value>
+  </data>
+  <data name="LocalServiceToggleSwitchLaunchSuccessful" xml:space="preserve">
+    <value>Remote Play is on. If you turn it off, you may not access your local music files from remote devices.</value>
+  </data>
+  <data name="Lyrics" xml:space="preserve">
+    <value>lryics</value>
+  </data>
+  <data name="LyricsReset" xml:space="preserve">
+    <value>Lyrics have been reset!</value>
+  </data>
+  <data name="LyricsUpdated" xml:space="preserve">
+    <value>The lyrics of "{0}" have been updated!</value>
+  </data>
+  <data name="LyricsUpdatedAndRefreshed" xml:space="preserve">
+    <value>The lyrics of "{0}" have been updated. Now is showing the lyrics of "{1}".</value>
+  </data>
+  <data name="MiniModeFailed" xml:space="preserve">
+    <value>Fail to enter mini mode!</value>
+  </data>
+  <data name="MusicMenuPlayLogicChange" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MusicName" xml:space="preserve">
+    <value> "{0}"</value>
+  </data>
+  <data name="MusicNoAlbumArt" xml:space="preserve">
+    <value>"{0}" does not have album art!</value>
+  </data>
+  <data name="MusicNotFound" xml:space="preserve">
+    <value>Cannot find music "{0}"</value>
+  </data>
+  <data name="MusicRemoved" xml:space="preserve">
+    <value>"{0}" is removed</value>
+  </data>
+  <data name="MusicsNotFound" xml:space="preserve">
+    <value>Skipped {0} songs as they cannot be found.</value>
+  </data>
+  <data name="NamingErrorEmptyOrWhiteSpace" xml:space="preserve">
+    <value>Playlist name cannot be empty or whitespaces!</value>
+  </data>
+  <data name="NamingErrorSpecial" xml:space="preserve">
+    <value>Playlist name cannot contain "+++++" or "{0}"!</value>
+  </data>
+  <data name="NamingErrorTooLong" xml:space="preserve">
+    <value>Playlist name cannot have more than 50 characters!</value>
+  </data>
+  <data name="NamingErrorUsed" xml:space="preserve">
+    <value>This name has been used!</value>
+  </data>
+  <data name="NeverMind" xml:space="preserve">
+    <value>Never Mind</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="No Playlist" xml:space="preserve">
+    <value>No Playlist</value>
+  </data>
+  <data name="NoLyricsAvailable" xml:space="preserve">
+    <value>No Lyrics Available</value>
+  </data>
+  <data name="NoMatchingLyrics" xml:space="preserve">
+    <value>No matching lyrics.</value>
+  </data>
+  <data name="NoMusicUnderCurrentFolder" xml:space="preserve">
+    <value>There is no music file found under the current folder!</value>
+  </data>
+  <data name="NoResult" xml:space="preserve">
+    <value>No result can be found!</value>
+  </data>
+  <data name="NothingChanged" xml:space="preserve">
+    <value>No changes were detected.</value>
+  </data>
+  <data name="NotImplemented" xml:space="preserve">
+    <value>This feature is not implemented yet!</value>
+  </data>
+  <data name="NotPlayedYet" xml:space="preserve">
+    <value>"{0}" has not been played yet.</value>
+  </data>
+  <data name="NowLoading" xml:space="preserve">
+    <value>I am still loading. Please try later.</value>
+  </data>
+  <data name="OpenBrowserSuccessful" xml:space="preserve">
+    <value>Fail to find matching lyrics. Open a web browser instead.</value>
+  </data>
+  <data name="OpenSettingsAndTurnOnSpeechInputWindows10" xml:space="preserve">
+    <value>You need to open the system settings, and then click 'Get to know me' under the 'Speech' tab.</value>
+  </data>
+  <data name="OpenSettingsAndTurnOnSpeechInputWindows11" xml:space="preserve">
+    <value>You need to open the system settings, and then turn on the switch of speech recognition.</value>
+  </data>
+  <data name="OpenSettingsFailed" xml:space="preserve">
+    <value>Unable to open system settings!</value>
+  </data>
+  <data name="OperationFailed" xml:space="preserve">
+    <value>Operation failed: {0}</value>
+  </data>
+  <data name="OperationFailedDueToEmptyMusicLibrary" xml:space="preserve">
+    <value>Operation failed! You have an empty music library!</value>
+  </data>
+  <data name="PathNotFound" xml:space="preserve">
+    <value>Path {0} does not exist!</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="PendingSaveLyrics" xml:space="preserve">
+    <value>The lyrics of "{0}" has been changed but not saved.</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="PlaylistName" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="PlaylistRemoved" xml:space="preserve">
+    <value>"{0}" is removed</value>
+  </data>
+  <data name="Playlists:" xml:space="preserve">
+    <value>Playlists: </value>
+  </data>
+  <data name="PlayRandomAlbum" xml:space="preserve">
+    <value>Now playing music from album "{0}".</value>
+  </data>
+  <data name="PlayRandomArtist" xml:space="preserve">
+    <value>Now playing music from artist "{0}".</value>
+  </data>
+  <data name="PlayRandomLocalFolder" xml:space="preserve">
+    <value>Now playing music from folder "{0}".</value>
+  </data>
+  <data name="PlayRandomPlaylist" xml:space="preserve">
+    <value>Now playing music from playlist "{0}".</value>
+  </data>
+  <data name="PleaseExitMultiSelectMode" xml:space="preserve">
+    <value>Please exit multi-select mode first!</value>
+  </data>
+  <data name="PleaseWriteDownYourUseCaseWhyCurrentPlaylistIsNull" xml:space="preserve">
+    <value>Please write down the case how you use this playlist. This problem has occurred many times but the developer doesn't know how to fix it. Thanks!</value>
+  </data>
+  <data name="PostParenthesis" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="ProcessingRequest" xml:space="preserve">
+    <value>I am processing your previous request. Please try later!</value>
+  </data>
+  <data name="ProcessRequest" xml:space="preserve">
+    <value>Processing your request......</value>
+  </data>
+  <data name="PropertiesReset" xml:space="preserve">
+    <value>Properties is reset!</value>
+  </data>
+  <data name="PropertiesUpdated" xml:space="preserve">
+    <value>Properties is updated!</value>
+  </data>
+  <data name="Quotations" xml:space="preserve">
+    <value>"{0}"</value>
+  </data>
+  <data name="RemoveAlbumArt" xml:space="preserve">
+    <value>Do you want to remove the album art of "{0}"?</value>
+  </data>
+  <data name="RemoveFromList" xml:space="preserve">
+    <value>Remove "{0}" from the list</value>
+  </data>
+  <data name="RemoveFromPlaylist" xml:space="preserve">
+    <value>Remove "{0}" from playlist</value>
+  </data>
+  <data name="RemoveItem" xml:space="preserve">
+    <value>Do you want to remove "{0}"?</value>
+  </data>
+  <data name="RemoveItems" xml:space="preserve">
+    <value>You are going to remove {0} items. Continue?</value>
+  </data>
+  <data name="RemoveMusic" xml:space="preserve">
+    <value>Do you want to remove "{0}" from your playlist?</value>
+  </data>
+  <data name="RemoveMusicList" xml:space="preserve">
+    <value>You are about to remove {0} songs from the playlist. This operation cannot be undone. Do you want to continue?</value>
+  </data>
+  <data name="RemovePlaylist" xml:space="preserve">
+    <value>Do you want to remove playlist "{0}"?</value>
+  </data>
+  <data name="Repeat One: Disabled" xml:space="preserve">
+    <value>Repeat One: Disabled</value>
+  </data>
+  <data name="Repeat One: Enabled" xml:space="preserve">
+    <value>Repeat One: Enabled</value>
+  </data>
+  <data name="Repeat: Disabled" xml:space="preserve">
+    <value>Repeat: Disabled</value>
+  </data>
+  <data name="Repeat: Enabled" xml:space="preserve">
+    <value>Repeat: Enabled</value>
+  </data>
+  <data name="ResyncData" xml:space="preserve">
+    <value>Sychronizing data changes......</value>
+  </data>
+  <data name="Reverse Playlist" xml:space="preserve">
+    <value>Reverse Playlist</value>
+  </data>
+  <data name="ReverseList" xml:space="preserve">
+    <value>Reverse List</value>
+  </data>
+  <data name="RootNotFound" xml:space="preserve">
+    <value>Cannot find the music folder or do not have the necessary access rights. Please pick a new one, or authorize access rights by picking the original one in the popup.</value>
+  </data>
+  <data name="SameFolderAlreadyExists" xml:space="preserve">
+    <value>Folder with the same name already exists!</value>
+  </data>
+  <data name="SaveLyricsLater" xml:space="preserve">
+    <value>The lyrics of "{0}" will be saved after music is switched. You can change this behavior in the Settings page.</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchDirectoryHint" xml:space="preserve">
+    <value>Search under ""</value>
+  </data>
+  <data name="SearchDirectoryResult" xml:space="preserve">
+    <value>Search result of "{0}" under "{1}"</value>
+  </data>
+  <data name="SearchEmpty" xml:space="preserve">
+    <value>Search content cannot be empty!</value>
+  </data>
+  <data name="SearchLyricsDone" xml:space="preserve">
+    <value>Lyrics have been added to all music.</value>
+  </data>
+  <data name="SearchLyricsFailed" xml:space="preserve">
+    <value>Unable to find matching lyrics!</value>
+  </data>
+  <data name="SearchLyricsSuccessful" xml:space="preserve">
+    <value>Matching lyrics are found! You need to save it manually.</value>
+  </data>
+  <data name="SearchLyricsUrl" xml:space="preserve">
+    <value>https://www.bing.com/search?q={0}+{1}+{2}</value>
+  </data>
+  <data name="SearchResult" xml:space="preserve">
+    <value>Search result of "{0}"</value>
+  </data>
+  <data name="SearchResultAlbum" xml:space="preserve">
+    <value>Your request matches album “{0}”</value>
+  </data>
+  <data name="SearchResultArtist" xml:space="preserve">
+    <value>Your request matches artist “{0}”</value>
+  </data>
+  <data name="SearchResultFolder" xml:space="preserve">
+    <value>Your request matches folder “{0}”</value>
+  </data>
+  <data name="SearchResultMusic" xml:space="preserve">
+    <value>Your request matches music “{0}”</value>
+  </data>
+  <data name="SearchResultPlaylist" xml:space="preserve">
+    <value>Your request matches playlist “{0}”</value>
+  </data>
+  <data name="SelectedItemsRemoved" xml:space="preserve">
+    <value>Selected items have been removed!</value>
+  </data>
+  <data name="SetAsPreferredFailed" xml:space="preserve">
+    <value>Operation failed. You have too many preferences to flirt with!</value>
+  </data>
+  <data name="SetItemAsPreferred" xml:space="preserve">
+    <value>{0} has been set as preferred!</value>
+  </data>
+  <data name="SetPlayNext" xml:space="preserve">
+    <value>“{0}” will be played next</value>
+  </data>
+  <data name="SetRootFolder" xml:space="preserve">
+    <value>Please set your music library first!</value>
+  </data>
+  <data name="Shuffle: Disabled" xml:space="preserve">
+    <value>Shuffle: Disabled</value>
+  </data>
+  <data name="Shuffle: Enabled" xml:space="preserve">
+    <value>Shuffle: Enabled</value>
+  </data>
+  <data name="SongAddedTo" xml:space="preserve">
+    <value>"{0}" is added to "{1}"</value>
+  </data>
+  <data name="Songs" xml:space="preserve">
+    <value>Songs ({0})</value>
+  </data>
+  <data name="Songs:" xml:space="preserve">
+    <value>Songs: </value>
+  </data>
+  <data name="SongsAddedTo" xml:space="preserve">
+    <value>{0} songs are added to "{1}"</value>
+  </data>
+  <data name="Sort By Album" xml:space="preserve">
+    <value>Sort By Album</value>
+  </data>
+  <data name="Sort By Artist" xml:space="preserve">
+    <value>Sort By Artist</value>
+  </data>
+  <data name="Sort By Date Added" xml:space="preserve">
+    <value>Sort By Date Added</value>
+  </data>
+  <data name="Sort By Default" xml:space="preserve">
+    <value>Sort By Default</value>
+  </data>
+  <data name="Sort By Duration" xml:space="preserve">
+    <value>Sort By Duration</value>
+  </data>
+  <data name="Sort By Name" xml:space="preserve">
+    <value>Sort By Name</value>
+  </data>
+  <data name="Sort By Play Count" xml:space="preserve">
+    <value>Sort By Play Count</value>
+  </data>
+  <data name="Sort By Title" xml:space="preserve">
+    <value>Sort By Title</value>
+  </data>
+  <data name="StopAddingLyrics" xml:space="preserve">
+    <value>Trying to stop adding lyrics......</value>
+  </data>
+  <data name="SwitchLanguageSuccessful" xml:space="preserve">
+    <value>SMPlayer is switched to English! You need to restart this app to make it work. </value>
+  </data>
+  <data name="UnableToChangeAlbumArt" xml:space="preserve">
+    <value>Unable to change album art!</value>
+  </data>
+  <data name="UnableToLocateMusic" xml:space="preserve">
+    <value>Currently unable to locate music.</value>
+  </data>
+  <data name="UnacceptedSpeechPrivacyPolicy" xml:space="preserve">
+    <value>The speech privacy policy was not accepted</value>
+  </data>
+  <data name="UnauthorizedAccessException" xml:space="preserve">
+    <value>Authorization is needed to access {0}!</value>
+  </data>
+  <data name="UndoPreferItem" xml:space="preserve">
+    <value>{0} is no longer preferred.</value>
+  </data>
+  <data name="UnknownAlbum" xml:space="preserve">
+    <value>Unknown Album</value>
+  </data>
+  <data name="UnknownArtist" xml:space="preserve">
+    <value>Unknown Artist</value>
+  </data>
+  <data name="UnknownExceptionOccurred" xml:space="preserve">
+    <value>Something wrong happened!!! To avoid affecting your subsequent normal use, it is strongly recommended that you report this issue to the developer for resolution.</value>
+  </data>
+  <data name="UpdateDBMsgInitDatabase" xml:space="preserve">
+    <value>Initializing database...... </value>
+  </data>
+  <data name="UpdateDBMsgPreparing" xml:space="preserve">
+    <value>Now preparing data to write, please WAIT for a couple of minutes, and do not exit.</value>
+  </data>
+  <data name="UpdateDBMsgUpdatingDatabase" xml:space="preserve">
+    <value>Updating database...... Please do not exit.</value>
+  </data>
+  <data name="UpdateFailed" xml:space="preserve">
+    <value>Update was failed: {0}</value>
+  </data>
+  <data name="UpdateFinished" xml:space="preserve">
+    <value>Your data has been updated!</value>
+  </data>
+  <data name="UpdateMusicLibrary" xml:space="preserve">
+    <value>Updating your music library, please do not close the application! I didn't implement the progress bar......</value>
+  </data>
+  <data name="VoiceAssistantAudiblePrompt" xml:space="preserve">
+    <value>How can I help you?</value>
+  </data>
+  <data name="VoiceAssistantCannotUnderstand" xml:space="preserve">
+    <value>Sorry, I can't follow you. Could you please say that again?</value>
+  </data>
+  <data name="VoiceAssistantNewVolume" xml:space="preserve">
+    <value>You have the volume to {0}.</value>
+  </data>
+  <data name="VoiceAssistantNoSearchResults" xml:space="preserve">
+    <value>Sorry, I can't find result for "{0}".</value>
+  </data>
+  <data name="VoiceAssistantSetLanguageFailed" xml:space="preserve">
+    <value>Failed to set languange for the voice assistant, you might need to install the corresponding language pack.</value>
+  </data>
+  <data name="VoiceAssitantError" xml:space="preserve">
+    <value>Sorry, something goes wrong.</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+</root>

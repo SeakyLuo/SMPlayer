@@ -43,18 +43,18 @@ namespace SMPlayer
 
         public static ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView();
         public static ResourceLoader MessageResourceLoader = ResourceLoader.GetForCurrentView("Messages");
-        public const string Language_CN = "zh-Hans-CN", Language_EN = "en-US";
+        public const string Language_ZH = "zh", Language_CN = "zh-Hans-CN", Language_EN = "en", Language_US = "en-US";
         public static Language CurrentLanguage
         {
             get
             {
                 if (currentLanguage != null) return currentLanguage;
                 IReadOnlyList<string> languages = Windows.System.UserProfile.GlobalizationPreferences.Languages;
-                string language = languages.FirstOrDefault(i => SupportedLanguages.Contains(i));
-                return currentLanguage = new Language(language ?? Language_EN);
+                string language = languages.FirstOrDefault(i => SupportedLanguages.Any(l => l.StartsWith(l)));
+                return currentLanguage = new Language(language ?? Language_US);
             }
         }
-        private static readonly List<string> SupportedLanguages = new List<string>() { Language_EN, Language_CN };
+        private static readonly List<string> SupportedLanguages = new List<string>() { Language_EN, Language_ZH };
         private static Language currentLanguage;
         public static ResourceLoader TextResourceLoader = ResourceLoader.GetForCurrentView("Texts");
         public static string AppVersion

@@ -74,6 +74,10 @@ namespace SMPlayer.Helpers
             foreach (var subFolder in await folder.GetFoldersAsync())
             {
                 if (LoadingStatus == ExecutionStatus.Break) return false;
+                if (subFolder.Name.EndsWith(".logicx"))
+                {
+                    continue;
+                }
                 var branch = StorageService.FindFolderIncludingHidden(subFolder.Path) ?? new FolderTree(subFolder.Path);
                 if (branch.State.IsActive())
                 {

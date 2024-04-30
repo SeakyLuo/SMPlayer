@@ -1,0 +1,561 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddToToolTip" xml:space="preserve">
+    <value>Add to playlist</value>
+  </data>
+  <data name="Albums" xml:space="preserve">
+    <value>Albums</value>
+  </data>
+  <data name="AlbumsWithCount" xml:space="preserve">
+    <value>Albums ({0})</value>
+  </data>
+  <data name="AllAbumsWithCount" xml:space="preserve">
+    <value>All Albums ({0})</value>
+  </data>
+  <data name="AllAlbums" xml:space="preserve">
+    <value>All Albums</value>
+  </data>
+  <data name="AllArtistsWithCount" xml:space="preserve">
+    <value>All Artists ({0})</value>
+  </data>
+  <data name="AllArtsists" xml:space="preserve">
+    <value>All Artists</value>
+  </data>
+  <data name="AllSongs" xml:space="preserve">
+    <value>All Songs</value>
+  </data>
+  <data name="AllSongsWithCount" xml:space="preserve">
+    <value>All Songs ({0})</value>
+  </data>
+  <data name="Artists" xml:space="preserve">
+    <value>Artists</value>
+  </data>
+  <data name="ArtistsAndSoOn" xml:space="preserve">
+    <value>{0}, {1}, etc.</value>
+  </data>
+  <data name="ArtistSeperator" xml:space="preserve">
+    <value>; </value>
+  </data>
+  <data name="ArtistsWithCount" xml:space="preserve">
+    <value>Artists ({0})</value>
+  </data>
+  <data name="Authorize" xml:space="preserve">
+    <value>Authorize</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="CollapseList" xml:space="preserve">
+    <value>Collapse</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="CreateNewFolder" xml:space="preserve">
+    <value>Create New Folder</value>
+  </data>
+  <data name="CreateNewPlaylist" xml:space="preserve">
+    <value>Create New Playlist</value>
+  </data>
+  <data name="CurrentPlaylistIsNull" xml:space="preserve">
+    <value>Current Playlist cannot be found</value>
+  </data>
+  <data name="DeleteFolder" xml:space="preserve">
+    <value>Delete Folder</value>
+  </data>
+  <data name="Detail" xml:space="preserve">
+    <value>Detail</value>
+  </data>
+  <data name="DeviceAuthorizations" xml:space="preserve">
+    <value>Device Authorizations</value>
+  </data>
+  <data name="DiscardChanges" xml:space="preserve">
+    <value>Discard changes</value>
+  </data>
+  <data name="ExpandList" xml:space="preserve">
+    <value>Expand</value>
+  </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>Feedback</value>
+  </data>
+  <data name="FilesAddedWithCount" xml:space="preserve">
+    <value>Items Added ({0})</value>
+  </data>
+  <data name="FilesMovedWithCount" xml:space="preserve">
+    <value>Items Moved ({0})</value>
+  </data>
+  <data name="FilesRemovedWithCount" xml:space="preserve">
+    <value>Items Removed ({0})</value>
+  </data>
+  <data name="Folders" xml:space="preserve">
+    <value>Folders</value>
+  </data>
+  <data name="FoldersWithCount" xml:space="preserve">
+    <value>Folders ({0})</value>
+  </data>
+  <data name="GetHelp" xml:space="preserve">
+    <value>Get Help</value>
+  </data>
+  <data name="GridViewFolderPlayInfo" xml:space="preserve">
+    <value>Play all music under "{0}"</value>
+  </data>
+  <data name="GridViewMusicPlayInfo" xml:space="preserve">
+    <value>Play "{0}" first</value>
+  </data>
+  <data name="HideFile" xml:space="preserve">
+    <value>Hide File</value>
+  </data>
+  <data name="HideFolder" xml:space="preserve">
+    <value>Hide Folder</value>
+  </data>
+  <data name="HideFolderToolTip" xml:space="preserve">
+    <value>Folders and files that are in the hidden folder cannot be updated and displayed. You can see all the hidden folders in the Local page.</value>
+  </data>
+  <data name="InvalidItemToolTip" xml:space="preserve">
+    <value>{0} is invalid or cannot be found</value>
+  </data>
+  <data name="IsEnabledToggleSwitchOffToolTip" xml:space="preserve">
+    <value>If you enable, this item will have a higher play probability.</value>
+  </data>
+  <data name="IsEnabledToggleSwitchOnToolTip" xml:space="preserve">
+    <value>If you disable, this item will not have a higher play probability.</value>
+  </data>
+  <data name="ItemsSelected" xml:space="preserve">
+    <value>Items Selected: {0}</value>
+  </data>
+  <data name="KeepBoth" xml:space="preserve">
+    <value>Keep Both</value>
+  </data>
+  <data name="LeastPlayed" xml:space="preserve">
+    <value>Least Played</value>
+  </data>
+  <data name="LikeMusicToolTip" xml:space="preserve">
+    <value>Set As My Favorite</value>
+  </data>
+  <data name="LrcLyricsAl" xml:space="preserve">
+    <value>Album: </value>
+  </data>
+  <data name="LrcLyricsAr" xml:space="preserve">
+    <value>Artist: </value>
+  </data>
+  <data name="LrcLyricsBy" xml:space="preserve">
+    <value>Lyrics: </value>
+  </data>
+  <data name="Month1" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="Month10" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="Month11" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="Month12" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="Month2" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="Month3" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="Month4" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="Month5" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="Month6" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="Month7" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="Month8" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="Month9" xml:space="preserve">
+    <value>September</value>
+  </data>
+  <data name="MostPlayed" xml:space="preserve">
+    <value>Most Played</value>
+  </data>
+  <data name="MoveAndReplace" xml:space="preserve">
+    <value>Move and Replace</value>
+  </data>
+  <data name="MoveToFolder" xml:space="preserve">
+    <value>Move To Folder</value>
+  </data>
+  <data name="MoveToFolderOfPath" xml:space="preserve">
+    <value>Move to {0}</value>
+  </data>
+  <data name="MyFavorites" xml:space="preserve">
+    <value>My Favorites</value>
+  </data>
+  <data name="NewFolder" xml:space="preserve">
+    <value>New Folder</value>
+  </data>
+  <data name="NewFolderName" xml:space="preserve">
+    <value>New Folder</value>
+  </data>
+  <data name="NewPlaylistToolTip" xml:space="preserve">
+    <value>Create a new playlist</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="NowPlaying" xml:space="preserve">
+    <value>Now Playing</value>
+  </data>
+  <data name="PasswordValidation" xml:space="preserve">
+    <value>Password should have a length between 4 and 30, and consistent of letters A-Za-z or numbers 0-9.</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="PinToStartToolTip" xml:space="preserve">
+    <value>Pin Playlist to the Start Menu</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="Playlists" xml:space="preserve">
+    <value>Playlists</value>
+  </data>
+  <data name="PlaylistsWithCount" xml:space="preserve">
+    <value>Playlists ({0})</value>
+  </data>
+  <data name="PlayMusicOfName" xml:space="preserve">
+    <value>Add "{0}" to the Now Playing playlist and play immediately.</value>
+  </data>
+  <data name="PlayMusicOfNameNext" xml:space="preserve">
+    <value>Add "{0}" to the Now Playing playlist and make it the next one.</value>
+  </data>
+  <data name="PlayNext" xml:space="preserve">
+    <value>Play Next</value>
+  </data>
+  <data name="PreferenceSettings" xml:space="preserve">
+    <value>Preference Settings</value>
+  </data>
+  <data name="PreferLevelDislike" xml:space="preserve">
+    <value>Dislike</value>
+  </data>
+  <data name="PreferLevelDislikeToolTip" xml:space="preserve">
+    <value>Disliked items will appear less in Quick Play.</value>
+  </data>
+  <data name="PreferLevelDoNotAppear" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
+  <data name="PreferLevelDoNotAppearToolTip" xml:space="preserve">
+    <value>This item will not appear in Quick Play.</value>
+  </data>
+  <data name="PreferLevelHigh" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="PreferLevelHigher" xml:space="preserve">
+    <value>Higher</value>
+  </data>
+  <data name="PreferLevelHigherToolTip" xml:space="preserve">
+    <value>Higher-Level items will have higher probabilities appearing in Quick Play.</value>
+  </data>
+  <data name="PreferLevelHighToolTip" xml:space="preserve">
+    <value>High-Level items will have very normal probabilities appearing in Quick Play.</value>
+  </data>
+  <data name="PreferLevelNormal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="PreferLevelNormalToolTip" xml:space="preserve">
+    <value>Normal-Level items will have very normal probabilities appearing in Quick Play.</value>
+  </data>
+  <data name="PreferLevelVeryHigh" xml:space="preserve">
+    <value>Very High</value>
+  </data>
+  <data name="PreferLevelVeryHighToolTip" xml:space="preserve">
+    <value>Very-High-Level items will have very high probabilities appearing in Quick Play.</value>
+  </data>
+  <data name="PreferredAlbums" xml:space="preserve">
+    <value>Preferred Albums</value>
+  </data>
+  <data name="PreferredAlbumsWithCount" xml:space="preserve">
+    <value>Preferred Albums ({0}/{1})</value>
+  </data>
+  <data name="PreferredArtists" xml:space="preserve">
+    <value>Preferred Artists</value>
+  </data>
+  <data name="PreferredArtistsWithCount" xml:space="preserve">
+    <value>Preferred Artists ({0}/{1})</value>
+  </data>
+  <data name="PreferredFolders" xml:space="preserve">
+    <value>Preferred Folders</value>
+  </data>
+  <data name="PreferredFoldersWithCount" xml:space="preserve">
+    <value>Preferred Folders ({0}/{1})</value>
+  </data>
+  <data name="PreferredPlaylists" xml:space="preserve">
+    <value>Preferred Playlists</value>
+  </data>
+  <data name="PreferredPlaylistsWithCount" xml:space="preserve">
+    <value>Preferred Playlists ({0}/{1})</value>
+  </data>
+  <data name="PreferredSongs" xml:space="preserve">
+    <value>Preferred Songs</value>
+  </data>
+  <data name="PreferredSongsWithCount" xml:space="preserve">
+    <value>Preferred Songs ({0}/{1})</value>
+  </data>
+  <data name="QuickPlay" xml:space="preserve">
+    <value>Quick Play</value>
+  </data>
+  <data name="QuickPlayToolTip" xml:space="preserve">
+    <value>Play music with randomness and preferences</value>
+  </data>
+  <data name="RandomPlay" xml:space="preserve">
+    <value>Random Play</value>
+  </data>
+  <data name="Recent" xml:space="preserve">
+    <value>Recent</value>
+  </data>
+  <data name="Recent30Days" xml:space="preserve">
+    <value>Recent 30 Days</value>
+  </data>
+  <data name="Recent7Days" xml:space="preserve">
+    <value>Recent 7 Days</value>
+  </data>
+  <data name="RecentAdded" xml:space="preserve">
+    <value>Recent Added</value>
+  </data>
+  <data name="RecentPlayed" xml:space="preserve">
+    <value>Recent Played</value>
+  </data>
+  <data name="RemotePlay" xml:space="preserve">
+    <value>Remote Play</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="RenameFolder" xml:space="preserve">
+    <value>Rename Folder</value>
+  </data>
+  <data name="RenamePlaylist" xml:space="preserve">
+    <value>Rename Playlist</value>
+  </data>
+  <data name="SaveImmediately" xml:space="preserve">
+    <value>Save immediately</value>
+  </data>
+  <data name="SetAsPreferred" xml:space="preserve">
+    <value>Set As Preferred</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="ShareFeedbacks" xml:space="preserve">
+    <value>Feedbacks about SMPlayer</value>
+  </data>
+  <data name="ShowInExplorer" xml:space="preserve">
+    <value>Show In Explorer</value>
+  </data>
+  <data name="ShowInExplorerToolTip" xml:space="preserve">
+    <value>Show "{0}" in explorer</value>
+  </data>
+  <data name="ShuffleAndPlay" xml:space="preserve">
+    <value>Shuffle and play</value>
+  </data>
+  <data name="SkipThis" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+  <data name="Songs" xml:space="preserve">
+    <value>Songs</value>
+  </data>
+  <data name="SongsWithCount" xml:space="preserve">
+    <value>Songs ({0})</value>
+  </data>
+  <data name="Sort" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>This Month</value>
+  </data>
+  <data name="ToastHelperNext" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="ToastHelperPause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="ToastHelperPlay" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="ToastHelperSwitchLyricsSourceToInternet" xml:space="preserve">
+    <value>To web lyrics</value>
+  </data>
+  <data name="ToastHelperSwitchLyricsSourceToLrcFile" xml:space="preserve">
+    <value>To lrc lryics</value>
+  </data>
+  <data name="ToastHelperSwitchLyricsSourceToMusic" xml:space="preserve">
+    <value>To music lyrics</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="UndoLikeMusicToolTip" xml:space="preserve">
+    <value>Remove From My Favorite</value>
+  </data>
+  <data name="UndoPrefer" xml:space="preserve">
+    <value>Undo Prefer</value>
+  </data>
+  <data name="UnknownExceptionOccurredEmailTitle" xml:space="preserve">
+    <value>Unknown exception occurred</value>
+  </data>
+  <data name="UnPinToolTip" xml:space="preserve">
+    <value>UnPin Playlist</value>
+  </data>
+  <data name="UpdateMusicLibraryFailed" xml:space="preserve">
+    <value>Update Music Library Failed</value>
+  </data>
+  <data name="UpdateResultOfFolder" xml:space="preserve">
+    <value>Update Result of "{0}"</value>
+  </data>
+  <data name="ViaEmail" xml:space="preserve">
+    <value>Via Email</value>
+  </data>
+  <data name="ViaWebBrowser" xml:space="preserve">
+    <value>Via Web Browser</value>
+  </data>
+  <data name="VoiceAssistantHints1" xml:space="preserve">
+    <value>You can try to say, "play music by {0}”, or </value>
+  </data>
+  <data name="VoiceAssistantHints2" xml:space="preserve">
+    <value>You can try to say, "play album {0}” or </value>
+  </data>
+  <data name="VoiceAssistantHints3" xml:space="preserve">
+    <value>You can try to say, "quick play" or </value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
+  </data>
+</root>
