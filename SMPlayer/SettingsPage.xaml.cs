@@ -391,6 +391,10 @@ namespace SMPlayer
             {
                 languageStr = Helper.Language_CN;
             }
+            else if (language == SupportedLanguage.FollowSystem)
+            {
+                languageStr = Helper.CurrentLanguage.LanguageTag;
+            }
             else
             {
                 languageStr = Helper.Language_EN;
