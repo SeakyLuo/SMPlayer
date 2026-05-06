@@ -8,7 +8,7 @@ using System.Linq;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
-using Windows.ApplicationModel.VoiceCommands;
+using Microsoft.Services.Store.Engagement;
 using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.UI.Xaml;
@@ -141,7 +141,7 @@ namespace SMPlayer
             {
                 return;
             }
-            Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
+            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             MusicPlayer.Init(music);
             ToastHelper.Init();
             VoiceAssistantHelper.Init();

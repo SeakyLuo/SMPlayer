@@ -67,6 +67,10 @@ namespace SMPlayer.Controls
         private void SetPlayButtonIcon(object sender)
         {
             GridViewMusic music = (sender as FrameworkElement).DataContext as GridViewMusic;
+            if (music == null)
+            {
+                return;
+            }
             PlayButtonIcon.Symbol = music.IsPlaying && MusicPlayer.IsPlaying ? Symbol.Pause : Symbol.Play;
         }
 

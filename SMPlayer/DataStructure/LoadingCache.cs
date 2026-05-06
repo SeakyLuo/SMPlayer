@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
@@ -11,7 +12,7 @@ namespace SMPlayer
         public int MaxSize { get; set; } = int.MaxValue;
         public long TimeOfExpiration { get; set; }
         public Func<K, V> Load { private get ; set; }
-        private readonly Dictionary<K, CacheValue<V>> dict = new Dictionary<K, CacheValue<V>>();
+        private readonly ConcurrentDictionary<K, CacheValue<V>> dict = new ConcurrentDictionary<K, CacheValue<V>>();
         private readonly Timer timer = new Timer();
 
         public LoadingCache(long timeOfExpiration, TimeUnit unit)
@@ -53,7 +54,7 @@ namespace SMPlayer
             }
             foreach (K key in keys)
             {
-                dict.Remove(key);
+                Delete(key);
             }
         }
 
@@ -89,7 +90,7 @@ namespace SMPlayer
             }
             foreach (K key in keys)
             {
-                dict.Remove(key);
+                Delete(key);
             }
         }
 
@@ -113,7 +114,7 @@ namespace SMPlayer
 
         public bool Delete(K key)
         {
-            return dict.Remove(key);
+            return dict.Remove(key, out _);
         }
 
         public bool ContainsKey(K key)

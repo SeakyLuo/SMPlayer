@@ -169,7 +169,15 @@ namespace SMPlayer.Services
         public static async Task RenameFolder(FolderTree original, string newName)
         {
             StorageFolder folder = await original.GetStorageFolderAsync();
-            await folder.RenameAsync(newName);
+            try
+            {
+                await folder.RenameAsync(newName);
+            }
+            catch (Exception e)
+            {
+                Helper.ShowOperationFailedNotification(e);
+                return;
+            }
             string newPath = folder.Path;
             FolderTree originalTree = FindFolderInfo(original.Id);
             SQLHelper.Run(c =>

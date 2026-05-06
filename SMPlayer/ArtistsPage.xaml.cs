@@ -443,23 +443,32 @@ namespace SMPlayer
                             break;
                         case MusicEventType.Modify:
                             Music before = music, after = args.ModifiedMusic;
-                            bool isSelected = artist.Equals(ArtistMasterDetailsView.SelectedItem);
-                            if (artist.Equals(ArtistMasterDetailsView.SelectedItem) || !artist.NotLoaded)
-                                artist.ReloadMusic(music);
+                            if (before.Artist == after.Artist)
+                            {
+                                if (artist != null && (artist.Equals(ArtistMasterDetailsView.SelectedItem) || !artist.NotLoaded))
+                                    artist.ReloadMusic(after);
+                                break;
+                            }
+                            if (artist != null)
+                            {
+                                artist.Load();
+                                if (artist.Songs.IsEmpty())
+                                {
+                                    SuggestionList.Remove(artist.Name);
+                                    Artists.Remove(artist);
+                                }
+                            }
                             if (SuggestionList.Contains(after.Artist))
                             {
-                                if (before.Artist != after.Artist)
+                                var newArtist = Artists.First(a => a.Name == after.Artist);
+                                if (newArtist.Equals(ArtistMasterDetailsView.SelectedItem))
                                 {
-                                    var newArtist = Artists.First(a => a.Name == after.Artist);
-                                    if (newArtist.Equals(ArtistMasterDetailsView.SelectedItem))
-                                    {
-                                        newArtist.Load();
-                                        FindMusicAndSetPlaying(after);
-                                    }
-                                    else if (!newArtist.NotLoaded)
-                                    {
-                                        newArtist.Load();
-                                    }
+                                    newArtist.Load();
+                                    FindMusicAndSetPlaying(after);
+                                }
+                                else if (!newArtist.NotLoaded)
+                                {
+                                    newArtist.Load();
                                 }
                             }
                             else
@@ -468,14 +477,9 @@ namespace SMPlayer
                                 SuggestionList.Insert(index, after.Artist);
                                 Artists.Insert(index, new ArtistView(after.ToVO()));
                             }
-                            if (before.Artist != after.Artist && artist.Songs.IsEmpty())
-                            {
-                                SuggestionList.Remove(artist.Name);
-                                Artists.Remove(artist);
-                            }
                             break;
                     }
-                } 
+                }
                 catch (Exception e)
                 {
                     Log.Warn($"ArtistsPage IMusicEventListener.Execute failed {e}");

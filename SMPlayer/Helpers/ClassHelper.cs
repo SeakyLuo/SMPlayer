@@ -218,7 +218,7 @@ namespace SMPlayer
         }
         public static bool IsMusicFile(this StorageFile file)
         {
-            return MusicHelper.SupportedFileTypes.Any(i => file.FileType.EndsWith(i));
+            return MusicHelper.SupportedFileTypes.Any(i => file.FileType.ToLower().EndsWith(i));
         }
         public static async Task<int> CountFoldersAsync(this StorageFolder folder)
         {

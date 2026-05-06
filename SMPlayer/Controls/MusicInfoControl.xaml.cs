@@ -152,6 +152,7 @@ namespace SMPlayer.Controls
                     if (uint.TryParse(YearTextBox.Text, out uint Year))
                         Properties.Year = Year;
                     await Properties.SavePropertiesAsync();
+                    await SaveTagPropertiesAsync(newMusic, Properties.AlbumArtist, Properties.TrackNumber, Properties.Year);
                     MusicService.MusicModified(CurrentMusic, newMusic);
                     CurrentMusic.CopyFrom(newMusic);
                 }
@@ -168,6 +169,25 @@ namespace SMPlayer.Controls
                 SaveProgress.Visibility = Visibility.Collapsed;
                 IsProcessing = false;
             }
+        }
+
+        private async Task SaveTagPropertiesAsync(Music music, string albumArtist, uint trackNumber, uint year)
+        {
+            using (var tagFile = (await music.GetStorageFileAsync()).CreateTagFile())
+            {
+                tagFile.Tag.Title = music.Name;
+                tagFile.Tag.Performers = ToTagValues(music.Artist);
+                tagFile.Tag.Album = music.Album;
+                tagFile.Tag.AlbumArtists = ToTagValues(albumArtist);
+                tagFile.Tag.Track = trackNumber;
+                tagFile.Tag.Year = year;
+                tagFile.Save();
+            }
+        }
+
+        private string[] ToTagValues(string value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? new string[0] : new[] { value };
         }
 
         private void SetControlEnability(bool isEnabled)

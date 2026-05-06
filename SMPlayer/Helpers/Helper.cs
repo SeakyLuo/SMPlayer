@@ -114,7 +114,14 @@ namespace SMPlayer
                 default:
                     return;
             }
-            await Windows.System.Launcher.LaunchFolderAsync(folder, options);
+            try
+            {
+                await Windows.System.Launcher.LaunchFolderAsync(folder, options);
+            }
+            catch (Exception e)
+            {
+                ShowOperationFailedNotification(e);
+            }
         }
 
         public static async Task SendEmailToDeveloper(string subject, string messageBody)

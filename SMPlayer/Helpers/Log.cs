@@ -1,4 +1,5 @@
-﻿using SMPlayer.Helpers;
+﻿using Microsoft.Services.Store.Engagement;
+using SMPlayer.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,11 +16,13 @@ namespace SMPlayer
     {
         private const string LogFileName = "SMPlayerLog";
         private static readonly Log log = new Log();
+        private static StoreServicesCustomEventLogger logger;
         private static StorageFolder LogFolder;
 
         public static async Task Init()
         {
             LogFolder = await StorageHelper.CreateFolder("Logs");
+            logger = StoreServicesCustomEventLogger.GetDefault();
         }
 
         public static async Task ClearLogFiles(int maxBackups = 5)
@@ -31,42 +34,42 @@ namespace SMPlayer
 
         public static void Debug(string message, params object[] args)
         {
-            log.Debug_(message, args);
+            log.debug(message, args);
         }
 
         public static void Info(string message, params object[] args)
         {
-            log.Info_(message, args);
+            log.info(message, args);
         }
 
         public static void Warn(string message, params object[] args)
         {
-            log.Warn_(message, args);
+            log.warn(message, args);
         }
 
         public static void Error(string message, params object[] args)
         {
-            log.Error_(message, args);
+            log.error(message, args);
         }
 
-        public void Debug_(string message, params object[] args)
+        private void debug(string message, params object[] args)
         {
             PrintMessage(LogLevel.Debug, message, args);
         }
 
-        public void Info_(string message, params object[] args)
+        private void info(string message, params object[] args)
         {
             string finalMessage = PrintMessage(LogLevel.Info, message, args);
             AppendText(LogFileName, finalMessage);
         }
 
-        public void Warn_(string message, params object[] args)
+        private void warn(string message, params object[] args)
         {
             string finalMessage = PrintMessage(LogLevel.Warn, message, args);
             AppendText(LogFileName, finalMessage);
         }
 
-        public void Error_(string message, params object[] args)
+        private void error(string message, params object[] args)
         {
             string finalMessage = PrintMessage(LogLevel.Error, message, args);
             AppendText(LogFileName, finalMessage);
@@ -79,6 +82,7 @@ namespace SMPlayer
             {
                 finalMessage = string.Format($"{BuildMessageHeader(level)} {message}", args);
                 System.Diagnostics.Debug.WriteLine(finalMessage);
+                logger.Log(finalMessage);
                 return finalMessage;
             }
             catch (Exception)

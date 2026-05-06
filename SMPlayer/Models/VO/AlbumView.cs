@@ -55,8 +55,8 @@ namespace SMPlayer.Models
         public AlbumView(string name, IEnumerable<Music> songs, bool setThumbnail = true)
         {
             Name = name;
-            Songs = new ObservableCollection<MusicView>(songs.Select(i => i.ToVO()));
-            List<string> artists = songs.GroupBy(m => m.Artist).OrderByDescending(i => i.Count()).Select(i => i.Key).ToList();
+            Songs = songs == null ? new ObservableCollection<MusicView>() : new ObservableCollection<MusicView>(songs.Select(i => i.ToVO()));
+            List<string> artists = Songs.GroupBy(m => m.Artist).OrderByDescending(i => i.Count()).Select(i => i.Key).ToList();
             if (artists.Count() >= 3)
             {
                 Artist = Helper.LocalizeText("ArtistsAndSoOn", artists[0], artists[1], artists.Count());
@@ -83,9 +83,16 @@ namespace SMPlayer.Models
             IsThumbnailLoading = true;
             if (string.IsNullOrEmpty(ThumbnailSource) || !(await ImageHelper.LoadImage(ThumbnailSource) is BitmapImage thumbnail))
             {
-                MusicImage image = await GetAlbumCoverAsync(Songs);
-                Thumbnail = image.Image;
-                ThumbnailSource = image.Path;
+                try 
+                {
+                    MusicImage image = await GetAlbumCoverAsync(Songs);
+                    Thumbnail = image.Image;
+                    ThumbnailSource = image.Path;
+                }
+                catch (Exception e)
+                {
+                    Log.Warn($"SetThumbnailAsync ${e}");
+                }
             }
             else
             {

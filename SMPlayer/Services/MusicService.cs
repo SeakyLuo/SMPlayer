@@ -265,9 +265,13 @@ namespace SMPlayer.Services
             {
                 return true;
             }
-            return await music.SaveLyricsAsync(await LyricsHelper.SearchLyrics(music));
+            string lyrics = await LyricsHelper.SearchLyrics(music); 
+            if (string.IsNullOrEmpty(lyrics))
+            {
+                return true;
+            }
+            return await music.SaveLyricsAsync(lyrics);
         }
-
 
         public static async Task<bool> SaveLyricsAsync(this Music music, string lyrics)
         {

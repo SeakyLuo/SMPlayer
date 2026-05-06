@@ -485,7 +485,7 @@ namespace SMPlayer
 
         public static void PlayNext(Music target, int index)
         {
-            if (index >= 0 && PlaybackList.Items[index].GetMusic() == target)
+            if (0 <= index && index < PlaybackList.Items.Count && PlaybackList.Items[index].GetMusic() == target)
             {
                 int currentIndex = CurrentIndex;
                 MoveMusic(index, currentIndex + (index < currentIndex ? 0 : 1));

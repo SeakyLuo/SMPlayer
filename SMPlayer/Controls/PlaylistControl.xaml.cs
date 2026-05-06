@@ -400,6 +400,10 @@ namespace SMPlayer
                     }
                     break;
                 case MultiSelectEvent.SelectAll:
+                    if (SongsListView.SelectionMode != ListViewSelectionMode.Multiple)
+                    {
+                        SongsListView.SelectionMode = ListViewSelectionMode.Multiple;
+                    }
                     SongsListView.SelectAll();
                     Helper.GetMainPageContainer()?.GetMultiSelectCommandBar().CountSelections(SelectedItemsCount);
                     break;
