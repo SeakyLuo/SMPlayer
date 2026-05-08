@@ -1534,4 +1534,7 @@
   <data name="FollowSystemComboItem.Content" xml:space="preserve">
     <value>跟随系统</value>
   </data>
+  <data name="ReleaseNotesNewUIComing.Text" xml:space="preserve">
+    <value>全新 UI 版本即将到来。</value>
+  </data>
 </root>

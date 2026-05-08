@@ -1540,4 +1540,7 @@ Lrc lyrics will be read in this order: local lrc files, Internet sources, music 
   <data name="FollowSystemComboItem.Content" xml:space="preserve">
     <value>Follow system</value>
   </data>
+  <data name="ReleaseNotesNewUIComing.Text" xml:space="preserve">
+    <value>A brand-new UI version is coming soon.</value>
+  </data>
 </root>

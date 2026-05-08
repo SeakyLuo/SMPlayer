@@ -22,13 +22,11 @@ Album art in NowPlayingFull.
 
 Search multiple lyrics choose one. Lyrics priority in notification. Search in lryics.
 
-Allow MainSearchBar to have a search history dropdown.
-
 Recent played artist, album, playlist.
 
 Scrolling lyrics and desktop lyrics.
 
-Add paging.
+Night mode.
 
 # TO FIX
 Able to drag titlebar when loading, multi-select.
@@ -54,10 +52,8 @@ Disallow dialog closing when processing request.
 
 Mini mode shuffle button like NowPlayingPage.
 
-Grid Mode for PlaylistPage.
-
-Improve shy header.
-
 Batch delete music file.
 
 Lock-Screen wall paper like Groove.
+
+Add paging.

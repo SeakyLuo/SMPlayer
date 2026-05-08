@@ -129,7 +129,7 @@ namespace SMPlayer.Helpers.VoiceAssistant
                 MatchCollection playAlbumByArtistMatch = VoiceAssistantHelper.Matches(text, @"(?<=play .*album) .+ by .+");
                 if (playAlbumByArtistMatch.IsNotEmpty())
                 {
-                    result.Type = MatchType.PlayByArtistAndMusic;
+                    result.Type = MatchType.PlayByArtistAndAlbum;
                     result.Param = new ByArtistRequest(playAlbumByArtistMatch, " by ");
                     return result;
                 }
